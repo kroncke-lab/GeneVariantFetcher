@@ -1,6 +1,8 @@
 # GeneVariantFetcher — Quick Start Guide
 
 Get GVF running in 5 minutes and extract genetic variants from the literature.
+This is the canonical local setup and first-run guide; README and agent
+handoff files should link here instead of duplicating install or `.env` blocks.
 
 ## Prerequisites
 
@@ -56,16 +58,17 @@ See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
 
 ## First Run
 
-Extract KCNH2 variants (a well-studied cardiac gene):
-
-```bash
-gvf extract KCNH2 --email you@example.com --output ./output
-```
-
-For a recall-oriented cold-start run with recovery layers and reporting:
+Run the current cold-start workflow for KCNH2, a well-studied cardiac gene:
 
 ```bash
 gvf gvf-run KCNH2 --email you@example.com --output ./validation_runs/my_run
+```
+
+`gvf-run` runs the regular end-to-end path, including source recovery by default.
+For a lower-level extraction-only run:
+
+```bash
+gvf extract KCNH2 --email you@example.com --output ./output
 ```
 
 ### What This Does
@@ -173,8 +176,8 @@ sqlite> SELECT v.protein_notation, p.total_carriers_observed, p.affected_count
 If you don't have publisher API keys, GVF still works using only PubMed Central:
 
 ```bash
-# Works without any publisher keys
-gvf extract KCNH2 --email you@example.com --output ./output
+# Works without publisher keys; skips live paywall recovery
+gvf gvf-run KCNH2 --email you@example.com --output ./output --no-source-recovery
 ```
 
 **Limitations:**

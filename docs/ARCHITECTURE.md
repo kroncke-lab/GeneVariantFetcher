@@ -38,7 +38,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 1.6: Filter Papers (Two-Tier)                                               │
 │   Tier 1: KeywordFilter (regex, fast) — ~65 clinical/variant keywords            │
-│   Tier 2: InternFilter (LLM, gpt-4o-mini) — relevance classification             │
+│   Tier 2: InternFilter (LLM, provider-aware model) — relevance classification     │
 │   OUTPUT: pmid_status/filtered_out.csv                                           │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -65,7 +65,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 3: Variant Extraction (ExpertExtractor)                                     │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
-│   • Model: gpt-4o-mini → gpt-4o (escalation if needed)                           │
+│   • Model cascade from config/settings.py (Claude by default)                     │
 │   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
 │     - Detects concatenated gene+variant (HERGG604S, KCNH2A561V)                  │
 │     - Unicode arrow normalization (→, ➔, ⟶)                                      │
@@ -213,7 +213,7 @@ Filtered PMIDs
     │                           (condensed high-value sections)
     │
     └─→ ExpertExtractor ──────→ LLM extraction
-            │                   (gpt-4o-mini or gpt-4o)
+            │                   (provider-aware model cascade)
             │
             ▼
     Structured JSON extraction
@@ -266,6 +266,34 @@ extractions/{gene}_PMID_*.json
 | **Wiley** | API key | Variable | TDM agreement needed |
 | **Unpaywall** | Email | 100k/day | OA link resolution |
 | **LLM provider** | API key | Per plan | One provider required for extraction — Anthropic (default), OpenAI, or Azure AI |
+
+### Model Provider And Reasoning Effort
+
+`config/settings.py` resolves the effective model for each stage. Anthropic is
+the default provider; OpenAI and Azure AI are supported when the corresponding
+provider keys and model settings are configured.
+
+OpenAI-style reasoning models expose a reasoning-effort knob. GVF can set it per
+pipeline stage through environment variables; all default to unset, so behavior
+is unchanged until a stage opts in:
+
+| Variable | Stage |
+|----------|-------|
+| `TIER2_REASONING_EFFORT` | Tier 2 relevance filtering in `pipeline/filters.py` |
+| `TIER3_REASONING_EFFORT` | Tier 3 extraction and compact claim adjudication in `pipeline/extraction.py` |
+| `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
+| `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
+
+Valid values are `minimal`, `low`, `medium`, and `high`. Validation lives in
+`config/settings.py`. Chat-completions calls use
+`utils/llm_utils.build_reasoning_effort_kwargs`; Responses API calls use
+`utils/llm_utils.build_responses_reasoning_param`. Both helpers no-op for models
+without an OpenAI-style effort knob.
+
+Treat reasoning effort as a secondary lever. Source acquisition, supplement
+folding, extraction logic, and matcher behavior usually move recall more than a
+non-default effort value. Change one stage at a time and re-score before keeping
+the setting.
 
 ### Retry & Circuit Breaker
 

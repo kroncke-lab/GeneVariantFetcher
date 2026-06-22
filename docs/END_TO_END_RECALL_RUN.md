@@ -9,24 +9,10 @@ supersedes the older post-insttoken re-extraction experiment for normal work.
 
 ## Repository Setup
 
-```bash
-git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
-cd GeneVariantFetcher
-
-python3.11 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[browser,dev]"
-python -m playwright install chromium
-
-cp .env.example .env
-```
-
-Edit `.env` with:
-
-- `NCBI_EMAIL`
-- at least one LLM key, usually `ANTHROPIC_API_KEY` for the current recall setup
-- `ELSEVIER_API_KEY` plus `ELSEVIER_INSTTOKEN` for institutional ScienceDirect full text
-- optional `NCBI_API_KEY`, `SPRINGER_API_KEY`, and `WILEY_API_KEY`
+Follow `docs/QUICKSTART.md` for clone, `.venv`, browser, and first-run setup.
+Follow `docs/API_KEYS.md` for the `.env` credential list. For recall refresh
+work, publisher credentials and institutional full-text access materially affect
+coverage.
 
 ## Fresh Cold-Start Run
 

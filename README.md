@@ -52,32 +52,30 @@ recovery are not cold-start behavior.
 
 ## Quick Start
 
+Canonical setup and credential details live in
+[`docs/QUICKSTART.md`](docs/QUICKSTART.md) and
+[`docs/API_KEYS.md`](docs/API_KEYS.md). After setup:
+
 ```bash
-# 1. Clone and install
-git clone https://github.com/your-org/GeneVariantFetcher.git
-cd GeneVariantFetcher
-python3.11 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[browser,dev]"
-python -m playwright install chromium
-
-# 2. Configure API keys
-cp .env.example .env
-cat > .env << 'EOF'
-ANTHROPIC_API_KEY=...
-NCBI_EMAIL=your@email.com
-ELSEVIER_API_KEY=...
-# Optional but high-leverage for ScienceDirect subscription full text:
-# ELSEVIER_INSTTOKEN=...
-EOF
-
-# 3. Run your first extraction (turnkey, no gold standard required)
 gvf gvf-run KCNH2 --email your@email.com --output ./results [--disease "Long QT Syndrome"]
 # Source recovery (paywall + supplement acquisition) runs BY DEFAULT.
 # Add --no-source-recovery for a fast PMC / free-text-only pass.
 ```
 
 Your results will be in `./results/KCNH2/{timestamp}/KCNH2.db`
+
+---
+
+## Which Runbook?
+
+| Need | Start here |
+|------|------------|
+| Install locally and run once | [`docs/QUICKSTART.md`](docs/QUICKSTART.md) |
+| Configure credentials | [`docs/API_KEYS.md`](docs/API_KEYS.md) |
+| Run a new gene-disease pair with no gold standard | [`docs/NEW_GENE_RUNBOOK.md`](docs/NEW_GENE_RUNBOOK.md) |
+| Re-run recall after new papers, credentials, or recovery code | [`docs/RECALL_REFRESH_RUNBOOK.md`](docs/RECALL_REFRESH_RUNBOOK.md) |
+| Run the full portable recall workflow on another machine | [`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md) |
+| Check current recall metrics or active work | [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md) and [`TASKS.md`](TASKS.md) |
 
 ---
 
@@ -103,19 +101,8 @@ sudo dnf install poppler-utils
 
 ### Python Setup
 
-```bash
-# Create virtual environment
-python3.11 -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# or: .venv\Scripts\activate  # Windows
-
-# Install GVF (browser extra pulls in Playwright for paywall recovery)
-pip install -e ".[browser,dev]"
-python -m playwright install chromium
-
-# For a minimal install without paywall recovery or dev tools:
-# pip install -e .
-```
+Use the setup commands in [`docs/QUICKSTART.md`](docs/QUICKSTART.md). Keep the
+project `.venv` active when running CLI commands, tests, or scripts.
 
 ### Verify Installation
 
@@ -316,26 +303,10 @@ OUTPUT: SQLite database + JSON summaries + workflow logs
 
 ## API Keys
 
-### Required
-
-| API | Purpose | How to Get |
-|-----|---------|-----------|
-| **NCBI Email** | PubMed access (required for E-utilities) | Your institutional email |
-| **One LLM provider key** | LLM extraction (Tier 2 & 3). Anthropic is the default provider (`config/settings.py`); OpenAI or Azure AI also work. | [console.anthropic.com](https://console.anthropic.com/) / [platform.openai.com](https://platform.openai.com/api-keys) / [Azure AI](https://ai.azure.com/) |
-
-### Optional (Improves Coverage)
-
-| API | Purpose | How to Get |
-|-----|---------|-----------|
-| **NCBI API Key** | 10x higher rate limits (3→10 req/sec) | [ncbi.nlm.nih.gov/account](https://www.ncbi.nlm.nih.gov/account/) |
-| **Elsevier** | ScienceDirect full-text | [dev.elsevier.com](https://dev.elsevier.com/) |
-| **Springer** | SpringerLink content | [dev.springernature.com](https://dev.springernature.com/) |
-| **Wiley** | Wiley Online Library | [onlinelibrary.wiley.com/library-info/resources/text-and-datamining](https://onlinelibrary.wiley.com/library-info/resources/text-and-datamining) |
-
-### Free (No Key Required)
-
-- **PMC Open Access** — Free BioC XML for all open access papers
-- **Unpaywall** — Uses your NCBI email for OA link resolution
+GVF requires `NCBI_EMAIL` and one LLM provider key. Publisher keys are optional
+but materially improve full-text and supplement coverage. The complete,
+canonical key list and acquisition notes are in
+[`docs/API_KEYS.md`](docs/API_KEYS.md).
 
 ---
 
@@ -390,34 +361,9 @@ See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for full sc
 
 ## Configuration
 
-### Environment Variables (.env)
-
-Create a `.env` file in the project root:
-
-```bash
-# Required
-NCBI_EMAIL=your@email.com          # For PubMed API
-
-# Required: at least one LLM provider key
-ANTHROPIC_API_KEY=...              # Claude via LiteLLM
-# OPENAI_API_KEY=sk-...            # OpenAI alternative
-# AZURE_AI_API_KEY=...             # Azure AI Foundry alternative
-# GPT54_DEPLOYMENT=gpt-5.4         # Optional Azure side-by-side probe
-# DEEPSEEK_DEPLOYMENT=DeepSeek-V4-Pro
-# EARLY_DEBATE_MODELS=azure_ai/gpt-5.4,azure_ai/DeepSeek-V4-Pro
-# DEEPSEEK_RPM=4                   # Safe default for 20k tokens/minute quota
-
-# Recommended
-NCBI_API_KEY=...                   # 10x rate limits
-
-# Optional (publisher access)
-ELSEVIER_API_KEY=...               # ScienceDirect
-SPRINGER_API_KEY=...               # SpringerLink
-WILEY_API_KEY=...                  # Wiley Online
-
-# Optional additional LLM provider
-GEMINI_API_KEY=...                 # Gemini, when configured in model strings
-```
+Environment variables are loaded from `.env`. See
+[`docs/API_KEYS.md`](docs/API_KEYS.md) for credential names and
+`config/settings.py` for pipeline/model settings.
 
 ### Pipeline Settings (config/settings.py)
 
@@ -523,10 +469,9 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ### Development Setup
 
-```bash
-# Install dev dependencies
-pip install -e ".[dev]"
+After following [`docs/QUICKSTART.md`](docs/QUICKSTART.md):
 
+```bash
 # Run tests
 pytest tests/
 

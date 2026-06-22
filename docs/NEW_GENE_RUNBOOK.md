@@ -14,7 +14,8 @@ gene-disease pair. The steps below detail what `gvf-run` runs.
 
 ## 1. Prepare
 
-Use the project virtual environment.
+Use the project virtual environment. Local setup lives in `docs/QUICKSTART.md`;
+credential details live in `docs/API_KEYS.md`.
 
 ```bash
 source .venv/bin/activate
@@ -36,9 +37,11 @@ Run without `--pmid-file`; explicit PMID lists are for validation against known 
 
 Prefer the `gvf <command>` console script. When it is not on `PATH`, use
 `.venv/bin/python -m cli <command>` as the fallback.
+Use the lower-level `extract` command here only when debugging individual stages;
+the preferred production path is the `gvf-run` command at the top of this runbook.
 
 ```bash
-gvf extract GENE --scout-first
+gvf extract GENE --email "$NCBI_EMAIL" --output results/ --scout-first
 ```
 
 The workflow should discover PMIDs through PubMind, PubMed, and Europe PMC, then write `results/GENE/<timestamp>/GENE_pmids.txt`.
@@ -58,7 +61,8 @@ Key outputs to inspect:
 If resuming, point `GVF_RESUME_DIR` at the existing timestamped run directory.
 
 ```bash
-GVF_RESUME_DIR=results/GENE/<timestamp> gvf extract GENE --scout-first
+GVF_RESUME_DIR=results/GENE/<timestamp> \
+  gvf extract GENE --email "$NCBI_EMAIL" --output results/ --scout-first
 ```
 
 The harvester should reuse non-empty `pmc_fulltext/*_FULL_CONTEXT.md` files and retry only empty, abstract-only, thin, or publisher-shell artifacts. Avoid re-downloading already valid content.
@@ -114,7 +118,7 @@ PubMed discovery. Pass `--include-discovery-pmids` only for diagnostic audits
 that intentionally include every discovered PMID.
 
 The no-gold acquisition and staged refresh loop runs by default as part of
-`gvf-run`. Add `--no-source-recovery` for a fast PMC/free-text-only pass:
+`gvf-run`:
 
 ```bash
 gvf gvf-run GENE --email you@example.com --output results/
@@ -127,6 +131,12 @@ This runs `source-qc`, fetches `source_qc/fetch_input.csv` with
 `scripts/refresh_run_db.py --stage-extractions --only-forced-pmids` with both
 existing-source and fetched-source override CSVs. Recovery layers run against the
 refreshed DB unless `--skip layers` is also supplied.
+
+For a fast PMC/free-text-only pass, skip source recovery:
+
+```bash
+gvf gvf-run GENE --email you@example.com --output results/ --no-source-recovery
+```
 
 For a manual no-gold audit on an existing run:
 
