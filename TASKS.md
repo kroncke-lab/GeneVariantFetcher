@@ -49,6 +49,18 @@ missed them** after the 1B parser land.
       (affected/proband/case vs unaffected/asymptomatic/control vs study total).
       Point the count classifier / evidence-card validator at the `regex_table`
       layer; current counts and precision are in `docs/RECALL_STATUS.md`.
+- [ ] **Un-ingest the PMID 33013630 annotation-table contamination** (precision
+      FP cleanup). This review is a **garbage carrier source** — gnomAD allele
+      counts + SIFT/PolyPhen, no patient data (see `docs/RECALL_HISTORY.md`
+      2026-06-22). The root-cause `table_router.py` fix (blank-gene-cell inherit
+      + no infer on population-annotation tables) is **landed**, so the current
+      extractor yields 0 for it; the **May-29 canonical DBs are not yet cleaned**:
+      KCNH2 21 vars (9 sole-source FP incl. `Val759Ile`, 12 bogus-count), KCNQ1
+      14 vars (SCN5A/RYR2 clean). Drop this PMID's `variant_papers`/`penetrance_data`
+      rows + orphaned nodes at the next refresh (reversible, backup first). All
+      real KCNH2 variants it name-drops are already well-covered by primary
+      sources (e.g. `Gly924Ala` 38370760=65), so this is pure precision gain, no
+      recall loss.
 
 ### Lever 3 — Acquisition of absent-PMID rows (426; SCN5A has 96 absent PMIDs)
 - [ ] Wiley/Springer supplements + remaining paywalls; restore Springer key; Wiley

@@ -43,6 +43,58 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-06-22 — Annotation-table guard: blank-cell wrong-gene + gnomAD-count-as-carrier (PMID 33013630)
+
+**Garbage-source warning.** PMID **33013630** ("Are Variants Causing Cardiac
+Arrhythmia Risk Factors in SUDEP?") is a **hypothesis/review**. Its Table 1 has
+columns `Gene | Variant | gnomAD allele count | SIFT | PolyPhen-2 | References`
+and **zero patient/carrier data** — it is variant *annotation*, never primary
+carrier evidence (extraction rule 4). Treat any carrier counts sourced from this
+PMID as invalid.
+
+Two deterministic `pipeline/table_router.py` bugs were turning this annotation
+table into carrier evidence (both hit *every* gene, including no-gold targets):
+1. **Blank Gene cells (markdown rowspan) were not inherited.** Gene-grouped
+   tables name the gene once and leave continuation rows blank; those rows were
+   stamped with the *target* gene instead of the real one. So HCN4 `Val759Ile`,
+   HCN2 `Pro802Ser`, SCN5A `Ala572Asp`, AKAP9 `Arg2607Gly` … all leaked into
+   KCNH2. The flagged symptom was **KCNH2 `Val759Ile` = 870 affected / 0 / 870**
+   — the 870 is HCN4's *gnomAD allele count*.
+2. **`_looks_like_row_level_clinical_list` fired on the caption's clinical cue
+   alone**, minting 1 inferred carrier per annotated row even with no subject
+   column.
+
+**Fix (landed in code, gold-free, generalized to the whole class):**
+forward-fill blank Gene cells before the gene-filter; and an **annotation
+table** — one whose only quantitative columns are variant annotation
+(population-frequency allele counts like gnomAD/ExAC/TOPMed **or** in-silico
+predictors like SIFT/PolyPhen/CADD/REVEL) with **no subject column** — no longer
+infers a carrier per row, regardless of a clinical caption or "score" cue. The
+current extractor returns **0** variants from this table (and from a
+prediction-score-only table such as `REVEL score | CADD score`). 4 regressions
+added in `tests/unit/test_table_router.py` (incl. a guard rail that a genuine
+proband list with no annotation columns still infers); full offline suite green
+(958 passed / 53 skipped). The literal 870 was already nulled in canonical
+`02_strict` by the earlier count-outlier guard; the code fix stops the whole
+class at the root.
+
+**Did a good source do a good job? Yes — dropping 33013630 loses zero signal.**
+The only genuine KCNH2 variants this review name-drops (`Arg744*`, `Gly924Ala`,
+"identified in a SUDEP patient") are redundantly and far better captured by real
+primary sources GVF already extracts well, e.g.:
+`Arg176Trp` 25+ papers (incl. 19160088=128, 16754261=32/60, 21244686=88),
+`Arg744*` (11802537=7, 22338672=1/3), `Gly924Ala` (**38370760**=65),
+`Gly749Ala` (38370760=41), `Arg1047Leu` (38370760=67, +10 more). PMID
+**38370760** is a standout high-quality cohort table GVF extracted cleanly with
+affected/unaffected splits.
+
+**Residual (not yet cleaned — see `TASKS.md`):** the May-29 canonical KCNH2
+(21 vars from this PMID: 9 sole-source FP incl. `Val759Ile`, 12 with bogus
+counts) and KCNQ1 (14 vars) DBs still carry this contamination; SCN5A/RYR2 are
+clean. The live `Val759Ile=870/0/870` row also persists in the stale
+`validation_runs/20260518` copies. Un-ingesting PMID 33013630 (the fixed
+extractor yields 0 for it) is a precision/FP cleanup deferred to the next refresh.
+
 ### 2026-06-22 — Docs source-of-truth cleanup
 Consolidated the recall docs so there is no competing "next-run plan" surface:
 `TASKS.md` now owns the active Exact-Match Recovery Plan, `RECALL_STATUS.md` is a

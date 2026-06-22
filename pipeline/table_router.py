@@ -462,6 +462,36 @@ _POPULATION_FREQUENCY_HEADERS = (
     "alleles",
     "exac",
     "gnomad",
+    "1000genomes",
+    "topmed",
+    "clinvar",
+    "dbsnp",
+)
+
+# In-silico pathogenicity predictors. A numeric column under one of these is a
+# computational score, never a human carrier/person count (extraction rule 3).
+# Tokens are matched as substrings of normalized (lowercased, punctuation-
+# stripped) headers, so keep them long enough to avoid colliding with real
+# count headers (e.g. "sift", "cadd", "revel" are safe; bare "score" is not and
+# stays out — it is a clinical-context cue, e.g. Schwartz score).
+_PREDICTION_SCORE_HEADERS = (
+    "sift",
+    "polyphen",
+    "cadd",
+    "revel",
+    "provean",
+    "mutationtaster",
+    "mutationassessor",
+    "alphamissense",
+    "fathmm",
+    "phylop",
+    "phastcons",
+    "gerp",
+    "metasvm",
+    "metalr",
+    "primateai",
+    "condel",
+    "insilico",
 )
 
 _DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT = (
@@ -496,6 +526,22 @@ def _is_row_identifier_header(header: str) -> bool:
 
 def _is_population_frequency_header(header: str) -> bool:
     return any(token in header for token in _POPULATION_FREQUENCY_HEADERS)
+
+
+def _is_prediction_score_header(header: str) -> bool:
+    return any(token in header for token in _PREDICTION_SCORE_HEADERS)
+
+
+def _is_variant_annotation_header(header: str) -> bool:
+    """True for columns that annotate a variant rather than count people.
+
+    Population-frequency allele counts (gnomAD/ExAC/TOPMed…) and in-silico
+    pathogenicity predictors (SIFT/PolyPhen/CADD/REVEL…) are variant metadata,
+    never carrier/person counts (extraction rules 2-3).
+    """
+    return _is_population_frequency_header(header) or _is_prediction_score_header(
+        header
+    )
 
 
 def _is_denominator_header_when_carrier_present(
@@ -543,6 +589,16 @@ def _looks_like_row_level_clinical_list(
     )
 
     if has_assay_or_gwas_cue and not subject_cue:
+        return False
+    # An annotation/summary table keyed by variant-annotation columns
+    # (population-frequency allele counts like gnomAD/ExAC, or in-silico
+    # predictors like SIFT/PolyPhen/CADD/REVEL) with no subject column is
+    # variant annotation, not a one-carrier-per-row clinical list. A bare
+    # clinical caption/"score" cue must not mint a carrier for every annotated
+    # row (e.g. PMID 33013630 Table 1: gnomAD allele count + SIFT/PolyPhen,
+    # zero patient columns; or a "REVEL score | CADD score" prediction table).
+    has_annotation_header = any(_is_variant_annotation_header(h) for h in headers)
+    if has_annotation_header and not subject_cue:
         return False
     return subject_cue or clinical_cue
 
@@ -1496,6 +1552,12 @@ def parse_routed_table(
     caption_scope = _caption_gene_scope(table.caption)
     if caption_scope and gene_symbol.strip().upper() not in caption_scope:
         return []
+    # Markdown rowspan: a blank Gene cell inherits the gene from the row above
+    # (gene-grouped tables list the gene once, then leave continuation rows
+    # blank). Forward-fill so the gene-filter below sees the true gene of every
+    # row; otherwise off-target continuation rows (e.g. HCN4 Val759Ile under a
+    # KCNH2 extraction) leak through and are mis-stamped with the target gene.
+    last_gene_cell = ""
 
     for row_number, row in enumerate(table.data_lines, start=1):
         cells = _split_pipe_row(row)
@@ -1512,6 +1574,10 @@ def parse_routed_table(
         # Gene-filter: skip rows that explicitly belong to a different gene.
         if gene_idx is not None and target_gene_lower:
             gene_cell = (cell(gene_idx) or "").strip()
+            if gene_cell:
+                last_gene_cell = gene_cell
+            else:
+                gene_cell = last_gene_cell  # inherit markdown rowspan
             gene_tokens = _gene_symbol_tokens(gene_cell.upper())
             if (
                 gene_cell

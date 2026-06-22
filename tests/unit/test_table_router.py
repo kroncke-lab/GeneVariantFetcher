@@ -189,6 +189,109 @@ def test_parse_routed_table_filters_multigene_and_derives_total():
     assert pen["unaffected_count"] == 3
 
 
+def test_parse_routed_table_inherits_blank_gene_cell_for_filter():
+    # Markdown rowspan: gene-grouped tables name the gene once, then leave
+    # continuation rows blank. Blank cells must inherit the gene above so
+    # off-target continuation rows are filtered (regression: PMID 33013630
+    # Table 1, where HCN4 Val759Ile leaked into KCNH2 as 870 "carriers").
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Variants identified in long QT probands",
+        header_line="| Gene | Protein | Proband | Phenotype |",
+        header_cells=["Gene", "Protein", "Proband", "Phenotype"],
+        data_lines=[
+            "| KCNH2 | p.Ala561Val | P1 | LQT2 |",
+            "|  | p.Arg176Trp | P2 | LQT2 |",
+            "| SCN5A | p.Arg1623Gln | P3 | LQT3 |",
+            "|  | p.Glu1784Lys | P4 | LQT3 |",
+        ],
+        char_start=0,
+        char_end=240,
+    )
+    mapping = {"gene": 0, "protein": 1, "phenotype": 3}
+
+    variants = parse_routed_table(table, mapping, "KCNH2")
+
+    # Blank-cell continuation row p.Glu1784Lys inherits SCN5A and is dropped;
+    # p.Arg176Trp inherits KCNH2 and is kept.
+    assert [v["protein_notation"] for v in variants] == [
+        "p.Ala561Val",
+        "p.Arg176Trp",
+    ]
+
+
+def test_parse_routed_table_skips_population_annotation_table_without_subjects():
+    # gnomAD/SIFT/PolyPhen annotation table with a clinical caption but no
+    # patient/proband column must not mint one inferred carrier per row
+    # (regression: PMID 33013630 Table 1).
+    table = MarkdownTable(
+        table_id="T1",
+        caption=(
+            "Table 1. Nonsynonymous variants in cardiac arrhythmia genes "
+            "identified in sudden unexpected death in epilepsy (SUDEP)"
+        ),
+        header_line="| Gene | Variant | gnomAD allele count | SIFT | PolyPhen-2 |",
+        header_cells=["Gene", "Variant", "gnomAD allele count", "SIFT", "PolyPhen-2"],
+        data_lines=[
+            "| KCNH2 | Ile82Thr | 0 | Deleterious | Benign |",
+            "|  | Arg176Trp | 44 | Deleterious | Possibly damaging |",
+        ],
+        char_start=0,
+        char_end=240,
+    )
+    mapping = {"gene": 0, "protein": 1, "patient_count": 2}
+
+    # gnomAD column is rejected as a count, and the table has no subject column,
+    # so no carriers are inferred -> zero variants from this annotation table.
+    assert parse_routed_table(table, mapping, "KCNH2") == []
+
+
+def test_parse_routed_table_skips_prediction_score_annotation_table():
+    # In-silico predictor table (SIFT/PolyPhen/CADD/REVEL) with no gnomAD column
+    # and no subject column must not mint one inferred carrier per row, even
+    # though "score" is a clinical-context cue. Generalizes the population-table
+    # guard to prediction-score annotation tables (extraction rule 3).
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. In silico pathogenicity predictions",
+        header_line="| Gene | Variant | REVEL score | CADD score |",
+        header_cells=["Gene", "Variant", "REVEL score", "CADD score"],
+        data_lines=[
+            "| KCNH2 | Ile82Thr | 0.7 | 24.1 |",
+            "|  | Arg176Trp | 0.9 | 27.3 |",
+        ],
+        char_start=0,
+        char_end=200,
+    )
+
+    assert parse_routed_table(table, {"gene": 0, "protein": 1}, "KCNH2") == []
+
+
+def test_parse_routed_table_still_infers_clinical_list_without_annotation_columns():
+    # Guard rail for the two guards above: a genuine one-proband-per-row clinical
+    # list (mutation + phenotype, no population/prediction columns, no explicit
+    # subject header) must still infer one carrier per row.
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Mutations identified in long QT probands",
+        header_line="| Gene | Mutation | Phenotype | Age |",
+        header_cells=["Gene", "Mutation", "Phenotype", "Age"],
+        data_lines=[
+            "| KCNH2 | p.Ala561Val | LQT2 | 34 |",
+            "|  | p.Arg176Trp | LQT2 | 12 |",
+        ],
+        char_start=0,
+        char_end=200,
+    )
+
+    variants = parse_routed_table(
+        table, {"gene": 0, "protein": 1, "phenotype": 2}, "KCNH2"
+    )
+
+    assert [v["protein_notation"] for v in variants] == ["p.Ala561Val", "p.Arg176Trp"]
+    assert all(v["penetrance_data"]["total_carriers_observed"] == 1 for v in variants)
+
+
 def test_parse_routed_table_drops_off_target_gene_cell_even_when_gene_unmapped():
     table = MarkdownTable(
         table_id="T1",
