@@ -43,6 +43,14 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-06-22 — Docs source-of-truth cleanup
+Consolidated the recall docs so there is no competing "next-run plan" surface:
+`TASKS.md` now owns the active Exact-Match Recovery Plan, `RECALL_STATUS.md` is a
+short current metrics/failure-split snapshot, and this file owns the dated recall
+trajectory. The embedded `RECALL_STATUS.md` session log and stale 2026-05-29
+plan were removed from the live status file; their substantive benchmark history
+is represented by the timeline entries below.
+
 ### 2026-06-12 — Targeted lands extended to the remaining three genes
 After the KCNQ1 headline land, `scripts/targeted_land.py` was run on the other
 three canonical genes. SCN5A PMID 19716085 promoted a cleaner re-extraction

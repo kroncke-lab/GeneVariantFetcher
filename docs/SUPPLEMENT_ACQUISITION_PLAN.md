@@ -2,8 +2,10 @@
 
 Generated 2026-06-05 from a 6-way recon + synthesis workflow that re-verified
 every load-bearing claim against the live repo and the 4 gold cardiac genes
-(KCNH2/KCNQ1/SCN5A/RYR2). This file is the durable source of truth for the
-supplement-acquisition effort; it is safe to compact the session against it.
+(KCNH2/KCNQ1/SCN5A/RYR2). This file is now a historical record of the
+supplement-acquisition effort and the landed Elsevier `mmc` work. It is not the
+active next-run plan; use `TASKS.md` for the current recall checklist and
+`docs/RECALL_STATUS.md` for current measured status.
 
 ## MEASURED RESULTS (2026-06-05 execution)
 
@@ -152,7 +154,7 @@ but API drops supplements) · OUP 76 (4.5%) · Springer 60 (3.6%) · NPG 56 (3.3
 · **Karger 5 (0.3%) · Sage 0 (0.0%)**. Stub/0-byte acquisition gaps = 145
 (8.7%, 127 SCN5A) — that's missing *full text*, not supplements.
 
-## Task plan (sequenced highest-value/lowest-risk first)
+## Historical Task Plan (superseded by `TASKS.md`)
 
 ### PHASE 0 — no network, free recall, do first
 - **T1** (low): QC counter — per gene, count PMIDs with a `{pmid}_supplements/`

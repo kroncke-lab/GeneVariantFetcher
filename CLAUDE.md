@@ -22,8 +22,7 @@ grant target is 90% unique-variant recall, with submission in October 2026.
 
 ## Current Measured State
 
-Current live metrics, the scored baseline artifact, highest-yield remaining
-PMIDs, and the next-run plan are consolidated in:
+Current live metrics and the scored baseline artifact are consolidated in:
 
 `docs/RECALL_STATUS.md`
 
@@ -31,6 +30,8 @@ Treat that file as authoritative. Older KCNH2-only and 2026-05-18 closeout
 numbers are historical debugging baselines. Gold-PMID-conditioned enrichment
 and KCNH2 v12 manual recovery are diagnostic/manual recovery paths, not
 cold-start capability.
+
+The active forward checklist lives in `TASKS.md` ("Exact-Match Recovery Plan").
 
 Companion docs:
 - `docs/RECALL_HISTORY.md` — append-only benchmark/change history (the recall
@@ -78,9 +79,8 @@ usable assembled full text after the automatic harvesters and fallback routes.
 They are not "assigned to a human" by code; they are papers GVF could not fetch
 with the currently available credentials and network position.
 
-Current high-yield missing PMIDs are listed in
-`docs/RECALL_STATUS.md`. Keep PMID rankings there so this
-handoff file does not drift.
+Current high-yield work items are tracked in `TASKS.md`. Keep PMID rankings and
+live work queues out of this handoff file so it does not drift.
 
 ## Current Recovery Path
 
@@ -113,7 +113,7 @@ staged refresh). Pass `--no-source-recovery` to skip it.
 
 The same path has been exercised on KCNH2, RYR2, and SCN5A with staged
 extraction replay. **All current recall figures live in
-`docs/RECALL_STATUS.md`** (the single source of truth) — including
+`docs/RECALL_STATUS.md`** (the single source of truth for live metrics) — including
 selected-vs-actually-downloaded PMID recall, refresh-successful PMID recall,
 and acceptance-gate details. Do not restate per-gene numbers here; they drift.
 Note that the published baselines are cardiac-gene-specific, depend on the
@@ -122,7 +122,7 @@ arbitrary new gene-disease pair starts with no gold standard and no recall
 measurement.
 
 Residual-gap diagnoses and the latest per-gene numbers are tracked in
-`docs/RECALL_STATUS.md` (Next Run Plan + session log), not here. Durable tooling
+`docs/RECALL_STATUS.md`; the active checklist is in `TASKS.md`, not here. Durable tooling
 that came out of those sessions: a Word `.doc`/`.docx` supplement-conversion
 fallback (macOS `textutil` recovers table rows `antiword` misses),
 scanner gene-context filtering, a stricter protein-notation artifact guard, a
@@ -246,8 +246,9 @@ output-token budget instead of the 4k default.
 
 ## Active Work
 
-Current active work is tracked in `docs/RECALL_STATUS.md`; the recall trajectory
-is in `docs/RECALL_HISTORY.md`. Do not duplicate metric gaps here. The short
+Current active work is tracked in `TASKS.md`; current metrics are in
+`docs/RECALL_STATUS.md`; the recall trajectory is in `docs/RECALL_HISTORY.md`.
+Do not duplicate metric gaps here. The short
 version: source acquisition improved after the Elsevier insttoken unblock, the
 refresh/rebuild path converts recovered source into DB rows without
 gold-dependent logic, and (2026-06-05) Elsevier `mmc` supplement recovery + the

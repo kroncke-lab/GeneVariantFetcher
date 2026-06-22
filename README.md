@@ -33,7 +33,8 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 
 Current recall status is tracked in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). That file is the source of
-truth for live metrics, blockers, and next actions.
+truth for live metrics and blockers. The active forward checklist lives in
+[`TASKS.md`](TASKS.md).
 
 For a **fast, cheap regression check** when changing prompts/harness/guardrails,
 use the curated benchmark in

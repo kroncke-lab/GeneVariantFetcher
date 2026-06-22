@@ -2,17 +2,16 @@
 
 ## Current Focus
 - Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
-  - Current metrics, highest-yield PMIDs, and next run plan are in `docs/RECALL_STATUS.md`.
-  - Do not duplicate live recall tables here; this file is only a short task checklist.
+  - Current metrics and failure split are in `docs/RECALL_STATUS.md`.
+  - The forward plan lives here. Do not duplicate live recall tables in this file.
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 
 ## Exact-Match Recovery Plan (2026-06-12) — START HERE
 
-Root-caused decomposition of the exact-match gap to the manual gold curation
-(current missing rows + count-mismatches are in `docs/RECALL_STATUS.md`)
-(§ "2026-06-12 Next Run Plan"). This is the tracked checklist — update boxes as
-items land. **Both Claude and Codex: resume the recall push from here.**
+Root-caused decomposition of the exact-match gap to the manual gold curation.
+This is the tracked checklist — update boxes as items land. **Both Claude and
+Codex: resume the recall push from here.**
 
 Gap by root cause after the 1B parser land: acquisition (PMID absent) ~426 ·
 supplement/table not in source ~647 · in-source-but-not-extracted ~236 · matcher
@@ -146,7 +145,9 @@ missed them** after the 1B parser land.
   - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
-- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`; SCN5A is now the largest remaining unique-variant blocker.
+- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
+      the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
+      unique-variant blocker.
   - [ ] Resolve blocked supplement downloads for SCN5A `29325976` (`mmc1.docx`, Cloudflare/redirect blocked even after browser fallback in a 0-cookie session) and similar `missing_variant_supplement` PMIDs.
   - [ ] Resolve residual Wiley Cloudflare/TDM-403 and Springer content-gate failures from the 13-PMID SCN5A residual batch; current no-cookie run landed only `16643399` and `24667783`.
 - [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
@@ -167,5 +168,5 @@ missed them** after the 1B parser land.
 - [ ] Expand quality gate test set beyond the 10 audit files.
 - [x] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
 
-See `docs/RECALL_STATUS.md` for current status and `CLAUDE.md`
-for recovery architecture and handoff details.
+See `docs/RECALL_STATUS.md` for current measured status and `CLAUDE.md` for
+recovery architecture and handoff details.
