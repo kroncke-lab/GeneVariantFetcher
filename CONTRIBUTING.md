@@ -4,26 +4,15 @@ Thank you for your interest in contributing! This guide covers the essentials.
 
 ## Development Setup
 
+Follow [`docs/QUICKSTART.md`](docs/QUICKSTART.md) for clone, `.venv`,
+installation, browser setup, and `.env` basics. Credential details live in
+[`docs/API_KEYS.md`](docs/API_KEYS.md).
+
+Install pre-commit hooks after the project environment is active:
+
 ```bash
-# Clone and enter repo
-git clone https://github.com/your-org/GeneVariantFetcher.git
-cd GeneVariantFetcher
-
-# Create virtual environment (Python 3.11+ required)
-python3.11 -m venv .venv
-source .venv/bin/activate
-
-# Install in development mode (browser + dev extras)
-pip install -e ".[browser,dev]"
-python -m playwright install chromium
-
-# Install pre-commit hooks
-pip install pre-commit && pre-commit install
-
-# Copy environment template and add your API keys
-cp .env.example .env
-# Edit .env with your LLM, NCBI, Elsevier/Springer/Wiley keys.
-# For current recall work, include ELSEVIER_INSTTOKEN when institutionally available.
+.venv/bin/python -m pip install pre-commit
+.venv/bin/pre-commit install
 ```
 
 ## Adding a New Gene
@@ -46,12 +35,14 @@ cp .env.example .env
 
 3. **Run discovery** to find papers:
    ```bash
-   gvf extract GENE --max-pmids 500 --max-downloads 0
+   gvf extract GENE --email "$NCBI_EMAIL" --output ./results \
+     --max-pmids 500 --max-downloads 0
    ```
 
 4. **Test extraction** on a few papers before full run:
    ```bash
-   gvf extract GENE --limit 10 --scout-first
+   gvf extract GENE --email "$NCBI_EMAIL" --output ./results \
+     --max-pmids 50 --max-downloads 10 --scout-first
    ```
 
 ## Extending Extractors

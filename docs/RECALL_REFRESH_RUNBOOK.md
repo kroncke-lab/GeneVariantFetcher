@@ -10,6 +10,11 @@ History/benchmarks: [`RECALL_HISTORY.md`](RECALL_HISTORY.md). Current numbers:
 [`SUPPLEMENT_ACQUISITION_PLAN.md`](SUPPLEMENT_ACQUISITION_PLAN.md). Cold-start a
 brand-new gene: [`NEW_GENE_RUNBOOK.md`](NEW_GENE_RUNBOOK.md).
 
+Scope: use this for an existing run or scored gene when new source access,
+papers, or recovery logic might improve recall. Use `QUICKSTART.md` for setup
+and `END_TO_END_RECALL_RUN.md` only when recreating the workflow on another
+machine.
+
 ## One command (the common case)
 
 ```bash

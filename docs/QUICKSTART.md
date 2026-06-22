@@ -4,6 +4,11 @@ Get GVF running in 5 minutes and extract genetic variants from the literature.
 This is the canonical local setup and first-run guide; README and agent
 handoff files should link here instead of duplicating install or `.env` blocks.
 
+Scope: use this for local installation and a first single-gene run. Use
+`NEW_GENE_RUNBOOK.md` for no-gold production runs, `RECALL_REFRESH_RUNBOOK.md`
+for existing scored runs, and `END_TO_END_RECALL_RUN.md` for portable recall
+runs on another machine.
+
 ## Prerequisites
 
 - **Python 3.11+** (required)

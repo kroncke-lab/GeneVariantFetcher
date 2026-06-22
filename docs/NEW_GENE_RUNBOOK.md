@@ -12,6 +12,11 @@ Source recovery (paywall + supplement acquisition) runs by default in
 optional `--disease` flag scopes discovery and Tier 2 filtering to a
 gene-disease pair. The steps below detail what `gvf-run` runs.
 
+Scope: use this for a new gene-disease pair where recall cannot be scored yet.
+Use `RECALL_REFRESH_RUNBOOK.md` for an existing scored run and
+`END_TO_END_RECALL_RUN.md` when recreating the recall workflow on another
+machine.
+
 ## 1. Prepare
 
 Use the project virtual environment. Local setup lives in `docs/QUICKSTART.md`;

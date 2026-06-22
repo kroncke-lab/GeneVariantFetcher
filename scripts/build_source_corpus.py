@@ -48,7 +48,7 @@ if str(REPO) not in sys.path:
 
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
 
-ROOTS = ["results", "validation_runs", "results_top10"]
+DEFAULT_ROOTS = ["results", "validation_runs"]
 KNOWN_GENES = {
     "KCNH2",
     "KCNQ1",
@@ -75,13 +75,28 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def infer_gene(p: Path, pmid: str, corpus_pmid_gene: dict[str, str]) -> str | None:
-    parts = p.parts
-    for i, seg in enumerate(parts):
-        if seg in ("results", "results_top10") and i + 1 < len(parts):
-            cand = parts[i + 1]
-            if cand.upper() in KNOWN_GENES or cand.isupper():
-                return cand.upper()
+def looks_like_gene_dir(name: str) -> bool:
+    """Return True for path components that plausibly name a gene."""
+    cand = name.upper()
+    return cand in KNOWN_GENES or (
+        cand == name and any(ch.isalpha() for ch in cand) and len(cand) <= 12
+    )
+
+
+def infer_gene(
+    p: Path,
+    pmid: str,
+    corpus_pmid_gene: dict[str, str],
+    source_bases: list[Path],
+) -> str | None:
+    for base in source_bases:
+        try:
+            rel = p.relative_to(base)
+        except ValueError:
+            continue
+        for part in rel.parts[:-1]:
+            if looks_like_gene_dir(part):
+                return part.upper()
     up = p.as_posix().upper()
     for g in KNOWN_GENES:
         if f"/{g}/" in up or f"_{g}_" in up or f"_{g}." in up:
@@ -151,10 +166,19 @@ def main() -> int:
         default=str(REPO / "corpus"),
         help="Corpus dir (default: <repo>/corpus).",
     )
-    ap.add_argument("--roots", nargs="*", default=ROOTS, help="Source roots to scan.")
+    ap.add_argument(
+        "--roots",
+        nargs="*",
+        default=DEFAULT_ROOTS,
+        help=(
+            "Source roots to scan (default: results validation_runs). "
+            "Pass legacy/ad-hoc roots explicitly when needed."
+        ),
+    )
     args = ap.parse_args()
     out = Path(args.out)
     dry = not args.apply
+    source_bases = [(REPO / r).resolve() for r in args.roots]
 
     if args.verify:
         return verify(out)
@@ -171,8 +195,7 @@ def main() -> int:
     # Gather candidates per (gene, pmid) from all source roots.
     cand: dict[tuple[str, str], list[dict]] = defaultdict(list)
     skipped_no_gene: list[str] = []
-    for r in args.roots:
-        base = REPO / r
+    for base in source_bases:
         if not base.exists():
             continue
         for ft in base.rglob("*" + SUFFIX):
@@ -181,7 +204,7 @@ def main() -> int:
             pmid = ft.name[: -len(SUFFIX)]
             if not pmid.isdigit():
                 continue
-            gene = infer_gene(ft, pmid, corpus_pmid_gene)
+            gene = infer_gene(ft.resolve(), pmid, corpus_pmid_gene, source_bases)
             if not gene:
                 skipped_no_gene.append(ft.as_posix())
                 continue

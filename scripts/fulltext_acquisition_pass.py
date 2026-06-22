@@ -63,29 +63,6 @@ class GeneRun:
         )
 
 
-DEFAULT_RUNS: tuple[GeneRun, ...] = (
-    GeneRun(
-        "KCNH2",
-        REPO_ROOT
-        / "validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938",
-    ),
-    GeneRun(
-        "KCNQ1",
-        REPO_ROOT / "validation_runs/20260517_203904/results/KCNQ1/20260517_204424",
-    ),
-    GeneRun(
-        "RYR2",
-        REPO_ROOT
-        / "validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938",
-    ),
-    GeneRun(
-        "SCN5A",
-        REPO_ROOT
-        / "validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938",
-    ),
-)
-
-
 @dataclass
 class PmidStatus:
     pmid: str
@@ -202,6 +179,60 @@ def _autodiscover_filter_progress(gene: str) -> Path | None:
 
     candidates.sort(key=score, reverse=True)
     return candidates[0]
+
+
+def _autodiscover_run_dir(gene: str) -> Path | None:
+    """Find the most recent local run directory for a gene."""
+    candidates: set[Path] = set()
+    for root in (REPO_ROOT / "validation_runs", REPO_ROOT / "results"):
+        if not root.exists():
+            continue
+        for marker in (
+            f"**/{gene}.db",
+            f"**/{gene}_pmids.txt",
+            f"**/results/{gene}/**/{gene}.db",
+            f"**/results/{gene}/**/{gene}_pmids.txt",
+        ):
+            candidates.update(path.parent.resolve() for path in root.glob(marker))
+    candidates = {
+        path
+        for path in candidates
+        if (path / "pmc_fulltext").is_dir()
+        or (path / f"{gene}_pmids.txt").exists()
+        or (path / f"{gene}.db").exists()
+    }
+    if not candidates:
+        return None
+    return max(candidates, key=lambda path: path.stat().st_mtime)
+
+
+def _parse_run_dir_overrides(specs: Iterable[str]) -> dict[str, Path]:
+    overrides: dict[str, Path] = {}
+    for spec in specs:
+        if "=" not in spec:
+            LOG.warning("--run-dir %r missing '='; skipping", spec)
+            continue
+        gene_key, _, path_str = spec.partition("=")
+        overrides[gene_key.strip().upper()] = Path(path_str.strip()).expanduser()
+    return overrides
+
+
+def resolve_runs(genes: Iterable[str], overrides: dict[str, Path]) -> list[GeneRun]:
+    runs: list[GeneRun] = []
+    missing: list[str] = []
+    for gene in genes:
+        run_dir = overrides.get(gene) or _autodiscover_run_dir(gene)
+        if run_dir is None:
+            missing.append(gene)
+            continue
+        runs.append(GeneRun(gene, run_dir.resolve()))
+    if missing:
+        raise FileNotFoundError(
+            "No local run dir found for "
+            + ", ".join(missing)
+            + ". Pass --run-dir GENE=<path> for each missing gene."
+        )
+    return runs
 
 
 def resolve_filter_progress(run: GeneRun, overrides: dict[str, Path]) -> Path | None:
@@ -449,7 +480,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--genes",
         default="KCNH2,KCNQ1,RYR2,SCN5A",
-        help="Comma-separated genes from the built-in recall run map.",
+        help=(
+            "Comma-separated genes to process. Local run dirs are auto-discovered "
+            "from validation_runs/ and results/ unless --run-dir overrides them."
+        ),
+    )
+    parser.add_argument(
+        "--run-dir",
+        action="append",
+        default=[],
+        metavar="GENE=PATH",
+        help=(
+            "Use a specific run directory for a gene instead of autodiscovery. "
+            "Repeatable."
+        ),
     )
     parser.add_argument(
         "--target",
@@ -481,7 +525,11 @@ def parse_args() -> argparse.Namespace:
         "--scan-root",
         action="append",
         type=Path,
-        default=[REPO_ROOT / "validation_runs", REPO_ROOT / "results"],
+        default=[
+            REPO_ROOT / "corpus",
+            REPO_ROOT / "validation_runs",
+            REPO_ROOT / "results",
+        ],
         help="Root to scan for reusable prior FULL_CONTEXT.md files.",
     )
     parser.add_argument(
@@ -534,10 +582,12 @@ def main() -> int:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
 
-    selected = {g.strip().upper() for g in args.genes.split(",") if g.strip()}
-    runs = [run for run in DEFAULT_RUNS if run.gene in selected]
-    if not runs:
-        print(f"No matching built-in genes for {args.genes}", file=sys.stderr)
+    selected = [g.strip().upper() for g in args.genes.split(",") if g.strip()]
+    run_dir_overrides = _parse_run_dir_overrides(args.run_dir)
+    try:
+        runs = resolve_runs(selected, run_dir_overrides)
+    except FileNotFoundError as exc:
+        print(str(exc), file=sys.stderr)
         return 2
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
