@@ -41,7 +41,9 @@ jobs:
         run: |
           pytest tests/unit -v
         env:
-          NCBI_EMAIL: "ci@example.com"
+          # Not example.com: Settings rejects any address containing
+          # "example.com" as an unconfigured placeholder (config/settings.py).
+          NCBI_EMAIL: "ci@ncbi.test"
           OPENAI_API_KEY: "sk-test-dummy"
 
   integration-offline:
