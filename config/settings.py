@@ -295,6 +295,16 @@ class Settings(BaseSettings):
             "Gold-free; silently skips variants without count_provenance."
         ),
     )
+    count_classifier_fields: str = Field(
+        default="all",
+        env="COUNT_CLASSIFIER_FIELDS",
+        description=(
+            "Comma-separated logical count fields the count classifier may "
+            "flag/clear (all|carriers,affected,unaffected). Use "
+            "'affected,unaffected' to preserve carrier counts while refusing "
+            "ambiguous affected-status splits."
+        ),
+    )
     strict_cohort_labels: bool = Field(
         default=False,
         env="GVF_STRICT_COHORT_LABELS",
@@ -583,6 +593,28 @@ class Settings(BaseSettings):
                 f"count policy must be one of {sorted(allowed)}; got {v!r}"
             )
         return v_norm
+
+    @field_validator("count_classifier_fields")
+    @classmethod
+    def _validate_count_classifier_fields(cls, v: str) -> str:
+        """Normalize COUNT_CLASSIFIER_FIELDS; reject unknown field names early."""
+        v_norm = str(v or "").strip().lower()
+        if v_norm in {"", "all", "*"}:
+            return "all"
+        allowed = {"carriers", "affected", "unaffected"}
+        fields: list[str] = []
+        for item in v_norm.split(","):
+            field = item.strip().lower()
+            if not field:
+                continue
+            if field not in allowed:
+                raise ValueError(
+                    f"count classifier fields must be one or more of "
+                    f"{sorted(allowed)} or 'all'; got {field!r}"
+                )
+            if field not in fields:
+                fields.append(field)
+        return ",".join(fields) if fields else "all"
 
     @field_validator("reference_validation_policy")
     @classmethod

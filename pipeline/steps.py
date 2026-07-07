@@ -224,12 +224,39 @@ def _resolve_filter_workers() -> int:
         return DEFAULT_MAX_WORKERS
 
 
-def _resolve_count_policies() -> Tuple[str, str]:
-    """Return (count_guard_policy, count_classifier_policy) from Settings.
+COUNT_CLASSIFIER_FIELDS = {"carriers", "affected", "unaffected"}
+
+
+def _parse_count_classifier_fields(value: Any) -> tuple[str, ...] | None:
+    """Normalize COUNT_CLASSIFIER_FIELDS; None means all classifier fields."""
+    if value is None:
+        return None
+    raw = str(value).strip().lower()
+    if raw in {"", "all", "*"}:
+        return None
+    fields: list[str] = []
+    for item in raw.split(","):
+        field = item.strip().lower()
+        if not field:
+            continue
+        if field not in COUNT_CLASSIFIER_FIELDS:
+            raise ValueError(
+                f"count classifier field must be one of "
+                f"{sorted(COUNT_CLASSIFIER_FIELDS)} or 'all'; got {field!r}"
+            )
+        if field not in fields:
+            fields.append(field)
+    return tuple(fields) or None
+
+
+def _resolve_count_policies() -> Tuple[str, str, tuple[str, ...] | None]:
+    """Return (guard_policy, classifier_policy, classifier_fields) from Settings.
 
     Both default to "off" (strict no-op) so behavior is unchanged unless a
     stage is explicitly opted in via COUNT_GUARD_POLICY / COUNT_CLASSIFIER_POLICY.
-    Falls back to ("off", "off") if Settings can't load (e.g. minimal-env tests).
+    COUNT_CLASSIFIER_FIELDS narrows which fields the classifier may flag/clear;
+    None means all fields. Falls back to ("off", "off", None) if Settings can't
+    load (e.g. minimal-env tests).
     """
     try:
         from config.settings import get_settings
@@ -238,9 +265,12 @@ def _resolve_count_policies() -> Tuple[str, str]:
         return (
             getattr(settings, "count_guard_policy", "off") or "off",
             getattr(settings, "count_classifier_policy", "off") or "off",
+            _parse_count_classifier_fields(
+                getattr(settings, "count_classifier_fields", "all")
+            ),
         )
     except Exception:
-        return ("off", "off")
+        return ("off", "off", None)
 
 
 def _nonhuman_veterinary_source_reason(source_text: str) -> Optional[str]:
@@ -347,7 +377,7 @@ def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
     counts; "clear" additionally zeros the flagged counts (raw preserved under
     the flag).
     """
-    guard_policy, classifier_policy = _resolve_count_policies()
+    guard_policy, classifier_policy, classifier_fields = _resolve_count_policies()
     if guard_policy == "off" and classifier_policy == "off":
         return
     if not isinstance(extracted_data, dict):
@@ -380,7 +410,10 @@ def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
             enforce_per_variant_policy,
         )
 
-        classifier_annotations = detect_misclassified_counts(variants)
+        classifier_annotations = detect_misclassified_counts(
+            variants,
+            fields=classifier_fields,
+        )
         classifier_result = enforce_per_variant_policy(
             variants, classifier_annotations, policy=classifier_policy
         )
@@ -388,6 +421,7 @@ def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
             md = extracted_data.setdefault("extraction_metadata", {})
             md["count_classifier"] = {
                 "policy": classifier_policy,
+                "fields": list(classifier_fields) if classifier_fields else "all",
                 "flagged": classifier_result.flagged,
                 "cleared": classifier_result.cleared,
             }

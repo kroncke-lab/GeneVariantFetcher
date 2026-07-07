@@ -19,21 +19,26 @@ import pipeline.steps as steps
 
 
 class _StubSettings:
-    """Minimal stand-in exposing only the two count-policy attributes."""
+    """Minimal stand-in exposing only count-hygiene settings."""
 
-    def __init__(self, guard="off", classifier="off"):
+    def __init__(self, guard="off", classifier="off", classifier_fields="all"):
         self.count_guard_policy = guard
         self.count_classifier_policy = classifier
+        self.count_classifier_fields = classifier_fields
 
 
 @pytest.fixture
 def patch_policies(monkeypatch):
     """Return a setter that points steps' get_settings() at a stub."""
 
-    def _set(guard="off", classifier="off"):
+    def _set(guard="off", classifier="off", classifier_fields="all"):
         monkeypatch.setattr(
             "config.settings.get_settings",
-            lambda: _StubSettings(guard=guard, classifier=classifier),
+            lambda: _StubSettings(
+                guard=guard,
+                classifier=classifier,
+                classifier_fields=classifier_fields,
+            ),
         )
 
     return _set
@@ -177,7 +182,7 @@ def test_resolve_count_policies_defaults_off_without_settings(monkeypatch):
         raise RuntimeError("no env")
 
     monkeypatch.setattr("config.settings.get_settings", _boom)
-    assert steps._resolve_count_policies() == ("off", "off")
+    assert steps._resolve_count_policies() == ("off", "off", None)
 
 
 def _baseline_env(monkeypatch):
@@ -198,22 +203,25 @@ def test_settings_count_policies_default_off(monkeypatch):
         settings = get_settings()
         assert settings.count_guard_policy == "off"
         assert settings.count_classifier_policy == "off"
+        assert settings.count_classifier_fields == "all"
     finally:
         get_settings.cache_clear()
 
 
-def test_settings_count_policy_accepts_flag_and_clear(monkeypatch):
+def test_settings_count_policy_accepts_flag_clear_and_field_scope(monkeypatch):
     """flag/clear parse and normalize (case-insensitive) on real Settings."""
     from config.settings import get_settings
 
     _baseline_env(monkeypatch)
     monkeypatch.setenv("COUNT_GUARD_POLICY", "FLAG")
     monkeypatch.setenv("COUNT_CLASSIFIER_POLICY", "clear")
+    monkeypatch.setenv("COUNT_CLASSIFIER_FIELDS", "Affected, Unaffected")
     get_settings.cache_clear()
     try:
         settings = get_settings()
         assert settings.count_guard_policy == "flag"
         assert settings.count_classifier_policy == "clear"
+        assert settings.count_classifier_fields == "affected,unaffected"
     finally:
         get_settings.cache_clear()
 
@@ -230,3 +238,57 @@ def test_settings_count_policy_rejects_unknown(monkeypatch):
             get_settings()
     finally:
         get_settings.cache_clear()
+
+
+def test_settings_count_classifier_fields_rejects_unknown(monkeypatch):
+    """An unknown classifier field is rejected by the validator."""
+    from config.settings import get_settings
+
+    _baseline_env(monkeypatch)
+    monkeypatch.setenv("COUNT_CLASSIFIER_FIELDS", "carriers,status")
+    get_settings.cache_clear()
+    try:
+        with pytest.raises(ValueError):
+            get_settings()
+    finally:
+        get_settings.cache_clear()
+
+
+def test_classifier_field_scope_clears_only_requested_fields(patch_policies):
+    """COUNT_CLASSIFIER_FIELDS can limit clearing to affected-status counts."""
+    patch_policies(
+        guard="off",
+        classifier="clear",
+        classifier_fields="affected,unaffected",
+    )
+    data = {
+        "variants": [
+            {
+                "patients": {"count": 453},
+                "penetrance_data": {
+                    "total_carriers_observed": 453,
+                    "affected_count": 200,
+                    "unaffected_count": 253,
+                },
+                "count_provenance": {
+                    "carriers_count_type": "cohort_total",
+                    "affected_count_type": "cohort_total",
+                    "unaffected_count_type": "control",
+                },
+            }
+        ],
+        "extraction_metadata": {},
+    }
+
+    steps._apply_count_hygiene(data)
+
+    variant = data["variants"][0]
+    assert variant["patients"]["count"] == 453
+    assert variant["penetrance_data"]["total_carriers_observed"] == 453
+    assert variant["penetrance_data"]["affected_count"] is None
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert set(variant["count_classifier_flags"]) == {"affected", "unaffected"}
+    assert data["extraction_metadata"]["count_classifier"]["fields"] == [
+        "affected",
+        "unaffected",
+    ]

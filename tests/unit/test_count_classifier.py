@@ -162,6 +162,26 @@ def test_each_field_classified_independently():
     assert fields_flagged == {"affected", "unaffected"}
 
 
+def test_fields_argument_limits_detection_scope():
+    variant = _variant(
+        carriers=453,
+        affected=120,
+        unaffected=80,
+        provenance={
+            "carriers_column_label": "Total N",
+            "carriers_count_type": "cohort_total",
+            "affected_column_label": "All affected",
+            "affected_count_type": "cohort_total",
+            "unaffected_column_label": "Controls",
+            "unaffected_count_type": "control",
+        },
+    )
+
+    anns = detect_misclassified_counts([variant], fields=["affected", "unaffected"])
+
+    assert {a.field for a in anns} == {"affected", "unaffected"}
+
+
 def test_unknown_count_type_is_refused():
     """The closed vocabulary includes 'unknown' as a non-per-variant type."""
     variant = _variant(

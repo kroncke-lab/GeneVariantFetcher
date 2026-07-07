@@ -47,6 +47,27 @@ def _seed(extractions_dir):
     _write(extractions_dir / "KCNQ1_PMID_88888888.json", legacy)
 
 
+def _seed_multi_field(extractions_dir):
+    extractions_dir.mkdir(parents=True, exist_ok=True)
+    variant = {
+        "patients": {"count": 453},
+        "penetrance_data": {
+            "total_carriers_observed": 453,
+            "affected_count": 120,
+            "unaffected_count": 80,
+        },
+        "count_provenance": {
+            "carriers_column_label": "Total N",
+            "carriers_count_type": "cohort_total",
+            "affected_column_label": "All affected",
+            "affected_count_type": "cohort_total",
+            "unaffected_column_label": "Controls",
+            "unaffected_count_type": "control",
+        },
+    }
+    _write(extractions_dir / "KCNQ1_PMID_12345678.json", [variant])
+
+
 def test_dry_run_detects_only_misclassified_pmids(tmp_path, monkeypatch):
     extractions = tmp_path / "extractions"
     _seed(extractions)
@@ -119,3 +140,39 @@ def test_clear_policy_nulls_both_mirrors_and_backs_up(tmp_path, monkeypatch):
     # Backup contains the original
     backup_payload = json.loads((backup / "KCNQ1_PMID_29622001.json").read_text())
     assert backup_payload["variants"][0]["patients"]["count"] == 453
+
+
+def test_fields_option_limits_classifier_scope(tmp_path, monkeypatch):
+    extractions = tmp_path / "extractions"
+    _seed_multi_field(extractions)
+    report = tmp_path / "report.json"
+    backup = tmp_path / "backup"
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "apply_count_classifier.py",
+            "--extractions",
+            str(extractions),
+            "--policy",
+            "clear",
+            "--fields",
+            "affected,unaffected",
+            "--backup-dir",
+            str(backup),
+            "--report-out",
+            str(report),
+        ],
+    )
+    rc = cli.main()
+    assert rc == 0
+
+    cleared = json.loads((extractions / "KCNQ1_PMID_12345678.json").read_text())
+    variant = cleared["variants"][0]
+    assert variant["patients"]["count"] == 453
+    assert variant["penetrance_data"]["total_carriers_observed"] == 453
+    assert variant["penetrance_data"]["affected_count"] is None
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert set(variant["count_classifier_flags"]) == {"affected", "unaffected"}
+    assert cleared["count_classifier"]["fields"] == ["affected", "unaffected"]
