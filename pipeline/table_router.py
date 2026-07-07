@@ -1275,11 +1275,26 @@ def route_tables(
 
         response = _call()
         raw = response.choices[0].message.content or ""
+        if not raw.strip():
+            logger.warning(
+                "table_router: empty LLM response from %s; retrying once", model
+            )
+            response = _call()
+            raw = response.choices[0].message.content or ""
     except Exception as e:  # noqa: BLE001
         logger.warning("table_router: LLM call failed: %s", e)
         return RouterResult(
             routed_tables=deterministic,
             error=str(e),
+            used_fallback=not deterministic,
+        )
+
+    if not raw.strip():
+        error = f"empty LLM response from table router model {model}"
+        logger.warning("table_router: %s", error)
+        return RouterResult(
+            routed_tables=deterministic,
+            error=error,
             used_fallback=not deterministic,
         )
 
@@ -1359,6 +1374,54 @@ def _usable_count_index(
     return idx
 
 
+def _router_count_type_for_label(label: Optional[str], role: str) -> Optional[str]:
+    normalized = _normalize_header(label or "")
+    if not normalized:
+        return None
+    if role == "unaffected" and any(
+        token in normalized
+        for token in (
+            "control",
+            "healthy",
+            "normal",
+            "unaffected",
+            "asymptomatic",
+        )
+    ):
+        return "unaffected_control"
+    if role == "affected" and normalized in {
+        "case",
+        "cases",
+        "brs",
+        "lqt",
+        "brslqt",
+        "disease",
+        "diseased",
+    }:
+        return "case"
+    if "family" in normalized or "families" in normalized or "kindred" in normalized:
+        return "family_count"
+    if "proband" in normalized:
+        return "proband_count"
+    if any(
+        token in normalized
+        for token in ("screened", "ntested", "numbertested", "screenedn")
+    ):
+        return "screened_N"
+    if any(
+        token in normalized
+        for token in (
+            "totalcase",
+            "totalcontrol",
+            "totalsample",
+            "samplesize",
+            "cohortsize",
+        )
+    ):
+        return "cohort_total"
+    return "per_variant_carrier"
+
+
 def _router_count_provenance(
     table: MarkdownTable,
     count_idx: Optional[int],
@@ -1374,11 +1437,13 @@ def _router_count_provenance(
     unaffected_label = _header_label(table, unaff_idx)
     return {
         "carriers_column_label": carrier_label,
-        "carriers_count_type": "per_variant_carrier" if carrier_label else None,
+        "carriers_count_type": _router_count_type_for_label(carrier_label, "carriers"),
         "affected_column_label": affected_label,
-        "affected_count_type": "per_variant_carrier" if affected_label else None,
+        "affected_count_type": _router_count_type_for_label(affected_label, "affected"),
         "unaffected_column_label": unaffected_label,
-        "unaffected_count_type": "per_variant_carrier" if unaffected_label else None,
+        "unaffected_count_type": _router_count_type_for_label(
+            unaffected_label, "unaffected"
+        ),
     }
 
 
@@ -1441,25 +1506,55 @@ def _router_fact_rows(
         "patient_count",
         total,
         count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            "implicit one carrier per clinical row"
+            if count_idx == _INFER_ROW_PATIENT_COUNT
+            else _header_label(table, count_idx),
+            "carriers",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "total_carriers_observed",
         total,
         count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            "implicit one carrier per clinical row"
+            if count_idx == _INFER_ROW_PATIENT_COUNT
+            else _header_label(table, count_idx),
+            "carriers",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "affected_count",
         affected,
         aff_idx if aff_idx is not None else count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            _header_label(table, aff_idx)
+            or (
+                "implicit one carrier per clinical row"
+                if count_idx == _INFER_ROW_PATIENT_COUNT
+                else _header_label(table, count_idx)
+            ),
+            "affected",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "unaffected_count",
         unaffected,
         unaff_idx if unaff_idx is not None else count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            _header_label(table, unaff_idx)
+            or (
+                "implicit one carrier per clinical row"
+                if count_idx == _INFER_ROW_PATIENT_COUNT
+                else _header_label(table, count_idx)
+            ),
+            "unaffected",
+        )
+        or "per_variant_carrier",
     )
     add_count("uncertain_count", uncertain, unc_idx, "per_variant_carrier")
     return rows

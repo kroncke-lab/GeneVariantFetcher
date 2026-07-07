@@ -564,6 +564,32 @@ def test_extract_via_router_falls_back_when_router_returns_empty():
     assert result["error"] is None
 
 
+def test_extract_via_router_retries_empty_llm_response_then_reports_error():
+    calls = 0
+
+    def stub(**_):
+        nonlocal calls
+        calls += 1
+        return _stub_response("")
+
+    paper = """Table 1. Functional assays
+
+| construct | tail current | activation V1/2 |
+|-----------|--------------|-----------------|
+| WT | 100% | -32 |
+| K897T | 95% | -30 |
+"""
+
+    result = extract_via_router(
+        paper, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert calls == 2
+    assert result["used_fallback"] is True
+    assert result["variants"] == []
+    assert "empty LLM response" in result["error"]
+
+
 # --- B3: cohort-label guard (strict_cohort_labels) -------------------------
 
 
@@ -635,18 +661,26 @@ def test_infer_mapping_strict_skips_cohort_columns_on_assay_table():
 def test_infer_mapping_strict_keeps_unambiguous_labels():
     table = MarkdownTable(
         table_id="T1",
-        caption="Table 3. Variant carriers",
-        header_line="| rsID | Protein | Affected | Unaffected |",
-        header_cells=["rsID", "Protein", "Affected", "Unaffected"],
-        data_lines=["| rs1 | p.Arg190Trp | 2 | 3 |"],
+        caption="Table 3. KCNH2 variant carriers",
+        header_line="| Protein | Affected | Unaffected |",
+        header_cells=["Protein", "Affected", "Unaffected"],
+        data_lines=["| K897T | 2 | 3 |"],
         char_start=0,
         char_end=80,
     )
     mapping = _infer_column_mapping_from_headers(table, strict_cohort_labels=True)
     assert mapping is not None
     # 'Affected'/'Unaffected' are unambiguous -> still mapped even on an assay table.
-    assert mapping.get("affected") == 2
-    assert mapping.get("unaffected") == 3
+    assert mapping.get("affected") == 1
+    assert mapping.get("unaffected") == 2
+
+    variants = parse_routed_table(table, mapping, "KCNH2")
+    assert (
+        variants[0]["count_provenance"]["affected_count_type"] == "per_variant_carrier"
+    )
+    assert (
+        variants[0]["count_provenance"]["unaffected_count_type"] == "unaffected_control"
+    )
 
 
 def test_infer_mapping_prefers_carrier_over_total_case_denominator():

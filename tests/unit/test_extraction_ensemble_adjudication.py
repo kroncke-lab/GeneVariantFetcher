@@ -151,6 +151,112 @@ def test_high_risk_extraction_uses_adjudicator_model(monkeypatch):
     )
 
 
+def test_claim_verification_ranks_count_risk_before_row_order(monkeypatch):
+    captured = {"cards": []}
+
+    def fake_verify(self, card):
+        captured["model"] = self.model
+        captured["cards"].append(card)
+        return {
+            "verdict": "directly_supported",
+            "field_verdicts": {
+                "variant": "directly_supported",
+                "total_carriers": "directly_supported",
+                "affected": "directly_supported",
+                "unaffected": "directly_supported",
+            },
+            "corrected_values": card.extracted,
+            "reason": "Local table row supports the claim.",
+            "evidence_quote": card.variant,
+        }
+
+    monkeypatch.setattr(VariantClaimVerifier, "verify", fake_verify)
+
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    extractor.max_verifier_cards = 2
+    extractor.evidence_packet_max_chars = 6000
+    data = {
+        "variants": [
+            _variant("p.LowRiskAla", total=1, affected=1, unaffected=0),
+            {
+                **_variant("p.RegexHotArg", total=120, affected=75, unaffected=45),
+                "source_location": "Table (regex extraction)",
+                "source_layer": "regex_table",
+            },
+            _variant("p.LowRiskGly", total=2, affected=2, unaffected=0),
+            {
+                **_variant("p.RegexHotGly", total=80, affected=50, unaffected=30),
+                "source_location": "Supplement Table 2 (regex extraction)",
+                "source_layer": "regex_table",
+            },
+        ],
+        "extraction_metadata": {},
+    }
+    source_text = "\n".join(
+        [
+            "p.LowRiskAla was observed in one affected carrier.",
+            "Table row: p.RegexHotArg had 120 carriers, 75 affected, and 45 unaffected.",
+            "p.LowRiskGly was observed in two affected carriers.",
+            "Table row: p.RegexHotGly had 80 carriers, 50 affected, and 30 unaffected.",
+        ]
+    )
+
+    verified = extractor._verify_claim_cards_for_extraction(
+        paper=Paper(pmid="2", title="Dense table", gene_symbol="RYR2"),
+        primary_model="primary-model",
+        extracted_data=data,
+        source_text=source_text,
+        verifier_model="frontier-verifier",
+    )
+
+    assert captured["model"] == "frontier-verifier"
+    assert [card.variant for card in captured["cards"]] == [
+        "p.RegexHotArg",
+        "p.RegexHotGly",
+    ]
+    assert [v["protein_notation"] for v in verified["variants"]] == [
+        "p.LowRiskAla",
+        "p.RegexHotArg",
+        "p.LowRiskGly",
+        "p.RegexHotGly",
+    ]
+    metadata = verified["extraction_metadata"]
+    assert metadata["claim_verification_candidate_policy"] == "risk_ranked"
+    assert metadata["claim_verification_cards"] == 2
+    assert metadata["claim_verification_results"][0]["variant"] == "p.RegexHotArg"
+
+
+def test_risk_flags_count_bearing_regex_table_rows():
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    data = {
+        "variants": [
+            {
+                **_variant("p.RegexHotArg", total=120, affected=75, unaffected=45),
+                "source_location": "Table (regex extraction)",
+                "source_layer": "regex_table",
+            },
+            {
+                **_variant("p.RegexHotGly", total=80, affected=50, unaffected=30),
+                "source_location": "Supplement Table 2 (regex extraction)",
+                "source_layer": "regex_table",
+            },
+            _variant("p.LowRiskAla", total=1, affected=1, unaffected=0),
+        ],
+        "extraction_metadata": {},
+    }
+
+    risk = extractor._assess_extraction_risk(
+        extracted_data=data,
+        source_text="Table rows mention RYR2 variants and carrier counts.",
+        estimated_variants=3,
+        scanner_variant_count=3,
+    )
+
+    assert risk["score"] >= 2
+    assert "count_bearing_high_risk_source_layer:2" in risk["reasons"]
+    assert risk["requires_adjudication"] is True
+
+
 def test_low_risk_extraction_skips_adjudicator(monkeypatch):
     def fail_if_called(self, prompt):
         raise AssertionError("adjudicator should not run for low-risk extraction")
