@@ -8,7 +8,6 @@ genetic variant data using advanced LLM prompting.
 import copy
 import json
 import logging
-import os
 import re
 from pathlib import Path
 from typing import Any, List, Optional
@@ -37,6 +36,7 @@ from pipeline.prompts import (
 from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.env_utils import get_env_int
 from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
     VariantScanner,
@@ -49,12 +49,10 @@ logger = logging.getLogger(__name__)
 TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
 TABLE_REGEX_MERGE_MAX_VARIANTS = 500
 SCANNER_REGEX_MERGE_MAX_VARIANTS = 150
-TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = int(
-    os.environ.get("GVF_TABLE_OVERFLOW_MERGE_MAX_VARIANTS", "2000")
+TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = get_env_int(
+    "GVF_TABLE_OVERFLOW_MERGE_MAX_VARIANTS", 2000
 )
-TABLE_REGEX_OVERFLOW_CHUNK_SIZE = int(
-    os.environ.get("GVF_TABLE_OVERFLOW_CHUNK_SIZE", "250")
-)
+TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 250)
 
 
 def _find_data_zones_file(

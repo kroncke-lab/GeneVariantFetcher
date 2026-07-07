@@ -12,6 +12,7 @@ import os
 import re
 from typing import Any, Optional
 
+from utils.env_utils import get_env_int
 from utils.gene_metadata import (
     gene_alias_regex,
     get_gene_aliases,
@@ -37,14 +38,14 @@ PROTEIN_REF_POS_RE = re.compile(
     re.IGNORECASE,
 )
 
-CONTEXT_SCAN_MAX_SOURCE_CHARS = int(
-    os.environ.get("TARGET_GENE_SPECIFICITY_CONTEXT_MAX_SOURCE_CHARS", "2000000")
+CONTEXT_SCAN_MAX_SOURCE_CHARS = get_env_int(
+    "TARGET_GENE_SPECIFICITY_CONTEXT_MAX_SOURCE_CHARS", 2_000_000
 )
-CONTEXT_SCAN_MAX_VARIANTS = int(
-    os.environ.get("TARGET_GENE_SPECIFICITY_CONTEXT_MAX_VARIANTS", "2000")
+CONTEXT_SCAN_MAX_VARIANTS = get_env_int(
+    "TARGET_GENE_SPECIFICITY_CONTEXT_MAX_VARIANTS", 2000
 )
-VARIANTFEATURES_MAX_VARIANTS = int(
-    os.environ.get("TARGET_GENE_SPECIFICITY_VARIANTFEATURES_MAX_VARIANTS", "2000")
+VARIANTFEATURES_MAX_VARIANTS = get_env_int(
+    "TARGET_GENE_SPECIFICITY_VARIANTFEATURES_MAX_VARIANTS", 2000
 )
 
 AA3_TO_1 = {
