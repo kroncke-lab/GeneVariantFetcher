@@ -6,7 +6,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from cli.dashboard import generate_dashboard, md_to_html
+from cli.dashboard import _sanitize_local_paths, generate_dashboard, md_to_html
 
 
 def _make_corpus(corpus: Path) -> None:
@@ -79,6 +79,20 @@ def _make_db(db: Path) -> None:
     )
     con.commit()
     con.close()
+
+
+def test_sanitize_local_paths_redacts_mac_and_windows_paths():
+    mac = _sanitize_local_paths("see /Users/brett/GVF/results/source.pdf now")
+    assert "/Users/brett" not in mac
+    assert "[local path: source.pdf]" in mac
+
+    win_backslash = _sanitize_local_paths("see C:\\Users\\brett\\GVF\\source.pdf now")
+    assert "C:\\Users" not in win_backslash
+    assert "[local path: source.pdf]" in win_backslash
+
+    win_forwardslash = _sanitize_local_paths("see C:/Users/brett/GVF/source.pdf now")
+    assert "C:/Users" not in win_forwardslash
+    assert "[local path: source.pdf]" in win_forwardslash
 
 
 def test_md_to_html_renders_blocks_and_tables():

@@ -717,14 +717,18 @@ import os  # noqa: E402
 REPO = Path(__file__).resolve().parents[1]
 
 _LOCAL_PATH_RE = re.compile(
-    r"(/Users/[^\s<>'\"`\]\)]+|/private/var/[^\s<>'\"`\]\)]+|/tmp/[^\s<>'\"`\]\)]+)"
+    r"((?:/[Uu]sers/|[A-Za-z]:[/\\][Uu]sers[/\\])[^\s<>'\"`\]\)]+"
+    r"|/private/var/[^\s<>'\"`\]\)]+|/tmp/[^\s<>'\"`\]\)]+)"
 )
 
 
 def _sanitize_local_paths(text: str) -> str:
-    return _LOCAL_PATH_RE.sub(
-        lambda m: f"[local path: {Path(m.group(0)).name or 'redacted'}]", text
-    )
+    # Split on both separators so Windows (backslash) paths are reduced to their
+    # basename too — Path().name only splits on "/" on POSIX and would leak them.
+    def _basename(match: str) -> str:
+        return re.split(r"[/\\]", match.rstrip("/\\"))[-1] or "redacted"
+
+    return _LOCAL_PATH_RE.sub(lambda m: f"[local path: {_basename(m.group(0))}]", text)
 
 
 def _rel(target: Path, start: Path) -> str:
