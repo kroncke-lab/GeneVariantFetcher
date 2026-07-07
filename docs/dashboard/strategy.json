@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-07-07 10:19 America/Chicago",
+  "models": [
+    "Codex scheduled-run workflow",
+    "Claude CLI bounded critique",
+    "Grok CLI bounded critique"
+  ],
+  "barriers": [
+    {
+      "title": "Current score is slightly below the June 12 status snapshot",
+      "detail": "The immediate score-only run wrote recall_metrics/nightly_20260707_151618: unique variants 2589/3010 (86.0%), rows 5517/6833 (80.7%), PMIDs 1273/1502 (84.8%). That is slightly lower than docs/RECALL_STATUS.md (2591 unique, 5518 rows, 1274 PMIDs), so the dirty scorer/matcher changes need reconciliation before claiming progress."
+    },
+    {
+      "title": "The latest disagreement taxonomy is no longer acquisition-only",
+      "detail": "The newest paper_disagreement_report.csv is led by pipeline_only_extras (481), count_semantics (326), source_missing_or_stub (287), and source_abstract_only (102). Source access still matters, but precision/count attribution is now a first-class blocker."
+    },
+    {
+      "title": "SCN5A and RYR2 remain below target despite KCNQ1 crossing 90%",
+      "detail": "KCNQ1 unique-variant recall is 90.5%, but KCNH2 is 83.2%, RYR2 is 83.7%, and SCN5A is 86.2%. Aggregate row and patient gaps remain large: +633 rows and +947 patients/carriers to 90%."
+    },
+    {
+      "title": "Count-role semantics are the main MAE risk",
+      "detail": "Rows-mode MAE is stable for carriers (0.615) and affected (0.494), but unaffected MAE remains high at 1.192. The external critiques both flagged count-bearing extras and unaffected/control attribution as the risk most likely to make recall gains look better than the evidence really is."
+    }
+  ],
+  "ideas": [
+    {
+      "title": "Classify pipeline_only_extras before broad acquisition",
+      "detail": "Split the 481 extras into zero-count linkage rows versus real counted carrier mis-binds. This is cheap, no-network work and tells us whether the apparent precision surface is mostly harmless linker noise or a real adjudication/MAE problem."
+    },
+    {
+      "title": "Run a count-semantics pass on regex_table and controls",
+      "detail": "Use papers with usable full text to preserve raw count columns and classify per-variant carrier, affected, unaffected/control, and study-wide totals before DB writes. Guard especially against population/control counts landing as unaffected carrier evidence."
+    },
+    {
+      "title": "Keep SCN5A supplement work bounded",
+      "detail": "Target PMID 29325976 and the missing_variant_supplement set as a small before/after experiment. Score those PMIDs and then the aggregate, rather than starting an unbounded publisher-access sweep."
+    },
+    {
+      "title": "Reconcile the current scorer delta",
+      "detail": "The latest score lost two unique variants versus the live status file. Diff nightly_20260707_151618 against codex_verify_20260612 or the canonical June 12 artifact to identify whether the delta is a deliberate matcher/precision cleanup or an accidental regression."
+    }
+  ],
+  "solutions": [
+    {
+      "title": "Use counted precision as a land gate",
+      "detail": "Require precision_vs_counted_gold_pmids to hold at or above the current 77.2% floor, or improve alongside recall, before accepting source or extraction changes into canonical metrics."
+    },
+    {
+      "title": "Add a dashboard regression callout",
+      "detail": "Keep docs/dashboard/index.html on the latest score artifact, but use this strategy section to flag when the latest score disagrees with docs/RECALL_STATUS.md so status updates are intentional."
+    },
+    {
+      "title": "Make the next overnight run compare artifacts",
+      "detail": "Have the scheduled job compute a compact delta from the previous accepted summary: PMIDs, rows, unique variants, patients, affected, unaffected, counted precision, and MAE. That will expose small regressions immediately."
+    },
+    {
+      "title": "Keep KCNE1 out of recall headlines",
+      "detail": "KCNE1 remains extraction-only until a gold input exists. The dashboard can list it as no-gold context, but it should not be used in scored recall claims."
+    }
+  ],
+  "model_notes": {
+    "Claude CLI": "Overlooked risk: acquisition-first work can feed more text into over-attribution paths. Suggested first classifying pipeline_only_extras and attacking unaffected count semantics. Guard precision_vs_counted_gold_pmids.",
+    "Grok CLI": "Overlooked risk: pipeline_only_extras is the largest current disagreement bucket and counted precision is only 77.2%. Suggested bounded SCN5A supplement A/B plus count-semantics/regex_table precision work. Guard counted precision and extras together.",
+    "Run note": "Grok's default model rejected --effort max, so it was rerun noninteractively without that flag. Claude ran with --effort max and a small budget cap."
+  }
+}
