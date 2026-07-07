@@ -5,6 +5,7 @@ This module provides standardized retry configurations used across the project
 for API calls, LLM requests, and web scraping operations.
 """
 
+import os
 from typing import Tuple, Type
 
 import requests
@@ -118,8 +119,21 @@ _LLM_RETRY_EXCEPTIONS: Tuple[Type[Exception], ...] = (
     *LITELLM_TRANSIENT_ERRORS,
 )
 
+
+def _positive_int_env(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    if raw:
+        try:
+            value = int(raw)
+            if value > 0:
+                return value
+        except ValueError:
+            pass
+    return default
+
+
 llm_retry = retry(
-    stop=stop_after_attempt(8),
+    stop=stop_after_attempt(_positive_int_env("LLM_RETRY_ATTEMPTS", 8)),
     # Jittered exponential: nominal 4s, 8s, 16s, 32s, 60s, 60s, 60s with up to
     # 10s additive jitter per attempt. Total budget ~5 minutes, enough to
     # outlast a typical Anthropic 529 spike without burning all attempts in

@@ -65,7 +65,10 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 3: Variant Extraction (ExpertExtractor)                                     │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
-│   • Model cascade from config/settings.py (Claude by default)                     │
+│   • Cheap paper census estimates variant/count ranges for escalation only         │
+│   • Kimi routes candidate tables; deterministic parser extracts table rows         │
+│   • Grok 4.3 runs primary full-text extraction when table parsing is insufficient  │
+│   • GPT-5.4 / DeepSeek / Kimi verify compact claim cards for high-risk outputs    │
 │   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
 │     - Detects concatenated gene+variant (HERGG604S, KCNH2A561V)                  │
 │     - Unicode arrow normalization (→, ➔, ⟶)                                      │
@@ -265,13 +268,34 @@ extractions/{gene}_PMID_*.json
 | **Springer** | API key | Variable | Free for researchers |
 | **Wiley** | API key | Variable | TDM agreement needed |
 | **Unpaywall** | Email | 100k/day | OA link resolution |
-| **LLM provider** | API key | Per plan | One provider required for extraction — Anthropic (default), OpenAI, or Azure AI |
+| **LLM provider** | API key | Per plan | One provider required for extraction — Azure AI, Anthropic, or OpenAI |
 
 ### Model Provider And Reasoning Effort
 
-`config/settings.py` resolves the effective model for each stage. Anthropic is
-the default provider; OpenAI and Azure AI are supported when the corresponding
-provider keys and model settings are configured.
+`config/settings.py` resolves the effective model for each stage. The current
+forward strategy is Azure-first for routine work and Anthropic-final for
+explicit escalation queues: cheap triage/table routing/extraction/debate stay on
+Azure deployments, while Sonnet/Opus are reserved for final adjudication over
+compact claim cards.
+
+Recommended staging routing:
+
+| Stage | Model |
+|-------|-------|
+| Tier 2 triage | `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint) |
+| Cheap paper census | deterministic regex/table/count pass; stored as `extraction_metadata.paper_census` |
+| Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
+| Tier 3 extraction | `azure_ai/grok-4.3` |
+| Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
+| Final adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
+| Final hard-case arbiter | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
+
+The paper census is deliberately approximate. It produces ranges for variant
+rows, unique variants, carriers, affected, and unaffected counts plus risk flags
+such as denominator-like columns or missing table bodies. These values are never
+used as extracted facts. They only raise review priority, trigger targeted
+fallback, and help the adjudication dashboard explain why a paper or claim was
+escalated.
 
 OpenAI-style reasoning models expose a reasoning-effort knob. GVF can set it per
 pipeline stage through environment variables; all default to unset, so behavior
@@ -294,6 +318,13 @@ Treat reasoning effort as a secondary lever. Source acquisition, supplement
 folding, extraction logic, and matcher behavior usually move recall more than a
 non-default effort value. Change one stage at a time and re-score before keeping
 the setting.
+
+Before a long run, verify that the active Azure endpoint has the configured
+deployment names:
+
+```bash
+.venv/bin/python scripts/smoke_azure_models.py
+```
 
 ### Retry & Circuit Breaker
 

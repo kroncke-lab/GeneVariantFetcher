@@ -246,7 +246,7 @@ Without any publisher keys, GVF still:
 ### Recommendation
 
 For best results, obtain at least:
-1. **One LLM provider key** (required) — Anthropic (default), OpenAI, or Azure AI
+1. **One LLM provider key** (required) — Azure AI, Anthropic, or OpenAI
 2. **Elsevier API key + `ELSEVIER_INSTTOKEN`** (biggest current impact)
 3. **Springer** (free, good coverage)
 

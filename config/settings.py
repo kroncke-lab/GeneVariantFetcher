@@ -20,6 +20,14 @@ ANTHROPIC_TIER2_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
 ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
 ANTHROPIC_TABLE_ROUTER_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
 ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
+FINAL_ADJUDICATOR_DEFAULT = "anthropic/claude-sonnet-5"
+FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
+
+# Azure-first staging defaults. These are deployment names on the active Azure
+# AI Foundry endpoint, not base model names. Per-tier env vars still win.
+AZURE_TIER2_DEFAULT = "gpt-5.4"
+AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
+AZURE_TIER3_DEFAULT = "grok-4.3"
 
 # Tier-model env var names. Used to decide whether the user explicitly set
 # a tier model (in which case --model-provider does not override it) vs.
@@ -326,6 +334,23 @@ class Settings(BaseSettings):
         description=(
             "Comma-separated early debate critic models. If unset, defaults to "
             "GPT54_DEPLOYMENT and DEEPSEEK_DEPLOYMENT via Azure."
+        ),
+    )
+    final_adjudicator_models: Union[str, List[str]] = Field(
+        default=FINAL_ADJUDICATOR_DEFAULT,
+        env="FINAL_ADJUDICATOR_MODELS",
+        description=(
+            "Comma-separated final adjudication models reserved for explicit "
+            "post-debate escalation queues. Keep Anthropic here instead of in "
+            "routine Tier 2/Tier 3 extraction loops."
+        ),
+    )
+    final_arbiter_model: str = Field(
+        default=FINAL_ARBITER_DEFAULT,
+        env="FINAL_ARBITER_MODEL",
+        description=(
+            "Most expensive final arbiter for hard residual cases after the "
+            "final adjudicator screen, usually an Opus-class Claude model."
         ),
     )
 
@@ -684,6 +709,13 @@ class Settings(BaseSettings):
             return [item.strip() for item in v.split(",") if item.strip()]
         return v
 
+    @field_validator("final_adjudicator_models", mode="after")
+    @classmethod
+    def split_final_adjudicator_models(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
+
     @field_validator("browser_html_publisher_allowlist", mode="after")
     @classmethod
     def split_browser_html_allowlist(cls, v):
@@ -812,6 +844,9 @@ class Settings(BaseSettings):
     def _is_anthropic(self) -> bool:
         return (self.model_provider or "").strip().lower() == "anthropic"
 
+    def _is_azure(self) -> bool:
+        return (self.model_provider or "").strip().lower() in {"azure", "azure_ai"}
+
     def _tier_env_set(self, field_name: str) -> bool:
         env_var = _TIER_ENV_VARS.get(field_name)
         if not env_var:
@@ -831,12 +866,24 @@ class Settings(BaseSettings):
     def get_tier2_model(self) -> str:
         if self._is_anthropic() and not self._tier_env_set("tier2_model"):
             return self.anthropic_tier2_model
+        if self._is_azure() and not self._tier_env_set("tier2_model"):
+            return (
+                self._azure_model_string(
+                    self.azure_deployment_gpt54 or AZURE_TIER2_DEFAULT
+                )
+                or f"azure_ai/{AZURE_TIER2_DEFAULT}"
+            )
         return self.tier2_model
 
     def get_tier3_models(self) -> List[str]:
         if self._is_anthropic() and not self._tier_env_set("tier3_models"):
             value = self.anthropic_tier3_models
             return [m.strip() for m in value.split(",") if m.strip()]
+        if self._is_azure() and not self._tier_env_set("tier3_models"):
+            model = self._azure_model_string(
+                self.azure_deployment_grok or AZURE_TIER3_DEFAULT
+            )
+            return [model] if model else []
         models = self.tier3_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
@@ -851,6 +898,13 @@ class Settings(BaseSettings):
     def get_table_router_model(self) -> str:
         if self._is_anthropic() and not self._tier_env_set("table_router_model"):
             return self.anthropic_table_router_model
+        if self._is_azure() and not self._tier_env_set("table_router_model"):
+            return (
+                self._azure_model_string(
+                    self.azure_deployment_kimi or AZURE_TABLE_ROUTER_DEFAULT
+                )
+                or f"azure_ai/{AZURE_TABLE_ROUTER_DEFAULT}"
+            )
         return self.table_router_model
 
     def get_vision_model(self) -> str:
@@ -894,8 +948,22 @@ class Settings(BaseSettings):
             self._azure_model_string(
                 self.azure_deployment_deepseek or "DeepSeek-V4-Pro"
             ),
+            self._azure_model_string(
+                self.azure_deployment_kimi or AZURE_TABLE_ROUTER_DEFAULT
+            ),
         ]
         return [model for model in defaults if model]
+
+    def get_final_adjudicator_models(self) -> List[str]:
+        """Return Anthropic-reserved models for explicit final review queues."""
+        models = self.final_adjudicator_models
+        if isinstance(models, str):
+            return [m.strip() for m in models.split(",") if m.strip()]
+        return list(models)
+
+    def get_final_arbiter_model(self) -> str:
+        """Return the single most expensive final arbiter model."""
+        return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
 
     # ------------------------------------------------------------------
     # Provider-aware rate-limit / concurrency
