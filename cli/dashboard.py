@@ -13,9 +13,10 @@ serve the whole `corpus/` to share it:
   a sortable/filterable paper table linking to per-paper adjudication pages.
 * `paper_<PMID>.html` — the ADJUDICATION view: paper header with one-click links
   to PubMed / DOI / PMC, the extracted records (variant provenance +
-  per-patient characteristics) on the left, and the EXACT on-disk full text the
-  LLM parsed rendered on the right. Clicking a record jumps to and highlights
-  the sentence/section it was extracted from, so you can verify it yourself.
+  per-patient characteristics) on the left, and the DB-recorded source file
+  (`extraction_metadata.source_file`, falling back to the corpus full text)
+  rendered on the right. Clicking a record jumps to and highlights the
+  sentence/section it was extracted from, so you can verify it yourself.
 
 Nothing here mutates the DB or hits the network; it is a read-only view.
 """
@@ -579,6 +580,37 @@ def _artifacts_links(corpus_dir: Path, gene: str, pmid: str) -> dict:
     return out
 
 
+def _resolve_extraction_source(
+    meta: dict, corpus_dir: Path, gene: str, pmid: str
+) -> tuple[Path, str]:
+    """Prefer the exact source file recorded in extraction_metadata.
+
+    Older DBs or externally generated dashboards may not have a resolvable
+    source_file, so the corpus FULL_CONTEXT copy remains the fallback.
+    """
+    fallback = corpus_dir / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
+    raw = (meta or {}).get("source_file")
+    if raw:
+        p = Path(str(raw)).expanduser()
+        candidates = (
+            [p] if p.is_absolute() else [Path.cwd() / p, REPO / p, corpus_dir / p]
+        )
+        for cand in candidates:
+            if cand.is_file():
+                return cand, "extraction_metadata.source_file"
+    return fallback, "corpus FULL_CONTEXT fallback"
+
+
+def _display_source_path(path: Path) -> str:
+    resolved = path.expanduser().resolve()
+    for base in (Path.cwd(), REPO):
+        try:
+            return resolved.relative_to(base.resolve()).as_posix()
+        except ValueError:
+            continue
+    return resolved.name
+
+
 # ---------------------------------------------------------------------------
 # HTML scaffolding (self-contained: inline CSS + JS, no network assets)
 # ---------------------------------------------------------------------------
@@ -683,6 +715,16 @@ def _barbar(ok: int, total: int) -> str:
 import os  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
+
+_LOCAL_PATH_RE = re.compile(
+    r"(/Users/[^\s<>'\"`\]\)]+|/private/var/[^\s<>'\"`\]\)]+|/tmp/[^\s<>'\"`\]\)]+)"
+)
+
+
+def _sanitize_local_paths(text: str) -> str:
+    return _LOCAL_PATH_RE.sub(
+        lambda m: f"[local path: {Path(m.group(0)).name or 'redacted'}]", text
+    )
 
 
 def _rel(target: Path, start: Path) -> str:
@@ -796,8 +838,9 @@ def render_paper_page(
     bib = paper.get("bib") or {}
     doi = bib.get("doi") or links["doi"]
     pmcid = bib.get("pmc_id") or links["pmcid"]
+    meta = paper["meta"]
     paper_root = corpus_dir / gene / pmid
-    ft = paper_root / f"{pmid}_FULL_CONTEXT.md"
+    ft, source_basis = _resolve_extraction_source(meta, corpus_dir, gene, pmid)
 
     link_html = [f"<a href='{pubmed_url(pmid)}' target='_blank'>PubMed ↗</a>"]
     if doi:
@@ -818,7 +861,6 @@ def render_paper_page(
         if x
     )
 
-    meta = paper["meta"]
     meta_bits = []
     for k in (
         "model_used",
@@ -828,7 +870,8 @@ def render_paper_page(
         "total_variants_found",
     ):
         if meta.get(k) not in (None, ""):
-            meta_bits.append(f"<span class='tag'>{esc(k)}: {esc(meta[k])}</span>")
+            value = _display_source_path(ft) if k == "source_file" else meta[k]
+            meta_bits.append(f"<span class='tag'>{esc(k)}: {esc(value)}</span>")
     pen_tot = db.get("pen_by_pmid", {}).get(pmid)
     if pen_tot and (
         pen_tot["carriers"] or pen_tot["affected"] or pen_tot["unaffected"]
@@ -925,9 +968,14 @@ def render_paper_page(
     bp_warn = ""
     if ft.exists():
         raw = ft.read_text(encoding="utf-8", errors="replace")
+        raw = _sanitize_local_paths(raw)
         src_html = md_to_html(raw)
         bp_warn = boilerplate_warning(raw)
-        src_note = f"<div class='mut'>Exact on-disk source the LLM parsed: <code>{esc(ft.name)}</code></div>"
+        src_note = (
+            "<div class='mut'>Source shown: "
+            f"<code>{esc(_display_source_path(ft))}</code> "
+            f"<span class='tag'>{esc(source_basis)}</span></div>"
+        )
         heads = re.findall(r'<h(\d) class="blk hd" id="(sec\d+)">(.*?)</h\1>', src_html)
         if heads:
             links = "".join(
