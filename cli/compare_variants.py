@@ -831,6 +831,32 @@ def normalize_variant(variant: str) -> str:
     # Handle X alone at end (but not in middle of word)
     variant = re.sub(r"(\d)X$", r"\1*", variant)
 
+    # cDNA del/dup suffix normalization. The deleted/duplicated bases (or a
+    # redundant base-count) are optional in HGVS whenever the position/range
+    # already fixes the variant, so BIC-style and HGVS-style cDNA rows must
+    # collapse to one comparison key:
+    #   c.462_463del2 == c.462_463delAA == c.462_463del
+    #   c.6638delC    == c.6638del
+    # Only strip when the extent is unambiguous (an explicit range, a single
+    # deleted base, or a bare base-count). Insertions are NEVER stripped — the
+    # inserted sequence IS the variant's content. Notation-only, gene-agnostic.
+    if variant.lower().startswith("c."):
+        collapsed = re.sub(r"_c\.", "_", variant)  # repair c.5042_c.5043 -> c.5042_5043
+        m = re.match(
+            r"^(c\.\d+(?:_\d+)?)(del|dup)([0-9]+|[ACGTacgt]+)$",
+            collapsed,
+            re.IGNORECASE,
+        )
+        if m:
+            suffix = m.group(3)
+            unambiguous = (
+                "_" in m.group(1)  # explicit range fixes the extent
+                or suffix.isdigit()  # bare base-count, redundant
+                or (suffix.isalpha() and len(suffix) == 1)  # single deleted base
+            )
+            if unambiguous:
+                variant = f"{m.group(1)}{m.group(2)}"
+
     return variant
 
 
@@ -888,6 +914,14 @@ def to_canonical_form(variant: str) -> Optional[str]:
         inserted = m.group(2).upper()
         return f"{inserted[0]}{m.group(1)}Ins"
 
+    # --- Numeric in-frame duplication with residues: 391DUPS -> S391dup ---
+    # Mirrors the position-first del/ins lanes above; some curators write the
+    # position before the operation. Notation-only, gene-agnostic.
+    m = re.match(r"^(\d+)(?:[-_]\d+)?\s*dup\s*([A-Z]+)$", v, re.IGNORECASE)
+    if m:
+        duplicated = m.group(2).upper()
+        return f"{duplicated[0]}{m.group(1)}dup"
+
     # --- Three-letter range deletion: Gln1507_Pro1509del -> Q1507_P1509Del ---
     m = re.match(
         r"^([A-Z][a-z]{2})(\d+)[_-]([A-Z][a-z]{2})(\d+)del([A-Z]*)\d*$",
@@ -921,6 +955,39 @@ def to_canonical_form(variant: str) -> Optional[str]:
         else:
             inserted = inserted.upper()
         return f"{m.group(1)}_{m.group(2)}Ins{inserted}"
+
+    # --- Residue-anchored range insertion: Y1795_E1796insD,
+    #     Tyr1795_Glu1796insAsp -> Y1795_E1796InsD. HGVS writes the flanking
+    #     residues; single- and three-letter forms must canonicalize alike so a
+    #     cDNA/BIC gold row and a protein extraction match. Notation-only.
+    m = re.match(
+        r"^([A-Za-z]{1,3})(\d+)[_-]([A-Za-z]{1,3})(\d+)ins([A-Za-z]+)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+
+        def _residue_to_single(tok: str) -> Optional[str]:
+            tok = tok.strip()
+            if len(tok) == 1:
+                return tok.upper()
+            if len(tok) == 3 and tok.title() in AA_3_TO_1:
+                return AA_3_TO_1[tok.title()]
+            if len(tok) % 3 == 0:
+                out = ""
+                for i in range(0, len(tok), 3):
+                    part = tok[i : i + 3].title()
+                    if part not in AA_3_TO_1:
+                        return None
+                    out += AA_3_TO_1[part]
+                return out
+            return None
+
+        ref1 = _residue_to_single(m.group(1))
+        ref2 = _residue_to_single(m.group(3))
+        inserted = _residue_to_single(m.group(5))
+        if ref1 and ref2 and inserted:
+            return f"{ref1}{m.group(2)}_{ref2}{m.group(4)}Ins{inserted}"
 
     # --- Three-letter missense with trailing *: Ala429Pro* -> A429P ---
     m = re.match(r"^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})\*$", v)
@@ -1372,19 +1439,27 @@ def _cdna_indel_protein_positions(cdna: str) -> Optional[Tuple[int, int]]:
         c.547_553delGGCGG  → (183, 185)
 
     Returns None for non-indel cDNA notations (e.g. ``c.1558-1G>C`` splice
-    sites) where there's no clean protein-position equivalent.
+    sites) where there's no clean protein-position equivalent, and for indels
+    whose coordinates carry an intronic offset (e.g. ``c.5256_5278-2757del``, a
+    multi-kb structural deletion into an intron): the ``±N`` offset makes the
+    naive codon math meaningless and would otherwise fabricate a narrow protein
+    range that false-bridges to an unrelated coding variant at that codon.
     """
     if not cdna or not isinstance(cdna, str):
         return None
     m = re.match(
-        r"^c\.(\d+)(?:[+\-]\d+)?(?:_(\d+)(?:[+\-]\d+)?)?\s*(del|dup|ins)",
+        r"^c\.(\d+)([+\-]\d+)?(?:_(\d+)([+\-]\d+)?)?\s*(del|dup|ins)",
         cdna.strip(),
         re.IGNORECASE,
     )
     if not m:
         return None
+    # Intronic-offset coordinates (start or end) => intron-spanning / structural
+    # event; codon math is invalid, so do not offer a protein-position bridge.
+    if m.group(2) or m.group(4):
+        return None
     start = int(m.group(1))
-    end = int(m.group(2)) if m.group(2) else start
+    end = int(m.group(3)) if m.group(3) else start
     aa_start = (start - 1) // 3 + 1
     aa_end = (end - 1) // 3 + 1
     return (aa_start, aa_end)

@@ -1356,6 +1356,40 @@ class TestCDNAProteinBridge:
         bridged = [r for r in results if r.match_type.endswith("cdna_bridge")]
         assert len(bridged) == 0
 
+    def test_bridge_rejects_intronic_offset_deletion(self):
+        # Gold c.5256_5278-2757del is a multi-kb intron-spanning structural
+        # deletion; the -2757 offset makes codon math meaningless. It must NOT
+        # bridge to an unrelated coding frameshift (c.5266dupC = p.Gln1756fs)
+        # that merely happens to sit inside the naively-computed codon window.
+        # (Real BRCA1 33468216 case: the false match inflated carriers MAE by
+        # 210 by pairing a 1-carrier deletion with a 211-carrier duplication.)
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111"],
+                "protein_change": ["c.5256_5278-2757del"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["HBOC"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                "variant": ["p.Gln1756fs"],
+                "protein_notation": ["p.Gln1756fs"],
+                "cdna_notation": ["c.5266dupC"],
+                "carriers_total": [211],
+                "affected_count": [211],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        bridged = [r for r in results if r.match_type.endswith("cdna_bridge")]
+        assert len(bridged) == 0
+        gold_row = [r for r in results if r.excel_variant_raw == "c.5256_5278-2757del"]
+        assert gold_row and gold_row[0].missing_in_sqlite is True
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
