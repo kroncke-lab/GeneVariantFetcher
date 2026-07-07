@@ -2,6 +2,7 @@ import pytest
 
 from scripts.recall_audit.common import find_full_contexts
 from scripts.recall_audit.paper_disagreement_report import (
+    build_paper_disagreement_rows,
     _build_context_index,
     _failure_class,
     _source_info,
@@ -192,3 +193,27 @@ def test_source_info_does_not_prefer_larger_abstract_fallback(tmp_path):
     assert info["available_context_path"] == str(fallback)
     assert info["available_source_status"] == "abstract_only"
     assert info["source_desync"] is False
+
+
+def test_paper_disagreement_rows_allow_missing_optional_score_csvs(tmp_path):
+    recall_score = tmp_path / "score"
+    (recall_score / "APOE").mkdir(parents=True)
+    gold_dir = tmp_path / "gold"
+    gold_dir.mkdir()
+    (gold_dir / "APOE_recall_input.csv").write_text(
+        "pmid,variant,carriers,affected,unaffected\n1,E3,1,1,0\n",
+        encoding="utf-8",
+    )
+
+    rows = build_paper_disagreement_rows(
+        recall_score=recall_score,
+        gold_dir=gold_dir,
+        results_dir=tmp_path / "results",
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["gene"] == "APOE"
+    assert rows[0]["pmid"] == "1"
+    assert rows[0]["missing_rows"] == 0
+    assert rows[0]["count_mismatch_rows"] == 0
+    assert rows[0]["extra_sqlite_rows"] == 0

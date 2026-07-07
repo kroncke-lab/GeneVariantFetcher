@@ -16,9 +16,16 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.recall_audit.common import repo_path, write_csv_rows, write_json
+    from config.settings import get_settings
+    from scripts.recall_audit.common import (
+        REPO_ROOT,
+        repo_path,
+        write_csv_rows,
+        write_json,
+    )
 except ModuleNotFoundError:  # pragma: no cover
-    from common import repo_path, write_csv_rows, write_json
+    from config.settings import get_settings
+    from common import REPO_ROOT, repo_path, write_csv_rows, write_json
 
 COUNT_FIELDS = ("total_carriers", "affected", "unaffected")
 HIGH_RISK_PATTERNS = {
@@ -55,6 +62,19 @@ def clip(value: Any, limit: int = 240) -> str:
     return text if len(text) <= limit else text[: limit - 3] + "..."
 
 
+def display_source_context(value: Any) -> str:
+    text = "" if value is None else str(value)
+    if not text:
+        return ""
+    path = Path(text)
+    if not path.is_absolute():
+        return text
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return path.name
+
+
 def field_names_with_disagreement(record: dict[str, Any]) -> list[str]:
     field_agreement = (record.get("debate") or {}).get("field_agreement") or {}
     return [
@@ -64,14 +84,36 @@ def field_names_with_disagreement(record: dict[str, Any]) -> list[str]:
     ]
 
 
+def field_names_with_trusted_wrong(record: dict[str, Any]) -> list[str]:
+    fields: set[str] = set()
+    for key in (
+        "baseline_field_evaluations",
+        "debate_field_evaluations",
+        "field_evaluations",
+    ):
+        for item in record.get(key, []) or []:
+            if item.get("after_wrong"):
+                field = item.get("field")
+                if field:
+                    fields.add(str(field))
+    return sorted(fields)
+
+
 def is_escalation_candidate(record: dict[str, Any]) -> bool:
     agreement = str((record.get("debate") or {}).get("agreement") or "").lower()
-    return agreement != "agree" or bool(field_names_with_disagreement(record))
+    return (
+        agreement != "agree"
+        or bool(field_names_with_disagreement(record))
+        or bool(field_names_with_trusted_wrong(record))
+    )
 
 
 def severity(record: dict[str, Any]) -> str:
     agreement = str((record.get("debate") or {}).get("agreement") or "").lower()
     fields = set(field_names_with_disagreement(record))
+    trusted_wrong_fields = set(field_names_with_trusted_wrong(record))
+    if trusted_wrong_fields.intersection(COUNT_FIELDS):
+        return "high"
     if agreement == "disagree" or fields.intersection(COUNT_FIELDS):
         return "high"
     if agreement in {"partial", "abstain"} or fields:
@@ -139,7 +181,7 @@ def _queue_item(
             "baseline_flagged": 0,
             "debate_flagged": 0,
             "reasons": [],
-            "source_context": record.get("source_context") or "",
+            "source_context": display_source_context(record.get("source_context")),
         },
     )
 
@@ -232,6 +274,10 @@ def build_queue(
         item["directions"].append(direction)
         item["agreement_labels"].append(str(agreement))
         item["disagreement_fields"].update(field_names_with_disagreement(record))
+        trusted_wrong_fields = field_names_with_trusted_wrong(record)
+        item["disagreement_fields"].update(trusted_wrong_fields)
+        if trusted_wrong_fields:
+            item["agreement_labels"].append("benchmark_trusted_wrong")
         item["baseline_trusted_wrong"] += count_eval_flags(
             record.get("baseline_field_evaluations", []), "after_wrong"
         )
@@ -247,6 +293,12 @@ def build_queue(
         reason = (record.get("debate") or {}).get("reason")
         if reason:
             item["reasons"].append(clip(reason))
+        if trusted_wrong_fields:
+            item["reasons"].append(
+                "Benchmark gold still disagrees with trusted "
+                + ",".join(trusted_wrong_fields)
+                + " value after Azure debate."
+            )
 
     if verification_records:
         add_high_risk_consensus(
@@ -290,7 +342,7 @@ def main() -> int:
     parser.add_argument("--out-json")
     parser.add_argument(
         "--escalation-model",
-        default="anthropic/claude-opus-4-7",
+        default=None,
         help="Model to recommend for the next adjudication tier.",
     )
     args = parser.parse_args()
@@ -303,7 +355,8 @@ def main() -> int:
         verification_records.extend(load_jsonl(repo_path(path)))
     rows = build_queue(
         records,
-        escalation_model=args.escalation_model,
+        escalation_model=args.escalation_model
+        or get_settings().get_final_arbiter_model(),
         verification_records=verification_records,
     )
     fieldnames = [

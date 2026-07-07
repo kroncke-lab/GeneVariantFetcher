@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from collections import Counter, defaultdict
@@ -36,6 +37,18 @@ AGREEMENTS = {"agree", "disagree", "partial", "abstain"}
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     with path.open(encoding="utf-8") as handle:
         return [json.loads(line) for line in handle if line.strip()]
+
+
+def load_queue_keys(path: Path) -> set[tuple[str, str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return {
+            (
+                str(row.get("gene") or ""),
+                str(row.get("pmid") or ""),
+                str(row.get("variant") or ""),
+            )
+            for row in csv.DictReader(handle)
+        }
 
 
 def card_from_record(record: dict[str, Any]) -> VariantClaimCard:
@@ -284,6 +297,7 @@ def select_records(
     baseline_models: set[str] | None,
     pmids: set[str] | None,
     failure_classes: set[str] | None,
+    queue_keys: set[tuple[str, str, str]] | None,
     limit_cards: int,
 ) -> list[dict[str, Any]]:
     selected = []
@@ -293,6 +307,16 @@ def select_records(
         if pmids and str(record.get("pmid")) not in pmids:
             continue
         if failure_classes and record.get("failure_class") not in failure_classes:
+            continue
+        if (
+            queue_keys
+            and (
+                str(record.get("gene") or ""),
+                str(record.get("pmid") or ""),
+                str(record.get("variant") or ""),
+            )
+            not in queue_keys
+        ):
             continue
         selected.append(record)
         if limit_cards and len(selected) >= limit_cards:
@@ -305,23 +329,52 @@ def main() -> int:
     parser.add_argument("--baseline-records", required=True)
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--debater-model", action="append", dest="debater_models")
+    parser.add_argument(
+        "--queue-csv",
+        help=(
+            "Optional escalation queue CSV from build_claim_debate_escalation_queue.py. "
+            "When set, only matching gene/PMID/variant cards are debated."
+        ),
+    )
+    parser.add_argument(
+        "--final-adjudicator",
+        action="store_true",
+        help="Use FINAL_ADJUDICATOR_MODELS instead of early debate defaults.",
+    )
+    parser.add_argument(
+        "--final-arbiter",
+        action="store_true",
+        help="Use FINAL_ARBITER_MODEL as the only debater model.",
+    )
     parser.add_argument("--baseline-model", action="append", dest="baseline_models")
     parser.add_argument("--pmid", action="append", dest="pmids")
     parser.add_argument("--failure-class", action="append", dest="failure_classes")
     parser.add_argument("--limit-cards", type=int, default=0)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    if args.final_adjudicator and args.final_arbiter:
+        parser.error("--final-adjudicator and --final-arbiter are mutually exclusive")
 
     baseline_records = load_jsonl(repo_path(args.baseline_records))
+    queue_keys = load_queue_keys(repo_path(args.queue_csv)) if args.queue_csv else None
     selected = select_records(
         baseline_records,
         baseline_models=set(args.baseline_models) if args.baseline_models else None,
         pmids=set(args.pmids) if args.pmids else None,
         failure_classes=set(args.failure_classes) if args.failure_classes else None,
+        queue_keys=queue_keys,
         limit_cards=args.limit_cards,
     )
 
-    debater_models = args.debater_models or get_settings().get_early_debate_models()
+    settings = get_settings()
+    if args.debater_models:
+        debater_models = args.debater_models
+    elif args.final_arbiter:
+        debater_models = [settings.get_final_arbiter_model()]
+    elif args.final_adjudicator:
+        debater_models = settings.get_final_adjudicator_models()
+    else:
+        debater_models = settings.get_early_debate_models()
     out_dir = repo_path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -410,6 +463,7 @@ def main() -> int:
         out_dir / "run_summary.json",
         {
             "baseline_records": str(repo_path(args.baseline_records)),
+            "queue_csv": str(repo_path(args.queue_csv)) if args.queue_csv else None,
             "selected_records": len(selected),
             "debater_models": debater_models,
             "records": len(debate_records),

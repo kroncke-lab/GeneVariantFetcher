@@ -160,6 +160,7 @@ def candidate_rows(
     db_rows: list[dict[str, Any]],
     gold: dict[str, dict],
     max_cards: int,
+    target_variants: list[str] | None = None,
 ) -> list[dict[str, Any]]:
     grouped: dict[str, dict[str, Any]] = {}
     for row in db_rows:
@@ -168,9 +169,38 @@ def candidate_rows(
             continue
         grouped[key] = row
 
+    selected: list[dict[str, Any]] = []
+    for variant in target_variants or []:
+        key = canonical_variant(variant)
+        if key and key in grouped and grouped[key] not in selected:
+            selected.append(grouped[key])
+    if max_cards and len(selected) >= max_cards:
+        return selected[:max_cards]
+
     intersect = [row for key, row in grouped.items() if key in gold]
     extras = [row for key, row in grouped.items() if key not in gold]
-    return [*intersect, *extras][:max_cards]
+    for row in [*intersect, *extras]:
+        if row not in selected:
+            selected.append(row)
+        if max_cards and len(selected) >= max_cards:
+            break
+    return selected
+
+
+def case_target_variants(case: dict[str, str]) -> list[str]:
+    """Return variant labels from a scored case row, preserving useful aliases."""
+    targets: list[str] = []
+    for key in (
+        "variant",
+        "sqlite_variant_raw",
+        "excel_variant_raw",
+        "sqlite_variant_norm",
+        "excel_variant_norm",
+    ):
+        value = str(case.get(key) or "").strip()
+        if value and value not in targets:
+            targets.append(value)
+    return targets
 
 
 def values_from_row(row: dict[str, Any]) -> dict[str, int | None]:
@@ -232,6 +262,7 @@ def run_for_case(
     model: str,
     run_dir: Path,
     results_dir: Path,
+    gold_dir: str | None,
     disease: str | None,
     max_cards_per_paper: int,
     dry_run: bool,
@@ -251,11 +282,12 @@ def run_for_case(
         ]
     source_text = contexts[0].read_text(encoding="utf-8", errors="ignore")
     db_rows = query_pipeline_rows(resolve_gene_db(gene, run_dir=run_dir), pmid)
-    gold = gold_index(gene, pmid)
+    gold = gold_index(gene, pmid, gold_dir)
     rows = candidate_rows(
         db_rows=db_rows,
         gold=gold,
         max_cards=max_cards_per_paper,
+        target_variants=case_target_variants(case),
     )
     verifier = None if dry_run else VariantClaimVerifier(model=model)
 
@@ -445,6 +477,7 @@ def main() -> int:
     parser.add_argument("--cases-csv", required=True)
     parser.add_argument("--run-dir", required=True)
     parser.add_argument("--results-dir", default=str(DEFAULT_RESULTS_DIR))
+    parser.add_argument("--gold-dir")
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--model", action="append", dest="models")
     parser.add_argument(
@@ -508,6 +541,7 @@ def main() -> int:
                 model=model,
                 run_dir=repo_path(args.run_dir),
                 results_dir=repo_path(args.results_dir),
+                gold_dir=args.gold_dir,
                 disease=args.disease,
                 max_cards_per_paper=args.max_cards_per_paper,
                 dry_run=args.dry_run,
