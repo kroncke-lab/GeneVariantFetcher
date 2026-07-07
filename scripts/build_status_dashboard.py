@@ -10,7 +10,10 @@ recall suite already produces. It has two clearly separated halves:
    ``recall_metrics/<run>/summary.json`` + its ``paper_disagreement_report.csv``.
    This always renders, even with no LLM involvement.
 
-2. STRATEGY NARRATIVE (optional sidecar ``docs/dashboard/strategy.json``): the
+2. PIPELINE ARCHITECTURE (optional sidecar ``docs/dashboard/pipeline.json``):
+   the current repo architecture, cold-start flow, refresh loop, and guardrails.
+
+3. STRATEGY NARRATIVE (optional sidecar ``docs/dashboard/strategy.json``): the
    overnight reasoning pass writes barriers-to-success, things-to-try, and
    candidate-solutions here, optionally with Grok / Claude second opinions.
    If the sidecar is missing, the section shows a placeholder.
@@ -168,6 +171,16 @@ def load_strategy(dashboard_dir: Path) -> Optional[dict]:
         return None
 
 
+def load_pipeline(dashboard_dir: Path) -> Optional[dict]:
+    p = dashboard_dir / "pipeline.json"
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
 def gather_trend(repo_root: Path, limit: int = 20) -> list[dict]:
     """Aggregate unique_variants + pmids recall over time from all summaries."""
     pts: list[dict] = []
@@ -295,6 +308,66 @@ def svg_trend(points: list[dict], width: int = 640, height: int = 176) -> str:
 # ---------------------------------------------------------------------------
 # Rendering
 # ---------------------------------------------------------------------------
+def render_pipeline(pipeline: Optional[dict]) -> str:
+    if not pipeline:
+        return (
+            "<div class='card placeholder'><h3>Architecture pipeline</h3>"
+            "<p class='muted'>No <code>pipeline.json</code> yet. The scheduled overnight "
+            "run should refresh the current repo pipeline architecture here from "
+            "<code>docs/ARCHITECTURE.md</code>, <code>cli/gvf_run.py</code>, and the "
+            "recall refresh runbook.</p></div>"
+        )
+
+    gen = pipeline.get("generated_at", "")
+    sources = pipeline.get("sources") or []
+    stages = pipeline.get("stages") or []
+    loops = pipeline.get("active_loops") or []
+    guardrails = pipeline.get("guardrails") or []
+    bottlenecks = pipeline.get("current_bottlenecks") or []
+
+    parts = ["<div class='card pipeline'><h3>Architecture pipeline</h3>"]
+    meta = []
+    if gen:
+        meta.append(f"generated {esc(gen)}")
+    if sources:
+        meta.append("sources: " + esc(", ".join(sources)))
+    if meta:
+        parts.append(f"<p class='muted small'>{' · '.join(meta)}</p>")
+
+    if stages:
+        parts.append("<div class='pipe-flow'>")
+        for stage in stages:
+            modules = stage.get("modules") or []
+            outputs = stage.get("outputs") or []
+            parts.append(
+                "<div class='pipe-step'>"
+                f"<div class='pipe-k'>Stage {esc(stage.get('stage', ''))}</div>"
+                f"<div class='pipe-title'>{esc(stage.get('name', ''))}</div>"
+                f"<div class='pipe-body'>{esc(stage.get('purpose', ''))}</div>"
+                f"<div class='pipe-meta'><b>Modules</b>: {esc(', '.join(modules))}</div>"
+                f"<div class='pipe-meta'><b>Outputs</b>: {esc(', '.join(outputs))}</div>"
+                "</div>"
+            )
+        parts.append("</div>")
+
+    def detail_block(title: str, items: list) -> str:
+        if not items:
+            return ""
+        lis = "".join(
+            f"<li>{esc(item)}</li>"
+            if isinstance(item, str)
+            else f"<li><b>{esc(item.get('title', ''))}</b> — {esc(item.get('detail', ''))}</li>"
+            for item in items
+        )
+        return f"<h4>{esc(title)}</h4><ul>{lis}</ul>"
+
+    parts.append(detail_block("Active operating loops", loops))
+    parts.append(detail_block("Guardrails", guardrails))
+    parts.append(detail_block("Current architecture bottlenecks", bottlenecks))
+    parts.append("</div>")
+    return "".join(parts)
+
+
 def render_strategy(strategy: Optional[dict]) -> str:
     if not strategy:
         return (
@@ -342,7 +415,11 @@ def render_strategy(strategy: Optional[dict]) -> str:
 
 
 def render(
-    summary: dict, metrics_dir: Path, repo_root: Path, strategy: Optional[dict]
+    summary: dict,
+    metrics_dir: Path,
+    repo_root: Path,
+    strategy: Optional[dict],
+    pipeline: Optional[dict],
 ) -> str:
     agg = summary["aggregate_recall"]
     gaps = summary.get("aggregate_target_gaps", {})
@@ -471,6 +548,13 @@ tr.lever td:first-child{{border-left:3px solid var(--bad)}}
 tr.nonlever{{opacity:.7}} .gloss{{color:var(--muted);font-size:12px}}
 .card{{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:12px}}
 .card.placeholder{{border-style:dashed}}
+.pipe-flow{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}}
+.pipe-step{{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:11px 12px}}
+.pipe-k{{font-size:11px;color:var(--target);font-weight:700;text-transform:uppercase;letter-spacing:.04em}}
+.pipe-title{{font-weight:700;margin:2px 0 5px}}
+.pipe-body{{color:var(--ink);font-size:12.5px;margin-bottom:8px}}
+.pipe-meta{{color:var(--muted);font-size:11.5px;margin-top:4px}}
+.pipeline ul{{margin:4px 0 10px;padding-left:18px}} .pipeline li{{margin:3px 0}}
 .strategy ul{{margin:4px 0 10px;padding-left:18px}} .strategy li{{margin:3px 0}}
 .notes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}}
 .note{{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}}
@@ -514,11 +598,15 @@ circle.line-uv{{fill:var(--uv)}} circle.line-pm{{fill:var(--pm)}}
 <table><thead><tr><th>Failure class</th><th class="num">PMIDs</th><th>Share</th><th>What it means</th></tr></thead>
 <tbody>{"".join(bar_rows) or "<tr><td colspan=4 class=muted>No paper_disagreement_report.csv in this run.</td></tr>"}</tbody></table>
 
+<h2>Architecture & pipeline</h2>
+{render_pipeline(pipeline)}
+
 <h2>Strategy</h2>
 {render_strategy(strategy)}
 
 <div class="foot">Generated by <code>scripts/build_status_dashboard.py</code>. Metrics are read-only from the recall suite;
-the strategy narrative is written by the scheduled overnight run into <code>docs/dashboard/strategy.json</code>.
+the pipeline and strategy narratives are written by the scheduled overnight run into <code>docs/dashboard/pipeline.json</code>
+and <code>docs/dashboard/strategy.json</code>.
 Authoritative numbers live in <code>docs/RECALL_STATUS.md</code>.</div>
 </div></body></html>
 """
@@ -544,8 +632,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     dashboard_dir = (repo_root / args.out).parent
     dashboard_dir.mkdir(parents=True, exist_ok=True)
     strategy = load_strategy(dashboard_dir)
+    pipeline = load_pipeline(dashboard_dir)
 
-    html_out = render(summary, metrics_dir, repo_root, strategy)
+    html_out = render(summary, metrics_dir, repo_root, strategy, pipeline)
     out_path = repo_root / args.out
     out_path.write_text(html_out, encoding="utf-8")
     print(
