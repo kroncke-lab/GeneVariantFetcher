@@ -157,6 +157,13 @@ missed them** after the 1B parser land.
   - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
+- [ ] **Adopt Azure-first / Anthropic-final model routing for the 101-paper
+      staging loop.** Routine triage/table routing/extraction/debate should use
+      Azure deployments (`gpt-5.4-nano`, `Kimi-K2.6-1`, `grok-4.3`, `gpt-5.4`,
+      `DeepSeek-V4-Pro`). Reserve Anthropic for explicit final adjudication
+      queues only: Sonnet 5 as the final screen and Opus 4.8 as the hard-case
+      arbiter. Measure on the curated staging set before considering full-gene
+      refreshes.
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
       the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
       unique-variant blocker.

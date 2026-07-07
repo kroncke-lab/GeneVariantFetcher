@@ -6,8 +6,8 @@ audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
 
 Internal helpers (not exposed as Typer commands):
 - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
-- fetch_manager: Post-fetch markdown conversion + Data Scout, used by the GUI
-  and as `python -m cli.fetch_manager <paywalled_missing.csv>` for manual work.
+- fetch_manager: Post-fetch markdown conversion + Data Scout, available as
+  `python -m cli.fetch_manager <paywalled_missing.csv>` for manual work.
 """
 
 import os

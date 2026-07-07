@@ -49,6 +49,7 @@ recall scorer before claiming a metric.
 | Understand pipeline internals | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | Inspect output schema | [`docs/OUTPUT_FORMAT.md`](docs/OUTPUT_FORMAT.md) |
 | Publish/adjudicate with Variant_Browser | [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md) |
+| Understand which support scripts to use | [`scripts/README.md`](scripts/README.md) |
 
 ## Minimal First Run
 

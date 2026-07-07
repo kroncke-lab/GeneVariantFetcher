@@ -1,8 +1,8 @@
 """
 Shared workflow step implementations.
 
-This module contains the core logic for each pipeline step, used by both
-the CLI (automated_workflow.py) and GUI (worker.py) implementations.
+This module contains the core logic for each pipeline step used by CLI
+orchestration.
 
 Each step function takes explicit parameters and returns a result dict,
 allowing the callers to handle their own context (checkpoints, logging, etc.).

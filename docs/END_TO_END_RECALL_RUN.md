@@ -80,15 +80,10 @@ JSON, rebuild the DB, and run DB-observed recovery layers:
   --replace-db
 ```
 
-The legacy `scripts/run_insttoken_reextract_experiment.py` driver is retained
-for historical comparisons, but it should not be the default path for consuming
-newly recovered sources.
-
-`scripts/run_full_recall_experiment.sh` is a wrapper around
-`run_insttoken_reextract_experiment.py` and is part of the historical
-post-insttoken re-extraction path; **it is not a fresh-run launcher**. Do not
-use it to drive a new `gvf-run`. To run a fresh multi-gene job, invoke
-`gvf gvf-run <GENE>` per gene (or script a shell loop over `gvf gvf-run`).
+The historical post-insttoken re-extraction drivers were removed from the active
+tree. To consume newly recovered sources, use `scripts/refresh_run_db.py` and
+`scripts/refresh_recall.py`. To run a fresh multi-gene job, invoke
+`gvf gvf-run <GENE>` per gene or script a shell loop over `gvf gvf-run`.
 
 ## Full-Text Acquisition Only
 

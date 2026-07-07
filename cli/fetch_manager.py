@@ -789,8 +789,8 @@ def run_fetch_manager(
 
         if convert:
             print("\nNext steps:")
-            print("  - Re-run extraction using GUI 'folder job' feature")
-            print("  - Or run: python automated_workflow.py ... (with existing folder)")
+            print("  - Re-run extraction with gvf gvf-run or cli.extract")
+            print("  - Or run: python -m cli.automated_workflow ...")
 
 
 def main():

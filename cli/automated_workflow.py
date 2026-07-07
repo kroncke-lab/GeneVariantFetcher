@@ -9,7 +9,7 @@ This script provides the production-ready, end-to-end automated workflow:
 4. Save structured results to JSON and aggregate penetrance metrics
 
 This module uses the shared step implementations from pipeline/steps.py,
-ensuring consistency with the GUI workflow.
+matching the `gvf-run` orchestration path.
 """
 
 import json
