@@ -176,7 +176,7 @@ def main() -> int:
         ),
     )
     args = ap.parse_args()
-    out = Path(args.out)
+    out = Path(args.out).expanduser().resolve()
     dry = not args.apply
     source_bases = [(REPO / r).resolve() for r in args.roots]
 
