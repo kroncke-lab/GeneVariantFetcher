@@ -32,74 +32,74 @@ def apply_carrier_guard(
 ) -> dict:
     db = Path(db)
     con = sqlite3.connect(str(db))
-    cur = con.cursor()
     try:
-        n = cur.execute(
-            "SELECT COUNT(*) FROM penetrance_data WHERE total_carriers_observed > ?",
-            (threshold,),
-        ).fetchone()[0]
-    except sqlite3.OperationalError:
-        con.close()
-        if logger:
-            logger.info("carrier guard: no penetrance_data table; nothing to do")
-        return {"guarded": 0}
-    if not n:
-        con.close()
-        if logger:
-            logger.info("carrier guard: 0 observations over %d carriers", threshold)
-        return {"guarded": 0}
+        cur = con.cursor()
+        try:
+            n = cur.execute(
+                "SELECT COUNT(*) FROM penetrance_data WHERE total_carriers_observed > ?",
+                (threshold,),
+            ).fetchone()[0]
+        except sqlite3.OperationalError:
+            if logger:
+                logger.info("carrier guard: no penetrance_data table; nothing to do")
+            return {"guarded": 0}
+        if not n:
+            if logger:
+                logger.info("carrier guard: 0 observations over %d carriers", threshold)
+            return {"guarded": 0}
 
-    cur.execute(
-        """CREATE TABLE IF NOT EXISTS carrier_guard_quarantine(
-            penetrance_id INTEGER, variant_id INTEGER, pmid TEXT,
-            total_carriers_observed INTEGER, affected_count INTEGER,
-            unaffected_count INTEGER, uncertain_count INTEGER,
-            penetrance_percentage REAL, threshold INTEGER, reason TEXT,
-            guarded_at TEXT
-        )"""
-    )
-    _ensure_column(cur, "carrier_guard_quarantine", "uncertain_count", "INTEGER")
-    _ensure_column(cur, "carrier_guard_quarantine", "penetrance_percentage", "REAL")
-    _ensure_column(cur, "carrier_guard_quarantine", "threshold", "INTEGER")
-    _ensure_column(cur, "carrier_guard_quarantine", "reason", "TEXT")
-    cur.execute(
-        """INSERT INTO carrier_guard_quarantine (
-            penetrance_id, variant_id, pmid, total_carriers_observed,
-            affected_count, unaffected_count, uncertain_count,
-            penetrance_percentage, threshold, reason, guarded_at
+        cur.execute(
+            """CREATE TABLE IF NOT EXISTS carrier_guard_quarantine(
+                penetrance_id INTEGER, variant_id INTEGER, pmid TEXT,
+                total_carriers_observed INTEGER, affected_count INTEGER,
+                unaffected_count INTEGER, uncertain_count INTEGER,
+                penetrance_percentage REAL, threshold INTEGER, reason TEXT,
+                guarded_at TEXT
+            )"""
         )
-        SELECT penetrance_id, variant_id, pmid, total_carriers_observed,
-               affected_count, unaffected_count, uncertain_count,
-               penetrance_percentage, ?,
-               'total_carriers_observed exceeds plausible per-variant ceiling',
-               ?
-        FROM penetrance_data WHERE total_carriers_observed > ?""",
-        (threshold, datetime.now().isoformat(timespec="seconds"), threshold),
-    )
-    cur.execute(
-        """UPDATE penetrance_data
-           SET total_carriers_observed = NULL,
-               affected_count = NULL,
-               unaffected_count = NULL,
-               uncertain_count = NULL,
-               penetrance_percentage = NULL
-           WHERE total_carriers_observed > ?""",
-        (threshold,),
-    )
-    con.commit()
-    guarded_total = cur.execute(
-        "SELECT COALESCE(SUM(total_carriers_observed), 0) FROM penetrance_data"
-    ).fetchone()[0]
-    con.close()
-    if logger:
-        logger.info(
-            "carrier guard: neutralized %d observations over %d; guarded carrier total=%d",
-            n,
-            threshold,
-            guarded_total,
+        _ensure_column(cur, "carrier_guard_quarantine", "uncertain_count", "INTEGER")
+        _ensure_column(cur, "carrier_guard_quarantine", "penetrance_percentage", "REAL")
+        _ensure_column(cur, "carrier_guard_quarantine", "threshold", "INTEGER")
+        _ensure_column(cur, "carrier_guard_quarantine", "reason", "TEXT")
+        cur.execute(
+            """INSERT INTO carrier_guard_quarantine (
+                penetrance_id, variant_id, pmid, total_carriers_observed,
+                affected_count, unaffected_count, uncertain_count,
+                penetrance_percentage, threshold, reason, guarded_at
+            )
+            SELECT penetrance_id, variant_id, pmid, total_carriers_observed,
+                   affected_count, unaffected_count, uncertain_count,
+                   penetrance_percentage, ?,
+                   'total_carriers_observed exceeds plausible per-variant ceiling',
+                   ?
+            FROM penetrance_data WHERE total_carriers_observed > ?""",
+            (threshold, datetime.now().isoformat(timespec="seconds"), threshold),
         )
-    return {
-        "guarded": n,
-        "threshold": threshold,
-        "guarded_carrier_total": guarded_total,
-    }
+        cur.execute(
+            """UPDATE penetrance_data
+               SET total_carriers_observed = NULL,
+                   affected_count = NULL,
+                   unaffected_count = NULL,
+                   uncertain_count = NULL,
+                   penetrance_percentage = NULL
+               WHERE total_carriers_observed > ?""",
+            (threshold,),
+        )
+        con.commit()
+        guarded_total = cur.execute(
+            "SELECT COALESCE(SUM(total_carriers_observed), 0) FROM penetrance_data"
+        ).fetchone()[0]
+        if logger:
+            logger.info(
+                "carrier guard: neutralized %d observations over %d; guarded carrier total=%d",
+                n,
+                threshold,
+                guarded_total,
+            )
+        return {
+            "guarded": n,
+            "threshold": threshold,
+            "guarded_carrier_total": guarded_total,
+        }
+    finally:
+        con.close()
