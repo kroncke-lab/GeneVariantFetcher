@@ -210,16 +210,32 @@ def svg_bar(recall: Optional[float], width: int = 160) -> str:
     )
 
 
-def svg_trend(points: list[dict], width: int = 640, height: int = 150) -> str:
+def _trend_date_label(ts: str) -> str:
+    try:
+        dt = _dt.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except ValueError:
+        return ts[:10]
+    return dt.strftime("%m/%d")
+
+
+def svg_trend(points: list[dict], width: int = 640, height: int = 176) -> str:
     if len(points) < 2:
         return "<p class='muted'>Not enough history yet for a trajectory line.</p>"
-    pad = 28
-    xs = [pad + i * (width - 2 * pad) / (len(points) - 1) for i in range(len(points))]
+    left_pad = 34
+    right_pad = 18
+    top_pad = 16
+    bottom_pad = 44
+    plot_bottom = height - bottom_pad
+    plot_height = plot_bottom - top_pad
+    xs = [
+        left_pad + i * (width - left_pad - right_pad) / (len(points) - 1)
+        for i in range(len(points))
+    ]
 
     def y(v: float) -> float:
         lo, hi = 0.4, 1.0  # fixed recall window for readability
         v = max(lo, min(hi, v))
-        return height - pad - (v - lo) / (hi - lo) * (height - 2 * pad)
+        return plot_bottom - (v - lo) / (hi - lo) * plot_height
 
     def path(key: str, cls: str) -> str:
         pts = [
@@ -236,18 +252,39 @@ def svg_trend(points: list[dict], width: int = 640, height: int = 150) -> str:
         )
         return f"<path d='{d}' fill='none' class='{cls}' stroke-width='2'/>{dots}"
 
+    max_ticks = min(5, len(points))
+    tick_indices = sorted(
+        {round(i * (len(points) - 1) / (max_ticks - 1)) for i in range(max_ticks)}
+    )
+    ticks = []
+    for idx in tick_indices:
+        x = xs[idx]
+        anchor = "middle"
+        if idx == 0:
+            anchor = "start"
+        elif idx == len(points) - 1:
+            anchor = "end"
+        ticks.append(
+            f"<line x1='{x:.1f}' y1='{plot_bottom:.1f}' x2='{x:.1f}' y2='{plot_bottom + 5:.1f}' class='xaxis'/>"
+            f"<text x='{x:.1f}' y='{plot_bottom + 20:.1f}' text-anchor='{anchor}' class='axis'>"
+            f"{esc(_trend_date_label(points[idx].get('ts', '')))}</text>"
+        )
+
     target_y = y(TARGET)
     grid = "".join(
-        f"<line x1='{pad}' y1='{y(v):.1f}' x2='{width - pad}' y2='{y(v):.1f}' class='grid'/>"
+        f"<line x1='{left_pad}' y1='{y(v):.1f}' x2='{width - right_pad}' y2='{y(v):.1f}' class='grid'/>"
         f"<text x='4' y='{y(v) + 3:.1f}' class='axis'>{int(v * 100)}%</text>"
         for v in (0.5, 0.7, 0.9)
     )
     return (
         f"<svg width='100%' viewBox='0 0 {width} {height}' class='trend'>"
         f"{grid}"
-        f"<line x1='{pad}' y1='{target_y:.1f}' x2='{width - pad}' y2='{target_y:.1f}' class='targetline'/>"
+        f"<line x1='{left_pad}' y1='{target_y:.1f}' x2='{width - right_pad}' y2='{target_y:.1f}' class='targetline'/>"
         f"{path('unique_variants', 'line-uv')}"
         f"{path('pmids', 'line-pm')}"
+        f"<line x1='{left_pad}' y1='{plot_bottom:.1f}' x2='{width - right_pad}' y2='{plot_bottom:.1f}' class='xaxis'/>"
+        f"{''.join(ticks)}"
+        f"<text x='{(left_pad + width - right_pad) / 2:.1f}' y='{height - 6}' text-anchor='middle' class='axis'>Run date</text>"
         f"</svg>"
         f"<div class='legend'><span class='k uv'></span>Unique-variant recall "
         f"<span class='k pm'></span>PMID recall "
@@ -440,6 +477,7 @@ tr.nonlever{{opacity:.7}} .gloss{{color:var(--muted);font-size:12px}}
 .note-h{{font-weight:700;font-size:12px;color:var(--target);margin-bottom:4px}}
 .note-b{{font-size:12.5px;white-space:pre-wrap}}
 .trend .grid{{stroke:var(--line)}} .trend .axis{{fill:var(--muted);font-size:9px}}
+.trend .xaxis{{stroke:var(--muted);stroke-width:1}}
 .trend .targetline{{stroke:var(--target);stroke-dasharray:4,3;stroke-width:1.5}}
 .trend .line-uv{{stroke:var(--uv)}} .trend .line-uv circle{{fill:var(--uv)}}
 .trend .line-pm{{stroke:var(--pm)}} .line-uv{{stroke:var(--uv)}} .line-pm{{stroke:var(--pm)}}
