@@ -1,0 +1,30 @@
+# Negative / guard cases — variants that the extraction protocol must NOT mint
+# as carrier evidence. Drawn from PMID 33013630 Table 1 (a SUDEP review whose
+# table is `Gene | Variant | gnomAD allele count | SIFT | PolyPhen-2 | References`
+# — pure annotation, zero patient data), all extracted under a KCNH2 job.
+#
+# Two failure modes, two guard layers:
+#   wrong_gene        — residue mismatches KCNH2 aa_ref (variantFeatures) -> the
+#                       residue/target-gene-specificity guard must drop it.
+#   real_gene_annot   — genuine KCNH2 residue, but the row is gnomAD/in-silico
+#                       annotation, not a person count -> the annotation/count
+#                       guard must emit 0 carriers.
+#   real_gene_carrier — genuine KCNH2 AND has explicit "1 SUDEP patient" text
+#                       support; the only rows that should yield a carrier
+#                       (count=1, phenotype SUDEP). See RECALL_HISTORY 2026-06-22.
+#
+# expected_carriers is the correct per-(variant,PMID) carrier count from 33013630.
+#
+variant	aa_pos	claimed_ref	kcnh2_aa_ref	residue_match	true_gene	evidence_class	expected_carriers	note
+V759I	759	V	K	no	HCN4	wrong_gene	0	"870" in source is HCN4 gnomAD allele count
+G973R	973	G	L	no	HCN4	wrong_gene	0	gnomAD allele count 19
+P802S	802	P	N	no	HCN2	wrong_gene	0	gnomAD allele count 10
+R1044W	1044	R	A	no	HCN4	wrong_gene	0	gnomAD allele count 4
+R523C	523	R	L	no	SCN5A	wrong_gene	0	gnomAD allele count 2
+I397V	397	I	R	no	SCN5A	wrong_gene	0	gnomAD allele count 1
+I82T	82	I	I	yes	KCNH2	real_gene_annot	0	gnomAD allele count 0; no patient data
+R176W	176	R	R	yes	KCNH2	real_gene_annot	0	gnomAD allele count 44; annotation only
+G749A	749	G	G	yes	KCNH2	real_gene_annot	0	gnomAD allele count 0; annotation only
+R1047L	1047	R	R	yes	KCNH2	real_gene_annot	0	gnomAD allele count 3117; annotation only
+R744*	744	R	R	yes	KCNH2	real_gene_carrier	1	text: "identified in a SUDEP patient"
+G924A	924	G	G	yes	KCNH2	real_gene_carrier	1	text: "identified in a SUDEP patient"

@@ -1,0 +1,13 @@
+variant,pmid,carriers,affected,unaffected,gold_v2_carriers,gold_v2_affected,gold_v2_unaffected,gold_v2_status,gold_v2_note,gold_v2_source
+C112R,2539388,5,5,0,,,,,,
+R142C,2539388,5,5,0,,,,,,
+p.Arg25Cys,10432380,2,1,1,,,,,,
+p.Leu28Pro,10213152,29,27,2,,,,,,
+p.E37K,23990795,1,0,1,,,,,,
+p.L46P,23990795,6,2,4,,,,,,
+c.460C>A,27108409,2,2,0,,,,,,
+p.Arg145Pro,16431249,18,18,,,,,,,
+p.Cys25Arg,16431249,4,4,,,,,,,
+p.Leu141_Lys143del,16431249,5,5,,,,,,,
+p.Gln156_Gly173del,16431249,1,1,,,,,,,
+p.Gln3Lys,16431249,1,1,,,,,,,

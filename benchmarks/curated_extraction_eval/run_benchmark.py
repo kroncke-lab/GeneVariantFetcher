@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Run the curated-extraction-eval benchmark: recall + MAE on 24 fixed papers.
+"""Run the curated-extraction-eval benchmark: recall + MAE on fixed papers.
 
 WHAT THIS IS
   A cheap, FIXED regression harness. It scores extraction against the frozen
-  gold subset in ./gold (24 hand-picked, well-extracted, strategy-diverse gold
-  papers across KCNH2/KCNQ1/SCN5A/RYR2) and reports recall + rows-mode MAE +
+  gold subset in ./gold (hand-picked, strategy-diverse gold papers across the
+  registry genes) and reports recall + rows-mode MAE +
   precision, plus a per-paper breakdown. Use it to tell whether a change to the
   prompts / harness / guardrails / matcher helped or regressed, WITHOUT paying to
   re-run the whole gold standard. See README.md for the full story.
@@ -64,6 +64,13 @@ CANONICAL_DBS = {
     / "validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
     "RYR2": REPO
     / "validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db",
+    # Non-cardiac diversity genes (gold via gold_overrides/). Existence-gated in
+    # resolve_dbs, so checkouts without these run dirs just skip them.
+    "BRCA1": REPO / "results/BRCA1/20260616_132646/BRCA1.db",
+    "BRCA2": REPO
+    / "results/BRCA2/20260606_134517_hereditary_breast_cancer_500/BRCA2/20260606_134519/BRCA2.refresh_20260606_205358.db",
+    "MYBPC3": REPO / "results/MYBPC3/20260616_132646/MYBPC3.refresh_20260617_091043.db",
+    "APOE": REPO / "results/APOE/20260621_072155_full_redo/APOE.db",
 }
 
 
@@ -203,6 +210,15 @@ def fmt_pct(v) -> str:
     return "n/a" if v is None else f"{v:.1%}"
 
 
+def display_path(path: Path) -> str:
+    """Return a readable path whether callers supplied absolute or relative args."""
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(REPO))
+    except ValueError:
+        return str(path)
+
+
 def headline(summary: dict) -> dict:
     rec = summary.get("aggregate_recall", {})
     mae = summary.get("aggregate_mae", {})
@@ -238,9 +254,9 @@ def headline(summary: dict) -> dict:
 def print_scorecard(summary: dict, papers: list[dict], baseline: dict | None) -> None:
     h = headline(summary)
     print("\n" + "=" * 72)
-    print("CURATED EXTRACTION EVAL — subset of 24 gold papers")
+    print("CURATED EXTRACTION EVAL — fixed curated gold subset")
     print("=" * 72)
-    print("\nAggregate recall (matched / gold on the 24-paper subset):")
+    print("\nAggregate recall (matched / gold on the curated subset):")
     base_rec = (baseline or {}).get("recall", {})
     for name, b in h["recall"].items():
         delta = ""
@@ -291,17 +307,16 @@ def print_scorecard(summary: dict, papers: list[dict], baseline: dict | None) ->
 
 def resolve_dbs(overrides: list[str] | None) -> dict[str, Path]:
     dbs: dict[str, Path] = {}
+    for gene, path in CANONICAL_DBS.items():
+        if path.exists():
+            dbs[gene] = path
+        else:
+            print(f"  (skip {gene}: canonical DB not found at {path})")
     for item in overrides or []:
         if "=" not in item:
             raise SystemExit(f"--db must be GENE=/path/to.db, got {item!r}")
         gene, path = item.split("=", 1)
         dbs[gene.strip().upper()] = Path(path).expanduser()
-    if not dbs:  # default to canonical DBs that exist
-        for gene, path in CANONICAL_DBS.items():
-            if path.exists():
-                dbs[gene] = path
-            else:
-                print(f"  (skip {gene}: canonical DB not found at {path})")
     if not dbs:
         raise SystemExit(
             "No DBs to score. Pass --db GENE=/path/to.db, or run from a checkout "
@@ -460,10 +475,10 @@ def main() -> int:
 
     if args.write_baseline:
         BASELINE.write_text(json.dumps(headline(summary), indent=2) + "\n")
-        print(f"Wrote baseline -> {BASELINE.relative_to(REPO)}")
+        print(f"Wrote baseline -> {display_path(BASELINE)}")
 
     print(
-        f"Full scorer artifacts: {args.outdir.relative_to(REPO)}/ "
+        f"Full scorer artifacts: {display_path(args.outdir)}/ "
         "(summary.json, report.md, per-gene discrepancies.csv, "
         "paper_disagreement_report.csv)"
     )

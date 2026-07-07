@@ -33,3 +33,13 @@ After editing, run `python build_fixture.py`; it will fold these rows into the
 frozen `gold/` subset and stop warning about missing gold for those PMIDs.
 
 A copy-paste starter for a new gene is in `_TEMPLATE_recall_input.csv`.
+
+## July 2026 non-cardiac adoption note
+
+BRCA1, BRCA2, MYBPC3, and APOE overrides were reconciled on 2026-07-06 from a
+candidate re-derivation plus review pass. The adopted rule is: include every
+gene variant with at least one study carrier, and include phenotype/count fields
+only when the paper reports individual-level counts. Family-only papers remain
+blank pending an explicit `count_unit` schema. The temporary backup and
+re-derived candidate directories from that reconciliation are local generated
+artifacts and are not part of the committed benchmark contract.

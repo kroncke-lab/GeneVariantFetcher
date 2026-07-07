@@ -1,39 +1,39 @@
 {
   "recall": {
     "pmids": {
-      "matched": 24,
-      "gold": 24,
-      "recall": 1.0
+      "matched": 100,
+      "gold": 101,
+      "recall": 0.9900990099009901
     },
     "variant_rows": {
-      "matched": 735,
-      "gold": 738,
-      "recall": 0.9959349593495935
+      "matched": 2728,
+      "gold": 3029,
+      "recall": 0.9006272697259822
     },
     "unique_variants": {
-      "matched": 566,
-      "gold": 569,
-      "recall": 0.9947275922671354
+      "matched": 1863,
+      "gold": 2019,
+      "recall": 0.9227340267459139
     },
     "patients": {
-      "matched": 2032,
-      "gold": 2035,
-      "recall": 0.9985257985257985
+      "matched": 7947,
+      "gold": 8398,
+      "recall": 0.9462967373184091
     },
     "affected": {
-      "matched": 1318,
-      "gold": 1321,
-      "recall": 0.9977289931869796
+      "matched": 6238,
+      "gold": 6644,
+      "recall": 0.9388922335942204
     },
     "unaffected": {
-      "matched": 270,
-      "gold": 270,
-      "recall": 1.0
+      "matched": 511,
+      "gold": 523,
+      "recall": 0.9770554493307839
     }
   },
   "mae": {
-    "carriers": 0.15618661257606492,
-    "affected": 0.15776081424936386,
-    "unaffected": 0.18181818181818182
+    "carriers": 0.300462249614792,
+    "affected": 0.25808419768151314,
+    "unaffected": 0.2608695652173913
   }
 }

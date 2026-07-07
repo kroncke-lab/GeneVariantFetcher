@@ -69,6 +69,18 @@ REGISTRY = HERE / "registry.tsv"
 
 VALID_STRATEGIES = {"table", "text", "figure", "mixed"}
 
+# Most benchmark source is synced into corpus/<GENE>/<PMID>/, but a few no-gold
+# new-gene runs only have their reusable cache under results/.../pmc_fulltext.
+RUN_LOCAL_SOURCE_DIRS = {
+    "BRCA1": [REPO / "results/BRCA1/20260616_132646/pmc_fulltext"],
+    "BRCA2": [
+        REPO
+        / "results/BRCA2/20260606_134517_hereditary_breast_cancer_500/BRCA2/20260606_134519/pmc_fulltext"
+    ],
+    "MYBPC3": [REPO / "results/MYBPC3/20260616_132646/pmc_fulltext"],
+    "APOE": [REPO / "results/APOE/20260616_132646/pmc_fulltext"],
+}
+
 # Canonical gold-CSV schema (matches the repo normalized recall inputs). The
 # first five are required; gold_v2_* are optional adjudication-overlay columns.
 CANON_HEADER = [
@@ -212,7 +224,7 @@ def title_for(gene: str, pmid: str) -> str:
                 conn.close()
         except sqlite3.Error:
             pass
-    fc = CORPUS / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
+    fc = source_full_context(gene, pmid)
     if fc.exists():
         try:
             skip = {
@@ -234,6 +246,18 @@ def title_for(gene: str, pmid: str) -> str:
         except OSError:
             pass
     return ""
+
+
+def source_full_context(gene: str, pmid: str) -> Path:
+    """Return the best cached FULL_CONTEXT path for a benchmark paper."""
+    corpus_fc = CORPUS / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
+    if corpus_fc.exists():
+        return corpus_fc
+    for root in RUN_LOCAL_SOURCE_DIRS.get(gene, []):
+        fc = root / f"{pmid}_FULL_CONTEXT.md"
+        if fc.exists():
+            return fc
+    return corpus_fc
 
 
 def copy_source_snapshot(corpus_dir: Path, dst_dir: Path, pmid: str) -> int:
@@ -307,14 +331,14 @@ def main(argv: list[str]) -> int:
             if gsrc == "MISSING" or stats["gold_rows"] == 0:
                 missing_gold.append(f"{gene}/{pmid}")
 
-            corpus_fc = CORPUS / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
-            src_status = "ok" if corpus_fc.exists() else "MISSING_IN_CORPUS"
-            if not corpus_fc.exists():
+            source_fc = source_full_context(gene, pmid)
+            src_status = "ok" if source_fc.exists() else "MISSING_IN_CORPUS"
+            if not source_fc.exists():
                 missing_src.append(f"{gene}/{pmid}")
 
-            if materialize_sources and corpus_fc.exists():
+            if materialize_sources and source_fc.exists():
                 src_bytes_total += copy_source_snapshot(
-                    corpus_fc.parent,
+                    source_fc.parent,
                     HERE / "sources" / gene / pmid,
                     pmid,
                 )
@@ -331,8 +355,8 @@ def main(argv: list[str]) -> int:
                     "gold_source": gsrc,
                     "title": title_for(gene, pmid),
                     "why_selected": note,
-                    "corpus_source": str(corpus_fc.relative_to(REPO))
-                    if corpus_fc.exists()
+                    "corpus_source": str(source_fc.relative_to(REPO))
+                    if source_fc.exists()
                     else "",
                     "source_status": src_status,
                     "pubmed_url": PUBMED.format(pmid=pmid),

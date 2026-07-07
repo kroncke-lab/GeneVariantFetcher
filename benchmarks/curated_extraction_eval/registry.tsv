@@ -44,3 +44,81 @@ RYR2	19926015	figure	large mixed table+figure ORF scan (40 variants)
 RYR2	22222782	figure	postmortem RYR2 figure readings; MAE signal (cmm=3)
 RYR2	16272262	mixed	CPVT paper; table+figure mix (routing stress)
 RYR2	29544605	text	RYR2 variants reported in prose (12)
+KCNH2	33013630	text	SUDEP review: gnomAD/SIFT/PolyPhen annotation table (FP guard) + 2 text-supported SUDEP carriers (Arg744*/Gly924Ala) the LLM path over-attributes to 6 rows
+KCNH2	15840476	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNH2	10862094	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	19716085	text	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	30758498	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	17192539	text	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	19490272	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	14678125	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	24606995	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	21956039	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+KCNQ1	16922724	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	25904541	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	24631775	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	26669661	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	11901046	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	22360817	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+SCN5A	29017927	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	28404607	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	29925740	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	33606749	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	30170228	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	30403697	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	23595086	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	16188589	table	added to expand the regression set toward ~50 papers (well-covered gold paper)
+RYR2	12093772	text	added to expand the regression set toward ~50 papers (well-covered gold paper)
+BRCA1	10480351	text	pre-2000 African American HBOC; abstract-supported truncating mutations plus benign/control-count polymorphism
+BRCA1	10528853	mixed	OCR-heavy TDGS table/figure mutation scan; recurring polymorphism counts and mutation/polymorphism role confusion
+BRCA1	10441573	figure	Norwegian founder penetrance/pedigree paper; founder carrier counts in text and figures
+BRCA1	10090482	text	Flemish mutation-in-brief; small-family text counts and splice/frameshift/nonsense mix
+BRCA1	22923021	mixed	Slovene HBOC family/pedigree paper; novel/founder variants and unaffected carrier count
+BRCA1	30309222	table	Korean ovarian cancer supplement table; recurrent founder counts and missing-supplement failure mode
+BRCA1	33113089	table	New Zealand panel paper; true BRCA1 singleton amid false-positive call/benign haplotype table noise
+BRCA1	33468216	table	Latvian large cohort/founder table; family-count versus patient-count role stress
+BRCA2	10398279	text	Ashkenazi prostate-cancer founder screen; tiny text-supported BRCA2 carrier count
+BRCA2	15365993	table	Korean sporadic breast cancer mutation spectrum; table-count extraction and polymorphism/VUS mix
+BRCA2	18489799	table	Czech HBOC large mutation spectrum; many family-count rows across BRCA2 tables
+BRCA2	21356067	mixed	Finnish high-risk founder-negative cohort; affected cases versus healthy/control carrier split
+BRCA2	22655046	mixed	Mexican HBOC sequencing with family follow-up; asymptomatic carrier pedigree plus VUS table
+BRCA2	25802882	mixed	Japanese NGS cohort; deleterious table, unaffected relatives, VUS/common variant tables
+MYBPC3	9541104	figure	Australian FHC pedigrees; mutation-positive family counts from figure/text
+MYBPC3	9541100	mixed	FHC penetrance paper; affected/equivocal/unaffected role split in pedigrees
+MYBPC3	10424815	text	double heterozygosity family; MYBPC3-only and double-heterozygous affected counts in prose
+MYBPC3	16858239	table	Italian HCM cohort abstract/table; recurrent/founder MYBPC3 variants and exact patient counts
+MYBPC3	20433692	mixed	Spanish HCM family study; supplement pedigree counts and aggregate genotype-phenotype table
+MYBPC3	21302287	table	Italian HCM mutation table; dense cDNA/protein table with SNP/pathogenic mix
+MYBPC3	33673806	table	Blueprint large lab cohort; 70+ MYBPC3 diagnostic table rows from supplement
+MYBPC3	40453736	mixed	Hong Kong 2025 HCM cohort; recurrent pathogenic/VUS variants and East-Asian frequency context
+APOE	2539388	figure	pre-1990 apoE3 family; dual substitutions on one variant allele with affected-family cosegregation
+APOE	10432380	mixed	LPG family; Arg25Cys carrier split with asymptomatic mother and negative population screens
+APOE	10213152	table	late-onset AD case-control APOE*4 Pittsburgh coding variant; large case/control count split
+APOE	23990795	table	AD rare coding variant table; APOE case/control split amid wrong-gene table false positives
+APOE	27108409	table	primary hypertriglyceridemia cohort; APOE Arg154Ser patients and matched control count
+APOE	16431249	table	LPG review aggregate; source-reported APOE variant counts across sequenced LPG patients
+# --- Cardiac era/strategy/size/failure-mode expansion (2026-06-30) ---
+KCNH2	7889573	text	pre-2000 era anchor (1995); 5 variants in early HERG/LQT2 text
+KCNH2	29650123	figure	FAILURE MODE: figure/pedigree variants, in-source but ~0.09 recall (TASKS extraction-gap)
+KCNH2	29622001	table	large llm_table cohort (35 var), partial recall ~0.66 (count/route stress)
+KCNH2	23098067	text	mid-size running-text cohort (22 var), partial recall ~0.68
+KCNH2	17210839	table	clean regex_table (6 var), 2007 era
+KCNH2	12442276	text	small clean text case (3 var), low-size anchor, 2002
+KCNQ1	32893267	table	HIGH-SIZE anchor: 249-variant screening cohort, 4MB source (large-table stress)
+KCNQ1	24667783	text	FAILURE MODE: 16 var in text, in-source but ~0.31 recall
+KCNQ1	34135346	table	post-2020 era anchor (2021), regex_table, 10 var
+KCNQ1	33614747	table	post-2020 (2021) regex_table, 10 var
+KCNQ1	25344363	figure	rare KCNQ1 figure-sourced case (3 var), strategy balance
+KCNQ1	30816480	table	clean llm_table (7 var), 2019
+SCN5A	30059973	table	large regex_table (185 var), high-size table stress
+SCN5A	29325976	table	large table (91 var), TASKS-tracked extraction gap, ~0.75 recall
+SCN5A	24613995	figure	clean figure-sourced case (13 var), 2014
+SCN5A	19251209	text	large running-text cohort (32 var), ~0.91 recall
+SCN5A	24144883	text	FAILURE MODE: 8 var in text, in-source but ~0.25 recall
+SCN5A	26173111	table	regex_table (19 var), 2015, ~0.95 recall
+RYR2	19398665	figure	FAILURE MODE: ORF-scan figure (27 var), in-source but ~0.07 recall (TASKS gap)
+RYR2	28237968	table	clean llm_table (18 var), 2017
+RYR2	34661651	text	post-2020 era anchor (2022), small text case (4 var)
+RYR2	12106942	table	older llm_table (6 var), 2002
+RYR2	33500567	text	post-2020 (2021) text case (9 var), 1MB source w/ supplement
+RYR2	27452199	table	FAILURE MODE: 31 gold variants, 0 extracted; in-source extraction gap (TASKS)

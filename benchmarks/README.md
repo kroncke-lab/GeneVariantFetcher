@@ -11,12 +11,12 @@ full-gold scorer and metrics.
 
 ## Sets
 
-- **[`curated_extraction_eval/`](curated_extraction_eval/README.md)** — 24
-  hand-picked, well-extracted, strategy-diverse gold papers (KCNH2/KCNQ1/SCN5A/
-  RYR2; tables vs figures vs in-text), plus an append-only registry for future
-  problem papers and new genes. It scores existing DBs or runs the fixed PMID set
-  through the regular default `gvf-run` post-selection pipeline. **Start here** —
-  its README is self-contained.
+- **[`curated_extraction_eval/`](curated_extraction_eval/README.md)** — 101
+  hand-picked, strategy-diverse gold papers across KCNH2, KCNQ1, SCN5A, RYR2,
+  BRCA1, BRCA2, MYBPC3, and APOE, spanning tables, figures, in-text evidence,
+  negative cases, and false-positive guard cases. It scores existing DBs or runs
+  the fixed PMID set through the regular default `gvf-run` post-selection
+  pipeline. **Start here** — its README is self-contained.
 
   ```bash
   python benchmarks/curated_extraction_eval/run_benchmark.py        # score canonical DBs (free)

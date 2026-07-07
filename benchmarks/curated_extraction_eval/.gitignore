@@ -4,4 +4,8 @@ sources/
 
 # Runner output artifacts.
 .last_run/
+.last_run*/
 .extract_runs/
+.policy_experiments/
+gold_overrides.backup_*/
+gold_overrides_rederived/

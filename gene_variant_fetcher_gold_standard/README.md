@@ -42,8 +42,8 @@ already configured there):
 ```bash
 cd /Users/kronckbm/GitRepos/Variant_Browser
 set -a; source .env; set +a
-venv/bin/python /Users/kronckbm/Projects/GeneVariantFetcher/scripts/build_gold_standard_from_varbrowser.py \
-  --out /Users/kronckbm/Projects/GeneVariantFetcher/gene_variant_fetcher_gold_standard
+venv/bin/python /Users/kronckbm/GitRepos/GeneVariantFetcher/scripts/build_gold_standard_from_varbrowser.py \
+  --out /Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard
 ```
 
 It is idempotent — re-running overwrites `raw/`, `normalized/`, `qc/`, and

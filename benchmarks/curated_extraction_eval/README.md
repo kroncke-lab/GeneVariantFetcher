@@ -1,9 +1,13 @@
 # Curated Extraction Eval — a small, fixed benchmark for prompt/harness/guardrail changes
 
-**What this is, in one sentence:** a hand-picked set of **24 gold-standard papers**
-(across KCNH2, KCNQ1, SCN5A, RYR2) that the GeneVariantFetcher (GVF) pipeline
-already extracts *very well*, so you can measure whether a change to the
-**prompts, harness, guardrails, or variant matcher** helped or hurt — on
+**What this is, in one sentence:** a hand-picked set of **101 gold-standard papers**
+across **8 gene-disease pairs** — the 4 cardiac channelopathy genes (KCNH2,
+KCNQ1, SCN5A, RYR2) plus hereditary cancer (BRCA1, BRCA2), hypertrophic
+cardiomyopathy (MYBPC3), and Alzheimer's/lipid disorders (APOE) — spanning
+**publication years 1989–2025**, all four extraction strategies, cohort sizes
+from single case reports to 100+ variant screens, and **deliberately-included
+failure-mode and false-positive-guard cases**, so you can measure whether a change
+to the **prompts, harness, guardrails, or variant matcher** helped or hurt — on
 **recall** and **mean absolute error (MAE)** — **without re-running the entire
 gold standard and burning a huge number of LLM tokens.**
 
@@ -16,11 +20,14 @@ README is self-contained. You do not need any other context to use it.
 
 The full GVF gold standard is ~1,500 papers / ~6,800 variant rows. Scoring a
 pipeline change against all of it is slow and, if you re-extract, expensive. This
-benchmark is the **fast inner loop**: a *fixed*, *curated*, *strategy-diverse*
+benchmark is the **fast inner loop**: a *fixed*, *curated*, *diversity-spanning*
 subset you can run repeatedly to catch regressions and confirm improvements
-cheaply. It is deliberately small (24 papers, ~740 gold variant rows) and
-deliberately **easy for the current pipeline** — so any drop in the numbers is a
-real signal that a change regressed something, not just noise from hard papers.
+cheaply. It is small (101 papers, ~3,000 gold variant rows) but **deliberately
+diverse** — it pairs papers the pipeline already nails (the high-recall floor
+that makes regressions obvious) with genes, eras, and failure modes the pipeline
+does *not* yet handle well, so the aggregate carries real headroom (~90%) for a
+protocol change to move. Per-paper scores tell you which is which: a
+high-recall paper dropping is a regression; a known-hard paper rising is a win.
 
 It complements (does not replace) the full scorer
 (`scripts/run_recall_suite.py`) and the authoritative metrics in
@@ -94,23 +101,29 @@ benchmark number.
 
 ## Current baseline (the numbers to hold or beat)
 
-Measured by `score` mode against the four **canonical DBs** in
-`docs/RECALL_STATUS.md`. The machine-readable copy is **`expected_baseline.json`**
-(the runner diffs against it automatically); regenerate with `--write-baseline`.
+Measured by `score` mode against the eight **canonical DBs** wired into
+`run_benchmark.py` (the 4 cardiac DBs from `docs/RECALL_STATUS.md` plus the
+BRCA1/BRCA2/MYBPC3/APOE run DBs). The machine-readable copy is
+**`expected_baseline.json`** (the runner diffs against it automatically);
+regenerate with `--write-baseline`.
 
-| Metric | Subset recall | (Full gold standard, for contrast) |
+| Metric | Subset recall (101 papers) | (Full cardiac gold standard, for contrast) |
 |---|---:|---:|
-| PMIDs | 100% (24/24) | ~85% |
-| Variant rows | ~99.6% | ~81% |
-| **Unique variants** | **~99.5%** | ~86% |
-| Patients / Affected / Unaffected | ~99.9% / ~99.8% / 100% | ~85% / ~84% / ~87% |
-| Carriers MAE | ~0.16 | ~0.61 |
+| PMIDs | 99.0% (100/101) | ~85% |
+| Variant rows | 90.1% (2728/3029) | ~81% |
+| **Unique variants** | **92.3% (1863/2019)** | ~86% |
+| Patients / Affected / Unaffected | 94.6% / 93.9% / 97.7% | ~85% / ~84% / ~87% |
+| Carriers MAE | 0.300 | ~0.61 |
 
-The subset scores far higher than the full gold standard **on purpose** — these
-are papers the pipeline already nails, so the benchmark is a sensitive regression
-detector. A change that drops subset unique-variant recall below ~99% or pushes
-carriers MAE above ~0.2 is doing real damage and should be investigated before it
-ships.
+This set sits near ~90% **on purpose**: it blends papers the pipeline nails
+(the regression floor) with deliberately-hard new-gene and failure-mode papers
+(the headroom). So read the **per-paper table**, not just the aggregate — a
+high-recall paper dropping is a real regression; the known-hard papers (e.g.
+KCNH2 29650123, RYR2 19398665/27452199, SCN5A 24144883, KCNQ1 24667783) are
+extraction-gap targets that *should* rise when a protocol change works. The
+4 `negative_cases/` guards (run `pytest benchmarks/curated_extraction_eval/negative_cases`)
+must stay green — they assert the protocol does NOT mint carriers from
+annotation/predictor/wrong-gene tables.
 
 ---
 
@@ -126,6 +139,7 @@ curated_extraction_eval/
 ├── expected_baseline.json ← committed baseline the runner diffs against
 ├── run_benchmark.py     ← the runner (score + extract modes)
 ├── build_fixture.py     ← regenerator: reads registry.tsv + gold and rebuilds every derived file
+├── negative_cases/      ← PRECISION/guard cases: assert the protocol does NOT mint carriers from annotation/predictor/wrong-gene data (gold-free, self-contained pytest). See its README.
 ├── pmids/<GENE>.txt      ← PMID lists for `gvf gvf-run --pmid-file` (auto-generated)
 ├── gold/normalized/<GENE>_recall_input.csv ← FROZEN gold SUBSET (auto-generated; same schema as the full gold, so the scorer runs unmodified)
 ├── gold_overrides/<GENE>_recall_input.csv  ← curator-supplied gold for papers the repo gold standard doesn't cover (see its README)
@@ -181,30 +195,34 @@ cache.
 > After a real improvement lands, re-run `run_benchmark.py --write-baseline` to
 > move the bar up.
 
-## How the original 24 papers were chosen
+## How the 101 papers were chosen
 
-Goal: papers the pipeline **already extracts well**, spanning the **strategies**
-a curator uses to pull variants out of a paper, balanced across the four genes.
+The set was built in two arms to span **four axes**: gene-disease pair, era,
+extraction strategy, cohort size — and to weight in **failure modes**, not just
+papers the pipeline nails.
 
-1. **Candidate pool:** every gold PMID, scored against the canonical DBs.
-2. **"Well-extracted" filter:** ≥6 gold variants, ≥85% row recall, and accurate
-   counts (summed |count error| ≤ 1.0 per matched row). Every pick here was then
-   **re-validated live** against the canonical DBs (≥95% row recall; most 100%).
-3. **Strategy tag** (from the dominant `variant_papers.source_layer`):
-   - **table** — variants in mutation-list tables (`regex_table`/`llm_table`)
-   - **text** — variants in running prose (`llm_text`/`regex_text`)
-   - **figure** — variants read from pedigrees/figures by the vision layer
-   - **mixed** — table + figure both contribute (exercises routing)
-4. **Curation:** 24 picked to balance gene × strategy, span small (7 variants) to
-   large (90), and include count-disagreement cases so MAE has signal.
+**Cardiac arm (73 papers · KCNH2/KCNQ1/SCN5A/RYR2).** Drawn from the repo gold
+standard (free to score). Per gold PMID, the canonical DB gave strategy (dominant
+`variant_papers.source_layer`), era (`papers.publication_date`), and approximate
+recall; picks were chosen to add era anchors (e.g. KCNH2 7889573 / 1995, RYR2
+34661651 / 2022), size anchors (KCNQ1 32893267 / 249 variants down to 3-variant
+case reports), strategy coverage, and in-source failure cases the pipeline misses
+(KCNH2 29650123, RYR2 19398665/27452199, SCN5A 24144883, KCNQ1 24667783).
 
-Final mix: **9 table · 8 text · 5 figure · 2 mixed**, across **KCNH2 6 · KCNQ1 5
-· SCN5A 7 · RYR2 6**. See `manifest.md` for the full list with titles and links.
+**Non-cardiac arm (28 papers · BRCA1/BRCA2/MYBPC3/APOE).** These genes have no
+repo gold standard, so each paper's gold answer was **curated by hand into
+`gold_overrides/` from the cached full text/tables** (the extraction DB was used
+only as a row locator, never trusted as gold). Counts the source did not state
+were left out rather than inferred; APOE allele-frequency-only papers were dropped
+in favor of ones with concrete coding variants + patient counts. The arm spans
+1989 (APOE 2539388) to 2025 (MYBPC3 40453736) and includes count-role-confusion
+cases (BRCA2 21356067, BRCA1 33468216) on purpose.
 
-> KCNH2 has no pure-*figure* paper in the set: in this gold standard its
-> well-extracted papers are table/text, and the clean figure-sourced papers are
-> in SCN5A and RYR2. That is a property of the data, recorded here so it is not
-> mistaken for an omission.
+**Strategy tags** (`table | text | figure | mixed`, from the dominant source
+route) — current mix: **54 table · 24 text · 12 figure · 11 mixed**, across
+**KCNH2 15 · KCNQ1 19 · SCN5A 19 · RYR2 20 · BRCA1 8 · BRCA2 6 · MYBPC3 8 ·
+APOE 6**. Plus 4 `negative_cases/` guards (gold-free FP assertions). See
+`manifest.md` for the full list with titles and links.
 
 ### Reproduce the selection / regenerate the fixture
 
