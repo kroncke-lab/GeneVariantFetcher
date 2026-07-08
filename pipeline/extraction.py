@@ -2257,9 +2257,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         return self._valid_table_protein(compact)
 
-    def _extract_lqts_compendium_protein(
-        self, prefix: str, mutation_type: str
-    ) -> Optional[str]:
+    def _extract_lqts_compendium_protein(self, prefix: str) -> Optional[str]:
         patterns = [
             r"[ACDEFGHIKLMNPQRSTVWY]+\s+\d+-\d+\s+dup",
             r"\d+-\d+\s+del\s+[ACDEFGHIKLMNPQRSTVWY]+",
@@ -2406,9 +2404,7 @@ class ExpertExtractor(BaseLLMCaller):
         )
         if not type_match:
             return None
-        protein_raw = self._extract_lqts_compendium_protein(
-            left[: type_match.start()], type_match.group("mutation_type")
-        )
+        protein_raw = self._extract_lqts_compendium_protein(left[: type_match.start()])
         return self._lqts_compendium_variant(
             gene_symbol=gene_symbol,
             protein_raw=protein_raw,

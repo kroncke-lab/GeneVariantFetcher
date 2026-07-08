@@ -820,7 +820,6 @@ def build_router_prompt(
     gene_symbol: str,
     *,
     sample_rows: int = 3,
-    cell_chars: int = 60,
 ) -> str:
     """Compact JSON-friendly inventory of every detected table.
 
