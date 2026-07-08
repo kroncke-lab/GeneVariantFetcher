@@ -907,6 +907,12 @@ def run_gvf_pipeline(
     output = Path(output).expanduser()
     output.mkdir(parents=True, exist_ok=True)
 
+    # Honor the --email flag as NCBI_EMAIL so the documented cold-start command
+    # (gvf gvf-run <GENE> --email you@lab.edu) works on a fresh clone with no
+    # pre-populated .env. An explicitly-set NCBI_EMAIL in the environment wins.
+    if email:
+        os.environ.setdefault("NCBI_EMAIL", email)
+
     # Step 1: doctor
     logger.info("🩺 Step 1: doctor")
     status = doctor()
