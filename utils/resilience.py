@@ -99,7 +99,15 @@ class CircuitBreaker:
         self.last_failure_time = datetime.now()
         self.consecutive_successes = 0
 
-        if self.failure_count >= self.max_failures and self.state == "closed":
+        if self.state == "half-open":
+            # A trial call failed while probing recovery — re-block immediately
+            # instead of leaving the breaker half-open (which would keep letting
+            # traffic through to a still-broken dependency).
+            self.state = "open"
+            logger.error(
+                f"Circuit breaker '{self.name}' RE-OPENED after a failed half-open trial"
+            )
+        elif self.failure_count >= self.max_failures and self.state == "closed":
             self.state = "open"
             logger.error(
                 f"Circuit breaker '{self.name}' OPENED after {self.failure_count} failures"
