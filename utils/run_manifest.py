@@ -147,15 +147,13 @@ class RunManifestManager:
         manifest = RunManifest(output_path, gene_symbol)
 
         # Set environment information
-        import platform
         import socket
         import sys
+        from importlib.metadata import PackageNotFoundError, version
 
         try:
-            import pkg_resources
-
-            gvf_version = pkg_resources.get_distribution("genevariantfetcher").version
-        except:
+            gvf_version = version("genevariantfetcher")
+        except PackageNotFoundError:
             gvf_version = "development"
 
         manifest.data["environment"].update(
