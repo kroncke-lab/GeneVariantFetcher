@@ -49,7 +49,7 @@ the preferred production path is the `gvf-run` command at the top of this runboo
 gvf extract GENE --email "$NCBI_EMAIL" --output results/ --scout-first
 ```
 
-The workflow should discover PMIDs through PubMind, PubMed, and Europe PMC, then write `results/GENE/<timestamp>/GENE_pmids.txt`.
+The workflow should discover PMIDs through PubMind and PubMed (Europe PMC is added only when `USE_EUROPEPMC=1`), then write `results/GENE/<timestamp>/GENE_pmids.txt`.
 
 ## 3. Triage
 

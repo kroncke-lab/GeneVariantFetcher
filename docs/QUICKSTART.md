@@ -63,18 +63,28 @@ See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
 
 ## First Run
 
-Run the current cold-start workflow for KCNH2, a well-studied cardiac gene:
+`gvf gvf-run` is the one command you need. Point it at **your own gene** — any
+HGNC symbol works, and no gold standard is required:
 
 ```bash
-gvf gvf-run KCNH2 --email you@example.com --output ./validation_runs/my_run
+gvf gvf-run <YOUR_GENE> --email you@lab.edu --output ./results [--disease "<phenotype>"]
 ```
 
-`gvf-run` runs the regular end-to-end path, including source recovery by default.
-For a lower-level extraction-only run:
+`gvf-run` runs the regular end-to-end path (discovery → triage → full-text and
+supplement acquisition → extraction → SQLite → recovery layers), with source
+recovery on by default. The `--email` flag is used for NCBI compliance; it is
+applied automatically, so you do not need an `NCBI_EMAIL` line in `.env` just to
+run (you do still need one LLM provider key).
+
+To reproduce a known result first, KCNH2 (a well-studied cardiac gene) is a good
+validation target:
 
 ```bash
-gvf extract KCNH2 --email you@example.com --output ./output
+gvf gvf-run KCNH2 --email you@lab.edu --output ./results --disease "Long QT Syndrome"
 ```
+
+The lower-level `gvf extract` command exists for debugging individual stages;
+prefer `gvf gvf-run` for normal work.
 
 ### What This Does
 

@@ -84,7 +84,7 @@ or replaying a specific stage.
 
 GVF's default workflow is:
 
-1. Discover PMIDs from PubMind, PubMed, and Europe PMC.
+1. Discover PMIDs from PubMind and PubMed (and Europe PMC when `USE_EUROPEPMC=1`).
 2. Fetch abstracts and apply Tier 1/Tier 2 relevance filtering.
 3. Download full text and supplements from PMC, publisher APIs, Unpaywall, and
    authenticated recovery routes when configured.
@@ -120,7 +120,7 @@ Use the project `.venv`:
 
 ```bash
 source .venv/bin/activate
-.venv/bin/python -m pytest tests/ -q
+.venv/bin/python -m pytest tests/unit -q
 ```
 
 Live network and institutional-access checks are opt-in:
