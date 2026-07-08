@@ -290,6 +290,55 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
 
 
 @api_retry
+def _efetch_pubmed_articles(pmids: List[str], email: Optional[str] = None):
+    _set_entrez_email(email)
+    handle = Entrez.efetch(
+        db="pubmed", id=",".join(pmids), rettype="xml", retmode="xml"
+    )
+    records = Entrez.read(handle)
+    handle.close()
+    return records
+
+
+def batch_fetch_affiliations(
+    pmids: List[str], batch_size: int = 200, email: Optional[str] = None
+) -> Dict[str, str]:
+    """PMID -> first non-empty author affiliation string, via batched EFetch.
+
+    A last-resort signal for cohort geographic origin (the study's author country).
+    Returns only PMIDs where an affiliation was found; failures are skipped.
+    """
+    out: Dict[str, str] = {}
+    for i in range(0, len(pmids), batch_size):
+        batch = [str(p) for p in pmids[i : i + batch_size]]
+        try:
+            records = _efetch_pubmed_articles(batch, email=email)
+        except Exception as exc:  # noqa: BLE001
+            logger.error("Failed to efetch affiliations for batch at %d: %s", i, exc)
+            continue
+        articles = records["PubmedArticle"] if "PubmedArticle" in records else []
+        for article in articles:
+            try:
+                medline = article["MedlineCitation"]
+                pmid = str(medline["PMID"])
+                authors = medline.get("Article", {}).get("AuthorList", []) or []
+                affiliation = None
+                for author in authors:
+                    for entry in author.get("AffiliationInfo") or []:
+                        text = str(entry.get("Affiliation") or "").strip()
+                        if text:
+                            affiliation = text
+                            break
+                    if affiliation:
+                        break
+                if affiliation:
+                    out[pmid] = affiliation
+            except (KeyError, TypeError, ValueError):
+                continue
+    return out
+
+
+@api_retry
 def query_europepmc(gene_symbol: str, max_results: int = 100) -> Set[str]:
     """
     Query Europe PMC for papers mentioning a gene symbol.
