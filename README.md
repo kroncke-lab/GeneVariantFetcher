@@ -17,7 +17,7 @@ analysis.
 The current production entry point is:
 
 ```bash
-gvf gvf-run <GENE> --email you@example.com --output ./results [--disease "<phenotype>"]
+gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
 ```
 
 Source recovery, including paywall and supplement acquisition, runs by default.
@@ -58,7 +58,7 @@ Follow [`docs/QUICKSTART.md`](docs/QUICKSTART.md) for the canonical install and
 
 ```bash
 source .venv/bin/activate
-gvf gvf-run KCNH2 --email you@example.com --output ./results --disease "Long QT Syndrome"
+gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --disease "Long QT Syndrome"
 ```
 
 The primary output is:

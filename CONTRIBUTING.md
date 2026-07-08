@@ -86,7 +86,10 @@ def normalize_variant(raw: str, gene: str = "KCNH2") -> str | None:
 ## Running Tests
 
 ```bash
-# Run all tests
+# Offline unit suite — matches CI; bare `pytest` resolves to this
+pytest tests/unit -q
+
+# Broader offline coverage (unit + recall)
 pytest tests/unit tests/recall -q
 
 # Run specific test file

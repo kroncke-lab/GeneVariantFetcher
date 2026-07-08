@@ -39,7 +39,7 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
 ## Turnkey Commands
 
 ```bash
-gvf gvf-run <GENE> --email you@example.com --output ./results [--disease "<phenotype>"]
+gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
 ```
 
 `gvf-run` runs doctor checks, extraction, source QC, source recovery, DB-observed
