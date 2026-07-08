@@ -3,7 +3,7 @@
 
 .DEFAULT_GOAL := help
 PY := .venv/bin/python
-EMAIL ?= you@lab.edu
+EMAIL ?= brett.kroncke@gmail.com
 OUTPUT ?= ./results
 
 .PHONY: help install test run
@@ -20,6 +20,6 @@ install:  ## Create .venv and install GVF with browser + dev extras
 test:  ## Run the offline unit suite (the CI-gated set)
 	$(PY) -m pytest tests/unit -q
 
-run:  ## Run the pipeline on a gene: make run GENE=KCNH2 [EMAIL=you@lab.edu] [OUTPUT=./results]
-	@test -n "$(GENE)" || { echo "Usage: make run GENE=<SYMBOL> [EMAIL=you@lab.edu] [OUTPUT=./results]"; exit 2; }
+run:  ## Run the pipeline on a gene: make run GENE=KCNH2 [EMAIL=brett.kroncke@gmail.com] [OUTPUT=./results]
+	@test -n "$(GENE)" || { echo "Usage: make run GENE=<SYMBOL> [EMAIL=brett.kroncke@gmail.com] [OUTPUT=./results]"; exit 2; }
 	$(PY) -m cli gvf-run $(GENE) --email $(EMAIL) --output $(OUTPUT)

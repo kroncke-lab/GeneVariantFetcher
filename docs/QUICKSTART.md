@@ -42,7 +42,7 @@ Create a `.env` file in the repository root:
 
 ```bash
 # Required
-NCBI_EMAIL=you@example.com
+NCBI_EMAIL=brett.kroncke@gmail.com
 
 # Required: at least one LLM provider key
 ANTHROPIC_API_KEY=your-anthropic-key
@@ -67,7 +67,7 @@ See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
 HGNC symbol works, and no gold standard is required:
 
 ```bash
-gvf gvf-run <YOUR_GENE> --email you@lab.edu --output ./results [--disease "<phenotype>"]
+gvf gvf-run <YOUR_GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
 ```
 
 `gvf-run` runs the regular end-to-end path (discovery → triage → full-text and
@@ -80,7 +80,7 @@ To reproduce a known result first, KCNH2 (a well-studied cardiac gene) is a good
 validation target:
 
 ```bash
-gvf gvf-run KCNH2 --email you@lab.edu --output ./results --disease "Long QT Syndrome"
+gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --disease "Long QT Syndrome"
 ```
 
 The lower-level `gvf extract` command exists for debugging individual stages;
@@ -98,17 +98,17 @@ prefer `gvf gvf-run` for normal work.
 
 ```bash
 # Limit papers for faster testing
-gvf extract KCNH2 --email you@example.com --max-pmids 20 --max-downloads 10
+gvf extract KCNH2 --email brett.kroncke@gmail.com --max-pmids 20 --max-downloads 10
 
 # Verbose output
-gvf extract KCNH2 --email you@example.com --verbose
+gvf extract KCNH2 --email brett.kroncke@gmail.com --verbose
 
 # Custom output directory
-gvf extract KCNH2 --email you@example.com --output /path/to/results
+gvf extract KCNH2 --email brett.kroncke@gmail.com --output /path/to/results
 
 # Publish the scored run into the Variant_Browser review DB for collaborator
 # adjudication (opt-in, best-effort; needs a sibling Variant_Browser checkout)
-gvf gvf-run KCNH2 --email you@example.com --output ./results --publish-review
+gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --publish-review
 ```
 
 To pull collaborator adjudications back into the gold standard, see
@@ -192,7 +192,7 @@ If you don't have publisher API keys, GVF still works using only PubMed Central:
 
 ```bash
 # Works without publisher keys; skips live paywall recovery
-gvf gvf-run KCNH2 --email you@example.com --output ./output --no-source-recovery
+gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./output --no-source-recovery
 ```
 
 **Limitations:**

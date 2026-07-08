@@ -4,7 +4,7 @@ This is the cold-start flow for a gene with no manually curated gold standard.
 The turnkey entry point is:
 
 ```bash
-gvf gvf-run <GENE> --email you@example.com --output ./results [--disease "<phenotype>"]
+gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
 ```
 
 Source recovery (paywall + supplement acquisition) runs by default in
@@ -126,7 +126,7 @@ The no-gold acquisition and staged refresh loop runs by default as part of
 `gvf-run`:
 
 ```bash
-gvf gvf-run GENE --email you@example.com --output results/
+gvf gvf-run GENE --email brett.kroncke@gmail.com --output results/
 ```
 
 This runs `source-qc`, fetches `source_qc/fetch_input.csv` with
@@ -140,7 +140,7 @@ refreshed DB unless `--skip layers` is also supplied.
 For a fast PMC/free-text-only pass, skip source recovery:
 
 ```bash
-gvf gvf-run GENE --email you@example.com --output results/ --no-source-recovery
+gvf gvf-run GENE --email brett.kroncke@gmail.com --output results/ --no-source-recovery
 ```
 
 For a manual no-gold audit on an existing run:
@@ -261,7 +261,7 @@ standard. Both directions are opt-in.
 Publish on the run (best-effort; a publish failure warns but never fails the run):
 
 ```bash
-gvf gvf-run GENE --email you@example.com --output results/ \
+gvf gvf-run GENE --email brett.kroncke@gmail.com --output results/ \
   --disease "<phenotype>" --publish-review
 ```
 
