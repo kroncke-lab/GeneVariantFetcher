@@ -1,17 +1,19 @@
 {
-  "generated_at": "2026-07-07 11:08 America/Chicago",
+  "generated_at": "2026-07-08 07:53 America/Chicago",
   "sources": [
+    "CLAUDE.md",
     "docs/ARCHITECTURE.md",
+    "docs/RECALL_REFRESH_RUNBOOK.md",
     "cli/gvf_run.py",
     "pipeline/steps.py",
-    "docs/RECALL_REFRESH_RUNBOOK.md",
-    "CLAUDE.md"
+    "pipeline/extraction.py",
+    "pipeline/table_router.py"
   ],
   "stages": [
     {
       "stage": 0,
       "name": "Runtime doctor and configuration",
-      "purpose": "Validate required NCBI email, available LLM provider keys, recommended publisher keys, and subscription unlocks before a run spends model or acquisition budget.",
+      "purpose": "Validate required NCBI email, at least one LLM provider key, recommended publisher keys, and subscription unlocks before a run spends acquisition or model budget.",
       "modules": [
         "cli/gvf_run.py",
         "config/settings.py",
@@ -19,13 +21,13 @@
       ],
       "outputs": [
         "doctor status",
-        "provider-aware worker/model settings"
+        "provider-aware model and worker settings"
       ]
     },
     {
       "stage": 1,
       "name": "Gene discovery and paper triage",
-      "purpose": "Expand the gene query, discover candidate PMIDs, fetch abstracts, then filter with a fast keyword tier and a provider-aware LLM relevance tier.",
+      "purpose": "Expand gene aliases, discover candidate PMIDs, fetch abstracts, then filter with a fast keyword tier and a provider-aware LLM/clinical triage tier.",
       "modules": [
         "gene_literature/discovery.py",
         "gene_literature/pubmed_client.py",
@@ -35,14 +37,16 @@
       "outputs": [
         "{gene}_pmids.txt",
         "abstract_json/{PMID}.json",
+        "pmid_status/filter_progress.jsonl",
         "pmid_status/filtered_out.csv"
       ]
     },
     {
       "stage": 2,
-      "name": "Source acquisition and corpus cache",
-      "purpose": "Acquire full text, supplements, and figures from PMC, publisher APIs, Unpaywall, CORE, authenticated browser paths, and the corpus cache without downgrading already-good source.",
+      "name": "Source acquisition and corpus reuse",
+      "purpose": "Reuse quality-gated corpus/prior-run source first, then acquire full text, supplements, and figures from PMC, publisher APIs, Unpaywall, CORE-compatible harvesters, and authenticated browser paths without downgrading usable source.",
       "modules": [
+        "pipeline/steps.py",
         "harvesting/orchestrator.py",
         "harvesting/elsevier_api.py",
         "harvesting/springer_api.py",
@@ -52,22 +56,25 @@
       ],
       "outputs": [
         "pmc_fulltext/{PMID}_FULL_CONTEXT.md",
+        "pmc_fulltext/{PMID}_artifacts.json",
         "corpus/{GENE}/{PMID}/",
-        "source_acquisition_summary.json"
+        "source acquisition logs"
       ]
     },
     {
       "stage": 3,
       "name": "Source QC, supplement folding, and targeted refresh",
-      "purpose": "Audit missing/stub/abstract-only sources, fold on-disk supplements into FULL_CONTEXT, and acceptance-gated re-extract only PMIDs with a real deterministic lift.",
+      "purpose": "Classify missing/stub/abstract-only sources, fold on-disk supplements into FULL_CONTEXT, fetch high-yield missing source when authorized, and acceptance-gated re-extract only PMIDs with a real deterministic lift.",
       "modules": [
         "scripts/recall_audit/source_acquisition_audit.py",
+        "scripts/recall_audit/summarize_acquisition_outcome.py",
         "scripts/fetch_elsevier_supplements.py",
         "scripts/refresh_run_db.py",
         "harvesting/supplement_fold.py"
       ],
       "outputs": [
         "source_acquisition_worklist.csv",
+        "fetch_input.csv",
         "source_override.csv",
         "refresh_summary.json",
         "staged extraction JSON"
@@ -76,42 +83,50 @@
     {
       "stage": 4,
       "name": "Variant and count extraction",
-      "purpose": "Extract variants, carrier counts, affected/unaffected counts, phenotypes, functional evidence, and table provenance from source text using deterministic pre-scans plus the LLM ExpertExtractor.",
+      "purpose": "Choose DATA_ZONES, CLEANED, or FULL_CONTEXT source; run deterministic variant/table pre-scans and table routing; extract variants/counts/phenotypes; then apply target-gene specificity, non-human count guards, optional count outlier/classifier hygiene, and retry failure handling before writing per-PMID JSON.",
       "modules": [
+        "pipeline/steps.py",
         "pipeline/extraction.py",
         "pipeline/table_router.py",
         "pipeline/prompts.py",
         "pipeline/data_scout.py",
+        "pipeline/count_outlier_guard.py",
+        "pipeline/count_classifier.py",
         "utils/variant_scanner.py"
       ],
       "outputs": [
         "extractions/{gene}_PMID_{pmid}.json",
-        "dense_table_overflow.tsv",
-        "extraction metadata"
+        "pmid_status/dense_table_overflow.tsv",
+        "pmid_status/extraction_retry_summary.json",
+        "extraction metadata with source fingerprints"
       ]
     },
     {
       "stage": 5,
-      "name": "Normalization, migration, and recovery layers",
-      "purpose": "Normalize variant notation, migrate extraction JSON to SQLite, then add DB-observed recovery layers without gold-PMID leakage.",
+      "name": "Normalization, migration, recovery, and enrichment",
+      "purpose": "Normalize notation, migrate extraction JSON to SQLite, run DB-observed recovery layers without gold-PMID leakage, and optionally run full-coverage walk-to-taper, carrier-count guard, and variantFeatures enrichment/quarantine.",
       "modules": [
         "utils/variant_normalizer.py",
         "harvesting/migrate_to_sqlite.py",
         "scripts/recall_recovery/run_all_layers.py",
         "scripts/recall_recovery/ingest_clinvar.py",
         "scripts/recall_recovery/ingest_pubtator.py",
-        "scripts/extract_figure_variants.py"
+        "scripts/extract_figure_variants.py",
+        "pipeline/full_coverage.py",
+        "pipeline/carrier_guard.py",
+        "pipeline/vf_enrichment.py"
       ],
       "outputs": [
         "{gene}.db",
         "variant_papers.source_layer",
-        "recovery progression artifacts"
+        "recovery progression artifacts",
+        "full-coverage and enrichment QC artifacts"
       ]
     },
     {
       "stage": 6,
       "name": "Scoring, dashboard, and review handoff",
-      "purpose": "Score canonical DBs against normalized gold inputs, decompose precision and failure classes, publish a dashboard, and support review/adjudication round trips.",
+      "purpose": "Score canonical DBs against normalized gold inputs, decompose recall/precision/MAE/failure classes, render the overnight dashboard, and support Variant Browser review/adjudication round trips.",
       "modules": [
         "scripts/run_recall_suite.py",
         "cli/compare_variants.py",
@@ -131,43 +146,67 @@
   "active_loops": [
     {
       "title": "Cold-start loop",
-      "detail": "`gvf gvf-run <GENE>` runs doctor -> extract -> recovery layers -> source QC -> source recovery -> report, with corpus reuse and default source recovery."
+      "detail": "`gvf gvf-run <GENE>` runs doctor, discovery/filtering, extraction, source QC/recovery, DB-observed recovery layers, corpus sync, and run reporting with source recovery enabled by default."
     },
     {
       "title": "Recall-refresh loop",
-      "detail": "`scripts/refresh_recall.py` fetches new supplements, bridges corpus to harvest layout, folds source, re-extracts acceptance-gated PMIDs, scores, and optionally lands into canonical DBs."
+      "detail": "`scripts/refresh_recall.py` fetches new supplements, bridges corpus to harvest layout, folds source, acceptance-gates targeted re-extraction, scores, and optionally surgically lands into canonical DBs."
+    },
+    {
+      "title": "Full-coverage loop",
+      "detail": "`gvf-run --full-coverage` adds walk-to-taper priority extraction, carrier-count guard, and variantFeatures enrichment after the bounded extraction path; it remains opt-in and should be scored before promotion."
     },
     {
       "title": "Dashboard loop",
-      "detail": "The 4 AM automation reads repo status, scores only when inputs changed, refreshes pipeline.json and strategy.json, then rebuilds docs/dashboard/index.html."
+      "detail": "The overnight automation scores only when inputs changed, updates pipeline.json and strategy.json, rebuilds docs/dashboard/index.html, and publishes only dashboard-scope files from a clean worktree."
     }
   ],
   "guardrails": [
     {
       "title": "No gold leakage in default recovery",
-      "detail": "ClinVar/PubTator/source recovery defaults to DB-observed PMIDs; gold-assisted worklists are diagnostic only."
+      "detail": "ClinVar, PubTator, source recovery, and cold-start paths default to DB-observed PMIDs; gold-assisted worklists remain diagnostic."
+    },
+    {
+      "title": "Source never-downgrade behavior",
+      "detail": "Corpus reuse and prior-run consolidation copy only usable full text; compromised stubs fall through to fresh acquisition attempts when credentials improve."
+    },
+    {
+      "title": "Extraction source fingerprints",
+      "detail": "Per-PMID JSON is reused only when source SHA/size still match, preventing stale abstract-only or stale full-text extractions from silently winning."
+    },
+    {
+      "title": "Count hygiene is opt-in by policy",
+      "detail": "COUNT_GUARD_POLICY and COUNT_CLASSIFIER_POLICY default to off; flag/clear behavior must be explicitly selected and then scored for recall, counted precision, and MAE."
     },
     {
       "title": "Surgical canonical landing",
-      "detail": "`refresh_recall.py --land` backs up canonical DBs, preserves ClinVar/PubTator/figure layer rows, and reverts on unique-variant, row-recall, or rows-mode MAE regression."
+      "detail": "`refresh_recall.py --land` backs up canonical DBs, preserves recovery-layer rows, and reverts on unique-variant, row-recall, or rows-mode MAE regression."
     },
     {
       "title": "Generated metrics stay out of git",
-      "detail": "`recall_metrics/`, SQLite DBs, local results, and credentials remain local; the dashboard commits rendered status and the scripts/JSON needed to regenerate it."
+      "detail": "recall_metrics, SQLite DBs, local results, credentials, and scratch work stay local; only dashboard HTML/sidecars and the dashboard builder are eligible for nightly publication."
     }
   ],
   "current_bottlenecks": [
     {
-      "title": "Architecture bottleneck: source acquisition and folding",
-      "detail": "The pipeline has the needed stages, but remaining recall lift depends on getting missing supplement/table bodies into FULL_CONTEXT and refresh_run_db without source downgrades."
+      "title": "Metric bottleneck: counted extras and count semantics",
+      "detail": "The latest disagreement report is led by pipeline_only_extras and count_semantics, so precision/count attribution must be separated from source-acquisition work."
     },
     {
-      "title": "Architecture bottleneck: count semantics",
-      "detail": "The current extraction/migration path still needs stronger preservation and classification of raw count columns so study-wide, control, affected, and per-variant carrier counts do not collapse into the wrong fields."
+      "title": "Architecture bottleneck: source acquisition and folding",
+      "detail": "Missing or abstract-only source remains large enough to block the 90% target; the architecture has folding/recovery hooks, but high-yield supplements still need bounded, authorized acquisition and refresh."
+    },
+    {
+      "title": "Architecture bottleneck: available-source underextraction",
+      "detail": "The extractor/table-router path still needs targeted exhaustion checks on PMIDs with usable source and many missing rows, rather than broad unbounded extraction reruns."
     },
     {
       "title": "Architecture bottleneck: matcher lanes",
       "detail": "Already-extracted indels, compound rows, splice/IVS records, and structural/CNV events still need explicit matcher lanes or denominator treatment."
+    },
+    {
+      "title": "Dashboard bottleneck: accepted baseline drift",
+      "detail": "The fresh score matches the July 7 nightly artifact but remains below docs/RECALL_STATUS.md by 2 unique variants, 1 row, and 1 PMID, so status updates should reconcile whether this is intended cleanup or regression."
     }
   ]
 }
