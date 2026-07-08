@@ -90,7 +90,7 @@ def normalize_variant(raw: str, gene: str = "KCNH2") -> str | None:
 pytest tests/unit tests/recall -q
 
 # Run specific test file
-pytest tests/test_normalizer.py -v
+pytest tests/unit/test_normalization.py -v
 
 # Run with coverage
 pytest tests/ --cov=pipeline --cov=harvesting --cov-report=term-missing
@@ -125,7 +125,7 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ```
 GeneVariantFetcher/
 ├── cli/              # CLI commands (Typer)
-├── config/           # Settings, gene configs (gene_config.py)
+├── config/           # Settings, constants, gene synonyms
 ├── gene_literature/  # PMID discovery (PubMed, PubMind, Europe PMC)
 ├── harvesting/       # Paper download, publisher APIs, format conversion
 ├── pipeline/         # Core extraction logic (filters, extraction, aggregation)

@@ -46,11 +46,8 @@ The database uses a normalized schema with the following tables:
 
 ### Installation
 
-First, ensure you have Python 3.11+ and install dependencies:
-
-```bash
-pip install tabulate  # For query_variants_db.py
-```
+The migration uses only the Python 3.11+ standard library — no extra
+dependencies are required.
 
 ### Basic Migration
 

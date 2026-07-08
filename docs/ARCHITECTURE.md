@@ -394,21 +394,17 @@ Checkpoints are stored in `~/.gvf_jobs/{job_id}/checkpoint.json` with atomic wri
    ]
    ```
 
-### Adding a New Gene Configuration
+### Adding a New Gene
 
-Add to `config/gene_config.py`:
-```python
-GENE_CONFIGS = {
-    "YOUR_GENE": {
-        "aliases": ["ALIAS1", "ALIAS2"],
-        "chromosome": "chr1",
-        "coding_positions": (start, end),
-        "domains": [
-            {"name": "Domain1", "start": 1, "end": 100},
-        ],
-    },
-}
-```
+There is no central gene-config file or `GENE_CONFIGS` dict — per-gene wiring is
+intentionally minimal:
+
+- Add the canonical protein length to `PROTEIN_LENGTHS` in
+  `utils/variant_normalizer.py`.
+- Optionally add synonyms to `config/cardiac_gene_synonyms.json` and a variant
+  alias map at `data/{gene_lower}_variant_aliases.json`.
+
+See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.
 
 ### Customizing Extraction Prompts
 
