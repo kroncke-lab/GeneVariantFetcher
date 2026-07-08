@@ -13,7 +13,7 @@ help:  ## Show this help
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
 install:  ## Create .venv and install GVF with browser + dev extras
-	python3.11 -m venv .venv
+	python3 -m venv .venv
 	$(PY) -m pip install -e ".[browser,dev]"
 	$(PY) -m playwright install chromium
 

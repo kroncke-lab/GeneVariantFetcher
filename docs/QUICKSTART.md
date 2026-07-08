@@ -28,7 +28,7 @@ git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
 cd GeneVariantFetcher
 
 # Create and activate a virtual environment
-python3.11 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install GVF in development mode

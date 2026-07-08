@@ -15,6 +15,16 @@ from dotenv import load_dotenv
 # Load environment variables for tests
 load_dotenv()
 
+
+def _has_placeholder_ncbi_email() -> bool:
+    value = os.getenv("NCBI_EMAIL", "").strip().lower()
+    return (
+        not value
+        or value in {"your_email@example.com", "you@example.com"}
+        or "example.com" in value
+    )
+
+
 # =============================================================================
 # PATH CONSTANTS
 # =============================================================================
@@ -114,6 +124,18 @@ def clear_settings_cache():
     """
     from config.settings import get_settings
 
+    get_settings.cache_clear()
+    yield
+    get_settings.cache_clear()
+
+
+@pytest.fixture(autouse=True)
+def isolated_settings(monkeypatch):
+    """Keep offline unit tests independent of a developer's local .env."""
+    from config.settings import get_settings
+
+    if _has_placeholder_ncbi_email():
+        monkeypatch.setenv("NCBI_EMAIL", "test@example.org")
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()
