@@ -49,7 +49,6 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │     1. PMC OA (Open Access) → BioC XML                                           │
 │     2. Publisher APIs (Elsevier, Springer, Wiley) → XML/PDF                      │
 │     3. Unpaywall → OA PDF links                                                  │
-│     4. CORE API → aggregated OA content                                          │
 │   OUTPUT: pmc_fulltext/{PMID}_FULL_CONTEXT.md                                    │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -189,9 +188,7 @@ Filtered PMIDs
     │       ├─→ Springer API ─→ SpringerLink HTML/PDF
     │       └─→ Wiley API ────→ Wiley XML/PDF
     │
-    ├─→ Unpaywall ────────────→ OA PDF location
-    │
-    └─→ CORE API ─────────────→ Aggregated OA content
+    └─→ Unpaywall ────────────→ OA PDF location
             │
             ▼
     Format Conversion (XML/PDF/HTML → Markdown)

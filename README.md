@@ -149,7 +149,7 @@ reference protein sequences used by validation code.
   author = {Kronck, Brett M. and Roden, Dan M.},
   year = {2026},
   version = {2.1.0},
-  url = {https://github.com/your-org/GeneVariantFetcher}
+  url = {https://github.com/kroncke-lab/GeneVariantFetcher}
 }
 ```
 
