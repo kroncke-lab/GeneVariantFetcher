@@ -1,67 +1,80 @@
 {
-  "generated_at": "2026-07-07 10:19 America/Chicago",
+  "generated_at": "2026-07-08 07:53 America/Chicago",
   "models": [
     "Codex scheduled-run workflow",
-    "Claude CLI bounded critique",
-    "Grok CLI bounded critique"
+    "Claude CLI attempted; bounded call timed out",
+    "Grok CLI skipped after external-model wrapper timeout"
   ],
   "barriers": [
     {
-      "title": "Current score is slightly below the June 12 status snapshot",
-      "detail": "The immediate score-only run wrote recall_metrics/nightly_20260707_151618: unique variants 2589/3010 (86.0%), rows 5517/6833 (80.7%), PMIDs 1273/1502 (84.8%). That is slightly lower than docs/RECALL_STATUS.md (2591 unique, 5518 rows, 1274 PMIDs), so the dirty scorer/matcher changes need reconciliation before claiming progress."
+      "title": "Fresh score still disagrees with the status snapshot",
+      "detail": "The score-only refresh wrote recall_metrics/nightly_20260708_124724 with unique variants 2589/3010 (86.0%), rows 5517/6833 (80.7%), and PMIDs 1273/1502 (84.8%). docs/RECALL_STATUS.md still reports 2591 unique, 5518 rows, and 1274 PMIDs from the June 12 status snapshot, so the latest matcher/scorer changes need reconciliation before changing the authoritative status."
     },
     {
-      "title": "The latest disagreement taxonomy is no longer acquisition-only",
-      "detail": "The newest paper_disagreement_report.csv is led by pipeline_only_extras (481), count_semantics (326), source_missing_or_stub (287), and source_abstract_only (102). Source access still matters, but precision/count attribution is now a first-class blocker."
+      "title": "Counted precision and count semantics are now first-class blockers",
+      "detail": "The fresh failure split is led by pipeline_only_extras (481) and count_semantics (326), ahead of source_missing_or_stub (287) and source_abstract_only (102). Treat these as precision/count-attribution work, not generic extraction recall work."
     },
     {
-      "title": "SCN5A and RYR2 remain below target despite KCNQ1 crossing 90%",
-      "detail": "KCNQ1 unique-variant recall is 90.5%, but KCNH2 is 83.2%, RYR2 is 83.7%, and SCN5A is 86.2%. Aggregate row and patient gaps remain large: +633 rows and +947 patients/carriers to 90%."
+      "title": "SCN5A, RYR2, and KCNH2 still hold the 90% gap",
+      "detail": "KCNQ1 unique-variant recall remains over target at 563/622 (90.5%), while SCN5A is 1020/1183 (86.2%), RYR2 is 565/675 (83.7%), and KCNH2 is 441/530 (83.2%). Aggregate gaps remain +120 unique variants, +633 rows, and +947 patients/carriers to 90%."
     },
     {
-      "title": "Count-role semantics are the main MAE risk",
-      "detail": "Rows-mode MAE is stable for carriers (0.615) and affected (0.494), but unaffected MAE remains high at 1.192. The external critiques both flagged count-bearing extras and unaffected/control attribution as the risk most likely to make recall gains look better than the evidence really is."
+      "title": "Unaffected/control attribution remains the MAE risk",
+      "detail": "Carriers MAE is stable at 0.615 and affected MAE at 0.494, but unaffected MAE is still 1.192. Any source or extraction gain should be gated against control/unaffected count inflation, especially in regex_table and cohort-table rows."
+    },
+    {
+      "title": "High-yield missing PMIDs are concentrated enough for bounded experiments",
+      "detail": "Fresh missing-row leaders include KCNQ1 17192539 (56), KCNQ1 23631430 (36), SCN5A 15840476 (31), SCN5A 20541041 (26), RYR2 19398665 (25), RYR2 27452199 (23), KCNH2 29650123 (20), and KCNH2 16922724 (19). Use these as small acceptance-gated tests, not a broad live rerun."
     }
   ],
   "ideas": [
     {
-      "title": "Classify pipeline_only_extras before broad acquisition",
-      "detail": "Split the 481 extras into zero-count linkage rows versus real counted carrier mis-binds. This is cheap, no-network work and tells us whether the apparent precision surface is mostly harmless linker noise or a real adjudication/MAE problem."
+      "title": "Diff the accepted June status against the fresh scorer output",
+      "detail": "Compare recall_metrics/linearized_tables_20260612_strict or codex_verify_20260612 against nightly_20260708_124724 for PMIDs, rows, unique variants, patients, affected, unaffected, counted precision, and MAE. Acceptance gate: explain the -2 unique/-1 row/-1 PMID delta before updating docs/RECALL_STATUS.md."
     },
     {
-      "title": "Run a count-semantics pass on regex_table and controls",
-      "detail": "Use papers with usable full text to preserve raw count columns and classify per-variant carrier, affected, unaffected/control, and study-wide totals before DB writes. Guard especially against population/control counts landing as unaffected carrier evidence."
+      "title": "Classify pipeline_only_extras before more acquisition",
+      "detail": "Split the 481 pipeline_only_extras into zero-count linkage rows, count-bearing carrier rows, wrong-gene/annotation-table rows, and matcher-denominator artifacts. Acceptance gate: reduce counted extras or prove most extras are harmless zero-count linkage."
     },
     {
-      "title": "Keep SCN5A supplement work bounded",
-      "detail": "Target PMID 29325976 and the missing_variant_supplement set as a small before/after experiment. Score those PMIDs and then the aggregate, rather than starting an unbounded publisher-access sweep."
+      "title": "Run a count-semantics pass on regex_table/control rows",
+      "detail": "Preserve raw count columns and classify per-variant carriers versus study-wide, affected/proband/case, unaffected/asymptomatic/control, and population counts before DB writes. Acceptance gate: unaffected MAE holds or improves while precision_vs_counted_gold_pmids stays at or above 77.2%."
     },
     {
-      "title": "Reconcile the current scorer delta",
-      "detail": "The latest score lost two unique variants versus the live status file. Diff nightly_20260707_151618 against codex_verify_20260612 or the canonical June 12 artifact to identify whether the delta is a deliberate matcher/precision cleanup or an accidental regression."
+      "title": "Target the top missing-PMID set with source-aware refresh",
+      "detail": "Regenerate a small worklist from the fresh missing reports, then run source QC and targeted refresh only for the highest-yield PMIDs with usable or recoverable table bodies. Acceptance gate: aggregate unique variants or rows move without MAE or counted-precision regression."
+    },
+    {
+      "title": "Extend matcher lanes only where extracted evidence already exists",
+      "detail": "Use the unmatched/missing reports to isolate indels, compound rows, splice/IVS records, and structural/CNV forms that are already in SQLite but fail exact matching. Acceptance gate: recovered matches increase unique-variant recall without adding counted extras."
     }
   ],
   "solutions": [
     {
-      "title": "Use counted precision as a land gate",
-      "detail": "Require precision_vs_counted_gold_pmids to hold at or above the current 77.2% floor, or improve alongside recall, before accepting source or extraction changes into canonical metrics."
+      "title": "Add a previous-artifact delta block to the dashboard workflow",
+      "detail": "Have the nightly job compute a compact delta versus the latest accepted summary so small regressions in recall, MAE, and counted precision are visible before the morning readout."
     },
     {
-      "title": "Add a dashboard regression callout",
-      "detail": "Keep docs/dashboard/index.html on the latest score artifact, but use this strategy section to flag when the latest score disagrees with docs/RECALL_STATUS.md so status updates are intentional."
+      "title": "Use counted precision as a promotion gate",
+      "detail": "Do not accept source, extraction, or matcher changes unless precision_vs_counted_gold_pmids holds at or above the current 77.2% floor, or improves alongside recall."
     },
     {
-      "title": "Make the next overnight run compare artifacts",
-      "detail": "Have the scheduled job compute a compact delta from the previous accepted summary: PMIDs, rows, unique variants, patients, affected, unaffected, counted precision, and MAE. That will expose small regressions immediately."
+      "title": "Keep source acquisition and count cleanup separate",
+      "detail": "Source/table acquisition should target missing/stub/abstract-only and missing-table-body failures; count-semantics work should target count-bearing extras and MAE. Mixing them will hide whether a change improved recall or just shifted errors."
+    },
+    {
+      "title": "Treat full-coverage enrichment as opt-in until scored",
+      "detail": "The architecture now has full-coverage walk-to-taper, carrier guard, and variantFeatures enrichment hooks. Keep them behind explicit flags and require score-only evidence before promoting their outputs into canonical recall claims."
     },
     {
       "title": "Keep KCNE1 out of recall headlines",
-      "detail": "KCNE1 remains extraction-only until a gold input exists. The dashboard can list it as no-gold context, but it should not be used in scored recall claims."
+      "detail": "KCNE1 remains extraction-only until a normalized gold input exists. It can appear as no-gold context in the dashboard but should not affect scored recall claims."
     }
   ],
   "model_notes": {
-    "Claude CLI": "Overlooked risk: acquisition-first work can feed more text into over-attribution paths. Suggested first classifying pipeline_only_extras and attacking unaffected count semantics. Guard precision_vs_counted_gold_pmids.",
-    "Grok CLI": "Overlooked risk: pipeline_only_extras is the largest current disagreement bucket and counted precision is only 77.2%. Suggested bounded SCN5A supplement A/B plus count-semantics/regex_table precision work. Guard counted precision and extras together.",
-    "Run note": "Grok's default model rejected --effort max, so it was rerun noninteractively without that flag. Claude ran with --effort max and a small budget cap."
+    "Claude CLI": "Installed, but the bounded noninteractive critique wrapper did not return and was interrupted. No fresh Claude critique was used for this run.",
+    "Grok CLI": "Installed, but skipped after the external-model wrapper timeout to avoid blocking the dashboard. No fresh Grok critique was used for this run.",
+    "Run note": "The previous dashboard sidecar contained July 7 Claude/Grok critiques; this run replaces them with an explicit timeout note rather than reusing stale second opinions.",
+    "Publish note": "Dashboard commit/push is blocked locally because the generated pre-commit hook invokes .venv/bin/python -m pre_commit, but this .venv has neither pre_commit nor pip. Hooks were not bypassed."
   }
 }
