@@ -54,10 +54,11 @@ Use the project virtualenv:
 source .venv/bin/activate
 ```
 
-Default local tests avoid live network calls:
+Default local tests avoid live network calls (bare `pytest` resolves to this
+same offline unit suite via `pytest.ini`):
 
 ```bash
-.venv/bin/python -m pytest tests/ -q
+.venv/bin/python -m pytest tests/unit -q
 ```
 
 Live network/institutional checks are opt-in:
