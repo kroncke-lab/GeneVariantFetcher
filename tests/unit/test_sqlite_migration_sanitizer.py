@@ -3,6 +3,7 @@
 import json
 
 from harvesting.migrate_to_sqlite import (
+    _first_quote,
     create_database_schema,
     find_extraction_json_files,
     insert_paper_metadata,
@@ -12,6 +13,35 @@ from harvesting.migrate_to_sqlite import (
     repair_extraction_data,
 )
 from utils.pmid_utils import extract_pmid_from_filename
+
+
+def test_first_quote_empty_list_is_none_not_bracket_literal():
+    # Regression: an empty key_quotes list used to serialize to the literal "[]"
+    # and land in fact_provenance.evidence_quote for every quote-less fact.
+    assert _first_quote({"key_quotes": []}) is None
+    assert _first_quote({"key_quotes": [""]}) is None
+    assert _first_quote({}) is None
+    assert _first_quote({"key_quotes": ["real quote"]}) == "real quote"
+
+
+def test_migration_never_stores_bracket_literal_quote(tmp_path):
+    db = tmp_path / "G.db"
+    conn = create_database_schema(str(db))
+    cur = conn.cursor()
+    extraction = {
+        "paper_metadata": {"pmid": "1", "title": "t"},
+        "variants": [
+            {"gene_symbol": "KCNH2", "protein_notation": "A561V", "key_quotes": []}
+        ],
+    }
+    insert_paper_metadata(cur, extraction, replace_existing=False)
+    insert_variant_data(cur, "1", extraction["variants"][0])
+    conn.commit()
+    junk = cur.execute(
+        "SELECT COUNT(*) FROM fact_provenance WHERE evidence_quote = '[]'"
+    ).fetchone()[0]
+    assert junk == 0
+    conn.close()
 
 
 def test_migration_skips_malformed_protein_only_variant(tmp_path):

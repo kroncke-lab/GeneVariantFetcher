@@ -1374,3 +1374,57 @@ BRCT
     pairs = extractor._linearized_variant_pairs
     assert pairs.get("c.68a>g") == "p.Glu23Gly"
     assert pairs.get("c.5123c>a") == "p.Ala1708Glu"
+
+
+def test_table_regex_threads_within_paper_locator():
+    """Regex table hits carry a within-paper locator, not the old constant.
+
+    Gap A: source_table (from the caption), source_row (the row's lead cell),
+    row_ordinal, source_column (the matched cell's header), and the verbatim row
+    as evidence_quote — all under source_layer=regex_table so guardrails still fire.
+    """
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. KCNH2 variants identified in probands
+
+| Variant | Patients | Affected status |
+|---|---|---|
+| p.Ala561Val | 3 | affected |
+| c.1841G>A | 2 | affected |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "KCNH2")
+    by_note = {
+        (v.get("protein_notation") or v.get("cdna_notation")): v for v in variants
+    }
+    assert set(by_note) == {"A561V", "c.1841G>A"}
+
+    a561v = by_note["A561V"]
+    assert a561v["source_layer"] == "regex_table"
+    assert a561v["source_table"] == "Table 2"
+    assert a561v["source_row"] == "p.Ala561Val"
+    assert a561v["row_ordinal"] == 1
+    assert a561v["source_column"] == "Variant"
+    assert a561v["evidence_quote"] == "| p.Ala561Val | 3 | affected |"
+    # No longer the uninformative legacy constant.
+    assert a561v["source_location"] == "Table 2 (regex extraction)"
+    assert "Table (regex extraction)" != a561v["source_location"]
+
+
+def test_table_regex_without_caption_still_locates_row_and_column():
+    """A table with no 'Table N' caption still yields row/column/quote (block-scoped)."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Gene | Mutation | N |
+|---|---|---|
+| KCNH2 | p.Gly628Ser | 5 |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "KCNH2")
+    assert len(variants) == 1
+    v = variants[0]
+    assert v["source_layer"] == "regex_table"
+    assert v.get("source_table") is None  # no caption to name it
+    assert v["source_column"] == "Mutation"
+    assert v["evidence_quote"] == "| KCNH2 | p.Gly628Ser | 5 |"
+    assert "block 1" in v["source_location"]
