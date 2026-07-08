@@ -39,7 +39,6 @@ from utils.models import ExtractionResult, Paper
 from utils.env_utils import get_env_int
 from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
-    VariantScanner,
     merge_scanner_results,
     scan_document_for_variants,
 )
@@ -6169,23 +6168,3 @@ Return strict JSON with this schema:
     def extract_batch(self, papers: List[Paper]) -> List[ExtractionResult]:
         """Extract data from multiple papers."""
         return [self.extract(paper) for paper in papers]
-
-
-def extract_variants_from_paper(
-    paper: Paper,
-    models: Optional[List[str]] = None,
-    fulltext_dir: Optional[str] = None,
-) -> ExtractionResult:
-    """
-    Convenience function to extract variants from a single paper.
-
-    Args:
-        paper: Paper object with text to extract from
-        models: Optional list of model identifiers to use
-        fulltext_dir: Optional directory where DATA_ZONES.md files are stored
-
-    Returns:
-        ExtractionResult with extracted variant data
-    """
-    extractor = ExpertExtractor(models=models, fulltext_dir=fulltext_dir)
-    return extractor.extract(paper)

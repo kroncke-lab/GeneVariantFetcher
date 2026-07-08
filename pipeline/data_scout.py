@@ -840,31 +840,3 @@ class GeneticDataScout:
             )
 
         return "\n".join(lines)
-
-
-def scout_data_zones(
-    text: str,
-    gene_symbol: str,
-    pmid: Optional[str] = None,
-    min_relevance_score: float = 0.1,
-    max_zones: int = 30,
-) -> DataZoneReport:
-    """
-    Convenience function to scan text for data zones.
-
-    Args:
-        text: Full markdown text to scan
-        gene_symbol: Target gene symbol
-        pmid: Optional PubMed ID
-        min_relevance_score: Minimum relevance score threshold
-        max_zones: Maximum zones to return
-
-    Returns:
-        DataZoneReport with all identified zones
-    """
-    scout = GeneticDataScout(
-        gene_symbol=gene_symbol,
-        min_relevance_score=min_relevance_score,
-        max_zones=max_zones,
-    )
-    return scout.scan(text, pmid=pmid)

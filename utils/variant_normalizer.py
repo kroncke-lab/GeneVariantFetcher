@@ -717,56 +717,6 @@ class VariantNormalizer:
             return f"{gene}:unknown"
 
 
-def normalize_variant_list(variants: list, gene_symbol: str) -> Tuple[list, dict]:
-    """
-    Normalize a list of variants and deduplicate.
-
-    Args:
-        variants: List of variant dicts
-        gene_symbol: Gene symbol for validation
-
-    Returns:
-        Tuple of (normalized_variants, stats_dict)
-    """
-    normalizer = VariantNormalizer(gene_symbol)
-
-    seen_keys = set()
-    normalized = []
-    stats = {
-        "total_input": len(variants),
-        "normalized": 0,
-        "duplicates_removed": 0,
-        "normalization_failed": 0,
-        "non_target_filtered": 0,
-    }
-
-    for v in variants:
-        result = normalizer.get_canonical_form(v)
-        key = result.get("canonical_key", "")
-
-        if key in seen_keys:
-            stats["duplicates_removed"] += 1
-            continue
-
-        # Track non-target variants
-        if result.get("is_non_target"):
-            stats["non_target_filtered"] += 1
-
-        seen_keys.add(key)
-        normalized.append(result)
-
-        if result.get("protein_notation_normalized") or result.get(
-            "cdna_notation_normalized"
-        ):
-            stats["normalized"] += 1
-        else:
-            stats["normalization_failed"] += 1
-
-    stats["total_output"] = len(normalized)
-
-    return normalized, stats
-
-
 def normalize_frameshift(variant: str) -> Optional[str]:
     """
     Normalize all frameshift naming conventions to a standard form: REFposfsX

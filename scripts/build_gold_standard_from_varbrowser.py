@@ -116,12 +116,6 @@ def _ensure_dirs(out_root: Path) -> None:
         (out_root / sub).mkdir(parents=True, exist_ok=True)
 
 
-def _cursor_fetchall_dict(cursor) -> Tuple[List[str], List[Dict[str, Any]]]:
-    cols = [c[0] for c in cursor.description]
-    rows = [dict(zip(cols, row)) for row in cursor.fetchall()]
-    return cols, rows
-
-
 def _fetch_table_ordered(
     table_fqn: str, order_by_sql: str
 ) -> Tuple[List[str], List[List[Any]], List[Dict[str, Any]]]:

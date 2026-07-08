@@ -278,26 +278,6 @@ def _contains_patient_level_terms(title: Optional[str], abstract: Optional[str])
     return any(keyword in combined for keyword in PATIENT_KEYWORDS)
 
 
-def _has_pmcid(article: str.Element) -> str:
-    """Return True if the article includes a PubMed Central identifier.
-
-    Checks for multiple possible IdType values and attribute names:
-    - IdType="pmc" (current PubMed standard)
-    - IdType="pmcid" (older format)
-    - idtype (lowercase attribute, for compatibility)
-    """
-
-    for article_id in article.findall(".//ArticleIdList/ArticleId"):
-        # Check both capitalized and lowercase attribute names
-        id_type = article_id.get("IdType") or article_id.get("idtype") or ""
-        id_type_lower = id_type.lower()
-
-        # Accept both "pmc" and "pmcid" as valid PMC identifiers
-        if id_type_lower in ("pmc", "pmcid") and (article_id.text or "").strip():
-            return True
-    return False
-
-
 def _extract_pmcid(article: str.Element) -> Optional[str]:
     """Extract the PubMed Central ID if available.
 

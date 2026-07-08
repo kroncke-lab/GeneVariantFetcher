@@ -15,7 +15,6 @@ import logging
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import quote
 from xml.etree import ElementTree as ET
 
 import requests
@@ -368,23 +367,3 @@ class SpringerAPIClient:
         metadata, _ = self.get_metadata_by_doi(doi)
 
         return markdown, metadata, None
-
-
-def get_springer_client(api_key: Optional[str] = None) -> SpringerAPIClient:
-    """
-    Factory function to create a Springer API client.
-
-    If no API key is provided, attempts to read from environment variable.
-
-    Args:
-        api_key: Optional API key (if not provided, reads from SPRINGER_API_KEY env var)
-
-    Returns:
-        Configured SpringerAPIClient instance
-    """
-    import os
-
-    if api_key is None:
-        api_key = os.environ.get("SPRINGER_API_KEY")
-
-    return SpringerAPIClient(api_key=api_key)
