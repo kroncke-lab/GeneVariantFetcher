@@ -45,6 +45,28 @@ from pipeline.count_classifier import (  # noqa: E402
     enforce_per_variant_policy,
 )
 
+COUNT_CLASSIFIER_FIELDS = {"carriers", "affected", "unaffected"}
+
+
+def parse_fields(value: str) -> list[str] | None:
+    """Return requested classifier fields; None means all fields."""
+    raw = str(value or "").strip().lower()
+    if raw in {"", "all", "*"}:
+        return None
+    fields: list[str] = []
+    for item in raw.split(","):
+        field = item.strip().lower()
+        if not field:
+            continue
+        if field not in COUNT_CLASSIFIER_FIELDS:
+            raise argparse.ArgumentTypeError(
+                f"--fields entries must be one of "
+                f"{sorted(COUNT_CLASSIFIER_FIELDS)} or 'all'; got {field!r}"
+            )
+        if field not in fields:
+            fields.append(field)
+    return fields or None
+
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -77,6 +99,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Where to write the per-PMID classifier report (JSON).",
     )
     p.add_argument(
+        "--fields",
+        type=parse_fields,
+        default=None,
+        help=(
+            "Comma-separated logical fields to classify: all, carriers, affected, "
+            "unaffected. Default: all."
+        ),
+    )
+    p.add_argument(
         "--dry-run",
         action="store_true",
         help="Detect and report only; never write changes (overrides --policy).",
@@ -98,6 +129,7 @@ def main() -> int:
     )
     if backup_dir is not None:
         backup_dir.mkdir(parents=True, exist_ok=True)
+    classifier_fields = args.fields
 
     report_rows: list[dict[str, object]] = []
     totals = {
@@ -129,7 +161,7 @@ def main() -> int:
         ):
             totals["pmids_with_provenance"] += 1
 
-        annotations = detect_misclassified_counts(variants)
+        annotations = detect_misclassified_counts(variants, fields=classifier_fields)
         if not annotations:
             continue
 
@@ -140,6 +172,7 @@ def main() -> int:
         if policy in {"flag", "clear"}:
             payload["count_classifier"] = {
                 "policy": policy,
+                "fields": classifier_fields or "all",
                 "flagged": result.flagged,
                 "cleared": result.cleared,
                 "annotations": result.as_dict()["annotations"],
@@ -156,6 +189,7 @@ def main() -> int:
     summary = {
         "extractions_dir": str(extractions),
         "policy": policy,
+        "fields": classifier_fields or "all",
         "totals": totals,
         "rows": report_rows,
     }

@@ -200,28 +200,6 @@ def create_scraping_session() -> requests.Session:
     return get_browser_session()
 
 
-def parse_html_safe(html: str, parser: str = "html.parser") -> BeautifulSoup:
-    """
-    Safely parse HTML with error handling.
-
-    Args:
-        html: Raw HTML string
-        parser: Parser to use (default: 'html.parser')
-
-    Returns:
-        BeautifulSoup object
-
-    Raises:
-        ValueError: If HTML cannot be parsed
-    """
-    try:
-        soup = BeautifulSoup(html, parser)
-        return soup
-    except Exception as e:
-        logger.error(f"Failed to parse HTML: {e}")
-        raise ValueError(f"Invalid HTML content: {e}")
-
-
 def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:
     """
     Extract PMIDs from JSON API responses.

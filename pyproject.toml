@@ -12,9 +12,10 @@ dependencies = [
     "pdfplumber>=0.11.0",  # Fallback PDF extraction (better table detection)
     "openai>=2.8.1",
     "pandas>=2.3.3",
-    "pydantic>=2.0.0",
-    "pydantic-settings>=2.0.0",
+    "pydantic>=2.13,<3",  # <3 cap: settings rely on v2 Field/validation_alias behavior
+    "pydantic-settings>=2.14",
     "pymupdf>=1.24.0",
+    "rapidfuzz>=3.0.0",  # deterministic fuzzy variant matching in the recall scorer
     "xlrd>=2.0.1",
     "openpyxl>=3.1.0",
     "python-docx>=1.2.0",
@@ -28,6 +29,7 @@ dependencies = [
 [project.optional-dependencies]
 browser = [
     "playwright>=1.40.0",
+    "browser-cookie3>=0.19.0",  # read browser cookies for authenticated paywall fetches
 ]
 # Stealth backend for Cloudflare-fronted publishers (Wiley etc.) when EZproxy
 # isn't available. Patched-Playwright drop-in; run `patchright install chromium`.
@@ -35,6 +37,16 @@ browser = [
 # fetch_paywalled.py --stealth and docs/RECALL_REFRESH_RUNBOOK.md).
 stealth = [
     "patchright>=1.40.0",
+]
+# Optional direct Anthropic SDK for gene_literature.llm_relevance; the main LLM
+# path goes through litellm, so this is only needed for that opt-in relevance check.
+relevance = [
+    "anthropic>=0.25.0",
+]
+# Optional YAML variant-mapping files for cli.compare_variants (JSON mappings
+# work without it).
+mapping = [
+    "PyYAML>=6.0",
 ]
 dev = [
     "pytest>=7.4.0",

@@ -20,6 +20,14 @@ ANTHROPIC_TIER2_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
 ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
 ANTHROPIC_TABLE_ROUTER_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
 ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
+FINAL_ADJUDICATOR_DEFAULT = "anthropic/claude-sonnet-5"
+FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
+
+# Azure-first staging defaults. These are deployment names on the active Azure
+# AI Foundry endpoint, not base model names. Per-tier env vars still win.
+AZURE_TIER2_DEFAULT = "gpt-5.4"
+AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
+AZURE_TIER3_DEFAULT = "grok-4.3"
 
 # Tier-model env var names. Used to decide whether the user explicitly set
 # a tier model (in which case --model-provider does not override it) vs.
@@ -37,42 +45,54 @@ class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
     # API Keys - all loaded from .env file
-    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
-    anthropic_api_key: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
-    gemini_api_key: Optional[str] = Field(default=None, env="GEMINI_API_KEY")
-    ncbi_email: Optional[str] = Field(default=None, env="NCBI_EMAIL")
-    ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
-    elsevier_api_key: Optional[str] = Field(default=None, env="ELSEVIER_API_KEY")
+    openai_api_key: Optional[str] = Field(
+        default=None, validation_alias="OPENAI_API_KEY"
+    )
+    anthropic_api_key: Optional[str] = Field(
+        default=None, validation_alias="ANTHROPIC_API_KEY"
+    )
+    gemini_api_key: Optional[str] = Field(
+        default=None, validation_alias="GEMINI_API_KEY"
+    )
+    ncbi_email: Optional[str] = Field(default=None, validation_alias="NCBI_EMAIL")
+    ncbi_api_key: Optional[str] = Field(default=None, validation_alias="NCBI_API_KEY")
+    elsevier_api_key: Optional[str] = Field(
+        default=None, validation_alias="ELSEVIER_API_KEY"
+    )
     elsevier_insttoken: Optional[str] = Field(
         default=None,
-        env="ELSEVIER_INSTTOKEN",
+        validation_alias="ELSEVIER_INSTTOKEN",
         description="Elsevier institution token for subscription access",
     )
-    wiley_api_key: Optional[str] = Field(default=None, env="WILEY_API_KEY")
-    springer_api_key: Optional[str] = Field(default=None, env="SPRINGER_API_KEY")
+    wiley_api_key: Optional[str] = Field(default=None, validation_alias="WILEY_API_KEY")
+    springer_api_key: Optional[str] = Field(
+        default=None, validation_alias="SPRINGER_API_KEY"
+    )
 
     # Azure AI Foundry — primary LLM provider. Single resource hosts multiple
     # deployments accessed via LiteLLM model strings like "azure_ai/<deployment>".
     # LiteLLM reads AZURE_AI_API_KEY / AZURE_AI_API_BASE from the process
     # environment automatically; we expose them here so other modules can read
     # them via Settings and so missing-key validation can include them.
-    azure_ai_api_key: Optional[str] = Field(default=None, env="AZURE_AI_API_KEY")
+    azure_ai_api_key: Optional[str] = Field(
+        default=None, validation_alias="AZURE_AI_API_KEY"
+    )
     azure_ai_api_base: Optional[str] = Field(
         default=None,
-        env="AZURE_AI_API_BASE",
+        validation_alias="AZURE_AI_API_BASE",
         description="Azure AI Foundry endpoint, e.g. https://<resource>.services.ai.azure.com",
     )
     azure_ai_api_version: Optional[str] = Field(
-        default="2024-08-01-preview", env="AZURE_AI_API_VERSION"
+        default="2024-08-01-preview", validation_alias="AZURE_AI_API_VERSION"
     )
     azure_deployment_gpt5_codex: Optional[str] = Field(
-        default=None, env="AZURE_DEPLOYMENT_GPT5_CODEX"
+        default=None, validation_alias="AZURE_DEPLOYMENT_GPT5_CODEX"
     )
     azure_deployment_kimi: Optional[str] = Field(
-        default=None, env="AZURE_DEPLOYMENT_KIMI"
+        default=None, validation_alias="AZURE_DEPLOYMENT_KIMI"
     )
     azure_deployment_grok: Optional[str] = Field(
-        default=None, env="AZURE_DEPLOYMENT_GROK"
+        default=None, validation_alias="AZURE_DEPLOYMENT_GROK"
     )
     azure_deployment_gpt54: Optional[str] = Field(
         default=None,
@@ -95,7 +115,7 @@ class Settings(BaseSettings):
     # to fall back to the Azure AI Foundry deployments.
     model_provider: str = Field(
         default="anthropic",
-        env="MODEL_PROVIDER",
+        validation_alias="MODEL_PROVIDER",
         description=(
             "LLM provider selector: 'anthropic' (default), 'azure', or 'openai'."
             " 'anthropic' switches every tier to Claude defaults unless the"
@@ -106,17 +126,17 @@ class Settings(BaseSettings):
     # Model Configuration
     tier1_model: Optional[str] = Field(
         default=None,
-        env="TIER1_MODEL",
+        validation_alias="TIER1_MODEL",
         description="Optional LLM for Tier 1 (if using LLM-based Tier 1)",
     )
     tier2_model: str = Field(
         default="gpt-4o-mini",
-        env="TIER2_MODEL",
+        validation_alias="TIER2_MODEL",
         description="Model for Tier 2 classification (cheap)",
     )
     tier3_models: Union[str, List[str]] = Field(
         default="gpt-4o-mini,gpt-4o",
-        env="TIER3_MODELS",
+        validation_alias="TIER3_MODELS",
         description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')",
     )
 
@@ -125,70 +145,76 @@ class Settings(BaseSettings):
     # via env so users can mix-and-match (e.g. Anthropic for Tier 3 only).
     anthropic_tier2_model: str = Field(
         default=ANTHROPIC_TIER2_DEFAULT,
-        env="ANTHROPIC_TIER2_MODEL",
+        validation_alias="ANTHROPIC_TIER2_MODEL",
         description="Anthropic Tier 2 classifier model (used when MODEL_PROVIDER=anthropic)",
     )
     anthropic_tier3_models: str = Field(
         default=ANTHROPIC_TIER3_DEFAULT,
-        env="ANTHROPIC_TIER3_MODELS",
+        validation_alias="ANTHROPIC_TIER3_MODELS",
         description="Anthropic Tier 3 extraction cascade (used when MODEL_PROVIDER=anthropic)",
     )
     anthropic_table_router_model: str = Field(
         default=ANTHROPIC_TABLE_ROUTER_DEFAULT,
-        env="ANTHROPIC_TABLE_ROUTER_MODEL",
+        validation_alias="ANTHROPIC_TABLE_ROUTER_MODEL",
         description="Anthropic table-router model (used when MODEL_PROVIDER=anthropic)",
     )
     anthropic_vision_model: str = Field(
         default=ANTHROPIC_VISION_DEFAULT,
-        env="ANTHROPIC_VISION_MODEL",
+        validation_alias="ANTHROPIC_VISION_MODEL",
         description="Anthropic vision model for figure/pedigree analysis (used when MODEL_PROVIDER=anthropic)",
     )
 
     # Legacy alias for backward compatibility
-    intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
+    intern_model: str = Field(default="gpt-4o-mini", validation_alias="INTERN_MODEL")
 
     # Tiered Classification Configuration
     enable_tier1: bool = Field(
         default=True,
-        env="ENABLE_TIER1",
+        validation_alias="ENABLE_TIER1",
         description="Enable Tier 1 keyword/heuristic filtering",
     )
     enable_tier2: bool = Field(
-        default=True, env="ENABLE_TIER2", description="Enable Tier 2 LLM classification"
+        default=True,
+        validation_alias="ENABLE_TIER2",
+        description="Enable Tier 2 LLM classification",
     )
     enable_tier3: bool = Field(
-        default=True, env="ENABLE_TIER3", description="Enable Tier 3 expert extraction"
+        default=True,
+        validation_alias="ENABLE_TIER3",
+        description="Enable Tier 3 expert extraction",
     )
 
     # Tier 1 Configuration
     tier1_min_keywords: int = Field(
         default=1,
-        env="TIER1_MIN_KEYWORDS",
+        validation_alias="TIER1_MIN_KEYWORDS",
         description="Minimum keyword matches for Tier 1 to pass (lowered from 2 to 1 for fail-open recall)",
     )
     tier1_use_llm: bool = Field(
         default=False,
-        env="TIER1_USE_LLM",
+        validation_alias="TIER1_USE_LLM",
         description="Use lightweight LLM for Tier 1 instead of keywords",
     )
 
     # Tier 2 Configuration
     tier2_temperature: float = Field(
-        default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM"
+        default=0.1,
+        validation_alias="TIER2_TEMPERATURE",
+        description="Temperature for Tier 2 LLM",
     )
     tier2_max_tokens: int = Field(
         default=300,
-        env="TIER2_MAX_TOKENS",
+        validation_alias="TIER2_MAX_TOKENS",
         description="Max tokens for Tier 2 LLM response (raised from 150 to 300 for the variant-aware prompt, which produces longer reasons that were getting truncated)",
     )
     tier2_confidence_threshold: float = Field(
         default=0.3,
-        env="TIER2_CONFIDENCE_THRESHOLD",
+        validation_alias="TIER2_CONFIDENCE_THRESHOLD",
         description="Minimum confidence to pass Tier 2",
     )
     tier2_reasoning_effort: Optional[str] = Field(
         default=None,
-        env="TIER2_REASONING_EFFORT",
+        validation_alias="TIER2_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for Tier 2 relevance models "
             "(minimal|low|medium|high). None = provider default. Tier 2 is a "
@@ -200,11 +226,13 @@ class Settings(BaseSettings):
 
     # Tier 3 Configuration
     tier3_temperature: float = Field(
-        default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM"
+        default=0.0,
+        validation_alias="TIER3_TEMPERATURE",
+        description="Temperature for Tier 3 LLM",
     )
     tier3_reasoning_effort: Optional[str] = Field(
         default=None,
-        env="TIER3_REASONING_EFFORT",
+        validation_alias="TIER3_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for Tier 3 extraction models "
             "(minimal|low|medium|high). None = provider default. This is the "
@@ -216,17 +244,17 @@ class Settings(BaseSettings):
     )
     tier3_max_tokens: int = Field(
         default=16000,
-        env="TIER3_MAX_TOKENS",
+        validation_alias="TIER3_MAX_TOKENS",
         description="Max tokens for Tier 3 LLM response (increased for large variant tables)",
     )
     tier3_threshold: int = Field(
         default=1,
-        env="TIER3_THRESHOLD",
+        validation_alias="TIER3_THRESHOLD",
         description="Try next model if first finds fewer variants than this (0 = only use first model)",
     )
     enable_tier3_ensemble_qa: bool = Field(
         default=True,
-        env="ENABLE_TIER3_ENSEMBLE_QA",
+        validation_alias="ENABLE_TIER3_ENSEMBLE_QA",
         description=(
             "Run a compact second-model adjudication pass for high-risk "
             "extractions instead of sending every full paper to every model."
@@ -234,7 +262,7 @@ class Settings(BaseSettings):
     )
     tier3_adjudicator_models: Union[str, List[str]] = Field(
         default="anthropic/claude-sonnet-4-6",
-        env="TIER3_ADJUDICATOR_MODELS",
+        validation_alias="TIER3_ADJUDICATOR_MODELS",
         description=(
             "Comma-separated adjudicator models used for high-risk Tier 3 "
             "outputs. These models see compact evidence packets, not full papers."
@@ -242,27 +270,27 @@ class Settings(BaseSettings):
     )
     tier3_adjudication_risk_threshold: int = Field(
         default=2,
-        env="TIER3_ADJUDICATION_RISK_THRESHOLD",
+        validation_alias="TIER3_ADJUDICATION_RISK_THRESHOLD",
         description="Minimum extraction risk score required to trigger adjudication.",
     )
     tier3_evidence_packet_max_chars: int = Field(
         default=24000,
-        env="TIER3_EVIDENCE_PACKET_MAX_CHARS",
+        validation_alias="TIER3_EVIDENCE_PACKET_MAX_CHARS",
         description="Maximum characters sent to adjudicator evidence packets.",
     )
     tier3_adjudication_max_tokens: int = Field(
         default=12000,
-        env="TIER3_ADJUDICATION_MAX_TOKENS",
+        validation_alias="TIER3_ADJUDICATION_MAX_TOKENS",
         description="Maximum output tokens for Tier 3 adjudicator responses.",
     )
     tier3_max_verifier_cards: int = Field(
         default=20,
-        env="TIER3_MAX_VERIFIER_CARDS",
+        validation_alias="TIER3_MAX_VERIFIER_CARDS",
         description="Maximum per-variant evidence cards to verify in one extraction.",
     )
     count_guard_policy: str = Field(
         default="off",
-        env="COUNT_GUARD_POLICY",
+        validation_alias="COUNT_GUARD_POLICY",
         description=(
             "Policy for the per-PMID count-outlier guard "
             "(pipeline/count_outlier_guard.py) applied to freshly extracted "
@@ -275,7 +303,7 @@ class Settings(BaseSettings):
     )
     count_classifier_policy: str = Field(
         default="off",
-        env="COUNT_CLASSIFIER_POLICY",
+        validation_alias="COUNT_CLASSIFIER_POLICY",
         description=(
             "Policy for the per-variant count classifier "
             "(pipeline/count_classifier.py) applied to freshly extracted "
@@ -287,9 +315,19 @@ class Settings(BaseSettings):
             "Gold-free; silently skips variants without count_provenance."
         ),
     )
+    count_classifier_fields: str = Field(
+        default="all",
+        validation_alias="COUNT_CLASSIFIER_FIELDS",
+        description=(
+            "Comma-separated logical count fields the count classifier may "
+            "flag/clear (all|carriers,affected,unaffected). Use "
+            "'affected,unaffected' to preserve carrier counts while refusing "
+            "ambiguous affected-status splits."
+        ),
+    )
     strict_cohort_labels: bool = Field(
         default=False,
-        env="GVF_STRICT_COHORT_LABELS",
+        validation_alias="GVF_STRICT_COHORT_LABELS",
         description=(
             "When True, the deterministic table column mapper "
             "(pipeline/table_router.py) refuses to map an ambiguous case/control "
@@ -303,7 +341,7 @@ class Settings(BaseSettings):
     )
     reference_validation_policy: str = Field(
         default="off",
-        env="REFERENCE_VALIDATION_POLICY",
+        validation_alias="REFERENCE_VALIDATION_POLICY",
         description=(
             "Policy for the reference-transcript validation gate (B1, "
             "pipeline/reference_validation.py) applied at DB migration "
@@ -322,10 +360,27 @@ class Settings(BaseSettings):
     )
     early_debate_models: Union[str, List[str]] = Field(
         default="",
-        env="EARLY_DEBATE_MODELS",
+        validation_alias="EARLY_DEBATE_MODELS",
         description=(
             "Comma-separated early debate critic models. If unset, defaults to "
             "GPT54_DEPLOYMENT and DEEPSEEK_DEPLOYMENT via Azure."
+        ),
+    )
+    final_adjudicator_models: Union[str, List[str]] = Field(
+        default=FINAL_ADJUDICATOR_DEFAULT,
+        validation_alias="FINAL_ADJUDICATOR_MODELS",
+        description=(
+            "Comma-separated final adjudication models reserved for explicit "
+            "post-debate escalation queues. Keep Anthropic here instead of in "
+            "routine Tier 2/Tier 3 extraction loops."
+        ),
+    )
+    final_arbiter_model: str = Field(
+        default=FINAL_ARBITER_DEFAULT,
+        validation_alias="FINAL_ARBITER_MODEL",
+        description=(
+            "Most expensive final arbiter for hard residual cases after the "
+            "final adjudicator screen, usually an Opus-class Claude model."
         ),
     )
 
@@ -334,17 +389,17 @@ class Settings(BaseSettings):
     # back to the full-text Tier-3 path when no usable tables are detected.
     enable_table_router: bool = Field(
         default=True,
-        env="ENABLE_TABLE_ROUTER",
+        validation_alias="ENABLE_TABLE_ROUTER",
         description="Try router-first table extraction before sending full text to Tier 3",
     )
     table_router_model: str = Field(
         default="azure_ai/Kimi-K2.6-1",
-        env="TABLE_ROUTER_MODEL",
+        validation_alias="TABLE_ROUTER_MODEL",
         description="LLM used to classify tables and emit column mappings",
     )
     table_router_max_tokens: int = Field(
         default=8192,
-        env="TABLE_ROUTER_MAX_TOKENS",
+        validation_alias="TABLE_ROUTER_MAX_TOKENS",
         description=(
             "Max tokens for the table-router response. Kimi-K2.6 is a reasoning"
             " model that consumes the budget on hidden reasoning tokens before"
@@ -355,7 +410,7 @@ class Settings(BaseSettings):
     )
     table_router_reasoning_effort: Optional[str] = Field(
         default=None,
-        env="TABLE_ROUTER_REASONING_EFFORT",
+        validation_alias="TABLE_ROUTER_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for the table-router model "
             "(minimal|low|medium|high). None = provider default. Table "
@@ -367,71 +422,71 @@ class Settings(BaseSettings):
     # Paper Sourcing Configuration
     use_pubmind: bool = Field(
         default=True,
-        env="USE_PUBMIND",
+        validation_alias="USE_PUBMIND",
         description="Use PubMind as primary literature source",
     )
     use_pubmed: bool = Field(
         default=True,
-        env="USE_PUBMED",
+        validation_alias="USE_PUBMED",
         description="Use PubMed API as additional source",
     )
     use_europepmc: bool = Field(
         default=False,
-        env="USE_EUROPEPMC",
+        validation_alias="USE_EUROPEPMC",
         description="Use EuropePMC as additional source",
     )
     pubmind_only: bool = Field(
         default=False,
-        env="PUBMIND_ONLY",
+        validation_alias="PUBMIND_ONLY",
         description="Use ONLY PubMind (ignore PubMed/EuropePMC)",
     )
     max_papers_per_source: int = Field(
         default=1500,
-        env="MAX_PAPERS_PER_SOURCE",
+        validation_alias="MAX_PAPERS_PER_SOURCE",
         description="Max papers to fetch per source",
     )
 
     # Genetic Data Scout Configuration
     scout_enabled: bool = Field(
         default=True,
-        env="SCOUT_ENABLED",
+        validation_alias="SCOUT_ENABLED",
         description="Enable Genetic Data Scout to create condensed DATA_ZONES.md files",
     )
     scout_min_relevance: float = Field(
         default=0.3,
-        env="SCOUT_MIN_RELEVANCE",
+        validation_alias="SCOUT_MIN_RELEVANCE",
         description="Minimum relevance score (0.0-1.0) for zones to be included",
     )
     scout_max_zones: int = Field(
         default=30,
-        env="SCOUT_MAX_ZONES",
+        validation_alias="SCOUT_MAX_ZONES",
         description="Maximum number of data zones to identify per paper",
     )
     scout_use_condensed: bool = Field(
         default=True,
-        env="SCOUT_USE_CONDENSED",
+        validation_alias="SCOUT_USE_CONDENSED",
         description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction",
     )
 
     # Extraction Tuning
     extraction_max_chars: int = Field(
         default=60_000,
-        env="EXTRACTION_MAX_CHARS",
+        validation_alias="EXTRACTION_MAX_CHARS",
         description="Max characters sent to LLM in a single extraction prompt",
     )
     scanner_merge_confidence: float = Field(
         default=0.6,
-        env="SCANNER_MERGE_CONFIDENCE",
+        validation_alias="SCANNER_MERGE_CONFIDENCE",
         description="Minimum scanner confidence to merge into LLM results",
     )
     scanner_max_hints: int = Field(
         default=50,
-        env="SCANNER_MAX_HINTS",
+        validation_alias="SCANNER_MAX_HINTS",
         description="Maximum scanner hints to include in LLM prompt",
     )
     max_workers: int = Field(
         default=8,
-        env="MAX_WORKERS",
+        validation_alias="MAX_WORKERS",
         description=(
             "Explicit global override for parallel workers. When set via the"
             " MAX_WORKERS env var it wins over the provider-aware defaults"
@@ -448,17 +503,17 @@ class Settings(BaseSettings):
     # call sites that read them.
     anthropic_rpm: int = Field(
         default=1000,
-        env="ANTHROPIC_RPM",
+        validation_alias="ANTHROPIC_RPM",
         description="Default LLM requests-per-minute when MODEL_PROVIDER=anthropic",
     )
     azure_rpm: int = Field(
         default=50,
-        env="AZURE_RPM",
+        validation_alias="AZURE_RPM",
         description="Default LLM requests-per-minute when MODEL_PROVIDER=azure",
     )
     deepseek_rpm: int = Field(
         default=4,
-        env="DEEPSEEK_RPM",
+        validation_alias="DEEPSEEK_RPM",
         description=(
             "DeepSeek deployment RPM cap. DeepSeek-V4-Pro is constrained by a "
             "20k tokens/minute quota, so this stays below the 20 requests/minute "
@@ -467,12 +522,12 @@ class Settings(BaseSettings):
     )
     anthropic_max_workers: int = Field(
         default=20,
-        env="ANTHROPIC_MAX_WORKERS",
+        validation_alias="ANTHROPIC_MAX_WORKERS",
         description="Default parallel workers (extraction) for Anthropic",
     )
     azure_max_workers: int = Field(
         default=3,
-        env="AZURE_MAX_WORKERS",
+        validation_alias="AZURE_MAX_WORKERS",
         description="Default parallel workers (extraction) for Azure",
     )
     # Filter-stage workers default higher than extraction. Tier-2 LLM filter
@@ -483,7 +538,7 @@ class Settings(BaseSettings):
     # MAX_WORKERS=1 for extraction reasons.
     filter_max_workers: int = Field(
         default=20,
-        env="FILTER_MAX_WORKERS",
+        validation_alias="FILTER_MAX_WORKERS",
         description=(
             "Default parallel workers for the Tier-2 LLM filter (cli/discover, "
             "filter step of extract). Independent of MAX_WORKERS used for "
@@ -494,17 +549,17 @@ class Settings(BaseSettings):
     # Figure/Image Extraction Configuration
     extract_figures: bool = Field(
         default=True,
-        env="EXTRACT_FIGURES",
+        validation_alias="EXTRACT_FIGURES",
         description="Extract images from PDFs during harvesting",
     )
     extract_pedigrees: bool = Field(
         default=True,
-        env="EXTRACT_PEDIGREES",
+        validation_alias="EXTRACT_PEDIGREES",
         description="Run pedigree detection and extraction on extracted figures",
     )
     vision_model: str = Field(
         default="azure_ai/gpt-5.3-codex-1",
-        env="VISION_MODEL",
+        validation_alias="VISION_MODEL",
         description=(
             "Vision-capable model for pedigree analysis. Azure gpt-5 family"
             " deployments (e.g. gpt-5.3-codex-1) are routed through the"
@@ -514,7 +569,7 @@ class Settings(BaseSettings):
     )
     vision_reasoning_effort: Optional[str] = Field(
         default=None,
-        env="VISION_REASONING_EFFORT",
+        validation_alias="VISION_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for figure/pedigree vision models "
             "(minimal|low|medium|high). None = provider default. NOTE: the "
@@ -559,6 +614,28 @@ class Settings(BaseSettings):
             )
         return v_norm
 
+    @field_validator("count_classifier_fields")
+    @classmethod
+    def _validate_count_classifier_fields(cls, v: str) -> str:
+        """Normalize COUNT_CLASSIFIER_FIELDS; reject unknown field names early."""
+        v_norm = str(v or "").strip().lower()
+        if v_norm in {"", "all", "*"}:
+            return "all"
+        allowed = {"carriers", "affected", "unaffected"}
+        fields: list[str] = []
+        for item in v_norm.split(","):
+            field = item.strip().lower()
+            if not field:
+                continue
+            if field not in allowed:
+                raise ValueError(
+                    f"count classifier fields must be one or more of "
+                    f"{sorted(allowed)} or 'all'; got {field!r}"
+                )
+            if field not in fields:
+                fields.append(field)
+        return ",".join(fields) if fields else "all"
+
     @field_validator("reference_validation_policy")
     @classmethod
     def _validate_reference_validation_policy(cls, v: str) -> str:
@@ -576,7 +653,7 @@ class Settings(BaseSettings):
 
     pedigree_confidence_threshold: float = Field(
         default=0.7,
-        env="PEDIGREE_CONFIDENCE_THRESHOLD",
+        validation_alias="PEDIGREE_CONFIDENCE_THRESHOLD",
         description="Minimum confidence (0.0-1.0) to classify an image as a pedigree",
     )
 
@@ -588,17 +665,17 @@ class Settings(BaseSettings):
     # --no-browser-html-fallback or ENABLE_BROWSER_HTML_FALLBACK=false.
     enable_browser_html_fallback: bool = Field(
         default=True,
-        env="ENABLE_BROWSER_HTML_FALLBACK",
+        validation_alias="ENABLE_BROWSER_HTML_FALLBACK",
         description="Enable Tier 3.5 browser-based HTML harvesting (Playwright)",
     )
     browser_html_publisher_allowlist: Union[str, List[str]] = Field(
         default="aha,oxford,wiley,elsevier_open,generic",
-        env="BROWSER_HTML_PUBLISHER_ALLOWLIST",
+        validation_alias="BROWSER_HTML_PUBLISHER_ALLOWLIST",
         description="Comma-separated strategy NAMEs to enable for Tier 3.5",
     )
     browser_html_min_embargo_months: Optional[int] = Field(
         default=None,
-        env="BROWSER_HTML_MIN_EMBARGO_MONTHS",
+        validation_alias="BROWSER_HTML_MIN_EMBARGO_MONTHS",
         description=(
             "Optional global override for minimum embargo months. If unset"
             " (default), each strategy uses its own EMBARGO_MONTHS. If set,"
@@ -607,12 +684,12 @@ class Settings(BaseSettings):
     )
     browser_html_headless: bool = Field(
         default=True,
-        env="BROWSER_HTML_HEADLESS",
+        validation_alias="BROWSER_HTML_HEADLESS",
         description="Run Tier 3.5 browser headless",
     )
     browser_html_use_profile: bool = Field(
         default=False,
-        env="BROWSER_HTML_USE_PROFILE",
+        validation_alias="BROWSER_HTML_USE_PROFILE",
         description=(
             "Run Tier 3.5 in a persistent Chrome profile so institutional "
             "SSO/OpenAthens cookies can be reused for paywalled publisher pages."
@@ -620,7 +697,7 @@ class Settings(BaseSettings):
     )
     browser_html_profile_path: Optional[str] = Field(
         default=None,
-        env="BROWSER_HTML_PROFILE_PATH",
+        validation_alias="BROWSER_HTML_PROFILE_PATH",
         description=(
             "Persistent Chrome user-data directory for Tier 3.5. Use a dedicated "
             "GVF profile, not the daily Chrome profile that may be locked."
@@ -628,7 +705,7 @@ class Settings(BaseSettings):
     )
     browser_html_channel: str = Field(
         default="chrome",
-        env="BROWSER_HTML_CHANNEL",
+        validation_alias="BROWSER_HTML_CHANNEL",
         description=(
             "Browser channel for persistent profile mode. 'chrome' uses the "
             "installed Chrome with normal profile/cookie behavior."
@@ -636,12 +713,12 @@ class Settings(BaseSettings):
     )
     browser_html_slow_mo_ms: int = Field(
         default=0,
-        env="BROWSER_HTML_SLOW_MO_MS",
+        validation_alias="BROWSER_HTML_SLOW_MO_MS",
         description="Optional Playwright slow_mo delay for Tier 3.5 browser actions.",
     )
     browser_html_max_per_run: int = Field(
         default=0,
-        env="BROWSER_HTML_MAX_PER_RUN",
+        validation_alias="BROWSER_HTML_MAX_PER_RUN",
         description=(
             "Hard cap on Tier 3.5 attempts per harvest run. 0 means unlimited; "
             "set a positive value for smoke tests or quota-limited runs."
@@ -649,7 +726,7 @@ class Settings(BaseSettings):
     )
     browser_html_per_paper_timeout_s: int = Field(
         default=90,
-        env="BROWSER_HTML_PER_PAPER_TIMEOUT_S",
+        validation_alias="BROWSER_HTML_PER_PAPER_TIMEOUT_S",
         description="Per-paper timeout for Tier 3.5 attempts (seconds)",
     )
 
@@ -680,6 +757,13 @@ class Settings(BaseSettings):
     @field_validator("early_debate_models", mode="after")
     @classmethod
     def split_early_debate_models(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
+
+    @field_validator("final_adjudicator_models", mode="after")
+    @classmethod
+    def split_final_adjudicator_models(cls, v):
         if isinstance(v, str):
             return [item.strip() for item in v.split(",") if item.strip()]
         return v
@@ -812,6 +896,9 @@ class Settings(BaseSettings):
     def _is_anthropic(self) -> bool:
         return (self.model_provider or "").strip().lower() == "anthropic"
 
+    def _is_azure(self) -> bool:
+        return (self.model_provider or "").strip().lower() in {"azure", "azure_ai"}
+
     def _tier_env_set(self, field_name: str) -> bool:
         env_var = _TIER_ENV_VARS.get(field_name)
         if not env_var:
@@ -831,12 +918,24 @@ class Settings(BaseSettings):
     def get_tier2_model(self) -> str:
         if self._is_anthropic() and not self._tier_env_set("tier2_model"):
             return self.anthropic_tier2_model
+        if self._is_azure() and not self._tier_env_set("tier2_model"):
+            return (
+                self._azure_model_string(
+                    self.azure_deployment_gpt54 or AZURE_TIER2_DEFAULT
+                )
+                or f"azure_ai/{AZURE_TIER2_DEFAULT}"
+            )
         return self.tier2_model
 
     def get_tier3_models(self) -> List[str]:
         if self._is_anthropic() and not self._tier_env_set("tier3_models"):
             value = self.anthropic_tier3_models
             return [m.strip() for m in value.split(",") if m.strip()]
+        if self._is_azure() and not self._tier_env_set("tier3_models"):
+            model = self._azure_model_string(
+                self.azure_deployment_grok or AZURE_TIER3_DEFAULT
+            )
+            return [model] if model else []
         models = self.tier3_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
@@ -851,6 +950,13 @@ class Settings(BaseSettings):
     def get_table_router_model(self) -> str:
         if self._is_anthropic() and not self._tier_env_set("table_router_model"):
             return self.anthropic_table_router_model
+        if self._is_azure() and not self._tier_env_set("table_router_model"):
+            return (
+                self._azure_model_string(
+                    self.azure_deployment_kimi or AZURE_TABLE_ROUTER_DEFAULT
+                )
+                or f"azure_ai/{AZURE_TABLE_ROUTER_DEFAULT}"
+            )
         return self.table_router_model
 
     def get_vision_model(self) -> str:
@@ -894,8 +1000,22 @@ class Settings(BaseSettings):
             self._azure_model_string(
                 self.azure_deployment_deepseek or "DeepSeek-V4-Pro"
             ),
+            self._azure_model_string(
+                self.azure_deployment_kimi or AZURE_TABLE_ROUTER_DEFAULT
+            ),
         ]
         return [model for model in defaults if model]
+
+    def get_final_adjudicator_models(self) -> List[str]:
+        """Return Anthropic-reserved models for explicit final review queues."""
+        models = self.final_adjudicator_models
+        if isinstance(models, str):
+            return [m.strip() for m in models.split(",") if m.strip()]
+        return list(models)
+
+    def get_final_arbiter_model(self) -> str:
+        """Return the single most expensive final arbiter model."""
+        return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
 
     # ------------------------------------------------------------------
     # Provider-aware rate-limit / concurrency

@@ -1,0 +1,12 @@
+# Confirmed non-cardiac false-positive guards. These papers contain
+# functional, predictor, or annotation-like variant tables/text with no
+# patient-carrier evidence for the listed target-gene variants.
+gene	pmid	variant	evidence_class	expected_carriers	note
+BRCA1	33087888	A102E	functional_assay_table	0	BRCA1 functional-assay integration table; assay score/readout, not patient carriers
+BRCA1	33087888	A1039D	functional_assay_table	0	BRCA1 functional-assay integration table; regex-table FP with no carrier column
+BRCA1	30219179	p.Arg71Gly	functional_assay_table	0	multiplex HDR assay result; cDNA-based functional readout, not a carrier count
+BRCA1	30219179	p.Leu22Ser	functional_assay_table	0	multiplex HDR assay/ClinVar comparison; no study-carrier count
+MYBPC3	33782553	p.Arg502Trp	predictor_table	0	STRUM/CardioBoost/model prediction text, no patient carrier evidence
+MYBPC3	33782553	p.Trp792Arg	predictor_table	0	MYBPC3 pathogenicity prediction/modeling text, not a cohort count
+APOE	22530123	p.Arg176Cys	predictor_table	0	in-silico nsSNP prediction/figure-caption variant; no clinical carrier count
+APOE	22530123	p.Arg154Ser	predictor_table	0	APOE figure-caption variant from computational SNP prioritization, not patient carrier data

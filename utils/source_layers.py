@@ -264,10 +264,6 @@ def junk_notation_reason(
     return None
 
 
-def is_junk_notation(**kwargs: object) -> bool:
-    return junk_notation_reason(**kwargs) is not None
-
-
 def count_reasons(reasons: Iterable[str]) -> dict[str, int]:
     counts: dict[str, int] = {}
     for reason in reasons:

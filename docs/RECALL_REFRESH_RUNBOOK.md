@@ -6,9 +6,14 @@ have it pick up *only the new work*. Every step here is idempotent: re-running
 on an unchanged corpus is a no-op.
 
 History/benchmarks: [`RECALL_HISTORY.md`](RECALL_HISTORY.md). Current numbers:
-[`RECALL_STATUS.md`](RECALL_STATUS.md). Supplement deep-dive:
+[`RECALL_STATUS.md`](RECALL_STATUS.md). Historical supplement recovery summary:
 [`SUPPLEMENT_ACQUISITION_PLAN.md`](SUPPLEMENT_ACQUISITION_PLAN.md). Cold-start a
 brand-new gene: [`NEW_GENE_RUNBOOK.md`](NEW_GENE_RUNBOOK.md).
+
+Scope: use this for an existing run or scored gene when new source access,
+papers, or recovery logic might improve recall. Use `QUICKSTART.md` for setup
+and `END_TO_END_RECALL_RUN.md` only when recreating the workflow on another
+machine.
 
 ## One command (the common case)
 
@@ -44,9 +49,8 @@ regression). If nothing new is found, it reports a no-op and exits.
 2. Re-fetch supplements — previously-blocked papers are now reachable, already-
    fetched ones are skipped:
    ```bash
-   python scripts/fetch_elsevier_supplements.py --gene <GENE>     # Elsevier mmc (today)
-   # Springer/Wiley: add SpringerAPIClient.download_supplements (see SUPPLEMENT_ACQUISITION_PLAN.md
-   # "T6" — reactivates the moment the Springer key is restored)
+   python scripts/fetch_elsevier_supplements.py --gene <GENE>     # Elsevier mmc
+   # Springer/Wiley support requires a verified downloader before use.
    ```
 3. `python scripts/refresh_recall.py --gene <GENE> --run-dir <run> --land`.
 

@@ -32,6 +32,8 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
+
 logger = logging.getLogger(__name__)
 
 
@@ -302,13 +304,26 @@ def _strict_cohort_labels_enabled() -> bool:
 
 _ROW_LEVEL_SUBJECT_KEYWORDS = (
     "patient",
+    "patientnumber",
+    "patientno",
+    "patientid",
     "proband",
+    "probandnumber",
+    "probandno",
+    "probandid",
     "subject",
+    "subjectnumber",
+    "subjectno",
+    "subjectid",
     "caseid",
     "case",
+    "casenumber",
+    "caseno",
     "family",
     "kindred",
     "individual",
+    "adultnumber",
+    "childnumber",
     "participant",
     "pedigree",
     "member",
@@ -388,6 +403,164 @@ def _looks_numeric_column(values: List[str]) -> bool:
     return numeric >= max(1, len(non_empty) // 2)
 
 
+_EXPLICIT_CARRIER_COUNT_HEADERS = (
+    "carrier",
+    "carriers",
+    "ncarrier",
+    "ncarriers",
+    "numberofcarriers",
+    "noofcarriers",
+)
+
+_ROW_IDENTIFIER_HEADERS = (
+    "adultnumber",
+    "childnumber",
+    "patientnumber",
+    "patientno",
+    "patientid",
+    "probandnumber",
+    "probandno",
+    "probandid",
+    "subjectnumber",
+    "subjectno",
+    "subjectid",
+    "individualnumber",
+    "individualno",
+    "individualid",
+    "participantnumber",
+    "participantno",
+    "participantid",
+    "casenumber",
+    "caseno",
+    "caseid",
+    "familynumber",
+    "familyno",
+    "familyid",
+    "kindrednumber",
+    "kindredno",
+    "kindredid",
+    "pedigreenumber",
+    "pedigreeno",
+    "pedigreeid",
+    "sampleid",
+)
+
+_POPULATION_FREQUENCY_HEADERS = (
+    "maf",
+    "minorallelefrequency",
+    "allelefrequency",
+    "alternateallelefrequency",
+    "effectallelefrequency",
+    "eaf",
+    "frequency",
+    "freq",
+    "occurrence",
+    "occurrences",
+    "numberofoccurrences",
+    "noofoccurrences",
+    "allelecount",
+    "alleles",
+    "exac",
+    "gnomad",
+    "1000genomes",
+    "topmed",
+    "clinvar",
+    "dbsnp",
+)
+
+# In-silico pathogenicity predictors. A numeric column under one of these is a
+# computational score, never a human carrier/person count (extraction rule 3).
+# Tokens are matched as substrings of normalized (lowercased, punctuation-
+# stripped) headers, so keep them long enough to avoid colliding with real
+# count headers (e.g. "sift", "cadd", "revel" are safe; bare "score" is not and
+# stays out — it is a clinical-context cue, e.g. Schwartz score).
+_PREDICTION_SCORE_HEADERS = (
+    "sift",
+    "polyphen",
+    "cadd",
+    "revel",
+    "provean",
+    "mutationtaster",
+    "mutationassessor",
+    "alphamissense",
+    "fathmm",
+    "phylop",
+    "phastcons",
+    "gerp",
+    "metasvm",
+    "metalr",
+    "primateai",
+    "condel",
+    "insilico",
+)
+
+_DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT = (
+    "totalcase",
+    "totalcases",
+    "case",
+    "cases",
+    "totalcontrol",
+    "totalcontrols",
+    "control",
+    "controls",
+    "totalsample",
+    "samplesize",
+    "cohortsize",
+    "screened",
+    "screenedn",
+    "ntested",
+    "numbertested",
+)
+
+
+def _has_explicit_carrier_header(headers: List[str]) -> bool:
+    return any(
+        any(token in header for token in _EXPLICIT_CARRIER_COUNT_HEADERS)
+        for header in headers
+    )
+
+
+def _is_row_identifier_header(header: str) -> bool:
+    return any(token in header for token in _ROW_IDENTIFIER_HEADERS)
+
+
+def _is_population_frequency_header(header: str) -> bool:
+    return any(token in header for token in _POPULATION_FREQUENCY_HEADERS)
+
+
+def _is_prediction_score_header(header: str) -> bool:
+    return any(token in header for token in _PREDICTION_SCORE_HEADERS)
+
+
+def _is_variant_annotation_header(header: str) -> bool:
+    """True for columns that annotate a variant rather than count people.
+
+    Population-frequency allele counts (gnomAD/ExAC/TOPMed…) and in-silico
+    pathogenicity predictors (SIFT/PolyPhen/CADD/REVEL…) are variant metadata,
+    never carrier/person counts (extraction rules 2-3).
+    """
+    return _is_population_frequency_header(header) or _is_prediction_score_header(
+        header
+    )
+
+
+def _is_denominator_header_when_carrier_present(
+    header: str, normalized_headers: List[str]
+) -> bool:
+    if not _has_explicit_carrier_header(normalized_headers):
+        return False
+    return any(token in header for token in _DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT)
+
+
+def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> bool:
+    """Reject numeric columns that are visibly not per-variant carrier counts."""
+    return (
+        _is_row_identifier_header(header)
+        or _is_population_frequency_header(header)
+        or _is_denominator_header_when_carrier_present(header, normalized_headers)
+    )
+
+
 def _has_header_keyword(headers: List[str], keywords: tuple[str, ...]) -> bool:
     return any(any(kw in header for kw in keywords) for header in headers)
 
@@ -417,6 +590,16 @@ def _looks_like_row_level_clinical_list(
 
     if has_assay_or_gwas_cue and not subject_cue:
         return False
+    # An annotation/summary table keyed by variant-annotation columns
+    # (population-frequency allele counts like gnomAD/ExAC, or in-silico
+    # predictors like SIFT/PolyPhen/CADD/REVEL) with no subject column is
+    # variant annotation, not a one-carrier-per-row clinical list. A bare
+    # clinical caption/"score" cue must not mint a carrier for every annotated
+    # row (e.g. PMID 33013630 Table 1: gnomAD allele count + SIFT/PolyPhen,
+    # zero patient columns; or a "REVEL score | CADD score" prediction table).
+    has_annotation_header = any(_is_variant_annotation_header(h) for h in headers)
+    if has_annotation_header and not subject_cue:
+        return False
     return subject_cue or clinical_cue
 
 
@@ -437,26 +620,37 @@ def _infer_column_mapping_from_headers(
         values = _column_values(table, idx)
         protein_by_data = any(_normalize_protein(v) for v in values)
         cdna_by_data = any(_normalize_cdna(v) for v in values)
+        non_variant_count_header = _is_non_variant_count_header(
+            header, normalized_headers
+        )
 
         if "gene" not in mapping and any(
             kw in header for kw in _HEADER_FIELD_KEYWORDS["gene"]
         ):
             mapping["gene"] = idx
 
-        if "unaffected" not in mapping and _field_header_match(
-            header,
-            "unaffected",
-            strict_cohort_labels=strict_cohort_labels,
-            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+        if (
+            not non_variant_count_header
+            and "unaffected" not in mapping
+            and _field_header_match(
+                header,
+                "unaffected",
+                strict_cohort_labels=strict_cohort_labels,
+                has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+            )
         ):
             mapping["unaffected"] = idx
             continue
 
-        if "affected" not in mapping and _field_header_match(
-            header,
-            "affected",
-            strict_cohort_labels=strict_cohort_labels,
-            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+        if (
+            not non_variant_count_header
+            and "affected" not in mapping
+            and _field_header_match(
+                header,
+                "affected",
+                strict_cohort_labels=strict_cohort_labels,
+                has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+            )
         ):
             mapping["affected"] = idx
             continue
@@ -492,8 +686,10 @@ def _infer_column_mapping_from_headers(
             mapping["clinical_significance"] = idx
             continue
 
-        if "patient_count" not in mapping and any(
-            kw in header for kw in _HEADER_FIELD_KEYWORDS["patient_count"]
+        if (
+            not non_variant_count_header
+            and "patient_count" not in mapping
+            and any(kw in header for kw in _HEADER_FIELD_KEYWORDS["patient_count"])
         ):
             if _looks_numeric_column(values):
                 mapping["patient_count"] = idx
@@ -624,7 +820,6 @@ def build_router_prompt(
     gene_symbol: str,
     *,
     sample_rows: int = 3,
-    cell_chars: int = 60,
 ) -> str:
     """Compact JSON-friendly inventory of every detected table.
 
@@ -659,7 +854,8 @@ Allowed field names (omit a field if no column matches):
   - gene              — column listing the gene symbol (KCNH2, SCN5A, etc.)
   - cdna              — column with c. or HGVS coding-DNA notation
   - protein           — column with p. or short-form amino acid notation
-  - patient_count     — total carriers / "n detected" / "number of times" / "patients"
+  - patient_count     — explicit variant-specific carriers / patients / probands
+                        / "n detected" counts
   - affected          — affected/symptomatic carrier count
   - unaffected        — unaffected/asymptomatic carrier count
   - uncertain         — equivocal/borderline carrier count
@@ -677,6 +873,13 @@ GWAS/association statistics, allele-frequency summaries, lead SNPs, or columns
 such as Locus/SNV/CHR/BP/EA/AA/EAF/beta/SE/p/n do NOT qualify — skip them.
 In those tables, AA usually means alternate allele and n is cohort size, not a
 patient/carrier count.
+Do NOT map denominator, row-ID, or population-frequency columns to patient_count:
+"Total case(s)" is a screened/case denominator when a "Carrier(s)" column is
+present; use "Carrier(s)" instead. "Adult number", "child number", "patient ID",
+and "case no." are row identifiers; for one-patient-per-row clinical lists set
+"patient_count": -1. "MAF", "allele frequency", "No. of occurrences",
+ExAC/gnomAD/1000 Genomes counts, and allele denominators are population data,
+not clinical carrier counts.
 
 Return strict JSON. No prose. No markdown fences. Schema:
 
@@ -915,31 +1118,29 @@ _GENE_SYMBOL_IGNORE = {
     "HG19",
     "HG38",
 }
-_TARGET_GENE_ALIASES = {
-    "KCNH2": {"KCNH2", "HERG", "HERG1", "ERG", "ERG1", "H-ERG", "LQT2"},
-    "KCNQ1": {"KCNQ1", "KVLQT1", "LQT1"},
-    "SCN5A": {"SCN5A", "NAV1.5", "LQT3"},
-    "RYR2": {"RYR2", "RYR-2"},
-}
 
 
 def _target_gene_tokens(gene_symbol: str) -> set[str]:
     gene = (gene_symbol or "").strip().upper()
-    return _TARGET_GENE_ALIASES.get(gene, {gene})
+    aliases = get_gene_aliases(gene, include_query_aliases=True)
+    return {alias.upper() for alias in aliases if alias} | {gene}
 
 
 def _caption_gene_scope(caption: Optional[str]) -> set[str]:
     """Return target genes explicitly implied by a table caption."""
     if not caption:
         return set()
-    text = caption.upper()
     scope: set[str] = set()
-    for gene, aliases in _TARGET_GENE_ALIASES.items():
-        for alias in aliases:
-            if re.search(rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", text):
-                scope.add(gene)
-                break
+    for gene in known_gene_aliases(include_query_aliases=True):
+        if gene_alias_regex(gene, include_query_aliases=True).search(caption):
+            scope.add(gene)
     return scope
+
+
+def _cell_mentions_target_gene(value: Optional[str], gene_symbol: str) -> bool:
+    if not value or not gene_symbol:
+        return False
+    return bool(gene_alias_regex(gene_symbol, include_query_aliases=True).search(value))
 
 
 def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
@@ -972,6 +1173,8 @@ def _row_has_off_target_gene_without_target(cells: List[str], gene_symbol: str) 
     whose gene column was not mapped by the router.
     """
     target_tokens = _target_gene_tokens(gene_symbol)
+    if _cell_mentions_target_gene(" ".join(cells), gene_symbol):
+        return False
     row_tokens: set[str] = set()
     for cell in cells:
         row_tokens.update(_gene_symbol_tokens(cell))
@@ -1071,11 +1274,26 @@ def route_tables(
 
         response = _call()
         raw = response.choices[0].message.content or ""
+        if not raw.strip():
+            logger.warning(
+                "table_router: empty LLM response from %s; retrying once", model
+            )
+            response = _call()
+            raw = response.choices[0].message.content or ""
     except Exception as e:  # noqa: BLE001
         logger.warning("table_router: LLM call failed: %s", e)
         return RouterResult(
             routed_tables=deterministic,
             error=str(e),
+            used_fallback=not deterministic,
+        )
+
+    if not raw.strip():
+        error = f"empty LLM response from table router model {model}"
+        logger.warning("table_router: %s", error)
+        return RouterResult(
+            routed_tables=deterministic,
+            error=error,
             used_fallback=not deterministic,
         )
 
@@ -1135,6 +1353,74 @@ def _header_label(table: MarkdownTable, idx: Optional[int]) -> Optional[str]:
     return label or None
 
 
+def _usable_count_index(
+    table: MarkdownTable,
+    idx: Optional[int],
+    normalized_headers: List[str],
+) -> Optional[int]:
+    """Drop routed count columns that are clearly IDs, denominators, or AFs."""
+    if idx is None or idx == _INFER_ROW_PATIENT_COUNT:
+        return idx
+    if idx < 0 or idx >= len(normalized_headers):
+        return None
+    if _is_non_variant_count_header(normalized_headers[idx], normalized_headers):
+        logger.debug(
+            "table_router: ignoring non-carrier count column %r in %s",
+            _header_label(table, idx),
+            table.table_id,
+        )
+        return None
+    return idx
+
+
+def _router_count_type_for_label(label: Optional[str], role: str) -> Optional[str]:
+    normalized = _normalize_header(label or "")
+    if not normalized:
+        return None
+    if role == "unaffected" and any(
+        token in normalized
+        for token in (
+            "control",
+            "healthy",
+            "normal",
+            "unaffected",
+            "asymptomatic",
+        )
+    ):
+        return "unaffected_control"
+    if role == "affected" and normalized in {
+        "case",
+        "cases",
+        "brs",
+        "lqt",
+        "brslqt",
+        "disease",
+        "diseased",
+    }:
+        return "case"
+    if "family" in normalized or "families" in normalized or "kindred" in normalized:
+        return "family_count"
+    if "proband" in normalized:
+        return "proband_count"
+    if any(
+        token in normalized
+        for token in ("screened", "ntested", "numbertested", "screenedn")
+    ):
+        return "screened_N"
+    if any(
+        token in normalized
+        for token in (
+            "totalcase",
+            "totalcontrol",
+            "totalsample",
+            "samplesize",
+            "cohortsize",
+        )
+    ):
+        return "cohort_total"
+    return "per_variant_carrier"
+
+
 def _router_count_provenance(
     table: MarkdownTable,
     count_idx: Optional[int],
@@ -1150,11 +1436,13 @@ def _router_count_provenance(
     unaffected_label = _header_label(table, unaff_idx)
     return {
         "carriers_column_label": carrier_label,
-        "carriers_count_type": "per_variant_carrier" if carrier_label else None,
+        "carriers_count_type": _router_count_type_for_label(carrier_label, "carriers"),
         "affected_column_label": affected_label,
-        "affected_count_type": "per_variant_carrier" if affected_label else None,
+        "affected_count_type": _router_count_type_for_label(affected_label, "affected"),
         "unaffected_column_label": unaffected_label,
-        "unaffected_count_type": "per_variant_carrier" if unaffected_label else None,
+        "unaffected_count_type": _router_count_type_for_label(
+            unaffected_label, "unaffected"
+        ),
     }
 
 
@@ -1217,25 +1505,55 @@ def _router_fact_rows(
         "patient_count",
         total,
         count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            "implicit one carrier per clinical row"
+            if count_idx == _INFER_ROW_PATIENT_COUNT
+            else _header_label(table, count_idx),
+            "carriers",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "total_carriers_observed",
         total,
         count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            "implicit one carrier per clinical row"
+            if count_idx == _INFER_ROW_PATIENT_COUNT
+            else _header_label(table, count_idx),
+            "carriers",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "affected_count",
         affected,
         aff_idx if aff_idx is not None else count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            _header_label(table, aff_idx)
+            or (
+                "implicit one carrier per clinical row"
+                if count_idx == _INFER_ROW_PATIENT_COUNT
+                else _header_label(table, count_idx)
+            ),
+            "affected",
+        )
+        or "per_variant_carrier",
     )
     add_count(
         "unaffected_count",
         unaffected,
         unaff_idx if unaff_idx is not None else count_idx,
-        "per_variant_carrier",
+        _router_count_type_for_label(
+            _header_label(table, unaff_idx)
+            or (
+                "implicit one carrier per clinical row"
+                if count_idx == _INFER_ROW_PATIENT_COUNT
+                else _header_label(table, count_idx)
+            ),
+            "unaffected",
+        )
+        or "per_variant_carrier",
     )
     add_count("uncertain_count", uncertain, unc_idx, "per_variant_carrier")
     return rows
@@ -1288,12 +1606,39 @@ def parse_routed_table(
     gene_idx = mapping.get("gene")
     cdna_idx = mapping.get("cdna")
     protein_idx = mapping.get("protein")
-    count_idx = mapping.get("patient_count")
-    aff_idx = mapping.get("affected")
-    unaff_idx = mapping.get("unaffected")
-    unc_idx = mapping.get("uncertain")
+    normalized_headers = [_normalize_header(c) for c in table.header_cells]
+    count_idx = _usable_count_index(
+        table, mapping.get("patient_count"), normalized_headers
+    )
+    aff_idx = _usable_count_index(table, mapping.get("affected"), normalized_headers)
+    unaff_idx = _usable_count_index(
+        table, mapping.get("unaffected"), normalized_headers
+    )
+    unc_idx = _usable_count_index(table, mapping.get("uncertain"), normalized_headers)
     pheno_idx = mapping.get("phenotype")
     clin_idx = mapping.get("clinical_significance")
+
+    if count_idx is None and aff_idx is None and unaff_idx is None:
+        sanitized_mapping = {
+            key: value
+            for key, value in mapping.items()
+            if key
+            not in {
+                "patient_count",
+                "affected",
+                "unaffected",
+                "uncertain",
+            }
+        }
+        has_assay_or_gwas_cue = any(
+            h in _GWAS_OR_ASSAY_HEADERS for h in normalized_headers
+        )
+        if _looks_like_row_level_clinical_list(
+            table, sanitized_mapping, has_assay_or_gwas_cue
+        ):
+            count_idx = _INFER_ROW_PATIENT_COUNT
+        else:
+            return []
 
     variants: List[Dict[str, Any]] = []
     by_key: Dict[tuple[str, str], Dict[str, Any]] = {}
@@ -1301,6 +1646,12 @@ def parse_routed_table(
     caption_scope = _caption_gene_scope(table.caption)
     if caption_scope and gene_symbol.strip().upper() not in caption_scope:
         return []
+    # Markdown rowspan: a blank Gene cell inherits the gene from the row above
+    # (gene-grouped tables list the gene once, then leave continuation rows
+    # blank). Forward-fill so the gene-filter below sees the true gene of every
+    # row; otherwise off-target continuation rows (e.g. HCN4 Val759Ile under a
+    # KCNH2 extraction) leak through and are mis-stamped with the target gene.
+    last_gene_cell = ""
 
     for row_number, row in enumerate(table.data_lines, start=1):
         cells = _split_pipe_row(row)
@@ -1316,11 +1667,15 @@ def parse_routed_table(
 
         # Gene-filter: skip rows that explicitly belong to a different gene.
         if gene_idx is not None and target_gene_lower:
-            gene_cell = (cell(gene_idx) or "").strip().lower()
+            gene_cell = (cell(gene_idx) or "").strip()
+            if gene_cell:
+                last_gene_cell = gene_cell
+            else:
+                gene_cell = last_gene_cell  # inherit markdown rowspan
             gene_tokens = _gene_symbol_tokens(gene_cell.upper())
             if (
                 gene_cell
-                and target_gene_lower not in gene_cell
+                and not _cell_mentions_target_gene(gene_cell, gene_symbol)
                 and not (gene_tokens & _target_gene_tokens(gene_symbol))
             ):
                 continue

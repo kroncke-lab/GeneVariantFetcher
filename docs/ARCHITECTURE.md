@@ -38,7 +38,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 1.6: Filter Papers (Two-Tier)                                               │
 │   Tier 1: KeywordFilter (regex, fast) — ~65 clinical/variant keywords            │
-│   Tier 2: InternFilter (LLM, gpt-4o-mini) — relevance classification             │
+│   Tier 2: InternFilter (LLM, provider-aware model) — relevance classification     │
 │   OUTPUT: pmid_status/filtered_out.csv                                           │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -49,7 +49,6 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │     1. PMC OA (Open Access) → BioC XML                                           │
 │     2. Publisher APIs (Elsevier, Springer, Wiley) → XML/PDF                      │
 │     3. Unpaywall → OA PDF links                                                  │
-│     4. CORE API → aggregated OA content                                          │
 │   OUTPUT: pmc_fulltext/{PMID}_FULL_CONTEXT.md                                    │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -65,7 +64,10 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 3: Variant Extraction (ExpertExtractor)                                     │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
-│   • Model: gpt-4o-mini → gpt-4o (escalation if needed)                           │
+│   • Cheap paper census estimates variant/count ranges for escalation only         │
+│   • Kimi routes candidate tables; deterministic parser extracts table rows         │
+│   • Grok 4.3 runs primary full-text extraction when table parsing is insufficient  │
+│   • GPT-5.4 / DeepSeek / Kimi verify compact claim cards for high-risk outputs    │
 │   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
 │     - Detects concatenated gene+variant (HERGG604S, KCNH2A561V)                  │
 │     - Unicode arrow normalization (→, ➔, ⟶)                                      │
@@ -186,9 +188,7 @@ Filtered PMIDs
     │       ├─→ Springer API ─→ SpringerLink HTML/PDF
     │       └─→ Wiley API ────→ Wiley XML/PDF
     │
-    ├─→ Unpaywall ────────────→ OA PDF location
-    │
-    └─→ CORE API ─────────────→ Aggregated OA content
+    └─→ Unpaywall ────────────→ OA PDF location
             │
             ▼
     Format Conversion (XML/PDF/HTML → Markdown)
@@ -213,7 +213,7 @@ Filtered PMIDs
     │                           (condensed high-value sections)
     │
     └─→ ExpertExtractor ──────→ LLM extraction
-            │                   (gpt-4o-mini or gpt-4o)
+            │                   (provider-aware model cascade)
             │
             ▼
     Structured JSON extraction
@@ -265,7 +265,63 @@ extractions/{gene}_PMID_*.json
 | **Springer** | API key | Variable | Free for researchers |
 | **Wiley** | API key | Variable | TDM agreement needed |
 | **Unpaywall** | Email | 100k/day | OA link resolution |
-| **LLM provider** | API key | Per plan | One provider required for extraction — Anthropic (default), OpenAI, or Azure AI |
+| **LLM provider** | API key | Per plan | One provider required for extraction — Azure AI, Anthropic, or OpenAI |
+
+### Model Provider And Reasoning Effort
+
+`config/settings.py` resolves the effective model for each stage. The current
+forward strategy is Azure-first for routine work and Anthropic-final for
+explicit escalation queues: cheap triage/table routing/extraction/debate stay on
+Azure deployments, while Sonnet/Opus are reserved for final adjudication over
+compact claim cards.
+
+Recommended staging routing:
+
+| Stage | Model |
+|-------|-------|
+| Tier 2 triage | `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint) |
+| Cheap paper census | deterministic regex/table/count pass; stored as `extraction_metadata.paper_census` |
+| Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
+| Tier 3 extraction | `azure_ai/grok-4.3` |
+| Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
+| Final adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
+| Final hard-case arbiter | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
+
+The paper census is deliberately approximate. It produces ranges for variant
+rows, unique variants, carriers, affected, and unaffected counts plus risk flags
+such as denominator-like columns or missing table bodies. These values are never
+used as extracted facts. They only raise review priority, trigger targeted
+fallback, and help the adjudication dashboard explain why a paper or claim was
+escalated.
+
+OpenAI-style reasoning models expose a reasoning-effort knob. GVF can set it per
+pipeline stage through environment variables; all default to unset, so behavior
+is unchanged until a stage opts in:
+
+| Variable | Stage |
+|----------|-------|
+| `TIER2_REASONING_EFFORT` | Tier 2 relevance filtering in `pipeline/filters.py` |
+| `TIER3_REASONING_EFFORT` | Tier 3 extraction and compact claim adjudication in `pipeline/extraction.py` |
+| `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
+| `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
+
+Valid values are `minimal`, `low`, `medium`, and `high`. Validation lives in
+`config/settings.py`. Chat-completions calls use
+`utils/llm_utils.build_reasoning_effort_kwargs`; Responses API calls use
+`utils/llm_utils.build_responses_reasoning_param`. Both helpers no-op for models
+without an OpenAI-style effort knob.
+
+Treat reasoning effort as a secondary lever. Source acquisition, supplement
+folding, extraction logic, and matcher behavior usually move recall more than a
+non-default effort value. Change one stage at a time and re-score before keeping
+the setting.
+
+Before a long run, verify that the active Azure endpoint has the configured
+deployment names:
+
+```bash
+.venv/bin/python scripts/smoke_azure_models.py
+```
 
 ### Retry & Circuit Breaker
 
@@ -335,21 +391,17 @@ Checkpoints are stored in `~/.gvf_jobs/{job_id}/checkpoint.json` with atomic wri
    ]
    ```
 
-### Adding a New Gene Configuration
+### Adding a New Gene
 
-Add to `config/gene_config.py`:
-```python
-GENE_CONFIGS = {
-    "YOUR_GENE": {
-        "aliases": ["ALIAS1", "ALIAS2"],
-        "chromosome": "chr1",
-        "coding_positions": (start, end),
-        "domains": [
-            {"name": "Domain1", "start": 1, "end": 100},
-        ],
-    },
-}
-```
+There is no central gene-config file or `GENE_CONFIGS` dict — per-gene wiring is
+intentionally minimal:
+
+- Add the canonical protein length to `PROTEIN_LENGTHS` in
+  `utils/variant_normalizer.py`.
+- Optionally add synonyms to `config/cardiac_gene_synonyms.json` and a variant
+  alias map at `data/{gene_lower}_variant_aliases.json`.
+
+See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.
 
 ### Customizing Extraction Prompts
 

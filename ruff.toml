@@ -20,5 +20,4 @@ exclude = [
     "*.egg-info",
     "docs/examples/*",    # Example scripts may have issues
     "tests/*",            # Test files have pre-existing issues
-    "gene_literature/rename_downloads.py",  # Has type annotation issues
 ]

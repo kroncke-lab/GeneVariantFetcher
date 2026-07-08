@@ -1,0 +1,25 @@
+# variantFeatures reference residues — committed slice for the wrong-gene guard.
+#
+# Source: variantFeatures repo, data/variants.db, table variant_consequences
+#   SELECT DISTINCT gene_symbol, aa_pos, aa_ref FROM variant_consequences
+#   WHERE gene_symbol=? AND aa_pos=? AND aa_ref IS NOT NULL
+# (aa_ref is the reference amino acid at that protein position for the gene's
+# canonical/MANE transcript). Baked in here so the negative-case test is
+# self-contained and does not need the sibling variantFeatures DB present.
+#
+# This is the local equivalent of the UniProt reference-AA check: a variant
+# "<ref><pos><alt>" assigned to <gene> is a wrong-gene call when <ref> != aa_ref.
+#
+gene	aa_pos	aa_ref
+KCNH2	82	I
+KCNH2	176	R
+KCNH2	397	R
+KCNH2	523	L
+KCNH2	744	R
+KCNH2	749	G
+KCNH2	759	K
+KCNH2	802	N
+KCNH2	924	G
+KCNH2	973	L
+KCNH2	1044	A
+KCNH2	1047	R

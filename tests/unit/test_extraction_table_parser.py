@@ -66,6 +66,35 @@ Table 3. Summary of putative LQT3-associated mutations in SCN5A
     assert variants[0]["penetrance_data"]["total_carriers_observed"] == 1
 
 
+def test_markdown_parser_joins_wrapped_header_and_data_cells():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. Summary of putative LQT1-associated mutations in KCNQ1
+
+| Region | Nucleotide | Variant | Mutation
+        Type | Location | No. of patients |
+|---|---|---|---|---|---|
+| Exon 1 | 5 C>T | A2V* | Missense | N-Terminal | 1 |
+| Exon 1 | 242_264delCGCGGCCGCCGGTGAGCCTA
+        GACinsGCGCCCGCGG | G80fs+151X* | Frame shift | N-Terminal | 1 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"A2V", "G80fsX"}
+    assert by_protein["A2V"]["cdna_notation"] == "c.5C>T"
+    assert (
+        by_protein["G80fsX"]["cdna_notation"]
+        == "c.242_264delCGCGGCCGCCGGTGAGCCTAGACinsGCGCCCGCGG"
+    )
+    assert by_protein["G80fsX"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+    }
+
+
 def test_table_regex_skips_off_target_gene_column_rows():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
@@ -731,6 +760,19 @@ Polymorphism    2074 C>A   Q692K   DI/DII     0   0   5   Benign
         "affected_count": 0,
         "unaffected_count": 1,
     }
+    assert (
+        by_protein["A185T"]["count_provenance"]["unaffected_column_label"] == "Control"
+    )
+    assert (
+        by_protein["A185T"]["count_provenance"]["unaffected_count_type"]
+        == "unaffected_control"
+    )
+    assert by_protein["Q750R"]["count_provenance"]["affected_count_type"] == "case"
+    assert by_protein["Q750R"]["patients"]["column_ref"] == "BrS + LQT + Control"
+    assert (
+        by_protein["Q750R"]["patients"]["locator_extra"]["parser"]
+        == "fixed_width_nssnv"
+    )
     assert by_protein["Q692K"]["penetrance_data"]["unaffected_count"] == 5
 
 
@@ -781,6 +823,14 @@ Nucleotide Change              Coding Effect            Region
         "total_carriers_observed": 2,
         "affected_count": 2,
         "unaffected_count": 0,
+    }
+    assert by_protein["L136P"]["count_provenance"] == {
+        "carriers_column_label": "Coding Effect count",
+        "carriers_count_type": "per_variant_carrier",
+        "affected_column_label": "Coding Effect count",
+        "affected_count_type": "per_variant_carrier",
+        "unaffected_column_label": None,
+        "unaffected_count_type": None,
     }
     assert by_protein["N1380del"]["cdna_notation"] == "c.4140_4142delCAA"
 

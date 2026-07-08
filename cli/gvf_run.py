@@ -133,6 +133,13 @@ def step_extract(
     max_pmids: int,
     resume_dir: Optional[Path],
     disease: Optional[str] = None,
+    include_all_clinigen_phenotypes: bool = False,
+    extraction_top_n: Optional[int] = None,
+    extraction_priority_offset: int = 0,
+    extraction_triage_mode: Optional[str] = None,
+    extraction_triage_model: Optional[str] = None,
+    extraction_triage_include_defer: bool = False,
+    extraction_triage_max_llm: Optional[int] = None,
 ) -> Path:
     """Run the existing automated workflow. Returns the run dir it produced."""
     from cli.automated_workflow import automated_variant_extraction_workflow
@@ -162,6 +169,13 @@ def step_extract(
         pmids=pmids,
         scout_first=True,
         disease=disease,
+        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+        extraction_top_n=extraction_top_n,
+        extraction_priority_offset=extraction_priority_offset,
+        extraction_triage_mode=extraction_triage_mode,
+        extraction_triage_model=extraction_triage_model,
+        extraction_triage_include_defer=extraction_triage_include_defer,
+        extraction_triage_max_llm=extraction_triage_max_llm,
     )
 
     # Find the run dir the workflow just created (latest timestamped child).
@@ -802,6 +816,49 @@ def step_publish_review(
 
 
 # ---------------------------------------------------------------------------
+# Full-coverage steps (opt-in via --full-coverage). Thin wrappers over
+# self-contained pipeline modules; they do not modify the extraction pipeline.
+# ---------------------------------------------------------------------------
+
+
+def step_full_coverage_walk(
+    gene: str,
+    run_dir: Path,
+    *,
+    model: str,
+    max_workers: int,
+    start_offset: int,
+    min_new_variants: int,
+) -> dict:
+    """Walk priority extraction to variant-yield taper for full literature coverage."""
+    from pipeline.full_coverage import run_walk_to_taper
+
+    return run_walk_to_taper(
+        gene,
+        run_dir,
+        model=model,
+        max_workers=max_workers,
+        start_offset=start_offset,
+        min_new_variants=min_new_variants,
+        logger=logger,
+    )
+
+
+def step_carrier_guard(db: Path) -> dict:
+    """Neutralize implausible per-variant carrier counts (cohort/allele-number misreads)."""
+    from pipeline.carrier_guard import apply_carrier_guard
+
+    return apply_carrier_guard(db, logger=logger)
+
+
+def step_vf_enrich(gene: str, db: Path) -> dict:
+    """variantFeatures: canonical names + in silico scores + wrong-gene FP quarantine."""
+    from pipeline.vf_enrichment import enrich_and_quarantine
+
+    return enrich_and_quarantine(gene, db, logger=logger)
+
+
+# ---------------------------------------------------------------------------
 # Entry point (called from cli/__init__.py)
 # ---------------------------------------------------------------------------
 
@@ -818,10 +875,23 @@ def run_gvf_pipeline(
     source_recovery: bool = True,
     source_recovery_timeout_s: int = 120,
     disease: Optional[str] = None,
+    include_all_clinigen_phenotypes: bool = False,
     corpus_sync: bool = True,
     publish_review: bool = False,
     review_repo: Optional[Path] = None,
     publish_timeout_s: int = 600,
+    extraction_top_n: Optional[int] = None,
+    extraction_priority_offset: int = 0,
+    extraction_triage_mode: Optional[str] = None,
+    extraction_triage_model: Optional[str] = None,
+    extraction_triage_include_defer: bool = False,
+    extraction_triage_max_llm: Optional[int] = None,
+    full_coverage: bool = False,
+    extraction_model: Optional[str] = None,
+    extraction_workers: Optional[int] = None,
+    taper_min_variants: int = 8,
+    carrier_guard: bool = True,
+    vf_enrich: bool = True,
 ) -> int:
     """Execute the full pipeline. Returns exit code."""
     initialize_runtime()
@@ -856,6 +926,18 @@ def run_gvf_pipeline(
     # Step 2: extract (unless skipped)
     gene = gene.upper()
     run_dir: Optional[Path] = None
+    effective_extraction_top_n = extraction_top_n
+    seeded_priority_count = 0
+    if (
+        full_coverage
+        and "extract" not in skip
+        and (effective_extraction_top_n is None or effective_extraction_top_n <= 0)
+    ):
+        effective_extraction_top_n = 1000
+        logger.info(
+            "Full coverage enabled: seeding priority extraction with top %d before walk-to-taper",
+            effective_extraction_top_n,
+        )
     if "extract" in skip:
         # Find existing run dir
         gene_root = output / gene
@@ -882,7 +964,16 @@ def run_gvf_pipeline(
                 max_pmids=max_pmids,
                 resume_dir=resume_dir,
                 disease=disease,
+                include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+                extraction_top_n=effective_extraction_top_n,
+                extraction_priority_offset=extraction_priority_offset,
+                extraction_triage_mode=extraction_triage_mode,
+                extraction_triage_model=extraction_triage_model,
+                extraction_triage_include_defer=extraction_triage_include_defer,
+                extraction_triage_max_llm=extraction_triage_max_llm,
             )
+            if effective_extraction_top_n and effective_extraction_top_n > 0:
+                seeded_priority_count = effective_extraction_top_n
         except Exception as e:
             logger.exception("extract step failed: %s", e)
             return 3
@@ -891,6 +982,28 @@ def run_gvf_pipeline(
     if not db:
         logger.error("No DB produced in %s", run_dir)
         return 4
+
+    # Step 2.5: full-coverage walk-to-taper extraction (opt-in via --full-coverage).
+    # Continues priority extraction in offset batches until variant yield tapers,
+    # on a high-TPM model — vs the single bounded top-N pass above.
+    if full_coverage and "walk" not in skip:
+        logger.info("🚶 Step 2.5: full-coverage walk-to-taper extraction")
+        try:
+            walk_start_offset = extraction_priority_offset + seeded_priority_count
+            stats = step_full_coverage_walk(
+                gene=gene,
+                run_dir=run_dir,
+                model=extraction_model or "azure_ai/gpt-5.4",
+                max_workers=extraction_workers or 10,
+                start_offset=walk_start_offset,
+                min_new_variants=taper_min_variants,
+            )
+            logger.info("full-coverage walk: %s", stats)
+            db = _find_db(run_dir, gene) or db
+        except Exception as e:  # noqa: BLE001 - best-effort; keep the bounded extraction
+            logger.exception("full-coverage walk failed (%s); continuing", e)
+    elif full_coverage and "walk" in skip:
+        logger.info("⏭️  Step 2.5: full-coverage walk — SKIPPED")
 
     gold = _find_gold(gene)
     source_qc_summary: Optional[Path] = None
@@ -944,6 +1057,26 @@ def run_gvf_pipeline(
         )
     else:
         logger.info("⏭️  Step 3: layers — SKIPPED")
+
+    # Step 3.5: full-coverage data-quality passes on the finalized DB (opt-in).
+    # carrier-guard neutralizes cohort/allele-number-as-carrier misreads; vf-enrich
+    # attaches canonical names + in silico scores and quarantines wrong-gene FPs.
+    if full_coverage and carrier_guard and "carrier-guard" not in skip:
+        logger.info("🛡️  Step 3.5: carrier-count guard")
+        try:
+            step_carrier_guard(db=db)
+        except Exception as e:  # noqa: BLE001
+            logger.exception("carrier guard failed (%s); continuing", e)
+    elif full_coverage and not carrier_guard:
+        logger.info("⏭️  Step 3.5: carrier-count guard — SKIPPED")
+    if full_coverage and vf_enrich and "vf-enrich" not in skip:
+        logger.info("🔬 Step 3.6: variantFeatures enrich + wrong-gene FP quarantine")
+        try:
+            step_vf_enrich(gene=gene, db=db)
+        except Exception as e:  # noqa: BLE001
+            logger.exception("vf-enrich failed (%s); continuing", e)
+    elif full_coverage and not vf_enrich:
+        logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED")
 
     # Step 4: gold-free source QC
     if source_qc_summary is None and "source-qc" not in skip:

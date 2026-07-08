@@ -70,6 +70,25 @@ def test_intern_filter_fails_open_when_llm_rejects_target_gene_screening(monkeyp
     assert "Original classifier reason" in result.reason
 
 
+def test_intern_filter_fail_open_uses_default_gene_aliases(monkeypatch):
+    def fake_call_llm_json(self, prompt):
+        return {"decision": "FAIL", "reason": "missed alias", "confidence": 0.9}
+
+    monkeypatch.setattr(InternFilter, "call_llm_json", fake_call_llm_json)
+
+    result = InternFilter(model="stub").filter(
+        Paper(
+            pmid="4",
+            title="cMyBP-C variants in hypertrophic cardiomyopathy families",
+            abstract="Patients were screened and variant carriers were identified.",
+            gene_symbol="MYBPC3",
+        )
+    )
+
+    assert result.decision == FilterDecision.PASS
+    assert result.metadata["fail_open_target_gene_signal"] is True
+
+
 def test_intern_filter_does_not_fail_open_unrelated_reviews(monkeypatch):
     def fake_call_llm_json(self, prompt):
         return {"decision": "FAIL", "reason": "review only", "confidence": 0.95}

@@ -1,5 +1,6 @@
 """Tests for debate escalation queue construction."""
 
+from scripts.recall_audit.common import REPO_ROOT
 from scripts.recall_audit.build_claim_debate_escalation_queue import build_queue
 
 
@@ -63,3 +64,54 @@ def test_low_risk_direct_consensus_is_not_queued():
     )
 
     assert rows == []
+
+
+def test_benchmark_trusted_wrong_consensus_is_queued():
+    rows = build_queue(
+        records=[
+            {
+                "baseline_model": "azure_ai/DeepSeek-V4-Pro",
+                "debater_model": "azure_ai/gpt-5.4",
+                "gene": "KCNQ1",
+                "pmid": "17192539",
+                "variant": "p.Gly589Asp",
+                "failure_class": "count_mismatch",
+                "source_context": str(
+                    REPO_ROOT
+                    / "validation_runs"
+                    / "run"
+                    / "review_corpus"
+                    / "KCNQ1"
+                    / "17192539"
+                    / "17192539_FULL_CONTEXT.md"
+                ),
+                "debate": {
+                    "agreement": "agree",
+                    "field_agreement": {"total_carriers": "agree"},
+                    "reason": "Both models trusted a study-wide aggregate.",
+                },
+                "baseline_field_evaluations": [
+                    {
+                        "field": "total_carriers",
+                        "after_wrong": True,
+                        "flagged_not_autopopulated": False,
+                    }
+                ],
+                "debate_field_evaluations": [
+                    {
+                        "field": "total_carriers",
+                        "after_wrong": True,
+                        "flagged_not_autopopulated": False,
+                    }
+                ],
+            }
+        ],
+        escalation_model="anthropic/claude-sonnet-5",
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["severity"] == "high"
+    assert rows[0]["agreement_labels"] == "agree;benchmark_trusted_wrong"
+    assert rows[0]["disagreement_fields"] == "total_carriers"
+    assert rows[0]["source_context"].startswith("validation_runs/")
+    assert "Benchmark gold still disagrees" in rows[0]["reasons"]

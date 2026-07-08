@@ -11,6 +11,7 @@ from typing import List, Optional
 
 from config.constants import FILTER_CLINICAL_KEYWORDS
 from config.settings import get_settings
+from utils.gene_metadata import get_gene_aliases
 from utils.llm_utils import BaseLLMCaller
 from utils.models import FilterDecision, FilterResult, FilterTier, Paper
 
@@ -29,13 +30,6 @@ _REASONING_MODEL_HINTS = (
     "o1",
     "o3",
 )
-
-TARGET_GENE_ALIASES = {
-    "KCNH2": ("KCNH2", "HERG", "KVLQT2", "LQT2"),
-    "KCNQ1": ("KCNQ1", "KVLQT1", "LQT1"),
-    "SCN5A": ("SCN5A", "NAV1.5", "LQT3", "BRUGADA"),
-    "RYR2": ("RYR2", "CPVT1", "CPVT"),
-}
 
 GENOTYPED_COHORT_SIGNALS = (
     "MUTATION",
@@ -298,7 +292,7 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
         if not gene:
             return False
         text = f"{paper.title or ''}\n{paper.abstract or ''}".upper()
-        aliases = TARGET_GENE_ALIASES.get(gene, (gene,))
+        aliases = get_gene_aliases(gene, include_query_aliases=True)
         return any(self._contains_alias(text, alias) for alias in aliases)
 
     def _should_fail_open_target_gene_abstract(self, paper: Paper) -> bool:

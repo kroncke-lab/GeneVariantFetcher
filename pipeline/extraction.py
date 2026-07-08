@@ -33,11 +33,12 @@ from pipeline.prompts import (
     EXTRACTION_PROMPT,
     HIGH_VARIANT_THRESHOLD,
 )
+from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.env_utils import get_env_int
 from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
-    VariantScanner,
     merge_scanner_results,
     scan_document_for_variants,
 )
@@ -47,6 +48,10 @@ logger = logging.getLogger(__name__)
 TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
 TABLE_REGEX_MERGE_MAX_VARIANTS = 500
 SCANNER_REGEX_MERGE_MAX_VARIANTS = 150
+TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = get_env_int(
+    "GVF_TABLE_OVERFLOW_MERGE_MAX_VARIANTS", 2000
+)
+TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 250)
 
 
 def _find_data_zones_file(
@@ -444,6 +449,233 @@ class ExpertExtractor(BaseLLMCaller):
                 count += 1
         return count
 
+    @staticmethod
+    def _estimate_range(point: int | None, *, low: int | None = None) -> dict:
+        if point is None:
+            return {"low": None, "point": None, "high": None}
+        point = max(0, int(point))
+        if point == 0:
+            return {"low": 0, "point": 0, "high": 0}
+        low_value = max(0, int(low if low is not None else max(0, point // 2)))
+        high_value = max(point, int(point * 1.5) + 2)
+        return {"low": low_value, "point": point, "high": high_value}
+
+    @staticmethod
+    def _markdown_cells(line: str) -> list[str]:
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            return []
+        return [cell.strip() for cell in stripped.strip("|").split("|")]
+
+    @staticmethod
+    def _looks_like_separator_row(cells: list[str]) -> bool:
+        return bool(cells) and all(
+            re.fullmatch(r":?-{2,}:?", cell or "") for cell in cells
+        )
+
+    def _estimate_markdown_count_columns(
+        self, full_text: str
+    ) -> tuple[dict, list[str]]:
+        """Return rough count-column sums from markdown tables.
+
+        These are loose paper-level estimates, not extracted facts. They only
+        drive fallback/adjudication priority.
+        """
+        totals = {"carriers": 0, "affected": 0, "unaffected": 0}
+        seen = {"carriers": False, "affected": False, "unaffected": False}
+        risk_flags: list[str] = []
+        lines = full_text.splitlines()
+        for idx, line in enumerate(lines):
+            header = self._markdown_cells(line)
+            if not header or idx + 1 >= len(lines):
+                continue
+            separator = self._markdown_cells(lines[idx + 1])
+            if not self._looks_like_separator_row(separator):
+                continue
+
+            column_roles: dict[int, str] = {}
+            for col_idx, label in enumerate(header):
+                normalized = re.sub(r"[^a-z0-9]+", "", label.lower())
+                if not normalized:
+                    continue
+                if any(
+                    token in normalized
+                    for token in ("screened", "tested", "cohort", "sample", "family")
+                ):
+                    risk_flags.append(f"possible_denominator_column:{label}")
+                    continue
+                if "unaffected" in normalized or "asymptomatic" in normalized:
+                    column_roles[col_idx] = "unaffected"
+                elif "affected" in normalized or "symptomatic" in normalized:
+                    column_roles[col_idx] = "affected"
+                elif "control" in normalized or "healthy" in normalized:
+                    column_roles[col_idx] = "unaffected"
+                    risk_flags.append(f"control_column:{label}")
+                elif "case" in normalized:
+                    column_roles[col_idx] = "affected"
+                    risk_flags.append(f"case_column:{label}")
+                elif any(
+                    token in normalized
+                    for token in ("carrier", "patient", "proband", "individual")
+                ):
+                    column_roles[col_idx] = "carriers"
+
+            if not column_roles:
+                continue
+
+            for row in lines[idx + 2 :]:
+                cells = self._markdown_cells(row)
+                if not cells:
+                    break
+                if len(cells) < len(header):
+                    continue
+                for col_idx, role in column_roles.items():
+                    if col_idx >= len(cells):
+                        continue
+                    match = re.search(r"\b\d{1,5}\b", cells[col_idx].replace(",", ""))
+                    if not match:
+                        continue
+                    value = int(match.group(0))
+                    if value > 10000:
+                        risk_flags.append(f"implausible_count_cell:{header[col_idx]}")
+                        continue
+                    totals[role] += value
+                    seen[role] = True
+
+        estimates = {
+            role: self._estimate_range(totals[role], low=totals[role])
+            if seen[role]
+            else self._estimate_range(None)
+            for role in totals
+        }
+        return estimates, sorted(set(risk_flags))
+
+    def _estimate_paper_census(
+        self,
+        full_text: str,
+        gene_symbol: Optional[str],
+        *,
+        table_row_hint: Optional[int] = None,
+        scanner_variant_count: int = 0,
+        table_hint_variant_count: int = 0,
+    ) -> dict[str, Any]:
+        """Build a cheap, approximate paper census used only for escalation.
+
+        The census estimates rough ranges for variant rows and counts. It does
+        not write extracted facts; downstream code uses it to decide whether a
+        paper/claim needs fallback or adjudication.
+        """
+        text = full_text or ""
+        table_rows = (
+            table_row_hint
+            if table_row_hint is not None
+            else self._estimate_table_rows(text)
+        )
+        protein_tokens = {
+            match.group(0)
+            for match in re.finditer(
+                r"\b(?:p\.)?(?:[A-Z][a-z]{2}|[A-Z])\d{1,5}(?:[A-Z][a-z]{2}|[A-Z]|\*|Ter|fs|del|dup|ins)\b",
+                text,
+            )
+        }
+        cdna_tokens = {
+            match.group(0)
+            for match in re.finditer(
+                r"\bc\.\d+(?:[+-]\d+)?(?:[ACGT]>[ACGT]|del|dup|ins|_\d+del)\b",
+                text,
+                flags=re.IGNORECASE,
+            )
+        }
+        variant_token_count = len(protein_tokens | cdna_tokens)
+
+        count_estimates, count_risks = self._estimate_markdown_count_columns(text)
+        basis: list[str] = []
+        risk_flags: list[str] = list(count_risks)
+        if table_rows:
+            basis.append("markdown_table_rows")
+        if variant_token_count:
+            basis.append("variant_tokens")
+        if scanner_variant_count:
+            basis.append("regex_scanner_candidates")
+        if table_hint_variant_count:
+            basis.append("deterministic_table_hints")
+        if any(value["point"] is not None for value in count_estimates.values()):
+            basis.append("count_columns")
+        if self._source_has_missing_table_bodies(text):
+            risk_flags.append("source_mentions_tables_but_no_table_bodies")
+
+        gene = (gene_symbol or "").strip()
+        if gene and gene.lower() not in text.lower():
+            risk_flags.append("no_target_gene_mention")
+
+        variant_point = max(
+            table_rows or 0,
+            variant_token_count,
+            scanner_variant_count,
+            table_hint_variant_count,
+        )
+        variant_low = max(
+            table_hint_variant_count,
+            min(
+                value
+                for value in (
+                    variant_point,
+                    variant_token_count or variant_point,
+                    table_rows or variant_point,
+                )
+                if value is not None
+            )
+            if variant_point
+            else 0,
+        )
+        unique_point = max(
+            variant_token_count, scanner_variant_count, table_hint_variant_count
+        )
+        if not unique_point and variant_point:
+            unique_point = max(1, min(variant_point, table_rows or variant_point))
+
+        if count_estimates["carriers"]["point"] is None and variant_point:
+            count_estimates["carriers"] = {
+                "low": 0,
+                "point": variant_point,
+                "high": max(variant_point, variant_point * 2),
+            }
+            basis.append("row_count_proxy")
+            risk_flags.append("no_explicit_carrier_count_columns")
+
+        if not basis:
+            confidence = "low"
+        elif "count_columns" in basis and (
+            "variant_tokens" in basis or table_hint_variant_count
+        ):
+            confidence = "medium"
+        elif "markdown_table_rows" in basis or "variant_tokens" in basis:
+            confidence = "medium"
+        else:
+            confidence = "low"
+
+        return {
+            "version": "deterministic_v1",
+            "confidence": confidence,
+            "basis": sorted(set(basis)),
+            "risk_flags": sorted(set(risk_flags)),
+            "signals": {
+                "markdown_table_rows": table_rows,
+                "variant_token_count": variant_token_count,
+                "scanner_variant_count": scanner_variant_count,
+                "table_hint_variant_count": table_hint_variant_count,
+            },
+            "estimated_variant_rows": self._estimate_range(
+                variant_point, low=variant_low
+            ),
+            "estimated_unique_variants": self._estimate_range(
+                unique_point, low=min(unique_point, variant_low) if unique_point else 0
+            ),
+            "estimated_carriers": count_estimates["carriers"],
+            "estimated_affected": count_estimates["affected"],
+            "estimated_unaffected": count_estimates["unaffected"],
+        }
+
     def _extract_variants_from_tables(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -504,16 +736,23 @@ class ExpertExtractor(BaseLLMCaller):
         def genes_mentioned_in_cells(cells: list[str]) -> set[str]:
             genes = set()
             for cell in cells:
-                searchable = re.sub(r"[*_`\\]", " ", cell).upper()
+                searchable = re.sub(r"[*_`\\]", " ", cell)
+                searchable_upper = searchable.upper()
                 for alias, official in self.TABLE_LABEL_GENE_ALIASES.items():
                     if re.search(
-                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", searchable
+                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])",
+                        searchable_upper,
                     ):
                         genes.add(official)
+                for gene in known_gene_aliases(include_query_aliases=False):
+                    if gene_alias_regex(gene, include_query_aliases=False).search(
+                        searchable
+                    ):
+                        genes.add(gene)
                 for explicit_gene in self.TABLE_LABEL_EXPLICIT_GENES:
                     if re.search(
                         rf"(?<![A-Z0-9]){re.escape(explicit_gene)}(?![A-Z0-9])",
-                        searchable,
+                        searchable_upper,
                     ):
                         genes.add(explicit_gene)
             return genes
@@ -542,6 +781,7 @@ class ExpertExtractor(BaseLLMCaller):
                     row_gene = normalized_cell
                 if row_gene:
                     row_genes.append(row_gene)
+                row_genes.extend(genes_mentioned_in_cells([cell]))
             context_genes = set(row_genes) or active_table_genes
             if context_genes and target_gene not in context_genes:
                 row_gene_filtered_count += 1
@@ -698,6 +938,117 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data["extraction_metadata"]["table_regex_added"] = added_count
 
         extracted_data["variants"] = existing_variants
+        return extracted_data
+
+    def _table_variant_key(self, variant: dict) -> tuple[str, str]:
+        """Return a normalized dedupe key for a table-derived variant."""
+        from utils.variant_normalizer import normalize_variant
+
+        protein = normalize_variant(variant.get("protein_notation", "") or "")
+        cdna = normalize_variant(variant.get("cdna_notation", "") or "")
+        return (cdna.lower(), protein.lower())
+
+    def _is_structured_table_variant(self, variant: dict) -> bool:
+        """True when a table variant carries row/count provenance, not just regex text."""
+        source_location = str(variant.get("source_location") or "").lower()
+        patients = variant.get("patients") or {}
+        penetrance = variant.get("penetrance_data") or {}
+        return (
+            "router+deterministic" in source_location
+            or bool(variant.get("fact_provenance"))
+            or bool(variant.get("count_provenance"))
+            or patients.get("count") is not None
+            or penetrance.get("total_carriers_observed") is not None
+            or penetrance.get("affected_count") is not None
+        )
+
+    def _dedupe_table_variants(self, table_variants: List[dict]) -> List[dict]:
+        """Dedupe table candidates while preferring richer row-level variants."""
+        selected: List[dict] = []
+        index_by_key: dict[tuple[str, str], int] = {}
+        for variant in table_variants:
+            key = self._table_variant_key(variant)
+            if not any(key):
+                continue
+            if key not in index_by_key:
+                index_by_key[key] = len(selected)
+                selected.append(variant)
+                continue
+            existing_index = index_by_key[key]
+            existing = selected[existing_index]
+            if self._is_structured_table_variant(
+                variant
+            ) and not self._is_structured_table_variant(existing):
+                selected[existing_index] = variant
+        return selected
+
+    def _select_table_variants_for_merge(
+        self, table_variants: List[dict]
+    ) -> tuple[List[dict], Optional[dict]]:
+        """Select candidates for table merge and describe overflow decisions."""
+        deduped = self._dedupe_table_variants(table_variants)
+        if len(table_variants) <= TABLE_REGEX_MERGE_MAX_VARIANTS:
+            return deduped, None
+
+        overflow_max = max(
+            TABLE_REGEX_MERGE_MAX_VARIANTS, TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS
+        )
+        structured = [v for v in deduped if self._is_structured_table_variant(v)]
+        regex_only = [v for v in deduped if not self._is_structured_table_variant(v)]
+
+        selected: List[dict] = []
+        selected.extend(structured[:overflow_max])
+        remaining_slots = max(0, overflow_max - len(selected))
+        if remaining_slots:
+            selected.extend(regex_only[:remaining_slots])
+
+        overflow = {
+            "candidate_count": len(table_variants),
+            "deduped_count": len(deduped),
+            "normal_safety_cap": TABLE_REGEX_MERGE_MAX_VARIANTS,
+            "overflow_merge_cap": overflow_max,
+            "chunk_size": max(1, TABLE_REGEX_OVERFLOW_CHUNK_SIZE),
+            "structured_candidate_count": len(structured),
+            "regex_only_candidate_count": len(regex_only),
+            "selected_for_merge": len(selected),
+            "omitted_after_dedupe": max(0, len(deduped) - len(selected)),
+            "reason": "candidate_count_exceeds_safety_cap",
+        }
+        return selected, overflow
+
+    def _merge_table_variants_with_overflow_qc(
+        self, extracted_data: dict, table_variants: List[dict], pmid: Optional[str]
+    ) -> dict:
+        """Merge table candidates; when over cap, merge in bounded chunks with QC."""
+        selected, overflow = self._select_table_variants_for_merge(table_variants)
+        if overflow:
+            logger.warning(
+                "PMID %s - Table regex/router merge overflow: %d candidates "
+                "(deduped=%d), merging %d with overflow cap %d",
+                pmid,
+                overflow["candidate_count"],
+                overflow["deduped_count"],
+                overflow["selected_for_merge"],
+                overflow["overflow_merge_cap"],
+            )
+
+        before_count = len(extracted_data.get("variants", []) or [])
+        if selected:
+            chunk_size = (
+                max(1, TABLE_REGEX_OVERFLOW_CHUNK_SIZE) if overflow else len(selected)
+            )
+            for start in range(0, len(selected), chunk_size):
+                extracted_data = self._merge_table_variants(
+                    extracted_data, selected[start : start + chunk_size]
+                )
+
+        after_count = len(extracted_data.get("variants", []) or [])
+        metadata = extracted_data.setdefault("extraction_metadata", {})
+        metadata["table_merge_candidate_count"] = len(table_variants)
+        if overflow:
+            overflow["merged_added"] = max(0, after_count - before_count)
+            metadata["table_merge_overflow"] = overflow
+            metadata["table_regex_added"] = overflow["merged_added"]
         return extracted_data
 
     def _format_table_hints(
@@ -998,6 +1349,7 @@ class ExpertExtractor(BaseLLMCaller):
         "patients",
         "no. of patients",
         "no. of patient",
+        "carrier",
         "carriers",
         "probands",
         "families",
@@ -1219,6 +1571,7 @@ class ExpertExtractor(BaseLLMCaller):
     )
     CDNA_TABLE_VALUE_RE = re.compile(
         r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
+        r"|^c\.\d+(?:_\d+)?del[ACGT]+ins[ACGT]+$"
         r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
         r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
         re.IGNORECASE,
@@ -1380,8 +1733,17 @@ class ExpertExtractor(BaseLLMCaller):
             return cleaned
         if cleaned.endswith("*"):
             without_footnote = cleaned[:-1]
-            if without_footnote and self.PROTEIN_TABLE_VALUE_RE.match(without_footnote):
+            if without_footnote and (
+                self.PROTEIN_TABLE_VALUE_RE.match(without_footnote)
+                or re.search(r"fs\+\d+(?:X|Ter)$", without_footnote, re.IGNORECASE)
+            ):
                 cleaned = without_footnote
+        cleaned = re.sub(
+            r"(fs)\+\d+(?:X|Ter|\*)$",
+            r"\1X",
+            cleaned,
+            flags=re.IGNORECASE,
+        )
         if self.PROTEIN_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
@@ -1405,6 +1767,170 @@ class ExpertExtractor(BaseLLMCaller):
         if self.CDNA_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
+
+    @staticmethod
+    def _normalize_count_label(label: Optional[str]) -> str:
+        return re.sub(r"[^a-z0-9]+", "", (label or "").lower())
+
+    @classmethod
+    def _table_count_type_for_label(
+        cls, label: Optional[str], *, role: Optional[str] = None
+    ) -> Optional[str]:
+        """Map a raw table count header to the existing count_type vocabulary."""
+        normalized = cls._normalize_count_label(label)
+        if not normalized:
+            return None
+        if role == "unaffected" and any(
+            token in normalized
+            for token in (
+                "control",
+                "healthy",
+                "normal",
+                "unaffected",
+                "asymptomatic",
+            )
+        ):
+            return "unaffected_control"
+        if role == "affected" and normalized in {
+            "case",
+            "cases",
+            "brs",
+            "lqt",
+            "brslqt",
+            "disease",
+            "diseased",
+        }:
+            return "case"
+        if (
+            "family" in normalized
+            or "families" in normalized
+            or "kindred" in normalized
+        ):
+            return "family_count"
+        if "proband" in normalized:
+            return "proband_count"
+        if any(
+            token in normalized
+            for token in ("screened", "ntested", "numbertested", "screenedn")
+        ):
+            return "screened_N"
+        if any(
+            token in normalized
+            for token in (
+                "totalcase",
+                "totalcontrol",
+                "totalsample",
+                "samplesize",
+                "cohortsize",
+            )
+        ):
+            return "cohort_total"
+        if role == "affected" and normalized in {"case", "cases"}:
+            return "case"
+        if role == "unaffected" and "control" in normalized:
+            return "unaffected_control"
+        return "per_variant_carrier"
+
+    @classmethod
+    def _table_count_provenance(
+        cls,
+        *,
+        carriers_label: Optional[str],
+        affected_label: Optional[str] = None,
+        unaffected_label: Optional[str] = None,
+        carriers_count_type: Optional[str] = None,
+        affected_count_type: Optional[str] = None,
+        unaffected_count_type: Optional[str] = None,
+    ) -> dict:
+        return {
+            "carriers_column_label": carriers_label,
+            "carriers_count_type": carriers_count_type
+            or cls._table_count_type_for_label(carriers_label, role="carriers"),
+            "affected_column_label": affected_label,
+            "affected_count_type": affected_count_type
+            or cls._table_count_type_for_label(affected_label, role="affected"),
+            "unaffected_column_label": unaffected_label,
+            "unaffected_count_type": unaffected_count_type
+            or cls._table_count_type_for_label(unaffected_label, role="unaffected"),
+        }
+
+    @staticmethod
+    def _table_source_container(source_ref: Optional[str]) -> str:
+        return (
+            "supplement"
+            if re.search(
+                r"\bsupp(?:lement(?:ary|al)?)?\b|etable|e-table",
+                source_ref or "",
+                re.IGNORECASE,
+            )
+            else "main"
+        )
+
+    @classmethod
+    def _table_observation_provenance(
+        cls,
+        *,
+        source_ref: str,
+        column_ref: Optional[str],
+        parser: str,
+        row_label: Optional[str] = None,
+        row_ordinal: Optional[int] = None,
+        locator_extra: Optional[dict] = None,
+    ) -> dict:
+        extra = {"parser": parser}
+        if locator_extra:
+            extra.update(locator_extra)
+        return {
+            "source_container": cls._table_source_container(source_ref),
+            "source_kind": "table",
+            "source_ref": source_ref,
+            "row_label": row_label,
+            "row_ordinal": row_ordinal,
+            "column_ref": column_ref,
+            "locator_extra": extra,
+        }
+
+    @classmethod
+    def _attach_table_count_provenance(
+        cls,
+        variant: dict,
+        *,
+        source_ref: str,
+        parser: str,
+        carriers_label: Optional[str],
+        affected_label: Optional[str] = None,
+        unaffected_label: Optional[str] = None,
+        carriers_count_type: Optional[str] = None,
+        affected_count_type: Optional[str] = None,
+        unaffected_count_type: Optional[str] = None,
+        row_label: Optional[str] = None,
+        row_ordinal: Optional[int] = None,
+        locator_extra: Optional[dict] = None,
+    ) -> dict:
+        provenance = cls._table_count_provenance(
+            carriers_label=carriers_label,
+            affected_label=affected_label,
+            unaffected_label=unaffected_label,
+            carriers_count_type=carriers_count_type,
+            affected_count_type=affected_count_type,
+            unaffected_count_type=unaffected_count_type,
+        )
+        variant["count_provenance"] = provenance
+        observation_provenance = cls._table_observation_provenance(
+            source_ref=source_ref,
+            column_ref=carriers_label,
+            parser=parser,
+            row_label=row_label,
+            row_ordinal=row_ordinal,
+            locator_extra=locator_extra,
+        )
+        variant.update(observation_provenance)
+        patients = variant.setdefault("patients", {})
+        if isinstance(patients, dict):
+            for key, value in observation_provenance.items():
+                if value is not None:
+                    patients.setdefault(key, value)
+        return variant
 
     def _is_variant_table_header(self, line: str) -> bool:
         """
@@ -1500,6 +2026,9 @@ class ExpertExtractor(BaseLLMCaller):
         label_upper = label.upper()
         for alias, gene in self.TABLE_LABEL_GENE_ALIASES.items():
             if re.search(rf"\b{re.escape(alias)}\b", label_upper):
+                symbols.add(gene)
+        for gene in known_gene_aliases(include_query_aliases=False):
+            if gene_alias_regex(gene, include_query_aliases=False).search(label):
                 symbols.add(gene)
         return symbols
 
@@ -1628,29 +2157,41 @@ class ExpertExtractor(BaseLLMCaller):
         affected_count = numeric_tokens[-2]
         unaffected_count = max(count - affected_count, 0)
 
-        return {
-            "gene_symbol": gene_symbol,
-            "cdna_notation": cdna,
-            "protein_notation": protein,
-            "clinical_significance": "pathogenic",
-            "patients": {
-                "count": count,
-                "phenotype": f"{gene_symbol}-associated disease",
+        return self._attach_table_count_provenance(
+            {
+                "gene_symbol": gene_symbol,
+                "cdna_notation": cdna,
+                "protein_notation": protein,
+                "clinical_significance": "pathogenic",
+                "patients": {
+                    "count": count,
+                    "phenotype": f"{gene_symbol}-associated disease",
+                },
+                "penetrance_data": {
+                    "total_carriers_observed": count,
+                    "affected_count": affected_count,
+                    "unaffected_count": unaffected_count,
+                },
+                "individual_records": [],
+                "functional_data": {"summary": "", "assays": []},
+                "segregation_data": None,
+                "population_frequency": None,
+                "evidence_level": "medium",
+                "source_location": current_table_label
+                or "Fixed-width LQT mutation table",
+                "additional_notes": "Parsed via deterministic fixed-width LQT mutation table parser",
+                "key_quotes": [],
             },
-            "penetrance_data": {
-                "total_carriers_observed": count,
-                "affected_count": affected_count,
-                "unaffected_count": unaffected_count,
-            },
-            "individual_records": [],
-            "functional_data": {"summary": "", "assays": []},
-            "segregation_data": None,
-            "population_frequency": None,
-            "evidence_level": "medium",
-            "source_location": current_table_label or "Fixed-width LQT mutation table",
-            "additional_notes": "Parsed via deterministic fixed-width LQT mutation table parser",
-            "key_quotes": [],
-        }
+            source_ref=current_table_label or "Fixed-width LQT mutation table",
+            parser="fixed_width_lqt",
+            carriers_label="N",
+            affected_label="Syncope",
+            unaffected_label="N minus Syncope",
+            carriers_count_type="per_variant_carrier",
+            affected_count_type="case",
+            unaffected_count_type="per_variant_carrier",
+            row_label=stripped,
+        )
 
     def _normalize_lqts_compendium_protein(
         self, protein_raw: Optional[str]
@@ -1716,9 +2257,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         return self._valid_table_protein(compact)
 
-    def _extract_lqts_compendium_protein(
-        self, prefix: str, mutation_type: str
-    ) -> Optional[str]:
+    def _extract_lqts_compendium_protein(self, prefix: str) -> Optional[str]:
         patterns = [
             r"[ACDEFGHIKLMNPQRSTVWY]+\s+\d+-\d+\s+dup",
             r"\d+-\d+\s+del\s+[ACDEFGHIKLMNPQRSTVWY]+",
@@ -1769,32 +2308,46 @@ class ExpertExtractor(BaseLLMCaller):
             return None
         count, affected_count, unaffected_count, control_like = parsed_status
 
-        return {
-            "gene_symbol": gene_symbol,
-            "cdna_notation": None,
-            "protein_notation": protein,
-            "clinical_significance": "benign" if control_like else "pathogenic",
-            "patients": {
-                "count": count,
-                "phenotype": "unaffected control"
-                if control_like
-                else f"{gene_symbol}-associated disease",
+        count_label = "Number Ethnicity"
+        unaffected_label = count_label if control_like else None
+        affected_label = None if control_like else count_label
+        return self._attach_table_count_provenance(
+            {
+                "gene_symbol": gene_symbol,
+                "cdna_notation": None,
+                "protein_notation": protein,
+                "clinical_significance": "benign" if control_like else "pathogenic",
+                "patients": {
+                    "count": count,
+                    "phenotype": "unaffected control"
+                    if control_like
+                    else f"{gene_symbol}-associated disease",
+                },
+                "penetrance_data": {
+                    "total_carriers_observed": count,
+                    "affected_count": affected_count,
+                    "unaffected_count": unaffected_count,
+                },
+                "individual_records": [],
+                "functional_data": {"summary": "", "assays": []},
+                "segregation_data": None,
+                "population_frequency": None,
+                "evidence_level": "medium",
+                "source_location": source_location
+                or "LQTS compendium summary of all mutations",
+                "additional_notes": "Parsed via deterministic LQTS compendium table parser",
+                "key_quotes": [],
             },
-            "penetrance_data": {
-                "total_carriers_observed": count,
-                "affected_count": affected_count,
-                "unaffected_count": unaffected_count,
-            },
-            "individual_records": [],
-            "functional_data": {"summary": "", "assays": []},
-            "segregation_data": None,
-            "population_frequency": None,
-            "evidence_level": "medium",
-            "source_location": source_location
-            or "LQTS compendium summary of all mutations",
-            "additional_notes": "Parsed via deterministic LQTS compendium table parser",
-            "key_quotes": [],
-        }
+            source_ref=source_location or "LQTS compendium summary of all mutations",
+            parser="lqts_compendium",
+            carriers_label=count_label,
+            affected_label=affected_label,
+            unaffected_label=unaffected_label,
+            carriers_count_type="per_variant_carrier",
+            affected_count_type="case" if affected_label else None,
+            unaffected_count_type="unaffected_control" if unaffected_label else None,
+            row_label=f"{protein_raw or protein} | {count_ethnicity} | {status}",
+        )
 
     def _parse_lqts_compendium_variant_row(
         self,
@@ -1851,9 +2404,7 @@ class ExpertExtractor(BaseLLMCaller):
         )
         if not type_match:
             return None
-        protein_raw = self._extract_lqts_compendium_protein(
-            left[: type_match.start()], type_match.group("mutation_type")
-        )
+        protein_raw = self._extract_lqts_compendium_protein(left[: type_match.start()])
         return self._lqts_compendium_variant(
             gene_symbol=gene_symbol,
             protein_raw=protein_raw,
@@ -2484,6 +3035,101 @@ class ExpertExtractor(BaseLLMCaller):
             block.append("| " + " | ".join(clean(cell) for cell in row) + " |")
         return "\n".join(block)
 
+    @staticmethod
+    def _join_wrapped_markdown_table_lines(lines: list[str]) -> list[str]:
+        """Join DOC/PDF-converted markdown table rows split across physical lines.
+
+        Word-to-markdown conversion often wraps a header or long nucleotide cell:
+
+            | Region | Nucleotide | Variant | Mutation
+                            Type | Location | No. of patients |
+
+        The parser expects one logical table row per line. Join only continuations
+        after a pipe-starting row and only when the continuation still contains a
+        pipe, which keeps ordinary prose outside tables untouched.
+        """
+        joined: list[str] = []
+        idx = 0
+        while idx < len(lines):
+            line = lines[idx]
+            if not line.lstrip().startswith("|"):
+                joined.append(line)
+                idx += 1
+                continue
+
+            current = line.rstrip()
+            idx += 1
+            while idx < len(lines):
+                nxt = lines[idx]
+                stripped = nxt.strip()
+                if not stripped:
+                    break
+                if nxt.lstrip().startswith("|"):
+                    break
+                if "|" not in nxt:
+                    break
+                current = f"{current} {stripped}"
+                idx += 1
+            joined.append(current)
+        return joined
+
+    @classmethod
+    def _markdown_table_caption_queue(cls, lines: list[str]) -> list[str]:
+        """Return table captions in document order for unlabeled table blocks.
+
+        Some folded supplements emit all captions first, then a sequence of bare
+        markdown tables. Capturing captions in order lets the parser scope table
+        block 1 to caption 1, block 2 to caption 2, and so on.
+        """
+
+        def clean_caption(value: str) -> str:
+            return value.lstrip("#").strip().replace("*", "").strip()
+
+        def is_caption_start(value: str, next_value: str = "") -> bool:
+            cleaned = clean_caption(value)
+            if not cleaned or cleaned.startswith("|") or len(cleaned) > 220:
+                return False
+            if re.match(
+                r"^(?:eTable|(?:Supplementary|Supplemental|Online)\s+Table|Table)\b"
+                r"\s*[\w\d]+(?:[\.:]|\s|$)",
+                cleaned,
+                re.IGNORECASE,
+            ):
+                return True
+            if cleaned.lower() == "table":
+                nxt = clean_caption(next_value)
+                return bool(re.match(r"^\d+[\.:]?\s+", nxt))
+            return False
+
+        captions: list[str] = []
+        idx = 0
+        while idx < len(lines):
+            line = lines[idx]
+            next_line = lines[idx + 1] if idx + 1 < len(lines) else ""
+            if not is_caption_start(line, next_line):
+                idx += 1
+                continue
+
+            parts = [clean_caption(line)]
+            idx += 1
+            while idx < len(lines):
+                current = lines[idx]
+                stripped = current.strip()
+                following = lines[idx + 1] if idx + 1 < len(lines) else ""
+                if not stripped or stripped.startswith("|"):
+                    break
+                if is_caption_start(current, following):
+                    break
+                cleaned = clean_caption(current)
+                if cleaned:
+                    parts.append(cleaned)
+                idx += 1
+
+            caption = re.sub(r"\s+", " ", " ".join(parts)).strip()
+            if caption:
+                captions.append(caption)
+        return captions
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -2501,7 +3147,9 @@ class ExpertExtractor(BaseLLMCaller):
         if not gene_symbol:
             return []
 
-        lines = full_text.splitlines()
+        lines = self._join_wrapped_markdown_table_lines(full_text.splitlines())
+        table_caption_queue = self._markdown_table_caption_queue(lines)
+        table_block_index = 0
         table_started = False
         variants = []
         header_idx = {}
@@ -2512,6 +3160,43 @@ class ExpertExtractor(BaseLLMCaller):
         row_level_clinical_table = False
         current_table_label = ""
         active_table_label = ""
+        normalized_active_headers = []
+
+        from pipeline.table_router import (
+            _is_non_variant_count_header,
+            _normalize_header,
+        )
+
+        def count_type_for_header(label: Optional[str]) -> Optional[str]:
+            if not label:
+                return None
+            normalized = _normalize_header(label)
+            if not normalized:
+                return None
+            if "family" in normalized or "kindred" in normalized:
+                return "family_count"
+            if "proband" in normalized:
+                return "proband_count"
+            if "control" in normalized:
+                return "unaffected_control"
+            if normalized in {"case", "cases"}:
+                return "case"
+            if any(
+                token in normalized
+                for token in (
+                    "totalcase",
+                    "totalcontrol",
+                    "totalsample",
+                    "samplesize",
+                    "cohortsize",
+                )
+            ):
+                return "cohort_total"
+            if any(
+                token in normalized for token in ("screened", "ntested", "numbertested")
+            ):
+                return "screened_N"
+            return "per_variant_carrier"
 
         def update_table_label(text: str) -> None:
             nonlocal current_table_label
@@ -2558,8 +3243,17 @@ class ExpertExtractor(BaseLLMCaller):
                     row_level_clinical_table = (
                         self._looks_like_row_level_clinical_header(parts)
                     )
-                    active_table_label = current_table_label
+                    queued_table_label = (
+                        table_caption_queue[table_block_index]
+                        if table_block_index < len(table_caption_queue)
+                        else ""
+                    )
+                    table_block_index += 1
+                    active_table_label = queued_table_label or current_table_label
                     active_headers = parts
+                    normalized_active_headers = [
+                        _normalize_header(header) for header in active_headers
+                    ]
                     table_row_ordinal = 0
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
@@ -2600,6 +3294,7 @@ class ExpertExtractor(BaseLLMCaller):
                 header_idx = {}
                 header_multi = {"count": [], "affected": [], "unaffected": []}
                 active_headers = []
+                normalized_active_headers = []
                 table_row_ordinal = 0
                 row_level_clinical_table = False
                 active_table_label = ""
@@ -2614,32 +3309,57 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
             table_row_ordinal += 1
 
-            def get_col(key: str) -> Optional[str]:
-                idx = header_mapping.get(key)
-                if idx is None or idx >= len(cells):
-                    # Fallback to direct header lookup
-                    idx = header_idx.get(key)
+            def usable_indices(key: str) -> List[int]:
+                raw_indices = list(header_multi.get(key, []))
+                mapped_idx = header_mapping.get(key)
+                if mapped_idx is not None and mapped_idx not in raw_indices:
+                    raw_indices.append(mapped_idx)
+                if not raw_indices:
+                    direct_idx = header_idx.get(key)
+                    if direct_idx is not None:
+                        raw_indices.append(direct_idx)
+
+                indices: List[int] = []
+                for idx in raw_indices:
                     if idx is None or idx >= len(cells):
-                        return None
+                        continue
+                    if (
+                        key in {"count", "affected", "unaffected"}
+                        and idx < len(normalized_active_headers)
+                        and _is_non_variant_count_header(
+                            normalized_active_headers[idx], normalized_active_headers
+                        )
+                    ):
+                        continue
+                    indices.append(idx)
+                return indices
+
+            def get_col(key: str) -> Optional[str]:
+                indices = usable_indices(key)
+                if not indices:
+                    return None
+                idx = indices[0]
                 return cells[idx] or None
 
             def get_cols(key: str) -> List[str]:
                 values = []
-                for idx in header_multi.get(key, []):
+                for idx in usable_indices(key):
                     if idx < len(cells) and cells[idx]:
                         values.append(cells[idx])
-                if not values:
-                    value = get_col(key)
-                    if value:
-                        values.append(value)
                 return values
 
+            def header_labels(key: str) -> List[str]:
+                labels = []
+                for idx in usable_indices(key):
+                    if idx < len(active_headers):
+                        label = active_headers[idx].strip()
+                        if label:
+                            labels.append(label)
+                return labels
+
             def header_label(key: str) -> Optional[str]:
-                idx = header_mapping.get(key)
-                if idx is None or idx >= len(active_headers):
-                    return None
-                label = active_headers[idx].strip()
-                return label or None
+                labels = header_labels(key)
+                return "; ".join(labels) if labels else None
 
             cdna = get_col("cdna")
             protein = get_col("protein")
@@ -2766,6 +3486,9 @@ class ExpertExtractor(BaseLLMCaller):
                     "line_number": line_number,
                 },
             }
+            carrier_label = header_label("count")
+            affected_label = header_label("affected") or carrier_label
+            unaffected_label = header_label("unaffected")
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": f"c.{cdna}"
@@ -2794,6 +3517,14 @@ class ExpertExtractor(BaseLLMCaller):
                 **observation_provenance,
                 "additional_notes": "Parsed via deterministic table parser",
                 "key_quotes": [],
+                "count_provenance": {
+                    "carriers_column_label": carrier_label,
+                    "carriers_count_type": count_type_for_header(carrier_label),
+                    "affected_column_label": affected_label,
+                    "affected_count_type": count_type_for_header(affected_label),
+                    "unaffected_column_label": unaffected_label,
+                    "unaffected_count_type": count_type_for_header(unaffected_label),
+                },
             }
             variants.append(variant)
 
@@ -2875,6 +3606,18 @@ class ExpertExtractor(BaseLLMCaller):
                 "additional_notes": "Parsed via deterministic vertical gene-table parser",
                 "key_quotes": [],
             }
+            source_ref = current_table_label or "Vertical gene table"
+            variant = self._attach_table_count_provenance(
+                variant,
+                source_ref=source_ref,
+                parser="vertical_gene_table",
+                carriers_label="implicit one carrier per clinical row",
+                affected_label="implicit one affected carrier per clinical row",
+                unaffected_label=None,
+                carriers_count_type="per_variant_carrier",
+                affected_count_type="per_variant_carrier",
+                row_label=f"{target_gene} {cdna or ''} {protein or ''}".strip(),
+            )
             by_key[key] = variant
             variants.append(variant)
 
@@ -3081,30 +3824,41 @@ class ExpertExtractor(BaseLLMCaller):
                     continue
                 seen.add(key)
                 variants.append(
-                    {
-                        "gene_symbol": gene_symbol,
-                        "cdna_notation": None,
-                        "protein_notation": protein,
-                        "clinical_significance": "pathogenic",
-                        "patients": {
-                            "count": count,
-                            "phenotype": f"{gene_symbol}-associated disease",
+                    self._attach_table_count_provenance(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": None,
+                            "protein_notation": protein,
+                            "clinical_significance": "pathogenic",
+                            "patients": {
+                                "count": count,
+                                "phenotype": f"{gene_symbol}-associated disease",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": count,
+                                "affected_count": count,
+                                "unaffected_count": 0,
+                            },
+                            "individual_records": [],
+                            "functional_data": {"summary": "", "assays": []},
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "medium",
+                            "source_location": current_table_label
+                            or "Supplemental coding-effect count table",
+                            "additional_notes": "Parsed via deterministic fixed-width coding-effect count table parser",
+                            "key_quotes": [],
                         },
-                        "penetrance_data": {
-                            "total_carriers_observed": count,
-                            "affected_count": count,
-                            "unaffected_count": 0,
-                        },
-                        "individual_records": [],
-                        "functional_data": {"summary": "", "assays": []},
-                        "segregation_data": None,
-                        "population_frequency": None,
-                        "evidence_level": "medium",
-                        "source_location": current_table_label
+                        source_ref=current_table_label
                         or "Supplemental coding-effect count table",
-                        "additional_notes": "Parsed via deterministic fixed-width coding-effect count table parser",
-                        "key_quotes": [],
-                    }
+                        parser="fixed_width_coding_effect_count",
+                        carriers_label="COUNT",
+                        affected_label="COUNT",
+                        unaffected_label=None,
+                        carriers_count_type="per_variant_carrier",
+                        affected_count_type="per_variant_carrier",
+                        row_label=stripped,
+                    )
                 )
                 continue
 
@@ -3144,30 +3898,45 @@ class ExpertExtractor(BaseLLMCaller):
                         continue
                     seen.add(key)
                     variants.append(
-                        {
-                            "gene_symbol": gene_symbol,
-                            "cdna_notation": cdna,
-                            "protein_notation": protein,
-                            "clinical_significance": "pathogenic",
-                            "patients": {
-                                "count": count,
-                                "phenotype": f"{gene_symbol}-associated disease",
+                        self._attach_table_count_provenance(
+                            {
+                                "gene_symbol": gene_symbol,
+                                "cdna_notation": cdna,
+                                "protein_notation": protein,
+                                "clinical_significance": "pathogenic",
+                                "patients": {
+                                    "count": count,
+                                    "phenotype": f"{gene_symbol}-associated disease",
+                                },
+                                "penetrance_data": {
+                                    "total_carriers_observed": count,
+                                    "affected_count": count,
+                                    "unaffected_count": 0,
+                                },
+                                "individual_records": [],
+                                "functional_data": {"summary": "", "assays": []},
+                                "segregation_data": None,
+                                "population_frequency": None,
+                                "evidence_level": "medium",
+                                "source_location": current_table_label
+                                or "Fixed-width clinical mutation table",
+                                "additional_notes": "Parsed via deterministic fixed-width clinical mutation table parser",
+                                "key_quotes": [],
                             },
-                            "penetrance_data": {
-                                "total_carriers_observed": count,
-                                "affected_count": count,
-                                "unaffected_count": 0,
-                            },
-                            "individual_records": [],
-                            "functional_data": {"summary": "", "assays": []},
-                            "segregation_data": None,
-                            "population_frequency": None,
-                            "evidence_level": "medium",
-                            "source_location": current_table_label
+                            source_ref=current_table_label
                             or "Fixed-width clinical mutation table",
-                            "additional_notes": "Parsed via deterministic fixed-width clinical mutation table parser",
-                            "key_quotes": [],
-                        }
+                            parser="fixed_width_clinical_mutation",
+                            carriers_label="Coding Effect"
+                            if count == 1 and match.group("count") is None
+                            else "Coding Effect count",
+                            affected_label="Coding Effect"
+                            if count == 1 and match.group("count") is None
+                            else "Coding Effect count",
+                            unaffected_label=None,
+                            carriers_count_type="per_variant_carrier",
+                            affected_count_type="per_variant_carrier",
+                            row_label=stripped,
+                        )
                     )
                     continue
 
@@ -3193,32 +3962,44 @@ class ExpertExtractor(BaseLLMCaller):
                         continue
                     seen.add(key)
                     variants.append(
-                        {
-                            "gene_symbol": gene_symbol,
-                            "cdna_notation": cdna,
-                            "protein_notation": protein,
-                            "clinical_significance": "pathogenic"
-                            if affected_count
-                            else "benign",
-                            "patients": {
-                                "count": patient_count,
-                                "phenotype": f"{gene_symbol} nsSNV carrier",
+                        self._attach_table_count_provenance(
+                            {
+                                "gene_symbol": gene_symbol,
+                                "cdna_notation": cdna,
+                                "protein_notation": protein,
+                                "clinical_significance": "pathogenic"
+                                if affected_count
+                                else "benign",
+                                "patients": {
+                                    "count": patient_count,
+                                    "phenotype": f"{gene_symbol} nsSNV carrier",
+                                },
+                                "penetrance_data": {
+                                    "total_carriers_observed": patient_count,
+                                    "affected_count": affected_count,
+                                    "unaffected_count": unaffected_count,
+                                },
+                                "individual_records": [],
+                                "functional_data": {"summary": "", "assays": []},
+                                "segregation_data": None,
+                                "population_frequency": None,
+                                "evidence_level": "medium",
+                                "source_location": current_table_label
+                                or f"Supplemental {gene_symbol} nsSNV table",
+                                "additional_notes": f"Parsed via deterministic fixed-width nsSNV table parser; status={status}",
+                                "key_quotes": [],
                             },
-                            "penetrance_data": {
-                                "total_carriers_observed": patient_count,
-                                "affected_count": affected_count,
-                                "unaffected_count": unaffected_count,
-                            },
-                            "individual_records": [],
-                            "functional_data": {"summary": "", "assays": []},
-                            "segregation_data": None,
-                            "population_frequency": None,
-                            "evidence_level": "medium",
-                            "source_location": current_table_label
+                            source_ref=current_table_label
                             or f"Supplemental {gene_symbol} nsSNV table",
-                            "additional_notes": f"Parsed via deterministic fixed-width nsSNV table parser; status={status}",
-                            "key_quotes": [],
-                        }
+                            parser="fixed_width_nssnv",
+                            carriers_label="BrS + LQT + Control",
+                            affected_label="BrS; LQT",
+                            unaffected_label="Control",
+                            carriers_count_type="per_variant_carrier",
+                            affected_count_type="case",
+                            unaffected_count_type="unaffected_control",
+                            row_label=stripped,
+                        )
                     )
                     continue
 
@@ -3289,29 +4070,39 @@ class ExpertExtractor(BaseLLMCaller):
                     continue
                 seen.add(key)
                 variants.append(
-                    {
-                        "gene_symbol": gene_symbol,
-                        "cdna_notation": None,
-                        "protein_notation": protein,
-                        "clinical_significance": "pathogenic",
-                        "patients": {
-                            "count": 1,
-                            "phenotype": f"{gene_symbol}-associated disease",
+                    self._attach_table_count_provenance(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": None,
+                            "protein_notation": protein,
+                            "clinical_significance": "pathogenic",
+                            "patients": {
+                                "count": 1,
+                                "phenotype": f"{gene_symbol}-associated disease",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": 1,
+                                "affected_count": 1,
+                                "unaffected_count": 0,
+                            },
+                            "individual_records": [],
+                            "functional_data": {"summary": "", "assays": []},
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "medium",
+                            "source_location": current_table_label,
+                            "additional_notes": "Parsed via deterministic fixed-width patient table parser",
+                            "key_quotes": [],
                         },
-                        "penetrance_data": {
-                            "total_carriers_observed": 1,
-                            "affected_count": 1,
-                            "unaffected_count": 0,
-                        },
-                        "individual_records": [],
-                        "functional_data": {"summary": "", "assays": []},
-                        "segregation_data": None,
-                        "population_frequency": None,
-                        "evidence_level": "medium",
-                        "source_location": current_table_label,
-                        "additional_notes": "Parsed via deterministic fixed-width patient table parser",
-                        "key_quotes": [],
-                    }
+                        source_ref=current_table_label,
+                        parser="fixed_width_patient_table",
+                        carriers_label="implicit one carrier per clinical row",
+                        affected_label="implicit one affected carrier per clinical row",
+                        unaffected_label=None,
+                        carriers_count_type="per_variant_carrier",
+                        affected_count_type="per_variant_carrier",
+                        row_label=stripped,
+                    )
                 )
                 continue
 
@@ -3336,29 +4127,39 @@ class ExpertExtractor(BaseLLMCaller):
                     continue
                 seen.add(key)
                 variants.append(
-                    {
-                        "gene_symbol": gene_symbol,
-                        "cdna_notation": cdna,
-                        "protein_notation": protein,
-                        "clinical_significance": "unknown",
-                        "patients": {
-                            "count": 1,
-                            "phenotype": f"{gene_symbol} variant carrier",
+                    self._attach_table_count_provenance(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": cdna,
+                            "protein_notation": protein,
+                            "clinical_significance": "unknown",
+                            "patients": {
+                                "count": 1,
+                                "phenotype": f"{gene_symbol} variant carrier",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": 1,
+                                "affected_count": 1,
+                                "unaffected_count": 0,
+                            },
+                            "individual_records": [],
+                            "functional_data": {"summary": "", "assays": []},
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "medium",
+                            "source_location": "Supplemental Table 1",
+                            "additional_notes": "Parsed via deterministic fixed-width WES table parser",
+                            "key_quotes": [],
                         },
-                        "penetrance_data": {
-                            "total_carriers_observed": 1,
-                            "affected_count": 1,
-                            "unaffected_count": 0,
-                        },
-                        "individual_records": [],
-                        "functional_data": {"summary": "", "assays": []},
-                        "segregation_data": None,
-                        "population_frequency": None,
-                        "evidence_level": "medium",
-                        "source_location": "Supplemental Table 1",
-                        "additional_notes": "Parsed via deterministic fixed-width WES table parser",
-                        "key_quotes": [],
-                    }
+                        source_ref=current_table_label or "Supplemental Table 1",
+                        parser="fixed_width_wes",
+                        carriers_label="implicit one carrier per clinical row",
+                        affected_label="implicit one affected carrier per clinical row",
+                        unaffected_label=None,
+                        carriers_count_type="per_variant_carrier",
+                        affected_count_type="per_variant_carrier",
+                        row_label=stripped,
+                    )
                 )
                 continue
 
@@ -3399,29 +4200,39 @@ class ExpertExtractor(BaseLLMCaller):
             seen.add(key)
 
             variants.append(
-                {
-                    "gene_symbol": gene_symbol,
-                    "cdna_notation": cdna,
-                    "protein_notation": protein,
-                    "clinical_significance": "pathogenic",
-                    "patients": {
-                        "count": count,
-                        "phenotype": f"{gene_symbol}-associated disease",
+                self._attach_table_count_provenance(
+                    {
+                        "gene_symbol": gene_symbol,
+                        "cdna_notation": cdna,
+                        "protein_notation": protein,
+                        "clinical_significance": "pathogenic",
+                        "patients": {
+                            "count": count,
+                            "phenotype": f"{gene_symbol}-associated disease",
+                        },
+                        "penetrance_data": {
+                            "total_carriers_observed": count,
+                            "affected_count": count,
+                            "unaffected_count": 0,
+                        },
+                        "individual_records": [],
+                        "functional_data": {"summary": "", "assays": []},
+                        "segregation_data": None,
+                        "population_frequency": None,
+                        "evidence_level": "medium",
+                        "source_location": "Fixed-width table",
+                        "additional_notes": "Parsed via deterministic fixed-width table parser",
+                        "key_quotes": [],
                     },
-                    "penetrance_data": {
-                        "total_carriers_observed": count,
-                        "affected_count": count,
-                        "unaffected_count": 0,
-                    },
-                    "individual_records": [],
-                    "functional_data": {"summary": "", "assays": []},
-                    "segregation_data": None,
-                    "population_frequency": None,
-                    "evidence_level": "medium",
-                    "source_location": "Fixed-width table",
-                    "additional_notes": "Parsed via deterministic fixed-width table parser",
-                    "key_quotes": [],
-                }
+                    source_ref=current_table_label or "Fixed-width table",
+                    parser="fixed_width_table",
+                    carriers_label="n",
+                    affected_label="n",
+                    unaffected_label=None,
+                    carriers_count_type="per_variant_carrier",
+                    affected_count_type="per_variant_carrier",
+                    row_label=stripped,
+                )
             )
 
         for variant in self._parse_lqts_compendium_vertical_variants(
@@ -3859,6 +4670,171 @@ class ExpertExtractor(BaseLLMCaller):
         uncertain = self._coerce_count(pdata.get("uncertain_count"))
         return total, affected, unaffected, uncertain
 
+    @staticmethod
+    def _count_provenance_type(variant: dict, field: str) -> str | None:
+        provenance = variant.get("count_provenance")
+        if not isinstance(provenance, dict):
+            return None
+        key_map = {
+            "total_carriers": "carriers_count_type",
+            "affected": "affected_count_type",
+            "unaffected": "unaffected_count_type",
+        }
+        value = provenance.get(key_map.get(field, ""))
+        if value is None:
+            return None
+        normalized = str(value).strip().lower()
+        return normalized or None
+
+    @classmethod
+    def _has_non_per_variant_count_provenance(cls, variant: dict) -> bool:
+        total, affected, unaffected, _uncertain = cls._count_tuple_static(variant)
+        for field, value in (
+            ("total_carriers", total),
+            ("affected", affected),
+            ("unaffected", unaffected),
+        ):
+            if value is None:
+                continue
+            declared = cls._count_provenance_type(variant, field)
+            if declared and declared != "per_variant_carrier":
+                return True
+        return False
+
+    @staticmethod
+    def _count_tuple_static(
+        variant: dict,
+    ) -> tuple[int | None, int | None, int | None, int | None]:
+        patients = variant.get("patients") or {}
+        pdata = variant.get("penetrance_data") or {}
+        total = ExpertExtractor._coerce_count(
+            pdata.get("total_carriers_observed", patients.get("count"))
+        )
+        affected = ExpertExtractor._coerce_count(pdata.get("affected_count"))
+        unaffected = ExpertExtractor._coerce_count(pdata.get("unaffected_count"))
+        uncertain = ExpertExtractor._coerce_count(pdata.get("uncertain_count"))
+        return total, affected, unaffected, uncertain
+
+    def _claim_verification_candidate_score(
+        self,
+        variant: dict,
+        *,
+        repeated_count_tuples: set[tuple[int, int | None, int | None]],
+    ) -> tuple[int, list[str]]:
+        """Rank no-gold claim-verification candidates by count-risk signals."""
+        total, affected, unaffected, uncertain = self._count_tuple(variant)
+        counts = [value for value in (total, affected, unaffected, uncertain)]
+        non_null_counts = [value for value in counts if value is not None]
+        if not non_null_counts:
+            return 0, []
+
+        score = 0
+        reasons: list[str] = []
+        source_layer = self._infer_source_layer(variant)
+
+        score += 2
+        reasons.append("count_bearing")
+
+        if source_layer in {"regex_table", "regex_text"}:
+            score += 7
+            reasons.append(f"source_layer:{source_layer}")
+        elif source_layer == "figure":
+            score += 5
+            reasons.append("source_layer:figure")
+        elif source_layer == "mixed":
+            score += 4
+            reasons.append("source_layer:mixed")
+        elif source_layer == "llm_table":
+            score += 2
+            reasons.append("source_layer:llm_table")
+
+        largest = max(non_null_counts)
+        if largest >= 100:
+            score += 4
+            reasons.append("very_large_count")
+        elif largest >= 50:
+            score += 3
+            reasons.append("large_count")
+        elif largest >= 10:
+            score += 1
+            reasons.append("moderate_count")
+
+        if (
+            total is not None
+            and affected is not None
+            and unaffected is not None
+            and affected + unaffected + (uncertain or 0) != total
+        ):
+            score += 6
+            reasons.append("count_arithmetic_mismatch")
+
+        if total is not None and (total, affected, unaffected) in repeated_count_tuples:
+            score += 5
+            reasons.append("repeated_large_count_tuple")
+
+        provenance = variant.get("count_provenance")
+        if not isinstance(provenance, dict):
+            score += 2
+            reasons.append("missing_count_provenance")
+        elif self._has_non_per_variant_count_provenance(variant):
+            score += 6
+            reasons.append("non_per_variant_count_provenance")
+        else:
+            for field, value in (
+                ("total_carriers", total),
+                ("affected", affected),
+                ("unaffected", unaffected),
+            ):
+                if value is None:
+                    continue
+                declared = self._count_provenance_type(variant, field)
+                if declared is None:
+                    score += 1
+                    reasons.append(f"unknown_{field}_provenance")
+
+        text = " ".join(
+            str(variant.get(key) or "")
+            for key in ("source_location", "additional_notes", "extraction_source")
+        ).lower()
+        if "auto-detected" in text or "pattern scanning" in text:
+            score += 3
+            reasons.append("scanner_detected")
+        if "regex" in text:
+            score += 2
+            reasons.append("regex_extraction")
+
+        return score, reasons
+
+    def _rank_claim_verification_candidates(
+        self, variants: list[dict]
+    ) -> list[tuple[int, int, list[str]]]:
+        repeated_groups: dict[tuple[int, int | None, int | None], int] = {}
+        for variant in variants:
+            if not isinstance(variant, dict):
+                continue
+            total, affected, unaffected, _uncertain = self._count_tuple(variant)
+            if total is not None and total >= 10:
+                key = (total, affected, unaffected)
+                repeated_groups[key] = repeated_groups.get(key, 0) + 1
+        repeated_count_tuples = {
+            count_tuple
+            for count_tuple, count in repeated_groups.items()
+            if count >= 3 and count_tuple[0] >= count * 2
+        }
+
+        ranked: list[tuple[int, int, list[str]]] = []
+        for idx, variant in enumerate(variants):
+            if not isinstance(variant, dict):
+                continue
+            score, reasons = self._claim_verification_candidate_score(
+                variant,
+                repeated_count_tuples=repeated_count_tuples,
+            )
+            if score <= 0:
+                continue
+            ranked.append((idx, score, reasons))
+        return sorted(ranked, key=lambda item: (-item[1], item[0]))
+
     def _assess_extraction_risk(
         self,
         *,
@@ -3866,6 +4842,7 @@ class ExpertExtractor(BaseLLMCaller):
         source_text: str,
         estimated_variants: int | None = None,
         scanner_variant_count: int = 0,
+        paper_census: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
         """Score whether an extraction should get second-model adjudication."""
         variants = extracted_data.get("variants") or []
@@ -3894,15 +4871,63 @@ class ExpertExtractor(BaseLLMCaller):
                 f"low_variant_yield_vs_scanner:{len(variants)}/{scanner_variant_count}"
             )
 
+        if paper_census:
+            census_rows = paper_census.get("estimated_variant_rows") or {}
+            census_point = self._coerce_count(census_rows.get("point"))
+            census_low = self._coerce_count(census_rows.get("low"))
+            if (
+                census_point
+                and census_point >= 5
+                and len(variants) < max(2, census_point // 3)
+            ):
+                score += 2
+                reasons.append(
+                    f"low_variant_yield_vs_census:{len(variants)}/{census_point}"
+                )
+            elif census_low and len(variants) < census_low:
+                score += 1
+                reasons.append(
+                    f"below_census_low_variant_rows:{len(variants)}/{census_low}"
+                )
+            census_flags = set(paper_census.get("risk_flags") or [])
+            if "source_mentions_tables_but_no_table_bodies" in census_flags:
+                source_blockers.append("source_mentions_tables_but_no_table_bodies")
+            denominator_flags = [
+                flag
+                for flag in census_flags
+                if flag.startswith("possible_denominator_column")
+                or flag.startswith("case_column")
+                or flag.startswith("control_column")
+            ]
+            if denominator_flags and variants:
+                score += 1
+                reasons.append("paper_census_denominator_columns")
+
         repeated_groups: dict[tuple[int, int | None, int | None], int] = {}
         arithmetic_mismatches = 0
         variants_with_counts = 0
+        high_risk_count_rows = 0
+        non_per_variant_count_rows = 0
+        unknown_large_count_rows = 0
         for variant in variants:
             total, affected, unaffected, uncertain = self._count_tuple(variant)
             if any(
                 value is not None for value in (total, affected, unaffected, uncertain)
             ):
                 variants_with_counts += 1
+                source_layer = self._infer_source_layer(variant)
+                if source_layer in {"regex_table", "regex_text", "figure", "mixed"}:
+                    high_risk_count_rows += 1
+                if self._has_non_per_variant_count_provenance(variant):
+                    non_per_variant_count_rows += 1
+                provenance = variant.get("count_provenance")
+                largest = max(
+                    value
+                    for value in (total, affected, unaffected, uncertain)
+                    if value is not None
+                )
+                if largest >= 50 and not isinstance(provenance, dict):
+                    unknown_large_count_rows += 1
             if (
                 total is not None
                 and affected is not None
@@ -3937,6 +4962,42 @@ class ExpertExtractor(BaseLLMCaller):
             score += 2
             reasons.append(f"count_arithmetic_mismatch:{arithmetic_mismatches}")
 
+        if high_risk_count_rows:
+            score += 2 if high_risk_count_rows >= 3 else 1
+            reasons.append(
+                f"count_bearing_high_risk_source_layer:{high_risk_count_rows}"
+            )
+
+        if non_per_variant_count_rows:
+            score += 2
+            reasons.append(
+                f"non_per_variant_count_provenance:{non_per_variant_count_rows}"
+            )
+
+        if unknown_large_count_rows:
+            score += 2
+            reasons.append(f"unknown_large_count_provenance:{unknown_large_count_rows}")
+
+        if paper_census:
+            extracted_carrier_sum = 0
+            for variant in variants:
+                total, _affected, _unaffected, _uncertain = self._count_tuple(variant)
+                if total is not None:
+                    extracted_carrier_sum += total
+            carrier_high = self._coerce_count(
+                (paper_census.get("estimated_carriers") or {}).get("high")
+            )
+            if (
+                carrier_high
+                and carrier_high > 0
+                and extracted_carrier_sum > max(carrier_high * 3, carrier_high + 20)
+                and len(variants) >= 3
+            ):
+                score += 2
+                reasons.append(
+                    f"extracted_carrier_sum_above_census:{extracted_carrier_sum}/{carrier_high}"
+                )
+
         meta = extracted_data.get("extraction_metadata") or {}
         if meta.get("study_wide_count_suppressed"):
             score += 2
@@ -3953,9 +5014,10 @@ class ExpertExtractor(BaseLLMCaller):
         return {
             "score": score,
             "reasons": reasons,
-            "source_blockers": source_blockers,
+            "source_blockers": sorted(set(source_blockers)),
             "estimated_variants": estimated_variants,
             "scanner_variant_count": scanner_variant_count,
+            "paper_census": paper_census,
             "variant_count": len(variants),
             "requires_adjudication": score >= self.adjudication_risk_threshold,
         }
@@ -4177,15 +5239,17 @@ Return strict JSON with this schema:
             max_tokens=min(self.adjudication_max_tokens, 2500),
             reasoning_effort=self.reasoning_effort,
         )
-        updated_variants: list[dict] = []
+        updated_variants: list[dict] = list(variants)
         verification_results: list[dict[str, Any]] = []
         field_changes: list[dict[str, Any]] = []
         verified_count = 0
+        candidate_order = self._rank_claim_verification_candidates(variants)
+        selected_candidates: list[dict[str, Any]] = []
 
-        for idx, variant in enumerate(variants):
+        for idx, score, reasons in candidate_order:
             if verified_count >= self.max_verifier_cards:
-                updated_variants.append(variant)
-                continue
+                break
+            variant = variants[idx]
             card = build_claim_card(
                 source_text=source_text,
                 gene=paper.gene_symbol or variant.get("gene_symbol") or "UNKNOWN",
@@ -4213,17 +5277,36 @@ Return strict JSON with this schema:
                     "reason": "No compact evidence lines found for this claim.",
                     "evidence_quote": "",
                 }
-                updated_variants.append(updated)
+                updated_variants[idx] = updated
+                selected_candidates.append(
+                    {
+                        "variant_index": idx,
+                        "score": score,
+                        "reasons": reasons,
+                        "verdict": "source_missing",
+                    }
+                )
                 continue
 
             verification = verifier.verify(card)
             updated, changes = apply_verification_to_variant(variant, verification)
-            updated_variants.append(updated)
+            updated_variants[idx] = updated
             verified_count += 1
+            selected_candidates.append(
+                {
+                    "variant_index": idx,
+                    "variant": card.variant,
+                    "score": score,
+                    "reasons": reasons,
+                    "verdict": verification.get("verdict"),
+                }
+            )
             verification_results.append(
                 {
                     "variant_index": idx,
                     "variant": card.variant,
+                    "candidate_score": score,
+                    "candidate_reasons": reasons,
                     "extracted": card.extracted,
                     "verification": verification,
                 }
@@ -4244,6 +5327,11 @@ Return strict JSON with this schema:
         metadata["claim_verification_model"] = verifier_model
         metadata["claim_verification_primary_model"] = primary_model
         metadata["claim_verification_cards"] = verified_count
+        metadata["claim_verification_candidate_policy"] = "risk_ranked"
+        metadata["claim_verification_candidates_considered"] = len(candidate_order)
+        metadata["claim_verification_selected_candidates"] = selected_candidates[
+            : self.max_verifier_cards
+        ]
         metadata["claim_verification_field_changes"] = field_changes
         metadata["claim_verification_results"] = verification_results[
             : self.max_verifier_cards
@@ -4259,12 +5347,14 @@ Return strict JSON with this schema:
         source_text: str,
         estimated_variants: int | None,
         scanner_variant_count: int,
+        paper_census: Optional[dict[str, Any]] = None,
     ) -> dict:
         risk = self._assess_extraction_risk(
             extracted_data=extracted_data,
             source_text=source_text,
             estimated_variants=estimated_variants,
             scanner_variant_count=scanner_variant_count,
+            paper_census=paper_census,
         )
         metadata = extracted_data.setdefault("extraction_metadata", {})
         metadata["extraction_risk"] = risk
@@ -4621,6 +5711,11 @@ Return strict JSON with this schema:
         # Use scanner_text (original full text) for table row estimation
         if estimated_variants is None:
             estimated_variants = self._estimate_table_rows(scanner_text)
+        paper_census = self._estimate_paper_census(
+            scanner_text,
+            paper.gene_symbol,
+            table_row_hint=estimated_variants,
+        )
 
         # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
         deterministic_min_variants = (
@@ -4648,6 +5743,7 @@ Return strict JSON with this schema:
                         "extraction_confidence": "medium",
                         "compact_mode": True,
                         "notes": "Bypassed LLM using markdown table parser for large table",
+                        "paper_census": paper_census,
                     },
                 }
                 return ExtractionResult(
@@ -4723,6 +5819,7 @@ Return strict JSON with this schema:
                         "fixed_width": len(fixed_width_variants),
                         "vertical": len(vertical_variants),
                     },
+                    "paper_census": paper_census,
                 },
             }
             parser_model = (
@@ -4748,6 +5845,9 @@ Return strict JSON with this schema:
             if router_outcome is not None:
                 routed_data = router_outcome.extracted_data or {}
                 router_variants = routed_data.get("variants", []) or []
+                routed_data.setdefault("extraction_metadata", {})["paper_census"] = (
+                    paper_census
+                )
                 if len(router_variants) >= deterministic_min_variants:
                     return router_outcome
                 logger.info(
@@ -4784,6 +5884,13 @@ Return strict JSON with this schema:
             source=f"PMID_{paper.pmid}",
         )
         scanner_variant_count = len(scanner_result.variants)
+        paper_census = self._estimate_paper_census(
+            scanner_text,
+            paper.gene_symbol,
+            table_row_hint=estimated_variants,
+            scanner_variant_count=scanner_variant_count,
+            table_hint_variant_count=len(table_hint_variants),
+        )
         scanner_merge_enabled = (
             scanner_variant_count <= SCANNER_REGEX_MERGE_MAX_VARIANTS
         )
@@ -4851,6 +5958,9 @@ Return strict JSON with this schema:
 
             # Normalize stop codon notation
             extracted_data = self._normalize_stop_codon_notation(extracted_data)
+            extracted_data.setdefault("extraction_metadata", {})["paper_census"] = (
+                paper_census
+            )
             # Populate penetrance data from patient counts
             extracted_data = self._populate_penetrance_from_patient_count(
                 extracted_data
@@ -4872,22 +5982,12 @@ Return strict JSON with this schema:
                     extracted_data
                 )
 
-            # Merge pre-extracted table variants to catch any the LLM missed
-            # (uses the already-extracted variants from before the LLM call)
-            table_variants_for_merge = table_hint_variants
-            if len(table_variants_for_merge) > TABLE_REGEX_MERGE_MAX_VARIANTS:
-                logger.warning(
-                    "PMID %s - Skipping merge of %d table regex/router variants; "
-                    "candidate count exceeds safety cap %d",
-                    paper.pmid,
-                    len(table_variants_for_merge),
-                    TABLE_REGEX_MERGE_MAX_VARIANTS,
-                )
-                table_variants_for_merge = []
-
-            if table_variants_for_merge:
-                extracted_data = self._merge_table_variants(
-                    extracted_data, table_variants_for_merge
+            # Merge pre-extracted table variants to catch any the LLM missed.
+            # Above the normal cap, keep a bounded deterministic overflow path
+            # instead of dropping the entire table safety-net.
+            if table_hint_variants:
+                extracted_data = self._merge_table_variants_with_overflow_qc(
+                    extracted_data, table_hint_variants, paper.pmid
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
@@ -4926,6 +6026,7 @@ Return strict JSON with this schema:
                 source_text=scanner_text,
                 estimated_variants=estimated_variants,
                 scanner_variant_count=effective_scanner_variant_count,
+                paper_census=paper_census,
             )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(
@@ -5063,23 +6164,3 @@ Return strict JSON with this schema:
     def extract_batch(self, papers: List[Paper]) -> List[ExtractionResult]:
         """Extract data from multiple papers."""
         return [self.extract(paper) for paper in papers]
-
-
-def extract_variants_from_paper(
-    paper: Paper,
-    models: Optional[List[str]] = None,
-    fulltext_dir: Optional[str] = None,
-) -> ExtractionResult:
-    """
-    Convenience function to extract variants from a single paper.
-
-    Args:
-        paper: Paper object with text to extract from
-        models: Optional list of model identifiers to use
-        fulltext_dir: Optional directory where DATA_ZONES.md files are stored
-
-    Returns:
-        ExtractionResult with extracted variant data
-    """
-    extractor = ExpertExtractor(models=models, fulltext_dir=fulltext_dir)
-    return extractor.extract(paper)

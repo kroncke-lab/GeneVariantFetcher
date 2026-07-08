@@ -1,7 +1,7 @@
 # Variant_Browser Review Integration
 
 GeneVariantFetcher round-trips with the sibling **Variant_Browser** curation app
-(Azure SQL `vb-curation` on `sandboxtest.database.windows.net`). The two halves:
+(Azure SQL `vb-curation` on `variantbrowser-prod-sql.database.windows.net`). The two halves:
 
 1. **Publish** — push a finished GVF run into the review database so collaborators
    can adjudicate it.
@@ -73,6 +73,33 @@ GVF needs **no** Azure credentials for this — `gvf_publish.sh` loads them from
 `Variant_Browser/.env` itself.
 
 Wired in `cli/gvf_run.py` (`step_publish_review`, `_find_review_repo`).
+
+### Curated 101-paper staging publish
+
+For the fixed curated benchmark, publish the benchmark DBs only to the
+Variant_Browser staging/review surface, not the public site:
+
+```bash
+python scripts/publish_curated_review_set.py \
+  --run-root validation_runs/azure_first_101_YYYYMMDD \
+  --dataset-label gvf_curated_101_YYYYMMDD \
+  --create-pairs
+```
+
+Use `--dry-run` first to confirm the per-gene DBs and PMID manifests:
+
+```bash
+python scripts/publish_curated_review_set.py \
+  --run-root validation_runs/azure_first_101_YYYYMMDD \
+  --dataset-label gvf_curated_101_YYYYMMDD \
+  --dry-run
+```
+
+The helper accepts repeatable `--db GENE=/path/to.db` overrides, or
+`--extract-root` when the extraction directory is not under `RUN_ROOT/extract`.
+It still calls `Variant_Browser/scripts/gvf_publish.sh`; staging dataset labels,
+PMID restrictions, and optional pair creation are passed through environment
+variables consumed by the browser repo.
 
 ---
 

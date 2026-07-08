@@ -64,16 +64,3 @@ class ExtractionResult(BaseModel):
     error: Optional[str] = None
     model_used: Optional[str] = None
     tokens_used: Optional[int] = None
-
-
-class PipelineResult(BaseModel):
-    """Complete pipeline result for a single paper."""
-
-    pmid: str
-    passed_all_filters: bool
-    final_tier_reached: FilterTier
-    filter_results: List[FilterResult] = Field(default_factory=list)
-    extraction_result: Optional[ExtractionResult] = None
-    total_cost_estimate: Optional[float] = Field(
-        default=None, description="Estimated cost in USD"
-    )

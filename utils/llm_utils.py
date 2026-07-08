@@ -23,9 +23,26 @@ from .retry_utils import llm_retry
 litellm.num_retries = (
     2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
 )
-litellm.request_timeout = (
-    1200  # 20 minute timeout for large extractions (increased from 600)
-)
+
+
+def _resolve_litellm_request_timeout() -> int:
+    raw = os.getenv("LLM_REQUEST_TIMEOUT_S", "").strip()
+    if raw:
+        try:
+            timeout_s = int(raw)
+            if timeout_s > 0:
+                return timeout_s
+        except ValueError:
+            pass
+        logger = logging.getLogger(__name__)
+        logger.warning(
+            "Ignoring invalid LLM_REQUEST_TIMEOUT_S=%r; expected positive integer",
+            raw,
+        )
+    return 1200  # 20 minute default for large extractions.
+
+
+litellm.request_timeout = _resolve_litellm_request_timeout()
 
 logger = logging.getLogger(__name__)
 
@@ -443,18 +460,30 @@ class BaseLLMCaller:
         if response_format is None:
             response_format = {"type": "json_object"}
 
-        wait_for_llm_rate_limit(self.model)
-        response = completion(
-            model=self.model,
-            messages=messages,
-            temperature=self.temperature,
-            max_tokens=self.max_tokens,
-            response_format=response_format,
-            **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
-        )
+        def _make_call():
+            wait_for_llm_rate_limit(self.model)
+            return completion(
+                model=self.model,
+                messages=messages,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                response_format=response_format,
+                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+            )
+
+        response = _make_call()
 
         result_text = response.choices[0].message.content
         finish_reason = getattr(response.choices[0], "finish_reason", None)
+        if not (result_text or "").strip():
+            logger.warning(
+                "LLM returned empty JSON content for model=%s finish_reason=%s; retrying once",
+                self.model,
+                finish_reason,
+            )
+            response = _make_call()
+            result_text = response.choices[0].message.content
+            finish_reason = getattr(response.choices[0], "finish_reason", None)
         was_truncated = finish_reason == "length"
 
         try:
@@ -521,20 +550,33 @@ class BaseLLMCaller:
         )
 
         try:
+
+            def _make_call():
+                wait_for_llm_rate_limit(self.model)
+                return completion(
+                    model=self.model,
+                    messages=messages,
+                    temperature=self.temperature,
+                    max_tokens=self.max_tokens,
+                    response_format=response_format,
+                    **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+                )
+
             # Make the LLM API call
-            wait_for_llm_rate_limit(self.model)
-            response = completion(
-                model=self.model,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                response_format=response_format,
-                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
-            )
+            response = _make_call()
 
             # Extract response text
             result_text = response.choices[0].message.content
             finish_reason = getattr(response.choices[0], "finish_reason", None)
+            if not (result_text or "").strip():
+                logger.warning(
+                    "LLM returned empty JSON content for model=%s finish_reason=%s; retrying once",
+                    self.model,
+                    finish_reason,
+                )
+                response = _make_call()
+                result_text = response.choices[0].message.content
+                finish_reason = getattr(response.choices[0], "finish_reason", None)
 
             # Parse JSON response
             result_data = parse_llm_json_response(result_text)

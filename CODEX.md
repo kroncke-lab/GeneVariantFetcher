@@ -6,6 +6,5 @@ The canonical agent handoff lives in `CLAUDE.md`, and `AGENTS.md` mirrors the
 same pointers. Do not add handoff content here — keeping three parallel agent
 files in sync caused drift, so CODEX.md is deliberately thin.
 
-For current instructions, read `CLAUDE.md`. For live recall metrics and the
-next-run plan, read `docs/RECALL_STATUS.md` (the single source of truth for
-numbers).
+For current instructions, read `CLAUDE.md`. For live recall metrics, read
+`docs/RECALL_STATUS.md`; for the active forward checklist, read `TASKS.md`.

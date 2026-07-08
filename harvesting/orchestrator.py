@@ -46,11 +46,7 @@ from .persistence import (
 from .supplement_processing_service import process_supplement_files
 from .priority_queue import Priority, PriorityQueue
 from .springer_api import SpringerAPIClient
-from .supplement_reference_parser import (
-    check_supplement_gap,
-    extract_supplement_urls_from_text,
-    parse_supplement_references,
-)
+from .supplement_reference_parser import check_supplement_gap
 from gene_literature.supplements import UnifiedSupplementFetcher
 from .artifacts_log import ArtifactsLog
 from .figure_extractor import (
@@ -62,7 +58,7 @@ from .figure_extractor import (
     save_captions_json,
 )
 from .supplement_scraper import SupplementScraper
-from .unpaywall_api import UnpaywallClient, get_unpaywall_client
+from .unpaywall_api import UnpaywallClient
 from .wiley_api import WileyAPIClient
 
 logger = get_logger(__name__)

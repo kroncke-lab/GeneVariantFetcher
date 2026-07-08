@@ -24,10 +24,18 @@ escalation-queue builder can also consume direct verification records so
 high-risk trusted-consensus cases are queued even when debate agrees:
 
 ```bash
+.venv/bin/python scripts/recall_audit/run_claim_verification_pilot.py \
+  --cases-csv /path/to/paper_disagreement_report.csv \
+  --run-dir /path/to/scored_run \
+  --out-dir /tmp/claim_verify_azure \
+  --model azure_ai/gpt-5.4
 .venv/bin/python scripts/recall_audit/rescore_claim_verification_records.py \
   --records-jsonl /path/to/claim_verification_records.jsonl \
   --out-dir /tmp/claim_verify_rescore_v2 \
   --gold-value-set v2
+.venv/bin/python scripts/recall_audit/run_claim_debate_pilot.py \
+  --baseline-records /tmp/claim_verify_rescore_v2/claim_verification_records.jsonl \
+  --out-dir /tmp/claim_debate_azure
 .venv/bin/python scripts/recall_audit/rescore_claim_debate_records.py \
   --records-jsonl /path/to/claim_debate_records.jsonl \
   --out-dir /tmp/claim_debate_rescore_v2 \
@@ -36,7 +44,29 @@ high-risk trusted-consensus cases are queued even when debate agrees:
   --debate-records /path/to/claim_debate_records.jsonl \
   --verification-records /path/to/claim_verification_records.jsonl \
   --out-csv /tmp/escalation_queue.csv
+.venv/bin/python scripts/recall_audit/run_claim_debate_pilot.py \
+  --baseline-records /tmp/claim_verify_rescore_v2/claim_verification_records.jsonl \
+  --queue-csv /tmp/escalation_queue.csv \
+  --final-adjudicator \
+  --out-dir /tmp/final_adjudication_sonnet
+.venv/bin/python scripts/recall_audit/run_claim_debate_pilot.py \
+  --baseline-records /tmp/claim_verify_rescore_v2/claim_verification_records.jsonl \
+  --queue-csv /tmp/escalation_queue.csv \
+  --final-arbiter \
+  --out-dir /tmp/final_arbiter_opus
 ```
+
+The intended model-routing strategy is Azure first, Anthropic last:
+
+- Routine triage: `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint)
+- Table routing: `azure_ai/Kimi-K2.6-1`
+- Main extraction: `azure_ai/grok-4.3`
+- Internal claim verification / debate: `azure_ai/gpt-5.4`,
+  `azure_ai/DeepSeek-V4-Pro`, and `azure_ai/Kimi-K2.6-1`
+- Final adjudication only: `FINAL_ADJUDICATOR_MODELS`, defaulting to
+  `anthropic/claude-sonnet-5`
+- Final arbiter for hard residuals: `FINAL_ARBITER_MODEL`, defaulting to
+  `anthropic/claude-opus-4-8`
 
 `end_to_end_pmid_replay.py` makes a real LLM call and should be used only for a
 targeted PMID after a prompt/parser change:

@@ -7,26 +7,17 @@ Current status and metrics live in `docs/RECALL_STATUS.md`. For existing runs
 with newly recovered source artifacts, use `scripts/refresh_run_db.py`; it
 supersedes the older post-insttoken re-extraction experiment for normal work.
 
+Scope: use this when moving or recreating the recall workflow on another
+machine. Use `QUICKSTART.md` for ordinary local setup, `NEW_GENE_RUNBOOK.md` for
+a new no-gold gene, and `RECALL_REFRESH_RUNBOOK.md` for ongoing refreshes of an
+existing scored run.
+
 ## Repository Setup
 
-```bash
-git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
-cd GeneVariantFetcher
-
-python3.11 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[browser,dev]"
-python -m playwright install chromium
-
-cp .env.example .env
-```
-
-Edit `.env` with:
-
-- `NCBI_EMAIL`
-- at least one LLM key, usually `ANTHROPIC_API_KEY` for the current recall setup
-- `ELSEVIER_API_KEY` plus `ELSEVIER_INSTTOKEN` for institutional ScienceDirect full text
-- optional `NCBI_API_KEY`, `SPRINGER_API_KEY`, and `WILEY_API_KEY`
+Follow `docs/QUICKSTART.md` for clone, `.venv`, browser, and first-run setup.
+Follow `docs/API_KEYS.md` for the `.env` credential list. For recall refresh
+work, publisher credentials and institutional full-text access materially affect
+coverage.
 
 ## Fresh Cold-Start Run
 
@@ -63,63 +54,36 @@ want to reuse the full-text corpus already present on this machine.
 
 ## Reusing Local Full-Text Artifacts
 
-The current full-text corpus is intentionally not tracked by Git. To reuse the
-papers already downloaded on this machine, copy these ignored repo-relative
-directories to the same paths on the other computer:
-
-```text
-validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938
-validation_runs/20260517_203904/results/KCNQ1/20260517_204424
-validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938
-validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938
-```
+The current full-text corpus is intentionally not tracked by Git. To reuse
+papers already downloaded on this machine, copy the ignored `corpus/` directory
+and any specific ignored run directories you plan to refresh or score.
 
 Example transfer:
 
 ```bash
 rsync -a --info=progress2 \
-  validation_runs/turnkey_e2e_20260518_213934 \
-  other-host:/path/to/GeneVariantFetcher/validation_runs/
+  corpus/ \
+  other-host:/path/to/GeneVariantFetcher/corpus/
 
 rsync -a --info=progress2 \
-  validation_runs/20260517_203904 \
-  other-host:/path/to/GeneVariantFetcher/validation_runs/
+  validation_runs/<run-to-reuse>/ \
+  other-host:/path/to/GeneVariantFetcher/validation_runs/<run-to-reuse>/
 ```
 
-Then refresh each copied run from its source artifacts into canonical
-extraction JSON, rebuild the DB, and run DB-observed recovery layers:
+Then refresh the copied run from its source artifacts into canonical extraction
+JSON, rebuild the DB, and run DB-observed recovery layers:
 
 ```bash
 .venv/bin/python scripts/refresh_run_db.py \
-  --gene KCNH2 \
-  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938 \
-  --replace-db
-
-.venv/bin/python scripts/refresh_run_db.py \
-  --gene KCNQ1 \
-  --run-dir validation_runs/20260517_203904/results/KCNQ1/20260517_204424 \
-  --replace-db
-
-.venv/bin/python scripts/refresh_run_db.py \
-  --gene RYR2 \
-  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938 \
-  --replace-db
-
-.venv/bin/python scripts/refresh_run_db.py \
-  --gene SCN5A \
-  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938 \
+  --gene <GENE> \
+  --run-dir validation_runs/<run-to-reuse>/results/<GENE>/<timestamp> \
   --replace-db
 ```
 
-The legacy `scripts/run_insttoken_reextract_experiment.py` driver is retained
-for historical comparisons, but it should not be the default path for consuming
-newly recovered sources.
-
-`scripts/run_full_recall_experiment.sh` is a wrapper around
-`run_insttoken_reextract_experiment.py` and is part of the historical
-post-insttoken re-extraction path; **it is not a fresh-run launcher**. Do not
-use it to drive a new `gvf-run`. To run a fresh multi-gene job, invoke
-`gvf gvf-run <GENE>` per gene (or script a shell loop over `gvf gvf-run`).
+The historical post-insttoken re-extraction drivers were removed from the active
+tree. To consume newly recovered sources, use `scripts/refresh_run_db.py` and
+`scripts/refresh_recall.py`. To run a fresh multi-gene job, invoke
+`gvf gvf-run <GENE>` per gene or script a shell loop over `gvf gvf-run`.
 
 ## Full-Text Acquisition Only
 

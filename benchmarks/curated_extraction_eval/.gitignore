@@ -1,0 +1,11 @@
+# Frozen paper full-text snapshot — never commit paper full text (repo policy).
+# Regenerate locally from corpus/ with: python build_fixture.py
+sources/
+
+# Runner output artifacts.
+.last_run/
+.last_run*/
+.extract_runs/
+.policy_experiments/
+gold_overrides.backup_*/
+gold_overrides_rederived/

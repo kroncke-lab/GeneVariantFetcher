@@ -73,6 +73,13 @@ CLINICAL STUDY indicators (extract normally):
 - Columns like "patients", "carriers", "probands", "cases", "affected", "unaffected"
 - Individual patient descriptions with ages, symptoms, phenotypes
 
+CRITICAL - NON-HUMAN/VETERINARY STUDIES:
+If the paper's subjects are animals or model organisms (cat/feline/Maine Coon,
+Ragdoll, dog/canine, mouse, rat, zebrafish, cell lines), do NOT extract those
+animals/samples as human clinical carriers. For a human gene-disease review,
+animal/model-organism rows belong only in functional_data/additional_notes unless
+the row or sentence explicitly describes human patients/carriers.
+
 RECOGNIZING IMPLICIT COUNTS (for CLINICAL studies only):
 - "a patient" / "a case" / "an individual" = 1 carrier
 - "a healthy individual" / "an asymptomatic carrier" = 1 UNAFFECTED carrier
@@ -86,6 +93,17 @@ not just the first table. If variant X appears in Table 1 with 50 carriers and T
 with 78 carriers from a non-overlapping cohort, total = 128. "N patients" or "No. of
 patients" columns are CARRIER COUNTS. Frequency columns like "5/200" → 5 carriers.
 When same variant in multiple tables: SUM if independent, use LARGER if overlapping.
+But do NOT use denominator, row-ID, or population-frequency columns as carrier counts:
+- If a row has both "Total case(s)" and "Carrier(s)", use "Carrier(s)"; "Total case(s)"
+  is the screened/case denominator.
+- "Adult number", "child number", "patient ID/no.", "case no.", and similar labels are
+  row identifiers. Count one clinical row as one carrier; do not use the ID number.
+- "MAF", "allele frequency", "No. of occurrences", ExAC/gnomAD/1000 Genomes allele
+  counts, and denominators such as "n=2184 alleles" are population data, not disease
+  carrier counts.
+- Bare genotype observation columns such as "het", "hom", "homo", or "genotype"
+  are not disease carrier counts unless the table explicitly says they are affected
+  human carriers for that variant.
 
 CRITICAL — DO NOT COPY STUDY-WIDE TOTALS ONTO EACH VARIANT:
 If the paper states an aggregate such as "43 carriers, 28 affected and 15 unaffected"
@@ -346,6 +364,13 @@ CLINICAL STUDY indicators (extract penetrance normally):
 - Individual patient descriptions with ages, symptoms, phenotypes
 - Pedigrees with affected/unaffected family members
 
+CRITICAL - NON-HUMAN/VETERINARY STUDIES:
+If the paper's subjects are animals or model organisms (cat/feline/Maine Coon,
+Ragdoll, dog/canine, mouse, rat, zebrafish, cell lines), do NOT extract those
+animals/samples as human clinical carriers. For a human gene-disease review,
+animal/model-organism rows belong only in functional_data/additional_notes unless
+the row or sentence explicitly describes human patients/carriers.
+
 SANITY CHECK: If you find 50+ variants all with similar carrier counts (e.g., 20-50 each) and ~100% penetrance,
 this is likely a functional study where you're mistaking assay replicates for patients. Re-evaluate the table structure.
 
@@ -429,6 +454,16 @@ Common patterns in cohort papers:
 - Frequency columns (e.g., "5/200") give carrier counts: numerator = carriers, denominator = total screened
 - "Families" ≠ "carriers": if "3 families" are reported, look for how many total carriers across those families
 - If the paper says "identified in N individuals" or "found in N patients", that is the total carrier count
+- If a row has both "Total case(s)" and "Carrier(s)", use "Carrier(s)"; "Total case(s)"
+  is the screened/case denominator.
+- "Adult number", "child number", "patient ID/no.", "case no.", and similar labels are
+  row identifiers. Count one clinical row as one carrier; do not use the ID number.
+- "MAF", "allele frequency", "No. of occurrences", ExAC/gnomAD/1000 Genomes allele
+  counts, and denominators such as "n=2184 alleles" are population data, not disease
+  carrier counts.
+- Bare genotype observation columns such as "het", "hom", "homo", or "genotype"
+  are not disease carrier counts unless the table explicitly says they are affected
+  human carriers for that variant.
 
 When the same variant appears in multiple tables or sections:
 1. SUM the carrier counts if the cohorts are independent/non-overlapping

@@ -15,20 +15,20 @@ gold standard.
 > signal — don't paper over errors.
 >
 > ### 1. Environment + static checks
-> 1. Verify `.venv/` exists and is Python 3.11+; if missing, recreate with
->    `python3.11 -m venv .venv && .venv/bin/pip install -e ".[dev]"`.
-> 2. Confirm required env vars: `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM
->    provider key (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or Azure
->    AI/OpenAI credentials), `ELSEVIER_API_KEY`, `ELSEVIER_INSTTOKEN`, and
->    `WILEY_API_KEY`.
+> 1. Verify `.venv/` exists and is Python 3.11+; if missing, stop and follow
+>    `docs/QUICKSTART.md` before continuing.
+> 2. Confirm required and high-value env vars from `docs/API_KEYS.md`, including
+>    `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM provider key, publisher keys, and
+>    institutional full-text credentials when available.
 >    Report missing ones.
 > 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
 >    `.venv/bin/python -m ruff format --check .`. Report any issues.
 >
 > ### 2. Unit tests
-> Run `.venv/bin/python -m pytest tests/unit -q`. Expect 400+ passing;
-> skips depend on optional external credentials and local tools. Capture
-> the count and any failures.
+> Run `.venv/bin/python -m pytest tests/unit -q`. Expect several hundred
+> passing (the count grows as coverage expands, so treat it as a floor, not a
+> fixed target); skips depend on optional external credentials and local tools.
+> Capture the count and any failures.
 >
 > ### 3. Module-import smoke
 > Verify every importable module loads cleanly:

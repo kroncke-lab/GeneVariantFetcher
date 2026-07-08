@@ -63,6 +63,67 @@ def test_passes_through_per_variant_carrier():
     assert detect_misclassified_counts([variant]) == []
 
 
+def test_flags_per_variant_carrier_with_row_identifier_label():
+    variant = _variant(
+        carriers=172,
+        provenance={
+            "carriers_column_label": "Adult number",
+            "carriers_count_type": ACCEPTED_COUNT_TYPE,
+        },
+    )
+
+    anns = detect_misclassified_counts([variant])
+
+    assert len(anns) == 1
+    assert anns[0].column_label == "Adult number"
+    assert anns[0].declared_count_type == ACCEPTED_COUNT_TYPE
+    assert "row identifier" in anns[0].reason
+
+
+def test_flags_per_variant_carrier_with_population_frequency_label():
+    variant = _variant(
+        carriers=189,
+        provenance={
+            "carriers_column_label": "MAF (No. of occurrences from n=2184 alleles)",
+            "carriers_count_type": ACCEPTED_COUNT_TYPE,
+        },
+    )
+
+    anns = detect_misclassified_counts([variant])
+
+    assert len(anns) == 1
+    assert "population allele frequency/count" in anns[0].reason
+
+
+def test_flags_bare_het_genotype_observation_label():
+    variant = _variant(
+        carriers=17722,
+        provenance={
+            "carriers_column_label": "het",
+            "carriers_count_type": ACCEPTED_COUNT_TYPE,
+        },
+    )
+
+    anns = detect_misclassified_counts([variant])
+
+    assert len(anns) == 1
+    assert anns[0].column_label == "het"
+    assert "genotype observation count" in anns[0].reason
+
+
+def test_flags_missing_count_type_with_suspicious_label():
+    variant = _variant(
+        affected=1505,
+        provenance={"affected_column_label": "Total case"},
+    )
+
+    anns = detect_misclassified_counts([variant])
+
+    assert len(anns) == 1
+    assert anns[0].declared_count_type == "suspicious_column_label"
+    assert "cohort denominator" in anns[0].reason
+
+
 def test_silently_skips_variants_without_provenance():
     """Backward compat: old extraction JSONs have no count_provenance block.
     The classifier must not touch them — only the outlier guard handles that case."""
@@ -99,6 +160,26 @@ def test_each_field_classified_independently():
     anns = detect_misclassified_counts([variant])
     fields_flagged = {a.field for a in anns}
     assert fields_flagged == {"affected", "unaffected"}
+
+
+def test_fields_argument_limits_detection_scope():
+    variant = _variant(
+        carriers=453,
+        affected=120,
+        unaffected=80,
+        provenance={
+            "carriers_column_label": "Total N",
+            "carriers_count_type": "cohort_total",
+            "affected_column_label": "All affected",
+            "affected_count_type": "cohort_total",
+            "unaffected_column_label": "Controls",
+            "unaffected_count_type": "control",
+        },
+    )
+
+    anns = detect_misclassified_counts([variant], fields=["affected", "unaffected"])
+
+    assert {a.field for a in anns} == {"affected", "unaffected"}
 
 
 def test_unknown_count_type_is_refused():

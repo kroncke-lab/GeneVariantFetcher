@@ -15,6 +15,7 @@ from typing import Any, Iterable, Optional
 try:
     from scripts.recall_audit.common import (
         DEFAULT_RESULTS_DIR,
+        REPO_ROOT,
         canonical_variant,
         context_status,
         find_full_contexts,
@@ -32,6 +33,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover
     from common import (
         DEFAULT_RESULTS_DIR,
+        REPO_ROOT,
         canonical_variant,
         context_status,
         find_full_contexts,
@@ -153,6 +155,31 @@ def _group_rows_by_pmid(rows: list[dict[str, str]]) -> dict[str, list[dict[str, 
     for row in rows:
         grouped[normalize_pmid(row.get("pmid"))].append(row)
     return grouped
+
+
+def _read_optional_csv_rows(path: Path) -> list[dict[str, str]]:
+    """Read a generated compare artifact if it exists.
+
+    Some compare outputs are intentionally omitted when they would be empty
+    (for example, a perfect-recall gene has no ``missing_in_sqlite.csv``).
+    Paper-level reporting should treat those files as empty inputs.
+    """
+    if not path.exists():
+        return []
+    return read_csv_rows(path)
+
+
+def _display_path(value: Any) -> str:
+    text = "" if value is None else str(value)
+    if not text:
+        return ""
+    path = Path(text)
+    if not path.is_absolute():
+        return text
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return path.name
 
 
 def _load_metadata(db_path: Path | None) -> dict[str, dict[str, Any]]:
@@ -458,13 +485,13 @@ def build_paper_disagreement_rows(
             continue
         gold = _gold_by_pmid(gold_path)
         missing_by = _group_rows_by_pmid(
-            read_csv_rows(gene_dir / "missing_in_sqlite.csv")
+            _read_optional_csv_rows(gene_dir / "missing_in_sqlite.csv")
         )
-        extra_rows = read_csv_rows(gene_dir / "missing_in_excel.csv")
+        extra_rows = _read_optional_csv_rows(gene_dir / "missing_in_excel.csv")
         extra_by = _group_rows_by_pmid(
             [row for row in extra_rows if normalize_pmid(row.get("pmid")) in gold]
         )
-        discrepancies = read_csv_rows(gene_dir / "discrepancies.csv")
+        discrepancies = _read_optional_csv_rows(gene_dir / "discrepancies.csv")
         mismatch_by = _group_rows_by_pmid(
             [
                 row
@@ -492,6 +519,14 @@ def build_paper_disagreement_rows(
                 results_dir=result_root,
                 context_index=context_index,
             )
+            source = {
+                **source,
+                "source_file": _display_path(source.get("source_file")),
+                "context_path": _display_path(source.get("context_path")),
+                "available_context_path": _display_path(
+                    source.get("available_context_path")
+                ),
+            }
             gold_rows = int(gold_item["gold_rows"])
             missing_rows = len(missing)
             matched_rows = max(0, gold_rows - missing_rows)

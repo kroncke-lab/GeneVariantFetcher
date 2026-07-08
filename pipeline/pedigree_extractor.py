@@ -564,23 +564,3 @@ class PedigreeExtractor:
                 )
 
         return "\n".join(lines)
-
-
-def extract_pedigrees_from_paper(
-    figures_dir: Path,
-    model: Optional[str] = None,
-    detect_only: bool = False,
-) -> List[Dict]:
-    """
-    Convenience function to extract pedigree data from a paper's figures.
-
-    Args:
-        figures_dir: Directory containing figure images (e.g., {pmid}_figures/)
-        model: Vision model to use (defaults to settings.vision_model)
-        detect_only: If True, only detect pedigrees without full extraction
-
-    Returns:
-        List of pedigree extraction results
-    """
-    extractor = PedigreeExtractor(model=model)
-    return extractor.process_figures_directory(figures_dir, detect_only=detect_only)

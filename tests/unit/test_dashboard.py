@@ -6,7 +6,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from cli.dashboard import generate_dashboard, md_to_html
+from cli.dashboard import _sanitize_local_paths, generate_dashboard, md_to_html
 
 
 def _make_corpus(corpus: Path) -> None:
@@ -25,6 +25,11 @@ def _make_corpus(corpus: Path) -> None:
         "| Variant | Patient |\n|---|---|\n| p.Gly300Ser | case 3 |\n",
         encoding="utf-8",
     )
+    (d / "111_CLEANED.md").write_text(
+        "# Cleaned Results\n\nCLEANED SOURCE p.Arg100Trp evidence text.\n\n"
+        "File available at: /Users/example/GeneVariantFetcher/results/source.pdf\n",
+        encoding="utf-8",
+    )
     (d / "111_artifacts.json").write_text(
         json.dumps({"pmid": "111", "doi": "10.1/x", "pmcid": "PMC1"}), encoding="utf-8"
     )
@@ -40,6 +45,9 @@ def _make_db(db: Path) -> None:
             cdna_notation TEXT, protein_notation TEXT, genomic_position TEXT, clinical_significance TEXT);
         CREATE TABLE variant_papers(variant_id INTEGER, pmid TEXT, source_location TEXT,
             additional_notes TEXT, key_quotes TEXT, count_provenance TEXT);
+        CREATE TABLE extraction_metadata(pmid TEXT, model_used TEXT, source_file TEXT,
+            source_type TEXT, extraction_confidence TEXT, total_variants_found INTEGER,
+            notes TEXT, abstract_only INTEGER);
         CREATE TABLE individual_records(variant_id INTEGER, pmid TEXT, individual_id TEXT,
             age_at_evaluation INTEGER, age_at_onset INTEGER, sex TEXT, affected_status TEXT,
             phenotype_details TEXT, evidence_sentence TEXT, ethnicity TEXT, geographic_origin TEXT);
@@ -60,12 +68,31 @@ def _make_db(db: Path) -> None:
         "INSERT INTO variant_papers VALUES (1,'111','Table 1, case 3','proband; LQT2',"
         '\'["carried p.Arg100Trp"]\',\'{"carriers_column_label":"N carriers","carriers_count_type":"per_variant_carrier"}\')'
     )
+    source_file = db.parent / "corpus" / "TESTGENE" / "111" / "111_CLEANED.md"
+    con.execute(
+        "INSERT INTO extraction_metadata VALUES ('111','test-model',?,'fulltext','high',1,'',0)",
+        (str(source_file),),
+    )
     con.execute(
         "INSERT INTO individual_records VALUES (1,'111','proband',12,10,'F','affected',"
         "'long QT','The proband carried p.Arg100Trp and was affected at age 12.','East Asian','Japan')"
     )
     con.commit()
     con.close()
+
+
+def test_sanitize_local_paths_redacts_mac_and_windows_paths():
+    mac = _sanitize_local_paths("see /Users/brett/GVF/results/source.pdf now")
+    assert "/Users/brett" not in mac
+    assert "[local path: source.pdf]" in mac
+
+    win_backslash = _sanitize_local_paths("see C:\\Users\\brett\\GVF\\source.pdf now")
+    assert "C:\\Users" not in win_backslash
+    assert "[local path: source.pdf]" in win_backslash
+
+    win_forwardslash = _sanitize_local_paths("see C:/Users/brett/GVF/source.pdf now")
+    assert "C:/Users" not in win_forwardslash
+    assert "[local path: source.pdf]" in win_forwardslash
 
 
 def test_md_to_html_renders_blocks_and_tables():
@@ -114,9 +141,12 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     # silently broke every clickthrough). Raw jump("..." would be malformed.
     assert "jump(&quot;" in paper
     assert 'onclick="jump("' not in paper
-    assert (
-        "carried p.Arg100Trp and was affected" in paper
-    )  # the on-disk source is rendered
+    assert "CLEANED SOURCE p.Arg100Trp evidence text" in paper
+    assert "extraction_metadata.source_file" in paper
+    assert str(tmp_path) not in paper
+    assert "/Users/example" not in paper
+    assert "[local path: source.pdf]" in paper
+    assert "source_file: 111_CLEANED.md" in paper
     assert "id='src'" in paper  # source pane present
     # new provenance fields
     assert (

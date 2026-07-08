@@ -33,6 +33,7 @@ def build_gene_keyword_queries(
     gene_symbol: str,
     synonyms: Optional[Sequence[str]] = None,
     disease: Optional[str] = None,
+    disease_terms: Optional[Sequence[str]] = None,
 ) -> List[str]:
     """Return a set of PubMed queries focused on a gene and variant keywords.
 
@@ -46,7 +47,7 @@ def build_gene_keyword_queries(
     Returns:
         List of PubMed query strings
     """
-    base_query = build_gene_query(gene_symbol, synonyms)
+    base_query = f"({build_gene_query(gene_symbol, synonyms)})"
     keyword_clauses: Sequence[str] = (
         "",  # base gene query
         "AND (variant OR mutation OR polymorphism)",
@@ -54,9 +55,7 @@ def build_gene_keyword_queries(
         "AND (case report OR cohort OR patient)",
     )
 
-    disease_clause = ""
-    if disease and disease.strip():
-        disease_clause = f' AND "{disease.strip()}"[Title/Abstract]'
+    disease_clause = _build_disease_query_clause(disease, disease_terms)
 
     queries: List[str] = []
     for clause in keyword_clauses:
@@ -90,6 +89,7 @@ def discover_pmids_for_gene(
     settings: Settings | None = None,
     synonyms: Sequence[str] | None = None,
     disease: str | None = None,
+    disease_terms: Sequence[str] | None = None,
 ) -> PMIDDiscoveryResult:
     """Fetch PMIDs from configured sources, merge, and persist them.
 
@@ -154,7 +154,10 @@ def discover_pmids_for_gene(
         pubmed_client = PubMedClient(api_key=api_key, email=effective_email)
         pubmed_pmids: set[str] = set()
         for query in build_gene_keyword_queries(
-            gene_symbol, synonyms=synonyms_list or None, disease=disease
+            gene_symbol,
+            synonyms=synonyms_list or None,
+            disease=disease,
+            disease_terms=disease_terms,
         ):
             try:
                 pubmed_pmids.update(
@@ -200,6 +203,32 @@ def discover_pmids_for_gene(
         combined_pmids=combined_pmids,
         synonyms_used=synonyms_list,
     )
+
+
+def _build_disease_query_clause(
+    disease: str | None, disease_terms: Sequence[str] | None = None
+) -> str:
+    terms: list[str] = []
+    if disease and disease.strip():
+        terms.append(disease.strip())
+    terms.extend(
+        term.strip() for term in (disease_terms or []) if term and term.strip()
+    )
+
+    seen: set[str] = set()
+    clauses: list[str] = []
+    for term in terms:
+        key = term.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        clauses.append(f'"{term}"[Title/Abstract]')
+
+    if not clauses:
+        return ""
+    if len(clauses) == 1:
+        return f" AND {clauses[0]}"
+    return f" AND ({' OR '.join(clauses)})"
 
 
 def _save_pmids(pmids: List[str], output_file: Path) -> None:

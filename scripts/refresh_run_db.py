@@ -455,10 +455,6 @@ def _dedup_variants(variants: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
-def _dedup_count(variants: list[dict[str, Any]]) -> int:
-    return len(_dedup_variants(variants))
-
-
 def _variant_positions(variants: list) -> set[int]:
     """Distinct codon positions across a variant list, unifying cDNA + protein.
 
@@ -545,14 +541,6 @@ def deterministic_variant_list(
     variants.extend(fixed_width_variants)
     variants.extend(extractor._parse_vertical_gene_table_variants(text, gene))
     return _dedup_variants(variants)
-
-
-def deterministic_variant_count(
-    extractor: ExpertExtractor,
-    source_file: Path,
-    gene: str,
-) -> int:
-    return len(deterministic_variant_list(extractor, source_file, gene))
 
 
 def select_replay_candidates(
