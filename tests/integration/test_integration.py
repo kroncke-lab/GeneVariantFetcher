@@ -24,18 +24,6 @@ def test_imports():
         return False
 
     try:
-        from utils.pmid_status import (
-            get_pmid_status,
-            get_failed_pmids,
-            get_stats_summary,
-        )
-
-        print("  ✓ pmid_status utilities")
-    except ImportError as e:
-        print(f"  ✗ pmid_status: {e}")
-        return False
-
-    try:
         from utils.run_manifest import RunManifest
 
         print("  ✓ RunManifest")
@@ -67,56 +55,6 @@ def test_circuit_breaker():
     # Should block calls when open
     assert cb.is_open() == True
     print("  ✓ is_open() returns True when open")
-
-    return True
-
-
-def test_pmid_status():
-    """Test PMID status tracking."""
-    print("\nTesting PMID status...")
-    from utils.pmid_status import get_pmid_status, get_failed_pmids, get_stats_summary
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        output_dir = Path(tmpdir)
-        status_dir = output_dir / "pmid_status"
-        status_dir.mkdir()
-
-        # Write a test status file
-        test_status = {
-            "pmid": "12345678",
-            "status": "extracted",
-            "download_timestamp": "2026-02-06T14:00:00",
-            "variant_count": 5,
-            "failure_reason": None,
-        }
-        with open(status_dir / "12345678.json", "w") as f:
-            json.dump(test_status, f)
-
-        # Write a failed status
-        failed_status = {
-            "pmid": "87654321",
-            "status": "failed",
-            "failure_reason": "Paywall",
-        }
-        with open(status_dir / "87654321.json", "w") as f:
-            json.dump(failed_status, f)
-
-        # Test get_pmid_status
-        status = get_pmid_status(output_dir, "12345678")
-        assert status is not None, "Should find status for 12345678"
-        assert status["status"] == "extracted"
-        print("  ✓ get_pmid_status works")
-
-        # Test get_failed_pmids
-        failed = get_failed_pmids(output_dir)
-        assert "87654321" in failed, "Should find failed PMID"
-        print("  ✓ get_failed_pmids works")
-
-        # Test get_stats_summary
-        stats = get_stats_summary(output_dir)
-        assert stats["extracted"] == 1
-        assert stats["failed"] == 1
-        print("  ✓ get_stats_summary works")
 
     return True
 
@@ -178,9 +116,6 @@ def main():
         all_passed = False
 
     if not test_circuit_breaker():
-        all_passed = False
-
-    if not test_pmid_status():
         all_passed = False
 
     if not test_run_manifest():

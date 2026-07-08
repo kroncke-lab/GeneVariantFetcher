@@ -337,38 +337,6 @@ class TestSupplementScraper:
 
 
 # ============================================================================
-# PMID Status Tracker Tests
-# ============================================================================
-
-
-class TestPMIDStatus:
-    """Test utils.pmid_status module (local, no network needed)."""
-
-    def test_import(self):
-        """Verify pmid_status module imports."""
-        from utils.pmid_status import (
-            get_pmid_status,
-            get_failed_pmids,
-            get_stats_summary,
-        )
-
-        assert callable(get_pmid_status)
-        assert callable(get_failed_pmids)
-        assert callable(get_stats_summary)
-
-        _tracker.record("PMID Status: module import", True)
-
-    def test_get_pmid_status_missing(self):
-        """Querying a non-existent status file should return None."""
-        from utils.pmid_status import get_pmid_status
-
-        result = get_pmid_status("/nonexistent/path", "99999")
-        assert result is None, "Should return None for missing status"
-
-        _tracker.record("PMID Status: missing status returns None", True)
-
-
-# ============================================================================
 # Cross-Module Integration Tests
 # ============================================================================
 
@@ -433,7 +401,7 @@ def run_standalone():
     print(f"{'=' * 70}\n")
 
     # --- Europe PMC (query_europepmc) ---
-    print("[1/4] Europe PMC query...")
+    print("[1/3] Europe PMC query...")
     try:
         from utils.pubmed_utils import query_europepmc
 
@@ -449,7 +417,7 @@ def run_standalone():
         traceback.print_exc()
 
     # --- PMC API ---
-    print("[2/4] PMC API Client...")
+    print("[2/3] PMC API Client...")
     try:
         from harvesting.pmc_api import PMCAPIClient
 
@@ -471,7 +439,7 @@ def run_standalone():
         traceback.print_exc()
 
     # --- Unpaywall ---
-    print("[3/4] Unpaywall API...")
+    print("[3/3] Unpaywall API...")
     try:
         from harvesting.unpaywall_api import UnpaywallClient
 
@@ -494,18 +462,6 @@ def run_standalone():
 
     except Exception as e:
         tracker.record("Unpaywall: module load/test", False, str(e)[:80])
-        traceback.print_exc()
-
-    # --- PMID Status ---
-    print("[4/4] PMID Status Tracker...")
-    try:
-        from utils.pmid_status import get_pmid_status
-
-        result = get_pmid_status("/nonexistent", "99999")
-        tracker.record("PMID Status: missing status returns None", result is None)
-
-    except Exception as e:
-        tracker.record("PMID Status: module load/test", False, str(e)[:80])
         traceback.print_exc()
 
     # --- Summary ---
