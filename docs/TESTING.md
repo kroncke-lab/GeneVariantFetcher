@@ -25,9 +25,10 @@ gold standard.
 >    `.venv/bin/python -m ruff format --check .`. Report any issues.
 >
 > ### 2. Unit tests
-> Run `.venv/bin/python -m pytest tests/unit -q`. Expect 400+ passing;
-> skips depend on optional external credentials and local tools. Capture
-> the count and any failures.
+> Run `.venv/bin/python -m pytest tests/unit -q`. Expect several hundred
+> passing (the count grows as coverage expands, so treat it as a floor, not a
+> fixed target); skips depend on optional external credentials and local tools.
+> Capture the count and any failures.
 >
 > ### 3. Module-import smoke
 > Verify every importable module loads cleanly:
