@@ -8,8 +8,8 @@ Local sources (no network, no LLM):
   * corpus/<GENE>/<PMID>/{pmid}_artifacts.json     -> doi, pmcid
 
 Optional network fallback (``--fetch-missing``):
-  * PubMed ESummary for PMIDs still missing a column after the local pass. This is
-    where doi / pmc_id come from at scale (corpus artifacts.json only has a few).
+  * PubMed ESummary for bibliographic columns still missing after the local pass.
+  * PubMed EFetch for first-author affiliation / author-country fields.
 
 Only fills columns that are currently NULL/empty (never overwrites a real value),
 so it is idempotent and safe to re-run after migrate / refresh. Local values always
@@ -36,9 +36,9 @@ if str(REPO) not in sys.path:
 
 # ESummary-derivable columns (also sourced from local abstract/artifact caches).
 COLS = ("first_author", "journal", "publication_date", "doi", "pmc_id")
-# Author-affiliation columns — a last-resort cohort-origin signal (EFetch only,
-# never in local caches). author_country feeds "cohort origin (from author
-# affiliation)" downstream.
+# Author-affiliation columns — a weaker paper-level location signal (EFetch only,
+# never in local caches). Downstream consumers should keep this distinct from a
+# stated cohort origin.
 AUTHOR_COLS = ("author_affiliation", "author_country")
 ALL_COLS = COLS + AUTHOR_COLS
 

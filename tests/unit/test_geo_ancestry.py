@@ -18,9 +18,12 @@ def test_find_ethnicity_prefers_specific_terms():
 def test_find_origin_countries_and_regions():
     assert find_origin("families from Northern Italy") == "Northern Italy"
     assert find_origin("recruited in the USA") == "United States"
+    assert find_origin("recruited in the U.S.") == "United States"
     assert find_origin("a UK biobank sample") == "United Kingdom"
+    assert find_origin("a U.K. cohort") == "United Kingdom"
     assert find_origin("Slav peoples of Eastern Europe") == "Eastern Europe"
     assert find_origin("nothing geographic here") is None
+    assert find_origin("the variant was reported to us by the family") is None
 
 
 def test_country_from_affiliation_tail_and_variants():
@@ -30,6 +33,10 @@ def test_country_from_affiliation_tail_and_variants():
     )
     assert (
         country_from_affiliation("Cedars-Sinai Medical Center, Los Angeles, CA, USA")
+        == "United States"
+    )
+    assert (
+        country_from_affiliation("Brigham and Women's Hospital, Boston, MA, U.S.")
         == "United States"
     )
     assert (

@@ -135,6 +135,7 @@ class ScanResult:
                 continue
             seen.add(v.normalized)
 
+            context_quote = " ".join((v.context or v.raw_text or "").split())
             variant_dict = {
                 "gene_symbol": gene_symbol,
                 "protein_notation": v.normalized
@@ -149,7 +150,7 @@ class ScanResult:
                 "penetrance_data": {},
                 "individual_records": [],
                 "functional_data": {"summary": "", "assays": []},
-                "key_quotes": [],
+                "key_quotes": [context_quote] if context_quote else [],
                 "_scanner_confidence": v.confidence,
                 "_scanner_raw": v.raw_text,
             }
@@ -1202,6 +1203,7 @@ def merge_scanner_results(
             continue
 
         # Create variant dict
+        context_quote = " ".join((sv.context or sv.raw_text or "").split())
         new_variant = {
             "gene_symbol": gene_symbol,
             "protein_notation": sv.normalized
@@ -1218,7 +1220,7 @@ def merge_scanner_results(
             "penetrance_data": {},
             "individual_records": [],
             "functional_data": {"summary": "", "assays": []},
-            "key_quotes": [],
+            "key_quotes": [context_quote] if context_quote else [],
         }
 
         existing_variants.append(new_variant)

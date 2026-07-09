@@ -172,6 +172,8 @@ class TestScanResult:
         assert dicts[1]["cdna_notation"] == "c.1600C>T"
         assert dicts[1]["protein_notation"] is None
         assert dicts[0]["evidence_level"] == "scanner"
+        assert dicts[0]["key_quotes"] == ["R534C"]
+        assert dicts[1]["key_quotes"] == ["c.1600C>T"]
 
     def test_to_variant_dicts_dedup(self):
         result = ScanResult()

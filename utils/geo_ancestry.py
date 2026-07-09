@@ -8,9 +8,10 @@ Three cheap, no-LLM signals, tried in order of trust:
    affiliation string (``country_from_affiliation``). Clearly weaker than a
    stated cohort origin, so callers mark it as inferred.
 
-Used to backfill ``individual_records.ethnicity`` / ``geographic_origin`` and a
-paper-level cohort origin at migrate time, so existing extractions gain this
-without a re-run. The gazetteers are deliberately curated (common study
+Used during migration to backfill ``individual_records.ethnicity`` /
+``geographic_origin`` from patient-level text. The metadata backfill also uses
+``country_from_affiliation`` to store ``papers.author_country`` as a weaker
+paper-level signal. The gazetteers are deliberately curated (common study
 populations), not exhaustive — extend as new cohorts appear.
 """
 
@@ -77,12 +78,14 @@ _COUNTRY_CANON = {
     "usa": "United States",
     "u.s.a": "United States",
     "u.s.a.": "United States",
+    "u.s": "United States",
     "u.s.": "United States",
     "us": "United States",
     "united states": "United States",
     "united states of america": "United States",
     "america": "United States",
     "uk": "United Kingdom",
+    "u.k": "United Kingdom",
     "u.k.": "United Kingdom",
     "united kingdom": "United Kingdom",
     "great britain": "United Kingdom",
@@ -212,9 +215,14 @@ def _compile_alt(terms) -> re.Pattern:
 
 
 _ETHNICITY_RE = _compile_alt(ETHNICITY_TERMS)
-_ORIGIN_RE = _compile_alt(
-    list(_MULTIWORD_ORIGINS) + [c.title() for c in _COUNTRY_CANON] + list(_COUNTRIES)
+# Keep ambiguous short abbreviations such as "us" out of free-text origin
+# matching. They remain valid in affiliation tail parsing via _COUNTRY_CANON.
+_ORIGIN_MATCH_TERMS = (
+    list(_MULTIWORD_ORIGINS)
+    + [key for key in _COUNTRY_CANON if key not in {"us"}]
+    + list(_COUNTRIES)
 )
+_ORIGIN_RE = _compile_alt(_ORIGIN_MATCH_TERMS)
 
 
 def _canonical_origin(raw: str) -> str:
