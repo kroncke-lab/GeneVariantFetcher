@@ -45,6 +45,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 # Configure logging using centralized utility
 from utils.logging_utils import get_logger, setup_logging
 from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filename
+from utils.geo_ancestry import enrich_ethnicity_origin
 from utils.source_layers import (
     infer_source_layer_from_text,
     junk_notation_reason,
@@ -1083,6 +1084,9 @@ def _first_quote(variant_data: Dict[str, Any]) -> Optional[str]:
             text = _clean_optional_text(quote)
             if text:
                 return text
+        # An empty / quote-less list must yield None, not the JSON-dumped "[]"
+        # (that literal used to land in evidence_quote for every quote-less fact).
+        return None
     return _clean_optional_text(quotes)
 
 
@@ -1575,6 +1579,15 @@ def _insert_standard_fact_provenance(
         source_layer=source_layer,
     )
 
+    # Structured locators the extractor may attach at the variant top level
+    # (e.g. the table-regex pass records source_table/source_row/source_column +
+    # the verbatim row). Thread them into the synthesized identity fact so the
+    # within-paper coordinate survives to fact_provenance.
+    top_source_table = variant_data.get("source_table")
+    top_source_row = variant_data.get("source_row")
+    top_source_column = variant_data.get("source_column")
+    top_evidence_quote = variant_data.get("evidence_quote") or quote
+
     for notation_key in ("protein_notation", "cdna_notation", "genomic_position"):
         notation = variant_data.get(notation_key)
         if notation:
@@ -1585,7 +1598,10 @@ def _insert_standard_fact_provenance(
                 fact_type="variant_identity",
                 fact_value=notation,
                 source_location=source_location,
-                evidence_quote=quote,
+                source_table=top_source_table,
+                source_row=top_source_row,
+                source_column=top_source_column,
+                evidence_quote=top_evidence_quote,
                 source_layer=source_layer,
                 provenance_kind="synthesized",
             )
@@ -1911,6 +1927,21 @@ def insert_variant_data(
             pmid=pmid,
             individual_id=individual_id,
         )
+        # Deterministic ethnicity / cohort-origin backfill from the surrounding
+        # patient text when the extractor didn't set them. Author-affiliation
+        # fallback is applied later (network) via the metadata backfill, so migrate
+        # stays offline.
+        patients_block = variant_data.get("patients") or {}
+        record_ethnicity, record_origin = enrich_ethnicity_origin(
+            stated_ethnicity=record.get("ethnicity"),
+            stated_origin=record.get("geographic_origin"),
+            text_fields=[
+                record.get("phenotype_details"),
+                record.get("evidence_sentence"),
+                patients_block.get("demographics"),
+                variant_data.get("additional_notes"),
+            ],
+        )
         if preserve_existing_evidence:
             if individual_id:
                 existing_record = cursor.execute(
@@ -1948,8 +1979,8 @@ def insert_variant_data(
                 "affected_status": affected_status,
                 "phenotype_details": record.get("phenotype_details"),
                 "evidence_sentence": record.get("evidence_sentence"),
-                "ethnicity": record.get("ethnicity"),
-                "geographic_origin": record.get("geographic_origin"),
+                "ethnicity": record_ethnicity,
+                "geographic_origin": record_origin,
                 **individual_provenance,
             },
         ):
@@ -1976,8 +2007,8 @@ def insert_variant_data(
                 affected_status,
                 record.get("phenotype_details"),
                 record.get("evidence_sentence"),
-                record.get("ethnicity"),
-                record.get("geographic_origin"),
+                record_ethnicity,
+                record_origin,
                 individual_provenance["source_container"],
                 individual_provenance["source_kind"],
                 individual_provenance["source_ref"],

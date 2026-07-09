@@ -329,7 +329,8 @@ For each variant, provide:
 3. Clinical Significance: pathogenic, likely pathogenic, benign, likely benign, VUS, etc.
 4. Patient Information:
    - Number of patients/cases
-   - Demographics (age, sex, ethnicity if mentioned)
+   - Demographics (age, sex; ethnicity/ancestry and the geographic origin
+     or country of the carriers/cohort whenever stated — capture these verbatim)
    - Phenotype/disease presentation
 5. Functional Data:
    - In vitro studies

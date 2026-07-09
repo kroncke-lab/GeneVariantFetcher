@@ -759,16 +759,102 @@ class ExpertExtractor(BaseLLMCaller):
 
         active_table_genes: set[str] = set()
 
+        # Table/row provenance bookkeeping. The scanner already walks each markdown
+        # row, so it knows which table block and row a hit came from — thread that
+        # through instead of the old constant "Table (regex extraction)". Every hit
+        # then carries a within-paper locator (source_table / source_row /
+        # source_column + the verbatim row) that migrate_to_sqlite folds into
+        # fact_provenance.
+        table_ordinal = 0
+        row_ordinal = 0
+        in_table = False
+        header_cells: List[str] = []
+        current_table_label: Optional[str] = None
+        caption_candidates: List[str] = []
+        table_label_re = re.compile(
+            r"((?:Supplementary\s+|Supplemental\s+|Supp\.?\s+)?(?:e|S)?"
+            r"Table\s+S?\d+[A-Za-z]?)",
+            re.IGNORECASE,
+        )
+
+        def _table_label(candidates: List[str]) -> Optional[str]:
+            for candidate in reversed(candidates):
+                found = table_label_re.search(candidate)
+                if found:
+                    return re.sub(r"\s+", " ", found.group(1)).strip()
+            return None
+
+        def _column_ref(
+            row_cells: List[str],
+            head_cells: List[str],
+            header_row: bool,
+            needle: str,
+        ) -> Optional[str]:
+            for idx, cell in enumerate(row_cells):
+                if needle and needle in cell:
+                    if not header_row and idx < len(head_cells) and head_cells[idx]:
+                        return head_cells[idx][:80]
+                    return f"column {idx + 1}"
+            return None
+
+        def _table_variant(
+            notation_key: str,
+            notation: str,
+            *,
+            source_location: str,
+            source_table: Optional[str],
+            source_row: str,
+            row_index: Optional[int],
+            source_column: Optional[str],
+            evidence_quote: str,
+        ) -> dict:
+            variant = {
+                "gene_symbol": gene_symbol,
+                notation_key: notation,
+                "source_location": source_location,
+                # Explicit layer so the improved location text never re-classifies
+                # these away from regex_table (guardrails + scoring depend on it).
+                "source_layer": "regex_table",
+            }
+            if source_table:
+                variant["source_table"] = source_table
+            if source_row:
+                variant["source_row"] = source_row
+            if row_index is not None:
+                variant["row_ordinal"] = row_index
+            if source_column:
+                variant["source_column"] = source_column
+            if evidence_quote:
+                variant["evidence_quote"] = evidence_quote
+            return variant
+
         # Find all markdown table rows
         for line in full_text.splitlines():
             line = line.strip()
             if not line.startswith("|"):
                 active_table_genes = set()
+                in_table = False
+                if line:
+                    caption_candidates.append(line)
+                    del caption_candidates[:-3]  # keep only the last 3 lines
                 continue
             if set(line) <= {"|", "-", " ", ":"}:  # Skip separator rows
                 continue
 
             cells = [cell.strip() for cell in line.strip("|").split("|")]
+
+            # First pipe row of a block is its header; the rest are data rows.
+            if not in_table:
+                in_table = True
+                table_ordinal += 1
+                row_ordinal = 0
+                header_cells = cells
+                current_table_label = _table_label(caption_candidates)
+                caption_candidates = []
+                is_header_row = True
+            else:
+                is_header_row = False
+                row_ordinal += 1
             mentioned_genes = genes_mentioned_in_cells(cells)
             if mentioned_genes:
                 active_table_genes = mentioned_genes
@@ -787,6 +873,21 @@ class ExpertExtractor(BaseLLMCaller):
                 row_gene_filtered_count += 1
                 continue
 
+            # Per-row provenance shared by every hit found in this row.
+            row_label = (
+                "header"
+                if is_header_row
+                else (next((c for c in cells if c), "") or f"row {row_ordinal}")[:120]
+            )
+            row_index = None if is_header_row else row_ordinal
+            row_quote = line[:300]
+            if current_table_label:
+                loc_str = f"{current_table_label} (regex extraction)"
+            else:
+                loc_str = f"Table (regex extraction), block {table_ordinal}" + (
+                    "" if is_header_row else f", row {row_ordinal}"
+                )
+
             # Extract variants from this row
             # Look for protein notation
             for match in protein_pattern.finditer(line):
@@ -803,11 +904,18 @@ class ExpertExtractor(BaseLLMCaller):
                 if normalized not in seen_variants:
                     seen_variants.add(normalized)
                     variants.append(
-                        {
-                            "gene_symbol": gene_symbol,
-                            "protein_notation": normalized,
-                            "source_location": "Table (regex extraction)",
-                        }
+                        _table_variant(
+                            "protein_notation",
+                            normalized,
+                            source_location=loc_str,
+                            source_table=current_table_label,
+                            source_row=row_label,
+                            row_index=row_index,
+                            source_column=_column_ref(
+                                cells, header_cells, is_header_row, match.group(1)
+                            ),
+                            evidence_quote=row_quote,
+                        )
                     )
 
             # Look for cDNA notation
@@ -816,11 +924,18 @@ class ExpertExtractor(BaseLLMCaller):
                 if notation not in seen_variants:
                     seen_variants.add(notation)
                     variants.append(
-                        {
-                            "gene_symbol": gene_symbol,
-                            "cdna_notation": notation,
-                            "source_location": "Table (regex extraction)",
-                        }
+                        _table_variant(
+                            "cdna_notation",
+                            notation,
+                            source_location=loc_str,
+                            source_table=current_table_label,
+                            source_row=row_label,
+                            row_index=row_index,
+                            source_column=_column_ref(
+                                cells, header_cells, is_header_row, match.group(1)
+                            ),
+                            evidence_quote=row_quote,
+                        )
                     )
 
             # Look for short protein notation (A561V)
@@ -842,11 +957,18 @@ class ExpertExtractor(BaseLLMCaller):
                 if normalized not in seen_variants:
                     seen_variants.add(normalized)
                     variants.append(
-                        {
-                            "gene_symbol": gene_symbol,
-                            "protein_notation": normalized,
-                            "source_location": "Table (regex extraction)",
-                        }
+                        _table_variant(
+                            "protein_notation",
+                            normalized,
+                            source_location=loc_str,
+                            source_table=current_table_label,
+                            source_row=row_label,
+                            row_index=row_index,
+                            source_column=_column_ref(
+                                cells, header_cells, is_header_row, match.group(1)
+                            ),
+                            evidence_quote=row_quote,
+                        )
                     )
 
         if variants:

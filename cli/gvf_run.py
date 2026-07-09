@@ -756,6 +756,30 @@ def _find_review_repo(explicit: Optional[Path]) -> Optional[Path]:
     return None
 
 
+def step_backfill_metadata(*, db: Path, run_dir: Path, email: Optional[str]) -> None:
+    """Fill papers.{first_author, journal, publication_date, doi, pmc_id}.
+
+    Local abstract/artifact caches first; PubMed ESummary fills the rest (mainly
+    doi / pmc_id). Runs before report + publish so the scored DB, the run report,
+    and any Variant_Browser publish all carry real citations instead of bare PMIDs.
+    Best-effort: a failure here never fails the run.
+    """
+    try:
+        from scripts.backfill_paper_metadata import run_backfill
+
+        results = run_backfill(
+            [str(db)],
+            roots=[run_dir],
+            fetch_missing=bool(email),
+            email=email,
+        )
+        filled = results.get(str(db), {})
+        detail = ", ".join(f"{col}+{n}" for col, n in filled.items() if n)
+        logger.info("📚 paper metadata backfill: %s", detail or "already complete")
+    except Exception as e:  # noqa: BLE001
+        logger.warning("paper metadata backfill failed (%s); continuing", e)
+
+
 def step_publish_review(
     *,
     gene: str,
@@ -1106,6 +1130,14 @@ def run_gvf_pipeline(
         step_corpus_sync(run_dir=run_dir)
     elif "corpus-sync" in skip or not corpus_sync:
         logger.info("⏭️  Step 4.5: corpus sync — SKIPPED")
+
+    # Step 4.6: backfill paper bibliographic metadata (journal/year/doi/pmc/author)
+    # so the report and any review-DB publish render real citations, not bare PMIDs.
+    if "metadata-backfill" not in skip:
+        logger.info("📚 Step 4.6: paper metadata backfill")
+        step_backfill_metadata(db=db, run_dir=run_dir, email=email)
+    else:
+        logger.info("⏭️  Step 4.6: paper metadata backfill — SKIPPED")
 
     # Step 5: report
     if "report" not in skip:
