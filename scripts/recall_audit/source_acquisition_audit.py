@@ -202,28 +202,6 @@ def _doi_from_source_artifacts(pmid: str, source_file: Path | None) -> str:
     return ""
 
 
-def _doi_from_source_text(source_file: Path | None) -> str:
-    """Extract the article DOI from an on-disk source / abstract file.
-
-    Abstract-only stubs carry no structured DOI, but the PubMed abstract they
-    do contain prints the article DOI on its NLM citation line
-    (``doi: 10.xxxx/...``). Prefer that ``doi:``-labelled match so we never grab
-    a DOI from the reference list, then fall back to the first DOI in the text.
-    Without this, a stub reaches ``fetch_paywalled`` with an empty DOI and is
-    dropped before any publisher/proxy route is tried.
-    """
-    if source_file is None or not source_file.exists():
-        return ""
-    try:
-        text = source_file.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return ""
-    labelled = re.search(r"doi:\s*(10\.\d{4,9}/[^\s\"'<>]+)", text, flags=re.IGNORECASE)
-    if labelled:
-        return _clean_doi(labelled.group(1))
-    return _extract_doi(text)
-
-
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -384,8 +362,6 @@ def classify_pmid(
     status = context_status(source_file)
     if not doi:
         doi = _doi_from_source_artifacts(pmid, source_file)
-    if not doi:
-        doi = _doi_from_source_text(source_file)
     extraction_file = extraction_dir / f"{gene}_PMID_{pmid}.json"
     data = _json_load(extraction_file) if extraction_file.exists() else {}
     metadata = data.get("extraction_metadata") or {}

@@ -281,9 +281,6 @@ def test_fetch_one_uses_scholar_when_no_doi(monkeypatch, tmp_path: Path):
     monkeypatch.setattr(
         fp, "try_scholar_pdf_fallback", lambda *args, **kwargs: scholar_row
     )
-    # No DOI on input AND none resolvable from the PMID -> Scholar is the last
-    # resort. Stub the resolver so the path is exercised without network.
-    monkeypatch.setattr(fp, "resolve_doi_for_pmid", lambda _pmid: None)
     fetcher = SimpleNamespace(converter=MagicMock(), session=requests.Session())
 
     row = fp.fetch_one(fetcher, "1", None, tmp_path)

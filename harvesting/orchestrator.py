@@ -64,31 +64,6 @@ from .wiley_api import WileyAPIClient
 logger = get_logger(__name__)
 
 
-_DOI_RE = re.compile(r"10\.\d{4,9}/[^\s\"'<>]+", re.IGNORECASE)
-
-
-def _clean_doi(value: str) -> str:
-    doi = str(value or "").strip()
-    doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
-    return doi.strip().strip(".,;:)]}>")
-
-
-def _doi_from_text(text: str) -> str:
-    """Pull the article DOI out of free text (metadata value or abstract body).
-
-    Prefer a ``doi:``-labelled match — that is the NLM citation line for the
-    article itself — before falling back to the first DOI anywhere in the text,
-    so we never mistake a reference's DOI for the paper's own.
-    """
-    if not text:
-        return ""
-    labelled = re.search(r"doi:\s*(10\.\d{4,9}/[^\s\"'<>]+)", text, flags=re.IGNORECASE)
-    if labelled:
-        return _clean_doi(labelled.group(1))
-    match = _DOI_RE.search(text)
-    return _clean_doi(match.group(0)) if match else ""
-
-
 # =============================================================================
 # INPUT VALIDATION
 # =============================================================================
@@ -1441,19 +1416,6 @@ class PMCHarvester:
         ).strip()
         pubdate = (metadata.get("PubDate") or "").strip()
 
-        # Preserve the DOI/PMCID we already have in hand. Dropping them here is
-        # what strands abstract-only stubs: source recovery routes on DOI, so a
-        # stub with no persisted DOI can never be re-fetched from its publisher.
-        doi = _clean_doi(
-            str(metadata.get("DOI") or metadata.get("doi") or "")
-        ) or _doi_from_text(abstract or "")
-        pmcid = str(
-            metadata.get("PmcRefId")
-            or metadata.get("pmc")
-            or metadata.get("PMCID")
-            or ""
-        ).strip()
-
         authors: List[str] = []
         for author in metadata.get("AuthorList") or []:
             if isinstance(author, dict):
@@ -1485,12 +1447,6 @@ class PMCHarvester:
             "> papers. Treat as preliminary and seek the full text when possible.",
             "",
         ]
-        identifiers = [f"PMID: {pmid}"]
-        if doi:
-            identifiers.append(f"DOI: {doi}")
-        if pmcid:
-            identifiers.append(f"PMCID: {pmcid}")
-        parts += ["## Identifiers", " | ".join(identifiers), ""]
         if title:
             parts += ["## Title", title, ""]
         if authors:
@@ -1511,33 +1467,6 @@ class PMCHarvester:
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(content)
 
-        # Persist a minimal artifacts.json so downstream source recovery and the
-        # corpus index can route this stub by DOI on a later pass — abstract-only
-        # papers previously wrote no artifacts.json at all, losing the DOI.
-        try:
-            artifacts_path = self.output_dir / f"{pmid}_artifacts.json"
-            artifacts_path.write_text(
-                json.dumps(
-                    {
-                        "pmid": pmid,
-                        "doi": doi,
-                        "pmcid": pmcid,
-                        "gene_symbol": self.gene_symbol or "",
-                        "timestamp": datetime.datetime.now().isoformat(),
-                        "source": "abstract_only_fallback",
-                        "notes": reason,
-                        "figures": [],
-                        "supplements": [],
-                    },
-                    indent=2,
-                ),
-                encoding="utf-8",
-            )
-        except OSError as e:
-            logger.warning(
-                "Failed to write abstract-only artifacts.json for %s: %s", pmid, e
-            )
-
         self._log_abstract_only(pmid, reason, str(output_file))
 
         self._write_pmid_status(
@@ -1547,8 +1476,6 @@ class PMCHarvester:
                 "download_timestamp": datetime.datetime.now().isoformat(),
                 "failure_reason": reason,
                 "source": "pubmed_abstract",
-                "doi": doi,
-                "pmcid": pmcid,
             },
         )
 

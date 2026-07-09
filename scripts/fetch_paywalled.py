@@ -71,7 +71,6 @@ from harvesting.scholar_pdf_fallback import try_scholar_pdf  # noqa: E402
 from harvesting.springer_api import SpringerAPIClient  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
 from harvesting.wiley_api import WileyAPIClient  # noqa: E402
-from utils.pubmed_utils import get_doi_from_pmid  # noqa: E402
 
 
 # Body selectors used by the PMC HTML fallback. PMC articles render the
@@ -957,34 +956,6 @@ def _append_recovered_supplement_markdown(
     )
 
 
-_DOI_RESOLVE_CACHE: Dict[str, Optional[str]] = {}
-
-
-def resolve_doi_for_pmid(pmid: str) -> Optional[str]:
-    """Best-effort PMID -> DOI lookup for queue items that arrived without one.
-
-    A stub in the fetch queue with no DOI would otherwise short-circuit to the
-    Scholar-only fallback and skip every publisher / EZproxy / PMC recovery
-    path — yet the DOI is available from PubMed for the large majority of these
-    papers (and is often printed in the abstract we already saved). Resolving it
-    here is the difference between "attempt nothing" and "route to the right
-    publisher". Cached, network-guarded, and gated on ``NCBI_EMAIL`` so offline
-    runs degrade cleanly to the prior behaviour.
-    """
-    if pmid in _DOI_RESOLVE_CACHE:
-        return _DOI_RESOLVE_CACHE[pmid]
-    email = os.environ.get("NCBI_EMAIL")
-    doi: Optional[str] = None
-    if email:
-        try:
-            doi = get_doi_from_pmid(pmid, email=email)
-        except Exception as exc:  # network/parse/retry errors → degrade gracefully
-            LOG.info("PMID->DOI lookup failed for %s: %s", pmid, exc)
-            doi = None
-    _DOI_RESOLVE_CACHE[pmid] = doi
-    return doi
-
-
 def parse_pmid_doi_overrides(raw: List[str]) -> Dict[str, str]:
     out: Dict[str, str] = {}
     for entry in raw or []:
@@ -1204,16 +1175,9 @@ def fetch_one(
         )
 
     if not doi:
-        resolved = resolve_doi_for_pmid(pmid)
-        if resolved:
-            doi = resolved
-            row["doi"] = doi
-            row["reason"] = "DOI resolved from PMID"
-            print(f"  Resolved DOI for {pmid} from PubMed: {doi}")
-        else:
-            row["reason"] = "no DOI"
-            run_scholar_fallback()
-            return row
+        row["reason"] = "no DOI"
+        run_scholar_fallback()
+        return row
 
     # Tell the user which strategy will run, before we burn time on the fetch.
     strategy = find_strategy(doi=doi, allowlist=None)

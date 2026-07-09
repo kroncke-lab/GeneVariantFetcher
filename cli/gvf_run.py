@@ -70,7 +70,6 @@ RECOMMENDED_ENV = (
 )
 CREDENTIAL_UNLOCKS = (
     "ELSEVIER_INSTTOKEN",  # subscription full text
-    "GVF_EZPROXY_PREFIX",  # institutional proxy -> Wiley/AHA/Cloudflare publishers
 )
 
 
@@ -672,13 +671,6 @@ def step_report(
             "- ELSEVIER_INSTTOKEN is unset. Adding it (request from your library) "
             "typically lifts variant_rows by ~30-50 pp for cardiac channel genes "
             "because Heart Rhythm / JACC / Eur Heart J unlock."
-        )
-    if doctor_status.get("unlocks", {}).get("GVF_EZPROXY_PREFIX") is False:
-        lines.append(
-            "- GVF_EZPROXY_PREFIX/HOST is unset. Setting it (institutional proxy, "
-            "plus a logged-in Chrome for its session cookie) routes Wiley / AHA / "
-            "Cloudflare-gated publishers through your campus subscription so stub "
-            "papers with a known DOI can be recovered instead of skipped."
         )
     if not any(doctor_status.get("llm_providers", {}).values()):
         lines.append(
