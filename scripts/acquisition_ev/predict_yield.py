@@ -112,8 +112,11 @@ def load_gold(genes: list[str]) -> dict[str, dict[str, dict]]:
     out: dict[str, dict[str, dict]] = {}
     for g in genes:
         path = GOLD_DIR / f"{g}_recall_input.csv"
+        if not path.exists():
+            print(f"  WARN: no gold file for {g} at {path}; skipping")
+            continue
         per = defaultdict(lambda: {"vset": set(), "carriers": 0, "affected": 0})
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 pmid = (row.get("pmid") or "").strip()
                 var = (row.get("variant") or "").strip()
@@ -147,7 +150,7 @@ def fetch_abstracts(
 ) -> dict[str, dict]:
     cache: dict[str, dict] = {}
     if CACHE.exists() and not refresh:
-        cache = json.loads(CACHE.read_text())
+        cache = json.loads(CACHE.read_text(encoding="utf-8"))
     todo = [p for p in pmids if p not in cache]
     if todo:
         print(f"  fetching {len(todo)} abstracts from PubMed ({len(cache)} cached)...")
@@ -166,7 +169,8 @@ def fetch_abstracts(
         )
         for attempt in range(3):
             try:
-                data = urllib.request.urlopen(url, timeout=60).read()
+                with urllib.request.urlopen(url, timeout=60) as response:
+                    data = response.read()
                 root = ET.fromstring(data)
                 break
             except Exception as exc:  # noqa: BLE001
@@ -205,7 +209,7 @@ def fetch_abstracts(
             }
         time.sleep(0.4)
     CACHE.parent.mkdir(parents=True, exist_ok=True)
-    CACHE.write_text(json.dumps(cache))
+    CACHE.write_text(json.dumps(cache), encoding="utf-8")
     return cache
 
 
@@ -306,9 +310,10 @@ def spearman(xs: list[float], ys: list[float]) -> tuple[float, float]:
         return 0.0, 1.0
     rho = cov / (vx * vy)
     # two-sided p via t approximation
-    if abs(rho) >= 1.0:
+    denom = 1 - rho * rho
+    if denom <= 0.0:  # rho at +/-1, or float underflow near it: p ~ 0
         return rho, 0.0
-    t = rho * math.sqrt((n - 2) / (1 - rho * rho))
+    t = rho * math.sqrt((n - 2) / denom)
     p = 2 * (1 - NormalDist().cdf(abs(t)))
     return rho, p
 
@@ -409,7 +414,7 @@ def main() -> int:
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     # per-paper CSV
-    with open(RESULTS / "per_paper_scores.csv", "w", newline="") as f:
+    with open(RESULTS / "per_paper_scores.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(
             [
@@ -448,7 +453,9 @@ def main() -> int:
     metrics = {"pooled": evaluate(items, "POOLED (cardiac)")}
     for g in genes:
         metrics[g] = evaluate([it for it in items if it["gene"] == g], g)
-    (RESULTS / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
+    (RESULTS / "metrics.json").write_text(
+        json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
+    )
 
     # console summary
     print("\n" + "=" * 74)
