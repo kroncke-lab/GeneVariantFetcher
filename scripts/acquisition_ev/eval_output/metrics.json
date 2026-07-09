@@ -1,0 +1,352 @@
+{
+  "pooled": {
+    "label": "POOLED (cardiac)",
+    "n": 1502,
+    "carriers": {
+      "spearman_ev": 0.433,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.415,
+        "20%": 0.532,
+        "30%": 0.661,
+        "50%": 0.82
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.744,
+        "20%": 0.852,
+        "30%": 0.912,
+        "50%": 0.971
+      },
+      "capture_len_baseline": {
+        "10%": 0.146,
+        "20%": 0.276,
+        "30%": 0.414,
+        "50%": 0.743
+      },
+      "lift_at_20pct": 2.66
+    },
+    "variants": {
+      "spearman_ev": 0.346,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.398,
+        "20%": 0.509,
+        "30%": 0.627,
+        "50%": 0.753
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.646,
+        "20%": 0.762,
+        "30%": 0.823,
+        "50%": 0.89
+      },
+      "capture_len_baseline": {
+        "10%": 0.128,
+        "20%": 0.276,
+        "30%": 0.426,
+        "50%": 0.716
+      },
+      "lift_at_20pct": 2.55
+    },
+    "signal_spearman_vs_carriers": {
+      "gene_hits": 0.167,
+      "variant_mentions": -0.156,
+      "carrier_mentions": 0.511,
+      "original_data": 0.338,
+      "cohort_size": 0.368,
+      "review": -0.001
+    }
+  },
+  "KCNH2": {
+    "label": "KCNH2",
+    "n": 262,
+    "carriers": {
+      "spearman_ev": 0.298,
+      "spearman_p": "4.8e-07",
+      "capture_ev": {
+        "10%": 0.232,
+        "20%": 0.385,
+        "30%": 0.592,
+        "50%": 0.73
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.604,
+        "20%": 0.743,
+        "30%": 0.828,
+        "50%": 0.927
+      },
+      "capture_len_baseline": {
+        "10%": 0.095,
+        "20%": 0.194,
+        "30%": 0.327,
+        "50%": 0.641
+      },
+      "lift_at_20pct": 1.93
+    },
+    "variants": {
+      "spearman_ev": 0.427,
+      "spearman_p": "2.8e-14",
+      "capture_ev": {
+        "10%": 0.288,
+        "20%": 0.409,
+        "30%": 0.594,
+        "50%": 0.747
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.571,
+        "20%": 0.697,
+        "30%": 0.781,
+        "50%": 0.868
+      },
+      "capture_len_baseline": {
+        "10%": 0.176,
+        "20%": 0.263,
+        "30%": 0.37,
+        "50%": 0.59
+      },
+      "lift_at_20pct": 2.04
+    },
+    "signal_spearman_vs_carriers": {
+      "gene_hits": 0.192,
+      "variant_mentions": -0.051,
+      "carrier_mentions": 0.243,
+      "original_data": 0.264,
+      "cohort_size": 0.241,
+      "review": -0.012
+    }
+  },
+  "KCNQ1": {
+    "label": "KCNQ1",
+    "n": 305,
+    "carriers": {
+      "spearman_ev": 0.389,
+      "spearman_p": "2.0e-13",
+      "capture_ev": {
+        "10%": 0.42,
+        "20%": 0.533,
+        "30%": 0.636,
+        "50%": 0.743
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.794,
+        "20%": 0.887,
+        "30%": 0.932,
+        "50%": 0.977
+      },
+      "capture_len_baseline": {
+        "10%": 0.189,
+        "20%": 0.271,
+        "30%": 0.373,
+        "50%": 0.718
+      },
+      "lift_at_20pct": 2.67
+    },
+    "variants": {
+      "spearman_ev": 0.227,
+      "spearman_p": "5.1e-05",
+      "capture_ev": {
+        "10%": 0.471,
+        "20%": 0.532,
+        "30%": 0.637,
+        "50%": 0.713
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.714,
+        "20%": 0.811,
+        "30%": 0.86,
+        "50%": 0.912
+      },
+      "capture_len_baseline": {
+        "10%": 0.155,
+        "20%": 0.219,
+        "30%": 0.295,
+        "50%": 0.616
+      },
+      "lift_at_20pct": 2.66
+    },
+    "signal_spearman_vs_carriers": {
+      "gene_hits": -0.133,
+      "variant_mentions": -0.273,
+      "carrier_mentions": 0.517,
+      "original_data": 0.271,
+      "cohort_size": 0.374,
+      "review": 0.033
+    }
+  },
+  "SCN5A": {
+    "label": "SCN5A",
+    "n": 757,
+    "carriers": {
+      "spearman_ev": 0.459,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.441,
+        "20%": 0.607,
+        "30%": 0.708,
+        "50%": 0.858
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.75,
+        "20%": 0.863,
+        "30%": 0.922,
+        "50%": 0.98
+      },
+      "capture_len_baseline": {
+        "10%": 0.087,
+        "20%": 0.313,
+        "30%": 0.434,
+        "50%": 0.728
+      },
+      "lift_at_20pct": 3.04
+    },
+    "variants": {
+      "spearman_ev": 0.306,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.399,
+        "20%": 0.528,
+        "30%": 0.624,
+        "50%": 0.748
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.63,
+        "20%": 0.746,
+        "30%": 0.807,
+        "50%": 0.879
+      },
+      "capture_len_baseline": {
+        "10%": 0.118,
+        "20%": 0.323,
+        "30%": 0.457,
+        "50%": 0.722
+      },
+      "lift_at_20pct": 2.64
+    },
+    "signal_spearman_vs_carriers": {
+      "gene_hits": 0.215,
+      "variant_mentions": -0.139,
+      "carrier_mentions": 0.556,
+      "original_data": 0.374,
+      "cohort_size": 0.359,
+      "review": -0.017
+    }
+  },
+  "RYR2": {
+    "label": "RYR2",
+    "n": 178,
+    "carriers": {
+      "spearman_ev": 0.579,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.338,
+        "20%": 0.481,
+        "30%": 0.601,
+        "50%": 0.852
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.584,
+        "20%": 0.753,
+        "30%": 0.84,
+        "50%": 0.936
+      },
+      "capture_len_baseline": {
+        "10%": 0.068,
+        "20%": 0.246,
+        "30%": 0.378,
+        "50%": 0.726
+      },
+      "lift_at_20pct": 2.41
+    },
+    "variants": {
+      "spearman_ev": 0.552,
+      "spearman_p": "0.0e+00",
+      "capture_ev": {
+        "10%": 0.376,
+        "20%": 0.515,
+        "30%": 0.634,
+        "50%": 0.815
+      },
+      "capture_random": {
+        "10%": 0.1,
+        "20%": 0.2,
+        "30%": 0.3,
+        "50%": 0.5
+      },
+      "capture_oracle": {
+        "10%": 0.643,
+        "20%": 0.776,
+        "30%": 0.846,
+        "50%": 0.909
+      },
+      "capture_len_baseline": {
+        "10%": 0.071,
+        "20%": 0.189,
+        "30%": 0.311,
+        "50%": 0.758
+      },
+      "lift_at_20pct": 2.57
+    },
+    "signal_spearman_vs_carriers": {
+      "gene_hits": 0.216,
+      "variant_mentions": -0.055,
+      "carrier_mentions": 0.526,
+      "original_data": 0.396,
+      "cohort_size": 0.606,
+      "review": 0.025
+    }
+  }
+}
