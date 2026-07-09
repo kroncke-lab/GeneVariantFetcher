@@ -98,6 +98,21 @@ COHORT_NEAR_RE = re.compile(
 N_EQUALS_RE = re.compile(r"\b[nN]\s*=\s*(\d{1,6})\b")
 COHORT_CAP = 50000  # ignore absurd numbers (years, base pairs, etc.)
 
+# Population-frequency / GWAS / association studies: huge N but few phenotyped
+# carriers -- the score's main over-ranking failure mode (eval finding, see README).
+# Key on the paper's SUBJECT (population frequency / trait association), NOT tooling
+# refs like gnomAD / MAF that genuine clinical cohorts also cite for annotation --
+# those over-flagged real high-carrier cohorts (e.g. KCNQ1 32893267, 722 carriers).
+POPULATION_STUDY_RE = re.compile(
+    r"(?:genome[- ]wide association|\bGWAS\b|background population|general population|"
+    r"exome sequencing project|\bNHLBI\b|1000 genomes|UK Biobank|"
+    r"genomic epidemiology|\bCHARGE\b|Hardy[- ]?Weinberg|"
+    r"allele frequenc\w+ in the (?:general |background )?population|"
+    r"associated with (?:PR|QRS|QT|RR|JT) interval)",
+    re.IGNORECASE,
+)
+POPULATION_PENALTY = 0.3  # ev multiplier when flagged (down-weight, do not drop)
+
 
 def alias_regex(gene: str) -> re.Pattern:
     parts = [re.escape(a) for a in GENE_ALIASES.get(gene, [gene])]
@@ -233,6 +248,7 @@ def compute_features(gene: str, rec: dict) -> dict:
     cohort = max(cohort_vals) if cohort_vals else 0
 
     review = bool(REVIEW_TITLE_RE.search(title)) or ("Review" in ptypes)
+    pop_cues = sorted({m.group(0) for m in POPULATION_STUDY_RE.finditer(text)})
     return {
         "has_abstract": int(bool(abstract)),
         "gene_hits": _count(alias_regex(gene), text),
@@ -241,6 +257,8 @@ def compute_features(gene: str, rec: dict) -> dict:
         "original_data": _count(ORIGINAL_DATA_RE, text),
         "cohort_size": cohort,
         "review": int(review),
+        "population_study": int(bool(pop_cues)),
+        "population_cues": pop_cues,
         "abstract_len": len(abstract),
     }
 
@@ -273,11 +291,22 @@ def score(feat: dict) -> dict:
         + 0.5 * math.log1p(feat["original_data"])
     )
     ev *= p_relevant
+
+    # Down-weight population-frequency / GWAS / association studies (large N, few
+    # phenotyped carriers) and PERSIST why, so the reason travels with the score.
+    note = ""
+    if feat.get("population_study"):
+        ev *= POPULATION_PENALTY
+        cues = ", ".join(feat.get("population_cues", [])[:4])
+        note = f"likely GWAS/big-population study (down-weighted x{POPULATION_PENALTY}); cues: {cues}"
+
     return {
         "p_relevant": round(p_relevant, 4),
         "est_variants": est_variants,
         "est_carriers": est_carriers,
         "ev_score": round(ev, 4),
+        "population_flag": int(bool(feat.get("population_study"))),
+        "note": note,
     }
 
 
@@ -430,6 +459,8 @@ def main() -> int:
                 "variant_mentions",
                 "carrier_mentions",
                 "review",
+                "population_flag",
+                "note",
             ]
         )
         for it in items:
@@ -447,12 +478,27 @@ def main() -> int:
                     it["feat"]["variant_mentions"],
                     it["feat"]["carrier_mentions"],
                     it["feat"]["review"],
+                    it["population_flag"],
+                    it["note"],
                 ]
             )
 
     metrics = {"pooled": evaluate(items, "POOLED (cardiac)")}
     for g in genes:
         metrics[g] = evaluate([it for it in items if it["gene"] == g], g)
+    flagged = [it for it in items if it.get("population_flag")]
+    clean = [it for it in items if not it.get("population_flag")]
+    metrics["population_filter"] = {
+        "flagged": len(flagged),
+        "flagged_pct": round(100 * len(flagged) / max(len(items), 1), 1),
+        "penalty": POPULATION_PENALTY,
+        "mean_true_carriers_flagged": round(
+            sum(it["carriers"] for it in flagged) / max(len(flagged), 1), 1
+        ),
+        "mean_true_carriers_clean": round(
+            sum(it["carriers"] for it in clean) / max(len(clean), 1), 1
+        ),
+    }
     (RESULTS / "metrics.json").write_text(
         json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
     )
@@ -473,6 +519,12 @@ def main() -> int:
                 f"            capture@20%: EV={t['capture_ev']['20%']:.2f}  random=0.20  oracle={t['capture_oracle']['20%']:.2f}  len-baseline={t['capture_len_baseline']['20%']:.2f}"
             )
         print(f"  raw-signal Spearman vs carriers: {m['signal_spearman_vs_carriers']}")
+
+    pf = metrics["population_filter"]
+    print(
+        f"\n  population filter: {pf['flagged']} flagged ({pf['flagged_pct']}%), penalty x{pf['penalty']}; "
+        f"mean true carriers flagged={pf['mean_true_carriers_flagged']} vs clean={pf['mean_true_carriers_clean']}"
+    )
 
     p = metrics["pooled"]
     verdict_ok = (

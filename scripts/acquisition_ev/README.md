@@ -42,13 +42,15 @@ is 0 when the score beats the noise thresholds, 2 otherwise.
 
 ## Result on the cardiac ion-channel gold standards (n=1502)
 
+(Numbers include the population/GWAS down-weighting described below.)
+
 | Set | Spearman(EV, carriers) | Spearman(EV, variants) | carriers capture@20% | variants capture@20% |
 | --- | ---: | ---: | ---: | ---: |
-| **Pooled** | **+0.43** | **+0.35** | **0.53** (random 0.20, oracle 0.85) | **0.51** (random 0.20, oracle 0.76) |
-| KCNH2 | +0.30 | +0.43 | 0.39 | 0.41 |
-| KCNQ1 | +0.39 | +0.23 | 0.53 | 0.53 |
-| SCN5A | +0.46 | +0.31 | 0.61 | 0.53 |
-| RYR2  | +0.58 | +0.55 | 0.48 | 0.52 |
+| **Pooled** | **+0.44** | **+0.34** | **0.54** (random 0.20, oracle 0.85) | **0.53** (random 0.20, oracle 0.76) |
+| KCNH2 | +0.29 | +0.41 | 0.39 | 0.41 |
+| KCNQ1 | +0.39 | +0.22 | 0.53 | 0.54 |
+| SCN5A | +0.48 | +0.30 | 0.65 | 0.55 |
+| RYR2  | +0.56 | +0.54 | 0.48 | 0.52 |
 
 All correlations are positive and significant (p ≤ 5e-5 per gene, p≈0 pooled).
 Acquiring the top 20% of papers by score recovers roughly **half of all carriers
@@ -77,12 +79,37 @@ supplement-heavy papers that matter most — and it means the useful predictor i
 abstract."** The `est_variants = variant_mentions` proxy is therefore weak; treat it
 as a floor only.
 
+## Population / GWAS down-weighting (persisted)
+
+The score's main failure mode was **population-frequency / GWAS / association**
+papers: huge N, but they report variant frequencies in a background population, not
+phenotyped carriers, so they floated to the top on `cohort_size` with ~0 real yield
+(e.g. PMID 23465283 — NHLBI Exome Sequencing Project, 0–3 gold carriers). These are
+now detected (`POPULATION_STUDY_RE`) and their `ev_score` is multiplied by
+`POPULATION_PENALTY` (0.3 — down-weight, don't drop).
+
+The detector keys on the paper's **subject** — "background/general population",
+"Exome Sequencing Project / NHLBI", "genome-wide association / GWAS", "genomic
+epidemiology / CHARGE", "associated with PR/QRS/QT interval" — and deliberately does
+**not** fire on tooling references like `gnomAD` / `MAF` that genuine clinical
+cohorts cite for annotation (keying on those over-flagged real high-carrier papers,
+e.g. KCNQ1 32893267 with 722 carriers). On cardiac gold it flags 4.0% of papers,
+whose mean true carriers is **5.2 vs 12.8** for the rest — it concentrates on
+low-yield papers. Applying it removed all three known GWAS papers from the top-10 and
+nudged pooled carrier capture up (lift 2.66 → 2.71×).
+
+**The reason persists.** Every flagged paper carries `population_flag=1` and a
+human-readable `note` in `per_paper_scores.csv` (and in the `score()` output a
+downstream consumer / Variant Browser would surface), e.g. `"likely GWAS/big-
+population study (down-weighted x0.3); cues: Exome Sequencing Project, NHLBI,
+background population"`. A curator sees *why* a paper was demoted and can override it.
+
 ## Known limitations (→ v2 levers)
 
-- **Population/GWAS/biobank studies are over-ranked.** Papers with a huge N but few
-  per-gene curated carriers (e.g. PMID 23465283, cohort 6500 → 0–3 gold carriers)
-  float to the top on `cohort_size`. Next: penalize association/population/GWAS
-  context, or down-weight papers mentioning many genes.
+- **Residual population borderline flags.** A few papers merely citing "genome-wide
+  association" get the 0.3× penalty they may not fully deserve (e.g. SCN5A 24613995,
+  13 carriers). The persisted `note` makes every such case visible for a curator to
+  override, which is why the penalty down-weights rather than drops.
 - **No-abstract papers can't be scored.** 116/1502 (7.7%) have no PubMed abstract
   and default to the bottom — but they hold only 1.7% of gold carriers, so the cost
   is small. A title/journal-only fallback would recover them.

@@ -3,13 +3,13 @@
     "label": "POOLED (cardiac)",
     "n": 1502,
     "carriers": {
-      "spearman_ev": 0.433,
+      "spearman_ev": 0.443,
       "spearman_p": "0.0e+00",
       "capture_ev": {
-        "10%": 0.415,
-        "20%": 0.532,
-        "30%": 0.661,
-        "50%": 0.82
+        "10%": 0.421,
+        "20%": 0.542,
+        "30%": 0.664,
+        "50%": 0.816
       },
       "capture_random": {
         "10%": 0.1,
@@ -29,16 +29,16 @@
         "30%": 0.414,
         "50%": 0.743
       },
-      "lift_at_20pct": 2.66
+      "lift_at_20pct": 2.71
     },
     "variants": {
-      "spearman_ev": 0.346,
+      "spearman_ev": 0.336,
       "spearman_p": "0.0e+00",
       "capture_ev": {
-        "10%": 0.398,
-        "20%": 0.509,
-        "30%": 0.627,
-        "50%": 0.753
+        "10%": 0.397,
+        "20%": 0.525,
+        "30%": 0.621,
+        "50%": 0.735
       },
       "capture_random": {
         "10%": 0.1,
@@ -58,7 +58,7 @@
         "30%": 0.426,
         "50%": 0.716
       },
-      "lift_at_20pct": 2.55
+      "lift_at_20pct": 2.63
     },
     "signal_spearman_vs_carriers": {
       "gene_hits": 0.167,
@@ -73,13 +73,13 @@
     "label": "KCNH2",
     "n": 262,
     "carriers": {
-      "spearman_ev": 0.298,
-      "spearman_p": "4.8e-07",
+      "spearman_ev": 0.286,
+      "spearman_p": "1.5e-06",
       "capture_ev": {
-        "10%": 0.232,
-        "20%": 0.385,
-        "30%": 0.592,
-        "50%": 0.73
+        "10%": 0.234,
+        "20%": 0.392,
+        "30%": 0.598,
+        "50%": 0.736
       },
       "capture_random": {
         "10%": 0.1,
@@ -99,16 +99,16 @@
         "30%": 0.327,
         "50%": 0.641
       },
-      "lift_at_20pct": 1.93
+      "lift_at_20pct": 1.96
     },
     "variants": {
-      "spearman_ev": 0.427,
-      "spearman_p": "2.8e-14",
+      "spearman_ev": 0.408,
+      "spearman_p": "5.7e-13",
       "capture_ev": {
-        "10%": 0.288,
-        "20%": 0.409,
-        "30%": 0.594,
-        "50%": 0.747
+        "10%": 0.282,
+        "20%": 0.406,
+        "30%": 0.614,
+        "50%": 0.748
       },
       "capture_random": {
         "10%": 0.1,
@@ -128,7 +128,7 @@
         "30%": 0.37,
         "50%": 0.59
       },
-      "lift_at_20pct": 2.04
+      "lift_at_20pct": 2.03
     },
     "signal_spearman_vs_carriers": {
       "gene_hits": 0.192,
@@ -143,13 +143,13 @@
     "label": "KCNQ1",
     "n": 305,
     "carriers": {
-      "spearman_ev": 0.389,
-      "spearman_p": "2.0e-13",
+      "spearman_ev": 0.392,
+      "spearman_p": "1.2e-13",
       "capture_ev": {
-        "10%": 0.42,
-        "20%": 0.533,
-        "30%": 0.636,
-        "50%": 0.743
+        "10%": 0.47,
+        "20%": 0.525,
+        "30%": 0.625,
+        "50%": 0.789
       },
       "capture_random": {
         "10%": 0.1,
@@ -169,16 +169,16 @@
         "30%": 0.373,
         "50%": 0.718
       },
-      "lift_at_20pct": 2.67
+      "lift_at_20pct": 2.62
     },
     "variants": {
-      "spearman_ev": 0.227,
-      "spearman_p": "5.1e-05",
+      "spearman_ev": 0.222,
+      "spearman_p": "7.4e-05",
       "capture_ev": {
-        "10%": 0.471,
-        "20%": 0.532,
-        "30%": 0.637,
-        "50%": 0.713
+        "10%": 0.469,
+        "20%": 0.538,
+        "30%": 0.64,
+        "50%": 0.717
       },
       "capture_random": {
         "10%": 0.1,
@@ -198,7 +198,7 @@
         "30%": 0.295,
         "50%": 0.616
       },
-      "lift_at_20pct": 2.66
+      "lift_at_20pct": 2.69
     },
     "signal_spearman_vs_carriers": {
       "gene_hits": -0.133,
@@ -213,13 +213,13 @@
     "label": "SCN5A",
     "n": 757,
     "carriers": {
-      "spearman_ev": 0.459,
+      "spearman_ev": 0.478,
       "spearman_p": "0.0e+00",
       "capture_ev": {
-        "10%": 0.441,
-        "20%": 0.607,
-        "30%": 0.708,
-        "50%": 0.858
+        "10%": 0.459,
+        "20%": 0.645,
+        "30%": 0.72,
+        "50%": 0.86
       },
       "capture_random": {
         "10%": 0.1,
@@ -239,16 +239,16 @@
         "30%": 0.434,
         "50%": 0.728
       },
-      "lift_at_20pct": 3.04
+      "lift_at_20pct": 3.23
     },
     "variants": {
-      "spearman_ev": 0.306,
+      "spearman_ev": 0.296,
       "spearman_p": "0.0e+00",
       "capture_ev": {
         "10%": 0.399,
-        "20%": 0.528,
-        "30%": 0.624,
-        "50%": 0.748
+        "20%": 0.546,
+        "30%": 0.615,
+        "50%": 0.721
       },
       "capture_random": {
         "10%": 0.1,
@@ -268,7 +268,7 @@
         "30%": 0.457,
         "50%": 0.722
       },
-      "lift_at_20pct": 2.64
+      "lift_at_20pct": 2.73
     },
     "signal_spearman_vs_carriers": {
       "gene_hits": 0.215,
@@ -283,13 +283,13 @@
     "label": "RYR2",
     "n": 178,
     "carriers": {
-      "spearman_ev": 0.579,
+      "spearman_ev": 0.565,
       "spearman_p": "0.0e+00",
       "capture_ev": {
         "10%": 0.338,
         "20%": 0.481,
-        "30%": 0.601,
-        "50%": 0.852
+        "30%": 0.611,
+        "50%": 0.839
       },
       "capture_random": {
         "10%": 0.1,
@@ -312,13 +312,13 @@
       "lift_at_20pct": 2.41
     },
     "variants": {
-      "spearman_ev": 0.552,
+      "spearman_ev": 0.539,
       "spearman_p": "0.0e+00",
       "capture_ev": {
         "10%": 0.376,
         "20%": 0.515,
-        "30%": 0.634,
-        "50%": 0.815
+        "30%": 0.618,
+        "50%": 0.794
       },
       "capture_random": {
         "10%": 0.1,
@@ -348,5 +348,12 @@
       "cohort_size": 0.606,
       "review": 0.025
     }
+  },
+  "population_filter": {
+    "flagged": 60,
+    "flagged_pct": 4.0,
+    "penalty": 0.3,
+    "mean_true_carriers_flagged": 5.2,
+    "mean_true_carriers_clean": 12.8
   }
 }
