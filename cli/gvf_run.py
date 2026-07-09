@@ -74,6 +74,35 @@ CREDENTIAL_UNLOCKS = (
 )
 
 
+def browser_recovery_status() -> dict:
+    """Report whether the Playwright browser-recovery tier can actually run.
+
+    Playwright is a declared dependency and Tier 3.5 / source-recovery relies on
+    it to fetch free-after-embargo and Cloudflare-gated publisher HTML. When the
+    package or its Chromium binary is missing the recovery tier silently
+    degrades to abstract-only stubs, so surface it loudly here instead. Cheap:
+    resolves the executable path without launching a browser.
+    """
+    result = {"available": False, "reason": ""}
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception:
+        result["reason"] = "playwright not installed (pip install playwright)"
+        return result
+    try:
+        with sync_playwright() as p:
+            exe = p.chromium.executable_path
+        if exe and Path(exe).exists():
+            result["available"] = True
+        else:
+            result["reason"] = (
+                "chromium binary missing (run: python -m playwright install chromium)"
+            )
+    except Exception as e:  # driver start / path resolution failed
+        result["reason"] = f"chromium unavailable: {str(e)[:120]}"
+    return result
+
+
 def doctor() -> dict:
     """Return a status dict describing the environment.
 
@@ -102,6 +131,9 @@ def doctor() -> dict:
     for k in RECOMMENDED_ENV + CREDENTIAL_UNLOCKS:
         bucket = "unlocks" if k in CREDENTIAL_UNLOCKS else "recommended"
         status[bucket][k] = bool(os.environ.get(k))
+    # Browser-recovery tier: a hard dependency for source recovery, but easy to
+    # leave un-provisioned (package installed, Chromium binary not). Surface it.
+    status["browser_recovery"] = browser_recovery_status()
     # Quick reachability check — NCBI esearch
     try:
         import requests
@@ -667,6 +699,15 @@ def step_report(
         lines.append("")
 
     lines.append("## Next steps")
+    browser = doctor_status.get("browser_recovery") or {}
+    if browser and not browser.get("available", True):
+        lines.append(
+            "- ⚠️ Browser recovery is UNAVAILABLE "
+            f"({browser.get('reason') or 'unknown'}). Source recovery cannot fetch "
+            "free-after-embargo or paywalled publisher HTML and will fall back to "
+            "abstract-only stubs. Fix: `python -m playwright install chromium` "
+            "(and `pip install playwright` if missing)."
+        )
     if doctor_status.get("unlocks", {}).get("ELSEVIER_INSTTOKEN") is False:
         lines.append(
             "- ELSEVIER_INSTTOKEN is unset. Adding it (request from your library) "
