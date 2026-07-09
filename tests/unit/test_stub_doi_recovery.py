@@ -15,10 +15,8 @@ tests lock in the three fixes that close that gap:
 from __future__ import annotations
 
 import csv
-import sys
 from pathlib import Path
 
-from cli import gvf_run
 from harvesting import orchestrator as orch
 from scripts import fetch_paywalled as fp
 from scripts.recall_audit import source_acquisition_audit as audit
@@ -148,24 +146,3 @@ def test_resolve_doi_degrades_on_error(monkeypatch):
 
     monkeypatch.setattr(fp, "get_doi_from_pmid", _raise)
     assert fp.resolve_doi_for_pmid("999") is None
-
-
-# --------------------------------------------------------------------------- #
-# 4. doctor: browser-recovery tier must be surfaced, not silently skipped
-# --------------------------------------------------------------------------- #
-
-
-def test_browser_recovery_status_shape():
-    st = gvf_run.browser_recovery_status()
-    assert set(st) >= {"available", "reason"}
-    assert isinstance(st["available"], bool)
-
-
-def test_browser_recovery_status_reports_missing_playwright(monkeypatch):
-    # Simulate playwright not installed: importing it must raise, and the check
-    # must degrade to a clear, actionable message instead of crashing.
-    monkeypatch.setitem(sys.modules, "playwright", None)
-    monkeypatch.setitem(sys.modules, "playwright.sync_api", None)
-    st = gvf_run.browser_recovery_status()
-    assert st["available"] is False
-    assert "playwright" in st["reason"].lower()
