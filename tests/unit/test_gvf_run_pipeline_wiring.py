@@ -359,3 +359,46 @@ def test_trust_gate_is_skippable(tmp_path: Path, monkeypatch):
     )
     assert rc == 0
     assert calls == [], "trust gate should be skippable via skip=['trust-gate']"
+
+
+def test_paper_final_check_runs_by_default(tmp_path: Path, monkeypatch):
+    """The per-paper final check (sniff test) runs by default — Step 3.8."""
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db: calls.append(db) or {"papers": 0, "checked": 0},
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == 0
+    assert len(calls) == 1, "paper final check should run by default"
+
+
+def test_paper_final_check_is_skippable(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run, "step_paper_final_check", lambda db: calls.append(db) or {}
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc", "paper-final-check"],
+    )
+    assert rc == 0
+    assert calls == [], "final check should be skippable via skip=['paper-final-check']"

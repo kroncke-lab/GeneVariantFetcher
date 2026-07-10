@@ -406,6 +406,37 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Per-paper "final check" (sniff test). A strong reasoning model reviews
+    # each paper's extracted counts against their provenance and records a soft
+    # verdict in paper_final_check (never mutates counts). Default-on; skips
+    # gracefully when the model is unreachable. See pipeline/paper_final_check.py.
+    paper_final_check_enabled: bool = Field(
+        default=True,
+        validation_alias="PAPER_FINAL_CHECK_ENABLED",
+        description=(
+            "Run the per-paper gpt-5.6-sol sniff test as a default gvf-run step "
+            "(Step 3.8). Set false to skip."
+        ),
+    )
+    paper_final_check_model: str = Field(
+        default="azure_ai/gpt-5.6-sol",
+        validation_alias="PAPER_FINAL_CHECK_MODEL",
+        description=(
+            "Model for the per-paper final check. Defaults to the deepest "
+            "reasoning model; the step skips gracefully when it is unreachable "
+            "(e.g. no Azure credentials)."
+        ),
+    )
+    paper_final_check_reasoning_effort: Optional[str] = Field(
+        default="xhigh",
+        validation_alias="PAPER_FINAL_CHECK_REASONING_EFFORT",
+        description=(
+            "Reasoning effort for the per-paper final check "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). "
+            "xhigh = max thinking on gpt-5.6-sol."
+        ),
+    )
+
     # Table-router (router-first extraction): the LLM classifies which tables
     # contain variant data; a deterministic parser then reads the cells. Falls
     # back to the full-text Tier-3 path when no usable tables are detected.
@@ -608,6 +639,7 @@ class Settings(BaseSettings):
         "vision_reasoning_effort",
         "final_adjudicator_reasoning_effort",
         "final_arbiter_reasoning_effort",
+        "paper_final_check_reasoning_effort",
     )
     @classmethod
     def _validate_reasoning_effort(cls, v: Optional[str]) -> Optional[str]:
