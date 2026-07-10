@@ -47,7 +47,13 @@ def summarize_trust(db_path: str | Path) -> dict[str, Any]:
                        pd.trust_rule_version,
                        em.study_design
                 FROM penetrance_data pd
-                LEFT JOIN extraction_metadata em ON em.pmid = pd.pmid
+                LEFT JOIN extraction_metadata em
+                       ON em.pmid = pd.pmid
+                      AND em.extraction_id = (
+                              SELECT MAX(em2.extraction_id)
+                              FROM extraction_metadata em2
+                              WHERE em2.pmid = pd.pmid
+                          )
                 """
             ).fetchall()
         else:

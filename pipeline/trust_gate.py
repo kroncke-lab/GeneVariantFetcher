@@ -258,6 +258,11 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                        ON vp.variant_id = pd.variant_id AND vp.pmid = pd.pmid
                 LEFT JOIN extraction_metadata em
                        ON em.pmid = pd.pmid
+                      AND em.extraction_id = (
+                              SELECT MAX(em2.extraction_id)
+                              FROM extraction_metadata em2
+                              WHERE em2.pmid = pd.pmid
+                          )
                 """
             )
         ]

@@ -170,3 +170,43 @@ def test_apply_trust_gate_is_idempotent(tmp_path):
     second = apply_trust_gate(db)
     assert first["trusted"] == second["trusted"] == 1
     assert first["quarantine"] == second["quarantine"] == 0
+
+
+def test_apply_trust_gate_dedupes_multiple_extraction_metadata_rows(tmp_path):
+    """A pmid with >1 extraction_metadata row must not fan a fact out once per
+    row (which double-counts stats and lets an arbitrary row win the tier). The
+    latest metadata row (max extraction_id) decides the study context."""
+    db = str(tmp_path / "t.db")
+    conn = create_database_schema(db)
+    try:
+        _seed(conn, 1, "111", {"carriers": 10, "affected": 6, "unaffected": 3})
+        # Two metadata rows for the same pmid. The OLDER (extraction_id=1) is a
+        # review (study_type_mismatch -> quarantine); the NEWER (extraction_id=2)
+        # is a case series (clean). The newer must win.
+        conn.execute(
+            "INSERT INTO extraction_metadata (extraction_id, pmid, study_design) "
+            "VALUES (1, '111', 'review_meta')"
+        )
+        conn.execute(
+            "INSERT INTO extraction_metadata (extraction_id, pmid, study_design) "
+            "VALUES (2, '111', 'case_series')"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    stats = apply_trust_gate(db)
+    # Exactly one fact tiered — no fan-out (would be 2 before the fix).
+    assert stats["trusted"] + stats["quarantine"] == 1
+    # Latest metadata (case_series) wins -> trusted, not the older review_meta.
+    assert stats["trusted"] == 1
+    assert stats["quarantine"] == 0
+
+    conn = sqlite3.connect(db)
+    try:
+        tier = conn.execute(
+            "SELECT trust_tier FROM penetrance_data WHERE penetrance_id = 1"
+        ).fetchone()[0]
+    finally:
+        conn.close()
+    assert tier == "trusted"
