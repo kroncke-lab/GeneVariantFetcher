@@ -165,6 +165,16 @@ class RunManifestManager:
             }
         )
 
+        # Reproducibility provenance: git SHA, prompt/extractor content hash,
+        # resolved model routing, dependency-lock hash. Best-effort -- never
+        # blocks a run.
+        try:
+            from utils.provenance import collect_provenance
+
+            manifest.data["provenance"] = collect_provenance()
+        except Exception:
+            manifest.data["provenance"] = {}
+
         return manifest
 
     @staticmethod
