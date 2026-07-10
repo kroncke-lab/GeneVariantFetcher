@@ -16,8 +16,15 @@ def test_hash_files_is_stable_and_content_addressed(tmp_path):
     assert h3 != h1
 
 
-def test_hash_files_none_when_absent(tmp_path):
-    assert provenance.hash_files(["nope.txt"], root=tmp_path) is None
+def test_hash_files_folds_missing_as_sentinel(tmp_path):
+    """A missing listed file is folded in (not skipped), so its absence changes
+    the hash and can't silently vanish. Only an empty list returns None."""
+    (tmp_path / "a.txt").write_text("alpha")
+    present = provenance.hash_files(["a.txt"], root=tmp_path)
+    with_missing = provenance.hash_files(["a.txt", "nope.txt"], root=tmp_path)
+    assert with_missing is not None
+    assert with_missing != present
+    assert provenance.hash_files([], root=tmp_path) is None
 
 
 def test_collect_provenance_has_expected_keys_and_never_raises():
@@ -38,3 +45,10 @@ def test_prompt_extractor_hash_tracks_real_files():
     # These files exist in the repo, so the hash must be populated.
     assert provenance.prompt_extractor_hash() is not None
     assert provenance.dependency_lock_hash() is not None
+
+
+def test_collect_provenance_records_missing_hash_inputs():
+    prov = provenance.collect_provenance()
+    assert "prompt_extractor_files_missing" in prov
+    # Every expected extractor file exists in the repo, so none are missing.
+    assert prov["prompt_extractor_files_missing"] == []

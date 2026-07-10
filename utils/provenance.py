@@ -23,6 +23,12 @@ PROMPT_EXTRACTOR_FILES = [
     "pipeline/extraction.py",
     "pipeline/table_router.py",
     "pipeline/pedigree_extractor.py",
+    # behavior that also moves recall/counts, not just the prompt text:
+    "pipeline/filters.py",
+    "pipeline/count_classifier.py",
+    "pipeline/extraction_priority.py",
+    "utils/variant_normalizer.py",
+    "utils/variant_scanner.py",
 ]
 
 # Files whose content defines the dependency set.
@@ -57,19 +63,24 @@ def git_is_dirty() -> Optional[bool]:
 
 
 def hash_files(rel_paths: Iterable[str], root: Path = REPO_ROOT) -> Optional[str]:
-    """Stable sha256 over the given files' path+content; None if none exist."""
+    """Stable sha256 over the given files' path+content.
+
+    A listed file that is absent is folded in as a ``<MISSING>`` sentinel rather
+    than skipped, so a rename or removal (e.g. a stale entry in
+    ``PROMPT_EXTRACTOR_FILES``) changes the hash and cannot silently vanish while
+    the digest still looks valid. Returns None only for an empty input list.
+    """
+    rel_list = list(rel_paths)
+    if not rel_list:
+        return None
     hasher = hashlib.sha256()
-    seen_any = False
-    for rel in rel_paths:
+    for rel in rel_list:
         path = root / rel
-        if not path.is_file():
-            continue
-        seen_any = True
         hasher.update(rel.encode("utf-8"))
         hasher.update(b"\0")
-        hasher.update(path.read_bytes())
+        hasher.update(path.read_bytes() if path.is_file() else b"<MISSING>")
         hasher.update(b"\0")
-    return hasher.hexdigest() if seen_any else None
+    return hasher.hexdigest()
 
 
 def prompt_extractor_hash() -> Optional[str]:
@@ -78,6 +89,12 @@ def prompt_extractor_hash() -> Optional[str]:
 
 def dependency_lock_hash() -> Optional[str]:
     return hash_files(DEPENDENCY_FILES)
+
+
+def missing_files(rel_paths: Iterable[str], root: Path = REPO_ROOT) -> list[str]:
+    """Listed paths that are not present. A stale hash-input list is a
+    reproducibility hole, so it is recorded in the manifest, not swallowed."""
+    return [rel for rel in rel_paths if not (root / rel).is_file()]
 
 
 def resolved_model_routing() -> dict[str, Any]:
@@ -145,4 +162,10 @@ def collect_provenance() -> dict[str, Any]:
             provenance[key] = fn()
         except Exception:
             provenance[key] = None
+    try:
+        provenance["prompt_extractor_files_missing"] = missing_files(
+            PROMPT_EXTRACTOR_FILES
+        )
+    except Exception:
+        provenance["prompt_extractor_files_missing"] = None
     return provenance
