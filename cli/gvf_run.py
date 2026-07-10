@@ -994,6 +994,13 @@ def step_vf_enrich(gene: str, db: Path) -> dict:
     return enrich_and_quarantine(gene, db, logger=logger)
 
 
+def step_trust_gate(db: Path) -> dict:
+    """Soft-quarantine gold-free-implausible count facts into the trust tier."""
+    from pipeline.trust_gate import apply_trust_gate
+
+    return apply_trust_gate(db)
+
+
 # ---------------------------------------------------------------------------
 # Entry point (called from cli/__init__.py)
 # ---------------------------------------------------------------------------
@@ -1272,6 +1279,21 @@ def run_gvf_pipeline(
             stage_warnings.append(f"vf-enrich failed: {e}")
     elif full_coverage and not vf_enrich:
         logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED")
+
+    # Step 3.7: per-fact trust gate — soft-quarantine gold-free-implausible count
+    # facts into a two-tier (trusted/quarantine) DB. Default ON: this is the
+    # primary automated quality control for unattended operation. It only sets
+    # trust_tier (never NULLs/deletes), so a failure degrades to the DDL default
+    # ('trusted') rather than losing data — hence a warning, not a hard failure.
+    if "trust-gate" not in skip:
+        logger.info("🚦 Step 3.7: per-fact trust gate")
+        try:
+            logger.info("trust gate: %s", step_trust_gate(db=db))
+        except Exception as e:  # noqa: BLE001
+            logger.exception("trust gate failed (%s); continuing", e)
+            stage_warnings.append(f"trust gate failed: {e}")
+    else:
+        logger.info("⏭️  Step 3.7: trust gate — SKIPPED")
 
     # Step 4: gold-free source QC. Only run if Step 3 did not already attempt it —
     # a failed Step-3 attempt also leaves source_qc_summary None, and re-running
