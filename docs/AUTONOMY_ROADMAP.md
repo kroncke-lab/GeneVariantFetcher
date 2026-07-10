@@ -26,16 +26,16 @@ Trust/validation hardening + the "fleet-honesty" pass:
   error; cold-start harness strips warm-start `GVF_*` env, refuses a non-empty
   isolated corpus, and derives the covered-gene set at runtime.
 
-The foundation **measures and reports** honestly. It does not yet **decide**
-per-fact what to trust — that is the next PR.
+The foundation **measures and reports** honestly. The per-fact **decision** layer
+(the trust gate) landed next — v1 is now merged (see below).
 
-## Next PR (keystone): per-fact confidence/trust gate → two-tier DB
+## Keystone — per-fact confidence/trust gate → two-tier DB (v1 LANDED, PR #142)
 
 The piece that actually removes the human from the margin. Sorts every extracted
 fact into **trusted** vs **quarantine** using gold-free checks, so downstream
 products consume only the trusted tier and the held tier feeds audit/calibration.
 
-**Status — v1 landed on the `trust-gate` branch (stacked on #140):** the two-tier
+**Status — v1 MERGED to main (PR #142):** the two-tier
 schema (`penetrance_data.trust_tier / trust_reasons / trust_rule_version`), the
 gold-free rule core (`pipeline/trust_gate.py`: `arith_inconsistent`,
 `count_is_total`, `population_count`, `paper_outlier`; pure `evaluate_fact` +
@@ -144,8 +144,9 @@ From the `/code-review` on PR #140 (correctness/reuse not in the fleet-honesty p
       `GVF_APPLY_ADJUDICATIONS` truthy-parse (→ `recall_audit.common.parse_bool`,
       so `=y` isn't silently false).
 - [ ] **Latent**: `migrate_to_sqlite` raw `BEGIN` has no guard for a connection
-      already in a transaction (safe with current callers). `step_layers` returns
-      `progression.csv` even when the layer subprocess failed.
+      already in a transaction (safe with current callers). (`step_layers`
+      returning a bogus `progression.csv` path on failure was FIXED — merged; it
+      returns `None` now.)
 
 ## BRCA generalization prerequisites (gate depends on these)
 

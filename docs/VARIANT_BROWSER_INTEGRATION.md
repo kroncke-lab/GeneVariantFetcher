@@ -166,11 +166,11 @@ Written under `gene_variant_fetcher_gold_standard/adjudications/` (override with
 Adjudications are a **correction overlay**: the extracted value and the adjudicated
 value are kept side by side. Nothing rewrites the raw extraction JSON or the run DB.
 
-> **Note (current limitation):** the recall scorer (`cli/compare_variants.py`,
-> `scripts/run_recall_suite.py`) does **not yet consume** this overlay — nor the
-> older, hand-curated `gold_v2_*` columns in `normalized/<GENE>_recall_input.csv`.
-> The overlay preserves everything needed to recompute metrics, but joining it into
-> the live scorer is a deliberate next step, not automatic today.
+> **Note:** the recall scorer now consumes this overlay **opt-in** — pass
+> `--adjudication-overlay PATH` (`cli/compare_variants.py`) or set
+> `GVF_APPLY_ADJUDICATIONS=1` (`scripts/run_recall_suite.py`); it is off by default
+> so baseline scoring is unchanged. The older hand-curated `gold_v2_*` columns are
+> still not consumed. Making overlay consumption the *default* is the remaining step.
 
 This is the live, export-driven cousin of the older hand-curated `gold_v2_*`
 overlay columns in `normalized/<GENE>_recall_input.csv` (which were populated by a

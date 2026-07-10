@@ -7,15 +7,45 @@
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 
-## Autonomy at Scale (2026-07-10) — the trust gate is the next lever
+## Autonomy at Scale (updated 2026-07-10) — trust-gate v1 landed; these are the open levers
 
-The strategic direction and the buildable next-PR spec live in
-[`docs/AUTONOMY_ROADMAP.md`](docs/AUTONOMY_ROADMAP.md): a per-fact
-confidence/trust gate → two-tier (trusted/quarantine) DB, gene-class-agnostic
-structural checks, per-stratum calibration (cardiac + BRCA + a cold gene), and
-the deferred code-review findings from PR #140. The recall levers below still
-apply; the trust gate is what makes unattended hundreds-of-genes operation
-trustworthy.
+Fleet-honesty (non-zero exit + `RUN_STATUS.json` on stage failure, fail-closed
+regression gate) and the per-fact **trust gate v1** are MERGED (PR #140 + #142):
+`pipeline/trust_gate.py` soft-quarantines gold-free-implausible counts into a
+trusted/quarantine two-tier DB, default-on in `gvf-run` (Step 3.7). Full plan and
+rationale in [`docs/AUTONOMY_ROADMAP.md`](docs/AUTONOMY_ROADMAP.md). The open
+levers — what actually stands between here and "trust it unattended at scale":
+
+- [ ] **Make the trusted tier the DEFAULT** the scorer, reports, and downstream
+      tools read — they still read the WHOLE DB, so the tiering is informational
+      today. Highest-leverage single step: add `trust_tier` filtering to
+      `cli/compare_variants.py` (`extract_sqlite_data`) and report trusted-tier
+      precision + the quarantine rate.
+- [ ] **Count-role / evidence-type axis.** Promote count role (patient / cohort
+      total / control / population) to a first-class field on `penetrance_data`
+      and have the trust gate score role consistency (case-control ≠ carrier
+      counts) — keeps BRCA case-control from looking like a cardiac penetrance
+      error. Sharpens Lever 2 below.
+- [ ] **Calibrate the trust gate per stratum** (cardiac + BRCA + one cold gene)
+      with `scripts/precision_sample.py`; a pooled CI hides BRCA failure under
+      cardiac volume. One-time human labeling per stratum, not per paper.
+- [ ] **BRCA1/BRCA2 readiness** (see `project_brca_generalization_readiness` in
+      memory): register BRCA2 in `PROTEIN_LENGTHS` / `gene_metadata`; handle
+      BRCA-class notation BY CLASS (legacy BIC indels, IVS, exon CNVs), not a
+      per-gene alias file; build a ClinVar silver standard to score against.
+- [ ] **Fail-CLOSED validation on unknown genes.** `utils/variant_normalizer.py`
+      `validate_position` returns True when a gene's length is unknown (MLH1,
+      BRCA2) — quarantine those (reason `no_gene_length`) instead of trusting.
+- [ ] **Fleet-scale nightly + acceptance metrics.** Wire `make regression-gate`
+      into a real nightly/cron (needs the gitignored canonical DBs → local /
+      self-hosted); define the gate's own acceptance metrics (trusted-tier
+      precision on cardiac AND BRCA; quarantine rate not exploding on cold genes).
+- [ ] **Fold the legacy guards into the trust record.** `carrier_guard` (NULLs
+      counts) and `vf`-quarantine (DELETEs rows) should write `trust_tier` and
+      preserve raw counts instead of destroying data.
+
+The supplement-acquisition recall ceiling (Levers 1/3 below) is the other half —
+finding more of the real evidence — and is orthogonal to the trust work.
 
 ## Exact-Match Recovery Plan (2026-06-12) — START HERE
 
