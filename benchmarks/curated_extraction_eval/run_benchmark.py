@@ -235,6 +235,11 @@ def headline(summary: dict) -> dict:
         b = mae.get(name, {})
         return b.get("mae")
 
+    e2e = summary.get("aggregate_count_error_end_to_end", {})
+
+    def e(name):
+        return e2e.get(name, {}).get("mae")
+
     return {
         "recall": {
             k: r(k)
@@ -248,6 +253,9 @@ def headline(summary: dict) -> dict:
             )
         },
         "mae": {k: m(k) for k in ("carriers", "affected", "unaffected")},
+        "count_error_end_to_end": {
+            k: e(k) for k in ("carriers", "affected", "unaffected")
+        },
     }
 
 
@@ -321,24 +329,58 @@ def check_regression(
         return []
     h = headline(summary)
     problems: list[str] = []
+
     base_rec = baseline.get("recall", {})
     for name, block in h["recall"].items():
-        cur = block["recall"]
         base = (base_rec.get(name) or {}).get("recall")
-        if cur is None or base is None:
-            continue
-        if cur < base - recall_tol:
+        if base is None:
+            continue  # dimension not tracked by the baseline
+        cur = block["recall"]
+        if cur is None:
+            problems.append(
+                f"recall.{name}: missing in current run (baseline {base:.3f})"
+            )
+        elif cur < base - recall_tol:
             problems.append(
                 f"recall.{name}: {cur:.3f} < baseline {base:.3f} - {recall_tol}"
             )
-    base_mae = baseline.get("mae", {})
-    for name, cur in h["mae"].items():
-        base = base_mae.get(name)
-        if cur is None or base is None:
-            continue
-        if cur > base + mae_tol:
-            problems.append(f"mae.{name}: {cur:.3f} > baseline {base:.3f} + {mae_tol}")
+
+    # Both matched-only MAE and the end-to-end count error (misses as zero) gate
+    # on a rise. Including e2e is what stops the gate from re-flattering the
+    # metric this branch just added; it activates once the baseline is
+    # regenerated (--write-baseline) with the e2e block.
+    for key, label in (("mae", "mae"), ("count_error_end_to_end", "e2e")):
+        base_block = baseline.get(key, {})
+        for name, cur in h.get(key, {}).items():
+            base = base_block.get(name)
+            if base is None:
+                continue
+            if cur is None:
+                problems.append(
+                    f"{label}.{name}: missing in current run (baseline {base:.3f})"
+                )
+            elif cur > base + mae_tol:
+                problems.append(
+                    f"{label}.{name}: {cur:.3f} > baseline {base:.3f} + {mae_tol}"
+                )
     return problems
+
+
+def gate_result(
+    summary: dict,
+    baseline: dict | None,
+    recall_tol: float,
+    mae_tol: float,
+) -> list[str]:
+    """The --fail-on-regression decision, fail-closed. A missing baseline is a
+    hard failure: a gate that compared against nothing must not report success.
+    """
+    if baseline is None:
+        return [
+            "no baseline at expected_baseline.json — refusing to pass a gate that "
+            "checked nothing (write one with --write-baseline)"
+        ]
+    return check_regression(summary, baseline, recall_tol, mae_tol)
 
 
 def resolve_dbs(overrides: list[str] | None) -> dict[str, Path]:
@@ -539,11 +581,9 @@ def main() -> int:
     )
 
     if args.fail_on_regression:
-        problems = check_regression(
-            summary, baseline, args.regression_tol, args.mae_tol
-        )
+        problems = gate_result(summary, baseline, args.regression_tol, args.mae_tol)
         if problems:
-            print("\n❌ REGRESSION vs baseline:")
+            print("\n❌ REGRESSION gate failed:")
             for problem in problems:
                 print(f"  - {problem}")
             return 1

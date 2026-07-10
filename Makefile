@@ -6,7 +6,7 @@ PY := .venv/bin/python
 EMAIL ?= brett.kroncke@gmail.com
 OUTPUT ?= ./results
 
-.PHONY: help install test run
+.PHONY: help install test run regression-gate
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -23,3 +23,6 @@ test:  ## Run the offline unit suite (the CI-gated set)
 run:  ## Run the pipeline on a gene: make run GENE=KCNH2 [EMAIL=brett.kroncke@gmail.com] [OUTPUT=./results]
 	@test -n "$(GENE)" || { echo "Usage: make run GENE=<SYMBOL> [EMAIL=brett.kroncke@gmail.com] [OUTPUT=./results]"; exit 2; }
 	$(PY) -m cli gvf-run $(GENE) --email $(EMAIL) --output $(OUTPUT)
+
+regression-gate:  ## Score the curated benchmark and FAIL on any regression (fail-closed; needs canonical DBs — run as a nightly/cron)
+	$(PY) benchmarks/curated_extraction_eval/run_benchmark.py --fail-on-regression
