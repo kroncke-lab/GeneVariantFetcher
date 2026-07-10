@@ -305,6 +305,42 @@ def print_scorecard(summary: dict, papers: list[dict], baseline: dict | None) ->
     print()
 
 
+def check_regression(
+    summary: dict,
+    baseline: dict | None,
+    recall_tol: float,
+    mae_tol: float,
+) -> list[str]:
+    """Return regression messages (empty if none) vs the frozen baseline.
+
+    A recall dimension regresses if it drops more than ``recall_tol`` below
+    baseline; a count MAE regresses if it rises more than ``mae_tol`` above
+    baseline (higher MAE is worse).
+    """
+    if not baseline:
+        return []
+    h = headline(summary)
+    problems: list[str] = []
+    base_rec = baseline.get("recall", {})
+    for name, block in h["recall"].items():
+        cur = block["recall"]
+        base = (base_rec.get(name) or {}).get("recall")
+        if cur is None or base is None:
+            continue
+        if cur < base - recall_tol:
+            problems.append(
+                f"recall.{name}: {cur:.3f} < baseline {base:.3f} - {recall_tol}"
+            )
+    base_mae = baseline.get("mae", {})
+    for name, cur in h["mae"].items():
+        base = base_mae.get(name)
+        if cur is None or base is None:
+            continue
+        if cur > base + mae_tol:
+            problems.append(f"mae.{name}: {cur:.3f} > baseline {base:.3f} + {mae_tol}")
+    return problems
+
+
 def resolve_dbs(overrides: list[str] | None) -> dict[str, Path]:
     dbs: dict[str, Path] = {}
     for gene, path in CANONICAL_DBS.items():
@@ -443,6 +479,25 @@ def main() -> int:
         action="store_true",
         help="Save this run's headline numbers as expected_baseline.json.",
     )
+    ap.add_argument(
+        "--fail-on-regression",
+        action="store_true",
+        help="Exit nonzero if recall drops or count MAE rises beyond tolerance "
+        "vs expected_baseline.json. Makes this runner a CI/nightly gate.",
+    )
+    ap.add_argument(
+        "--regression-tol",
+        type=float,
+        default=0.005,
+        help="Recall regression tolerance (fraction; default 0.005 = 0.5pp).",
+    )
+    ap.add_argument(
+        "--mae-tol",
+        type=float,
+        default=0.05,
+        help="Count-MAE regression tolerance (absolute; default 0.05, matching "
+        "the refresh_recall land gate).",
+    )
     args = ap.parse_args()
 
     manifest = load_manifest()
@@ -482,6 +537,17 @@ def main() -> int:
         "(summary.json, report.md, per-gene discrepancies.csv, "
         "paper_disagreement_report.csv)"
     )
+
+    if args.fail_on_regression:
+        problems = check_regression(
+            summary, baseline, args.regression_tol, args.mae_tol
+        )
+        if problems:
+            print("\n❌ REGRESSION vs baseline:")
+            for problem in problems:
+                print(f"  - {problem}")
+            return 1
+        print("\n✓ No regression vs baseline.")
     return 0
 
 

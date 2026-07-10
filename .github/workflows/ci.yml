@@ -65,3 +65,29 @@ jobs:
             tests/test_manifest.py \
             tests/test_failure_logger.py \
             tests/test_extract_cli.py
+
+  benchmark-guards:
+    # Gates the precision/negative benchmark cases (self-contained: no network,
+    # no LLM, no DB) and smoke-checks the curated benchmark runner. The curated
+    # SCORE gate (run_benchmark.py --fail-on-regression) needs the gitignored
+    # canonical DBs, so it runs in the nightly, not here.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest
+      - name: Negative benchmark cases (precision guards)
+        run: pytest -v benchmarks/curated_extraction_eval/negative_cases
+      - name: Curated benchmark runner smoke
+        run: python benchmarks/curated_extraction_eval/run_benchmark.py --help
+      - name: Cold-start harness smoke (dry-run)
+        run: python benchmarks/cold_start_eval/run_cold_start.py LDLR
+        env:
+          NCBI_EMAIL: "ci@ncbi.test"
