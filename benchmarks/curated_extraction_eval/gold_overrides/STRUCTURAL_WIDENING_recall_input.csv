@@ -1,0 +1,5 @@
+gene,pmid,variant,protein_notation,cdna_notation,variant_class,structural_description,affected,unaffected,total_carriers,notes
+BRCA1,synthetic_struct_001,del:exon3-5,,,"exon_deletion","deletion of exons 3-5",2,1,3,Stage5-B structural gold: exon deletion
+BRCA1,synthetic_struct_001,c.185delAGinsT,,,complex,,1,0,1,Stage5-B delins gold
+BRCA1,synthetic_struct_001,IVS9+1G>A,,,splice,,1,0,1,Stage5-B IVS splice gold
+BRCA1,synthetic_struct_002,del:wholegene,,,"large_deletion","whole-gene deletion",3,0,3,Stage5-B whole-gene deletion gold

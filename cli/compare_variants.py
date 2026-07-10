@@ -1103,9 +1103,74 @@ def to_canonical_form(variant: str) -> Optional[str]:
         if ref:
             return f"{ref}{m.group(2)}sp"
 
-    # --- IVS notation: pass through ---
-    if v.startswith("IVS"):
-        return v
+    # --- IVS notation: pass through (gene-agnostic IVS↔IVS matching; v1) ---
+    if v.upper().startswith("IVS"):
+        m = re.match(
+            r"^IVS(\d+)([+\-]\d+)([ACGT])>([ACGT])$",
+            v,
+            re.IGNORECASE,
+        )
+        if m:
+            return (
+                f"IVS{m.group(1)}{m.group(2)}{m.group(3).upper()}>{m.group(4).upper()}"
+            )
+        m = re.match(
+            r"^IVS(\d+)([+\-]\d+)(del|dup|ins)([ACGT]*)$",
+            v,
+            re.IGNORECASE,
+        )
+        if m:
+            return (
+                f"IVS{m.group(1)}{m.group(2)}{m.group(3).lower()}{m.group(4).upper()}"
+            )
+        return v.upper() if v.upper().startswith("IVS") else v
+
+    # --- cDNA delins: c.123_456delAGinsT -> c.123_456delinsT (collapse deleted bases) ---
+    m = re.match(
+        r"^c\.(\d+)(?:_(\d+))?del([ACGT]*)ins([ACGT]+)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        pos = m.group(1) if not m.group(2) else f"{m.group(1)}_{m.group(2)}"
+        return f"c.{pos}delins{m.group(4).upper()}"
+
+    # --- Structural keys: del:exon3-5, dup:exon2, del:wholegene ---
+    m = re.match(
+        r"^(del|dup):(?:exon(\d+)(?:-(\d+))?|wholegene)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        op = m.group(1).lower()
+        if m.group(0).lower().endswith("wholegene"):
+            return f"{op}:wholegene"
+        e1, e2 = m.group(2), m.group(3)
+        if e2:
+            return f"{op}:exon{e1}-{e2}"
+        return f"{op}:exon{e1}"
+
+    # Free-text structural descriptions → structural keys when parseable
+    m = re.search(
+        r"(?:deletion|del)\s+of\s+exons?\s*(\d+)(?:\s*[-–—to]+\s*(\d+))?",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        if m.group(2):
+            return f"del:exon{m.group(1)}-{m.group(2)}"
+        return f"del:exon{m.group(1)}"
+    m = re.search(
+        r"(?:duplication|dup)\s+of\s+exons?\s*(\d+)(?:\s*[-–—to]+\s*(\d+))?",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        if m.group(2):
+            return f"dup:exon{m.group(1)}-{m.group(2)}"
+        return f"dup:exon{m.group(1)}"
+    if re.search(r"whole[\s-]?gene\s+del", v, re.IGNORECASE):
+        return "del:wholegene"
 
     # Could not canonicalize
     return None

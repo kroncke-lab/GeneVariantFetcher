@@ -271,6 +271,8 @@ CDNA_PATTERNS = [
     re.compile(r"^c\.(\d+)(del|dup|ins)([ACGT]*)$", re.IGNORECASE),
     # c.1234_1235delAG
     re.compile(r"^c\.(\d+)_(\d+)(del|dup|ins)([ACGT]*)$", re.IGNORECASE),
+    # c.1234delAGinsT / c.1234_1235delAGinsT (delins)
+    re.compile(r"^c\.(\d+)(?:_(\d+))?del([ACGT]*)ins([ACGT]+)$", re.IGNORECASE),
     # c.1234+1G>A (intronic - donor)
     re.compile(r"^c\.(\d+[\+]\d+)([ACGT])>([ACGT])$"),
     # c.1234-1G>A (intronic - acceptor)
@@ -279,7 +281,10 @@ CDNA_PATTERNS = [
     re.compile(r"^c\.(\d+[\+\-]\d+)(del|dup|ins)([ACGT]*)$", re.IGNORECASE),
 ]
 
-# IVS (splice) patterns - legacy notation
+# IVS (splice) patterns - legacy notation.
+# Gene-agnostic IVS↔IVS matching is preferred in to_canonical_form / matchers.
+# KCNH2_IVS_MAP remains an optional IVS→cDNA bridge for that gene only; full
+# per-transcript bridging for other genes is deferred.
 SPLICE_PATTERNS = [
     # IVS10+1G>A, IVS5-2A>G
     re.compile(r"^IVS(\d+)([\+\-]\d+)([ACGT])>([ACGT])$", re.IGNORECASE),
