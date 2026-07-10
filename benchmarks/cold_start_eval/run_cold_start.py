@@ -73,10 +73,58 @@ SUGGESTED = {
 }
 
 
+def _covered_genes() -> set[str]:
+    """Genes that are NOT a genuine cold start, derived at runtime so the guard
+    can't drift from reality. Unions the hardcoded floor with the gold recall
+    CSVs, curated gold overrides + registry, cardiac synonyms, and top-level
+    corpus/ gene dirs. Best-effort per source (a missing/unreadable source is
+    skipped, never fatal)."""
+    covered = set(NOT_COLD_START)
+
+    for d in (
+        BASE_DIR / "gene_variant_fetcher_gold_standard" / "normalized",
+        BASE_DIR / "benchmarks" / "curated_extraction_eval" / "gold_overrides",
+    ):
+        try:
+            for csv_path in d.glob("*_recall_input.csv"):
+                covered.add(csv_path.name[: -len("_recall_input.csv")].upper())
+        except OSError:
+            pass
+
+    registry = BASE_DIR / "benchmarks" / "curated_extraction_eval" / "registry.tsv"
+    try:
+        lines = registry.read_text().splitlines()
+        header = lines[0].split("\t") if lines else []
+        gcol = header.index("gene") if "gene" in header else 0
+        for line in lines[1:]:
+            cells = line.split("\t")
+            if len(cells) > gcol and cells[gcol].strip():
+                covered.add(cells[gcol].strip().upper())
+    except (OSError, ValueError, IndexError):
+        pass
+
+    try:
+        data = json.loads(
+            (BASE_DIR / "config" / "cardiac_gene_synonyms.json").read_text()
+        )
+        covered.update(str(k).upper() for k in data)
+    except (OSError, json.JSONDecodeError):
+        pass
+
+    try:
+        for child in (BASE_DIR / "corpus").iterdir():
+            if child.is_dir() and not child.name.startswith("."):
+                covered.add(child.name.upper())
+    except OSError:
+        pass
+
+    return covered
+
+
 def is_cold_start_gene(gene: str) -> tuple[bool, str]:
     """Return (is_genuine_cold_start, reason)."""
     g = gene.strip().upper()
-    if g in NOT_COLD_START:
+    if g in _covered_genes():
         return (
             False,
             f"{g} already has gold/registry/corpus/cardiac coverage — not a "
@@ -90,7 +138,6 @@ def build_cold_start_command(
     gene: str,
     email: str,
     output_dir: Path,
-    corpus_dir: Path,
     disease: Optional[str] = None,
     source_recovery: bool = True,
 ) -> list[str]:
@@ -114,9 +161,38 @@ def build_cold_start_command(
     return cmd
 
 
+# GVF_* env vars that would warm-start a cold run from prior state / cached work
+# and so defeat the clean room. Stripped from the subprocess env before launch;
+# credentials (non-GVF) and the harness's own GVF_CORPUS_DIR are preserved.
+WARM_START_ENV = (
+    "GVF_RESUME_DIR",
+    "GVF_REUSE_FULL_CONTEXT_BYTES",
+    "GVF_EXTRACTION_TOP_N",
+    "GVF_EXTRACTION_PRIORITY_OFFSET",
+    "GVF_QA_MODEL",
+    "GVF_MAX_WORKERS",
+)
+
+
 def cold_start_env(corpus_dir: Path) -> dict[str, str]:
-    """Env overrides that isolate the run from any cached source."""
+    """The single explicit override: pin the corpus dir to the fresh isolated dir."""
     return {"GVF_CORPUS_DIR": str(corpus_dir)}
+
+
+def hermetic_env(base: dict[str, str], corpus_dir: Path) -> dict[str, str]:
+    """Build the cold-start subprocess env: strip warm-start/tuning GVF_* vars
+    (and any GVF_*_DIR pointing at a cached tree) that would reuse prior state,
+    then pin GVF_CORPUS_DIR to the fresh dir. Non-GVF env — PATH, API
+    credentials — is preserved so the run can still authenticate and discover.
+    """
+    env = dict(base)
+    for key in WARM_START_ENV:
+        env.pop(key, None)
+    for key in list(env):
+        if key.startswith("GVF_") and key.endswith("_DIR") and key != "GVF_CORPUS_DIR":
+            env.pop(key, None)
+    env.update(cold_start_env(corpus_dir))
+    return env
 
 
 def summarize_acquisition(run_output_root: Path, gene: str) -> Optional[dict]:
@@ -164,6 +240,11 @@ def main() -> int:
         action="store_true",
         help="Proceed even if the gene is not a genuine cold start.",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Wipe and recreate a non-empty isolated corpus dir instead of refusing.",
+    )
     args = parser.parse_args()
 
     gene = args.gene.strip().upper()
@@ -173,10 +254,29 @@ def main() -> int:
         print("Refusing non-cold-start gene; pass --allow-non-cold-gene to override.")
         return 2
 
-    output_dir = args.output or (BASE_DIR / "benchmarks" / "cold_start_eval" / "runs")
-    corpus_dir = args.corpus_dir or (output_dir / f".coldstart_corpus_{gene}")
+    # Resolve to absolute so the harness (cwd) and the subprocess (cwd=BASE_DIR)
+    # agree on which dirs are created/isolated vs. read.
+    output_dir = (
+        args.output or (BASE_DIR / "benchmarks" / "cold_start_eval" / "runs")
+    ).resolve()
+    corpus_dir = (
+        args.corpus_dir or (output_dir / f".coldstart_corpus_{gene}")
+    ).resolve()
     disease = args.disease or SUGGESTED.get(gene)
 
+    # A non-empty isolated corpus is NOT a clean room — a prior cold run would
+    # warm-start this one. Refuse (or --force wipe) instead of silently reusing.
+    if corpus_dir.exists() and any(corpus_dir.iterdir()):
+        if not args.force:
+            print(
+                f"Isolated corpus dir is not empty: {corpus_dir}\n"
+                "It would warm-start the run. Remove it, pick a fresh --corpus-dir, "
+                "or pass --force to wipe it."
+            )
+            return 2
+        import shutil
+
+        shutil.rmtree(corpus_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     corpus_dir.mkdir(parents=True, exist_ok=True)
 
@@ -184,7 +284,6 @@ def main() -> int:
         gene=gene,
         email=args.email,
         output_dir=output_dir,
-        corpus_dir=corpus_dir,
         disease=disease,
         source_recovery=not args.no_source_recovery,
     )
@@ -194,6 +293,7 @@ def main() -> int:
     printable = f"{env_prefix} {shlex.join(cmd)}"
     print("\nHermetic cold-start command:")
     print(f"  {printable}\n")
+    print("  (the live run also strips warm-start GVF_* env: resume/reuse/tuning)")
     print(f"Isolated corpus dir (empty): {corpus_dir}")
     print(f"Output root: {output_dir}")
 
@@ -207,8 +307,7 @@ def main() -> int:
 
     import os
 
-    run_env = os.environ.copy()
-    run_env.update(env_overrides)
+    run_env = hermetic_env(dict(os.environ), corpus_dir)
     print("\n[run] Launching live cold-start run (this can take a long time)…")
     result = subprocess.run(cmd, env=run_env, cwd=str(BASE_DIR))
     acquisition = summarize_acquisition(output_dir, gene)
