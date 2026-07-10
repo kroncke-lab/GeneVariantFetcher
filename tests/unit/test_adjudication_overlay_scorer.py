@@ -12,6 +12,7 @@ from cli.compare_variants import (
     ComparisonRow,
     apply_adjudication_overlay,
     compute_precision_summary,
+    compute_recall_summary,
     compute_rows_mae,
     load_adjudication_overlay,
 )
@@ -85,6 +86,54 @@ def test_wrong_paper_excludes_row():
     rows = [_row(excel_affected=3, sqlite_affected=3, affected_diff=0)]
     out = apply_adjudication_overlay(rows, _overlay(verdict="wrong_paper"))
     assert out == []
+
+
+def test_wrong_paper_excludes_missed_gold_rows_from_recall():
+    # A paper the curator judged out of scope (wrong_paper) that carries BOTH an
+    # extracted+matched variant AND a gold variant GVF missed. The missed-gold
+    # row has no DB source_notation, so it never keys into the overlay -- only
+    # the matched variant's notation appears there. Excluding the paper must drop
+    # BOTH rows; dropping only the keyed one leaves the missed-gold variant in
+    # the recall denominator for a paper that is out of scope for recall.
+    matched = _row(
+        pmid="1",
+        excel_variant_raw="p.V1M",
+        excel_variant_norm="p.V1M",
+        sqlite_variant_raw="p.V1M",
+        sqlite_variant_norm="p.V1M",
+        match_type="exact",
+        excel_affected=3,
+        sqlite_affected=3,
+        affected_diff=0,
+    )
+    missed_gold = _row(
+        pmid="1",
+        excel_variant_raw="p.V2M",
+        excel_variant_norm="p.V2M",
+        sqlite_variant_raw=None,
+        sqlite_variant_norm=None,
+        match_type="none",
+        match_score=None,
+        missing_in_sqlite=True,
+        excel_affected=2,
+    )
+    rows = [matched, missed_gold]
+
+    # Both variants sit in the gold recall denominator before adjudication.
+    before = compute_recall_summary(rows)
+    assert before["variant_rows"]["gold"] == 2
+    assert before["unique_variants"]["gold"] == 2
+
+    # The overlay only keys the matched variant (the one with a DB notation).
+    overlay = _overlay(verdict="wrong_paper")  # keyed ("1", "p.V1M")
+    out = apply_adjudication_overlay(rows, overlay)
+
+    # The whole paper drops: no rows survive and the recall denominator empties.
+    assert out == []
+    after = compute_recall_summary(out)
+    assert after["variant_rows"]["gold"] == 0
+    assert after["unique_variants"]["gold"] == 0
+    assert after["pmids"]["gold"] == 0
 
 
 def test_confirmed_true_positive_extra_leaves_precision_denominator():
