@@ -84,7 +84,7 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
 
-    def fake_qc(gene, run_dir, outdir):
+    def fake_qc(gene, run_dir, outdir, stage_failures=None):
         calls.append("source-qc")
         outdir.mkdir(parents=True, exist_ok=True)
         summary = outdir / "summary.json"
@@ -92,7 +92,13 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
         return summary
 
     def fake_recovery(
-        gene, run_dir, source_qc_dir, gold, run_recovery_layers, timeout_s
+        gene,
+        run_dir,
+        source_qc_dir,
+        gold,
+        run_recovery_layers,
+        timeout_s,
+        stage_failures=None,
     ):
         calls.append("source-recovery")
         return None

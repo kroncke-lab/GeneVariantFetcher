@@ -2367,12 +2367,28 @@ def migrate_to_sqlite(
         stats = migrate_extraction_directory(conn, extraction_dir)
         conn.close()
 
+        failed = stats.get("failed", 0)
+        if failed:
+            # Partial success. Each failed file was rolled back by its SAVEPOINT
+            # (no rows written), so this is missing evidence, not corruption --
+            # but surface it loudly so a partial migration is never mistaken for
+            # a clean one by the caller or the final status.
+            logger.warning(
+                "⚠️  SQLite migration: %d/%d extraction file(s) failed to "
+                "migrate and were rolled back (no rows written for them)",
+                failed,
+                stats.get("total_files", 0),
+            )
+            for msg in stats.get("errors", [])[:10]:
+                logger.warning("   - %s", msg)
+
         return StepResult(
             success=True,
             stats={
                 "total_files": stats["total_files"],
                 "successful": stats["successful"],
-                "failed": stats["failed"],
+                "failed": failed,
+                "errors": stats.get("errors", []),
             },
         )
 

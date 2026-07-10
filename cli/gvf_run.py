@@ -265,6 +265,7 @@ def step_layers(
     gold: Optional[Path],
     outdir: Path,
     with_v12: Optional[Path],
+    stage_failures: Optional[list[str]] = None,
 ) -> Optional[Path]:
     """Run the recall-recovery driver. Returns the progression.csv path."""
     cmd = [
@@ -295,6 +296,10 @@ def step_layers(
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         logger.error("recovery layers failed: %s", result.stderr[-400:])
+        if stage_failures is not None:
+            stage_failures.append(
+                f"recovery layers (run_all_layers.py) exited {result.returncode}"
+            )
     return outdir / "progression.csv"
 
 
@@ -303,7 +308,12 @@ def step_layers(
 # ---------------------------------------------------------------------------
 
 
-def step_source_qc(gene: str, run_dir: Path, outdir: Path) -> Optional[Path]:
+def step_source_qc(
+    gene: str,
+    run_dir: Path,
+    outdir: Path,
+    stage_failures: Optional[list[str]] = None,
+) -> Optional[Path]:
     """Run the no-gold source acquisition audit. Returns summary JSON path."""
     outdir.mkdir(parents=True, exist_ok=True)
     summary = outdir / "source_acquisition_summary.json"
@@ -327,6 +337,11 @@ def step_source_qc(gene: str, run_dir: Path, outdir: Path) -> Optional[Path]:
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         logger.error("source acquisition QC failed: %s", result.stderr[-400:])
+        if stage_failures is not None:
+            stage_failures.append(
+                f"source acquisition QC (source_acquisition_audit.py) exited "
+                f"{result.returncode}"
+            )
         return None
     return summary
 
@@ -378,6 +393,7 @@ def step_source_recovery(
     gold: Optional[Path],
     run_recovery_layers: bool,
     timeout_s: int,
+    stage_failures: Optional[list[str]] = None,
 ) -> Optional[SourceRecoveryResult]:
     """Run fetch → summarize → staged refresh from source-QC artifacts."""
     worklist = source_qc_dir / "source_acquisition_worklist.csv"
@@ -412,6 +428,11 @@ def step_source_recovery(
                 fetch_result.returncode,
                 (fetch_result.stderr or fetch_result.stdout)[-400:],
             )
+            if stage_failures is not None:
+                stage_failures.append(
+                    f"source-recovery fetch (fetch_paywalled.py) exited "
+                    f"{fetch_result.returncode}"
+                )
     else:
         logger.info("source-recovery fetch skipped: no fetch rows in %s", fetch_input)
 
@@ -437,6 +458,11 @@ def step_source_recovery(
     summary_result = subprocess.run(summary_cmd, capture_output=True, text=True)
     if summary_result.returncode != 0:
         logger.error("source-recovery summary failed: %s", summary_result.stderr[-400:])
+        if stage_failures is not None:
+            stage_failures.append(
+                f"source-recovery summarize (summarize_acquisition_outcome.py) exited "
+                f"{summary_result.returncode}"
+            )
         return None
 
     result = SourceRecoveryResult(
@@ -473,6 +499,11 @@ def step_source_recovery(
     refresh_result = subprocess.run(refresh_cmd, capture_output=True, text=True)
     if refresh_result.returncode != 0:
         logger.error("source-recovery refresh failed: %s", refresh_result.stderr[-800:])
+        if stage_failures is not None:
+            stage_failures.append(
+                f"source-recovery refresh (refresh_run_db.py) exited "
+                f"{refresh_result.returncode}"
+            )
         return result
 
     refresh_summary = _latest_refresh_summary_after(run_dir, refresh_started_at)
@@ -537,6 +568,7 @@ def step_report(
     started_at: float,
     duration_s: float,
     out_path: Path,
+    stage_failures: Optional[list[str]] = None,
 ) -> None:
     """Write a RUN_REPORT.md summarizing the whole run."""
     lines: list[str] = []
@@ -546,7 +578,22 @@ def step_report(
     lines.append(f"- Duration: {duration_s / 60:.1f} min")
     lines.append(f"- Run dir: `{run_dir}`")
     lines.append(f"- DB: `{db}`")
+    lines.append(
+        f"- Stage status: {'⚠️ completed with warnings' if stage_failures else '✓ all stages ok'}"
+    )
     lines.append("")
+
+    if stage_failures:
+        lines.append("## Stage Warnings")
+        lines.append("")
+        lines.append(
+            "Non-fatal stage failures (a subprocess exited nonzero but the run "
+            "continued). Results may be incomplete for these stages:"
+        )
+        lines.append("")
+        for failure in stage_failures:
+            lines.append(f"  - ⚠️ {failure}")
+        lines.append("")
     lines.append("## Doctor")
     lines.append("")
     lines.append("Required:")
@@ -971,6 +1018,10 @@ def run_gvf_pipeline(
 
     skip = {s.lower() for s in (skip or [])}
     started = time.time()
+    # Accumulates non-fatal stage failures (recovery subprocesses that exit
+    # nonzero but let the run continue) so the final status and RUN_REPORT.md
+    # reflect them instead of "✅ Done" hiding a swallowed error.
+    stage_failures: list[str] = []
 
     logging.basicConfig(
         level=logging.INFO,
@@ -1100,6 +1151,7 @@ def run_gvf_pipeline(
             gene=gene,
             run_dir=run_dir,
             outdir=run_dir / "source_qc",
+            stage_failures=stage_failures,
         )
         if "source-recovery" not in skip and source_qc_summary is not None:
             logger.info("🛟 Step 4: source recovery")
@@ -1110,6 +1162,7 @@ def run_gvf_pipeline(
                 gold=gold,
                 run_recovery_layers=("layers" not in skip),
                 timeout_s=source_recovery_timeout_s,
+                stage_failures=stage_failures,
             )
             if source_recovery_result and source_recovery_result.active_db:
                 db = source_recovery_result.active_db
@@ -1135,6 +1188,7 @@ def run_gvf_pipeline(
             gold=gold,
             outdir=layer_outdir,
             with_v12=v12,
+            stage_failures=stage_failures,
         )
     else:
         logger.info("⏭️  Step 3: layers — SKIPPED")
@@ -1166,6 +1220,7 @@ def run_gvf_pipeline(
             gene=gene,
             run_dir=run_dir,
             outdir=run_dir / "source_qc",
+            stage_failures=stage_failures,
         )
     elif "source-qc" in skip:
         logger.info("⏭️  Step 4: source acquisition QC — SKIPPED")
@@ -1203,6 +1258,7 @@ def run_gvf_pipeline(
             started_at=started,
             duration_s=time.time() - started,
             out_path=report_path,
+            stage_failures=stage_failures,
         )
         # Copy to root output dir so users find it without spelunking
         try:
@@ -1223,5 +1279,14 @@ def run_gvf_pipeline(
     elif publish_review and "publish-review" in skip:
         logger.info("⏭️  Step 6: publish to review DB — SKIPPED")
 
-    logger.info("✅ Done in %.1f min", (time.time() - started) / 60)
+    if stage_failures:
+        logger.warning(
+            "⚠️  Done in %.1f min with %d stage warning(s) — see RUN_REPORT.md:",
+            (time.time() - started) / 60,
+            len(stage_failures),
+        )
+        for failure in stage_failures:
+            logger.warning("   - %s", failure)
+    else:
+        logger.info("✅ Done in %.1f min", (time.time() - started) / 60)
     return 0
