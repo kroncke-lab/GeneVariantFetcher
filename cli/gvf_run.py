@@ -1001,10 +1001,14 @@ def step_trust_gate(db: Path) -> dict:
     return apply_trust_gate(db)
 
 
-def step_paper_final_check(db: Path) -> dict:
-    """Per-paper LLM sniff test (default gpt-5.6-sol at xhigh) over each paper's
-    extracted counts vs their provenance. Records a soft verdict in the
-    paper_final_check table; never mutates or deletes a count.
+def step_paper_final_check(
+    db: Path, run_dir: Optional[Path] = None, gene: Optional[str] = None
+) -> dict:
+    """Per-paper LLM review (default gpt-5.6-sol at xhigh). When the paper's
+    on-disk source text is available it produces a carrier/phenotype summary + a
+    missed-carrier completeness signal (paper_carrier_groups); otherwise it runs
+    the DB-only sniff test over the extracted counts vs their provenance. Records
+    soft results in paper_final_check; never mutates or deletes a count.
 
     Self-gating: returns a ``{"skipped": reason}`` dict (rather than raising) when
     settings can't load, the check is disabled, or the model provider has no
@@ -1024,7 +1028,7 @@ def step_paper_final_check(db: Path) -> dict:
 
     from pipeline.paper_final_check import apply_paper_final_check
 
-    return apply_paper_final_check(db)
+    return apply_paper_final_check(db, run_dir=run_dir, gene=gene)
 
 
 def _paper_check_reachable(model: str) -> bool:
@@ -1347,7 +1351,7 @@ def run_gvf_pipeline(
     if "paper-final-check" not in skip:
         logger.info("🧪 Step 3.8: per-paper final check")
         try:
-            pfc_result = step_paper_final_check(db=db)
+            pfc_result = step_paper_final_check(db=db, run_dir=run_dir, gene=gene)
             if isinstance(pfc_result, dict) and pfc_result.get("skipped"):
                 logger.info(
                     "⏭️  Step 3.8: paper final check — %s", pfc_result["skipped"]

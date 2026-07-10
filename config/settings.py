@@ -436,6 +436,25 @@ class Settings(BaseSettings):
             "xhigh = max thinking on gpt-5.6-sol."
         ),
     )
+    paper_summary_source_grounded: bool = Field(
+        default=True,
+        validation_alias="PAPER_SUMMARY_SOURCE_GROUNDED",
+        description=(
+            "When true (default), the per-paper final check reads the paper's "
+            "on-disk source text and produces a carrier/phenotype summary plus a "
+            "missed-carrier completeness signal (paper_carrier_groups). Set false "
+            "for the cheaper DB-only sniff test (no source read)."
+        ),
+    )
+    paper_summary_max_source_chars: int = Field(
+        default=60000,
+        validation_alias="PAPER_SUMMARY_MAX_SOURCE_CHARS",
+        description=(
+            "Char budget of source text fed to the summary prompt (~15K input "
+            "tokens at 60000). Table/supplement regions are preferred when "
+            "truncating; source_truncated is recorded so gaps are re-runnable."
+        ),
+    )
 
     # Table-router (router-first extraction): the LLM classifies which tables
     # contain variant data; a deterministic parser then reads the cells. Falls

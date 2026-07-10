@@ -61,8 +61,11 @@ MODEL_TOKEN_LIMITS = {
     "gpt-5.3-codex": (16384, 15000),  # OpenAI GPT-5.3 Codex via Azure
     "gpt-5.5": (16384, 15000),  # OpenAI GPT-5.5 via Azure
     "gpt-5.4": (16384, 15000),  # OpenAI GPT-5.4 via Azure
-    "gpt-5.6-sol": (16384, 15000),  # OpenAI GPT-5.6 Sol via Azure Foundry
-    "gpt-5.6": (16384, 15000),  # OpenAI GPT-5.6 family via Azure
+    # GPT-5.6 reasoning models spend hidden reasoning tokens against the output
+    # budget before emitting JSON, so at xhigh a 15000 cap truncates to empty on
+    # long inputs. Give ample headroom (verified on the source-grounded summary).
+    "gpt-5.6-sol": (128000, 64000),  # OpenAI GPT-5.6 Sol via Azure Foundry
+    "gpt-5.6": (128000, 64000),  # OpenAI GPT-5.6 family via Azure
     # Generic GPT-5 family fallback. Lookup is longest-pattern-first, so the
     # specific gpt-5.x entries above still win; this only catches gpt-5.x ids we
     # haven't enumerated yet. Without it an unrecognized gpt-5.x falls to

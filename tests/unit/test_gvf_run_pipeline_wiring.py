@@ -370,7 +370,7 @@ def test_paper_final_check_runs_by_default(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(
         gvf_run,
         "step_paper_final_check",
-        lambda db: calls.append(db) or {"papers": 0, "checked": 0},
+        lambda db, run_dir, gene: calls.append(db) or {"papers": 0, "checked": 0},
     )
 
     rc = gvf_run.run_gvf_pipeline(
@@ -390,7 +390,9 @@ def test_paper_final_check_is_skippable(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
     monkeypatch.setattr(
-        gvf_run, "step_paper_final_check", lambda db: calls.append(db) or {}
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: calls.append(db) or {},
     )
 
     rc = gvf_run.run_gvf_pipeline(
