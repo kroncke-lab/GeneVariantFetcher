@@ -475,6 +475,18 @@ def extract_sqlite_data(
     """
     strategy, primary_table = find_best_data_source(table_info)
 
+    # Structural events (exon/CNV/whole-gene) live only in structural_description
+    # with the point-form columns NULL, so fold it into the variant key when the
+    # column exists (older DBs predate it). It is the last COALESCE arg and NULL
+    # for non-structural rows, so it never changes an existing point-form key.
+    _variants_cols = (
+        table_info["variants"].columns if "variants" in table_info else set()
+    )
+    variant_key = "COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position"
+    if "structural_description" in _variants_cols:
+        variant_key += ", v.structural_description"
+    variant_key += ")"
+
     if strategy == "union_all":
         # Union every (pmid, variant_id) link from variant_papers, penetrance_data,
         # and individual_records. Counts: prefer penetrance_data > aggregated
@@ -584,7 +596,7 @@ def extract_sqlite_data(
         ){ir_cte}{vp_layer_cte}
         SELECT
             al.pmid,
-            COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) AS variant,
+            {variant_key} AS variant,
             v.gene_symbol,
             v.protein_notation,
             v.cdna_notation,
@@ -611,10 +623,10 @@ def extract_sqlite_data(
 
     elif strategy == "penetrance_data":
         # Join penetrance_data with variants to get variant notation
-        query = """
+        query = f"""
             SELECT
                 pd.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
@@ -631,10 +643,10 @@ def extract_sqlite_data(
 
     elif strategy == "individual_records":
         # Aggregate individual records by variant+pmid
-        query = """
+        query = f"""
             SELECT
                 ir.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
@@ -669,7 +681,7 @@ def extract_sqlite_data(
         query = f"""
             SELECT
                 vp.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,

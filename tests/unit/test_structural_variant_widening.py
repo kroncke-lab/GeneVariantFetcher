@@ -75,3 +75,56 @@ def test_scanner_bic_prefixless_requires_gene_context():
     with_gene = scanner.scan("BRCA1 185delAG was found in the kindred.")
     assert not any(v.source == "bic_prefixless" for v in no_gene.variants)
     assert any(v.source == "bic_prefixless" for v in with_gene.variants)
+
+
+def test_scanner_bic_ignores_lowercase_delta_word():
+    """'120delta' (del + lowercase 'ta') must not match as c.120delTA; uppercase
+    BIC bases like 185delAG still do."""
+    scanner = VariantScanner(gene_symbol="SCN5A")
+    delta = scanner.scan("The SCN5A ECG showed a 120delta wave morphology.")
+    assert not any(v.source == "bic_prefixless" for v in delta.variants)
+    real = scanner.scan("SCN5A 185delAG segregated in the family.")
+    assert any(v.source == "bic_prefixless" for v in real.variants)
+
+
+def test_scanner_skips_negated_structural_events():
+    """A ruled-out exon deletion must not be emitted as a positive finding."""
+    scanner = VariantScanner(gene_symbol="BRCA1")
+    negated = scanner.scan("In BRCA1 there was no deletion of exons 3-5 on MLPA.")
+    positive = scanner.scan("In BRCA1 a deletion of exons 3-5 was identified.")
+    assert not any(v.source == "exon_event" for v in negated.variants)
+    assert any(v.source == "exon_event" for v in positive.variants)
+
+
+def test_extract_sqlite_data_surfaces_structural_description(tmp_path):
+    """A structural-only variant (point-form NULL) must reach the scorer's
+    variant key via structural_description, so it can canonicalize and match."""
+    import sqlite3
+
+    from cli.compare_variants import extract_sqlite_data, introspect_sqlite
+
+    db = tmp_path / "s.db"
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        """
+        CREATE TABLE variants (variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
+            protein_notation TEXT, cdna_notation TEXT, genomic_position TEXT,
+            structural_description TEXT);
+        CREATE TABLE variant_papers (variant_id INTEGER, pmid TEXT);
+        CREATE TABLE penetrance_data (penetrance_id INTEGER PRIMARY KEY,
+            variant_id INTEGER, pmid TEXT, total_carriers_observed INTEGER,
+            affected_count INTEGER, unaffected_count INTEGER, uncertain_count INTEGER);
+        """
+    )
+    conn.execute(
+        "INSERT INTO variants VALUES (1,'BRCA1',NULL,NULL,NULL,'deletion of exons 3-5')"
+    )
+    conn.execute("INSERT INTO variant_papers VALUES (1, '111')")
+    conn.execute("INSERT INTO penetrance_data VALUES (1,1,'111',4,4,0,0)")
+    conn.commit()
+    table_info = introspect_sqlite(conn)
+    df = extract_sqlite_data(conn, table_info)
+    conn.close()
+
+    assert "deletion of exons 3-5" in set(df["variant"])
+    assert to_canonical_form("deletion of exons 3-5") == "del:exon3-5"

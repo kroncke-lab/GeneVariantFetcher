@@ -360,9 +360,22 @@ class VariantScanner:
     # STRUCTURAL / EXON-LEVEL / PREFIXLESS BIC PATTERNS (tightly gated)
     # ==========================================================================
 
-    # Prefixless BIC-style indel: 185delAG, 5382insC (need digit length ≥ 3 + bases)
+    # Prefixless BIC-style indel: 185delAG, 5382insC (need digit length ≥ 3 + bases).
+    # Bases must be UPPERCASE (BIC convention); the (?-i:) scope keeps [ACGT]
+    # case-sensitive even under the global IGNORECASE, so "120delta" (del + "ta")
+    # no longer matches as c.120delTA. del/dup/ins stays case-insensitive.
     BIC_PREFIXLESS_INDEL = re.compile(
-        r"\b(\d{3,5})(del|dup|ins)([ACGT]{1,20})\b", re.IGNORECASE
+        r"\b(\d{3,5})(del|dup|ins)((?-i:[ACGT]{1,20}))\b", re.IGNORECASE
+    )
+
+    # Negation preceding a free-text structural event ("no deletion of exon 5",
+    # "ruled out a whole-gene deletion"). Sentence-break aware so it only looks
+    # within the current clause.
+    NEGATION_BEFORE_RE = re.compile(
+        r"(?:\bno\b|\bnot\b|\bnegative\s+for\b|\bwithout\b|\babsen(?:ce|t)\b|"
+        r"\bexclud(?:e[ds]?|ing)\b|\brule[ds]?\s+out\b|\bno\s+evidence\b)"
+        r"[^.;:!?]{0,40}$",
+        re.IGNORECASE,
     )
 
     # Exon-level deletion/duplication: deletion of exons 3-5, del exons 3–5
@@ -1039,6 +1052,12 @@ class VariantScanner:
 
         return variants
 
+    def _preceded_by_negation(self, text: str, start: int, window: int = 60) -> bool:
+        """True when a negation word ('no deletion of...') sits in the same clause
+        just before a structural match, so it should not be emitted as positive."""
+        before = text[max(0, start - window) : start]
+        return bool(self.NEGATION_BEFORE_RE.search(before))
+
     def _scan_structural_variants(self, text: str) -> List[ScannedVariant]:
         """Scan for exon-level, large del/dup, and prefixless BIC-style indels."""
         variants: List[ScannedVariant] = []
@@ -1078,6 +1097,8 @@ class VariantScanner:
             )
 
         for m in self.EXON_EVENT.finditer(text):
+            if self._preceded_by_negation(text, m.start()):
+                continue
             exon1, exon2 = m.group(1), m.group(2)
             raw = m.group(0)
             op = "deletion" if re.search(r"del", raw, re.I) else "duplication"
@@ -1104,6 +1125,8 @@ class VariantScanner:
             )
 
         for m in self.WHOLE_GENE_DEL.finditer(text):
+            if self._preceded_by_negation(text, m.start()):
+                continue
             raw = m.group(0)
             variants.append(
                 ScannedVariant(
