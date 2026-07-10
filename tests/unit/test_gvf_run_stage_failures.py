@@ -37,3 +37,27 @@ def test_report_clean_when_no_stage_failures(tmp_path):
     text = _report(tmp_path, [])
     assert "## Stage Warnings" not in text
     assert "all stages ok" in text
+
+
+def test_step_layers_returns_none_on_failure(tmp_path, monkeypatch):
+    """A failed recovery-layers subprocess must not hand back a bogus
+    progression.csv path; it returns None and records the stage failure."""
+    import cli.gvf_run as gvf_run
+
+    class _Result:
+        returncode = 1
+        stderr = "boom"
+
+    monkeypatch.setattr(gvf_run.subprocess, "run", lambda *a, **k: _Result())
+    failures: list[str] = []
+    out = gvf_run.step_layers(
+        gene="LDLR",
+        db=tmp_path / "LDLR.db",
+        run_dir=tmp_path,
+        gold=None,
+        outdir=tmp_path / "layers",
+        with_v12=None,
+        stage_failures=failures,
+    )
+    assert out is None
+    assert any("run_all_layers.py" in f for f in failures)

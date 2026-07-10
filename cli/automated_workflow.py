@@ -955,7 +955,14 @@ def automated_variant_extraction_workflow(
     workflow_stats["migration_successful"] = migrate_result.stats.get("successful", 0)
     workflow_stats["migration_failed"] = migrate_result.stats.get("failed", 0)
 
-    if workflow_stats["migration_failed"]:
+    if not migrate_result.success:
+        # A complete migration crash returns empty stats, so migration_failed is
+        # 0 and the partial-failure branch below would miss it entirely.
+        run_manifest.add_warning(
+            f"SQLite migration failed completely: "
+            f"{migrate_result.error or 'unknown error'}"
+        )
+    elif workflow_stats["migration_failed"]:
         # Record on the run manifest so a partial migration is visible in the
         # durable run status, not just the transient log.
         run_manifest.add_warning(

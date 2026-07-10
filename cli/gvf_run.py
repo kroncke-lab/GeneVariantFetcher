@@ -300,6 +300,8 @@ def step_layers(
             stage_failures.append(
                 f"recovery layers (run_all_layers.py) exited {result.returncode}"
             )
+        # Don't hand back a progression.csv path the failed run never produced.
+        return None
     return outdir / "progression.csv"
 
 
