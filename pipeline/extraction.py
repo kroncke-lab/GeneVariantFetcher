@@ -1428,6 +1428,13 @@ class ExpertExtractor(BaseLLMCaller):
                 malformed_count += 1
                 continue
 
+            # A structural-keep above may have cleared a malformed
+            # protein_notation; re-read it so the position check runs on the
+            # current value, not the dropped string. Otherwise extract_position
+            # pulls a number out of the junk (e.g. "1500del" -> 1500) and
+            # false-drops the structural event this branch meant to preserve.
+            protein = v.get("protein_notation") or ""
+
             # Check position validity (for protein variants)
             if protein and protein_length:
                 position = normalizer.extract_position(protein)

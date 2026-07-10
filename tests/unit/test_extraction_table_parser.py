@@ -1211,6 +1211,34 @@ def test_artifact_filter_keeps_ivs_splice_notations():
     assert filtered["extraction_metadata"]["malformed_filtered"] == 1
 
 
+def test_artifact_filter_keeps_structural_row_despite_malformed_protein():
+    """A structural-keep must not be re-dropped by the position check reading the
+    stale (malformed) protein_notation it just cleared. Regression: '99999del'
+    fails PROTEIN_NOTATION_RE, the structural branch clears it, but the position
+    check used to run on the stale string (extract_position -> 99999 > gene len)
+    and false-drop the event."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "extraction_metadata": {},
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "protein_notation": "99999del",  # malformed; 99999 > KCNH2 length
+                "variant_class": "exon_deletion",
+                "structural_description": "deletion of exons 3-5",
+            }
+        ],
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "KCNH2")
+
+    assert len(filtered["variants"]) == 1, "structural event must survive"
+    kept = filtered["variants"][0]
+    assert kept["variant_class"] == "exon_deletion"
+    assert kept.get("protein_notation") is None  # malformed point-form was cleared
+    assert filtered["extraction_metadata"].get("position_invalid_filtered", 0) == 0
+
+
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
     paper = Paper(
