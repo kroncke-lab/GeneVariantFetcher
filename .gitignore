@@ -117,6 +117,9 @@ nightly-review/
 # Validation framework run artifacts (multi-GB snapshots, never commit)
 validation_runs/
 
+# Cold-start benchmark live-run output + isolated corpora (never commit)
+benchmarks/cold_start_eval/runs/
+
 # Consolidated source corpus (deduplicated full text + supplements + figures,
 # multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit)
 corpus/

@@ -235,6 +235,11 @@ def headline(summary: dict) -> dict:
         b = mae.get(name, {})
         return b.get("mae")
 
+    e2e = summary.get("aggregate_count_error_end_to_end", {})
+
+    def e(name):
+        return e2e.get(name, {}).get("mae")
+
     return {
         "recall": {
             k: r(k)
@@ -248,6 +253,9 @@ def headline(summary: dict) -> dict:
             )
         },
         "mae": {k: m(k) for k in ("carriers", "affected", "unaffected")},
+        "count_error_end_to_end": {
+            k: e(k) for k in ("carriers", "affected", "unaffected")
+        },
     }
 
 
@@ -303,6 +311,76 @@ def print_scorecard(summary: dict, papers: list[dict], baseline: dict | None) ->
                 f"{str(p['matched']):>5} {rr:>7} {str(p['cmm']):>3} {p['cdiff']:>15}"
             )
     print()
+
+
+def check_regression(
+    summary: dict,
+    baseline: dict | None,
+    recall_tol: float,
+    mae_tol: float,
+) -> list[str]:
+    """Return regression messages (empty if none) vs the frozen baseline.
+
+    A recall dimension regresses if it drops more than ``recall_tol`` below
+    baseline; a count MAE regresses if it rises more than ``mae_tol`` above
+    baseline (higher MAE is worse).
+    """
+    if not baseline:
+        return []
+    h = headline(summary)
+    problems: list[str] = []
+
+    base_rec = baseline.get("recall", {})
+    for name, block in h["recall"].items():
+        base = (base_rec.get(name) or {}).get("recall")
+        if base is None:
+            continue  # dimension not tracked by the baseline
+        cur = block["recall"]
+        if cur is None:
+            problems.append(
+                f"recall.{name}: missing in current run (baseline {base:.3f})"
+            )
+        elif cur < base - recall_tol:
+            problems.append(
+                f"recall.{name}: {cur:.3f} < baseline {base:.3f} - {recall_tol}"
+            )
+
+    # Both matched-only MAE and the end-to-end count error (misses as zero) gate
+    # on a rise. Including e2e is what stops the gate from re-flattering the
+    # metric this branch just added; it activates once the baseline is
+    # regenerated (--write-baseline) with the e2e block.
+    for key, label in (("mae", "mae"), ("count_error_end_to_end", "e2e")):
+        base_block = baseline.get(key, {})
+        for name, cur in h.get(key, {}).items():
+            base = base_block.get(name)
+            if base is None:
+                continue
+            if cur is None:
+                problems.append(
+                    f"{label}.{name}: missing in current run (baseline {base:.3f})"
+                )
+            elif cur > base + mae_tol:
+                problems.append(
+                    f"{label}.{name}: {cur:.3f} > baseline {base:.3f} + {mae_tol}"
+                )
+    return problems
+
+
+def gate_result(
+    summary: dict,
+    baseline: dict | None,
+    recall_tol: float,
+    mae_tol: float,
+) -> list[str]:
+    """The --fail-on-regression decision, fail-closed. A missing baseline is a
+    hard failure: a gate that compared against nothing must not report success.
+    """
+    if baseline is None:
+        return [
+            "no baseline at expected_baseline.json — refusing to pass a gate that "
+            "checked nothing (write one with --write-baseline)"
+        ]
+    return check_regression(summary, baseline, recall_tol, mae_tol)
 
 
 def resolve_dbs(overrides: list[str] | None) -> dict[str, Path]:
@@ -443,6 +521,25 @@ def main() -> int:
         action="store_true",
         help="Save this run's headline numbers as expected_baseline.json.",
     )
+    ap.add_argument(
+        "--fail-on-regression",
+        action="store_true",
+        help="Exit nonzero if recall drops or count MAE rises beyond tolerance "
+        "vs expected_baseline.json. Makes this runner a CI/nightly gate.",
+    )
+    ap.add_argument(
+        "--regression-tol",
+        type=float,
+        default=0.005,
+        help="Recall regression tolerance (fraction; default 0.005 = 0.5pp).",
+    )
+    ap.add_argument(
+        "--mae-tol",
+        type=float,
+        default=0.05,
+        help="Count-MAE regression tolerance (absolute; default 0.05, matching "
+        "the refresh_recall land gate).",
+    )
     args = ap.parse_args()
 
     manifest = load_manifest()
@@ -482,6 +579,15 @@ def main() -> int:
         "(summary.json, report.md, per-gene discrepancies.csv, "
         "paper_disagreement_report.csv)"
     )
+
+    if args.fail_on_regression:
+        problems = gate_result(summary, baseline, args.regression_tol, args.mae_tol)
+        if problems:
+            print("\n❌ REGRESSION gate failed:")
+            for problem in problems:
+                print(f"  - {problem}")
+            return 1
+        print("\n✓ No regression vs baseline.")
     return 0
 
 

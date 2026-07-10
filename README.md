@@ -4,15 +4,28 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](CHANGELOG.md)
 
-Automated extraction of human genetic variant carriers from biomedical
-literature into a normalized SQLite database.
+Builds an auditable evidence database from gene-focused biomedical literature,
+designed to run **autonomously at scale** — hundreds of genes and hundreds of
+thousands of papers — with automated quality gates, not human review, as the
+primary control.
 
 ## What GVF Does
 
 Given a gene, GVF discovers relevant papers, downloads full text and
 supplements, extracts variants and carrier/count evidence with an LLM-backed
-pipeline, and writes a queryable SQLite database for downstream curation and
-analysis.
+pipeline, and writes a queryable SQLite database with per-fact provenance so
+every extracted count is auditable back to its source table, row, and quote.
+
+The design target is unattended operation across many genes: automated source
+QC, acceptance gates, count guards, non-regression checks, and per-fact
+provenance decide what to trust, so runs scale without a human in the per-paper
+loop. Human adjudication is an **exception-only escape hatch** for the rare
+marginal case — routed through
+[Variant_Browser](docs/VARIANT_BROWSER_INTEGRATION.md), off the per-paper and
+per-run critical path, never a required step. The confidence-gating layer that
+sorts every extracted fact into a trusted or held tier automatically is in
+active development; until it lands, the automated gates stay conservative and
+uncertain counts are surfaced with provenance rather than silently trusted.
 
 The current production entry point is:
 
@@ -23,6 +36,33 @@ gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease
 Source recovery, including paywall and supplement acquisition, runs by default.
 Pass `--no-source-recovery` only for a fast PMC/free-text-only pass or a
 controlled measurement run.
+
+## Scope and Intended Use
+
+- **Operating model:** unattended, high-throughput extraction across many genes
+  and hundreds of thousands of papers. Automated quality gates are the primary
+  control; human adjudication is an exception-only escape hatch for the rare
+  marginal case, not a per-record or per-run step.
+- **Research use only.** GVF is not a patient-facing or clinical-decision
+  system. Do not treat extracted variants, carrier counts, or classifications as
+  clinical-grade.
+- **Validation surface:** metrics are strongest on the four cardiac gold genes
+  (KCNH2, KCNQ1, SCN5A, RYR2), which are in-distribution from repeated tuning.
+  Generalization to other gene classes — e.g. BRCA1/BRCA2, whose truncating and
+  case-control evidence differs structurally from cardiac missense — and
+  arbitrary-gene cold start are exercised separately by
+  [`benchmarks/cold_start_eval/`](benchmarks/cold_start_eval/README.md); report
+  cardiac-gold, generalization, and cold-start numbers distinctly.
+
+## Source Access and Browser Cookies
+
+Default source recovery loads cookies from your local Chrome profile
+(`scripts/fetch_paywalled.py`) so authenticated/institutional publisher access
+carries into the fetch. This reads your browser session — only run it on a
+machine and account you control, and only where your institution's access terms
+permit programmatic full-text/supplement retrieval. To disable cookie loading,
+pass `--no-cookies` to `scripts/fetch_paywalled.py`; for a fast run with no
+paywall/cookie access at all, use `gvf gvf-run --no-source-recovery`.
 
 ## Current Status
 
@@ -130,7 +170,11 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 ```
 
 Project dependencies are defined in [`pyproject.toml`](pyproject.toml). Install
-with `pip install -e ".[browser,dev]"`; there is no separate requirements file.
+with `pip install -e ".[browser,dev]"`. A pinned snapshot of a known-good
+environment is committed as [`requirements.lock`](requirements.lock)
+(`uv pip install -r requirements.lock`); each run records that lock's hash, the
+git SHA, the prompt/extractor hash, and the resolved model routing in its
+`run_manifest.json` under `provenance`.
 
 ## Repository Hygiene
 

@@ -84,7 +84,7 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
 
-    def fake_qc(gene, run_dir, outdir):
+    def fake_qc(gene, run_dir, outdir, stage_failures=None):
         calls.append("source-qc")
         outdir.mkdir(parents=True, exist_ok=True)
         summary = outdir / "summary.json"
@@ -92,7 +92,13 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
         return summary
 
     def fake_recovery(
-        gene, run_dir, source_qc_dir, gold, run_recovery_layers, timeout_s
+        gene,
+        run_dir,
+        source_qc_dir,
+        gold,
+        run_recovery_layers,
+        timeout_s,
+        stage_failures=None,
     ):
         calls.append("source-recovery")
         return None
@@ -120,7 +126,9 @@ def test_corpus_sync_runs_by_default_and_is_skippable(tmp_path: Path, monkeypatc
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
     calls: list = []
     monkeypatch.setattr(
-        gvf_run, "step_corpus_sync", lambda run_dir: calls.append(run_dir)
+        gvf_run,
+        "step_corpus_sync",
+        lambda run_dir, stage_warnings=None: calls.append(run_dir),
     )
 
     # default: corpus_sync on
@@ -269,3 +277,44 @@ def test_full_coverage_quality_steps_are_toggleable(tmp_path: Path, monkeypatch)
 
     assert rc == 0
     assert calls == ["walk"]
+
+
+def test_stage_failure_sets_nonzero_exit_and_status(tmp_path: Path, monkeypatch):
+    """A completeness-stage failure -> non-zero exit (EXIT_STAGE_WARNINGS) plus a
+    machine-readable RUN_STATUS.json, so a fleet detects the incomplete run
+    instead of reading a clean exit 0. Also guards the no-double-run fix."""
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run, "step_corpus_sync", lambda run_dir, stage_warnings=None: None
+    )
+    monkeypatch.setattr(gvf_run, "step_backfill_metadata", lambda **kwargs: None)
+
+    qc_calls: list[str] = []
+
+    def failing_qc(gene, run_dir, outdir, stage_failures=None):
+        qc_calls.append("qc")
+        if stage_failures is not None:
+            stage_failures.append("source-qc (source_acquisition_audit.py) exited 1")
+        return None  # QC failed -> no summary
+
+    monkeypatch.setattr(gvf_run, "step_source_qc", failing_qc)
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=True,
+        skip=["layers"],
+    )
+
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    # A failed Step-3 QC must not be re-run by the Step-4 fallback.
+    assert qc_calls == ["qc"], "source-qc ran twice after a failure"
+
+    status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+    assert status["status"] == "completed_with_warnings"
+    assert status["exit_code"] == gvf_run.EXIT_STAGE_WARNINGS
+    assert any("source-qc" in f for f in status["stage_failures"])

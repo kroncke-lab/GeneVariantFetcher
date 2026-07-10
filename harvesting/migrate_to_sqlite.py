@@ -2384,21 +2384,50 @@ def migrate_extraction_directory(
     failed = 0
     errors = []
 
-    for json_file in json_files:
-        success, message = migrate_extraction_file(
-            cursor,
-            json_file,
-            replace_existing_paper=replace_existing_paper,
-        )
-        if success:
-            successful += 1
-            logger.info(f"✓ [{successful}/{len(json_files)}] {message}")
-        else:
-            failed += 1
-            errors.append(message)
-            logger.error(f"✗ [{failed} failures] {message}")
-
-    conn.commit()
+    # Per-file atomicity. Each file migrates inside its own SAVEPOINT so a
+    # mid-file failure (e.g. a constraint error raised after paper metadata was
+    # already inserted) rolls back only that file's partial rows instead of
+    # riding along on the directory-wide commit below. Without this, a failed
+    # file leaves half-written paper/variant rows -- and under
+    # replace_existing_paper=True (delete-then-insert) it can delete a paper's
+    # good rows and leave only the partial replacement. Transactions are driven
+    # explicitly so SAVEPOINT semantics do not depend on sqlite3's
+    # implicit-transaction mode.
+    prev_isolation = conn.isolation_level
+    conn.isolation_level = None
+    try:
+        cursor.execute("BEGIN")
+        for idx, json_file in enumerate(json_files):
+            savepoint = f"gvf_migrate_{idx}"
+            cursor.execute(f"SAVEPOINT {savepoint}")
+            success, message = migrate_extraction_file(
+                cursor,
+                json_file,
+                replace_existing_paper=replace_existing_paper,
+            )
+            if success:
+                cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
+                successful += 1
+                logger.info(f"✓ [{successful}/{len(json_files)}] {message}")
+            else:
+                # Discard any partial writes this file made before it failed,
+                # then drop the savepoint marker.
+                cursor.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+                cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
+                failed += 1
+                errors.append(message)
+                logger.error(f"✗ [{failed} failures] {message}")
+        # conn.commit() persists here despite isolation_level=None: the explicit
+        # BEGIN above opens a transaction, so SQLite is not in autocommit at the C
+        # level and commit() issues a real COMMIT. rollback() stays a method call
+        # -- a safe no-op if a sqlite error already aborted the transaction, where
+        # a bare cursor "ROLLBACK" would instead raise and mask the original error.
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.isolation_level = prev_isolation
 
     stats = {
         "total_files": len(json_files),
