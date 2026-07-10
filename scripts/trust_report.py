@@ -28,7 +28,8 @@ def summarize_trust(db_path: str | Path) -> dict[str, Any]:
     """Return trust-tier counts for a DB's ``penetrance_data`` facts.
 
     ``{tiered, total, trusted, quarantine, quarantine_rate, by_reason,
-    rule_versions}``. ``tiered=False`` for a pre-trust-gate DB (no column).
+    rule_versions, study_design_distribution, quarantine_by_study_design}``.
+    ``tiered=False`` for a pre-trust-gate DB (no column).
     """
     conn = _connect_ro(db_path)
     try:
@@ -36,18 +37,39 @@ def summarize_trust(db_path: str | Path) -> dict[str, Any]:
         total = conn.execute("SELECT COUNT(*) FROM penetrance_data").fetchone()[0]
         if "trust_tier" not in cols:
             return {"tiered": False, "total": total}
-        rows = conn.execute(
-            "SELECT trust_tier, trust_reasons, trust_rule_version FROM penetrance_data"
-        ).fetchall()
+        em_cols = {r[1] for r in conn.execute("PRAGMA table_info(extraction_metadata)")}
+        has_study_design = "study_design" in em_cols
+        if has_study_design:
+            rows = conn.execute(
+                """
+                SELECT pd.trust_tier,
+                       pd.trust_reasons,
+                       pd.trust_rule_version,
+                       em.study_design
+                FROM penetrance_data pd
+                LEFT JOIN extraction_metadata em ON em.pmid = pd.pmid
+                """
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT trust_tier, trust_reasons, trust_rule_version, NULL "
+                "FROM penetrance_data"
+            ).fetchall()
     finally:
         conn.close()
 
     tiers: Counter = Counter()
     reasons: Counter = Counter()
     versions: Counter = Counter()
-    for tier, reasons_json, version in rows:
+    study_designs: Counter = Counter()
+    quarantine_by_design: Counter = Counter()
+    for tier, reasons_json, version, study_design in rows:
         tiers[tier or "untiered"] += 1
         versions[version or "none"] += 1
+        design_key = (study_design or "").strip() or "unknown"
+        study_designs[design_key] += 1
+        if tier == "quarantine":
+            quarantine_by_design[design_key] += 1
         if reasons_json:
             try:
                 for reason in json.loads(reasons_json):
@@ -65,6 +87,8 @@ def summarize_trust(db_path: str | Path) -> dict[str, Any]:
         "quarantine_rate": (quarantine / total) if total else 0.0,
         "by_reason": dict(reasons.most_common()),
         "rule_versions": dict(versions),
+        "study_design_distribution": dict(study_designs.most_common()),
+        "quarantine_by_study_design": dict(quarantine_by_design.most_common()),
     }
 
 

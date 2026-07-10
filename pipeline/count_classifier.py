@@ -143,16 +143,94 @@ def _normalize_count_type(value: Any) -> Optional[str]:
     return canonical  # unknown value passes through so callers can log it
 
 
+# Study designs where a large "carrier" number is usually a denominator /
+# allele count / non-clinical total rather than affected carriers.
+_POPULATION_STUDY_DESIGNS = frozenset({"cohort_population", "cohort_biobank", "gwas"})
+# Designs where a primary clinical carrier count is a trap (not patient carriers).
+_TRAP_STUDY_DESIGNS = frozenset({"functional_invitro", "review_meta"})
+_FAMILY_STUDY_DESIGNS = frozenset({"family_segregation"})
+_CASE_CONTROL_DESIGNS = frozenset({"case_control"})
+
+
+def _study_context_reason(
+    *,
+    study_design: Optional[str],
+    ascertainment: Optional[str],
+    declared: Optional[str],
+    field: str,
+    value: int,
+) -> Optional[str]:
+    """Return a study-context refusal reason, or None if context is clean.
+
+    Only fires when the LLM left count_type as per_variant_carrier/unknown/null
+    but the paper-level study design makes that assignment implausible.
+    """
+    design = (study_design or "").strip().lower()
+    asc = (ascertainment or "").strip().lower()
+    if not design and not asc:
+        return None
+    # Population / biobank / GWAS: large counts are denominators/allele totals.
+    if design in _POPULATION_STUDY_DESIGNS or asc in {
+        "population_screening",
+        "biobank",
+    }:
+        if field == "carriers" and value is not None and value >= 50:
+            if declared in (None, ACCEPTED_COUNT_TYPE, "unknown"):
+                return (
+                    f"study_design={design or 'unknown'}/ascertainment={asc or 'unknown'} "
+                    f"suggests population_count/cohort_total, not per-variant carriers "
+                    f"(value={value})"
+                )
+    if design in _FAMILY_STUDY_DESIGNS:
+        if declared in (None, ACCEPTED_COUNT_TYPE, "unknown") and field == "carriers":
+            # Soft signal only for large family-wide N reused as carrier count.
+            if value is not None and value >= 20:
+                return (
+                    f"study_design=family_segregation: large carrier count {value} "
+                    f"may be pedigree/family total rather than per-variant carriers"
+                )
+    if design in _CASE_CONTROL_DESIGNS:
+        if declared in (None, ACCEPTED_COUNT_TYPE, "unknown") and field in {
+            "carriers",
+            "affected",
+            "unaffected",
+        }:
+            if (
+                value is not None
+                and value >= 20
+                and declared not in {"case", "control"}
+            ):
+                return (
+                    f"study_design=case_control: count {value} lacks case/control arm "
+                    f"provenance (declared={declared!r})"
+                )
+    if design in _TRAP_STUDY_DESIGNS:
+        if field == "carriers" and value is not None and value > 0:
+            return (
+                f"study_design={design}: primary carrier count is a trap "
+                f"(functional/review/meta paper); value={value}"
+            )
+    return None
+
+
 def detect_misclassified_counts(
     variants: list[dict[str, Any]],
     *,
     fields: Optional[Iterable[str]] = None,
+    study_design: Optional[str] = None,
+    ascertainment: Optional[str] = None,
 ) -> list[ClassifierAnnotation]:
     """Flag (variant_index, field) where the LLM-declared count_type is not
     ``per_variant_carrier`` AND the variant currently has a non-null count.
 
-    Variants without a ``count_provenance`` block are silently skipped — the
-    classifier is opt-in based on the LLM having populated the new schema.
+    Variants without a ``count_provenance`` block are still checked against
+    paper-level study context (when provided) so population/GWAS/review papers
+    do not silently assign large denominators as per-variant carriers.
+
+    Variants without a ``count_provenance`` block are silently skipped for
+    provenance-based rules — the classifier is opt-in based on the LLM having
+    populated the new schema — except for study-context rules, which only need
+    a non-null count value.
     """
     field_keys = list(fields) if fields else list(PROVENANCE_KEYS.keys())
     annotations: list[ClassifierAnnotation] = []
@@ -161,42 +239,73 @@ def detect_misclassified_counts(
         if not isinstance(variant, dict):
             continue
         provenance = variant.get("count_provenance")
-        if not isinstance(provenance, dict):
-            continue
+        has_provenance = isinstance(provenance, dict)
+        if not has_provenance:
+            provenance = {}
         for fkey in field_keys:
             label_key, type_key = PROVENANCE_KEYS[fkey]
-            declared = _normalize_count_type(provenance.get(type_key))
-            column_label = provenance.get(label_key) or None
-            suspicious_label = _suspicious_column_label_reason(column_label)
-            if (
-                declared is None or declared == ACCEPTED_COUNT_TYPE
-            ) and not suspicious_label:
-                continue
+            declared = (
+                _normalize_count_type(provenance.get(type_key))
+                if has_provenance
+                else None
+            )
+            column_label = provenance.get(label_key) or None if has_provenance else None
+            suspicious_label = (
+                _suspicious_column_label_reason(column_label)
+                if has_provenance
+                else None
+            )
             paths = COUNT_FIELDS.get(fkey)
             if not paths:
                 continue
             current_value = _read_field(variant, paths)
             if current_value is None:
-                # No value to refuse — provenance says non-per-variant and
-                # the count is already null, so nothing to do.
                 continue
+
+            study_reason = _study_context_reason(
+                study_design=study_design,
+                ascertainment=ascertainment,
+                declared=declared,
+                field=fkey,
+                value=current_value,
+            )
+
+            provenance_bad = has_provenance and (
+                (declared is not None and declared != ACCEPTED_COUNT_TYPE)
+                or bool(suspicious_label)
+            )
+            if not provenance_bad and not study_reason:
+                continue
+            if not has_provenance and not study_reason:
+                continue
+
+            if study_reason and not provenance_bad:
+                reason = study_reason
+                declared_out = declared or "study_context"
+            elif suspicious_label:
+                reason = (
+                    f"column label looks like {suspicious_label}; value "
+                    f"{current_value} would be a non-per-variant assignment"
+                )
+                declared_out = declared or "suspicious_column_label"
+            else:
+                reason = (
+                    f"declared count_type {declared!r} is not "
+                    f"{ACCEPTED_COUNT_TYPE!r}; value {current_value} "
+                    f"would be a non-per-variant assignment"
+                )
+                declared_out = declared or "unknown"
+                if study_reason:
+                    reason = f"{reason}; also {study_reason}"
+
             annotations.append(
                 ClassifierAnnotation(
                     variant_index=idx,
                     field=fkey,
                     value=current_value,
-                    declared_count_type=declared or "suspicious_column_label",
+                    declared_count_type=declared_out,
                     column_label=column_label,
-                    reason=(
-                        f"column label looks like {suspicious_label}; value "
-                        f"{current_value} would be a non-per-variant assignment"
-                        if suspicious_label
-                        else (
-                            f"declared count_type {declared!r} is not "
-                            f"{ACCEPTED_COUNT_TYPE!r}; value {current_value} "
-                            f"would be a non-per-variant assignment"
-                        )
-                    ),
+                    reason=reason,
                 )
             )
     return annotations

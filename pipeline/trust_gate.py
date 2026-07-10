@@ -62,9 +62,24 @@ POPULATION_CARRIER_CEILING = 100_000
 OUTLIER_K = 10
 OUTLIER_ABS_FLOOR = 50
 
+# Study designs where a clinical per-variant carrier/penetrance count is a trap
+# (review, pure functional, GWAS allele tables). Soft-quarantine via
+# study_type_mismatch; never delete the row.
+STUDY_TYPE_MISMATCH_DESIGNS = frozenset({"review_meta", "functional_invitro", "gwas"})
+# Population/biobank designs: strengthen population_count for large carriers.
+POPULATION_STUDY_DESIGNS = frozenset({"cohort_population", "cohort_biobank", "gwas"})
+# Soft floor for study-context population_count (below the hard gnomAD ceiling).
+POPULATION_STUDY_CARRIER_FLOOR = 50
+
 # Rule identifiers, ordered. The rule-set version below is derived from this so a
 # stored fact records exactly which rule generation tiered it.
-RULE_IDS = ("arith_inconsistent", "count_is_total", "population_count", "paper_outlier")
+RULE_IDS = (
+    "arith_inconsistent",
+    "count_is_total",
+    "population_count",
+    "paper_outlier",
+    "study_type_mismatch",
+)
 
 
 def rule_version() -> str:
@@ -78,10 +93,14 @@ def rule_version() -> str:
             "outlier_k": OUTLIER_K,
             "outlier_floor": OUTLIER_ABS_FLOOR,
             "population_label_re": POPULATION_LABEL_RE.pattern,
+            "study_type_mismatch_designs": sorted(STUDY_TYPE_MISMATCH_DESIGNS),
+            "population_study_designs": sorted(POPULATION_STUDY_DESIGNS),
+            "population_study_carrier_floor": POPULATION_STUDY_CARRIER_FLOOR,
         },
         sort_keys=True,
     )
-    return "tg1-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    # tg2: study-record aware generation (study_type_mismatch + population study).
+    return "tg2-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
 def _as_int(value: Any) -> Optional[int]:
@@ -97,6 +116,7 @@ def evaluate_fact(
     counts: dict[str, Any],
     provenance: Optional[dict[str, Any]] = None,
     paper_stats: Optional[dict[str, Any]] = None,
+    study_context: Optional[dict[str, Any]] = None,
 ) -> list[str]:
     """Return the sorted reason codes a single count fact trips (empty = clean).
 
@@ -104,9 +124,12 @@ def evaluate_fact(
     (any may be None). ``provenance``: the fact's ``count_provenance`` dict
     (``carriers_count_type``, ``carriers_column_label``). ``paper_stats``:
     ``{"carriers_median": float, "carriers_n": int}`` for the fact's paper.
+    ``study_context``: optional paper-level fields from extraction_metadata
+    (``study_design``, ``ascertainment``, ``study_type``).
     """
     provenance = provenance or {}
     paper_stats = paper_stats or {}
+    study_context = study_context or {}
     reasons: set[str] = set()
 
     carriers = _as_int(counts.get("carriers"))
@@ -131,6 +154,23 @@ def evaluate_fact(
         reasons.add("population_count")
     if carriers is not None and carriers > POPULATION_CARRIER_CEILING:
         reasons.add("population_count")
+
+    design = str(study_context.get("study_design") or "").strip().lower()
+    # Strengthen population_count when the paper is itself a population/biobank/GWAS study.
+    if (
+        design in POPULATION_STUDY_DESIGNS
+        and carriers is not None
+        and carriers >= POPULATION_STUDY_CARRIER_FLOOR
+    ):
+        reasons.add("population_count")
+
+    # study_type_mismatch: clinical carrier/penetrance counts from review /
+    # functional / GWAS papers are soft-quarantined (still auditable).
+    has_clinical_count = any(
+        v is not None and v > 0 for v in (carriers, affected, unaffected)
+    )
+    if design in STUDY_TYPE_MISMATCH_DESIGNS and has_clinical_count:
+        reasons.add("study_type_mismatch")
 
     # paper_outlier: carrier count is a wild outlier vs the paper's other rows.
     median = paper_stats.get("carriers_median")
@@ -185,20 +225,39 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
         conn.row_factory = sqlite3.Row
         # Pull each count fact with its fact-level count provenance (variant ↔
         # paper carries the count_provenance JSON).
+        # Optional study columns (PR-1 A2); tolerate pre-study-record DBs.
+        em_cols = {r[1] for r in conn.execute("PRAGMA table_info(extraction_metadata)")}
+        study_select = []
+        for col in (
+            "study_design",
+            "ascertainment",
+            "study_type",
+            "cohort_source",
+            "population",
+        ):
+            if col in em_cols:
+                study_select.append(f"em.{col} AS {col}")
+            else:
+                study_select.append(f"NULL AS {col}")
+        study_sql = ",\n                       ".join(study_select)
+
         rows = [
             dict(r)
             for r in conn.execute(
-                """
+                f"""
                 SELECT pd.penetrance_id       AS penetrance_id,
                        pd.pmid                 AS pmid,
                        pd.total_carriers_observed AS carriers,
                        pd.affected_count       AS affected,
                        pd.unaffected_count     AS unaffected,
                        pd.uncertain_count      AS uncertain,
-                       vp.count_provenance     AS count_provenance
+                       vp.count_provenance     AS count_provenance,
+                       {study_sql}
                 FROM penetrance_data pd
                 LEFT JOIN variant_papers vp
                        ON vp.variant_id = pd.variant_id AND vp.pmid = pd.pmid
+                LEFT JOIN extraction_metadata em
+                       ON em.pmid = pd.pmid
                 """
             )
         ]
@@ -219,7 +278,17 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                     provenance = json.loads(raw)
                 except (TypeError, ValueError, json.JSONDecodeError):
                     provenance = {}
-            reasons = evaluate_fact(r, provenance, paper_stats.get(str(r.get("pmid"))))
+            study_context = {
+                "study_design": r.get("study_design"),
+                "ascertainment": r.get("ascertainment"),
+                "study_type": r.get("study_type"),
+            }
+            reasons = evaluate_fact(
+                r,
+                provenance,
+                paper_stats.get(str(r.get("pmid"))),
+                study_context=study_context,
+            )
             tier = decide_tier(reasons)
             stats[tier] += 1
             for reason in reasons:
