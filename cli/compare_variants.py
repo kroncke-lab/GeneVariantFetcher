@@ -16,6 +16,7 @@ Author: GeneVariantFetcher Team
 """
 
 import argparse
+import csv
 import json
 import logging
 import re
@@ -2186,6 +2187,136 @@ def create_comparison_row(
     )
 
 
+def _adjudication_variant_key(notation: str) -> str:
+    """Canonical key for matching an overlay row to a ComparisonRow.
+
+    Mirrors the ``to_canonical_form(...) or normalize_variant(...)`` keying used
+    by ``aggregate_sqlite_data`` / ``ingest_review_adjudications`` so the same
+    variant lands on the same key on both sides.
+    """
+    canon = to_canonical_form(notation)
+    return canon if canon else normalize_variant(notation)
+
+
+def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str]]:
+    """Load a ``<GENE>_review_adjudications.csv`` overlay into a lookup map.
+
+    Returns ``{(pmid, variant_key): overlay_row}``. Missing/empty file yields an
+    empty map (a no-op overlay). Keyed on ``source_notation`` (the DB variant
+    notation the adjudicator reviewed).
+    """
+    overlay: Dict[Tuple[str, str], Dict[str, str]] = {}
+    if not path or not Path(path).exists():
+        return overlay
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            pmid = normalize_pmid(row.get("pmid") or "")
+            notation = (row.get("source_notation") or "").strip()
+            if not pmid or not notation:
+                continue
+            overlay[(pmid, _adjudication_variant_key(notation))] = row
+    return overlay
+
+
+def _int_or_none(value: Any) -> Optional[int]:
+    if value in (None, ""):
+        return None
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def _apply_count_override(row: ComparisonRow, adj: Dict[str, str]) -> None:
+    """Replace a matched row's extracted counts with adjudicated corrections."""
+    corrected_affected = _int_or_none(adj.get("corrected_affected"))
+    corrected_unaffected = _int_or_none(adj.get("corrected_unaffected"))
+    corrected_total = _int_or_none(adj.get("corrected_total"))
+    if corrected_affected is not None:
+        row.sqlite_affected = corrected_affected
+    if corrected_unaffected is not None:
+        row.sqlite_unaffected = corrected_unaffected
+    if corrected_total is not None:
+        row.sqlite_carriers_total = corrected_total
+    row.carriers_diff = compute_diff(
+        row.excel_carriers_total, row.sqlite_carriers_total
+    )
+    row.affected_diff = compute_diff(row.excel_affected, row.sqlite_affected)
+    row.unaffected_diff = compute_diff(row.excel_unaffected, row.sqlite_unaffected)
+    row.count_mismatch = any(
+        [
+            row.carriers_diff is not None and row.carriers_diff != 0,
+            row.affected_diff is not None and row.affected_diff != 0,
+            row.unaffected_diff is not None and row.unaffected_diff != 0,
+        ]
+    )
+
+
+def apply_adjudication_overlay(
+    results: List[ComparisonRow],
+    overlay: Dict[Tuple[str, str], Dict[str, str]],
+) -> List[ComparisonRow]:
+    """Fold exception-path human adjudication verdicts into comparison rows before scoring.
+
+    Converts the precision proxy's false-positive UPPER BOUND toward truth and
+    the raw extracted counts toward adjudicated truth. Verdict/action effects:
+
+    - ``correct_counts`` / ``count_override``: overwrite the row's extracted
+      counts with the adjudicated ``corrected_*`` values (feeds MAE + the
+      end-to-end count error).
+    - ``wrong_paper`` / ``excluded``: drop the row entirely (out of scope for
+      both recall and precision).
+    - ``confirm`` / ``gold_confirmed`` on a DB-only extra: drop it from the
+      extra set — a real variant the curator omitted is not a false positive.
+    - ``wrong_variant`` / ``false_positive``: keep the extra so precision counts
+      it as a confirmed false positive.
+
+    Rows with no overlay entry pass through unchanged. Returns a new list; the
+    default scoring path (no overlay) is untouched because callers only invoke
+    this when an overlay is explicitly supplied.
+    """
+    if not overlay:
+        return results
+    out: List[ComparisonRow] = []
+    applied = {
+        "count_override": 0,
+        "excluded": 0,
+        "confirmed_tp_dropped": 0,
+        "false_positive_kept": 0,
+    }
+    for row in results:
+        key = None
+        for norm in (row.sqlite_variant_norm, row.excel_variant_norm):
+            if norm and (row.pmid, norm) in overlay:
+                key = (row.pmid, norm)
+                break
+        if key is None:
+            out.append(row)
+            continue
+        adj = overlay[key]
+        action = (adj.get("action") or "").strip().lower()
+        verdict = (adj.get("verdict") or "").strip().lower()
+        if action == "count_override" or verdict == "correct_counts":
+            _apply_count_override(row, adj)
+            applied["count_override"] += 1
+            out.append(row)
+        elif action == "excluded" or verdict == "wrong_paper":
+            applied["excluded"] += 1
+            # dropped
+        elif (
+            action == "gold_confirmed" or verdict == "confirm"
+        ) and row.missing_in_excel:
+            applied["confirmed_tp_dropped"] += 1
+            # dropped from the false-positive set
+        elif action == "false_positive" or verdict == "wrong_variant":
+            applied["false_positive_kept"] += 1
+            out.append(row)
+        else:
+            out.append(row)
+    logger.info("adjudication overlay applied: %s", applied)
+    return out
+
+
 def _ratio(numerator: int, denominator: int) -> Optional[float]:
     if denominator == 0:
         return None
@@ -2303,6 +2434,82 @@ def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
             "sum_abs_error": total_abs,
             "n_matched": n,
             "mae": (total_abs / n) if n else None,
+        }
+    return out
+
+
+def _percentile(values: List[int], q: float) -> Optional[float]:
+    """Linear-interpolated q-th percentile (0-100) of ``values``; None if empty."""
+    if not values:
+        return None
+    s = sorted(values)
+    if len(s) == 1:
+        return float(s[0])
+    idx = (len(s) - 1) * (q / 100.0)
+    lo = int(idx)
+    frac = idx - lo
+    if lo + 1 < len(s):
+        return float(s[lo] + (s[lo + 1] - s[lo]) * frac)
+    return float(s[lo])
+
+
+def compute_end_to_end_count_error(results: List[ComparisonRow]) -> Dict[str, Any]:
+    """End-to-end count error over every gold row, missed variants counted as 0.
+
+    Unlike ``compute_rows_mae`` (which scores only matched rows where BOTH sides
+    carry a count), this walks every gold-side row and treats an absent extracted
+    count -- whether the variant was missed entirely (``missing_in_sqlite``) or
+    matched but never assigned a count -- as an extracted value of 0. That makes
+    the error term end-to-end: a missed variant contributes its full gold count
+    to the error, so this metric cannot be flattered by simply not extracting the
+    hard cases.
+
+    Reports mean (the end-to-end MAE), median, p95, and max per count field, plus
+    how many of the contributing rows were misses -- so a low mean that hides a
+    long tail (e.g. one variant off by 200) is visible. Denominated on gold, so
+    DB-only extra rows (a precision concern) are excluded.
+
+    Per-field output: ``{"n", "n_missed", "sum_abs_error", "mae", "median",
+    "p95", "max"}``.
+    """
+    gold_rows = [r for r in results if not r.missing_in_excel]
+    field_pairs = [
+        ("carriers", "excel_carriers_total", "sqlite_carriers_total"),
+        ("affected", "excel_affected", "sqlite_affected"),
+        ("unaffected", "excel_unaffected", "sqlite_unaffected"),
+    ]
+    out: Dict[str, Any] = {}
+    for label, gold_attr, ext_attr in field_pairs:
+        errors: List[int] = []
+        n_missed = 0
+        for r in gold_rows:
+            gv = getattr(r, gold_attr, None)
+            if gv is None:
+                # No gold count to recover for this field on this row.
+                continue
+            try:
+                gold_val = int(gv)
+            except (TypeError, ValueError):
+                continue
+            sv = getattr(r, ext_attr, None)
+            extracted_missing = sv is None
+            try:
+                ext_val = 0 if extracted_missing else int(sv)
+            except (TypeError, ValueError):
+                ext_val = 0
+                extracted_missing = True
+            errors.append(abs(gold_val - ext_val))
+            if extracted_missing:
+                n_missed += 1
+        n = len(errors)
+        out[label] = {
+            "n": n,
+            "n_missed": n_missed,
+            "sum_abs_error": sum(errors),
+            "mae": (sum(errors) / n) if n else None,
+            "median": _percentile(errors, 50),
+            "p95": _percentile(errors, 95),
+            "max": max(errors) if errors else None,
         }
     return out
 
@@ -2461,6 +2668,7 @@ def generate_outputs(
         "unique_pmids": len(set(r.pmid for r in results)),
         "recall": compute_recall_summary(results),
         "mae": compute_rows_mae(results),
+        "count_error_end_to_end": compute_end_to_end_count_error(results),
         "precision": compute_precision_summary(results),
         "top_mismatches": [],
     }
@@ -2784,6 +2992,18 @@ Examples:
     )
 
     parser.add_argument(
+        "--adjudication-overlay",
+        type=Path,
+        default=None,
+        help=(
+            "Optional path to a <GENE>_review_adjudications.csv overlay. When "
+            "given, human adjudication verdicts (count corrections, "
+            "false-positive/true-positive resolutions, exclusions) are folded "
+            "into scoring. Omitted by default so scoring is unchanged."
+        ),
+    )
+
+    parser.add_argument(
         "--log_level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         default="INFO",
@@ -2854,6 +3074,16 @@ Examples:
             args.variant_match_mode,
             args.fuzzy_threshold,
         )
+
+        # Fold in human adjudications when an overlay is explicitly provided.
+        if args.adjudication_overlay:
+            overlay = load_adjudication_overlay(args.adjudication_overlay)
+            logger.info(
+                "Applying adjudication overlay %s (%d entries)",
+                args.adjudication_overlay,
+                len(overlay),
+            )
+            results = apply_adjudication_overlay(results, overlay)
 
         # Generate outputs
         summary = generate_outputs(results, args.outdir, args.excel, args.sqlite)

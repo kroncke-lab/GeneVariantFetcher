@@ -7,6 +7,7 @@ import argparse
 import json
 import logging
 import math
+import os
 import sqlite3
 import subprocess
 import sys
@@ -21,10 +22,12 @@ if str(BASE_DIR) not in sys.path:
 from cli.compare_variants import (  # noqa: E402
     aggregate_excel_data,
     aggregate_sqlite_data,
+    apply_adjudication_overlay,
     compare_data,
     extract_sqlite_data,
     generate_outputs,
     introspect_sqlite,
+    load_adjudication_overlay,
     load_excel_data,
 )
 from scripts.recall_audit.common import write_csv_rows  # noqa: E402
@@ -117,6 +120,29 @@ def find_latest_db(gene: str, results_dir: Path) -> Path | None:
     return max(candidates, key=_db_sort_key)
 
 
+def _maybe_adjudication_overlay(gene: str) -> dict[Any, Any]:
+    """Load the gene's adjudication overlay when opted in via env.
+
+    Opt-in only (``GVF_APPLY_ADJUDICATIONS=1``) so the default nightly score is
+    unchanged. Overlay dir defaults to
+    ``gene_variant_fetcher_gold_standard/adjudications`` and is overridable with
+    ``GVF_ADJUDICATIONS_DIR``. Returns an empty map (a no-op) when disabled or
+    the file is absent.
+    """
+    if os.environ.get("GVF_APPLY_ADJUDICATIONS", "").strip().lower() not in {
+        "1",
+        "true",
+        "yes",
+    }:
+        return {}
+    default_dir = BASE_DIR / "gene_variant_fetcher_gold_standard" / "adjudications"
+    adj_dir = Path(os.environ.get("GVF_ADJUDICATIONS_DIR") or default_dir)
+    overlay = load_adjudication_overlay(adj_dir / f"{gene}_review_adjudications.csv")
+    if overlay:
+        print(f"[{gene}] applying adjudication overlay ({len(overlay)} entries)")
+    return overlay
+
+
 def run_gene_compare(
     *,
     gene: str,
@@ -145,6 +171,7 @@ def run_gene_compare(
         variant_match_mode,
         fuzzy_threshold,
     )
+    rows = apply_adjudication_overlay(rows, _maybe_adjudication_overlay(gene))
     summary = generate_outputs(rows, gene_outdir, gold_path, db_path)
     return {
         "gene": gene,
@@ -191,6 +218,44 @@ def combine_mae(scored: list[dict[str, Any]]) -> dict[str, Any]:
             "sum_abs_error": total,
             "n_matched": n,
             "mae": (total / n) if n else None,
+        }
+    return aggregate
+
+
+def combine_count_error_end_to_end(scored: list[dict[str, Any]]) -> dict[str, Any]:
+    """Pool the end-to-end count error (misses=0) across genes.
+
+    Sums |err| and N over every gold row (matched or missed) so the aggregate
+    ``mae`` is the honest end-to-end error, not the matched-only MAE. Median/p95
+    cannot be recomputed from per-gene summaries without the raw error lists, so
+    only the pooled mean, counts, and max-of-maxes are aggregated here; the full
+    per-gene distribution stays in each gene's summary.json. Genes whose
+    summaries predate this metric contribute nothing.
+    """
+    aggregate: dict[str, Any] = {}
+    for field_name in MAE_FIELDS:
+        total = 0
+        n = 0
+        n_missed = 0
+        max_err: int | None = None
+        for item in scored:
+            block = (
+                item.get("summary", {})
+                .get("count_error_end_to_end", {})
+                .get(field_name, {})
+            )
+            total += int(block.get("sum_abs_error") or 0)
+            n += int(block.get("n") or 0)
+            n_missed += int(block.get("n_missed") or 0)
+            block_max = block.get("max")
+            if block_max is not None:
+                max_err = block_max if max_err is None else max(max_err, block_max)
+        aggregate[field_name] = {
+            "n": n,
+            "n_missed": n_missed,
+            "sum_abs_error": total,
+            "mae": (total / n) if n else None,
+            "max": max_err,
         }
     return aggregate
 
@@ -327,6 +392,7 @@ def build_run_summary(
     gene_results: list[dict[str, Any]],
     aggregate_recall: dict[str, Any],
     aggregate_mae: dict[str, Any] | None = None,
+    aggregate_count_error_end_to_end: dict[str, Any] | None = None,
     aggregate_precision: dict[str, Any] | None = None,
     aggregate_fbeta: dict[str, Any] | None = None,
     manifest: dict[str, Any],
@@ -341,6 +407,7 @@ def build_run_summary(
             for name, metric in aggregate_recall.items()
         },
         "aggregate_mae": aggregate_mae or {},
+        "aggregate_count_error_end_to_end": aggregate_count_error_end_to_end or {},
         "aggregate_precision": aggregate_precision or {},
         "aggregate_fbeta": aggregate_fbeta or {},
         "gene_results": gene_results,
@@ -437,6 +504,32 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
             lines.append(
                 f"| {field_name} | {block.get('sum_abs_error', 0)} / {block.get('n_matched', 0)} | "
                 f"{'n/a' if mae_val is None else f'{mae_val:.3f}'} |"
+            )
+
+    e2e = summary.get("aggregate_count_error_end_to_end") or {}
+    if any(block.get("n") for block in e2e.values()):
+        lines.extend(
+            [
+                "",
+                "## Aggregate End-to-End Count Error",
+                "",
+                "Error over EVERY gold row with a missed variant counted as an "
+                "extracted 0 (not just matched rows). Reads higher than rows-mode "
+                "MAE above by design — it is not flattered by skipping hard "
+                "variants. Per-gene median/p95 live in each gene's summary.json.",
+                "",
+                "| Field | sum \\|err\\| / N gold | end-to-end MAE | of which missed | max |",
+                "|-------|---------|-----|-----|-----|",
+            ]
+        )
+        for field_name in MAE_FIELDS:
+            block = e2e.get(field_name, {})
+            mae_val = block.get("mae")
+            max_val = block.get("max")
+            lines.append(
+                f"| {field_name} | {block.get('sum_abs_error', 0)} / {block.get('n', 0)} | "
+                f"{'n/a' if mae_val is None else f'{mae_val:.3f}'} | "
+                f"{block.get('n_missed', 0)} | {'n/a' if max_val is None else max_val} |"
             )
 
     precision = summary.get("aggregate_precision") or {}
@@ -794,6 +887,7 @@ def main() -> int:
         gene_results=gene_results,
         aggregate_recall=aggregate_recall,
         aggregate_mae=combine_mae(scored),
+        aggregate_count_error_end_to_end=combine_count_error_end_to_end(scored),
         aggregate_precision=aggregate_precision,
         aggregate_fbeta=combine_fbeta(aggregate_recall, aggregate_precision),
         manifest=manifest,
