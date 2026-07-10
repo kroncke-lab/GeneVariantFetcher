@@ -795,7 +795,7 @@ def _fmt(v: Optional[float]) -> str:
     return f"{v:.1f}%"
 
 
-def step_corpus_sync(run_dir: Path) -> None:
+def step_corpus_sync(run_dir: Path, stage_warnings: Optional[list[str]] = None) -> None:
     """Incrementally fold this run's fetched source into the consolidated corpus.
 
     Scoped to ``run_dir`` so it is fast; the builder is idempotent and only
@@ -820,8 +820,14 @@ def step_corpus_sync(run_dir: Path) -> None:
             logger.warning(
                 "corpus sync returned %s: %s", result.returncode, result.stderr[-300:]
             )
+            if stage_warnings is not None:
+                stage_warnings.append(
+                    f"corpus sync (build_source_corpus.py) exited {result.returncode}"
+                )
     except Exception as e:  # noqa: BLE001 - corpus sync is best-effort
         logger.warning("corpus sync failed (non-fatal): %s", e)
+        if stage_warnings is not None:
+            stage_warnings.append(f"corpus sync failed: {e}")
 
 
 # ---------------------------------------------------------------------------
@@ -852,7 +858,13 @@ def _find_review_repo(explicit: Optional[Path]) -> Optional[Path]:
     return None
 
 
-def step_backfill_metadata(*, db: Path, run_dir: Path, email: Optional[str]) -> None:
+def step_backfill_metadata(
+    *,
+    db: Path,
+    run_dir: Path,
+    email: Optional[str],
+    stage_warnings: Optional[list[str]] = None,
+) -> None:
     """Fill papers.{first_author, journal, publication_date, doi, pmc_id}.
 
     Local abstract/artifact caches first; PubMed ESummary fills the rest (mainly
@@ -874,6 +886,8 @@ def step_backfill_metadata(*, db: Path, run_dir: Path, email: Optional[str]) -> 
         logger.info("📚 paper metadata backfill: %s", detail or "already complete")
     except Exception as e:  # noqa: BLE001
         logger.warning("paper metadata backfill failed (%s); continuing", e)
+        if stage_warnings is not None:
+            stage_warnings.append(f"metadata backfill failed: {e}")
 
 
 def step_publish_review(
@@ -983,6 +997,41 @@ def step_vf_enrich(gene: str, db: Path) -> dict:
 # ---------------------------------------------------------------------------
 
 
+EXIT_STAGE_WARNINGS = 3  # completed, but a completeness-affecting stage failed
+
+
+def _write_run_status(
+    run_dir: Path,
+    gene: str,
+    status: str,
+    exit_code: int,
+    stage_failures: list[str],
+    stage_warnings: list[str],
+    started_at: float,
+) -> None:
+    """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
+    structured stage status (and the process exit code) instead of scraping
+    RUN_REPORT.md. Best-effort: never raises into the run.
+    """
+    try:
+        (run_dir / "RUN_STATUS.json").write_text(
+            json.dumps(
+                {
+                    "gene": gene,
+                    "status": status,
+                    "exit_code": exit_code,
+                    "duration_seconds": int(time.time() - started_at),
+                    "stage_failures": list(stage_failures),
+                    "stage_warnings": list(stage_warnings),
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+    except OSError as e:
+        logger.warning("could not write RUN_STATUS.json: %s", e)
+
+
 def run_gvf_pipeline(
     gene: str,
     email: str,
@@ -1022,6 +1071,10 @@ def run_gvf_pipeline(
     # nonzero but let the run continue) so the final status and RUN_REPORT.md
     # reflect them instead of "✅ Done" hiding a swallowed error.
     stage_failures: list[str] = []
+    # Best-effort stages (corpus sync, metadata backfill, quality passes) whose
+    # failure does not remove core evidence: recorded for visibility but they do
+    # NOT flip the exit code.
+    stage_warnings: list[str] = []
 
     logging.basicConfig(
         level=logging.INFO,
@@ -1134,11 +1187,13 @@ def run_gvf_pipeline(
             db = _find_db(run_dir, gene) or db
         except Exception as e:  # noqa: BLE001 - best-effort; keep the bounded extraction
             logger.exception("full-coverage walk failed (%s); continuing", e)
+            stage_warnings.append(f"full-coverage walk failed: {e}")
     elif full_coverage and "walk" in skip:
         logger.info("⏭️  Step 2.5: full-coverage walk — SKIPPED")
 
     gold = _find_gold(gene)
     source_qc_summary: Optional[Path] = None
+    source_qc_attempted = False
     source_recovery_result: Optional[SourceRecoveryResult] = None
     layer_outdir: Optional[Path] = None
 
@@ -1153,6 +1208,7 @@ def run_gvf_pipeline(
             outdir=run_dir / "source_qc",
             stage_failures=stage_failures,
         )
+        source_qc_attempted = True
         if "source-recovery" not in skip and source_qc_summary is not None:
             logger.info("🛟 Step 4: source recovery")
             source_recovery_result = step_source_recovery(
@@ -1202,6 +1258,7 @@ def run_gvf_pipeline(
             step_carrier_guard(db=db)
         except Exception as e:  # noqa: BLE001
             logger.exception("carrier guard failed (%s); continuing", e)
+            stage_warnings.append(f"carrier guard failed: {e}")
     elif full_coverage and not carrier_guard:
         logger.info("⏭️  Step 3.5: carrier-count guard — SKIPPED")
     if full_coverage and vf_enrich and "vf-enrich" not in skip:
@@ -1210,11 +1267,14 @@ def run_gvf_pipeline(
             step_vf_enrich(gene=gene, db=db)
         except Exception as e:  # noqa: BLE001
             logger.exception("vf-enrich failed (%s); continuing", e)
+            stage_warnings.append(f"vf-enrich failed: {e}")
     elif full_coverage and not vf_enrich:
         logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED")
 
-    # Step 4: gold-free source QC
-    if source_qc_summary is None and "source-qc" not in skip:
+    # Step 4: gold-free source QC. Only run if Step 3 did not already attempt it —
+    # a failed Step-3 attempt also leaves source_qc_summary None, and re-running
+    # would repeat the failing subprocess and double-record the stage failure.
+    if not source_qc_attempted and "source-qc" not in skip:
         logger.info("🔎 Step 4: source acquisition QC")
         source_qc_summary = step_source_qc(
             gene=gene,
@@ -1222,6 +1282,7 @@ def run_gvf_pipeline(
             outdir=run_dir / "source_qc",
             stage_failures=stage_failures,
         )
+        source_qc_attempted = True
     elif "source-qc" in skip:
         logger.info("⏭️  Step 4: source acquisition QC — SKIPPED")
     else:
@@ -1231,7 +1292,7 @@ def run_gvf_pipeline(
     # (idempotent incremental merge — adds new papers / upgrades compromised
     # categories only, so the next run reuses them instead of re-fetching).
     if corpus_sync and "corpus-sync" not in skip:
-        step_corpus_sync(run_dir=run_dir)
+        step_corpus_sync(run_dir=run_dir, stage_warnings=stage_warnings)
     elif "corpus-sync" in skip or not corpus_sync:
         logger.info("⏭️  Step 4.5: corpus sync — SKIPPED")
 
@@ -1239,7 +1300,9 @@ def run_gvf_pipeline(
     # so the report and any review-DB publish render real citations, not bare PMIDs.
     if "metadata-backfill" not in skip:
         logger.info("📚 Step 4.6: paper metadata backfill")
-        step_backfill_metadata(db=db, run_dir=run_dir, email=email)
+        step_backfill_metadata(
+            db=db, run_dir=run_dir, email=email, stage_warnings=stage_warnings
+        )
     else:
         logger.info("⏭️  Step 4.6: paper metadata backfill — SKIPPED")
 
@@ -1279,14 +1342,27 @@ def run_gvf_pipeline(
     elif publish_review and "publish-review" in skip:
         logger.info("⏭️  Step 6: publish to review DB — SKIPPED")
 
+    exit_code = EXIT_STAGE_WARNINGS if stage_failures else 0
+    status = "completed_with_warnings" if stage_failures else "completed"
+    _write_run_status(
+        run_dir, gene, status, exit_code, stage_failures, stage_warnings, started
+    )
+
     if stage_failures:
         logger.warning(
-            "⚠️  Done in %.1f min with %d stage warning(s) — see RUN_REPORT.md:",
+            "⚠️  Done in %.1f min with %d stage failure(s) (exit %d) — see "
+            "RUN_STATUS.json / RUN_REPORT.md:",
             (time.time() - started) / 60,
             len(stage_failures),
+            exit_code,
         )
         for failure in stage_failures:
             logger.warning("   - %s", failure)
     else:
         logger.info("✅ Done in %.1f min", (time.time() - started) / 60)
-    return 0
+    if stage_warnings:
+        logger.info(
+            "   (%d non-fatal stage warning(s) recorded in RUN_STATUS.json)",
+            len(stage_warnings),
+        )
+    return exit_code
