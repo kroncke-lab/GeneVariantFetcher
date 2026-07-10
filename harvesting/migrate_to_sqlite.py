@@ -577,6 +577,9 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             unaffected_count INTEGER,
             uncertain_count INTEGER,
             penetrance_percentage REAL,
+            trust_tier TEXT DEFAULT 'trusted',
+            trust_reasons TEXT,
+            trust_rule_version TEXT,
 
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
@@ -676,6 +679,9 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("variant_papers", "key_quotes", "TEXT"),
         ("variant_papers", "count_provenance", "TEXT"),
         ("variant_papers", "source_layer", "TEXT"),
+        ("penetrance_data", "trust_tier", "TEXT DEFAULT 'trusted'"),
+        ("penetrance_data", "trust_reasons", "TEXT"),
+        ("penetrance_data", "trust_rule_version", "TEXT"),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
         *(

@@ -318,3 +318,44 @@ def test_stage_failure_sets_nonzero_exit_and_status(tmp_path: Path, monkeypatch)
     assert status["status"] == "completed_with_warnings"
     assert status["exit_code"] == gvf_run.EXIT_STAGE_WARNINGS
     assert any("source-qc" in f for f in status["stage_failures"])
+
+
+def test_trust_gate_runs_by_default(tmp_path: Path, monkeypatch):
+    """The per-fact trust gate runs by default — the primary quality control."""
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_trust_gate",
+        lambda db: calls.append(db) or {"trusted": 0, "quarantine": 0},
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == 0
+    assert len(calls) == 1, "trust gate should run by default"
+
+
+def test_trust_gate_is_skippable(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: calls.append(db) or {})
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc", "trust-gate"],
+    )
+    assert rc == 0
+    assert calls == [], "trust gate should be skippable via skip=['trust-gate']"
