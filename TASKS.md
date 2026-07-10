@@ -7,6 +7,16 @@
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 
+## Autonomy at Scale (2026-07-10) — the trust gate is the next lever
+
+The strategic direction and the buildable next-PR spec live in
+[`docs/AUTONOMY_ROADMAP.md`](docs/AUTONOMY_ROADMAP.md): a per-fact
+confidence/trust gate → two-tier (trusted/quarantine) DB, gene-class-agnostic
+structural checks, per-stratum calibration (cardiac + BRCA + a cold gene), and
+the deferred code-review findings from PR #140. The recall levers below still
+apply; the trust gate is what makes unattended hundreds-of-genes operation
+trustworthy.
+
 ## Exact-Match Recovery Plan (2026-06-12) — START HERE
 
 Root-caused decomposition of the exact-match gap to the manual gold curation.
