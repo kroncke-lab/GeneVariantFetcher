@@ -1045,6 +1045,12 @@ def _paper_check_reachable(model: str) -> bool:
         return bool(
             os.environ.get("OPENAI_API_KEY") or os.environ.get("AZURE_AI_API_KEY")
         )
+    # Bare (unprefixed) Azure deployment names still need Azure credentials.
+    base = m.rsplit("/", 1)[-1]
+    if base.startswith(("gpt-5", "gpt5", "kimi", "grok", "deepseek")):
+        return bool(
+            os.environ.get("AZURE_AI_API_KEY") and os.environ.get("AZURE_AI_API_BASE")
+        )
     return True  # unknown provider: attempt, let it warn per-paper if misconfigured
 
 

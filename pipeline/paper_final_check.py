@@ -198,7 +198,7 @@ class _Checker(Protocol):
 
 class _SummaryChecker(Protocol):
     def check(  # pragma: no cover
-        self, payload: dict[str, Any], source_text: str
+        self, payload: dict[str, Any], source_text: str, truncated: bool = False
     ) -> dict[str, Any]: ...
 
 
@@ -320,12 +320,14 @@ def _read_text(path: Path) -> Optional[str]:
         return None
 
 
-def _pick_fulltext(dirpath: Path, pmid: str, oversize_bytes: int) -> Optional[Path]:
-    """Pick the most-complete usable full-text sibling for a pmid in a dir.
-
-    Prefer FULL_CONTEXT (folded supplements) unless it is oversized and a smaller
-    sibling exists; among non-oversized candidates pick the largest.
-    """
+def _ordered_fulltext_candidates(
+    dirpath: Path, pmid: str, oversize_bytes: int
+) -> list[Path]:
+    """Full-text siblings for a pmid in a dir, best-first. Prefer FULL_CONTEXT
+    (folded supplements), then CLEANED, then DATA_ZONES; non-oversized files come
+    before oversized. The caller reads them in order until one is USABLE, so an
+    empty/stub FULL_CONTEXT falls through to a good CLEANED sibling instead of
+    aborting the whole source lookup."""
     cands: list[tuple[str, Path, int]] = []
     for suffix in _FULLTEXT_SUFFIXES:
         f = dirpath / f"{pmid}{suffix}"
@@ -334,15 +336,13 @@ def _pick_fulltext(dirpath: Path, pmid: str, oversize_bytes: int) -> Optional[Pa
                 cands.append((suffix, f, f.stat().st_size))
         except OSError:
             continue
-    if not cands:
-        return None
-    full = next((c for c in cands if c[0] == "_FULL_CONTEXT.md"), None)
-    if full and full[2] <= oversize_bytes:
-        return full[1]
-    under = [c for c in cands if c[2] <= oversize_bytes]
-    if under:
-        return max(under, key=lambda c: c[2])[1]
-    return min(cands, key=lambda c: c[2])[1]
+
+    def order(c: tuple[str, Path, int]) -> tuple[int, int, int]:
+        suffix, _f, size = c
+        oversized = 1 if size > oversize_bytes else 0
+        return (oversized, _FULLTEXT_SUFFIXES.index(suffix), -size)
+
+    return [c[1] for c in sorted(cands, key=order)]
 
 
 def _abstract_from_json(path: Path) -> Optional[str]:
@@ -363,46 +363,41 @@ def resolve_source_text(
     """Return (text, source_kind, source_path) for a paper's on-disk source.
 
     ``source_kind`` is ``"fulltext"`` | ``"abstract_only"`` | ``"none"``.
-    Precedence: (a) the extraction_metadata.source_file pointer (the exact file
-    extraction saw); (b) run_dir/pmc_fulltext; (c) corpus/<GENE>/<PMID>/;
-    (d) run_dir/abstract_json. Never raises.
+    Full text is ALWAYS preferred over an abstract (completeness needs the most
+    complete text). Full-text dirs, in order: the extraction_metadata.source_file
+    hint's dir, run_dir/pmc_fulltext, corpus/<GENE>/<PMID>/ — and within each dir
+    every candidate is tried until one is usable. Abstracts (the hint if it is a
+    JSON, then run_dir/abstract_json) are the last resort. Never raises.
     """
     pmid = str(pmid)
     gene = (gene or "").strip()
     run_path = Path(run_dir) if run_dir else None
+    hint_path = _resolve_path(source_file_hint) if source_file_hint else None
 
-    # (a) extraction_metadata.source_file hint
-    if source_file_hint:
-        resolved = _resolve_path(source_file_hint)
-        if resolved is not None:
-            if resolved.suffix == ".json":
-                abstract = _abstract_from_json(resolved)
-                if abstract:
-                    return abstract, "abstract_only", str(resolved)
-            else:
-                best = _pick_fulltext(resolved.parent, pmid, oversize_bytes)
-                if best is not None:
-                    text = _read_text(best)
-                    if _is_usable_source(text):
-                        return text, "fulltext", str(best)
-
-    # (b) run_dir/pmc_fulltext
+    # Full text first, from every source dir, trying every sibling until usable.
+    fulltext_dirs: list[Path] = []
+    if hint_path is not None and hint_path.suffix != ".json":
+        fulltext_dirs.append(hint_path.parent)
     if run_path is not None:
-        best = _pick_fulltext(run_path / "pmc_fulltext", pmid, oversize_bytes)
-        if best is not None:
-            text = _read_text(best)
-            if _is_usable_source(text):
-                return text, "fulltext", str(best)
-
-    # (c) corpus fallback (cross-run superset)
+        fulltext_dirs.append(run_path / "pmc_fulltext")
     if gene:
-        best = _pick_fulltext(REPO_ROOT / "corpus" / gene / pmid, pmid, oversize_bytes)
-        if best is not None:
-            text = _read_text(best)
+        fulltext_dirs.append(REPO_ROOT / "corpus" / gene / pmid)
+    seen: set[str] = set()
+    for d in fulltext_dirs:
+        for cand in _ordered_fulltext_candidates(d, pmid, oversize_bytes):
+            key = str(cand)
+            if key in seen:
+                continue
+            seen.add(key)
+            text = _read_text(cand)
             if _is_usable_source(text):
-                return text, "fulltext", str(best)
+                return text, "fulltext", key
 
-    # (d) abstract_json in run_dir
+    # Abstract only as a last resort.
+    if hint_path is not None and hint_path.suffix == ".json":
+        abstract = _abstract_from_json(hint_path)
+        if abstract:
+            return abstract, "abstract_only", str(hint_path)
     if run_path is not None:
         aj = run_path / "abstract_json" / f"{pmid}.json"
         if aj.exists():
@@ -417,7 +412,7 @@ def resolve_source_text(
 _DEAD_SECTION_RE = re.compile(
     r"^#{1,6}\s*(references|bibliography|acknowledg|author\s+contributions?|"
     r"funding|conflicts?\s+of\s+interest|competing\s+interests?|"
-    r"declaration|data\s+availability)",
+    r"declarations\b|data\s+availability)",
     re.IGNORECASE,
 )
 _HEADER_RE = re.compile(r"^#{1,6}\s+\S")
@@ -453,6 +448,9 @@ def _select_source_for_summary(
     table_lines = [ln for ln in kept if _TABLEISH_RE.search(ln)]
     head_budget = int(max_chars * 0.6)
     head = body[:head_budget]
+    nl = head.rfind("\n")  # cut at a line boundary so a variant notation isn't split
+    if nl > 0:
+        head = head[:nl]
     tail_budget = max_chars - len(head)
     tail = "\n".join(table_lines)[: max(0, tail_budget)]
     selected = (
@@ -481,7 +479,9 @@ def gather_paper_payloads(
     """Assemble one payload per paper that has extracted counts (the pipeline's
     already-captured rows + their provenance). Papers with no ``penetrance_data``
     rows are skipped — there is nothing to check."""
-    conn.row_factory = sqlite3.Row
+    # Local cursor with Row factory — don't mutate the caller's connection.
+    cur = conn.cursor()
+    cur.row_factory = sqlite3.Row
     sel_trust = (
         ", pd.trust_tier AS trust_tier, pd.trust_reasons AS trust_reasons"
         if _penetrance_has_trust(conn)
@@ -516,7 +516,7 @@ def gather_paper_payloads(
         ORDER BY pd.pmid
     """
     grouped: dict[str, dict[str, Any]] = {}
-    for row in conn.execute(sql, params):
+    for row in cur.execute(sql, params):
         pmid = str(row["pmid"])
         bucket = grouped.setdefault(
             pmid,
@@ -631,9 +631,24 @@ def _coerce_confidence(value: Any) -> Optional[float]:
     return max(0.0, min(1.0, conf))
 
 
+def _as_bool(value: Any) -> bool:
+    """Robust truthiness for LLM JSON: the string "false"/"no"/"0" must be False
+    (Python's bool("false") is True, which would silently hide a real miss)."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in ("true", "1", "yes", "y", "t")
+    return False
+
+
 def _norm_flags(raw: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
     flags: list[dict[str, Any]] = []
-    for item in raw.get("flags") or []:
+    raw_flags = raw.get("flags")
+    if isinstance(raw_flags, dict):  # model sometimes returns a single object
+        raw_flags = [raw_flags]
+    for item in raw_flags or []:
         if not isinstance(item, dict):
             continue
         severity = str(item.get("severity") or "").strip().lower()
@@ -668,18 +683,23 @@ def normalize_result(raw: Any, payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def normalize_summary_result(
-    raw: Any, payload: dict[str, Any], source_text: str
+    raw: Any, payload: dict[str, Any], source_text: str, truncated: bool = False
 ) -> dict[str, Any]:
     """Coerce the source-grounded JSON into a stable record + derive the
-    missed-carrier signal (never asked directly; derived from in_extraction)."""
+    missed-carrier signal (never asked directly; derived from in_extraction).
+    ``truncated`` = the fed source was truncated, so "complete" is not claimable.
+    """
     raw = raw if isinstance(raw, dict) else {}
     flags, verdict = _norm_flags(raw)
 
+    raw_groups = raw.get("carrier_groups")
+    if isinstance(raw_groups, dict):  # tolerate a single object
+        raw_groups = [raw_groups]
     groups: list[dict[str, Any]] = []
-    for g in (raw.get("carrier_groups") or [])[:MAX_CARRIER_GROUPS]:
+    for g in raw_groups or []:
         if not isinstance(g, dict):
             continue
-        in_extraction = bool(g.get("in_extraction"))
+        in_extraction = _as_bool(g.get("in_extraction"))
         quote = str(g.get("evidence_quote") or "").strip()
         groups.append(
             {
@@ -699,15 +719,34 @@ def normalize_summary_result(
             }
         )
 
+    # Count across ALL groups the model returned (before any persistence cap).
     n_reported = len(groups)
     n_in = sum(1 for g in groups if g["in_extraction"])
     n_missing = n_reported - n_in
+
+    # Persist misses first, then cap — the reported_missing worklist is never
+    # dropped by the cap; only surplus already-extracted rows are.
+    groups.sort(key=lambda g: 0 if g["status"] == "reported_missing" else 1)
+    capped = n_reported > MAX_CARRIER_GROUPS
+    kept_groups = groups[:MAX_CARRIER_GROUPS]
 
     comp = raw.get("completeness")
     comp = comp if isinstance(comp, dict) else {}
     status = str(comp.get("status") or "").strip().lower()
     if status not in VALID_COMPLETENESS:
         status = "gaps" if n_missing > 0 else ("complete" if n_reported else "unsure")
+    # Trust the derived misses over the model's self-report, and never claim
+    # "complete" on a source we truncated before showing it.
+    if n_missing > 0:
+        status = "gaps"
+    elif truncated and status == "complete":
+        status = "unsure"
+
+    notes = str(comp.get("notes") or "").strip()
+    if capped:
+        notes = (
+            f"{notes} [carrier_groups capped at {MAX_CARRIER_GROUPS} of {n_reported}]"
+        ).strip()
 
     cohort_sources = [
         str(c).strip() for c in (raw.get("cohort_sources") or []) if str(c).strip()
@@ -725,13 +764,13 @@ def normalize_summary_result(
         "flags": flags,
         "summary": summary,
         "cohort_sources": cohort_sources,
-        "carrier_groups": groups,
+        "carrier_groups": kept_groups,
         "completeness": {
             "status": status,
             "n_reported": n_reported,
             "n_in_extraction": n_in,
             "n_missing": n_missing,
-            "notes": str(comp.get("notes") or "").strip(),
+            "notes": notes,
         },
     }
 
@@ -920,11 +959,14 @@ def _record_carrier_groups(
     )
 
 
-def _existing_check_version(conn: sqlite3.Connection, pmid: str) -> Optional[str]:
+def _existing_check(
+    conn: sqlite3.Connection, pmid: str
+) -> tuple[Optional[str], Optional[str]]:
+    """(check_version, verdict) of a paper's recorded row, or (None, None)."""
     row = conn.execute(
-        "SELECT check_version FROM paper_final_check WHERE pmid = ?", (pmid,)
+        "SELECT check_version, verdict FROM paper_final_check WHERE pmid = ?", (pmid,)
     ).fetchone()
-    return row[0] if row else None
+    return (row[0], row[1]) if row else (None, None)
 
 
 # ---------------------------------------------------------------------------
@@ -975,11 +1017,13 @@ class PaperSummaryChecker:
             reasoning_effort=reasoning_effort,
         )
 
-    def check(self, payload: dict[str, Any], source_text: str) -> dict[str, Any]:
+    def check(
+        self, payload: dict[str, Any], source_text: str, truncated: bool = False
+    ) -> dict[str, Any]:
         raw = self._caller.call_llm_json(
             build_paper_summary_prompt(payload, source_text)
         )
-        return normalize_summary_result(raw, payload, source_text)
+        return normalize_summary_result(raw, payload, source_text, truncated)
 
 
 def _error_result(payload: dict[str, Any], exc: Exception) -> dict[str, Any]:
@@ -1097,17 +1141,28 @@ def apply_paper_final_check(
             use_summary = bool(
                 source_grounded and source_kind == "fulltext" and source_text
             )
-            intended_version = sum_version if use_summary else db_version
 
-            # Version-skip: identical reviewer generation already recorded.
-            if _existing_check_version(conn, pmid) == intended_version:
-                stats["skipped"] += 1
-                continue
-
+            selected, truncated = "", False
             if use_summary:
                 selected, truncated = _select_source_for_summary(
                     source_text, max_source_chars
                 )
+                # Fold a signature of the SELECTED source into the version so a
+                # later-enriched source (folded supplements) re-runs instead of
+                # being version-skipped.
+                source_sig = hashlib.sha256(selected.encode("utf-8")).hexdigest()[:12]
+                intended_version = f"{sum_version}-{source_sig}"
+            else:
+                intended_version = db_version
+
+            # Version-skip: same reviewer generation AND same source already
+            # recorded, and NOT a prior error (transient failures are retryable).
+            prev_version, prev_verdict = _existing_check(conn, pmid)
+            if prev_version == intended_version and prev_verdict != "error":
+                stats["skipped"] += 1
+                continue
+
+            if use_summary:
                 if summary_checker is None:
                     summary_checker = PaperSummaryChecker(
                         model=model,
@@ -1115,36 +1170,26 @@ def apply_paper_final_check(
                         max_tokens=SUMMARY_MAX_TOKENS,
                     )
                 try:
-                    result = summary_checker.check(payload, selected)
+                    result = summary_checker.check(payload, selected, truncated)
                     stats["source_grounded"] += 1
                     comp = result.get("completeness") or {}
                     stats["missing_carriers"] += int(comp.get("n_missing") or 0)
                 except Exception as exc:  # noqa: BLE001 - one paper must not abort
                     logger.warning("paper summary failed for pmid=%s: %s", pmid, exc)
                     result = _error_result(payload, exc)
-                    use_summary = False  # record as an error row, no groups
                 _record_row(
                     conn,
                     result=result,
                     model=model,
                     reasoning_effort=reasoning_effort,
                     prompt_version=SUMMARY_PROMPT_VERSION,
-                    version=sum_version,
+                    version=intended_version,
                     checked_at=checked_at,
                     source_kind=source_kind,
                     source_file=source_path,
                     source_chars=len(selected),
                     source_truncated=1 if truncated else 0,
                 )
-                if result.get("source_grounded"):
-                    _record_carrier_groups(
-                        conn,
-                        pmid=pmid,
-                        gene_symbol=result.get("gene_symbol"),
-                        groups=result.get("carrier_groups") or [],
-                        version=sum_version,
-                        checked_at=checked_at,
-                    )
             else:
                 if source_kind == "none":
                     stats["source_absent"] += 1
@@ -1173,10 +1218,26 @@ def apply_paper_final_check(
                     source_file=source_path,
                 )
 
+            # Always replace the paper's carrier groups (DELETE-before-insert):
+            # a re-check that errors or degrades to DB-only must not leave stale
+            # reported_missing rows queryable as current.
+            _record_carrier_groups(
+                conn,
+                pmid=pmid,
+                gene_symbol=result.get("gene_symbol"),
+                groups=(result.get("carrier_groups") or [])
+                if result.get("source_grounded")
+                else [],
+                version=intended_version,
+                checked_at=checked_at,
+            )
+
             verdict = result.get("verdict") or "ok"
             stats[verdict] = stats.get(verdict, 0) + 1
             stats["flagged_facts"] += int(result.get("n_flagged") or 0)
             stats["checked"] += 1
+            # Incremental commit: a crash mid-run keeps completed papers.
+            conn.commit()
 
         conn.commit()
         logger.info(

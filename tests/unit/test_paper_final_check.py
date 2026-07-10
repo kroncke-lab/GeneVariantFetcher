@@ -389,7 +389,7 @@ class _StubSummary:
         self.groups = groups
         self.calls = 0
 
-    def check(self, payload, source_text):
+    def check(self, payload, source_text, truncated=False):
         self.calls += 1
         raw = {
             "paper_verdict": "flag",
@@ -643,3 +643,166 @@ def test_summary_check_version_sensitive_to_budget():
     assert a.startswith("pfs1-")
     assert a != summary_check_version("m", "xhigh", 40000)
     assert a != summary_check_version("m", "high", 60000)
+
+
+# --- review fixes ---------------------------------------------------------
+
+
+class _FlakySummary:
+    """Raises on the first call, succeeds after (for retry testing)."""
+
+    def __init__(self, groups):
+        self.groups = groups
+        self.calls = 0
+
+    def check(self, payload, source_text, truncated=False):
+        self.calls += 1
+        if self.calls == 1:
+            raise RuntimeError("transient llm error")
+        return normalize_summary_result(
+            {
+                "paper_verdict": "flag",
+                "confidence": 0.5,
+                "study_summary": "ok",
+                "carrier_groups": self.groups,
+                "completeness": {"status": "gaps"},
+                "flags": [],
+            },
+            payload,
+            source_text,
+            truncated,
+        )
+
+
+def test_as_bool_string_false_is_a_miss():
+    from pipeline.paper_final_check import _as_bool
+
+    assert _as_bool("false") is False
+    assert _as_bool("true") is True
+    assert _as_bool(0) is False
+    assert _as_bool(1) is True
+    r = normalize_summary_result(
+        {
+            "carrier_groups": [
+                {"variant": "p.X", "in_extraction": "false", "evidence_quote": "q"}
+            ]
+        },
+        {"pmid": "1", "gene": "G", "facts": []},
+        "src",
+    )
+    assert r["carrier_groups"][0]["status"] == "reported_missing"
+    assert r["completeness"]["n_missing"] == 1
+
+
+def test_normalize_status_reconciled_with_derived_misses_and_truncation():
+    payload = {"pmid": "1", "gene": "G", "facts": []}
+    # Model claims "complete" but a miss exists → forced to "gaps".
+    r = normalize_summary_result(
+        {
+            "carrier_groups": [
+                {"variant": "p.X", "in_extraction": False, "evidence_quote": "q"}
+            ],
+            "completeness": {"status": "complete"},
+        },
+        payload,
+        "src",
+    )
+    assert r["completeness"]["status"] == "gaps"
+    # Truncated source with no miss cannot claim "complete" → "unsure".
+    r2 = normalize_summary_result(
+        {
+            "carrier_groups": [
+                {"variant": "p.Y", "in_extraction": True, "evidence_quote": "q"}
+            ],
+            "completeness": {"status": "complete"},
+        },
+        payload,
+        "src",
+        truncated=True,
+    )
+    assert r2["completeness"]["status"] == "unsure"
+
+
+def test_resolve_prefers_fulltext_over_abstract_hint(tmp_path):
+    aj = tmp_path / "abstract_json"
+    aj.mkdir()
+    hint = aj / "555.json"
+    hint.write_text(json.dumps({"abstract": "abstract text " * 30}))
+    ft = tmp_path / "pmc_fulltext"
+    ft.mkdir()
+    (ft / "555_FULL_CONTEXT.md").write_text("FULL BODY " + "carrier " * 60)
+    text, kind, path = resolve_source_text(
+        "555", "G", run_dir=tmp_path, source_file_hint=str(hint)
+    )
+    assert kind == "fulltext"
+    assert path.endswith("555_FULL_CONTEXT.md")
+
+
+def test_resolve_empty_full_falls_to_cleaned(tmp_path):
+    d = tmp_path / "pmc_fulltext"
+    d.mkdir()
+    (d / "666_FULL_CONTEXT.md").write_text("stub")  # <200 chars → unusable
+    (d / "666_CLEANED.md").write_text("CLEANED carriers " * 40)
+    text, kind, path = resolve_source_text("666", "G", run_dir=tmp_path)
+    assert kind == "fulltext"
+    assert path.endswith("666_CLEANED.md")
+    assert text.startswith("CLEANED")
+
+
+def test_apply_errored_paper_is_retryable(tmp_path):
+    ft = tmp_path / "pmc_fulltext"
+    ft.mkdir()
+    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    db = tmp_path / "t.db"
+    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    flaky = _FlakySummary(_GROUPS)
+    common = dict(
+        model="m",
+        reasoning_effort="xhigh",
+        source_grounded=True,
+        max_source_chars=60000,
+        run_dir=tmp_path,
+        gene="BRCA2",
+    )
+    s1 = apply_paper_final_check(db, summary_checker=flaky, **common)
+    assert s1["error"] == 1
+    s2 = apply_paper_final_check(db, summary_checker=flaky, **common)
+    assert s2["skipped"] == 0  # error rows are NOT version-skipped
+    assert s2["source_grounded"] == 1  # retry succeeded
+    assert flaky.calls == 2
+
+
+def test_apply_stale_groups_cleared_when_degraded_to_db_only(tmp_path):
+    ft = tmp_path / "pmc_fulltext"
+    ft.mkdir()
+    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    db = tmp_path / "t.db"
+    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    apply_paper_final_check(
+        db,
+        model="m",
+        reasoning_effort="xhigh",
+        source_grounded=True,
+        max_source_chars=60000,
+        run_dir=tmp_path,
+        gene="BRCA2",
+        summary_checker=_StubSummary(_GROUPS),
+    )
+    conn = sqlite3.connect(db)
+    assert conn.execute("SELECT COUNT(*) FROM paper_carrier_groups").fetchone()[0] == 2
+    conn.close()
+
+    # Re-check with source_grounded off → DB-only → stale groups must be cleared.
+    apply_paper_final_check(
+        db,
+        model="m",
+        reasoning_effort="xhigh",
+        source_grounded=False,
+        max_source_chars=60000,
+        gene="BRCA2",
+        checker=_Stub(),
+    )
+    conn = sqlite3.connect(db)
+    n = conn.execute("SELECT COUNT(*) FROM paper_carrier_groups").fetchone()[0]
+    conn.close()
+    assert n == 0
