@@ -1286,17 +1286,26 @@ class ExpertExtractor(BaseLLMCaller):
         r"Ala|Cys|Asp|Glu|Phe|Gly|His|Ile|Lys|Leu|Met|Asn|Pro|Gln|"
         r"Arg|Ser|Thr|Val|Trp|Tyr|Ter|Stop|Xaa"
     )
+    # delins must be listed before del so "delins..." is not truncated at "del".
     PROTEIN_NOTATION_RE = re.compile(
         rf"^(?:p\.)?(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
         rf"(?:[_-](?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])\d{{1,4}})?"
-        rf"(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
+        rf"(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*"
+        rf"|delins(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])+"
+        r"|del|dup|ins)",
         re.IGNORECASE,
     )
+    # cDNA: point, simple indel, range indel, delins, and legacy IVS splice
+    # (scanner stores IVS into cdna_notation; table parser already emits delins).
     CDNA_NOTATION_RE = re.compile(
         r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
         r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
+        r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
+        r"|^c\.\d+(?:[+-]\d+)?del[ACGT]*ins[ACGT]+$"
+        r"|^IVS\d+[+-]\d+[ACGT]>[ACGT]$"
+        r"|^IVS\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
         re.IGNORECASE,
     )
 
@@ -1363,11 +1372,33 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
 
             # Malformed notation guard. Protein entries need an amino-acid
-            # position; cDNA entries need HGVS-like c. notation. This catches
-            # table-parser artifacts such as A/T/G/C, p-values, allele
-            # frequencies, and header fragments before they reach SQLite.
+            # position; cDNA entries need HGVS-like c. / IVS notation. Structural
+            # events with a valid variant_class + structural_description are kept
+            # even without point-form notation.
             protein_clean = protein.strip().replace(" ", "")
             cdna_clean = cdna.strip().replace(" ", "")
+            vclass = (v.get("variant_class") or "").strip().lower()
+            structural = (v.get("structural_description") or "").strip()
+            has_structural_identity = bool(
+                vclass
+                and structural
+                and vclass
+                in {
+                    "missense",
+                    "nonsense",
+                    "frameshift",
+                    "inframe_indel",
+                    "splice",
+                    "deep_intronic",
+                    "large_deletion",
+                    "large_duplication",
+                    "cnv",
+                    "exon_deletion",
+                    "exon_duplication",
+                    "complex",
+                    "other",
+                }
+            )
             malformed = False
             if protein_clean and not self.PROTEIN_NOTATION_RE.match(protein_clean):
                 malformed = True
@@ -1377,6 +1408,22 @@ class ExpertExtractor(BaseLLMCaller):
                 malformed = True
                 if len(malformed_examples) < 5:
                     malformed_examples.append(cdna)
+            # Structural-only rows: no point-form required if class+description set.
+            if (
+                malformed
+                and has_structural_identity
+                and not protein_clean
+                and not cdna_clean
+            ):
+                malformed = False
+            if malformed and has_structural_identity:
+                # Point-form failed but structural identity exists — drop the
+                # bad notation fields and keep the structural event.
+                if protein_clean and not self.PROTEIN_NOTATION_RE.match(protein_clean):
+                    v["protein_notation"] = None
+                if cdna_clean and not self.CDNA_NOTATION_RE.match(cdna_clean):
+                    v["cdna_notation"] = None
+                malformed = False
             if malformed:
                 malformed_count += 1
                 continue

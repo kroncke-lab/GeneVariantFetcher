@@ -17,6 +17,27 @@ the deferred code-review findings from PR #140. The recall levers below still
 apply; the trust gate is what makes unattended hundreds-of-genes operation
 trustworthy.
 
+### Stage 5 — study record + variant-class widening (landed 2026-07-10)
+
+Teach extraction to model the study and stop dropping non-missense notations:
+
+- [x] **C** — keep delins + IVS through `_filter_extraction_artifacts` (and
+      migration regexes); unit tests in `test_extraction_table_parser.py`.
+- [x] **A1–A2** — `study_design` / `ascertainment` / `cohort_source` /
+      `population` / `study_summary` in prompts + `extraction_metadata` SQLite
+      (also persists previously dropped `study_type`).
+- [x] **A3–A5** — study context in `count_classifier` + `trust_gate`
+      (`study_type_mismatch`, strengthened `population_count`; rule_version
+      `tg2-*`) + distributions in `trust_report.py`.
+- [x] **B** — `variant_class` + `structural_description` schema/persist;
+      scanner exon/BIC/delins patterns; normalizer + `to_canonical_form`
+      splice/delins/structural keys; synthetic gold seed
+      `benchmarks/curated_extraction_eval/gold_overrides/STRUCTURAL_WIDENING_recall_input.csv`.
+
+**Follow-ons:** re-extract or LLM backfill study fields on existing DBs; expand
+structural/splice gold beyond the synthetic seed so B recall is measurable on
+cardiac missense-heavy gold.
+
 ## Exact-Match Recovery Plan (2026-06-12) — START HERE
 
 Root-caused decomposition of the exact-match gap to the manual gold curation.
