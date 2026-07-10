@@ -2206,7 +2206,7 @@ def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str
     notation the adjudicator reviewed).
     """
     overlay: Dict[Tuple[str, str], Dict[str, str]] = {}
-    if not path or not Path(path).exists():
+    if path is None or not path.exists():
         return overlay
     with open(path, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):

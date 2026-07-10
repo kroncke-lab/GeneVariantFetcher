@@ -88,7 +88,7 @@ def build_comparison_rows(
 ) -> list[ComparisonRow]:
     """Build the scorer's comparison rows for one gene (no files written)."""
     excel_df, detected_columns = load_excel_data(gold_path, None, None)
-    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    conn = sqlite3.connect(f"{db_path.resolve().as_uri()}?mode=ro", uri=True)
     try:
         table_info = introspect_sqlite(conn)
         sqlite_df = extract_sqlite_data(conn, table_info)

@@ -2417,6 +2417,11 @@ def migrate_extraction_directory(
                 failed += 1
                 errors.append(message)
                 logger.error(f"✗ [{failed} failures] {message}")
+        # conn.commit() persists here despite isolation_level=None: the explicit
+        # BEGIN above opens a transaction, so SQLite is not in autocommit at the C
+        # level and commit() issues a real COMMIT. rollback() stays a method call
+        # -- a safe no-op if a sqlite error already aborted the transaction, where
+        # a bare cursor "ROLLBACK" would instead raise and mask the original error.
         conn.commit()
     except Exception:
         conn.rollback()

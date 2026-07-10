@@ -57,14 +57,20 @@ def test_failed_file_leaves_no_partial_rows(tmp_path, monkeypatch):
     assert stats["successful"] == 1
     assert stats["failed"] == 1
 
-    pmids = {row[0] for row in conn.execute("SELECT pmid FROM papers")}
-    assert "1000002" in pmids, "later good file must still commit"
-    assert "1000001" not in pmids, "failed file's paper row must be rolled back"
-    orphan_penetrance = conn.execute(
-        "SELECT COUNT(*) FROM penetrance_data WHERE pmid = '1000001'"
-    ).fetchone()[0]
-    assert orphan_penetrance == 0, "failed file must leave no child rows"
+    # Reopen a fresh connection so the assertions prove on-disk durability,
+    # not just rows visible inside the still-open migrating connection.
     conn.close()
+    verify = sqlite3.connect(str(tmp_path / "t.db"))
+    try:
+        pmids = {row[0] for row in verify.execute("SELECT pmid FROM papers")}
+        assert "1000002" in pmids, "later good file must still commit"
+        assert "1000001" not in pmids, "failed file's paper row must be rolled back"
+        orphan_penetrance = verify.execute(
+            "SELECT COUNT(*) FROM penetrance_data WHERE pmid = '1000001'"
+        ).fetchone()[0]
+        assert orphan_penetrance == 0, "failed file must leave no child rows"
+    finally:
+        verify.close()
 
 
 def test_all_good_files_commit(tmp_path):
@@ -76,6 +82,10 @@ def test_all_good_files_commit(tmp_path):
 
     assert stats["successful"] == 2
     assert stats["failed"] == 0
-    pmids = {row[0] for row in conn.execute("SELECT pmid FROM papers")}
-    assert {"2000001", "2000002"} <= pmids
     conn.close()
+    verify = sqlite3.connect(str(tmp_path / "t.db"))
+    try:
+        pmids = {row[0] for row in verify.execute("SELECT pmid FROM papers")}
+        assert {"2000001", "2000002"} <= pmids
+    finally:
+        verify.close()
