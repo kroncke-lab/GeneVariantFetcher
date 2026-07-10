@@ -142,6 +142,8 @@ def resolved_model_routing() -> dict[str, Any]:
         "tier3_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
+        "final_adjudicator_reasoning_effort",
+        "final_arbiter_reasoning_effort",
         "enable_table_router",
     ):
         routing[attr] = getattr(settings, attr, None)

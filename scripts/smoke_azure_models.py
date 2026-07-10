@@ -15,9 +15,9 @@ import time
 from typing import Iterable
 
 import litellm
-from litellm import completion
 
 from config.settings import get_settings
+from utils.llm_utils import litellm_completion
 
 
 REASONING_HINTS = ("kimi", "grok-4", "gpt-5", "gpt5", "deepseek", "o1", "o3")
@@ -63,7 +63,8 @@ def _smoke_one(
     for attempt in range(1, attempts + 1):
         start = time.time()
         try:
-            response = completion(
+            # temperature=0 is dropped for gpt-5.6-* (only default 1 allowed).
+            response = litellm_completion(
                 model=model,
                 messages=[
                     {"role": "system", "content": "Return strict JSON only."},

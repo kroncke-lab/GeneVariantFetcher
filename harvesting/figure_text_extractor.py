@@ -19,12 +19,14 @@ from pathlib import Path
 from typing import List
 
 import requests
-from litellm import completion
 
 from config.settings import get_settings
 from utils.llm_utils import (
+    azure_responses_api_url,
     build_reasoning_effort_kwargs,
     build_responses_reasoning_param,
+    litellm_completion,
+    normalize_azure_ai_api_base,
 )
 
 logger = logging.getLogger(__name__)
@@ -119,7 +121,7 @@ def _extract_one(image_path: Path, model: str) -> str:
     if _uses_responses_api(model):
         return _extract_one_responses_api(data_url, model)
 
-    response = completion(
+    response = litellm_completion(
         model=model,
         messages=[
             {
@@ -139,7 +141,7 @@ def _extract_one(image_path: Path, model: str) -> str:
 
 def _extract_one_responses_api(image_data_url: str, model: str) -> str:
     """Call Azure AI Foundry Responses API for GPT-5-family vision models."""
-    base = os.environ.get("AZURE_AI_API_BASE", "").rstrip("/")
+    base = normalize_azure_ai_api_base()
     key = os.environ.get("AZURE_AI_API_KEY", "")
     if not base or not key:
         raise RuntimeError(
@@ -147,7 +149,7 @@ def _extract_one_responses_api(image_data_url: str, model: str) -> str:
             "AZURE_AI_API_KEY"
         )
 
-    url = f"{base}/openai/v1/responses?api-version=v1"
+    url = azure_responses_api_url(base)
     body = {
         "model": _strip_provider_prefix(model),
         "input": [

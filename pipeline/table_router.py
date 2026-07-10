@@ -1241,7 +1241,7 @@ def route_tables(
         )
 
     if llm_caller is None:
-        from litellm import completion as llm_caller  # type: ignore
+        from utils.llm_utils import litellm_completion as llm_caller  # type: ignore
 
     prompt = build_router_prompt(llm_candidates, gene_symbol)
 

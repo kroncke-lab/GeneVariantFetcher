@@ -25,7 +25,7 @@ FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
 
 # Azure-first staging defaults. These are deployment names on the active Azure
 # AI Foundry endpoint, not base model names. Per-tier env vars still win.
-AZURE_TIER2_DEFAULT = "gpt-5.4"
+AZURE_TIER2_DEFAULT = "gpt-5.6-sol"
 AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
 AZURE_TIER3_DEFAULT = "grok-4.3"
 
@@ -80,7 +80,13 @@ class Settings(BaseSettings):
     azure_ai_api_base: Optional[str] = Field(
         default=None,
         validation_alias="AZURE_AI_API_BASE",
-        description="Azure AI Foundry endpoint, e.g. https://<resource>.services.ai.azure.com",
+        description=(
+            "Azure AI Foundry inference endpoint, e.g. "
+            "https://<resource>.services.ai.azure.com (resource root). "
+            "Portal project URLs (.../api/projects/<project>) are for the "
+            "SDK; strip that path for LiteLLM azure_ai/* calls. OpenAI v1 "
+            "bases ending in /openai/v1 are also supported."
+        ),
     )
     azure_ai_api_version: Optional[str] = Field(
         default="2024-08-01-preview", validation_alias="AZURE_AI_API_VERSION"
@@ -371,8 +377,16 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ADJUDICATOR_MODELS",
         description=(
             "Comma-separated final adjudication models reserved for explicit "
-            "post-debate escalation queues. Keep Anthropic here instead of in "
-            "routine Tier 2/Tier 3 extraction loops."
+            "post-debate escalation queues (e.g. azure_ai/gpt-5.6-sol)."
+        ),
+    )
+    final_adjudicator_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="FINAL_ADJUDICATOR_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for final adjudicator models "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). "
+            "Use xhigh for deepest single-agent thinking on gpt-5.6-sol."
         ),
     )
     final_arbiter_model: str = Field(
@@ -380,7 +394,15 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ARBITER_MODEL",
         description=(
             "Most expensive final arbiter for hard residual cases after the "
-            "final adjudicator screen, usually an Opus-class Claude model."
+            "final adjudicator screen (gpt-5.6-sol or Opus-class)."
+        ),
+    )
+    final_arbiter_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="FINAL_ARBITER_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for the final arbiter model "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh)."
         ),
     )
 
@@ -584,6 +606,8 @@ class Settings(BaseSettings):
         "tier3_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
+        "final_adjudicator_reasoning_effort",
+        "final_arbiter_reasoning_effort",
     )
     @classmethod
     def _validate_reasoning_effort(cls, v: Optional[str]) -> Optional[str]:
@@ -593,10 +617,15 @@ class Settings(BaseSettings):
         v_norm = str(v).strip().lower()
         if v_norm == "":
             return None
-        allowed = {"minimal", "low", "medium", "high"}
+        # max → xhigh: deepest single-agent thinking on GPT-5.6 (Azure rejects
+        # the literal "max" value; xhigh is the supported maximum).
+        if v_norm == "max":
+            v_norm = "xhigh"
+        allowed = {"none", "minimal", "low", "medium", "high", "xhigh"}
         if v_norm not in allowed:
             raise ValueError(
-                f"reasoning_effort must be one of {sorted(allowed)} or unset; got {v!r}"
+                f"reasoning_effort must be one of {sorted(allowed)} "
+                f"(or 'max' alias for xhigh) or unset; got {v!r}"
             )
         return v_norm
 
