@@ -35,6 +35,17 @@ The piece that actually removes the human from the margin. Sorts every extracted
 fact into **trusted** vs **quarantine** using gold-free checks, so downstream
 products consume only the trusted tier and the held tier feeds audit/calibration.
 
+**Status — v1 landed on the `trust-gate` branch (stacked on #140):** the two-tier
+schema (`penetrance_data.trust_tier / trust_reasons / trust_rule_version`), the
+gold-free rule core (`pipeline/trust_gate.py`: `arith_inconsistent`,
+`count_is_total`, `population_count`, `paper_outlier`; pure `evaluate_fact` +
+soft-quarantine `apply_trust_gate`), default-on wiring in `gvf-run` (Step 3.7),
+and `scripts/trust_report.py`. Still to do (checklist below): the role /
+evidence-type axis (§3), fail-closed unknown-gene validation (§4), per-stratum
+calibration (§5), the fleet acceptance metric (§6), scorer trusted-tier
+filtering, and folding the legacy carrier-guard / vf-quarantine into the unified
+record.
+
 ### 1. One unified per-fact decision record (don't parallel-build)
 
 Today quarantine is fragmented (outlier JSON flags, carrier-guard NULLs, deleted
