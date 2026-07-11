@@ -712,12 +712,17 @@ class VariantNormalizer:
         gene = self.gene_symbol
         protein = variant.get("protein_notation", "")
         cdna = variant.get("cdna_notation", "")
+        structural = structural_variant_identity(
+            variant.get("structural_description", "")
+        )
 
         # Prefer protein notation for key
         if protein:
             return f"{gene}:{protein}"
         elif cdna:
             return f"{gene}:{cdna}"
+        elif structural:
+            return f"{gene}:{structural}"
         else:
             return f"{gene}:unknown"
 
@@ -1308,6 +1313,53 @@ def match_variants_to_baseline(
 # =============================================================================
 # STANDALONE FUNCTIONS (drop-in replacement for variant_utils.py)
 # =============================================================================
+
+
+def structural_variant_identity(description: Any) -> str:
+    """Return a stable identity key for a structural-variant description.
+
+    Structural events often have no protein or cDNA notation, so merge and
+    migration code must not treat every such row as the same empty key.  Parse
+    the structural forms GVF understands into the same compact keys used by the
+    scorer; otherwise retain a conservative whitespace/case-normalized fallback
+    for novel free-text event descriptions.
+    """
+    if description is None:
+        return ""
+
+    text = str(description).strip()
+    if not text:
+        return ""
+    text = re.sub(r"[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]", "-", text)
+    text = re.sub(r"\s*-\s*", "-", text)
+    text = re.sub(r"\s+", " ", text).casefold()
+
+    explicit = re.fullmatch(r"(del|dup):(?:exon(\d+)(?:-(\d+))?|wholegene)", text)
+    if explicit:
+        op = explicit.group(1)
+        if text.endswith("wholegene"):
+            return f"{op}:wholegene"
+        exon1, exon2 = explicit.group(2), explicit.group(3)
+        return f"{op}:exon{exon1}{f'-{exon2}' if exon2 else ''}"
+
+    exon_event = re.search(
+        r"\b(deletion|del|duplication|dup)\s+of\s+exons?\s*"
+        r"(\d+)(?:\s*(?:-|to)\s*(\d+))?\b",
+        text,
+    )
+    if exon_event:
+        op = "del" if exon_event.group(1) in {"deletion", "del"} else "dup"
+        exon1, exon2 = exon_event.group(2), exon_event.group(3)
+        return f"{op}:exon{exon1}{f'-{exon2}' if exon2 else ''}"
+
+    if re.search(
+        r"\b(?:(?:whole[- ]gene|entire gene)\s+(?:deletion|del)"
+        r"|(?:deletion|del)\s+of\s+(?:the\s+)?(?:whole|entire)\s+gene)\b",
+        text,
+    ):
+        return "del:wholegene"
+
+    return text
 
 
 def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:

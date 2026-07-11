@@ -56,16 +56,19 @@ high-risk trusted-consensus cases are queued even when debate agrees:
   --out-dir /tmp/final_arbiter_opus
 ```
 
-The intended model-routing strategy is Azure first, Anthropic last:
+The intended routing is Azure-first for routine work, GPT-5.6 for the canonical
+final sniff test, and Anthropic only for optional exception queues:
 
 - Routine triage: `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint)
 - Table routing: `azure_ai/Kimi-K2.6-1`
 - Main extraction: `azure_ai/grok-4.3`
 - Internal claim verification / debate: `azure_ai/gpt-5.4`,
   `azure_ai/DeepSeek-V4-Pro`, and `azure_ai/Kimi-K2.6-1`
-- Final adjudication only: `FINAL_ADJUDICATOR_MODELS`, defaulting to
+- Canonical final per-paper sniff test (Step 3.8):
+  `azure_ai/gpt-5.6-sol` at `xhigh`, default-on, with soft persisted verdicts
+- Optional exception adjudication: `FINAL_ADJUDICATOR_MODELS`, defaulting to
   `anthropic/claude-sonnet-5`
-- Final arbiter for hard residuals: `FINAL_ARBITER_MODEL`, defaulting to
+- Optional hard-case escalation: `FINAL_ARBITER_MODEL`, defaulting to
   `anthropic/claude-opus-4-8`
 
 `end_to_end_pmid_replay.py` makes a real LLM call and should be used only for a

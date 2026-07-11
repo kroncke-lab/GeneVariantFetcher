@@ -50,22 +50,12 @@ from utils.source_layers import (
     infer_source_layer_from_text,
     junk_notation_reason,
 )
+from utils.protein_notation import PROTEIN_NOTATION_RE
+from utils.variant_normalizer import structural_variant_identity
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
-PROTEIN_NOTATION_RE = re.compile(
-    r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
-    r"\d{1,4}"
-    # Optional second residue for HGVS range notations like p.Asp2_Arg135del
-    # or p.Lys100_Glu105delinsX. Without this, valid multi-residue dels/ins
-    # are silently dropped at migration. delins must precede del.
-    r"(?:[_-](?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
-    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*"
-    r"|delins[ACDEFGHIKLMNPQRSTVWY]+"
-    r"|del[ACDEFGHIKLMNPQRSTVWY]*|dup|ins[ACDEFGHIKLMNPQRSTVWY]*)",
-    re.IGNORECASE,
-)
 CDNA_NOTATION_RE = re.compile(
     r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
     r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
@@ -93,6 +83,20 @@ VARIANT_CLASS_VALUES = frozenset(
         "exon_duplication",
         "complex",
         "other",
+    }
+)
+
+# Only these classes can identify a variant without protein/cDNA/genomic
+# notation. Point-variant classes such as missense and the catch-all ``other``
+# still require an actual notation; a free-text description alone is not an
+# identity and otherwise turns cohort summaries into variants.
+STRUCTURAL_ONLY_VARIANT_CLASS_VALUES = frozenset(
+    {
+        "large_deletion",
+        "large_duplication",
+        "cnv",
+        "exon_deletion",
+        "exon_duplication",
     }
 )
 
@@ -160,7 +164,7 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     vclass = (variant_data.get("variant_class") or "").strip().lower()
     structural = (variant_data.get("structural_description") or "").strip()
 
-    if protein and not PROTEIN_NOTATION_RE.match(protein):
+    if protein and not PROTEIN_NOTATION_RE.fullmatch(protein):
         variant_data["protein_notation"] = None
         protein = ""
     if cdna and not CDNA_NOTATION_RE.match(cdna):
@@ -171,7 +175,7 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
         variant_data["variant_class"] = None
         vclass = ""
 
-    has_structural = bool(vclass and structural)
+    has_structural = bool(vclass in STRUCTURAL_ONLY_VARIANT_CLASS_VALUES and structural)
     return bool(protein or cdna or genomic or has_structural)
 
 
@@ -957,21 +961,35 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
             (gene_symbol, cdna, cdna, protein, protein, genomic, genomic),
         )
     elif structural:
+        # Free-text descriptions can differ only in case, Unicode dashes, or
+        # wording ("deletion" vs ``del:``). Compare their stable structural
+        # identities in Python so replay does not mint duplicate variant rows.
+        structural_key = structural_variant_identity(structural)
         cursor.execute(
             """
-            SELECT variant_id FROM variants
+            SELECT variant_id, structural_description FROM variants
             WHERE gene_symbol = ?
-            AND structural_description = ?
+            AND structural_description IS NOT NULL
             AND cdna_notation IS NULL
             AND protein_notation IS NULL
             AND genomic_position IS NULL
+            ORDER BY variant_id
         """,
-            (gene_symbol, structural),
+            (gene_symbol,),
+        )
+        result = next(
+            (
+                (variant_id,)
+                for variant_id, description in cursor.fetchall()
+                if structural_variant_identity(description) == structural_key
+            ),
+            None,
         )
     else:
         cursor.execute("SELECT variant_id FROM variants WHERE 0")
 
-    result = cursor.fetchone()
+    if not structural or cdna or protein or genomic:
+        result = cursor.fetchone()
     if result:
         vid = result[0]
         if vclass or structural:
@@ -1677,7 +1695,12 @@ def _insert_standard_fact_provenance(
     top_source_column = variant_data.get("source_column")
     top_evidence_quote = variant_data.get("evidence_quote") or quote
 
-    for notation_key in ("protein_notation", "cdna_notation", "genomic_position"):
+    for notation_key in (
+        "protein_notation",
+        "cdna_notation",
+        "genomic_position",
+        "structural_description",
+    ):
         notation = variant_data.get(notation_key)
         if notation:
             insert_fact_provenance(
@@ -1831,6 +1854,7 @@ def insert_variant_data(
         "protein_notation": variant_data.get("protein_notation"),
         "cdna_notation": variant_data.get("cdna_notation"),
         "genomic_position": variant_data.get("genomic_position"),
+        "structural_description": variant_data.get("structural_description"),
     }
     if not sanitize_variant_notation(variant_data):
         # Promote to WARNING so cohort-summary hallucinations are visible in

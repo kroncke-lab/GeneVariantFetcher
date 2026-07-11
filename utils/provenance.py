@@ -27,6 +27,7 @@ PROMPT_EXTRACTOR_FILES = [
     "pipeline/filters.py",
     "pipeline/count_classifier.py",
     "pipeline/extraction_priority.py",
+    "utils/protein_notation.py",
     "utils/variant_normalizer.py",
     "utils/variant_scanner.py",
 ]
@@ -137,6 +138,10 @@ def resolved_model_routing() -> dict[str, Any]:
         getattr(settings, "get_final_adjudicator_models", None),
     )
     _try("final_arbiter_model", getattr(settings, "get_final_arbiter_model", None))
+    _try(
+        "paper_final_check_model",
+        getattr(settings, "get_paper_final_check_model", None),
+    )
     for attr in (
         "tier2_reasoning_effort",
         "tier3_reasoning_effort",
@@ -144,6 +149,7 @@ def resolved_model_routing() -> dict[str, Any]:
         "vision_reasoning_effort",
         "final_adjudicator_reasoning_effort",
         "final_arbiter_reasoning_effort",
+        "paper_final_check_reasoning_effort",
         "enable_table_router",
     ):
         routing[attr] = getattr(settings, attr, None)

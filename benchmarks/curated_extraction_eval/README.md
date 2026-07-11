@@ -139,6 +139,7 @@ curated_extraction_eval/
 ├── expected_baseline.json ← committed baseline the runner diffs against
 ├── run_benchmark.py     ← the runner (score + extract modes)
 ├── build_fixture.py     ← regenerator: reads registry.tsv + gold and rebuilds every derived file
+├── fixtures/            ← deterministic synthetic cases used by unit tests; never folded into curated gold
 ├── negative_cases/      ← PRECISION/guard cases: assert the protocol does NOT mint carriers from annotation/predictor/wrong-gene data (gold-free, self-contained pytest). See its README.
 ├── pmids/<GENE>.txt      ← PMID lists for `gvf gvf-run --pmid-file` (auto-generated)
 ├── gold/normalized/<GENE>_recall_input.csv ← FROZEN gold SUBSET (auto-generated; same schema as the full gold, so the scorer runs unmodified)

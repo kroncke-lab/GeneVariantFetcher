@@ -133,7 +133,11 @@ GVF's default workflow is:
 4. Reuse or update the local source corpus under `corpus/`.
 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
 6. Migrate extraction JSON to SQLite.
-7. Run DB-observed recovery layers and optional recall scoring.
+7. Run DB-observed recovery layers and the default-on per-fact trust gate.
+8. After trust gating, run the default-on `azure_ai/gpt-5.6-sol`/`xhigh`
+   final per-paper sniff test (Step 3.8); it persists soft review results and
+   never mutates extracted counts.
+9. Produce optional recall scoring and report handoff artifacts.
 
 Technical details live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 

@@ -25,9 +25,10 @@ FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
 
 # Azure-first staging defaults. These are deployment names on the active Azure
 # AI Foundry endpoint, not base model names. Per-tier env vars still win.
-AZURE_TIER2_DEFAULT = "gpt-5.6-sol"
+AZURE_TIER2_DEFAULT = "gpt-5.4"
 AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
 AZURE_TIER3_DEFAULT = "grok-4.3"
+AZURE_PAPER_FINAL_CHECK_DEFAULT = "gpt-5.6-sol"
 
 # Tier-model env var names. Used to decide whether the user explicitly set
 # a tier model (in which case --model-provider does not override it) vs.
@@ -38,6 +39,7 @@ _TIER_ENV_VARS = {
     "tier3_adjudicator_models": "TIER3_ADJUDICATOR_MODELS",
     "table_router_model": "TABLE_ROUTER_MODEL",
     "vision_model": "VISION_MODEL",
+    "paper_final_check_model": "PAPER_FINAL_CHECK_MODEL",
 }
 
 
@@ -104,6 +106,15 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("GPT54_DEPLOYMENT", "AZURE_DEPLOYMENT_GPT54"),
         description="Azure AI Foundry GPT-5.4 deployment name",
+    )
+    azure_deployment_gpt56_sol: Optional[str] = Field(
+        default=None,
+        validation_alias="AZURE_DEPLOYMENT_GPT56_SOL",
+        description=(
+            "Optional Azure AI Foundry GPT-5.6 Sol deployment used by the "
+            "separate per-paper final check, not routine extraction or the "
+            "optional Anthropic exception-adjudication queue."
+        ),
     )
     azure_deployment_deepseek: Optional[str] = Field(
         default=None,
@@ -377,7 +388,7 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ADJUDICATOR_MODELS",
         description=(
             "Comma-separated final adjudication models reserved for explicit "
-            "post-debate escalation queues (e.g. azure_ai/gpt-5.6-sol)."
+            "post-debate escalation queues. Defaults to Anthropic Sonnet 5."
         ),
     )
     final_adjudicator_reasoning_effort: Optional[str] = Field(
@@ -385,8 +396,7 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ADJUDICATOR_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for final adjudicator models "
-            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). "
-            "Use xhigh for deepest single-agent thinking on gpt-5.6-sol."
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh)."
         ),
     )
     final_arbiter_model: str = Field(
@@ -394,7 +404,7 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ARBITER_MODEL",
         description=(
             "Most expensive final arbiter for hard residual cases after the "
-            "final adjudicator screen (gpt-5.6-sol or Opus-class)."
+            "final adjudicator screen. Defaults to Anthropic Opus 4.8."
         ),
     )
     final_arbiter_reasoning_effort: Optional[str] = Field(
@@ -419,7 +429,7 @@ class Settings(BaseSettings):
         ),
     )
     paper_final_check_model: str = Field(
-        default="azure_ai/gpt-5.6-sol",
+        default=f"azure_ai/{AZURE_PAPER_FINAL_CHECK_DEFAULT}",
         validation_alias="PAPER_FINAL_CHECK_MODEL",
         description=(
             "Model for the per-paper final check. Defaults to the deepest "
@@ -1022,6 +1032,9 @@ class Settings(BaseSettings):
         return list(models)
 
     def get_tier3_adjudicator_models(self) -> List[str]:
+        if self._is_azure() and not self._tier_env_set("tier3_adjudicator_models"):
+            model = self._azure_model_string(self.azure_deployment_gpt54 or "gpt-5.4")
+            return [model] if model else []
         models = self.tier3_adjudicator_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
@@ -1087,15 +1100,32 @@ class Settings(BaseSettings):
         return [model for model in defaults if model]
 
     def get_final_adjudicator_models(self) -> List[str]:
-        """Return Anthropic-reserved models for explicit final review queues."""
+        """Return models for optional exception-adjudication queues."""
         models = self.final_adjudicator_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
         return list(models)
 
     def get_final_arbiter_model(self) -> str:
-        """Return the single most expensive final arbiter model."""
+        """Return the optional hard-case escalation model."""
         return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
+
+    def get_paper_final_check_model(self) -> str:
+        """Return the independent soft per-paper review model.
+
+        ``PAPER_FINAL_CHECK_MODEL`` remains the strongest override. Otherwise
+        ``AZURE_DEPLOYMENT_GPT56_SOL`` supplies the deployment alias without
+        changing routine Tier 2/Tier 3 routing or the optional Anthropic
+        exception-adjudicator and hard-case arbiter defaults.
+        """
+        if self._tier_env_set("paper_final_check_model"):
+            return str(self.paper_final_check_model).strip()
+        return (
+            self._azure_model_string(
+                self.azure_deployment_gpt56_sol or AZURE_PAPER_FINAL_CHECK_DEFAULT
+            )
+            or f"azure_ai/{AZURE_PAPER_FINAL_CHECK_DEFAULT}"
+        )
 
     # ------------------------------------------------------------------
     # Provider-aware rate-limit / concurrency

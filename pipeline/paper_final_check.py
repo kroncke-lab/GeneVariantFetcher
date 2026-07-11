@@ -55,7 +55,9 @@ DEFAULT_MAX_TOKENS = 16000
 # more output budget (reasoning tokens count against it) than the DB-only sniff
 # test — otherwise the JSON truncates to empty on long papers.
 SUMMARY_MAX_TOKENS = 64000
-# Cap facts per paper so a 70-row paper stays a "quick" pass.
+# Cap provenance-rich facts per paper so a 70-row paper stays a "quick" pass.
+# Every captured row still appears in ``captured_fact_index``; this cap only
+# bounds quotes/locations/trust detail.
 MAX_FACTS_PER_PAPER = 60
 # Bound each provenance/quote field so the prompt stays compact.
 MAX_QUOTE_CHARS = 800
@@ -69,8 +71,8 @@ OVERSIZE_SOURCE_BYTES = 3_000_000
 # Minimum usable source length (chars); below this, treat as no source.
 MIN_USABLE_SOURCE_CHARS = 200
 
-PROMPT_VERSION = "pfc1"  # DB-only sniff test (stable)
-SUMMARY_PROMPT_VERSION = "pfs1"  # source-grounded summary + completeness
+PROMPT_VERSION = "pfc3"  # DB-only sniff test + strict response contract
+SUMMARY_PROMPT_VERSION = "pfs3"  # source-grounded summary + strict response contract
 SOURCE_RECIPE_VERSION = "src1"  # bump when resolve/select logic changes
 
 VALID_VERDICTS = ("ok", "flag")
@@ -83,10 +85,12 @@ _FULLTEXT_SUFFIXES = ("_FULL_CONTEXT.md", "_CLEANED.md", "_DATA_ZONES.md")
 
 _PROMPT_TEMPLATE = """You are the final quality-control reviewer (a "sniff test") for an automated
 pipeline that extracts variant carrier counts from biomedical papers. You are
-NOT re-extracting the paper. For ONE paper you are given the variant/count rows
-the pipeline extracted and whatever provenance it captured (a source location,
-verbatim quote(s), and the count's declared role/label). Judge quickly but
-carefully whether each row looks trustworthy, and flag the ones that do not.
+NOT re-extracting the paper. For ONE paper you are given a COMPLETE compact
+``captured_fact_index`` containing every extracted identity/count row, plus a
+possibly capped ``facts`` list with richer provenance (source location, verbatim
+quote(s), and declared count role/label). Use the complete index when deciding
+which rows exist; use the detailed facts when judging provenance. Judge quickly
+but carefully whether each row looks trustworthy, and flag the ones that do not.
 
 A row is SUSPECT if any of these apply:
 - The count looks like a cohort/study denominator (everyone enrolled, screened,
@@ -132,7 +136,7 @@ You are given TWO blocks:
 {source}
 === END SOURCE TEXT ===
 
-=== ALREADY CAPTURED BY THE PIPELINE (rows we already extracted) ===
+=== ALREADY CAPTURED BY THE PIPELINE ===
 {payload}
 === END ALREADY CAPTURED ===
 
@@ -146,8 +150,10 @@ supplement tables (look for markers like "# SUPPLEMENTAL FILE" or
 "GVF_FOLDED_SUPPLEMENTS"), and pedigrees — supplement and per-variant multi-row
 tables are where carriers are most often reported. For EACH group:
   - copy a VERBATIM evidence_quote from the SOURCE above (never paraphrase),
-  - set in_extraction=true ONLY if that group clearly matches one of the
-    ALREADY CAPTURED rows (notation may differ — you decide the match),
+  - set in_extraction=true ONLY if that group clearly matches an entry in the
+    COMPLETE ``captured_fact_index`` (notation may differ — use every identifier
+    provided and decide the match). The richer ``facts`` list may be capped and
+    MUST NOT be treated as the complete inventory,
   - otherwise in_extraction=false. Groups with in_extraction=false are carriers
     the pipeline MISSED — that is the point of this audit.
 Never invent a carrier you cannot quote from the SOURCE. If the source is
@@ -396,13 +402,13 @@ def resolve_source_text(
     # Abstract only as a last resort.
     if hint_path is not None and hint_path.suffix == ".json":
         abstract = _abstract_from_json(hint_path)
-        if abstract:
+        if _is_usable_source(abstract):
             return abstract, "abstract_only", str(hint_path)
     if run_path is not None:
         aj = run_path / "abstract_json" / f"{pmid}.json"
         if aj.exists():
             abstract = _abstract_from_json(aj)
-            if abstract:
+            if _is_usable_source(abstract):
                 return abstract, "abstract_only", str(aj)
 
     return None, "none", None
@@ -476,9 +482,13 @@ def gather_paper_payloads(
     pmids: Optional[list[str]] = None,
     max_facts: int = MAX_FACTS_PER_PAPER,
 ) -> list[dict[str, Any]]:
-    """Assemble one payload per paper that has extracted counts (the pipeline's
-    already-captured rows + their provenance). Papers with no ``penetrance_data``
-    rows are skipped — there is nothing to check."""
+    """Assemble one payload per paper, including zero-count-row papers.
+
+    ``facts`` retains provenance-rich detail for at most ``max_facts`` rows.
+    ``captured_fact_index`` is a complete compact identity/count inventory and
+    is never capped; source-grounded matching must use it so large papers cannot
+    turn already-captured rows into false misses.
+    """
     # Local cursor with Row factory — don't mutate the caller's connection.
     cur = conn.cursor()
     cur.row_factory = sqlite3.Row
@@ -488,15 +498,57 @@ def gather_paper_payloads(
         else ""
     )
     where = ""
+    paper_where = ""
     params: list[Any] = []
     if pmids:
         placeholders = ",".join("?" for _ in pmids)
         where = f" WHERE pd.pmid IN ({placeholders})"
+        paper_where = f" WHERE p.pmid IN ({placeholders})"
         params = list(pmids)
+
+    # Seed from papers, not penetrance_data. A source-grounded audit is most
+    # valuable when extraction produced zero count rows.
+    grouped: dict[str, dict[str, Any]] = {}
+    for row in cur.execute(
+        f"""
+        SELECT p.pmid AS pmid, p.title AS title, p.gene_symbol AS gene_symbol
+        FROM papers p
+        {paper_where}
+        ORDER BY p.pmid
+        """,
+        params,
+    ):
+        pmid = str(row["pmid"])
+        grouped[pmid] = {
+            "pmid": pmid,
+            "gene": row["gene_symbol"],
+            "title": row["title"],
+            "facts": [],
+            "captured_fact_index": [],
+            "n_facts_total": 0,
+        }
+
+    variant_cols = {row[1] for row in conn.execute("PRAGMA table_info(variants)")}
+    structural_expr = (
+        "v.structural_description"
+        if "structural_description" in variant_cols
+        else "NULL"
+    )
+    variant_class_expr = (
+        "v.variant_class" if "variant_class" in variant_cols else "NULL"
+    )
+    variant_identity_expr = (
+        "COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position, "
+        f"{structural_expr})"
+    )
     sql = f"""
         SELECT pd.pmid AS pmid,
-               COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position)
-                   AS variant,
+               {variant_identity_expr} AS variant,
+               v.protein_notation      AS protein_notation,
+               v.cdna_notation         AS cdna_notation,
+               v.genomic_position      AS genomic_position,
+               {structural_expr}       AS structural_description,
+               {variant_class_expr}    AS variant_class,
                pd.total_carriers_observed AS total_carriers,
                pd.affected_count          AS affected,
                pd.unaffected_count        AS unaffected,
@@ -513,9 +565,8 @@ def gather_paper_payloads(
                ON vp.variant_id = pd.variant_id AND vp.pmid = pd.pmid
         LEFT JOIN papers p ON p.pmid = pd.pmid
         {where}
-        ORDER BY pd.pmid
+        ORDER BY pd.pmid, pd.penetrance_id
     """
-    grouped: dict[str, dict[str, Any]] = {}
     for row in cur.execute(sql, params):
         pmid = str(row["pmid"])
         bucket = grouped.setdefault(
@@ -525,24 +576,49 @@ def gather_paper_payloads(
                 "gene": row["gene_symbol"],
                 "title": row["title"],
                 "facts": [],
+                "captured_fact_index": [],
                 "n_facts_total": 0,
             },
         )
-        bucket["n_facts_total"] += 1
-        if len(bucket["facts"]) >= max_facts:
-            continue
-
         counts = {
             "total_carriers": _as_int(row["total_carriers"]),
             "affected": _as_int(row["affected"]),
             "unaffected": _as_int(row["unaffected"]),
             "uncertain": _as_int(row["uncertain"]),
         }
-        fact: dict[str, Any] = {
-            "n": len(bucket["facts"]) + 1,
-            "variant": row["variant"] or "(unnamed)",
-            "counts": {k: v for k, v in counts.items() if v is not None},
+        compact_counts = {k: v for k, v in counts.items() if v is not None}
+        identifiers = {
+            key: row[key]
+            for key in (
+                "protein_notation",
+                "cdna_notation",
+                "genomic_position",
+                "structural_description",
+                "variant_class",
+            )
+            if row[key] not in (None, "")
         }
+        fact_number = bucket["n_facts_total"] + 1
+        compact_fact: dict[str, Any] = {
+            "n": fact_number,
+            "variant": row["variant"] or "(unnamed)",
+            "counts": compact_counts,
+        }
+        if identifiers:
+            compact_fact["identifiers"] = identifiers
+        bucket["captured_fact_index"].append(compact_fact)
+        bucket["n_facts_total"] = fact_number
+
+        if len(bucket["facts"]) >= max_facts:
+            continue
+
+        fact: dict[str, Any] = {
+            "n": fact_number,
+            "variant": row["variant"] or "(unnamed)",
+            "counts": compact_counts,
+        }
+        if identifiers:
+            fact["identifiers"] = identifiers
         prov = _load_json(row["count_provenance"]) or {}
         if isinstance(prov, dict):
             role = _clip(prov.get("carriers_count_type"), 80)
@@ -571,6 +647,43 @@ def gather_paper_payloads(
         payload["truncated"] = payload["n_facts_total"] > len(payload["facts"])
         payloads.append(payload)
     return payloads
+
+
+def payload_content_hash(payload: dict[str, Any]) -> str:
+    """Hash the semantic DB payload independently of row/insertion order.
+
+    A changed count, identity, provenance field, title, or trust decision must
+    invalidate version-skip even when the source text and reviewer model did not
+    change. Fact ordinals are presentation-only and are excluded from the hash.
+    """
+
+    def without_ordinal(item: Any) -> Any:
+        if not isinstance(item, dict):
+            return item
+        return {k: v for k, v in item.items() if k != "n"}
+
+    def stable_items(items: Any) -> list[Any]:
+        values = [without_ordinal(item) for item in (items or [])]
+        return sorted(
+            values,
+            key=lambda item: json.dumps(
+                item, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ),
+        )
+
+    canonical = {
+        "pmid": payload.get("pmid"),
+        "gene": payload.get("gene"),
+        "title": payload.get("title"),
+        "facts": stable_items(payload.get("facts")),
+        "captured_fact_index": stable_items(payload.get("captured_fact_index")),
+        "n_facts_total": payload.get("n_facts_total", 0),
+        "truncated": bool(payload.get("truncated")),
+    }
+    encoded = json.dumps(
+        canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
 def _source_hints(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
@@ -665,9 +778,148 @@ def _norm_flags(raw: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
     return flags, verdict
 
 
+class FinalCheckResponseError(ValueError):
+    """The model returned JSON that cannot support an honest final verdict."""
+
+
+def _validate_common_response(raw: Any, *, mode: str) -> dict[str, Any]:
+    """Validate fields shared by both final-check response schemas.
+
+    Empty/partial JSON is an outage signal, not an implicit ``ok``. Raising here
+    lets the orchestration persist ``verdict=error``; error rows are deliberately
+    excluded from version-skip and therefore remain retryable.
+    """
+    if not isinstance(raw, dict) or not raw:
+        raise FinalCheckResponseError(f"{mode} response must be a non-empty object")
+
+    required = {"paper_verdict", "confidence", "flags"}
+    missing = sorted(required - raw.keys())
+    if missing:
+        raise FinalCheckResponseError(
+            f"{mode} response missing required fields: {', '.join(missing)}"
+        )
+
+    verdict = str(raw.get("paper_verdict") or "").strip().lower()
+    if verdict not in VALID_VERDICTS:
+        raise FinalCheckResponseError(
+            f"{mode} response has invalid paper_verdict: {verdict or '<empty>'}"
+        )
+
+    confidence = raw.get("confidence")
+    if isinstance(confidence, bool):
+        raise FinalCheckResponseError(f"{mode} confidence must be a number in [0, 1]")
+    try:
+        confidence_value = float(confidence)
+    except (TypeError, ValueError) as exc:
+        raise FinalCheckResponseError(
+            f"{mode} confidence must be a number in [0, 1]"
+        ) from exc
+    if not 0.0 <= confidence_value <= 1.0:
+        raise FinalCheckResponseError(f"{mode} confidence must be a number in [0, 1]")
+
+    if not isinstance(raw.get("flags"), list):
+        raise FinalCheckResponseError(f"{mode} flags must be a list")
+    return raw
+
+
+def _validate_db_response(raw: Any) -> dict[str, Any]:
+    raw = _validate_common_response(raw, mode="DB-only final-check")
+    if "summary" not in raw or not isinstance(raw.get("summary"), str):
+        raise FinalCheckResponseError(
+            "DB-only final-check response missing required string field: summary"
+        )
+    if not raw["summary"].strip():
+        raise FinalCheckResponseError("DB-only final-check summary must not be empty")
+    return raw
+
+
+def _validate_summary_response(raw: Any) -> dict[str, Any]:
+    raw = _validate_common_response(raw, mode="source-grounded final-check")
+    required = {
+        "study_summary",
+        "cohort_sources",
+        "carrier_groups",
+        "completeness",
+    }
+    missing = sorted(required - raw.keys())
+    if missing:
+        raise FinalCheckResponseError(
+            "source-grounded final-check response missing required fields: "
+            + ", ".join(missing)
+        )
+    if (
+        not isinstance(raw.get("study_summary"), str)
+        or not raw["study_summary"].strip()
+    ):
+        raise FinalCheckResponseError(
+            "source-grounded final-check study_summary must be a non-empty string"
+        )
+    if not isinstance(raw.get("cohort_sources"), list):
+        raise FinalCheckResponseError(
+            "source-grounded final-check cohort_sources must be a list"
+        )
+    groups = raw.get("carrier_groups")
+    if not isinstance(groups, list):
+        raise FinalCheckResponseError(
+            "source-grounded final-check carrier_groups must be a list"
+        )
+    for index, group in enumerate(groups):
+        if not isinstance(group, dict):
+            raise FinalCheckResponseError(
+                f"source-grounded carrier_groups[{index}] must be an object"
+            )
+        missing_group = {
+            "variant",
+            "evidence_quote",
+            "in_extraction",
+        } - group.keys()
+        if missing_group:
+            raise FinalCheckResponseError(
+                f"source-grounded carrier_groups[{index}] missing required fields: "
+                + ", ".join(sorted(missing_group))
+            )
+    completeness = raw.get("completeness")
+    if not isinstance(completeness, dict):
+        raise FinalCheckResponseError(
+            "source-grounded final-check completeness must be an object"
+        )
+    status = str(completeness.get("status") or "").strip().lower()
+    if status not in VALID_COMPLETENESS:
+        raise FinalCheckResponseError(
+            "source-grounded final-check completeness.status must be one of "
+            + ", ".join(VALID_COMPLETENESS)
+        )
+    return raw
+
+
+def _validate_checker_result(result: Any, *, source_grounded: bool) -> dict[str, Any]:
+    """Defense-in-depth for injected/custom checkers after normalization."""
+    mode = "source-grounded" if source_grounded else "DB-only"
+    if not isinstance(result, dict) or not result:
+        raise FinalCheckResponseError(f"{mode} checker returned an empty result")
+    if result.get("verdict") not in VALID_VERDICTS:
+        raise FinalCheckResponseError(
+            f"{mode} checker returned invalid verdict: {result.get('verdict')!r}"
+        )
+    required = {"confidence", "flags", "summary"}
+    missing = sorted(required - result.keys())
+    if missing:
+        raise FinalCheckResponseError(
+            f"{mode} checker result missing required fields: {', '.join(missing)}"
+        )
+    if source_grounded:
+        if not isinstance(result.get("carrier_groups"), list) or not isinstance(
+            result.get("completeness"), dict
+        ):
+            raise FinalCheckResponseError(
+                "source-grounded checker result requires carrier_groups and completeness"
+            )
+    return result
+
+
 def normalize_result(raw: Any, payload: dict[str, Any]) -> dict[str, Any]:
     """Coerce the DB-only sniff-test JSON into a stable record."""
-    raw = raw if isinstance(raw, dict) else {}
+    raw = _validate_db_response(raw)
     flags, verdict = _norm_flags(raw)
     return {
         "pmid": payload.get("pmid"),
@@ -675,7 +927,9 @@ def normalize_result(raw: Any, payload: dict[str, Any]) -> dict[str, Any]:
         "source_grounded": False,
         "verdict": verdict,
         "confidence": _coerce_confidence(raw.get("confidence")),
-        "n_facts": len(payload.get("facts") or []),
+        "n_facts": int(
+            payload.get("n_facts_total", len(payload.get("facts") or [])) or 0
+        ),
         "n_flagged": len(flags),
         "flags": flags,
         "summary": str(raw.get("summary") or "").strip(),
@@ -689,7 +943,7 @@ def normalize_summary_result(
     missed-carrier signal (never asked directly; derived from in_extraction).
     ``truncated`` = the fed source was truncated, so "complete" is not claimable.
     """
-    raw = raw if isinstance(raw, dict) else {}
+    raw = _validate_summary_response(raw)
     flags, verdict = _norm_flags(raw)
 
     raw_groups = raw.get("carrier_groups")
@@ -759,7 +1013,9 @@ def normalize_summary_result(
         "source_grounded": True,
         "verdict": verdict,
         "confidence": _coerce_confidence(raw.get("confidence")),
-        "n_facts": len(payload.get("facts") or []),
+        "n_facts": int(
+            payload.get("n_facts_total", len(payload.get("facts") or [])) or 0
+        ),
         "n_flagged": len(flags),
         "flags": flags,
         "summary": summary,
@@ -1033,10 +1289,27 @@ def _error_result(payload: dict[str, Any], exc: Exception) -> dict[str, Any]:
         "source_grounded": False,
         "verdict": "error",
         "confidence": None,
-        "n_facts": len(payload.get("facts") or []),
+        "n_facts": int(
+            payload.get("n_facts_total", len(payload.get("facts") or [])) or 0
+        ),
         "n_flagged": 0,
         "flags": [],
         "summary": f"final check error: {exc}",
+    }
+
+
+def _skipped_result(payload: dict[str, Any], reason: str) -> dict[str, Any]:
+    """Durable marker for a paper that cannot be reviewed without source/facts."""
+    return {
+        "pmid": payload.get("pmid"),
+        "gene_symbol": payload.get("gene"),
+        "source_grounded": False,
+        "verdict": "skipped",
+        "confidence": None,
+        "n_facts": 0,
+        "n_flagged": 0,
+        "flags": [],
+        "summary": reason,
     }
 
 
@@ -1081,7 +1354,7 @@ def apply_paper_final_check(
         from config.settings import get_settings
 
         settings = get_settings()
-        model = model or settings.paper_final_check_model
+        model = model or settings.get_paper_final_check_model()
         if reasoning_effort is None:
             reasoning_effort = settings.paper_final_check_reasoning_effort
         if source_grounded is None:
@@ -1103,6 +1376,7 @@ def apply_paper_final_check(
         "error": 0,
         "source_grounded": 0,
         "source_absent": 0,
+        "skipped_empty_no_source": 0,
         "flagged_facts": 0,
         "missing_carriers": 0,
         "model": model,
@@ -1139,7 +1413,9 @@ def apply_paper_final_check(
                     source_file_hint=(hints.get(pmid) or {}).get("source_file"),
                 )
             use_summary = bool(
-                source_grounded and source_kind == "fulltext" and source_text
+                source_grounded
+                and source_text
+                and source_kind in {"fulltext", "abstract_only"}
             )
 
             selected, truncated = "", False
@@ -1147,19 +1423,60 @@ def apply_paper_final_check(
                 selected, truncated = _select_source_for_summary(
                     source_text, max_source_chars
                 )
+                # An abstract can ground reported groups, but it can never prove
+                # full-paper completeness. Reuse the truncation guard so a model
+                # cannot persist "complete" from an abstract-only view.
+                truncated = truncated or source_kind == "abstract_only"
                 # Fold a signature of the SELECTED source into the version so a
                 # later-enriched source (folded supplements) re-runs instead of
                 # being version-skipped.
                 source_sig = hashlib.sha256(selected.encode("utf-8")).hexdigest()[:12]
-                intended_version = f"{sum_version}-{source_sig}"
+                payload_sig = payload_content_hash(payload)[:12]
+                intended_version = f"{sum_version}-{source_sig}-{payload_sig}"
             else:
-                intended_version = db_version
+                payload_sig = payload_content_hash(payload)[:12]
+                intended_version = f"{db_version}-{payload_sig}"
+
+            empty_no_source = not payload.get("captured_fact_index") and not use_summary
 
             # Version-skip: same reviewer generation AND same source already
-            # recorded, and NOT a prior error (transient failures are retryable).
+            # recorded, same DB payload, and NOT a prior error (transient
+            # failures are retryable).
             prev_version, prev_verdict = _existing_check(conn, pmid)
             if prev_version == intended_version and prev_verdict != "error":
                 stats["skipped"] += 1
+                if empty_no_source:
+                    stats["skipped_empty_no_source"] += 1
+                continue
+
+            if empty_no_source:
+                reason = "paper has no extracted count facts and no usable source text"
+                logger.info("paper final check skipped pmid=%s: %s", pmid, reason)
+                result = _skipped_result(payload, reason)
+                _record_row(
+                    conn,
+                    result=result,
+                    model=model,
+                    reasoning_effort=reasoning_effort,
+                    prompt_version=PROMPT_VERSION,
+                    version=intended_version,
+                    checked_at=checked_at,
+                    source_kind=source_kind,
+                    source_file=source_path,
+                )
+                _record_carrier_groups(
+                    conn,
+                    pmid=pmid,
+                    gene_symbol=result.get("gene_symbol"),
+                    groups=[],
+                    version=intended_version,
+                    checked_at=checked_at,
+                )
+                stats["skipped"] += 1
+                stats["skipped_empty_no_source"] += 1
+                if source_kind == "none":
+                    stats["source_absent"] += 1
+                conn.commit()
                 continue
 
             if use_summary:
@@ -1171,6 +1488,7 @@ def apply_paper_final_check(
                     )
                 try:
                     result = summary_checker.check(payload, selected, truncated)
+                    result = _validate_checker_result(result, source_grounded=True)
                     stats["source_grounded"] += 1
                     comp = result.get("completeness") or {}
                     stats["missing_carriers"] += int(comp.get("n_missing") or 0)
@@ -1201,6 +1519,7 @@ def apply_paper_final_check(
                     )
                 try:
                     result = checker.check(payload)
+                    result = _validate_checker_result(result, source_grounded=False)
                 except Exception as exc:  # noqa: BLE001
                     logger.warning(
                         "paper final check failed for pmid=%s: %s", pmid, exc
@@ -1212,7 +1531,7 @@ def apply_paper_final_check(
                     model=model,
                     reasoning_effort=reasoning_effort,
                     prompt_version=PROMPT_VERSION,
-                    version=db_version,
+                    version=intended_version,
                     checked_at=checked_at,
                     source_kind=source_kind,
                     source_file=source_path,

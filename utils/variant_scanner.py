@@ -40,6 +40,7 @@ try:
         VariantNormalizer,
         get_variant_type,
         normalize_variant,
+        structural_variant_identity,
     )
 except ImportError:
     # Fallback for standalone testing
@@ -54,6 +55,7 @@ except ImportError:
         VariantNormalizer,
         get_variant_type,
         normalize_variant,
+        structural_variant_identity,
     )
 
 
@@ -145,7 +147,11 @@ class ScanResult:
                 "protein_notation": v.normalized
                 if v.notation_type == "protein"
                 else None,
-                "cdna_notation": v.normalized if v.notation_type == "cdna" else None,
+                "cdna_notation": v.normalized
+                if v.notation_type in {"cdna", "splice"}
+                else None,
+                "variant_class": v.variant_class,
+                "structural_description": v.structural_description,
                 "clinical_significance": "unknown",
                 "evidence_level": "scanner",
                 "source_location": f"Text scan ({v.source})",
@@ -158,6 +164,11 @@ class ScanResult:
                 "_scanner_confidence": v.confidence,
                 "_scanner_raw": v.raw_text,
             }
+            if (
+                v.notation_type == "structural"
+                and not variant_dict["structural_description"]
+            ):
+                variant_dict["structural_description"] = v.normalized
             results.append(variant_dict)
 
         return results
@@ -375,6 +386,30 @@ class VariantScanner:
         r"(?:\bno\b|\bnot\b|\bnegative\s+for\b|\bwithout\b|\babsen(?:ce|t)\b|"
         r"\bexclud(?:e[ds]?|ing)\b|\brule[ds]?\s+out\b|\bno\s+evidence\b)"
         r"[^.;:!?]{0,40}$",
+        re.IGNORECASE,
+    )
+
+    # Negation can also follow the structural noun phrase: "deletion of exons
+    # 3-5 was not detected". Keep the look-ahead clause-bounded so a negative
+    # statement later in the paragraph cannot suppress a real finding.
+    NEGATION_AFTER_RE = re.compile(
+        r"^[^.;:!?\n]{0,60}\b(?:not|never)\s+(?:be\s+|been\s+)?"
+        r"(?:detected|identified|found|observed|seen|confirmed|demonstrated|present)\b"
+        r"|^[^.;:!?\n]{0,60}\b(?:was|were|is|are)\s+"
+        r"(?:absent|excluded|ruled\s+out)\b",
+        re.IGNORECASE,
+    )
+
+    # Generic structural phrases are useful only when the surrounding statement
+    # says they were a positive finding. This deliberately excludes methods and
+    # background prose such as "MLPA detects exon deletions" unless the paper
+    # also reports that one was found/observed in the target gene.
+    STRUCTURAL_POSITIVE_FINDING_RE = re.compile(
+        r"\b(?:identified|detected|found|observed|reported|confirmed|revealed|"
+        r"showed|demonstrated|harbou?rs?|harbou?red|carries|carried|segregates|"
+        r"segregated)\b"
+        r"|\bwe\s+(?:identify|detect|observe|report|confirm|demonstrate)\b"
+        r"|\b(?:is|was|were)\s+present\b|\bpresent\s+in\b",
         re.IGNORECASE,
     )
 
@@ -1052,11 +1087,47 @@ class VariantScanner:
 
         return variants
 
-    def _preceded_by_negation(self, text: str, start: int, window: int = 60) -> bool:
-        """True when a negation word ('no deletion of...') sits in the same clause
-        just before a structural match, so it should not be emitted as positive."""
+    def _structural_statement_context(
+        self, text: str, start: int, end: int, window: int = 240
+    ) -> str:
+        """Return the clause-sized statement containing a structural match."""
+        lower = max(0, start - window)
+        upper = min(len(text), end + window)
+        before = text[lower:start]
+        after = text[end:upper]
+        # A bare period is not a safe boundary because HGVS c./p. prefixes are
+        # common immediately before the event. Only a period followed by space
+        # (or the end of the window) closes the statement.
+        boundary = re.compile(r"\n|[;?!]|\.(?=\s|$)")
+        left_matches = list(boundary.finditer(before))
+        left = lower + left_matches[-1].end() if left_matches else lower
+        right_match = boundary.search(after)
+        right = end + right_match.start() if right_match else upper
+        return text[left:right].strip()
+
+    def _structural_match_is_negated(
+        self, text: str, start: int, end: int, window: int = 80
+    ) -> bool:
+        """Return true for negation immediately before or after an event."""
         before = text[max(0, start - window) : start]
-        return bool(self.NEGATION_BEFORE_RE.search(before))
+        after = text[end : min(len(text), end + window)]
+        return bool(
+            self.NEGATION_BEFORE_RE.search(before)
+            or self.NEGATION_AFTER_RE.search(after)
+        )
+
+    def _positive_structural_context(
+        self, text: str, start: int, end: int
+    ) -> Optional[str]:
+        """Return evidence context only for target-gene positive findings."""
+        context = self._structural_statement_context(text, start, end)
+        if not self._context_mentions_gene(context, self.gene_symbol):
+            return None
+        if self._structural_match_is_negated(text, start, end):
+            return None
+        if not self.STRUCTURAL_POSITIVE_FINDING_RE.search(context):
+            return None
+        return context
 
     def _scan_structural_variants(self, text: str) -> List[ScannedVariant]:
         """Scan for exon-level, large del/dup, and prefixless BIC-style indels."""
@@ -1097,7 +1168,8 @@ class VariantScanner:
             )
 
         for m in self.EXON_EVENT.finditer(text):
-            if self._preceded_by_negation(text, m.start()):
+            context = self._positive_structural_context(text, m.start(), m.end())
+            if context is None:
                 continue
             exon1, exon2 = m.group(1), m.group(2)
             raw = m.group(0)
@@ -1116,7 +1188,7 @@ class VariantScanner:
                     variant_type=op,
                     notation_type="structural",
                     position=int(exon1),
-                    context=self._get_context(text, m.start(), m.end()),
+                    context=context,
                     confidence=0.85,
                     source="exon_event",
                     variant_class=vclass,
@@ -1125,7 +1197,8 @@ class VariantScanner:
             )
 
         for m in self.WHOLE_GENE_DEL.finditer(text):
-            if self._preceded_by_negation(text, m.start()):
+            context = self._positive_structural_context(text, m.start(), m.end())
+            if context is None:
                 continue
             raw = m.group(0)
             variants.append(
@@ -1135,7 +1208,7 @@ class VariantScanner:
                     variant_type="deletion",
                     notation_type="structural",
                     position=None,
-                    context=self._get_context(text, m.start(), m.end()),
+                    context=context,
                     confidence=0.80,
                     source="whole_gene_del",
                     variant_class="large_deletion",
@@ -1166,6 +1239,7 @@ class VariantScanner:
                     context=self._get_context(text, m.start(), m.end()),
                     confidence=0.95,
                     source="ivs_splice",
+                    variant_class="splice",
                 )
             )
 
@@ -1191,6 +1265,7 @@ class VariantScanner:
                     context=self._get_context(text, m.start(), m.end()),
                     confidence=0.90,
                     source="ivs_indel",
+                    variant_class="splice",
                 )
             )
 
@@ -1358,7 +1433,9 @@ def merge_scanner_results(
     """
     existing_variants = extracted_data.get("variants", [])
 
-    # Build set of existing variant keys (normalized)
+    # Build set of existing variant keys (normalized). Structural-only rows need
+    # their description in this identity set; otherwise every scanner replay
+    # appends a duplicate because both point-notation fields are empty.
     existing_keys = set()
     for v in existing_variants:
         protein = normalize_variant(v.get("protein_notation", "") or "", gene_symbol)
@@ -1367,6 +1444,9 @@ def merge_scanner_results(
             existing_keys.add(protein.upper())
         if cdna:
             existing_keys.add(cdna.upper())
+        structural = structural_variant_identity(v.get("structural_description"))
+        if structural:
+            existing_keys.add(f"STRUCT:{structural}")
 
     # Add scanner variants not already present
     added_count = 0
@@ -1374,7 +1454,14 @@ def merge_scanner_results(
         if sv.confidence < min_confidence:
             continue
 
-        if sv.normalized.upper() in existing_keys:
+        scanner_key = sv.normalized.upper()
+        if sv.notation_type == "structural":
+            structural = structural_variant_identity(
+                sv.structural_description or sv.normalized
+            )
+            scanner_key = f"STRUCT:{structural}"
+
+        if scanner_key in existing_keys:
             continue
 
         # Create variant dict
@@ -1405,7 +1492,7 @@ def merge_scanner_results(
                 new_variant["structural_description"] = sv.normalized
 
         existing_variants.append(new_variant)
-        existing_keys.add(sv.normalized.upper())
+        existing_keys.add(scanner_key)
         added_count += 1
 
     if added_count > 0:

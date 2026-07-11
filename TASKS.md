@@ -61,8 +61,9 @@ Teach extraction to model the study and stop dropping non-missense notations:
       `tg2-*`) + distributions in `trust_report.py`.
 - [x] **B** — `variant_class` + `structural_description` schema/persist;
       scanner exon/BIC/delins patterns; normalizer + `to_canonical_form`
-      splice/delins/structural keys; synthetic gold seed
-      `benchmarks/curated_extraction_eval/gold_overrides/STRUCTURAL_WIDENING_recall_input.csv`.
+      splice/delins/structural keys; deterministic synthetic cases in
+      `benchmarks/curated_extraction_eval/fixtures/structural_widening_cases.csv`
+      (kept separate from curated real-gene gold).
 
 **Follow-ons:** re-extract or LLM backfill study fields on existing DBs; expand
 structural/splice gold beyond the synthetic seed so B recall is measurable on
@@ -218,13 +219,15 @@ missed them** after the 1B parser land.
   - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
-- [ ] **Adopt Azure-first / Anthropic-final model routing for the 101-paper
-      staging loop.** Routine triage/table routing/extraction/debate should use
-      Azure deployments (`gpt-5.4-nano`, `Kimi-K2.6-1`, `grok-4.3`, `gpt-5.4`,
-      `DeepSeek-V4-Pro`). Reserve Anthropic for explicit final adjudication
-      queues only: Sonnet 5 as the final screen and Opus 4.8 as the hard-case
-      arbiter. Measure on the curated staging set before considering full-gene
-      refreshes.
+- [ ] **Adopt Azure-first routine routing plus the canonical GPT-5.6 per-paper
+      final check for the 101-paper staging loop.** Routine triage/table
+      routing/extraction/debate should use Azure deployments (`gpt-5.4`,
+      `Kimi-K2.6-1`, `grok-4.3`, `DeepSeek-V4-Pro`). Step 3.8 is the separate,
+      default-on final per-paper sniff test using `azure_ai/gpt-5.6-sol` at
+      `xhigh`; it records soft review results and must not replace routine Tier
+      2. Sonnet 5 and Opus 4.8 are optional exception-adjudication and hard-case
+      escalation queues, respectively. Measure on the curated staging set
+      before considering full-gene refreshes.
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
       the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
       unique-variant blocker.

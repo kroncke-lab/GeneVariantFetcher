@@ -47,6 +47,7 @@ def _configured_models(include_final: bool) -> list[str]:
     if include_final:
         models.extend(settings.get_final_adjudicator_models())
         models.append(settings.get_final_arbiter_model())
+        models.append(settings.get_paper_final_check_model())
     return _unique(model for model in models if model.startswith("azure_ai/"))
 
 
@@ -120,7 +121,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--include-final",
         action="store_true",
-        help="Also include final adjudicator settings if they are Azure models.",
+        help=(
+            "Also include Azure-configured final-review models, including the "
+            "independent per-paper final check."
+        ),
     )
     args = parser.parse_args(argv)
 

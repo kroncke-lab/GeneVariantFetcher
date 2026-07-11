@@ -128,14 +128,14 @@ From the `/code-review` on PR #140 (correctness/reuse not in the fleet-honesty p
 - [x] **Overlay is per-row, not per-paper** (`cli/compare_variants.py` ~2303):
       `wrong_paper` / `excluded` drops only the matched row; missed gold variants
       on the excluded paper stay in the recall denominator. Drop **all** rows for
-      that PMID. → Done (commit 9727e5f): `apply_adjudication_overlay` now sweeps
+      that PMID. → Done: `apply_adjudication_overlay` now sweeps
       the excluded PMIDs up front and drops every row for them; regression test in
       `test_adjudication_overlay_scorer.py`.
 - [x] **Overlay re-encodes the ingest contract** (`compare_variants.py` ~2190,
       ~2299): `_adjudication_variant_key` duplicates
       `ingest_review_adjudications._variant_key`, and the verdict→action branches
       duplicate `VERDICT_TO_ACTION`. Import them — drift silently drops
-      adjudications. → Done (commit 9727e5f): `_adjudication_variant_key`
+      adjudications. → Done: `_adjudication_variant_key`
       delegates to ingest's `_variant_key`, and `_overlay_action` resolves rows
       through the imported `VERDICT_TO_ACTION` (lazy imports dodge the load cycle).
 - [ ] **End-to-end count error can't see zero-gold over-attribution**

@@ -571,8 +571,12 @@ def step_report(
     duration_s: float,
     out_path: Path,
     stage_failures: Optional[list[str]] = None,
+    stage_warnings: Optional[list[str]] = None,
+    paper_final_check: Optional[dict] = None,
 ) -> None:
     """Write a RUN_REPORT.md summarizing the whole run."""
+    stage_failures = stage_failures or []
+    stage_warnings = stage_warnings or []
     lines: list[str] = []
     lines.append(f"# GVF Run Report — {gene}")
     lines.append("")
@@ -580,9 +584,13 @@ def step_report(
     lines.append(f"- Duration: {duration_s / 60:.1f} min")
     lines.append(f"- Run dir: `{run_dir}`")
     lines.append(f"- DB: `{db}`")
-    lines.append(
-        f"- Stage status: {'⚠️ completed with warnings' if stage_failures else '✓ all stages ok'}"
-    )
+    if stage_failures:
+        stage_status = "⚠️ completed with warnings (stage failures recorded)"
+    elif stage_warnings:
+        stage_status = "✓ core stages ok; best-effort warnings recorded"
+    else:
+        stage_status = "✓ all stages ok"
+    lines.append(f"- Stage status: {stage_status}")
     lines.append("")
 
     if stage_failures:
@@ -596,6 +604,56 @@ def step_report(
         for failure in stage_failures:
             lines.append(f"  - ⚠️ {failure}")
         lines.append("")
+
+    if stage_warnings:
+        lines.append("## Best-effort Warnings")
+        lines.append("")
+        lines.append(
+            "These quality/metadata stages did not remove core extracted evidence, "
+            "so they do not change the process exit code:"
+        )
+        lines.append("")
+        for warning in stage_warnings:
+            lines.append(f"  - ⚠️ {warning}")
+        lines.append("")
+
+    if paper_final_check is not None:
+        lines.append("## Paper Final Check")
+        lines.append("")
+        skip_reason = paper_final_check.get("skipped")
+        if isinstance(skip_reason, str):
+            lines.append(f"_Skipped: {skip_reason}_")
+        else:
+            lines.append(
+                "| Papers | Checked | Cached/skipped | Source-grounded | Flags | Errors | Missing groups |"
+            )
+            lines.append("|---:|---:|---:|---:|---:|---:|---:|")
+            lines.append(
+                "| {papers} | {checked} | {skipped} | {grounded} | {flags} | "
+                "{errors} | {missing} |".format(
+                    papers=paper_final_check.get("papers", 0),
+                    checked=paper_final_check.get("checked", 0),
+                    skipped=paper_final_check.get("skipped", 0),
+                    grounded=paper_final_check.get("source_grounded", 0),
+                    flags=paper_final_check.get("flagged_facts", 0),
+                    errors=paper_final_check.get("error", 0),
+                    missing=paper_final_check.get("missing_carriers", 0),
+                )
+            )
+            empty_skips = int(paper_final_check.get("skipped_empty_no_source", 0) or 0)
+            if empty_skips:
+                lines.append("")
+                lines.append(
+                    f"- {empty_skips} paper(s) had neither extracted count facts "
+                    "nor usable source text and were explicitly skipped."
+                )
+            lines.append("")
+            lines.append(
+                "Soft results remain in `paper_final_check`; source-grounded "
+                "reported/missing groups remain in `paper_carrier_groups`."
+            )
+        lines.append("")
+
     lines.append("## Doctor")
     lines.append("")
     lines.append("Required:")
@@ -1022,7 +1080,7 @@ def step_paper_final_check(
 
     if not settings.paper_final_check_enabled:
         return {"skipped": "disabled (paper_final_check_enabled=false)"}
-    model = settings.paper_final_check_model
+    model = settings.get_paper_final_check_model()
     if not _paper_check_reachable(model):
         return {"skipped": f"model {model} unreachable (no provider credentials)"}
 
@@ -1052,6 +1110,27 @@ def _paper_check_reachable(model: str) -> bool:
             os.environ.get("AZURE_AI_API_KEY") and os.environ.get("AZURE_AI_API_BASE")
         )
     return True  # unknown provider: attempt, let it warn per-paper if misconfigured
+
+
+def _paper_final_check_error_warning(result: object) -> Optional[str]:
+    """Describe per-paper reviewer errors without turning soft QC into data loss.
+
+    The final check intentionally continues after individual LLM failures. Its
+    aggregate result therefore needs explicit orchestration-level surfacing;
+    otherwise an all-paper outage looks like a successful quality pass.
+    """
+    if not isinstance(result, dict):
+        return None
+    try:
+        errors = int(result.get("error") or 0)
+        checked = int(result.get("checked") or 0)
+    except (TypeError, ValueError):
+        return "paper final check returned invalid error statistics"
+    if errors <= 0:
+        return None
+    if checked > 0 and errors >= checked:
+        return f"paper final check failed for all {checked} checked paper(s)"
+    return f"paper final check recorded {errors} error(s) across {checked} checked paper(s)"
 
 
 # ---------------------------------------------------------------------------
@@ -1258,6 +1337,7 @@ def run_gvf_pipeline(
     source_qc_attempted = False
     source_recovery_result: Optional[SourceRecoveryResult] = None
     layer_outdir: Optional[Path] = None
+    paper_final_check_result: Optional[dict] = None
 
     if source_recovery and "source-qc" in skip:
         logger.warning("source recovery requested but source-qc was skipped")
@@ -1357,13 +1437,22 @@ def run_gvf_pipeline(
     if "paper-final-check" not in skip:
         logger.info("🧪 Step 3.8: per-paper final check")
         try:
-            pfc_result = step_paper_final_check(db=db, run_dir=run_dir, gene=gene)
-            if isinstance(pfc_result, dict) and pfc_result.get("skipped"):
+            paper_final_check_result = step_paper_final_check(
+                db=db, run_dir=run_dir, gene=gene
+            )
+            if isinstance(paper_final_check_result, dict) and isinstance(
+                paper_final_check_result.get("skipped"), str
+            ):
                 logger.info(
-                    "⏭️  Step 3.8: paper final check — %s", pfc_result["skipped"]
+                    "⏭️  Step 3.8: paper final check — %s",
+                    paper_final_check_result["skipped"],
                 )
             else:
-                logger.info("paper final check: %s", pfc_result)
+                logger.info("paper final check: %s", paper_final_check_result)
+            pfc_warning = _paper_final_check_error_warning(paper_final_check_result)
+            if pfc_warning:
+                logger.warning("%s", pfc_warning)
+                stage_warnings.append(pfc_warning)
         except Exception as e:  # noqa: BLE001
             logger.exception("paper final check failed (%s); continuing", e)
             stage_warnings.append(f"paper final check failed: {e}")
@@ -1421,6 +1510,8 @@ def run_gvf_pipeline(
             duration_s=time.time() - started,
             out_path=report_path,
             stage_failures=stage_failures,
+            stage_warnings=stage_warnings,
+            paper_final_check=paper_final_check_result,
         )
         # Copy to root output dir so users find it without spelunking
         try:
