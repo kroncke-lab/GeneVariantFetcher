@@ -22,10 +22,12 @@ provenance decide what to trust, so runs scale without a human in the per-paper
 loop. Human adjudication is an **exception-only escape hatch** for the rare
 marginal case — routed through
 [Variant_Browser](docs/VARIANT_BROWSER_INTEGRATION.md), off the per-paper and
-per-run critical path, never a required step. The confidence-gating layer that
-sorts every extracted fact into a trusted or held tier automatically is in
-active development; until it lands, the automated gates stay conservative and
-uncertain counts are surfaced with provenance rather than silently trusted.
+per-run critical path, never a required step. A per-fact **trust gate** (v1) sorts
+every extracted fact into a **trusted** or **quarantine** tier using gold-free
+structural checks (`pipeline/trust_gate.py`, default-on in `gvf-run`;
+`scripts/trust_report.py` inspects the tiers). Making the trusted tier the default
+that scoring and downstream tools consume — and calibrating the gate per gene
+class — is in progress.
 
 The current production entry point is:
 

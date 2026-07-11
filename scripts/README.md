@@ -13,6 +13,8 @@ Use these when updating an existing scored run or measuring recall.
 | `refresh_recall.py` | Refresh and score the tracked recall genes. |
 | `run_recall_suite.py` | Score one or more gene DBs against normalized gold inputs. |
 | `recall_mae.py` | Compare rows-mode MAE and run-to-run score changes. |
+| `trust_report.py` | Inspect the trust-gate two-tier DB (trusted/quarantine counts, rate, by reason). |
+| `precision_sample.py` | Draw + score an adjudicated precision-calibration sample (Wilson CI) for gate thresholds. |
 
 ## Source And Corpus
 

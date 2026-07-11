@@ -113,7 +113,10 @@ CREATE TABLE variant_papers (
 ### Data Tables
 
 #### `penetrance_data`
-Cohort-level penetrance statistics.
+Cohort-level penetrance statistics. Each row carries a **trust tier** set by the
+per-fact trust gate (`pipeline/trust_gate.py`, default-on); consumers that want
+only high-confidence counts filter `trust_tier = 'trusted'` (see
+`scripts/trust_report.py`).
 
 ```sql
 CREATE TABLE penetrance_data (
@@ -125,6 +128,9 @@ CREATE TABLE penetrance_data (
     unaffected_count INTEGER,
     uncertain_count INTEGER,
     penetrance_percentage REAL,
+    trust_tier TEXT DEFAULT 'trusted',  -- 'trusted' | 'quarantine' (trust gate)
+    trust_reasons TEXT,                 -- JSON list of gold-free reason codes
+    trust_rule_version TEXT,            -- rule-set version that tiered this row
     FOREIGN KEY (variant_id) REFERENCES variants(variant_id),
     FOREIGN KEY (pmid) REFERENCES papers(pmid)
 );

@@ -5,6 +5,33 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-07-10
+
+### Added
+- Per-fact **trust gate** (`pipeline/trust_gate.py`): gold-free structural rules
+  (arithmetic inconsistency, count-is-cohort-total, population-scale, per-paper
+  outlier) soft-quarantine implausible count facts into a two-tier
+  (trusted/quarantine) DB. New `penetrance_data` columns `trust_tier` /
+  `trust_reasons` / `trust_rule_version`; default-on in `gvf-run` (Step 3.7).
+  `scripts/trust_report.py` inspects the tiers.
+- Run **provenance** in `run_manifest.json` (git SHA, prompt/extractor +
+  dependency hashes, resolved model routing) and a committed `requirements.lock`.
+- Honest **count-accuracy** metric (`compute_end_to_end_count_error`, misses as
+  zero) and an adjudicated-precision calibration sampler
+  (`scripts/precision_sample.py`, Wilson CI).
+- Clean-room **cold-start** benchmark (`benchmarks/cold_start_eval/`) and a
+  fail-closed benchmark regression gate (`make regression-gate`).
+
+### Changed
+- **Positioning reframed** to autonomous operation at scale: automated quality
+  gates are the primary control; human adjudication is an exception-only escape
+  hatch (README + docs).
+- **Fleet honesty**: `gvf-run` returns a non-zero exit and writes a
+  machine-readable `RUN_STATUS.json` when a completeness stage fails (was a silent
+  exit 0); per-file `SAVEPOINT` rollback in SQLite migration.
+- The recall scorer consumes the adjudication overlay opt-in
+  (`GVF_APPLY_ADJUDICATIONS=1`).
+
 ## [Unreleased] - 2026-06-03
 
 ### Changed
