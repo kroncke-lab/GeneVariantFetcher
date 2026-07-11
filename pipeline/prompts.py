@@ -181,8 +181,9 @@ the aggregate locator on `patients` and `fact_provenance`. The downstream SQLite
 writer computes `source_record_id`; do not attempt to hash it.
 
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
-Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
-and genomic_position would be null. The variant identifier is load-bearing.
+Do NOT emit a variant entry where ALL of cdna_notation, protein_notation,
+genomic_position, AND structural_description would be null. The variant
+identifier is load-bearing.
 
 REJECT examples:
 - "34 patients with pore-region mutations" (mutation class, not a variant)
@@ -193,6 +194,7 @@ ACCEPT examples (at least one identifier present):
 - protein_notation: "p.Arg176Trp" → emit
 - cdna_notation: "c.1234G>A" → emit
 - genomic_position: "chr7:150646404G>A" → emit
+- variant_class: "exon_deletion" + structural_description: "deletion of exons 3-5" → emit
 
 If the paper describes a cohort by mutation class without listing the variants,
 return ZERO entries for that cohort description rather than a placeholder.
@@ -228,8 +230,10 @@ Return a JSON object with this structure:
     "variants": [
         {{
             "gene_symbol": "{gene_symbol}",
-            "cdna_notation": "c.XXX",
-            "protein_notation": "p.XXX",
+            "cdna_notation": "c.XXX or IVS... or null",
+            "protein_notation": "p.XXX or null",
+            "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
+            "structural_description": "free text for structural events e.g. 'deletion of exons 3-5' or null",
             "clinical_significance": "pathogenic/likely_pathogenic/VUS/likely_benign/benign",
             "patients": {{
                 "count": N,
@@ -279,12 +283,16 @@ Return a JSON object with this structure:
         "total_variants_found": integer,
         "extraction_confidence": "high/medium/low",
         "study_type": "clinical/functional/mixed (REQUIRED - indicate if this is a functional assay study)",
+        "study_design": "case_report|case_series|case_control|cohort_population|cohort_biobank|family_segregation|functional_invitro|gwas|review_meta|other (REQUIRED - primary study design)",
+        "study_summary": "1-3 sentence plain narrative of what this study is",
         "compact_mode": true,
         "notes": "Compact extraction - detailed fields omitted for completeness"
     }}
 }}
 
 CRITICAL: Extract ALL variants. Do NOT stop early. Completeness > detail.
+Structural events (exon deletions, large del/dup, CNVs) may omit point-form
+notation if variant_class + structural_description are set.
 """
 
 EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
@@ -547,8 +555,9 @@ the aggregate locator on `patients` and `fact_provenance`. The downstream SQLite
 writer computes `source_record_id`; do not attempt to hash it.
 
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
-Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
-and genomic_position would be null. The variant identifier is load-bearing.
+Do NOT emit a variant entry where ALL of cdna_notation, protein_notation,
+genomic_position, AND structural_description would be null. The variant
+identifier is load-bearing.
 
 REJECT examples:
 - "34 patients with pore-region mutations" (mutation class, not a variant)
@@ -559,6 +568,7 @@ ACCEPT examples (at least one identifier present):
 - protein_notation: "p.Arg176Trp" → emit
 - cdna_notation: "c.1234G>A" → emit
 - genomic_position: "chr7:150646404G>A" → emit
+- variant_class: "exon_deletion" + structural_description: "deletion of exons 3-5" → emit
 
 If the paper describes a cohort by mutation class without listing the variants,
 return ZERO entries for that cohort description rather than a placeholder.
@@ -594,9 +604,11 @@ Return a JSON object with this structure:
     "variants": [
         {{
             "gene_symbol": "string",
-            "cdna_notation": "string or null",
+            "cdna_notation": "string or null (c. or IVS notation)",
             "protein_notation": "string or null",
             "genomic_position": "string or null",
+            "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
+            "structural_description": "free text for structural events e.g. 'deletion of exons 3-5' or null",
             "clinical_significance": "string",
             "patients": {{
                 "count": integer,
@@ -697,6 +709,11 @@ Return a JSON object with this structure:
         "total_variants_found": integer,
         "extraction_confidence": "high/medium/low",
         "study_type": "clinical/functional/mixed (REQUIRED - indicate if this is a functional assay study)",
+        "study_design": "case_report|case_series|case_control|cohort_population|cohort_biobank|family_segregation|functional_invitro|gwas|review_meta|other (REQUIRED - primary study design)",
+        "ascertainment": "proband_referral|population_screening|biobank|family_cascade|unknown (how subjects were found; drives penetrance interpretation)",
+        "cohort_source": "where the cohort came from (e.g. 'LQTS referral clinic, Japan'; 'UK Biobank'; 'gnomAD reference') or null",
+        "population": "study-level ancestry/geography/founder population or null",
+        "study_summary": "1-3 sentence plain narrative of what this study is",
         "challenges": ["any issues during extraction"],
         "notes": "any additional notes about the extraction process"
     }}

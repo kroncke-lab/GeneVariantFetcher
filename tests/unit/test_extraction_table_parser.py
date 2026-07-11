@@ -1138,6 +1138,107 @@ def test_artifact_filter_removes_malformed_protein_notations():
     assert filtered["extraction_metadata"]["malformed_filtered"] == 4
 
 
+def test_artifact_filter_keeps_delins_notations():
+    """delins rows the table parser emits must not be dropped as malformed."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "extraction_metadata": {},
+        "variants": [
+            {
+                "gene_symbol": "SCN5A",
+                "cdna_notation": "c.4513_4521delAAGCAGinsT",
+                "protein_notation": "p.Lys1505_Gln1507delinsTrp",
+            },
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "c.123delAinsT",
+            },
+            {
+                "gene_symbol": "KCNH2",
+                "protein_notation": "p.Arg176delinsLys",
+            },
+            # Still drop true garbage
+            {"gene_symbol": "KCNH2", "protein_notation": "0.99"},
+        ],
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "SCN5A")
+    remaining_cdna = {
+        v.get("cdna_notation") for v in filtered["variants"] if v.get("cdna_notation")
+    }
+    remaining_protein = {
+        v.get("protein_notation")
+        for v in filtered["variants"]
+        if v.get("protein_notation")
+    }
+    assert "c.4513_4521delAAGCAGinsT" in remaining_cdna
+    assert "c.123delAinsT" in remaining_cdna
+    assert "p.Lys1505_Gln1507delinsTrp" in remaining_protein
+    assert "p.Arg176delinsLys" in remaining_protein
+    assert filtered["extraction_metadata"]["malformed_filtered"] == 1
+
+
+def test_artifact_filter_keeps_ivs_splice_notations():
+    """Scanner stores IVS into cdna_notation; filter must treat it as valid splice."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "extraction_metadata": {},
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "IVS9+1G>A",
+                "evidence_level": "scanner",
+            },
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "IVS5-2A>G",
+            },
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "IVS10+1del",
+            },
+            # malformed non-IVS still dropped
+            {"gene_symbol": "KCNH2", "cdna_notation": "not-a-variant"},
+        ],
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "KCNH2")
+    remaining_cdna = {v.get("cdna_notation") for v in filtered["variants"]}
+    assert "IVS9+1G>A" in remaining_cdna
+    assert "IVS5-2A>G" in remaining_cdna
+    assert "IVS10+1del" in remaining_cdna
+    assert "not-a-variant" not in remaining_cdna
+    assert filtered["extraction_metadata"]["malformed_filtered"] == 1
+
+
+def test_artifact_filter_keeps_structural_row_despite_malformed_protein():
+    """A structural-keep must not be re-dropped by the position check reading the
+    stale (malformed) protein_notation it just cleared. Regression: '99999del'
+    fails PROTEIN_NOTATION_RE, the structural branch clears it, but the position
+    check used to run on the stale string (extract_position -> 99999 > gene len)
+    and false-drop the event."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "extraction_metadata": {},
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "protein_notation": "99999del",  # malformed; 99999 > KCNH2 length
+                "variant_class": "exon_deletion",
+                "structural_description": "deletion of exons 3-5",
+            }
+        ],
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "KCNH2")
+
+    assert len(filtered["variants"]) == 1, "structural event must survive"
+    kept = filtered["variants"][0]
+    assert kept["variant_class"] == "exon_deletion"
+    assert kept.get("protein_notation") is None  # malformed point-form was cleared
+    assert filtered["extraction_metadata"].get("position_invalid_filtered", 0) == 0
+
+
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
     paper = Paper(
