@@ -1001,6 +1001,59 @@ def step_trust_gate(db: Path) -> dict:
     return apply_trust_gate(db)
 
 
+def step_paper_final_check(
+    db: Path, run_dir: Optional[Path] = None, gene: Optional[str] = None
+) -> dict:
+    """Per-paper LLM review (default gpt-5.6-sol at xhigh). When the paper's
+    on-disk source text is available it produces a carrier/phenotype summary + a
+    missed-carrier completeness signal (paper_carrier_groups); otherwise it runs
+    the DB-only sniff test over the extracted counts vs their provenance. Records
+    soft results in paper_final_check; never mutates or deletes a count.
+
+    Self-gating: returns a ``{"skipped": reason}`` dict (rather than raising) when
+    settings can't load, the check is disabled, or the model provider has no
+    credentials — so a keyless clone degrades cleanly instead of erroring."""
+    try:
+        from config.settings import get_settings
+
+        settings = get_settings()
+    except Exception as e:  # noqa: BLE001 - misconfigured settings must not fail run
+        return {"skipped": f"settings unavailable: {e}"}
+
+    if not settings.paper_final_check_enabled:
+        return {"skipped": "disabled (paper_final_check_enabled=false)"}
+    model = settings.paper_final_check_model
+    if not _paper_check_reachable(model):
+        return {"skipped": f"model {model} unreachable (no provider credentials)"}
+
+    from pipeline.paper_final_check import apply_paper_final_check
+
+    return apply_paper_final_check(db, run_dir=run_dir, gene=gene)
+
+
+def _paper_check_reachable(model: str) -> bool:
+    """True when credentials for the final-check model's provider are present, so
+    the step skips cleanly on a keyless clone instead of erroring every paper."""
+    m = (model or "").lower()
+    if m.startswith(("azure_ai/", "azure/")):
+        return bool(
+            os.environ.get("AZURE_AI_API_KEY") and os.environ.get("AZURE_AI_API_BASE")
+        )
+    if m.startswith("anthropic/"):
+        return bool(os.environ.get("ANTHROPIC_API_KEY"))
+    if m.startswith("openai/"):
+        return bool(
+            os.environ.get("OPENAI_API_KEY") or os.environ.get("AZURE_AI_API_KEY")
+        )
+    # Bare (unprefixed) Azure deployment names still need Azure credentials.
+    base = m.rsplit("/", 1)[-1]
+    if base.startswith(("gpt-5", "gpt5", "kimi", "grok", "deepseek")):
+        return bool(
+            os.environ.get("AZURE_AI_API_KEY") and os.environ.get("AZURE_AI_API_BASE")
+        )
+    return True  # unknown provider: attempt, let it warn per-paper if misconfigured
+
+
 # ---------------------------------------------------------------------------
 # Entry point (called from cli/__init__.py)
 # ---------------------------------------------------------------------------
@@ -1294,6 +1347,28 @@ def run_gvf_pipeline(
             stage_warnings.append(f"trust gate failed: {e}")
     else:
         logger.info("⏭️  Step 3.7: trust gate — SKIPPED")
+
+    # Step 3.8: per-paper final check (sniff test). A strong reasoning model
+    # (default gpt-5.6-sol at xhigh, per config.settings) reviews each paper's
+    # extracted counts against their captured provenance and records a soft
+    # verdict in the paper_final_check table — it never mutates or deletes a
+    # count. Default ON. The step self-gates (disabled / unreachable / bad
+    # settings → clean skip); a genuine failure warns, it does not fail the run.
+    if "paper-final-check" not in skip:
+        logger.info("🧪 Step 3.8: per-paper final check")
+        try:
+            pfc_result = step_paper_final_check(db=db, run_dir=run_dir, gene=gene)
+            if isinstance(pfc_result, dict) and pfc_result.get("skipped"):
+                logger.info(
+                    "⏭️  Step 3.8: paper final check — %s", pfc_result["skipped"]
+                )
+            else:
+                logger.info("paper final check: %s", pfc_result)
+        except Exception as e:  # noqa: BLE001
+            logger.exception("paper final check failed (%s); continuing", e)
+            stage_warnings.append(f"paper final check failed: {e}")
+    else:
+        logger.info("⏭️  Step 3.8: paper final check — SKIPPED")
 
     # Step 4: gold-free source QC. Only run if Step 3 did not already attempt it —
     # a failed Step-3 attempt also leaves source_qc_summary None, and re-running

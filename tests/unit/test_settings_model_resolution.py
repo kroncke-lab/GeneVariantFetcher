@@ -39,7 +39,7 @@ def test_azure_provider_uses_deployment_defaults_when_tiers_unset(monkeypatch):
         azure_deployment_grok="grok-4.3",
     )
 
-    assert settings.get_tier2_model() == "azure_ai/gpt-5.4"
+    assert settings.get_tier2_model() == "azure_ai/gpt-5.6-sol"
     assert settings.get_table_router_model() == "azure_ai/Kimi-K2.6-1"
     assert settings.get_tier3_models() == ["azure_ai/grok-4.3"]
 
@@ -91,7 +91,16 @@ def test_explicit_early_debate_models_win():
     ]
 
 
-def test_final_adjudication_models_are_anthropic_reserved_defaults():
+def test_final_adjudication_models_are_anthropic_reserved_defaults(monkeypatch):
+    # Isolate from a developer's live .env / exported FINAL_* vars.
+    for env_var in (
+        "FINAL_ADJUDICATOR_MODELS",
+        "FINAL_ARBITER_MODEL",
+        "FINAL_ADJUDICATOR_REASONING_EFFORT",
+        "FINAL_ARBITER_REASONING_EFFORT",
+    ):
+        monkeypatch.delenv(env_var, raising=False)
+
     settings = _settings()
 
     assert settings.get_final_adjudicator_models() == ["anthropic/claude-sonnet-5"]
@@ -111,3 +120,18 @@ def test_explicit_final_adjudication_models_win():
         "anthropic/claude-opus-4-8",
     ]
     assert settings.get_final_arbiter_model() == "anthropic/claude-opus-4-8-max"
+
+
+def test_final_adjudication_accepts_gpt56_sol_with_max_effort_alias():
+    settings = _settings(
+        final_adjudicator_models="azure_ai/gpt-5.6-sol",
+        final_adjudicator_reasoning_effort="max",
+        final_arbiter_model="azure_ai/gpt-5.6-sol",
+        final_arbiter_reasoning_effort="xhigh",
+    )
+
+    assert settings.get_final_adjudicator_models() == ["azure_ai/gpt-5.6-sol"]
+    assert settings.get_final_arbiter_model() == "azure_ai/gpt-5.6-sol"
+    # "max" normalizes to Azure-supported xhigh
+    assert settings.final_adjudicator_reasoning_effort == "xhigh"
+    assert settings.final_arbiter_reasoning_effort == "xhigh"
