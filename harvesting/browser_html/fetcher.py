@@ -30,7 +30,8 @@ class BrowserHTMLFetcher:
         - first ``fetch()`` call lazily starts the browser pool
         - ``close()`` shuts the browser down at end of harvest
 
-    Disabled by default. Driven by config:
+    Enabled by default (``enable_browser_html_fallback`` defaults to true).
+    Driven by config:
         - ``enable_browser_html_fallback`` (bool)
         - ``browser_html_publisher_allowlist`` (list of strategy NAMEs)
         - ``browser_html_min_embargo_months`` (cap to override per-strategy)

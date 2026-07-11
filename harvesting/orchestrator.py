@@ -413,7 +413,8 @@ class PMCHarvester:
         initialize_harvest_logs(self.paywalled_log, self.success_log)
 
         # Tier 3.5: Browser HTML fallback (lazy — no browser spawned until used).
-        # Disabled unless ENABLE_BROWSER_HTML_FALLBACK is true.
+        # Enabled by default (ENABLE_BROWSER_HTML_FALLBACK defaults to true); the
+        # fetcher reads that flag to gate fetch(). Set it false to opt out.
         self.browser_html = None
         try:
             from .browser_html import BrowserHTMLFetcher
