@@ -543,7 +543,7 @@ def classify_pmid(
         if action in ("fetch", "manual_or_blocked")
         else None
     )
-    ev_score_val = float(ev["ev_score"]) if ev else 0.0
+    ev_score_val = float(ev.get("ev_score", 0.0)) if ev else 0.0
 
     priority = 0
     if action == "fetch":
@@ -572,11 +572,11 @@ def classify_pmid(
         "route": route,
         "priority_score": priority,
         "ev_score": round(ev_score_val, 4),
-        "ev_est_carriers": float(ev["est_carriers"]) if ev else 0.0,
-        "ev_est_variants": float(ev["est_variants"]) if ev else 0.0,
-        "ev_p_relevant": float(ev["p_relevant"]) if ev else 0.0,
-        "ev_population_flag": int(ev["population_flag"]) if ev else 0,
-        "ev_note": (ev["note"] if ev else ""),
+        "ev_est_carriers": float(ev.get("est_carriers", 0.0)) if ev else 0.0,
+        "ev_est_variants": float(ev.get("est_variants", 0.0)) if ev else 0.0,
+        "ev_p_relevant": float(ev.get("p_relevant", 0.0)) if ev else 0.0,
+        "ev_population_flag": int(ev.get("population_flag", 0)) if ev else 0,
+        "ev_note": ev.get("note", "") if ev else "",
         "source_status": status,
         "source_path": str(source_file) if source_file else "",
         "source_bytes": source_file.stat().st_size if source_file else 0,

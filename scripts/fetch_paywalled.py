@@ -1407,6 +1407,8 @@ def write_auth_status(
     """
 
     def _matches(domain: str, needles: tuple) -> bool:
+        if not domain:
+            return False
         return any(domain == n or domain.endswith("." + n) for n in needles)
 
     institutional = {

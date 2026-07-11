@@ -1332,10 +1332,11 @@ def run_gvf_pipeline(
 
     # Advisory: authenticated paywalled recovery needs an institutional credential.
     auth_status = status.get("institutional_auth") or {}
-    if not auth_status.get("ready", True):
-        logger.warning("🔒 institutional auth: %s", auth_status.get("reason"))
-    elif not auth_status.get("ezproxy_configured"):
-        logger.info("🔒 institutional auth: %s", auth_status.get("reason"))
+    if auth_status:
+        if not auth_status.get("ready", True):
+            logger.warning("🔒 institutional auth: %s", auth_status.get("reason"))
+        elif not auth_status.get("ezproxy_configured"):
+            logger.info("🔒 institutional auth: %s", auth_status.get("reason"))
 
     # Step 2: extract (unless skipped)
     gene = gene.upper()
