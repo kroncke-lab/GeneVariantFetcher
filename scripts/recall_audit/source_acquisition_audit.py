@@ -10,8 +10,16 @@ but a new gene needs the same operational loop without knowing the answers:
 * How many run PMIDs are currently backed by usable full text?
 
 This script reads only run-local artifacts: ``pmc_fulltext/``, extraction JSONs,
-``paywalled_missing.csv``, source-completeness JSON, and PMID list files. It
-does not read recall outputs or gold standards.
+``paywalled_missing.csv``, source-completeness JSON, ``abstract_json/`` (for
+acquisition EV), and PMID list files. It does not read recall outputs or gold
+standards.
+
+Fetch prioritisation: the un-downloaded ``fetch`` tail is ranked by an
+abstract-only acquisition expected-value (EV) score — a gold-free prediction of
+how many phenotyped carriers / distinct variants a full extraction would yield —
+so ``fetch_input.csv`` sends the highest-payoff papers to the recovery fetcher
+first. EV is best-effort; if the scorer is unavailable the worklist falls back to
+the prior priority ordering.
 """
 
 from __future__ import annotations
@@ -48,6 +56,20 @@ except ModuleNotFoundError:  # pragma: no cover
         write_csv_rows,
     )
 
+# Optional acquisition expected-value (EV) scorer. Abstract-only, gold-free,
+# pure-stdlib prototype in scripts/acquisition_ev/. It predicts, from a paper's
+# abstract alone, how many phenotyped carriers / distinct variants a full
+# extraction would likely yield, so the un-downloaded fetch tail can be ranked by
+# payoff. Import is best-effort: the audit still runs if the module is missing.
+try:
+    from scripts.acquisition_ev.predict_yield import (  # noqa: E402
+        compute_features as _ev_compute_features,
+        score as _ev_score,
+    )
+except Exception:  # pragma: no cover - EV ranking is optional
+    _ev_compute_features = None  # type: ignore[assignment]
+    _ev_score = None  # type: ignore[assignment]
+
 DATA_AVAILABLE_STATUSES = {
     "recovered_pmc",
     "recovered_browser",
@@ -61,6 +83,12 @@ FIELDS = [
     "action",
     "route",
     "priority_score",
+    "ev_score",
+    "ev_est_carriers",
+    "ev_est_variants",
+    "ev_p_relevant",
+    "ev_population_flag",
+    "ev_note",
     "source_status",
     "source_path",
     "source_bytes",
@@ -370,6 +398,45 @@ def _source_sha_mismatch(metadata: dict[str, Any], source_file: Path | None) -> 
     return bool(existing_sha and existing_sha != _sha256(source_file))
 
 
+def _load_ev_record(
+    abstract_dir: Path | None, pmid: str, source_file: Path | None
+) -> dict[str, Any]:
+    """Best-effort title+abstract for EV scoring, from run-local artifacts only.
+
+    Prefers the Step 1.5 ``abstract_json/{pmid}.json`` record; falls back to the
+    text of an abstract-only source stub. Never reads gold standards or network.
+    """
+    if abstract_dir is not None:
+        record_path = abstract_dir / f"{pmid}.json"
+        if record_path.exists():
+            payload = _json_load(record_path)
+            meta = payload.get("metadata") or {}
+            title = str(meta.get("title") or "")
+            abstract = str(payload.get("abstract") or "")
+            if title or abstract:
+                return {"title": title, "abstract": abstract, "pubtypes": []}
+    if source_file is not None and source_file.exists():
+        try:
+            text = source_file.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            text = ""
+        if text:
+            return {"title": "", "abstract": text, "pubtypes": []}
+    return {"title": "", "abstract": "", "pubtypes": []}
+
+
+def _acquisition_ev(gene: str, record: dict[str, Any]) -> dict[str, Any] | None:
+    """Run the abstract-only EV scorer; return None if unavailable or on error."""
+    if _ev_compute_features is None or _ev_score is None:
+        return None
+    if not (record.get("title") or record.get("abstract")):
+        return None
+    try:
+        return _ev_score(_ev_compute_features(gene, record))
+    except Exception:  # pragma: no cover - never let scoring break the audit
+        return None
+
+
 def classify_pmid(
     *,
     gene: str,
@@ -379,6 +446,7 @@ def classify_pmid(
     doi: str,
     zero_variant_pmids: set[str],
     single_carrier_pmids: set[str],
+    abstract_dir: Path | None = None,
 ) -> dict[str, Any]:
     source_file = _best_source_for_pmid(harvest_dir, pmid)
     status = context_status(source_file)
@@ -466,6 +534,17 @@ def classify_pmid(
         action = "none"
         route = "covered"
 
+    # Abstract-only expected value: rank the un-downloaded tail (fetch / blocked)
+    # by predicted per-paper carrier/variant yield so recovery effort and any
+    # capped browser attempts go to the highest-payoff papers first. Gold-free and
+    # best-effort — a None here just means "no EV signal", never an error.
+    ev = (
+        _acquisition_ev(gene, _load_ev_record(abstract_dir, pmid, source_file))
+        if action in ("fetch", "manual_or_blocked")
+        else None
+    )
+    ev_score_val = float(ev["ev_score"]) if ev else 0.0
+
     priority = 0
     if action == "fetch":
         priority += 100
@@ -481,6 +560,10 @@ def classify_pmid(
         priority += 10
     if missing_variant_supplement:
         priority += 35
+    if action == "fetch" and ev:
+        # Bounded so EV orders papers WITHIN the fetch tier without leaping other
+        # action tiers; the fetch queue itself is EV-sorted in write_fetch_input.
+        priority += min(int(round(ev_score_val * 2)), 30)
 
     return {
         "gene": gene,
@@ -488,6 +571,12 @@ def classify_pmid(
         "action": action,
         "route": route,
         "priority_score": priority,
+        "ev_score": round(ev_score_val, 4),
+        "ev_est_carriers": float(ev["est_carriers"]) if ev else 0.0,
+        "ev_est_variants": float(ev["est_variants"]) if ev else 0.0,
+        "ev_p_relevant": float(ev["p_relevant"]) if ev else 0.0,
+        "ev_population_flag": int(ev["population_flag"]) if ev else 0,
+        "ev_note": (ev["note"] if ev else ""),
         "source_status": status,
         "source_path": str(source_file) if source_file else "",
         "source_bytes": source_file.stat().st_size if source_file else 0,
@@ -519,12 +608,14 @@ def build_audit(
     extraction_dir: Path | None = None,
     paywalled_csv: Path | None = None,
     source_completeness_path: Path | None = None,
+    abstract_dir: Path | None = None,
     include_discovery_pmids: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     gene = gene.upper()
     harvest_dir = harvest_dir or run_dir / "pmc_fulltext"
     extraction_dir = extraction_dir or run_dir / "extractions"
     paywalled_csv = paywalled_csv or harvest_dir / "paywalled_missing.csv"
+    abstract_dir = abstract_dir or run_dir / "abstract_json"
     source_completeness_path = (
         source_completeness_path or run_dir / "source_completeness.json"
     )
@@ -558,6 +649,7 @@ def build_audit(
             doi=doi_by_pmid.get(pmid, ""),
             zero_variant_pmids=zero_variant_pmids,
             single_carrier_pmids=single_carrier_pmids,
+            abstract_dir=abstract_dir,
         )
         for pmid in sorted(pmids)
     ]
@@ -574,6 +666,8 @@ def build_audit(
     summary["harvest_dir"] = str(harvest_dir)
     summary["extraction_dir"] = str(extraction_dir)
     summary["paywalled_csv"] = str(paywalled_csv) if paywalled_csv.exists() else None
+    summary["abstract_dir"] = str(abstract_dir) if abstract_dir.exists() else None
+    summary["acquisition_ev_available"] = _ev_score is not None
     summary["include_discovery_pmids"] = include_discovery_pmids
     summary["source_completeness"] = (
         str(source_completeness_path) if source_completeness_path.exists() else None
@@ -614,6 +708,26 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         for row in rows
         if row["zero_variant_qc"] and row["source_status"] in DATA_AVAILABLE_STATUSES
     }
+    fetch_by_ev = sorted(
+        (
+            row
+            for row in rows
+            if row["action"] == "fetch" and float(row.get("ev_score") or 0.0) > 0
+        ),
+        key=lambda row: -float(row.get("ev_score") or 0.0),
+    )
+    top_fetch_targets_by_ev = [
+        {
+            "pmid": row["pmid"],
+            "ev_score": round(float(row.get("ev_score") or 0.0), 4),
+            "est_carriers": float(row.get("ev_est_carriers") or 0.0),
+            "est_variants": float(row.get("ev_est_variants") or 0.0),
+            "population_flag": int(row.get("ev_population_flag") or 0),
+            "route": row["route"],
+            "doi": row["doi"],
+        }
+        for row in fetch_by_ev[:10]
+    ]
     return {
         "pmids": total,
         "by_action": dict(sorted(by_action.items())),
@@ -633,10 +747,14 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 len(zero_variant_usable), total
             ),
         },
+        "top_fetch_targets_by_ev": top_fetch_targets_by_ev,
         "notes": {
             "selected_for_fetch": (
                 "Run PMIDs without usable run-local full text; feed fetch_input.csv "
-                "to scripts/fetch_paywalled.py."
+                "to scripts/fetch_paywalled.py. fetch_input.csv is ordered by "
+                "abstract-only acquisition EV (predicted per-paper carrier/variant "
+                "yield) so the highest-payoff papers are fetched first; "
+                "top_fetch_targets_by_ev lists the leaders."
             ),
             "selected_for_source_refresh": (
                 "Run PMIDs with usable source text that should be replayed through "
@@ -651,10 +769,21 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def write_fetch_input(rows: list[dict[str, Any]], path: Path) -> None:
+    # Prioritise the un-downloaded tail by predicted per-paper yield (EV), then by
+    # the general priority score, then PMID for determinism. fetch_paywalled.py
+    # processes PMIDs in file order, so this ordering is what actually decides
+    # which papers get browser/proxy attempts first under any per-run cap.
+    fetch_rows_src = sorted(
+        (row for row in rows if row["action"] == "fetch"),
+        key=lambda row: (
+            -float(row.get("ev_score") or 0.0),
+            -int(row.get("priority_score") or 0),
+            row["pmid"],
+        ),
+    )
     fetch_rows = [
         {"PMID": row["pmid"], "DOI": row["doi"], "route": row["route"]}
-        for row in rows
-        if row["action"] == "fetch"
+        for row in fetch_rows_src
     ]
     write_csv_rows(fetch_rows, FETCH_INPUT_FIELDS, path)
 
@@ -685,6 +814,15 @@ def main() -> int:
     parser.add_argument("--paywalled-csv", type=Path, default=None)
     parser.add_argument("--source-completeness", type=Path, default=None)
     parser.add_argument(
+        "--abstract-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Directory of Step 1.5 abstract JSONs used to compute abstract-only "
+            "acquisition EV for fetch ranking. Defaults to <run-dir>/abstract_json."
+        ),
+    )
+    parser.add_argument(
         "--include-discovery-pmids",
         action="store_true",
         help=(
@@ -714,6 +852,9 @@ def main() -> int:
         else None,
         source_completeness_path=repo_path(args.source_completeness).expanduser()
         if args.source_completeness
+        else None,
+        abstract_dir=repo_path(args.abstract_dir).expanduser()
+        if args.abstract_dir
         else None,
         include_discovery_pmids=args.include_discovery_pmids,
     )

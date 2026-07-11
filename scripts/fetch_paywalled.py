@@ -1379,6 +1379,63 @@ def fetch_one(
     return row
 
 
+# Institutional SSO / proxy cookie domains — presence of any of these means the
+# authenticated pool actually carries a credential that can clear Cloudflare /
+# subscription walls. Kept in sync with cookie_loader.DEFAULT_PUBLISHER_DOMAINS.
+_INSTITUTIONAL_SSO_DOMAINS = (
+    "vumc.org",
+    "vanderbilt.edu",
+    "proxy.library.vanderbilt.edu",
+    "login.proxy.library.vanderbilt.edu",
+    "ezproxy.library.vanderbilt.edu",
+    "microsoftonline.com",
+    "login.microsoft.com",
+    "okta.com",
+    "shibboleth.net",
+)
+
+
+def write_auth_status(
+    output_dir: Path, cookies: List[Dict], summary: Dict[str, int]
+) -> Dict:
+    """Record what institutional/publisher auth this recovery pass actually had.
+
+    Reuses the already-computed cookie domain summary (no extra Chrome read), so
+    the run report and downstream tooling can tell whether paywalled subscription
+    content was reachable instead of guessing. Writes ``auth_status.json`` into the
+    fetch output dir and warns loudly when no institutional cookies are present.
+    """
+
+    def _matches(domain: str, needles: tuple) -> bool:
+        return any(domain == n or domain.endswith("." + n) for n in needles)
+
+    institutional = {
+        d: n for d, n in summary.items() if _matches(d, _INSTITUTIONAL_SSO_DOMAINS)
+    }
+    inst_total = sum(institutional.values())
+    status = {
+        "total_cookies": len(cookies),
+        "institutional_sso_cookies": inst_total,
+        "has_institutional_cookies": inst_total > 0,
+        "institutional_domains": institutional,
+        "domain_summary": summary,
+    }
+    try:
+        (output_dir / "auth_status.json").write_text(
+            json.dumps(status, indent=2), encoding="utf-8"
+        )
+    except OSError as exc:
+        print(f"  WARNING: could not write auth_status.json: {exc}")
+    if inst_total == 0:
+        print(
+            "  WARNING: no institutional SSO/EZproxy cookies found — subscription "
+            "content behind Cloudflare (Wiley/AHA/Karger/Sage/Liebert) will likely "
+            "NOT be recoverable. Sign in to your institution in Chrome or set "
+            "GVF_EZPROXY_PREFIX."
+        )
+    return status
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -1553,6 +1610,7 @@ def main() -> int:
     print(f"  total cookies: {len(cookies)}")
     for d, n in list(summary.items())[:20]:
         print(f"    {d:40s} {n}")
+    write_auth_status(output_dir, cookies, summary)
     print()
 
     # ---- 2. Build the authenticated pool ----

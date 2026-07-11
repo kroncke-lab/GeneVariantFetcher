@@ -68,6 +68,12 @@ def test_audit_fetch_queue_reports_selected_pmids_without_gold(tmp_path: Path):
             "action": "fetch",
             "route": "fetch_elsevier_insttoken",
             "priority_score": 100,
+            "ev_score": 0.0,
+            "ev_est_carriers": 0.0,
+            "ev_est_variants": 0.0,
+            "ev_p_relevant": 0.0,
+            "ev_population_flag": 0,
+            "ev_note": "",
             "source_status": "not_attempted",
             "source_path": "",
             "source_bytes": 0,
@@ -98,6 +104,62 @@ def test_audit_fetch_queue_reports_selected_pmids_without_gold(tmp_path: Path):
             "route": "fetch_elsevier_insttoken",
         }
     ]
+
+
+def test_fetch_queue_ordered_by_acquisition_ev(tmp_path: Path):
+    """The un-downloaded fetch tail is ranked by predicted per-paper yield.
+
+    A high-yield cohort abstract must be fetched before a single-case abstract,
+    and every fetch row must carry a populated ev_score column.
+    """
+    run_dir = tmp_path / "run"
+    harvest_dir = run_dir / "pmc_fulltext"
+    abstract_dir = run_dir / "abstract_json"
+    (run_dir / "extractions").mkdir(parents=True)
+    harvest_dir.mkdir()
+    abstract_dir.mkdir()
+
+    (abstract_dir / "111.json").write_text(
+        json.dumps(
+            {
+                "metadata": {"pmid": "111", "title": "KCNH2 variants in a LQT2 cohort"},
+                "abstract": (
+                    "We genotyped 200 probands carrying p.Arg190Gln, c.1000A>G, "
+                    "p.Gly628Ser and p.Ala561Val; 150 affected mutation-positive "
+                    "carriers across 40 families were phenotyped."
+                ),
+            }
+        ),
+        encoding="utf-8",
+    )
+    (abstract_dir / "222.json").write_text(
+        json.dumps(
+            {
+                "metadata": {"pmid": "222", "title": "A case report"},
+                "abstract": "We report a single patient with a novel finding.",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (harvest_dir / "paywalled_missing.csv").write_text(
+        "PMID,DOI,Reason\n"
+        "111,10.1016/j.hrthm.2020.01.001,paywall\n"
+        "222,10.1016/j.hrthm.2020.02.002,paywall\n",
+        encoding="utf-8",
+    )
+
+    rows, summary = audit.build_audit(gene="KCNH2", run_dir=run_dir)
+    by_pmid = {row["pmid"]: row for row in rows}
+    assert by_pmid["111"]["ev_score"] > by_pmid["222"]["ev_score"] > 0
+    assert by_pmid["111"]["ev_est_carriers"] == 200.0
+
+    fetch_input = tmp_path / "fetch_input.csv"
+    audit.write_fetch_input(rows, fetch_input)
+    assert [r["PMID"] for r in _read_csv(fetch_input)] == ["111", "222"]
+
+    top = summary["top_fetch_targets_by_ev"]
+    assert top and top[0]["pmid"] == "111"
+    assert summary["acquisition_ev_available"] is True
 
 
 def test_audit_routes_known_blocked_publishers_out_of_fetch_queue(tmp_path: Path):

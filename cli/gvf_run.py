@@ -103,6 +103,76 @@ def browser_recovery_status() -> dict:
     return result
 
 
+def institutional_auth_status() -> dict:
+    """Report whether authenticated-publisher recovery is likely to work.
+
+    The Tier 3.5 browser pool and EZproxy routing only get through Cloudflare /
+    subscription walls when the run carries *some* institutional credential:
+    either an EZproxy prefix/host env var, or logged-in publisher/SSO cookies in
+    the local Chrome profile. Neither is required to run GVF, but when both are
+    absent the source-recovery pass silently degrades to abstract-only for
+    paywalled papers — which is the dominant remaining recall gap. Surface it here
+    so it is a visible, fixable precondition rather than a silent ceiling.
+
+    Cheap and prompt-free: it inspects env configuration and whether the cookie
+    backend is importable. It does NOT read the Chrome cookie store (that can pop
+    a macOS keychain prompt); actual cookie counts are written by the recovery
+    pass to ``<run>/source_qc/fetch/auth_status.json``.
+    """
+    ezproxy_env = next(
+        (
+            k
+            for k in (
+                "GVF_EZPROXY_PREFIX",
+                "GVF_EZPROXY_HOST",
+                "PROXY_LOGIN_PREFIX",
+                "PROXY_HOST",
+            )
+            if os.environ.get(k)
+        ),
+        None,
+    )
+    cookie_domains_env = bool(
+        os.environ.get("GVF_COOKIE_DOMAINS")
+        or os.environ.get("GVF_SSO_COOKIE_DOMAINS")
+        or os.environ.get("COOKIE_DOMAIN")
+    )
+    try:
+        import browser_cookie3  # noqa: F401
+
+        cookie_backend = True
+    except Exception:
+        cookie_backend = False
+
+    ezproxy = bool(ezproxy_env)
+    ready = ezproxy or cookie_backend
+    if ezproxy:
+        reason = f"EZproxy configured via {ezproxy_env}"
+    elif cookie_backend:
+        reason = (
+            "no EZproxy env; will reuse logged-in Chrome cookies — confirm you are "
+            "signed in to your institution/publishers in Chrome"
+        )
+    else:
+        reason = (
+            "no EZproxy env and browser_cookie3 not installed — paywalled "
+            "subscription content cannot be recovered"
+        )
+    return {
+        "ready": ready,
+        "ezproxy_configured": ezproxy,
+        "ezproxy_env_var": ezproxy_env,
+        "cookie_domains_env": cookie_domains_env,
+        "cookie_backend_available": cookie_backend,
+        "reason": reason,
+        "hint": (
+            "Set GVF_EZPROXY_PREFIX (e.g. "
+            "https://login.proxy.library.<inst>.edu/login?url=) or sign in to your "
+            "institution/publishers in Chrome so cookies can be reused."
+        ),
+    }
+
+
 def doctor() -> dict:
     """Return a status dict describing the environment.
 
@@ -134,6 +204,9 @@ def doctor() -> dict:
     # Browser-recovery tier: a hard dependency for source recovery, but easy to
     # leave un-provisioned (package installed, Chromium binary not). Surface it.
     status["browser_recovery"] = browser_recovery_status()
+    # Institutional auth readiness: whether authenticated paywalled recovery can
+    # actually reach subscription content. Advisory only — never flips status.ok.
+    status["institutional_auth"] = institutional_auth_status()
     # Quick reachability check — NCBI esearch
     try:
         import requests
@@ -815,6 +888,14 @@ def step_report(
             "abstract-only stubs. Fix: `python -m playwright install chromium` "
             "(and `pip install playwright` if missing)."
         )
+    auth = doctor_status.get("institutional_auth") or {}
+    if auth and not auth.get("ready", True):
+        lines.append(
+            "- ⚠️ No institutional auth path detected "
+            f"({auth.get('reason') or 'unknown'}). Paywalled subscription content "
+            "(Wiley / AHA / Karger / Sage / Liebert) will NOT be recovered. "
+            f"{auth.get('hint') or ''}"
+        )
     if doctor_status.get("unlocks", {}).get("ELSEVIER_INSTTOKEN") is False:
         lines.append(
             "- ELSEVIER_INSTTOKEN is unset. Adding it (request from your library) "
@@ -1248,6 +1329,13 @@ def run_gvf_pipeline(
                 "  missing: one of OPENAI_API_KEY, AZURE_AI_API_KEY, ANTHROPIC_API_KEY"
             )
         return 2
+
+    # Advisory: authenticated paywalled recovery needs an institutional credential.
+    auth_status = status.get("institutional_auth") or {}
+    if not auth_status.get("ready", True):
+        logger.warning("🔒 institutional auth: %s", auth_status.get("reason"))
+    elif not auth_status.get("ezproxy_configured"):
+        logger.info("🔒 institutional auth: %s", auth_status.get("reason"))
 
     # Step 2: extract (unless skipped)
     gene = gene.upper()
