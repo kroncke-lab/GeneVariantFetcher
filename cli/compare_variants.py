@@ -2267,12 +2267,16 @@ def create_comparison_row(
 def _adjudication_variant_key(notation: str) -> str:
     """Canonical key for matching an overlay row to a ComparisonRow.
 
-    Mirrors the ``to_canonical_form(...) or normalize_variant(...)`` keying used
-    by ``aggregate_sqlite_data`` / ``ingest_review_adjudications`` so the same
-    variant lands on the same key on both sides.
+    Delegates to the overlay producer's ``_variant_key`` so the scorer and
+    ``scripts/ingest_review_adjudications`` canonicalize a notation through one
+    shared implementation of the ``to_canonical_form(...) or
+    normalize_variant(...)`` keying -- a copy here could silently drift from the
+    producer. Imported lazily because ingest imports from this module at load
+    time (a module-level import would be circular).
     """
-    canon = to_canonical_form(notation)
-    return canon if canon else normalize_variant(notation)
+    from scripts.ingest_review_adjudications import _variant_key
+
+    return _variant_key(notation)
 
 
 def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str]]:
@@ -2329,6 +2333,25 @@ def _apply_count_override(row: ComparisonRow, adj: Dict[str, str]) -> None:
     )
 
 
+def _overlay_action(adj: Dict[str, str]) -> str:
+    """Resolve an overlay row to its canonical action.
+
+    Prefers the explicit ``action`` column; when it is blank, translates the
+    ``verdict`` through the SAME ``VERDICT_TO_ACTION`` table the ingest script
+    writes (imported, not re-encoded here), so a verdict newly added to ingest
+    resolves identically for the scorer instead of being silently ignored.
+    Imported lazily because ingest imports from this module at load time (a
+    module-level import would be circular).
+    """
+    action = (adj.get("action") or "").strip().lower()
+    if action:
+        return action
+    from scripts.ingest_review_adjudications import VERDICT_TO_ACTION
+
+    verdict = (adj.get("verdict") or "").strip().lower()
+    return VERDICT_TO_ACTION.get(verdict, "")
+
+
 def apply_adjudication_overlay(
     results: List[ComparisonRow],
     overlay: Dict[Tuple[str, str], Dict[str, str]],
@@ -2341,8 +2364,12 @@ def apply_adjudication_overlay(
     - ``correct_counts`` / ``count_override``: overwrite the row's extracted
       counts with the adjudicated ``corrected_*`` values (feeds MAE + the
       end-to-end count error).
-    - ``wrong_paper`` / ``excluded``: drop the row entirely (out of scope for
-      both recall and precision).
+    - ``wrong_paper`` / ``excluded``: drop EVERY row for that PMID -- the paper
+      is out of scope for both recall and precision. Dropping only the single
+      keyed row would leave the paper's missed-gold variants in the recall
+      denominator: those rows have no DB ``source_notation``, so they carry no
+      overlay key and never match on their own, and the paper's recall would sag
+      instead of cleanly excluding.
     - ``confirm`` / ``gold_confirmed`` on a DB-only extra: drop it from the
       extra set — a real variant the curator omitted is not a false positive.
     - ``wrong_variant`` / ``false_positive``: keep the extra so precision counts
@@ -2354,6 +2381,14 @@ def apply_adjudication_overlay(
     """
     if not overlay:
         return results
+    # A wrong_paper/excluded verdict excludes the WHOLE paper. Collect those
+    # PMIDs up front so every row for them is dropped below, including
+    # missed-gold rows that carry no overlay key of their own.
+    excluded_pmids = {
+        pmid
+        for (pmid, _vkey), adj in overlay.items()
+        if _overlay_action(adj) == "excluded"
+    }
     out: List[ComparisonRow] = []
     applied = {
         "count_override": 0,
@@ -2362,6 +2397,9 @@ def apply_adjudication_overlay(
         "false_positive_kept": 0,
     }
     for row in results:
+        if row.pmid in excluded_pmids:
+            applied["excluded"] += 1
+            continue  # whole paper is out of scope for recall and precision
         key = None
         for norm in (row.sqlite_variant_norm, row.excel_variant_norm):
             if norm and (row.pmid, norm) in overlay:
@@ -2371,21 +2409,15 @@ def apply_adjudication_overlay(
             out.append(row)
             continue
         adj = overlay[key]
-        action = (adj.get("action") or "").strip().lower()
-        verdict = (adj.get("verdict") or "").strip().lower()
-        if action == "count_override" or verdict == "correct_counts":
+        action = _overlay_action(adj)
+        if action == "count_override":
             _apply_count_override(row, adj)
             applied["count_override"] += 1
             out.append(row)
-        elif action == "excluded" or verdict == "wrong_paper":
-            applied["excluded"] += 1
-            # dropped
-        elif (
-            action == "gold_confirmed" or verdict == "confirm"
-        ) and row.missing_in_excel:
+        elif action == "gold_confirmed" and row.missing_in_excel:
             applied["confirmed_tp_dropped"] += 1
             # dropped from the false-positive set
-        elif action == "false_positive" or verdict == "wrong_variant":
+        elif action == "false_positive":
             applied["false_positive_kept"] += 1
             out.append(row)
         else:
