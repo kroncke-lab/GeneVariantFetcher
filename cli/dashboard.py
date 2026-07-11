@@ -7,10 +7,15 @@ supplements are referenced relatively into the corpus (no duplication), so zip o
 serve the whole `corpus/` to share it:
 
 * `index.html` — per-gene cards: source coverage (usable vs stub), extraction
-  funnel (in-corpus -> extracted -> has-variants), variant/unique counts.
-* `<GENE>.html` — funnel, coverage-by-extraction-method facet, a
-  provenance-completeness audit, the "what's left" (stub / no-variant) list, and
-  a sortable/filterable paper table linking to per-paper adjudication pages.
+  funnel (in-corpus -> extracted -> has-variants), variant/unique counts, plus
+  trust / final-check / since-last-run badges (the gold-free progress read).
+* `<GENE>.html` — a "since last run" delta line, a **Run health** card (gold-free
+  confidence: funnel + trust-tier quarantine + per-paper final-check), a **What to
+  change next** ranked worklist (acquisition / extraction / trust / review / gap
+  levers, each linking to the affected papers), the coverage-by-method facet, a
+  provenance-completeness audit, the "what's left" list, and a
+  sortable/filterable paper table (with a final-check Check column) linking to
+  per-paper adjudication pages.
 * `paper_<PMID>.html` — the ADJUDICATION view: paper header with one-click links
   to PubMed / DOI / PMC, the extracted records (variant provenance +
   per-patient characteristics) on the left, and the DB-recorded source file
@@ -35,6 +40,15 @@ import tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Optional
+
+# Reuse the trust-gate reader rather than re-deriving the two-tier split here
+# (scripts is a package cli/ already imports from). Guarded so the dashboard
+# still renders if the module ever moves.
+try:
+    from scripts.trust_report import list_quarantined, summarize_trust
+except Exception:  # pragma: no cover - dashboard degrades without trust readers
+    summarize_trust = None  # type: ignore[assignment]
+    list_quarantined = None  # type: ignore[assignment]
 
 
 # ---------------------------------------------------------------------------
@@ -77,7 +91,7 @@ def _to_int(x) -> int:
     """Coerce a possibly-TEXT/None DB count to int (0 on junk)."""
     try:
         return int(float(str(x).strip()))
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return 0
 
 
@@ -242,6 +256,52 @@ def _table_cols(con: sqlite3.Connection, table: str) -> set[str]:
         return set()
 
 
+def _load_paper_final_check(con: sqlite3.Connection) -> dict:
+    """Read the soft per-paper final-check verdicts (pipeline/paper_final_check.py).
+
+    Returns ``{"by_pmid": {pmid: {...}}, "counts": Counter}``; empty for DBs that
+    predate the sniff test (no ``paper_final_check`` table). Never mutates.
+    """
+    out: dict = {"by_pmid": {}, "counts": Counter()}
+    cols = _table_cols(con, "paper_final_check")
+    if not cols:
+        return out
+    want = [
+        c
+        for c in (
+            "pmid",
+            "verdict",
+            "confidence",
+            "n_flagged",
+            "n_missing",
+            "completeness_status",
+            "summary",
+            "source_grounded",
+        )
+        if c in cols
+    ]
+    for r in con.execute("SELECT " + ",".join(want) + " FROM paper_final_check"):
+        rd = dict(r)
+        pmid = str(rd.get("pmid"))
+        verdict = (rd.get("verdict") or "").strip().lower()
+        n_flagged = _to_int(rd.get("n_flagged"))
+        n_missing = _to_int(rd.get("n_missing"))
+        out["by_pmid"][pmid] = {
+            "verdict": verdict,
+            "confidence": rd.get("confidence"),
+            "n_flagged": n_flagged,
+            "n_missing": n_missing,
+            "completeness_status": (rd.get("completeness_status") or ""),
+            "summary": (rd.get("summary") or ""),
+            "source_grounded": bool(rd.get("source_grounded")),
+        }
+        out["counts"]["total"] += 1
+        out["counts"][verdict or "unknown"] += 1
+        out["counts"]["flagged_facts"] += n_flagged
+        out["counts"]["missing_carriers"] += n_missing
+    return out
+
+
 def load_db(db_path: Path) -> dict:
     """Pull the provenance/coverage surface from a scored DB. Degrades gracefully."""
     con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
@@ -267,6 +327,10 @@ def load_db(db_path: Path) -> dict:
         "pen_by_pmid": defaultdict(
             lambda: {"carriers": 0, "affected": 0, "unaffected": 0}
         ),
+        # soft signals (populated below; kept here so renderers can rely on them)
+        "final_check": {"by_pmid": {}, "counts": Counter()},
+        "trust": {"tiered": False},
+        "quarantined": [],
     }
     try:
         pcols = _table_cols(con, "papers")
@@ -446,8 +510,27 @@ def load_db(db_path: Path) -> dict:
                 "SELECT pmid, table_name, table_caption, variants_extracted FROM tables_processed"
             ):
                 data["by_pmid"][str(r["pmid"])]["tables"].append(dict(r))
+        # Soft per-paper final-check verdicts (never mutates counts; a signal).
+        data["final_check"] = _load_paper_final_check(con)
     finally:
         con.close()
+
+    # Trust-tier split (reuse scripts/trust_report). Its own read-only connection;
+    # degrades to untiered on pre-gate DBs or ones without penetrance_data (the
+    # summarizer raises sqlite3.Error there, which we swallow).
+    data["trust"] = {"tiered": False}
+    data["quarantined"] = []
+    if summarize_trust is not None:
+        try:
+            data["trust"] = summarize_trust(db_path)
+            if data["trust"].get("tiered") and list_quarantined is not None:
+                data["quarantined"] = list_quarantined(db_path, 60)
+        # ValueError covers json.JSONDecodeError from list_quarantined on a
+        # malformed trust_reasons cell (summarize_trust guards its own json.loads,
+        # so it can return tiered=True and still hand off a corrupt row).
+        except (sqlite3.Error, OSError, ValueError):  # pragma: no cover - best-effort
+            data["trust"] = {"tiered": False}
+            data["quarantined"] = []
     return data
 
 
@@ -1154,6 +1237,455 @@ def _gold_source_card(gold_pmids: set, corpus_rows: dict) -> str:
     )
 
 
+# ---------------------------------------------------------------------------
+# Trust / final-check / worklist / delta surfaces (the "progress & what to
+# change" views). All read-only, all degrade to nothing on a bare DB, and all
+# work WITHOUT a gold standard — the real (no-gold) workload's only signal.
+# ---------------------------------------------------------------------------
+def _paper_links(pmids: list, page_pmids: set, limit: int = 8) -> str:
+    shown = pmids[:limit]
+    bits = []
+    for pm in shown:
+        if pm in page_pmids:
+            bits.append(f"<a href='papers/{esc(pm)}.html'>{esc(pm)}</a>")
+        else:
+            # esc the URL too: worklist PMIDs come from the corpus/trust/final-check
+            # tables unfiltered, so a stray non-numeric id can't break the attribute.
+            bits.append(
+                f"<a href='{esc(pubmed_url(pm))}' target='_blank'>{esc(pm)}↗</a>"
+            )
+    more = len(pmids) - len(shown)
+    tail = f" <span class='mut'>+{more}</span>" if more > 0 else ""
+    return " ".join(bits) + tail
+
+
+def _health_signals(
+    s: dict,
+    db: Optional[dict],
+    zero_var_extracted: int,
+    usable_unextracted: int,
+    usable_extracted: int,
+) -> dict:
+    """The component health rates (each None when there's no basis to judge).
+
+    ``zero_rate`` is the genuine extraction-miss rate — extracted-but-empty over
+    the papers that had USABLE full text and were extracted (not over all DB
+    papers, which would fold in abstract-only rows that can never be in the
+    numerator, nor over the not-yet-extracted backlog, which is a throughput
+    gap surfaced separately so a partial run doesn't read as broken quality)."""
+    trust = (db or {}).get("trust", {}) or {}
+    fcc = ((db or {}).get("final_check", {}) or {}).get("counts", {}) or {}
+    # trust is only "gated" if the gate actually tiered facts into trusted /
+    # quarantine. A present trust_tier COLUMN with only untiered (NULL) rows means
+    # the gate never ran (or failed) — that must not read as a healthy 0%.
+    trust_gated = (
+        bool(trust.get("tiered"))
+        and ((trust.get("trusted", 0) or 0) + (trust.get("quarantine", 0) or 0)) > 0
+    )
+    # final-check flag rate is over REVIEWABLE papers (ok + flag), not the raw
+    # row count — "skipped"/"error" rows would otherwise dilute the rate and make
+    # the gene read healthier than it is.
+    fc_reviewable = fcc.get("ok", 0) + fcc.get("flag", 0)
+    return {
+        "zero_var": zero_var_extracted,
+        "zero_rate": (zero_var_extracted / usable_extracted)
+        if usable_extracted
+        else None,
+        "unextracted": usable_unextracted,
+        "tiered": bool(trust.get("tiered")),
+        "trust_gated": trust_gated,
+        "trusted": trust.get("trusted", 0),
+        "quarantine": trust.get("quarantine", 0),
+        "quar_rate": trust.get("quarantine_rate") if trust_gated else None,
+        "quar_reasons": list((trust.get("by_reason") or {}).items())[:3],
+        "fc_total": fcc.get("total", 0),
+        "fc_reviewable": fc_reviewable,
+        "fc_ok": fcc.get("ok", 0),
+        "fc_flag": fcc.get("flag", 0),
+        "fc_flag_rate": (fcc.get("flag", 0) / fc_reviewable) if fc_reviewable else None,
+        "fc_flagged_facts": fcc.get("flagged_facts", 0),
+        "fc_missing_carriers": fcc.get("missing_carriers", 0),
+    }
+
+
+def _health_band(sig: dict) -> tuple[str, str]:
+    """Coarse gold-free confidence read from the worst component rate.
+    Returns (css_class, label). 'unknown' when nothing has been gated yet."""
+    rates = [
+        r
+        for r in (sig["zero_rate"], sig["quar_rate"], sig["fc_flag_rate"])
+        if r is not None
+    ]
+    if not rates:
+        return "", "not yet gated"
+    worst = max(rates)
+    if worst >= 0.35:
+        return "bad", "needs attention"
+    if worst >= 0.15:
+        return "warn", "watch"
+    return "ok", "healthy"
+
+
+def _health_card(
+    s: dict,
+    db: Optional[dict],
+    zero_var_extracted: int,
+    usable_unextracted: int,
+    usable_extracted: int,
+) -> str:
+    """Gold-free 'is this gene going well?' card: extraction-funnel health +
+    trust-tier split + final-check verdicts, with an overall confidence chip."""
+    if not db:
+        return ""
+    sig = _health_signals(
+        s, db, zero_var_extracted, usable_unextracted, usable_extracted
+    )
+    band_cls, band_label = _health_band(sig)
+
+    def rate(v: Optional[float]) -> str:
+        return f"{v * 100:.0f}%" if v is not None else "—"
+
+    # trust line
+    if sig["trust_gated"]:
+        reasons = (
+            " · ".join(f"{esc(k)} ({v})" for k, v in sig["quar_reasons"])
+            if sig["quar_reasons"]
+            else "—"
+        )
+        trust_html = (
+            f"<div class='kv'><span>trusted / quarantined counts</span>"
+            f"<b>{sig['trusted']} / {sig['quarantine']} ({rate(sig['quar_rate'])})</b></div>"
+            f"<div class='mut' style='font-size:11px'>top quarantine reasons: {reasons}</div>"
+        )
+    elif sig["tiered"]:
+        trust_html = (
+            "<div class='kv'><span>trust gate</span>"
+            "<b class='mut'>ran, 0 facts gated</b></div>"
+        )
+    else:
+        trust_html = (
+            "<div class='kv'><span>trust gate</span>"
+            "<b class='mut'>not applied</b></div>"
+        )
+    # final-check line — flag rate is over reviewable (ok+flag) papers; any
+    # skipped/error rows are surfaced separately, not folded into the rate.
+    non_reviewable = sig["fc_total"] - sig["fc_reviewable"]
+    if sig["fc_reviewable"]:
+        skipped_note = f" · {non_reviewable} skipped/errored" if non_reviewable else ""
+        fc_html = (
+            f"<div class='kv'><span>final-check papers ok / flagged</span>"
+            f"<b>{sig['fc_ok']} / {sig['fc_flag']} ({rate(sig['fc_flag_rate'])})</b></div>"
+            f"<div class='mut' style='font-size:11px'>{sig['fc_flagged_facts']} flagged facts · "
+            f"{sig['fc_missing_carriers']} carriers the checker says we missed{skipped_note}</div>"
+        )
+    elif sig["fc_total"]:
+        fc_html = (
+            "<div class='kv'><span>per-paper final check</span>"
+            f"<b class='mut'>{sig['fc_total']} rows, none reviewable</b></div>"
+        )
+    else:
+        fc_html = (
+            "<div class='kv'><span>per-paper final check</span>"
+            "<b class='mut'>not run</b></div>"
+        )
+    zero_flag = (
+        " <span class='flag'>⚠</span>" if (sig["zero_rate"] or 0) >= 0.15 else ""
+    )
+    unextracted_html = (
+        f"<div class='kv'><span>usable, not yet extracted</span>"
+        f"<b class='mut'>{sig['unextracted']}</b></div>"
+        if sig["unextracted"]
+        else ""
+    )
+    return (
+        "<div class='card'><h2>Run health "
+        f"<span class='tag {band_cls}'>{esc(band_label)}</span></h2>"
+        f"<div class='kv'><span>usable full text → extracted → with variants</span>"
+        f"<b>{s.get('usable', 0)} → {s.get('extracted', 0)} → {s.get('with_variants', 0)}</b></div>"
+        f"{unextracted_html}"
+        f"<div class='kv'><span>extracted but 0 variants{zero_flag}</span>"
+        f"<b>{sig['zero_var']} ({rate(sig['zero_rate'])})</b></div>"
+        f"{trust_html}{fc_html}"
+        "<div class='mut' style='font-size:11px;margin-top:4px'>gold-free confidence read: "
+        "extraction-miss rate + trust-gate quarantine + per-paper sniff test. "
+        "Green/amber/red = worst of the three rates (the not-yet-extracted backlog "
+        "is a throughput lever, not a quality signal).</div></div>"
+    )
+
+
+def _worklist_card(
+    gene: str,
+    s: dict,
+    db: Optional[dict],
+    stub_pmids: list,
+    zero_var_extracted: list,
+    usable_unextracted: list,
+    page_pmids: set,
+    recall: Optional[dict],
+    per_pmid: Optional[dict],
+) -> str:
+    """Ranked 'what to change next' list, built only from data already loaded
+    (self-contained, no network, works with no gold). Each lever links to the
+    affected papers and names the command to run. The richer gold-based
+    disagreement worklist lives in scripts/recall_audit/build_acquisition_worklist.py."""
+    import math
+
+    trust = (db or {}).get("trust", {}) or {}
+    quarantined = (db or {}).get("quarantined", []) or []
+    # true quarantine total (the quarantined LIST is capped at 60 for display)
+    quar_total = (
+        trust.get("quarantine", 0)
+        if (trust.get("tiered") and trust.get("total"))
+        else 0
+    )
+    fc_by = ((db or {}).get("final_check", {}) or {}).get("by_pmid", {}) or {}
+    flagged_pmids = [p for p, d in fc_by.items() if d.get("verdict") == "flag"]
+
+    levers: list[dict] = []
+    # gap-to-90 (gold genes only) — the headline recall lever
+    if recall:
+        m, g, _ = recall.get("unique_variants", (None, None, None))
+        if g:
+            gap = max(0, math.ceil(g * 0.9) - (m or 0))
+            if gap > 0:
+                worst = sorted(
+                    ((p, v) for p, v in (per_pmid or {}).items() if v.get("missing")),
+                    key=lambda kv: kv[1]["missing"],
+                    reverse=True,
+                )
+                levers.append(
+                    {
+                        "n": gap,
+                        "label": f"Close the gap to 90% unique-variant recall (+{gap})",
+                        "why": "gold variants still missing from the DB — the papers "
+                        "with the most missing rows are the highest-yield fixes",
+                        "papers": [p for p, _ in worst],
+                        "cmd": "scripts/refresh_recall.py / scripts/recall_recovery/run_all_layers.py",
+                    }
+                )
+    # acquisition — stubs (no usable full text)
+    if stub_pmids:
+        levers.append(
+            {
+                "n": len(stub_pmids),
+                "label": "Acquire missing full text (stub / paywalled)",
+                "why": "no usable full text on disk — a publisher key or proxy "
+                "fetch is the lever, not prompt tuning",
+                "papers": stub_pmids,
+                "cmd": f"gvf gvf-run {gene} …  (or scripts/fetch_paywalled.py)",
+            }
+        )
+    # throughput — usable text on disk but never extracted into this DB
+    if usable_unextracted:
+        levers.append(
+            {
+                "n": len(usable_unextracted),
+                "label": "Extract usable papers not yet in the DB",
+                "why": "full text is on disk but these papers were never extracted "
+                "(a partial / in-progress run) — the lever is running extraction, "
+                "not fetching or prompt tuning",
+                "papers": usable_unextracted,
+                "cmd": f"gvf gvf-run {gene} …  (corpus cache skips what's done)",
+            }
+        )
+    # extraction quality — extracted but produced 0 variants
+    if zero_var_extracted:
+        levers.append(
+            {
+                "n": len(zero_var_extracted),
+                "label": "Investigate extraction misses (extracted, 0 variants)",
+                "why": "extraction ran on usable text but produced nothing — a "
+                "page-shell scrape or a parser/notation miss; open the source to see",
+                "papers": zero_var_extracted,
+                "cmd": "open the adjudication page → check the rendered source",
+            }
+        )
+    # trust — quarantined counts
+    if quar_total or quarantined:
+        # dedup so a variant-heavy paper doesn't consume every visible link
+        quar_pmids = list(
+            dict.fromkeys(str(q.get("pmid")) for q in quarantined if q.get("pmid"))
+        )
+        levers.append(
+            {
+                "n": quar_total or len(quar_pmids),
+                "label": "Review quarantined counts (trust gate)",
+                "why": "counts the trust gate soft-quarantined as likely wrong "
+                "(arithmetic / population / outlier) — informational, flagged for "
+                "review, not yet auto-excluded from scoring",
+                "papers": quar_pmids,
+                "cmd": "python scripts/trust_report.py --db <db> --list 20",
+            }
+        )
+    # review — final-check flagged papers
+    if flagged_pmids:
+        levers.append(
+            {
+                "n": len(flagged_pmids),
+                "label": "Adjudicate final-check flags",
+                "why": "papers the per-paper sniff test flagged as likely wrong "
+                "(count vs provenance mismatch, missing quote)",
+                "papers": flagged_pmids,
+                "cmd": "open the adjudication page → verify against source",
+            }
+        )
+    if not levers:
+        return (
+            "<div class='card'><h2>What to change next</h2>"
+            "<div class='mut'>No open levers detected — full text acquired, variants "
+            "extracted, no quarantine/flags. (Trust gate + final check may not have "
+            "run; those add signal.)</div></div>"
+        )
+    levers.sort(key=lambda x: x["n"], reverse=True)
+    rows = []
+    for lev in levers:
+        rows.append(
+            f"<div class='rec'><b>{esc(lev['label'])}</b> "
+            f"<span class='tag warn'>{lev['n']}</span>"
+            f"<div class='mut' style='font-size:12px'>{esc(lev['why'])}</div>"
+            f"<div style='margin-top:4px'>{_paper_links(lev['papers'], page_pmids)}</div>"
+            f"<div class='mut' style='font-size:11px;margin-top:3px'>▶ <code>{esc(lev['cmd'])}</code></div>"
+            "</div>"
+        )
+    return (
+        "<div class='card' style='grid-column:1/-1'><h2>What to change next</h2>"
+        "<div class='mut' style='font-size:12px;margin-bottom:6px'>ranked by size; "
+        "each lever links to the affected papers and names the command.</div>"
+        f"{''.join(rows)}</div>"
+    )
+
+
+# --- per-run deltas ("see progress" over time) -----------------------------
+def _gene_snapshot(s: dict, db: Optional[dict], recall: Optional[dict]) -> dict:
+    """The per-run numbers we diff to show 'what changed since last run'."""
+    trust = (db or {}).get("trust", {}) or {}
+    fcc = ((db or {}).get("final_check", {}) or {}).get("counts", {}) or {}
+    uv = (recall or {}).get("unique_variants", (None, None, None))
+    # None means "not measured this run" (so a delta is skipped); use explicit 0
+    # defaults for the "measured, happens to be zero" case (Counter.get returns
+    # None for an absent key even when total>0 — a subtle all-ok trap).
+    # "gated"/"run" require actual signal: facts tiered into trusted/quarantine,
+    # and final-check papers that were reviewable (ok/flag) — not merely a present
+    # column or a table of all-skipped/errored rows.
+    trust_gated = (
+        bool(trust.get("tiered"))
+        and ((trust.get("trusted", 0) or 0) + (trust.get("quarantine", 0) or 0)) > 0
+    )
+    fc_run = (fcc.get("ok", 0) + fcc.get("flag", 0)) > 0
+    return {
+        "usable": s.get("usable"),
+        "stub": s.get("stub"),
+        "extracted": s.get("extracted"),
+        "with_variants": s.get("with_variants"),
+        "unique": s.get("unique"),
+        "variant_rows": s.get("variant_rows"),
+        "quarantine": trust.get("quarantine", 0) if trust_gated else None,
+        "flagged_papers": fcc.get("flag", 0) if fc_run else None,
+        "missing_carriers": fcc.get("missing_carriers", 0) if fc_run else None,
+        "recall_uv_pct": round((uv[2] or 0) * 100, 1) if uv[2] is not None else None,
+    }
+
+
+_SNAPSHOT_FIELDS = (
+    ("unique", "unique variants", False),
+    ("variant_rows", "variant rows", False),
+    ("with_variants", "papers w/ variants", False),
+    ("extracted", "extracted papers", False),
+    ("usable", "usable full text", False),
+    ("stub", "stubs to fetch", True),
+    ("quarantine", "quarantined counts", True),
+    ("flagged_papers", "flagged papers", True),
+    ("missing_carriers", "checker-missed carriers", True),
+    ("recall_uv_pct", "uniqV recall %", False),
+)
+
+
+def _history_path(hist_dir: Path, gene: str) -> Path:
+    return hist_dir / f"{gene}.jsonl"
+
+
+def _load_prev_snapshot(hist_dir: Path, gene: str) -> Optional[dict]:
+    """The most recent well-formed snapshot dict. Scans backward so a single
+    corrupt/partial last line (or a valid-but-non-object line like ``[]``) does
+    not discard the whole history or crash the delta consumers."""
+    p = _history_path(hist_dir, gene)
+    if not p.exists():
+        return None
+    try:
+        lines = [ln for ln in p.read_text().splitlines() if ln.strip()]
+    except OSError:
+        return None
+    for ln in reversed(lines):
+        try:
+            obj = json.loads(ln)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict):
+            return obj
+    return None
+
+
+def _snapshot_changed(prev: Optional[dict], cur: dict) -> bool:
+    if prev is None:
+        return True
+    return any(prev.get(k) != cur.get(k) for k, _, _ in _SNAPSHOT_FIELDS)
+
+
+def _append_snapshot(hist_dir: Path, gene: str, snap: dict, generated: str) -> None:
+    try:
+        hist_dir.mkdir(parents=True, exist_ok=True)
+        rec = dict(snap)
+        rec["generated"] = generated
+        with _history_path(hist_dir, gene).open("a", encoding="utf-8") as f:
+            f.write(json.dumps(rec) + "\n")
+    except OSError:  # pragma: no cover - history is best-effort
+        pass
+
+
+def _delta_html(prev: Optional[dict], cur: dict) -> str:
+    """Compact 'since last run' line. Empty string if there's nothing to say."""
+    if prev is None:
+        return (
+            "<div class='note'>First tracked run — deltas will appear on the next "
+            "dashboard build after the numbers change.</div>"
+        )
+    bits = []
+    for key, label, lower_better in _SNAPSHOT_FIELDS:
+        a, b = prev.get(key), cur.get(key)
+        # only diff like-for-like measured numbers (skip a side that's None =
+        # not-measured-this-run, or a corrupt/non-numeric history value)
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            continue
+        if a == b:
+            continue
+        d = b - a
+        good = (d < 0) if lower_better else (d > 0)
+        cls = "ok" if good else "bad"
+        d_str = f"{d:+.0f}" if float(d).is_integer() else f"{d:+.1f}"
+        bits.append(f"<span class='tag {cls}'>{esc(label)} {d_str}</span>")
+    prev_when = esc(prev.get("generated") or "last run")
+    if not bits:
+        return (
+            "<div class='mut' style='font-size:12px'>No tracked metric changed "
+            f"since {prev_when}.</div>"
+        )
+    return f"<div class='note'>Since {prev_when}: {' '.join(bits)}</div>"
+
+
+def _delta_compact(prev: Optional[dict], cur: dict) -> str:
+    """One chip for the overview card: unique-variant change since last run."""
+    if not prev:
+        return ""
+    a, b = prev.get("unique"), cur.get("unique")
+    # only diff like-for-like measured numbers (a corrupt history value could be
+    # a str/None; subtracting would raise or fabricate a delta)
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)) or a == b:
+        return ""
+    d = b - a
+    cls = "ok" if d > 0 else "bad"
+    return f"<span class='tag {cls}'>uniqV {d:+.0f} since last run</span>"
+
+
 def render_gene_page(
     gene: str,
     corpus_rows: dict,
@@ -1164,12 +1696,15 @@ def render_gene_page(
     recall: Optional[dict] = None,
     per_pmid: Optional[dict] = None,
     mae: Optional[dict] = None,
+    delta_html: str = "",
 ) -> tuple[str, dict, list[str]]:
     s = gene_stats(gene, corpus_rows, db)
     per_pmid = per_pmid or {}
     pen_by_pmid = (db or {}).get("pen_by_pmid", {})
     prov = (db or {}).get("prov", Counter())
     method = (db or {}).get("source_method", Counter())
+    fc_by = (db or {}).get("final_check", {}).get("by_pmid", {}) if db else {}
+    has_fc = bool((db or {}).get("final_check", {}).get("counts", {}).get("total"))
 
     # provenance-completeness audit (the "test experiment" surface)
     audit = []
@@ -1232,12 +1767,30 @@ def render_gene_page(
     )
 
     has_gold = bool(per_pmid)
+    db_papers = set((db or {}).get("papers", {}))
+    # Split usable-but-empty into two very different problems: papers extraction
+    # never touched (throughput) vs. papers it processed and got nothing from
+    # (a genuine miss). Conflating them makes a partial run look broken.
+    zero_var_extracted: list[str] = []  # in DB, extracted, but 0 variants
+    usable_unextracted: list[str] = []  # usable text on disk, never extracted
+    n_usable_extracted = 0  # usable full text AND in the DB (zero_rate denominator)
     for pmid in paper_pmids:
         cr = corpus_rows.get(pmid, {})
         status = cr.get("full_text_status", "—")
         by = (db or {}).get("by_pmid", {}).get(pmid, {})
         nvar = len(by.get("variants", [])) if db else 0
         npat = len(by.get("patients", [])) if db else 0
+        in_db = db is not None and pmid in db_papers
+        if status == "ok":
+            if not in_db:
+                # includes the no-DB case (db is None): usable text on disk but
+                # nothing extracted, so surface an "extract these" lever rather
+                # than a misleading "no open levers detected".
+                usable_unextracted.append(pmid)
+            else:
+                n_usable_extracted += 1
+                if nvar == 0:
+                    zero_var_extracted.append(pmid)
         title = (db or {}).get("papers", {}).get(pmid, {}).get("title") or ""
         badge = "ok" if status == "ok" else "bad" if status == "stub" else "warn"
         has_page = pmid in cap_set
@@ -1267,19 +1820,40 @@ def render_gene_page(
         pen = pen_by_pmid.get(pmid, {})
         carriers = pen.get("carriers", 0)
         aff, unaff = pen.get("affected", 0), pen.get("unaffected", 0)
+        fc_cell = ""
+        if has_fc:
+            fc = fc_by.get(pmid)
+            if not fc:
+                fc_cell = "<td class='mut' data-v='2'>—</td>"
+            elif fc.get("verdict") == "flag":
+                miss = fc.get("n_missing") or 0
+                extra = f" −{miss}" if miss else ""
+                title_txt = (fc.get("summary") or "flagged by final check")[:180]
+                fc_cell = (
+                    f"<td data-v='0'><span class='tag bad' title=\"{esc(title_txt)}\">"
+                    f"flag{esc(extra)}</span></td>"
+                )
+            elif fc.get("verdict") == "ok":
+                fc_cell = "<td data-v='1'><span class='tag ok'>ok</span></td>"
+            else:
+                # skipped / error / unknown — NOT a green pass; show it muted
+                v = fc.get("verdict") or "?"
+                fc_cell = f"<td class='mut' data-v='2'>{esc(v)}</td>"
         rows.append(
             f"<tr><td data-v='{esc(pmid)}'>{pmid_cell}</td><td>{esc(title[:80])}</td>"
             f"<td><span class='tag {badge}'>{esc(status)}</span>"
             + (
-                " <span class='flag' title='Usable full text but 0 variants extracted — possible boilerplate scrape or extraction miss; check the source'>⚠</span>"
-                if status == "ok" and nvar == 0 and db is not None
+                " <span class='flag' title='Extracted but 0 variants — possible boilerplate scrape or extraction miss; check the source'>⚠</span>"
+                if status == "ok" and nvar == 0 and in_db
+                else " <span class='mut' title='Usable full text on disk but not yet extracted into this DB'>·</span>"
+                if status == "ok" and not in_db and db is not None
                 else ""
             )
             + "</td>"
             f"<td data-v='{nvar}'>{nvar}</td>{gold_cells}"
             f"<td data-v='{carriers}'>{carriers}</td>"
             f"<td data-v='{aff}'>{aff}</td><td data-v='{unaff}'>{unaff}</td>"
-            f"<td data-v='{npat}' class='mut'>{npat}</td></tr>"
+            f"<td data-v='{npat}' class='mut'>{npat}</td>{fc_cell}</tr>"
         )
 
     # Build the header (gold genes get gold / matched / missing-vs-gold columns).
@@ -1287,7 +1861,8 @@ def render_gene_page(
     # numbers); "records" is the sparser per-person individual_records count.
     base_cols = ["PMID", "Title", "Source", "Variants"]
     gold_cols = ["Gold", "Matched", "Δ vs gold"] if has_gold else []
-    all_cols = base_cols + gold_cols + ["Carriers", "Aff", "Unaff", "records"]
+    tail_cols = ["Carriers", "Aff", "Unaff", "records"] + (["Check"] if has_fc else [])
+    all_cols = base_cols + gold_cols + tail_cols
     thead_html = "".join(
         f"<th onclick=\"srt('pt',{i})\">{esc(c)}</th>" for i, c in enumerate(all_cols)
     )
@@ -1312,7 +1887,7 @@ def render_gene_page(
         f"<header><h1>{esc(gene)}</h1><div class='sub'>"
         f"<a href='../index.html'>← overview</a> · <a href='variants.html'>variants ({s['unique']})</a>"
         f"</div></header>"
-        f"<div class='wrap'>{gap_note}"
+        f"<div class='wrap'>{gap_note}{delta_html}"
         f"<div class='flex'>"
         f"<div class='card'><h2>Source coverage</h2>"
         f"<div class='kv'><span>papers in corpus</span><b>{s['in_corpus']}</b></div>"
@@ -1326,6 +1901,7 @@ def render_gene_page(
         f"<div class='kv'><span>papers with variants</span><b>{s['with_variants']}</b></div>"
         f"<div class='kv'><span>variant rows</span><b>{s['variant_rows']}</b></div>"
         f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div></div>"
+        f"{_health_card(s, db, len(zero_var_extracted), len(usable_unextracted), n_usable_extracted)}"
         f"{_gold_card(recall, mae)}"
         f"{_gold_source_card(set(per_pmid), corpus_rows)}"
         f"<div class='card'><h2>Provenance completeness</h2>{audit_html or '<span class=mut>no DB</span>'}"
@@ -1335,12 +1911,19 @@ def render_gene_page(
         f"<div class='mut' style='font-size:12px;margin-top:6px'>re-run <code>gvf gvf-run {esc(gene)} …</code> "
         f"(corpus cache skips what's done; a new publisher key re-fetches stubs)</div></div>"
         f"</div>"
+        f"{_worklist_card(gene, s, db, stub_pmids, zero_var_extracted, usable_unextracted, cap_set, recall, per_pmid)}"
         f"<h2 style='margin-top:20px'>Papers</h2>"
         f"<div class='mut' style='font-size:12px;margin-bottom:6px'>"
         f"Variants = extracted; Gold/Matched/Δ vs the gold standard (where available); "
         f"Carriers/Aff/Unaff = cohort counts from penetrance_data; records = per-person rows. "
         f"<span class='flag'>⚠</span> = usable full text on disk but 0 variants extracted "
-        f"(possible boilerplate/page-shell scrape or an extraction miss — open it to check).</div>"
+        f"(possible boilerplate/page-shell scrape or an extraction miss — open it to check)."
+        + (
+            " Check = per-paper final-check verdict (flag −N = checker thinks N carriers were missed)."
+            if has_fc
+            else ""
+        )
+        + "</div>"
         f"<input class='search' id='pt-s' placeholder='filter papers…' onkeyup=\"filt('pt')\">"
         f"<table id='pt' data-sc=''><thead><tr>{thead_html}</tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table>"
@@ -1415,6 +1998,34 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
                 f"{pct(gc['ft'], gc['n']):.0f}% / {pct(gc['figs'], gc['n']):.0f}% / "
                 f"{pct(gc['sup'], gc['n']):.0f}% / {pct(gc['all3'], gc['n']):.0f}%</b></div>"
             )
+        # trust + final-check + since-last-run badges (the no-gold progress read)
+        trust = s.get("trust") or {}
+        fcc = s.get("final_check_counts") or {}
+        badges = []
+        # only badge trust when the gate actually tiered facts into trusted/
+        # quarantine; a present column with only untiered rows is not "healthy".
+        if (
+            trust.get("tiered")
+            and ((trust.get("trusted", 0) or 0) + (trust.get("quarantine", 0) or 0)) > 0
+        ):
+            qr = trust.get("quarantine_rate") or 0
+            tcls = "bad" if qr >= 0.35 else "warn" if qr >= 0.15 else "ok"
+            badges.append(
+                f"<span class='tag {tcls}'>trust {trust.get('trusted', 0)}✓ / "
+                f"{trust.get('quarantine', 0)} quar</span>"
+            )
+        # flag rate over reviewable (ok+flag), not raw row count
+        reviewable = fcc.get("ok", 0) + fcc.get("flag", 0)
+        if reviewable:
+            fcls = "bad" if fcc.get("flag") else "ok"
+            badges.append(
+                f"<span class='tag {fcls}'>check {fcc.get('flag', 0)} flagged</span>"
+            )
+        badges_html = s.get("delta_compact") or ""
+        badges_html += "".join(badges)
+        badges_html = (
+            f"<div style='margin-top:6px'>{badges_html}</div>" if badges_html else ""
+        )
         cards.append(
             f"<div class='card'><h2><a href='{esc(gene)}/index.html'>{esc(gene)}</a></h2>"
             f"<div class='kv'><span>papers in corpus</span><b>{s['in_corpus']}</b></div>"
@@ -1422,7 +2033,7 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
             f"<div class='kv'><span>usable full text</span><b>{s['usable']} ({pct(s['usable'], s['in_corpus']):.0f}%)</b></div>"
             f"<div class='kv'><span>extracted</span><b>{s['extracted']}</b></div>"
             f"<div class='kv'><span>papers w/ variants</span><b>{s['with_variants']}</b></div>"
-            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>{gold}"
+            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>{gold}{badges_html}"
             f"<div style='margin-top:8px'><a href='{esc(gene)}/index.html'>status</a> · "
             f"<a href='{esc(gene)}/variants.html'>variants</a></div></div>"
         )
@@ -1456,6 +2067,9 @@ def generate_dashboard(
     out_dir.mkdir(parents=True, exist_ok=True)
     corpus_idx = load_corpus_index(corpus_dir)
     target_genes = genes or sorted(corpus_idx.keys())
+    # dedup while preserving order — a duplicated --gene would otherwise diff a
+    # run against the snapshot it just appended and report a spurious "no change".
+    target_genes = list(dict.fromkeys(target_genes))
     score_map = score_genes(target_genes, db_map) if score else {}
     summaries: dict[str, dict] = {}
     stats = {"genes": 0, "paper_pages": 0, "scored": len(score_map)}
@@ -1467,6 +2081,20 @@ def generate_dashboard(
         db = load_db(db_path) if db_path and db_path.exists() else None
         sm = score_map.get(gene) or {}
         recall, per_pmid = sm.get("agg"), sm.get("per_pmid")
+        # per-run delta: diff this run's snapshot against the last one recorded in
+        # the (gitignored) corpus history, so the gene page can show what moved.
+        hist_dir = corpus_dir / "dashboard_history"
+        snap = _gene_snapshot(gene_stats(gene, corpus_rows, db), db, recall)
+        prev = _load_prev_snapshot(hist_dir, gene)
+        # carry the last SCORED recall forward through unscored (--no-score) builds
+        # so an interleaved fast pass doesn't wipe the recall baseline.
+        if (
+            snap.get("recall_uv_pct") is None
+            and prev
+            and prev.get("recall_uv_pct") is not None
+        ):
+            snap["recall_uv_pct"] = prev["recall_uv_pct"]
+        delta_html = _delta_html(prev, snap)
         # Per-gene subdir: <out>/<GENE>/{index.html, variants.html, papers/<PMID>.html}
         gene_dir = out_dir / gene
         gene_dir.mkdir(parents=True, exist_ok=True)
@@ -1480,12 +2108,21 @@ def generate_dashboard(
             recall=recall,
             per_pmid=per_pmid,
             mae=sm.get("mae"),
+            delta_html=delta_html,
         )
         (gene_dir / "index.html").write_text(page, encoding="utf-8")
+        if _snapshot_changed(prev, snap):
+            _append_snapshot(hist_dir, gene, snap, generated)
         s["recall"] = recall
         s["gold_cov"] = (
             gold_coverage_stats(set(per_pmid), corpus_rows) if per_pmid else None
         )
+        # stash the no-gold progress signals for the overview cards
+        s["trust"] = (db or {}).get("trust", {"tiered": False})
+        s["final_check_counts"] = dict(
+            (db or {}).get("final_check", {}).get("counts", {})
+        )
+        s["delta_compact"] = _delta_compact(prev, snap)
         summaries[gene] = s
         stats["genes"] += 1
         if db:
