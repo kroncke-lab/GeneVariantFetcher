@@ -410,9 +410,12 @@ def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
             enforce_per_variant_policy,
         )
 
+        extraction_meta = extracted_data.get("extraction_metadata") or {}
         classifier_annotations = detect_misclassified_counts(
             variants,
             fields=classifier_fields,
+            study_design=extraction_meta.get("study_design"),
+            ascertainment=extraction_meta.get("ascertainment"),
         )
         classifier_result = enforce_per_variant_policy(
             variants, classifier_annotations, policy=classifier_policy
