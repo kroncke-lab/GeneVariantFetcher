@@ -15,9 +15,9 @@ import time
 from typing import Iterable
 
 import litellm
-from litellm import completion
 
 from config.settings import get_settings
+from utils.llm_utils import litellm_completion
 
 
 REASONING_HINTS = ("kimi", "grok-4", "gpt-5", "gpt5", "deepseek", "o1", "o3")
@@ -47,6 +47,7 @@ def _configured_models(include_final: bool) -> list[str]:
     if include_final:
         models.extend(settings.get_final_adjudicator_models())
         models.append(settings.get_final_arbiter_model())
+        models.append(settings.get_paper_final_check_model())
     return _unique(model for model in models if model.startswith("azure_ai/"))
 
 
@@ -63,7 +64,8 @@ def _smoke_one(
     for attempt in range(1, attempts + 1):
         start = time.time()
         try:
-            response = completion(
+            # temperature=0 is dropped for gpt-5.6-* (only default 1 allowed).
+            response = litellm_completion(
                 model=model,
                 messages=[
                     {"role": "system", "content": "Return strict JSON only."},
@@ -119,7 +121,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--include-final",
         action="store_true",
-        help="Also include final adjudicator settings if they are Azure models.",
+        help=(
+            "Also include Azure-configured final-review models, including the "
+            "independent per-paper final check."
+        ),
     )
     args = parser.parse_args(argv)
 

@@ -50,25 +50,54 @@ from utils.source_layers import (
     infer_source_layer_from_text,
     junk_notation_reason,
 )
+from utils.protein_notation import PROTEIN_NOTATION_RE
+from utils.variant_normalizer import structural_variant_identity
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
-PROTEIN_NOTATION_RE = re.compile(
-    r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
-    r"\d{1,4}"
-    # Optional second residue for HGVS range notations like p.Asp2_Arg135del
-    # or p.Lys100_Glu105delinsX. Without this, valid multi-residue dels/ins
-    # are silently dropped at migration.
-    r"(?:[_-](?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
-    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del[ACDEFGHIKLMNPQRSTVWY]*|dup|ins[ACDEFGHIKLMNPQRSTVWY]*)",
-    re.IGNORECASE,
-)
 CDNA_NOTATION_RE = re.compile(
     r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
     r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
+    r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
+    r"|^c\.\d+(?:[+-]\d+)?del[ACGT]*ins[ACGT]+$"
+    r"|^IVS\d+[+-]\d+[ACGT]>[ACGT]$"
+    r"|^IVS\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
+)
+
+# Closed vocabulary for per-variant structural classification (Stage 5 B1).
+VARIANT_CLASS_VALUES = frozenset(
+    {
+        "missense",
+        "nonsense",
+        "frameshift",
+        "inframe_indel",
+        "splice",
+        "deep_intronic",
+        "large_deletion",
+        "large_duplication",
+        "cnv",
+        "exon_deletion",
+        "exon_duplication",
+        "complex",
+        "other",
+    }
+)
+
+# Only these classes can identify a variant without protein/cDNA/genomic
+# notation. Point-variant classes such as missense and the catch-all ``other``
+# still require an actual notation; a free-text description alone is not an
+# identity and otherwise turns cohort summaries into variants.
+STRUCTURAL_ONLY_VARIANT_CLASS_VALUES = frozenset(
+    {
+        "large_deletion",
+        "large_duplication",
+        "cnv",
+        "exon_deletion",
+        "exon_duplication",
+    }
 )
 
 FACT_PROVENANCE_FIELDS: Tuple[str, ...] = (
@@ -125,19 +154,29 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     Returns True if the variant still has at least one usable notation. This is
     a migration-time backstop for older extraction JSON files that may contain
     table artifacts such as single alleles (A/C/G/T), p-values, or cohort sizes.
+
+    Structural events with a valid ``variant_class`` + ``structural_description``
+    are kept even without point-form protein/cDNA notation.
     """
     protein = (variant_data.get("protein_notation") or "").strip().replace(" ", "")
     cdna = (variant_data.get("cdna_notation") or "").strip().replace(" ", "")
     genomic = (variant_data.get("genomic_position") or "").strip()
+    vclass = (variant_data.get("variant_class") or "").strip().lower()
+    structural = (variant_data.get("structural_description") or "").strip()
 
-    if protein and not PROTEIN_NOTATION_RE.match(protein):
+    if protein and not PROTEIN_NOTATION_RE.fullmatch(protein):
         variant_data["protein_notation"] = None
         protein = ""
     if cdna and not CDNA_NOTATION_RE.match(cdna):
         variant_data["cdna_notation"] = None
         cdna = ""
 
-    return bool(protein or cdna or genomic)
+    if vclass and vclass not in VARIANT_CLASS_VALUES:
+        variant_data["variant_class"] = None
+        vclass = ""
+
+    has_structural = bool(vclass in STRUCTURAL_ONLY_VARIANT_CLASS_VALUES and structural)
+    return bool(protein or cdna or genomic or has_structural)
 
 
 def infer_source_layer(variant_data: Dict[str, Any]) -> str:
@@ -528,6 +567,8 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             genomic_position TEXT,
             clinical_significance TEXT,
             evidence_level TEXT,
+            variant_class TEXT,  -- missense, splice, exon_deletion, cnv, ...
+            structural_description TEXT,  -- free text e.g. "deletion of exons 3-5"
 
             -- Composite unique constraint (flexible nulls)
             UNIQUE(gene_symbol, cdna_notation, protein_notation, genomic_position)
@@ -684,6 +725,14 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("penetrance_data", "trust_rule_version", "TEXT"),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
+        ("extraction_metadata", "study_type", "TEXT"),
+        ("extraction_metadata", "study_design", "TEXT"),
+        ("extraction_metadata", "ascertainment", "TEXT"),
+        ("extraction_metadata", "cohort_source", "TEXT"),
+        ("extraction_metadata", "population", "TEXT"),
+        ("extraction_metadata", "study_summary", "TEXT"),
+        ("variants", "variant_class", "TEXT"),
+        ("variants", "structural_description", "TEXT"),
         *(
             ("individual_records", col, decl)
             for col, decl in OBSERVATION_PROVENANCE_COLUMNS
@@ -785,6 +834,12 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             pmid TEXT NOT NULL,
             total_variants_found INTEGER,
             extraction_confidence TEXT,
+            study_type TEXT,  -- clinical/functional/mixed (legacy coarse label)
+            study_design TEXT,  -- case_report, cohort_population, gwas, ...
+            ascertainment TEXT,  -- proband_referral, biobank, family_cascade, ...
+            cohort_source TEXT,  -- free-text cohort origin
+            population TEXT,  -- ancestry/geography/founder population
+            study_summary TEXT,  -- 1-3 sentence study narrative
             challenges TEXT,  -- JSON array
             notes TEXT,
             model_used TEXT,
@@ -888,30 +943,74 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
     cdna = variant_data.get("cdna_notation")
     protein = variant_data.get("protein_notation")
     genomic = variant_data.get("genomic_position")
+    vclass = (variant_data.get("variant_class") or "").strip().lower() or None
+    if vclass and vclass not in VARIANT_CLASS_VALUES:
+        vclass = None
+    structural = (variant_data.get("structural_description") or "").strip() or None
 
-    # Try to find existing variant
-    cursor.execute(
-        """
-        SELECT variant_id FROM variants
-        WHERE gene_symbol = ?
-        AND (cdna_notation = ? OR (cdna_notation IS NULL AND ? IS NULL))
-        AND (protein_notation = ? OR (protein_notation IS NULL AND ? IS NULL))
-        AND (genomic_position = ? OR (genomic_position IS NULL AND ? IS NULL))
-    """,
-        (gene_symbol, cdna, cdna, protein, protein, genomic, genomic),
-    )
+    # Point-form identity first; structural-only events key on description.
+    if cdna or protein or genomic:
+        cursor.execute(
+            """
+            SELECT variant_id FROM variants
+            WHERE gene_symbol = ?
+            AND (cdna_notation = ? OR (cdna_notation IS NULL AND ? IS NULL))
+            AND (protein_notation = ? OR (protein_notation IS NULL AND ? IS NULL))
+            AND (genomic_position = ? OR (genomic_position IS NULL AND ? IS NULL))
+        """,
+            (gene_symbol, cdna, cdna, protein, protein, genomic, genomic),
+        )
+    elif structural:
+        # Free-text descriptions can differ only in case, Unicode dashes, or
+        # wording ("deletion" vs ``del:``). Compare their stable structural
+        # identities in Python so replay does not mint duplicate variant rows.
+        structural_key = structural_variant_identity(structural)
+        cursor.execute(
+            """
+            SELECT variant_id, structural_description FROM variants
+            WHERE gene_symbol = ?
+            AND structural_description IS NOT NULL
+            AND cdna_notation IS NULL
+            AND protein_notation IS NULL
+            AND genomic_position IS NULL
+            ORDER BY variant_id
+        """,
+            (gene_symbol,),
+        )
+        result = next(
+            (
+                (variant_id,)
+                for variant_id, description in cursor.fetchall()
+                if structural_variant_identity(description) == structural_key
+            ),
+            None,
+        )
+    else:
+        cursor.execute("SELECT variant_id FROM variants WHERE 0")
 
-    result = cursor.fetchone()
+    if not structural or cdna or protein or genomic:
+        result = cursor.fetchone()
     if result:
-        return result[0]
+        vid = result[0]
+        if vclass or structural:
+            cursor.execute(
+                """
+                UPDATE variants
+                SET variant_class = COALESCE(variant_class, ?),
+                    structural_description = COALESCE(structural_description, ?)
+                WHERE variant_id = ?
+                """,
+                (vclass, structural, vid),
+            )
+        return vid
 
-    # Create new variant
     cursor.execute(
         """
         INSERT INTO variants (
             gene_symbol, cdna_notation, protein_notation,
-            genomic_position, clinical_significance, evidence_level
-        ) VALUES (?, ?, ?, ?, ?, ?)
+            genomic_position, clinical_significance, evidence_level,
+            variant_class, structural_description
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """,
         (
             gene_symbol,
@@ -920,6 +1019,8 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
             genomic,
             variant_data.get("clinical_significance"),
             variant_data.get("evidence_level"),
+            vclass,
+            structural,
         ),
     )
 
@@ -1594,7 +1695,12 @@ def _insert_standard_fact_provenance(
     top_source_column = variant_data.get("source_column")
     top_evidence_quote = variant_data.get("evidence_quote") or quote
 
-    for notation_key in ("protein_notation", "cdna_notation", "genomic_position"):
+    for notation_key in (
+        "protein_notation",
+        "cdna_notation",
+        "genomic_position",
+        "structural_description",
+    ):
         notation = variant_data.get(notation_key)
         if notation:
             insert_fact_provenance(
@@ -1748,6 +1854,7 @@ def insert_variant_data(
         "protein_notation": variant_data.get("protein_notation"),
         "cdna_notation": variant_data.get("cdna_notation"),
         "genomic_position": variant_data.get("genomic_position"),
+        "structural_description": variant_data.get("structural_description"),
     }
     if not sanitize_variant_notation(variant_data):
         # Promote to WARNING so cohort-summary hallucinations are visible in
@@ -2315,14 +2422,22 @@ def migrate_extraction_file(
                 """
                 INSERT INTO extraction_metadata (
                     pmid, total_variants_found, extraction_confidence,
+                    study_type, study_design, ascertainment, cohort_source,
+                    population, study_summary,
                     challenges, notes, extraction_timestamp, source_type, abstract_only,
                     source_file, model_used
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     pmid,
                     extraction_meta.get("total_variants_found"),
                     extraction_meta.get("extraction_confidence"),
+                    extraction_meta.get("study_type"),
+                    extraction_meta.get("study_design"),
+                    extraction_meta.get("ascertainment"),
+                    extraction_meta.get("cohort_source"),
+                    extraction_meta.get("population"),
+                    extraction_meta.get("study_summary"),
                     json.dumps(extraction_meta.get("challenges", [])),
                     extraction_meta.get("notes"),
                     datetime.now().isoformat(),

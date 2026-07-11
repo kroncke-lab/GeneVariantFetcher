@@ -63,8 +63,37 @@ def test_multiple_reasons_accumulate():
 
 def test_rule_version_is_stable_and_tagged():
     version = trust_gate.rule_version()
-    assert version.startswith("tg1-")
+    assert version.startswith("tg2-")
     assert version == trust_gate.rule_version()
+
+
+def test_study_type_mismatch_quarantines_review_functional_gwas():
+    reasons = evaluate_fact(
+        {"carriers": 12, "affected": 8},
+        study_context={"study_design": "review_meta"},
+    )
+    assert "study_type_mismatch" in reasons
+    reasons_fn = evaluate_fact(
+        {"carriers": 3},
+        study_context={"study_design": "functional_invitro"},
+    )
+    assert "study_type_mismatch" in reasons_fn
+
+
+def test_population_study_strengthens_population_count():
+    reasons = evaluate_fact(
+        {"carriers": 80},
+        study_context={"study_design": "cohort_biobank"},
+    )
+    assert "population_count" in reasons
+    # Small clinical counts on case series stay clean on this rule alone.
+    assert (
+        evaluate_fact(
+            {"carriers": 5},
+            study_context={"study_design": "case_series"},
+        )
+        == []
+    )
 
 
 def _seed(conn, pid, pmid, counts, count_provenance=None):
@@ -108,7 +137,7 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert stats["trusted"] == 1
     assert stats["quarantine"] == 1
     assert stats["by_reason"].get("population_count") == 1
-    assert stats["rule_version"].startswith("tg1-")
+    assert stats["rule_version"].startswith("tg2-")
 
     conn = sqlite3.connect(db)
     try:
@@ -141,3 +170,43 @@ def test_apply_trust_gate_is_idempotent(tmp_path):
     second = apply_trust_gate(db)
     assert first["trusted"] == second["trusted"] == 1
     assert first["quarantine"] == second["quarantine"] == 0
+
+
+def test_apply_trust_gate_dedupes_multiple_extraction_metadata_rows(tmp_path):
+    """A pmid with >1 extraction_metadata row must not fan a fact out once per
+    row (which double-counts stats and lets an arbitrary row win the tier). The
+    latest metadata row (max extraction_id) decides the study context."""
+    db = str(tmp_path / "t.db")
+    conn = create_database_schema(db)
+    try:
+        _seed(conn, 1, "111", {"carriers": 10, "affected": 6, "unaffected": 3})
+        # Two metadata rows for the same pmid. The OLDER (extraction_id=1) is a
+        # review (study_type_mismatch -> quarantine); the NEWER (extraction_id=2)
+        # is a case series (clean). The newer must win.
+        conn.execute(
+            "INSERT INTO extraction_metadata (extraction_id, pmid, study_design) "
+            "VALUES (1, '111', 'review_meta')"
+        )
+        conn.execute(
+            "INSERT INTO extraction_metadata (extraction_id, pmid, study_design) "
+            "VALUES (2, '111', 'case_series')"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    stats = apply_trust_gate(db)
+    # Exactly one fact tiered — no fan-out (would be 2 before the fix).
+    assert stats["trusted"] + stats["quarantine"] == 1
+    # Latest metadata (case_series) wins -> trusted, not the older review_meta.
+    assert stats["trusted"] == 1
+    assert stats["quarantine"] == 0
+
+    conn = sqlite3.connect(db)
+    try:
+        tier = conn.execute(
+            "SELECT trust_tier FROM penetrance_data WHERE penetrance_id = 1"
+        ).fetchone()[0]
+    finally:
+        conn.close()
+    assert tier == "trusted"

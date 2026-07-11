@@ -152,11 +152,13 @@ class ClaimDebateVerifier(BaseLLMCaller):
         model: str,
         temperature: float = 0.0,
         max_tokens: int = 2500,
+        reasoning_effort: str | None = None,
     ):
         super().__init__(
             model=model,
             temperature=temperature,
             max_tokens=clamp_max_tokens(model, max_tokens),
+            reasoning_effort=reasoning_effort,
         )
 
     def debate(
@@ -367,12 +369,19 @@ def main() -> int:
     )
 
     settings = get_settings()
+    reasoning_effort: str | None = None
+    debate_max_tokens = 2500
     if args.debater_models:
         debater_models = args.debater_models
     elif args.final_arbiter:
         debater_models = [settings.get_final_arbiter_model()]
+        reasoning_effort = settings.final_arbiter_reasoning_effort
+        # xhigh/high burn reasoning tokens before visible JSON; give headroom.
+        debate_max_tokens = 16000
     elif args.final_adjudicator:
         debater_models = settings.get_final_adjudicator_models()
+        reasoning_effort = settings.final_adjudicator_reasoning_effort
+        debate_max_tokens = 16000
     else:
         debater_models = settings.get_early_debate_models()
     out_dir = repo_path(args.out_dir)
@@ -381,7 +390,15 @@ def main() -> int:
     debate_records: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     for debater_model in debater_models:
-        verifier = None if args.dry_run else ClaimDebateVerifier(model=debater_model)
+        verifier = (
+            None
+            if args.dry_run
+            else ClaimDebateVerifier(
+                model=debater_model,
+                max_tokens=debate_max_tokens,
+                reasoning_effort=reasoning_effort,
+            )
+        )
         for record in selected:
             card = card_from_record(record)
             baseline_verification = record.get("verification") or {}

@@ -1,0 +1,5 @@
+gene,case_id,mention,expected_canonical,variant_class,affected,unaffected,carriers
+BRCA1,synthetic_struct_001,deletion of exons 3-5,del:exon3-5,exon_deletion,2,1,3
+BRCA1,synthetic_struct_001,c.185delAGinsT,c.185delinsT,complex,1,0,1
+BRCA1,synthetic_struct_001,IVS9+1G>A,IVS9+1G>A,splice,1,0,1
+BRCA1,synthetic_struct_002,whole-gene deletion,del:wholegene,large_deletion,3,0,3

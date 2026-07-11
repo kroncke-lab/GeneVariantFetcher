@@ -14,8 +14,10 @@ def test_uses_responses_api_detects_gpt5_family():
     assert _uses_responses_api("gpt-5") is True
     assert _uses_responses_api("gpt-5-codex") is True
     assert _uses_responses_api("gpt-5.3-codex-1") is True
+    assert _uses_responses_api("gpt-5.6-sol") is True
     assert _uses_responses_api("azure_ai/gpt-5") is True
     assert _uses_responses_api("azure_ai/gpt-5.3-codex-1") is True
+    assert _uses_responses_api("azure_ai/gpt-5.6-sol") is True
 
 
 def test_uses_responses_api_rejects_other_models():

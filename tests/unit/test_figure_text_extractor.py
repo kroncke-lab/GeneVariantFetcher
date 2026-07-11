@@ -81,7 +81,8 @@ class TestExtractImagesToMarkdown:
         ].message.content = "| Variant | Count |\n|---|---|\n| p.Arg176Trp | 4 |"
 
         with patch(
-            "harvesting.figure_text_extractor.completion", return_value=fake_response
+            "harvesting.figure_text_extractor.litellm_completion",
+            return_value=fake_response,
         ):
             result = extract_images_to_markdown(
                 [img], model="anthropic/claude-sonnet-4-6"
@@ -95,7 +96,7 @@ class TestExtractImagesToMarkdown:
         img = _write_dummy_image(tmp_path / "fig2.png")
 
         with patch(
-            "harvesting.figure_text_extractor.completion",
+            "harvesting.figure_text_extractor.litellm_completion",
             side_effect=RuntimeError("timeout"),
         ):
             result = extract_images_to_markdown(
@@ -112,7 +113,8 @@ class TestExtractImagesToMarkdown:
         fake_response.choices[0].message.content = "   "  # whitespace only
 
         with patch(
-            "harvesting.figure_text_extractor.completion", return_value=fake_response
+            "harvesting.figure_text_extractor.litellm_completion",
+            return_value=fake_response,
         ):
             result = extract_images_to_markdown(
                 [img], model="anthropic/claude-sonnet-4-6"
@@ -133,7 +135,8 @@ class TestExtractImagesToMarkdown:
             return r
 
         with patch(
-            "harvesting.figure_text_extractor.completion", side_effect=_fake_completion
+            "harvesting.figure_text_extractor.litellm_completion",
+            side_effect=_fake_completion,
         ):
             result = extract_images_to_markdown(
                 imgs, model="anthropic/claude-sonnet-4-6"
@@ -180,7 +183,7 @@ class TestExtractImagesToMarkdown:
         with (
             patch("harvesting.figure_text_extractor.requests.post", _fake_post),
             patch(
-                "harvesting.figure_text_extractor.completion",
+                "harvesting.figure_text_extractor.litellm_completion",
                 side_effect=AssertionError("chat completion should not be used"),
             ),
         ):

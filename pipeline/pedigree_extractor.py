@@ -17,12 +17,14 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import requests
-from litellm import completion
 
 from config.settings import get_settings
 from utils.llm_utils import (
+    azure_responses_api_url,
     build_reasoning_effort_kwargs,
     build_responses_reasoning_param,
+    litellm_completion,
+    normalize_azure_ai_api_base,
     parse_llm_json_response,
 )
 
@@ -65,7 +67,7 @@ def _call_azure_responses_api_vision(
     model emitted, or None on transport / non-200 errors. Caller is
     responsible for retry semantics.
     """
-    base = os.environ.get("AZURE_AI_API_BASE", "").rstrip("/")
+    base = normalize_azure_ai_api_base()
     key = os.environ.get("AZURE_AI_API_KEY", "")
     if not base or not key:
         logger.error(
@@ -73,7 +75,7 @@ def _call_azure_responses_api_vision(
         )
         return None
 
-    url = f"{base}/openai/v1/responses?api-version=v1"
+    url = azure_responses_api_url(base)
     body = {
         "model": deployment,
         "input": [
@@ -289,7 +291,7 @@ class PedigreeExtractor:
                     max_output_tokens=max(max_tokens * 4, 4096),
                 )
 
-            response = completion(
+            response = litellm_completion(
                 model=self.model,
                 messages=[
                     {

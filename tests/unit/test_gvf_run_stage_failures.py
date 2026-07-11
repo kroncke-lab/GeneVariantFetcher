@@ -8,7 +8,13 @@ run status instead of a bare "✅ Done" hiding a swallowed error.
 from cli.gvf_run import step_report
 
 
-def _report(tmp_path, stage_failures):
+def _report(
+    tmp_path,
+    stage_failures,
+    *,
+    stage_warnings=None,
+    paper_final_check=None,
+):
     out = tmp_path / "RUN_REPORT.md"
     step_report(
         gene="LDLR",
@@ -22,6 +28,8 @@ def _report(tmp_path, stage_failures):
         duration_s=60.0,
         out_path=out,
         stage_failures=stage_failures,
+        stage_warnings=stage_warnings,
+        paper_final_check=paper_final_check,
     )
     return out.read_text()
 
@@ -37,6 +45,31 @@ def test_report_clean_when_no_stage_failures(tmp_path):
     text = _report(tmp_path, [])
     assert "## Stage Warnings" not in text
     assert "all stages ok" in text
+
+
+def test_report_surfaces_paper_final_check_errors_as_best_effort_warning(tmp_path):
+    warning = "paper final check failed for all 2 checked paper(s)"
+    text = _report(
+        tmp_path,
+        [],
+        stage_warnings=[warning],
+        paper_final_check={
+            "papers": 3,
+            "checked": 2,
+            "skipped": 1,
+            "skipped_empty_no_source": 1,
+            "source_grounded": 1,
+            "flagged_facts": 0,
+            "error": 2,
+            "missing_carriers": 0,
+        },
+    )
+    assert "## Best-effort Warnings" in text
+    assert warning in text
+    assert "## Paper Final Check" in text
+    assert "| 3 | 2 | 1 | 1 | 0 | 2 | 0 |" in text
+    assert "explicitly skipped" in text
+    assert "best-effort warnings recorded" in text
 
 
 def test_step_layers_returns_none_on_failure(tmp_path, monkeypatch):

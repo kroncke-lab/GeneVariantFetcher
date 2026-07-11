@@ -28,6 +28,7 @@ FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
 AZURE_TIER2_DEFAULT = "gpt-5.4"
 AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
 AZURE_TIER3_DEFAULT = "grok-4.3"
+AZURE_PAPER_FINAL_CHECK_DEFAULT = "gpt-5.6-sol"
 
 # Tier-model env var names. Used to decide whether the user explicitly set
 # a tier model (in which case --model-provider does not override it) vs.
@@ -38,6 +39,7 @@ _TIER_ENV_VARS = {
     "tier3_adjudicator_models": "TIER3_ADJUDICATOR_MODELS",
     "table_router_model": "TABLE_ROUTER_MODEL",
     "vision_model": "VISION_MODEL",
+    "paper_final_check_model": "PAPER_FINAL_CHECK_MODEL",
 }
 
 
@@ -80,7 +82,13 @@ class Settings(BaseSettings):
     azure_ai_api_base: Optional[str] = Field(
         default=None,
         validation_alias="AZURE_AI_API_BASE",
-        description="Azure AI Foundry endpoint, e.g. https://<resource>.services.ai.azure.com",
+        description=(
+            "Azure AI Foundry inference endpoint, e.g. "
+            "https://<resource>.services.ai.azure.com (resource root). "
+            "Portal project URLs (.../api/projects/<project>) are for the "
+            "SDK; strip that path for LiteLLM azure_ai/* calls. OpenAI v1 "
+            "bases ending in /openai/v1 are also supported."
+        ),
     )
     azure_ai_api_version: Optional[str] = Field(
         default="2024-08-01-preview", validation_alias="AZURE_AI_API_VERSION"
@@ -98,6 +106,15 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("GPT54_DEPLOYMENT", "AZURE_DEPLOYMENT_GPT54"),
         description="Azure AI Foundry GPT-5.4 deployment name",
+    )
+    azure_deployment_gpt56_sol: Optional[str] = Field(
+        default=None,
+        validation_alias="AZURE_DEPLOYMENT_GPT56_SOL",
+        description=(
+            "Optional Azure AI Foundry GPT-5.6 Sol deployment used by the "
+            "separate per-paper final check, not routine extraction or the "
+            "optional Anthropic exception-adjudication queue."
+        ),
     )
     azure_deployment_deepseek: Optional[str] = Field(
         default=None,
@@ -371,8 +388,15 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ADJUDICATOR_MODELS",
         description=(
             "Comma-separated final adjudication models reserved for explicit "
-            "post-debate escalation queues. Keep Anthropic here instead of in "
-            "routine Tier 2/Tier 3 extraction loops."
+            "post-debate escalation queues. Defaults to Anthropic Sonnet 5."
+        ),
+    )
+    final_adjudicator_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="FINAL_ADJUDICATOR_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for final adjudicator models "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh)."
         ),
     )
     final_arbiter_model: str = Field(
@@ -380,7 +404,65 @@ class Settings(BaseSettings):
         validation_alias="FINAL_ARBITER_MODEL",
         description=(
             "Most expensive final arbiter for hard residual cases after the "
-            "final adjudicator screen, usually an Opus-class Claude model."
+            "final adjudicator screen. Defaults to Anthropic Opus 4.8."
+        ),
+    )
+    final_arbiter_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="FINAL_ARBITER_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for the final arbiter model "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh)."
+        ),
+    )
+
+    # Per-paper "final check" (sniff test). A strong reasoning model reviews
+    # each paper's extracted counts against their provenance and records a soft
+    # verdict in paper_final_check (never mutates counts). Default-on; skips
+    # gracefully when the model is unreachable. See pipeline/paper_final_check.py.
+    paper_final_check_enabled: bool = Field(
+        default=True,
+        validation_alias="PAPER_FINAL_CHECK_ENABLED",
+        description=(
+            "Run the per-paper gpt-5.6-sol sniff test as a default gvf-run step "
+            "(Step 3.8). Set false to skip."
+        ),
+    )
+    paper_final_check_model: str = Field(
+        default=f"azure_ai/{AZURE_PAPER_FINAL_CHECK_DEFAULT}",
+        validation_alias="PAPER_FINAL_CHECK_MODEL",
+        description=(
+            "Model for the per-paper final check. Defaults to the deepest "
+            "reasoning model; the step skips gracefully when it is unreachable "
+            "(e.g. no Azure credentials)."
+        ),
+    )
+    paper_final_check_reasoning_effort: Optional[str] = Field(
+        default="xhigh",
+        validation_alias="PAPER_FINAL_CHECK_REASONING_EFFORT",
+        description=(
+            "Reasoning effort for the per-paper final check "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). "
+            "xhigh = max thinking on gpt-5.6-sol."
+        ),
+    )
+    paper_summary_source_grounded: bool = Field(
+        default=True,
+        validation_alias="PAPER_SUMMARY_SOURCE_GROUNDED",
+        description=(
+            "When true (default), the per-paper final check reads the paper's "
+            "on-disk source text and produces a carrier/phenotype summary plus a "
+            "missed-carrier completeness signal (paper_carrier_groups). Set false "
+            "for the cheaper DB-only sniff test (no source read)."
+        ),
+    )
+    paper_summary_max_source_chars: int = Field(
+        default=60000,
+        validation_alias="PAPER_SUMMARY_MAX_SOURCE_CHARS",
+        description=(
+            "Char budget of source text fed to the summary prompt (~15K input "
+            "tokens at 60000). Table/supplement regions are preferred when "
+            "truncating; source_truncated is recorded so gaps are re-runnable."
         ),
     )
 
@@ -584,6 +666,9 @@ class Settings(BaseSettings):
         "tier3_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
+        "final_adjudicator_reasoning_effort",
+        "final_arbiter_reasoning_effort",
+        "paper_final_check_reasoning_effort",
     )
     @classmethod
     def _validate_reasoning_effort(cls, v: Optional[str]) -> Optional[str]:
@@ -593,10 +678,15 @@ class Settings(BaseSettings):
         v_norm = str(v).strip().lower()
         if v_norm == "":
             return None
-        allowed = {"minimal", "low", "medium", "high"}
+        # max → xhigh: deepest single-agent thinking on GPT-5.6 (Azure rejects
+        # the literal "max" value; xhigh is the supported maximum).
+        if v_norm == "max":
+            v_norm = "xhigh"
+        allowed = {"none", "minimal", "low", "medium", "high", "xhigh"}
         if v_norm not in allowed:
             raise ValueError(
-                f"reasoning_effort must be one of {sorted(allowed)} or unset; got {v!r}"
+                f"reasoning_effort must be one of {sorted(allowed)} "
+                f"(or 'max' alias for xhigh) or unset; got {v!r}"
             )
         return v_norm
 
@@ -942,6 +1032,9 @@ class Settings(BaseSettings):
         return list(models)
 
     def get_tier3_adjudicator_models(self) -> List[str]:
+        if self._is_azure() and not self._tier_env_set("tier3_adjudicator_models"):
+            model = self._azure_model_string(self.azure_deployment_gpt54 or "gpt-5.4")
+            return [model] if model else []
         models = self.tier3_adjudicator_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
@@ -1007,15 +1100,32 @@ class Settings(BaseSettings):
         return [model for model in defaults if model]
 
     def get_final_adjudicator_models(self) -> List[str]:
-        """Return Anthropic-reserved models for explicit final review queues."""
+        """Return models for optional exception-adjudication queues."""
         models = self.final_adjudicator_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
         return list(models)
 
     def get_final_arbiter_model(self) -> str:
-        """Return the single most expensive final arbiter model."""
+        """Return the optional hard-case escalation model."""
         return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
+
+    def get_paper_final_check_model(self) -> str:
+        """Return the independent soft per-paper review model.
+
+        ``PAPER_FINAL_CHECK_MODEL`` remains the strongest override. Otherwise
+        ``AZURE_DEPLOYMENT_GPT56_SOL`` supplies the deployment alias without
+        changing routine Tier 2/Tier 3 routing or the optional Anthropic
+        exception-adjudicator and hard-case arbiter defaults.
+        """
+        if self._tier_env_set("paper_final_check_model"):
+            return str(self.paper_final_check_model).strip()
+        return (
+            self._azure_model_string(
+                self.azure_deployment_gpt56_sol or AZURE_PAPER_FINAL_CHECK_DEFAULT
+            )
+            or f"azure_ai/{AZURE_PAPER_FINAL_CHECK_DEFAULT}"
+        )
 
     # ------------------------------------------------------------------
     # Provider-aware rate-limit / concurrency

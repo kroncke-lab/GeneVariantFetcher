@@ -22,10 +22,12 @@ provenance decide what to trust, so runs scale without a human in the per-paper
 loop. Human adjudication is an **exception-only escape hatch** for the rare
 marginal case — routed through
 [Variant_Browser](docs/VARIANT_BROWSER_INTEGRATION.md), off the per-paper and
-per-run critical path, never a required step. The confidence-gating layer that
-sorts every extracted fact into a trusted or held tier automatically is in
-active development; until it lands, the automated gates stay conservative and
-uncertain counts are surfaced with provenance rather than silently trusted.
+per-run critical path, never a required step. A per-fact **trust gate** (v1) sorts
+every extracted fact into a **trusted** or **quarantine** tier using gold-free
+structural checks (`pipeline/trust_gate.py`, default-on in `gvf-run`;
+`scripts/trust_report.py` inspects the tiers). Making the trusted tier the default
+that scoring and downstream tools consume — and calibrating the gate per gene
+class — is in progress.
 
 The current production entry point is:
 
@@ -131,7 +133,11 @@ GVF's default workflow is:
 4. Reuse or update the local source corpus under `corpus/`.
 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
 6. Migrate extraction JSON to SQLite.
-7. Run DB-observed recovery layers and optional recall scoring.
+7. Run DB-observed recovery layers and the default-on per-fact trust gate.
+8. After trust gating, run the default-on `azure_ai/gpt-5.6-sol`/`xhigh`
+   final per-paper sniff test (Step 3.8); it persists soft review results and
+   never mutates extracted counts.
+9. Produce optional recall scoring and report handoff artifacts.
 
 Technical details live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 

@@ -270,10 +270,11 @@ extractions/{gene}_PMID_*.json
 ### Model Provider And Reasoning Effort
 
 `config/settings.py` resolves the effective model for each stage. The current
-forward strategy is Azure-first for routine work and Anthropic-final for
-explicit escalation queues: cheap triage/table routing/extraction/debate stay on
-Azure deployments, while Sonnet/Opus are reserved for final adjudication over
-compact claim cards.
+forward strategy keeps routine triage/table routing/extraction/debate on Azure,
+then runs a separate, default-on final per-paper sniff test with GPT-5.6 Sol at
+`xhigh` (Step 3.8). That check records soft review results; it does not replace
+routine Tier 2 or mutate extracted counts. Sonnet/Opus are reserved for optional
+exception-adjudication and hard-case escalation over compact claim cards.
 
 Recommended staging routing:
 
@@ -284,8 +285,9 @@ Recommended staging routing:
 | Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
 | Tier 3 extraction | `azure_ai/grok-4.3` |
 | Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
-| Final adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
-| Final hard-case arbiter | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
+| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; canonical and default-on, with soft persisted verdicts |
+| Optional exception-adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
+| Optional hard-case escalation | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
 
 The paper census is deliberately approximate. It produces ranges for variant
 rows, unique variants, carriers, affected, and unaffected counts plus risk flags
@@ -295,8 +297,8 @@ fallback, and help the adjudication dashboard explain why a paper or claim was
 escalated.
 
 OpenAI-style reasoning models expose a reasoning-effort knob. GVF can set it per
-pipeline stage through environment variables; all default to unset, so behavior
-is unchanged until a stage opts in:
+pipeline stage through environment variables. Routine-stage efforts default to
+unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
 
 | Variable | Stage |
 |----------|-------|
@@ -304,9 +306,13 @@ is unchanged until a stage opts in:
 | `TIER3_REASONING_EFFORT` | Tier 3 extraction and compact claim adjudication in `pipeline/extraction.py` |
 | `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
 | `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
+| `PAPER_FINAL_CHECK_REASONING_EFFORT` | Default-on final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` by default) |
+| `FINAL_ADJUDICATOR_REASONING_EFFORT` | Optional exception-adjudication queue when overridden to an OpenAI-style model |
+| `FINAL_ARBITER_REASONING_EFFORT` | Optional hard-case queue when overridden to an OpenAI-style model |
 
-Valid values are `minimal`, `low`, `medium`, and `high`. Validation lives in
-`config/settings.py`. Chat-completions calls use
+Valid values are `none`, `minimal`, `low`, `medium`, `high`, and `xhigh`; `max`
+is accepted as an alias for `xhigh`. Validation lives in `config/settings.py`.
+Chat-completions calls use
 `utils/llm_utils.build_reasoning_effort_kwargs`; Responses API calls use
 `utils/llm_utils.build_responses_reasoning_param`. Both helpers no-op for models
 without an OpenAI-style effort knob.
@@ -320,7 +326,7 @@ Before a long run, verify that the active Azure endpoint has the configured
 deployment names:
 
 ```bash
-.venv/bin/python scripts/smoke_azure_models.py
+.venv/bin/python scripts/smoke_azure_models.py --include-final
 ```
 
 ### Retry & Circuit Breaker

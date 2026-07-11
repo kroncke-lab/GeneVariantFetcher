@@ -359,3 +359,91 @@ def test_trust_gate_is_skippable(tmp_path: Path, monkeypatch):
     )
     assert rc == 0
     assert calls == [], "trust gate should be skippable via skip=['trust-gate']"
+
+
+def test_paper_final_check_runs_by_default(tmp_path: Path, monkeypatch):
+    """The per-paper final check (sniff test) runs by default — Step 3.8."""
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: calls.append(db) or {"papers": 0, "checked": 0},
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == 0
+    assert len(calls) == 1, "paper final check should run by default"
+
+
+def test_paper_final_check_is_skippable(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    calls: list = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: calls.append(db) or {},
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc", "paper-final-check"],
+    )
+    assert rc == 0
+    assert calls == [], "final check should be skippable via skip=['paper-final-check']"
+
+
+def test_paper_final_check_errors_warn_and_reach_run_outputs(
+    tmp_path: Path, monkeypatch, caplog
+):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {})
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: {
+            "papers": 2,
+            "checked": 2,
+            "skipped": 0,
+            "source_grounded": 0,
+            "flagged_facts": 0,
+            "missing_carriers": 0,
+            "error": 2,
+        },
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=["layers", "source-qc", "metadata-backfill"],
+    )
+
+    warning = "paper final check failed for all 2 checked paper(s)"
+    assert rc == 0  # soft QC warning does not discard an otherwise usable run
+    assert warning in caplog.text
+    run_dir = output / "TESTGENE" / "run1"
+    report = (run_dir / "RUN_REPORT.md").read_text()
+    status = json.loads((run_dir / "RUN_STATUS.json").read_text())
+    assert warning in report
+    assert "## Paper Final Check" in report
+    assert warning in status["stage_warnings"]
+    assert status["exit_code"] == 0

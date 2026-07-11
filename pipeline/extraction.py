@@ -37,6 +37,9 @@ from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
 from utils.env_utils import get_env_int
+from utils.protein_notation import (
+    PROTEIN_NOTATION_RE as STRICT_PROTEIN_NOTATION_RE,
+)
 from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
     merge_scanner_results,
@@ -987,12 +990,16 @@ class ExpertExtractor(BaseLLMCaller):
 
         Avoids duplicates by checking normalized notation.
         """
-        from utils.variant_normalizer import normalize_variant
+        from utils.variant_normalizer import (
+            normalize_variant,
+            structural_variant_identity,
+        )
 
         existing_variants = extracted_data.get("variants", [])
 
         # Build set of existing variant keys
         existing_keys = set()
+        existing_structural_keys = set()
         for v in existing_variants:
             protein = normalize_variant(v.get("protein_notation", "") or "")
             cdna = normalize_variant(v.get("cdna_notation", "") or "")
@@ -1000,17 +1007,31 @@ class ExpertExtractor(BaseLLMCaller):
                 existing_keys.add(protein)
             if cdna:
                 existing_keys.add(cdna)
+            structural = (
+                structural_variant_identity(v.get("structural_description"))
+                if not (protein or cdna)
+                else ""
+            )
+            if structural:
+                existing_structural_keys.add(structural)
 
         # Add new variants not already present
         added_count = 0
         for tv in table_variants:
             protein = normalize_variant(tv.get("protein_notation", "") or "")
             cdna = normalize_variant(tv.get("cdna_notation", "") or "")
+            structural = (
+                structural_variant_identity(tv.get("structural_description"))
+                if not (protein or cdna)
+                else ""
+            )
 
             # Check if already exists
             if protein and protein in existing_keys:
                 continue
             if cdna and cdna in existing_keys:
+                continue
+            if structural and structural in existing_structural_keys:
                 continue
 
             # Add to existing variants. Router-produced table variants already
@@ -1047,6 +1068,8 @@ class ExpertExtractor(BaseLLMCaller):
                 existing_keys.add(protein)
             if cdna:
                 existing_keys.add(cdna)
+            if structural:
+                existing_structural_keys.add(structural)
 
         if added_count > 0:
             logger.info(
@@ -1062,13 +1085,21 @@ class ExpertExtractor(BaseLLMCaller):
         extracted_data["variants"] = existing_variants
         return extracted_data
 
-    def _table_variant_key(self, variant: dict) -> tuple[str, str]:
+    def _table_variant_key(self, variant: dict) -> tuple[str, str, str]:
         """Return a normalized dedupe key for a table-derived variant."""
-        from utils.variant_normalizer import normalize_variant
+        from utils.variant_normalizer import (
+            normalize_variant,
+            structural_variant_identity,
+        )
 
         protein = normalize_variant(variant.get("protein_notation", "") or "")
         cdna = normalize_variant(variant.get("cdna_notation", "") or "")
-        return (cdna.lower(), protein.lower())
+        structural = structural_variant_identity(variant.get("structural_description"))
+        return (
+            cdna.lower(),
+            protein.lower(),
+            structural if not (cdna or protein) else "",
+        )
 
     def _is_structured_table_variant(self, variant: dict) -> bool:
         """True when a table variant carries row/count provenance, not just regex text."""
@@ -1087,7 +1118,7 @@ class ExpertExtractor(BaseLLMCaller):
     def _dedupe_table_variants(self, table_variants: List[dict]) -> List[dict]:
         """Dedupe table candidates while preferring richer row-level variants."""
         selected: List[dict] = []
-        index_by_key: dict[tuple[str, str], int] = {}
+        index_by_key: dict[tuple[str, str, str], int] = {}
         for variant in table_variants:
             key = self._table_variant_key(variant)
             if not any(key):
@@ -1282,22 +1313,27 @@ class ExpertExtractor(BaseLLMCaller):
         r"^-$",  # Dash placeholder
         r"^\?$",  # Question mark placeholder
     ]
-    AA3_RE = (
-        r"Ala|Cys|Asp|Glu|Phe|Gly|His|Ile|Lys|Leu|Met|Asn|Pro|Gln|"
-        r"Arg|Ser|Thr|Val|Trp|Tyr|Ter|Stop|Xaa"
-    )
-    PROTEIN_NOTATION_RE = re.compile(
-        rf"^(?:p\.)?(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])"
-        r"\d{1,4}"
-        rf"(?:[_-](?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])\d{{1,4}})?"
-        rf"(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
-        re.IGNORECASE,
-    )
+    PROTEIN_NOTATION_RE = STRICT_PROTEIN_NOTATION_RE
+    # cDNA: point, simple indel, range indel, delins, and legacy IVS splice
+    # (scanner stores IVS into cdna_notation; table parser already emits delins).
     CDNA_NOTATION_RE = re.compile(
         r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
         r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
+        r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
+        r"|^c\.\d+(?:[+-]\d+)?del[ACGT]*ins[ACGT]+$"
+        r"|^IVS\d+[+-]\d+[ACGT]>[ACGT]$"
+        r"|^IVS\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
         re.IGNORECASE,
+    )
+    STRUCTURAL_ONLY_VARIANT_CLASSES = frozenset(
+        {
+            "large_deletion",
+            "large_duplication",
+            "cnv",
+            "exon_deletion",
+            "exon_duplication",
+        }
     )
 
     def _filter_extraction_artifacts(
@@ -1346,6 +1382,7 @@ class ExpertExtractor(BaseLLMCaller):
         for v in variants:
             protein = v.get("protein_notation", "") or ""
             cdna = v.get("cdna_notation", "") or ""
+            genomic = (v.get("genomic_position") or "").strip()
 
             # Check for artifact patterns
             is_artifact = False
@@ -1363,23 +1400,49 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
 
             # Malformed notation guard. Protein entries need an amino-acid
-            # position; cDNA entries need HGVS-like c. notation. This catches
-            # table-parser artifacts such as A/T/G/C, p-values, allele
-            # frequencies, and header fragments before they reach SQLite.
+            # position; cDNA entries need HGVS-like c. / IVS notation. Structural
+            # events with a valid variant_class + structural_description are kept
+            # even without point-form notation.
             protein_clean = protein.strip().replace(" ", "")
             cdna_clean = cdna.strip().replace(" ", "")
-            malformed = False
-            if protein_clean and not self.PROTEIN_NOTATION_RE.match(protein_clean):
-                malformed = True
+            vclass = (v.get("variant_class") or "").strip().lower()
+            structural = (v.get("structural_description") or "").strip()
+            has_structural_identity = bool(
+                structural and vclass in self.STRUCTURAL_ONLY_VARIANT_CLASSES
+            )
+            protein_valid = bool(
+                not protein_clean or self.PROTEIN_NOTATION_RE.fullmatch(protein_clean)
+            )
+            cdna_valid = bool(
+                not cdna_clean or self.CDNA_NOTATION_RE.fullmatch(cdna_clean)
+            )
+            if not protein_valid:
                 if len(malformed_examples) < 5:
                     malformed_examples.append(protein)
-            if cdna_clean and not self.CDNA_NOTATION_RE.match(cdna_clean):
-                malformed = True
+                v["protein_notation"] = None
+                protein_clean = ""
+            if not cdna_valid:
                 if len(malformed_examples) < 5:
                     malformed_examples.append(cdna)
-            if malformed:
+                v["cdna_notation"] = None
+                cdna_clean = ""
+
+            # Invalid notation is field-local: clear it, then keep the row when
+            # another usable identity remains.  This matches the migration
+            # backstop and prevents a bad protein string from erasing a valid
+            # cDNA/genomic/structural variant.
+            if not (protein_clean or cdna_clean or genomic or has_structural_identity):
                 malformed_count += 1
+                if protein_valid and cdna_valid and len(malformed_examples) < 5:
+                    malformed_examples.append("<missing variant identity>")
                 continue
+
+            # Field-level sanitization above may have cleared a malformed
+            # protein_notation; re-read it so the position check runs on the
+            # current value, not the dropped string. Otherwise extract_position
+            # can pull a number out of junk (e.g. "1500del" -> 1500) and erase
+            # a row that still has another valid identity.
+            protein = v.get("protein_notation") or ""
 
             # Check position validity (for protein variants)
             if protein and protein_length:
@@ -4381,7 +4444,8 @@ class ExpertExtractor(BaseLLMCaller):
         for v in variants:
             cdna = v.get("cdna_notation", "") or ""
             protein = v.get("protein_notation", "") or ""
-            summaries.append(f"- {cdna} / {protein}")
+            structural = v.get("structural_description", "") or ""
+            summaries.append(f"- {cdna} / {protein} / {structural}")
         return "\n".join(summaries)
 
     def _merge_continuation_results(
@@ -4392,15 +4456,30 @@ class ExpertExtractor(BaseLLMCaller):
         base_variants = base_data.get("variants", [])
         continuation_variants = continuation_data.get("variants", [])
 
-        # Deduplicate by cdna_notation + protein_notation
+        # Structural-only events have no cDNA/protein notation, so their
+        # description must participate in continuation deduplication.
+        from utils.variant_normalizer import structural_variant_identity
+
         existing_keys = set()
         for v in base_variants:
-            key = (v.get("cdna_notation", ""), v.get("protein_notation", ""))
+            key = (
+                v.get("cdna_notation", ""),
+                v.get("protein_notation", ""),
+                structural_variant_identity(v.get("structural_description"))
+                if not (v.get("cdna_notation") or v.get("protein_notation"))
+                else "",
+            )
             existing_keys.add(key)
 
         new_variants = []
         for v in continuation_variants:
-            key = (v.get("cdna_notation", ""), v.get("protein_notation", ""))
+            key = (
+                v.get("cdna_notation", ""),
+                v.get("protein_notation", ""),
+                structural_variant_identity(v.get("structural_description"))
+                if not (v.get("cdna_notation") or v.get("protein_notation"))
+                else "",
+            )
             if key not in existing_keys:
                 new_variants.append(v)
                 existing_keys.add(key)

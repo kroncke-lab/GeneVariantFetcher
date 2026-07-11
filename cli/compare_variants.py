@@ -475,6 +475,18 @@ def extract_sqlite_data(
     """
     strategy, primary_table = find_best_data_source(table_info)
 
+    # Structural events (exon/CNV/whole-gene) live only in structural_description
+    # with the point-form columns NULL, so fold it into the variant key when the
+    # column exists (older DBs predate it). It is the last COALESCE arg and NULL
+    # for non-structural rows, so it never changes an existing point-form key.
+    _variants_cols = (
+        table_info["variants"].columns if "variants" in table_info else set()
+    )
+    variant_key = "COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position"
+    if "structural_description" in _variants_cols:
+        variant_key += ", v.structural_description"
+    variant_key += ")"
+
     if strategy == "union_all":
         # Union every (pmid, variant_id) link from variant_papers, penetrance_data,
         # and individual_records. Counts: prefer penetrance_data > aggregated
@@ -584,7 +596,7 @@ def extract_sqlite_data(
         ){ir_cte}{vp_layer_cte}
         SELECT
             al.pmid,
-            COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) AS variant,
+            {variant_key} AS variant,
             v.gene_symbol,
             v.protein_notation,
             v.cdna_notation,
@@ -611,10 +623,10 @@ def extract_sqlite_data(
 
     elif strategy == "penetrance_data":
         # Join penetrance_data with variants to get variant notation
-        query = """
+        query = f"""
             SELECT
                 pd.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
@@ -631,10 +643,10 @@ def extract_sqlite_data(
 
     elif strategy == "individual_records":
         # Aggregate individual records by variant+pmid
-        query = """
+        query = f"""
             SELECT
                 ir.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
@@ -669,7 +681,7 @@ def extract_sqlite_data(
         query = f"""
             SELECT
                 vp.pmid,
-                COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                {variant_key} as variant,
                 v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
@@ -1103,9 +1115,74 @@ def to_canonical_form(variant: str) -> Optional[str]:
         if ref:
             return f"{ref}{m.group(2)}sp"
 
-    # --- IVS notation: pass through ---
-    if v.startswith("IVS"):
-        return v
+    # --- IVS notation: pass through (gene-agnostic IVS↔IVS matching; v1) ---
+    if v.upper().startswith("IVS"):
+        m = re.match(
+            r"^IVS(\d+)([+\-]\d+)([ACGT])>([ACGT])$",
+            v,
+            re.IGNORECASE,
+        )
+        if m:
+            return (
+                f"IVS{m.group(1)}{m.group(2)}{m.group(3).upper()}>{m.group(4).upper()}"
+            )
+        m = re.match(
+            r"^IVS(\d+)([+\-]\d+)(del|dup|ins)([ACGT]*)$",
+            v,
+            re.IGNORECASE,
+        )
+        if m:
+            return (
+                f"IVS{m.group(1)}{m.group(2)}{m.group(3).lower()}{m.group(4).upper()}"
+            )
+        return v.upper() if v.upper().startswith("IVS") else v
+
+    # --- cDNA delins: c.123_456delAGinsT -> c.123_456delinsT (collapse deleted bases) ---
+    m = re.match(
+        r"^c\.(\d+)(?:_(\d+))?del([ACGT]*)ins([ACGT]+)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        pos = m.group(1) if not m.group(2) else f"{m.group(1)}_{m.group(2)}"
+        return f"c.{pos}delins{m.group(4).upper()}"
+
+    # --- Structural keys: del:exon3-5, dup:exon2, del:wholegene ---
+    m = re.match(
+        r"^(del|dup):(?:exon(\d+)(?:-(\d+))?|wholegene)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        op = m.group(1).lower()
+        if m.group(0).lower().endswith("wholegene"):
+            return f"{op}:wholegene"
+        e1, e2 = m.group(2), m.group(3)
+        if e2:
+            return f"{op}:exon{e1}-{e2}"
+        return f"{op}:exon{e1}"
+
+    # Free-text structural descriptions → structural keys when parseable
+    m = re.search(
+        r"(?:deletion|del)\s+of\s+exons?\s*(\d+)(?:\s*[-–—to]+\s*(\d+))?",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        if m.group(2):
+            return f"del:exon{m.group(1)}-{m.group(2)}"
+        return f"del:exon{m.group(1)}"
+    m = re.search(
+        r"(?:duplication|dup)\s+of\s+exons?\s*(\d+)(?:\s*[-–—to]+\s*(\d+))?",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        if m.group(2):
+            return f"dup:exon{m.group(1)}-{m.group(2)}"
+        return f"dup:exon{m.group(1)}"
+    if re.search(r"whole[\s-]?gene\s+del", v, re.IGNORECASE):
+        return "del:wholegene"
 
     # Could not canonicalize
     return None
@@ -2190,12 +2267,16 @@ def create_comparison_row(
 def _adjudication_variant_key(notation: str) -> str:
     """Canonical key for matching an overlay row to a ComparisonRow.
 
-    Mirrors the ``to_canonical_form(...) or normalize_variant(...)`` keying used
-    by ``aggregate_sqlite_data`` / ``ingest_review_adjudications`` so the same
-    variant lands on the same key on both sides.
+    Delegates to the overlay producer's ``_variant_key`` so the scorer and
+    ``scripts/ingest_review_adjudications`` canonicalize a notation through one
+    shared implementation of the ``to_canonical_form(...) or
+    normalize_variant(...)`` keying -- a copy here could silently drift from the
+    producer. Imported lazily because ingest imports from this module at load
+    time (a module-level import would be circular).
     """
-    canon = to_canonical_form(notation)
-    return canon if canon else normalize_variant(notation)
+    from scripts.ingest_review_adjudications import _variant_key
+
+    return _variant_key(notation)
 
 
 def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str]]:
@@ -2252,6 +2333,25 @@ def _apply_count_override(row: ComparisonRow, adj: Dict[str, str]) -> None:
     )
 
 
+def _overlay_action(adj: Dict[str, str]) -> str:
+    """Resolve an overlay row to its canonical action.
+
+    Prefers the explicit ``action`` column; when it is blank, translates the
+    ``verdict`` through the SAME ``VERDICT_TO_ACTION`` table the ingest script
+    writes (imported, not re-encoded here), so a verdict newly added to ingest
+    resolves identically for the scorer instead of being silently ignored.
+    Imported lazily because ingest imports from this module at load time (a
+    module-level import would be circular).
+    """
+    action = (adj.get("action") or "").strip().lower()
+    if action:
+        return action
+    from scripts.ingest_review_adjudications import VERDICT_TO_ACTION
+
+    verdict = (adj.get("verdict") or "").strip().lower()
+    return VERDICT_TO_ACTION.get(verdict, "")
+
+
 def apply_adjudication_overlay(
     results: List[ComparisonRow],
     overlay: Dict[Tuple[str, str], Dict[str, str]],
@@ -2264,8 +2364,12 @@ def apply_adjudication_overlay(
     - ``correct_counts`` / ``count_override``: overwrite the row's extracted
       counts with the adjudicated ``corrected_*`` values (feeds MAE + the
       end-to-end count error).
-    - ``wrong_paper`` / ``excluded``: drop the row entirely (out of scope for
-      both recall and precision).
+    - ``wrong_paper`` / ``excluded``: drop EVERY row for that PMID -- the paper
+      is out of scope for both recall and precision. Dropping only the single
+      keyed row would leave the paper's missed-gold variants in the recall
+      denominator: those rows have no DB ``source_notation``, so they carry no
+      overlay key and never match on their own, and the paper's recall would sag
+      instead of cleanly excluding.
     - ``confirm`` / ``gold_confirmed`` on a DB-only extra: drop it from the
       extra set — a real variant the curator omitted is not a false positive.
     - ``wrong_variant`` / ``false_positive``: keep the extra so precision counts
@@ -2277,6 +2381,14 @@ def apply_adjudication_overlay(
     """
     if not overlay:
         return results
+    # A wrong_paper/excluded verdict excludes the WHOLE paper. Collect those
+    # PMIDs up front so every row for them is dropped below, including
+    # missed-gold rows that carry no overlay key of their own.
+    excluded_pmids = {
+        pmid
+        for (pmid, _vkey), adj in overlay.items()
+        if _overlay_action(adj) == "excluded"
+    }
     out: List[ComparisonRow] = []
     applied = {
         "count_override": 0,
@@ -2285,6 +2397,9 @@ def apply_adjudication_overlay(
         "false_positive_kept": 0,
     }
     for row in results:
+        if row.pmid in excluded_pmids:
+            applied["excluded"] += 1
+            continue  # whole paper is out of scope for recall and precision
         key = None
         for norm in (row.sqlite_variant_norm, row.excel_variant_norm):
             if norm and (row.pmid, norm) in overlay:
@@ -2294,21 +2409,15 @@ def apply_adjudication_overlay(
             out.append(row)
             continue
         adj = overlay[key]
-        action = (adj.get("action") or "").strip().lower()
-        verdict = (adj.get("verdict") or "").strip().lower()
-        if action == "count_override" or verdict == "correct_counts":
+        action = _overlay_action(adj)
+        if action == "count_override":
             _apply_count_override(row, adj)
             applied["count_override"] += 1
             out.append(row)
-        elif action == "excluded" or verdict == "wrong_paper":
-            applied["excluded"] += 1
-            # dropped
-        elif (
-            action == "gold_confirmed" or verdict == "confirm"
-        ) and row.missing_in_excel:
+        elif action == "gold_confirmed" and row.missing_in_excel:
             applied["confirmed_tp_dropped"] += 1
             # dropped from the false-positive set
-        elif action == "false_positive" or verdict == "wrong_variant":
+        elif action == "false_positive":
             applied["false_positive_kept"] += 1
             out.append(row)
         else:

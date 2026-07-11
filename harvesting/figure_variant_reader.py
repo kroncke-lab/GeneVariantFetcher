@@ -41,12 +41,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
-from litellm import completion
 
 from config.settings import get_settings
 from utils.llm_utils import (
+    azure_responses_api_url,
     build_reasoning_effort_kwargs,
     build_responses_reasoning_param,
+    litellm_completion,
+    normalize_azure_ai_api_base,
 )
 
 logger = logging.getLogger(__name__)
@@ -279,7 +281,7 @@ def _read_one(image_path: Path, gene: str, model: str) -> FigureReadResult:
 
 
 def _call_chat_completions(data_url: str, model: str, prompt: str) -> str:
-    response = completion(
+    response = litellm_completion(
         model=model,
         messages=[
             {
@@ -298,14 +300,14 @@ def _call_chat_completions(data_url: str, model: str, prompt: str) -> str:
 
 
 def _call_responses_api(data_url: str, model: str, prompt: str) -> str:
-    base = os.environ.get("AZURE_AI_API_BASE", "").rstrip("/")
+    base = normalize_azure_ai_api_base()
     key = os.environ.get("AZURE_AI_API_KEY", "")
     if not base or not key:
         raise RuntimeError(
             "Responses API requires AZURE_AI_API_BASE and AZURE_AI_API_KEY"
         )
 
-    url = f"{base}/openai/v1/responses?api-version=v1"
+    url = azure_responses_api_url(base)
     body = {
         "model": _strip_provider_prefix(model),
         "input": [

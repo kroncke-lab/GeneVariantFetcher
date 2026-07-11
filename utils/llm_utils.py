@@ -61,6 +61,11 @@ MODEL_TOKEN_LIMITS = {
     "gpt-5.3-codex": (16384, 15000),  # OpenAI GPT-5.3 Codex via Azure
     "gpt-5.5": (16384, 15000),  # OpenAI GPT-5.5 via Azure
     "gpt-5.4": (16384, 15000),  # OpenAI GPT-5.4 via Azure
+    # GPT-5.6 reasoning models spend hidden reasoning tokens against the output
+    # budget before emitting JSON, so at xhigh a 15000 cap truncates to empty on
+    # long inputs. Give ample headroom (verified on the source-grounded summary).
+    "gpt-5.6-sol": (128000, 64000),  # OpenAI GPT-5.6 Sol via Azure Foundry
+    "gpt-5.6": (128000, 64000),  # OpenAI GPT-5.6 family via Azure
     # Generic GPT-5 family fallback. Lookup is longest-pattern-first, so the
     # specific gpt-5.x entries above still win; this only catches gpt-5.x ids we
     # haven't enumerated yet. Without it an unrecognized gpt-5.x falls to
@@ -116,16 +121,112 @@ DEFAULT_TOKEN_LIMIT = (4096, 4000)
 # =============================================================================
 # REASONING EFFORT
 # =============================================================================
-# OpenAI-style reasoning models accept a `reasoning_effort` knob
-# ("minimal" | "low" | "medium" | "high"). Anthropic exposes the same capability
-# through extended `thinking`, which additionally requires temperature=1 — so we
-# do NOT route Claude through this helper yet (that path needs the temperature
-# interaction handled and live verification). Grok-4-class models reason by
-# default and ignore an effort param. litellm.drop_params=True would silently
-# drop an unsupported value, so this allow-list exists to make the no-op explicit
-# (and logged) rather than leaving callers believing effort was applied.
-REASONING_EFFORT_LEVELS = ("minimal", "low", "medium", "high")
+# OpenAI-style reasoning models accept a `reasoning_effort` knob.
+# GPT-5 family historically: minimal|low|medium|high.
+# GPT-5.6 on Azure/OpenAI also accepts none|xhigh (and OpenAI docs mention max
+# as the deepest single-agent setting; Azure currently rejects "max" and takes
+# "xhigh" as the deepest available). We treat "max" as an alias of "xhigh".
+# Anthropic exposes the same capability through extended `thinking`, which
+# additionally requires temperature=1 — so we do NOT route Claude through this
+# helper yet. Grok-4-class models reason by default and ignore an effort param.
+# litellm.drop_params=True would silently drop an unsupported value, so this
+# allow-list exists to make the no-op explicit (and logged) rather than leaving
+# callers believing effort was applied.
+REASONING_EFFORT_LEVELS = ("none", "minimal", "low", "medium", "high", "xhigh")
+REASONING_EFFORT_ALIASES = {"max": "xhigh"}
 _REASONING_EFFORT_MODEL_HINTS = ("gpt-5", "gpt5", "o1", "o3", "o4-mini")
+
+
+# =============================================================================
+# AZURE FOUNDRY OPENAI v1 ENDPOINT
+# =============================================================================
+# Foundry portal "OpenAI-compatible" endpoints look like:
+#   https://<resource>.services.ai.azure.com/openai/v1
+# with deployment names passed as the model id (e.g. gpt-5.6-sol).
+#
+# LiteLLM's azure_ai/* provider rewrites services.ai.azure.com hosts to
+# /models/chat/completions, which is the wrong path for this endpoint. When
+# AZURE_AI_API_BASE ends with /openai/v1 we rewrite azure_ai/<deployment> to
+# openai/<deployment> and pass api_base/api_key explicitly.
+
+
+def normalize_azure_ai_api_base(base: Optional[str] = None) -> str:
+    """Return AZURE_AI_API_BASE with trailing slash stripped."""
+    raw = base if base is not None else os.environ.get("AZURE_AI_API_BASE", "")
+    return (raw or "").strip().rstrip("/")
+
+
+def is_azure_openai_v1_base(base: Optional[str] = None) -> bool:
+    """True when the configured Azure base is the Foundry OpenAI v1 endpoint."""
+    normalized = normalize_azure_ai_api_base(base)
+    return normalized.endswith("/openai/v1")
+
+
+def azure_responses_api_url(base: Optional[str] = None) -> str:
+    """Build the Azure Foundry Responses API URL for the configured base.
+
+    Accepts either the resource root or a base that already ends in
+    ``/openai/v1`` so callers never double the path segment.
+    """
+    normalized = normalize_azure_ai_api_base(base)
+    if not normalized:
+        return ""
+    if is_azure_openai_v1_base(normalized):
+        return f"{normalized}/responses?api-version=v1"
+    return f"{normalized}/openai/v1/responses?api-version=v1"
+
+
+def _model_rejects_nondefault_temperature(model: str) -> bool:
+    """GPT-5.6 (and some GPT-5) endpoints only accept the default temperature=1."""
+    m = (model or "").lower()
+    # Strip provider prefixes for matching.
+    if "/" in m:
+        m = m.rsplit("/", 1)[-1]
+    return m.startswith("gpt-5.6") or m.startswith("gpt-5.6-")
+
+
+def resolve_litellm_model_and_kwargs(
+    model: str, **kwargs: Any
+) -> tuple[str, Dict[str, Any]]:
+    """Rewrite azure_ai/* for Foundry OpenAI v1 bases; otherwise pass through."""
+    out = dict(kwargs)
+    base = normalize_azure_ai_api_base()
+    key = (os.environ.get("AZURE_AI_API_KEY") or "").strip()
+    resolved = model
+    if model.startswith("azure_ai/") and is_azure_openai_v1_base(base):
+        deployment = model[len("azure_ai/") :]
+        out.setdefault("api_base", base)
+        if key:
+            out.setdefault("api_key", key)
+        resolved = f"openai/{deployment}"
+    # gpt-5.6-sol rejects temperature != 1 (and temperature=0 is common in GVF).
+    # Omit the param so the provider default applies.
+    if _model_rejects_nondefault_temperature(resolved) and "temperature" in out:
+        temp = out.get("temperature")
+        if temp is not None and float(temp) != 1.0:
+            logger.debug(
+                "Dropping temperature=%r for model %r (only default 1 supported)",
+                temp,
+                resolved,
+            )
+            out.pop("temperature", None)
+    return resolved, out
+
+
+def litellm_completion(*, model: str, **kwargs: Any) -> Any:
+    """LiteLLM completion with Azure Foundry OpenAI v1 routing when configured."""
+    resolved_model, resolved_kwargs = resolve_litellm_model_and_kwargs(model, **kwargs)
+    return completion(model=resolved_model, **resolved_kwargs)
+
+
+def normalize_reasoning_effort(effort: Optional[str]) -> Optional[str]:
+    """Normalize effort aliases (e.g. max→xhigh); return None when unset."""
+    if effort is None:
+        return None
+    v = str(effort).strip().lower()
+    if not v:
+        return None
+    return REASONING_EFFORT_ALIASES.get(v, v)
 
 
 def build_reasoning_effort_kwargs(
@@ -138,6 +239,7 @@ def build_reasoning_effort_kwargs(
     (instead of relying on litellm.drop_params) means an effort set on an
     unsupported model is logged as ignored rather than silently dropped.
     """
+    effort = normalize_reasoning_effort(effort)
     if not effort:
         return {}
     m = (model or "").lower()
@@ -162,6 +264,7 @@ def build_responses_reasoning_param(
     semantics as :func:`build_reasoning_effort_kwargs`, so vision/figure code
     that POSTs to ``/responses`` can spread it straight into the JSON body.
     """
+    effort = normalize_reasoning_effort(effort)
     if not effort:
         return {}
     m = (model or "").lower()
@@ -405,7 +508,7 @@ class BaseLLMCaller:
 
         try:
             wait_for_llm_rate_limit(self.model)
-            response = completion(
+            response = litellm_completion(
                 model=self.model,
                 messages=[
                     {
@@ -462,7 +565,7 @@ class BaseLLMCaller:
 
         def _make_call():
             wait_for_llm_rate_limit(self.model)
-            return completion(
+            return litellm_completion(
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,
@@ -553,7 +656,7 @@ class BaseLLMCaller:
 
             def _make_call():
                 wait_for_llm_rate_limit(self.model)
-                return completion(
+                return litellm_completion(
                     model=self.model,
                     messages=messages,
                     temperature=self.temperature,
@@ -630,7 +733,7 @@ class BaseLLMCaller:
 
         try:
             wait_for_llm_rate_limit(self.model)
-            response = completion(
+            response = litellm_completion(
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,

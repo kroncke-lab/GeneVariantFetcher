@@ -40,6 +40,7 @@ try:
         VariantNormalizer,
         get_variant_type,
         normalize_variant,
+        structural_variant_identity,
     )
 except ImportError:
     # Fallback for standalone testing
@@ -54,6 +55,7 @@ except ImportError:
         VariantNormalizer,
         get_variant_type,
         normalize_variant,
+        structural_variant_identity,
     )
 
 
@@ -64,11 +66,13 @@ class ScannedVariant:
     raw_text: str  # Original matched text
     normalized: str  # Normalized form (e.g., A561V)
     variant_type: str  # missense, frameshift, nonsense, etc.
-    notation_type: str  # protein, cdna, splice
+    notation_type: str  # protein, cdna, splice, structural
     position: Optional[int]  # Amino acid or nucleotide position
     context: str  # Surrounding text (for debugging)
     confidence: float  # 0.0-1.0 based on pattern quality
     source: str  # Where it was found (narrative, table, etc.)
+    variant_class: Optional[str] = None  # closed taxonomy when known
+    structural_description: Optional[str] = None  # free-text structural event
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -79,6 +83,8 @@ class ScannedVariant:
             "position": self.position,
             "confidence": self.confidence,
             "source": self.source,
+            "variant_class": self.variant_class,
+            "structural_description": self.structural_description,
         }
 
 
@@ -141,7 +147,11 @@ class ScanResult:
                 "protein_notation": v.normalized
                 if v.notation_type == "protein"
                 else None,
-                "cdna_notation": v.normalized if v.notation_type == "cdna" else None,
+                "cdna_notation": v.normalized
+                if v.notation_type in {"cdna", "splice"}
+                else None,
+                "variant_class": v.variant_class,
+                "structural_description": v.structural_description,
                 "clinical_significance": "unknown",
                 "evidence_level": "scanner",
                 "source_location": f"Text scan ({v.source})",
@@ -154,6 +164,11 @@ class ScanResult:
                 "_scanner_confidence": v.confidence,
                 "_scanner_raw": v.raw_text,
             }
+            if (
+                v.notation_type == "structural"
+                and not variant_dict["structural_description"]
+            ):
+                variant_dict["structural_description"] = v.normalized
             results.append(variant_dict)
 
         return results
@@ -347,6 +362,76 @@ class VariantScanner:
         r"\bIVS(\d+)([\+\-]\d+)(del|dup|ins)([ACGT]*)\b", re.IGNORECASE
     )
 
+    # cDNA delins: c.123_456delXXXinsYYY or c.123delAinsT
+    CDNA_DELINS = re.compile(
+        r"\bc\.(\d+)(?:_(\d+))?del([ACGT]*)ins([ACGT]+)\b", re.IGNORECASE
+    )
+
+    # ==========================================================================
+    # STRUCTURAL / EXON-LEVEL / PREFIXLESS BIC PATTERNS (tightly gated)
+    # ==========================================================================
+
+    # Prefixless BIC-style indel: 185delAG, 5382insC (need digit length ≥ 3 + bases).
+    # Bases must be UPPERCASE (BIC convention); the (?-i:) scope keeps [ACGT]
+    # case-sensitive even under the global IGNORECASE, so "120delta" (del + "ta")
+    # no longer matches as c.120delTA. del/dup/ins stays case-insensitive.
+    BIC_PREFIXLESS_INDEL = re.compile(
+        r"\b(\d{3,5})(del|dup|ins)((?-i:[ACGT]{1,20}))\b", re.IGNORECASE
+    )
+
+    # Negation preceding a free-text structural event ("no deletion of exon 5",
+    # "ruled out a whole-gene deletion"). Sentence-break aware so it only looks
+    # within the current clause.
+    NEGATION_BEFORE_RE = re.compile(
+        r"(?:\bno\b|\bnot\b|\bnegative\s+for\b|\bwithout\b|\babsen(?:ce|t)\b|"
+        r"\bexclud(?:e[ds]?|ing)\b|\brule[ds]?\s+out\b|\bno\s+evidence\b)"
+        r"[^.;:!?]{0,40}$",
+        re.IGNORECASE,
+    )
+
+    # Negation can also follow the structural noun phrase: "deletion of exons
+    # 3-5 was not detected". Keep the look-ahead clause-bounded so a negative
+    # statement later in the paragraph cannot suppress a real finding.
+    NEGATION_AFTER_RE = re.compile(
+        r"^[^.;:!?\n]{0,60}\b(?:not|never)\s+(?:be\s+|been\s+)?"
+        r"(?:detected|identified|found|observed|seen|confirmed|demonstrated|present)\b"
+        r"|^[^.;:!?\n]{0,60}\b(?:was|were|is|are)\s+"
+        r"(?:absent|excluded|ruled\s+out)\b",
+        re.IGNORECASE,
+    )
+
+    # Generic structural phrases are useful only when the surrounding statement
+    # says they were a positive finding. This deliberately excludes methods and
+    # background prose such as "MLPA detects exon deletions" unless the paper
+    # also reports that one was found/observed in the target gene.
+    STRUCTURAL_POSITIVE_FINDING_RE = re.compile(
+        r"\b(?:identified|detected|found|observed|reported|confirmed|revealed|"
+        r"showed|demonstrated|harbou?rs?|harbou?red|carries|carried|segregates|"
+        r"segregated)\b"
+        r"|\bwe\s+(?:identify|detect|observe|report|confirm|demonstrate)\b"
+        r"|\b(?:is|was|were)\s+present\b|\bpresent\s+in\b",
+        re.IGNORECASE,
+    )
+
+    # Exon-level deletion/duplication: deletion of exons 3-5, del exons 3–5
+    EXON_EVENT = re.compile(
+        r"\b(?:(?:large\s+)?(?:deletion|duplication)\s+of\s+)?"
+        r"(?:del(?:etion)?|dup(?:lication)?)\s*"
+        r"(?:of\s+)?"
+        r"exons?\s*"
+        r"(\d{1,3})"
+        r"(?:\s*[-–—to]+\s*(\d{1,3}))?"
+        r"\b",
+        re.IGNORECASE,
+    )
+
+    # Whole-gene / large CNV phrasing (require gene-ish context nearby is handled later)
+    WHOLE_GENE_DEL = re.compile(
+        r"\b(?:whole[\s-]?gene|entire\s+gene)\s+(?:deletion|del)\b"
+        r"|\b(?:deletion|del)\s+of\s+(?:the\s+)?(?:entire|whole)\s+gene\b",
+        re.IGNORECASE,
+    )
+
     # ==========================================================================
     # NARRATIVE CONTEXT PATTERNS
     # ==========================================================================
@@ -437,10 +522,15 @@ class VariantScanner:
         cdna_variants = self._scan_cdna_variants(text)
         splice_variants = self._scan_splice_variants(text)
         narrative_variants = self._scan_narrative_variants(text)
+        structural_variants = self._scan_structural_variants(text)
 
         # Combine all findings
         all_candidates = (
-            protein_variants + cdna_variants + splice_variants + narrative_variants
+            protein_variants
+            + cdna_variants
+            + splice_variants
+            + narrative_variants
+            + structural_variants
         )
 
         # Filter and deduplicate
@@ -968,6 +1058,164 @@ class VariantScanner:
                 )
             )
 
+        # cDNA delins
+        for m in self.CDNA_DELINS.finditer(text):
+            pos1, pos2, deleted, inserted = (
+                m.group(1),
+                m.group(2),
+                m.group(3) or "",
+                m.group(4),
+            )
+            raw = m.group(0)
+            if pos2:
+                normalized = f"c.{pos1}_{pos2}del{deleted.upper()}ins{inserted.upper()}"
+            else:
+                normalized = f"c.{pos1}del{deleted.upper()}ins{inserted.upper()}"
+            variants.append(
+                ScannedVariant(
+                    raw_text=raw,
+                    normalized=normalized,
+                    variant_type="delins",
+                    notation_type="cdna",
+                    position=int(pos1),
+                    context=self._get_context(text, m.start(), m.end()),
+                    confidence=0.92,
+                    source="cdna_delins",
+                    variant_class="complex",
+                )
+            )
+
+        return variants
+
+    def _structural_statement_context(
+        self, text: str, start: int, end: int, window: int = 240
+    ) -> str:
+        """Return the clause-sized statement containing a structural match."""
+        lower = max(0, start - window)
+        upper = min(len(text), end + window)
+        before = text[lower:start]
+        after = text[end:upper]
+        # A bare period is not a safe boundary because HGVS c./p. prefixes are
+        # common immediately before the event. Only a period followed by space
+        # (or the end of the window) closes the statement.
+        boundary = re.compile(r"\n|[;?!]|\.(?=\s|$)")
+        left_matches = list(boundary.finditer(before))
+        left = lower + left_matches[-1].end() if left_matches else lower
+        right_match = boundary.search(after)
+        right = end + right_match.start() if right_match else upper
+        return text[left:right].strip()
+
+    def _structural_match_is_negated(
+        self, text: str, start: int, end: int, window: int = 80
+    ) -> bool:
+        """Return true for negation immediately before or after an event."""
+        before = text[max(0, start - window) : start]
+        after = text[end : min(len(text), end + window)]
+        return bool(
+            self.NEGATION_BEFORE_RE.search(before)
+            or self.NEGATION_AFTER_RE.search(after)
+        )
+
+    def _positive_structural_context(
+        self, text: str, start: int, end: int
+    ) -> Optional[str]:
+        """Return evidence context only for target-gene positive findings."""
+        context = self._structural_statement_context(text, start, end)
+        if not self._context_mentions_gene(context, self.gene_symbol):
+            return None
+        if self._structural_match_is_negated(text, start, end):
+            return None
+        if not self.STRUCTURAL_POSITIVE_FINDING_RE.search(context):
+            return None
+        return context
+
+    def _scan_structural_variants(self, text: str) -> List[ScannedVariant]:
+        """Scan for exon-level, large del/dup, and prefixless BIC-style indels."""
+        variants: List[ScannedVariant] = []
+
+        for m in self.BIC_PREFIXLESS_INDEL.finditer(text):
+            pos, op, bases = m.group(1), m.group(2).lower(), m.group(3).upper()
+            ctx = self._get_context(text, m.start(), m.end(), window=80)
+            if self.gene_symbol and self.gene_symbol.upper() not in ctx.upper():
+                aliases: set[str] = set()
+                try:
+                    if get_gene_aliases:
+                        aliases = {
+                            a.upper()
+                            for a in get_gene_aliases(
+                                self.gene_symbol, include_query_aliases=True
+                            )
+                        }
+                except Exception:
+                    aliases = set()
+                if not any(a in ctx.upper() for a in aliases):
+                    continue
+            normalized = f"c.{pos}{op}{bases}"
+            variants.append(
+                ScannedVariant(
+                    raw_text=m.group(0),
+                    normalized=normalized,
+                    variant_type=op,
+                    notation_type="cdna",
+                    position=int(pos),
+                    context=ctx,
+                    confidence=0.75,
+                    source="bic_prefixless",
+                    variant_class=(
+                        "frameshift" if op in {"del", "ins"} else "inframe_indel"
+                    ),
+                )
+            )
+
+        for m in self.EXON_EVENT.finditer(text):
+            context = self._positive_structural_context(text, m.start(), m.end())
+            if context is None:
+                continue
+            exon1, exon2 = m.group(1), m.group(2)
+            raw = m.group(0)
+            op = "deletion" if re.search(r"del", raw, re.I) else "duplication"
+            if exon2:
+                desc = f"{op} of exons {exon1}-{exon2}"
+                key = f"{'del' if op == 'deletion' else 'dup'}:exon{exon1}-{exon2}"
+            else:
+                desc = f"{op} of exon {exon1}"
+                key = f"{'del' if op == 'deletion' else 'dup'}:exon{exon1}"
+            vclass = "exon_deletion" if op == "deletion" else "exon_duplication"
+            variants.append(
+                ScannedVariant(
+                    raw_text=raw,
+                    normalized=key,
+                    variant_type=op,
+                    notation_type="structural",
+                    position=int(exon1),
+                    context=context,
+                    confidence=0.85,
+                    source="exon_event",
+                    variant_class=vclass,
+                    structural_description=desc,
+                )
+            )
+
+        for m in self.WHOLE_GENE_DEL.finditer(text):
+            context = self._positive_structural_context(text, m.start(), m.end())
+            if context is None:
+                continue
+            raw = m.group(0)
+            variants.append(
+                ScannedVariant(
+                    raw_text=raw,
+                    normalized="del:wholegene",
+                    variant_type="deletion",
+                    notation_type="structural",
+                    position=None,
+                    context=context,
+                    confidence=0.80,
+                    source="whole_gene_del",
+                    variant_class="large_deletion",
+                    structural_description="whole-gene deletion",
+                )
+            )
+
         return variants
 
     def _scan_splice_variants(self, text: str) -> List[ScannedVariant]:
@@ -991,6 +1239,7 @@ class VariantScanner:
                     context=self._get_context(text, m.start(), m.end()),
                     confidence=0.95,
                     source="ivs_splice",
+                    variant_class="splice",
                 )
             )
 
@@ -1016,6 +1265,7 @@ class VariantScanner:
                     context=self._get_context(text, m.start(), m.end()),
                     confidence=0.90,
                     source="ivs_indel",
+                    variant_class="splice",
                 )
             )
 
@@ -1183,7 +1433,9 @@ def merge_scanner_results(
     """
     existing_variants = extracted_data.get("variants", [])
 
-    # Build set of existing variant keys (normalized)
+    # Build set of existing variant keys (normalized). Structural-only rows need
+    # their description in this identity set; otherwise every scanner replay
+    # appends a duplicate because both point-notation fields are empty.
     existing_keys = set()
     for v in existing_variants:
         protein = normalize_variant(v.get("protein_notation", "") or "", gene_symbol)
@@ -1192,6 +1444,9 @@ def merge_scanner_results(
             existing_keys.add(protein.upper())
         if cdna:
             existing_keys.add(cdna.upper())
+        structural = structural_variant_identity(v.get("structural_description"))
+        if structural:
+            existing_keys.add(f"STRUCT:{structural}")
 
     # Add scanner variants not already present
     added_count = 0
@@ -1199,7 +1454,14 @@ def merge_scanner_results(
         if sv.confidence < min_confidence:
             continue
 
-        if sv.normalized.upper() in existing_keys:
+        scanner_key = sv.normalized.upper()
+        if sv.notation_type == "structural":
+            structural = structural_variant_identity(
+                sv.structural_description or sv.normalized
+            )
+            scanner_key = f"STRUCT:{structural}"
+
+        if scanner_key in existing_keys:
             continue
 
         # Create variant dict
@@ -1212,6 +1474,8 @@ def merge_scanner_results(
             "cdna_notation": sv.normalized
             if sv.notation_type in ("cdna", "splice")
             else None,
+            "variant_class": getattr(sv, "variant_class", None),
+            "structural_description": getattr(sv, "structural_description", None),
             "clinical_significance": "unknown",
             "evidence_level": "scanner",
             "source_location": f"Text scan ({sv.source})",
@@ -1222,9 +1486,13 @@ def merge_scanner_results(
             "functional_data": {"summary": "", "assays": []},
             "key_quotes": [context_quote] if context_quote else [],
         }
+        if sv.notation_type == "structural" and sv.normalized:
+            # structural key lives in structural_description; keep class
+            if not new_variant["structural_description"]:
+                new_variant["structural_description"] = sv.normalized
 
         existing_variants.append(new_variant)
-        existing_keys.add(sv.normalized.upper())
+        existing_keys.add(scanner_key)
         added_count += 1
 
     if added_count > 0:
