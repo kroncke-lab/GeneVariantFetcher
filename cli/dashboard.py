@@ -280,10 +280,14 @@ def _load_paper_final_check(con: sqlite3.Connection) -> dict:
         )
         if c in cols
     ]
+    if not want:  # table exists but has none of the expected columns (schema drift)
+        return out
     for r in con.execute("SELECT " + ",".join(want) + " FROM paper_final_check"):
         rd = dict(r)
         pmid = str(rd.get("pmid"))
-        verdict = (rd.get("verdict") or "").strip().lower()
+        # SQLite is dynamically typed — coerce text-ish columns to str so later
+        # slicing / HTML-escaping can't TypeError on an int/float cell.
+        verdict = str(rd.get("verdict") or "").strip().lower()
         n_flagged = _to_int(rd.get("n_flagged"))
         n_missing = _to_int(rd.get("n_missing"))
         out["by_pmid"][pmid] = {
@@ -291,8 +295,8 @@ def _load_paper_final_check(con: sqlite3.Connection) -> dict:
             "confidence": rd.get("confidence"),
             "n_flagged": n_flagged,
             "n_missing": n_missing,
-            "completeness_status": (rd.get("completeness_status") or ""),
-            "summary": (rd.get("summary") or ""),
+            "completeness_status": str(rd.get("completeness_status") or ""),
+            "summary": str(rd.get("summary") or ""),
             "source_grounded": bool(rd.get("source_grounded")),
         }
         out["counts"]["total"] += 1
@@ -1612,7 +1616,9 @@ def _load_prev_snapshot(hist_dir: Path, gene: str) -> Optional[dict]:
     if not p.exists():
         return None
     try:
-        lines = [ln for ln in p.read_text().splitlines() if ln.strip()]
+        # match _append_snapshot's utf-8 write; the platform default (cp1252 on
+        # Windows) would raise UnicodeDecodeError (a ValueError, not OSError).
+        lines = [ln for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()]
     except OSError:
         return None
     for ln in reversed(lines):
@@ -2017,7 +2023,7 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
         # flag rate over reviewable (ok+flag), not raw row count
         reviewable = fcc.get("ok", 0) + fcc.get("flag", 0)
         if reviewable:
-            fcls = "bad" if fcc.get("flag") else "ok"
+            fcls = "bad" if fcc.get("flag", 0) > 0 else "ok"
             badges.append(
                 f"<span class='tag {fcls}'>check {fcc.get('flag', 0)} flagged</span>"
             )

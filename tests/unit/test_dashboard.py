@@ -14,6 +14,7 @@ from cli.dashboard import (
     _gene_snapshot,
     _health_band,
     _health_signals,
+    _load_paper_final_check,
     _load_prev_snapshot,
     _sanitize_local_paths,
     _worklist_card,
@@ -416,11 +417,34 @@ def test_delta_compact_guards_corrupt_values():
 def test_load_prev_snapshot_scans_back_past_corrupt_last_lines(tmp_path: Path):
     hist = tmp_path / "hist"
     hist.mkdir()
-    # last well-formed DICT is the first line; the rest are corrupt / non-object
+    # last well-formed DICT is the first line; the rest are corrupt / non-object.
+    # The dict carries a non-ASCII char so the read must be utf-8 (the platform
+    # default would UnicodeDecodeError on Windows — a ValueError, not OSError).
     (hist / "G.jsonl").write_text(
-        '{"unique": 5, "generated": "d1"}\n[]\nnot json at all\n', encoding="utf-8"
+        '{"unique": 5, "generated": "dµ"}\n[]\nnot json at all\n', encoding="utf-8"
     )
-    assert _load_prev_snapshot(hist, "G") == {"unique": 5, "generated": "d1"}
+    assert _load_prev_snapshot(hist, "G") == {"unique": 5, "generated": "dµ"}
+
+
+def test_load_paper_final_check_coerces_nonstring_columns(tmp_path: Path):
+    # SQLite columns can hold unexpected types; text-ish fields must be coerced
+    # to str so later slicing / escaping can't TypeError.
+    db = tmp_path / "fc.db"
+    con = sqlite3.connect(str(db))
+    con.row_factory = sqlite3.Row  # load_db sets this; _load_paper_final_check needs it
+    con.execute(
+        "CREATE TABLE paper_final_check(pmid TEXT, verdict TEXT, n_flagged INTEGER, "
+        "n_missing INTEGER, completeness_status, summary)"
+    )
+    # summary + completeness_status stored as INTEGERs (dynamic typing)
+    con.execute("INSERT INTO paper_final_check VALUES ('111','flag',1,2,0,12345)")
+    con.commit()
+    out = _load_paper_final_check(con)
+    con.close()
+    rec = out["by_pmid"]["111"]
+    assert isinstance(rec["summary"], str) and rec["summary"] == "12345"
+    assert isinstance(rec["completeness_status"], str)
+    assert out["counts"]["flag"] == 1
 
 
 def test_health_signals_reviewable_and_denominators():
