@@ -19,6 +19,7 @@ from cli.dashboard import (
     _health_signals,
     _load_paper_final_check,
     _load_prev_snapshot,
+    _read_artifact_sample,
     _sanitize_local_paths,
     _worklist_card,
     build_paper_process_index,
@@ -112,6 +113,16 @@ def test_scoring_outputs_stay_in_scoring_stage():
         )
         == 6
     )
+
+
+def test_sqlite_artifact_is_metadata_only(tmp_path: Path):
+    db = tmp_path / "TESTGENE.db"
+    db.write_bytes(b"SQLite format 3\x00\xff\xfe\x00binary payload")
+
+    text, mode = _read_artifact_sample(db, db.stat().st_size)
+
+    assert text == ""
+    assert mode == "binary"
 
 
 def test_paper_process_index_and_timeline_include_every_stage_source(

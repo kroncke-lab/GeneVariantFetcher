@@ -950,6 +950,8 @@ def _artifact_stage(path: Path) -> int:
 
 def _read_artifact_sample(path: Path, size: int) -> tuple[str, str]:
     """Return (text, mode): full important logs/reports, sampled large dumps."""
+    if path.suffix.lower() == ".db":
+        return "", "binary"
     important = (
         path.name.lower() in _PROCESS_FULL_NAMES or path.suffix.lower() == ".log"
     )
