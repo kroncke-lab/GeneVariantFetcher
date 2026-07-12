@@ -1037,7 +1037,7 @@ def main() -> int:
             print(f"Extract failures: {details}")
     else:
         dbs = resolve_dbs(args.db)
-        dbs = {g: p for g, p in dbs.items() if g in set(genes_in_set)}
+        dbs = {g: p for g, p in dbs.items() if g in selected_genes}
 
     require_complete_gene_set(dbs, genes_in_set)
 
@@ -1047,7 +1047,9 @@ def main() -> int:
 
     summary = run_scorer(dbs, args.outdir)
     papers = per_paper_table(args.outdir, manifest_in_scope)
-    baseline_document = json.loads(BASELINE.read_text()) if BASELINE.exists() else None
+    baseline_document = (
+        json.loads(BASELINE.read_text(encoding="utf-8")) if BASELINE.exists() else None
+    )
     baseline, baseline_note = select_baseline_profile(
         baseline_document,
         genes_in_set,
@@ -1072,7 +1074,7 @@ def main() -> int:
             all_genes_in_set,
             current_fixture_hash,
         )
-        BASELINE.write_text(json.dumps(updated, indent=2) + "\n")
+        BASELINE.write_text(json.dumps(updated, indent=2) + "\n", encoding="utf-8")
         print(f"Wrote baseline -> {display_path(BASELINE)}")
 
     print(
