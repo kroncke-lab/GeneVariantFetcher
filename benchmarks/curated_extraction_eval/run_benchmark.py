@@ -299,8 +299,14 @@ def require_pmid_files_match_manifest(
             for line in path.read_text(encoding="utf-8").splitlines()
             if line.strip()
         ]
-        observed = set(observed_list)
-        duplicates = sorted(pmid for pmid in observed if observed_list.count(pmid) > 1)
+        observed: set[str] = set()
+        duplicate_set: set[str] = set()
+        for pmid in observed_list:
+            if pmid in observed:
+                duplicate_set.add(pmid)
+            else:
+                observed.add(pmid)
+        duplicates = sorted(duplicate_set)
         missing = sorted(expected[gene] - observed)
         unexpected = sorted(observed - expected[gene])
         details = []
@@ -659,7 +665,7 @@ def _fresh_files(
     include_content: bool = False,
 ) -> list[Path]:
     """Files newly created or modified after one subprocess invocation."""
-    fresh: list[Path] = []
+    fresh: list[tuple[Path, int]] = []
     for path in root.glob(pattern) if root.exists() else []:
         if not path.is_file():
             continue
@@ -669,8 +675,9 @@ def _fresh_files(
         except OSError:
             continue
         if before.get(resolved) != signature:
-            fresh.append(resolved)
-    return sorted(fresh, key=lambda path: path.stat().st_mtime_ns, reverse=True)
+            fresh.append((resolved, signature[0]))
+    fresh.sort(key=lambda item: item[1], reverse=True)
+    return [path for path, _ in fresh]
 
 
 def _status_exit_code(payload: dict) -> int | None:
