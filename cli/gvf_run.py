@@ -1230,18 +1230,37 @@ def _write_run_status(
     stage_failures: list[str],
     stage_warnings: list[str],
     started_at: float,
+    active_db: Path,
 ) -> None:
     """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
     structured stage status (and the process exit code) instead of scraping
-    RUN_REPORT.md. Best-effort: never raises into the run.
+    RUN_REPORT.md.
+
+    ``active_db`` names the finalized database consumed by the post-extraction
+    stages. Paths inside ``run_dir`` are stored relative to the directory that
+    contains RUN_STATUS.json; paths outside it are stored as absolute paths.
+    Consumers can therefore resolve a relative value against
+    ``RUN_STATUS.json.parent``. Best-effort: never raises into the run.
     """
     try:
+        try:
+            active_db_ref = str(active_db.relative_to(run_dir))
+        except ValueError:
+            resolved_run_dir = run_dir.resolve()
+            resolved_active_db = active_db.resolve()
+            try:
+                active_db_ref = str(resolved_active_db.relative_to(resolved_run_dir))
+            except ValueError:
+                active_db_ref = str(resolved_active_db)
+
         (run_dir / "RUN_STATUS.json").write_text(
             json.dumps(
                 {
                     "gene": gene,
                     "status": status,
+                    "severity": "warning" if stage_failures else "ok",
                     "exit_code": exit_code,
+                    "active_db": active_db_ref,
                     "duration_seconds": int(time.time() - started_at),
                     "stage_failures": list(stage_failures),
                     "stage_warnings": list(stage_warnings),
@@ -1624,7 +1643,14 @@ def run_gvf_pipeline(
     exit_code = EXIT_STAGE_WARNINGS if stage_failures else 0
     status = "completed_with_warnings" if stage_failures else "completed"
     _write_run_status(
-        run_dir, gene, status, exit_code, stage_failures, stage_warnings, started
+        run_dir,
+        gene,
+        status,
+        exit_code,
+        stage_failures,
+        stage_warnings,
+        started,
+        db,
     )
 
     if stage_failures:

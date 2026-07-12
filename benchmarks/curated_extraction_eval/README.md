@@ -42,14 +42,19 @@ full gold standard before claiming a headline number.
 # From the repo root. Uses the project venv if present.
 
 # 1) SCORE MODE (default, NO LLM tokens, takes seconds):
-#    Score the four canonical DBs on the 24-paper subset.
+#    Score every canonical DB in the 101-paper set.
 python benchmarks/curated_extraction_eval/run_benchmark.py
 
-# 2) Score a DB *you* produced (e.g. after a matcher/scorer/normalizer change):
+# 2) Headline cardiac-only score (the fully human-curated gold scope):
 python benchmarks/curated_extraction_eval/run_benchmark.py \
+    --genes KCNH2,KCNQ1,RYR2,SCN5A
+
+# 3) Score DBs *you* produced (repeat --db and select the same gene scope):
+python benchmarks/curated_extraction_eval/run_benchmark.py \
+    --genes KCNH2,SCN5A \
     --db KCNH2=/path/to/your/KCNH2.db --db SCN5A=/path/to/your/SCN5A.db
 
-# 3) EXTRACT MODE (opt-in, COSTS LLM TOKENS): run the fixed PMID set through
+# 4) EXTRACT MODE (opt-in, COSTS LLM TOKENS): run the fixed PMID set through
 #    the regular default gvf-run pipeline after selection, then score it.
 #    Needs a working .env.
 python benchmarks/curated_extraction_eval/run_benchmark.py \
@@ -81,6 +86,12 @@ back to the repo's normal `corpus/` cache. `--fast` is available only for a
 cheap diagnostic pass and adds `--no-source-recovery`; do not use it for the
 benchmark number.
 
+Every requested gene must produce a DB; the runner refuses a partial aggregate.
+An exit-3 run with a fresh `RUN_STATUS.json` marked
+`completed_with_warnings` is still scored from its explicit `active_db`, but it
+is labeled degraded and cannot pass `--fail-on-regression`. Fatal exits and
+stale or missing warning status are never treated as successful output.
+
 ---
 
 ## What the metrics mean
@@ -99,21 +110,27 @@ benchmark number.
 
 ---
 
-## Current baseline (the numbers to hold or beat)
+## Current baselines (the numbers to hold or beat)
 
-Measured by `score` mode against the eight **canonical DBs** wired into
-`run_benchmark.py` (the 4 cardiac DBs from `docs/RECALL_STATUS.md` plus the
-BRCA1/BRCA2/MYBPC3/APOE run DBs). The machine-readable copy is
-**`expected_baseline.json`** (the runner diffs against it automatically);
-regenerate with `--write-baseline`.
+`expected_baseline.json` stores schema-v2 profiles keyed by the **exact sorted
+gene set** and a fingerprint of that scope's manifest rows plus frozen gold.
+The runner compares only with an exact-scope, exact-fixture profile, so a cardiac
+run can never be diffed against the eight-gene baseline and a changed paper/gold
+fixture cannot reuse stale metrics. `--write-baseline` updates only the selected
+scope and preserves the others.
 
-| Metric | Subset recall (101 papers) | (Full cardiac gold standard, for contrast) |
+The headline profile is the four fully human-curated cardiac genes. The
+eight-gene profile remains useful as a broader extraction regression surface,
+but its non-cardiac answer keys are curator/derived overrides and must not be
+reported as program recall.
+
+| Metric | Cardiac profile (73 papers) | Eight-gene diagnostic (101 papers) |
 |---|---:|---:|
-| PMIDs | 99.0% (100/101) | ~85% |
-| Variant rows | 90.1% (2728/3029) | ~81% |
-| **Unique variants** | **92.3% (1863/2019)** | ~86% |
-| Patients / Affected / Unaffected | 94.6% / 93.9% / 97.7% | ~85% / ~84% / ~87% |
-| Carriers MAE | 0.300 | ~0.61 |
+| PMIDs | 98.6% (72/73) | 99.0% (100/101) |
+| Variant rows | 89.8% (2436/2714) | 90.0% (2742/3048) |
+| **Unique variants** | **92.0% (1584/1721)** | **92.1% (1878/2040)** |
+| Patients / Affected / Unaffected | 93.9% / 93.2% / 98.0% | 92.9% / 91.7% / 97.7% |
+| Carriers MAE | 0.339 | 0.355 |
 
 This set sits near ~90% **on purpose**: it blends papers the pipeline nails
 (the regression floor) with deliberately-hard new-gene and failure-mode papers
@@ -136,7 +153,7 @@ curated_extraction_eval/
 ├── add_paper.py         ← one-command add: appends to registry, checks gold+source, rebuilds
 ├── manifest.md          ← human-readable table of the papers (auto-generated)
 ├── manifest.csv         ← machine-readable: gene, pmid, strategy, gold counts, gold source, title, corpus path, PubMed URL
-├── expected_baseline.json ← committed baseline the runner diffs against
+├── expected_baseline.json ← committed exact-gene-scope baseline profiles
 ├── run_benchmark.py     ← the runner (score + extract modes)
 ├── build_fixture.py     ← regenerator: reads registry.tsv + gold and rebuilds every derived file
 ├── fixtures/            ← deterministic synthetic cases used by unit tests; never folded into curated gold
@@ -247,7 +264,14 @@ canonical DBs and filtering as described above.
 
 - **Canonical DB paths** are hard-coded in `run_benchmark.py` and `build_fixture.py`
   to match `docs/RECALL_STATUS.md`. If those DBs move, update both (one constant
-  each). On a fresh checkout without them, pass `--db GENE=/path` explicitly.
+  each). A requested gene with no DB is a hard error rather than a silently
+  smaller denominator; on a fresh checkout, pass each DB explicitly with
+  matching `--genes`.
+- **Baselines are exact-scope.** A scope without a committed profile is still
+  scoreable, but it has no baseline delta and `--fail-on-regression` fails
+  closed. A changed manifest/gold fingerprint behaves the same way. Create or
+  replace only that profile with `--write-baseline` after the result is accepted;
+  degraded and `--fast` extraction runs are not eligible.
 - **The gold subset is frozen.** It is a row-filtered copy of
   `gene_variant_fetcher_gold_standard/normalized/<GENE>_recall_input.csv`. If the
   full gold is re-curated, re-run `build_fixture.py` to refresh the subset.

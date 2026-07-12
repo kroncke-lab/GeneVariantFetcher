@@ -21,6 +21,15 @@ TRAILING_JUNK_PROTEIN_NOTATIONS = (
     "p.Gly262Alafs*98junk",
     "p.Gly24fsTer58more",
     "p.Arg176delinsLysGlyoops",
+    "p.Q376splice-junk",
+    "p.L799spliceworthy",
+    "M159spurious",
+)
+
+LEGACY_SPLICE_PROTEIN_NOTATIONS = (
+    ("KCNH2", "p.Q376splice"),
+    ("KCNH2", "p.L799splice"),
+    ("KCNH2", "M159sp"),
 )
 
 
@@ -36,6 +45,24 @@ def test_extractor_and_migration_accept_valid_protein_forms(notation: str):
 
     assert filtered["variants"] == [row]
     assert sanitize_variant_notation(dict(row)) is True
+
+
+@pytest.mark.parametrize(("gene", "notation"), LEGACY_SPLICE_PROTEIN_NOTATIONS)
+def test_extractor_and_migration_preserve_legacy_splice_labels(
+    gene: str, notation: str
+):
+    extractor = ExpertExtractor(models=["gpt-4"])
+    row = {"gene_symbol": gene, "protein_notation": notation}
+
+    filtered = extractor._filter_extraction_artifacts(
+        {"extraction_metadata": {}, "variants": [dict(row)]},
+        gene,
+    )
+    migrated = dict(row)
+
+    assert filtered["variants"][0]["protein_notation"] == notation
+    assert sanitize_variant_notation(migrated) is True
+    assert migrated["protein_notation"] == notation
 
 
 @pytest.mark.parametrize("notation", TRAILING_JUNK_PROTEIN_NOTATIONS)
