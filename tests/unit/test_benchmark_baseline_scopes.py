@@ -9,6 +9,7 @@ from benchmarks.curated_extraction_eval.run_benchmark import (
     gate_result,
     require_clean_baseline_write,
     require_complete_gene_set,
+    require_pmid_files_match_manifest,
     select_baseline_profile,
     update_baseline_document,
 )
@@ -129,3 +130,19 @@ def test_regression_gate_fails_closed_on_degraded_extract():
 def test_degraded_extract_cannot_write_baseline():
     with pytest.raises(SystemExit, match="refusing to write baseline.*KCNQ1"):
         require_clean_baseline_write({"KCNQ1": "source recovery failed"})
+
+
+def test_extract_pmid_file_must_match_selected_manifest(tmp_path: Path):
+    manifest = {
+        "KCNH2:1": {"gene": "KCNH2", "pmid": "1"},
+        "KCNH2:2": {"gene": "KCNH2", "pmid": "2"},
+    }
+    (tmp_path / "KCNH2.txt").write_text("1\n3\n3\n", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exc:
+        require_pmid_files_match_manifest(["KCNH2"], manifest, tmp_path)
+
+    message = str(exc.value)
+    assert "missing=2" in message
+    assert "unexpected=3" in message
+    assert "duplicates=3" in message

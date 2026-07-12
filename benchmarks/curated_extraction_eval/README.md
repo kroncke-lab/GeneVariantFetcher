@@ -87,6 +87,9 @@ cheap diagnostic pass and adds `--no-source-recovery`; do not use it for the
 benchmark number.
 
 Every requested gene must produce a DB; the runner refuses a partial aggregate.
+Before extraction starts, each selected `pmids/<GENE>.txt` must contain exactly
+the manifest's PMID set, without duplicates, so a drifted acquisition list
+cannot be scored against the canonical fixture baseline.
 An exit-3 run with a fresh `RUN_STATUS.json` marked
 `completed_with_warnings` is still scored from its explicit `active_db`, but it
 is labeled degraded and cannot pass `--fail-on-regression`. Fatal exits and

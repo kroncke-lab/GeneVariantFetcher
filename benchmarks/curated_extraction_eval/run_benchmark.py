@@ -274,6 +274,52 @@ def baseline_scope_key(genes: Iterable[str]) -> str:
     return ",".join(gene_scope(genes))
 
 
+def require_pmid_files_match_manifest(
+    genes: Iterable[str],
+    manifest: dict[str, dict[str, str]],
+    pmid_dir: Path | None = None,
+) -> None:
+    """Refuse extraction when a selected PMID file has drifted from the manifest."""
+    wanted = gene_scope(genes)
+    expected = {gene: set() for gene in wanted}
+    for row in manifest.values():
+        gene = row.get("gene", "").strip().upper()
+        if gene in expected:
+            expected[gene].add(row.get("pmid", "").strip())
+
+    root = pmid_dir or HERE / "pmids"
+    problems: list[str] = []
+    for gene in wanted:
+        path = root / f"{gene}.txt"
+        if not path.is_file():
+            problems.append(f"{gene}: missing {path}")
+            continue
+        observed_list = [
+            line.strip()
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        observed = set(observed_list)
+        duplicates = sorted(pmid for pmid in observed if observed_list.count(pmid) > 1)
+        missing = sorted(expected[gene] - observed)
+        unexpected = sorted(observed - expected[gene])
+        details = []
+        if missing:
+            details.append("missing=" + ",".join(missing))
+        if unexpected:
+            details.append("unexpected=" + ",".join(unexpected))
+        if duplicates:
+            details.append("duplicates=" + ",".join(duplicates))
+        if details:
+            problems.append(f"{gene}: " + " ".join(details))
+
+    if problems:
+        raise SystemExit(
+            "benchmark PMID files do not match the selected manifest: "
+            + "; ".join(problems)
+        )
+
+
 def fixture_sha256(genes: Iterable[str], manifest: dict[str, dict[str, str]]) -> str:
     """Fingerprint the selected manifest rows and frozen gold files.
 
@@ -1019,6 +1065,7 @@ def main() -> int:
     if args.mode == "extract":
         if not args.email:
             raise SystemExit("--mode extract requires --email")
+        require_pmid_files_match_manifest(genes_in_set, manifest_in_scope)
         extracted = do_extract(
             args.email,
             args.extract_outdir,
