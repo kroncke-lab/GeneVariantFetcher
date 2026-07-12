@@ -214,7 +214,7 @@ class VariantScanner:
     # Full HGVS protein notation: p.Arg534Cys, p.Ala561Val, p.Leu987fs, etc.
     PROTEIN_HGVS_FULL = re.compile(
         r"\bp\.([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|fs\*?\d*|del|dup|ins|Ter|\*)"
-        r"(?:\*?\d*)?",  # Optional frameshift extension
+        r"(?:\*?\d*)?(?!\w)",  # Optional extension + complete-token boundary
         re.IGNORECASE,
     )
 
@@ -236,13 +236,14 @@ class VariantScanner:
 
     # Short HGVS with p.: p.R534C, p.A561V, p.L987fs
     PROTEIN_HGVS_SHORT = re.compile(
-        r"\bp\.([A-Z])(\d+)([A-Z]|fs[X\*]?\d*|del|dup|ins|\*|X)", re.IGNORECASE
+        r"\bp\.([A-Z])(\d+)([A-Z]|fs[X\*]?\d*|del|dup|ins|\*|X)(?!\w)",
+        re.IGNORECASE,
     )
 
     # Three-letter AA without p. prefix: Arg534Cys, Ala561Val, Leu987fs
     PROTEIN_THREE_LETTER = re.compile(
         r"\b([A-Z][a-z]{2})(\d{2,4})([A-Z][a-z]{2}|fs\*?\d*|del|dup|ins|Ter|\*)"
-        r"(?:[X\*]?\d*)?",
+        r"(?:[X\*]?\d*)?(?!\w)",
         re.IGNORECASE,
     )
 

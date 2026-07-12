@@ -6,6 +6,7 @@ import pytest
 
 from harvesting.migrate_to_sqlite import sanitize_variant_notation
 from pipeline.extraction import ExpertExtractor
+from utils.variant_scanner import VariantScanner, merge_scanner_results
 
 
 VALID_PROTEIN_NOTATIONS = (
@@ -21,6 +22,15 @@ TRAILING_JUNK_PROTEIN_NOTATIONS = (
     "p.Gly262Alafs*98junk",
     "p.Gly24fsTer58more",
     "p.Arg176delinsLysGlyoops",
+    "p.Q376splice-junk",
+    "p.L799spliceworthy",
+    "M159spurious",
+)
+
+LEGACY_SPLICE_PROTEIN_NOTATIONS = (
+    ("KCNH2", "p.Q376splice"),
+    ("KCNH2", "p.L799splice"),
+    ("KCNH2", "M159sp"),
 )
 
 
@@ -36,6 +46,51 @@ def test_extractor_and_migration_accept_valid_protein_forms(notation: str):
 
     assert filtered["variants"] == [row]
     assert sanitize_variant_notation(dict(row)) is True
+
+
+@pytest.mark.parametrize(("gene", "notation"), LEGACY_SPLICE_PROTEIN_NOTATIONS)
+def test_extractor_and_migration_preserve_legacy_splice_labels(
+    gene: str, notation: str
+):
+    extractor = ExpertExtractor(models=["gpt-4"])
+    row = {"gene_symbol": gene, "protein_notation": notation}
+
+    filtered = extractor._filter_extraction_artifacts(
+        {"extraction_metadata": {}, "variants": [dict(row)]},
+        gene,
+    )
+    migrated = dict(row)
+
+    assert filtered["variants"][0]["protein_notation"] == notation
+    assert sanitize_variant_notation(migrated) is True
+    assert migrated["protein_notation"] == notation
+
+
+@pytest.mark.parametrize(
+    "notation",
+    ("p.Q376splice", "p.L799splice", "p.Gln376splice", "Gln376splice"),
+)
+def test_scanner_does_not_prefix_match_splice_label_as_missense(notation: str):
+    result = VariantScanner("KCNH2").scan(f"The table reports {notation}.")
+
+    assert result.variants == []
+
+
+@pytest.mark.parametrize(("gene", "notation"), LEGACY_SPLICE_PROTEIN_NOTATIONS)
+def test_scanner_merge_does_not_add_false_variant_for_splice_label(
+    gene: str, notation: str
+):
+    scanned = VariantScanner(gene).scan(f"The table reports {notation}.")
+    merged = merge_scanner_results(
+        {
+            "extraction_metadata": {},
+            "variants": [{"gene_symbol": gene, "protein_notation": notation}],
+        },
+        scanned,
+        gene,
+    )
+
+    assert [row["protein_notation"] for row in merged["variants"]] == [notation]
 
 
 @pytest.mark.parametrize("notation", TRAILING_JUNK_PROTEIN_NOTATIONS)

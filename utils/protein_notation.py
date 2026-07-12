@@ -20,6 +20,12 @@ AA1_PATTERN = r"[ACDEFGHIKLMNPQRSTVWY]"
 AMINO_ACID_PATTERN = rf"(?:{AA3_PATTERN}|{AA1_PATTERN})"
 AMINO_ACID_SEQUENCE_PATTERN = rf"(?:{AMINO_ACID_PATTERN})+"
 
+# Some legacy clinical tables use a residue-position label for a splice event
+# instead of HGVS cDNA notation.  Keep this as a separate, exact alternative:
+# ``sp``/``splice`` is only valid immediately after one residue position, not
+# after a range and not as the prefix of an arbitrary trailing annotation.
+LEGACY_SPLICE_LABEL_PATTERN = rf"(?:p\.)?{AMINO_ACID_PATTERN}\d{{1,4}}(?:splice|sp)"
+
 # Supported changes include substitutions/termination, frameshifts with an
 # optional changed residue and stop distance, and simple/range indels.  Examples
 # that exercise the less obvious branches:
@@ -28,7 +34,8 @@ AMINO_ACID_SEQUENCE_PATTERN = rf"(?:{AMINO_ACID_PATTERN})+"
 #   p.Ala100_Glu101insLys  three-letter insertion sequence
 #   p.Arg176delinsLysGly   multi-residue replacement sequence
 PROTEIN_NOTATION_RE = re.compile(
-    rf"(?:p\.)?{AMINO_ACID_PATTERN}"
+    rf"(?:{LEGACY_SPLICE_LABEL_PATTERN}"
+    rf"|(?:p\.)?{AMINO_ACID_PATTERN}"
     r"\d{1,4}"
     rf"(?:[_-]{AMINO_ACID_PATTERN}\d{{1,4}})?"
     rf"(?:{AMINO_ACID_PATTERN}|[X*?=]"
@@ -36,7 +43,7 @@ PROTEIN_NOTATION_RE = re.compile(
     rf"|delins{AMINO_ACID_SEQUENCE_PATTERN}"
     rf"|del(?:{AMINO_ACID_SEQUENCE_PATTERN})?"
     rf"|dup(?:{AMINO_ACID_SEQUENCE_PATTERN})?"
-    rf"|ins(?:{AMINO_ACID_SEQUENCE_PATTERN})?)",
+    rf"|ins(?:{AMINO_ACID_SEQUENCE_PATTERN})?))",
     re.IGNORECASE,
 )
 

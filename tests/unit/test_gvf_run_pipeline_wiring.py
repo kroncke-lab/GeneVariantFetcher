@@ -76,6 +76,15 @@ def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):
     body = report.read_text()
     assert "# GVF Run Report — TESTGENE" in body
 
+    status_path = report.parent / "RUN_STATUS.json"
+    status = json.loads(status_path.read_text())
+    assert status["status"] == "completed"
+    assert status["severity"] == "ok"
+    assert status["active_db"] == "TESTGENE.db"
+    assert (status_path.parent / status["active_db"]).resolve() == (
+        report.parent / "TESTGENE.db"
+    ).resolve()
+
 
 def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
     """With no flag passed, the turnkey driver runs source-qc + source-recovery."""
@@ -101,15 +110,23 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
         stage_failures=None,
     ):
         calls.append("source-recovery")
-        return None
+        refreshed_db = run_dir / f"{gene}.refresh.db"
+        refreshed_db.write_bytes(b"refreshed sqlite")
+        return gvf_run.SourceRecoveryResult(
+            fetch_dir=run_dir / "source_qc" / "fetch",
+            outcome_summary=run_dir / "source_qc" / "outcome.json",
+            fetched_source_override=run_dir / "source_qc" / "override.csv",
+            active_db=refreshed_db,
+        )
 
     monkeypatch.setattr(gvf_run, "step_source_qc", fake_qc)
     monkeypatch.setattr(gvf_run, "step_source_recovery", fake_recovery)
 
+    output = tmp_path / "out"
     rc = gvf_run.run_gvf_pipeline(
         gene="TESTGENE",
         email="x@example.com",
-        output=tmp_path / "out",
+        output=output,
         # NOTE: source_recovery intentionally omitted -> exercises the default
         skip=["layers"],
     )
@@ -117,6 +134,12 @@ def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
     assert rc == 0
     assert "source-qc" in calls, "source-qc did not run under the default"
     assert "source-recovery" in calls, "source-recovery is not ON by default"
+    status_path = output / "TESTGENE" / "run1" / "RUN_STATUS.json"
+    status = json.loads(status_path.read_text())
+    assert status["active_db"] == "TESTGENE.refresh.db"
+    assert (
+        status_path.parent / status["active_db"]
+    ).read_bytes() == b"refreshed sqlite"
 
 
 def test_corpus_sync_runs_by_default_and_is_skippable(tmp_path: Path, monkeypatch):
@@ -316,8 +339,35 @@ def test_stage_failure_sets_nonzero_exit_and_status(tmp_path: Path, monkeypatch)
 
     status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
     assert status["status"] == "completed_with_warnings"
+    assert status["severity"] == "warning"
     assert status["exit_code"] == gvf_run.EXIT_STAGE_WARNINGS
+    assert status["active_db"] == "TESTGENE.db"
     assert any("source-qc" in f for f in status["stage_failures"])
+
+
+def test_fatal_extract_failure_does_not_write_completed_status(
+    tmp_path: Path, monkeypatch
+):
+    """Fatal exit 3 must not leave a RUN_STATUS that claims completion."""
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+
+    def failing_extract(*, gene, output_dir, **kwargs):
+        # Model an extractor that creates its run directory before raising.
+        (Path(output_dir) / gene / "run1").mkdir(parents=True)
+        raise RuntimeError("fatal extraction failure")
+
+    monkeypatch.setattr(gvf_run, "step_extract", failing_extract)
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+    )
+
+    assert rc == 3
+    assert not (output / "TESTGENE" / "run1" / "RUN_STATUS.json").exists()
 
 
 def test_trust_gate_runs_by_default(tmp_path: Path, monkeypatch):

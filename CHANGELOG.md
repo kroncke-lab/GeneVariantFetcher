@@ -32,6 +32,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The recall scorer consumes the adjudication overlay opt-in
   (`GVF_APPLY_ADJUDICATIONS=1`).
 
+### Fixed
+- Curated extract-mode benchmarks now score a finalized DB from a fresh
+  `RUN_STATUS.json` when `gvf-run` completes with exit 3 warnings, while marking
+  the result degraded and refusing partial gene sets or degraded baseline
+  updates. `RUN_STATUS.json` now records `severity` and the finalized
+  `active_db` explicitly.
+- Curated benchmark baselines are keyed by the exact gene scope, preventing a
+  filtered cardiac run from being compared with the eight-gene baseline.
+- Strict protein-notation validation preserves exact legacy splice labels such
+  as `p.Q376splice`, `p.L799splice`, and `M159sp` without accepting trailing
+  junk.
+
 ## [Unreleased] - 2026-06-03
 
 ### Changed

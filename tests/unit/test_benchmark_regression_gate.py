@@ -65,3 +65,17 @@ def test_e2e_count_error_regression_flagged():
     baseline = {**BASELINE, "count_error_end_to_end": {"carriers": 1.0}}
     problems = check_regression(summary, baseline, 0.005, 0.05)
     assert any("e2e.carriers" in p for p in problems)
+
+
+def test_changed_gold_denominator_is_not_compared_as_recall_delta():
+    summary = _summary(0.95, 0.30)
+    baseline = {
+        "recall": {
+            "unique_variants": {"gold": 99, "recall": 0.90},
+        },
+        "mae": {"carriers": 0.30},
+    }
+
+    problems = check_regression(summary, baseline, 0.005, 0.05)
+
+    assert any("gold denominator 100 != baseline 99" in p for p in problems)

@@ -1,39 +1,111 @@
 {
-  "recall": {
-    "pmids": {
-      "matched": 100,
-      "gold": 101,
-      "recall": 0.9900990099009901
+  "schema_version": 2,
+  "profiles": {
+    "APOE,BRCA1,BRCA2,KCNH2,KCNQ1,MYBPC3,RYR2,SCN5A": {
+      "genes": [
+        "APOE",
+        "BRCA1",
+        "BRCA2",
+        "KCNH2",
+        "KCNQ1",
+        "MYBPC3",
+        "RYR2",
+        "SCN5A"
+      ],
+      "fixture_sha256": "3a0d7cb46e96011633cc632c6f74988322881edb7d132b9cc460ca6f67185e59",
+      "recall": {
+        "pmids": {
+          "matched": 100,
+          "gold": 101,
+          "recall": 0.9900990099009901
+        },
+        "variant_rows": {
+          "matched": 2742,
+          "gold": 3048,
+          "recall": 0.8996062992125984
+        },
+        "unique_variants": {
+          "matched": 1878,
+          "gold": 2040,
+          "recall": 0.9205882352941176
+        },
+        "patients": {
+          "matched": 7878,
+          "gold": 8479,
+          "recall": 0.9291189998820616
+        },
+        "affected": {
+          "matched": 6177,
+          "gold": 6734,
+          "recall": 0.9172854172854172
+        },
+        "unaffected": {
+          "matched": 503,
+          "gold": 515,
+          "recall": 0.9766990291262136
+        }
+      },
+      "mae": {
+        "carriers": 0.35523613963039014,
+        "affected": 0.2728380024360536,
+        "unaffected": 0.2608695652173913
+      },
+      "count_error_end_to_end": {
+        "carriers": 1.3722576079263977,
+        "affected": 1.4025974025974026,
+        "unaffected": 2.0279329608938546
+      }
     },
-    "variant_rows": {
-      "matched": 2728,
-      "gold": 3029,
-      "recall": 0.9006272697259822
-    },
-    "unique_variants": {
-      "matched": 1863,
-      "gold": 2019,
-      "recall": 0.9227340267459139
-    },
-    "patients": {
-      "matched": 7947,
-      "gold": 8398,
-      "recall": 0.9462967373184091
-    },
-    "affected": {
-      "matched": 6238,
-      "gold": 6644,
-      "recall": 0.9388922335942204
-    },
-    "unaffected": {
-      "matched": 511,
-      "gold": 523,
-      "recall": 0.9770554493307839
+    "KCNH2,KCNQ1,RYR2,SCN5A": {
+      "genes": [
+        "KCNH2",
+        "KCNQ1",
+        "RYR2",
+        "SCN5A"
+      ],
+      "fixture_sha256": "5e309f822b1b0ee72cc3f6b3131c2572819e6d64058cbb8071dd997f5df6ad55",
+      "recall": {
+        "pmids": {
+          "matched": 72,
+          "gold": 73,
+          "recall": 0.9863013698630136
+        },
+        "variant_rows": {
+          "matched": 2436,
+          "gold": 2714,
+          "recall": 0.8975681650700074
+        },
+        "unique_variants": {
+          "matched": 1584,
+          "gold": 1721,
+          "recall": 0.9203951191167926
+        },
+        "patients": {
+          "matched": 6275,
+          "gold": 6686,
+          "recall": 0.938528268022734
+        },
+        "affected": {
+          "matched": 5233,
+          "gold": 5615,
+          "recall": 0.9319679430097952
+        },
+        "unaffected": {
+          "matched": 435,
+          "gold": 444,
+          "recall": 0.9797297297297297
+        }
+      },
+      "mae": {
+        "carriers": 0.3388235294117647,
+        "affected": 0.2863013698630137,
+        "unaffected": 0.3
+      },
+      "count_error_end_to_end": {
+        "carriers": 1.3554578168732507,
+        "affected": 1.3345959595959596,
+        "unaffected": 2.025
+      }
     }
-  },
-  "mae": {
-    "carriers": 0.300462249614792,
-    "affected": 0.25808419768151314,
-    "unaffected": 0.2608695652173913
   }
 }
