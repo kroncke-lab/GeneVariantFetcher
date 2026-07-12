@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from pathlib import Path
 
 from collections import Counter
 
 from cli.dashboard import (
+    _artifact_stage,
     _delta_compact,
     _delta_html,
+    _display_db_source,
     _gene_snapshot,
     _health_band,
     _health_signals,
@@ -18,9 +21,185 @@ from cli.dashboard import (
     _load_prev_snapshot,
     _sanitize_local_paths,
     _worklist_card,
+    build_paper_process_index,
+    discover_process_artifacts,
+    find_latest_db,
     generate_dashboard,
     md_to_html,
+    render_paper_process_page,
+    render_process_page,
+    render_index,
 )
+
+
+def test_find_latest_db_ignores_review_staging_copy(tmp_path: Path, monkeypatch):
+    repo = tmp_path / "repo"
+    run_db = repo / "results" / "KCNH2" / "real_run" / "KCNH2.db"
+    review_db = repo / "results" / "KCNH2" / "review_staging_test" / "KCNH2.db"
+    run_db.parent.mkdir(parents=True)
+    review_db.parent.mkdir(parents=True)
+    run_db.touch()
+    review_db.touch()
+    os.utime(run_db, (100, 100))
+    os.utime(review_db, (200, 200))
+    monkeypatch.setattr("cli.dashboard.REPO", repo)
+
+    assert find_latest_db("KCNH2") == run_db
+
+
+def test_dashboard_provenance_labels_are_truthful(tmp_path: Path, monkeypatch):
+    repo = tmp_path / "repo"
+    db = repo / "results" / "KCNH2" / "run_1" / "KCNH2.db"
+    db.parent.mkdir(parents=True)
+    db.touch()
+    monkeypatch.setattr("cli.dashboard.REPO", repo)
+
+    assert _display_db_source(db) == "results/KCNH2/run_1/KCNH2.db"
+    summary = {
+        "KCNH2": {
+            "in_corpus": 1,
+            "usable": 1,
+            "extracted": 1,
+            "with_variants": 1,
+            "variant_rows": 1,
+            "unique": 1,
+            "recall": {"unique_variants": (1, 1, 1.0)},
+            "db_source": _display_db_source(db),
+        }
+    }
+    page = render_index(summary, "2026-07-12 15:00")
+
+    assert "gold scores computed during this build from the selected DBs" in page
+    assert "single source of truth" not in page
+    assert "results/KCNH2/run_1/KCNH2.db" in page
+
+
+def test_process_explorer_indexes_full_logs_and_samples_large_dumps(
+    tmp_path: Path, monkeypatch
+):
+    repo = tmp_path / "repo"
+    corpus = repo / "corpus"
+    run = repo / "results" / "KCNH2" / "run_1"
+    db = run / "KCNH2.db"
+    run.mkdir(parents=True)
+    (run / "RUN_STATUS.json").write_text('{"status":"completed"}', encoding="utf-8")
+    extractions = run / "extractions"
+    extractions.mkdir()
+    (extractions / "KCNH2_PMID_123.json").write_text("x" * 3000, encoding="utf-8")
+    db.touch()
+    monkeypatch.setattr("cli.dashboard.REPO", repo)
+
+    artifacts = discover_process_artifacts("KCNH2", db, corpus)
+    page = render_process_page("KCNH2", artifacts, repo / "dash" / "KCNH2", db)
+
+    assert any(
+        a["relative"].endswith("RUN_STATUS.json") and a["mode"] == "full"
+        for a in artifacts
+    )
+    assert any(
+        a["relative"].endswith("KCNH2_PMID_123.json") and a["mode"] == "sample"
+        for a in artifacts
+    )
+    assert "search stage, PMID, filename" in page
+    assert "Run setup &amp; status" in page
+    assert "sample from large dump" in page
+
+
+def test_scoring_outputs_stay_in_scoring_stage():
+    assert (
+        _artifact_stage(
+            Path("layers/score_2_pubtator/KCNH2/paper_disagreement_report.csv")
+        )
+        == 6
+    )
+
+
+def test_paper_process_index_and_timeline_include_every_stage_source(
+    tmp_path: Path, monkeypatch
+):
+    repo = tmp_path / "repo"
+    corpus = repo / "corpus"
+    run = repo / "results" / "TESTGENE" / "run_1"
+    db_path = run / "TESTGENE.db"
+    (run / "abstract_json").mkdir(parents=True)
+    (run / "extractions").mkdir()
+    paper_dir = corpus / "TESTGENE" / "12345678"
+    paper_dir.mkdir(parents=True)
+    db_path.touch()
+    (run / "abstract_json" / "12345678.json").write_text(
+        '{"pmid":"12345678","abstract":"paper abstract"}', encoding="utf-8"
+    )
+    (run / "extractions" / "TESTGENE_PMID_12345678.json").write_text(
+        '{"variants":[{"protein_notation":"p.Arg1Trp"}]}', encoding="utf-8"
+    )
+    workflow = run / "TESTGENE_workflow.log"
+    workflow.write_text(
+        "starting run\nPMID 12345678 extraction completed with 1 variant\n",
+        encoding="utf-8",
+    )
+    (paper_dir / "12345678_FULL_CONTEXT.md").write_text(
+        "# Full paper\np.Arg1Trp was observed.", encoding="utf-8"
+    )
+    monkeypatch.setattr("cli.dashboard.REPO", repo)
+
+    selected = [
+        {
+            "path": workflow,
+            "relative": "results/TESTGENE/run_1/TESTGENE_workflow.log",
+            "stage": 0,
+            "size": workflow.stat().st_size,
+            "mtime": workflow.stat().st_mtime,
+            "modified": "2026-07-12 12:00",
+            "text": workflow.read_text(),
+            "mode": "full",
+        }
+    ]
+    index = build_paper_process_index(
+        "TESTGENE", db_path, corpus, {"12345678"}, selected
+    )
+    db = {
+        "db_path": db_path,
+        "papers": {
+            "12345678": {
+                "title": "Test paper",
+                "meta": {"model_used": "test-model"},
+                "bib": {},
+            }
+        },
+        "by_pmid": {
+            "12345678": {
+                "variants": [{"variant": "p.Arg1Trp"}],
+                "patients": [],
+                "tables": [],
+            }
+        },
+        "pen_by_pmid": {"12345678": {"carriers": 1, "affected": 1, "unaffected": 0}},
+        "pen_rows_by_pmid": {
+            "12345678": [{"variant_label": "p.Arg1Trp", "trust_tier": "trusted"}]
+        },
+        "facts_by_pmid_variant": {},
+        "final_check": {"by_pmid": {}, "counts": Counter()},
+    }
+    page = render_paper_process_page(
+        "TESTGENE",
+        "12345678",
+        db,
+        index["12345678"],
+        repo / "dashboard" / "TESTGENE" / "papers",
+        score={"gold": 1, "missing": 0},
+    )
+
+    assert "Run setup &amp; status" in page
+    assert "paper abstract" in page
+    assert "p.Arg1Trp" in page
+    assert "extraction completed with 1 variant" in page
+    assert "Selected database snapshot" in page and "trust_tier" in page
+    assert "Current scoring and review state" in page
+    assert "search this paper process" in page
+    assert "oninput='trailFilter()'" in page
+    assert "Stage 6: Scoring &amp; review" in page
+    assert "/Users/" not in page
+    assert "href='../../../results/TESTGENE/run_1/" in page
 
 
 def _make_corpus(corpus: Path) -> None:
@@ -143,6 +322,9 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     gene = (out / "TESTGENE" / "index.html").read_text()
     assert "Source coverage" in gene and "Provenance completeness" in gene
     assert "papers/111.html" in gene  # links to the adjudication page
+    assert "process.html" in gene
+    process = (out / "TESTGENE" / "process.html").read_text()
+    assert "Process Explorer" in process and "TESTGENE.db" in process
 
     paper = (out / "TESTGENE" / "papers" / "111.html").read_text()
     assert "pubmed.ncbi.nlm.nih.gov/111/" in paper  # PubMed link
@@ -168,6 +350,11 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     )  # first author + journal bibliography
     assert "East Asian" in paper and "Japan" in paper  # patient ethnicity / origin
     assert "count basis" in paper and "N carriers" in paper  # count_provenance ("why")
+    assert "111_process.html" in paper
+    paper_process = (out / "TESTGENE" / "papers" / "111_process.html").read_text()
+    assert "Selected database snapshot" in paper_process
+    assert "p.Arg100Trp" in paper_process
+    assert "evidence &amp; full source" in paper_process
 
     # variant-centric (website-style) page
     variants = (out / "TESTGENE" / "variants.html").read_text()

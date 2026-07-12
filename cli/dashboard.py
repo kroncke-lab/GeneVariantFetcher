@@ -9,19 +9,23 @@ serve the whole `corpus/` to share it:
 * `index.html` — per-gene cards: source coverage (usable vs stub), extraction
   funnel (in-corpus -> extracted -> has-variants), variant/unique counts, plus
   trust / final-check / since-last-run badges (the gold-free progress read).
-* `<GENE>.html` — a "since last run" delta line, a **Run health** card (gold-free
+* `<GENE>/index.html` — a "since last run" delta line, a **Run health** card (gold-free
   confidence: funnel + trust-tier quarantine + per-paper final-check), a **What to
   change next** ranked worklist (acquisition / extraction / trust / review / gap
   levers, each linking to the affected papers), the coverage-by-method facet, a
   provenance-completeness audit, the "what's left" list, and a
   sortable/filterable paper table (with a final-check Check column) linking to
   per-paper adjudication pages.
-* `paper_<PMID>.html` — the ADJUDICATION view: paper header with one-click links
+* `<GENE>/papers/<PMID>.html` — the ADJUDICATION view: paper header with one-click links
   to PubMed / DOI / PMC, the extracted records (variant provenance +
   per-patient characteristics) on the left, and the DB-recorded source file
   (`extraction_metadata.source_file`, falling back to the corpus full text)
   rendered on the right. Clicking a record jumps to and highlights the
   sentence/section it was extracted from, so you can verify it yourself.
+* `<GENE>/papers/<PMID>_process.html` — the searchable paper-level process trail:
+  discovery/filter decisions, acquisition/source files, QC and refresh evidence,
+  extraction versions, the complete selected-DB snapshot, trust/final-check state,
+  and scoring/disagreement records with links to the full local artifacts.
 
 Nothing here mutates the DB or hits the network; it is a read-only view.
 """
@@ -38,6 +42,7 @@ import subprocess
 import sys
 import tempfile
 from collections import Counter, defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -311,6 +316,7 @@ def load_db(db_path: Path) -> dict:
     con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
     data: dict = {
+        "db_path": db_path,
         "papers": {},
         "by_pmid": defaultdict(lambda: {"variants": [], "patients": [], "tables": []}),
         "facts_by_pmid_variant": defaultdict(list),
@@ -331,6 +337,7 @@ def load_db(db_path: Path) -> dict:
         "pen_by_pmid": defaultdict(
             lambda: {"carriers": 0, "affected": 0, "unaffected": 0}
         ),
+        "pen_rows_by_pmid": defaultdict(list),
         # soft signals (populated below; kept here so renderers can rely on them)
         "final_check": {"by_pmid": {}, "counts": Counter()},
         "trust": {"tiered": False},
@@ -447,17 +454,21 @@ def load_db(db_path: Path) -> dict:
         # unaffected numbers per paper and per variant.
         if _table_cols(con, "penetrance_data"):
             for r in con.execute(
-                "SELECT pd.pmid, v.protein_notation, "
-                "COALESCE(pd.total_carriers_observed,0) c, COALESCE(pd.affected_count,0) a, "
-                "COALESCE(pd.unaffected_count,0) u "
+                "SELECT pd.*, "
+                "COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position, '?') "
+                "AS variant_label "
                 "FROM penetrance_data pd LEFT JOIN variants v ON v.variant_id = pd.variant_id"
             ):
-                pmid = str(r["pmid"])
-                c, a, u = _to_int(r["c"]), _to_int(r["a"]), _to_int(r["u"])
+                rd = dict(r)
+                pmid = str(rd["pmid"])
+                c = _to_int(rd.get("total_carriers_observed"))
+                a = _to_int(rd.get("affected_count"))
+                u = _to_int(rd.get("unaffected_count"))
                 data["pen_by_pmid"][pmid]["carriers"] += c
                 data["pen_by_pmid"][pmid]["affected"] += a
                 data["pen_by_pmid"][pmid]["unaffected"] += u
-                vname = r["protein_notation"]
+                data["pen_rows_by_pmid"][pmid].append(rd)
+                vname = rd.get("variant_label")
                 if vname:
                     pv = data.setdefault("pen_pv", {}).setdefault(
                         (pmid, vname), {"carriers": 0, "affected": 0, "unaffected": 0}
@@ -717,6 +728,10 @@ h1{margin:0;font-size:21px;color:#0f172a}.sub{color:var(--mut);font-size:13px}
 .tag.ok{color:#fff;background:var(--ok);border-color:var(--ok)}.tag.bad{color:#fff;background:var(--bad);border-color:var(--bad)}.tag.warn{color:#fff;background:var(--warn);border-color:var(--warn)}
 table{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
 th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+#art{table-layout:fixed}#art th:nth-child(1){width:12%}#art th:nth-child(2){width:28%}
+#art th:nth-child(3){width:8%}#art th:nth-child(4){width:12%}#art th:nth-child(5){width:40%}
+#art td,#art code{overflow-wrap:anywhere;word-break:break-word}#art code{white-space:normal}
+#art details{max-width:100%}#art pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:28rem;overflow:auto}
 th{position:sticky;top:0;background:#eef2f8;color:#0f172a;cursor:pointer;user-select:none;font-weight:600}
 tbody tr:nth-child(even) td{background:#f8fafc}tr:hover td{background:#eef5ff}
 .search{width:100%;padding:9px 11px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--ink)}
@@ -738,6 +753,15 @@ tbody tr:nth-child(even) td{background:#f8fafc}tr:hover td{background:#eef5ff}
 .gold{background:linear-gradient(180deg,#fffbeb,#fff);border-color:#fde68a}
 .figref{display:inline-block;font-size:12px;padding:2px 9px;border-radius:7px;background:#eef2f8;color:var(--acc2)}
 .flag{color:var(--warn);cursor:help;font-weight:700}
+.stagecard{background:#fff;border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:16px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.stagehead{display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:10px}
+.stagehead h2{margin:0;font-size:17px}.stagehead p{margin:2px 0 0;color:var(--mut);font-size:12px}.stagehead>.tag{margin-left:auto}
+.stage-num{display:grid;place-items:center;min-width:34px;height:34px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:16px}
+.artifact-card{border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin:8px 0;background:#fbfcfe;overflow:hidden}
+.artifact-card code{overflow-wrap:anywhere;word-break:break-word;white-space:normal}.dump{white-space:pre-wrap;overflow-wrap:anywhere;max-height:48rem;overflow:auto;background:#0f172a;color:#dbeafe;padding:12px;border-radius:8px;font-size:11px}
+.muted-empty{color:var(--mut);font-style:italic;padding:8px 2px}
+.stage-nav{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:0;z-index:6;background:rgba(238,241,246,.96);padding:8px 0;margin:4px 0 10px}
+.stage-nav a{font-size:11px;padding:4px 9px;border:1px solid var(--line);border-radius:20px;background:#fff}.stagecard{scroll-margin-top:54px}
 """
 
 SORT_JS = """
@@ -748,6 +772,12 @@ function srt(id,n){var t=document.getElementById(id),tb=t.tBodies[0],rs=[].slice
  rs.sort(function(a,b){var x=a.cells[n].getAttribute('data-v')||a.cells[n].textContent,y=b.cells[n].getAttribute('data-v')||b.cells[n].textContent;
   var nx=parseFloat(x),ny=parseFloat(y);if(!isNaN(nx)&&!isNaN(ny)){x=nx;y=ny}return (x>y?1:x<y?-1:0)*(asc?1:-1)});
  rs.forEach(function(r){tb.appendChild(r)})}
+"""
+
+TRAIL_JS = """
+function trailFilter(){var q=(document.getElementById('trail-s').value||'').toLowerCase();
+ document.querySelectorAll('.trailitem').forEach(function(x){x.style.display=!q||x.textContent.toLowerCase().includes(q)?'':'none'});
+ document.querySelectorAll('.stagecard').forEach(function(s){var any=[].slice.call(s.querySelectorAll('.trailitem')).some(function(x){return x.style.display!='none'});s.style.display=any?'':'none'});}
 """
 
 JUMP_JS = r"""
@@ -822,12 +852,645 @@ def _rel(target: Path, start: Path) -> str:
     return os.path.relpath(target, start)
 
 
+def _display_db_source(db_path: Path) -> str:
+    """A publish-safe DB identifier: repo-relative when possible, else basename."""
+    try:
+        return str(db_path.resolve().relative_to(REPO.resolve()))
+    except (OSError, ValueError):
+        return db_path.name
+
+
+PROCESS_STAGES = {
+    0: "Run setup & status",
+    1: "Discovery & filtering",
+    2: "Source acquisition",
+    3: "Source QC & refresh",
+    4: "Extraction",
+    5: "Normalization, DB & trust",
+    6: "Scoring & review",
+    7: "Cross-stage / other",
+}
+_PROCESS_SUFFIXES = {".json", ".jsonl", ".csv", ".tsv", ".md", ".txt", ".log", ".db"}
+_PROCESS_FULL_NAMES = {
+    "run_status.json",
+    "run_report.md",
+    "source_completeness.json",
+    "source_acquisition_audit.json",
+    "refresh_summary.json",
+}
+_PROCESS_PER_STAGE_LIMIT = 1500
+
+
+def _artifact_stage(path: Path) -> int:
+    """Classify a run artifact into the stage where an operator acts on it."""
+    low = path.as_posix().lower()
+    name = path.name.lower()
+    if name in {"run_status.json", "run_report.md"} or "doctor" in low:
+        return 0
+    if path.suffix.lower() == ".db":
+        return 5
+    if any(x in low for x in ("recall", "precision", "adjudicat", "review", "score")):
+        return 6
+    if any(
+        x in low for x in ("trust", "clinvar", "pubtator", "migration", "penetrance")
+    ):
+        return 5
+    if any(x in low for x in ("extraction", "table", "scout", "retry")):
+        return 4
+    if any(
+        x in low for x in ("discover", "abstract", "filter", "pmid_status", "_pmids")
+    ):
+        return 1
+    if any(
+        x in low
+        for x in (
+            "source_acquisition",
+            "source_completeness",
+            "acquisition_outcome",
+            "refresh_",
+            "worklist",
+            "supplement_fold",
+            "source_qc",
+        )
+    ):
+        return 3
+    if any(
+        x in low
+        for x in (
+            "pmc_fulltext",
+            "full_context",
+            "cleaned",
+            "data_zones",
+            "paywall",
+            "supplement",
+            "figure",
+            "fetch",
+        )
+    ):
+        return 2
+    if "recovery" in low:
+        return 5
+    if any(
+        x in low
+        for x in (
+            "recall",
+            "precision",
+            "adjudicat",
+            "review",
+            "score",
+            "report",
+            "summary",
+        )
+    ):
+        return 6
+    if path.suffix.lower() == ".log":
+        return 0
+    return 7
+
+
+def _read_artifact_sample(path: Path, size: int) -> tuple[str, str]:
+    """Return (text, mode): full important logs/reports, sampled large dumps."""
+    important = (
+        path.name.lower() in _PROCESS_FULL_NAMES or path.suffix.lower() == ".log"
+    )
+    if important and size <= 128_000:
+        try:
+            return _sanitize_local_paths(
+                path.read_text(encoding="utf-8", errors="replace")
+            ), "full"
+        except OSError:
+            return "", "unreadable"
+    try:
+        with path.open("r", encoding="utf-8", errors="replace") as fh:
+            head = fh.read(700)
+        if size <= 700:
+            return _sanitize_local_paths(head), "full"
+        return _sanitize_local_paths(head), "sample"
+    except (OSError, UnicodeError):
+        return "", "binary" if path.suffix.lower() == ".db" else "unreadable"
+
+
+def discover_process_artifacts(
+    gene: str, db_path: Optional[Path], corpus_dir: Path
+) -> list[dict]:
+    """Inventory searchable stage artifacts without copying the underlying dumps."""
+    roots: list[Path] = [corpus_dir / gene]
+    explicit: list[Path] = []
+    if db_path:
+        roots.insert(0, db_path.parent)
+        explicit.append(db_path)
+    metrics_root = REPO / "recall_metrics"
+    if metrics_root.is_dir():
+        summaries = list(metrics_root.glob("*/summary.json"))
+        if summaries:
+            latest = max(summaries, key=lambda p: p.stat().st_mtime).parent
+            roots.append(latest / gene)
+            explicit.extend(
+                p
+                for p in (
+                    latest / "summary.json",
+                    latest / "paper_disagreement_report.csv",
+                    latest / "precision_summary.json",
+                )
+                if p.is_file()
+            )
+    roots.extend([REPO / "docs" / "dashboard"])
+
+    seen: set[Path] = set()
+    candidates: list[dict] = []
+    paths: list[Path] = list(explicit)
+    for root in roots:
+        if not root.is_dir():
+            continue
+        paths.extend(root.rglob("*"))
+    for path in paths:
+        if not path.is_file() or path.suffix.lower() not in _PROCESS_SUFFIXES:
+            continue
+        resolved = path.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        # Only the selected live DB is useful here; backups and staging DBs
+        # are large, binary, and make the process trail look duplicated.
+        if path.suffix.lower() == ".db" and (
+            db_path is None or resolved != db_path.resolve()
+        ):
+            continue
+        try:
+            st = path.stat()
+        except OSError:
+            continue
+        try:
+            rel = resolved.relative_to(REPO.resolve()).as_posix()
+        except ValueError:
+            rel = path.name
+        candidates.append(
+            {
+                "path": path,
+                "relative": rel,
+                "stage": _artifact_stage(path),
+                "size": st.st_size,
+                "mtime": st.st_mtime,
+                "modified": datetime.fromtimestamp(st.st_mtime).strftime(
+                    "%Y-%m-%d %H:%M"
+                ),
+            }
+        )
+
+    # Historical refreshes often contain byte-for-byte-ish copies under new
+    # directories. Collapse copies by stage/name/size, keeping the newest path.
+    dedup: dict[tuple, dict] = {}
+    for artifact in candidates:
+        key = (artifact["stage"], artifact["path"].name.lower(), artifact["size"])
+        current = dedup.get(key)
+        if current is None or artifact["mtime"] > current["mtime"]:
+            dedup[key] = artifact
+
+    selected: list[dict] = []
+    by_stage: dict[int, list[dict]] = defaultdict(list)
+    for artifact in dedup.values():
+        by_stage[artifact["stage"]].append(artifact)
+    for stage, items in by_stage.items():
+        items.sort(
+            key=lambda a: (
+                a["path"].name.lower() in _PROCESS_FULL_NAMES
+                or a["path"].suffix.lower() == ".log",
+                a["mtime"],
+                a["size"],
+            ),
+            reverse=True,
+        )
+        selected.extend(items[:_PROCESS_PER_STAGE_LIMIT])
+
+    for artifact in selected:
+        artifact["text"], artifact["mode"] = _read_artifact_sample(
+            artifact["path"], artifact["size"]
+        )
+    return sorted(selected, key=lambda a: (a["stage"], a["relative"]))
+
+
+def _human_bytes(n: int) -> str:
+    value = float(n)
+    for unit in ("B", "KB", "MB", "GB"):
+        if value < 1024 or unit == "GB":
+            return f"{value:.0f} {unit}" if unit == "B" else f"{value:.1f} {unit}"
+        value /= 1024
+    return f"{n} B"
+
+
+def render_process_page(
+    gene: str, artifacts: list[dict], gene_dir: Path, db_path: Optional[Path]
+) -> str:
+    """Searchable stage explorer with full small logs and sampled large dumps."""
+    counts = Counter(a["stage"] for a in artifacts)
+    stage_cards = "".join(
+        f"<div class='card'><div class='big'>{counts.get(stage, 0)}</div>"
+        f"<div class='mut'>Stage {stage}: {esc(label)}</div></div>"
+        for stage, label in PROCESS_STAGES.items()
+        if counts.get(stage)
+    )
+    rows = []
+    repo_root = REPO.resolve()
+    for artifact in artifacts:
+        path = artifact["path"].resolve()
+        try:
+            path.relative_to(repo_root)
+            raw_link = f"<a href='{esc(_rel(path, gene_dir))}' target='_blank'>open full local file</a>"
+        except ValueError:
+            raw_link = "<span class='mut'>outside repo; preview only</span>"
+        mode = artifact["mode"]
+        label = {
+            "full": "full inline",
+            "sample": "sample from large dump",
+            "binary": "binary metadata only",
+            "unreadable": "unreadable",
+        }.get(mode, mode)
+        preview = (
+            f"<details><summary>{esc(label)}</summary><pre>{esc(artifact['text'])}</pre></details>"
+            if artifact["text"]
+            else f"<span class='mut'>{esc(label)}</span>"
+        )
+        stage = artifact["stage"]
+        rows.append(
+            f"<tr><td data-v='{stage}'><span class='tag'>Stage {stage}</span><br>"
+            f"<span class='mut'>{esc(PROCESS_STAGES[stage])}</span></td>"
+            f"<td><code>{esc(artifact['relative'])}</code><div>{raw_link}</div></td>"
+            f"<td data-v='{artifact['size']}'>{esc(_human_bytes(artifact['size']))}</td>"
+            f"<td>{esc(artifact['modified'])}</td><td>{preview}</td></tr>"
+        )
+    db_note = _display_db_source(db_path) if db_path else "none selected"
+    body = (
+        f"<header><h1>{esc(gene)} — Process Explorer</h1>"
+        f"<div class='sub'><a href='index.html'>← gene status</a> · database: "
+        f"<code>{esc(db_note)}</code></div></header><div class='wrap'>"
+        "<div class='note'>Search paths and indexed content across every pipeline stage. "
+        "Small logs/status reports are shown in full; large JSON/CSV/text dumps show a sample. "
+        "Repeat copies from historical refreshes are collapsed and the most recent 1,500 artifacts "
+        "per stage are indexed. The full-file links are local-only because run artifacts are intentionally not published.</div>"
+        f"<div class='grid' style='margin-bottom:16px'>{stage_cards}</div>"
+        f"<h2>Artifacts ({len(artifacts)})</h2>"
+        "<input class='search' id='art-s' placeholder='search stage, PMID, filename, error, model, status, variant…' onkeyup=\"filt('art')\">"
+        "<table id='art' data-sc=''><thead><tr>"
+        "<th onclick=\"srt('art',0)\">Stage</th><th onclick=\"srt('art',1)\">Artifact</th>"
+        "<th onclick=\"srt('art',2)\">Size</th><th onclick=\"srt('art',3)\">Modified</th>"
+        f"<th>Data / log preview</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>"
+    )
+    return _page(f"{gene} — process explorer", body)
+
+
+PAPER_STAGE_DESCRIPTIONS = {
+    0: "Run configuration, orchestration status, and workflow-log evidence for this PMID.",
+    1: "How the paper was discovered, represented by its abstract, and passed or failed filtering.",
+    2: "What source text, figures, supplements, and publisher-acquisition artifacts landed on disk.",
+    3: "Source-quality audits, recovery worklists, supplement folding, and targeted refresh decisions.",
+    4: "Every captured extraction input/output version, including staged re-extractions and parser products.",
+    5: "The selected SQLite result: paper metadata, extracted facts, counts, provenance, and trust decisions.",
+    6: "Gold comparison, disagreement rows, final-check verdicts, and review/adjudication evidence.",
+    7: "Additional paper-specific artifacts that do not map cleanly to one pipeline stage.",
+}
+_PAPER_TEXT_SUFFIXES = {
+    ".json",
+    ".jsonl",
+    ".csv",
+    ".tsv",
+    ".md",
+    ".txt",
+    ".log",
+    ".xml",
+    ".html",
+}
+_PAPER_SHARED_MARKERS = (
+    "audit",
+    "candidate",
+    "discrep",
+    "failure",
+    "filter",
+    "manifest",
+    "missing",
+    "outcome",
+    "pmids",
+    "progress",
+    "report",
+    "refresh",
+    "status",
+    "summary",
+    "worklist",
+)
+_PMID_TOKEN_RE = re.compile(r"(?<!\d)(\d{6,9})(?!\d)")
+
+
+def _latest_metrics_dir() -> Optional[Path]:
+    root = REPO / "recall_metrics"
+    if not root.is_dir():
+        return None
+    summaries = list(root.glob("*/summary.json"))
+    return max(summaries, key=lambda p: p.stat().st_mtime).parent if summaries else None
+
+
+def _paper_scan_roots(
+    gene: str, db_path: Optional[Path], corpus_dir: Path
+) -> list[Path]:
+    roots = [corpus_dir / gene]
+    if db_path:
+        roots.insert(0, db_path.parent)
+    latest = _latest_metrics_dir()
+    if latest:
+        roots.extend([latest / gene, latest])
+    return [r for r in roots if r.is_dir()]
+
+
+def _paper_path_record(
+    path: Path, kind: str = "direct", lines: Optional[list] = None
+) -> dict:
+    st = path.stat()
+    try:
+        relative = path.resolve().relative_to(REPO.resolve()).as_posix()
+    except ValueError:
+        relative = path.name
+    return {
+        "path": path,
+        "relative": relative,
+        "stage": _artifact_stage(path),
+        "size": st.st_size,
+        "mtime": st.st_mtime,
+        "modified": datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M"),
+        "kind": kind,
+        "lines": lines or [],
+    }
+
+
+def _line_excerpt(line: str, pmid: str, radius: int = 450) -> str:
+    low = line.find(pmid)
+    if low < 0:
+        return line[: radius * 2]
+    start = max(0, low - radius)
+    end = min(len(line), low + len(pmid) + radius)
+    prefix = "…" if start else ""
+    suffix = "…" if end < len(line) else ""
+    return prefix + line[start:end].strip() + suffix
+
+
+def build_paper_process_index(
+    gene: str,
+    db_path: Optional[Path],
+    corpus_dir: Path,
+    pmids: set[str],
+    selected_artifacts: list[dict],
+) -> dict[str, list[dict]]:
+    """Build one reusable PMID→artifact map for all paper process pages.
+
+    Direct paper files are indexed by PMID in their path. Shared operational
+    logs/reports are scanned once and contribute only the lines around each PMID.
+    """
+    out: dict[str, list[dict]] = defaultdict(list)
+    seen_direct: set[Path] = set()
+    for root in _paper_scan_roots(gene, db_path, corpus_dir):
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            resolved = path.resolve()
+            if resolved in seen_direct:
+                continue
+            path_tokens = set(path.parts) & pmids
+            name_tokens = set(_PMID_TOKEN_RE.findall(path.name)) & pmids
+            matched = path_tokens | name_tokens
+            if not matched:
+                continue
+            seen_direct.add(resolved)
+            try:
+                record = _paper_path_record(path)
+            except OSError:
+                continue
+            for pmid in matched:
+                out[pmid].append(record)
+
+    # Collapse repeated shared reports before scanning their contents. The
+    # 24-MB workflow log is intentionally retained: its matching lines explain
+    # orchestration behavior that per-paper JSON alone cannot show.
+    shared: dict[tuple, dict] = {}
+    for artifact in selected_artifacts:
+        path = artifact["path"]
+        name = path.name.lower()
+        if path.suffix.lower() not in _PAPER_TEXT_SUFFIXES:
+            continue
+        if path.suffix.lower() != ".log" and not any(
+            x in name for x in _PAPER_SHARED_MARKERS
+        ):
+            continue
+        if artifact["size"] > 40_000_000:
+            continue
+        key = (artifact["stage"], name, artifact["size"])
+        current = shared.get(key)
+        if current is None or artifact["mtime"] > current["mtime"]:
+            shared[key] = artifact
+
+    for artifact in sorted(shared.values(), key=lambda a: a["mtime"], reverse=True)[
+        :600
+    ]:
+        path = artifact["path"]
+        matches: dict[str, list[str]] = defaultdict(list)
+        try:
+            with path.open("r", encoding="utf-8", errors="replace") as fh:
+                for lineno, line in enumerate(fh, 1):
+                    hits = set(_PMID_TOKEN_RE.findall(line)) & pmids
+                    for pmid in hits:
+                        if len(matches[pmid]) < 24:
+                            excerpt = _sanitize_local_paths(_line_excerpt(line, pmid))
+                            matches[pmid].append(f"line {lineno}: {excerpt}")
+        except (OSError, UnicodeError):
+            continue
+        for pmid, lines in matches.items():
+            try:
+                out[pmid].append(_paper_path_record(path, kind="shared", lines=lines))
+            except OSError:
+                continue
+
+    for pmid, records in out.items():
+        # Preserve historical extraction versions but bound pathological trees.
+        by_stage: dict[int, list[dict]] = defaultdict(list)
+        for record in records:
+            by_stage[record["stage"]].append(record)
+        kept: list[dict] = []
+        for stage, items in by_stage.items():
+            items.sort(key=lambda a: (a["mtime"], a["size"]), reverse=True)
+            kept.extend(items[:36])
+        out[pmid] = sorted(kept, key=lambda a: (a["stage"], -a["mtime"]))
+    return out
+
+
+def _read_paper_artifact(path: Path, size: int, stage: int) -> tuple[str, str]:
+    """Inline full paper JSON/abstracts when practical; sample large sources/logs."""
+    if path.suffix.lower() not in _PAPER_TEXT_SUFFIXES:
+        return "", "binary / external file"
+    full_limit = 320_000 if stage in {1, 4, 5, 6} else 120_000
+    try:
+        if size <= full_limit:
+            raw = path.read_bytes().decode("utf-8", errors="replace")
+            return _sanitize_local_paths(raw), "full file"
+        with path.open("rb") as fh:
+            head = fh.read(5000)
+            fh.seek(max(0, size - 5000))
+            tail = fh.read(5000)
+        raw = head.decode("utf-8", errors="replace")
+        raw += "\n\n… [middle omitted; open full local file] …\n\n"
+        raw += tail.decode("utf-8", errors="replace")
+        return _sanitize_local_paths(raw), "head + tail sample"
+    except OSError:
+        return "", "unreadable"
+
+
+def _paper_db_snapshot(db: dict, pmid: str) -> dict:
+    rec = db.get("by_pmid", {}).get(
+        pmid, {"variants": [], "patients": [], "tables": []}
+    )
+    facts = {
+        variant: entries
+        for (fact_pmid, variant), entries in db.get("facts_by_pmid_variant", {}).items()
+        if fact_pmid == pmid
+    }
+    return {
+        "paper": db.get("papers", {}).get(pmid),
+        "extracted_records": rec,
+        "cohort_totals": db.get("pen_by_pmid", {}).get(pmid),
+        "penetrance_rows": db.get("pen_rows_by_pmid", {}).get(pmid, []),
+        "fact_provenance": facts,
+        "paper_final_check": db.get("final_check", {}).get("by_pmid", {}).get(pmid),
+    }
+
+
+def _render_trail_artifact(record: dict, papers_dir: Path) -> str:
+    path = record["path"].resolve()
+    try:
+        repo_relative = path.relative_to(REPO.resolve())
+        papers_dir.resolve().relative_to(REPO.resolve())
+        href = _rel(path, papers_dir)
+    except ValueError:
+        try:
+            repo_relative = path.relative_to(REPO.resolve())
+            href = "/" + repo_relative.as_posix()
+        except ValueError:
+            repo_relative = None
+            href = ""
+    raw_link = (
+        f"<a href='{esc(href)}' target='_blank'>open full local file</a>"
+        if repo_relative is not None
+        else "<span class='mut'>outside repository; indexed excerpt only</span>"
+    )
+    if record.get("kind") == "shared":
+        text = "\n".join(record.get("lines") or [])
+        mode = f"{len(record.get('lines') or [])} PMID-matching line(s)"
+    else:
+        text, mode = _read_paper_artifact(path, record["size"], record["stage"])
+    detail = (
+        f"<details{' open' if mode == 'full file' and record['stage'] in {1, 4} else ''}>"
+        f"<summary>{esc(mode)}</summary><pre class='dump'>{esc(text)}</pre></details>"
+        if text
+        else f"<div class='mut'>{esc(mode)}</div>"
+    )
+    return (
+        "<div class='trailitem artifact-card'>"
+        f"<div><code>{esc(record['relative'])}</code></div>"
+        f"<div class='mut'>{esc(_human_bytes(record['size']))} · {esc(record['modified'])} · {raw_link}</div>"
+        f"{detail}</div>"
+    )
+
+
+def render_paper_process_page(
+    gene: str,
+    pmid: str,
+    db: dict,
+    artifacts: list[dict],
+    papers_dir: Path,
+    score: Optional[dict] = None,
+) -> str:
+    """Expansive, searchable stage-by-stage explanation for one paper."""
+    paper = db.get("papers", {}).get(pmid, {})
+    title = paper.get("title") or f"PMID {pmid}"
+    by_stage: dict[int, list[dict]] = defaultdict(list)
+    for record in artifacts:
+        by_stage[record["stage"]].append(record)
+
+    db_json = _sanitize_local_paths(
+        json.dumps(_paper_db_snapshot(db, pmid), indent=2, default=str)
+    )
+    by_stage[5].append(
+        {
+            "synthetic": True,
+            "html": "<div class='trailitem artifact-card'><b>Selected database snapshot</b>"
+            f"<div class='mut'><code>{esc(_display_db_source(db['db_path']))}</code></div>"
+            f"<details open><summary>full paper rows and provenance</summary><pre class='dump'>{esc(db_json)}</pre></details></div>",
+        }
+    )
+    final_check = db.get("final_check", {}).get("by_pmid", {}).get(pmid)
+    if score or final_check:
+        score_json = _sanitize_local_paths(
+            json.dumps(
+                {"gold_comparison": score, "paper_final_check": final_check},
+                indent=2,
+                default=str,
+            )
+        )
+        by_stage[6].append(
+            {
+                "synthetic": True,
+                "html": "<div class='trailitem artifact-card'><b>Current scoring and review state</b>"
+                f"<details open><summary>paper result</summary><pre class='dump'>{esc(score_json)}</pre></details></div>",
+            }
+        )
+
+    sections = []
+    for stage, label in PROCESS_STAGES.items():
+        items = by_stage.get(stage, [])
+        rendered = "".join(
+            item["html"]
+            if item.get("synthetic")
+            else _render_trail_artifact(item, papers_dir)
+            for item in items
+        )
+        if not rendered:
+            rendered = "<div class='trailitem muted-empty'>No paper-specific artifact captured for this stage.</div>"
+        sections.append(
+            f"<section class='stagecard' id='stage-{stage}'><div class='stagehead'>"
+            f"<span class='stage-num'>{stage}</span><div><h2>{esc(label)}</h2>"
+            f"<p>{esc(PAPER_STAGE_DESCRIPTIONS[stage])}</p></div>"
+            f"<span class='tag'>{len(items)} item(s)</span></div>{rendered}</section>"
+        )
+
+    body = (
+        f"<header><h1>{esc(title)}</h1><div class='sub'>PMID {esc(pmid)} · "
+        f"<a href='{esc(pmid)}.html'>evidence &amp; full source</a> · "
+        f"<a href='../index.html'>← {esc(gene)}</a> · <a href='../process.html'>gene process explorer</a>"
+        "</div></header><div class='wrap'>"
+        "<div class='note'>This page reconstructs what the pipeline did to this paper. "
+        "Search covers artifact paths, full small files, targeted shared-log excerpts, "
+        "and the complete selected-DB snapshot.</div>"
+        "<input class='search' id='trail-s' placeholder='search this paper process: error, model, variant, count, trust, source…' "
+        "oninput='trailFilter()'>"
+        "<div class='stage-nav'>"
+        + "".join(
+            f"<a href='#stage-{stage}'>Stage {stage}: {esc(label)}</a>"
+            for stage, label in PROCESS_STAGES.items()
+        )
+        + "</div>"
+        f"{''.join(sections)}</div>"
+    )
+    return _page(f"{gene} · PMID {pmid} · process", body, TRAIL_JS)
+
+
 def find_latest_db(gene: str) -> Optional[Path]:
+    """Return the newest pipeline DB, excluding review-publication copies.
+
+    ``review_staging_test`` databases are intentionally refreshed when a review
+    packet is staged, so their mtimes are often newer than the underlying run.
+    Treating those copies as the latest run makes the dashboard silently score
+    and summarize the wrong artifact.
+    """
     cands = []
     for root in ("results", "validation_runs"):
         base = REPO / root
         if base.exists():
             cands += list(base.rglob(f"{gene}.db"))
+    cands = [p for p in cands if "review_staging_test" not in p.parts]
     return max(cands, key=lambda p: p.stat().st_mtime) if cands else None
 
 
@@ -938,6 +1601,7 @@ def render_paper_page(
         link_html.append(f"<a href='{doi_url(doi)}' target='_blank'>DOI ↗</a>")
     if pmcid:
         link_html.append(f"<a href='{pmc_url(pmcid)}' target='_blank'>PMC ↗</a>")
+    link_html.append(f"<a href='{esc(pmid)}_process.html'>full process trail</a>")
     link_html.append("<a href='../variants.html'>variants</a>")
     link_html.append(f"<a href='../index.html'>← {esc(gene)}</a>")
     link_html.append("<a href='../../index.html'>overview</a>")
@@ -1802,6 +2466,7 @@ def render_gene_page(
         has_page = pmid in cap_set
         pmid_cell = (
             f"<a href='papers/{esc(pmid)}.html'>{esc(pmid)}</a>"
+            f"<div><a class='mut' href='papers/{esc(pmid)}_process.html'>process trail</a></div>"
             if has_page
             else f"<a href='{pubmed_url(pmid)}' target='_blank'>{esc(pmid)}↗</a>"
         )
@@ -1872,6 +2537,12 @@ def render_gene_page(
     thead_html = "".join(
         f"<th onclick=\"srt('pt',{i})\">{esc(c)}</th>" for i, c in enumerate(all_cols)
     )
+    db_source = _display_db_source(db["db_path"]) if db and db.get("db_path") else ""
+    db_source_html = (
+        f"<div class='sub'>database: <code>{esc(db_source)}</code></div>"
+        if db_source
+        else ""
+    )
 
     audit_html = "".join(
         f"<div class='kv'><span>{esc(name)}</span><b>{n}/{tot} ({pct(n, tot):.0f}%)</b></div>"
@@ -1891,8 +2562,9 @@ def render_gene_page(
 
     body = (
         f"<header><h1>{esc(gene)}</h1><div class='sub'>"
-        f"<a href='../index.html'>← overview</a> · <a href='variants.html'>variants ({s['unique']})</a>"
-        f"</div></header>"
+        f"<a href='../index.html'>← overview</a> · <a href='variants.html'>variants ({s['unique']})</a> · "
+        "<a href='process.html'>process explorer</a>"
+        f"</div>{db_source_html}</header>"
         f"<div class='wrap'>{gap_note}{delta_html}"
         f"<div class='flex'>"
         f"<div class='card'><h2>Source coverage</h2>"
@@ -2040,16 +2712,24 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
             f"<div class='kv'><span>extracted</span><b>{s['extracted']}</b></div>"
             f"<div class='kv'><span>papers w/ variants</span><b>{s['with_variants']}</b></div>"
             f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>{gold}{badges_html}"
+            f"<div class='mut' style='font-size:11px;margin-top:6px'>DB: <code>{esc(s.get('db_source') or 'none')}</code></div>"
             f"<div style='margin-top:8px'><a href='{esc(gene)}/index.html'>status</a> · "
-            f"<a href='{esc(gene)}/variants.html'>variants</a></div></div>"
+            f"<a href='{esc(gene)}/variants.html'>variants</a> · "
+            f"<a href='{esc(gene)}/process.html'>process ({s.get('artifact_count', 0)})</a>"
+            "</div></div>"
         )
     tot = {
         k: sum(s[k] for s in summaries.values())
         for k in ("in_corpus", "usable", "extracted", "variant_rows")
     }
+    score_note = (
+        "gold scores computed during this build from the selected DBs"
+        if any(s.get("recall") for s in summaries.values())
+        else "gold scores not computed in this build"
+    )
     body = (
         f"<header><h1>GeneVariantFetcher — status & provenance dashboard</h1>"
-        f"<div class='sub'>generated {esc(generated)} · single source of truth: docs/RECALL_STATUS.md · "
+        f"<div class='sub'>generated {esc(generated)} · {esc(score_note)} · policy baseline: docs/RECALL_STATUS.md · "
         f"source corpus: corpus/INDEX.csv</div></header>"
         f"<div class='wrap'><div class='flex' style='margin-bottom:16px'>"
         f"<div><div class='big'>{tot['in_corpus']}</div><div class='mut'>papers in corpus</div></div>"
@@ -2117,9 +2797,16 @@ def generate_dashboard(
             delta_html=delta_html,
         )
         (gene_dir / "index.html").write_text(page, encoding="utf-8")
+        artifacts = discover_process_artifacts(gene, db_path, corpus_dir)
+        (gene_dir / "process.html").write_text(
+            render_process_page(gene, artifacts, gene_dir, db_path), encoding="utf-8"
+        )
+        s["artifact_count"] = len(artifacts)
+        stats["artifact_files"] = stats.get("artifact_files", 0) + len(artifacts)
         if _snapshot_changed(prev, snap):
             _append_snapshot(hist_dir, gene, snap, generated)
         s["recall"] = recall
+        s["db_source"] = _display_db_source(db_path) if db_path else ""
         s["gold_cov"] = (
             gold_coverage_stats(set(per_pmid), corpus_rows) if per_pmid else None
         )
@@ -2134,12 +2821,27 @@ def generate_dashboard(
         if db:
             papers_dir = gene_dir / "papers"
             papers_dir.mkdir(parents=True, exist_ok=True)
+            paper_artifacts = build_paper_process_index(
+                gene, db_path, corpus_dir, set(paper_pmids), artifacts
+            )
             for pmid in paper_pmids:
                 (papers_dir / f"{pmid}.html").write_text(
                     render_paper_page(gene, pmid, db, corpus_dir, papers_dir),
                     encoding="utf-8",
                 )
+                (papers_dir / f"{pmid}_process.html").write_text(
+                    render_paper_process_page(
+                        gene,
+                        pmid,
+                        db,
+                        paper_artifacts.get(pmid, []),
+                        papers_dir,
+                        score=per_pmid.get(pmid) if per_pmid else None,
+                    ),
+                    encoding="utf-8",
+                )
                 stats["paper_pages"] += 1
+                stats["paper_process_pages"] = stats.get("paper_process_pages", 0) + 1
             (gene_dir / "variants.html").write_text(
                 render_variants_page(gene, db, set(paper_pmids)), encoding="utf-8"
             )

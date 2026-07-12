@@ -748,9 +748,9 @@ def dashboard_command(
 
     Reads the consolidated corpus (corpus/INDEX.csv + corpus/<GENE>/<PMID>/) and
     the scored DB(s) and writes self-contained HTML to --out: an overview, a
-    per-gene funnel/coverage page, and per-paper ADJUDICATION pages (PubMed/DOI/PMC
-    links + the exact on-disk full text rendered, with click-to-jump-and-highlight
-    from each extracted record to the sentence it came from).
+    per-gene funnel/coverage page, per-paper ADJUDICATION pages (PubMed/DOI/PMC
+    links + exact on-disk full text with click-to-highlight provenance), and a
+    searchable stage-by-stage process trail for every rendered paper.
     """
     import os as _os
     from datetime import datetime
@@ -784,6 +784,8 @@ def dashboard_command(
     )
     typer.echo(
         f"✅ dashboard: {stats['genes']} gene page(s), {stats['paper_pages']} paper page(s), "
+        f"{stats.get('paper_process_pages', 0)} paper process page(s), "
+        f"{stats.get('artifact_files', 0)} process artifact(s), "
         f"{stats.get('scored', 0)} gene(s) gold-scored -> {out_dir / 'index.html'}"
     )
 
