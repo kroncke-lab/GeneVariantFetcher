@@ -53,12 +53,25 @@ DBS = {  # canonical run DBs, kept in sync with run_benchmark.py CANONICAL_DBS
  "SCN5A":"validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
 }
 out=pathlib.Path("benchmarks/curated_extraction_eval/review_pmids_50"); out.mkdir(exist_ok=True)
+# Source databases can contain a PMCID in a legacy ``pmid`` column.  A PMCID is
+# not a PMID: record the authoritative NCBI conversion here before regenerating.
+PMID_ALIASES = {"PMC9522753": "34546463"}
 for g,p in DBS.items():
     c=sqlite3.connect(p)
-    rows=c.execute("SELECT pmid, COUNT(*) n FROM penetrance_data WHERE pmid IS NOT NULL AND TRIM(pmid)!='' AND total_carriers_observed IS NOT NULL AND total_carriers_observed>0 GROUP BY pmid ORDER BY n DESC, pmid ASC LIMIT 50").fetchall()
-    (out/f"{g}.txt").write_text("\n".join(str(r[0]) for r in rows)+"\n"); c.close()
+    raw=c.execute("SELECT TRIM(pmid), COUNT(*) n FROM penetrance_data WHERE pmid IS NOT NULL AND TRIM(pmid)!='' AND total_carriers_observed IS NOT NULL AND total_carriers_observed>0 GROUP BY TRIM(pmid)").fetchall()
+    counts = {}
+    for source_id, n in raw:
+        pmid = PMID_ALIASES.get(source_id, source_id)
+        if not pmid.isdigit():
+            raise ValueError(f"{g}: {source_id!r} is not a numeric PMID; add an authoritative conversion")
+        counts[pmid] = counts.get(pmid, 0) + n
+    rows = sorted(counts.items(), key=lambda row: (-row[1], row[0]))[:50]
+    if len(rows) != 50:
+        raise ValueError(f"{g}: expected 50 unique numeric PMIDs, found {len(rows)}")
+    (out/f"{g}.txt").write_text("\n".join(pmid for pmid, _ in rows)+"\n"); c.close()
 PY
 ```
 
 Keep these files stable for reproducibility; put any materially different future
-cohort in a new versioned directory.
+cohort in a new versioned directory. The current PMCID alias was verified with
+the [NCBI PMC ID Converter](https://pmc.ncbi.nlm.nih.gov/tools/id-converter-api/).
