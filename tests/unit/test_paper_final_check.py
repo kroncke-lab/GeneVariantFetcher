@@ -543,7 +543,7 @@ from pipeline.paper_final_check import (  # noqa: E402
     _select_source_for_summary,
     build_paper_summary_prompt,
     normalize_summary_result,
-    resolve_source_text,
+    resolve_summary_source,
     summary_check_version,
 )
 
@@ -636,52 +636,73 @@ class _StubSummary:
         return normalize_summary_result(raw, payload, source_text)
 
 
-def test_resolve_source_prefers_full_context(tmp_path):
-    d = tmp_path / "pmc_fulltext"
-    d.mkdir()
-    (d / "111_FULL_CONTEXT.md").write_text("FULL " + "carrier data " * 50)
-    (d / "111_CLEANED.md").write_text("CLEANED " + "x " * 50)
-    text, kind, path = resolve_source_text("111", "BRCA2", run_dir=tmp_path)
-    assert kind == "fulltext"
-    assert text.startswith("FULL")
-    assert path.endswith("111_FULL_CONTEXT.md")
+def _stage_scout(base, pmid, zones=None, abstract=None):
+    """Stage the abstract + Data-Scout DATA_ZONES that resolve_summary_source reads."""
+    if zones is not None:
+        sc = base / "scout_output"
+        sc.mkdir(parents=True, exist_ok=True)
+        (sc / f"{pmid}_DATA_ZONES.md").write_text(zones)
+    if abstract is not None:
+        aj = base / "abstract_json"
+        aj.mkdir(parents=True, exist_ok=True)
+        (aj / f"{pmid}.json").write_text(json.dumps({"abstract": abstract}))
 
 
-def test_resolve_source_uses_source_file_hint(tmp_path):
-    d = tmp_path / "run" / "pmc_fulltext"
-    d.mkdir(parents=True)
-    f = d / "222_CLEANED.md"
-    f.write_text("HINTED SOURCE " + "carrier " * 60)
-    text, kind, path = resolve_source_text("222", "BRCA2", source_file_hint=str(f))
-    assert kind == "fulltext"
-    assert text.startswith("HINTED")
-
-
-def test_resolve_source_oversize_drops_to_cleaned(tmp_path):
-    d = tmp_path / "pmc_fulltext"
-    d.mkdir()
-    (d / "333_FULL_CONTEXT.md").write_text("F" * 5000)
-    (d / "333_CLEANED.md").write_text("CLEANED carriers " * 30)
-    text, kind, path = resolve_source_text(
-        "333", "G", run_dir=tmp_path, oversize_bytes=1000
+def test_resolve_summary_combines_abstract_and_scout(tmp_path):
+    _stage_scout(
+        tmp_path,
+        "111",
+        zones="## Data Zones\ncarrier data " * 20,
+        abstract="A study of BRCA2 carriers. " * 10,
     )
-    assert path.endswith("333_CLEANED.md")
-    assert text.startswith("CLEANED")
+    text, kind, path = resolve_summary_source("111", "BRCA2", run_dir=tmp_path)
+    assert kind == "abstract_scout"
+    assert "BRCA2 carriers" in text and "carrier data" in text
+    assert "## Abstract" in text and "## Data-scouted zones" in text
+    assert path.endswith("111_DATA_ZONES.md")
 
 
-def test_resolve_source_abstract_json(tmp_path):
-    aj = tmp_path / "abstract_json"
-    aj.mkdir()
-    (aj / "444.json").write_text(
-        json.dumps({"abstract": "A study of BRCA2 carriers. " * 20})
-    )
-    text, kind, path = resolve_source_text("444", "BRCA2", run_dir=tmp_path)
+def test_resolve_summary_scout_only(tmp_path):
+    _stage_scout(tmp_path, "222", zones="scouted carrier rows " * 20)
+    text, kind, path = resolve_summary_source("222", "BRCA2", run_dir=tmp_path)
+    assert kind == "scout_only"
+    assert "scouted carrier rows" in text
+    assert path.endswith("222_DATA_ZONES.md")
+
+
+def test_resolve_summary_abstract_only(tmp_path):
+    _stage_scout(tmp_path, "444", abstract="A study of BRCA2 carriers. " * 20)
+    text, kind, path = resolve_summary_source("444", "BRCA2", run_dir=tmp_path)
     assert kind == "abstract_only"
     assert "BRCA2 carriers" in text
 
 
-def test_resolve_source_none(tmp_path):
-    assert resolve_source_text("999", "BRCA2", run_dir=tmp_path) == (None, "none", None)
+def test_resolve_summary_abstract_from_json_hint(tmp_path):
+    f = tmp_path / "555.json"
+    f.write_text(json.dumps({"abstract": "Hinted BRCA2 abstract. " * 20}))
+    text, kind, path = resolve_summary_source("555", "BRCA2", source_file_hint=str(f))
+    assert kind == "abstract_only"
+    assert "Hinted BRCA2 abstract" in text
+
+
+def test_resolve_summary_never_loads_full_text(tmp_path):
+    # A FULL_CONTEXT full-text file must be IGNORED: only abstract + scout zones load.
+    ft = tmp_path / "pmc_fulltext"
+    ft.mkdir()
+    (ft / "666_FULL_CONTEXT.md").write_text("FULL TEXT carrier data " * 50)
+    assert resolve_summary_source("666", "BRCA2", run_dir=tmp_path) == (
+        None,
+        "none",
+        None,
+    )
+
+
+def test_resolve_summary_none(tmp_path):
+    assert resolve_summary_source("999", "BRCA2", run_dir=tmp_path) == (
+        None,
+        "none",
+        None,
+    )
 
 
 def test_select_source_drops_dead_sections():
@@ -702,6 +723,18 @@ def test_select_source_truncates_but_keeps_tables():
     assert len(selected) <= 5000 + 300
 
 
+def test_select_source_caps_long_repetitive_tables():
+    header = "| Variant | Carriers |\n| --- | --- |\n"
+    rows = "".join(f"| p.V{i} | {i} |\n" for i in range(200))
+    src = "### Results\n" + header + rows
+    # Well under the char budget → not "truncated", but the 200-row table is sampled.
+    selected, truncated = _select_source_for_summary(src, max_chars=100000)
+    assert truncated is False
+    assert "omitted for the sniff test" in selected
+    assert selected.count("| p.V") <= 25  # head + tail sample, not all 200
+    assert "| p.V0 |" in selected and "| p.V199 |" in selected  # head+tail preserved
+
+
 def test_build_summary_prompt_embeds_source_and_extracted():
     payload = {
         "pmid": "1",
@@ -720,10 +753,8 @@ def test_build_summary_prompt_embeds_source_and_extracted():
 def test_zero_fact_paper_with_source_gets_source_grounded_audit(tmp_path):
     db = tmp_path / "t.db"
     _seed(db)
-    fulltext = tmp_path / "pmc_fulltext"
-    fulltext.mkdir()
     quote = "Table S1 reports p.Arg77Ter in four affected carriers"
-    (fulltext / "333_FULL_CONTEXT.md").write_text((quote + ". ") * 8)
+    _stage_scout(tmp_path, "333", zones=(quote + ". ") * 8)
     summary = _StubSummary(
         [
             {
@@ -778,6 +809,10 @@ def test_normalize_summary_derives_missing_and_quote_verified():
     assert r["source_grounded"] is True
     assert r["completeness"]["n_reported"] == 2
     assert r["completeness"]["n_missing"] == 1
+    # Trust is orthogonal to completeness: a grounded miss with NO per-variant
+    # trust flag yields verdict 'ok' + completeness 'gaps' (model 'flag' dropped).
+    assert r["verdict"] == "ok"
+    assert r["completeness"]["status"] == "gaps"
     by = {g["variant"]: g for g in r["carrier_groups"]}
     assert by["p.Arg100Ter"]["status"] == "reported_missing"
     assert by["p.Arg100Ter"]["quote_verified"] == 1  # quote is in the source
@@ -816,12 +851,9 @@ def test_normalize_summary_accepts_explicit_valid_ok_response():
 
 
 def test_apply_source_grounded_writes_summary_and_missing(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    src_file = ft / "111_FULL_CONTEXT.md"
-    src_file.write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(src_file))
+    _seed_source(db, "111", "")
     stub = _StubSummary(_GROUPS)
 
     stats = apply_paper_final_check(
@@ -852,18 +884,16 @@ def test_apply_source_grounded_writes_summary_and_missing(tmp_path):
         "SELECT quote_verified FROM paper_carrier_groups WHERE variant='p.Arg100Ter'"
     ).fetchone()[0]
     conn.close()
-    assert row == (1, "gaps", 1, "pfs3")
+    assert row == (1, "gaps", 1, "pfs5")
     assert groups["p.Arg100Ter"] == "reported_missing"
     assert groups["p.Val30Met"] == "reported_extracted"
     assert verified == 1
 
 
 def test_apply_source_grounded_version_skip(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
     common = dict(
         model="m",
         reasoning_effort="xhigh",
@@ -884,11 +914,9 @@ def test_apply_source_grounded_version_skip(tmp_path):
 
 
 def test_source_grounded_version_skip_invalidates_when_payload_changes(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
     common = dict(
         model="m",
         reasoning_effort="xhigh",
@@ -923,11 +951,9 @@ def test_source_grounded_version_skip_invalidates_when_payload_changes(tmp_path)
 
 
 def test_apply_source_grounded_replaces_stale_groups(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
     conn = sqlite3.connect(db)
     from pipeline.paper_final_check import ensure_summary_schema
 
@@ -988,7 +1014,7 @@ def test_apply_no_source_degrades_to_db_only(tmp_path):
 
 def test_summary_check_version_sensitive_to_budget():
     a = summary_check_version("m", "xhigh", 60000)
-    assert a.startswith("pfs3-")
+    assert a.startswith("pfs5-")
     assert a != summary_check_version("m", "xhigh", 40000)
     assert a != summary_check_version("m", "high", 60000)
 
@@ -1033,28 +1059,36 @@ def test_as_bool_string_false_is_a_miss():
     r = normalize_summary_result(
         _valid_summary_response(
             carrier_groups=[
-                {"variant": "p.X", "in_extraction": "false", "evidence_quote": "q"}
+                {
+                    "variant": "p.X",
+                    "in_extraction": "false",
+                    "evidence_quote": "p.X seen in five carriers",
+                }
             ]
         ),
         {"pmid": "1", "gene": "G", "facts": []},
-        "src",
+        "Table 2 reports p.X seen in five carriers.",
     )
     assert r["carrier_groups"][0]["status"] == "reported_missing"
-    assert r["completeness"]["n_missing"] == 1
+    assert r["completeness"]["n_missing"] == 1  # grounded: quote is in the source
 
 
 def test_normalize_status_reconciled_with_derived_misses_and_truncation():
     payload = {"pmid": "1", "gene": "G", "facts": []}
-    # Model claims "complete" but a miss exists → forced to "gaps".
+    # Model claims "complete" but a GROUNDED miss exists → forced to "gaps".
     r = normalize_summary_result(
         _valid_summary_response(
             carrier_groups=[
-                {"variant": "p.X", "in_extraction": False, "evidence_quote": "q"}
+                {
+                    "variant": "p.X",
+                    "in_extraction": False,
+                    "evidence_quote": "p.X seen in five carriers",
+                }
             ],
             completeness={"status": "complete"},
         ),
         payload,
-        "src",
+        "Table 2 reports p.X seen in five carriers.",
     )
     assert r["completeness"]["status"] == "gaps"
     # Truncated source with no miss cannot claim "complete" → "unsure".
@@ -1072,38 +1106,54 @@ def test_normalize_status_reconciled_with_derived_misses_and_truncation():
     assert r2["completeness"]["status"] == "unsure"
 
 
-def test_resolve_prefers_fulltext_over_abstract_hint(tmp_path):
-    aj = tmp_path / "abstract_json"
-    aj.mkdir()
-    hint = aj / "555.json"
-    hint.write_text(json.dumps({"abstract": "abstract text " * 30}))
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "555_FULL_CONTEXT.md").write_text("FULL BODY " + "carrier " * 60)
-    text, kind, path = resolve_source_text(
-        "555", "G", run_dir=tmp_path, source_file_hint=str(hint)
+def test_ungrounded_missing_is_unsure_not_gaps_and_ok_verdict():
+    # A reported-missing group whose quote is NOT in the source is the model's
+    # over-report: it must NOT create a gap or a flag (the over-sensitivity fix).
+    r = normalize_summary_result(
+        _valid_summary_response(
+            paper_verdict="flag",
+            carrier_groups=[
+                {
+                    "variant": "p.Z",
+                    "in_extraction": False,
+                    "evidence_quote": "a carrier claim absent from the source",
+                }
+            ],
+            completeness={"status": "gaps"},
+        ),
+        {"pmid": "1", "gene": "G", "facts": []},
+        "Unrelated source text with no such carrier claim.",
     )
-    assert kind == "fulltext"
-    assert path.endswith("555_FULL_CONTEXT.md")
+    assert r["completeness"]["n_missing"] == 0
+    assert r["completeness"]["n_missing_unverified"] == 1
+    assert r["completeness"]["status"] == "unsure"
+    assert r["verdict"] == "ok"  # over-eager model 'flag' dropped: nothing grounded
 
 
-def test_resolve_empty_full_falls_to_cleaned(tmp_path):
-    d = tmp_path / "pmc_fulltext"
-    d.mkdir()
-    (d / "666_FULL_CONTEXT.md").write_text("stub")  # <200 chars → unusable
-    (d / "666_CLEANED.md").write_text("CLEANED carriers " * 40)
-    text, kind, path = resolve_source_text("666", "G", run_dir=tmp_path)
-    assert kind == "fulltext"
-    assert path.endswith("666_CLEANED.md")
-    assert text.startswith("CLEANED")
+def test_ok_verdict_with_real_flag_is_reconciled_to_flag():
+    # A model 'ok' that ships a per-variant flag is reconciled to 'flag'.
+    r = normalize_summary_result(
+        _valid_summary_response(
+            paper_verdict="ok",
+            flags=[
+                {
+                    "variant": "p.A",
+                    "issue": "count is a cohort total",
+                    "severity": "high",
+                }
+            ],
+        ),
+        {"pmid": "1", "gene": "G", "facts": []},
+        "source",
+    )
+    assert r["n_flagged"] == 1
+    assert r["verdict"] == "flag"
 
 
 def test_apply_errored_paper_is_retryable(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
     flaky = _FlakySummary(_GROUPS)
     common = dict(
         model="m",
@@ -1122,11 +1172,9 @@ def test_apply_errored_paper_is_retryable(tmp_path):
 
 
 def test_empty_summary_checker_result_is_error_and_retryable(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
 
     class EmptySummary:
         def check(self, payload, source_text, truncated=False):
@@ -1151,11 +1199,9 @@ def test_empty_summary_checker_result_is_error_and_retryable(tmp_path):
 
 
 def test_apply_stale_groups_cleared_when_degraded_to_db_only(tmp_path):
-    ft = tmp_path / "pmc_fulltext"
-    ft.mkdir()
-    (ft / "111_FULL_CONTEXT.md").write_text(_SOURCE)
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
-    _seed_source(db, "111", str(ft / "111_FULL_CONTEXT.md"))
+    _seed_source(db, "111", "")
     apply_paper_final_check(
         db,
         model="m",
