@@ -6,8 +6,9 @@ gate (see :mod:`pipeline.trust_gate`), this step asks a strong reasoning model
 
 Two modes, one step:
 
-* **Source-grounded (default when the paper's source text is on disk):** the
-  model reads the paper's actual source text PLUS the pipeline's extracted rows
+* **Source-grounded (default when the paper's scouted source is on disk):** the
+  model reads the paper's ABSTRACT + the Data-Scout ``DATA_ZONES`` (the
+  scout-narrowed high-value regions, NOT the full text) PLUS the extracted rows
   and returns, in one call, (a) a task-focused study/cohort summary, (b) an
   enumerated ``carrier_groups`` superset — every carrier group the paper reports,
   each tagged ``in_extraction`` and grounded by a verbatim quote — from which we
@@ -21,7 +22,7 @@ Two modes, one step:
 
 It is a **judgment layer, not a mutation**: it RECORDS soft results in
 ``paper_final_check`` (+ the ``paper_carrier_groups`` child table) and never
-edits or deletes a raw count. Pure helpers (``resolve_source_text``,
+edits or deletes a raw count. Pure helpers (``resolve_summary_source``,
 ``_select_source_for_summary``, ``build_*_prompt``, ``normalize_*``) have no
 LLM/DB coupling and are unit-tested directly; ``apply_paper_final_check`` is the
 thin SQLite + LLM adapter and accepts injected checkers so tests never hit the
@@ -63,25 +64,18 @@ MAX_FACTS_PER_PAPER = 60
 MAX_QUOTE_CHARS = 800
 # Cap enumerated carrier groups so output tokens stay bounded.
 MAX_CARRIER_GROUPS = 80
-# Default source-text budget fed to the summary prompt (~15K input tokens).
+# Char budget for the abstract + scouted zones fed to the summary prompt.
 DEFAULT_MAX_SOURCE_CHARS = 60000
-# FULL_CONTEXT files above this drop to the CLEANED sibling before truncation,
-# so a supplement-folded multi-MB monster never loads whole.
-OVERSIZE_SOURCE_BYTES = 3_000_000
 # Minimum usable source length (chars); below this, treat as no source.
 MIN_USABLE_SOURCE_CHARS = 200
 
 PROMPT_VERSION = "pfc3"  # DB-only sniff test + strict response contract
-SUMMARY_PROMPT_VERSION = "pfs3"  # source-grounded summary + strict response contract
-SOURCE_RECIPE_VERSION = "src1"  # bump when resolve/select logic changes
+SUMMARY_PROMPT_VERSION = "pfs5"  # trust-only verdict; completeness is separate
+SOURCE_RECIPE_VERSION = "src2"  # abstract + Data-Scout DATA_ZONES (no full text)
 
 VALID_VERDICTS = ("ok", "flag")
 VALID_SEVERITIES = ("low", "medium", "high")
 VALID_COMPLETENESS = ("complete", "gaps", "unsure")
-
-# Preferred full-text file suffixes, most-complete first (FULL_CONTEXT carries
-# folded supplements; CLEANED is noise-stripped; DATA_ZONES is scout-narrowed).
-_FULLTEXT_SUFFIXES = ("_FULL_CONTEXT.md", "_CLEANED.md", "_DATA_ZONES.md")
 
 _PROMPT_TEMPLATE = """You are the final quality-control reviewer (a "sniff test") for an automated
 pipeline that extracts variant carrier counts from biomedical papers. You are
@@ -129,6 +123,18 @@ automated pipeline whose job is to capture EVERY carrier of {gene} variants
 described in a paper, each carrier's phenotype (affected vs unaffected, and which
 disease), and where that carrier's cohort came from. You are AUDITING against the
 paper's real text — not re-typing the whole paper.
+
+WHY THIS PROJECT EXISTS (judge relevance against this): GVF builds an auditable
+database of per-variant PATIENT carrier counts and their phenotypes so the
+Kroncke Lab can estimate variant PENETRANCE for clinical interpretation. For each
+{gene} variant we want exactly three things: how many INDIVIDUAL humans carry it,
+how many are AFFECTED vs UNAFFECTED (and with which disease), and the cohort/
+provenance. We do NOT want, and you should treat as the WRONG kind of data:
+allele frequencies (gnomAD/ExAC/MAF), in-vitro / electrophysiology / functional
+measurements, in-silico predictions (SIFT/PolyPhen/CADD), or study-wide/cohort
+denominators — none of these are per-variant human carrier counts. A table is the
+"right" table for us only if it reports individual human carriers of specific
+variants; if a captured row came from a "wrong kind" table, flag it.
 
 You are given TWO blocks:
 
@@ -326,29 +332,28 @@ def _read_text(path: Path) -> Optional[str]:
         return None
 
 
-def _ordered_fulltext_candidates(
-    dirpath: Path, pmid: str, oversize_bytes: int
-) -> list[Path]:
-    """Full-text siblings for a pmid in a dir, best-first. Prefer FULL_CONTEXT
-    (folded supplements), then CLEANED, then DATA_ZONES; non-oversized files come
-    before oversized. The caller reads them in order until one is USABLE, so an
-    empty/stub FULL_CONTEXT falls through to a good CLEANED sibling instead of
-    aborting the whole source lookup."""
-    cands: list[tuple[str, Path, int]] = []
-    for suffix in _FULLTEXT_SUFFIXES:
-        f = dirpath / f"{pmid}{suffix}"
+def _load_scout_zones(
+    pmid: str, gene: str, run_path: Optional[Path]
+) -> tuple[Optional[str], Optional[str]]:
+    """Data-Scout ``DATA_ZONES.md`` (scout-narrowed high-value regions) for a pmid.
+
+    Looks in ``run_dir/scout_output`` first, then the corpus copy. Returns
+    ``(text, path)`` or ``(None, None)``. Never raises."""
+    dirs: list[Path] = []
+    if run_path is not None:
+        dirs.append(run_path / "scout_output")
+    if gene:
+        dirs.append(REPO_ROOT / "corpus" / gene / pmid)
+    for d in dirs:
+        f = d / f"{pmid}_DATA_ZONES.md"
         try:
             if f.exists():
-                cands.append((suffix, f, f.stat().st_size))
+                text = _read_text(f)
+                if _is_usable_source(text):
+                    return text, str(f)
         except OSError:
             continue
-
-    def order(c: tuple[str, Path, int]) -> tuple[int, int, int]:
-        suffix, _f, size = c
-        oversized = 1 if size > oversize_bytes else 0
-        return (oversized, _FULLTEXT_SUFFIXES.index(suffix), -size)
-
-    return [c[1] for c in sorted(cands, key=order)]
+    return None, None
 
 
 def _abstract_from_json(path: Path) -> Optional[str]:
@@ -359,59 +364,62 @@ def _abstract_from_json(path: Path) -> Optional[str]:
     return None
 
 
-def resolve_source_text(
+def _load_abstract(
+    pmid: str, run_path: Optional[Path], hint_path: Optional[Path]
+) -> tuple[Optional[str], Optional[str]]:
+    """Abstract text for a pmid: a JSON source-file hint, else run_dir/abstract_json."""
+    if hint_path is not None and hint_path.suffix == ".json":
+        abstract = _abstract_from_json(hint_path)
+        if _is_usable_source(abstract):
+            return abstract, str(hint_path)
+    if run_path is not None:
+        aj = run_path / "abstract_json" / f"{pmid}.json"
+        if aj.exists():
+            abstract = _abstract_from_json(aj)
+            if _is_usable_source(abstract):
+                return abstract, str(aj)
+    return None, None
+
+
+def resolve_summary_source(
     pmid: str,
     gene: Optional[str],
     run_dir: Optional[str | Path] = None,
     source_file_hint: Optional[str] = None,
-    oversize_bytes: int = OVERSIZE_SOURCE_BYTES,
 ) -> tuple[Optional[str], str, Optional[str]]:
-    """Return (text, source_kind, source_path) for a paper's on-disk source.
+    """Return (text, source_kind, source_path) for the sniff test's source-grounded
+    summary: the paper's ABSTRACT plus the Data-Scout ``DATA_ZONES`` (scout-narrowed
+    high-value regions where carriers concentrate).
 
-    ``source_kind`` is ``"fulltext"`` | ``"abstract_only"`` | ``"none"``.
-    Full text is ALWAYS preferred over an abstract (completeness needs the most
-    complete text). Full-text dirs, in order: the extraction_metadata.source_file
-    hint's dir, run_dir/pmc_fulltext, corpus/<GENE>/<PMID>/ — and within each dir
-    every candidate is tried until one is usable. Abstracts (the hint if it is a
-    JSON, then run_dir/abstract_json) are the last resort. Never raises.
+    Full text is DELIBERATELY excluded — the completeness check judges against the
+    abstract + scouted data zones, not tens of thousands of characters of prose.
+    ``source_kind`` is ``"abstract_scout"`` | ``"scout_only"`` | ``"abstract_only"``
+    | ``"none"``. Never raises.
     """
     pmid = str(pmid)
     gene = (gene or "").strip()
     run_path = Path(run_dir) if run_dir else None
     hint_path = _resolve_path(source_file_hint) if source_file_hint else None
 
-    # Full text first, from every source dir, trying every sibling until usable.
-    fulltext_dirs: list[Path] = []
-    if hint_path is not None and hint_path.suffix != ".json":
-        fulltext_dirs.append(hint_path.parent)
-    if run_path is not None:
-        fulltext_dirs.append(run_path / "pmc_fulltext")
-    if gene:
-        fulltext_dirs.append(REPO_ROOT / "corpus" / gene / pmid)
-    seen: set[str] = set()
-    for d in fulltext_dirs:
-        for cand in _ordered_fulltext_candidates(d, pmid, oversize_bytes):
-            key = str(cand)
-            if key in seen:
-                continue
-            seen.add(key)
-            text = _read_text(cand)
-            if _is_usable_source(text):
-                return text, "fulltext", key
+    abstract, a_path = _load_abstract(pmid, run_path, hint_path)
+    zones, z_path = _load_scout_zones(pmid, gene, run_path)
 
-    # Abstract only as a last resort.
-    if hint_path is not None and hint_path.suffix == ".json":
-        abstract = _abstract_from_json(hint_path)
-        if _is_usable_source(abstract):
-            return abstract, "abstract_only", str(hint_path)
-    if run_path is not None:
-        aj = run_path / "abstract_json" / f"{pmid}.json"
-        if aj.exists():
-            abstract = _abstract_from_json(aj)
-            if _is_usable_source(abstract):
-                return abstract, "abstract_only", str(aj)
+    parts: list[str] = []
+    if abstract:
+        parts.append("## Abstract\n\n" + abstract.strip())
+    if zones:
+        parts.append("## Data-scouted zones\n\n" + zones.strip())
+    combined = "\n\n".join(parts).strip()
+    if not _is_usable_source(combined):
+        return None, "none", None
 
-    return None, "none", None
+    if abstract and zones:
+        kind = "abstract_scout"
+    elif zones:
+        kind = "scout_only"
+    else:
+        kind = "abstract_only"
+    return combined, kind, (z_path or a_path)
 
 
 # Sections that never contain carriers — dropped before the char budget.
@@ -427,17 +435,58 @@ _TABLEISH_RE = re.compile(
 )
 
 
+# A long variant table is repetitive: the sniff test needs the columns + a sample
+# of rows to judge whether it is the right KIND of table (per-variant human
+# carriers) for our purposes, not every row. Sample long runs to head + tail.
+_PIPE_ROW_RE = re.compile(r"^\s*\|")
+TABLE_ROW_SAMPLE_HEAD = 20  # rows kept from the top (header + separator + data)
+TABLE_ROW_SAMPLE_TAIL = 3  # rows kept from the bottom
+MAX_TABLE_ROWS = (
+    TABLE_ROW_SAMPLE_HEAD + TABLE_ROW_SAMPLE_TAIL + 2
+)  # only cap clearly-long
+
+
+def _cap_repetitive_tables(text: str) -> str:
+    """Sample any markdown table longer than ``MAX_TABLE_ROWS`` down to its first
+    ``TABLE_ROW_SAMPLE_HEAD`` and last ``TABLE_ROW_SAMPLE_TAIL`` rows, with a count
+    marker in between. Preserves the table's columns and content shape at a
+    fraction of the tokens; short tables pass through untouched."""
+    lines = text.split("\n")
+    out: list[str] = []
+    i, n = 0, len(lines)
+    while i < n:
+        if not _PIPE_ROW_RE.match(lines[i]):
+            out.append(lines[i])
+            i += 1
+            continue
+        j = i
+        while j < n and _PIPE_ROW_RE.match(lines[j]):
+            j += 1
+        run = lines[i:j]
+        if len(run) > MAX_TABLE_ROWS:
+            omitted = len(run) - TABLE_ROW_SAMPLE_HEAD - TABLE_ROW_SAMPLE_TAIL
+            out.extend(run[:TABLE_ROW_SAMPLE_HEAD])
+            out.append(
+                f"| … {omitted} more rows (same columns) omitted for the sniff test … |"
+            )
+            out.extend(run[-TABLE_ROW_SAMPLE_TAIL:])
+        else:
+            out.extend(run)
+        i = j
+    return "\n".join(out)
+
+
 def _select_source_for_summary(
     text: str, max_chars: int = DEFAULT_MAX_SOURCE_CHARS
 ) -> tuple[str, bool]:
     """Trim source to the completeness-relevant text within a char budget.
 
-    Drops dead sections (references/acknowledgments/funding/...); then, if still
-    over budget, keeps a prose head plus ALL table/supplement-bearing lines
-    (that is where carriers concentrate) and truncates the long prose middle.
-    Returns (selected_text, truncated) — truncated is True only when the char
-    budget forced dropping potentially-relevant content, so a gap under
-    truncation is auditable and re-runnable at a higher cap.
+    Drops dead sections (references/acknowledgments/funding/...); samples long
+    repetitive tables to a representative head+tail; then, if still over budget,
+    keeps a prose head plus ALL table/supplement-bearing lines (that is where
+    carriers concentrate) and truncates the long prose middle. Returns
+    (selected_text, truncated) — truncated is True only when the char budget forced
+    dropping content, so a gap under truncation is auditable and re-runnable.
     """
     lines = text.split("\n")
     kept: list[str] = []
@@ -447,11 +496,14 @@ def _select_source_for_summary(
             skipping = bool(_DEAD_SECTION_RE.match(ln))
         if not skipping:
             kept.append(ln)
-    body = "\n".join(kept)
+    # Sample long repetitive tables first, so a 200-row variant table never
+    # dominates the budget or the model's attention.
+    body = _cap_repetitive_tables("\n".join(kept))
     if len(body) <= max_chars:
         return body, False
 
-    table_lines = [ln for ln in kept if _TABLEISH_RE.search(ln)]
+    body_lines = body.split("\n")
+    table_lines = [ln for ln in body_lines if _TABLEISH_RE.search(ln)]
     head_budget = int(max_chars * 0.6)
     head = body[:head_budget]
     nl = head.rfind("\n")  # cut at a line boundary so a variant notation isn't split
@@ -944,7 +996,7 @@ def normalize_summary_result(
     ``truncated`` = the fed source was truncated, so "complete" is not claimable.
     """
     raw = _validate_summary_response(raw)
-    flags, verdict = _norm_flags(raw)
+    flags, _model_verdict = _norm_flags(raw)  # verdict re-derived from grounded signal
 
     raw_groups = raw.get("carrier_groups")
     if isinstance(raw_groups, dict):  # tolerate a single object
@@ -974,33 +1026,61 @@ def normalize_summary_result(
         )
 
     # Count across ALL groups the model returned (before any persistence cap).
+    # A reported-missing group is only a GROUNDED miss when its evidence quote is
+    # actually present in the (scouted) source; ungrounded "missing" claims are the
+    # model's over-report and must not drive the gaps/verdict signal. This is the
+    # over-sensitivity fix: n_missing counts quote-verified misses only.
     n_reported = len(groups)
     n_in = sum(1 for g in groups if g["in_extraction"])
-    n_missing = n_reported - n_in
+    missing_groups = [g for g in groups if g["status"] == "reported_missing"]
+    n_missing = sum(1 for g in missing_groups if g["quote_verified"])
+    n_missing_unverified = len(missing_groups) - n_missing
 
-    # Persist misses first, then cap — the reported_missing worklist is never
-    # dropped by the cap; only surplus already-extracted rows are.
-    groups.sort(key=lambda g: 0 if g["status"] == "reported_missing" else 1)
+    # Persist grounded misses first, then ungrounded misses, then already-extracted
+    # rows, so the cap never drops a quote-verified miss.
+    def _group_priority(g: dict[str, Any]) -> int:
+        if g["status"] != "reported_missing":
+            return 2
+        return 0 if g["quote_verified"] else 1
+
+    groups.sort(key=_group_priority)
     capped = n_reported > MAX_CARRIER_GROUPS
     kept_groups = groups[:MAX_CARRIER_GROUPS]
 
+    # Completeness is DERIVED from the grounded miss signal, never the model's
+    # (over-eager) self-report: "gaps" REQUIRES a quote-verified miss; ungrounded
+    # miss claims are only "unsure"; a model "complete" is trusted just when no
+    # misses were claimed at all (and the source was not truncated).
     comp = raw.get("completeness")
     comp = comp if isinstance(comp, dict) else {}
-    status = str(comp.get("status") or "").strip().lower()
-    if status not in VALID_COMPLETENESS:
-        status = "gaps" if n_missing > 0 else ("complete" if n_reported else "unsure")
-    # Trust the derived misses over the model's self-report, and never claim
-    # "complete" on a source we truncated before showing it.
     if n_missing > 0:
         status = "gaps"
-    elif truncated and status == "complete":
+    elif n_missing_unverified > 0:
         status = "unsure"
+    else:
+        model_status = str(comp.get("status") or "").strip().lower()
+        complete_ok = (n_reported > 0 or model_status == "complete") and not truncated
+        status = "complete" if complete_ok else "unsure"
 
     notes = str(comp.get("notes") or "").strip()
+    if n_missing_unverified:
+        notes = (
+            f"{notes} [{n_missing_unverified} ungrounded missing-carrier "
+            "claim(s) not counted]"
+        ).strip()
     if capped:
         notes = (
             f"{notes} [carrier_groups capped at {MAX_CARRIER_GROUPS} of {n_reported}]"
         ).strip()
+
+    # Verdict = TRUST only, orthogonal to completeness. Flag ONLY on a real
+    # per-variant trust flag (wrong-gene, count-role, denominator, ...). A paper
+    # that merely LOOKS incomplete is NOT flagged — the missed carriers live in the
+    # separate ``completeness`` signal (status=gaps + carrier_groups worklist), so
+    # "flag" stays a precise, actionable "a captured count is suspect" queue rather
+    # than firing on every paper the model thinks it under-read. Also reconciles a
+    # model 'ok' that shipped real flags up to 'flag'.
+    verdict = "flag" if flags else "ok"
 
     cohort_sources = [
         str(c).strip() for c in (raw.get("cohort_sources") or []) if str(c).strip()
@@ -1026,6 +1106,7 @@ def normalize_summary_result(
             "n_reported": n_reported,
             "n_in_extraction": n_in,
             "n_missing": n_missing,
+            "n_missing_unverified": n_missing_unverified,
             "notes": notes,
         },
     }
@@ -1406,7 +1487,7 @@ def apply_paper_final_check(
             # Resolve source (cheap: path stat + a read) to decide the mode.
             source_text, source_kind, source_path = (None, "none", None)
             if source_grounded:
-                source_text, source_kind, source_path = resolve_source_text(
+                source_text, source_kind, source_path = resolve_summary_source(
                     pmid,
                     paper_gene,
                     run_dir=run_dir,
@@ -1415,7 +1496,7 @@ def apply_paper_final_check(
             use_summary = bool(
                 source_grounded
                 and source_text
-                and source_kind in {"fulltext", "abstract_only"}
+                and source_kind in {"abstract_scout", "scout_only", "abstract_only"}
             )
 
             selected, truncated = "", False

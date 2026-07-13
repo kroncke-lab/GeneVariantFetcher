@@ -6,6 +6,8 @@ sources/
 .last_run/
 .last_run*/
 .extract_runs/
+.cardiac_score/
+.cardiac_extract_score/
 .policy_experiments/
 gold_overrides.backup_*/
 gold_overrides_rederived/
