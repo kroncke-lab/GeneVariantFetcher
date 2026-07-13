@@ -11,6 +11,7 @@ from harvesting.migrate_to_sqlite import (
     migrate_extraction_directory,
     normalize_affected_status,
     repair_extraction_data,
+    validate_extraction_data,
 )
 from utils.pmid_utils import extract_pmid_from_filename
 
@@ -317,6 +318,131 @@ def test_migration_normalizes_individual_record_status(tmp_path):
         == "uncertain"
     )
     conn.close()
+
+
+def test_migration_repairs_pmcid_in_pmid_field_from_filename(tmp_path):
+    extraction_dir = tmp_path / "extractions"
+    extraction_dir.mkdir()
+    payload = {
+        "paper_metadata": {
+            "pmid": "PMC9522753",
+            "title": "Inherited channelopathies update",
+        },
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "protein_notation": "p.Lys897Thr",
+                "penetrance_data": {
+                    "total_carriers_observed": 8,
+                    "affected_count": 5,
+                    "unaffected_count": 3,
+                },
+            }
+        ],
+    }
+    (extraction_dir / "KCNH2_PMID_34546463.json").write_text(
+        json.dumps(payload), encoding="utf-8"
+    )
+
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    stats = migrate_extraction_directory(conn, extraction_dir)
+
+    assert stats["successful"] == 1
+    assert conn.execute("SELECT pmid, pmc_id FROM papers").fetchone() == (
+        "34546463",
+        "PMC9522753",
+    )
+    assert conn.execute("SELECT DISTINCT pmid FROM penetrance_data").fetchone() == (
+        "34546463",
+    )
+    conn.close()
+
+
+def test_repair_keeps_different_valid_metadata_pmid():
+    payload = {
+        "paper_metadata": {"pmid": "12345678", "title": "Correct metadata"},
+        "variants": [],
+    }
+
+    valid, errors, warnings = validate_extraction_data(
+        payload, "KCNH2_PMID_34546463.json"
+    )
+    repaired, repairs = repair_extraction_data(payload, "KCNH2_PMID_34546463.json")
+
+    assert valid
+    assert not errors
+    assert any("keeping metadata" in warning for warning in warnings)
+    assert repaired["paper_metadata"]["pmid"] == "12345678"
+    assert not any("Set pmid from filename" in repair for repair in repairs)
+
+
+def test_validation_rejects_invalid_pmid_without_filename_fallback():
+    payload = {
+        "paper_metadata": {
+            "pmid": "PMC9522753",
+            "title": "Legacy PMCID metadata",
+        },
+        "variants": [],
+    }
+
+    valid, errors, _ = validate_extraction_data(payload, "legacy_extraction.json")
+
+    assert not valid
+    assert errors == ["paper_metadata.pmid is not a valid PMID: PMC9522753"]
+
+
+def test_migration_normalizes_valid_pmid_whitespace(tmp_path):
+    extraction_dir = tmp_path / "extractions"
+    extraction_dir.mkdir()
+    payload = {
+        "paper_metadata": {
+            "pmid": " 34546463 ",
+            "title": "Whitespace-padded PMID",
+        },
+        "variants": [],
+    }
+    (extraction_dir / "KCNH2_PMID_34546463.json").write_text(
+        json.dumps(payload), encoding="utf-8"
+    )
+
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    stats = migrate_extraction_directory(conn, extraction_dir)
+
+    assert stats["successful"] == 1
+    assert conn.execute("SELECT pmid FROM papers").fetchone() == ("34546463",)
+    conn.close()
+
+
+def test_repair_still_recovers_missing_and_unknown_pmids_from_filename():
+    for bad_pmid in (None, "", "UNKNOWN"):
+        payload = {
+            "paper_metadata": {"pmid": bad_pmid, "title": "Incomplete metadata"},
+            "variants": [],
+        }
+
+        repaired, repairs = repair_extraction_data(payload, "KCNH2_PMID_34546463.json")
+
+        assert repaired["paper_metadata"]["pmid"] == "34546463"
+        assert any("Set pmid from filename" in repair for repair in repairs)
+
+
+def test_repair_does_not_overwrite_conflicting_existing_pmc_id():
+    payload = {
+        "paper_metadata": {
+            "pmid": "PMC9522753",
+            "pmc_id": "PMC1111111",
+            "title": "Conflicting legacy metadata",
+        },
+        "variants": [],
+    }
+
+    repaired, repairs = repair_extraction_data(payload, "KCNH2_PMID_34546463.json")
+
+    assert repaired["paper_metadata"]["pmid"] == "34546463"
+    assert repaired["paper_metadata"]["pmc_id"] == "PMC1111111"
+    assert any("discarded conflicting" in repair for repair in repairs)
 
 
 def test_targeted_migration_preserves_existing_pmid_evidence(tmp_path):

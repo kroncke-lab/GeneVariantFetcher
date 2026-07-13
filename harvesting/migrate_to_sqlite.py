@@ -44,7 +44,11 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 # Configure logging using centralized utility
 from utils.logging_utils import get_logger, setup_logging
-from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filename
+from utils.pmid_utils import (
+    extract_gene_from_filename,
+    extract_pmid_from_filename,
+    is_valid_pmid,
+)
 from utils.geo_ancestry import enrich_ethnicity_origin
 from utils.source_layers import (
     infer_source_layer_from_text,
@@ -374,8 +378,28 @@ def validate_extraction_data(
         errors.append("Missing paper_metadata section")
     else:
         pmid = paper_meta.get("pmid")
-        if not pmid or pmid == "UNKNOWN":
+        raw_pmid_text = str(pmid) if pmid is not None else ""
+        normalized_pmid = raw_pmid_text.strip()
+        filename_pmid = extract_pmid_from_filename(filename)
+        if not normalized_pmid or normalized_pmid == "UNKNOWN":
             errors.append(f"Missing or invalid paper_metadata.pmid: {pmid}")
+        elif raw_pmid_text != normalized_pmid:
+            errors.append(f"paper_metadata.pmid has surrounding whitespace: {pmid!r}")
+        elif not is_valid_pmid(normalized_pmid):
+            if filename_pmid:
+                errors.append(
+                    "paper_metadata.pmid is not a PMID while filename has one: "
+                    f"{normalized_pmid} != {filename_pmid}"
+                )
+            else:
+                errors.append(
+                    f"paper_metadata.pmid is not a valid PMID: {normalized_pmid}"
+                )
+        elif filename_pmid and normalized_pmid != filename_pmid:
+            warnings.append(
+                "paper_metadata.pmid differs from filename PMID; keeping metadata: "
+                f"{normalized_pmid} != {filename_pmid}"
+            )
         if not paper_meta.get("title"):
             warnings.append("Missing paper_metadata.title")
 
@@ -445,12 +469,33 @@ def repair_extraction_data(
 
     paper_meta = data["paper_metadata"]
 
-    # Fix missing PMID
-    if not paper_meta.get("pmid") or paper_meta.get("pmid") == "UNKNOWN":
-        if filename_pmid:
-            old_val = paper_meta.get("pmid", "MISSING")
-            paper_meta["pmid"] = filename_pmid
-            repairs.append(f"Set pmid from filename: {old_val} -> {filename_pmid}")
+    # Repair missing or malformed PMIDs from the extraction filename. A legacy
+    # extraction may put its PMCID in paper_metadata.pmid even though the
+    # canonical filename still carries the real PMID. Keep that accession as
+    # pmc_id instead of allowing it to become a paper/foreign-key identifier.
+    raw_pmid = paper_meta.get("pmid")
+    raw_pmid_text = str(raw_pmid) if raw_pmid is not None else ""
+    normalized_pmid = raw_pmid_text.strip()
+    if is_valid_pmid(normalized_pmid):
+        if raw_pmid_text != normalized_pmid:
+            paper_meta["pmid"] = normalized_pmid
+            repairs.append(
+                f"Normalized pmid whitespace: {raw_pmid!r} -> {normalized_pmid!r}"
+            )
+    elif filename_pmid:
+        old_val = raw_pmid if raw_pmid is not None else "MISSING"
+        if re.fullmatch(r"PMC\d+", normalized_pmid, re.IGNORECASE):
+            normalized_pmcid = normalized_pmid.upper()
+            if not paper_meta.get("pmc_id"):
+                paper_meta["pmc_id"] = normalized_pmcid
+                repairs.append(f"Preserved PMCID from pmid field: {normalized_pmcid}")
+            elif str(paper_meta["pmc_id"]).upper() != normalized_pmcid:
+                repairs.append(
+                    "Kept existing pmc_id and discarded conflicting pmid-field "
+                    f"PMCID: {paper_meta['pmc_id']} != {normalized_pmcid}"
+                )
+        paper_meta["pmid"] = filename_pmid
+        repairs.append(f"Set pmid from filename: {old_val} -> {filename_pmid}")
 
     # Fix missing title
     if not paper_meta.get("title"):
