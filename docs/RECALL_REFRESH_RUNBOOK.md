@@ -22,6 +22,8 @@ machine.
 python scripts/refresh_recall.py --gene SCN5A --run-dir <run-dir-with-extractions-and-SCN5A.db>
 # measure AND promote into the canonical DB if it improves (backs up first):
 python scripts/refresh_recall.py --gene SCN5A --run-dir <run-dir> --land
+# use a non-default consolidated corpus:
+python scripts/refresh_recall.py --gene SCN5A --run-dir <run-dir> --corpus <corpus>
 ```
 
 `refresh_recall.py` composes the idempotent pieces: fetch publisher supplements →
@@ -46,10 +48,10 @@ regression). If nothing new is found, it reports a no-op and exits.
 
 ### B. A new/upgraded API key or access (e.g. Springer key, Wiley off-VPN)
 1. Add the key to `.env` (see [`API_KEYS.md`](API_KEYS.md)).
-2. Re-fetch supplements — previously-blocked papers are now reachable, already-
-   fetched ones are skipped:
+2. Reconcile supplements — previously-blocked files are now reachable, while
+   already-fetched files are retained:
    ```bash
-   python scripts/fetch_elsevier_supplements.py --gene <GENE>     # Elsevier mmc
+   python scripts/fetch_elsevier_supplements.py --gene <GENE> --corpus <corpus>
    # Springer/Wiley support requires a verified downloader before use.
    ```
 3. `python scripts/refresh_recall.py --gene <GENE> --run-dir <run> --land`.
@@ -60,8 +62,8 @@ regression). If nothing new is found, it reports a no-op and exits.
 |---|---|---|
 | Source acquisition | `gvf gvf-run` (corpus-as-cache) | Reuses usable cached source per PMID; a `stub` falls through to a fresh fetch so a new key re-attempts it. |
 | Corpus build | `scripts/build_source_corpus.py --apply` | Never-downgrade: adds new papers, upgrades only compromised categories; a clean re-run is a no-op. |
-| Supplement fetch | `scripts/fetch_elsevier_supplements.py` | Skips papers that already have supplements on disk and files already downloaded; converges to 0-new. |
-| Supplement fold | `harvesting/supplement_fold.py` (wired into `refresh_run_db`) | Sentinel-delimited, backs up once to `.pre_fold_bak`, rebuilds the folded block each pass — never double-appends. |
+| Supplement fetch | `scripts/fetch_elsevier_supplements.py` | Reconciles each publisher `mmc` reference independently, reuses matching sibling-gene files, downloads only missing files, and caches a verified-complete reference manifest so later runs skip the article XML request; converges to 0-new. |
+| Supplement fold | `harvesting/supplement_fold.py` (wired into fetch, corpus reuse, and refresh) | Sentinel-delimited, migrates legacy inline blocks, writes a backup only on change, and returns a byte-stable no-op on rerun. |
 | Re-extraction | `scripts/refresh_run_db.py` | Selects candidates by deterministic-variant lift; a paper already extracted at its current variant count is not re-selected. Regression + explosion acceptance gates. |
 | Land into canonical | `scripts/refresh_recall.py --land` | Backs up the canonical DB first; deletes only extraction-origin rows (preserves layer rows); reverts if the landed DB scores below canonical. |
 
@@ -69,9 +71,11 @@ regression). If nothing new is found, it reports a no-op and exits.
 
 ```bash
 # 1. fetch supplements the full-text API dropped (idempotent)
-python scripts/fetch_elsevier_supplements.py --gene SCN5A
+python scripts/fetch_elsevier_supplements.py --gene SCN5A --corpus corpus
 # 2. QC: how many on-disk supplements aren't yet folded into FULL_CONTEXT
 python scripts/recall_audit/supplement_fold_gap.py --genes SCN5A
+# 2a. fold a nested corpus directly (no network)
+python scripts/fold_supplements.py --corpus corpus --genes SCN5A
 # 3. bridge nested corpus -> flat harvest dir
 python scripts/corpus_to_harvest.py --gene SCN5A --out /tmp/harvest/SCN5A
 # 4. refresh (folds supplements + acceptance-gated re-extract); writes a NEW db
@@ -82,6 +86,12 @@ python scripts/refresh_run_db.py --gene SCN5A --run-dir <run> \
 python scripts/run_recall_suite.py --score --genes SCN5A \
     --db SCN5A=/tmp/SCN5A.refreshed.db --outdir /tmp/score
 ```
+
+For turnkey source recovery, `source_acquisition_audit.py` writes a separate
+`supplement_input.csv`. `gvf-run` sends that queue to
+`fetch_elsevier_supplements.py --input ... --source-override-out ...` and sends
+only genuinely missing/stub article bodies to `fetch_paywalled.py`. This avoids
+re-downloading a usable full text merely because its supplement is incomplete.
 
 ## Getting past the Cloudflare wall (Wiley / Karger / Sage) — automated
 

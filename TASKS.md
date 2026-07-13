@@ -92,13 +92,13 @@ missed them** after the 1B parser land.
       unpromoted until count semantics are fixed. Candidates that regressed
       unique/row recall or MAE were withheld. Current score is in
       `docs/RECALL_STATUS.md`.
-- [ ] **1A — Supplement fetch+fold audit (acquisition/fold track, ~647 rows).**
-      Many top PMIDs reference an eTable/Supplementary Table but have 0 supplement
-      files on disk (e.g. KCNQ1 `17192539`: 21KB body, 48 missing variants absent
-      from source). Audit "supplement referenced but absent/unfolded"; fetch
-      (Elsevier mmc CDN works; Wiley/Springer gated); convert xlsx/docx/pdf; fold
-      into FULL_CONTEXT before extraction. Ensure the CLEANED size-guard never drops
-      a mutation-table region.
+- [x] **1A — Supplement fetch+fold audit (local/Elsevier track).** Completed
+      2026-07-12: per-file Elsevier `mmc` reconciliation recovered 64 missing
+      files across 49 papers without body re-downloads; all on-disk convertible
+      supplements are folded (1,577/1,577, pre-pass gap 289). The turnkey source
+      audit now sends supplement-only gaps to this route instead of refetching a
+      usable body. Wiley/Springer referenced-but-absent supplements remain under
+      Lever 3 because they require publisher access, not fold work.
 - [ ] **1C — Targeted re-extraction of the top extraction-gap PMIDs**,
       acceptance-gated via `scripts/refresh_recall.py`. Regenerate the ranked
       list from the post-1B score before running; the pre-1B list included KCNQ1

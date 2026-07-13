@@ -7,7 +7,7 @@ from harvesting.supplement_fold import (
     build_supplement_markdown,
     fold_supplements_into_full_context,
 )
-from scripts.fold_supplements import discover_pmids
+from scripts.fold_supplements import discover_corpus_papers, discover_pmids
 
 # A dummy converter is enough: .csv/.txt are read directly by _convert_supplement
 # and never touch the converter object.
@@ -92,11 +92,112 @@ def test_fold_is_idempotent_and_nondestructive(tmp_path):
     assert backup.read_text(encoding="utf-8") == original
 
     # Second fold is a no-op on content (no double-append) and keeps the backup.
-    fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
     folded_twice = fc.read_text(encoding="utf-8")
     assert folded_twice == folded_once
     assert folded_twice.count("# MAIN TEXT") == 1
     assert backup.read_text(encoding="utf-8") == original
+
+
+def test_fold_migrates_covered_legacy_inline_block_without_duplication(tmp_path):
+    pmid = "44444444"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text(
+        "# MAIN\n\nbody\n\n# SUPPLEMENTAL FILE 1: current.csv\n\n"
+        "variant,carriers\nc.2A>G,4\n",
+        encoding="utf-8",
+    )
+    _write_supp(
+        harvest / f"{pmid}_supplements",
+        "current.csv",
+        "variant,carriers\nc.2A>G,4\n",
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert folded.count("# MAIN") == 1
+    assert folded.count("c.2A>G,4") == 1
+    assert folded.count(FOLD_BEGIN) == 1
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
+    assert fc.read_text(encoding="utf-8") == folded
+
+
+def test_fold_retains_legacy_content_missing_from_disk(tmp_path):
+    pmid = "55555555"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text(
+        "# MAIN\n\nbody\n\n# SUPPLEMENTAL FILE 1: missing.csv\n\nlegacy,only\n",
+        encoding="utf-8",
+    )
+    _write_supp(
+        harvest / f"{pmid}_supplements",
+        "current.csv",
+        "variant,carriers\nc.2A>G,4\n",
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "legacy,only" in folded
+    assert "c.2A>G,4" in folded
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
+    assert fc.read_text(encoding="utf-8") == folded
+
+
+def test_fold_refuses_partial_conversion_without_rewriting(tmp_path, monkeypatch):
+    pmid = "66666666"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    original = "# MAIN\n\nbody\n"
+    fc.write_text(original, encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "good.txt", "good supplement\n")
+    _write_supp(supp_dir, "bad.txt", "bad supplement\n")
+
+    from harvesting import supplement_fold
+
+    real_convert = supplement_fold._convert_supplement
+
+    def fail_one(**kwargs):
+        if kwargs["file_path"].name == "bad.txt":
+            raise ValueError("conversion failed")
+        return real_convert(**kwargs)
+
+    monkeypatch.setattr(supplement_fold, "_convert_supplement", fail_one)
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
+    assert fc.read_text(encoding="utf-8") == original
+    assert not (harvest / f"{pmid}_FULL_CONTEXT.md.pre_fold_bak").exists()
+
+
+def test_fold_keeps_good_tables_when_another_file_converts_empty(tmp_path, monkeypatch):
+    pmid = "77777777"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "table.txt", "variant,carriers\nc.2A>G,4\n")
+    _write_supp(supp_dir, "image_only.pdf", "not real PDF")
+
+    from harvesting import supplement_fold
+
+    real_convert = supplement_fold._convert_supplement
+
+    def empty_one(**kwargs):
+        if kwargs["file_path"].name == "image_only.pdf":
+            return "", [], []
+        return real_convert(**kwargs)
+
+    monkeypatch.setattr(supplement_fold, "_convert_supplement", empty_one)
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    assert "c.2A>G,4" in fc.read_text(encoding="utf-8")
 
 
 def test_fold_returns_none_without_supplements(tmp_path):
@@ -134,3 +235,15 @@ def test_discover_pmids_requires_both_artifacts(tmp_path):
     (harvest / "333_FULL_CONTEXT.md").write_text("x", encoding="utf-8")
 
     assert discover_pmids(harvest) == ["111"]
+
+
+def test_discover_corpus_papers_scopes_genes(tmp_path):
+    for gene, pmid in (("SCN5A", "111"), ("KCNH2", "222")):
+        paper = tmp_path / "corpus" / gene / pmid
+        paper.mkdir(parents=True)
+        (paper / f"{pmid}_FULL_CONTEXT.md").write_text("body")
+        (paper / f"{pmid}_supplements").mkdir()
+
+    papers = discover_corpus_papers(tmp_path / "corpus", ["SCN5A"])
+
+    assert papers == [("111", tmp_path / "corpus" / "SCN5A" / "111")]

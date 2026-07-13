@@ -39,6 +39,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from harvesting.elsevier_api import ELSEVIER_DOI_PREFIXES  # noqa: E402
+
 try:
     from scripts.recall_audit.common import (  # noqa: E402
         context_status,
@@ -108,6 +110,7 @@ FIELDS = [
 ]
 
 FETCH_INPUT_FIELDS = ["PMID", "DOI", "route"]
+SUPPLEMENT_INPUT_FIELDS = ["PMID", "DOI", "route"]
 SOURCE_OVERRIDE_FIELDS = [
     "gene",
     "pmid",
@@ -136,7 +139,7 @@ def _extract_doi(value: Any) -> str:
 
 def infer_publisher(doi: str) -> str:
     lower = doi.lower()
-    if lower.startswith("10.1016/"):
+    if lower.startswith(ELSEVIER_DOI_PREFIXES):
         return "elsevier"
     if lower.startswith(("10.1002/", "10.1111/")):
         return "wiley"
@@ -494,7 +497,13 @@ def classify_pmid(
     elif missing_variant_supplement:
         if doi:
             route, publisher = fetch_route_for_doi(doi)
-            action = "manual_or_blocked" if route.startswith("blocked_") else "fetch"
+            if publisher == "elsevier":
+                action = "fetch_supplement_only"
+                route = "fetch_elsevier_supplements_only"
+            else:
+                action = (
+                    "manual_or_blocked" if route.startswith("blocked_") else "fetch"
+                )
         else:
             action = "fetch"
             route = "doi_lookup_then_fetch"
@@ -540,7 +549,7 @@ def classify_pmid(
     # best-effort — a None here just means "no EV signal", never an error.
     ev = (
         _acquisition_ev(gene, _load_ev_record(abstract_dir, pmid, source_file))
-        if action in ("fetch", "manual_or_blocked")
+        if action in ("fetch", "fetch_supplement_only", "manual_or_blocked")
         else None
     )
     ev_score_val = float(ev.get("ev_score", 0.0)) if ev else 0.0
@@ -548,6 +557,8 @@ def classify_pmid(
     priority = 0
     if action == "fetch":
         priority += 100
+    if action == "fetch_supplement_only":
+        priority += 95
     if action == "refresh_replay":
         priority += 80
     if zero_variant_qc:
@@ -694,6 +705,9 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if str(row["source_status"]) in DATA_AVAILABLE_STATUSES
     }
     selected_fetch = {row["pmid"] for row in rows if row["action"] == "fetch"}
+    selected_supplement_fetch = {
+        row["pmid"] for row in rows if row["action"] == "fetch_supplement_only"
+    }
     selected_refresh = {
         row["pmid"] for row in rows if row["action"] == "refresh_replay"
     }
@@ -736,6 +750,9 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "pmid_coverage": {
             "usable_fulltext_current": _coverage_item(len(usable), total),
             "selected_for_fetch": _coverage_item(len(selected_fetch), total),
+            "selected_for_supplement_fetch": _coverage_item(
+                len(selected_supplement_fetch), total
+            ),
             "selected_for_source_refresh": _coverage_item(len(selected_refresh), total),
             "selected_for_manual_or_blocked": _coverage_item(
                 len(selected_manual), total
@@ -759,6 +776,11 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "selected_for_source_refresh": (
                 "Run PMIDs with usable source text that should be replayed through "
                 "scripts/refresh_run_db.py --stage-extractions."
+            ),
+            "selected_for_supplement_fetch": (
+                "Run PMIDs with usable article bodies but missing Elsevier mmc "
+                "files; route to scripts/fetch_elsevier_supplements.py without "
+                "re-downloading full text."
             ),
             "selected_for_manual_or_blocked": (
                 "Run PMIDs without usable source text that are known blocked "
@@ -786,6 +808,17 @@ def write_fetch_input(rows: list[dict[str, Any]], path: Path) -> None:
         for row in fetch_rows_src
     ]
     write_csv_rows(fetch_rows, FETCH_INPUT_FIELDS, path)
+
+
+def write_supplement_input(rows: list[dict[str, Any]], path: Path) -> None:
+    supplement_rows = [
+        {"PMID": row["pmid"], "DOI": row["doi"], "route": row["route"]}
+        for row in sorted(
+            (row for row in rows if row["action"] == "fetch_supplement_only"),
+            key=lambda row: (-int(row.get("priority_score") or 0), row["pmid"]),
+        )
+    ]
+    write_csv_rows(supplement_rows, SUPPLEMENT_INPUT_FIELDS, path)
 
 
 def write_source_override(rows: list[dict[str, Any]], path: Path) -> None:
@@ -834,6 +867,7 @@ def main() -> int:
     parser.add_argument("--out", required=True, type=Path, help="Worklist CSV")
     parser.add_argument("--summary-out", required=True, type=Path)
     parser.add_argument("--fetch-input-out", type=Path, default=None)
+    parser.add_argument("--supplement-input-out", type=Path, default=None)
     parser.add_argument("--source-override-out", type=Path, default=None)
     args = parser.parse_args()
 
@@ -864,6 +898,8 @@ def main() -> int:
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     if args.fetch_input_out:
         write_fetch_input(rows, repo_path(args.fetch_input_out).expanduser())
+    if args.supplement_input_out:
+        write_supplement_input(rows, repo_path(args.supplement_input_out).expanduser())
     if args.source_override_out:
         write_source_override(rows, repo_path(args.source_override_out).expanduser())
     return 0

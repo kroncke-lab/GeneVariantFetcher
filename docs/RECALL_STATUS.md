@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-06-12.
+Last updated: 2026-07-12.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -15,34 +15,34 @@ file, this file is authoritative.
 ## Current Canonical Baseline
 
 Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
-the 2026-06-12 PDF-linearized table reconstruction, iter-2 quality-aware
-gate/selector, and targeted lands of all four genes:
+the 2026-07-12 four-gene supplement reconciliation, fold-gap closure, and the
+strictly gated SCN5A supplement-source land:
 
 - `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
 - `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
 - `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db`
 - `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db`
 
-Scored artifact for the strict post-1B run:
-`recall_metrics/linearized_tables_20260612_strict/`.
+Scored artifact:
+`recall_metrics/fulltext_supplements_20260712/`.
 
 ## Four-Gene Aggregate
 
 | Metric | Matched / Gold | Recall | Gap to 90% |
 | --- | ---: | ---: | ---: |
-| PMIDs | 1274 / 1502 | 84.8% | 78 |
-| Variant rows | 5518 / 6833 | 80.8% | 632 |
-| Unique variants | **2591 / 3010** | **86.1%** | **118** |
-| Patients/carriers | 15896 / 18719 | 84.9% | 951 |
-| Affected | 10435 / 12475 | 83.6% | 793 |
+| PMIDs | 1276 / 1502 | 85.0% | 76 |
+| Variant rows | 5546 / 6833 | 81.2% | 604 |
+| Unique variants | **2596 / 3010** | **86.2%** | **113** |
+| Patients/carriers | 15944 / 18719 | 85.2% | 904 |
+| Affected | 10483 / 12475 | 84.0% | 745 |
 | Unaffected | 3441 / 3951 | 87.1% | 115 |
 
 Rows-mode MAE:
 
 | Count field | Sum abs error / N | MAE |
 | --- | ---: | ---: |
-| Carriers | 2287 / 3718 | **0.615** |
-| Affected | 1535 / 3110 | **0.494** |
+| Carriers | 2287 / 3724 | **0.614** |
+| Affected | 1535 / 3116 | **0.493** |
 | Unaffected | 323 / 271 | **1.192** |
 
 ## Per-Gene Recall
@@ -51,21 +51,33 @@ Rows-mode MAE:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
 | KCNQ1 | 285/305 (93.4%) | 1499/1741 (86.1%) | 563/622 (**90.5%**) | 6995/7793 (89.8%) | 3909/4306 (90.8%) | 1319/1484 (88.9%) | 0.935 |
-| SCN5A | 620/757 (81.9%) | 2433/3128 (77.8%) | 1022/1183 (86.4%) | 5020/6219 (80.7%) | 3836/4876 (78.7%) | 1184/1343 (88.2%) | 0.454 |
+| SCN5A | 622/757 (82.2%) | 2461/3128 (78.7%) | 1027/1183 (86.8%) | 5068/6219 (81.5%) | 3884/4876 (79.7%) | 1184/1343 (88.2%) | 0.452 |
 | RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
+
+## Full-Text and Supplement Coverage
+
+The consolidated corpus currently contains 1,312 KCNH2, 2,396 KCNQ1, 656
+RYR2, and 1,590 SCN5A paper contexts. Among papers with an on-disk convertible
+supplement, the fold audit is **1,577/1,577 folded**: KCNH2 355/355, KCNQ1
+604/604, RYR2 233/233, and SCN5A 385/385. The pre-refresh gap was 289 papers.
+
+The Elsevier per-file reconciliation recovered 64 missing `mmc` files across 49
+papers without re-downloading article bodies, then updated 427 folded contexts.
+Remaining source gaps are papers or referenced supplements that are not locally
+available through current publisher access; they are not an on-disk fold gap.
 
 ## Precision Snapshot
 
 Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
 denominator to extra rows on gold PMIDs that carry at least one extracted count:
-`5518 / (5518 + 1631) = 77.2%`.
+`5546 / (5546 + 1629) = 77.3%`.
 
 The looser raw proxy remains useful only as a false-positive upper bound:
-`5518 / (5518 + 13021) = 29.8%`.
+`5546 / (5546 + 13036) = 29.8%`.
 
 Why the raw proxy is pessimistic:
 
-- 11,390 / 13,021 current extra-on-gold-PMID rows have zero patient counts and
+- 11,407 / 13,036 current extra-on-gold-PMID rows have zero patient counts and
   are ClinVar/PubTator-style linkage attributions rather than count-bearing paper
   extractions.
 - Only 1,631 extra rows carry any carrier/affected/unaffected count.
@@ -112,8 +124,9 @@ Current failure-mode split from `paper_disagreement_report.csv`:
 
 Use `TASKS.md` for the active checklist. The current blocker shape is:
 
-1. **Source/table acquisition and binding.** Missing or incomplete source bodies,
-   especially supplement mutation tables, remain the largest recall surface.
+1. **Source/table acquisition and binding.** The local fold backlog is closed;
+   missing or access-gated source bodies and referenced supplements remain the
+   largest recall surface.
 2. **Available-source underextraction.** Some usable sources are present but
    mutation-list tables are not exhausted.
 3. **Count semantics and regex-table precision.** `regex_table` is the dominant
