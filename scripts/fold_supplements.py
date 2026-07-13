@@ -102,16 +102,19 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(message)s",
     )
     harvest_dir = _resolve_harvest_dir(args)
     if args.corpus is not None and harvest_dir is not None:
-        build_parser().error("--corpus cannot be combined with --run-dir/--harvest-dir")
+        parser.error("--corpus cannot be combined with --run-dir/--harvest-dir")
+    if args.corpus is not None and not args.corpus.is_dir():
+        parser.error(f"--corpus directory does not exist: {args.corpus}")
     if args.corpus is None and (harvest_dir is None or not harvest_dir.is_dir()):
-        build_parser().error(
+        parser.error(
             "provide --corpus, --harvest-dir, or --run-dir containing pmc_fulltext/"
         )
 

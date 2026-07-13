@@ -112,7 +112,9 @@ def _convertible_files(supplements_dir: Path) -> list[Path]:
             if p.is_file()
             and p.suffix.lower() in _CONVERTIBLE_SUFFIXES
             and "__MACOSX" not in p.parts
-            and not p.name.startswith(".")
+            and not any(
+                part.startswith(".") for part in p.relative_to(supplements_dir).parts
+            )
         ),
         key=lambda p: p.relative_to(supplements_dir).as_posix(),
     )

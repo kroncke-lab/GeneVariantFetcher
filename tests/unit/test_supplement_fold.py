@@ -1,5 +1,7 @@
 """Unit tests for the on-disk supplement fold (C2)."""
 
+import pytest
+
 from harvesting.supplement_fold import (
     FOLD_BEGIN,
     FOLD_END,
@@ -7,7 +9,7 @@ from harvesting.supplement_fold import (
     build_supplement_markdown,
     fold_supplements_into_full_context,
 )
-from scripts.fold_supplements import discover_corpus_papers, discover_pmids
+from scripts.fold_supplements import discover_corpus_papers, discover_pmids, main
 
 # A dummy converter is enough: .csv/.txt are read directly by _convert_supplement
 # and never touch the converter object.
@@ -51,6 +53,7 @@ def test_build_supplement_markdown_folds_nested_zip_extracted_files(tmp_path):
     # cruft that must be ignored
     _write_supp(supp / "__MACOSX", "._junk.csv", "garbage\n")
     _write_supp(supp, ".DS_Store.csv", "garbage\n")
+    _write_supp(supp / ".cache", "visible_name.csv", "garbage\n")
 
     md, converted = build_supplement_markdown(supp, converter=_DUMMY)
 
@@ -247,3 +250,12 @@ def test_discover_corpus_papers_scopes_genes(tmp_path):
     papers = discover_corpus_papers(tmp_path / "corpus", ["SCN5A"])
 
     assert papers == [("111", tmp_path / "corpus" / "SCN5A" / "111")]
+
+
+def test_corpus_mode_rejects_missing_directory(tmp_path, monkeypatch, capsys):
+    missing = tmp_path / "missing-corpus"
+    monkeypatch.setattr("sys.argv", ["fold_supplements.py", "--corpus", str(missing)])
+
+    with pytest.raises(SystemExit, match="2"):
+        main()
+    assert f"--corpus directory does not exist: {missing}" in capsys.readouterr().err
