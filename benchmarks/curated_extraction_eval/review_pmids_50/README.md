@@ -41,7 +41,11 @@ in its own versioned directory rather than mutating the old one.
 
 ```bash
 python - <<'PY'
-import sqlite3, pathlib
+import pathlib
+import sqlite3
+
+from utils.pmid_utils import is_valid_pmid
+
 DBS = {  # canonical run DBs, kept in sync with run_benchmark.py CANONICAL_DBS
  "APOE":"results/APOE/20260621_072155_full_redo/APOE.db",
  "BRCA1":"results/BRCA1/20260616_132646/BRCA1.db",
@@ -53,25 +57,27 @@ DBS = {  # canonical run DBs, kept in sync with run_benchmark.py CANONICAL_DBS
  "SCN5A":"validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
 }
 out=pathlib.Path("benchmarks/curated_extraction_eval/review_pmids_50"); out.mkdir(exist_ok=True)
-# Source databases can contain a PMCID in a legacy ``pmid`` column.  A PMCID is
-# not a PMID: record the authoritative NCBI conversion here before regenerating.
-PMID_ALIASES = {"PMC9522753": "34546463"}
 for g,p in DBS.items():
     c=sqlite3.connect(p)
-    raw=c.execute("SELECT TRIM(pmid), COUNT(*) n FROM penetrance_data WHERE pmid IS NOT NULL AND TRIM(pmid)!='' AND total_carriers_observed IS NOT NULL AND total_carriers_observed>0 GROUP BY TRIM(pmid)").fetchall()
-    counts = {}
-    for source_id, n in raw:
-        pmid = PMID_ALIASES.get(source_id, source_id)
-        if not pmid.isdigit():
-            raise ValueError(f"{g}: {source_id!r} is not a numeric PMID; add an authoritative conversion")
-        counts[pmid] = counts.get(pmid, 0) + n
-    rows = sorted(counts.items(), key=lambda row: (-row[1], row[0]))[:50]
-    if len(rows) != 50:
-        raise ValueError(f"{g}: expected 50 unique numeric PMIDs, found {len(rows)}")
-    (out/f"{g}.txt").write_text("\n".join(pmid for pmid, _ in rows)+"\n"); c.close()
+    rows=c.execute("SELECT pmid, COUNT(*) n FROM penetrance_data WHERE pmid IS NOT NULL AND TRIM(pmid)!='' AND total_carriers_observed IS NOT NULL AND total_carriers_observed>0 GROUP BY pmid ORDER BY n DESC, pmid ASC LIMIT 50").fetchall()
+    c.close()
+    pmids=[str(pmid).strip() for pmid, _ in rows]
+    invalid=sorted({pmid for pmid in pmids if not is_valid_pmid(pmid)})
+    if invalid:
+        raise ValueError(
+            f"{g}: selected rows contain non-PMID identifiers: {invalid}; "
+            "refresh it from canonical extraction filenames before regenerating"
+        )
+    if len(pmids) != 50 or len(set(pmids)) != 50:
+        raise ValueError(f"{g}: expected 50 unique PMIDs, found {len(set(pmids))}")
+    (out/f"{g}.txt").write_text("\n".join(pmids)+"\n")
 PY
 ```
 
 Keep these files stable for reproducibility; put any materially different future
-cohort in a new versioned directory. The current PMCID alias was verified with
-the [NCBI PMC ID Converter](https://pmc.ncbi.nlm.nih.gov/tools/id-converter-api/).
+cohort in a new versioned directory. The fail-fast validation is intentional:
+repair a malformed identifier in the canonical extraction/DB rather than
+filtering it out or aliasing it only in the review cohort. For example, an older
+KCNH2 snapshot stored PMCID `PMC9522753` as its PMID; its canonical extraction
+filename identifies the paper as PMID `34546463`, while migration preserves
+`PMC9522753` in `papers.pmc_id`.
