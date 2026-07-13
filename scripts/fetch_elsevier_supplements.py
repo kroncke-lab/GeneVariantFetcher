@@ -121,7 +121,9 @@ def discover_targets(
         paper_dirs = (
             (pdir.name, pdir)
             for pdir in sorted(gene_dir.iterdir())
-            if pdir.is_dir() and (not wanted_pmids or pdir.name in wanted_pmids)
+            if pdir.is_dir()
+            and not pdir.name.startswith(".")
+            and (not wanted_pmids or pdir.name in wanted_pmids)
         )
 
     for pmid, pdir in paper_dirs:
@@ -132,7 +134,9 @@ def discover_targets(
                 reuse_dirs = tuple(
                     sibling / pmid / f"{pmid}_supplements"
                     for sibling in sorted(corpus.iterdir())
-                    if sibling.is_dir() and sibling.name.upper() != gene.upper()
+                    if sibling.is_dir()
+                    and not sibling.name.startswith(".")
+                    and sibling.name.upper() != gene.upper()
                 )
             targets.append(
                 PaperTarget(

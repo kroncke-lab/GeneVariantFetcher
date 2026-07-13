@@ -30,7 +30,7 @@ def discover_pmids(harvest_dir: Path) -> list[str]:
     """PMIDs that have BOTH a FULL_CONTEXT.md and a non-empty supplements dir."""
     pmids: set[str] = set()
     for d in harvest_dir.glob(f"*{_SUPP_SUFFIX}"):
-        if d.is_dir():
+        if d.is_dir() and not d.name.startswith("."):
             pmids.add(d.name[: -len(_SUPP_SUFFIX)])
     return sorted(p for p in pmids if (harvest_dir / f"{p}_FULL_CONTEXT.md").is_file())
 
@@ -39,13 +39,19 @@ def discover_corpus_papers(corpus: Path, genes: list[str]) -> list[tuple[str, Pa
     """Return ``(pmid, paper_dir)`` pairs from the nested corpus layout."""
     papers: list[tuple[str, Path]] = []
     selected_genes = genes or sorted(
-        path.name for path in corpus.iterdir() if path.is_dir()
+        path.name
+        for path in corpus.iterdir()
+        if path.is_dir() and not path.name.startswith(".")
     )
     for gene in selected_genes:
         gene_dir = corpus / gene.upper()
         if not gene_dir.is_dir():
             continue
-        for paper_dir in sorted(path for path in gene_dir.iterdir() if path.is_dir()):
+        for paper_dir in sorted(
+            path
+            for path in gene_dir.iterdir()
+            if path.is_dir() and not path.name.startswith(".")
+        ):
             pmid = paper_dir.name
             if (paper_dir / f"{pmid}_FULL_CONTEXT.md").is_file() and (
                 paper_dir / f"{pmid}{_SUPP_SUFFIX}"
