@@ -212,11 +212,11 @@ def fold_supplements_into_full_context(
         return None
     if failures:
         logger.warning(
-            "refusing partial supplement re-fold for PMID %s: %d conversion failure(s)",
+            "PMID %s had %d supplement conversion failure(s); proceeding with "
+            "successfully converted files",
             pmid,
             failures,
         )
-        return None
 
     original = full_context.read_text(encoding="utf-8", errors="replace")
     replacement_labels = _supplement_labels(md)

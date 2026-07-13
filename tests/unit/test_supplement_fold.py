@@ -151,7 +151,7 @@ def test_fold_retains_legacy_content_missing_from_disk(tmp_path):
     assert fc.read_text(encoding="utf-8") == folded
 
 
-def test_fold_refuses_partial_conversion_without_rewriting(tmp_path, monkeypatch):
+def test_first_fold_uses_good_files_when_one_conversion_fails(tmp_path, monkeypatch):
     pmid = "66666666"
     harvest = tmp_path / "pmc_fulltext"
     harvest.mkdir()
@@ -173,9 +173,41 @@ def test_fold_refuses_partial_conversion_without_rewriting(tmp_path, monkeypatch
 
     monkeypatch.setattr(supplement_fold, "_convert_supplement", fail_one)
 
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "good supplement" in folded
+    assert "bad supplement" not in folded
+    assert (harvest / f"{pmid}_FULL_CONTEXT.md.pre_fold_bak").read_text() == original
+
+
+def test_refold_conversion_failure_preserves_previous_block(tmp_path, monkeypatch):
+    pmid = "67676767"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "good.txt", "good supplement\n")
+    _write_supp(supp_dir, "bad.txt", "bad supplement\n")
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    folded = fc.read_text(encoding="utf-8")
+
+    from harvesting import supplement_fold
+
+    real_convert = supplement_fold._convert_supplement
+
+    def fail_previously_folded_file(**kwargs):
+        if kwargs["file_path"].name == "bad.txt":
+            raise ValueError("conversion failed")
+        return real_convert(**kwargs)
+
+    monkeypatch.setattr(
+        supplement_fold, "_convert_supplement", fail_previously_folded_file
+    )
+
     assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
-    assert fc.read_text(encoding="utf-8") == original
-    assert not (harvest / f"{pmid}_FULL_CONTEXT.md.pre_fold_bak").exists()
+    assert fc.read_text(encoding="utf-8") == folded
 
 
 def test_fold_keeps_good_tables_when_another_file_converts_empty(tmp_path, monkeypatch):
