@@ -576,6 +576,7 @@ circle.line-uv{{fill:var(--uv)}} circle.line-pm{{fill:var(--pm)}}
 <h1>GeneVariantFetcher — Recall Status</h1>
 <div class="sub">Target {int(TARGET * 100)}% across every metric · scored run generated {esc(gen_utc)} · page built {esc(now)}</div>
 <div class="sub">Source: <code>{esc(str(metrics_dir.relative_to(repo_root)) if metrics_dir.is_relative_to(repo_root) else metrics_dir)}</code></div>
+<div class="sub"><strong>Scope:</strong> recall / precision / MAE cover the four cardiac genes (KCNH2, KCNQ1, SCN5A, RYR2) only — the pairs with a fully human-curated manual gold standard. Other genes are review targets scored against curator/derived <code>gold_overrides</code>, not counted here.</div>
 
 <h2>Aggregate recall — gap to 90%</h2>
 <div class="grid-sc">{"".join(score_cards)}</div>

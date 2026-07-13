@@ -69,9 +69,17 @@ paywall/cookie access at all, use `gvf gvf-run --no-source-recovery`.
 ## Current Status
 
 Live recall metrics and blockers live in
-[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). The active forward checklist
-lives in [`TASKS.md`](TASKS.md). Do not copy recall numbers into new docs; they
-drift.
+[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md), rendered as a published status
+dashboard at
+<https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/>. The active forward
+checklist lives in [`TASKS.md`](TASKS.md). Do not copy recall numbers into new
+docs; they drift.
+
+**Recall, precision, and MAE are reported only for the four cardiac genes
+(KCNH2, KCNQ1, SCN5A, RYR2)** — the only gene-disease pairs with a fully
+human-curated, manually derived gold standard. Other genes (APOE, BRCA1, BRCA2,
+MYBPC3) are review targets scored against curator/derived `gold_overrides`, not
+counted in headline metrics. See `docs/RECALL_STATUS.md` for the scope rule.
 
 For fast regression checks while changing prompts, extraction logic, guardrails,
 or matching, use

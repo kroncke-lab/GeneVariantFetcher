@@ -12,6 +12,23 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
+Live view: the published status dashboard renders these numbers at
+<https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> (built by
+`scripts/build_status_dashboard.py` into `docs/dashboard/`).
+
+## Metrics scope: cardiac four only
+
+**Recall, precision, and MAE are computed only against the four cardiac genes —
+KCNH2, KCNQ1, SCN5A, RYR2 — because only those have a fully human-curated,
+manually derived gold standard** (`gene_variant_fetcher_gold_standard/`). The
+non-cardiac genes (APOE, BRCA1, BRCA2, MYBPC3) have only curator/LLM-derived
+`gold_overrides/` answer keys, which are useful for review but are **not** a
+manual gold standard, so they are **excluded from every headline metric here and
+on the dashboard**. Score them for spot checks if you like, but never fold them
+into the reported recall/precision/MAE. To reproduce the headline numbers,
+restrict scoring to the four cardiac genes, e.g.
+`run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
+
 ## Current Canonical Baseline
 
 Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
