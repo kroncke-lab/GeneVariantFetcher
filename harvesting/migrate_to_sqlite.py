@@ -382,11 +382,16 @@ def validate_extraction_data(
         filename_pmid = extract_pmid_from_filename(filename)
         if not normalized_pmid or normalized_pmid == "UNKNOWN":
             errors.append(f"Missing or invalid paper_metadata.pmid: {pmid}")
-        elif filename_pmid and not is_valid_pmid(normalized_pmid):
-            errors.append(
-                "paper_metadata.pmid is not a PMID while filename has one: "
-                f"{normalized_pmid} != {filename_pmid}"
-            )
+        elif not is_valid_pmid(normalized_pmid):
+            if filename_pmid:
+                errors.append(
+                    "paper_metadata.pmid is not a PMID while filename has one: "
+                    f"{normalized_pmid} != {filename_pmid}"
+                )
+            else:
+                errors.append(
+                    f"paper_metadata.pmid is not a valid PMID: {normalized_pmid}"
+                )
         elif filename_pmid and normalized_pmid != filename_pmid:
             warnings.append(
                 "paper_metadata.pmid differs from filename PMID; keeping metadata: "

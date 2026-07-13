@@ -377,6 +377,21 @@ def test_repair_keeps_different_valid_metadata_pmid():
     assert not any("Set pmid from filename" in repair for repair in repairs)
 
 
+def test_validation_rejects_invalid_pmid_without_filename_fallback():
+    payload = {
+        "paper_metadata": {
+            "pmid": "PMC9522753",
+            "title": "Legacy PMCID metadata",
+        },
+        "variants": [],
+    }
+
+    valid, errors, _ = validate_extraction_data(payload, "legacy_extraction.json")
+
+    assert not valid
+    assert errors == ["paper_metadata.pmid is not a valid PMID: PMC9522753"]
+
+
 def test_repair_still_recovers_missing_and_unknown_pmids_from_filename():
     for bad_pmid in (None, "", "UNKNOWN"):
         payload = {
