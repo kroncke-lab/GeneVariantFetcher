@@ -11,6 +11,7 @@ from scripts.fetch_elsevier_supplements import (
     _doi_for,
     _load_input,
     augment_paper,
+    discover_targets,
 )
 
 
@@ -48,6 +49,33 @@ def test_load_input_rejects_missing_file(tmp_path):
     missing = tmp_path / "missing.csv"
     with pytest.raises(SystemExit, match=f"Input file does not exist: {missing}"):
         _load_input(missing)
+
+
+def test_target_discovery_ignores_hidden_papers_and_sibling_genes(tmp_path):
+    corpus = tmp_path / "corpus"
+    target = corpus / "SCN5A" / "111"
+    target.mkdir(parents=True)
+    (target / "111_artifacts.json").write_text('{"doi": "10.1016/j.hrthm.2018.01.014"}')
+    hidden_paper = corpus / "SCN5A" / ".cache"
+    hidden_paper.mkdir()
+    (hidden_paper / ".cache_artifacts.json").write_text(
+        '{"doi": "10.1016/j.hrthm.2018.01.015"}'
+    )
+    visible_sibling = corpus / "KCNQ1" / "111" / "111_supplements"
+    visible_sibling.mkdir(parents=True)
+    hidden_sibling = corpus / ".cache" / "111" / "111_supplements"
+    hidden_sibling.mkdir(parents=True)
+
+    targets = discover_targets(
+        gene="SCN5A",
+        corpus=corpus,
+        harvest_dir=None,
+        wanted_pmids=set(),
+        input_dois={},
+    )
+
+    assert [target.pmid for target in targets] == ["111"]
+    assert targets[0].reuse_supplement_dirs == (visible_sibling,)
 
 
 def test_doi_lookup_ignores_non_object_and_invalid_utf8_json(tmp_path):

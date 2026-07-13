@@ -284,6 +284,24 @@ def test_discover_corpus_papers_scopes_genes(tmp_path):
     assert papers == [("111", tmp_path / "corpus" / "SCN5A" / "111")]
 
 
+def test_discover_corpus_papers_ignores_hidden_genes_and_papers(tmp_path):
+    corpus = tmp_path / "corpus"
+    visible = corpus / "SCN5A" / "111"
+    visible.mkdir(parents=True)
+    (visible / "111_FULL_CONTEXT.md").write_text("body")
+    (visible / "111_supplements").mkdir()
+    hidden_gene_paper = corpus / ".cache" / "222"
+    hidden_gene_paper.mkdir(parents=True)
+    (hidden_gene_paper / "222_FULL_CONTEXT.md").write_text("body")
+    (hidden_gene_paper / "222_supplements").mkdir()
+    hidden_paper = corpus / "SCN5A" / ".cache"
+    hidden_paper.mkdir()
+    (hidden_paper / ".cache_FULL_CONTEXT.md").write_text("body")
+    (hidden_paper / ".cache_supplements").mkdir()
+
+    assert discover_corpus_papers(corpus, []) == [("111", visible)]
+
+
 def test_corpus_mode_rejects_missing_directory(tmp_path, monkeypatch, capsys):
     missing = tmp_path / "missing-corpus"
     monkeypatch.setattr("sys.argv", ["fold_supplements.py", "--corpus", str(missing)])
