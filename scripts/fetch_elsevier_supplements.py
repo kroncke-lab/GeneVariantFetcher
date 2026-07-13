@@ -84,6 +84,8 @@ def _doi_for(pdir: Path, pmid: str) -> str:
 def _load_input(path: Path | None) -> dict[str, str]:
     if path is None:
         return {}
+    if not path.is_file():
+        raise SystemExit(f"Input file does not exist: {path}")
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         return {

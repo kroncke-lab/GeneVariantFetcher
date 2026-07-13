@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from harvesting.elsevier_api import ElsevierAPIClient
 from harvesting.supplement_fold import FOLD_BEGIN
 from scripts.fetch_elsevier_supplements import (
@@ -7,6 +9,7 @@ from scripts.fetch_elsevier_supplements import (
     PaperTarget,
     _cached_complete_refs,
     _doi_for,
+    _load_input,
     augment_paper,
 )
 
@@ -39,6 +42,12 @@ class FakeElsevierClient:
             downloaded.append(path.name)
         self.download_calls.append(downloaded)
         return [dest_dir / name for name in downloaded]
+
+
+def test_load_input_rejects_missing_file(tmp_path):
+    missing = tmp_path / "missing.csv"
+    with pytest.raises(SystemExit, match=f"Input file does not exist: {missing}"):
+        _load_input(missing)
 
 
 def test_doi_lookup_ignores_non_object_and_invalid_utf8_json(tmp_path):

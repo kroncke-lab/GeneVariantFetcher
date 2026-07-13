@@ -291,3 +291,23 @@ def test_corpus_mode_rejects_missing_directory(tmp_path, monkeypatch, capsys):
     with pytest.raises(SystemExit, match="2"):
         main()
     assert f"--corpus directory does not exist: {missing}" in capsys.readouterr().err
+
+
+def test_cli_rejects_missing_pmids_file(tmp_path, monkeypatch, capsys):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    missing = tmp_path / "missing-pmids.txt"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "fold_supplements.py",
+            "--corpus",
+            str(corpus),
+            "--pmids-file",
+            str(missing),
+        ],
+    )
+
+    with pytest.raises(SystemExit, match="2"):
+        main()
+    assert f"--pmids-file does not exist: {missing}" in capsys.readouterr().err

@@ -120,6 +120,8 @@ def main() -> int:
 
     wanted: set[str] = set()
     if args.pmids_file:
+        if not args.pmids_file.is_file():
+            parser.error(f"--pmids-file does not exist: {args.pmids_file}")
         wanted = {
             line.strip()
             for line in args.pmids_file.read_text(encoding="utf-8").splitlines()
