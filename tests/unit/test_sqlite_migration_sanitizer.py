@@ -392,6 +392,29 @@ def test_validation_rejects_invalid_pmid_without_filename_fallback():
     assert errors == ["paper_metadata.pmid is not a valid PMID: PMC9522753"]
 
 
+def test_migration_normalizes_valid_pmid_whitespace(tmp_path):
+    extraction_dir = tmp_path / "extractions"
+    extraction_dir.mkdir()
+    payload = {
+        "paper_metadata": {
+            "pmid": " 34546463 ",
+            "title": "Whitespace-padded PMID",
+        },
+        "variants": [],
+    }
+    (extraction_dir / "KCNH2_PMID_34546463.json").write_text(
+        json.dumps(payload), encoding="utf-8"
+    )
+
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    stats = migrate_extraction_directory(conn, extraction_dir)
+
+    assert stats["successful"] == 1
+    assert conn.execute("SELECT pmid FROM papers").fetchone() == ("34546463",)
+    conn.close()
+
+
 def test_repair_still_recovers_missing_and_unknown_pmids_from_filename():
     for bad_pmid in (None, "", "UNKNOWN"):
         payload = {

@@ -378,10 +378,13 @@ def validate_extraction_data(
         errors.append("Missing paper_metadata section")
     else:
         pmid = paper_meta.get("pmid")
-        normalized_pmid = str(pmid).strip() if pmid is not None else ""
+        raw_pmid_text = str(pmid) if pmid is not None else ""
+        normalized_pmid = raw_pmid_text.strip()
         filename_pmid = extract_pmid_from_filename(filename)
         if not normalized_pmid or normalized_pmid == "UNKNOWN":
             errors.append(f"Missing or invalid paper_metadata.pmid: {pmid}")
+        elif raw_pmid_text != normalized_pmid:
+            errors.append(f"paper_metadata.pmid has surrounding whitespace: {pmid!r}")
         elif not is_valid_pmid(normalized_pmid):
             if filename_pmid:
                 errors.append(
@@ -471,8 +474,15 @@ def repair_extraction_data(
     # canonical filename still carries the real PMID. Keep that accession as
     # pmc_id instead of allowing it to become a paper/foreign-key identifier.
     raw_pmid = paper_meta.get("pmid")
-    normalized_pmid = str(raw_pmid).strip() if raw_pmid is not None else ""
-    if filename_pmid and not is_valid_pmid(normalized_pmid):
+    raw_pmid_text = str(raw_pmid) if raw_pmid is not None else ""
+    normalized_pmid = raw_pmid_text.strip()
+    if is_valid_pmid(normalized_pmid):
+        if raw_pmid_text != normalized_pmid:
+            paper_meta["pmid"] = normalized_pmid
+            repairs.append(
+                f"Normalized pmid whitespace: {raw_pmid!r} -> {normalized_pmid!r}"
+            )
+    elif filename_pmid:
         old_val = raw_pmid if raw_pmid is not None else "MISSING"
         if re.fullmatch(r"PMC\d+", normalized_pmid, re.IGNORECASE):
             normalized_pmcid = normalized_pmid.upper()
