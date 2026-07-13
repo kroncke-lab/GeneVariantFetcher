@@ -58,9 +58,13 @@ def _doi_for(pdir: Path, pmid: str) -> str:
         if not art.exists():
             continue
         try:
-            doi = (json.loads(art.read_text()).get("doi") or "").strip()
+            data = json.loads(art.read_text(encoding="utf-8", errors="replace"))
         except (json.JSONDecodeError, OSError):
             continue
+        if not isinstance(data, dict):
+            continue
+        raw_doi = data.get("doi")
+        doi = raw_doi.strip() if isinstance(raw_doi, str) else ""
         if doi:
             return doi
     full_context = pdir / f"{pmid}_FULL_CONTEXT.md"
@@ -148,8 +152,10 @@ def _cached_complete_refs(
 ) -> list[str]:
     manifest = supp_dir / MANIFEST_NAME
     try:
-        data = json.loads(manifest.read_text(encoding="utf-8"))
+        data = json.loads(manifest.read_text(encoding="utf-8", errors="replace"))
     except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(data, dict):
         return []
     refs = data.get("refs") or []
     if data.get("doi") != doi or not isinstance(refs, list) or not refs:

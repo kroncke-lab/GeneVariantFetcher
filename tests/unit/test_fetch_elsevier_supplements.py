@@ -2,7 +2,13 @@ from pathlib import Path
 
 from harvesting.elsevier_api import ElsevierAPIClient
 from harvesting.supplement_fold import FOLD_BEGIN
-from scripts.fetch_elsevier_supplements import PaperTarget, augment_paper
+from scripts.fetch_elsevier_supplements import (
+    MANIFEST_NAME,
+    PaperTarget,
+    _cached_complete_refs,
+    _doi_for,
+    augment_paper,
+)
 
 
 class FakeElsevierClient:
@@ -33,6 +39,27 @@ class FakeElsevierClient:
             downloaded.append(path.name)
         self.download_calls.append(downloaded)
         return [dest_dir / name for name in downloaded]
+
+
+def test_doi_lookup_ignores_non_object_and_invalid_utf8_json(tmp_path):
+    pmid = "12345678"
+    (tmp_path / f"{pmid}_artifacts.json").write_text('["not", "an object"]')
+    (tmp_path / "result.json").write_bytes(b"\xff\xfe invalid json")
+    (tmp_path / f"{pmid}_FULL_CONTEXT.md").write_text(
+        "# Article\n\nDOI: 10.1016/j.hrthm.2018.01.014\n"
+    )
+
+    assert _doi_for(tmp_path, pmid) == "10.1016/j.hrthm.2018.01.014"
+
+
+def test_manifest_lookup_ignores_non_object_and_invalid_utf8_json(tmp_path):
+    client = FakeElsevierClient("")
+    manifest = tmp_path / MANIFEST_NAME
+    manifest.write_text('["not", "an object"]')
+    assert _cached_complete_refs(client, tmp_path, "10.1016/example") == []
+
+    manifest.write_bytes(b"\xff\xfe invalid json")
+    assert _cached_complete_refs(client, tmp_path, "10.1016/example") == []
 
 
 def test_partial_elsevier_set_fetches_only_missing_and_self_folds(tmp_path):
