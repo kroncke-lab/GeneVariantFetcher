@@ -30,18 +30,37 @@ Elsevier insttoken.
 | **2026-06-06** | **Duplicate-penetrance idempotency fix** | **2572/3010 (85.4%)** | **5423/6833 (79.4%)** | **0.614** |
 | **2026-06-12** | **PDF-linearized table reconstruction + iter-2 quality gate + targeted KCNQ1 land** | **2590/3010 (86.0%)** | **5514/6833 (80.7%)** | **0.634** |
 | **2026-06-12** | **+ targeted lands KCNH2/SCN5A/RYR2 (all four genes)** | **2591/3010 (86.1%)** | **5518/6833 (80.8%)** | **0.615** |
+| **2026-07-12** | **Four-gene supplement reconciliation + gated SCN5A land** | **2596/3010 (86.2%)** | **5546/6833 (81.2%)** | **0.614** |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
-Gap to the 90% unique-variant target: **118** variants (was 1126 at the 62.6%
+Gap to the 90% unique-variant target: **113** variants (was 1126 at the 62.6%
 starting point; ~89% of the original gap has been closed).
 
-Per-gene unique-variant recall, latest canonical (2026-06-12):
-KCNH2 **83.2%**, KCNQ1 **90.5%** (crossed the 90% target), SCN5A **86.4%**,
+Per-gene unique-variant recall, latest canonical (2026-07-12):
+KCNH2 **83.2%**, KCNQ1 **90.5%** (crossed the 90% target), SCN5A **86.8%**,
 RYR2 **83.7%**.
 
 ---
 
 ## Timeline (newest first)
+
+### 2026-07-12 — Four-gene idempotent supplement reconciliation and SCN5A gain
+Closed the local supplement-fold gap across KCNH2/KCNQ1/RYR2/SCN5A from 289
+papers to **0** (1,577/1,577 papers with convertible supplements folded).
+Elsevier acquisition now reconciles individual `mmc` files rather than treating
+"any supplement exists" as paper completion, reuses matching supplements across
+sibling gene corpora, folds changed sources immediately, and keeps supplement
+recovery separate from article-body recovery. The live pass recovered 64 missing
+files across 49 papers and updated 427 contexts without re-downloading bodies.
+
+Acceptance-gated re-extraction promoted only SCN5A (PMIDs 12193783, 20541041,
+23973953, 29017927): SCN5A unique variants **1020→1027**, rows **2432→2461**,
+and PMID coverage **619→622**, with carriers/affected MAE slightly improving and
+unaffected MAE holding. KCNH2, KCNQ1, and RYR2 candidates regressed recall or
+count coverage and were not promoted. Fresh aggregate: unique variants
+**2596/3010 (86.2%)**, rows **5546/6833 (81.2%)**, carriers MAE **0.614**.
+Grok and Claude CLI reviews informed the per-file completion model and the
+supplement-only acquisition route.
 
 ### 2026-06-22 — Annotation-table guard: blank-cell wrong-gene + gnomAD-count-as-carrier (PMID 33013630)
 

@@ -405,6 +405,8 @@ def step_source_qc(
         str(summary),
         "--fetch-input-out",
         str(outdir / "fetch_input.csv"),
+        "--supplement-input-out",
+        str(outdir / "supplement_input.csv"),
         "--source-override-out",
         str(outdir / "source_override.csv"),
     ]
@@ -473,6 +475,8 @@ def step_source_recovery(
     """Run fetch → summarize → staged refresh from source-QC artifacts."""
     worklist = source_qc_dir / "source_acquisition_worklist.csv"
     fetch_input = source_qc_dir / "fetch_input.csv"
+    supplement_input = source_qc_dir / "supplement_input.csv"
+    supplement_source_override = source_qc_dir / "supplement_source_override.csv"
     source_override = source_qc_dir / "source_override.csv"
     fetch_dir = source_qc_dir / "fetch"
     outcome_summary = source_qc_dir / "acquisition_outcome_summary.json"
@@ -481,6 +485,43 @@ def step_source_recovery(
     if not worklist.exists():
         logger.warning("source recovery skipped: missing %s", worklist)
         return None
+
+    if _csv_has_nonheader_rows(supplement_input):
+        supplement_cmd = [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "fetch_elsevier_supplements.py"),
+            "--gene",
+            gene,
+            "--harvest-dir",
+            str(run_dir / "pmc_fulltext"),
+            "--input",
+            str(supplement_input),
+            "--source-override-out",
+            str(supplement_source_override),
+        ]
+        logger.info(
+            "source-recovery supplement-only fetch → %s", " ".join(supplement_cmd)
+        )
+        supplement_result = subprocess.run(
+            supplement_cmd, capture_output=True, text=True
+        )
+        if supplement_result.returncode != 0:
+            logger.warning(
+                "source-recovery supplement-only fetch returned %s: %s",
+                supplement_result.returncode,
+                (supplement_result.stderr or supplement_result.stdout)[-400:],
+            )
+            if stage_failures is not None:
+                stage_failures.append(
+                    "source-recovery supplement-only fetch "
+                    f"(fetch_elsevier_supplements.py) exited "
+                    f"{supplement_result.returncode}"
+                )
+    else:
+        logger.info(
+            "source-recovery supplement-only fetch skipped: no rows in %s",
+            supplement_input,
+        )
 
     if _csv_has_nonheader_rows(fetch_input):
         fetch_dir.mkdir(parents=True, exist_ok=True)
@@ -547,7 +588,11 @@ def step_source_recovery(
     )
     override_csvs = [
         path
-        for path in (source_override, fetched_source_override)
+        for path in (
+            source_override,
+            supplement_source_override,
+            fetched_source_override,
+        )
         if _csv_has_nonheader_rows(path)
     ]
     if not override_csvs:
@@ -832,6 +877,7 @@ def step_report(
         for label, key in (
             ("Usable full text now", "usable_fulltext_current"),
             ("Selected for fetch", "selected_for_fetch"),
+            ("Selected for supplement-only fetch", "selected_for_supplement_fetch"),
             ("Selected for source refresh", "selected_for_source_refresh"),
             ("Manual or blocked", "selected_for_manual_or_blocked"),
             ("Zero-variant usable full text", "zero_variant_usable_fulltext"),
@@ -846,6 +892,7 @@ def step_report(
         qc_dir = source_qc_summary.parent
         lines.append(f"- Worklist: `{qc_dir / 'source_acquisition_worklist.csv'}`")
         lines.append(f"- Fetch queue: `{qc_dir / 'fetch_input.csv'}`")
+        lines.append(f"- Supplement-only queue: `{qc_dir / 'supplement_input.csv'}`")
         lines.append(f"- Refresh source overrides: `{qc_dir / 'source_override.csv'}`")
         lines.append("")
 

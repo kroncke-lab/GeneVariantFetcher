@@ -23,28 +23,247 @@ Tier-3 on the next refresh.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import os
+import re
+import shutil
+from dataclasses import dataclass
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 
 from harvesting.elsevier_api import ElsevierAPIClient  # noqa: E402
+from harvesting.supplement_fold import (  # noqa: E402
+    fold_supplements_into_full_context,
+)
+
+MANIFEST_NAME = ".gvf_elsevier_supplement_manifest.json"
+
+
+@dataclass(frozen=True)
+class PaperTarget:
+    pmid: str
+    paper_dir: Path
+    doi: str
+    reuse_supplement_dirs: tuple[Path, ...] = ()
 
 
 def _doi_for(pdir: Path, pmid: str) -> str:
-    art = pdir / f"{pmid}_artifacts.json"
-    if not art.exists():
-        return ""
+    for art in (
+        pdir / f"{pmid}_artifacts.json",
+        pdir / "result.json",
+        pdir / pmid / "result.json",
+    ):
+        if not art.exists():
+            continue
+        try:
+            data = json.loads(art.read_text(encoding="utf-8", errors="replace"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        raw_doi = data.get("doi")
+        doi = raw_doi.strip() if isinstance(raw_doi, str) else ""
+        if doi:
+            return doi
+    full_context = pdir / f"{pmid}_FULL_CONTEXT.md"
+    if full_context.exists():
+        try:
+            text = full_context.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return ""
+        labelled = re.search(
+            r"doi:\s*(10\.\d{4,9}/[^\s\"'<>]+)", text, flags=re.IGNORECASE
+        )
+        if labelled:
+            return labelled.group(1).strip().strip(".,;:)]}>")
+    return ""
+
+
+def _load_input(path: Path | None) -> dict[str, str]:
+    if path is None:
+        return {}
+    if not path.is_file():
+        raise SystemExit(f"Input file does not exist: {path}")
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        return {
+            str(row.get("PMID") or row.get("pmid") or "").strip(): str(
+                row.get("DOI") or row.get("doi") or ""
+            ).strip()
+            for row in reader
+            if str(row.get("PMID") or row.get("pmid") or "").strip()
+        }
+
+
+def discover_targets(
+    *,
+    gene: str,
+    corpus: Path,
+    harvest_dir: Path | None,
+    wanted_pmids: set[str],
+    input_dois: dict[str, str],
+) -> list[PaperTarget]:
+    targets: list[PaperTarget] = []
+    if harvest_dir is not None:
+        if not harvest_dir.is_dir():
+            raise SystemExit(f"No harvest dir: {harvest_dir}")
+        pmids = wanted_pmids or {
+            path.name.replace("_FULL_CONTEXT.md", "")
+            for path in harvest_dir.glob("*_FULL_CONTEXT.md")
+        }
+        paper_dirs = ((pmid, harvest_dir) for pmid in sorted(pmids))
+    else:
+        gene_dir = corpus / gene.upper()
+        if not gene_dir.is_dir():
+            raise SystemExit(f"No corpus dir for gene: {gene_dir}")
+        paper_dirs = (
+            (pdir.name, pdir)
+            for pdir in sorted(gene_dir.iterdir())
+            if pdir.is_dir() and (not wanted_pmids or pdir.name in wanted_pmids)
+        )
+
+    for pmid, pdir in paper_dirs:
+        doi = input_dois.get(pmid) or _doi_for(pdir, pmid)
+        if doi and ElsevierAPIClient.is_elsevier_doi(doi):
+            reuse_dirs: tuple[Path, ...] = ()
+            if harvest_dir is None:
+                reuse_dirs = tuple(
+                    sibling / pmid / f"{pmid}_supplements"
+                    for sibling in sorted(corpus.iterdir())
+                    if sibling.is_dir() and sibling.name.upper() != gene.upper()
+                )
+            targets.append(
+                PaperTarget(
+                    pmid=pmid,
+                    paper_dir=pdir,
+                    doi=doi,
+                    reuse_supplement_dirs=reuse_dirs,
+                )
+            )
+    return targets
+
+
+def _is_complete_file(path: Path) -> bool:
+    return path.is_file() and path.stat().st_size > 1000
+
+
+def _cached_complete_refs(
+    client: ElsevierAPIClient, supp_dir: Path, doi: str
+) -> list[str]:
+    manifest = supp_dir / MANIFEST_NAME
     try:
-        return (json.loads(art.read_text()).get("doi") or "").strip()
-    except (json.JSONDecodeError, OSError):
-        return ""
+        data = json.loads(manifest.read_text(encoding="utf-8", errors="replace"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(data, dict):
+        return []
+    refs = data.get("refs") or []
+    if data.get("doi") != doi or not isinstance(refs, list) or not refs:
+        return []
+    clean_refs = [str(ref) for ref in refs if str(ref).strip()]
+    if len(clean_refs) != len(refs):
+        return []
+    expected = [supp_dir / client.supplement_local_name(ref) for ref in clean_refs]
+    return clean_refs if all(_is_complete_file(path) for path in expected) else []
 
 
-def _has_supplements_on_disk(pdir: Path, pmid: str) -> bool:
-    sd = pdir / f"{pmid}_supplements"
-    return sd.is_dir() and any(p.is_file() for p in sd.rglob("*"))
+def _write_complete_manifest(supp_dir: Path, doi: str, refs: list[str]) -> None:
+    supp_dir.mkdir(parents=True, exist_ok=True)
+    (supp_dir / MANIFEST_NAME).write_text(
+        json.dumps({"doi": doi, "refs": refs}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def augment_paper(client: ElsevierAPIClient, target: PaperTarget) -> dict:
+    """Fetch only missing mmc files, then idempotently fold the complete set."""
+    supp_dir = target.paper_dir / f"{target.pmid}_supplements"
+    cached_refs = _cached_complete_refs(client, supp_dir, target.doi)
+    if cached_refs:
+        folded = (
+            fold_supplements_into_full_context(
+                target.pmid,
+                target.paper_dir,
+                supplements_dir=supp_dir,
+            )
+            is not None
+        )
+        return {
+            "pmid": target.pmid,
+            "doi": target.doi,
+            "refs": len(cached_refs),
+            "new_files": [],
+            "complete": True,
+            "folded": folded,
+            "error": "",
+        }
+
+    xml, err = client.get_fulltext_by_doi(target.doi)
+    if not xml:
+        folded = (
+            fold_supplements_into_full_context(
+                target.pmid,
+                target.paper_dir,
+                supplements_dir=supp_dir,
+            )
+            is not None
+        )
+        return {
+            "pmid": target.pmid,
+            "doi": target.doi,
+            "refs": 0,
+            "new_files": [],
+            "complete": False,
+            "folded": folded,
+            "error": err or "no XML",
+        }
+
+    refs = client.extract_supplement_refs(xml)
+    expected = {ref: supp_dir / client.supplement_local_name(ref) for ref in refs}
+    before = {
+        path.name: path.stat().st_size for path in expected.values() if path.exists()
+    }
+    for path in expected.values():
+        if _is_complete_file(path):
+            continue
+        for reuse_dir in target.reuse_supplement_dirs:
+            reusable = reuse_dir / path.name
+            if _is_complete_file(reusable):
+                supp_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(reusable, path)
+                break
+    missing = [ref for ref, path in expected.items() if not _is_complete_file(path)]
+    if missing:
+        client.download_supplements(xml, supp_dir)
+
+    after = {
+        path.name: path.stat().st_size for path in expected.values() if path.exists()
+    }
+    new_files = sorted(
+        name for name, size in after.items() if size > 1000 and before.get(name) != size
+    )
+    complete = bool(refs) and all(_is_complete_file(path) for path in expected.values())
+    if complete:
+        _write_complete_manifest(supp_dir, target.doi, refs)
+    folded = (
+        fold_supplements_into_full_context(
+            target.pmid,
+            target.paper_dir,
+            supplements_dir=supp_dir,
+        )
+        is not None
+    )
+    return {
+        "pmid": target.pmid,
+        "doi": target.doi,
+        "refs": len(refs),
+        "new_files": new_files,
+        "complete": complete,
+        "folded": folded,
+        "error": "" if refs else "no mmc references in XML",
+    }
 
 
 def main() -> int:
@@ -53,11 +272,32 @@ def main() -> int:
     )
     ap.add_argument("--gene", required=True)
     ap.add_argument("--corpus", default=str(REPO / "corpus"))
+    ap.add_argument(
+        "--harvest-dir",
+        type=Path,
+        default=None,
+        help="Flat run pmc_fulltext directory instead of nested corpus layout.",
+    )
+    ap.add_argument(
+        "--input",
+        type=Path,
+        default=None,
+        help="Optional CSV with PMID and DOI columns (used by gvf-run supplement queue).",
+    )
+    ap.add_argument(
+        "--source-override-out",
+        type=Path,
+        default=None,
+        help="Optional refresh_run_db source-override CSV for sources changed by folding.",
+    )
     ap.add_argument("--pmids", default="", help="Comma-separated PMIDs (default: all).")
     ap.add_argument(
         "--include-with-supplements",
         action="store_true",
-        help="Also (re)check papers that already have supplements on disk.",
+        help=(
+            "Compatibility flag; partial sets are now always rechecked and complete "
+            "sets are skipped per file."
+        ),
     )
     ap.add_argument("--limit", type=int, default=0, help="Max papers to process.")
     args = ap.parse_args()
@@ -69,50 +309,78 @@ def main() -> int:
     if not client.is_available:
         raise SystemExit("ELSEVIER_API_KEY not set; cannot fetch supplements.")
 
-    gene_dir = Path(args.corpus) / args.gene.upper()
-    if not gene_dir.is_dir():
-        raise SystemExit(f"No corpus dir for gene: {gene_dir}")
-
-    want = {p.strip() for p in args.pmids.split(",") if p.strip()}
-    targets: list[tuple[str, Path, str]] = []
-    for pdir in sorted(gene_dir.iterdir()):
-        if not pdir.is_dir():
-            continue
-        pmid = pdir.name
-        if want and pmid not in want:
-            continue
-        doi = _doi_for(pdir, pmid)
-        if not doi or not ElsevierAPIClient.is_elsevier_doi(doi):
-            continue
-        if not args.include_with_supplements and _has_supplements_on_disk(pdir, pmid):
-            continue
-        targets.append((pmid, pdir, doi))
+    input_dois = _load_input(args.input)
+    want = {p.strip() for p in args.pmids.split(",") if p.strip()} | set(input_dois)
+    targets = discover_targets(
+        gene=args.gene,
+        corpus=Path(args.corpus),
+        harvest_dir=args.harvest_dir,
+        wanted_pmids=want,
+        input_dois=input_dois,
+    )
 
     if args.limit:
         targets = targets[: args.limit]
-    print(f"{args.gene}: {len(targets)} Elsevier-DOI paper(s) to check for supplements")
+    print(
+        f"{args.gene}: {len(targets)} Elsevier-DOI paper(s) to reconcile "
+        "(existing files are never re-downloaded)"
+    )
 
     papers_with_supp = 0
     total_files = 0
-    for pmid, pdir, doi in targets:
-        xml, err = client.get_fulltext_by_doi(doi)
-        if not xml:
-            print(f"  {pmid} ({doi}): no XML ({err})")
-            continue
-        saved = client.download_supplements(xml, pdir / f"{pmid}_supplements")
-        if saved:
+    papers_complete = 0
+    folded_papers = 0
+    source_overrides: list[dict[str, object]] = []
+    for target in targets:
+        result = augment_paper(client, target)
+        new_files = result["new_files"]
+        if new_files:
             papers_with_supp += 1
-            total_files += len(saved)
+            total_files += len(new_files)
             print(
-                f"  {pmid} ({doi}): +{len(saved)} supplement(s) {[p.name for p in saved]}"
+                f"  {target.pmid} ({target.doi}): +{len(new_files)} "
+                f"supplement(s) {new_files}"
             )
         else:
-            print(f"  {pmid} ({doi}): no mmc references in XML")
+            suffix = f" ({result['error']})" if result["error"] else ""
+            print(f"  {target.pmid} ({target.doi}): no new files{suffix}")
+        papers_complete += int(result["complete"])
+        folded_papers += int(result["folded"])
+        full_context = target.paper_dir / f"{target.pmid}_FULL_CONTEXT.md"
+        if result["folded"] and full_context.exists():
+            source_overrides.append(
+                {
+                    "gene": args.gene.upper(),
+                    "pmid": target.pmid,
+                    "action": "refresh_replay",
+                    "route": "fetch_elsevier_supplements_only",
+                    "available_context_path": str(full_context),
+                    "available_context_bytes": full_context.stat().st_size,
+                    "notes": "supplement set changed and was folded into full text",
+                }
+            )
+
+    if args.source_override_out is not None:
+        args.source_override_out.parent.mkdir(parents=True, exist_ok=True)
+        with args.source_override_out.open("w", newline="", encoding="utf-8") as handle:
+            fieldnames = [
+                "gene",
+                "pmid",
+                "action",
+                "route",
+                "available_context_path",
+                "available_context_bytes",
+                "notes",
+            ]
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(source_overrides)
 
     print(
         f"\nDONE: recovered {total_files} supplement file(s) across "
-        f"{papers_with_supp}/{len(targets)} papers. Re-fold + re-extract "
-        f"(scripts/refresh_run_db.py folds automatically) to realize the variants."
+        f"{papers_with_supp}/{len(targets)} papers; {papers_complete} complete mmc "
+        f"sets; {folded_papers} FULL_CONTEXT file(s) updated. Re-extract to realize "
+        "new variants."
     )
     return 0
 

@@ -28,7 +28,6 @@ ELSEVIER_DOI_PREFIXES = (
     "10.1067/",  # Mosby (Elsevier)
     "10.1054/",  # Academic Press (Elsevier)
     "10.1006/",  # Academic Press (Elsevier)
-    "10.1038/",  # Nature (some under Elsevier agreement)
 )
 
 # Domains that indicate Elsevier publisher
@@ -210,6 +209,11 @@ class ElsevierAPIClient:
             seen.setdefault(m, None)
         return list(seen)
 
+    @staticmethod
+    def supplement_local_name(ref: str) -> str:
+        """Map a ScienceDirect supplement reference to its stable local name."""
+        return re.sub(r"^1-s2\.0-[A-Za-z0-9]+-", "", ref)
+
     def download_supplements(self, xml_content: str, dest_dir: Path) -> List[Path]:
         """Download every mmc supplement referenced in *xml_content* into *dest_dir*.
 
@@ -231,7 +235,7 @@ class ElsevierAPIClient:
         saved: List[Path] = []
         for ref in refs:
             # local name is the mmc tail (mmc1.docx), not the full CDN basename
-            local = re.sub(r"^1-s2\.0-[A-Za-z0-9]+-", "", ref)
+            local = self.supplement_local_name(ref)
             out = dest_dir / local
             if out.exists() and out.stat().st_size > 1000:
                 saved.append(out)

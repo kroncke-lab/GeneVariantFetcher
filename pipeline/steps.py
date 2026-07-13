@@ -1057,11 +1057,29 @@ def _consolidate_from_corpus(
                 s = gene_dir / pmid / extra
                 if s.is_file():
                     shutil.copy2(str(s), str(harvest_dir / extra))
+            copied_supplements = False
             for suffix in ("_figures", "_supplements"):
                 s = gene_dir / pmid / f"{pmid}{suffix}"
                 d = harvest_dir / f"{pmid}{suffix}"
                 if s.is_dir() and not d.exists():
                     shutil.copytree(str(s), str(d))
+                    copied_supplements = copied_supplements or suffix == "_supplements"
+            if copied_supplements:
+                # Full-text reuse and supplement completeness are separate.  A
+                # cached body must not be re-downloaded, but already-cached
+                # supplement tables still need to be visible to extraction.
+                try:
+                    from harvesting.supplement_fold import (
+                        fold_supplements_into_full_context,
+                    )
+
+                    fold_supplements_into_full_context(pmid, harvest_dir)
+                except Exception as exc:  # noqa: BLE001 - body reuse stays valid
+                    logger.warning(
+                        "corpus cache: supplement fold failed for PMID %s: %s",
+                        pmid,
+                        exc,
+                    )
             recovered.add(pmid)
         except Exception as e:  # noqa: BLE001 - best-effort cache reuse
             logger.warning(f"corpus cache: failed to reuse PMID {pmid}: {e}")

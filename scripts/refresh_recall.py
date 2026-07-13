@@ -66,6 +66,30 @@ def _run(cmd: list[str], label: str) -> None:
     subprocess.run(cmd, cwd=str(REPO), check=True)
 
 
+def _supplement_fetch_cmd(gene: str, corpus: Path) -> list[str]:
+    return [
+        PY,
+        str(REPO / "scripts" / "fetch_elsevier_supplements.py"),
+        "--gene",
+        gene,
+        "--corpus",
+        str(corpus),
+    ]
+
+
+def _corpus_bridge_cmd(gene: str, corpus: Path, harvest: Path) -> list[str]:
+    return [
+        PY,
+        str(REPO / "scripts" / "corpus_to_harvest.py"),
+        "--gene",
+        gene,
+        "--corpus",
+        str(corpus),
+        "--out",
+        str(harvest),
+    ]
+
+
 def _score(gene: str, db: Path, gold_dir: Path, outdir: Path) -> dict | None:
     outdir.mkdir(parents=True, exist_ok=True)
     cmd = [
@@ -338,12 +362,7 @@ def main() -> int:
     # 1. supplement fetch (idempotent; Elsevier today, Springer/Wiley when keyed)
     if not args.skip_fetch and os.getenv("ELSEVIER_API_KEY"):
         _run(
-            [
-                PY,
-                str(REPO / "scripts" / "fetch_elsevier_supplements.py"),
-                "--gene",
-                gene,
-            ],
+            _supplement_fetch_cmd(gene, Path(args.corpus)),
             "1. fetch Elsevier supplements (idempotent)",
         )
     elif not args.skip_fetch:
@@ -352,14 +371,7 @@ def main() -> int:
     # 2. bridge corpus -> flat harvest
     harvest = work / "harvest"
     _run(
-        [
-            PY,
-            str(REPO / "scripts" / "corpus_to_harvest.py"),
-            "--gene",
-            gene,
-            "--out",
-            str(harvest),
-        ],
+        _corpus_bridge_cmd(gene, Path(args.corpus), harvest),
         "2. bridge corpus -> flat harvest",
     )
 

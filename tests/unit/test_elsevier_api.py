@@ -2,6 +2,11 @@ from harvesting.elsevier_api import ElsevierAPIClient
 from pipeline.extraction import ExpertExtractor
 
 
+def test_elsevier_doi_detection_excludes_nature_prefix():
+    assert ElsevierAPIClient.is_elsevier_doi("10.1016/j.hrthm.2018.01.014") is True
+    assert ElsevierAPIClient.is_elsevier_doi("10.1038/s41467-021-27599-6") is False
+
+
 def test_elsevier_xml_to_markdown_preserves_table_bodies_for_deterministic_parser():
     xml = """
     <full-text-retrieval-response>

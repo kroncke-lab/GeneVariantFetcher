@@ -8,12 +8,26 @@ decision.
 """
 
 from scripts.refresh_recall import (
+    _corpus_bridge_cmd,
     _env_float,
     _mae,
     _mae_n,
     _mae_regressions,
     _promotion_decision,
+    _supplement_fetch_cmd,
 )
+
+
+def test_refresh_commands_forward_custom_corpus(tmp_path):
+    corpus = tmp_path / "custom-corpus"
+    harvest = tmp_path / "harvest"
+
+    fetch = _supplement_fetch_cmd("SCN5A", corpus)
+    bridge = _corpus_bridge_cmd("SCN5A", corpus, harvest)
+
+    assert fetch[fetch.index("--corpus") + 1] == str(corpus)
+    assert bridge[bridge.index("--corpus") + 1] == str(corpus)
+    assert bridge[bridge.index("--out") + 1] == str(harvest)
 
 
 def _summary(carriers=None, affected=None, unaffected=None, n=1):

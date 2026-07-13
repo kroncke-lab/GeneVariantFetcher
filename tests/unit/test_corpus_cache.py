@@ -11,6 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pipeline.steps as steps
+from harvesting.supplement_fold import FOLD_BEGIN
 
 
 def _make_corpus_paper(
@@ -62,6 +63,9 @@ def test_corpus_cache_reuses_usable_skips_stub_and_missing(tmp_path: Path):
     assert (harvest / "111_FULL_CONTEXT.md").exists()
     assert (harvest / "111_figures" / "fig_pmc_1.png").exists()
     assert (harvest / "111_supplements" / "table_s1.csv").exists()
+    reused_text = (harvest / "111_FULL_CONTEXT.md").read_text(encoding="utf-8")
+    assert FOLD_BEGIN in reused_text
+    assert "a,b\n1,2" in reused_text
     # stub / abstract-only / missing must NOT be copied (so they get re-fetched)
     assert not (harvest / "222_FULL_CONTEXT.md").exists()
     assert not (harvest / "333_FULL_CONTEXT.md").exists()

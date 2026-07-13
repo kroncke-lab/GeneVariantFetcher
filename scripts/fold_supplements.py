@@ -35,6 +35,25 @@ def discover_pmids(harvest_dir: Path) -> list[str]:
     return sorted(p for p in pmids if (harvest_dir / f"{p}_FULL_CONTEXT.md").is_file())
 
 
+def discover_corpus_papers(corpus: Path, genes: list[str]) -> list[tuple[str, Path]]:
+    """Return ``(pmid, paper_dir)`` pairs from the nested corpus layout."""
+    papers: list[tuple[str, Path]] = []
+    selected_genes = genes or sorted(
+        path.name for path in corpus.iterdir() if path.is_dir()
+    )
+    for gene in selected_genes:
+        gene_dir = corpus / gene.upper()
+        if not gene_dir.is_dir():
+            continue
+        for paper_dir in sorted(path for path in gene_dir.iterdir() if path.is_dir()):
+            pmid = paper_dir.name
+            if (paper_dir / f"{pmid}_FULL_CONTEXT.md").is_file() and (
+                paper_dir / f"{pmid}{_SUPP_SUFFIX}"
+            ).is_dir():
+                papers.append((pmid, paper_dir))
+    return papers
+
+
 def _resolve_harvest_dir(args: argparse.Namespace) -> Path | None:
     if args.harvest_dir:
         return args.harvest_dir
@@ -59,6 +78,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Dir holding *_FULL_CONTEXT.md + *_supplements/.",
     )
     p.add_argument(
+        "--corpus",
+        type=Path,
+        default=None,
+        help="Nested corpus root containing <GENE>/<PMID>/ directories.",
+    )
+    p.add_argument(
+        "--genes",
+        default="",
+        help="Comma-separated genes in --corpus mode (default: all).",
+    )
+    p.add_argument(
         "--pmids-file",
         type=Path,
         default=None,
@@ -72,40 +102,59 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(message)s",
     )
     harvest_dir = _resolve_harvest_dir(args)
-    if harvest_dir is None or not harvest_dir.is_dir():
-        build_parser().error(
-            "provide --harvest-dir, or --run-dir containing pmc_fulltext/"
+    if args.corpus is not None and harvest_dir is not None:
+        parser.error("--corpus cannot be combined with --run-dir/--harvest-dir")
+    if args.corpus is not None and not args.corpus.is_dir():
+        parser.error(f"--corpus directory does not exist: {args.corpus}")
+    if args.corpus is None and (harvest_dir is None or not harvest_dir.is_dir()):
+        parser.error(
+            "provide --corpus, --harvest-dir, or --run-dir containing pmc_fulltext/"
         )
 
+    wanted: set[str] = set()
     if args.pmids_file:
-        wanted = [
+        if not args.pmids_file.is_file():
+            parser.error(f"--pmids-file does not exist: {args.pmids_file}")
+        wanted = {
             line.strip()
             for line in args.pmids_file.read_text(encoding="utf-8").splitlines()
             if line.strip()
-        ]
-        pmids = [p for p in wanted if (harvest_dir / f"{p}_FULL_CONTEXT.md").is_file()]
+        }
+
+    if args.corpus is not None:
+        genes = [g.strip().upper() for g in args.genes.split(",") if g.strip()]
+        papers = discover_corpus_papers(args.corpus, genes)
+        if wanted:
+            papers = [(pmid, pdir) for pmid, pdir in papers if pmid in wanted]
     else:
+        assert harvest_dir is not None
         pmids = discover_pmids(harvest_dir)
+        if wanted:
+            pmids = [pmid for pmid in pmids if pmid in wanted]
+        papers = [(pmid, harvest_dir) for pmid in pmids]
 
     folded = 0
-    for pmid in pmids:
+    for pmid, paper_dir in papers:
         if args.dry_run:
-            supp = harvest_dir / f"{pmid}{_SUPP_SUFFIX}"
-            n = len([p for p in supp.iterdir() if p.is_file()]) if supp.is_dir() else 0
+            supp = paper_dir / f"{pmid}{_SUPP_SUFFIX}"
+            n = sum(1 for path in supp.rglob("*") if path.is_file())
             logger.info("[dry-run] %s: %d supplement file(s)", pmid, n)
             continue
-        if fold_supplements_into_full_context(pmid, harvest_dir) is not None:
+        if fold_supplements_into_full_context(pmid, paper_dir) is not None:
             folded += 1
 
     if not args.dry_run:
         logger.info(
-            "folded supplements into %d/%d FULL_CONTEXT file(s)", folded, len(pmids)
+            "folded supplements into %d/%d FULL_CONTEXT file(s)",
+            folded,
+            len(papers),
         )
     return 0
 

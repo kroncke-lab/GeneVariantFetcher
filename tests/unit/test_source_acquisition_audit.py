@@ -17,6 +17,17 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def test_infer_publisher_covers_legacy_elsevier_prefixes():
+    for doi in (
+        "10.1016/example",
+        "10.1053/example",
+        "10.1067/example",
+        "10.1054/example",
+        "10.1006/example",
+    ):
+        assert audit.infer_publisher(doi) == "elsevier"
+
+
 def test_audit_uses_full_context_when_data_zones_is_stub(tmp_path: Path):
     run_dir = tmp_path / "run"
     harvest_dir = run_dir / "pmc_fulltext"
@@ -299,12 +310,16 @@ def test_audit_fetches_missing_target_gene_variant_supplement(tmp_path: Path):
 
     rows, summary = audit.build_audit(gene="KCNH2", run_dir=run_dir)
     fetch_input = tmp_path / "fetch_input.csv"
+    supplement_input = tmp_path / "supplement_input.csv"
+    source_override = tmp_path / "source_override.csv"
     audit.write_fetch_input(rows, fetch_input)
+    audit.write_supplement_input(rows, supplement_input)
+    audit.write_source_override(rows, source_override)
 
     assert len(rows) == 1
     row = rows[0]
-    assert row["action"] == "fetch"
-    assert row["route"] == "fetch_elsevier_insttoken"
+    assert row["action"] == "fetch_supplement_only"
+    assert row["route"] == "fetch_elsevier_supplements_only"
     assert row["source_status"] == "recovered_pmc"
     assert row["missing_variant_supplement"] is True
     assert (
@@ -312,10 +327,24 @@ def test_audit_fetches_missing_target_gene_variant_supplement(tmp_path: Path):
         == "usable main text references a missing target-gene variant supplement"
     )
     assert summary["pmid_coverage"]["missing_variant_supplement"]["pmids"] == 1
-    assert _read_csv(fetch_input) == [
+    assert _read_csv(fetch_input) == []
+    assert _read_csv(supplement_input) == [
         {
             "PMID": "555",
             "DOI": "10.1016/j.hrthm.2020.01.001",
-            "route": "fetch_elsevier_insttoken",
+            "route": "fetch_elsevier_supplements_only",
         }
     ]
+    assert _read_csv(source_override) == []
+
+    wiley = audit.classify_pmid(
+        gene="KCNH2",
+        pmid=pmid,
+        harvest_dir=harvest_dir,
+        extraction_dir=extraction_dir,
+        doi="10.1002/humu.21126",
+        zero_variant_pmids=set(),
+        single_carrier_pmids=set(),
+    )
+    assert wiley["action"] == "fetch"
+    assert wiley["route"] == "fetch_wiley_tdm"
