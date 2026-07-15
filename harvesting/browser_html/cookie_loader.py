@@ -165,6 +165,59 @@ def chrome_cookie_to_playwright(cookie) -> Optional[dict]:
     return out
 
 
+def _cookies_from_file(path: str) -> List[dict]:
+    """Load cookies from a Netscape/Mozilla ``cookies.txt`` export, bypassing
+    browser_cookie3 and the macOS Keychain entirely.
+
+    Recent Chrome builds harden the "Chrome Safe Storage" keychain item so only
+    Chrome itself can read the cookie-encryption key; browser_cookie3 then fails
+    with "Unable to get key for cookie decryption" even in an interactive
+    Terminal (and always in a headless / agent context). Exporting the cookies
+    from *inside* Chrome — e.g. a "Get cookies.txt" browser extension — sidesteps
+    that: Chrome decrypts its own cookies and writes a plain tab-delimited file
+    we can read directly.
+
+    Handles the ``#HttpOnly_`` line prefix that stdlib cookiejar parsers treat as
+    a comment and drop — the EZproxy session cookie is typically HttpOnly, so
+    losing it would defeat the purpose.
+    """
+    out: List[dict] = []
+    with open(path, "r", encoding="utf-8", errors="replace") as fh:
+        for raw in fh:
+            line = raw.rstrip("\r\n")
+            if not line.strip():
+                continue
+            http_only = False
+            if line.startswith("#HttpOnly_"):
+                http_only = True
+                line = line[len("#HttpOnly_") :]
+            elif line.startswith("#"):
+                continue  # a genuine comment line
+            parts = line.split("\t")
+            if len(parts) < 7:
+                continue
+            domain, _flag, cpath, secure, expires, name = parts[:6]
+            value = "\t".join(parts[6:])  # tolerate a tab inside the value
+            if not name:
+                continue
+            try:
+                exp = int(expires)
+            except (TypeError, ValueError):
+                exp = 0
+            out.append(
+                {
+                    "name": name,
+                    "value": value,
+                    "domain": domain,
+                    "path": cpath or "/",
+                    "secure": str(secure).upper() == "TRUE",
+                    "httpOnly": http_only,
+                    "expires": exp if exp > 0 else -1,
+                }
+            )
+    return out
+
+
 def _load_domain_cookie_dicts(
     domain: str,
     profile_name: Optional[str],
@@ -219,6 +272,33 @@ def load_chrome_cookies(
         Failures to read a given domain are logged and skipped (we don't want
         one bad domain to disable the whole fetcher).
     """
+    # A GVF_COOKIE_FILE (Netscape cookies.txt exported from inside Chrome) takes
+    # precedence and skips browser_cookie3/Keychain entirely — the only reliable
+    # path on Chrome builds that lock the Safe Storage keychain item to Chrome,
+    # and the only path that works headless / through an agent.
+    cookie_file = os.environ.get("GVF_COOKIE_FILE")
+    if cookie_file:
+        p = os.path.expanduser(cookie_file)
+        if os.path.exists(p):
+            try:
+                cookies = _cookies_from_file(p)
+                logger.info(
+                    "Loaded %d cookies from GVF_COOKIE_FILE=%s (Keychain bypassed)",
+                    len(cookies),
+                    p,
+                )
+                return cookies
+            except Exception as e:  # noqa: BLE001 - fall back to Chrome on parse error
+                logger.warning(
+                    "GVF_COOKIE_FILE=%s could not be parsed (%s); falling back to Chrome",
+                    p,
+                    e,
+                )
+        else:
+            logger.warning(
+                "GVF_COOKIE_FILE=%s does not exist; falling back to Chrome cookies", p
+            )
+
     try:
         import browser_cookie3 as bc
     except ImportError as e:
