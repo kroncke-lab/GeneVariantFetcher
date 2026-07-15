@@ -15,7 +15,20 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 import cli.gvf_run as gvf_run
+
+
+@pytest.fixture(autouse=True)
+def _skip_institutional_preflight(monkeypatch):
+    """These tests exercise pipeline WIRING in a hermetic, mocked environment with
+    no live EZproxy. Opt out of the institutional-access preflight (covered
+    directly in test_institutional_preflight.py, and by
+    ``test_full_run_blocks_when_institutional_access_degraded`` below) the same way
+    CI/automation does, so a full-recovery run does not halt at the live probe.
+    """
+    monkeypatch.setenv("GVF_PREFLIGHT_SKIP", "1")
 
 
 def _ok_doctor() -> dict:
@@ -51,6 +64,102 @@ def _fake_extract_factory(captured: dict):
         return run_dir
 
     return fake_extract
+
+
+def test_full_run_blocks_when_institutional_access_degraded(
+    tmp_path: Path, monkeypatch
+):
+    """A full-dataset run (source_recovery on, no --pmid-file) must HALT at the
+    institutional preflight when EZproxy is unconfigured — before any extraction —
+    rather than silently harvesting abstract-only. This is the guard's whole point.
+    """
+    # Undo the module-wide bypass so the real guard runs, and guarantee EZproxy
+    # looks unconfigured regardless of the ambient .env.
+    monkeypatch.delenv("GVF_PREFLIGHT_SKIP", raising=False)
+    for k in (
+        "GVF_EZPROXY_PREFIX",
+        "GVF_EZPROXY_HOST",
+        "PROXY_LOGIN_PREFIX",
+        "PROXY_HOST",
+    ):
+        monkeypatch.delenv(k, raising=False)
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+
+    def _extract_must_not_run(*args, **kwargs):
+        raise AssertionError("extraction ran despite a blocked preflight")
+
+    monkeypatch.setattr(gvf_run, "step_extract", _extract_must_not_run)
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="SCN5A",
+        email="t@example.org",
+        output=tmp_path,
+        source_recovery=True,
+        corpus_sync=False,
+    )
+    assert rc == gvf_run.EXIT_INSTITUTIONAL_BLOCK
+
+
+def test_allow_degraded_institutional_overrides_block(tmp_path: Path, monkeypatch):
+    """--allow-degraded-institutional lets a degraded full run PROCEED past the
+    preflight, but the run is flagged degraded (recorded as a stage failure in
+    RUN_STATUS.json) so it is never a silent success.
+    """
+    monkeypatch.delenv("GVF_PREFLIGHT_SKIP", raising=False)
+    for k in (
+        "GVF_EZPROXY_PREFIX",
+        "GVF_EZPROXY_HOST",
+        "PROXY_LOGIN_PREFIX",
+        "PROXY_HOST",
+    ):
+        monkeypatch.delenv(k, raising=False)
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+
+    def fake_qc(gene, run_dir, outdir, stage_failures=None):
+        outdir.mkdir(parents=True, exist_ok=True)
+        summary = outdir / "summary.json"
+        summary.write_text(json.dumps({"pmid_coverage": {}}), encoding="utf-8")
+        return summary
+
+    def fake_recovery(
+        gene,
+        run_dir,
+        source_qc_dir,
+        gold,
+        run_recovery_layers,
+        timeout_s,
+        stage_failures=None,
+    ):
+        return gvf_run.SourceRecoveryResult(
+            fetch_dir=run_dir / "source_qc" / "fetch",
+            outcome_summary=run_dir / "source_qc" / "outcome.json",
+            fetched_source_override=run_dir / "source_qc" / "override.csv",
+            active_db=None,
+        )
+
+    monkeypatch.setattr(gvf_run, "step_source_qc", fake_qc)
+    monkeypatch.setattr(gvf_run, "step_source_recovery", fake_recovery)
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=True,  # full run -> the guard runs
+        allow_degraded_institutional=True,  # ...but the operator overrides the block
+        corpus_sync=False,
+        skip=["layers"],
+    )
+
+    # The override let extraction + recovery proceed past the dead-access guard...
+    assert captured.get("gene") == "TESTGENE"
+    # ...and the run is flagged degraded (stage failure -> EXIT_STAGE_WARNINGS),
+    # so an overridden run leaves a machine-readable trail, not a clean success.
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+    assert any("institutional access degraded" in f for f in status["stage_failures"])
 
 
 def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):

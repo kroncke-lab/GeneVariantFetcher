@@ -175,8 +175,12 @@ WARM_START_ENV = (
 
 
 def cold_start_env(corpus_dir: Path) -> dict[str, str]:
-    """The single explicit override: pin the corpus dir to the fresh isolated dir."""
-    return {"GVF_CORPUS_DIR": str(corpus_dir)}
+    """Explicit overrides for the clean room: pin the corpus dir to the fresh
+    isolated dir, and skip the interactive institutional-access preflight. This
+    hermetic measurement is a deliberate, non-interactive run whose access posture
+    the operator controls, so it must not halt at the live EZproxy probe the way a
+    turnkey production run does (the preflight is exercised in gvf_run's tests)."""
+    return {"GVF_CORPUS_DIR": str(corpus_dir), "GVF_PREFLIGHT_SKIP": "1"}
 
 
 def hermetic_env(base: dict[str, str], corpus_dir: Path) -> dict[str, str]:
