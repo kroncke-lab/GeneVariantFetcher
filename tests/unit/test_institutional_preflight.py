@@ -118,3 +118,10 @@ def test_env_helpers_are_defensive(monkeypatch):
     assert _float_env("X_BAD", 0.85) == 0.85
     monkeypatch.setenv("X_GOOD", "12")
     assert _int_env("X_GOOD", 45) == 12
+
+
+def test_audit_none_run_dir_is_safe():
+    # run_dir is Optional[Path] at the call site; None must not raise (a bare
+    # Path(None).rglob would TypeError, which the OSError handler wouldn't catch).
+    rpt = audit_source_integrity(None)
+    assert rpt.total == 0 and rpt.degraded is False

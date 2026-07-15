@@ -383,7 +383,7 @@ def _is_abstract_only_stub(path: Path) -> bool:
 
 
 def audit_source_integrity(
-    run_dir: Path, *, threshold: Optional[float] = None
+    run_dir: Optional[Path], *, threshold: Optional[float] = None
 ) -> IntegrityReport:
     """Scan a run dir's ``*_FULL_CONTEXT.md`` files and measure the stub ratio.
 
@@ -394,6 +394,9 @@ def audit_source_integrity(
     """
     threshold = _DEFAULT_MAX_ABSTRACT_ONLY_RATIO if threshold is None else threshold
     rpt = IntegrityReport(threshold=threshold)
+    if run_dir is None:
+        rpt.message = "source integrity: run_dir is None, skipping audit."
+        return rpt
     try:
         files = list(Path(run_dir).rglob("*_FULL_CONTEXT.md"))
     except OSError as exc:

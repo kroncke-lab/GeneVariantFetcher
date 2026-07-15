@@ -249,6 +249,16 @@ def _load_domain_cookie_dicts_worker(
         out_queue.put({"error": str(exc)})
 
 
+def _cookie_domain_matches(cookie_domain: str, domain_list) -> bool:
+    """True if a cookie's domain equals, or is a subdomain of, any requested domain."""
+    cd = (cookie_domain or "").lower().lstrip(".")
+    for d in domain_list:
+        dl = (d or "").lower().lstrip(".")
+        if dl and (cd == dl or cd.endswith("." + dl)):
+            return True
+    return False
+
+
 def load_chrome_cookies(
     domains: Optional[Iterable[str]] = None,
     profile_name: Optional[str] = None,
@@ -272,16 +282,31 @@ def load_chrome_cookies(
         Failures to read a given domain are logged and skipped (we don't want
         one bad domain to disable the whole fetcher).
     """
+    # Resolve the effective domain set once; both the cookie-file path and the
+    # browser_cookie3 path filter to it.
+    if domains is not None:
+        domains_iter = list(domains)
+    else:
+        domains_iter = list(
+            dict.fromkeys((*DEFAULT_PUBLISHER_DOMAINS, *_env_cookie_domains()))
+        )
+
     # A GVF_COOKIE_FILE (Netscape cookies.txt exported from inside Chrome) takes
     # precedence and skips browser_cookie3/Keychain entirely — the only reliable
     # path on Chrome builds that lock the Safe Storage keychain item to Chrome,
-    # and the only path that works headless / through an agent.
+    # and the only path that works headless / through an agent. Filter to the
+    # requested domains so an untrimmed export can't inject unrelated cookies
+    # (banking, mail, ...) into the recovery session / browser pool.
     cookie_file = os.environ.get("GVF_COOKIE_FILE")
     if cookie_file:
         p = os.path.expanduser(cookie_file)
         if os.path.exists(p):
             try:
-                cookies = _cookies_from_file(p)
+                cookies = [
+                    c
+                    for c in _cookies_from_file(p)
+                    if _cookie_domain_matches(c.get("domain", ""), domains_iter)
+                ]
                 logger.info(
                     "Loaded %d cookies from GVF_COOKIE_FILE=%s (Keychain bypassed)",
                     len(cookies),
@@ -307,12 +332,6 @@ def load_chrome_cookies(
             "Install with `pip install browser-cookie3`."
         ) from e
 
-    if domains is not None:
-        domains_iter = list(domains)
-    else:
-        domains_iter = list(
-            dict.fromkeys((*DEFAULT_PUBLISHER_DOMAINS, *_env_cookie_domains()))
-        )
     seen_keys: set = set()
     out: List[dict] = []
 

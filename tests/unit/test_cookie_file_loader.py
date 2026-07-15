@@ -84,3 +84,57 @@ def test_missing_cookie_file_does_not_crash(tmp_path, monkeypatch):
     monkeypatch.setenv("GVF_COOKIE_FILE", str(tmp_path / "nope.txt"))
     # Non-existent file: warn + fall back (returns a list, never raises here).
     assert isinstance(load_chrome_cookies(domains=[]), list)
+
+
+def test_load_chrome_cookies_filters_unrelated_file_cookies(tmp_path, monkeypatch):
+    # An untrimmed export must not inject unrelated (e.g. banking) cookies into
+    # the recovery session/browser: only cookies matching the default
+    # institutional + publisher domain set survive.
+    f = tmp_path / "cookies.txt"
+    f.write_text(
+        "\n".join(
+            [
+                "# Netscape HTTP Cookie File",
+                "\t".join(
+                    [
+                        ".proxy.library.vanderbilt.edu",
+                        "TRUE",
+                        "/",
+                        "TRUE",
+                        "1999999999",
+                        "ezproxy",
+                        "x",
+                    ]
+                ),
+                "\t".join(
+                    [
+                        "onlinelibrary.wiley.com",
+                        "FALSE",
+                        "/",
+                        "TRUE",
+                        "1999999999",
+                        "wiley_sess",
+                        "y",
+                    ]
+                ),
+                "\t".join(
+                    [
+                        "mybank.example",
+                        "FALSE",
+                        "/",
+                        "TRUE",
+                        "1999999999",
+                        "BANKSESSION",
+                        "secret",
+                    ]
+                ),
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("GVF_COOKIE_FILE", str(f))
+    names = {c["name"] for c in load_chrome_cookies()}  # domains=None -> default set
+    assert "ezproxy" in names  # EZproxy session kept
+    assert "wiley_sess" in names  # publisher cookie kept
+    assert "BANKSESSION" not in names  # unrelated cookie dropped
