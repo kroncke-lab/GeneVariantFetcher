@@ -73,16 +73,25 @@ def test_full_run_blocks_when_institutional_access_degraded(
     institutional preflight when EZproxy is unconfigured — before any extraction —
     rather than silently harvesting abstract-only. This is the guard's whole point.
     """
-    # Undo the module-wide bypass so the real guard runs, and guarantee EZproxy
-    # looks unconfigured regardless of the ambient .env.
+    # Run the real guard, but mock the probe to report degraded access. The live
+    # probe is non-deterministic (network) and run_gvf_pipeline reloads .env at
+    # startup (initialize_runtime -> load_dotenv), so env-manipulation cannot
+    # reliably simulate "no access". The probe's own logic is covered in
+    # test_institutional_preflight.py; here we assert a should_block report HALTS
+    # the run before extraction.
     monkeypatch.delenv("GVF_PREFLIGHT_SKIP", raising=False)
-    for k in (
-        "GVF_EZPROXY_PREFIX",
-        "GVF_EZPROXY_HOST",
-        "PROXY_LOGIN_PREFIX",
-        "PROXY_HOST",
-    ):
-        monkeypatch.delenv(k, raising=False)
+    import cli.institutional_preflight as ip
+
+    monkeypatch.setattr(
+        ip,
+        "probe_institutional_access",
+        lambda **kw: ip.AccessReport(
+            viable=False,
+            should_block=True,
+            reason="degraded (test)",
+            lines=["(test) EZproxy configured: NO"],
+        ),
+    )
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
 
     def _extract_must_not_run(*args, **kwargs):
@@ -106,13 +115,18 @@ def test_allow_degraded_institutional_overrides_block(tmp_path: Path, monkeypatc
     RUN_STATUS.json) so it is never a silent success.
     """
     monkeypatch.delenv("GVF_PREFLIGHT_SKIP", raising=False)
-    for k in (
-        "GVF_EZPROXY_PREFIX",
-        "GVF_EZPROXY_HOST",
-        "PROXY_LOGIN_PREFIX",
-        "PROXY_HOST",
-    ):
-        monkeypatch.delenv(k, raising=False)
+    import cli.institutional_preflight as ip
+
+    monkeypatch.setattr(
+        ip,
+        "probe_institutional_access",
+        lambda **kw: ip.AccessReport(
+            viable=False,
+            should_block=True,
+            reason="degraded (test)",
+            lines=["(test) EZproxy configured: NO"],
+        ),
+    )
     captured: dict = {}
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
