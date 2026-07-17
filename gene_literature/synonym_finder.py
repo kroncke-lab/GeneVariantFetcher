@@ -195,32 +195,38 @@ class SynonymFinder:
         Returns:
             Gene ID if found, None otherwise
         """
-        params = {
-            "db": "gene",
-            "term": f"{gene}[Gene Name] AND human[Organism]",
-            "retmode": "json",
-            "retmax": 1,  # Only need the top result
-        }
-
-        if self.email:
-            params["email"] = self.email
-        if self.api_key:
-            params["api_key"] = self.api_key
-
         url = f"{self.BASE_URL}/esearch.fcgi"
 
-        try:
-            response = self._request(url, params)
-            data = response.json()
+        # Resolve the exact official symbol first. A bare "[Gene Name]" search
+        # ranks by relevance, so a colliding symbol resolves to the more-studied
+        # gene (e.g. "TTN" returned TTR/transthyretin 7276 ahead of titin 7273).
+        # "[Preferred Symbol]" matches only the gene whose current official
+        # symbol is exactly this token; fall back to the broader field for
+        # inputs given as a full gene name rather than a symbol.
+        for field in ("Preferred Symbol", "Gene Name"):
+            params = {
+                "db": "gene",
+                "term": f"{gene}[{field}] AND human[Organism]",
+                "retmode": "json",
+                "retmax": 1,  # Only need the top result
+            }
+            if self.email:
+                params["email"] = self.email
+            if self.api_key:
+                params["api_key"] = self.api_key
+
+            try:
+                response = self._request(url, params)
+                data = response.json()
+            except Exception as e:
+                logger.error("Failed to search for gene '%s': %s", gene, e)
+                raise SynonymFinderError(f"Gene search failed: {e}") from e
 
             id_list = data.get("esearchresult", {}).get("idlist", [])
             if id_list:
                 return int(id_list[0])
-            return None
 
-        except Exception as e:
-            logger.error("Failed to search for gene '%s': %s", gene, e)
-            raise SynonymFinderError(f"Gene search failed: {e}") from e
+        return None
 
     def _fetch_gene_summary(
         self,
