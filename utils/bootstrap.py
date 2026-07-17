@@ -85,8 +85,14 @@ def _apply_network_hardening() -> None:
     if os.getenv("GVF_FORCE_IPV4", "").strip().lower() in _TRUTHY:
         _orig_getaddrinfo = socket.getaddrinfo
 
-        def _ipv4_only(host, port, family=0, type=0, proto=0, flags=0):
-            return _orig_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
+        def _ipv4_only(*args, **kwargs):
+            # Force family=AF_INET regardless of how the caller passes it,
+            # preserving all other positional/keyword arguments.
+            if len(args) >= 3:
+                args = args[:2] + (socket.AF_INET,) + args[3:]
+            else:
+                kwargs["family"] = socket.AF_INET
+            return _orig_getaddrinfo(*args, **kwargs)
 
         socket.getaddrinfo = _ipv4_only
         _logger.info("GVF_FORCE_IPV4 enabled: resolving hostnames to IPv4 only")

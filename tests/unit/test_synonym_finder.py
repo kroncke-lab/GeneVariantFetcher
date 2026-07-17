@@ -53,6 +53,8 @@ def test_search_gene_falls_back_to_gene_name():
     assert sf._search_gene("lamin A/C") == 4000
     assert any("[Preferred Symbol]" in t for t in sf._calls)
     assert any("[Gene Name]" in t for t in sf._calls)
+    # Multi-word terms must be quoted so NCBI treats them as one phrase.
+    assert all('"lamin A/C"' in t for t in sf._calls)
 
 
 def test_search_gene_returns_none_when_no_hit():

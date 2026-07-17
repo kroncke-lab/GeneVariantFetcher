@@ -206,7 +206,10 @@ class SynonymFinder:
         for field in ("Preferred Symbol", "Gene Name"):
             params = {
                 "db": "gene",
-                "term": f"{gene}[{field}] AND human[Organism]",
+                # Quote the term so multi-word names (e.g. "lamin A/C") are
+                # searched as one phrase; unquoted, NCBI splits on spaces and
+                # only the last token is bound to the field.
+                "term": f'"{gene}"[{field}] AND human[Organism]',
                 "retmode": "json",
                 "retmax": 1,  # Only need the top result
             }
@@ -218,6 +221,9 @@ class SynonymFinder:
             try:
                 response = self._request(url, params)
                 data = response.json()
+            except SynonymFinderError:
+                # _request already wraps request failures; don't double-wrap.
+                raise
             except Exception as e:
                 logger.error("Failed to search for gene '%s': %s", gene, e)
                 raise SynonymFinderError(f"Gene search failed: {e}") from e
