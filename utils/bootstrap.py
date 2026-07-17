@@ -57,7 +57,54 @@ def initialize_runtime(
                     extra_env,
                 )
 
+        _apply_network_hardening()
+
         _BOOTSTRAPPED = True
+
+
+_TRUTHY = {"1", "true", "yes", "on"}
+
+
+def _apply_network_hardening() -> None:
+    """Opt-in resilience for flaky networks (default: no-op).
+
+    On some hosts the IPv6 path to external services blackholes: TCP connections
+    establish but reads hang forever, because most HTTP client calls set no read
+    timeout. These env-gated knobs let an operator force IPv4 and/or install a
+    process-wide default socket timeout so a stalled read fails fast and the
+    caller's retry logic recovers instead of hanging indefinitely. Both are unset
+    by default, so behavior is unchanged unless explicitly enabled.
+
+    - ``GVF_FORCE_IPV4=1``       resolve hostnames to IPv4 (AF_INET) only.
+    - ``GVF_SOCKET_TIMEOUT=<s>`` ``socket.setdefaulttimeout(<s>)`` for calls that
+      do not set their own timeout. NOTE: httpx-based LLM clients set their own
+      per-request timeouts and are unaffected by this default.
+    """
+    import socket
+
+    if os.getenv("GVF_FORCE_IPV4", "").strip().lower() in _TRUTHY:
+        _orig_getaddrinfo = socket.getaddrinfo
+
+        def _ipv4_only(host, port, family=0, type=0, proto=0, flags=0):
+            return _orig_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
+
+        socket.getaddrinfo = _ipv4_only
+        _logger.info("GVF_FORCE_IPV4 enabled: resolving hostnames to IPv4 only")
+
+    raw_timeout = os.getenv("GVF_SOCKET_TIMEOUT", "").strip()
+    if raw_timeout:
+        try:
+            timeout = float(raw_timeout)
+        except ValueError:
+            _logger.warning(
+                "Ignoring invalid GVF_SOCKET_TIMEOUT=%r (not a number)", raw_timeout
+            )
+        else:
+            if timeout > 0:
+                socket.setdefaulttimeout(timeout)
+                _logger.info(
+                    "GVF_SOCKET_TIMEOUT enabled: default socket timeout %.0fs", timeout
+                )
 
 
 def llm_provider_key_status() -> dict[str, bool]:
