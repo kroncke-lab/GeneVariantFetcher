@@ -28,10 +28,16 @@ import json
 import os
 import re
 import shutil
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+# When this script is run by path (python scripts/fetch_elsevier_supplements.py),
+# sys.path[0] is the scripts/ dir, not the repo root, so `import harvesting`
+# fails with ModuleNotFoundError. Put the repo root on the path first.
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
 
 from harvesting.elsevier_api import ElsevierAPIClient  # noqa: E402
 from harvesting.supplement_fold import (  # noqa: E402
