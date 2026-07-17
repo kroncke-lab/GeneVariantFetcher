@@ -15,6 +15,33 @@ from scripts.fetch_elsevier_supplements import (
 )
 
 
+def test_script_importable_when_run_by_path(tmp_path):
+    """Running the script by path must not raise ModuleNotFoundError: 'harvesting'.
+
+    gvf-run invokes it as ``python scripts/fetch_elsevier_supplements.py``, so
+    sys.path[0] is the scripts/ dir (not the repo root) and the script must put
+    the repo root on the path itself. ``--help`` exercises the top-level imports
+    then exits 0.
+    """
+    import os
+    import subprocess
+    import sys
+
+    repo = Path(__file__).resolve().parents[2]
+    script = repo / "scripts" / "fetch_elsevier_supplements.py"
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)  # don't let an inherited path mask the bug
+    result = subprocess.run(
+        [sys.executable, str(script), "--help"],
+        cwd=str(tmp_path),
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "usage" in result.stdout.lower()
+
+
 class FakeElsevierClient:
     def __init__(self, xml: str):
         self.xml = xml
