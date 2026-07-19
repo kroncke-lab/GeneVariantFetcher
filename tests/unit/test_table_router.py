@@ -751,7 +751,7 @@ def test_parse_routed_table_rejects_population_occurrence_counts():
 
 
 def test_router_infers_blank_gene_group_and_ignores_family_history_case_counts():
-    """The routed path must make the same PMID 18627636 decision as the fast path."""
+    """The routed and fast paths must enforce the same structural role rules."""
     table = MarkdownTable(
         table_id="T5",
         caption="Table 5. Family and pathological characteristics",
@@ -796,3 +796,95 @@ def test_router_infers_blank_gene_group_and_ignores_family_history_case_counts()
         == "implicit one carrier per clinical row"
         for v in variants
     )
+
+
+@pytest.mark.parametrize(
+    "timing_header,family_header,ambiguous_count_header",
+    [
+        ("Age at onset", "Affected relatives", "Cases before age 40"),
+        (
+            "Duration of symptoms",
+            "Family members with disease",
+            "Clinical events",
+        ),
+        ("Follow-up (years)", "Family history", "Cancer diagnoses"),
+    ],
+)
+def test_router_classifies_clinical_measures_by_role_not_exact_header(
+    timing_header: str,
+    family_header: str,
+    ambiguous_count_header: str,
+):
+    """Header families, not one paper's wording, keep phenotype values out."""
+    table = MarkdownTable(
+        table_id="T-clinical",
+        caption="Clinical characteristics by variant",
+        header_line="",
+        header_cells=[
+            "Gene",
+            "cDNA",
+            "Protein",
+            timing_header,
+            family_header,
+            ambiguous_count_header,
+        ],
+        data_lines=["| PALB2 | c.3113G>A | p.Gly1038Asp | 42 | 3 | 2 |"],
+        char_start=0,
+        char_end=160,
+    )
+
+    mapping = _infer_column_mapping_from_headers(table, target_gene="PALB2")
+
+    assert mapping is not None
+    assert mapping["patient_count"] == -1
+    assert "affected" not in mapping
+    assert "unaffected" not in mapping
+
+
+def test_router_infers_open_vocabulary_unnamed_gene_groups():
+    """Unknown panel genes are scoped from rowspan structure, not a registry."""
+    table = MarkdownTable(
+        table_id="T-open",
+        caption="Grouped hereditary-disease variants",
+        header_line="|  | cDNA | Protein | No. of patients |",
+        header_cells=["", "cDNA", "Protein", "No. of patients"],
+        data_lines=[
+            "| PALB2 | c.3113G>A | p.Gly1038Asp | 4 |",
+            "|  | c.2257C>T | p.Arg753Ter | 2 |",
+            "| ATM | c.7271T>G | p.Val2424Gly | 3 |",
+            "|  | c.8147T>C | p.Val2716Ala | 5 |",
+        ],
+        char_start=0,
+        char_end=240,
+    )
+
+    mapping = _infer_column_mapping_from_headers(table, target_gene="PALB2")
+
+    assert mapping is not None
+    assert mapping["gene"] == 0
+    variants = parse_routed_table(table, mapping, "PALB2")
+    assert [variant["cdna_notation"] for variant in variants] == [
+        "c.3113G>A",
+        "c.2257C>T",
+    ]
+
+
+def test_router_does_not_treat_unlabeled_row_ids_as_open_gene_groups():
+    """Open-vocabulary inference requires rowspan blanks, not merely ID tokens."""
+    table = MarkdownTable(
+        table_id="T-ids",
+        caption="Variant observations",
+        header_line="|  | cDNA | No. of patients |",
+        header_cells=["", "cDNA", "No. of patients"],
+        data_lines=[
+            "| FAM101 | c.3113G>A | 4 |",
+            "| FAM102 | c.2257C>T | 2 |",
+        ],
+        char_start=0,
+        char_end=120,
+    )
+
+    mapping = _infer_column_mapping_from_headers(table, target_gene="PALB2")
+
+    assert mapping is not None
+    assert "gene" not in mapping

@@ -247,14 +247,33 @@ def test_markdown_gene_column_filters_rows_in_multigene_table():
 | **Gene** | **Amino acid change** | **Nucleotide change** | **Total carriers** |
 | --- | --- | --- | --- |
 | SCN5A | p.(Arg18Gln) | c.53G>A | 4 |
-| KCNH2 | p.(Pro1093Leu) | c.3278C>T | 2 |
-| KCNQ1 | p.(Tyr111Cys) | c.332A>G | 9 |
 | PALB2 | p.(Gly1038Asp) | c.3113G>A | 4 |
 | ATM | p.(Val2424Gly) | c.7271T>G | 3 |
+| KCNH2 | p.(Pro1093Leu) | c.3278C>T | 2 |
+| KCNQ1 | p.(Tyr111Cys) | c.332A>G | 9 |
 """
 
     variants = extractor._parse_markdown_table_variants(text, "SCN5A")
     assert [v["cdna_notation"] for v in variants] == ["c.53G>A"]
+
+
+def test_markdown_parser_infers_open_vocabulary_unnamed_gene_groups():
+    """Rowspan structure, not a built-in gene list, scopes unnamed groups."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+|  | Nucleotide change | Amino acid change | No. of patients |
+|---|---|---|---|
+| PALB2 | c.3113G>A | p.(Gly1038Asp) | 4 |
+|  | c.2257C>T | p.(Arg753Ter) | 2 |
+| ATM | c.7271T>G | p.(Val2424Gly) | 3 |
+|  | c.8147T>C | p.(Val2716Ala) | 5 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "PALB2")
+    assert [variant["cdna_notation"] for variant in variants] == [
+        "c.3113G>A",
+        "c.2257C>T",
+    ]
 
 
 def test_markdown_parser_accepts_header_without_outer_pipe_borders():
@@ -275,11 +294,13 @@ Gene | Amino acid change | Nucleotide change | Total carriers
 
 
 def test_markdown_parser_preserves_blank_gene_column_and_rejects_family_history_counts():
-    """PMID 18627636: a blank gene header must not shift age into counts.
+    """Column position and semantic roles must survive blank group headers.
 
     The first row of each gene group fills an otherwise unnamed gene column;
     continuation rows leave it blank.  ``No. of cases <= 50`` is family-history
-    context in this clinical-characteristics table, not genotyped carriers.
+    context in this clinical-characteristics table, not genotyped carriers. The
+    source paper is only a regression fixture; no source identity reaches the
+    parser.
     """
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
