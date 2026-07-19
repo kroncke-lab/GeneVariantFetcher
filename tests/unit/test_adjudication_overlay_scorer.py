@@ -10,6 +10,8 @@ import csv
 import json
 import sqlite3
 
+import scripts.ingest_review_adjudications as ingest
+
 from cli.compare_variants import (
     ComparisonRow,
     apply_adjudication_overlay,
@@ -207,6 +209,7 @@ def test_load_overlay_round_trips_live_gold_database(tmp_path):
             "INSERT INTO review_gold_overlays VALUES (?, ?, ?, ?, ?)",
             ("key-1", "KCNQ1", "1", "p.Val1Met", json.dumps(row)),
         )
+        ingest.ensure_live_gold_schema(conn)
         conn.commit()
     finally:
         conn.close()
@@ -217,3 +220,16 @@ def test_load_overlay_round_trips_live_gold_database(tmp_path):
     (key,) = overlay
     assert key[0] == "1"
     assert overlay[key]["action"] == "count_override"
+    assert load_adjudication_overlay_db(path, "KCNQ1", tier="noncardiac") == {}
+    assert load_adjudication_overlay_db(path, "KCNQ1", tier="unknown") == {}
+
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(
+            "INSERT INTO review_gold_exclusions VALUES (?, 1, ?, ?, ?)",
+            ("key-1", "lead", "bad source row", "2026-07-19T00:00:00+00:00"),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    assert load_adjudication_overlay_db(path, "KCNQ1", tier="cardiac") == {}

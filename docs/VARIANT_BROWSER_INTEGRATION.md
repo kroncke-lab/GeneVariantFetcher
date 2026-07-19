@@ -26,7 +26,7 @@ responsible for excluding raw, stale, disputed, withheld, and archived calls.
         │  ingest_review_adjudications.py                       │
         │  ◀── authenticated JSON from live Azure DB ───────────┤
         ▼                                                       │
-  review_gold.sqlite3   (approved gold + correction overlay + sync audit)
+  review_gold.sqlite3   (current view + immutable snapshots + tiers + audit)
 ```
 
 ---
@@ -151,10 +151,11 @@ when no DB is found for a gene, the overlay still records the adjudication with
 | `missing`         | `followup_missing` | GVF missed it — queue for a human.                 |
 | `other`           | `followup_other`   | Free-text `comment` — queue for a human.           |
 
-### Outputs
+### Versioned outputs and tier management
 
-The live path atomically replaces
-`gene_variant_fetcher_gold_standard/adjudications/review_gold.sqlite3`:
+The live path updates the current view in
+`gene_variant_fetcher_gold_standard/adjudications/review_gold.sqlite3` without
+deleting prior source revisions:
 
 - `review_gold_records` — exact accepted Azure records, including browser
   `record_key`, revision/status, source-reviewer account, approving-lead account,
@@ -164,6 +165,17 @@ The live path atomically replaces
   side for recall, precision, MAE, and RMSE/RMSD.
 - `review_gold_sync_state` — source URL, schema version, dataset checksum,
   record count, Azure generation time, and local sync time.
+- `review_gold_snapshots` / `review_gold_snapshot_records` — immutable copies of
+  every distinct authenticated Azure dataset revision and all of its records.
+- `review_gold_sync_runs` — one row per pull, including cardiac/non-cardiac and
+  added/updated/removed counts. Repeated pulls of an unchanged revision remain
+  auditable without duplicating snapshot records.
+- `review_gold_record_changes` — record-level added, updated, and removed events;
+  removal retains the prior payload so it can still be audited.
+- `review_gold_tiers` — built-in `cardiac`, `all`, and `noncardiac` definitions,
+  plus custom gene tiers.
+- `review_gold_exclusions` / `review_gold_exclusion_events` — current and
+  append-only audit state for reversible local removal from metric calculations.
 - `review_followup_queue.csv` — everything needing a human: `missing`/`other`,
   plus any actionable verdict whose round-trip key didn't resolve to an extracted
   row (`unmatched`) or that had no DB to verify against (`no_db`).
@@ -171,17 +183,57 @@ The live path atomically replaces
   plus net adjudicated count deltas (`net_affected_delta`, `net_unaffected_delta`)
   for matched `count_override` rows.
 
+The built-in cardiac tier contains `KCNH2`, `KCNQ1`, `RYR2`, and `SCN5A`.
+The cache always retains all genes; a tier changes only which records and genes
+the scorer reads. Inspect the database without producing CSVs:
+
+```bash
+python scripts/manage_review_gold.py summary
+python scripts/manage_review_gold.py snapshots
+python scripts/manage_review_gold.py syncs
+python scripts/manage_review_gold.py changes
+python scripts/manage_review_gold.py records --tier cardiac
+python scripts/manage_review_gold.py records --tier all --snapshot f739a470406f
+```
+
+Reversibly remove one record from active metrics, with an actor and reason kept
+in the audit ledger:
+
+```bash
+python scripts/manage_review_gold.py exclude \
+  --record-key RECORD_KEY --actor kronckbm --reason "misassigned table"
+python scripts/manage_review_gold.py restore \
+  --record-key RECORD_KEY --actor kronckbm --reason "source rechecked"
+```
+
+`--gene BRCA2` can be used instead of individual record keys for a bulk local
+exclusion. Normally, use tiers instead so the all-gene dataset remains available:
+
+```bash
+python scripts/manage_review_gold.py define-tier potassium \
+  --include-genes KCNH2,KCNQ1 --actor kronckbm \
+  --description "Potassium-channel gold"
+```
+
+An exclusion never deletes source history and survives later syncs. Removing an
+approval in Variant Browser is still the authoritative upstream action; the next
+sync records that disappearance as `removed` while retaining the older snapshot.
+
 ### Scoring and freshness
 
 Approved gold calls are a **correction overlay**: the extracted value and the adjudicated
 value are kept side by side. Nothing rewrites the raw extraction JSON or the run DB.
 
-`scripts/run_recall_suite.py` defaults to `--review-gold-sync auto`: when
+`scripts/run_recall_suite.py` defaults to `--review-gold-sync auto` and
+`--review-gold-tier cardiac`: when
 `GVF_REVIEW_GOLD_TOKEN` is configured it pulls a fresh snapshot before scoring
 and reads the SQLite overlay directly. For release/headline measurements use:
 
 ```bash
-python scripts/run_recall_suite.py --review-gold-sync required --score
+python scripts/run_recall_suite.py \
+  --review-gold-sync required --review-gold-tier cardiac --score
+python scripts/run_recall_suite.py \
+  --review-gold-sync required --review-gold-tier all --score
 ```
 
 `required` fails before scoring if authentication, network access, schema,
@@ -208,7 +260,8 @@ are not rewritten. This keeps model output and human truth separately auditable.
 |------|------|
 | `cli/gvf_run.py` (`step_publish_review`) | The opt-in publish step. |
 | `cli/__init__.py` (`gvf-run --publish-review`) | CLI flags. |
-| `scripts/ingest_review_adjudications.py` | Authenticated pull, validation, matching, and atomic cache sync. |
+| `scripts/ingest_review_adjudications.py` | Authenticated pull, validation, matching, transactional current-view update, and immutable snapshots. |
+| `scripts/manage_review_gold.py` | Snapshot/change inspection, custom tiers, and audited reversible exclusions. |
 | `scripts/run_recall_suite.py` | Fresh-sync gate and live overlay consumer. |
 | `gene_variant_fetcher_gold_standard/adjudications/review_gold.sqlite3` | Local gold DB + correction overlay + sync audit. |
 | `.github/workflows/review-gold-sync.yml` | Daily/on-demand live contract smoke. |

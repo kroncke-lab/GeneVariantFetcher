@@ -20,6 +20,7 @@ import pytest
 
 import harvesting.migrate_to_sqlite as migrate
 import scripts.ingest_review_adjudications as ingest
+import scripts.manage_review_gold as manage
 
 PMID = "10086971"
 
@@ -344,11 +345,20 @@ def test_live_sync_populates_atomic_sqlite_cache_with_identity_audit(tmp_path):
         sync_state = conn.execute(
             "SELECT dataset_revision, record_count FROM review_gold_sync_state"
         ).fetchone()
+        snapshots = conn.execute(
+            "SELECT COUNT(*) FROM review_gold_snapshots"
+        ).fetchone()[0]
     finally:
         conn.close()
     assert gold[0] == ("gold-record-0", "account-0", "lead-account")
     assert overlays == len(EXPORT_ROWS)
     assert sync_state == (payload["dataset_revision"], len(EXPORT_ROWS))
+    assert snapshots == 1
+    assert state["tier_counts"] == {
+        "all": len(EXPORT_ROWS),
+        "cardiac": len(EXPORT_ROWS),
+        "noncardiac": 0,
+    }
 
     # A second complete snapshot replaces rather than duplicates the cache.
     ingest.sync_live_gold(
@@ -365,6 +375,253 @@ def test_live_sync_populates_atomic_sqlite_cache_with_identity_audit(tmp_path):
         assert conn.execute("SELECT COUNT(*) FROM review_gold_records").fetchone()[
             0
         ] == len(EXPORT_ROWS)
+        assert (
+            conn.execute("SELECT COUNT(*) FROM review_gold_snapshots").fetchone()[0]
+            == 1
+        )
+        assert (
+            conn.execute("SELECT COUNT(*) FROM review_gold_sync_runs").fetchone()[0]
+            == 2
+        )
+        changes = conn.execute(
+            "SELECT added_count, updated_count, removed_count "
+            "FROM review_gold_sync_runs ORDER BY sync_id"
+        ).fetchall()
+        assert changes == [(len(EXPORT_ROWS), 0, 0), (0, 0, 0)]
+    finally:
+        conn.close()
+
+
+def test_live_sync_preserves_snapshots_and_tracks_tiered_changes(tmp_path):
+    first_rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    for row in first_rows:
+        row["revision"] = int(row["revision"])
+    first_rows[-1]["gene"] = "BRCA2"
+    cache_db = tmp_path / "review_gold.sqlite3"
+    out_dir = tmp_path / "out"
+
+    first = ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=_FakeOpener(_live_payload(first_rows)),
+        announce=False,
+    )
+    assert first["tier_counts"] == {"all": 6, "cardiac": 5, "noncardiac": 1}
+
+    second_rows = [dict(row) for row in first_rows[1:]]
+    second_rows[0]["comment"] = "updated after closer review"
+    added = dict(first_rows[0])
+    added.update(
+        {
+            "record_key": "gold-record-new",
+            "gene": "SCN5A",
+            "source_notation": "p.New1Variant",
+        }
+    )
+    second_rows.append(added)
+    second = ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=_FakeOpener(_live_payload(second_rows)),
+        announce=False,
+    )
+
+    assert second["tier_counts"] == {"all": 6, "cardiac": 5, "noncardiac": 1}
+    assert (
+        second["added_count"],
+        second["updated_count"],
+        second["removed_count"],
+    ) == (
+        1,
+        1,
+        1,
+    )
+    conn = sqlite3.connect(cache_db)
+    try:
+        assert (
+            conn.execute("SELECT COUNT(*) FROM review_gold_snapshots").fetchone()[0]
+            == 2
+        )
+        assert (
+            conn.execute(
+                "SELECT COUNT(*) FROM review_gold_snapshot_records"
+            ).fetchone()[0]
+            == 12
+        )
+        changes = conn.execute(
+            "SELECT change_type, record_key FROM review_gold_record_changes "
+            "WHERE sync_id = ? ORDER BY change_type, record_key",
+            (second["sync_id"],),
+        ).fetchall()
+        assert changes == [
+            ("added", "gold-record-new"),
+            ("removed", "gold-record-0"),
+            ("updated", "gold-record-1"),
+        ]
+        removed_payload = conn.execute(
+            "SELECT previous_payload_json FROM review_gold_record_changes "
+            "WHERE sync_id = ? AND change_type = 'removed'",
+            (second["sync_id"],),
+        ).fetchone()[0]
+        assert json.loads(removed_payload)["record_key"] == "gold-record-0"
+    finally:
+        conn.close()
+
+
+def test_existing_version_one_cache_is_archived_before_current_replacement(tmp_path):
+    rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    for row in rows:
+        row["revision"] = int(row["revision"])
+    cache_db = tmp_path / "review_gold.sqlite3"
+    out_dir = tmp_path / "out"
+    first_payload = _live_payload(rows)
+    ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=_FakeOpener(first_payload),
+        announce=False,
+    )
+    conn = sqlite3.connect(cache_db)
+    try:
+        for table in (
+            "review_gold_snapshot_records",
+            "review_gold_snapshots",
+            "review_gold_sync_runs",
+            "review_gold_record_changes",
+            "review_gold_tiers",
+            "review_gold_exclusions",
+            "review_gold_exclusion_events",
+        ):
+            conn.execute(f"DROP TABLE {table}")
+        conn.execute("PRAGMA user_version = 1")
+        conn.commit()
+    finally:
+        conn.close()
+
+    second_rows = rows[:-1]
+    ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=_FakeOpener(_live_payload(second_rows)),
+        announce=False,
+    )
+    conn = sqlite3.connect(cache_db)
+    try:
+        revisions = conn.execute(
+            "SELECT dataset_revision, record_count FROM review_gold_snapshots "
+            "ORDER BY first_synced_at"
+        ).fetchall()
+        assert revisions == [
+            (first_payload["dataset_revision"], len(rows)),
+            (_live_payload(second_rows)["dataset_revision"], len(second_rows)),
+        ]
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == 2
+    finally:
+        conn.close()
+
+
+def test_exclusions_are_reversible_and_custom_tiers_are_audited(tmp_path):
+    rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    for row in rows:
+        row["revision"] = int(row["revision"])
+    rows[-1]["gene"] = "BRCA2"
+    cache_db = tmp_path / "review_gold.sqlite3"
+    ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=tmp_path / "out",
+        no_db=True,
+        opener=_FakeOpener(_live_payload(rows)),
+        announce=False,
+    )
+
+    manage.set_exclusion(
+        cache_db,
+        record_keys=["gold-record-5"],
+        gene="",
+        active=True,
+        actor="lead-account",
+        reason="exclude pilot gene from headline gold",
+    )
+    assert ingest.current_gold_tier_counts(cache_db) == {
+        "all": 5,
+        "cardiac": 5,
+        "noncardiac": 0,
+    }
+    manage.set_exclusion(
+        cache_db,
+        record_keys=["gold-record-5"],
+        gene="",
+        active=False,
+        actor="lead-account",
+        reason="restore for all-gene analysis",
+    )
+    manage.define_tier(
+        cache_db,
+        name="potassium",
+        description="KCNH2 and KCNQ1 only",
+        include_genes="KCNH2,KCNQ1",
+        exclude_genes="",
+        all_genes=False,
+        actor="lead-account",
+    )
+    counts = ingest.current_gold_tier_counts(cache_db)
+    assert counts == {"all": 6, "cardiac": 5, "noncardiac": 1, "potassium": 5}
+    conn = sqlite3.connect(cache_db)
+    try:
+        assert conn.execute(
+            "SELECT action, actor FROM review_gold_exclusion_events "
+            "WHERE record_key = 'gold-record-5' ORDER BY event_id"
+        ).fetchall() == [("exclude", "lead-account"), ("restore", "lead-account")]
+        assert (
+            conn.execute(
+                "SELECT active FROM review_gold_exclusions "
+                "WHERE record_key = 'gold-record-5'"
+            ).fetchone()[0]
+            == 0
+        )
+    finally:
+        conn.close()
+
+
+def test_bulk_exclusion_target_lookup_chunks_sqlite_parameters(tmp_path):
+    cache_db = tmp_path / "review_gold.sqlite3"
+    conn = sqlite3.connect(cache_db)
+    try:
+        ingest.ensure_live_gold_schema(conn)
+        keys = [f"record-{index:04d}" for index in range(1200)]
+        conn.executemany(
+            """
+            INSERT INTO review_gold_snapshot_records (
+                dataset_revision, record_key, gene, pmid, source_notation,
+                status, revision, source_reviewer_user_id,
+                decided_by_user_id, payload_json
+            ) VALUES ('snapshot', ?, 'BRCA2', '', '', 'gold_standard', 1, 'r', 'l', '{}')
+            """,
+            [(key,) for key in keys],
+        )
+        conn.commit()
+        assert (
+            manage._target_record_keys(
+                conn,
+                record_keys=keys,
+                gene="",
+            )
+            == keys
+        )
     finally:
         conn.close()
 

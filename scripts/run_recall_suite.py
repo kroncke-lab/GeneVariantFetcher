@@ -126,6 +126,7 @@ def find_latest_db(gene: str, results_dir: Path) -> Path | None:
 def _maybe_adjudication_overlay(
     gene: str,
     live_db: Path | None = None,
+    tier: str = "cardiac",
 ) -> dict[Any, Any]:
     """Load a freshly synced DB overlay, or the legacy opt-in CSV fallback.
 
@@ -136,11 +137,11 @@ def _maybe_adjudication_overlay(
     the file is absent.
     """
     if live_db is not None:
-        overlay = load_adjudication_overlay_db(live_db, gene)
+        overlay = load_adjudication_overlay_db(live_db, gene, tier=tier)
         if overlay:
             print(
                 f"[{gene}] applying live Azure adjudication overlay "
-                f"({len(overlay)} entries)"
+                f"({len(overlay)} entries; tier={tier})"
             )
         return overlay
     if os.environ.get("GVF_APPLY_ADJUDICATIONS", "").strip().lower() not in {
@@ -166,6 +167,7 @@ def run_gene_compare(
     variant_match_mode: str = "fuzzy",
     fuzzy_threshold: float = 0.80,
     adjudication_db: Path | None = None,
+    adjudication_tier: str = "cardiac",
 ) -> dict[str, Any]:
     """Compare one gene's normalized gold input against one extraction DB."""
     gene_outdir = outdir / gene
@@ -188,7 +190,7 @@ def run_gene_compare(
     )
     rows = apply_adjudication_overlay(
         rows,
-        _maybe_adjudication_overlay(gene, adjudication_db),
+        _maybe_adjudication_overlay(gene, adjudication_db, adjudication_tier),
     )
     summary = generate_outputs(rows, gene_outdir, gold_path, db_path)
     return {
@@ -759,6 +761,7 @@ def build_gene_results(
     variant_match_mode: str,
     fuzzy_threshold: float,
     adjudication_db: Path | None = None,
+    adjudication_tier: str = "cardiac",
 ) -> list[dict[str, Any]]:
     gene_results: list[dict[str, Any]] = []
     manifest_genes = manifest.get("genes") or {}
@@ -805,6 +808,7 @@ def build_gene_results(
                     variant_match_mode=variant_match_mode,
                     fuzzy_threshold=fuzzy_threshold,
                     adjudication_db=adjudication_db,
+                    adjudication_tier=adjudication_tier,
                 )
             )
         except Exception as exc:  # noqa: BLE001
@@ -892,6 +896,15 @@ def main() -> int:
         help="Local SQLite cache populated by the live sync (default: %(default)s).",
     )
     parser.add_argument(
+        "--review-gold-tier",
+        default="cardiac",
+        help=(
+            "Named gold tier used for gene selection and adjudication overlays. "
+            "Built-ins: cardiac, all, noncardiac; custom tiers live in the cache "
+            "(default: %(default)s)."
+        ),
+    )
+    parser.add_argument(
         "--review-gold-timeout",
         type=int,
         default=30,
@@ -957,6 +970,13 @@ def main() -> int:
                         "record_count": state["record_count"],
                         "generated_at": state["generated_at"],
                         "cache_db": state["cache_db"],
+                        "tier_counts": state["tier_counts"],
+                        "excluded_record_count": state["excluded_count"],
+                        "changes": {
+                            "added": state["added_count"],
+                            "updated": state["updated_count"],
+                            "removed": state["removed_count"],
+                        },
                     }
                 )
         elif args.review_gold_sync == "required":
@@ -970,9 +990,34 @@ def main() -> int:
     manifest = load_manifest(gold_dir)
     genes = selected_genes(parse_gene_list(args.genes), gold_inputs, manifest)
 
+    from scripts.ingest_review_adjudications import (  # noqa: PLC0415
+        GoldSyncError,
+        _tier_includes_gene,
+        read_gold_tier_definition,
+    )
+
+    review_gold_db_path = args.review_gold_db.expanduser()
+    try:
+        tier_definition = read_gold_tier_definition(
+            review_gold_db_path if review_gold_db_path.exists() else None,
+            args.review_gold_tier,
+        )
+        genes_before_tier = list(genes)
+        genes = [gene for gene in genes if _tier_includes_gene(tier_definition, gene)]
+    except GoldSyncError as exc:
+        parser.error(str(exc))
+    review_gold_sync.update(
+        {
+            "tier": tier_definition["name"],
+            "tier_description": tier_definition["description"],
+            "genes_excluded_by_tier": sorted(set(genes_before_tier) - set(genes)),
+        }
+    )
+
     if not genes:
         parser.error(
-            f"No genes discovered. Expected CSVs under {gold_dir / 'normalized'}"
+            f"No genes remain in review-gold tier {tier_definition['name']!r}. "
+            f"Expected matching CSVs under {gold_dir / 'normalized'}"
         )
 
     gene_results = build_gene_results(
@@ -985,6 +1030,7 @@ def main() -> int:
         variant_match_mode=args.variant_match_mode,
         fuzzy_threshold=args.fuzzy_threshold,
         adjudication_db=adjudication_db,
+        adjudication_tier=tier_definition["name"],
     )
     scored = [item for item in gene_results if item.get("status") == "scored"]
     aggregate_recall = combine_recall(scored)

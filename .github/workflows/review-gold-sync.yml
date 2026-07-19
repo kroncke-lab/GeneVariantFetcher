@@ -31,3 +31,5 @@ jobs:
             --no-db \
             --cache-db "$RUNNER_TEMP/review_gold.sqlite3" \
             --out-dir "$RUNNER_TEMP/review_gold"
+          python scripts/manage_review_gold.py \
+            --db "$RUNNER_TEMP/review_gold.sqlite3" summary
