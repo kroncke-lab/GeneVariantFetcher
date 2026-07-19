@@ -3355,19 +3355,13 @@ class ExpertExtractor(BaseLLMCaller):
         active_table_label = ""
         active_header_line = ""
         normalized_active_headers = []
-        active_row_gene_scope: set[str] = set()
         active_row_gene_cell = ""
         previous_table_data_line = ""
-        recognized_row_genes = {
-            str(value).strip().upper()
-            for value in known_gene_aliases(include_query_aliases=True)
-            if str(value).strip()
-        }
-        recognized_row_genes.add(gene_symbol.upper())
 
         from pipeline.table_router import (
             _cell_mentions_target_gene,
             _gene_symbol_tokens,
+            _infer_unnamed_gene_column,
             _is_non_variant_count_header,
             _normalize_header,
             _split_pipe_row,
@@ -3470,7 +3464,6 @@ class ExpertExtractor(BaseLLMCaller):
                         _normalize_header(header) for header in active_headers
                     ]
                     table_row_ordinal = 0
-                    active_row_gene_scope = set()
                     active_row_gene_cell = ""
                     previous_table_data_line = ""
                     for idx, name in enumerate(parts):
@@ -3502,6 +3495,23 @@ class ExpertExtractor(BaseLLMCaller):
                             header_mapping["affected"] = idx
                             header_multi["affected"].append(idx)
 
+                    if "gene" not in header_mapping:
+                        table_data_lines: list[str] = []
+                        for candidate in lines[line_number:]:
+                            candidate_stripped = candidate.strip()
+                            if not candidate_stripped.startswith("|"):
+                                break
+                            if set(candidate_stripped) <= {"|", "-", " ", ":"}:
+                                continue
+                            table_data_lines.append(candidate)
+                        inferred_gene_idx = _infer_unnamed_gene_column(
+                            parts,
+                            table_data_lines,
+                            target_gene=gene_symbol,
+                        )
+                        if inferred_gene_idx is not None:
+                            header_mapping["gene"] = inferred_gene_idx
+
                     table_started = True
                 continue
 
@@ -3517,7 +3527,6 @@ class ExpertExtractor(BaseLLMCaller):
                 row_level_clinical_table = False
                 active_table_label = ""
                 active_header_line = ""
-                active_row_gene_scope = set()
                 active_row_gene_cell = ""
                 previous_table_data_line = ""
                 update_table_label(stripped_line, line_number)
@@ -3594,13 +3603,10 @@ class ExpertExtractor(BaseLLMCaller):
             unaffected_raw = get_col("unaffected")
             row_subject_raw = get_col("row_subject")
 
-            # Gene-grouped PMC tables often use a rowspan-like gene cell: name
-            # the gene once, leave continuation rows blank, then name the next
-            # gene.  When a real Gene header exists, carry the raw cell forward
-            # and filter it without requiring the co-listed gene to be in our
-            # built-in metadata registry (PALB2/ATM/etc. must not inherit a
-            # preceding BRCA2 scope).  For an unnamed gene column, retain the
-            # conservative prefix inference used for PMID 18627636.
+            # Gene-grouped tables often use a rowspan-like gene cell: name the
+            # gene once, leave continuation rows blank, then name the next gene.
+            # Carry the raw cell forward and filter it without requiring either
+            # gene to exist in the built-in metadata registry.
             if header_mapping.get("gene") is not None:
                 explicit_gene_cell = (row_gene or "").strip()
                 if explicit_gene_cell:
@@ -3612,34 +3618,6 @@ class ExpertExtractor(BaseLLMCaller):
                     explicit_gene_cell
                     and not _cell_mentions_target_gene(explicit_gene_cell, gene_symbol)
                     and not (gene_tokens & _target_gene_tokens(gene_symbol))
-                ):
-                    continue
-            else:
-                notation_indices = [
-                    idx
-                    for idx in (
-                        header_mapping.get("cdna"),
-                        header_mapping.get("protein"),
-                    )
-                    if idx is not None
-                ]
-                prefix_end = min(notation_indices) if notation_indices else len(cells)
-                explicit_row_gene_scope: set[str] = set()
-                for value in cells[:prefix_end]:
-                    explicit_row_gene_scope.update(
-                        self._gene_scope_from_table_label(value or "")
-                    )
-                    explicit_row_gene_scope.update(
-                        token
-                        for token in _gene_symbol_tokens(value or "")
-                        if token in recognized_row_genes
-                    )
-                if explicit_row_gene_scope:
-                    active_row_gene_scope = explicit_row_gene_scope
-
-                if (
-                    active_row_gene_scope
-                    and gene_symbol.upper() not in active_row_gene_scope
                 ):
                     continue
 

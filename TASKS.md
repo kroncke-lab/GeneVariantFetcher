@@ -237,11 +237,12 @@ missed them** after the 1B parser land.
   - [ ] Resolve blocked supplement downloads for SCN5A `29325976` (`mmc1.docx`, Cloudflare/redirect blocked even after browser fallback in a 0-cookie session) and similar `missing_variant_supplement` PMIDs.
   - [ ] Resolve residual Wiley Cloudflare/TDM-403 and Springer content-gate failures from the 13-PMID SCN5A residual batch; current no-cookie run landed only `16643399` and `24667783`.
 - [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
-  - [x] PMID `18627636` / BRCA2 regression: preserve blank markdown cells,
-        scope unnamed BRCA1/BRCA2 row groups, reject family-history clinical
-        measures as carrier columns, dedupe cross-table restatements on the
-        deterministic large-table path, and feed compact table evidence to the
-        GPT-5.6 final check.
+  - [x] General table-role validation: preserve positional blank cells, infer
+        unnamed open-vocabulary gene groups, reject clinical measures as carrier
+        columns, dedupe cross-table restatements on the deterministic path, and
+        feed compact header/neighbor-row evidence to the final check. PMID
+        `18627636` is retained only as one regression fixture for these process
+        invariants.
 - [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
 - [x] **Obtain Elsevier INSTTOKEN** (done 2026-05-21). Token issued by Elsevier Data Support (Jun Bautista) against the `@vanderbilt.edu`-registered API key labeled `GeneVariantFetcher`. Installed into `.env` with user-only file perms; sent only as `X-ELS-Insttoken` header by `harvesting/elsevier_api.py`. Unlock probe across KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 paywalled lists: 242/246 (98.4%) Elsevier candidates now return full text. Bodies saved into each run's `pmc_fulltext/` as `{PMID}_FULL_CONTEXT.md`. Details in `docs/RECALL_STATUS.md`.
 - [x] **Re-extract KCNH2/KCNQ1/RYR2/SCN5A with consolidated insttoken full text** (done 2026-05-25). The 242 `_FULL_CONTEXT.md` insttoken bodies were consumed via `scripts/refresh_run_db.py` on the multigene suite, then graft-gated by the 2026-05-26 acceptance-gated source replay. Current scored state is in `docs/RECALL_STATUS.md`.

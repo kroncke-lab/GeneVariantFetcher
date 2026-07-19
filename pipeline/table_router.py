@@ -351,6 +351,40 @@ _CLINICAL_CONTEXT_KEYWORDS = (
     "score",
 )
 
+_FAMILY_HISTORY_CONTEXT_TOKENS = (
+    "infamily",
+    "familyhistory",
+    "familial",
+    "familymember",
+    "affectedrelative",
+    "relativewith",
+    "pedigreehistory",
+    "kindredhistory",
+)
+
+_CLINICAL_TIMING_TOKENS = (
+    "age",
+    "onset",
+    "diagnosis",
+    "duration",
+    "followup",
+)
+
+_CLINICAL_MEASURE_TOKENS = (
+    "age",
+    "case",
+    "cancer",
+    "diagnosis",
+    "duration",
+    "event",
+    "family",
+    "followup",
+    "month",
+    "onset",
+    "relative",
+    "year",
+)
+
 _UNAFFECTED_TEXT_RE = re.compile(
     r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
     re.IGNORECASE,
@@ -556,9 +590,9 @@ def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> 
     """Reject numeric columns that are visibly not per-variant carrier counts."""
     row_identifier = _is_row_identifier_header(header)
     # ``Family (No.)`` is usually an identifier, but mutation-list tables can
-    # also use it as a family count while a separate leading ``No.`` column is
-    # the actual row identifier (PMID 18627636 Table 2).  The parallel serial
-    # column disambiguates that shape; retain the explicit ``family_count`` role.
+    # also use it as a family count when a separate serial-number column is the
+    # actual row identifier.  Resolve that role from the table schema rather
+    # than from any paper, gene, or caption identity.
     if (
         row_identifier
         and header in {"familyno", "familynumber"}
@@ -568,46 +602,27 @@ def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> 
         )
     ):
         row_identifier = False
-    # Family-history / clinical-characteristics tables often put a mutation next
-    # to several numeric phenotype summaries, for example ``age at diagnosis``,
-    # ``cancers in family``, and ``cases diagnosed <= 50``.  A fuzzy ``cases``
-    # match must not turn those family-history values into variant carriers.
+    # Clinical-characteristics tables often put a mutation next to numeric
+    # phenotype summaries such as age at diagnosis, affected relatives, and
+    # early-onset events.  A fuzzy ``cases`` match must not turn those measures
+    # into variant carriers.
     # Require the table-level combination here rather than blacklisting every
     # ``cases`` column: ordinary per-variant case tables remain valid.
-    family_history_table = any(
-        any(
-            token in candidate
-            for token in (
-                "infamily",
-                "familyhistory",
-                "familycancer",
-                "familialcancer",
-                "affectedrelatives",
-            )
-        )
+    clinical_characteristics_table = any(
+        any(token in candidate for token in _FAMILY_HISTORY_CONTEXT_TOKENS)
         for candidate in normalized_headers
     ) and any(
-        any(
-            token in candidate
-            for token in ("ageofdiagnosis", "ageatdiagnosis", "meanage")
-        )
+        any(token in candidate for token in _CLINICAL_TIMING_TOKENS)
         for candidate in normalized_headers
     )
-    family_history_measure = family_history_table and any(
-        token in header
-        for token in (
-            "case",
-            "cancer",
-            "family",
-            "relative",
-            "age",
-        )
+    clinical_measure = clinical_characteristics_table and any(
+        token in header for token in _CLINICAL_MEASURE_TOKENS
     )
     return (
         row_identifier
         or _is_population_frequency_header(header)
         or _is_denominator_header_when_carrier_present(header, normalized_headers)
-        or family_history_measure
+        or clinical_measure
     )
 
 
@@ -657,6 +672,7 @@ def _infer_column_mapping_from_headers(
     table: MarkdownTable,
     *,
     strict_cohort_labels: bool = False,
+    target_gene: Optional[str] = None,
 ) -> Optional[Dict[str, int]]:
     """Infer a table mapping without an LLM when headers/data are unambiguous."""
     mapping: Dict[str, int] = {}
@@ -744,25 +760,17 @@ def _infer_column_mapping_from_headers(
             if _looks_numeric_column(values):
                 mapping["patient_count"] = idx
 
-    # PMC tables sometimes leave the gene-group header cell blank and put
-    # ``BRCA1`` / ``BRCA2`` only in the first row of each rowspan-like group.
-    # Recover that unnamed gene column so parse_routed_table can forward-fill it
-    # and keep off-target rows out of a target-gene extraction.
+    # Converters can erase the header of a rowspan-like gene column. Recover it
+    # from column structure so parse_routed_table can forward-fill groups and
+    # keep off-target rows out of any target-gene extraction.
     if "gene" not in mapping:
-        known_genes = {
-            str(gene).strip().upper()
-            for gene in known_gene_aliases(include_query_aliases=True)
-            if str(gene).strip()
-        }
-        for idx, header in enumerate(normalized_headers):
-            if header:
-                continue
-            observed = set()
-            for value in _column_values(table, idx):
-                observed.update(_gene_symbol_tokens(value))
-            if observed & known_genes:
-                mapping["gene"] = idx
-                break
+        inferred_gene_idx = _infer_unnamed_gene_column(
+            table.header_cells,
+            table.data_lines,
+            target_gene=target_gene,
+        )
+        if inferred_gene_idx is not None:
+            mapping["gene"] = inferred_gene_idx
 
     # If a notation column has a generic "mutation/variant" header, data decides
     # whether it is cDNA or protein. Prefer explicit cDNA/protein when present.
@@ -1233,6 +1241,56 @@ def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
     return out
 
 
+def _infer_unnamed_gene_column(
+    header_cells: List[str],
+    data_lines: List[str],
+    *,
+    target_gene: Optional[str] = None,
+) -> Optional[int]:
+    """Infer a blank-header gene column from table structure.
+
+    Known symbols and aliases remain strong evidence, but are not required.
+    Two distinct cells that consist solely of gene-looking tokens are enough to
+    identify an open-vocabulary multi-gene grouping column.  Requiring a blank
+    header plus repeated token-only cells avoids treating prose, phenotype, or
+    family-ID columns as genes while allowing previously unseen panel genes.
+    """
+    recognized_genes = {
+        str(gene).strip().upper()
+        for gene in known_gene_aliases(include_query_aliases=True)
+        if str(gene).strip()
+    }
+    if target_gene:
+        recognized_genes.update(_target_gene_tokens(target_gene))
+
+    for idx, header in enumerate(header_cells):
+        if _normalize_header(header):
+            continue
+
+        observed_tokens: set[str] = set()
+        token_only_values: set[str] = set()
+        saw_blank_continuation = False
+        for row in data_lines:
+            cells = _split_pipe_row(row)
+            if idx >= len(cells):
+                continue
+            value = cells[idx].strip()
+            if not value:
+                saw_blank_continuation = True
+                continue
+            tokens = _gene_symbol_tokens(value)
+            observed_tokens.update(tokens)
+            cleaned = re.sub(r"[*_`\\]", "", value).strip().upper()
+            if len(tokens) == 1 and cleaned in tokens:
+                token_only_values.update(tokens)
+
+        if observed_tokens & recognized_genes or (
+            saw_blank_continuation and len(token_only_values) >= 2
+        ):
+            return idx
+    return None
+
+
 def _row_has_off_target_gene_without_target(cells: List[str], gene_symbol: str) -> bool:
     """Detect rows with an explicit non-target gene token but no target token.
 
@@ -1287,7 +1345,9 @@ def route_tables(
     strict_cohort_labels = _strict_cohort_labels_enabled()
     for table in tables:
         mapping = _infer_column_mapping_from_headers(
-            table, strict_cohort_labels=strict_cohort_labels
+            table,
+            strict_cohort_labels=strict_cohort_labels,
+            target_gene=gene_symbol,
         )
         if mapping:
             deterministic.append(
