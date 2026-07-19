@@ -9,9 +9,9 @@ GeneVariantFetcher round-trips with the sibling **Variant_Browser** curation app
    standard as a durable correction overlay.
 
 Both endpoints are **owned by Variant_Browser** (`scripts/gvf_publish.sh` and
-the lead inbox / `manage.py export_gold_standard`). GVF only calls them — it does not duplicate the
-DB schema, Azure credentials, or the GVF→browser variant matching. Keep that
-contract: changes to the publish/match logic belong in Variant_Browser.
+the bearer-authenticated `/review/api/gold-standard/` read API). GVF calls the
+contract rather than querying Azure SQL tables directly, so the browser remains
+responsible for excluding raw, stale, disputed, withheld, and archived calls.
 
 ```
   GVF run (<GENE>.db)                              Variant_Browser (Azure vb-curation)
@@ -24,9 +24,9 @@ contract: changes to the publish/match logic belong in Variant_Browser.
         │                                                       │   collaborators adjudicate
         │                                                       │        │
         │  ingest_review_adjudications.py                       │
-        │  ◀── approved gold-standard CSV ──────────────────────┤
+        │  ◀── authenticated JSON from live Azure DB ───────────┤
         ▼                                                       │
-  gene_variant_fetcher_gold_standard/adjudications/   (correction overlay + follow-up queue)
+  review_gold.sqlite3   (approved gold + correction overlay + sync audit)
 ```
 
 ---
@@ -103,25 +103,28 @@ variables consumed by the browser repo.
 
 ---
 
-## 2. Ingest adjudications (review → gold standard)
+## 2. Sync adjudications (live Azure review DB → GVF gold DB)
 
-Export the lead-approved gold calls from Variant_Browser, then fold them into
-GVF's gold standard as a correction overlay. Never use the multi-reviewer
-`export_adjudications` audit file here: it may contain competing calls for the
-same subject and is deliberately rejected by the ingester.
+The normal path pulls the complete current lead-approved dataset directly from
+the live Azure-backed review database. There is no browser download and no CSV
+transport:
 
 ```bash
-# 1. Download from /review/adjudications/ → GVF metrics handoff, or use the CLI:
-cd ~/GitRepos/Variant_Browser
-set -a && source .env && set +a
-python manage.py export_gold_standard [--gene KCNH2] \
-  --out gold_standard.csv --mark-exported
-
-# 2. Ingest into GVF's gold standard.
-cd ~/GitRepos/GeneVariantFetcher
+export GVF_REVIEW_GOLD_TOKEN='<machine credential>'
 python scripts/ingest_review_adjudications.py \
-  --export-csv ~/GitRepos/Variant_Browser/gold_standard.csv
+  --source-url https://variantbrowser.org/review/api/gold-standard/
 ```
+
+The token lives in the Variant Browser App Service setting and the GVF GitHub
+Actions secret named `GVF_REVIEW_GOLD_TOKEN`; never put it in a URL, log, or
+tracked file. The endpoint is HTTPS-only, read-only, `Cache-Control: no-store`,
+and uses a SHA-256 dataset revision that GVF independently recomputes before
+committing the cache. Redirects are rejected so the bearer token cannot be
+forwarded to another host.
+
+For offline recovery only, `--export-csv` still accepts a lead-approved
+`export_gold_standard` file. Raw multi-reviewer `export_adjudications` files and
+disputed/withheld rows fail closed on both paths.
 
 ### The round-trip key
 
@@ -150,16 +153,17 @@ when no DB is found for a gene, the overlay still records the adjudication with
 
 ### Outputs
 
-Written under `gene_variant_fetcher_gold_standard/adjudications/` (override with
-`--out-dir`). Idempotent — re-running replaces every gene present in the export:
+The live path atomically replaces
+`gene_variant_fetcher_gold_standard/adjudications/review_gold.sqlite3`:
 
-- `<GENE>_review_adjudications.csv` — the **correction overlay**. One row per
-  lead-approved gold call, keyed by `(gene, source_notation, pmid)`. It keeps **both** the
-  pipeline's extracted counts (`extracted_carriers/affected/unaffected`, captured
-  from the run DB) **and** the adjudicated corrections (`corrected_*`), so recall /
-  precision / MAE / RMSE (RMSD) can be recomputed without mutating raw extracted rows.
-  The browser `record_key`, gold revision/status, source-reviewer account, and
-  approving-lead account are retained for audit.
+- `review_gold_records` — exact accepted Azure records, including browser
+  `record_key`, revision/status, source-reviewer account, approving-lead account,
+  and the full contract payload.
+- `review_gold_overlays` — the resolved correction overlay keyed by
+  `(gene, source_notation, pmid)`, with extracted and corrected counts side by
+  side for recall, precision, MAE, and RMSE/RMSD.
+- `review_gold_sync_state` — source URL, schema version, dataset checksum,
+  record count, Azure generation time, and local sync time.
 - `review_followup_queue.csv` — everything needing a human: `missing`/`other`,
   plus any actionable verdict whose round-trip key didn't resolve to an extracted
   row (`unmatched`) or that had no DB to verify against (`no_db`).
@@ -167,24 +171,34 @@ Written under `gene_variant_fetcher_gold_standard/adjudications/` (override with
   plus net adjudicated count deltas (`net_affected_delta`, `net_unaffected_delta`)
   for matched `count_override` rows.
 
-### Correction overlay, not mutation
+### Scoring and freshness
 
 Approved gold calls are a **correction overlay**: the extracted value and the adjudicated
 value are kept side by side. Nothing rewrites the raw extraction JSON or the run DB.
 
-> **Note:** the recall scorer now consumes this overlay **opt-in** — pass
-> `--adjudication-overlay PATH` (`cli/compare_variants.py`) or set
-> `GVF_APPLY_ADJUDICATIONS=1` (`scripts/run_recall_suite.py`); it is off by default
-> so baseline scoring is unchanged. The older hand-curated `gold_v2_*` columns are
-> still not consumed. Making overlay consumption the *default* is the remaining step.
+`scripts/run_recall_suite.py` defaults to `--review-gold-sync auto`: when
+`GVF_REVIEW_GOLD_TOKEN` is configured it pulls a fresh snapshot before scoring
+and reads the SQLite overlay directly. For release/headline measurements use:
+
+```bash
+python scripts/run_recall_suite.py --review-gold-sync required --score
+```
+
+`required` fails before scoring if authentication, network access, schema,
+status gating, record count, or checksum validation fails. It never falls back
+to a stale cache. `off` gives an explicit unadjudicated baseline.
+
+The scheduled **Azure review gold sync** GitHub Action exercises the live
+contract daily and on demand. Its ephemeral smoke cache is not a replacement
+for the local canonical run DBs; the required sync immediately before a metric
+run is the freshness guarantee.
 
 The ingester verifies that the file contains gold approval metadata and only
 accepted `gold_standard`/legacy `adjudicated` statuses. `disputed` and `withheld`
 audit rows fail closed so they cannot silently alter evaluation metrics.
 
-This is the live, export-driven cousin of the older hand-curated `gold_v2_*`
-overlay columns in `normalized/<GENE>_recall_input.csv` (which were populated by a
-one-off manual probe, since retired).
+Approved gold remains a correction overlay: raw extraction JSON and run DB rows
+are not rewritten. This keeps model output and human truth separately auditable.
 
 ---
 
@@ -194,10 +208,12 @@ one-off manual probe, since retired).
 |------|------|
 | `cli/gvf_run.py` (`step_publish_review`) | The opt-in publish step. |
 | `cli/__init__.py` (`gvf-run --publish-review`) | CLI flags. |
-| `scripts/ingest_review_adjudications.py` | The adjudication ingest. |
-| `gene_variant_fetcher_gold_standard/adjudications/` | Correction overlay + queue + summary. |
+| `scripts/ingest_review_adjudications.py` | Authenticated pull, validation, matching, and atomic cache sync. |
+| `scripts/run_recall_suite.py` | Fresh-sync gate and live overlay consumer. |
+| `gene_variant_fetcher_gold_standard/adjudications/review_gold.sqlite3` | Local gold DB + correction overlay + sync audit. |
+| `.github/workflows/review-gold-sync.yml` | Daily/on-demand live contract smoke. |
 | `Variant_Browser/scripts/gvf_publish.sh` | Publish endpoint (owned by the browser). |
-| `Variant_Browser/review/gold_export.py` | Shared lead-approved export contract (owned by the browser). |
+| `Variant_Browser/review/api.py` (`live_gold_standard`) | Machine-authenticated Azure read contract. |
 
 ## Coverage
 

@@ -81,6 +81,11 @@ human-curated, manually derived gold standard. Other genes (APOE, BRCA1, BRCA2,
 MYBPC3) are review targets scored against curator/derived `gold_overrides`, not
 counted in headline metrics. See `docs/RECALL_STATUS.md` for the scope rule.
 
+Lead-approved Variant_Browser adjudications are pulled directly from its live
+Azure review database into GVF's `review_gold.sqlite3` cache. Release scoring
+uses `scripts/run_recall_suite.py --review-gold-sync required`; see
+[`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md).
+
 For fast regression checks while changing prompts, extraction logic, guardrails,
 or matching, use
 [`benchmarks/curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md).

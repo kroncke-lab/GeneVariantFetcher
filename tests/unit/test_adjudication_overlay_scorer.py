@@ -7,6 +7,8 @@ before recall/MAE/precision are computed.
 """
 
 import csv
+import json
+import sqlite3
 
 from cli.compare_variants import (
     ComparisonRow,
@@ -15,6 +17,7 @@ from cli.compare_variants import (
     compute_recall_summary,
     compute_rows_mae,
     load_adjudication_overlay,
+    load_adjudication_overlay_db,
 )
 
 
@@ -176,6 +179,39 @@ def test_load_overlay_round_trips_csv(tmp_path):
     overlay = load_adjudication_overlay(path)
     # Keyed on (pmid, canonical variant) -- same canonicalization the scorer
     # applies to DB rows, so a loaded overlay lines up with real ComparisonRows.
+    assert len(overlay) == 1
+    (key,) = overlay
+    assert key[0] == "1"
+    assert overlay[key]["action"] == "count_override"
+
+
+def test_load_overlay_round_trips_live_gold_database(tmp_path):
+    path = tmp_path / "review_gold.sqlite3"
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(
+            "CREATE TABLE review_gold_overlays ("
+            "record_key TEXT PRIMARY KEY, gene TEXT, pmid TEXT, "
+            "source_notation TEXT, payload_json TEXT)"
+        )
+        row = {
+            "record_key": "key-1",
+            "gene": "KCNQ1",
+            "pmid": "1",
+            "source_notation": "p.Val1Met",
+            "verdict": "correct_counts",
+            "action": "count_override",
+        }
+        conn.execute(
+            "INSERT INTO review_gold_overlays VALUES (?, ?, ?, ?, ?)",
+            ("key-1", "KCNQ1", "1", "p.Val1Met", json.dumps(row)),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    overlay = load_adjudication_overlay_db(path, "KCNQ1")
+
     assert len(overlay) == 1
     (key,) = overlay
     assert key[0] == "1"

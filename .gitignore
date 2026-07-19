@@ -78,6 +78,10 @@ results_*/
 *.log
 pipeline.log
 *.db
+gene_variant_fetcher_gold_standard/adjudications/*.sqlite3
+gene_variant_fetcher_gold_standard/adjudications/*_review_adjudications.csv
+gene_variant_fetcher_gold_standard/adjudications/review_followup_queue.csv
+gene_variant_fetcher_gold_standard/adjudications/review_adjudications_summary.json
 
 # Git filter-branch artifacts
 .git-rewrite/

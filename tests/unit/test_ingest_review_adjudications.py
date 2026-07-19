@@ -10,7 +10,10 @@ and the no-DB path.
 """
 
 import csv
+import hashlib
+import io
 import json
+import sqlite3
 import sys
 
 import pytest
@@ -266,3 +269,138 @@ def test_disputed_gold_audit_export_is_rejected(tmp_path):
 
     with pytest.raises(SystemExit, match="non-accepted status"):
         ingest._read_export(path)
+
+
+class _FakeResponse(io.BytesIO):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
+
+class _FakeOpener:
+    def __init__(self, payload):
+        self.payload = payload
+        self.request = None
+
+    def open(self, request, timeout):
+        self.request = request
+        return _FakeResponse(json.dumps(self.payload).encode())
+
+
+def _live_payload(rows):
+    canonical = json.dumps(
+        rows,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode()
+    return {
+        "ok": True,
+        "schema_version": 1,
+        "source": "variant_browser_azure_review",
+        "generated_at": "2026-07-19T20:00:00+00:00",
+        "dataset_revision": hashlib.sha256(canonical).hexdigest(),
+        "columns": list(rows[0]) if rows else sorted(ingest.GOLD_EXPORT_MARKERS),
+        "record_count": len(rows),
+        "records": rows,
+    }
+
+
+def test_live_sync_populates_atomic_sqlite_cache_with_identity_audit(tmp_path):
+    source_rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    payload = _live_payload(source_rows)
+    opener = _FakeOpener(payload)
+    cache_db = tmp_path / "review_gold.sqlite3"
+    out_dir = tmp_path / "live_out"
+
+    state = ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=opener,
+        announce=False,
+    )
+
+    assert state["record_count"] == len(EXPORT_ROWS)
+    assert state["dataset_revision"] == payload["dataset_revision"]
+    assert opener.request.get_header("Authorization").startswith("Bearer ")
+    conn = sqlite3.connect(cache_db)
+    try:
+        gold = conn.execute(
+            "SELECT record_key, source_reviewer_user_id, decided_by_user_id "
+            "FROM review_gold_records ORDER BY record_key"
+        ).fetchall()
+        overlays = conn.execute("SELECT COUNT(*) FROM review_gold_overlays").fetchone()[
+            0
+        ]
+        sync_state = conn.execute(
+            "SELECT dataset_revision, record_count FROM review_gold_sync_state"
+        ).fetchone()
+    finally:
+        conn.close()
+    assert gold[0] == ("gold-record-0", "account-0", "lead-account")
+    assert overlays == len(EXPORT_ROWS)
+    assert sync_state == (payload["dataset_revision"], len(EXPORT_ROWS))
+
+    # A second complete snapshot replaces rather than duplicates the cache.
+    ingest.sync_live_gold(
+        source_url="https://variantbrowser.org/review/api/gold-standard/",
+        token="secret-token-" * 4,
+        cache_db=cache_db,
+        out_dir=out_dir,
+        no_db=True,
+        opener=_FakeOpener(payload),
+        announce=False,
+    )
+    conn = sqlite3.connect(cache_db)
+    try:
+        assert conn.execute("SELECT COUNT(*) FROM review_gold_records").fetchone()[
+            0
+        ] == len(EXPORT_ROWS)
+    finally:
+        conn.close()
+
+
+def test_live_sync_rejects_disputed_or_checksum_tampered_payload(tmp_path):
+    source_rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    disputed = [dict(row) for row in source_rows]
+    disputed[0]["status"] = "disputed"
+    with pytest.raises(ingest.GoldSyncError, match="non-accepted status"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/",
+            "secret-token-" * 4,
+            opener=_FakeOpener(_live_payload(disputed)),
+        )
+
+    tampered = _live_payload(source_rows)
+    tampered["dataset_revision"] = "0" * 64
+    with pytest.raises(ingest.GoldSyncError, match="checksum"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/",
+            "secret-token-" * 4,
+            opener=_FakeOpener(tampered),
+        )
+
+    missing_identity = [dict(row) for row in source_rows]
+    missing_identity[0]["decided_by_user_id"] = ""
+    with pytest.raises(ingest.GoldSyncError, match="approving lead"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/",
+            "secret-token-" * 4,
+            opener=_FakeOpener(_live_payload(missing_identity)),
+        )
+
+
+def test_live_sync_requires_https_and_never_accepts_short_token():
+    with pytest.raises(ingest.GoldSyncError, match="HTTPS"):
+        ingest.fetch_live_gold(
+            "http://variantbrowser.org/review/api/gold-standard/", "x" * 64
+        )
+    with pytest.raises(ingest.GoldSyncError, match="too short"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/", "short"
+        )

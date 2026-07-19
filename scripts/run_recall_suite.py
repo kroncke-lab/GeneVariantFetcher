@@ -28,6 +28,7 @@ from cli.compare_variants import (  # noqa: E402
     generate_outputs,
     introspect_sqlite,
     load_adjudication_overlay,
+    load_adjudication_overlay_db,
     load_excel_data,
 )
 from scripts.recall_audit.common import write_csv_rows  # noqa: E402
@@ -44,6 +45,8 @@ DEFAULT_RESULTS_DIR = BASE_DIR / "results"
 METRICS_DIR = BASE_DIR / "recall_metrics"
 HISTORY_FILE = METRICS_DIR / "history.jsonl"
 TARGET_RECALL = 0.90
+DEFAULT_REVIEW_GOLD_URL = "https://variantbrowser.org/review/api/gold-standard/"
+DEFAULT_REVIEW_GOLD_DB = DEFAULT_GOLD_DIR / "adjudications" / "review_gold.sqlite3"
 
 RECALL_METRICS = (
     "pmids",
@@ -120,15 +123,26 @@ def find_latest_db(gene: str, results_dir: Path) -> Path | None:
     return max(candidates, key=_db_sort_key)
 
 
-def _maybe_adjudication_overlay(gene: str) -> dict[Any, Any]:
-    """Load the gene's adjudication overlay when opted in via env.
+def _maybe_adjudication_overlay(
+    gene: str,
+    live_db: Path | None = None,
+) -> dict[Any, Any]:
+    """Load a freshly synced DB overlay, or the legacy opt-in CSV fallback.
 
-    Opt-in only (``GVF_APPLY_ADJUDICATIONS=1``) so the default nightly score is
-    unchanged. Overlay dir defaults to
+    The live database is passed only after a successful sync. The older
+    ``GVF_APPLY_ADJUDICATIONS=1`` fallback remains opt-in and defaults to
     ``gene_variant_fetcher_gold_standard/adjudications`` and is overridable with
     ``GVF_ADJUDICATIONS_DIR``. Returns an empty map (a no-op) when disabled or
     the file is absent.
     """
+    if live_db is not None:
+        overlay = load_adjudication_overlay_db(live_db, gene)
+        if overlay:
+            print(
+                f"[{gene}] applying live Azure adjudication overlay "
+                f"({len(overlay)} entries)"
+            )
+        return overlay
     if os.environ.get("GVF_APPLY_ADJUDICATIONS", "").strip().lower() not in {
         "1",
         "true",
@@ -151,6 +165,7 @@ def run_gene_compare(
     outdir: Path,
     variant_match_mode: str = "fuzzy",
     fuzzy_threshold: float = 0.80,
+    adjudication_db: Path | None = None,
 ) -> dict[str, Any]:
     """Compare one gene's normalized gold input against one extraction DB."""
     gene_outdir = outdir / gene
@@ -171,7 +186,10 @@ def run_gene_compare(
         variant_match_mode,
         fuzzy_threshold,
     )
-    rows = apply_adjudication_overlay(rows, _maybe_adjudication_overlay(gene))
+    rows = apply_adjudication_overlay(
+        rows,
+        _maybe_adjudication_overlay(gene, adjudication_db),
+    )
     summary = generate_outputs(rows, gene_outdir, gold_path, db_path)
     return {
         "gene": gene,
@@ -472,6 +490,7 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
         "",
         f"- Generated: `{summary['generated_at_utc']}`",
         f"- Target recall: `{summary['target_recall']:.0%}`",
+        f"- Review gold sync: `{(summary.get('review_gold_sync') or {}).get('status', 'not_recorded')}`",
         "",
         "## Aggregate Recall",
         "",
@@ -622,6 +641,17 @@ def print_scorecard(summary: dict[str, Any]) -> None:
     print("GVF MULTI-GENE RECALL")
     print(f"Generated: {summary['generated_at_utc']}")
     print(f"Target: {summary['target_recall']:.0%}")
+    review_sync = summary.get("review_gold_sync") or {}
+    print(
+        "Review gold: "
+        f"{review_sync.get('status', 'not_recorded')}"
+        + (
+            f" ({review_sync.get('record_count')} records, "
+            f"revision {str(review_sync.get('dataset_revision') or '')[:12]})"
+            if review_sync.get("status") == "synced"
+            else ""
+        )
+    )
     print()
     print("Aggregate")
     for name, metric in summary.get("aggregate_recall", {}).items():
@@ -728,6 +758,7 @@ def build_gene_results(
     manifest: dict[str, Any],
     variant_match_mode: str,
     fuzzy_threshold: float,
+    adjudication_db: Path | None = None,
 ) -> list[dict[str, Any]]:
     gene_results: list[dict[str, Any]] = []
     manifest_genes = manifest.get("genes") or {}
@@ -773,6 +804,7 @@ def build_gene_results(
                     outdir=outdir,
                     variant_match_mode=variant_match_mode,
                     fuzzy_threshold=fuzzy_threshold,
+                    adjudication_db=adjudication_db,
                 )
             )
         except Exception as exc:  # noqa: BLE001
@@ -838,6 +870,33 @@ def main() -> int:
         help="Target recall used for gap calculations",
     )
     parser.add_argument("--score", action="store_true", help="Score only; skip pytest")
+    parser.add_argument(
+        "--review-gold-sync",
+        choices=["auto", "required", "off"],
+        default="auto",
+        help=(
+            "Pull current lead-approved adjudications from Azure before scoring. "
+            "auto syncs when GVF_REVIEW_GOLD_TOKEN is set; required fails closed "
+            "without a fresh sync; off disables the live source (default: %(default)s)."
+        ),
+    )
+    parser.add_argument(
+        "--review-gold-url",
+        default=os.environ.get("GVF_REVIEW_GOLD_URL", DEFAULT_REVIEW_GOLD_URL),
+        help="Variant Browser live-gold endpoint (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--review-gold-db",
+        type=Path,
+        default=DEFAULT_REVIEW_GOLD_DB,
+        help="Local SQLite cache populated by the live sync (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--review-gold-timeout",
+        type=int,
+        default=30,
+        help="Live gold request timeout in seconds (default: %(default)s).",
+    )
     parser.add_argument("--log", action="store_true", help="Append score to history")
     parser.add_argument("--notes", default="", help="Notes for --log")
     parser.add_argument(
@@ -861,6 +920,52 @@ def main() -> int:
     results_dir = args.results_dir.expanduser()
     outdir = args.outdir.expanduser()
 
+    review_gold_sync: dict[str, Any] = {"mode": args.review_gold_sync}
+    adjudication_db: Path | None = None
+    if args.review_gold_sync != "off":
+        token = os.environ.get("GVF_REVIEW_GOLD_TOKEN", "")
+        if token:
+            from scripts.ingest_review_adjudications import (
+                GoldSyncError,
+                sync_live_gold,
+            )
+
+            try:
+                state = sync_live_gold(
+                    source_url=args.review_gold_url,
+                    token=token,
+                    cache_db=args.review_gold_db.expanduser(),
+                    results_dir=results_dir,
+                    db_overrides=db_overrides,
+                    timeout_s=args.review_gold_timeout,
+                )
+            except GoldSyncError as exc:
+                review_gold_sync.update({"status": "failed", "error": str(exc)})
+                if args.review_gold_sync == "required":
+                    parser.error(f"required review-gold sync failed: {exc}")
+                logger.warning(
+                    "Live review-gold sync failed; adjudications will not be applied: %s",
+                    exc,
+                )
+            else:
+                adjudication_db = args.review_gold_db.expanduser()
+                review_gold_sync.update(
+                    {
+                        "status": "synced",
+                        "source_url": state["source_url"],
+                        "dataset_revision": state["dataset_revision"],
+                        "record_count": state["record_count"],
+                        "generated_at": state["generated_at"],
+                        "cache_db": state["cache_db"],
+                    }
+                )
+        elif args.review_gold_sync == "required":
+            parser.error("--review-gold-sync required needs GVF_REVIEW_GOLD_TOKEN")
+        else:
+            review_gold_sync["status"] = "skipped_no_token"
+    else:
+        review_gold_sync["status"] = "disabled"
+
     gold_inputs = discover_gold_inputs(gold_dir)
     manifest = load_manifest(gold_dir)
     genes = selected_genes(parse_gene_list(args.genes), gold_inputs, manifest)
@@ -879,6 +984,7 @@ def main() -> int:
         manifest=manifest,
         variant_match_mode=args.variant_match_mode,
         fuzzy_threshold=args.fuzzy_threshold,
+        adjudication_db=adjudication_db,
     )
     scored = [item for item in gene_results if item.get("status") == "scored"]
     aggregate_recall = combine_recall(scored)
@@ -893,6 +999,7 @@ def main() -> int:
         manifest=manifest,
         target=args.target,
     )
+    summary["review_gold_sync"] = review_gold_sync
     try:
         summary["disagreement_artifacts"] = write_disagreement_artifacts(
             outdir=outdir,
