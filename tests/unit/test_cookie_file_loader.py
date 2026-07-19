@@ -6,6 +6,10 @@ through an agent. A cookies.txt exported from inside Chrome is then the reliable
 source. These tests are pure filesystem — no browser_cookie3, no Keychain.
 """
 
+import sys
+
+import pytest
+
 from harvesting.browser_html.cookie_loader import (
     _cookies_from_file,
     load_chrome_cookies,
@@ -81,9 +85,21 @@ def test_file_cookies_are_recognized_as_ezproxy(tmp_path, monkeypatch):
 
 
 def test_missing_cookie_file_does_not_crash(tmp_path, monkeypatch):
+    # Match the base CI install, where the optional browser extra is absent. An
+    # explicit empty domain set is a no-op and must not import that dependency.
+    monkeypatch.setitem(sys.modules, "browser_cookie3", None)
     monkeypatch.setenv("GVF_COOKIE_FILE", str(tmp_path / "nope.txt"))
-    # Non-existent file: warn + fall back (returns a list, never raises here).
-    assert isinstance(load_chrome_cookies(domains=[]), list)
+    assert load_chrome_cookies(domains=[]) == []
+
+
+def test_missing_cookie_file_requires_browser_backend_for_real_fallback(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setitem(sys.modules, "browser_cookie3", None)
+    monkeypatch.setenv("GVF_COOKIE_FILE", str(tmp_path / "nope.txt"))
+
+    with pytest.raises(RuntimeError, match="browser_cookie3 is required"):
+        load_chrome_cookies(domains=["onlinelibrary.wiley.com"])
 
 
 def test_load_chrome_cookies_filters_unrelated_file_cookies(tmp_path, monkeypatch):

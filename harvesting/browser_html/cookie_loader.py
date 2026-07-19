@@ -324,6 +324,12 @@ def load_chrome_cookies(
                 "GVF_COOKIE_FILE=%s does not exist; falling back to Chrome cookies", p
             )
 
+    # An explicit empty domain set has nothing to load from Chrome. Return before
+    # importing the optional browser_cookie3 dependency so this no-op path stays
+    # usable in base/CI installs that intentionally omit the browser extra.
+    if not domains_iter:
+        return []
+
     try:
         import browser_cookie3 as bc
     except ImportError as e:
