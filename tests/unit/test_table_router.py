@@ -748,3 +748,51 @@ def test_parse_routed_table_rejects_population_occurrence_counts():
     mapping = {"gene": 0, "protein": 1, "patient_count": 2}
 
     assert parse_routed_table(table, mapping, "MYBPC3") == []
+
+
+def test_router_infers_blank_gene_group_and_ignores_family_history_case_counts():
+    """The routed path must make the same PMID 18627636 decision as the fast path."""
+    table = MarkdownTable(
+        table_id="T5",
+        caption="Table 5. Family and pathological characteristics",
+        header_line=(
+            "|  | Nucleotide change | AA change | Age of diagnosis | "
+            "No. of breast/ovarian cancers in family | Mean age diagnosis | "
+            "No. of cases (Breast cancer <= 50) |"
+        ),
+        header_cells=[
+            "",
+            "Nucleotide change",
+            "AA change",
+            "Age of diagnosis",
+            "No. of breast/ovarian cancers in family",
+            "Mean age diagnosis",
+            "No. of cases (Breast cancer <= 50)",
+        ],
+        data_lines=[
+            "| BRCA1 | 180 delA | STOP 22 | 55 | 2 | 43 | 1 |",
+            "|  | 185 delAG | STOP 39 | 33 | 1 | 33 | 1 |",
+            "| BRCA2 | 490 delCT | STOP 99 | 39 | 2 | 56 | 1 |",
+            "|  | 1184 insA | STOP 326 | 34 | 1 | 34 | 1 |",
+        ],
+        char_start=0,
+        char_end=400,
+    )
+
+    mapping = _infer_column_mapping_from_headers(table)
+
+    assert mapping is not None
+    assert mapping["gene"] == 0
+    assert mapping["patient_count"] == -1
+    assert "affected" not in mapping
+    variants = parse_routed_table(table, mapping, "BRCA2")
+    assert [v["cdna_notation"] for v in variants] == [
+        "c.490delCT",
+        "c.1184insA",
+    ]
+    assert all(v["patients"]["count"] == 1 for v in variants)
+    assert all(
+        v["count_provenance"]["carriers_column_label"]
+        == "implicit one carrier per clinical row"
+        for v in variants
+    )

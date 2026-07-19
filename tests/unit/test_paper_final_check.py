@@ -138,7 +138,7 @@ class _Stub:
 def test_check_version_is_stable_and_effort_sensitive():
     a = check_version("azure_ai/gpt-5.6-sol", "xhigh")
     assert a == check_version("azure_ai/gpt-5.6-sol", "xhigh")
-    assert a.startswith("pfc3-")
+    assert a.startswith("pfc4-")
     assert a != check_version("azure_ai/gpt-5.6-sol", "high")
     assert a != check_version("anthropic/claude-sonnet-5", "xhigh")
 
@@ -292,6 +292,69 @@ def test_gather_keeps_complete_index_beyond_sixty_rows(tmp_path):
     assert '"n": 65' in prompt
 
 
+def test_gather_prioritizes_targeted_table_evidence_beyond_fact_cap(tmp_path):
+    """A suspicious late row keeps its header/row evidence in the LLM payload."""
+    db = tmp_path / "t.db"
+    _seed(db, extra_facts_pmid111=63)
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        """
+        CREATE TABLE fact_provenance (
+            provenance_id INTEGER PRIMARY KEY,
+            variant_id INTEGER,
+            pmid TEXT,
+            fact_type TEXT,
+            fact_value TEXT,
+            source_table TEXT,
+            source_row TEXT,
+            source_column TEXT,
+            evidence_quote TEXT,
+            count_type TEXT,
+            source_layer TEXT
+        );
+        INSERT INTO penetrance_data VALUES (999,1,'111',43,43,0,0,NULL);
+        """
+    )
+    evidence = (
+        "Header: | Gene | Variant | Mean age diagnosis | No. of cases |\n"
+        "Target row: | BRCA1 | 180 delA | 43 | 1 |\n"
+        "Next row: |  | 185 delAG | 33 | 1 |"
+    )
+    conn.execute(
+        "INSERT INTO fact_provenance VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            1,
+            1,
+            "111",
+            "affected_count",
+            "43",
+            "Table 5",
+            "1",
+            "No. of cases",
+            evidence,
+            "per_variant_carrier",
+            "regex_table",
+        ),
+    )
+    conn.commit()
+
+    payload = next(
+        value
+        for value in gather_paper_payloads(conn, max_facts=60)
+        if value["pmid"] == "111"
+    )
+    conn.close()
+
+    late = next(
+        fact for fact in payload["facts"] if fact["counts"].get("affected") == 43
+    )
+    assert late["n"] == 66
+    assert late["table_evidence"][0]["source_table"] == "Table 5"
+    assert "Mean age diagnosis" in late["table_evidence"][0]["evidence_quote"]
+    assert len(payload["facts"]) == 60
+    assert len(payload["captured_fact_index"]) == 66
+
+
 def test_gather_names_structural_only_variant(tmp_path):
     db = tmp_path / "t.db"
     _seed(db)
@@ -377,7 +440,7 @@ def test_apply_records_and_is_idempotent(tmp_path):
     assert [r[0] for r in rows] == ["111", "222", "333"]
     assert all(r[1] == "flag" and r[2] == "m" and r[3] == "xhigh" for r in rows[:2])
     assert rows[2][1] == "skipped"
-    assert all(r[5] == "pfc3" for r in rows)
+    assert all(r[5] == "pfc4" for r in rows)
 
     # Re-run replaces (PRIMARY KEY on pmid), never duplicates.
     apply_paper_final_check(
@@ -884,7 +947,7 @@ def test_apply_source_grounded_writes_summary_and_missing(tmp_path):
         "SELECT quote_verified FROM paper_carrier_groups WHERE variant='p.Arg100Ter'"
     ).fetchone()[0]
     conn.close()
-    assert row == (1, "gaps", 1, "pfs5")
+    assert row == (1, "gaps", 1, "pfs6")
     assert groups["p.Arg100Ter"] == "reported_missing"
     assert groups["p.Val30Met"] == "reported_extracted"
     assert verified == 1
@@ -1009,12 +1072,12 @@ def test_apply_no_source_degrades_to_db_only(tmp_path):
         "SELECT source_grounded, prompt_version FROM paper_final_check WHERE pmid='111'"
     ).fetchone()
     conn.close()
-    assert row == (0, "pfc3")
+    assert row == (0, "pfc4")
 
 
 def test_summary_check_version_sensitive_to_budget():
     a = summary_check_version("m", "xhigh", 60000)
-    assert a.startswith("pfs5-")
+    assert a.startswith("pfs6-")
     assert a != summary_check_version("m", "xhigh", 40000)
     assert a != summary_check_version("m", "high", 60000)
 
