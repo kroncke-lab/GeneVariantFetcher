@@ -293,14 +293,18 @@ def _target_record_keys(
         )
     if not targets:
         raise GoldSyncError("Provide at least one --record-key or --gene.")
-    known = {
-        row[0]
-        for row in conn.execute(
-            "SELECT DISTINCT record_key FROM review_gold_snapshot_records "
-            f"WHERE record_key IN ({','.join('?' for _ in targets)})",
-            tuple(sorted(targets)),
+    known = set()
+    targets_list = sorted(targets)
+    for offset in range(0, len(targets_list), 500):
+        chunk = targets_list[offset : offset + 500]
+        known.update(
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT record_key FROM review_gold_snapshot_records "
+                f"WHERE record_key IN ({','.join('?' for _ in chunk)})",
+                tuple(chunk),
+            )
         )
-    }
     unknown = sorted(targets - known)
     if unknown:
         raise GoldSyncError(f"Unknown review-gold record key(s): {', '.join(unknown)}")

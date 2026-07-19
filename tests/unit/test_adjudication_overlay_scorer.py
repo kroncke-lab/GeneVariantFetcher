@@ -221,6 +221,7 @@ def test_load_overlay_round_trips_live_gold_database(tmp_path):
     assert key[0] == "1"
     assert overlay[key]["action"] == "count_override"
     assert load_adjudication_overlay_db(path, "KCNQ1", tier="noncardiac") == {}
+    assert load_adjudication_overlay_db(path, "KCNQ1", tier="unknown") == {}
 
     conn = sqlite3.connect(path)
     try:

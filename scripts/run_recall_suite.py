@@ -992,7 +992,7 @@ def main() -> int:
 
     from scripts.ingest_review_adjudications import (  # noqa: PLC0415
         GoldSyncError,
-        gold_tier_includes_gene,
+        _tier_includes_gene,
         read_gold_tier_definition,
     )
 
@@ -1003,15 +1003,7 @@ def main() -> int:
             args.review_gold_tier,
         )
         genes_before_tier = list(genes)
-        genes = [
-            gene
-            for gene in genes
-            if gold_tier_includes_gene(
-                review_gold_db_path if review_gold_db_path.exists() else None,
-                args.review_gold_tier,
-                gene,
-            )
-        ]
+        genes = [gene for gene in genes if _tier_includes_gene(tier_definition, gene)]
     except GoldSyncError as exc:
         parser.error(str(exc))
     review_gold_sync.update(

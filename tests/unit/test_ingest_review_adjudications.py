@@ -597,6 +597,35 @@ def test_exclusions_are_reversible_and_custom_tiers_are_audited(tmp_path):
         conn.close()
 
 
+def test_bulk_exclusion_target_lookup_chunks_sqlite_parameters(tmp_path):
+    cache_db = tmp_path / "review_gold.sqlite3"
+    conn = sqlite3.connect(cache_db)
+    try:
+        ingest.ensure_live_gold_schema(conn)
+        keys = [f"record-{index:04d}" for index in range(1200)]
+        conn.executemany(
+            """
+            INSERT INTO review_gold_snapshot_records (
+                dataset_revision, record_key, gene, pmid, source_notation,
+                status, revision, source_reviewer_user_id,
+                decided_by_user_id, payload_json
+            ) VALUES ('snapshot', ?, 'BRCA2', '', '', 'gold_standard', 1, 'r', 'l', '{}')
+            """,
+            [(key,) for key in keys],
+        )
+        conn.commit()
+        assert (
+            manage._target_record_keys(
+                conn,
+                record_keys=keys,
+                gene="",
+            )
+            == keys
+        )
+    finally:
+        conn.close()
+
+
 def test_live_sync_rejects_disputed_or_checksum_tampered_payload(tmp_path):
     source_rows = list(csv.DictReader(_write_export(tmp_path).open()))
     disputed = [dict(row) for row in source_rows]

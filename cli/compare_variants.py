@@ -2307,6 +2307,7 @@ def load_adjudication_overlay_db(
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """Load one tier's active overlay from the versioned live-gold database."""
     from scripts.ingest_review_adjudications import (
+        GoldSyncError,
         _variant_key,
         gold_tier_includes_gene,
     )
@@ -2314,7 +2315,10 @@ def load_adjudication_overlay_db(
     overlay: Dict[Tuple[str, str], Dict[str, Any]] = {}
     if path is None or not path.exists():
         return overlay
-    if not gold_tier_includes_gene(path, tier, gene):
+    try:
+        if not gold_tier_includes_gene(path, tier, gene):
+            return overlay
+    except (GoldSyncError, sqlite3.Error, json.JSONDecodeError):
         return overlay
     try:
         conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
