@@ -111,7 +111,8 @@ gvf extract KCNH2 --email brett.kroncke@gmail.com --output /path/to/results
 gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --publish-review
 ```
 
-To pull collaborator adjudications back into the gold standard, see
+To pull collaborator adjudications directly from the live Azure review database
+into GVF's local gold SQLite cache, see
 [docs/VARIANT_BROWSER_INTEGRATION.md](VARIANT_BROWSER_INTEGRATION.md)
 (`scripts/ingest_review_adjudications.py`).
 

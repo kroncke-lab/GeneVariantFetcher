@@ -6,9 +6,10 @@
   - The forward plan lives here. Do not duplicate live recall tables in this file.
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
-- **Variant_Browser adjudication overlay is lead-gated.** Ingest only its
-  `export_gold_standard`/lead-inbox download; raw multi-reviewer exports are
-  rejected. Scoring now reports RMSE (RMSD) alongside MAE.
+- **Variant_Browser adjudication overlay is lead-gated and live-synced.** GVF
+  pulls current approved gold from the Azure-backed machine API into an atomic
+  SQLite cache; raw, disputed, withheld, stale, or checksum-invalid inputs fail
+  closed. Required-sync scoring reads that cache for recall/precision/MAE/RMSE.
 
 ## Autonomy at Scale (updated 2026-07-10) — trust-gate v1 landed; these are the open levers
 

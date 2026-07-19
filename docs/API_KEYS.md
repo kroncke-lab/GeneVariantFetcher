@@ -274,7 +274,16 @@ SPRINGER_API_KEY=your-springer-key
 # === OPTIONAL ===
 WILEY_API_KEY=your-wiley-key
 CORE_API_KEY=your-core-key
+
+# Private review-gold pipeline (project-owner provisioned)
+GVF_REVIEW_GOLD_TOKEN=your-machine-token
+GVF_REVIEW_GOLD_URL=https://variantbrowser.org/review/api/gold-standard/
 ```
+
+`GVF_REVIEW_GOLD_TOKEN` is not an LLM/provider key. It is the shared
+machine-to-machine credential for reading lead-approved gold from the private
+Variant_Browser Azure review database. The same value is stored as the Azure App
+Service setting and the GVF GitHub Actions secret; rotate both together.
 
 ---
 

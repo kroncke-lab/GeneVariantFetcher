@@ -2300,6 +2300,46 @@ def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str
     return overlay
 
 
+def load_adjudication_overlay_db(
+    path: Path,
+    gene: str,
+) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    """Load one gene's overlay from the atomically synced live-gold database."""
+    from scripts.ingest_review_adjudications import _variant_key
+
+    overlay: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    if path is None or not path.exists():
+        return overlay
+    try:
+        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    except sqlite3.Error:
+        return overlay
+    try:
+        rows = conn.execute(
+            """
+            SELECT payload_json
+            FROM review_gold_overlays
+            WHERE gene = ?
+            ORDER BY pmid, source_notation, record_key
+            """,
+            (gene.strip().upper(),),
+        ).fetchall()
+    except sqlite3.Error:
+        return overlay
+    finally:
+        conn.close()
+    for (payload_json,) in rows:
+        try:
+            row = json.loads(payload_json)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        pmid = normalize_pmid(row.get("pmid") or "")
+        notation = str(row.get("source_notation") or "").strip()
+        if pmid and notation:
+            overlay[(pmid, _variant_key(notation))] = row
+    return overlay
+
+
 def _int_or_none(value: Any) -> Optional[int]:
     if value in (None, ""):
         return None

@@ -1,0 +1,33 @@
+name: Azure review gold sync
+
+on:
+  schedule:
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GVF_REVIEW_GOLD_TOKEN: ${{ secrets.GVF_REVIEW_GOLD_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install GVF
+        run: pip install -e .
+      - name: Require configured machine credential
+        run: test -n "$GVF_REVIEW_GOLD_TOKEN"
+      - name: Pull and validate current Azure review gold
+        run: |
+          python scripts/ingest_review_adjudications.py \
+            --source-url https://variantbrowser.org/review/api/gold-standard/ \
+            --no-db \
+            --cache-db "$RUNNER_TEMP/review_gold.sqlite3" \
+            --out-dir "$RUNNER_TEMP/review_gold"
