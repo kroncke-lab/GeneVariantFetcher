@@ -9,7 +9,7 @@ GeneVariantFetcher round-trips with the sibling **Variant_Browser** curation app
    standard as a durable correction overlay.
 
 Both endpoints are **owned by Variant_Browser** (`scripts/gvf_publish.sh` and
-`manage.py export_adjudications`). GVF only calls them — it does not duplicate the
+the lead inbox / `manage.py export_gold_standard`). GVF only calls them — it does not duplicate the
 DB schema, Azure credentials, or the GVF→browser variant matching. Keep that
 contract: changes to the publish/match logic belong in Variant_Browser.
 
@@ -24,7 +24,7 @@ contract: changes to the publish/match logic belong in Variant_Browser.
         │                                                       │   collaborators adjudicate
         │                                                       │        │
         │  ingest_review_adjudications.py                       │
-        │  ◀── export_adjudications --out adjudications.csv ────┤
+        │  ◀── approved gold-standard CSV ──────────────────────┤
         ▼                                                       │
   gene_variant_fetcher_gold_standard/adjudications/   (correction overlay + follow-up queue)
 ```
@@ -105,18 +105,22 @@ variables consumed by the browser repo.
 
 ## 2. Ingest adjudications (review → gold standard)
 
-Export the collaborator verdicts from Variant_Browser, then fold them into GVF's
-gold standard as a correction overlay.
+Export the lead-approved gold calls from Variant_Browser, then fold them into
+GVF's gold standard as a correction overlay. Never use the multi-reviewer
+`export_adjudications` audit file here: it may contain competing calls for the
+same subject and is deliberately rejected by the ingester.
 
 ```bash
-# 1. Export from the browser (writes the round-trip CSV).
+# 1. Download from /review/adjudications/ → GVF metrics handoff, or use the CLI:
 cd ~/GitRepos/Variant_Browser
 set -a && source .env && set +a
-python manage.py export_adjudications [--gene KCNH2] --out adjudications.csv
+python manage.py export_gold_standard [--gene KCNH2] \
+  --out gold_standard.csv --mark-exported
 
 # 2. Ingest into GVF's gold standard.
 cd ~/GitRepos/GeneVariantFetcher
-python scripts/ingest_review_adjudications.py --export-csv ~/GitRepos/Variant_Browser/adjudications.csv
+python scripts/ingest_review_adjudications.py \
+  --export-csv ~/GitRepos/Variant_Browser/gold_standard.csv
 ```
 
 ### The round-trip key
@@ -150,10 +154,12 @@ Written under `gene_variant_fetcher_gold_standard/adjudications/` (override with
 `--out-dir`). Idempotent — re-running replaces every gene present in the export:
 
 - `<GENE>_review_adjudications.csv` — the **correction overlay**. One row per
-  adjudication, keyed by `(gene, source_notation, pmid)`. It keeps **both** the
+  lead-approved gold call, keyed by `(gene, source_notation, pmid)`. It keeps **both** the
   pipeline's extracted counts (`extracted_carriers/affected/unaffected`, captured
   from the run DB) **and** the adjudicated corrections (`corrected_*`), so recall /
-  precision / MAE can be recomputed without mutating raw extracted rows.
+  precision / MAE / RMSE (RMSD) can be recomputed without mutating raw extracted rows.
+  The browser `record_key`, gold revision/status, source-reviewer account, and
+  approving-lead account are retained for audit.
 - `review_followup_queue.csv` — everything needing a human: `missing`/`other`,
   plus any actionable verdict whose round-trip key didn't resolve to an extracted
   row (`unmatched`) or that had no DB to verify against (`no_db`).
@@ -163,7 +169,7 @@ Written under `gene_variant_fetcher_gold_standard/adjudications/` (override with
 
 ### Correction overlay, not mutation
 
-Adjudications are a **correction overlay**: the extracted value and the adjudicated
+Approved gold calls are a **correction overlay**: the extracted value and the adjudicated
 value are kept side by side. Nothing rewrites the raw extraction JSON or the run DB.
 
 > **Note:** the recall scorer now consumes this overlay **opt-in** — pass
@@ -171,6 +177,10 @@ value are kept side by side. Nothing rewrites the raw extraction JSON or the run
 > `GVF_APPLY_ADJUDICATIONS=1` (`scripts/run_recall_suite.py`); it is off by default
 > so baseline scoring is unchanged. The older hand-curated `gold_v2_*` columns are
 > still not consumed. Making overlay consumption the *default* is the remaining step.
+
+The ingester verifies that the file contains gold approval metadata and only
+accepted `gold_standard`/legacy `adjudicated` statuses. `disputed` and `withheld`
+audit rows fail closed so they cannot silently alter evaluation metrics.
 
 This is the live, export-driven cousin of the older hand-curated `gold_v2_*`
 overlay columns in `normalized/<GENE>_recall_input.csv` (which were populated by a
@@ -187,7 +197,7 @@ one-off manual probe, since retired).
 | `scripts/ingest_review_adjudications.py` | The adjudication ingest. |
 | `gene_variant_fetcher_gold_standard/adjudications/` | Correction overlay + queue + summary. |
 | `Variant_Browser/scripts/gvf_publish.sh` | Publish endpoint (owned by the browser). |
-| `Variant_Browser/.../export_adjudications.py` | Export endpoint (owned by the browser). |
+| `Variant_Browser/review/gold_export.py` | Shared lead-approved export contract (owned by the browser). |
 
 ## Coverage
 
