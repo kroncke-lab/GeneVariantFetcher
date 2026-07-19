@@ -19,6 +19,7 @@ import argparse
 import csv
 import json
 import logging
+import math
 import re
 import sqlite3
 import unicodedata
@@ -2507,13 +2508,14 @@ def compute_recall_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
 
 
 def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
-    """Compute per-row mean absolute error for count fields on matched rows.
+    """Compute matched-row MAE and RMSE for count fields.
 
     Only matched (PMID x variant) rows with both gold and extracted counts
     present contribute. Lower is better; target is `MAE -> 0`. Returned
     aggregate is gold-dependent and complements the recall metrics.
 
-    Per-field output: ``{"sum": <int>, "n": <int>, "mae": <float | None>}``.
+    RMSE is the root-mean-square error (also called RMSD in some reports) and
+    weights large count misses more heavily than MAE.
     """
     matched_rows = [
         r
@@ -2528,6 +2530,7 @@ def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
     for label, gold_attr, ext_attr in field_pairs:
         total_abs = 0
+        total_squared = 0
         n = 0
         for r in matched_rows:
             gv = getattr(r, gold_attr, None)
@@ -2535,14 +2538,18 @@ def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
             if gv is None or sv is None:
                 continue
             try:
-                total_abs += abs(int(gv) - int(sv))
+                error = int(gv) - int(sv)
+                total_abs += abs(error)
+                total_squared += error * error
                 n += 1
             except (TypeError, ValueError):
                 continue
         out[label] = {
             "sum_abs_error": total_abs,
+            "sum_squared_error": total_squared,
             "n_matched": n,
             "mae": (total_abs / n) if n else None,
+            "rmse": math.sqrt(total_squared / n) if n else None,
         }
     return out
 
@@ -2573,13 +2580,14 @@ def compute_end_to_end_count_error(results: List[ComparisonRow]) -> Dict[str, An
     to the error, so this metric cannot be flattered by simply not extracting the
     hard cases.
 
-    Reports mean (the end-to-end MAE), median, p95, and max per count field, plus
+    Reports mean absolute error, root-mean-square error (RMSE/RMSD), median,
+    p95, and max per count field, plus
     how many of the contributing rows were misses -- so a low mean that hides a
     long tail (e.g. one variant off by 200) is visible. Denominated on gold, so
     DB-only extra rows (a precision concern) are excluded.
 
-    Per-field output: ``{"n", "n_missed", "sum_abs_error", "mae", "median",
-    "p95", "max"}``.
+    Per-field output includes ``n``, ``n_missed``, ``sum_abs_error``,
+    ``sum_squared_error``, ``mae``, ``rmse``, ``median``, ``p95``, and ``max``.
     """
     gold_rows = [r for r in results if not r.missing_in_excel]
     field_pairs = [
@@ -2611,11 +2619,14 @@ def compute_end_to_end_count_error(results: List[ComparisonRow]) -> Dict[str, An
             if extracted_missing:
                 n_missed += 1
         n = len(errors)
+        sum_squared_error = sum(error * error for error in errors)
         out[label] = {
             "n": n,
             "n_missed": n_missed,
             "sum_abs_error": sum(errors),
+            "sum_squared_error": sum_squared_error,
             "mae": (sum(errors) / n) if n else None,
+            "rmse": math.sqrt(sum_squared_error / n) if n else None,
             "median": _percentile(errors, 50),
             "p95": _percentile(errors, 95),
             "max": max(errors) if errors else None,
@@ -2887,6 +2898,36 @@ def write_markdown_report(
                 "",
             ]
         )
+
+    matched_error = summary.get("mae", {})
+    end_to_end_error = summary.get("count_error_end_to_end", {})
+    if matched_error or end_to_end_error:
+
+        def fmt_error(value: Any) -> str:
+            return "n/a" if value is None else f"{value:.2f}"
+
+        lines.extend(
+            [
+                "## Count Error (MAE / RMSE)",
+                "",
+                "End-to-end error treats missed or uncounted gold variants as "
+                "an extracted count of zero. RMSE (sometimes called RMSD) "
+                "weights large errors more heavily.",
+                "",
+                "| Dimension | Matched MAE | Matched RMSE | End-to-end MAE | End-to-end RMSE |",
+                "|-----------|-------------|--------------|----------------|-----------------|",
+            ]
+        )
+        for dimension in ("carriers", "affected", "unaffected"):
+            matched = matched_error.get(dimension, {})
+            end_to_end = end_to_end_error.get(dimension, {})
+            lines.append(
+                f"| {dimension.title()} | {fmt_error(matched.get('mae'))} | "
+                f"{fmt_error(matched.get('rmse'))} | "
+                f"{fmt_error(end_to_end.get('mae'))} | "
+                f"{fmt_error(end_to_end.get('rmse'))} |"
+            )
+        lines.append("")
 
     precision = summary.get("precision", {})
     if precision:

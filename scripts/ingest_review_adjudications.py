@@ -7,12 +7,12 @@ half is ``gvf-run --publish-review`` (which shells out to
 by the browser's export command:
 
     cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a
-    python manage.py export_adjudications [--gene GENE] --out adjudications.csv
+    python manage.py export_gold_standard [--gene GENE] --out gold_standard.csv
 
 and folds each reviewer verdict into a durable CORRECTION OVERLAY under
 ``gene_variant_fetcher_gold_standard/adjudications/``. The overlay keeps BOTH the
 pipeline's extracted carrier counts AND the adjudicated corrections, so recall /
-precision / MAE can be recomputed without ever mutating the raw extracted rows.
+precision / MAE / RMSE can be recomputed without ever mutating raw extracted rows.
 
 Matching — the round-trip key is ``(gene, source_notation, pmid)`` where
 ``source_notation`` is the GVF ``variants.protein_notation``. Each export row is
@@ -76,10 +76,13 @@ VERDICT_TO_ACTION = {
 # Overlay schema. Extracted_* are the pipeline's values (kept), corrected_* are
 # the adjudicated values (the overlay). Both survive so metrics can be recomputed.
 OVERLAY_COLUMNS = [
+    "record_key",
     "gene",
     "pmid",
     "source_notation",  # round-trip key == GVF protein_notation
     "variant_label",
+    "status",
+    "revision",
     "verdict",
     "action",
     "match_status",  # matched | unmatched | no_db
@@ -92,20 +95,31 @@ OVERLAY_COLUMNS = [
     "corrected_total",
     "corrected_classification",
     "comment",
+    "source_reviewer_user_id",
+    "source_reviewer",
+    "decided_by_user_id",
+    "decided_by",
     "adjudicator",
     "updated_at",
 ]
 
 FOLLOWUP_COLUMNS = [
+    "record_key",
     "gene",
     "pmid",
     "source_notation",
     "variant_label",
+    "status",
+    "revision",
     "verdict",
     "action",
     "match_status",
     "reason",
     "comment",
+    "source_reviewer_user_id",
+    "source_reviewer",
+    "decided_by_user_id",
+    "decided_by",
     "adjudicator",
     "updated_at",
 ]
@@ -178,9 +192,45 @@ def load_db_aggregate(db_path: Path) -> dict[tuple[str, str], dict[str, Any]]:
     return aggregate_sqlite_data(df)
 
 
+GOLD_EXPORT_MARKERS = {
+    "record_key",
+    "status",
+    "revision",
+    "source_reviewer_user_id",
+    "source_reviewer",
+    "decided_by_user_id",
+    "decided_by",
+}
+ACCEPTED_GOLD_STATUSES = {"gold_standard", "adjudicated"}
+
+
 def _read_export(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
-        return list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        fields = set(reader.fieldnames or [])
+        missing = sorted(GOLD_EXPORT_MARKERS - fields)
+        if missing:
+            raise SystemExit(
+                "Expected Variant_Browser export_gold_standard CSV; missing "
+                f"gold approval columns: {', '.join(missing)}. Do not ingest the "
+                "multi-reviewer export_adjudications audit file."
+            )
+        rows = list(reader)
+    unsafe = sorted(
+        {
+            (row.get("status") or "").strip().lower()
+            for row in rows
+            if (row.get("status") or "").strip().lower() not in ACCEPTED_GOLD_STATUSES
+        }
+    )
+    if unsafe:
+        raise SystemExit(
+            "Gold export contains non-accepted status(es): "
+            f"{', '.join(status or '<blank>' for status in unsafe)}. "
+            "Use the default export_gold_standard output; disputed/withheld "
+            "audit rows must not enter metric overlays."
+        )
+    return rows
 
 
 def build_overlay_rows(
@@ -211,10 +261,13 @@ def build_overlay_rows(
 
         out.append(
             {
+                "record_key": (raw.get("record_key") or "").strip(),
                 "gene": gene,
                 "pmid": pmid,
                 "source_notation": source_notation,
                 "variant_label": (raw.get("variant_label") or "").strip(),
+                "status": (raw.get("status") or "").strip(),
+                "revision": (raw.get("revision") or "").strip(),
                 "verdict": verdict,
                 "action": action,
                 "match_status": match_status,
@@ -230,6 +283,12 @@ def build_overlay_rows(
                 "corrected_total": _blank(raw.get("corrected_total")),
                 "corrected_classification": _blank(raw.get("corrected_classification")),
                 "comment": (raw.get("comment") or "").strip(),
+                "source_reviewer_user_id": (
+                    raw.get("source_reviewer_user_id") or ""
+                ).strip(),
+                "source_reviewer": (raw.get("source_reviewer") or "").strip(),
+                "decided_by_user_id": (raw.get("decided_by_user_id") or "").strip(),
+                "decided_by": (raw.get("decided_by") or "").strip(),
                 "adjudicator": (raw.get("adjudicator") or "").strip(),
                 "updated_at": (raw.get("updated_at") or "").strip(),
             }
@@ -330,15 +389,22 @@ def write_followup_queue(rows: list[dict[str, Any]], out_dir: Path) -> Path:
             continue
         queued.append(
             {
+                "record_key": row["record_key"],
                 "gene": row["gene"],
                 "pmid": row["pmid"],
                 "source_notation": row["source_notation"],
                 "variant_label": row["variant_label"],
+                "status": row["status"],
+                "revision": row["revision"],
                 "verdict": row["verdict"],
                 "action": row["action"],
                 "match_status": row["match_status"],
                 "reason": reason,
                 "comment": row["comment"],
+                "source_reviewer_user_id": row["source_reviewer_user_id"],
+                "source_reviewer": row["source_reviewer"],
+                "decided_by_user_id": row["decided_by_user_id"],
+                "decided_by": row["decided_by"],
                 "adjudicator": row["adjudicator"],
                 "updated_at": row["updated_at"],
             }
@@ -361,7 +427,10 @@ def main() -> int:
         "--export-csv",
         required=True,
         type=Path,
-        help="CSV from Variant_Browser `manage.py export_adjudications`.",
+        help=(
+            "Lead-approved CSV from Variant_Browser `manage.py "
+            "export_gold_standard` or its review inbox download."
+        ),
     )
     ap.add_argument(
         "--out-dir",

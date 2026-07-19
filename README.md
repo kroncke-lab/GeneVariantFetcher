@@ -75,7 +75,7 @@ dashboard at
 checklist lives in [`TASKS.md`](TASKS.md). Do not copy recall numbers into new
 docs; they drift.
 
-**Recall, precision, and MAE are reported only for the four cardiac genes
+**Recall, precision, MAE, and RMSE (RMSD) are reported only for the four cardiac genes
 (KCNH2, KCNQ1, SCN5A, RYR2)** — the only gene-disease pairs with a fully
 human-curated, manually derived gold standard. Other genes (APOE, BRCA1, BRCA2,
 MYBPC3) are review targets scored against curator/derived `gold_overrides`, not

@@ -1,7 +1,7 @@
 """Tests for scripts/ingest_review_adjudications.py.
 
-Exercises the Variant_Browser → GVF adjudication round-trip: an export CSV (the
-schema ``manage.py export_adjudications`` emits) is matched against a real run DB
+Exercises the Variant_Browser → GVF adjudication round-trip: a lead-approved CSV
+(the schema ``manage.py export_gold_standard`` emits) is matched against a real run DB
 built through the actual ``migrate_to_sqlite`` path, so the (pmid, canonical
 notation) match contract is checked against the same schema the recall scorer
 reads. Covers all six verdicts, the correction overlay (extracted + corrected
@@ -79,6 +79,13 @@ def _write_export(tmp_path):
         writer.writerow(
             [
                 "gene",
+                "record_key",
+                "status",
+                "revision",
+                "source_reviewer_user_id",
+                "source_reviewer",
+                "decided_by_user_id",
+                "decided_by",
                 "variant_label",
                 "source_notation",
                 "pmid",
@@ -98,6 +105,13 @@ def _write_export(tmp_path):
             writer.writerow(
                 [
                     "KCNH2",
+                    f"gold-record-{i}",
+                    "gold_standard",
+                    "1",
+                    f"account-{i}",
+                    f"reviewer{i}",
+                    "lead-account",
+                    "lead",
                     label,
                     src,
                     PMID,
@@ -151,6 +165,13 @@ def test_verdicts_map_and_match_against_real_db(tmp_path):
     assert len(rows) == len(EXPORT_ROWS)
 
     confirm = rows["p.Ser818Leu"]
+    assert confirm["record_key"] == "gold-record-0"
+    assert confirm["status"] == "gold_standard"
+    assert confirm["revision"] == "1"
+    assert confirm["source_reviewer_user_id"] == "account-0"
+    assert confirm["source_reviewer"] == "reviewer0"
+    assert confirm["decided_by_user_id"] == "lead-account"
+    assert confirm["decided_by"] == "lead"
     assert confirm["action"] == "gold_confirmed"
     assert confirm["match_status"] == "matched"
     # Both extracted and corrected survive; confirm keeps the extracted value.
@@ -224,3 +245,24 @@ def test_missing_export_errors(tmp_path):
             ingest.main()
     finally:
         sys.argv = sys_argv
+
+
+def test_multi_reviewer_audit_export_is_rejected(tmp_path):
+    path = tmp_path / "unsafe_adjudications.csv"
+    path.write_text("gene,pmid,verdict,adjudicator\nKCNH2,1,confirm,nate\n")
+
+    with pytest.raises(SystemExit, match="Do not ingest the multi-reviewer"):
+        ingest._read_export(path)
+
+
+def test_disputed_gold_audit_export_is_rejected(tmp_path):
+    path = _write_export(tmp_path)
+    rows = list(csv.DictReader(path.open()))
+    rows[0]["status"] = "disputed"
+    with path.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+    with pytest.raises(SystemExit, match="non-accepted status"):
+        ingest._read_export(path)
