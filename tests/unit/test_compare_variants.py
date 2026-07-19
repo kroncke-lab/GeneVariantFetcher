@@ -728,9 +728,12 @@ class TestComparison:
 
         assert summary["recall"]["unique_variants"]["matched"] == 3
         assert summary["recall"]["patients"]["gold"] == 26
+        assert summary["mae"]["carriers"]["rmse"] is not None
+        assert summary["count_error_end_to_end"]["carriers"]["rmse"] is not None
         report = (tmp_path / "report.md").read_text(encoding="utf-8")
         assert "## Recall" in report
         assert "| Affected | 16/18 (88.9%) |" in report
+        assert "## Count Error (MAE / RMSE)" in report
 
     def test_precision_summary_restricts_extra_rows_to_gold_pmids(self):
         """Extra DB rows count only when their PMID was curated by gold.

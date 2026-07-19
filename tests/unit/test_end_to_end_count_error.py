@@ -56,7 +56,9 @@ def test_misses_count_as_zero_and_tail_is_reported():
     assert e2e["n"] == 3
     assert e2e["n_missed"] == 2  # the miss + the matched-but-uncounted row
     assert e2e["sum_abs_error"] == 57
+    assert e2e["sum_squared_error"] == 2529
     assert e2e["mae"] == 19.0
+    assert e2e["rmse"] == pytest.approx((2529 / 3) ** 0.5)
     assert e2e["median"] == 5.0
     assert e2e["p95"] == pytest.approx(45.5)
     assert e2e["max"] == 50
@@ -65,6 +67,8 @@ def test_misses_count_as_zero_and_tail_is_reported():
     # far lower than the end-to-end error -- the exact gap this metric exposes.
     matched_only = compute_rows_mae(results)["carriers"]
     assert matched_only["mae"] == 2.0
+    assert matched_only["rmse"] == 2.0
+    assert matched_only["sum_squared_error"] == 4
     assert matched_only["n_matched"] == 1
 
 
@@ -74,7 +78,9 @@ def test_empty_fields_are_none():
         "n": 0,
         "n_missed": 0,
         "sum_abs_error": 0,
+        "sum_squared_error": 0,
         "mae": None,
+        "rmse": None,
         "median": None,
         "p95": None,
         "max": None,

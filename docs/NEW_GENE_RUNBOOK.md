@@ -265,16 +265,23 @@ gvf gvf-run GENE --email brett.kroncke@gmail.com --output results/ \
   --disease "<phenotype>" --publish-review
 ```
 
-Ingest the adjudications afterward (writes a correction overlay under
+Have a lead approve submitted calls in the Variant_Browser adjudication inbox,
+then ingest the approved gold afterward (writes a correction overlay under
 `gene_variant_fetcher_gold_standard/adjudications/` that keeps both the extracted
 and the adjudicated counts):
 
 ```bash
 cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a
-python manage.py export_adjudications [--gene GENE] --out adjudications.csv
+python manage.py export_gold_standard [--gene GENE] \
+  --out gold_standard.csv --mark-exported
 cd ~/GitRepos/GeneVariantFetcher
-python scripts/ingest_review_adjudications.py --export-csv ~/GitRepos/Variant_Browser/adjudications.csv
+python scripts/ingest_review_adjudications.py \
+  --export-csv ~/GitRepos/Variant_Browser/gold_standard.csv
 ```
+
+The browser lead can instead download this exact schema from
+`/review/adjudications/` → **GVF metrics handoff**. Do not ingest
+`export_adjudications`; it is a multi-reviewer audit and may contain conflicts.
 
 The gene-disease pair must already exist in the browser (created upstream from
 variantFeatures). See `docs/VARIANT_BROWSER_INTEGRATION.md` for the full contract,
