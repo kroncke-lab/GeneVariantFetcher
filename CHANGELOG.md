@@ -21,6 +21,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`scripts/precision_sample.py`, Wilson CI).
 - Clean-room **cold-start** benchmark (`benchmarks/cold_start_eval/`) and a
   fail-closed benchmark regression gate (`make regression-gate`).
+- **Institutional-access preflight guard** for `gvf-run`
+  (`cli/institutional_preflight.py`): a full-dataset run now HALTS before
+  harvesting if a *live* EZproxy full-text probe fails (login/SSO redirect,
+  Cloudflare wall, or missing/expired session cookie), instead of silently
+  degrading paywalled papers to abstract-only stubs and still reporting success.
+  Block-by-default; override a deliberate partial run with
+  `--allow-degraded-institutional` (or `GVF_PREFLIGHT_SKIP=1`), and
+  `--no-source-recovery` / `--pmid-file` runs skip the check. Paired with a
+  post-run **source-integrity audit** that flags a run degraded in
+  `RUN_STATUS.json` (`source_integrity`) when the abstract-only stub ratio is
+  near-total. New exit code `5` (institutional block).
 
 ### Changed
 - **Positioning reframed** to autonomous operation at scale: automated quality

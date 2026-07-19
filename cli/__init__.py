@@ -498,6 +498,20 @@ def gvf_run_command(
             help="Per-paper timeout passed to fetch_paywalled.py during --source-recovery.",
         ),
     ] = 120,
+    allow_degraded_institutional: Annotated[
+        bool,
+        typer.Option(
+            "--allow-degraded-institutional/--require-institutional",
+            help=(
+                "Override the institutional-access preflight. By default a "
+                "full-dataset run (source recovery on, no --pmid-file) HALTS if a "
+                "live paywall-access check fails, so it can't silently harvest "
+                "abstract-only. Pass --allow-degraded-institutional to proceed "
+                "anyway (the run is then flagged degraded). Fast/calibration runs "
+                "(--no-source-recovery / --pmid-file) skip the check entirely."
+            ),
+        ),
+    ] = False,
     extraction_top_n: Annotated[
         Optional[int],
         typer.Option(
@@ -681,6 +695,7 @@ def gvf_run_command(
         skip=list(skip) if skip else None,
         source_recovery=source_recovery,
         source_recovery_timeout_s=source_recovery_timeout_s,
+        allow_degraded_institutional=allow_degraded_institutional,
         disease=disease,
         include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
         corpus_sync=corpus_sync,

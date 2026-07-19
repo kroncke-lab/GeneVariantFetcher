@@ -3,14 +3,20 @@
 
 Mission-critical sanity check: confirms that, with ``GVF_EZPROXY_PREFIX``/``HOST``
 set and a valid EZproxy session cookie loaded, a Wiley Online Library request
-returns licensed content instead of the Cloudflare 403 "Just a moment…" page.
+returns licensed full text instead of the Cloudflare 403 "Just a moment…" page
+OR an expired-session redirect to the SSO login page.
 
-  GVF_EZPROXY_PREFIX="https://login.proxy.library.vanderbilt.edu/login?url=" \\
-      python scripts/check_ezproxy.py --doi 10.1111/jce.14865
+    GVF_EZPROXY_HOST=login.proxy.library.vanderbilt.edu \\
+        python scripts/check_ezproxy.py --doi 10.1111/jce.14865
 
-Reports, for the direct and the EZproxy-routed request: HTTP status, whether a
-Cloudflare challenge was detected, and the response size. A PASS is a non-403
-response with no CF challenge and a real body.
+This is a thin CLI over the SAME live probe ``gvf-run`` uses as its institutional
+preflight (``cli/institutional_preflight.probe_institutional_access``), so its
+verdict cannot disagree with what actually gates a run. In particular it does NOT
+false-pass a login/SSO redirect (a large HTTP 200 with no Cloudflare marker) the
+way a naive "200 + big body + not-CF" check would.
+
+Exit codes: 2 = EZproxy not configured; 0 = live full-text access confirmed;
+1 = configured but the routed request did not return licensed full text.
 """
 
 from __future__ import annotations
@@ -22,110 +28,54 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
-from harvesting.browser_html import ezproxy  # noqa: E402
-
-_CF_MARKERS = ("just a moment", "cf-chl", "challenge-platform", "/cdn-cgi/challenge")
-
-
-def _looks_cf(text: str, status: int, headers) -> bool:
-    low = (text or "")[:4000].lower()
-    server = str(headers.get("server", "")).lower() if headers else ""
-    return (
-        status == 403
-        or "cloudflare" in server
-        and any(m in low for m in _CF_MARKERS)
-        or any(m in low for m in _CF_MARKERS)
-    )
-
-
-def _probe(session, url: str, label: str) -> bool:
-    try:
-        r = session.get(url, timeout=45, allow_redirects=True)
-    except Exception as exc:  # noqa: BLE001
-        print(f"  {label:18s}: ERROR {exc}")
-        return False
-    cf = _looks_cf(r.text, r.status_code, r.headers)
-    ok = (r.status_code == 200) and not cf and len(r.text) > 4000
-    print(
-        f"  {label:18s}: status={r.status_code} cf_challenge={cf} "
-        f"bytes={len(r.text)} -> {'PASS' if ok else 'blocked'}"
-    )
-    return ok
-
 
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    ap.add_argument("--doi", default="10.1111/jce.14865", help="Wiley DOI to probe.")
+    ap.add_argument(
+        "--doi",
+        default=None,
+        help="Wiley DOI to probe (default: the preflight canary DOI).",
+    )
     args = ap.parse_args()
 
-    print(
-        f"EZproxy configured: {ezproxy.is_configured()}  prefix={ezproxy.proxy_prefix() or '(none)'}"
-    )
-    if not ezproxy.is_configured():
+    # Load .env the same way gvf-run does, so `GVF_EZPROXY_HOST` set in .env is
+    # honored when this is run standalone (otherwise it would report "not
+    # configured" despite a configured .env).
+    try:
+        from utils.bootstrap import initialize_runtime
+
+        initialize_runtime()
+    except Exception:  # noqa: BLE001 - bootstrap is best-effort for a diagnostic
+        pass
+
+    from cli.institutional_preflight import probe_institutional_access
+
+    rpt = probe_institutional_access(doi=args.doi)
+    for line in rpt.lines:
+        print(f"  {line}")
+    if rpt.probe_detail:
+        print(f"  probe detail: {rpt.probe_detail}")
+
+    if not rpt.ezproxy_configured:
         print(
-            "\nSet GVF_EZPROXY_PREFIX (or GVF_EZPROXY_HOST) and ensure an EZproxy\n"
-            "session cookie is loaded (log into the library proxy once in Chrome;\n"
-            "cookie_loader reads proxy.library.vanderbilt.edu). Then re-run."
+            "\nEZproxy is NOT configured. Set GVF_EZPROXY_HOST (e.g. "
+            "login.proxy.library.vanderbilt.edu) or GVF_EZPROXY_PREFIX, and log\n"
+            "into the library proxy once in Chrome (cookie_loader reads "
+            "proxy.library.vanderbilt.edu). Then re-run."
         )
         return 2
 
-    # Build a session with browser cookies (incl. the EZproxy session cookie) and
-    # the EZproxy URL rewriter installed — exactly what fetch_paywalled.py uses.
-    from scripts.fetch_paywalled import (
-        make_session,
-        hydrate_session_with_browser_cookies,
-    )
-    from harvesting.browser_html.cookie_loader import load_chrome_cookies
-
-    raw = make_session()  # already has EZproxy installed
-    try:
-        cookies = load_chrome_cookies()
-        n = hydrate_session_with_browser_cookies(raw, cookies)
-
-        # The EZproxy session cookies are NAMED ezproxy/ezproxyl/ezproxyn and live
-        # on the proxy host's domain (e.g. `.proxy.library.vanderbilt.edu`) — the
-        # domain string itself need not contain "ezproxy" (Vanderbilt's host is
-        # `proxy.library.vanderbilt.edu`). Match on either signal.
-        def _is_ez(c):
-            name = (c.get("name") or "").lower()
-            dom = (c.get("domain") or "").lower()
-            return name.startswith("ezproxy") or "proxy.library." in dom
-
-        ez = sum(1 for c in cookies if _is_ez(c))
-        print(f"loaded {n} browser cookies into the session ({ez} EZproxy/proxy)")
-        if ez == 0:
-            print(
-                "  WARNING: no EZproxy session cookie found — log into the proxy in"
-                " Chrome (VUMC users: sign in with your @vumc.org email)."
-            )
-    except Exception as exc:  # noqa: BLE001
-        print(f"  (could not load browser cookies: {exc})")
-
-    url = f"https://onlinelibrary.wiley.com/doi/full/{args.doi}"
-    print(f"\nProbing Wiley DOI {args.doi}:")
-    # direct (rewriter no-ops only if unconfigured; here it WILL route — so to show
-    # the contrast we hit the raw URL with a plain session too)
-    import requests
-
-    plain = requests.Session()
-    plain.headers.update(raw.headers)
-    _probe(plain, url, "direct (no proxy)")
-    routed_ok = _probe(raw, url, "via EZproxy")
+    if rpt.should_block:
+        print(f"\nRESULT: institutional full-text access is NOT live — {rpt.reason}")
+        return 1
 
     print(
-        "\nRESULT: EZproxy routing "
-        + ("WORKS — Cloudflare cleared." if routed_ok else "did NOT clear CF.")
+        "\nRESULT: institutional full-text access is LIVE — Cloudflare cleared, "
+        "real licensed full text returned."
     )
-    if not routed_ok:
-        print(
-            "Most likely the EZproxy session cookie is missing/expired. Log into\n"
-            "the library proxy in Chrome once, then re-run. If it still fails, the\n"
-            "proxy may require host-rewrite form instead of login?url= — set\n"
-            "GVF_EZPROXY_PREFIX to the working form from a manual browser session."
-        )
-    return 0 if routed_ok else 1
+    return 0
 
 
 if __name__ == "__main__":

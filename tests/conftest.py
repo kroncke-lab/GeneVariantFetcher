@@ -136,6 +136,11 @@ def isolated_settings(monkeypatch):
 
     if _has_placeholder_ncbi_email():
         monkeypatch.setenv("NCBI_EMAIL", "test@example.org")
+    # A developer .env may set GVF_COOKIE_FILE (loaded above via load_dotenv), which
+    # would route every load_chrome_cookies() call through the file path and break
+    # tests exercising the Chrome cookie path. Tests that want the file path set it
+    # explicitly (see test_cookie_file_loader.py).
+    monkeypatch.delenv("GVF_COOKIE_FILE", raising=False)
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

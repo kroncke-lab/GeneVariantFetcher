@@ -1267,6 +1267,9 @@ def _paper_final_check_error_warning(result: object) -> Optional[str]:
 
 
 EXIT_STAGE_WARNINGS = 3  # completed, but a completeness-affecting stage failed
+EXIT_INSTITUTIONAL_BLOCK = (
+    5  # refused to START a full run: institutional access degraded
+)
 
 
 def _write_run_status(
@@ -1278,6 +1281,7 @@ def _write_run_status(
     stage_warnings: list[str],
     started_at: float,
     active_db: Path,
+    integrity: Optional[dict] = None,
 ) -> None:
     """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
     structured stage status (and the process exit code) instead of scraping
@@ -1300,20 +1304,20 @@ def _write_run_status(
             except ValueError:
                 active_db_ref = str(resolved_active_db)
 
+        payload = {
+            "gene": gene,
+            "status": status,
+            "severity": "warning" if stage_failures else "ok",
+            "exit_code": exit_code,
+            "active_db": active_db_ref,
+            "duration_seconds": int(time.time() - started_at),
+            "stage_failures": list(stage_failures),
+            "stage_warnings": list(stage_warnings),
+        }
+        if integrity is not None:
+            payload["source_integrity"] = integrity
         (run_dir / "RUN_STATUS.json").write_text(
-            json.dumps(
-                {
-                    "gene": gene,
-                    "status": status,
-                    "severity": "warning" if stage_failures else "ok",
-                    "exit_code": exit_code,
-                    "active_db": active_db_ref,
-                    "duration_seconds": int(time.time() - started_at),
-                    "stage_failures": list(stage_failures),
-                    "stage_warnings": list(stage_warnings),
-                },
-                indent=2,
-            ),
+            json.dumps(payload, indent=2),
             encoding="utf-8",
         )
     except OSError as e:
@@ -1331,6 +1335,7 @@ def run_gvf_pipeline(
     skip: Optional[list[str]] = None,
     source_recovery: bool = True,
     source_recovery_timeout_s: int = 120,
+    allow_degraded_institutional: bool = False,
     disease: Optional[str] = None,
     include_all_clinigen_phenotypes: bool = False,
     corpus_sync: bool = True,
@@ -1396,13 +1401,78 @@ def run_gvf_pipeline(
             )
         return 2
 
-    # Advisory: authenticated paywalled recovery needs an institutional credential.
+    # A "full-dataset" run is one that actually attempts paywalled/supplementary
+    # recovery: source recovery ON, not a --pmid-file calibration run, and the
+    # recovery steps not skipped. Only these are guarded/audited for institutional
+    # access; fast (--no-source-recovery) and calibration (--pmid-file) runs are
+    # expected to be abstract-limited and must pass through untouched.
+    institutional_run = (
+        source_recovery
+        and pmid_file is None
+        and "source-recovery" not in skip
+        and "source-qc" not in skip
+    )
+
+    # Advisory (cheap, presence-only) — always shown.
     auth_status = status.get("institutional_auth") or {}
     if auth_status:
         if not auth_status.get("ready", True):
             logger.warning("🔒 institutional auth: %s", auth_status.get("reason"))
         elif not auth_status.get("ezproxy_configured"):
             logger.info("🔒 institutional auth: %s", auth_status.get("reason"))
+
+    # Live institutional-access preflight guard. A full-dataset run must not START
+    # if paywall access is dead, otherwise the orchestrator silently degrades every
+    # unreachable paywalled paper to an abstract-only stub and still reports
+    # success. Unlike the advisory above (presence-only), this routes a real Wiley
+    # DOI through EZproxy and verifies licensed full text comes back.
+    if not institutional_run:
+        logger.info("🔓 institutional preflight skipped (not a full-recovery run)")
+    elif os.environ.get("GVF_PREFLIGHT_SKIP"):
+        logger.warning(
+            "🔓 institutional preflight skipped (GVF_PREFLIGHT_SKIP set) — live "
+            "paywall access was NOT verified."
+        )
+    else:
+        logger.info("🔐 institutional preflight: probing live paywall access…")
+        access = None
+        try:
+            from cli.institutional_preflight import (
+                format_block_message,
+                probe_institutional_access,
+            )
+
+            access = probe_institutional_access()
+        except Exception as e:  # noqa: BLE001 - a guard bug must not brick every run
+            logger.exception("institutional preflight probe errored: %s", e)
+            stage_warnings.append(
+                "institutional preflight probe could not run; access unverified"
+            )
+        if access is not None:
+            for ln in access.lines:
+                logger.info("   %s", ln)
+            if access.should_block and not allow_degraded_institutional:
+                print(format_block_message(access))
+                logger.error(
+                    "institutional preflight blocked the run (exit %d). Override "
+                    "with --allow-degraded-institutional if this is intentional.",
+                    EXIT_INSTITUTIONAL_BLOCK,
+                )
+                return EXIT_INSTITUTIONAL_BLOCK
+            if access.should_block:
+                logger.warning(
+                    "⚠️  institutional access DEGRADED (%s) — proceeding anyway via "
+                    "--allow-degraded-institutional; expect abstract-only coverage "
+                    "for paywalled papers.",
+                    access.reason,
+                )
+                stage_failures.append(
+                    f"institutional access degraded (overridden): {access.reason}"
+                )
+            else:
+                logger.info(
+                    "✅ institutional preflight: live full-text access confirmed."
+                )
 
     # Step 2: extract (unless skipped)
     gene = gene.upper()
@@ -1631,6 +1701,43 @@ def run_gvf_pipeline(
     else:
         logger.info("⏭️  Step 4: source acquisition QC — already ran")
 
+    # Step 4.4: source-integrity audit (ground truth). The preflight guard is
+    # point-in-time; this catches a session that expired mid-run or a per-publisher
+    # gap by measuring how many resolved papers actually landed as full text vs.
+    # abstract-only stubs. Runs before corpus sync (while run_dir holds the run's
+    # own FULL_CONTEXT files) and only escalates to a stage failure on a
+    # full-recovery run at near-total failure (a healthy run is ~30-50% full text).
+    integrity_status: Optional[dict] = None
+    try:
+        from cli.institutional_preflight import audit_source_integrity
+
+        integ = audit_source_integrity(run_dir)
+        integrity_status = {
+            "full_text": integ.full_text,
+            "abstract_only": integ.abstract_only,
+            "total": integ.total,
+            "abstract_only_ratio": round(integ.ratio, 3),
+            "threshold": integ.threshold,
+            "degraded": bool(integ.degraded and institutional_run),
+        }
+        if integ.total and integrity_status["degraded"]:
+            # Full-recovery run that came back near-empty of full text: escalate.
+            logger.warning("🧪 %s", integ.message)
+            stage_failures.append(integ.message)
+        elif integ.total and integ.degraded:
+            # High stub ratio, but this run deliberately skipped recovery
+            # (fast/calibration) — that's expected, so don't cry "fix access".
+            logger.info(
+                "🧪 source integrity: %d/%d papers abstract-only "
+                "(expected for a fast/calibration run)",
+                integ.abstract_only,
+                integ.total,
+            )
+        elif integ.total:
+            logger.info("🧪 %s", integ.message)
+    except Exception as e:  # noqa: BLE001 - audit is best-effort, never fatal
+        logger.warning("source-integrity audit failed (%s); continuing", e)
+
     # Step 4.5: fold newly-fetched source into the consolidated corpus cache
     # (idempotent incremental merge — adds new papers / upgrades compromised
     # categories only, so the next run reuses them instead of re-fetching).
@@ -1698,6 +1805,7 @@ def run_gvf_pipeline(
         stage_warnings,
         started,
         db,
+        integrity_status,
     )
 
     if stage_failures:
