@@ -22,7 +22,7 @@ match here means a match there. Verdicts map to overlay actions:
   missing        -> followup_missing   (GVF missed it; queue for a human)
   other          -> followup_other     (free-text comment; queue for a human)
 
-Outputs (idempotent — a live sync atomically replaces the whole cache):
+Outputs (idempotent current view + immutable source history):
   <out-dir>/review_gold.sqlite3                live gold + metric overlays + sync audit
   <out-dir>/review_followup_queue.csv          missing/other + unresolved matches
   <out-dir>/review_adjudications_summary.json  per-gene counts + net count deltas
@@ -214,6 +214,24 @@ DEFAULT_CACHE_DB = (
     / "adjudications"
     / "review_gold.sqlite3"
 )
+CARDIAC_GENES = frozenset({"KCNH2", "KCNQ1", "RYR2", "SCN5A"})
+BUILTIN_GOLD_TIERS: dict[str, dict[str, Any]] = {
+    "all": {
+        "description": "All current lead-approved records, including non-cardiac genes.",
+        "gene_mode": "all",
+        "genes": [],
+    },
+    "cardiac": {
+        "description": "Canonical cardiac channelopathy genes only.",
+        "gene_mode": "include",
+        "genes": sorted(CARDIAC_GENES),
+    },
+    "noncardiac": {
+        "description": "Current records outside the canonical cardiac gene set.",
+        "gene_mode": "exclude",
+        "genes": sorted(CARDIAC_GENES),
+    },
+}
 
 
 class GoldSyncError(RuntimeError):
@@ -528,60 +546,461 @@ def write_overlays(rows: list[dict[str, Any]], out_dir: Path) -> dict[str, Path]
     return written
 
 
+def _canonical_json(value: Any) -> str:
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+
+
+def ensure_live_gold_schema(conn: sqlite3.Connection) -> None:
+    """Create/migrate the live cache, immutable history, tiers, and audit ledgers."""
+    conn.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS review_gold_records (
+            record_key TEXT PRIMARY KEY,
+            gene TEXT NOT NULL,
+            pmid TEXT NOT NULL DEFAULT '',
+            source_notation TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL,
+            revision INTEGER NOT NULL,
+            source_reviewer_user_id TEXT NOT NULL DEFAULT '',
+            decided_by_user_id TEXT NOT NULL DEFAULT '',
+            payload_json TEXT NOT NULL,
+            source_dataset_revision TEXT NOT NULL,
+            synced_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_records_gene
+            ON review_gold_records(gene, pmid);
+        CREATE TABLE IF NOT EXISTS review_gold_overlays (
+            record_key TEXT PRIMARY KEY,
+            gene TEXT NOT NULL,
+            pmid TEXT NOT NULL DEFAULT '',
+            source_notation TEXT NOT NULL DEFAULT '',
+            action TEXT NOT NULL,
+            match_status TEXT NOT NULL,
+            payload_json TEXT NOT NULL,
+            source_dataset_revision TEXT NOT NULL,
+            synced_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_overlays_gene
+            ON review_gold_overlays(gene, pmid);
+        CREATE TABLE IF NOT EXISTS review_gold_sync_state (
+            singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
+            source_url TEXT NOT NULL,
+            source TEXT NOT NULL,
+            schema_version INTEGER NOT NULL,
+            dataset_revision TEXT NOT NULL,
+            record_count INTEGER NOT NULL,
+            generated_at TEXT NOT NULL,
+            synced_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS review_gold_snapshots (
+            dataset_revision TEXT PRIMARY KEY,
+            source_url TEXT NOT NULL,
+            source TEXT NOT NULL,
+            schema_version INTEGER NOT NULL,
+            record_count INTEGER NOT NULL,
+            cardiac_record_count INTEGER NOT NULL,
+            noncardiac_record_count INTEGER NOT NULL,
+            generated_at TEXT NOT NULL,
+            first_synced_at TEXT NOT NULL,
+            last_synced_at TEXT NOT NULL,
+            sync_count INTEGER NOT NULL DEFAULT 1
+        );
+        CREATE TABLE IF NOT EXISTS review_gold_snapshot_records (
+            dataset_revision TEXT NOT NULL,
+            record_key TEXT NOT NULL,
+            gene TEXT NOT NULL,
+            pmid TEXT NOT NULL DEFAULT '',
+            source_notation TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL,
+            revision INTEGER NOT NULL,
+            source_reviewer_user_id TEXT NOT NULL DEFAULT '',
+            decided_by_user_id TEXT NOT NULL DEFAULT '',
+            payload_json TEXT NOT NULL,
+            PRIMARY KEY (dataset_revision, record_key)
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_snapshot_records_gene
+            ON review_gold_snapshot_records(dataset_revision, gene, pmid);
+        CREATE TABLE IF NOT EXISTS review_gold_sync_runs (
+            sync_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            dataset_revision TEXT NOT NULL,
+            previous_dataset_revision TEXT NOT NULL DEFAULT '',
+            source_url TEXT NOT NULL,
+            record_count INTEGER NOT NULL,
+            cardiac_record_count INTEGER NOT NULL,
+            noncardiac_record_count INTEGER NOT NULL,
+            added_count INTEGER NOT NULL,
+            updated_count INTEGER NOT NULL,
+            removed_count INTEGER NOT NULL,
+            generated_at TEXT NOT NULL,
+            synced_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_sync_runs_revision
+            ON review_gold_sync_runs(dataset_revision, synced_at);
+        CREATE TABLE IF NOT EXISTS review_gold_record_changes (
+            sync_id INTEGER NOT NULL,
+            dataset_revision TEXT NOT NULL,
+            previous_dataset_revision TEXT NOT NULL DEFAULT '',
+            record_key TEXT NOT NULL,
+            gene TEXT NOT NULL,
+            change_type TEXT NOT NULL CHECK (
+                change_type IN ('added', 'updated', 'removed')
+            ),
+            previous_payload_json TEXT NOT NULL DEFAULT '',
+            current_payload_json TEXT NOT NULL DEFAULT '',
+            detected_at TEXT NOT NULL,
+            PRIMARY KEY (sync_id, record_key)
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_record_changes_key
+            ON review_gold_record_changes(record_key, sync_id);
+        CREATE TABLE IF NOT EXISTS review_gold_tiers (
+            name TEXT PRIMARY KEY,
+            description TEXT NOT NULL DEFAULT '',
+            gene_mode TEXT NOT NULL CHECK (gene_mode IN ('all', 'include', 'exclude')),
+            genes_json TEXT NOT NULL DEFAULT '[]',
+            builtin INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            updated_by TEXT NOT NULL DEFAULT ''
+        );
+        CREATE TABLE IF NOT EXISTS review_gold_exclusions (
+            record_key TEXT PRIMARY KEY,
+            active INTEGER NOT NULL CHECK (active IN (0, 1)),
+            actor TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS review_gold_exclusion_events (
+            event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            record_key TEXT NOT NULL,
+            action TEXT NOT NULL CHECK (action IN ('exclude', 'restore')),
+            actor TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_gold_exclusion_events_key
+            ON review_gold_exclusion_events(record_key, event_id);
+        """
+    )
+    now = datetime.now(timezone.utc).isoformat()
+    for name, definition in BUILTIN_GOLD_TIERS.items():
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO review_gold_tiers (
+                name, description, gene_mode, genes_json, builtin,
+                created_at, updated_at, updated_by
+            ) VALUES (?, ?, ?, ?, 1, ?, ?, 'system')
+            """,
+            (
+                name,
+                definition["description"],
+                definition["gene_mode"],
+                _canonical_json(definition["genes"]),
+                now,
+                now,
+            ),
+        )
+
+
+def _tier_definition_conn(conn: sqlite3.Connection, tier: str) -> dict[str, Any]:
+    name = str(tier or "").strip().lower()
+    row = conn.execute(
+        "SELECT name, description, gene_mode, genes_json, builtin "
+        "FROM review_gold_tiers WHERE name = ?",
+        (name,),
+    ).fetchone()
+    if row is None:
+        raise GoldSyncError(f"Unknown review-gold tier: {tier!r}.")
+    genes = json.loads(row[3])
+    if not isinstance(genes, list):
+        raise GoldSyncError(f"Review-gold tier {name!r} has invalid genes JSON.")
+    return {
+        "name": row[0],
+        "description": row[1],
+        "gene_mode": row[2],
+        "genes": sorted({str(g).strip().upper() for g in genes if str(g).strip()}),
+        "builtin": bool(row[4]),
+    }
+
+
+def _tier_includes_gene(definition: dict[str, Any], gene: str) -> bool:
+    normalized = str(gene or "").strip().upper()
+    genes = set(definition["genes"])
+    if definition["gene_mode"] == "all":
+        return True
+    if definition["gene_mode"] == "include":
+        return normalized in genes
+    return normalized not in genes
+
+
+def _count_tier_records_conn(
+    conn: sqlite3.Connection,
+    tier: str,
+    *,
+    include_excluded: bool = False,
+) -> int:
+    definition = _tier_definition_conn(conn, tier)
+    excluded = set()
+    if not include_excluded:
+        excluded = {
+            row[0]
+            for row in conn.execute(
+                "SELECT record_key FROM review_gold_exclusions WHERE active = 1"
+            )
+        }
+    return sum(
+        1
+        for record_key, gene in conn.execute(
+            "SELECT record_key, gene FROM review_gold_records"
+        )
+        if record_key not in excluded and _tier_includes_gene(definition, gene)
+    )
+
+
+def _archive_existing_current_snapshot(conn: sqlite3.Connection) -> None:
+    """Backfill a pre-v2 cache before its current view is replaced."""
+    state = conn.execute(
+        "SELECT source_url, source, schema_version, dataset_revision, "
+        "record_count, generated_at, synced_at "
+        "FROM review_gold_sync_state WHERE singleton = 1"
+    ).fetchone()
+    if state is None or not state[3]:
+        return
+    exists = conn.execute(
+        "SELECT 1 FROM review_gold_snapshots WHERE dataset_revision = ?",
+        (state[3],),
+    ).fetchone()
+    if exists is not None:
+        return
+    records = conn.execute(
+        """
+        SELECT record_key, gene, pmid, source_notation, status, revision,
+               source_reviewer_user_id, decided_by_user_id, payload_json
+        FROM review_gold_records
+        """
+    ).fetchall()
+    cardiac_count = sum(1 for row in records if row[1] in CARDIAC_GENES)
+    conn.execute(
+        """
+        INSERT INTO review_gold_snapshots (
+            dataset_revision, source_url, source, schema_version, record_count,
+            cardiac_record_count, noncardiac_record_count, generated_at,
+            first_synced_at, last_synced_at, sync_count
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+        """,
+        (
+            state[3],
+            state[0],
+            state[1],
+            state[2],
+            len(records),
+            cardiac_count,
+            len(records) - cardiac_count,
+            state[5],
+            state[6],
+            state[6],
+        ),
+    )
+    conn.executemany(
+        """
+        INSERT INTO review_gold_snapshot_records (
+            dataset_revision, record_key, gene, pmid, source_notation, status,
+            revision, source_reviewer_user_id, decided_by_user_id, payload_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        [(state[3], *row) for row in records],
+    )
+
+
 def write_live_gold_cache(
     path: Path,
     gold_rows: list[dict[str, Any]],
     overlay_rows: list[dict[str, Any]],
     metadata: dict[str, Any],
-) -> Path:
-    """Atomically replace GVF's live-gold SQLite cache and sync audit row."""
+) -> tuple[Path, dict[str, Any]]:
+    """Update the current view while preserving every source snapshot and change."""
     path = path.expanduser()
     path.parent.mkdir(parents=True, exist_ok=True)
     synced_at = datetime.now(timezone.utc).isoformat()
     conn = sqlite3.connect(path)
     try:
         with conn:
-            conn.executescript(
+            ensure_live_gold_schema(conn)
+            _archive_existing_current_snapshot(conn)
+            previous_state = conn.execute(
+                "SELECT dataset_revision FROM review_gold_sync_state "
+                "WHERE singleton = 1"
+            ).fetchone()
+            previous_revision = previous_state[0] if previous_state else ""
+            previous_rows = {
+                row[0]: {"gene": row[1], "payload_json": row[2]}
+                for row in conn.execute(
+                    "SELECT record_key, gene, payload_json FROM review_gold_records"
+                )
+            }
+            prepared_gold = [
+                {
+                    "record_key": str(row.get("record_key") or "").strip(),
+                    "gene": str(row.get("gene") or "").strip().upper(),
+                    "pmid": normalize_pmid(row.get("pmid") or ""),
+                    "source_notation": str(row.get("source_notation") or "").strip(),
+                    "status": str(row.get("status") or "").strip(),
+                    "revision": int(row.get("revision") or 0),
+                    "source_reviewer_user_id": str(
+                        row.get("source_reviewer_user_id") or ""
+                    ).strip(),
+                    "decided_by_user_id": str(
+                        row.get("decided_by_user_id") or ""
+                    ).strip(),
+                    "payload_json": _canonical_json(row),
+                }
+                for row in gold_rows
+            ]
+            current_rows = {
+                row["record_key"]: {
+                    "gene": row["gene"],
+                    "payload_json": row["payload_json"],
+                }
+                for row in prepared_gold
+            }
+            added = sorted(set(current_rows) - set(previous_rows))
+            removed = sorted(set(previous_rows) - set(current_rows))
+            updated = sorted(
+                key
+                for key in set(previous_rows) & set(current_rows)
+                if previous_rows[key]["payload_json"]
+                != current_rows[key]["payload_json"]
+            )
+            cardiac_count = sum(
+                1 for row in prepared_gold if row["gene"] in CARDIAC_GENES
+            )
+            conn.execute(
                 """
-                CREATE TABLE IF NOT EXISTS review_gold_records (
-                    record_key TEXT PRIMARY KEY,
-                    gene TEXT NOT NULL,
-                    pmid TEXT NOT NULL DEFAULT '',
-                    source_notation TEXT NOT NULL DEFAULT '',
-                    status TEXT NOT NULL,
-                    revision INTEGER NOT NULL,
-                    source_reviewer_user_id TEXT NOT NULL DEFAULT '',
-                    decided_by_user_id TEXT NOT NULL DEFAULT '',
-                    payload_json TEXT NOT NULL,
-                    source_dataset_revision TEXT NOT NULL,
-                    synced_at TEXT NOT NULL
-                );
-                CREATE INDEX IF NOT EXISTS idx_review_gold_records_gene
-                    ON review_gold_records(gene, pmid);
-                CREATE TABLE IF NOT EXISTS review_gold_overlays (
-                    record_key TEXT PRIMARY KEY,
-                    gene TEXT NOT NULL,
-                    pmid TEXT NOT NULL DEFAULT '',
-                    source_notation TEXT NOT NULL DEFAULT '',
-                    action TEXT NOT NULL,
-                    match_status TEXT NOT NULL,
-                    payload_json TEXT NOT NULL,
-                    source_dataset_revision TEXT NOT NULL,
-                    synced_at TEXT NOT NULL
-                );
-                CREATE INDEX IF NOT EXISTS idx_review_gold_overlays_gene
-                    ON review_gold_overlays(gene, pmid);
-                CREATE TABLE IF NOT EXISTS review_gold_sync_state (
-                    singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
-                    source_url TEXT NOT NULL,
-                    source TEXT NOT NULL,
-                    schema_version INTEGER NOT NULL,
-                    dataset_revision TEXT NOT NULL,
-                    record_count INTEGER NOT NULL,
-                    generated_at TEXT NOT NULL,
-                    synced_at TEXT NOT NULL
-                );
+                INSERT INTO review_gold_snapshots (
+                    dataset_revision, source_url, source, schema_version,
+                    record_count, cardiac_record_count, noncardiac_record_count,
+                    generated_at, first_synced_at, last_synced_at, sync_count
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                ON CONFLICT(dataset_revision) DO UPDATE SET
+                    last_synced_at=excluded.last_synced_at,
+                    sync_count=review_gold_snapshots.sync_count + 1
+                """,
+                (
+                    metadata["dataset_revision"],
+                    metadata["source_url"],
+                    metadata["source"],
+                    metadata["schema_version"],
+                    len(prepared_gold),
+                    cardiac_count,
+                    len(prepared_gold) - cardiac_count,
+                    metadata["generated_at"],
+                    synced_at,
+                    synced_at,
+                ),
+            )
+            conn.executemany(
                 """
+                INSERT OR IGNORE INTO review_gold_snapshot_records (
+                    dataset_revision, record_key, gene, pmid, source_notation,
+                    status, revision, source_reviewer_user_id,
+                    decided_by_user_id, payload_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (
+                        metadata["dataset_revision"],
+                        row["record_key"],
+                        row["gene"],
+                        row["pmid"],
+                        row["source_notation"],
+                        row["status"],
+                        row["revision"],
+                        row["source_reviewer_user_id"],
+                        row["decided_by_user_id"],
+                        row["payload_json"],
+                    )
+                    for row in prepared_gold
+                ],
+            )
+            cursor = conn.execute(
+                """
+                INSERT INTO review_gold_sync_runs (
+                    dataset_revision, previous_dataset_revision, source_url,
+                    record_count, cardiac_record_count, noncardiac_record_count,
+                    added_count, updated_count, removed_count, generated_at, synced_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    metadata["dataset_revision"],
+                    previous_revision,
+                    metadata["source_url"],
+                    len(prepared_gold),
+                    cardiac_count,
+                    len(prepared_gold) - cardiac_count,
+                    len(added),
+                    len(updated),
+                    len(removed),
+                    metadata["generated_at"],
+                    synced_at,
+                ),
+            )
+            sync_id = int(cursor.lastrowid)
+            change_rows = []
+            for key in added:
+                change_rows.append(
+                    (
+                        sync_id,
+                        metadata["dataset_revision"],
+                        previous_revision,
+                        key,
+                        current_rows[key]["gene"],
+                        "added",
+                        "",
+                        current_rows[key]["payload_json"],
+                        synced_at,
+                    )
+                )
+            for key in updated:
+                change_rows.append(
+                    (
+                        sync_id,
+                        metadata["dataset_revision"],
+                        previous_revision,
+                        key,
+                        current_rows[key]["gene"],
+                        "updated",
+                        previous_rows[key]["payload_json"],
+                        current_rows[key]["payload_json"],
+                        synced_at,
+                    )
+                )
+            for key in removed:
+                change_rows.append(
+                    (
+                        sync_id,
+                        metadata["dataset_revision"],
+                        previous_revision,
+                        key,
+                        previous_rows[key]["gene"],
+                        "removed",
+                        previous_rows[key]["payload_json"],
+                        "",
+                        synced_at,
+                    )
+                )
+            conn.executemany(
+                """
+                INSERT INTO review_gold_record_changes (
+                    sync_id, dataset_revision, previous_dataset_revision,
+                    record_key, gene, change_type, previous_payload_json,
+                    current_payload_json, detected_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                change_rows,
             )
             conn.execute("DELETE FROM review_gold_records")
             conn.execute("DELETE FROM review_gold_overlays")
@@ -595,24 +1014,19 @@ def write_live_gold_cache(
                 """,
                 [
                     (
-                        str(row.get("record_key") or "").strip(),
-                        str(row.get("gene") or "").strip().upper(),
-                        normalize_pmid(row.get("pmid") or ""),
-                        str(row.get("source_notation") or "").strip(),
-                        str(row.get("status") or "").strip(),
-                        int(row.get("revision") or 0),
-                        str(row.get("source_reviewer_user_id") or "").strip(),
-                        str(row.get("decided_by_user_id") or "").strip(),
-                        json.dumps(
-                            row,
-                            sort_keys=True,
-                            separators=(",", ":"),
-                            ensure_ascii=False,
-                        ),
+                        row["record_key"],
+                        row["gene"],
+                        row["pmid"],
+                        row["source_notation"],
+                        row["status"],
+                        row["revision"],
+                        row["source_reviewer_user_id"],
+                        row["decided_by_user_id"],
+                        row["payload_json"],
                         metadata["dataset_revision"],
                         synced_at,
                     )
-                    for row in gold_rows
+                    for row in prepared_gold
                 ],
             )
             conn.executemany(
@@ -630,12 +1044,7 @@ def write_live_gold_cache(
                         row["source_notation"],
                         row["action"],
                         row["match_status"],
-                        json.dumps(
-                            row,
-                            sort_keys=True,
-                            separators=(",", ":"),
-                            ensure_ascii=False,
-                        ),
+                        _canonical_json(row),
                         metadata["dataset_revision"],
                         synced_at,
                     )
@@ -667,10 +1076,29 @@ def write_live_gold_cache(
                     synced_at,
                 ),
             )
-            conn.execute("PRAGMA user_version = 1")
+            tier_counts = {
+                name: _count_tier_records_conn(conn, name)
+                for (name,) in conn.execute(
+                    "SELECT name FROM review_gold_tiers ORDER BY name"
+                )
+            }
+            excluded_count = conn.execute(
+                "SELECT COUNT(*) FROM review_gold_exclusions WHERE active = 1"
+            ).fetchone()[0]
+            conn.execute("PRAGMA user_version = 2")
     finally:
         conn.close()
-    return path
+    return path, {
+        "sync_id": sync_id,
+        "previous_dataset_revision": previous_revision,
+        "added_count": len(added),
+        "updated_count": len(updated),
+        "removed_count": len(removed),
+        "cardiac_record_count": cardiac_count,
+        "noncardiac_record_count": len(prepared_gold) - cardiac_count,
+        "tier_counts": tier_counts,
+        "excluded_count": excluded_count,
+    }
 
 
 def read_live_sync_state(path: Path) -> dict[str, Any]:
@@ -691,6 +1119,50 @@ def read_live_sync_state(path: Path) -> dict[str, Any]:
     finally:
         conn.close()
     return dict(row) if row is not None else {}
+
+
+def read_gold_tier_definition(path: Optional[Path], tier: str) -> dict[str, Any]:
+    """Resolve a built-in or cache-defined tier without mutating the cache."""
+    name = str(tier or "").strip().lower()
+    builtin = BUILTIN_GOLD_TIERS.get(name)
+    if path is None or not path.exists():
+        if builtin is None:
+            raise GoldSyncError(
+                f"Review-gold tier {name!r} needs an existing cache definition."
+            )
+        return {"name": name, **builtin, "builtin": True}
+    try:
+        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    except sqlite3.Error as exc:
+        raise GoldSyncError(f"Could not open review-gold cache: {exc}") from exc
+    try:
+        try:
+            return _tier_definition_conn(conn, name)
+        except sqlite3.Error:
+            if builtin is not None:
+                return {"name": name, **builtin, "builtin": True}
+            raise GoldSyncError(f"Unknown review-gold tier: {name!r}.") from None
+    finally:
+        conn.close()
+
+
+def gold_tier_includes_gene(path: Optional[Path], tier: str, gene: str) -> bool:
+    return _tier_includes_gene(read_gold_tier_definition(path, tier), gene)
+
+
+def current_gold_tier_counts(path: Path) -> dict[str, int]:
+    """Return active record counts for every tier in a version-2 cache."""
+    try:
+        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    except sqlite3.Error as exc:
+        raise GoldSyncError(f"Could not open review-gold cache: {exc}") from exc
+    try:
+        names = [row[0] for row in conn.execute("SELECT name FROM review_gold_tiers")]
+        return {name: _count_tier_records_conn(conn, name) for name in names}
+    except sqlite3.Error as exc:
+        raise GoldSyncError(f"Review-gold cache has no tier metadata: {exc}") from exc
+    finally:
+        conn.close()
 
 
 def write_followup_queue(rows: list[dict[str, Any]], out_dir: Path) -> Path:
@@ -797,7 +1269,7 @@ def sync_live_gold(
     )
     overlay_rows = build_overlay_rows(export_rows, db_aggregates, have_db)
     try:
-        cache_path = write_live_gold_cache(
+        cache_path, audit = write_live_gold_cache(
             cache_db,
             export_rows,
             overlay_rows,
@@ -814,6 +1286,7 @@ def sync_live_gold(
         raise GoldSyncError(f"Failed to update GVF's live gold cache: {exc}") from exc
     state = {
         **metadata,
+        **audit,
         "cache_db": str(cache_path),
         "followup_queue": str(followup_path),
         "summary_path": str(summary_path),
@@ -823,6 +1296,18 @@ def sync_live_gold(
         print(
             f"Synced {metadata['record_count']} lead-approved gold record(s) "
             f"from Azure revision {metadata['dataset_revision'][:12]} -> {cache_path}"
+        )
+        print(
+            "  tiers: "
+            + ", ".join(
+                f"{name}={count}" for name, count in audit["tier_counts"].items()
+            )
+            + f"; excluded={audit['excluded_count']}"
+        )
+        print(
+            "  changes from prior current snapshot: "
+            f"added={audit['added_count']}, updated={audit['updated_count']}, "
+            f"removed={audit['removed_count']}"
         )
     return state
 

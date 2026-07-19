@@ -82,8 +82,12 @@ MYBPC3) are review targets scored against curator/derived `gold_overrides`, not
 counted in headline metrics. See `docs/RECALL_STATUS.md` for the scope rule.
 
 Lead-approved Variant_Browser adjudications are pulled directly from its live
-Azure review database into GVF's `review_gold.sqlite3` cache. Release scoring
-uses `scripts/run_recall_suite.py --review-gold-sync required`; see
+Azure review database into GVF's versioned `review_gold.sqlite3` cache. Every
+source revision and added/updated/removed record is retained. Release scoring
+defaults to the cardiac-only tier; use `--review-gold-tier all` for an analysis
+that includes non-cardiac genes. Inspect snapshots or make audited reversible
+exclusions with `scripts/manage_review_gold.py`. Release scoring uses
+`scripts/run_recall_suite.py --review-gold-sync required`; see
 [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md).
 
 For fast regression checks while changing prompts, extraction logic, guardrails,

@@ -2303,12 +2303,18 @@ def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str
 def load_adjudication_overlay_db(
     path: Path,
     gene: str,
+    tier: str = "cardiac",
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
-    """Load one gene's overlay from the atomically synced live-gold database."""
-    from scripts.ingest_review_adjudications import _variant_key
+    """Load one tier's active overlay from the versioned live-gold database."""
+    from scripts.ingest_review_adjudications import (
+        _variant_key,
+        gold_tier_includes_gene,
+    )
 
     overlay: Dict[Tuple[str, str], Dict[str, Any]] = {}
     if path is None or not path.exists():
+        return overlay
+    if not gold_tier_includes_gene(path, tier, gene):
         return overlay
     try:
         conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
@@ -2324,6 +2330,16 @@ def load_adjudication_overlay_db(
             """,
             (gene.strip().upper(),),
         ).fetchall()
+        try:
+            excluded = {
+                row[0]
+                for row in conn.execute(
+                    "SELECT record_key FROM review_gold_exclusions WHERE active = 1"
+                )
+            }
+        except sqlite3.Error:
+            # Version-1 caches and narrow unit fixtures predate exclusions.
+            excluded = set()
     except sqlite3.Error:
         return overlay
     finally:
@@ -2332,6 +2348,8 @@ def load_adjudication_overlay_db(
         try:
             row = json.loads(payload_json)
         except (TypeError, json.JSONDecodeError):
+            continue
+        if str(row.get("record_key") or "").strip() in excluded:
             continue
         pmid = normalize_pmid(row.get("pmid") or "")
         notation = str(row.get("source_notation") or "").strip()
