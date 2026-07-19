@@ -2129,6 +2129,12 @@ class ExpertExtractor(BaseLLMCaller):
             return False
 
         parts = self._markdown_cells(line)
+        if not parts:
+            # Some converters omit the outer Markdown border while retaining
+            # the column delimiters (``Gene | cDNA | carriers``).  Preserve
+            # interior blanks here just as the row parser does; otherwise the
+            # header gate rejects a shape the parser can already split.
+            parts = [part.strip() for part in line.split("|")]
         if self._looks_like_gwas_header(parts):
             return False
 
@@ -3350,6 +3356,7 @@ class ExpertExtractor(BaseLLMCaller):
         active_header_line = ""
         normalized_active_headers = []
         active_row_gene_scope: set[str] = set()
+        active_row_gene_cell = ""
         previous_table_data_line = ""
         recognized_row_genes = {
             str(value).strip().upper()
@@ -3359,10 +3366,12 @@ class ExpertExtractor(BaseLLMCaller):
         recognized_row_genes.add(gene_symbol.upper())
 
         from pipeline.table_router import (
+            _cell_mentions_target_gene,
             _gene_symbol_tokens,
             _is_non_variant_count_header,
             _normalize_header,
             _split_pipe_row,
+            _target_gene_tokens,
         )
 
         def count_type_for_header(label: Optional[str]) -> Optional[str]:
@@ -3462,6 +3471,7 @@ class ExpertExtractor(BaseLLMCaller):
                     ]
                     table_row_ordinal = 0
                     active_row_gene_scope = set()
+                    active_row_gene_cell = ""
                     previous_table_data_line = ""
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
@@ -3508,6 +3518,7 @@ class ExpertExtractor(BaseLLMCaller):
                 active_table_label = ""
                 active_header_line = ""
                 active_row_gene_scope = set()
+                active_row_gene_cell = ""
                 previous_table_data_line = ""
                 update_table_label(stripped_line, line_number)
                 continue
@@ -3583,36 +3594,54 @@ class ExpertExtractor(BaseLLMCaller):
             unaffected_raw = get_col("unaffected")
             row_subject_raw = get_col("row_subject")
 
-            # Gene-grouped PMC tables often leave the gene header blank and use
-            # a rowspan-like first cell: ``BRCA1`` once, blank continuation
-            # rows, then ``BRCA2`` once.  Infer the group from cells before the
-            # first notation column and carry it forward.  This prevents an
-            # extraction for BRCA2 from relabelling all BRCA1 rows as BRCA2.
-            notation_indices = [
-                idx
-                for idx in (header_mapping.get("cdna"), header_mapping.get("protein"))
-                if idx is not None
-            ]
-            prefix_end = min(notation_indices) if notation_indices else len(cells)
-            gene_context_cells = [row_gene] if row_gene else cells[:prefix_end]
-            explicit_row_gene_scope: set[str] = set()
-            for value in gene_context_cells:
-                explicit_row_gene_scope.update(
-                    self._gene_scope_from_table_label(value or "")
-                )
-                explicit_row_gene_scope.update(
-                    token
-                    for token in _gene_symbol_tokens(value or "")
-                    if token in recognized_row_genes
-                )
-            if explicit_row_gene_scope:
-                active_row_gene_scope = explicit_row_gene_scope
+            # Gene-grouped PMC tables often use a rowspan-like gene cell: name
+            # the gene once, leave continuation rows blank, then name the next
+            # gene.  When a real Gene header exists, carry the raw cell forward
+            # and filter it without requiring the co-listed gene to be in our
+            # built-in metadata registry (PALB2/ATM/etc. must not inherit a
+            # preceding BRCA2 scope).  For an unnamed gene column, retain the
+            # conservative prefix inference used for PMID 18627636.
+            if header_mapping.get("gene") is not None:
+                explicit_gene_cell = (row_gene or "").strip()
+                if explicit_gene_cell:
+                    active_row_gene_cell = explicit_gene_cell
+                else:
+                    explicit_gene_cell = active_row_gene_cell
+                gene_tokens = _gene_symbol_tokens(explicit_gene_cell)
+                if (
+                    explicit_gene_cell
+                    and not _cell_mentions_target_gene(explicit_gene_cell, gene_symbol)
+                    and not (gene_tokens & _target_gene_tokens(gene_symbol))
+                ):
+                    continue
+            else:
+                notation_indices = [
+                    idx
+                    for idx in (
+                        header_mapping.get("cdna"),
+                        header_mapping.get("protein"),
+                    )
+                    if idx is not None
+                ]
+                prefix_end = min(notation_indices) if notation_indices else len(cells)
+                explicit_row_gene_scope: set[str] = set()
+                for value in cells[:prefix_end]:
+                    explicit_row_gene_scope.update(
+                        self._gene_scope_from_table_label(value or "")
+                    )
+                    explicit_row_gene_scope.update(
+                        token
+                        for token in _gene_symbol_tokens(value or "")
+                        if token in recognized_row_genes
+                    )
+                if explicit_row_gene_scope:
+                    active_row_gene_scope = explicit_row_gene_scope
 
-            if (
-                active_row_gene_scope
-                and gene_symbol.upper() not in active_row_gene_scope
-            ):
-                continue
+                if (
+                    active_row_gene_scope
+                    and gene_symbol.upper() not in active_row_gene_scope
+                ):
+                    continue
 
             row_text = " ".join(cells)
             if not table_label_matches_target(active_table_label):

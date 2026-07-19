@@ -241,7 +241,7 @@ def test_markdown_no_caption_no_gene_column_is_not_oversuppressed():
 
 
 def test_markdown_gene_column_filters_rows_in_multigene_table():
-    """A table with a per-row Gene column keeps only the target gene's rows."""
+    """A Gene column filters off-target rows without a built-in gene registry."""
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
 | **Gene** | **Amino acid change** | **Nucleotide change** | **Total carriers** |
@@ -249,10 +249,29 @@ def test_markdown_gene_column_filters_rows_in_multigene_table():
 | SCN5A | p.(Arg18Gln) | c.53G>A | 4 |
 | KCNH2 | p.(Pro1093Leu) | c.3278C>T | 2 |
 | KCNQ1 | p.(Tyr111Cys) | c.332A>G | 9 |
+| PALB2 | p.(Gly1038Asp) | c.3113G>A | 4 |
+| ATM | p.(Val2424Gly) | c.7271T>G | 3 |
 """
 
     variants = extractor._parse_markdown_table_variants(text, "SCN5A")
     assert [v["cdna_notation"] for v in variants] == ["c.53G>A"]
+
+
+def test_markdown_parser_accepts_header_without_outer_pipe_borders():
+    """A borderless header must use the same position-preserving split as rows."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Gene | Amino acid change | Nucleotide change | Total carriers
+| --- | --- | --- | --- |
+| BRCA2 | p.(Ser1982Argfs) | c.5946delT | 2 |
+| PALB2 | p.(Gly1038Asp) | c.3113G>A | 4 |
+"""
+
+    assert extractor._is_variant_table_header(
+        "Gene | Amino acid change | Nucleotide change | Total carriers"
+    )
+    variants = extractor._parse_markdown_table_variants(text, "BRCA2")
+    assert [variant["cdna_notation"] for variant in variants] == ["c.5946delT"]
 
 
 def test_markdown_parser_preserves_blank_gene_column_and_rejects_family_history_counts():
