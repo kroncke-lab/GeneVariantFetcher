@@ -69,8 +69,8 @@ DEFAULT_MAX_SOURCE_CHARS = 60000
 # Minimum usable source length (chars); below this, treat as no source.
 MIN_USABLE_SOURCE_CHARS = 200
 
-PROMPT_VERSION = "pfc3"  # DB-only sniff test + strict response contract
-SUMMARY_PROMPT_VERSION = "pfs5"  # trust-only verdict; completeness is separate
+PROMPT_VERSION = "pfc4"  # targeted table evidence + strict response contract
+SUMMARY_PROMPT_VERSION = "pfs6"  # targeted table evidence in trust review
 SOURCE_RECIPE_VERSION = "src2"  # abstract + Data-Scout DATA_ZONES (no full text)
 
 VALID_VERDICTS = ("ok", "flag")
@@ -95,7 +95,10 @@ A row is SUSPECT if any of these apply:
   MAF, AC/AN, allele frequency), not a clinical carrier count.
 - affected + unaffected exceeds total_carriers.
 - The number is an assay replicate/cell count, or a table value that is really a
-  prediction score, allele frequency, exon/domain number, or genomic position.
+  prediction score, allele frequency, exon/domain number, genomic position, age
+  at diagnosis, mean age, or a family-history disease/case count.
+- A claimed count column does not line up with the target row in the supplied
+  table header/row context (watch especially for blank leading/group columns).
 - The count has no supporting quote or source location (treat as low confidence).
 - The magnitude is implausible for the carriers of a single variant.
 
@@ -172,7 +175,9 @@ a biobank, a referral clinic, a cited prior cohort, etc.).
 TASK C — trust flags: flag any ALREADY CAPTURED row that is SUSPECT (a cohort/
 study denominator, a study-wide or mutation-class total copied onto one variant,
 a gnomAD/allele-frequency figure, affected+unaffected exceeding the total, or an
-implausible magnitude), cross-checked against the real text.
+implausible magnitude). Also flag age-at-diagnosis, mean-age, and family-history
+disease/case values that were misread as carrier or affected counts. Cross-check
+the claimed column against any compact header + target-row evidence supplied.
 
 Return STRICT JSON only, no prose outside the object:
 {{
@@ -581,6 +586,49 @@ def gather_paper_payloads(
         }
 
     variant_cols = {row[1] for row in conn.execute("PRAGMA table_info(variants)")}
+    provenance_cols = {
+        row[1] for row in conn.execute("PRAGMA table_info(fact_provenance)")
+    }
+    evidence_by_variant: dict[tuple[int, str], list[dict[str, Any]]] = {}
+    if provenance_cols:
+        provenance_where = ""
+        provenance_params: list[Any] = []
+        if pmids:
+            placeholders = ",".join("?" for _ in pmids)
+            provenance_where = f" AND pmid IN ({placeholders})"
+            provenance_params = list(pmids)
+        for ev in cur.execute(
+            f"""
+            SELECT variant_id, pmid, fact_type, fact_value, source_table,
+                   source_row, source_column, evidence_quote, count_type,
+                   source_layer
+            FROM fact_provenance
+            WHERE fact_type IN (
+                'patient_count', 'total_carriers_observed', 'affected_count',
+                'unaffected_count', 'uncertain_count'
+            )
+            {provenance_where}
+            ORDER BY variant_id, pmid, provenance_id
+            """,
+            provenance_params,
+        ):
+            evidence = {
+                key: ev[key]
+                for key in (
+                    "fact_type",
+                    "fact_value",
+                    "source_table",
+                    "source_row",
+                    "source_column",
+                    "evidence_quote",
+                    "count_type",
+                    "source_layer",
+                )
+                if ev[key] not in (None, "")
+            }
+            key = (int(ev["variant_id"]), str(ev["pmid"]))
+            if evidence and evidence not in evidence_by_variant.setdefault(key, []):
+                evidence_by_variant[key].append(evidence)
     structural_expr = (
         "v.structural_description"
         if "structural_description" in variant_cols
@@ -595,6 +643,7 @@ def gather_paper_payloads(
     )
     sql = f"""
         SELECT pd.pmid AS pmid,
+               v.variant_id              AS variant_id,
                {variant_identity_expr} AS variant,
                v.protein_notation      AS protein_notation,
                v.cdna_notation         AS cdna_notation,
@@ -661,9 +710,6 @@ def gather_paper_payloads(
         bucket["captured_fact_index"].append(compact_fact)
         bucket["n_facts_total"] = fact_number
 
-        if len(bucket["facts"]) >= max_facts:
-            continue
-
         fact: dict[str, Any] = {
             "n": fact_number,
             "variant": row["variant"] or "(unnamed)",
@@ -682,9 +728,40 @@ def gather_paper_payloads(
         loc = _clip(row["source_location"], 200)
         if loc:
             fact["source_location"] = loc
-        quotes = _clip(row["key_quotes"])
+        raw_quotes = _load_json(row["key_quotes"])
+        if isinstance(raw_quotes, list):
+            quotes = _clip("\n".join(str(value) for value in raw_quotes if value))
+        else:
+            quotes = _clip(row["key_quotes"])
         if quotes:
             fact["quote"] = quotes
+        evidence_context = []
+        count_values = {
+            "patient_count": counts["total_carriers"],
+            "total_carriers_observed": counts["total_carriers"],
+            "affected_count": counts["affected"],
+            "unaffected_count": counts["unaffected"],
+            "uncertain_count": counts["uncertain"],
+        }
+        for evidence in evidence_by_variant.get((int(row["variant_id"]), pmid), []):
+            fact_type = str(evidence.get("fact_type") or "")
+            expected_value = count_values.get(fact_type)
+            if (
+                expected_value is None
+                or _as_int(evidence.get("fact_value")) != expected_value
+            ):
+                continue
+            clipped = {
+                key: _clip(value, MAX_QUOTE_CHARS if key == "evidence_quote" else 160)
+                for key, value in evidence.items()
+            }
+            clipped = {key: value for key, value in clipped.items() if value}
+            if clipped and clipped not in evidence_context:
+                evidence_context.append(clipped)
+            if len(evidence_context) >= 4:
+                break
+        if evidence_context:
+            fact["table_evidence"] = evidence_context
         if sel_trust:
             tier = row["trust_tier"]
             if tier:
@@ -696,6 +773,33 @@ def gather_paper_payloads(
 
     payloads = []
     for payload in grouped.values():
+        if len(payload["facts"]) > max_facts:
+
+            def review_priority(fact: dict[str, Any]) -> tuple[int, int, int, int]:
+                values = [
+                    abs(value)
+                    for value in (fact.get("counts") or {}).values()
+                    if isinstance(value, int)
+                ]
+                max_count = max(values, default=0)
+                label = str(fact.get("count_label") or "").lower()
+                ambiguous_label = int(
+                    any(
+                        token in label
+                        for token in ("age", "family", "case", "cohort", "screen")
+                    )
+                )
+                return (
+                    ambiguous_label,
+                    int(bool(fact.get("table_evidence"))),
+                    max_count,
+                    -int(fact.get("n") or 0),
+                )
+
+            selected = sorted(payload["facts"], key=review_priority, reverse=True)[
+                :max_facts
+            ]
+            payload["facts"] = sorted(selected, key=lambda fact: fact.get("n") or 0)
         payload["truncated"] = payload["n_facts_total"] > len(payload["facts"])
         payloads.append(payload)
     return payloads

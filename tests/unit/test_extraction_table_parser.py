@@ -255,6 +255,101 @@ def test_markdown_gene_column_filters_rows_in_multigene_table():
     assert [v["cdna_notation"] for v in variants] == ["c.53G>A"]
 
 
+def test_markdown_parser_preserves_blank_gene_column_and_rejects_family_history_counts():
+    """PMID 18627636: a blank gene header must not shift age into counts.
+
+    The first row of each gene group fills an otherwise unnamed gene column;
+    continuation rows leave it blank.  ``No. of cases <= 50`` is family-history
+    context in this clinical-characteristics table, not genotyped carriers.
+    """
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 1
+
+| Ethnicity | Women analysed |
+|---|---|
+| Malay | 91 |
+
+### Table 5
+
+Family characteristics and pathological characteristics of breast cancers of individuals with deleterious BRCA1 and BRCA2 mutations
+
+|  | Nucleotide change | AA change | Age of diagnosis of breast cancer | No. of breast/ovarian cancers in family | Mean age diagnosis (Breast cancer) | No. of cases (Breast cancer <= 50) | ER |
+|---|---|---|---|---|---|---|---|
+| BRCA1 | 180 delA | STOP 22 | 55 | 2 | 43 | 1 | - |
+|  | 185 delAG | STOP 39 | 33 | 1 | 33 | 1 | - |
+| BRCA2 | 490 delCT | STOP 99 | 39 | 2 | 56 | 1 | - |
+|  | 1184 insA | STOP 326 | 34 | 1 | 34 | 1 | + |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "BRCA2")
+
+    assert [v["cdna_notation"] for v in variants] == [
+        "c.490delCT",
+        "c.1184insA",
+    ]
+    assert all(v["patients"]["count"] == 1 for v in variants)
+    assert all(v["penetrance_data"]["affected_count"] == 1 for v in variants)
+    assert all(v["source_ref"] == "Table 5" for v in variants)
+    first = variants[0]
+    assert first["column_ref"] == "implicit one carrier per clinical row"
+    assert "Header:" in first["evidence_quote"]
+    assert "Target row: | BRCA2 | 490 delCT" in first["evidence_quote"]
+    assert "Next row: |  | 1184 insA" in first["evidence_quote"]
+    assert first["key_quotes"] == [first["evidence_quote"]]
+
+
+def test_large_table_dedupe_prefers_authoritative_mutation_list_over_restatement():
+    """A clinical restatement must not be added to the mutation-list count."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+| No. |  | Exon | Nucleotide change | AA change | Family (No.) |
+|---|---|---|---|---|---|
+| 1 | BRCA1 | 2 | 180 delA | STOP 22 | 1 |
+| 1 | BRCA2 | 3 | 490 delCT | STOP 99 | 2 |
+
+### Table 5
+
+Family characteristics of individuals with deleterious BRCA mutations
+
+|  | Nucleotide change | AA change | Age of diagnosis | No. of cancers in family | Mean age diagnosis | No. of cases (Breast cancer <= 50) |
+|---|---|---|---|---|---|---|
+| BRCA1 | 180 delA | STOP 22 | 55 | 2 | 43 | 1 |
+| BRCA2 | 490 delCT | STOP 99 | 39 | 2 | 56 | 1 |
+|  | 490 delCT | STOP 99 | 51 | 4 | 45 | 3 |
+"""
+
+    parsed = extractor._parse_markdown_table_variants(text, "BRCA2")
+    deduped = extractor._dedupe_table_variants(parsed)
+
+    assert [v["cdna_notation"] for v in deduped] == ["c.490delCT"]
+    variant = deduped[0]
+    assert variant["patients"]["count"] == 2
+    assert variant["penetrance_data"]["affected_count"] == 2
+    assert variant["source_ref"] == "Table 2"
+    assert variant["count_provenance"]["carriers_count_type"] == "family_count"
+
+
+def test_bare_family_identifier_remains_one_row_not_a_numeric_carrier_count():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Family | Mutation | Phenotype |
+|---|---|---|
+| 101 | p.Arg176Trp | affected |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNH2")
+
+    assert len(variants) == 1
+    assert variants[0]["patients"]["count"] == 1
+    assert (
+        variants[0]["count_provenance"]["carriers_column_label"]
+        == "implicit one carrier per clinical row"
+    )
+
+
 def test_fixed_width_parser_reads_pdftotext_layout_rows():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

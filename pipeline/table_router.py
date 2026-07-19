@@ -554,10 +554,60 @@ def _is_denominator_header_when_carrier_present(
 
 def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> bool:
     """Reject numeric columns that are visibly not per-variant carrier counts."""
+    row_identifier = _is_row_identifier_header(header)
+    # ``Family (No.)`` is usually an identifier, but mutation-list tables can
+    # also use it as a family count while a separate leading ``No.`` column is
+    # the actual row identifier (PMID 18627636 Table 2).  The parallel serial
+    # column disambiguates that shape; retain the explicit ``family_count`` role.
+    if (
+        row_identifier
+        and header in {"familyno", "familynumber"}
+        and any(
+            candidate in {"no", "number", "rowno", "serialno"}
+            for candidate in normalized_headers
+        )
+    ):
+        row_identifier = False
+    # Family-history / clinical-characteristics tables often put a mutation next
+    # to several numeric phenotype summaries, for example ``age at diagnosis``,
+    # ``cancers in family``, and ``cases diagnosed <= 50``.  A fuzzy ``cases``
+    # match must not turn those family-history values into variant carriers.
+    # Require the table-level combination here rather than blacklisting every
+    # ``cases`` column: ordinary per-variant case tables remain valid.
+    family_history_table = any(
+        any(
+            token in candidate
+            for token in (
+                "infamily",
+                "familyhistory",
+                "familycancer",
+                "familialcancer",
+                "affectedrelatives",
+            )
+        )
+        for candidate in normalized_headers
+    ) and any(
+        any(
+            token in candidate
+            for token in ("ageofdiagnosis", "ageatdiagnosis", "meanage")
+        )
+        for candidate in normalized_headers
+    )
+    family_history_measure = family_history_table and any(
+        token in header
+        for token in (
+            "case",
+            "cancer",
+            "family",
+            "relative",
+            "age",
+        )
+    )
     return (
-        _is_row_identifier_header(header)
+        row_identifier
         or _is_population_frequency_header(header)
         or _is_denominator_header_when_carrier_present(header, normalized_headers)
+        or family_history_measure
     )
 
 
@@ -693,6 +743,26 @@ def _infer_column_mapping_from_headers(
         ):
             if _looks_numeric_column(values):
                 mapping["patient_count"] = idx
+
+    # PMC tables sometimes leave the gene-group header cell blank and put
+    # ``BRCA1`` / ``BRCA2`` only in the first row of each rowspan-like group.
+    # Recover that unnamed gene column so parse_routed_table can forward-fill it
+    # and keep off-target rows out of a target-gene extraction.
+    if "gene" not in mapping:
+        known_genes = {
+            str(gene).strip().upper()
+            for gene in known_gene_aliases(include_query_aliases=True)
+            if str(gene).strip()
+        }
+        for idx, header in enumerate(normalized_headers):
+            if header:
+                continue
+            observed = set()
+            for value in _column_values(table, idx):
+                observed.update(_gene_symbol_tokens(value))
+            if observed & known_genes:
+                mapping["gene"] = idx
+                break
 
     # If a notation column has a generic "mutation/variant" header, data decides
     # whether it is cDNA or protein. Prefer explicit cDNA/protein when present.

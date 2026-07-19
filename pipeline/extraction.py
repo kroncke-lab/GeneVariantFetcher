@@ -1537,6 +1537,7 @@ class ExpertExtractor(BaseLLMCaller):
         "carrier",
         "carriers",
         "probands",
+        "family (no.)",
         "families",
         "subjects",
         "count",
@@ -2127,7 +2128,7 @@ class ExpertExtractor(BaseLLMCaller):
         if "|" not in line:
             return False
 
-        parts = [p.strip() for p in line.split("|") if p.strip()]
+        parts = self._markdown_cells(line)
         if self._looks_like_gwas_header(parts):
             return False
 
@@ -3344,12 +3345,24 @@ class ExpertExtractor(BaseLLMCaller):
         table_row_ordinal = 0
         row_level_clinical_table = False
         current_table_label = ""
+        current_table_label_line: Optional[int] = None
         active_table_label = ""
+        active_header_line = ""
         normalized_active_headers = []
+        active_row_gene_scope: set[str] = set()
+        previous_table_data_line = ""
+        recognized_row_genes = {
+            str(value).strip().upper()
+            for value in known_gene_aliases(include_query_aliases=True)
+            if str(value).strip()
+        }
+        recognized_row_genes.add(gene_symbol.upper())
 
         from pipeline.table_router import (
+            _gene_symbol_tokens,
             _is_non_variant_count_header,
             _normalize_header,
+            _split_pipe_row,
         )
 
         def count_type_for_header(label: Optional[str]) -> Optional[str]:
@@ -3383,8 +3396,8 @@ class ExpertExtractor(BaseLLMCaller):
                 return "screened_N"
             return "per_variant_carrier"
 
-        def update_table_label(text: str) -> None:
-            nonlocal current_table_label
+        def update_table_label(text: str, line_number: int) -> None:
+            nonlocal current_table_label, current_table_label_line
             candidate = text
             # Captions are frequently emitted as a single-cell table row, e.g.
             # `| **Supplemental Table 1. KCNQ1 variants ...** | | | |`. Pull the
@@ -3400,6 +3413,7 @@ class ExpertExtractor(BaseLLMCaller):
                 re.IGNORECASE,
             ):
                 current_table_label = heading
+                current_table_label_line = line_number
 
         def table_label_matches_target(label: str) -> bool:
             if not label:
@@ -3413,11 +3427,11 @@ class ExpertExtractor(BaseLLMCaller):
         for line_number, line in enumerate(lines, start=1):
             stripped_line = line.strip()
             if not table_started:
-                update_table_label(stripped_line)
+                update_table_label(stripped_line, line_number)
 
                 # Detect header row using broadened patterns
                 if self._is_variant_table_header(line):
-                    parts = [p.strip() for p in line.split("|") if p.strip()]
+                    parts = _split_pipe_row(line)
                     if self._looks_like_gwas_header(parts):
                         table_started = False
                         header_mapping = {}
@@ -3434,12 +3448,21 @@ class ExpertExtractor(BaseLLMCaller):
                         else ""
                     )
                     table_block_index += 1
-                    active_table_label = queued_table_label or current_table_label
+                    local_table_label = (
+                        current_table_label
+                        if current_table_label_line is not None
+                        and line_number - current_table_label_line <= 8
+                        else ""
+                    )
+                    active_table_label = local_table_label or queued_table_label
+                    active_header_line = line.strip()
                     active_headers = parts
                     normalized_active_headers = [
                         _normalize_header(header) for header in active_headers
                     ]
                     table_row_ordinal = 0
+                    active_row_gene_scope = set()
+                    previous_table_data_line = ""
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
@@ -3483,16 +3506,22 @@ class ExpertExtractor(BaseLLMCaller):
                 table_row_ordinal = 0
                 row_level_clinical_table = False
                 active_table_label = ""
+                active_header_line = ""
+                active_row_gene_scope = set()
+                previous_table_data_line = ""
+                update_table_label(stripped_line, line_number)
                 continue
 
             # Skip separator rows
             if set(line.strip()) <= {"|", "-", " ", ":"}:
                 continue
 
-            cells = [c.strip() for c in line.split("|") if c.strip()]
+            cells = _split_pipe_row(line)
             if len(cells) < 2:  # Relaxed from 3 to 2 for simpler tables
                 continue
             table_row_ordinal += 1
+            prior_table_data_line = previous_table_data_line
+            previous_table_data_line = line.strip()
 
             def usable_indices(key: str) -> List[int]:
                 raw_indices = list(header_multi.get(key, []))
@@ -3554,7 +3583,35 @@ class ExpertExtractor(BaseLLMCaller):
             unaffected_raw = get_col("unaffected")
             row_subject_raw = get_col("row_subject")
 
-            if row_gene and row_gene.strip().upper() != gene_symbol.upper():
+            # Gene-grouped PMC tables often leave the gene header blank and use
+            # a rowspan-like first cell: ``BRCA1`` once, blank continuation
+            # rows, then ``BRCA2`` once.  Infer the group from cells before the
+            # first notation column and carry it forward.  This prevents an
+            # extraction for BRCA2 from relabelling all BRCA1 rows as BRCA2.
+            notation_indices = [
+                idx
+                for idx in (header_mapping.get("cdna"), header_mapping.get("protein"))
+                if idx is not None
+            ]
+            prefix_end = min(notation_indices) if notation_indices else len(cells)
+            gene_context_cells = [row_gene] if row_gene else cells[:prefix_end]
+            explicit_row_gene_scope: set[str] = set()
+            for value in gene_context_cells:
+                explicit_row_gene_scope.update(
+                    self._gene_scope_from_table_label(value or "")
+                )
+                explicit_row_gene_scope.update(
+                    token
+                    for token in _gene_symbol_tokens(value or "")
+                    if token in recognized_row_genes
+                )
+            if explicit_row_gene_scope:
+                active_row_gene_scope = explicit_row_gene_scope
+
+            if (
+                active_row_gene_scope
+                and gene_symbol.upper() not in active_row_gene_scope
+            ):
                 continue
 
             row_text = " ".join(cells)
@@ -3601,6 +3658,7 @@ class ExpertExtractor(BaseLLMCaller):
             unaffected_count = parse_count_sum(get_cols("unaffected")) or parse_count(
                 unaffected_raw
             )
+            inferred_one_carrier = False
 
             # Fallback: use last cell if it looks numeric
             if (
@@ -3622,6 +3680,7 @@ class ExpertExtractor(BaseLLMCaller):
                 and row_level_clinical_table
             ):
                 patient_count = 1
+                inferred_one_carrier = True
                 row_text = " ".join(cells)
                 if re.search(
                     r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
@@ -3654,6 +3713,30 @@ class ExpertExtractor(BaseLLMCaller):
                     unaffected_count = remainder if remainder >= 0 else None
 
             source_ref = active_table_label or "Markdown table"
+            carrier_label = header_label("count")
+            if inferred_one_carrier:
+                carrier_label = "implicit one carrier per clinical row"
+            affected_label = header_label("affected") or carrier_label
+            unaffected_label = header_label("unaffected")
+
+            next_table_data_line = ""
+            if line_number < len(lines):
+                following = lines[line_number].strip()
+                if following.startswith("|") and not set(following) <= {
+                    "|",
+                    "-",
+                    " ",
+                    ":",
+                }:
+                    next_table_data_line = following
+            evidence_parts = [f"Header: {active_header_line or 'unknown'}"]
+            if prior_table_data_line:
+                evidence_parts.append(f"Previous row: {prior_table_data_line}")
+            evidence_parts.append(f"Target row: {line.strip()}")
+            if next_table_data_line:
+                evidence_parts.append(f"Next row: {next_table_data_line}")
+            table_evidence = "\n".join(evidence_parts)[:1600]
+
             observation_provenance = {
                 "source_container": "supplement"
                 if re.search(
@@ -3665,15 +3748,12 @@ class ExpertExtractor(BaseLLMCaller):
                 "source_kind": "table",
                 "source_ref": source_ref,
                 "row_ordinal": table_row_ordinal,
-                "column_ref": header_label("count"),
+                "column_ref": carrier_label,
                 "locator_extra": {
                     "parser": "markdown_table",
                     "line_number": line_number,
                 },
             }
-            carrier_label = header_label("count")
-            affected_label = header_label("affected") or carrier_label
-            unaffected_label = header_label("unaffected")
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": f"c.{cdna}"
@@ -3700,8 +3780,12 @@ class ExpertExtractor(BaseLLMCaller):
                 "evidence_level": "medium",
                 "source_location": active_table_label or "Markdown table",
                 **observation_provenance,
+                "source_table": source_ref,
+                "source_row": str(table_row_ordinal),
+                "source_column": carrier_label,
+                "evidence_quote": table_evidence,
                 "additional_notes": "Parsed via deterministic table parser",
-                "key_quotes": [],
+                "key_quotes": [table_evidence],
                 "count_provenance": {
                     "carriers_column_label": carrier_label,
                     "carriers_count_type": count_type_for_header(carrier_label),
@@ -5926,6 +6010,12 @@ Return strict JSON with this schema:
             parsed_variants = self._parse_markdown_table_variants(
                 scanner_text, paper.gene_symbol
             )
+            # The same carrier cohort is often restated across a mutation-list
+            # table and a later clinical-characteristics table.  The router path
+            # already deduplicates table candidates by normalized identity; make
+            # the large-table short circuit obey the same contract instead of
+            # writing multiple penetrance rows that downstream summaries add.
+            parsed_variants = self._dedupe_table_variants(parsed_variants)
             if len(parsed_variants) >= deterministic_min_variants:
                 extracted_data = {
                     "paper_metadata": {
