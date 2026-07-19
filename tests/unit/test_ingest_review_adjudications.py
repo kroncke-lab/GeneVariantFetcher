@@ -310,6 +310,10 @@ def _live_payload(rows):
 
 def test_live_sync_populates_atomic_sqlite_cache_with_identity_audit(tmp_path):
     source_rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    for row in source_rows:
+        # The Azure JSON API preserves the model's native integer revision;
+        # unlike the compatibility CSV path, this is not text.
+        row["revision"] = int(row["revision"])
     payload = _live_payload(source_rows)
     opener = _FakeOpener(payload)
     cache_db = tmp_path / "review_gold.sqlite3"

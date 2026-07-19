@@ -383,17 +383,20 @@ def fetch_live_gold(
 
 
 def build_overlay_rows(
-    export_rows: list[dict[str, str]],
+    export_rows: list[dict[str, Any]],
     db_aggregates: dict[str, dict[tuple[str, str], dict[str, Any]]],
     have_db: set[str],
 ) -> list[dict[str, Any]]:
     """Match each export row to extracted values and classify its action."""
     out: list[dict[str, Any]] = []
     for raw in export_rows:
-        gene = (raw.get("gene") or "").strip().upper()
+        # CSV inputs arrive as strings, while the live JSON contract preserves
+        # native scalar types (notably ``revision`` as an integer).  Normalize
+        # every text-bound field here so both transports follow the same path.
+        gene = _blank(raw.get("gene")).upper()
         pmid = normalize_pmid(raw.get("pmid") or "")
-        source_notation = (raw.get("source_notation") or "").strip()
-        verdict = (raw.get("verdict") or "").strip().lower()
+        source_notation = _blank(raw.get("source_notation"))
+        verdict = _blank(raw.get("verdict")).lower()
         action = VERDICT_TO_ACTION.get(verdict, "followup_other")
 
         agg = db_aggregates.get(gene)
@@ -410,13 +413,13 @@ def build_overlay_rows(
 
         out.append(
             {
-                "record_key": (raw.get("record_key") or "").strip(),
+                "record_key": _blank(raw.get("record_key")),
                 "gene": gene,
                 "pmid": pmid,
                 "source_notation": source_notation,
-                "variant_label": (raw.get("variant_label") or "").strip(),
-                "status": (raw.get("status") or "").strip(),
-                "revision": (raw.get("revision") or "").strip(),
+                "variant_label": _blank(raw.get("variant_label")),
+                "status": _blank(raw.get("status")),
+                "revision": _blank(raw.get("revision")),
                 "verdict": verdict,
                 "action": action,
                 "match_status": match_status,
@@ -431,15 +434,13 @@ def build_overlay_rows(
                 "corrected_unaffected": _blank(raw.get("corrected_unaffected")),
                 "corrected_total": _blank(raw.get("corrected_total")),
                 "corrected_classification": _blank(raw.get("corrected_classification")),
-                "comment": (raw.get("comment") or "").strip(),
-                "source_reviewer_user_id": (
-                    raw.get("source_reviewer_user_id") or ""
-                ).strip(),
-                "source_reviewer": (raw.get("source_reviewer") or "").strip(),
-                "decided_by_user_id": (raw.get("decided_by_user_id") or "").strip(),
-                "decided_by": (raw.get("decided_by") or "").strip(),
-                "adjudicator": (raw.get("adjudicator") or "").strip(),
-                "updated_at": (raw.get("updated_at") or "").strip(),
+                "comment": _blank(raw.get("comment")),
+                "source_reviewer_user_id": _blank(raw.get("source_reviewer_user_id")),
+                "source_reviewer": _blank(raw.get("source_reviewer")),
+                "decided_by_user_id": _blank(raw.get("decided_by_user_id")),
+                "decided_by": _blank(raw.get("decided_by")),
+                "adjudicator": _blank(raw.get("adjudicator")),
+                "updated_at": _blank(raw.get("updated_at")),
             }
         )
     return out
