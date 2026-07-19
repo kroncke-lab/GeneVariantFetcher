@@ -404,3 +404,36 @@ def test_live_sync_requires_https_and_never_accepts_short_token():
         ingest.fetch_live_gold(
             "https://variantbrowser.org/review/api/gold-standard/", "short"
         )
+
+
+def test_live_sync_redirect_handler_fails_explicitly():
+    request = ingest.urllib.request.Request(
+        "https://variantbrowser.org/review/api/gold-standard/"
+    )
+
+    with pytest.raises(ingest.urllib.error.HTTPError, match="blocked for security"):
+        ingest._NoRedirect().redirect_request(
+            request,
+            None,
+            302,
+            "Found",
+            {},
+            "https://other.invalid/gold",
+        )
+
+
+def test_read_live_sync_state_handles_paths_with_spaces(tmp_path):
+    path = tmp_path / "directory with spaces" / "review_gold.sqlite3"
+    path.parent.mkdir()
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(
+            "CREATE TABLE review_gold_sync_state ("
+            "singleton INTEGER PRIMARY KEY, dataset_revision TEXT)"
+        )
+        conn.execute("INSERT INTO review_gold_sync_state VALUES (1, 'abc123')")
+        conn.commit()
+    finally:
+        conn.close()
+
+    assert ingest.read_live_sync_state(path)["dataset_revision"] == "abc123"

@@ -2305,11 +2305,13 @@ def load_adjudication_overlay_db(
     gene: str,
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """Load one gene's overlay from the atomically synced live-gold database."""
+    from scripts.ingest_review_adjudications import _variant_key
+
     overlay: Dict[Tuple[str, str], Dict[str, Any]] = {}
     if path is None or not path.exists():
         return overlay
     try:
-        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
     except sqlite3.Error:
         return overlay
     try:
@@ -2334,7 +2336,7 @@ def load_adjudication_overlay_db(
         pmid = normalize_pmid(row.get("pmid") or "")
         notation = str(row.get("source_notation") or "").strip()
         if pmid and notation:
-            overlay[(pmid, _adjudication_variant_key(notation))] = row
+            overlay[(pmid, _variant_key(notation))] = row
     return overlay
 
 

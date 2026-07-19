@@ -186,7 +186,8 @@ def test_load_overlay_round_trips_csv(tmp_path):
 
 
 def test_load_overlay_round_trips_live_gold_database(tmp_path):
-    path = tmp_path / "review_gold.sqlite3"
+    path = tmp_path / "directory with spaces" / "review_gold.sqlite3"
+    path.parent.mkdir()
     conn = sqlite3.connect(path)
     try:
         conn.execute(

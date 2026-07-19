@@ -291,7 +291,13 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
     """Never forward the bearer token to a redirected host."""
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
-        return None
+        raise urllib.error.HTTPError(
+            req.full_url,
+            code,
+            f"Redirect to {newurl} blocked for security",
+            headers,
+            fp,
+        )
 
 
 def _validated_source_url(source_url: str) -> str:
@@ -670,7 +676,10 @@ def read_live_sync_state(path: Path) -> dict[str, Any]:
     """Read the non-secret audit manifest from an existing live cache."""
     if not path.exists():
         return {}
-    conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    try:
+        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
+    except sqlite3.Error:
+        return {}
     conn.row_factory = sqlite3.Row
     try:
         row = conn.execute(
