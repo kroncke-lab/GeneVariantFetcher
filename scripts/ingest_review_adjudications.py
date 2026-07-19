@@ -218,9 +218,10 @@ def _read_export(path: Path) -> list[dict[str, str]]:
         rows = list(reader)
     unsafe = sorted(
         {
-            (row.get("status") or "").strip().lower()
+            status
             for row in rows
-            if (row.get("status") or "").strip().lower() not in ACCEPTED_GOLD_STATUSES
+            if (status := (row.get("status") or "").strip().lower())
+            not in ACCEPTED_GOLD_STATUSES
         }
     )
     if unsafe:

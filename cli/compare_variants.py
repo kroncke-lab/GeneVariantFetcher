@@ -2619,13 +2619,14 @@ def compute_end_to_end_count_error(results: List[ComparisonRow]) -> Dict[str, An
             if extracted_missing:
                 n_missed += 1
         n = len(errors)
+        sum_abs_error = sum(errors)
         sum_squared_error = sum(error * error for error in errors)
         out[label] = {
             "n": n,
             "n_missed": n_missed,
-            "sum_abs_error": sum(errors),
+            "sum_abs_error": sum_abs_error,
             "sum_squared_error": sum_squared_error,
-            "mae": (sum(errors) / n) if n else None,
+            "mae": (sum_abs_error / n) if n else None,
             "rmse": math.sqrt(sum_squared_error / n) if n else None,
             "median": _percentile(errors, 50),
             "p95": _percentile(errors, 95),
