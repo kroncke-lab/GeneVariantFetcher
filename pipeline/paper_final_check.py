@@ -599,13 +599,18 @@ MAX_TABLE_ROWS = (
 )  # only cap clearly-long
 
 
-def _cap_repetitive_tables(text: str) -> str:
+def _cap_repetitive_tables(text: str) -> tuple[str, bool]:
     """Sample any markdown table longer than ``MAX_TABLE_ROWS`` down to its first
     ``TABLE_ROW_SAMPLE_HEAD`` and last ``TABLE_ROW_SAMPLE_TAIL`` rows, with a count
     marker in between. Preserves the table's columns and content shape at a
-    fraction of the tokens; short tables pass through untouched."""
+    fraction of the tokens; short tables pass through untouched.
+
+    Returns (text, sampled) — ``sampled`` is True when at least one table was
+    row-sampled, so the caller can mark the source truncated (the model saw a
+    subset of that table, so it can never prove full-paper completeness)."""
     lines = text.split("\n")
     out: list[str] = []
+    sampled = False
     i, n = 0, len(lines)
     while i < n:
         if not _PIPE_ROW_RE.match(lines[i]):
@@ -617,6 +622,7 @@ def _cap_repetitive_tables(text: str) -> str:
             j += 1
         run = lines[i:j]
         if len(run) > MAX_TABLE_ROWS:
+            sampled = True
             omitted = len(run) - TABLE_ROW_SAMPLE_HEAD - TABLE_ROW_SAMPLE_TAIL
             out.extend(run[:TABLE_ROW_SAMPLE_HEAD])
             out.append(
@@ -626,7 +632,7 @@ def _cap_repetitive_tables(text: str) -> str:
         else:
             out.extend(run)
         i = j
-    return "\n".join(out)
+    return "\n".join(out), sampled
 
 
 def _select_source_for_summary(
@@ -638,8 +644,10 @@ def _select_source_for_summary(
     repetitive tables to a representative head+tail; then, if still over budget,
     keeps a prose head plus ALL table/supplement-bearing lines (that is where
     carriers concentrate) and truncates the long prose middle. Returns
-    (selected_text, truncated) — truncated is True only when the char budget forced
-    dropping content, so a gap under truncation is auditable and re-runnable.
+    (selected_text, truncated) — truncated is True when the char budget forced
+    dropping content OR a long table was row-sampled (the model then saw only a
+    subset of that table), so a gap under truncation is auditable and re-runnable
+    and "complete" can never be claimed over a partial view.
     """
     lines = text.split("\n")
     kept: list[str] = []
@@ -650,10 +658,12 @@ def _select_source_for_summary(
         if not skipping:
             kept.append(ln)
     # Sample long repetitive tables first, so a 200-row variant table never
-    # dominates the budget or the model's attention.
-    body = _cap_repetitive_tables("\n".join(kept))
+    # dominates the budget or the model's attention. A sampled table means the
+    # model saw a subset of its rows, so the source is truncated even when the
+    # capped body fits the char budget.
+    body, table_sampled = _cap_repetitive_tables("\n".join(kept))
     if len(body) <= max_chars:
-        return body, False
+        return body, table_sampled
 
     body_lines = body.split("\n")
     table_lines = [ln for ln in body_lines if _TABLEISH_RE.search(ln)]

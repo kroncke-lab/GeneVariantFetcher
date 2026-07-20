@@ -829,12 +829,48 @@ def test_select_source_caps_long_repetitive_tables():
     header = "| Variant | Carriers |\n| --- | --- |\n"
     rows = "".join(f"| p.V{i} | {i} |\n" for i in range(200))
     src = "### Results\n" + header + rows
-    # Well under the char budget → not "truncated", but the 200-row table is sampled.
+    # Well under the char budget, but the 200-row table is row-sampled, so the
+    # model sees only a subset of the rows → the source is TRUNCATED. This must
+    # propagate so a "complete" verdict cannot be claimed over a partial view.
     selected, truncated = _select_source_for_summary(src, max_chars=100000)
-    assert truncated is False
+    assert truncated is True
     assert "omitted for the sniff test" in selected
     assert selected.count("| p.V") <= 25  # head + tail sample, not all 200
     assert "| p.V0 |" in selected and "| p.V199 |" in selected  # head+tail preserved
+
+
+def test_select_source_short_table_not_truncated():
+    # A short table passes through untouched → NOT truncated.
+    header = "| Variant | Carriers |\n| --- | --- |\n"
+    rows = "".join(f"| p.V{i} | {i} |\n" for i in range(5))
+    src = "### Results\n" + header + rows
+    selected, truncated = _select_source_for_summary(src, max_chars=100000)
+    assert truncated is False
+    assert "omitted for the sniff test" not in selected
+    assert selected.count("| p.V") == 5  # every row preserved
+
+
+def test_sampled_long_table_cannot_record_complete():
+    # A paper whose only long table was row-sampled must yield truncated=True AND
+    # must never persist completeness="complete": the model saw a subset of the
+    # table, so full-paper completeness is unprovable. Mirrors the abstract-only
+    # truncation guard.
+    header = "| Variant | Carriers |\n| --- | --- |\n"
+    rows = "".join(f"| p.V{i} | {i} |\n" for i in range(200))
+    src = "### Results\n" + header + rows
+    selected, truncated = _select_source_for_summary(src, max_chars=100000)
+    assert truncated is True
+
+    # The model returns a clean "complete" with no missed carriers; the sampled
+    # -table truncation must downgrade it to "unsure".
+    result = normalize_summary_result(
+        _valid_summary_response(),
+        {"pmid": "1", "gene": "G", "facts": []},
+        selected,
+        truncated=truncated,
+    )
+    assert result["completeness"]["status"] != "complete"
+    assert result["completeness"]["status"] == "unsure"
 
 
 def test_build_summary_prompt_embeds_source_and_extracted():
