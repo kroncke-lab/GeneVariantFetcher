@@ -201,3 +201,44 @@ def test_prioritization_uses_default_gene_aliases(tmp_path):
     assert result.selected_markdown_files == [alias_hit]
     assert result.candidates[0].pmid == "444"
     assert result.candidates[0].signals["gene_title_mentions"] > 0
+
+
+def test_penetrance_segregation_study_gets_priority_boost(tmp_path):
+    # Two full-text papers with the same carrier content; one is a carrier-first
+    # penetrance/segregation study. It should score higher and carry the signal
+    # (criticisms 3 and 6: don't out-prioritize segregation/penetrance studies).
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+
+    base_line = (
+        "BRCA1 variant c.5266dupC carriers were genotyped; carrier counts in Table 1."
+    )
+    plain = harvest / "111_FULL_CONTEXT.md"
+    plain.write_text("\n".join([base_line] * 80), encoding="utf-8")
+
+    penetrance = harvest / "222_FULL_CONTEXT.md"
+    penetrance.write_text(
+        "\n".join(
+            [
+                base_line,
+                "We performed cascade testing and prospective follow-up of unaffected carriers.",
+                "Co-segregation and penetrance were estimated across the family segregation study.",
+            ]
+            * 80
+        ),
+        encoding="utf-8",
+    )
+
+    result = prioritize_extraction_sources(
+        markdown_files=[plain, penetrance],
+        abstract_papers=[],
+        gene_symbol="BRCA1",
+        top_n=2,
+        report_dir=tmp_path / "priority",
+    )
+
+    by_pmid = {c.pmid: c for c in result.candidates}
+    assert by_pmid["222"].signals.get("penetrance_study_mentions", 0) > 0
+    assert by_pmid["111"].signals.get("penetrance_study_mentions", 0) == 0
+    assert any("penetrance/segregation" in r for r in by_pmid["222"].reasons)
+    assert by_pmid["222"].score > by_pmid["111"].score

@@ -11,14 +11,25 @@ and can be re-tiered after a rule change.
 The rules are deliberately **gene-class-agnostic** so they transfer from cardiac
 missense to BRCA truncating/case-control without per-gene tuning:
 
-- ``arith_inconsistent``  affected + unaffected + uncertain exceeds the total
-  carrier count (the parts cannot exceed the whole).
+- ``arith_inconsistent``  the phenotype breakdown is impossible: parts exceed
+  the total, a fully-specified partition does not equal the total, or any count
+  is negative.
 - ``count_is_total``      the extracted "carrier" count is really a cohort
   denominator (count role is a total/screened-N), not per-variant carriers.
 - ``population_count``     the count is a population allele magnitude (gnomAD /
   MAF / allele-frequency label, or a carrier count above a population ceiling).
 - ``paper_outlier``       the carrier count is a wild outlier vs the other
   variants in the same paper (median x k).
+- ``negative_count``      any carrier/affected/unaffected/uncertain count is
+  negative (never valid); folded into ``arith_inconsistent`` semantics but kept
+  as a distinct reason for auditability.
+- ``implied_unaffected_zero``  a *derived* ``unaffected == 0`` (affected equals
+  the carrier total and no unaffected column/quote backs it) in a study whose
+  design deliberately includes potentially-unaffected carriers (population /
+  biobank screening, case-control, family cascade/segregation). This is an
+  unsupported 100%-penetrance assertion, so **only the unaffected field** is
+  soft-quarantined — affected/total stay trusted. Proband case reports/series
+  and unknown-design papers never trip it (the cardiac default is preserved).
 
 The pure core (``evaluate_fact`` / ``decide_tier``) has no DB dependency and is
 unit-tested directly; ``apply_trust_gate`` is the thin SQLite adapter. The
@@ -74,6 +85,23 @@ POPULATION_STUDY_DESIGNS = frozenset({"cohort_population", "cohort_biobank", "gw
 # Soft floor for study-context population_count (below the hard gnomAD ceiling).
 POPULATION_STUDY_CARRIER_FLOOR = 50
 
+# Designs / ascertainments that deliberately enroll carriers who may be
+# UNAFFECTED (population/biobank screening, case-control, family cascade or
+# segregation). In these, a *derived* unaffected=0 (all carriers labelled
+# affected, no unaffected column/quote) is an unsupported 100%-penetrance claim.
+# The set is deliberately AFFIRMATIVE: an unknown/null design (the cardiac legacy
+# default) is NOT a member, so the rule stays dormant there and only bites the
+# cohort/screening/cascade studies (common in BRCA) where it is actually wrong.
+UNAFFECTED_EXPECTED_DESIGNS = frozenset(
+    {"cohort_population", "cohort_biobank", "case_control", "family_segregation"}
+)
+UNAFFECTED_EXPECTED_ASCERTAINMENTS = frozenset(
+    {"population_screening", "biobank", "family_cascade"}
+)
+# Count-provenance values that mean the unaffected number was NOT read from a
+# real unaffected column (so a 0 there is inferred, not sourced).
+_UNSOURCED_UNAFFECTED_TYPES = frozenset({"", "unknown"})
+
 # Rule identifiers, ordered. The rule-set version below is derived from this so a
 # stored fact records exactly which rule generation tiered it.
 RULE_IDS = (
@@ -82,9 +110,25 @@ RULE_IDS = (
     "population_count",
     "paper_outlier",
     "study_type_mismatch",
+    "negative_count",
+    "implied_unaffected_zero",
 )
 
 COUNT_TRUST_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
+
+# Which count fields a reason masks from the trusted projection. A reason not
+# listed here masks the WHOLE fact (all count fields) — the historical
+# all-or-nothing behavior. Field-specific reasons let us quarantine only the
+# unsupported field (e.g. a bad derived unaffected) while keeping the
+# well-supported affected/total counts trusted.
+REASON_FIELDS: dict[str, tuple[str, ...]] = {
+    "implied_unaffected_zero": ("unaffected",),
+}
+
+
+def _fields_masked_by(reason: str) -> tuple[str, ...]:
+    """Count fields a single reason quarantines (defaults to the whole fact)."""
+    return REASON_FIELDS.get(reason, COUNT_TRUST_FIELDS)
 
 
 def rule_version() -> str:
@@ -101,11 +145,16 @@ def rule_version() -> str:
             "study_type_mismatch_designs": sorted(STUDY_TYPE_MISMATCH_DESIGNS),
             "population_study_designs": sorted(POPULATION_STUDY_DESIGNS),
             "population_study_carrier_floor": POPULATION_STUDY_CARRIER_FLOOR,
+            "unaffected_expected_designs": sorted(UNAFFECTED_EXPECTED_DESIGNS),
+            "unaffected_expected_ascertainments": sorted(
+                UNAFFECTED_EXPECTED_ASCERTAINMENTS
+            ),
+            "reason_fields": {k: sorted(v) for k, v in sorted(REASON_FIELDS.items())},
         },
         sort_keys=True,
     )
-    # tg2: study-record aware generation (study_type_mismatch + population study).
-    return "tg2-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    # tg3: negative_count + full-partition arith + field-scoped implied_unaffected_zero.
+    return "tg3-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
 def _as_int(value: Any) -> Optional[int]:
@@ -142,11 +191,50 @@ def evaluate_fact(
     unaffected = _as_int(counts.get("unaffected"))
     uncertain = _as_int(counts.get("uncertain"))
 
-    # arith_inconsistent: the phenotype breakdown cannot exceed the total.
+    # negative_count: a count can never be negative. Kept distinct for audit but
+    # also implies arith_inconsistent.
+    if any(
+        v is not None and v < 0 for v in (carriers, affected, unaffected, uncertain)
+    ):
+        reasons.add("negative_count")
+        reasons.add("arith_inconsistent")
+
+    # arith_inconsistent: the phenotype breakdown cannot exceed the total, and a
+    # fully-specified partition (affected + unaffected + uncertain all reported)
+    # must equal the total. A partial partition summing to LESS than the total is
+    # left alone (the residual is simply unphenotyped carriers).
     if carriers is not None and (affected is not None or unaffected is not None):
         parts = (affected or 0) + (unaffected or 0) + (uncertain or 0)
-        if parts > carriers:
+        full_partition = (
+            affected is not None and unaffected is not None and uncertain is not None
+        )
+        if parts > carriers or (full_partition and parts != carriers):
             reasons.add("arith_inconsistent")
+
+    # implied_unaffected_zero: a *derived* unaffected==0 (every carrier labelled
+    # affected, nothing sourced the zero) in a study design that deliberately
+    # enrolls potentially-unaffected carriers is an unsupported 100%-penetrance
+    # claim. Masks only the unaffected field; affected/total stay trusted.
+    design = str(study_context.get("study_design") or "").strip().lower()
+    ascertainment = str(study_context.get("ascertainment") or "").strip().lower()
+    if (
+        unaffected == 0
+        and carriers is not None
+        and carriers > 0
+        and affected is not None
+        and affected == carriers
+    ):
+        unaff_label = str(provenance.get("unaffected_column_label") or "").strip()
+        unaff_type = str(provenance.get("unaffected_count_type") or "").strip().lower()
+        unaffected_sourced = bool(unaff_label) or (
+            unaff_type not in _UNSOURCED_UNAFFECTED_TYPES
+        )
+        design_expects_unaffected = (
+            design in UNAFFECTED_EXPECTED_DESIGNS
+            or ascertainment in UNAFFECTED_EXPECTED_ASCERTAINMENTS
+        )
+        if not unaffected_sourced and design_expects_unaffected:
+            reasons.add("implied_unaffected_zero")
 
     # count_is_total: the carrier number is really a cohort denominator.
     ctype = str(provenance.get("carriers_count_type") or "").strip().lower()
@@ -160,7 +248,6 @@ def evaluate_fact(
     if carriers is not None and carriers > POPULATION_CARRIER_CEILING:
         reasons.add("population_count")
 
-    design = str(study_context.get("study_design") or "").strip().lower()
     # Strengthen population_count when the paper is itself a population/biobank/GWAS study.
     if (
         design in POPULATION_STUDY_DESIGNS
@@ -331,11 +418,14 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
             ]
             combined_reasons = sorted(set(reasons) | set(paper_reasons))
 
-            structural_tier = decide_tier(reasons)
-            field_trust = {
-                field: "quarantine" if structural_tier == "quarantine" else "trusted"
-                for field in COUNT_TRUST_FIELDS
-            }
+            # Per-reason field masking: most reasons quarantine the whole fact
+            # (all count fields); field-scoped reasons (e.g.
+            # implied_unaffected_zero) quarantine only the unsupported field so a
+            # well-sourced affected/total count on the same row stays trusted.
+            field_trust = {field: "trusted" for field in COUNT_TRUST_FIELDS}
+            for reason in reasons:
+                for field in _fields_masked_by(reason):
+                    field_trust[field] = "quarantine"
             if paper_reasons:
                 try:
                     existing_fields = json.loads(r.get("existing_field_trust") or "{}")

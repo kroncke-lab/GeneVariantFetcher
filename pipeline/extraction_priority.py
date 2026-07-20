@@ -51,6 +51,21 @@ CARRIER_COUNT_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Carrier-first / penetrance study signal: papers that ASCERTAIN carriers and
+# track who develops disease (segregation, cascade, prospective follow-up) are
+# the primary source of UNAFFECTED-carrier data, which patient-first case series
+# under-report. Boost them so they are not out-prioritized by high-volume case
+# series (criticisms 3 and 6).
+PENETRANCE_RE = re.compile(
+    r"\b("
+    r"penetrance|co[- ]?segregation|segregat(?:ion|ed|es)|"
+    r"cascade\s+(?:screening|testing)|unaffected\s+carriers?|"
+    r"asymptomatic\s+carriers?|prospective\s+(?:cohort|follow[- ]?up)|"
+    r"family\s+segregation|genotype[- ]first"
+    r")\b",
+    re.IGNORECASE,
+)
+
 TABLE_RE = re.compile(
     r"\b(?:table|supplementary table|supplemental table|e[- ]table)\s+[A-Za-z0-9]+",
     re.IGNORECASE,
@@ -243,6 +258,7 @@ def _score_candidate(
     variant_mentions = _variant_mentions(combined)
     original_mentions = _count_pattern(ORIGINAL_DATA_RE, combined, 20)
     carrier_mentions = _count_pattern(CARRIER_COUNT_RE, combined, 20)
+    penetrance_mentions = _count_pattern(PENETRANCE_RE, combined, 20)
     table_mentions = _count_pattern(TABLE_RE, combined, 20)
     if source_kind == "fulltext":
         table_mentions += _artifact_table_count(source_path, pmid)
@@ -302,6 +318,9 @@ def _score_candidate(
     if carrier_mentions:
         score += min(20, carrier_mentions * 2)
         reasons.append("carrier/count terms")
+    if penetrance_mentions:
+        score += min(24, penetrance_mentions * 4)
+        reasons.append("penetrance/segregation study signal")
     if original_mentions:
         score += min(20, original_mentions * 2)
         reasons.append("original cohort/case terms")
@@ -346,6 +365,7 @@ def _score_candidate(
         "gene_variant_lines": gene_variant_lines,
         "gene_carrier_lines": gene_carrier_lines,
         "carrier_count_mentions": carrier_mentions,
+        "penetrance_study_mentions": penetrance_mentions,
         "original_data_mentions": original_mentions,
         "table_mentions": table_mentions,
         "methods_results": methods_results,

@@ -183,3 +183,14 @@ def test_requested_context_can_include_all_clingen_phenotypes(monkeypatch):
     assert "hypertrophic cardiomyopathy" in context.disease_terms
     assert "dilated cardiomyopathy" in context.disease_terms
     assert len(context.selected_clinigen_curations) == 2
+
+
+def test_discovery_includes_penetrance_segregation_lane():
+    # Criticisms 3 and 6: a dedicated lane must recruit carrier-first
+    # segregation / penetrance / cascade studies, not just case series.
+    queries = build_gene_keyword_queries("BRCA1")
+    lane = [q for q in queries if "penetrance" in q.lower()]
+    assert lane, "expected a penetrance/segregation discovery lane"
+    joined = lane[0].lower()
+    for term in ("segregation", "cascade", "unaffected carrier", "prospective"):
+        assert term in joined

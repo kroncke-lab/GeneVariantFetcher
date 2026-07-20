@@ -63,7 +63,7 @@ def test_multiple_reasons_accumulate():
 
 def test_rule_version_is_stable_and_tagged():
     version = trust_gate.rule_version()
-    assert version.startswith("tg2-")
+    assert version.startswith("tg3-")
     assert version == trust_gate.rule_version()
 
 
@@ -137,7 +137,7 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert stats["trusted"] == 1
     assert stats["quarantine"] == 1
     assert stats["by_reason"].get("population_count") == 1
-    assert stats["rule_version"].startswith("tg2-")
+    assert stats["rule_version"].startswith("tg3-")
 
     conn = sqlite3.connect(db)
     try:
@@ -249,3 +249,130 @@ def test_apply_trust_gate_dedupes_multiple_extraction_metadata_rows(tmp_path):
     finally:
         conn.close()
     assert tier == "trusted"
+
+
+def test_negative_count_is_quarantined():
+    reasons = evaluate_fact({"carriers": 10, "affected": -1})
+    assert "negative_count" in reasons
+    assert "arith_inconsistent" in reasons
+    assert decide_tier(reasons) == "quarantine"
+
+
+def test_full_partition_must_equal_total():
+    # affected + unaffected + uncertain all reported but sum != total.
+    reasons = evaluate_fact(
+        {"carriers": 10, "affected": 4, "unaffected": 3, "uncertain": 1}
+    )
+    assert "arith_inconsistent" in reasons
+
+
+def test_full_partition_that_balances_is_clean():
+    assert (
+        evaluate_fact({"carriers": 10, "affected": 6, "unaffected": 3, "uncertain": 1})
+        == []
+    )
+
+
+def test_partial_partition_under_total_is_left_alone():
+    # uncertain is None -> not a full partition -> a residual of unphenotyped
+    # carriers is fine, not an inconsistency.
+    assert evaluate_fact({"carriers": 20, "affected": 8, "unaffected": 5}) == []
+
+
+def _implied_zero_counts():
+    return {"carriers": 12, "affected": 12, "unaffected": 0}
+
+
+def test_implied_unaffected_zero_fires_for_cohort_design():
+    reasons = evaluate_fact(
+        _implied_zero_counts(),
+        provenance={"unaffected_column_label": None, "unaffected_count_type": None},
+        study_context={"study_design": "cohort_population"},
+    )
+    assert "implied_unaffected_zero" in reasons
+
+
+def test_implied_unaffected_zero_fires_for_family_cascade_ascertainment():
+    reasons = evaluate_fact(
+        _implied_zero_counts(),
+        study_context={"ascertainment": "family_cascade"},
+    )
+    assert "implied_unaffected_zero" in reasons
+
+
+def test_implied_unaffected_zero_dormant_on_unknown_design():
+    # Cardiac legacy default: no study_design -> the derived zero is trusted.
+    assert "implied_unaffected_zero" not in evaluate_fact(
+        _implied_zero_counts(), study_context={}
+    )
+
+
+def test_implied_unaffected_zero_dormant_for_case_report():
+    assert "implied_unaffected_zero" not in evaluate_fact(
+        _implied_zero_counts(), study_context={"study_design": "case_report"}
+    )
+
+
+def test_implied_unaffected_zero_dormant_when_unaffected_is_sourced():
+    # A real unaffected column reporting 0 is trusted even in a cohort study.
+    reasons = evaluate_fact(
+        _implied_zero_counts(),
+        provenance={
+            "unaffected_column_label": "Unaffected carriers",
+            "unaffected_count_type": "per_variant_carrier",
+        },
+        study_context={"study_design": "cohort_population"},
+    )
+    assert "implied_unaffected_zero" not in reasons
+
+
+def test_implied_unaffected_zero_masks_only_unaffected_field(tmp_path):
+    db = str(tmp_path / "t.db")
+    create_database_schema(db)
+    conn = sqlite3.connect(db)
+    try:
+        conn.execute(
+            "INSERT INTO variants (variant_id, gene_symbol, protein_notation) "
+            "VALUES (1, 'BRCA1', 'p.C61G')"
+        )
+        conn.execute("INSERT INTO papers (pmid, title) VALUES ('1', 't')")
+        conn.execute(
+            "INSERT INTO variant_papers (variant_id, pmid, count_provenance) "
+            "VALUES (1, '1', ?)",
+            (
+                json.dumps(
+                    {"unaffected_column_label": None, "unaffected_count_type": None}
+                ),
+            ),
+        )
+        conn.execute(
+            "INSERT INTO penetrance_data (penetrance_id, variant_id, pmid, "
+            "total_carriers_observed, affected_count, unaffected_count) "
+            "VALUES (1, 1, '1', 12, 12, 0)"
+        )
+        conn.execute(
+            "INSERT INTO extraction_metadata (pmid, study_design) VALUES ('1', 'cohort_population')"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    apply_trust_gate(db)
+
+    conn = sqlite3.connect(db)
+    try:
+        row = conn.execute(
+            "SELECT trust_tier, field_trust, affected_count, unaffected_count "
+            "FROM penetrance_data WHERE penetrance_id = 1"
+        ).fetchone()
+    finally:
+        conn.close()
+    tier, field_trust_raw, affected, unaffected = row
+    field_trust = json.loads(field_trust_raw)
+    assert tier == "quarantine"
+    # Only the unaffected field is masked; affected/total stay trusted.
+    assert field_trust["unaffected"] == "quarantine"
+    assert field_trust["affected"] == "trusted"
+    assert field_trust["total_carriers"] == "trusted"
+    # Raw counts are never mutated.
+    assert affected == 12 and unaffected == 0
