@@ -551,6 +551,9 @@ NT
     assert second["protein_notation"] == "R420Q"
     assert second["patients"]["count"] == 2
     assert second["penetrance_data"]["affected_count"] == 2
+    # A bare supplement catalogue must not assert pathogenicity per row.
+    assert first["clinical_significance"] == "uncertain"
+    assert second["clinical_significance"] == "uncertain"
 
 
 def test_markdown_table_parser_prefers_carrier_over_total_case_denominator():

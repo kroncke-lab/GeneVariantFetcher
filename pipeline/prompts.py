@@ -393,7 +393,15 @@ Natural language often implies counts without stating explicit numbers. You MUST
 - "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
 - "proband" / "the proband" = 1 carrier (usually affected unless stated otherwise)
 - "two patients" / "three families" = 2 or 3 carriers
-- For case reports mentioning a mutation, assume at least 1 affected carrier
+- For case reports that DESCRIBE A PATIENT/PROBAND with the mutation, assume at least 1 carrier;
+  label that carrier AFFECTED only when the paper states the individual has the disease/
+  phenotype. If carrier status/health is not described, count the carrier but leave the
+  affected/unaffected split unknown (null) — do NOT default the split to affected.
+- A bare "novel mutation" / "we report a mutation" with NO described human patient (e.g.
+  functional-only, in-silico, or database-reported variants) does NOT by itself imply a
+  clinical carrier — do not invent one.
+- NEVER assume an unaffected count. Leave unaffected_count null unless the paper explicitly
+  describes carriers without disease (healthy/asymptomatic/clinically silent).
 
 AFFECTED vs UNAFFECTED:
 - "Affected" = has the disease phenotype, symptoms, or clinical manifestations
@@ -606,6 +614,7 @@ Return a JSON object with this structure:
             "gene_symbol": "string",
             "cdna_notation": "string or null (c. or IVS notation)",
             "protein_notation": "string or null",
+            "source_notation": "string or null (the variant EXACTLY as written in this paper, verbatim, BEFORE any normalization — e.g. 'IVS3+2T>G', 'R1443X', '5382insC', 'del exon 13' — so a curator can trace it back)",
             "genomic_position": "string or null",
             "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
             "structural_description": "free text for structural events e.g. 'deletion of exons 3-5' or null",
@@ -729,9 +738,13 @@ IMPORTANT NOTES:
 ABSTRACT-ONLY EXTRACTION:
 When only an abstract is available (indicated by "[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]"):
 - Extract whatever variant and carrier information is available, even if limited
-- Recognize implicit counts: "a patient with mutation X" = 1 affected carrier with variant X
-- Case reports typically describe at least 1 affected carrier
-- "A novel mutation" or "we report a mutation" implies at least 1 carrier
+- Recognize implicit counts: "a patient with [disease] and mutation X" = 1 AFFECTED carrier;
+  "an asymptomatic/healthy carrier of X" = 1 UNAFFECTED carrier
+- A case report that describes a PATIENT implies at least 1 carrier; label it affected only
+  when the abstract states the patient has the disease/phenotype, otherwise leave the
+  affected/unaffected split null (do not default to affected, do not assume unaffected=0)
+- "A novel mutation" or "we report a mutation" with no described patient implies a variant
+  but NOT necessarily a clinical carrier — do not invent carrier counts
 - Even if carrier counts aren't explicit, extract the variant notation if mentioned
 - Set extraction_confidence to "low" or "medium" due to limited information
 - Note in extraction_metadata.notes that this was abstract-only extraction

@@ -53,6 +53,16 @@ def build_gene_keyword_queries(
         "AND (variant OR mutation OR polymorphism)",
         "AND (pathogenic OR germline OR somatic OR hereditary)",
         "AND (case report OR cohort OR patient)",
+        # Carrier-first / penetrance lane: recruit segregation, cascade, and
+        # prospective-carrier studies that report UNAFFECTED carriers, not just
+        # affected probands. Each clause is a separate PubMed search whose PMIDs
+        # are unioned, so this only broadens recall.
+        (
+            "AND (penetrance OR segregation OR co-segregation OR cosegregation OR "
+            '"cascade screening" OR "cascade testing" OR "unaffected carrier" OR '
+            '"asymptomatic carrier" OR "mutation carrier" OR kindred OR '
+            '"prospective cohort")'
+        ),
     )
 
     disease_clause = _build_disease_query_clause(disease, disease_terms)

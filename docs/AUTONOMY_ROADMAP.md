@@ -173,3 +173,40 @@ per-gene KCNH2 alias file — handle notation **by class**:
       gitignored canonical DBs — self-hosted runner or local cron, not public CI).
 - [ ] Consumer Gemini Code Assist sunsets 2026-07-17 — line up a replacement PR
       reviewer.
+
+## Study-design-aware counts + provenance honesty (landed) — measured follow-ups
+
+Branch `study-design-aware-counts` addressed a coworker's BRCA-extraction critique
+with gold-free / additive / scorer-invariant changes (verified on the canonical
+KCNH2 DB to add zero cardiac quarantine):
+
+- `trust_gate` gained `negative_count`, a full-partition equality check folded
+  into `arith_inconsistent`, and `implied_unaffected_zero` (masks ONLY the
+  unaffected field, and only for affirmatively cohort/screening/cascade designs —
+  dormant on unknown-design cardiac data).
+- `variant_papers.source_notation` now persists the verbatim as-reported variant
+  string beside the normalized IDs.
+- The extraction prompt decouples count from phenotype (label AFFECTED only when
+  the source states disease; never assume an unaffected count).
+- A penetrance/segregation discovery lane + a priority signal recruit carrier-first
+  studies.
+- The vertical supplement-catalogue parser no longer asserts `pathogenic` per row.
+
+These remain **deferred until a live cardiac re-extraction + rescore** can confirm
+they do not regress the four-gene gold (they change always-on, scored extraction
+defaults, so they cannot be proven safe with the offline suite alone):
+
+- [ ] Stop writing the source-free `unaffected_count = 0` in the deterministic
+      table parsers (`extraction.py` markdown + vertical, `table_router.py`) and
+      `_populate_penetrance_from_patient_count`. The scorer coerces `0`→`None`
+      for unaffected, so this is *believed* gold-neutral, but ~20 unit tests pin
+      the `0` and downstream (import/report) contracts assume it — flip with a
+      measured rescore, not blind.
+- [ ] Make `affected = patient_count` evidence-gated (only when ascertainment is
+      proband/case-series). `affected` is scored, so this needs the live rescore.
+- [ ] Flip `COUNT_CLASSIFIER_POLICY` / `COUNT_GUARD_POLICY` defaults `off`→`flag`
+      (annotate-only, non-destructive) after a BRCA + cardiac measurement pass.
+- [ ] A source-support quarantine (non-null count with no locator/quote) is a
+      regression trap at current provenance coverage (~38% locator / ~16% quote)
+      — keep it in the source-grounded paper-final-check path, not a blanket
+      trust-gate rule.

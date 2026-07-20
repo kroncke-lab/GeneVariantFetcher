@@ -639,6 +639,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             variant_id INTEGER NOT NULL,
             pmid TEXT NOT NULL,
             source_location TEXT,
+            source_notation TEXT,  -- verbatim variant string as written in THIS paper, before normalization (traceability)
             additional_notes TEXT,
             key_quotes TEXT,  -- JSON array of quotes
             count_provenance TEXT,  -- JSON: which column/count-type each carrier/affected count came from (the "why")
@@ -763,6 +764,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
     for table, col, decl in (
         ("papers", "first_author", "TEXT"),
         ("variant_papers", "source_location", "TEXT"),
+        ("variant_papers", "source_notation", "TEXT"),
         ("variant_papers", "additional_notes", "TEXT"),
         ("variant_papers", "key_quotes", "TEXT"),
         ("variant_papers", "count_provenance", "TEXT"),
@@ -1925,18 +1927,31 @@ def insert_variant_data(
     # Get or create variant
     variant_id = get_or_create_variant(cursor, variant_data)
 
+    # Verbatim variant notation as written in THIS paper, kept alongside the
+    # normalized IDs so a curator can trace a normalized variant back to the
+    # source and catch normalization errors. Prefer an explicit extraction-
+    # provided value; fall back to the pre-sanitization notation captured above.
+    source_notation = (
+        _clean_optional_text(variant_data.get("source_notation"))
+        or _clean_optional_text(original_notation.get("protein_notation"))
+        or _clean_optional_text(original_notation.get("cdna_notation"))
+        or _clean_optional_text(original_notation.get("genomic_position"))
+        or _clean_optional_text(original_notation.get("structural_description"))
+    )
+
     # Insert variant-paper association
     cursor.execute(
         """
         INSERT OR IGNORE INTO variant_papers (
-            variant_id, pmid, source_location, additional_notes, key_quotes,
-            count_provenance, source_layer
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            variant_id, pmid, source_location, source_notation, additional_notes,
+            key_quotes, count_provenance, source_layer
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """,
         (
             variant_id,
             pmid,
             variant_data.get("source_location"),
+            source_notation,
             variant_data.get("additional_notes"),
             json.dumps(variant_data.get("key_quotes", [])),
             json.dumps(variant_data["count_provenance"])

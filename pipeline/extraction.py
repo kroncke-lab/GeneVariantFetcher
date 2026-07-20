@@ -810,6 +810,7 @@ class ExpertExtractor(BaseLLMCaller):
             row_index: Optional[int],
             source_column: Optional[str],
             evidence_quote: str,
+            source_notation: Optional[str] = None,
         ) -> dict:
             variant = {
                 "gene_symbol": gene_symbol,
@@ -819,6 +820,10 @@ class ExpertExtractor(BaseLLMCaller):
                 # these away from regex_table (guardrails + scoring depend on it).
                 "source_layer": "regex_table",
             }
+            # Verbatim token as written in the paper, kept beside the normalized
+            # notation for traceability (persisted to variant_papers.source_notation).
+            if source_notation:
+                variant["source_notation"] = source_notation
             if source_table:
                 variant["source_table"] = source_table
             if source_row:
@@ -918,6 +923,7 @@ class ExpertExtractor(BaseLLMCaller):
                                 cells, header_cells, is_header_row, match.group(1)
                             ),
                             evidence_quote=row_quote,
+                            source_notation=notation,
                         )
                     )
 
@@ -938,6 +944,7 @@ class ExpertExtractor(BaseLLMCaller):
                                 cells, header_cells, is_header_row, match.group(1)
                             ),
                             evidence_quote=row_quote,
+                            source_notation=notation,
                         )
                     )
 
@@ -971,6 +978,7 @@ class ExpertExtractor(BaseLLMCaller):
                                 cells, header_cells, is_header_row, match.group(1)
                             ),
                             evidence_quote=row_quote,
+                            source_notation=notation,
                         )
                     )
 
@@ -3863,7 +3871,10 @@ class ExpertExtractor(BaseLLMCaller):
                 "gene_symbol": gene_symbol,
                 "cdna_notation": cdna,
                 "protein_notation": protein,
-                "clinical_significance": "pathogenic",
+                # A bare supplement variant catalogue carries no pathogenicity
+                # evidence per row; do not assert "pathogenic" for every listed
+                # variant (over-attribution). Scoring ignores this field.
+                "clinical_significance": "uncertain",
                 "patients": {
                     "count": 1,
                     "phenotype": f"{gene_symbol}-associated disease",
