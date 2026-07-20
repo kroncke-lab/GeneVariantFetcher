@@ -31,6 +31,7 @@ Elsevier insttoken.
 | **2026-06-12** | **PDF-linearized table reconstruction + iter-2 quality gate + targeted KCNQ1 land** | **2590/3010 (86.0%)** | **5514/6833 (80.7%)** | **0.634** |
 | **2026-06-12** | **+ targeted lands KCNH2/SCN5A/RYR2 (all four genes)** | **2591/3010 (86.1%)** | **5518/6833 (80.8%)** | **0.615** |
 | **2026-07-12** | **Four-gene supplement reconciliation + gated SCN5A land** | **2596/3010 (86.2%)** | **5546/6833 (81.2%)** | **0.614** |
+| 2026-07-20 | Trust/provenance/gold-integrity arc (#161–#165) — *no recall change by design* | 2596/3010 (86.2%) | 5546/6833 (81.2%) | 0.614 |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
 Gap to the 90% unique-variant target: **113** variants (was 1126 at the 62.6%
@@ -43,6 +44,54 @@ RYR2 **83.7%**.
 ---
 
 ## Timeline (newest first)
+
+### 2026-07-20 — Trust, provenance, and gold-integrity hardening (#161–#165); recall headline unchanged
+A run of protocol changes that harden **trustworthiness and BRCA-readiness**
+rather than four-gene recall. All were designed gold-free / additive /
+scorer-invariant, so the canonical four-gene headline is **unchanged**
+(86.2% unique-variant, 81.2% variant-row, 0.614 carriers MAE — see the trajectory
+table). The point of this arc is *honesty and generalization*, not a recall
+number: it makes the pipeline safe to trust on non-cardiac genes (BRCA1/BRCA2)
+where the old cardiac-tuned heuristics silently fabricated penetrance.
+
+- **#161 — Live gold sync from Variant_Browser.** GVF now pulls the human-
+  adjudicated approved gold from the Azure-backed review machine API into a
+  versioned SQLite cache (immutable snapshots, per-sync change log,
+  reviewer/approver identity, reversible exclusions; native JSON fields
+  normalized on ingest). Raw/disputed/withheld/stale/checksum-invalid inputs
+  fail closed.
+- **#162 — Generalized table-role validation.** The table router now rejects
+  row-ID, population-frequency, cohort-denominator, and clinical-measure columns
+  by class (not per-gene) and records the selected column + count type — directly
+  attacks "table numbers pulled from the wrong column."
+- **#163 — Versioned Azure gold snapshots + scoring tiers.** Cardiac / all /
+  noncardiac scoring tiers; required-sync scoring reads the selected tier for
+  recall/precision/MAE/RMSE; hardened tier filtering + bulk exclusions.
+- **#164 — Source-grounded per-paper final checks.** The default-on Step 3.8
+  final check must quote the source; returned quotes are programmatically verified
+  against the paper (same-table validation for header/row fragments) before a
+  finding can affect trust. Step 3.9 deterministically composes only source-
+  verified objective count/phenotype contradictions; weak "unsupported count"
+  findings stay advisory and never mutate raw counts.
+- **#165 — Study-design-aware counts + provenance honesty** (the coworker BRCA
+  critique). `trust_gate` **tg3**: `negative_count`, full-partition arithmetic
+  (a fully-specified affected+unaffected+uncertain that ≠ total is quarantined),
+  and `implied_unaffected_zero` — a *derived* 100%-penetrance claim
+  (unaffected=0 with affected=total, unsourced) in an affirmatively
+  cohort/biobank/case-control/cascade study is soft-quarantined on the
+  **unaffected field only** (dormant on proband/unknown-design papers, so 0 new
+  cardiac quarantine, verified on KCNH2). Plus `variant_papers.source_notation`
+  (verbatim as-reported variant string beside the normalized IDs); a prompt that
+  decouples count from phenotype (label AFFECTED only when disease is stated;
+  never assume an unaffected count); a penetrance/segregation/cascade discovery
+  lane + priority signal; and the vertical supplement-catalogue parser no longer
+  asserting "pathogenic" per row. Full offline suite 1214 passed; CI green.
+
+Deferred to a **measured** pass (flip source-free `unaffected=0`→null and
+evidence-gate `affected=patient_count` in the deterministic parsers; flip the
+count-classifier/guard defaults off→flag) — believed gold-neutral but they touch
+always-on, *scored* count defaults, so they need a live cardiac re-extraction +
+rescore first. Tracked in `docs/AUTONOMY_ROADMAP.md`.
 
 ### 2026-07-12 — Four-gene idempotent supplement reconciliation and SCN5A gain
 Closed the local supplement-fold gap across KCNH2/KCNQ1/RYR2/SCN5A from 289

@@ -336,6 +336,42 @@ deployment names:
 .venv/bin/python scripts/smoke_azure_models.py --include-final
 ```
 
+### Gold-free trust gate (Step 3.7) and traceability
+
+Before the LLM final check, a deterministic **gold-free** gate
+(`pipeline/trust_gate.py`, rule generation **tg3**) soft-quarantines
+structurally-implausible counts into a two-tier (`trusted` / `quarantine`)
+projection. It **never** deletes a row or NULLs a raw value — quarantined fields
+are only masked from the trusted projection the scorer/report read by default,
+and can be re-tiered after a rule change. Rules are gene-class-agnostic so they
+transfer from cardiac missense to BRCA case-control:
+
+| Reason | Fires when |
+|--------|-----------|
+| `arith_inconsistent` | affected+unaffected+uncertain exceed the total, a fully-specified partition ≠ total, or any count is negative |
+| `negative_count` | any carrier/affected/unaffected/uncertain < 0 |
+| `count_is_total` | the "carrier" count is really a cohort denominator / screened-N |
+| `population_count` | population allele magnitude (gnomAD/MAF label, or above the population ceiling) |
+| `paper_outlier` | carrier count is a wild within-paper outlier (median × k) |
+| `study_type_mismatch` | clinical carrier counts from a review/functional/GWAS paper |
+| `implied_unaffected_zero` | a *derived* unaffected=0 (affected=total, zero not sourced) in an affirmatively cohort/biobank/case-control/family-cascade study — masks **only** the unaffected field; dormant on proband/unknown-design papers |
+
+Each reason maps to the count fields it masks (`REASON_FIELDS`); most mask the
+whole fact, `implied_unaffected_zero` masks only `unaffected`. The scorer reads
+`penetrance_data.field_trust` per field (`cli/compare_variants.py`), falling back
+to the row-level `trust_tier` when field masks are absent.
+
+**Traceability.** `variant_papers.source_notation` stores the verbatim variant
+string as written in each paper (before normalization), captured from the LLM
+schema and the deterministic regex-table parser, so a curator can trace a
+normalized ID back to the source and catch normalization errors.
+
+**Design-aware discovery.** PubMed discovery includes a dedicated
+penetrance/segregation/cascade/unaffected-carrier query lane
+(`gene_literature/discovery.py`), and extraction priority scores that signal
+(`pipeline/extraction_priority.py`), so carrier-first penetrance cohorts are not
+out-prioritized by high-volume patient-first case series.
+
 ### Retry & Circuit Breaker
 
 GVF implements exponential backoff with jitter:
