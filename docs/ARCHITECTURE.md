@@ -272,9 +272,12 @@ extractions/{gene}_PMID_*.json
 `config/settings.py` resolves the effective model for each stage. The current
 forward strategy keeps routine triage/table routing/extraction/debate on Azure,
 then runs a separate, default-on final per-paper sniff test with GPT-5.6 Sol at
-`xhigh` (Step 3.8). That check records soft review results; it does not replace
-routine Tier 2 or mutate extracted counts. Sonnet/Opus are reserved for optional
-exception-adjudication and hard-case escalation over compact claim cards.
+`xhigh` (Step 3.8). That check records exact fact/field findings; it does not
+replace routine Tier 2 or mutate extracted counts. Step 3.9 deterministically
+composes source-verified, objective contradictions into a field-level trusted
+projection. Weak unsupported-count findings remain advisory. Sonnet/Opus are
+reserved for optional exception-adjudication and
+hard-case escalation over compact claim cards.
 
 Recommended staging routing:
 
@@ -285,7 +288,8 @@ Recommended staging routing:
 | Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
 | Tier 3 extraction | `azure_ai/grok-4.3` |
 | Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
-| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; canonical and default-on, with soft persisted verdicts |
+| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; canonical and default-on, with persisted exact fact/field findings |
+| Final-check trust composer (Step 3.9) | Deterministic; source-verified objective count/phenotype contradictions only by default; weak unsupported-count findings remain advisory and raw counts stay unchanged |
 | Optional exception-adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
 | Optional hard-case escalation | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
 
@@ -307,6 +311,9 @@ unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
 | `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
 | `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
 | `PAPER_FINAL_CHECK_REASONING_EFFORT` | Default-on final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` by default) |
+| `PAPER_FINAL_CHECK_GATE_ENABLED` | Enable exact, source-quoted final-check fact/field trust composition (default `true`); weak/unsupported-only reasons remain advisory |
+| `PAPER_FINAL_CHECK_GATE_MIN_SEVERITY` | Minimum applied severity (`high` by default) |
+| `PAPER_FINAL_CHECK_GATE_REQUIRE_SOURCE_GROUNDED` | Keep DB-only flags advisory (default `true`) |
 | `FINAL_ADJUDICATOR_REASONING_EFFORT` | Optional exception-adjudication queue when overridden to an OpenAI-style model |
 | `FINAL_ARBITER_REASONING_EFFORT` | Optional hard-case queue when overridden to an OpenAI-style model |
 

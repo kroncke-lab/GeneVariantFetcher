@@ -102,6 +102,11 @@ def _score(gene: str, db: Path, gold_dir: Path, outdir: Path) -> dict | None:
         f"{gene}={db}",
         "--outdir",
         str(outdir),
+        # This land diagnostic mutates/rebuilds rows without recomposing trust.
+        # Use the raw projection for a reproducible before/after decision; the
+        # canonical gvf-run trust protocol is evaluated separately.
+        "--trust-tier",
+        "all",
     ]
     subprocess.run(cmd, cwd=str(REPO), check=True)
     summ = outdir / gene / "summary.json"

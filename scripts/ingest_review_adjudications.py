@@ -188,7 +188,9 @@ def load_db_aggregate(db_path: Path) -> dict[tuple[str, str], dict[str, Any]]:
         return {}
     try:
         table_info = introspect_sqlite(conn)
-        df = extract_sqlite_data(conn, table_info)
+        # Adjudication ingest must see preserved raw evidence; trust is a later,
+        # reversible scoring projection and must not alter source-key matching.
+        df = extract_sqlite_data(conn, table_info, trust_mode="all")
     except Exception:  # noqa: BLE001 - a malformed DB shouldn't abort ingest
         return {}
     finally:

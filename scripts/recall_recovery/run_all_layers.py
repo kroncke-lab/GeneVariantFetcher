@@ -81,6 +81,10 @@ def score_layer(
         str(gold_dir),
         "--outdir",
         str(outdir),
+        # Intermediate recovery DBs have not run the canonical trust protocol;
+        # compare raw counts so layer deltas do not depend on stale/default tiers.
+        "--trust-tier",
+        "all",
     ]
     logger.info("score → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)

@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-07-12.
+Last updated: 2026-07-20.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -42,6 +42,32 @@ strictly gated SCN5A supplement-source land:
 
 Scored artifact:
 `recall_metrics/fulltext_supplements_20260712/`.
+
+## Targeted pfs12 enforcement spot check (not the canonical baseline)
+
+The enforced paper-final-check protocol was replayed on fresh single/few-paper
+DBs for KCNH2 (PMIDs 15840476 and 33013630), KCNQ1 (30758498), RYR2
+(28404607), and SCN5A (29325976). Metrics below are restricted to those PMIDs;
+they validate trust projection behavior and must not be compared with the
+four-gene aggregate as if they were a fleet refresh.
+
+| Gene | Variant recall | Affected recall | Matched carrier MAE / RMSE | End-to-end carrier MAE / RMSE | Grounded missing groups | Applied facts |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 85/86 (98.8%) | 107/108 (99.1%) | 0.035 / 0.243 | 0.047 / 0.264 | 1 | 1 |
+| KCNQ1 | 14/93 (15.1%) | 68/228 (29.8%) | 5.833 / 10.206 | 3.064 / 5.207 | 91 | 0 |
+| RYR2 | 235/244 (96.3%) | 242/276 (87.7%) | 0.004 / 0.065 | 0.143 / 1.676 | 1 | 1 |
+| SCN5A | 20/91 (22.0%) | 37/118 (31.4%) | n/a | 1.297 / 1.460 | 18 | 0 |
+
+Trusted and raw count metrics were identical for KCNH2, KCNQ1, and SCN5A. For
+RYR2, a source-quoted phenotype contradiction quarantined one affected field;
+matched affected MAE changed from 0.00426 raw to 0.00427 trusted. The source
+explicitly says that carrier had no VT/CPVT, while the current gold row expects
+affected status, so this is a gold-adjudication discrepancy rather than evidence
+that the source-grounded gate selected the wrong field. The grounded missing
+groups make the KCNH2, KCNQ1, RYR2, and SCN5A runs fail acceptance and route to
+re-extraction instead of allowing their high spot-check recall gaps to pass
+silently. A full canonical four-gene rerun remains required before changing the
+headline baseline.
 
 ## Four-Gene Aggregate
 

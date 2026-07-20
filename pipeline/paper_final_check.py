@@ -20,9 +20,12 @@ Two modes, one step:
   the model eyeballs the extracted rows + their captured provenance and flags
   count-role errors. No completeness signal is possible without the source.
 
-It is a **judgment layer, not a mutation**: it RECORDS soft results in
-``paper_final_check`` (+ the ``paper_carrier_groups`` child table) and never
-edits or deletes a raw count. Pure helpers (``resolve_summary_source``,
+It is an **auditor, not a raw-data mutation layer**: it records structured
+findings in ``paper_final_check`` (+ the ``paper_carrier_groups`` child table)
+and never edits or deletes a raw count. The separate
+``pipeline.paper_final_check_gate`` composer can bind source-grounded findings
+to exact count facts and quarantine only the affected trusted projection. Pure
+helpers (``resolve_summary_source``,
 ``_select_source_for_summary``, ``build_*_prompt``, ``normalize_*``) have no
 LLM/DB coupling and are unit-tested directly; ``apply_paper_final_check`` is the
 thin SQLite + LLM adapter and accepts injected checkers so tests never hit the
@@ -69,13 +72,33 @@ DEFAULT_MAX_SOURCE_CHARS = 60000
 # Minimum usable source length (chars); below this, treat as no source.
 MIN_USABLE_SOURCE_CHARS = 200
 
-PROMPT_VERSION = "pfc4"  # targeted table evidence + strict response contract
-SUMMARY_PROMPT_VERSION = "pfs6"  # targeted table evidence in trust review
+PROMPT_VERSION = "pfc7"  # source-quoted fact/field flags + phenotype reason
+SUMMARY_PROMPT_VERSION = "pfs12"  # attached table-title evidence + phenotype reason
 SOURCE_RECIPE_VERSION = "src2"  # abstract + Data-Scout DATA_ZONES (no full text)
 
 VALID_VERDICTS = ("ok", "flag")
 VALID_SEVERITIES = ("low", "medium", "high")
 VALID_COMPLETENESS = ("complete", "gaps", "unsure")
+VALID_FLAG_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
+FLAG_FIELD_ALIASES = {
+    "carriers": "total_carriers",
+    "carrier": "total_carriers",
+    "patient_count": "total_carriers",
+    "total_carriers_observed": "total_carriers",
+    "affected_count": "affected",
+    "unaffected_count": "unaffected",
+    "uncertain_count": "uncertain",
+}
+VALID_FLAG_REASONS = (
+    "count_is_total",
+    "population_count",
+    "wrong_column",
+    "arith_inconsistent",
+    "phenotype_misclassified",
+    "unsupported_count",
+    "wrong_gene",
+    "other",
+)
 
 _PROMPT_TEMPLATE = """You are the final quality-control reviewer (a "sniff test") for an automated
 pipeline that extracts variant carrier counts from biomedical papers. You are
@@ -102,6 +125,10 @@ A row is SUSPECT if any of these apply:
 - The count has no supporting quote or source location (treat as low confidence).
 - The magnitude is implausible for the carriers of a single variant.
 
+Every flag MUST name the exact ``fact_id`` value(s) copied from
+``captured_fact_index`` and the specific count field(s) that are suspect. Never
+blanket-flag every fact in a paper or rely on variant text alone.
+
 Paper (JSON):
 {payload}
 
@@ -111,8 +138,15 @@ Return STRICT JSON only, no prose outside the object:
   "confidence": <number between 0 and 1: your confidence the extraction for this
                  paper is correct overall>,
   "flags": [
-    {{"variant": "<the variant field from a suspect row>",
-      "issue": "<short reason it is suspect>",
+    {{"fact_ids": [<one or more integer fact_id values copied exactly from the
+                     suspect captured_fact_index rows>],
+      "variant": "<the variant field from the suspect row(s)>",
+      "fields": ["total_carriers"|"affected"|"unaffected"|"uncertain"],
+      "reason_code": "count_is_total"|"population_count"|"wrong_column"|
+                     "arith_inconsistent"|"phenotype_misclassified"|
+                     "unsupported_count"|"wrong_gene"|"other",
+      "evidence_quote": "<verbatim header/row text that demonstrates the problem>",
+      "issue": "<short reason the named fields are suspect>",
       "severity": "low" | "medium" | "high"}}
   ],
   "summary": "<one or two sentences: what this study appears to be, and whether
@@ -178,6 +212,34 @@ a gnomAD/allele-frequency figure, affected+unaffected exceeding the total, or an
 implausible magnitude). Also flag age-at-diagnosis, mean-age, and family-history
 disease/case values that were misread as carrier or affected counts. Cross-check
 the claimed column against any compact header + target-row evidence supplied.
+Every actionable flag MUST name the exact ``fact_id`` value(s) from
+``captured_fact_index`` and the specific count field(s) that are unsupported.
+Never use a paper-wide or variant-text-only flag as a substitute for enumerating
+the affected fact IDs. Do not flag a field merely because its evidence was
+omitted from the capped rich ``facts`` list; the complete index is authoritative
+for what was captured.
+
+Important phenotype rule: a cohort-level inclusion criterion can support a
+per-variant affected status. If the counted subjects are explicitly patients or
+cases with the target disease, their per-variant patient count may legitimately
+equal affected and unaffected may be zero even when the table does not repeat a
+separate phenotype column. Flag this only when the source shows a mixed cohort,
+controls/asymptomatic carriers, or another direct contradiction. Lack of a
+repeated row-level affected/unaffected split is not by itself a high-severity
+error.
+
+Every trust flag MUST copy a concise verbatim ``evidence_quote`` from the SOURCE
+TEXT that demonstrates the mismatch. For a table problem, include enough header
+and target-row text to establish the column role. A flag may bind multiple facts
+from one wrong-gene table; for that table-level problem, quote its title, header,
+and one representative target row (do not append a second distant row). Use
+``population_count`` for a
+gnomAD/ExAC/allele-count column and ``wrong_column`` for age, score, or shifted
+column values. Use ``phenotype_misclassified`` only when the source directly
+contradicts the captured affected/unaffected status or split; absent row-level
+phenotype detail alone is not enough. ``unsupported_count`` means weak/absent
+support rather than a demonstrated contradiction; it is advisory and must not
+be presented as a hard column error.
 
 Return STRICT JSON only, no prose outside the object:
 {{
@@ -203,7 +265,16 @@ Return STRICT JSON only, no prose outside the object:
     "notes": "<why; call out supplement/table gaps>"
   }},
   "flags": [
-    {{"variant": "<row>", "issue": "<why suspect>", "severity": "low"|"medium"|"high"}}
+    {{"fact_ids": [<one or more integer fact_id values copied exactly from the
+                     suspect captured_fact_index rows>],
+      "variant": "<row>",
+      "fields": ["total_carriers"|"affected"|"unaffected"|"uncertain"],
+      "reason_code": "count_is_total"|"population_count"|"wrong_column"|
+                     "arith_inconsistent"|"phenotype_misclassified"|
+                     "unsupported_count"|"wrong_gene"|"other",
+      "evidence_quote": "<VERBATIM source header/row demonstrating the mismatch>",
+      "issue": "<why the named fields are suspect>",
+      "severity": "low"|"medium"|"high"}}
   ]
 }}"""
 
@@ -308,6 +379,83 @@ def _normalized_contains(haystack: str, needle: str) -> bool:
     if len(needle_n) < 8:  # too short to verify meaningfully
         return False
     return needle_n in _norm_ws(haystack)
+
+
+def _source_evidence_verified(source_text: str, quote: str) -> bool:
+    """Verify a contiguous quote or fragments from one logical table.
+
+    Table headers and target rows are often non-adjacent. Reviewers may return
+    them in one multi-line evidence block. A table title may also be included,
+    but it must be in the short preamble immediately attached to that same table.
+    This permits title + sampled head/tail rows while preventing a model from
+    stitching a header or title from one table to a target row in another.
+    Markdown separator rows carry no independent evidence and are ignored.
+    """
+    if _normalized_contains(source_text, quote):
+        return True
+    fragments = []
+    for raw_line in str(quote or "").splitlines():
+        line = raw_line.strip()
+        if not line or re.fullmatch(r"[|:\-\s]+", line):
+            continue
+        if len(_norm_ws(line)) >= 8:
+            fragments.append(line)
+    if len(fragments) < 2:
+        return False
+
+    table_fragments = [line for line in fragments if line.lstrip().startswith("|")]
+    context_fragments = [
+        line for line in fragments if not line.lstrip().startswith("|")
+    ]
+    if len(table_fragments) < 2:
+        return False
+
+    # A header and target row may be non-adjacent, but they must belong to one
+    # contiguous markdown table. Searching the whole paper independently lets a
+    # model stitch a population header to an unrelated age-table row and turn
+    # that false evidence into an enforceable action.
+    source_lines = str(source_text or "").splitlines()
+    table_blocks: list[tuple[int, list[str]]] = []
+    current: list[str] = []
+    current_start = 0
+    for line_no, source_line in enumerate(source_lines):
+        if source_line.lstrip().startswith("|"):
+            if not current:
+                current_start = line_no
+            current.append(source_line)
+        elif current:
+            table_blocks.append((current_start, current))
+            current = []
+    if current:
+        table_blocks.append((current_start, current))
+
+    for start, block in table_blocks:
+        block_text = "\n".join(block)
+        if not all(
+            _normalized_contains(block_text, fragment) for fragment in table_fragments
+        ):
+            continue
+        if not context_fragments:
+            return True
+
+        # Titles/captions belong immediately before a table. Bound the preamble
+        # so unrelated prose elsewhere in the paper cannot validate the row.
+        preamble_lines: list[str] = []
+        cursor = start - 1
+        while cursor >= 0 and len(preamble_lines) < 8:
+            candidate = source_lines[cursor]
+            if candidate.lstrip().startswith("|") or candidate.strip() == "---":
+                break
+            if candidate.strip():
+                preamble_lines.append(candidate)
+            cursor -= 1
+        preamble_text = "\n".join(reversed(preamble_lines))
+        if all(
+            _normalized_contains(preamble_text, fragment)
+            for fragment in context_fragments
+        ):
+            return True
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -643,6 +791,7 @@ def gather_paper_payloads(
     )
     sql = f"""
         SELECT pd.pmid AS pmid,
+               pd.penetrance_id         AS penetrance_id,
                v.variant_id              AS variant_id,
                {variant_identity_expr} AS variant,
                v.protein_notation      AS protein_notation,
@@ -701,7 +850,8 @@ def gather_paper_payloads(
         }
         fact_number = bucket["n_facts_total"] + 1
         compact_fact: dict[str, Any] = {
-            "n": fact_number,
+            "fact_id": int(row["penetrance_id"]),
+            "variant_id": int(row["variant_id"]),
             "variant": row["variant"] or "(unnamed)",
             "counts": compact_counts,
         }
@@ -711,7 +861,8 @@ def gather_paper_payloads(
         bucket["n_facts_total"] = fact_number
 
         fact: dict[str, Any] = {
-            "n": fact_number,
+            "fact_id": int(row["penetrance_id"]),
+            "variant_id": int(row["variant_id"]),
             "variant": row["variant"] or "(unnamed)",
             "counts": compact_counts,
         }
@@ -763,12 +914,26 @@ def gather_paper_payloads(
         if evidence_context:
             fact["table_evidence"] = evidence_context
         if sel_trust:
-            tier = row["trust_tier"]
-            if tier:
-                fact["trust_tier"] = tier
-            reasons = _load_json(row["trust_reasons"])
-            if reasons:
-                fact["trust_reasons"] = reasons
+            all_reasons = _load_json(row["trust_reasons"])
+            all_reasons = all_reasons if isinstance(all_reasons, list) else []
+            structural_reasons = [
+                str(reason)
+                for reason in all_reasons
+                if not str(reason).startswith("paper_final_check:")
+            ]
+            # The reviewer must see/hash the structural extraction state, not
+            # its own prior decision. This keeps a durable PFC composition from
+            # invalidating the next reviewer payload or creating a feedback loop.
+            legacy_quarantine = (
+                str(row["trust_tier"] or "").lower() == "quarantine" and not all_reasons
+            )
+            if structural_reasons:
+                fact["trust_tier"] = "quarantine"
+                fact["trust_reasons"] = structural_reasons
+            elif legacy_quarantine:
+                fact["trust_tier"] = "quarantine"
+            else:
+                fact["trust_tier"] = "trusted"
         bucket["facts"].append(fact)
 
     payloads = []
@@ -793,13 +958,15 @@ def gather_paper_payloads(
                     ambiguous_label,
                     int(bool(fact.get("table_evidence"))),
                     max_count,
-                    -int(fact.get("n") or 0),
+                    -int(fact.get("fact_id") or 0),
                 )
 
             selected = sorted(payload["facts"], key=review_priority, reverse=True)[
                 :max_facts
             ]
-            payload["facts"] = sorted(selected, key=lambda fact: fact.get("n") or 0)
+            payload["facts"] = sorted(
+                selected, key=lambda fact: fact.get("fact_id") or 0
+            )
         payload["truncated"] = payload["n_facts_total"] > len(payload["facts"])
         payloads.append(payload)
     return payloads
@@ -808,18 +975,13 @@ def gather_paper_payloads(
 def payload_content_hash(payload: dict[str, Any]) -> str:
     """Hash the semantic DB payload independently of row/insertion order.
 
-    A changed count, identity, provenance field, title, or trust decision must
-    invalidate version-skip even when the source text and reviewer model did not
-    change. Fact ordinals are presentation-only and are excluded from the hash.
+    A changed count, identity, fact/variant ID, provenance field, title, or trust
+    decision must invalidate version-skip even when the source text and reviewer
+    model did not change.
     """
 
-    def without_ordinal(item: Any) -> Any:
-        if not isinstance(item, dict):
-            return item
-        return {k: v for k, v in item.items() if k != "n"}
-
     def stable_items(items: Any) -> list[Any]:
-        values = [without_ordinal(item) for item in (items or [])]
+        values = list(items or [])
         return sorted(
             values,
             key=lambda item: json.dumps(
@@ -912,7 +1074,24 @@ def _as_bool(value: Any) -> bool:
     return False
 
 
-def _norm_flags(raw: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
+def _norm_flags(
+    raw: dict[str, Any], payload: Optional[dict[str, Any]] = None
+) -> tuple[list[dict[str, Any]], str]:
+    """Normalize findings and seal their fact-to-variant bindings.
+
+    The reviewer chooses exact ``fact_ids`` from the payload.  ``variant_ids``
+    are copied from that same payload rather than trusted from model output, so
+    the enforcement step can reject a fact-id collision after a re-migration.
+    """
+    fact_variants: dict[int, int] = {}
+    for fact in (payload or {}).get("captured_fact_index") or []:
+        if not isinstance(fact, dict):
+            continue
+        fact_id = _as_int(fact.get("fact_id"))
+        variant_id = _as_int(fact.get("variant_id"))
+        if fact_id is not None and variant_id is not None:
+            fact_variants[fact_id] = variant_id
+
     flags: list[dict[str, Any]] = []
     raw_flags = raw.get("flags")
     if isinstance(raw_flags, dict):  # model sometimes returns a single object
@@ -921,9 +1100,44 @@ def _norm_flags(raw: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
         if not isinstance(item, dict):
             continue
         severity = str(item.get("severity") or "").strip().lower()
+        raw_fact_ids = item.get("fact_ids")
+        if raw_fact_ids is None and item.get("fact_id") is not None:
+            raw_fact_ids = [item.get("fact_id")]
+        if not isinstance(raw_fact_ids, list):
+            raw_fact_ids = []
+        fact_ids: list[int] = []
+        for value in raw_fact_ids:
+            fact_id = _as_int(value)
+            if fact_id is not None and fact_id > 0 and fact_id not in fact_ids:
+                fact_ids.append(fact_id)
+
+        raw_fields = item.get("fields")
+        if isinstance(raw_fields, str):
+            raw_fields = [raw_fields]
+        fields = []
+        for value in raw_fields or []:
+            field = str(value or "").strip().lower()
+            field = FLAG_FIELD_ALIASES.get(field, field)
+            if field in VALID_FLAG_FIELDS and field not in fields:
+                fields.append(field)
+
+        reason_code = str(item.get("reason_code") or "other").strip().lower()
+        if reason_code not in VALID_FLAG_REASONS:
+            reason_code = "other"
         flags.append(
             {
+                "fact_ids": fact_ids,
+                "variant_ids": [
+                    fact_variants[fact_id]
+                    for fact_id in fact_ids
+                    if fact_id in fact_variants
+                ],
                 "variant": str(item.get("variant") or "").strip() or "(unspecified)",
+                "fields": fields,
+                "reason_code": reason_code,
+                "evidence_quote": str(item.get("evidence_quote") or "").strip()[
+                    :MAX_QUOTE_CHARS
+                ],
                 "issue": str(item.get("issue") or "").strip(),
                 "severity": severity if severity in VALID_SEVERITIES else "medium",
             }
@@ -1076,7 +1290,7 @@ def _validate_checker_result(result: Any, *, source_grounded: bool) -> dict[str,
 def normalize_result(raw: Any, payload: dict[str, Any]) -> dict[str, Any]:
     """Coerce the DB-only sniff-test JSON into a stable record."""
     raw = _validate_db_response(raw)
-    flags, verdict = _norm_flags(raw)
+    flags, verdict = _norm_flags(raw, payload)
     return {
         "pmid": payload.get("pmid"),
         "gene_symbol": payload.get("gene"),
@@ -1100,7 +1314,14 @@ def normalize_summary_result(
     ``truncated`` = the fed source was truncated, so "complete" is not claimable.
     """
     raw = _validate_summary_response(raw)
-    flags, _model_verdict = _norm_flags(raw)  # verdict re-derived from grounded signal
+    flags, _model_verdict = _norm_flags(
+        raw, payload
+    )  # verdict re-derived from grounded signal
+    for flag in flags:
+        quote = flag.get("evidence_quote") or ""
+        flag["evidence_quote_verified"] = bool(
+            quote and _source_evidence_verified(source_text, quote)
+        )
 
     raw_groups = raw.get("carrier_groups")
     if isinstance(raw_groups, dict):  # tolerate a single object
@@ -1124,7 +1345,9 @@ def normalize_summary_result(
                 "in_extraction": in_extraction,
                 # Soft: keep-with-flag, never drop, so a real miss isn't lost to
                 # markdown/whitespace/OCR cosmetics.
-                "quote_verified": 1 if _normalized_contains(source_text, quote) else 0,
+                "quote_verified": 1
+                if _source_evidence_verified(source_text, quote)
+                else 0,
                 "status": "reported_extracted" if in_extraction else "reported_missing",
             }
         )
@@ -1297,6 +1520,50 @@ def ensure_summary_schema(conn: sqlite3.Connection) -> None:
     conn.execute(
         "CREATE INDEX IF NOT EXISTS idx_pcg_gene_status "
         "ON paper_carrier_groups(gene_symbol, status)"
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS paper_final_check_attempts (
+            attempt_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+            pmid            TEXT,
+            check_version   TEXT,
+            verdict         TEXT,
+            summary         TEXT,
+            attempted_at    TEXT
+        )
+        """
+    )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_pfcat_pmid ON paper_final_check_attempts(pmid)"
+    )
+
+
+def _record_attempt(
+    conn: sqlite3.Connection,
+    *,
+    result: dict[str, Any],
+    version: str,
+    attempted_at: str,
+) -> None:
+    """Persist every reviewer attempt, including transient errors.
+
+    ``paper_final_check`` remains the last successful/current decision row;
+    this append-only table keeps an outage auditable without erasing durable
+    grounded findings that still match the current payload.
+    """
+    conn.execute(
+        """
+        INSERT INTO paper_final_check_attempts (
+            pmid, check_version, verdict, summary, attempted_at
+        ) VALUES (?,?,?,?,?)
+        """,
+        (
+            result.get("pmid"),
+            version,
+            result.get("verdict"),
+            result.get("summary"),
+            attempted_at,
+        ),
     )
 
 
@@ -1573,6 +1840,12 @@ def apply_paper_final_check(
 
     conn = sqlite3.connect(db_path)
     try:
+        # Review and enforcement must hash the same payload shape even on a DB
+        # created before field-level trust columns existed. The import is local
+        # to avoid a module-load cycle with the deterministic composer.
+        from pipeline.paper_final_check_gate import ensure_gate_schema
+
+        ensure_gate_schema(conn)
         ensure_summary_schema(conn)
         payloads = gather_paper_payloads(conn, pmids=pmids)
         if limit is not None:
@@ -1665,6 +1938,9 @@ def apply_paper_final_check(
                 continue
 
             if use_summary:
+                record_prompt_version = SUMMARY_PROMPT_VERSION
+                record_source_chars: Optional[int] = len(selected)
+                record_source_truncated: Optional[int] = 1 if truncated else 0
                 if summary_checker is None:
                     summary_checker = PaperSummaryChecker(
                         model=model,
@@ -1680,20 +1956,10 @@ def apply_paper_final_check(
                 except Exception as exc:  # noqa: BLE001 - one paper must not abort
                     logger.warning("paper summary failed for pmid=%s: %s", pmid, exc)
                     result = _error_result(payload, exc)
-                _record_row(
-                    conn,
-                    result=result,
-                    model=model,
-                    reasoning_effort=reasoning_effort,
-                    prompt_version=SUMMARY_PROMPT_VERSION,
-                    version=intended_version,
-                    checked_at=checked_at,
-                    source_kind=source_kind,
-                    source_file=source_path,
-                    source_chars=len(selected),
-                    source_truncated=1 if truncated else 0,
-                )
             else:
+                record_prompt_version = PROMPT_VERSION
+                record_source_chars = None
+                record_source_truncated = None
                 if source_kind == "none":
                     stats["source_absent"] += 1
                 if checker is None:
@@ -1710,31 +1976,49 @@ def apply_paper_final_check(
                         "paper final check failed for pmid=%s: %s", pmid, exc
                     )
                     result = _error_result(payload, exc)
+
+            _record_attempt(
+                conn,
+                result=result,
+                version=intended_version,
+                attempted_at=checked_at,
+            )
+            preserve_previous_success = result.get(
+                "verdict"
+            ) == "error" and prev_verdict in {"ok", "flag"}
+            if preserve_previous_success:
+                logger.warning(
+                    "paper final check retained prior successful finding for "
+                    "pmid=%s after transient reviewer error",
+                    pmid,
+                )
+            else:
                 _record_row(
                     conn,
                     result=result,
                     model=model,
                     reasoning_effort=reasoning_effort,
-                    prompt_version=PROMPT_VERSION,
+                    prompt_version=record_prompt_version,
                     version=intended_version,
                     checked_at=checked_at,
                     source_kind=source_kind,
                     source_file=source_path,
+                    source_chars=record_source_chars,
+                    source_truncated=record_source_truncated,
                 )
-
-            # Always replace the paper's carrier groups (DELETE-before-insert):
-            # a re-check that errors or degrades to DB-only must not leave stale
-            # reported_missing rows queryable as current.
-            _record_carrier_groups(
-                conn,
-                pmid=pmid,
-                gene_symbol=result.get("gene_symbol"),
-                groups=(result.get("carrier_groups") or [])
-                if result.get("source_grounded")
-                else [],
-                version=intended_version,
-                checked_at=checked_at,
-            )
+                # A successful re-check replaces the paper's carrier groups. An
+                # error must not erase prior quote-verified misses; the failed
+                # attempt is already durable in paper_final_check_attempts.
+                _record_carrier_groups(
+                    conn,
+                    pmid=pmid,
+                    gene_symbol=result.get("gene_symbol"),
+                    groups=(result.get("carrier_groups") or [])
+                    if result.get("source_grounded")
+                    else [],
+                    version=intended_version,
+                    checked_at=checked_at,
+                )
 
             verdict = result.get("verdict") or "ok"
             stats[verdict] = stats.get(verdict, 0) + 1

@@ -21,7 +21,10 @@ missense to BRCA truncating/case-control without per-gene tuning:
   variants in the same paper (median x k).
 
 The pure core (``evaluate_fact`` / ``decide_tier``) has no DB dependency and is
-unit-tested directly; ``apply_trust_gate`` is the thin SQLite adapter.
+unit-tested directly; ``apply_trust_gate`` is the thin SQLite adapter. The
+adapter preserves any already-composed ``paper_final_check:`` field findings;
+the paper gate still follows this step in ``gvf-run`` to validate freshness and
+perform a full deterministic recomposition.
 """
 
 from __future__ import annotations
@@ -80,6 +83,8 @@ RULE_IDS = (
     "paper_outlier",
     "study_type_mismatch",
 )
+
+COUNT_TRUST_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
 
 
 def rule_version() -> str:
@@ -216,13 +221,27 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
     """Tier every ``penetrance_data`` fact in the DB. Soft-quarantine only: sets
     ``trust_tier`` / ``trust_reasons`` / ``trust_rule_version``; never NULLs a
     count or deletes a row. Idempotent — re-running re-tiers against current
-    rules. Returns ``{trusted, quarantine, by_reason, rule_version}``.
+    structural rules while retaining already-composed paper-level field masks.
+    The paper gate must still run afterward to validate their payload hash.
+    Returns ``{trusted, quarantine, by_reason, rule_version}``.
     """
     db_path = str(db_path)
     version = rule_version()
     conn = sqlite3.connect(db_path)
     try:
         conn.row_factory = sqlite3.Row
+        pd_cols = {r[1] for r in conn.execute("PRAGMA table_info(penetrance_data)")}
+        for name, declaration in (
+            ("trust_tier", "TEXT DEFAULT 'trusted'"),
+            ("trust_reasons", "TEXT"),
+            ("trust_rule_version", "TEXT"),
+            ("field_trust", "TEXT"),
+            ("trust_sources", "TEXT"),
+        ):
+            if name not in pd_cols:
+                conn.execute(
+                    f"ALTER TABLE penetrance_data ADD COLUMN {name} {declaration}"
+                )
         # Pull each count fact with its fact-level count provenance (variant ↔
         # paper carries the count_provenance JSON).
         # Optional study columns (PR-1 A2); tolerate pre-study-record DBs.
@@ -251,6 +270,10 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                        pd.affected_count       AS affected,
                        pd.unaffected_count     AS unaffected,
                        pd.uncertain_count      AS uncertain,
+                       pd.trust_tier            AS existing_trust_tier,
+                       pd.trust_reasons         AS existing_trust_reasons,
+                       pd.trust_rule_version    AS existing_trust_rule_version,
+                       pd.field_trust           AS existing_field_trust,
                        vp.count_provenance     AS count_provenance,
                        {study_sql}
                 FROM penetrance_data pd
@@ -274,7 +297,7 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
             "by_reason": {},
             "rule_version": version,
         }
-        updates: list[tuple[str, str, str, int]] = []
+        updates: list[tuple[str, str, str, str, str, int]] = []
         for r in rows:
             provenance = {}
             raw = r.get("count_provenance")
@@ -294,15 +317,75 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                 paper_stats.get(str(r.get("pmid"))),
                 study_context=study_context,
             )
-            tier = decide_tier(reasons)
+            existing_reasons: list[str] = []
+            try:
+                parsed_reasons = json.loads(r.get("existing_trust_reasons") or "[]")
+                if isinstance(parsed_reasons, list):
+                    existing_reasons = [str(value) for value in parsed_reasons]
+            except (TypeError, ValueError, json.JSONDecodeError):
+                pass
+            paper_reasons = [
+                reason
+                for reason in existing_reasons
+                if reason.startswith("paper_final_check:")
+            ]
+            combined_reasons = sorted(set(reasons) | set(paper_reasons))
+
+            structural_tier = decide_tier(reasons)
+            field_trust = {
+                field: "quarantine" if structural_tier == "quarantine" else "trusted"
+                for field in COUNT_TRUST_FIELDS
+            }
+            if paper_reasons:
+                try:
+                    existing_fields = json.loads(r.get("existing_field_trust") or "{}")
+                except (TypeError, ValueError, json.JSONDecodeError):
+                    existing_fields = {}
+                if isinstance(existing_fields, dict):
+                    for field in COUNT_TRUST_FIELDS:
+                        if existing_fields.get(field) == "quarantine":
+                            field_trust[field] = "quarantine"
+                # Recover the mask from reason metadata if a legacy row lacks a
+                # valid field_trust object.
+                for reason in paper_reasons:
+                    field = reason.rsplit(":", 1)[-1]
+                    if field in COUNT_TRUST_FIELDS:
+                        field_trust[field] = "quarantine"
+
+            tier = (
+                "quarantine"
+                if any(value == "quarantine" for value in field_trust.values())
+                else "trusted"
+            )
             stats[tier] += 1
-            for reason in reasons:
+            for reason in combined_reasons:
                 stats["by_reason"][reason] = stats["by_reason"].get(reason, 0) + 1
-            updates.append((tier, json.dumps(reasons), version, r["penetrance_id"]))
+            sources = []
+            if reasons:
+                sources.append("structural")
+            if paper_reasons:
+                sources.append("paper_final_check")
+            prior_composer_versions = [
+                part
+                for part in str(r.get("existing_trust_rule_version") or "").split("|")
+                if part.startswith("pfcg")
+            ]
+            composed_version = "|".join([version, *prior_composer_versions])
+            updates.append(
+                (
+                    tier,
+                    json.dumps(combined_reasons),
+                    composed_version,
+                    json.dumps(field_trust, sort_keys=True),
+                    json.dumps(sources),
+                    r["penetrance_id"],
+                )
+            )
 
         conn.executemany(
             "UPDATE penetrance_data SET trust_tier=?, trust_reasons=?, "
-            "trust_rule_version=? WHERE penetrance_id=?",
+            "trust_rule_version=?, field_trust=?, trust_sources=? "
+            "WHERE penetrance_id=?",
             updates,
         )
         conn.commit()

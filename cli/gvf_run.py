@@ -739,8 +739,10 @@ def step_report(
         lines.append("## Paper Final Check")
         lines.append("")
         skip_reason = paper_final_check.get("skipped")
+        gate = paper_final_check.get("gate")
         if isinstance(skip_reason, str):
             lines.append(f"_Skipped: {skip_reason}_")
+            lines.append("")
         else:
             lines.append(
                 "| Papers | Checked | Cached/skipped | Source-grounded | Flags | Errors | Missing groups |"
@@ -766,9 +768,45 @@ def step_report(
                     "nor usable source text and were explicitly skipped."
                 )
             lines.append("")
+        if paper_final_check.get("review_skipped"):
             lines.append(
-                "Soft results remain in `paper_final_check`; source-grounded "
-                "reported/missing groups remain in `paper_carrier_groups`."
+                "The live reviewer was skipped; Step 3.9 recomposed durable "
+                "stored findings against the current extraction payload."
+            )
+            lines.append("")
+        if isinstance(gate, dict) and not gate.get("skipped"):
+            lines.append(
+                "| Gate-applied facts | Applied bindings | Unresolved | "
+                "Unverified quote | Stale papers | Advisory reason | Trusted | "
+                "Quarantined |"
+            )
+            lines.append("|---:|---:|---:|---:|---:|---:|---:|---:|")
+            lines.append(
+                "| {facts} | {bindings} | {unresolved} | {unverified} | "
+                "{stale} | {advisory} | {trusted} | {quarantine} |".format(
+                    facts=gate.get("applied_facts", 0),
+                    bindings=gate.get("applied_bindings", 0),
+                    unresolved=gate.get("unresolved_actionable", 0),
+                    unverified=gate.get("unverified_actionable", 0),
+                    stale=gate.get("stale_papers", 0),
+                    advisory=gate.get("advisory_reason_flags", 0),
+                    trusted=gate.get("trusted", 0),
+                    quarantine=gate.get("quarantine", 0),
+                )
+            )
+            lines.append("")
+            lines.append(
+                "Raw count values remain unchanged. Exact, source-quoted "
+                "fact/field contradictions are composed into `field_trust`; default "
+                "scoring projects those quarantined fields as missing while "
+                "retaining variant identity. Reported/missing groups remain "
+                "in `paper_carrier_groups` as a re-extraction signal."
+            )
+        else:
+            lines.append(
+                "Final-check findings remain recorded in "
+                "`paper_final_check`; no actionable trust composition was "
+                "reported for this run."
             )
         lines.append("")
 
@@ -1217,6 +1255,27 @@ def step_paper_final_check(
     return apply_paper_final_check(db, run_dir=run_dir, gene=gene)
 
 
+def step_paper_final_check_gate(db: Path) -> dict:
+    """Compose exact source-grounded final-check flags into count trust.
+
+    Raw count columns and variant identities remain unchanged. Only the named
+    fact/field trusted projection is quarantined.
+    """
+    from config.settings import get_settings
+    from pipeline.paper_final_check_gate import apply_paper_final_check_gate
+
+    settings = get_settings()
+    if not settings.paper_final_check_gate_enabled:
+        return {"skipped": "disabled (paper_final_check_gate_enabled=false)"}
+    return apply_paper_final_check_gate(
+        db,
+        min_severity=settings.paper_final_check_gate_min_severity,
+        require_source_grounded=(
+            settings.paper_final_check_gate_require_source_grounded
+        ),
+    )
+
+
 def _paper_check_reachable(model: str) -> bool:
     """True when credentials for the final-check model's provider are present, so
     the step skips cleanly on a keyless clone instead of erroring every paper."""
@@ -1563,6 +1622,7 @@ def run_gvf_pipeline(
     source_recovery_result: Optional[SourceRecoveryResult] = None
     layer_outdir: Optional[Path] = None
     paper_final_check_result: Optional[dict] = None
+    paper_final_check_gate_result: Optional[dict] = None
 
     if source_recovery and "source-qc" in skip:
         logger.warning("source recovery requested but source-qc was skipped")
@@ -1655,10 +1715,9 @@ def run_gvf_pipeline(
 
     # Step 3.8: per-paper final check (sniff test). A strong reasoning model
     # (default gpt-5.6-sol at xhigh, per config.settings) reviews each paper's
-    # extracted counts against their captured provenance and records a soft
-    # verdict in the paper_final_check table — it never mutates or deletes a
-    # count. Default ON. The step self-gates (disabled / unreachable / bad
-    # settings → clean skip); a genuine failure warns, it does not fail the run.
+    # extracted counts against source/provenance and records structured findings.
+    # It never mutates or deletes a raw count. Step 3.9 then composes exact
+    # source-grounded fact/field flags into the trusted projection.
     if "paper-final-check" not in skip:
         logger.info("🧪 Step 3.8: per-paper final check")
         try:
@@ -1683,6 +1742,110 @@ def run_gvf_pipeline(
             stage_warnings.append(f"paper final check failed: {e}")
     else:
         logger.info("⏭️  Step 3.8: paper final check — SKIPPED")
+
+    # Step 3.9: actionable final-check gate. Never blanket-quarantines a paper:
+    # only at/above-threshold source-grounded findings carrying exact fact IDs and
+    # named count fields can affect trust. Raw values and identities remain in
+    # the DB. Quote-verified missing carrier groups fail run acceptance because
+    # there is no safe count to synthesize; they require re-extraction.
+    # Recompose from the durable current paper_final_check rows even when the
+    # live reviewer is skipped/unreachable. A transient outage must not silently
+    # lift a previously grounded quarantine after Step 3.7 resets structural
+    # reasons. Operators can explicitly skip only this deterministic composer
+    # with --skip paper-final-check-gate.
+    if "paper-final-check-gate" not in skip:
+        logger.info("🔒 Step 3.9: paper final-check trust composition")
+        try:
+            paper_final_check_gate_result = step_paper_final_check_gate(db=db)
+            logger.info(
+                "paper final-check trust composition: %s",
+                paper_final_check_gate_result,
+            )
+            if isinstance(paper_final_check_result, dict):
+                paper_final_check_result["gate"] = paper_final_check_gate_result
+            else:
+                # The composer intentionally runs from durable rows even when
+                # the live reviewer is skipped. Keep that enforcement visible
+                # in RUN_REPORT instead of dropping the whole section.
+                paper_final_check_result = {
+                    "papers": paper_final_check_gate_result.get("papers", 0),
+                    "checked": 0,
+                    "skipped": paper_final_check_gate_result.get("papers", 0),
+                    "source_grounded": paper_final_check_gate_result.get(
+                        "source_grounded_papers", 0
+                    ),
+                    "flagged_facts": paper_final_check_gate_result.get(
+                        "flags_total", 0
+                    ),
+                    "missing_carriers": paper_final_check_gate_result.get(
+                        "missing_carriers", 0
+                    ),
+                    "error": 0,
+                    "review_skipped": True,
+                    "gate": paper_final_check_gate_result,
+                }
+            unresolved = int(
+                paper_final_check_gate_result.get("unresolved_actionable") or 0
+            )
+            missing = int(paper_final_check_gate_result.get("missing_carriers") or 0)
+            ungrounded = int(
+                paper_final_check_gate_result.get("ungrounded_actionable") or 0
+            )
+            unverified = int(
+                paper_final_check_gate_result.get("unverified_actionable") or 0
+            )
+            advisory_reasons = int(
+                paper_final_check_gate_result.get("advisory_reason_flags") or 0
+            )
+            stale_actionable = int(
+                paper_final_check_gate_result.get("stale_actionable") or 0
+            )
+            stale_missing = int(
+                paper_final_check_gate_result.get("stale_missing_carriers") or 0
+            )
+            stale_reviewer = int(
+                paper_final_check_gate_result.get("stale_reviewer_version") or 0
+            )
+            if unresolved:
+                stage_failures.append(
+                    f"paper final-check gate left {unresolved} actionable "
+                    "flag binding(s) unresolved"
+                )
+            if missing:
+                stage_failures.append(
+                    f"paper final check found {missing} quote-verified missing "
+                    "carrier group(s); re-extraction required"
+                )
+            if stale_actionable or stale_missing:
+                stage_failures.append(
+                    "paper final-check gate refused stale findings "
+                    f"({stale_actionable} actionable flag(s), {stale_missing} "
+                    f"missing carrier group(s), {stale_reviewer} outdated "
+                    "reviewer generation(s)); "
+                    "reviewer replay required"
+                )
+            if ungrounded:
+                stage_warnings.append(
+                    f"paper final-check gate kept {ungrounded} DB-only "
+                    "actionable flag(s) advisory because source was unavailable"
+                )
+            if advisory_reasons:
+                stage_warnings.append(
+                    f"paper final-check gate kept {advisory_reasons} weak/"
+                    "unsupported finding(s) advisory; only objective contradiction "
+                    "reason codes enforce field trust"
+                )
+            if unverified:
+                stage_failures.append(
+                    f"paper final-check gate refused {unverified} actionable "
+                    "finding(s) without a verbatim source-verified quote; reviewer "
+                    "replay required"
+                )
+        except Exception as e:  # noqa: BLE001
+            logger.exception("paper final-check trust composition failed (%s)", e)
+            stage_failures.append(f"paper final-check trust composition failed: {e}")
+    else:
+        logger.info("⏭️  Step 3.9: paper final-check trust composition — SKIPPED")
 
     # Step 4: gold-free source QC. Only run if Step 3 did not already attempt it —
     # a failed Step-3 attempt also leaves source_qc_summary None, and re-running

@@ -29,6 +29,13 @@ def _skip_institutional_preflight(monkeypatch):
     CI/automation does, so a full-recovery run does not halt at the live probe.
     """
     monkeypatch.setenv("GVF_PREFLIGHT_SKIP", "1")
+    # The wiring fixture writes a placeholder, not a real SQLite database. Keep
+    # the deterministic composer inert unless a test explicitly replaces it.
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: {"skipped": "wiring fixture"},
+    )
 
 
 def _ok_doctor() -> dict:
@@ -545,6 +552,11 @@ def test_paper_final_check_runs_by_default(tmp_path: Path, monkeypatch):
         "step_paper_final_check",
         lambda db, run_dir, gene: calls.append(db) or {"papers": 0, "checked": 0},
     )
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: {"applied_facts": 0, "unresolved_actionable": 0},
+    )
 
     rc = gvf_run.run_gvf_pipeline(
         gene="TESTGENE",
@@ -560,12 +572,20 @@ def test_paper_final_check_runs_by_default(tmp_path: Path, monkeypatch):
 def test_paper_final_check_is_skippable(tmp_path: Path, monkeypatch):
     captured: dict = {}
     calls: list = []
+    gate_calls: list = []
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
     monkeypatch.setattr(
         gvf_run,
         "step_paper_final_check",
         lambda db, run_dir, gene: calls.append(db) or {},
+    )
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: (
+            gate_calls.append(db) or {"applied_facts": 0, "unresolved_actionable": 0}
+        ),
     )
 
     rc = gvf_run.run_gvf_pipeline(
@@ -577,6 +597,56 @@ def test_paper_final_check_is_skippable(tmp_path: Path, monkeypatch):
     )
     assert rc == 0
     assert calls == [], "final check should be skippable via skip=['paper-final-check']"
+    assert len(gate_calls) == 1, "stored grounded findings must still be recomposed"
+    report = (tmp_path / "out" / "TESTGENE" / "run1" / "RUN_REPORT.md").read_text(
+        encoding="utf-8"
+    )
+    assert "live reviewer was skipped" in report
+    assert "Gate-applied facts" in report
+
+
+def test_disabled_live_reviewer_still_reports_durable_gate(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {})
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: {"skipped": "disabled by configuration"},
+    )
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: {
+            "papers": 1,
+            "applied_facts": 2,
+            "applied_bindings": 2,
+            "unresolved_actionable": 0,
+            "unverified_actionable": 0,
+            "missing_carriers": 0,
+            "ungrounded_actionable": 0,
+            "stale_papers": 0,
+            "advisory_reason_flags": 0,
+            "trusted": 8,
+            "quarantine": 2,
+        },
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+
+    assert rc == 0
+    report = (output / "TESTGENE" / "run1" / "RUN_REPORT.md").read_text()
+    assert "_Skipped: disabled by configuration_" in report
+    assert "Gate-applied facts" in report
+    assert "| 2 | 2 | 0 | 0 | 0 | 0 | 8 | 2 |" in report
 
 
 def test_paper_final_check_errors_warn_and_reach_run_outputs(
@@ -597,6 +667,16 @@ def test_paper_final_check_errors_warn_and_reach_run_outputs(
             "flagged_facts": 0,
             "missing_carriers": 0,
             "error": 2,
+        },
+    )
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: {
+            "applied_facts": 0,
+            "unresolved_actionable": 0,
+            "missing_carriers": 0,
+            "ungrounded_actionable": 0,
         },
     )
 
@@ -620,3 +700,50 @@ def test_paper_final_check_errors_warn_and_reach_run_outputs(
     assert "## Paper Final Check" in report
     assert warning in status["stage_warnings"]
     assert status["exit_code"] == 0
+
+
+def test_paper_final_check_gate_makes_missing_or_unbound_evidence_nonzero(
+    tmp_path: Path, monkeypatch
+):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {})
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check",
+        lambda db, run_dir, gene: {
+            "papers": 1,
+            "checked": 1,
+            "skipped": 0,
+            "source_grounded": 1,
+            "flagged_facts": 1,
+            "missing_carriers": 1,
+            "error": 0,
+        },
+    )
+    monkeypatch.setattr(
+        gvf_run,
+        "step_paper_final_check_gate",
+        lambda db: {
+            "applied_facts": 0,
+            "unresolved_actionable": 1,
+            "missing_carriers": 1,
+            "ungrounded_actionable": 0,
+        },
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=["layers", "source-qc", "metadata-backfill"],
+    )
+
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+    assert any("binding" in value for value in status["stage_failures"])
+    assert any("re-extraction required" in value for value in status["stage_failures"])
