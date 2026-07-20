@@ -138,20 +138,36 @@ class _Stub:
 def test_check_version_is_stable_and_effort_sensitive():
     a = check_version("azure_ai/gpt-5.6-sol", "xhigh")
     assert a == check_version("azure_ai/gpt-5.6-sol", "xhigh")
-    assert a.startswith("pfc4-")
+    assert a.startswith("pfc7-")
     assert a != check_version("azure_ai/gpt-5.6-sol", "high")
     assert a != check_version("anthropic/claude-sonnet-5", "xhigh")
 
 
 def test_normalize_flag_response_normalizes_severity():
-    payload = {"pmid": "1", "gene": "BRCA2", "facts": [{"n": 1}]}
+    payload = {
+        "pmid": "1",
+        "gene": "BRCA2",
+        "facts": [{"fact_id": 11, "variant_id": 101}],
+        "captured_fact_index": [
+            {"fact_id": 11, "variant_id": 101},
+            {"fact_id": 12, "variant_id": 102},
+        ],
+    }
     r = normalize_result(
         {
             "paper_verdict": "flag",
             "confidence": 0.6,
             "flags": [
                 {
+                    "fact_ids": [11, "11", 12],
                     "variant": "p.V30M",
+                    "fields": [
+                        "affected",
+                        "affected",
+                        "total_carriers_observed",
+                        "bogus",
+                    ],
+                    "reason_code": "WRONG_COLUMN",
                     "issue": "cohort total",
                     "severity": "HIGH",
                 }
@@ -163,6 +179,10 @@ def test_normalize_flag_response_normalizes_severity():
     assert r["verdict"] == "flag"
     assert r["n_flagged"] == 1
     assert r["flags"][0]["severity"] == "high"
+    assert r["flags"][0]["fact_ids"] == [11, 12]
+    assert r["flags"][0]["variant_ids"] == [101, 102]
+    assert r["flags"][0]["fields"] == ["affected", "total_carriers"]
+    assert r["flags"][0]["reason_code"] == "wrong_column"
     assert r["n_facts"] == 1
     assert r["pmid"] == "1"
 
@@ -289,7 +309,7 @@ def test_gather_keeps_complete_index_beyond_sixty_rows(tmp_path):
     assert p111["n_facts_total"] == 65
     assert len(p111["captured_fact_index"]) == 65
     prompt = build_paper_check_prompt(p111)
-    assert '"n": 65' in prompt
+    assert '"fact_id": 162' in prompt
 
 
 def test_gather_prioritizes_targeted_table_evidence_beyond_fact_cap(tmp_path):
@@ -348,7 +368,7 @@ def test_gather_prioritizes_targeted_table_evidence_beyond_fact_cap(tmp_path):
     late = next(
         fact for fact in payload["facts"] if fact["counts"].get("affected") == 43
     )
-    assert late["n"] == 66
+    assert late["fact_id"] == 999
     assert late["table_evidence"][0]["source_table"] == "Table 5"
     assert "Mean age diagnosis" in late["table_evidence"][0]["evidence_quote"]
     assert len(payload["facts"]) == 60
@@ -409,8 +429,27 @@ def test_gather_includes_trust_when_present(tmp_path):
     payloads = gather_paper_payloads(conn)
     conn.close()
     fact = next(p for p in payloads if p["pmid"] == "111")["facts"][0]
+    assert fact["fact_id"] == 10
+    assert fact["variant_id"] == 1
     assert fact["trust_tier"] == "quarantine"
     assert fact["trust_reasons"] == ["population_count"]
+
+
+def test_gather_excludes_prior_paper_check_from_reviewer_payload(tmp_path):
+    db = tmp_path / "t.db"
+    _seed(db, with_trust=True)
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "UPDATE penetrance_data SET trust_tier='quarantine', trust_reasons=? "
+        "WHERE penetrance_id=10",
+        ('["paper_final_check:wrong_column:high:affected"]',),
+    )
+    conn.commit()
+    payloads = gather_paper_payloads(conn)
+    conn.close()
+    fact = next(p for p in payloads if p["pmid"] == "111")["facts"][0]
+    assert fact["trust_tier"] == "trusted"
+    assert "trust_reasons" not in fact
 
 
 def test_apply_records_and_is_idempotent(tmp_path):
@@ -440,7 +479,7 @@ def test_apply_records_and_is_idempotent(tmp_path):
     assert [r[0] for r in rows] == ["111", "222", "333"]
     assert all(r[1] == "flag" and r[2] == "m" and r[3] == "xhigh" for r in rows[:2])
     assert rows[2][1] == "skipped"
-    assert all(r[5] == "pfc4" for r in rows)
+    assert all(r[5] == "pfc7" for r in rows)
 
     # Re-run replaces (PRIMARY KEY on pmid), never duplicates.
     apply_paper_final_check(
@@ -947,7 +986,7 @@ def test_apply_source_grounded_writes_summary_and_missing(tmp_path):
         "SELECT quote_verified FROM paper_carrier_groups WHERE variant='p.Arg100Ter'"
     ).fetchone()[0]
     conn.close()
-    assert row == (1, "gaps", 1, "pfs6")
+    assert row == (1, "gaps", 1, "pfs12")
     assert groups["p.Arg100Ter"] == "reported_missing"
     assert groups["p.Val30Met"] == "reported_extracted"
     assert verified == 1
@@ -1072,12 +1111,12 @@ def test_apply_no_source_degrades_to_db_only(tmp_path):
         "SELECT source_grounded, prompt_version FROM paper_final_check WHERE pmid='111'"
     ).fetchone()
     conn.close()
-    assert row == (0, "pfc4")
+    assert row == (0, "pfc7")
 
 
 def test_summary_check_version_sensitive_to_budget():
     a = summary_check_version("m", "xhigh", 60000)
-    assert a.startswith("pfs6-")
+    assert a.startswith("pfs12-")
     assert a != summary_check_version("m", "xhigh", 40000)
     assert a != summary_check_version("m", "high", 60000)
 
@@ -1213,6 +1252,160 @@ def test_ok_verdict_with_real_flag_is_reconciled_to_flag():
     assert r["verdict"] == "flag"
 
 
+def test_source_flag_verifies_noncontiguous_header_and_target_rows():
+    source = """| Gene | Variant | gnomAD allele count |
+|---|---|---|
+| OTHER | p.X | 9 |
+| KCNH2 | p.Arg744* | 0 |
+"""
+    evidence = """| Gene | Variant | gnomAD allele count |
+|---|---|---|
+| KCNH2 | p.Arg744* | 0 |"""
+    r = normalize_summary_result(
+        _valid_summary_response(
+            flags=[
+                {
+                    "fact_ids": [1],
+                    "variant": "p.Arg744*",
+                    "fields": ["total_carriers"],
+                    "reason_code": "population_count",
+                    "evidence_quote": evidence,
+                    "issue": "population column",
+                    "severity": "high",
+                }
+            ]
+        ),
+        {
+            "pmid": "1",
+            "gene": "KCNH2",
+            "facts": [],
+            "captured_fact_index": [{"fact_id": 1, "variant_id": 2}],
+        },
+        source,
+    )
+    assert r["flags"][0]["evidence_quote_verified"] is True
+
+
+def test_source_flag_rejects_fragments_stitched_across_tables():
+    source = """| Gene | Variant | gnomAD allele count |
+|---|---|---|
+| OTHER | p.X | 9 |
+
+| Age at diagnosis | Cases |
+|---|---|
+| 45 | 12 |
+"""
+    evidence = """| Gene | Variant | gnomAD allele count |
+| 45 | 12 |"""
+    r = normalize_summary_result(
+        _valid_summary_response(
+            flags=[
+                {
+                    "fact_ids": [1],
+                    "variant": "p.Arg744*",
+                    "fields": ["total_carriers"],
+                    "reason_code": "population_count",
+                    "evidence_quote": evidence,
+                    "issue": "stitched evidence",
+                    "severity": "high",
+                }
+            ]
+        ),
+        {
+            "pmid": "1",
+            "gene": "KCNH2",
+            "facts": [],
+            "captured_fact_index": [{"fact_id": 1, "variant_id": 2}],
+        },
+        source,
+    )
+    assert r["flags"][0]["evidence_quote_verified"] is False
+
+
+def test_source_flag_accepts_title_and_rows_from_same_sampled_table():
+    source = """### Table 2
+
+Examples of BRCA1 variants in affected families
+
+| Class | Variant | Carrier |
+|---|---|---|
+| Pathogenic | c.1del | 18 |
+| … 26 more rows (same columns) omitted for the sniff test … |
+| Novel | c.99del | 2 |
+"""
+    evidence = """### Table 2
+Examples of BRCA1 variants in affected families
+| Class | Variant | Carrier |
+| Pathogenic | c.1del | 18 |
+| Novel | c.99del | 2 |"""
+    r = normalize_summary_result(
+        _valid_summary_response(
+            flags=[
+                {
+                    "fact_ids": [1],
+                    "variant": "wrong-gene table",
+                    "fields": ["total_carriers"],
+                    "reason_code": "wrong_gene",
+                    "evidence_quote": evidence,
+                    "issue": "BRCA1 table captured for BRCA2",
+                    "severity": "high",
+                }
+            ]
+        ),
+        {
+            "pmid": "1",
+            "gene": "BRCA2",
+            "facts": [],
+            "captured_fact_index": [{"fact_id": 1, "variant_id": 2}],
+        },
+        source,
+    )
+    assert r["flags"][0]["evidence_quote_verified"] is True
+
+
+def test_source_flag_rejects_distant_title_attached_to_other_table():
+    source = """Examples of BRCA1 variants in affected families
+
+| Class | Variant | Carrier |
+|---|---|---|
+| Pathogenic | c.1del | 18 |
+
+---
+
+Examples of BRCA2 variants in affected families
+
+| Class | Variant | Carrier |
+|---|---|---|
+| Novel | c.99del | 2 |
+"""
+    evidence = """Examples of BRCA1 variants in affected families
+| Class | Variant | Carrier |
+| Novel | c.99del | 2 |"""
+    r = normalize_summary_result(
+        _valid_summary_response(
+            flags=[
+                {
+                    "fact_ids": [1],
+                    "variant": "stitched title",
+                    "fields": ["total_carriers"],
+                    "reason_code": "wrong_gene",
+                    "evidence_quote": evidence,
+                    "issue": "title and row come from different tables",
+                    "severity": "high",
+                }
+            ]
+        ),
+        {
+            "pmid": "1",
+            "gene": "BRCA2",
+            "facts": [],
+            "captured_fact_index": [{"fact_id": 1, "variant_id": 2}],
+        },
+        source,
+    )
+    assert r["flags"][0]["evidence_quote_verified"] is False
+
+
 def test_apply_errored_paper_is_retryable(tmp_path):
     _stage_scout(tmp_path, "111", zones=_SOURCE)
     db = tmp_path / "t.db"
@@ -1232,6 +1425,60 @@ def test_apply_errored_paper_is_retryable(tmp_path):
     assert s2["skipped"] == 0  # error rows are NOT version-skipped
     assert s2["source_grounded"] == 1  # retry succeeded
     assert flaky.calls == 2
+
+
+def test_transient_error_preserves_prior_grounded_findings_and_records_attempt(
+    tmp_path,
+):
+    _stage_scout(tmp_path, "111", zones=_SOURCE)
+    db = tmp_path / "t.db"
+    _seed_source(db, "111", "")
+    common = dict(
+        model="m",
+        reasoning_effort="xhigh",
+        source_grounded=True,
+        max_source_chars=60000,
+        run_dir=tmp_path,
+        gene="BRCA2",
+    )
+    apply_paper_final_check(db, summary_checker=_StubSummary(_GROUPS), **common)
+    conn = sqlite3.connect(db)
+    prior = conn.execute(
+        "SELECT check_version, verdict, n_missing FROM paper_final_check "
+        "WHERE pmid='111'"
+    ).fetchone()
+    conn.execute(
+        "UPDATE penetrance_data SET total_carriers_observed=4 WHERE penetrance_id=1"
+    )
+    conn.commit()
+    conn.close()
+
+    class Raiser:
+        def check(self, payload, source_text, truncated=False):
+            raise RuntimeError("transient reviewer outage")
+
+    stats = apply_paper_final_check(db, summary_checker=Raiser(), **common)
+    assert stats["error"] == 1
+
+    conn = sqlite3.connect(db)
+    current = conn.execute(
+        "SELECT check_version, verdict, n_missing FROM paper_final_check "
+        "WHERE pmid='111'"
+    ).fetchone()
+    groups = conn.execute(
+        "SELECT COUNT(*) FROM paper_carrier_groups WHERE pmid='111'"
+    ).fetchone()[0]
+    attempt = conn.execute(
+        "SELECT verdict, summary FROM paper_final_check_attempts "
+        "WHERE pmid='111' ORDER BY attempt_id DESC LIMIT 1"
+    ).fetchone()
+    conn.close()
+
+    assert current == prior
+    assert current[1:] == ("ok", 1)
+    assert groups == 2
+    assert attempt[0] == "error"
+    assert "transient reviewer outage" in attempt[1]
 
 
 def test_empty_summary_checker_result_is_error_and_retryable(tmp_path):

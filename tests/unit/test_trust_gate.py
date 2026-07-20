@@ -172,6 +172,45 @@ def test_apply_trust_gate_is_idempotent(tmp_path):
     assert first["quarantine"] == second["quarantine"] == 0
 
 
+def test_apply_trust_gate_preserves_composed_paper_field_mask(tmp_path):
+    db = str(tmp_path / "t.db")
+    conn = create_database_schema(db)
+    try:
+        _seed(conn, 1, "111", {"carriers": 10, "affected": 6, "unaffected": 3})
+        conn.execute(
+            "UPDATE penetrance_data SET trust_tier='quarantine', "
+            "trust_reasons=?, trust_rule_version='tg2-old|pfcg1-seal', "
+            "field_trust=?, trust_sources='[\"paper_final_check\"]' "
+            "WHERE penetrance_id=1",
+            (
+                '["paper_final_check:column_role_mismatch:high:affected"]',
+                '{"total_carriers":"trusted","affected":"quarantine",'
+                '"unaffected":"trusted","uncertain":"trusted"}',
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    stats = apply_trust_gate(db)
+    assert stats["quarantine"] == 1
+
+    conn = sqlite3.connect(db)
+    try:
+        row = conn.execute(
+            "SELECT affected_count, trust_reasons, trust_rule_version, "
+            "field_trust, trust_sources FROM penetrance_data WHERE penetrance_id=1"
+        ).fetchone()
+    finally:
+        conn.close()
+    assert row[0] == 6
+    assert "paper_final_check:column_role_mismatch:high:affected" in row[1]
+    assert "pfcg1-seal" in row[2]
+    assert json.loads(row[3])["affected"] == "quarantine"
+    assert json.loads(row[3])["total_carriers"] == "trusted"
+    assert json.loads(row[4]) == ["paper_final_check"]
+
+
 def test_apply_trust_gate_dedupes_multiple_extraction_metadata_rows(tmp_path):
     """A pmid with >1 extraction_metadata row must not fan a fact out once per
     row (which double-counts stats and lets an arbitrary row win the tier). The

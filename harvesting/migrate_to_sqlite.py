@@ -666,6 +666,8 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             trust_tier TEXT DEFAULT 'trusted',
             trust_reasons TEXT,
             trust_rule_version TEXT,
+            field_trust TEXT,  -- JSON per count field; raw count columns stay unchanged
+            trust_sources TEXT,  -- JSON list: structural, paper_final_check, legacy
 
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
@@ -768,6 +770,8 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("penetrance_data", "trust_tier", "TEXT DEFAULT 'trusted'"),
         ("penetrance_data", "trust_reasons", "TEXT"),
         ("penetrance_data", "trust_rule_version", "TEXT"),
+        ("penetrance_data", "field_trust", "TEXT"),
+        ("penetrance_data", "trust_sources", "TEXT"),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
         ("extraction_metadata", "study_type", "TEXT"),

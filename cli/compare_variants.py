@@ -462,7 +462,10 @@ def find_best_data_source(table_info: Dict[str, TableInfo]) -> Tuple[str, TableI
 
 
 def extract_sqlite_data(
-    conn: sqlite3.Connection, table_info: Dict[str, TableInfo]
+    conn: sqlite3.Connection,
+    table_info: Dict[str, TableInfo],
+    *,
+    trust_mode: str = "trusted",
 ) -> pd.DataFrame:
     """
     Extract variant data from SQLite database.
@@ -470,10 +473,16 @@ def extract_sqlite_data(
     Args:
         conn: SQLite connection
         table_info: Schema information from introspection
+        trust_mode: ``trusted`` projects quarantined count fields to NULL while
+            preserving the variant-paper identity row; ``all`` reads raw counts.
 
     Returns:
         DataFrame with columns: pmid, variant, carriers_total, affected_count, unaffected_count
     """
+    trust_mode = str(trust_mode or "trusted").strip().lower()
+    if trust_mode not in {"trusted", "all"}:
+        raise ValueError("trust_mode must be 'trusted' or 'all'")
+
     strategy, primary_table = find_best_data_source(table_info)
 
     # Structural events (exon/CNV/whole-gene) live only in structural_description
@@ -487,6 +496,61 @@ def extract_sqlite_data(
     if "structural_description" in _variants_cols:
         variant_key += ", v.structural_description"
     variant_key += ")"
+
+    pd_columns = (
+        table_info["penetrance_data"].columns
+        if "penetrance_data" in table_info
+        else set()
+    )
+    has_pd_trust = "trust_tier" in pd_columns
+    has_field_trust = "field_trust" in pd_columns
+    has_field_trust_json = has_field_trust
+    if has_field_trust:
+        try:
+            conn.execute(
+                "SELECT json_valid('{}'), json_extract('{}', '$.x')"
+            ).fetchone()
+        except sqlite3.DatabaseError:
+            has_field_trust_json = False
+            logger.warning(
+                "SQLite JSON functions unavailable; trusted projection is "
+                "falling back to conservative row-level trust_tier masks"
+            )
+
+    def pd_count_expr(column: str, field: str) -> str:
+        """Trusted count projection without deleting the identity row.
+
+        New DBs carry a field mask, so an unsupported affected count does not
+        hide an independently supported carrier count. Legacy quarantined rows
+        have no mask and therefore conservatively project all count fields NULL.
+        """
+        raw = f"pd.{column}"
+        if trust_mode == "all" or not has_pd_trust:
+            return raw
+        if has_field_trust_json:
+            return (
+                "CASE "
+                "WHEN pd.field_trust IS NOT NULL AND pd.field_trust <> '' "
+                "AND json_valid(pd.field_trust) "
+                f"THEN CASE WHEN json_extract(pd.field_trust, '$.{field}') = "
+                f"'quarantine' THEN NULL ELSE {raw} END "
+                f"WHEN pd.trust_tier = 'quarantine' THEN NULL ELSE {raw} END"
+            )
+        return f"CASE WHEN pd.trust_tier = 'quarantine' THEN NULL ELSE {raw} END"
+
+    def pd_field_quarantined_expr(field: str) -> str:
+        """SQL boolean for whether a specific PD count field is quarantined."""
+        if trust_mode == "all" or not has_pd_trust:
+            return "0"
+        if has_field_trust_json:
+            return (
+                "CASE WHEN pd.field_trust IS NOT NULL AND pd.field_trust <> '' "
+                "AND json_valid(pd.field_trust) "
+                f"THEN COALESCE(json_extract(pd.field_trust, '$.{field}') = "
+                "'quarantine', 0) "
+                "ELSE COALESCE(pd.trust_tier = 'quarantine', 0) END"
+            )
+        return "COALESCE(pd.trust_tier = 'quarantine', 0)"
 
     if strategy == "union_all":
         # Union every (pmid, variant_id) link from variant_papers, penetrance_data,
@@ -569,27 +633,21 @@ def extract_sqlite_data(
             "COALESCE(vp.source_layer, 'llm_text')" if has_vp else "'llm_text'"
         )
 
-        carriers_expr = []
-        affected_expr = []
-        unaffected_expr = []
-        uncertain_expr = []
-        if has_pd:
-            carriers_expr.append("pd.total_carriers_observed")
-            affected_expr.append("pd.affected_count")
-            unaffected_expr.append("pd.unaffected_count")
-            uncertain_expr.append("pd.uncertain_count")
-        if has_ir:
-            carriers_expr.append("ir.carriers_total")
-            affected_expr.append("ir.affected_count")
-            unaffected_expr.append("ir.unaffected_count")
-            uncertain_expr.append("ir.uncertain_count")
-        carriers_expr.append("NULL")
-        affected_expr.append("NULL")
-        unaffected_expr.append("NULL")
-        uncertain_expr.append("NULL")
-
-        def coalesce_sql(values: list[str]) -> str:
-            return values[0] if len(values) == 1 else f"COALESCE({', '.join(values)})"
+        def combined_count_expr(pd_column: str, field: str, ir_column: str) -> str:
+            if has_pd and has_ir:
+                raw_fallback = f"COALESCE(pd.{pd_column}, ir.{ir_column})"
+                if trust_mode == "trusted" and has_pd_trust:
+                    return (
+                        "CASE WHEN pd.variant_id IS NOT NULL AND "
+                        f"({pd_field_quarantined_expr(field)}) THEN NULL "
+                        f"ELSE {raw_fallback} END"
+                    )
+                return raw_fallback
+            if has_pd:
+                return pd_count_expr(pd_column, field)
+            if has_ir:
+                return f"ir.{ir_column}"
+            return "NULL"
 
         query = f"""
         WITH all_links AS (
@@ -602,10 +660,10 @@ def extract_sqlite_data(
             v.protein_notation,
             v.cdna_notation,
             {layer_select_expr} AS source_layer,
-            {coalesce_sql(carriers_expr)} AS carriers_total,
-            {coalesce_sql(affected_expr)} AS affected_count,
-            {coalesce_sql(unaffected_expr)} AS unaffected_count,
-            {coalesce_sql(uncertain_expr)} AS uncertain_count
+            {combined_count_expr("total_carriers_observed", "total_carriers", "carriers_total")} AS carriers_total,
+            {combined_count_expr("affected_count", "affected", "affected_count")} AS affected_count,
+            {combined_count_expr("unaffected_count", "unaffected", "unaffected_count")} AS unaffected_count,
+            {combined_count_expr("uncertain_count", "uncertain", "uncertain_count")} AS uncertain_count
         FROM all_links al
         JOIN variants v ON al.variant_id = v.variant_id
         {pd_join}
@@ -632,10 +690,10 @@ def extract_sqlite_data(
                 v.protein_notation,
                 v.cdna_notation,
                 'llm_text' as source_layer,
-                pd.total_carriers_observed as carriers_total,
-                pd.affected_count,
-                pd.unaffected_count,
-                pd.uncertain_count
+                {pd_count_expr("total_carriers_observed", "total_carriers")} as carriers_total,
+                {pd_count_expr("affected_count", "affected")} as affected_count,
+                {pd_count_expr("unaffected_count", "unaffected")} as unaffected_count,
+                {pd_count_expr("uncertain_count", "uncertain")} as uncertain_count
             FROM penetrance_data pd
             JOIN variants v ON pd.variant_id = v.variant_id
         """
@@ -3217,6 +3275,16 @@ Examples:
     )
 
     parser.add_argument(
+        "--trust-tier",
+        choices=["trusted", "all"],
+        default="trusted",
+        help=(
+            "Count projection to score: trusted (default) masks quarantined "
+            "count fields but preserves variant identity; all reads raw counts."
+        ),
+    )
+
+    parser.add_argument(
         "--log_level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         default="INFO",
@@ -3255,6 +3323,7 @@ Examples:
     logger.info(f"Excel: {args.excel}")
     logger.info(f"SQLite: {args.sqlite}")
     logger.info(f"Match mode: {args.variant_match_mode}")
+    logger.info(f"Count trust projection: {args.trust_tier}")
     if args.variant_match_mode == "fuzzy":
         logger.info(f"Fuzzy threshold: {args.fuzzy_threshold}")
     logger.info("=" * 80)
@@ -3273,7 +3342,7 @@ Examples:
         table_info = introspect_sqlite(conn)
 
         # Extract SQLite data
-        sqlite_df = extract_sqlite_data(conn, table_info)
+        sqlite_df = extract_sqlite_data(conn, table_info, trust_mode=args.trust_tier)
         conn.close()
 
         # Aggregate data

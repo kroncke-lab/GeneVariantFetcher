@@ -417,9 +417,10 @@ class Settings(BaseSettings):
     )
 
     # Per-paper "final check" (sniff test). A strong reasoning model reviews
-    # each paper's extracted counts against their provenance and records a soft
-    # verdict in paper_final_check (never mutates counts). Default-on; skips
-    # gracefully when the model is unreachable. See pipeline/paper_final_check.py.
+    # each paper's extracted counts against source/provenance and records exact
+    # fact/field findings. The companion gate composes grounded findings into
+    # trust without mutating raw counts. Default-on; skips gracefully when the
+    # model is unreachable. See pipeline/paper_final_check.py.
     paper_final_check_enabled: bool = Field(
         default=True,
         validation_alias="PAPER_FINAL_CHECK_ENABLED",
@@ -465,6 +466,30 @@ class Settings(BaseSettings):
             "summary prompt (~15K input tokens at 60000). The scouted zones are "
             "already narrowed to the carrier-bearing regions; source_truncated is "
             "recorded on the rare overflow so gaps are re-runnable."
+        ),
+    )
+    paper_final_check_gate_enabled: bool = Field(
+        default=True,
+        validation_alias="PAPER_FINAL_CHECK_GATE_ENABLED",
+        description=(
+            "Compose exact source-grounded final-check fact/field flags into "
+            "the trusted count projection without changing raw extracted counts."
+        ),
+    )
+    paper_final_check_gate_min_severity: str = Field(
+        default="high",
+        validation_alias="PAPER_FINAL_CHECK_GATE_MIN_SEVERITY",
+        description=(
+            "Minimum source-grounded final-check flag severity that quarantines "
+            "the named count fields (low|medium|high)."
+        ),
+    )
+    paper_final_check_gate_require_source_grounded: bool = Field(
+        default=True,
+        validation_alias="PAPER_FINAL_CHECK_GATE_REQUIRE_SOURCE_GROUNDED",
+        description=(
+            "Require real source context before a model flag can quarantine a "
+            "count field. DB-only flags remain advisory by default."
         ),
     )
 
@@ -703,6 +728,16 @@ class Settings(BaseSettings):
         if v_norm not in allowed:
             raise ValueError(
                 f"count policy must be one of {sorted(allowed)}; got {v!r}"
+            )
+        return v_norm
+
+    @field_validator("paper_final_check_gate_min_severity")
+    @classmethod
+    def _validate_paper_final_check_gate_min_severity(cls, v: str) -> str:
+        v_norm = str(v or "").strip().lower()
+        if v_norm not in {"low", "medium", "high"}:
+            raise ValueError(
+                "paper_final_check_gate_min_severity must be low, medium, or high"
             )
         return v_norm
 

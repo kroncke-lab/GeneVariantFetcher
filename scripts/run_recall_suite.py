@@ -168,6 +168,7 @@ def run_gene_compare(
     fuzzy_threshold: float = 0.80,
     adjudication_db: Path | None = None,
     adjudication_tier: str = "cardiac",
+    trust_tier: str = "trusted",
 ) -> dict[str, Any]:
     """Compare one gene's normalized gold input against one extraction DB."""
     gene_outdir = outdir / gene
@@ -176,7 +177,7 @@ def run_gene_compare(
     conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     try:
         table_info = introspect_sqlite(conn)
-        sqlite_df = extract_sqlite_data(conn, table_info)
+        sqlite_df = extract_sqlite_data(conn, table_info, trust_mode=trust_tier)
     finally:
         conn.close()
 
@@ -492,6 +493,7 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
         "",
         f"- Generated: `{summary['generated_at_utc']}`",
         f"- Target recall: `{summary['target_recall']:.0%}`",
+        f"- Count projection: `{summary.get('trust_tier', 'trusted')}`",
         f"- Review gold sync: `{(summary.get('review_gold_sync') or {}).get('status', 'not_recorded')}`",
         "",
         "## Aggregate Recall",
@@ -762,6 +764,7 @@ def build_gene_results(
     fuzzy_threshold: float,
     adjudication_db: Path | None = None,
     adjudication_tier: str = "cardiac",
+    trust_tier: str = "trusted",
 ) -> list[dict[str, Any]]:
     gene_results: list[dict[str, Any]] = []
     manifest_genes = manifest.get("genes") or {}
@@ -809,6 +812,7 @@ def build_gene_results(
                     fuzzy_threshold=fuzzy_threshold,
                     adjudication_db=adjudication_db,
                     adjudication_tier=adjudication_tier,
+                    trust_tier=trust_tier,
                 )
             )
         except Exception as exc:  # noqa: BLE001
@@ -872,6 +876,15 @@ def main() -> int:
         type=float,
         default=TARGET_RECALL,
         help="Target recall used for gap calculations",
+    )
+    parser.add_argument(
+        "--trust-tier",
+        choices=["trusted", "all"],
+        default="trusted",
+        help=(
+            "Score the trusted field projection or raw counts for diagnostics "
+            "(default: %(default)s)."
+        ),
     )
     parser.add_argument("--score", action="store_true", help="Score only; skip pytest")
     parser.add_argument(
@@ -1031,6 +1044,7 @@ def main() -> int:
         fuzzy_threshold=args.fuzzy_threshold,
         adjudication_db=adjudication_db,
         adjudication_tier=tier_definition["name"],
+        trust_tier=args.trust_tier,
     )
     scored = [item for item in gene_results if item.get("status") == "scored"]
     aggregate_recall = combine_recall(scored)
@@ -1046,6 +1060,7 @@ def main() -> int:
         target=args.target,
     )
     summary["review_gold_sync"] = review_gold_sync
+    summary["trust_tier"] = args.trust_tier
     try:
         summary["disagreement_artifacts"] = write_disagreement_artifacts(
             outdir=outdir,

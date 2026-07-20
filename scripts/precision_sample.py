@@ -91,7 +91,8 @@ def build_comparison_rows(
     conn = sqlite3.connect(f"{db_path.resolve().as_uri()}?mode=ro", uri=True)
     try:
         table_info = introspect_sqlite(conn)
-        sqlite_df = extract_sqlite_data(conn, table_info)
+        # This sample calibrates the trust gate, so make its projection explicit.
+        sqlite_df = extract_sqlite_data(conn, table_info, trust_mode="trusted")
     finally:
         conn.close()
     gold_aggregated = aggregate_excel_data(excel_df, detected_columns)

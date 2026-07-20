@@ -601,6 +601,65 @@ class TestSQLiteIntrospection:
         assert "regex_table" in set(df["source_layer"])
         conn.close()
 
+    def test_extract_sqlite_data_defaults_to_field_level_trusted_counts(self):
+        conn = sqlite3.connect(":memory:")
+        conn.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY,
+                gene_symbol TEXT,
+                cdna_notation TEXT,
+                protein_notation TEXT,
+                genomic_position TEXT
+            );
+            CREATE TABLE variant_papers (
+                variant_id INTEGER,
+                pmid TEXT,
+                source_location TEXT,
+                source_layer TEXT
+            );
+            CREATE TABLE penetrance_data (
+                penetrance_id INTEGER PRIMARY KEY,
+                variant_id INTEGER,
+                pmid TEXT,
+                total_carriers_observed INTEGER,
+                affected_count INTEGER,
+                unaffected_count INTEGER,
+                uncertain_count INTEGER,
+                trust_tier TEXT,
+                field_trust TEXT
+            );
+            CREATE TABLE individual_records (
+                record_id INTEGER PRIMARY KEY,
+                variant_id INTEGER,
+                pmid TEXT,
+                affected_status TEXT
+            );
+            INSERT INTO variants VALUES (1, 'BRCA2', 'c.1A>G', 'p.Arg1Gly', NULL);
+            INSERT INTO variant_papers VALUES (1, '111', 'Table 2', 'llm_table');
+            INSERT INTO penetrance_data VALUES (
+                10, 1, '111', 5, 4, 1, 0, 'quarantine',
+                '{"total_carriers":"trusted","affected":"quarantine","unaffected":"trusted","uncertain":"trusted"}'
+            );
+            INSERT INTO individual_records VALUES (1, 1, '111', 'affected');
+            INSERT INTO individual_records VALUES (2, 1, '111', 'affected');
+            INSERT INTO individual_records VALUES (3, 1, '111', 'affected');
+            INSERT INTO individual_records VALUES (4, 1, '111', 'affected');
+            INSERT INTO individual_records VALUES (5, 1, '111', 'unaffected');
+            """
+        )
+        table_info = introspect_sqlite(conn)
+
+        trusted = extract_sqlite_data(conn, table_info)
+        raw = extract_sqlite_data(conn, table_info, trust_mode="all")
+
+        assert len(trusted) == 1  # identity survives count quarantine
+        assert trusted.iloc[0]["carriers_total"] == 5
+        assert pd.isna(trusted.iloc[0]["affected_count"])
+        assert trusted.iloc[0]["unaffected_count"] == 1
+        assert raw.iloc[0]["affected_count"] == 4
+        conn.close()
+
 
 # =============================================================================
 # COMPARISON TESTS

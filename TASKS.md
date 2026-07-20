@@ -22,11 +22,13 @@ trusted/quarantine two-tier DB, default-on in `gvf-run` (Step 3.7). Full plan an
 rationale in [`docs/AUTONOMY_ROADMAP.md`](docs/AUTONOMY_ROADMAP.md). The open
 levers — what actually stands between here and "trust it unattended at scale":
 
-- [ ] **Make the trusted tier the DEFAULT** the scorer, reports, and downstream
-      tools read — they still read the WHOLE DB, so the tiering is informational
-      today. Highest-leverage single step: add `trust_tier` filtering to
-      `cli/compare_variants.py` (`extract_sqlite_data`) and report trusted-tier
-      precision + the quarantine rate.
+- [x] **Make trusted count fields the DEFAULT for the scorer.**
+      `cli/compare_variants.py` now projects quarantined count fields as NULL by
+      default while retaining the raw row for PMID/variant recall; `--trust-tier
+      all` is the explicit raw-count diagnostic mode.
+- [ ] **Move reports, publish, and remaining downstream consumers to the trusted
+      projection.** Keep raw values visible as secondary audit data and report
+      trusted-tier precision plus quarantine rates before fleet rollout.
 - [ ] **Count-role / evidence-type axis.** Promote count role (patient / cohort
       total / control / population) to a first-class field on `penetrance_data`
       and have the trust gate score role consistency (case-control ≠ carrier
@@ -230,10 +232,13 @@ missed them** after the 1B parser land.
       routing/extraction/debate should use Azure deployments (`gpt-5.4`,
       `Kimi-K2.6-1`, `grok-4.3`, `DeepSeek-V4-Pro`). Step 3.8 is the separate,
       default-on final per-paper sniff test using `azure_ai/gpt-5.6-sol` at
-      `xhigh`; it records soft review results and must not replace routine Tier
-      2. Sonnet 5 and Opus 4.8 are optional exception-adjudication and hard-case
-      escalation queues, respectively. Measure on the curated staging set
-      before considering full-gene refreshes.
+      `xhigh`; it records exact fact/field findings and must not replace routine
+      Tier 2. Step 3.9 composes source-verified objective contradictions into
+      the trusted field projection without changing raw counts; weak
+      unsupported-count findings remain advisory. Sonnet 5 and Opus
+      4.8 remain optional exception-adjudication and hard-case escalation queues.
+      Calibrate quarantine/recall effects on the curated staging set before
+      considering full-gene refreshes.
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
       the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
       unique-variant blocker.
