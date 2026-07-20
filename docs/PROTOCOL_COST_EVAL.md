@@ -144,7 +144,70 @@ zero-count catalogue.
 carrier gap, and ≥50% projected `@xhigh` cost reduction. **Deferred:** the live
 `apply_paper_final_check` wiring (shadow/enforce modes + cheap-tier + separate
 screen storage), persisting the paper census to the DB (to sharpen the predicate),
-bounded final-check concurrency, and the same-run re-extraction loop. A
-pre-existing **completeness honesty bug** (long tables are head/tail sampled but
-not marked `truncated`, so `completeness=complete` can survive a partial view;
-`pipeline/paper_final_check.py` ~L602) must be fixed before enforce.
+bounded final-check concurrency, and the same-run re-extraction loop. The
+prerequisite **completeness honesty bug** (long tables were head/tail sampled but
+not marked `truncated`, so `completeness=complete` could survive a partial view;
+`pipeline/paper_final_check.py`) is **fixed — PR #168**.
+
+## 101-paper staging shadow calibration (2026-07-20)
+
+Ran the offline triage predicate over the **entire 101-paper curated staging
+set** (`benchmarks/curated_extraction_eval/`, 8 gene-disease pairs), each gene's
+canonical DB restricted to its manifest PMIDs, `has_source` taken from the
+manifest (every staging paper has confirmed cached source). **No LLM.** Reproduce:
+
+```
+python scripts/final_check_triage_report.py --staging --per-paper --zero-count-tier full    # conservative
+python scripts/final_check_triage_report.py --staging --per-paper --zero-count-tier cheap   # aggressive
+```
+
+**Routing distribution (101 papers; `skip=0` under both tiers — the design never
+drops a paper that has source):**
+
+| Zero-count routing | full | cheap | skip | `@xhigh` avoided pre-escalation |
+|---|---:|---:|---:|---:|
+| `full` (conservative) | 81 (80%) | 20 (20%) | 0 | ~20% |
+| `cheap` (aggressive)  | 61 (60%) | 40 (40%) | 0 | ~40% |
+
+This is a *smaller* saving than the canonical-KCNH2-only probe (71%→20%) because
+the staging set is deliberately count-dense — only ~29% of its papers are
+zero-count-with-source vs ~55% on a full cardiac DB. The staging set is the
+**safety** surface, not the savings surface; the aggressive lever is bigger on
+real full-gene DBs than this number implies.
+
+**Escalation coverage of the 17 curator-flagged known-hard papers (7
+missing-carrier + 10 count-error) — the go/no-go signal:**
+
+- **Conservative tier: 14/17 stay `full`.** 3 demote to cheap. Two are
+  clean-looking count papers (BRCA1 10528853, RYR2 22222782). The important one is
+  **SCN5A 24144883** — a missing-carrier failure that extracted 2 clean, *quoted*
+  count facts but misses 6/8 variants (~0.25 recall). Every count signal reads
+  clean; only a completeness pass catches the gap. Concrete proof the cheap lane
+  must re-enumerate carrier groups and escalate on any found miss — never a
+  count-only audit.
+- **Aggressive tier: 11/17 stay `full`.** It additionally demotes the 3
+  *highest-completeness-value* papers (KCNH2 29650123, RYR2 19398665, RYR2
+  27452199 — all zero-count-with-source, ~0.07–0.09 recall figure/pedigree
+  failures).
+
+**Verdict (offline routing is necessary, not sufficient):**
+
+- `skip=0` confirms the completeness-preservation invariant holds on real data.
+- The **conservative tier is the shadow-enforce candidate:** 80% full, only one
+  genuine missing-carrier paper (SCN5A 24144883) demoted; the remaining live gate
+  is a small cheap-vs-full agreement check on that + the 2 count papers.
+- The **aggressive tier is NOT enforce-ready:** it demotes the 3 most
+  completeness-critical papers, so it needs a live cheap-vs-full completeness
+  agreement measurement over the whole zero-count-with-source bucket first.
+- **Refinement found:** the zero-count rule fires *before* the confidence rule, so
+  under the aggressive tier a zero-count paper with low/unknown extraction
+  confidence bypasses the `low_or_unknown_confidence → full` guard (5 such papers:
+  KCNQ1 14678125/19716085, SCN5A 11901046/29017927/32533946). A cheap, safe
+  tightening: aggressive keeps zero-count-with-source at `full` when confidence is
+  low/unknown or the trust gate fired. (It does NOT protect the 3 medium/high-conf
+  failure-mode papers above — those need the live agreement check.)
+
+**Next step:** the LIVE cheap-vs-full completeness-agreement run on the demoted
+papers (costs tokens; bounded to ~20–40 papers) — the offline shadow measures
+routing, not agreement, and cannot substitute for it. Until then the production
+auditor stays full-on for every paper.
