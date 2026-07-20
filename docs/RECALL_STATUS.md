@@ -29,6 +29,18 @@ into the reported recall/precision/MAE. To reproduce the headline numbers,
 restrict scoring to the four cardiac genes, e.g.
 `run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
 
+## Current protocol note (2026-07-20)
+
+The trust/provenance/gold-integrity arc **#161–#165** has landed (see
+`docs/RECALL_HISTORY.md`). These are gold-free / additive / scorer-invariant
+changes — they harden trustworthiness and BRCA-readiness and **do not change the
+four-gene headline** below (`#165` was verified to add 0 new cardiac quarantine
+on KCNH2). The current end-to-end protocol is described in
+`docs/ARCHITECTURE.md`. A small **sample** cost-and-quality measurement of the
+current protocol (time, approximate spend, sample recall/MAE, and the new-guard
+behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
+spending a full cardiac re-extraction to move the headline.
+
 ## Current Canonical Baseline
 
 Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after

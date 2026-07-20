@@ -22,6 +22,11 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
   current blocker shape, and high-yield missing-PMID context. Do not copy recall
   numbers into this handoff.
 - `docs/RECALL_HISTORY.md` - append-only benchmark and change history.
+- `docs/PROTOCOL_CHANGELOG.md` - per-iteration ledger of protocol changes (one
+  row per protocol-affecting PR). Append here every iteration; keep it in sync
+  with RECALL_HISTORY (metrics) and ARCHITECTURE (current shape).
+- `docs/PROTOCOL_COST_EVAL.md` - latest sample measurement of the current
+  protocol's cost (time/money) and quality; the gate before a full re-extraction.
 - `docs/RECALL_REFRESH_RUNBOOK.md` - idempotent re-run path when source access,
   papers, or recovery logic changes.
 - `docs/NEW_GENE_RUNBOOK.md` - operational flow for a new gene-disease pair

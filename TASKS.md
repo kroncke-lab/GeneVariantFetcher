@@ -4,6 +4,13 @@
 - Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
   - Current metrics and failure split are in `docs/RECALL_STATUS.md`.
   - The forward plan lives here. Do not duplicate live recall tables in this file.
+- **Protocol-cost gate before the next full rescore.** The trust/provenance arc
+  #161–#165 has landed (headline unchanged by design; see `docs/RECALL_HISTORY.md`).
+  Before re-extracting the full gold set to move the headline, measure the current
+  protocol's **cost (time + money) and quality on a small sample** — recorded in
+  `docs/PROTOCOL_COST_EVAL.md`. Only greenlight a full cardiac re-extraction once
+  the sample shows the cost is acceptable and the new guards help without hurting
+  cardiac recall/MAE.
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 - **Variant_Browser adjudication overlay is lead-gated and live-synced.** GVF
