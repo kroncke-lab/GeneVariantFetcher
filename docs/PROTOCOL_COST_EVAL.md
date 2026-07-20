@@ -87,3 +87,64 @@ curated four-gene benchmark score is unchanged.
 
 _Sample artifacts (scratch, not committed): out_brca2 / out_kcnh2 DBs, per-gene
 logs, and `timing.txt` under the session scratchpad._
+
+---
+
+## Final-check triage prototype (2026-07-20)
+
+The `@xhigh` final check is the dominant cost and runs on **every** paper, so we
+prototyped triaging it. Design was reviewed three ways — **codex (gpt-5.6-sol,
+high), grok-4.5 (high), and agy/Antigravity (Gemini 3.1 Pro, high)** — which
+converged strongly.
+
+**Should it be interleaved per-paper (right after each paper's extraction)?
+No** (all three). The check only *records* findings (it doesn't trigger
+re-extraction), so moving it earlier changes timing, not efficacy; and it would
+run before source recovery / recovery layers settle, forcing a second pass. (The
+one concern that turned out **not** to apply: `trust_gate.paper_outlier` is
+computed per-PMID, not cross-paper, so interleaving wouldn't corrupt it.) The
+real wall-clock lever is **bounded final-check concurrency** (the calls are
+currently sequential) + a **same-run targeted re-extraction loop** — both larger,
+separate features, not a reorder. Keep batch `3.7 → 3.8 → 3.9`.
+
+**The real lever is risk-triage, but never "clean → skip."** The check does two
+jobs: a count-trust audit (mostly duplicated by the free trust gate) and a
+**completeness** check (which reported carrier groups we missed). Completeness has
+no free substitute and **does not correlate with extraction difficulty**, so a
+clean paper demotes to a **cheap, completeness-preserving pass** (same prompt,
+cheaper model/effort, escalate to `@xhigh` on any flag/miss/low-confidence),
+never a skip. A stable ~10% random audit sample of cheap papers still runs full
+to measure silent false negatives.
+
+**Built (this iteration):** the pure decision engine `pipeline/paper_final_check_triage.py`
+(`decide_final_check_tier` → full/cheap/skip + escalation predicate, unit-tested)
+and a **no-LLM offline shadow report** `scripts/final_check_triage_report.py` that
+runs the predicate over any migrated DB. Deliberately **no change to the
+production auditor yet** — the experts' unanimous guidance is shadow-calibrate
+first.
+
+**Offline shadow results** (canonical KCNH2, 1,131 papers; the go/no-go artifact):
+
+| Zero-count-with-source routing | @xhigh (`full`) | `cheap` | `@xhigh` calls avoided (pre-escalation) |
+|---|---:|---:|---:|
+| `full` (conservative, experts' default) | 71% | 29% | ~29% |
+| `cheap` (aggressive) | 20% | 80% | ~80% |
+
+The dominant cost driver is **papers that extracted zero counts but have source
+(~55%)**, sent to full for completeness. Routing them to the cheap completeness
+lane is the big lever (71%→20% full) — but only safe if the cheap pass reliably
+catches missed groups on that bucket, which is the calibration question. On our
+3 recent sample papers all went `full` (2 BRCA2 on `thin_provenance`, 1 KCNH2 on
+`zero_counts_with_source`) — correct, since they're either sparsely-quoted or a
+zero-count catalogue.
+
+**Rollout gate before enforcing (per codex/grok):** shadow-calibrate on the
+101-paper staging set + all known count-role/missing-carrier failures; require
+~100% escalation of known high-severity count errors, no missed quote-verified
+carrier gap, and ≥50% projected `@xhigh` cost reduction. **Deferred:** the live
+`apply_paper_final_check` wiring (shadow/enforce modes + cheap-tier + separate
+screen storage), persisting the paper census to the DB (to sharpen the predicate),
+bounded final-check concurrency, and the same-run re-extraction loop. A
+pre-existing **completeness honesty bug** (long tables are head/tail sampled but
+not marked `truncated`, so `completeness=complete` can survive a partial view;
+`pipeline/paper_final_check.py` ~L602) must be fixed before enforce.
