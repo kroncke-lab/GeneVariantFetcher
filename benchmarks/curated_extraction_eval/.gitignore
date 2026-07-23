@@ -9,5 +9,6 @@ sources/
 .cardiac_score/
 .cardiac_extract_score/
 .policy_experiments/
+.sol_runs/
 gold_overrides.backup_*/
 gold_overrides_rederived/
