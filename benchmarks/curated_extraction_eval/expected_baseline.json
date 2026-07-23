@@ -12,49 +12,49 @@
         "RYR2",
         "SCN5A"
       ],
-      "fixture_sha256": "3a0d7cb46e96011633cc632c6f74988322881edb7d132b9cc460ca6f67185e59",
       "recall": {
         "pmids": {
-          "matched": 100,
-          "gold": 101,
-          "recall": 0.9900990099009901
+          "matched": 104,
+          "gold": 105,
+          "recall": 0.9904761904761905
         },
         "variant_rows": {
-          "matched": 2742,
-          "gold": 3048,
-          "recall": 0.8996062992125984
+          "matched": 2752,
+          "gold": 3059,
+          "recall": 0.8996404053612291
         },
         "unique_variants": {
-          "matched": 1878,
-          "gold": 2040,
-          "recall": 0.9205882352941176
+          "matched": 1888,
+          "gold": 2050,
+          "recall": 0.9209756097560976
         },
         "patients": {
-          "matched": 7878,
-          "gold": 8479,
-          "recall": 0.9291189998820616
+          "matched": 8363,
+          "gold": 8964,
+          "recall": 0.9329540383757251
         },
         "affected": {
-          "matched": 6177,
-          "gold": 6734,
-          "recall": 0.9172854172854172
+          "matched": 6412,
+          "gold": 6969,
+          "recall": 0.9200746161572679
         },
         "unaffected": {
-          "matched": 503,
-          "gold": 515,
-          "recall": 0.9766990291262136
+          "matched": 753,
+          "gold": 765,
+          "recall": 0.984313725490196
         }
       },
       "mae": {
-        "carriers": 0.35523613963039014,
-        "affected": 0.2728380024360536,
+        "carriers": 0.48773006134969327,
+        "affected": 0.3375757575757576,
         "unaffected": 0.2608695652173913
       },
       "count_error_end_to_end": {
-        "carriers": 1.3722576079263977,
-        "affected": 1.4025974025974026,
-        "unaffected": 2.0279329608938546
-      }
+        "carriers": 1.5304899541769474,
+        "affected": 1.4781285659946748,
+        "unaffected": 3.295698924731183
+      },
+      "fixture_sha256": "3aea898aa02c12479da94e04189ae6896744fabe9642be9d93c2d0ea4da5237f"
     },
     "KCNH2,KCNQ1,RYR2,SCN5A": {
       "genes": [

@@ -124,6 +124,15 @@ def run_scorer(db_overrides: dict[str, Path], outdir: Path) -> dict:
         str(REPO / "results"),
         "--outdir",
         str(outdir),
+        # The benchmark scores its own frozen ./gold subset, which is independent
+        # of the live Azure review-gold cache. Pin the scorer to the full gene
+        # scope and disable live sync so the non-cardiac arm (BRCA1/BRCA2/MYBPC3/
+        # APOE) is scored too; the scorer's default --review-gold-tier=cardiac
+        # (added in PR #163) would otherwise silently drop every non-cardiac gene.
+        "--review-gold-sync",
+        "off",
+        "--review-gold-tier",
+        "all",
     ]
     for gene, path in db_overrides.items():
         cmd += ["--db", f"{gene}={path}"]
