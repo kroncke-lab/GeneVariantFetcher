@@ -10,3 +10,8 @@ MYBPC3	33782553	p.Arg502Trp	predictor_table	0	STRUM/CardioBoost/model prediction
 MYBPC3	33782553	p.Trp792Arg	predictor_table	0	MYBPC3 pathogenicity prediction/modeling text, not a cohort count
 APOE	22530123	p.Arg176Cys	predictor_table	0	in-silico nsSNP prediction/figure-caption variant; no clinical carrier count
 APOE	22530123	p.Arg154Ser	predictor_table	0	APOE figure-caption variant from computational SNP prioritization, not patient carrier data
+BRCA2	19944633	K805R	wrong_species	0	canine BRCA2 exon-11 SNP (dog mammary tumour, codon 2414 Lys>Arg); not a human carrier
+BRCA2	19944633	K171Q	wrong_species	0	canine BRCA2 SNP (codon 511 Lys>Gln); dog paper, no human carrier evidence
+BRCA2	19944633	I200T	wrong_species	0	canine BRCA2 missense (codon 599 Ile>Thr); wrong-species FP
+BRCA2	19944633	T795P	wrong_species	0	canine BRCA2 missense (codon 2383 Thr>Pro); wrong-species FP
+BRCA2	19944633	T1280A	wrong_species	0	canine BRCA2 missense (codon 3838 Thr>Ala); wrong-species FP

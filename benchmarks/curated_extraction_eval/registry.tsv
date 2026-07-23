@@ -122,3 +122,7 @@ RYR2	34661651	text	post-2020 era anchor (2022), small text case (4 var)
 RYR2	12106942	table	older llm_table (6 var), 2002
 RYR2	33500567	text	post-2020 (2021) text case (9 var), 1MB source w/ supplement
 RYR2	27452199	table	FAILURE MODE: 31 gold variants, 0 extracted; in-source extraction gap (TASKS)
+BRCA1	18627636	table	Azure-adjudicated: BRCA1 180delA truncating (Table 2); GVF had mislabeled it BRCA2 and pulled age as count. Malaysia BRCA1/2 study.
+BRCA1	26833046	table	Dual-gene Danish founder paper: 3 BRCA1 founder variants (c.3319G>T, c.3874delT, c.5213G>A), gene-corrected 2026-07-23 from an earlier BRCA2 misfile. Counts Azure-adjudicated (family-vs-carrier semantics unverified).
+BRCA2	26833046	table	Azure-adjudicated counts on the 4 BRCA2 founder variants (c.6373delA, c.7008-1G>A, c.7617+1G>A, c.8474delC). Dual-gene paper; its 3 BRCA1 founder variants live under BRCA1. 77 other extractions were wrong-variant FPs.
+BRCA2	26848529	table	3 Azure-confirmed variants (N289H=13, N1066fs=5, I1859fs=5); large hereditary breast cancer cohort.

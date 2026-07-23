@@ -21,7 +21,9 @@ scoring answer comes from: `repo` (gene_variant_fetcher_gold_standard) or
 | BRCA1 | [10441573](https://pubmed.ncbi.nlm.nih.gov/10441573/) | figure | override | 2 | 30/30/0 | Penetrances of BRCA1 1675delA and 1135insA with respect to breast cancer and ovarian cancer. |
 | BRCA1 | [10480351](https://pubmed.ncbi.nlm.nih.gov/10480351/) | text | override | 11 | 21/7/6 | BRCA1 mutations in African Americans |
 | BRCA1 | [10528853](https://pubmed.ncbi.nlm.nih.gov/10528853/) | mixed | override | 13 | 56/4/0 | A highly accurate, low cost test forBRCA1mutations |
+| BRCA1 | [18627636](https://pubmed.ncbi.nlm.nih.gov/18627636/) | table | override | 1 | 2/2/0 | Evaluation of BRCA1 and BRCA2 mutations and risk-prediction models in a typical Asian country (Malaysia) with a relatively low incidence of breast cancer |
 | BRCA1 | [22923021](https://pubmed.ncbi.nlm.nih.gov/22923021/) | mixed | override | 4 | 5/4/1 | Novel BRCA1 and BRCA2 pathogenic mutations in Slovene hereditary breast and ovarian cancer families |
+| BRCA1 | [26833046](https://pubmed.ncbi.nlm.nih.gov/26833046/) | table | override | 3 | 202/105/97 | BRCA1/BRCA2 founder mutations and cancer risks: impact in the western Danish population |
 | BRCA1 | [30309222](https://pubmed.ncbi.nlm.nih.gov/30309222/) | table | override | 21 | 35/35/0 | Clinical and Genetic Characteristics of BRCA1/2 Mutation in Korean Ovarian Cancer Patients: A Multicenter Study and Literature Review |
 | BRCA1 | [33113089](https://pubmed.ncbi.nlm.nih.gov/33113089/) | table | override | 12 | 3/3/0 | Under-ascertainment of breast cancer susceptibility gene carriers in a cohort of New Zealand female breast cancer patients |
 | BRCA1 | [33468216](https://pubmed.ncbi.nlm.nih.gov/33468216/) | table | override | 18 | 407/0/0 | A novel frequent BRCA1 recurrent variant c.5117G > A (p.Gly1206Glu) identified after 20 years of BRCA1/2 research in the Baltic region: cohort study and literature review |
@@ -31,6 +33,8 @@ scoring answer comes from: `repo` (gene_variant_fetcher_gold_standard) or
 | BRCA2 | [21356067](https://pubmed.ncbi.nlm.nih.gov/21356067/) | mixed | override | 6 | 26/3/23 | Screening for BRCA1, BRCA2, CHEK2, PALB2, BRIP1, RAD50, and CDH1 mutations in high-risk Finnish BRCA1/2-founder mutation-negative breast and/or ovarian cancer individuals |
 | BRCA2 | [22655046](https://pubmed.ncbi.nlm.nih.gov/22655046/) | mixed | override | 10 | 32/22/10 | Full-Exon Pyrosequencing Screening of BRCA Germline Mutations in Mexican Women with Inherited Breast and Ovarian Cancer |
 | BRCA2 | [25802882](https://pubmed.ncbi.nlm.nih.gov/25802882/) | mixed | override | 18 | 293/291/2 | Detection of BRCA1 and BRCA2 germline mutations in Japanese population using next-generation sequencing |
+| BRCA2 | [26833046](https://pubmed.ncbi.nlm.nih.gov/26833046/) | table | override | 4 | 258/105/153 | BRCA1/BRCA2 founder mutations and cancer risks: impact in the western Danish population |
+| BRCA2 | [26848529](https://pubmed.ncbi.nlm.nih.gov/26848529/) | table | override | 3 | 23/23/0 | Prevalence and spectrum of BRCA germline variants in mainland Chinese familial breast and ovarian cancer patients |
 | KCNH2 | [10862094](https://pubmed.ncbi.nlm.nih.gov/10862094/) | table | repo | 8 | 45/18/27 | Survey of the Coding Region of the HERG Gene in Long QT Syndrome Reveals Six Novel Mutations and an Amino Acid Polymorphism with Possible Phenotypic Effects |
 | KCNH2 | [10973849](https://pubmed.ncbi.nlm.nih.gov/10973849/) | table | repo | 60 | 65/65/0 | — |
 | KCNH2 | [11854117](https://pubmed.ncbi.nlm.nih.gov/11854117/) | table | repo | 44 | 201/201/0 | Increased Risk of Arrhythmic Events in Long-QT Syndrome With Mutations in the Pore Region of the Human Ether-a-go-go–Related Gene Potassium Channel |
@@ -113,4 +117,4 @@ scoring answer comes from: `repo` (gene_variant_fetcher_gold_standard) or
 | SCN5A | [30059973](https://pubmed.ncbi.nlm.nih.gov/30059973/) | table | repo | 185 | 445/445/0 | and broad notched or slurred R wave in leads I, aVL, V5 and V6, eventually associated with a RS |
 | SCN5A | [32533946](https://pubmed.ncbi.nlm.nih.gov/32533946/) | text | repo | 83 | 0/0/0 | High-Throughput Reclassification of SCN5A Variants |
 
-**101 papers** · 3099 gold variant-rows · by strategy: {'table': 54, 'mixed': 11, 'figure': 12, 'text': 24} · by gene: { KCNH2: 15, KCNQ1: 19, SCN5A: 19, RYR2: 20, BRCA1: 8, BRCA2: 6, MYBPC3: 8, APOE: 6 }
+**105 papers** · 3110 gold variant-rows · by strategy: {'table': 58, 'mixed': 11, 'figure': 12, 'text': 24} · by gene: { KCNH2: 15, KCNQ1: 19, SCN5A: 19, RYR2: 20, BRCA1: 10, BRCA2: 8, MYBPC3: 8, APOE: 6 }

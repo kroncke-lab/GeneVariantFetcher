@@ -1,6 +1,6 @@
 # Curated Extraction Eval — a small, fixed benchmark for prompt/harness/guardrail changes
 
-**What this is, in one sentence:** a hand-picked set of **101 gold-standard papers**
+**What this is, in one sentence:** a hand-picked set of **104 gold-standard papers**
 across **8 gene-disease pairs** — the 4 cardiac channelopathy genes (KCNH2,
 KCNQ1, SCN5A, RYR2) plus hereditary cancer (BRCA1, BRCA2), hypertrophic
 cardiomyopathy (MYBPC3), and Alzheimer's/lipid disorders (APOE) — spanning
@@ -22,7 +22,7 @@ The full GVF gold standard is ~1,500 papers / ~6,800 variant rows. Scoring a
 pipeline change against all of it is slow and, if you re-extract, expensive. This
 benchmark is the **fast inner loop**: a *fixed*, *curated*, *diversity-spanning*
 subset you can run repeatedly to catch regressions and confirm improvements
-cheaply. It is small (101 papers, ~3,000 gold variant rows) but **deliberately
+cheaply. It is small (104 papers, ~3,100 gold variant rows) but **deliberately
 diverse** — it pairs papers the pipeline already nails (the high-recall floor
 that makes regressions obvious) with genes, eras, and failure modes the pipeline
 does *not* yet handle well, so the aggregate carries real headroom (~90%) for a
@@ -127,13 +127,17 @@ eight-gene profile remains useful as a broader extraction regression surface,
 but its non-cardiac answer keys are curator/derived overrides and must not be
 reported as program recall.
 
-| Metric | Cardiac profile (73 papers) | Eight-gene diagnostic (101 papers) |
+One paper, [PMID 26833046](https://pubmed.ncbi.nlm.nih.gov/26833046/), reports
+both BRCA1 and BRCA2 founder mutations, so it appears under each gene: **104
+unique papers = 105 gene-paper entries** (the count `manifest.csv` reports).
+
+| Metric | Cardiac profile (73 papers) | Eight-gene diagnostic (105 entries) |
 |---|---:|---:|
-| PMIDs | 98.6% (72/73) | 99.0% (100/101) |
-| Variant rows | 89.8% (2436/2714) | 90.0% (2742/3048) |
-| **Unique variants** | **92.0% (1584/1721)** | **92.1% (1878/2040)** |
-| Patients / Affected / Unaffected | 93.9% / 93.2% / 98.0% | 92.9% / 91.7% / 97.7% |
-| Carriers MAE | 0.339 | 0.355 |
+| PMIDs | 98.6% (72/73) | 99.0% (104/105) |
+| Variant rows | 89.7% (2435/2714) | 90.0% (2752/3059) |
+| **Unique variants** | **92.0% (1584/1721)** | **92.1% (1888/2050)** |
+| Patients / Affected / Unaffected | 93.9% / 93.2% / 98.0% | 93.3% / 92.0% / 98.4% |
+| Carriers MAE | 0.339 | 0.488 |
 
 This set sits near ~90% **on purpose**: it blends papers the pipeline nails
 (the regression floor) with deliberately-hard new-gene and failure-mode papers
@@ -216,7 +220,7 @@ cache.
 > After a real improvement lands, re-run `run_benchmark.py --write-baseline` to
 > move the bar up.
 
-## How the 101 papers were chosen
+## How the 104 papers were chosen
 
 The set was built in two arms to span **four axes**: gene-disease pair, era,
 extraction strategy, cohort size — and to weight in **failure modes**, not just
