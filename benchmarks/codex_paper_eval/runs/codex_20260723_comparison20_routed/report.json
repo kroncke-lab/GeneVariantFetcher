@@ -1,0 +1,1782 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "by_gene": {
+    "KCNH2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 11,
+          "mae": 0.42857142857142855,
+          "predicted": 7,
+          "recall": 0.6363636363636364,
+          "rmse": 0.6546536707079771
+        },
+        "carriers": {
+          "gold_asserted": 11,
+          "mae": 0.2857142857142857,
+          "predicted": 7,
+          "recall": 0.6363636363636364,
+          "rmse": 0.5345224838248488
+        },
+        "unaffected": {
+          "gold_asserted": 11,
+          "mae": 0.2,
+          "predicted": 5,
+          "recall": 0.45454545454545453,
+          "rmse": 0.4472135954999579
+        }
+      },
+      "elapsed_seconds": 110.63,
+      "f1": 0.6666666666666666,
+      "fn": 1,
+      "fp": 9,
+      "papers": 5,
+      "precision": 0.5263157894736842,
+      "recall": 0.9090909090909091,
+      "token_usage": {
+        "input_tokens": 30117,
+        "output_tokens": 9201,
+        "total_tokens": 39318
+      },
+      "tp": 10
+    },
+    "KCNQ1": {
+      "count": {
+        "affected": {
+          "gold_asserted": 11,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.18181818181818182,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 11,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.18181818181818182,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 11,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 0.09090909090909091,
+          "rmse": 0.0
+        }
+      },
+      "elapsed_seconds": 111.095,
+      "f1": 0.6666666666666665,
+      "fn": 5,
+      "fp": 1,
+      "papers": 5,
+      "precision": 0.8571428571428571,
+      "recall": 0.5454545454545454,
+      "token_usage": {
+        "input_tokens": 59791,
+        "output_tokens": 7161,
+        "total_tokens": 66952
+      },
+      "tp": 6
+    },
+    "RYR2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 87,
+          "mae": 0.03773584905660377,
+          "predicted": 53,
+          "recall": 0.6091954022988506,
+          "rmse": 0.19425717247145283
+        },
+        "carriers": {
+          "gold_asserted": 87,
+          "mae": 0.03773584905660377,
+          "predicted": 53,
+          "recall": 0.6091954022988506,
+          "rmse": 0.19425717247145283
+        },
+        "unaffected": {
+          "gold_asserted": 87,
+          "mae": 0.0,
+          "predicted": 56,
+          "recall": 0.6436781609195402,
+          "rmse": 0.0
+        }
+      },
+      "elapsed_seconds": 311.459,
+      "f1": 0.7777777777777777,
+      "fn": 31,
+      "fp": 1,
+      "papers": 5,
+      "precision": 0.9824561403508771,
+      "recall": 0.6436781609195402,
+      "token_usage": {
+        "input_tokens": 44036,
+        "output_tokens": 14068,
+        "total_tokens": 58104
+      },
+      "tp": 56
+    },
+    "SCN5A": {
+      "count": {
+        "affected": {
+          "gold_asserted": 8,
+          "mae": 4.0,
+          "predicted": 1,
+          "recall": 0.125,
+          "rmse": 4.0
+        },
+        "carriers": {
+          "gold_asserted": 8,
+          "mae": 4.0,
+          "predicted": 1,
+          "recall": 0.125,
+          "rmse": 4.0
+        },
+        "unaffected": {
+          "gold_asserted": 8,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 0.125,
+          "rmse": 0.0
+        }
+      },
+      "elapsed_seconds": 88.69200000000001,
+      "f1": 0.7368421052631579,
+      "fn": 1,
+      "fp": 4,
+      "papers": 5,
+      "precision": 0.6363636363636364,
+      "recall": 0.875,
+      "token_usage": {
+        "input_tokens": 46471,
+        "output_tokens": 6734,
+        "total_tokens": 53205
+      },
+      "tp": 7
+    }
+  },
+  "integrity": {
+    "predictions_sha256": "73210ffde0b9307242d3d3803fe1fa207a5023143889b7e66ee1f5cab2f564dd",
+    "selection_sha256": "0dd204263b8cebab5815713bff30fa96ac622900a5a4abd90f16c80db0263955"
+  },
+  "locked_at": "2026-07-24T00:06:10.281650+00:00",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 117,
+        "mae": 0.14285714285714285,
+        "predicted": 63,
+        "recall": 0.5384615384615384,
+        "rmse": 0.5773502691896257
+      },
+      "carriers": {
+        "gold_asserted": 117,
+        "mae": 0.12698412698412698,
+        "predicted": 63,
+        "recall": 0.5384615384615384,
+        "rmse": 0.563436169819011
+      },
+      "unaffected": {
+        "gold_asserted": 117,
+        "mae": 0.015873015873015872,
+        "predicted": 63,
+        "recall": 0.5384615384615384,
+        "rmse": 0.12598815766974242
+      }
+    },
+    "elapsed_seconds": 621.876,
+    "f1": 0.7488151658767773,
+    "fn": 38,
+    "fp": 15,
+    "papers": 20,
+    "precision": 0.8404255319148937,
+    "recall": 0.6752136752136753,
+    "token_usage": {
+      "input_tokens": 180415,
+      "output_tokens": 37164,
+      "total_tokens": 217579
+    },
+    "tp": 79
+  },
+  "papers": [
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 10.063,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 0,
+      "gene": "SCN5A",
+      "matched_variants": [],
+      "missed_gold": [
+        "Q1476K"
+      ],
+      "pmid": "16054936",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 19002,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 596,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 19598
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text most clearly establishes that the human familial variant is in SCN1A, while SCN5A/Gln1478Lys was an engineered homolog used only for functional assays. The preserved tables and PDF webtable describe SCN1A mutation carriers or electrophysiology, not SCN5A carrier, affected, or unaffected person counts.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.149,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "Y1795C",
+          "predicted": "Y1795C"
+        },
+        {
+          "gold": "Y1795H",
+          "predicted": "Y1795H"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "16929919",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2883,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 550,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3433
+      },
+      "tool": "text",
+      "tool_rationale": "The text is the only substantive representation and identifies the SCN5A Y1795C and Y1795H variants with their associated phenotypes. The table representation contains only metadata and no variant-level carrier, affected, or unaffected counts.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 14.007,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "P.K1505_Q1507DEL",
+          "predicted": "\u0394KPQ (deletion of Lys1505-Pro1506-Glu1507)"
+        },
+        {
+          "gold": "N1325S",
+          "predicted": "N1325S"
+        },
+        {
+          "gold": "R1644H",
+          "predicted": "R1644H"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "8917568",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 9858,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1068,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10926
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text directly identifies the three SCN5A variants and describes a heterologous functional study. The available images appear to be experimental figures rather than pedigrees needed for carrier or phenotype counts, so OCR is not authoritative for human genotype-phenotype evidence.",
+      "tp": 3
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 4.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 4.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 4.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 4.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 4,
+          "field": "carriers",
+          "gold": 1,
+          "predicted": 5,
+          "variant": "H558R"
+        },
+        {
+          "error": 4,
+          "field": "affected",
+          "gold": 1,
+          "predicted": 5,
+          "variant": "H558R"
+        }
+      ],
+      "elapsed_seconds": 19.757,
+      "extra_predictions": [
+        "D1823D"
+      ],
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 1,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "H558R",
+          "predicted": "H558R"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "17544529",
+      "precision": 0.5,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 5215,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1509,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 6724
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the only substantive representation and reports the SCN5A variants and cohort-level carrier findings. The table representation contains metadata only and no preserved variant-level rows or person counts.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 37.716,
+      "extra_predictions": [
+        "SCN5A c.103G>A (p.G35S)",
+        "SCN5A c.647C>T (p.S216L)",
+        "SCN5A c.1127G>A (p.R376H)"
+      ],
+      "f1": 0.4,
+      "fn": 0,
+      "fp": 3,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "F2004L",
+          "predicted": "SCN5A c.6010T>C (p.F2004L)"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "23414114",
+      "precision": 0.25,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 9513,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 3011,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 12524
+      },
+      "tool": "table",
+      "tool_rationale": "The structured table directly reports SCN5A variants with genotype counts, including heterozygous and homozygous carriers and major-allele noncarriers across ancestry groups and overall. This preserves variant-level person counts more clearly than the repetitive running-text preview.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 1.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 1.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 1.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "KCNH2 INS \"GCGCGGGCG\" 569\u2013570 (INS GAG 189\u2013190)"
+        },
+        {
+          "error": -1,
+          "field": "unaffected",
+          "gold": 1,
+          "predicted": 0,
+          "variant": "KCNH2 INS \"GCGCGGGCG\" 569\u2013570 (INS GAG 189\u2013190)"
+        }
+      ],
+      "elapsed_seconds": 23.053,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "G189ins",
+          "predicted": "KCNH2 INS \"GCGCGGGCG\" 569\u2013570 (INS GAG 189\u2013190)"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "18452873",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7204,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1783,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8987
+      },
+      "tool": "table",
+      "tool_rationale": "The structured patient-level table directly links the KCNH2 insertion to patient 6 and preserves genotype, cohort, QTc, and age at AF onset. This is clearer for variant-level carrier and phenotype evidence than the fragmented running-text preview; no image-based evidence is required.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 1.0,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 1.0,
+          "rmse": 1.0
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "G873S"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "N985S"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "G873S"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "N985S"
+        }
+      ],
+      "elapsed_seconds": 8.29,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "G873S",
+          "predicted": "G873S"
+        },
+        {
+          "gold": "N985S",
+          "predicted": "N985S"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "16043162",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 3933,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 621,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 4554
+      },
+      "tool": "text",
+      "tool_rationale": "The text explicitly identifies KCNH2 variants G873S and N985S in two unrelated affected patients. The table representation contains only artifact metadata and no variant-level carrier or phenotype counts.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 14.481,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "R92C",
+          "predicted": "KCNH2 p.R92C"
+        },
+        {
+          "gold": "M645R",
+          "predicted": "KCNH2 p.M645R"
+        },
+        {
+          "gold": "K897T",
+          "predicted": "KCNH2 p.K897T"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "29121719",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10205,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1176,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 11381
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the most complete representation: it names the KCNH2 variants (R92C, M645R, and K897T) and provides cohort-level carrier/phenotype context. The table preview contains only aggregate long-QT-gene counts and its artifact extraction failed content validation, so it does not preserve KCNH2 variant-level person counts.",
+      "tp": 3
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 5.601,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [],
+      "missed_gold": [
+        "D609G"
+      ],
+      "pmid": "30844837",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "partial_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2369,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 331,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 2700
+      },
+      "tool": "pdf",
+      "tool_rationale": "No usable article body or variant-level table is available. The PDF is the most complete representation of the recovered artifact and preserves its layout, although the preview appears to contain only publisher permission material rather than KCNH2 carrier or phenotype evidence.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 4,
+          "mae": 0.0,
+          "predicted": 4,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 4,
+          "mae": 0.0,
+          "predicted": 4,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 4,
+          "mae": 0.0,
+          "predicted": 4,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 59.205,
+      "extra_predictions": [
+        "T65P",
+        "Y475del",
+        "G572S",
+        "N588D",
+        "N633S",
+        "V822M",
+        "D837G",
+        "N996I",
+        "R1033fs/23"
+      ],
+      "f1": 0.47058823529411764,
+      "fn": 0,
+      "fp": 9,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "I31S",
+          "predicted": "I31S"
+        },
+        {
+          "gold": "P910fsX",
+          "predicted": "P910fs/16"
+        },
+        {
+          "gold": "R920fsX",
+          "predicted": "R920fs/51"
+        },
+        {
+          "gold": "R1005fsX",
+          "predicted": "R1005fs/50"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "15851119",
+      "precision": 0.3076923076923077,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 6406,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 5290,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 11696
+      },
+      "tool": "table",
+      "tool_rationale": "The preserved table directly links each KCNH2 variant to case or family-member counts, cardiac-event phenotype, event timing, and genotype, making it the clearest source for variant-level carrier and affected-person evidence.",
+      "tp": 4
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 14.029,
+      "extra_predictions": [
+        "unspecified likely pathogenic KCNQ1 variant"
+      ],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "matched_variants": [],
+      "missed_gold": [
+        "L266P"
+      ],
+      "pmid": "27000522",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2460,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 774,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3234
+      },
+      "tool": "text",
+      "tool_rationale": "Text is the only available representation. It is an abstract-only fallback and reports one KCNQ1-positive case but lacks variant-level carrier, affected, and unaffected counts; no table, PDF, or OCR evidence is available.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 13.504,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "G589D",
+          "predicted": "G589D"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "21138517",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7831,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 748,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8579
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is available from PMC XML and is the clearest source for the KCNQ1 carrier cohort and phenotype information. No structured tables are present, and the figures show aggregate QT responses rather than variant-level carrier, affected, or unaffected counts.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 7,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 7,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 7,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 21.408,
+      "extra_predictions": [],
+      "f1": 0.7272727272727273,
+      "fn": 3,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "Y184S",
+          "predicted": "Y184S"
+        },
+        {
+          "gold": "S373P",
+          "predicted": "S373P"
+        },
+        {
+          "gold": "W392R",
+          "predicted": "W392R"
+        },
+        {
+          "gold": "G189R",
+          "predicted": "G189R"
+        }
+      ],
+      "missed_gold": [
+        "G314S",
+        "Y315S",
+        "G345R"
+      ],
+      "pmid": "10220144",
+      "precision": 1.0,
+      "recall": 0.5714285714285714,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7579,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1484,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 9063
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text contains the mutation and family-segregation narrative, whereas the table representation contains only artifact metadata and no preserved variant-level rows.",
+      "tp": 4
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 54.545,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "M437V",
+          "predicted": "KCNQ1 p.Met437Val (M437V)"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "31245483",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10959,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 3758,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 14717
+      },
+      "tool": "ocr",
+      "tool_rationale": "Figure 1B contains the family pedigree, and the caption states that members with both M437V and QT prolongation are marked visually in red. The pedigree image is therefore necessary to recover variant-level carrier and phenotype counts that are not enumerated in the text or tables.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.609,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [],
+      "missed_gold": [
+        "F340W"
+      ],
+      "pmid": "18567635",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 30962,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 397,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 31359
+      },
+      "tool": "text",
+      "tool_rationale": "The full running text is the clearest authoritative source for the KCNQ1 variants and functional findings. No structured tables or person-level carrier, affected, or unaffected counts are indicated, and OCR figures are not needed to recover genotype-phenotype evidence.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 14,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 0.14285714285714285,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 14,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 0.14285714285714285,
+          "rmse": 1.0
+        },
+        "unaffected": {
+          "gold_asserted": 14,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.14285714285714285,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "S2246L"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "G3946S"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "S2246L"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "G3946S"
+        }
+      ],
+      "elapsed_seconds": 28.584,
+      "extra_predictions": [],
+      "f1": 0.25,
+      "fn": 12,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "S2246L",
+          "predicted": "S2246L"
+        },
+        {
+          "gold": "G3946S",
+          "predicted": "G3946S"
+        }
+      ],
+      "missed_gold": [
+        "R4497C",
+        "R2474S",
+        "N4104K",
+        "V4771I",
+        "E2311D",
+        "N4895D",
+        "L3778F",
+        "I4867M",
+        "G3946S",
+        "E4950K",
+        "S2246L",
+        "A4860G"
+      ],
+      "pmid": "12093772",
+      "precision": 1.0,
+      "recall": 0.14285714285714285,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 8649,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 2122,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10771
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the most complete available representation and includes the clinical, genetic, and family-member descriptions. The table artifact preview contains only metadata and captions, without structured variant-level carrier, affected, or unaffected counts.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": 0.0,
+          "predicted": 3,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 11.892,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "V2306I",
+          "predicted": "V2306I"
+        },
+        {
+          "gold": "P4902L",
+          "predicted": "P4902L"
+        },
+        {
+          "gold": "R4959Q",
+          "predicted": "R4959Q"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "14571276",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 3046,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 926,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3972
+      },
+      "tool": "text",
+      "tool_rationale": "The text contains the only substantive variant-level evidence, naming RYR2 V2306I, P4902L, and R4959Q and stating that they were absent in unaffected and control individuals. The table representation contains only artifact metadata and no preserved variant or person-count rows.",
+      "tp": 3
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 50,
+          "recall": 0.9803921568627451,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 50,
+          "recall": 0.9803921568627451,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 50,
+          "recall": 0.9803921568627451,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 253.804,
+      "extra_predictions": [
+        "c.12533A>G (p.N4178S)"
+      ],
+      "f1": 0.9803921568627451,
+      "fn": 1,
+      "fp": 1,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "R420W",
+          "predicted": "c.1258C>T (p.R420W)"
+        },
+        {
+          "gold": "S767C",
+          "predicted": "c.[2300C>G;2301G>T] (p.S767C)"
+        },
+        {
+          "gold": "14298+2 T>C",
+          "predicted": "c.14298+2T>C"
+        },
+        {
+          "gold": "V907L",
+          "predicted": "c.2719G>C (p.V907L)"
+        },
+        {
+          "gold": "I1922L",
+          "predicted": "c.5764A>T (p.I1922L)"
+        },
+        {
+          "gold": "V2171M",
+          "predicted": "c.6511G>A (p.V2171M)"
+        },
+        {
+          "gold": "M2192L",
+          "predicted": "c.6574A>T (p.M2192L)"
+        },
+        {
+          "gold": "T2390I",
+          "predicted": "c.7169C>T (p.T2390I)"
+        },
+        {
+          "gold": "G2400T",
+          "predicted": "c.7199G>T (p.G2400T)"
+        },
+        {
+          "gold": "S4153I",
+          "predicted": "c.12458G>T (p.S4153I)"
+        },
+        {
+          "gold": "EXON 3 DELETION",
+          "predicted": "RYR2 exon 3 deletion (p.N57_G91del35)"
+        },
+        {
+          "gold": "W159C",
+          "predicted": "c.477G>T (p.W159C)"
+        },
+        {
+          "gold": "R169Q",
+          "predicted": "c.506G>A (p.R169Q)"
+        },
+        {
+          "gold": "G178A",
+          "predicted": "c.533G>C (p.G178A)"
+        },
+        {
+          "gold": "R407S",
+          "predicted": "c.1221A>T (p.R407S)"
+        },
+        {
+          "gold": "R420Q",
+          "predicted": "c.1259G>A (p.R420Q)"
+        },
+        {
+          "gold": "P1256T",
+          "predicted": "c.3766C>A (p.P1256T)"
+        },
+        {
+          "gold": "E1724K",
+          "predicted": "c.5170G>A (p.E1724K)"
+        },
+        {
+          "gold": "C2197W",
+          "predicted": "c.6591C>G (p.C2197W)"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "c.6737C>T (p.S2246L)"
+        },
+        {
+          "gold": "N2291K",
+          "predicted": "c.6873C>A (p.N2291K)"
+        },
+        {
+          "gold": "P2328R",
+          "predicted": "c.6983C>G (p.P2328R)"
+        },
+        {
+          "gold": "A2387V",
+          "predicted": "c.7160C>T (p.A2387V)"
+        },
+        {
+          "gold": "R2474G",
+          "predicted": "c.7420A>G (p.R2474G)"
+        },
+        {
+          "gold": "Q3861H",
+          "predicted": "c.11583G>T (p.Q3861H)"
+        },
+        {
+          "gold": "D3876E",
+          "predicted": "c.11628C>G (p.D3876E)"
+        },
+        {
+          "gold": "G3946S",
+          "predicted": "c.11836G>A (p.G3946S)"
+        },
+        {
+          "gold": "M4002I",
+          "predicted": "c.12006G>A (p.M4002I)"
+        },
+        {
+          "gold": "L4101F",
+          "predicted": "c.12301C>T (p.L4101F)"
+        },
+        {
+          "gold": "S4124R",
+          "predicted": "c.12372C>A (p.S4124R)"
+        },
+        {
+          "gold": "Q4159K",
+          "predicted": "c.12475C>A (p.Q4159K)"
+        },
+        {
+          "gold": "S4168P",
+          "predicted": "c.12502T>C (p.S4168P)"
+        },
+        {
+          "gold": "C4193W",
+          "predicted": "c.12579C>G (p.C4193W)"
+        },
+        {
+          "gold": "R4497C",
+          "predicted": "c.13489C>T (p.R4497C)"
+        },
+        {
+          "gold": "I4587V",
+          "predicted": "c.13759A>G (p.I4587V)"
+        },
+        {
+          "gold": "F4600L",
+          "predicted": "c.13798T>C (p.F4600L)"
+        },
+        {
+          "gold": "K4750Q",
+          "predicted": "c.14251A>C (p.K4750Q)"
+        },
+        {
+          "gold": "L4865V",
+          "predicted": "c.14593C>G (p.L4865V)"
+        },
+        {
+          "gold": "Q4936K",
+          "predicted": "c.14806C>A (p.Q4936K)"
+        },
+        {
+          "gold": "D458N",
+          "predicted": "c.1372G>A (p.D458N)"
+        },
+        {
+          "gold": "R1919Q",
+          "predicted": "c.5756G>A (p.R1919Q)"
+        },
+        {
+          "gold": "P3087R",
+          "predicted": "c.9260C>G (p.P3087R)"
+        },
+        {
+          "gold": "F2307L",
+          "predicted": "c.6919T>C (p.F2307L)"
+        },
+        {
+          "gold": "G2342R",
+          "predicted": "c.7024G>A (p.G2342R)"
+        },
+        {
+          "gold": "A2403T",
+          "predicted": "c.7207G>A (p.A2403T)"
+        },
+        {
+          "gold": "F4511L",
+          "predicted": "c.9910C>G (reported p.F4511L)"
+        },
+        {
+          "gold": "A4247V",
+          "predicted": "c.14222C>T (reported p.A4247V)"
+        },
+        {
+          "gold": "F4129V",
+          "predicted": "c.12385T>G (p.F4129V)"
+        },
+        {
+          "gold": "M4809I",
+          "predicted": "c.14427G>T (p.M4809I)"
+        },
+        {
+          "gold": "V4821I",
+          "predicted": "c.14461G>A (p.V4821I)"
+        }
+      ],
+      "missed_gold": [
+        "N4168S"
+      ],
+      "pmid": "29925740",
+      "precision": 0.9803921568627451,
+      "recall": 0.9803921568627451,
+      "source_completeness": "partial_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 14741,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 9956,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 24697
+      },
+      "tool": "text",
+      "tool_rationale": "The running text contains the relevant RYR2 carrier information, including that 9 of 104 initially diagnosed LQTS patients carried RYR2 mutations. The table representation contains only extraction metadata and no variant-level person-count rows.",
+      "tp": 50
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 18,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 18,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 18,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.692,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 18,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [],
+      "missed_gold": [
+        "R407S",
+        "N1551S",
+        "M2192L",
+        "A2387V",
+        "G2400T",
+        "R2474G",
+        "G2628E",
+        "D3638A",
+        "Q3861H",
+        "D3876E",
+        "M4002I",
+        "K4392R",
+        "S4124R",
+        "I4587V",
+        "Y4725C",
+        "K4750Q",
+        "L4865V",
+        "L4919S"
+      ],
+      "pmid": "23595086",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10241,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 412,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10653
+      },
+      "tool": "text",
+      "tool_rationale": "The table representation contains only extraction metadata and no structured variant or person-level rows. The running main text is therefore the most complete available source for RYR2 variant, carrier, affected, and unaffected evidence.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 9.487,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "T2390I",
+          "predicted": "RYR2 c.7169C>T (p.Thr2390Ile; p.T2390I)"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "27225049",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7359,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 652,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8011
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text contains the case-level phenotype, the RYR2 c.7169C>T (p.T2390I) result, and familial inheritance evidence involving the father. No table, PDF, or OCR representation is available.",
+      "tp": 1
+    }
+  ],
+  "run_id": "codex_20260723_comparison20_routed",
+  "scored_at": "2026-07-24T18:48:11.755391+00:00",
+  "seed": 2026072302,
+  "selection": {
+    "description": "Paper selection used the fixed manifest `comparison_papers_20260723.tsv` (20 papers) from the downloaded-source, gold-count-eligible pool. Routing, extraction, counts, evidence, and source locations were gold-value-blind.",
+    "mode": "manifest",
+    "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/comparison_papers_20260723.tsv",
+    "per_gene": 5,
+    "population": "fixed manifest `comparison_papers_20260723.tsv` (20 papers)",
+    "seed": 2026072302
+  },
+  "timing": {
+    "completed_at": "2026-07-24T00:06:00.587475+00:00",
+    "started_at": "2026-07-23T23:55:38.447624+00:00",
+    "summed_paper_seconds": 621.876,
+    "wall_seconds": 622.13
+  },
+  "token_usage": {
+    "estimate_method": null,
+    "input_tokens": 180415,
+    "model": "gpt-5.6-sol",
+    "output_tokens": 37164,
+    "reasoning_efforts": [
+      "high",
+      "medium"
+    ],
+    "telemetry_available": true,
+    "total_tokens": 217579
+  },
+  "tools_used": {
+    "ocr": 1,
+    "pdf": 1,
+    "table": 3,
+    "text": 15
+  }
+}

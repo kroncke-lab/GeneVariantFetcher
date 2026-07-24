@@ -1,0 +1,1029 @@
+{
+  "by_gene": {
+    "KCNH2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 2.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 2.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "elapsed_seconds": 56.013,
+      "f1": 0.2222222222222222,
+      "fn": 0,
+      "fp": 7,
+      "papers": 5,
+      "precision": 0.125,
+      "recall": 1.0,
+      "tp": 1
+    },
+    "KCNQ1": {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": 1.6666666666666667,
+          "predicted": 3,
+          "recall": 1.0,
+          "rmse": 2.3804761428476167
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": 0.5,
+          "predicted": 2,
+          "recall": 0.6666666666666666,
+          "rmse": 0.7071067811865476
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 0.6666666666666666,
+          "rmse": 1.4142135623730951
+        }
+      },
+      "elapsed_seconds": 70.066,
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 3,
+      "papers": 5,
+      "precision": 0.5,
+      "recall": 1.0,
+      "tp": 3
+    },
+    "RYR2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "elapsed_seconds": 67.631,
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 4,
+      "papers": 5,
+      "precision": 0.0,
+      "recall": null,
+      "tp": 0
+    },
+    "SCN5A": {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "elapsed_seconds": 374.07399999999996,
+      "f1": 0.13333333333333333,
+      "fn": 0,
+      "fp": 13,
+      "papers": 5,
+      "precision": 0.07142857142857142,
+      "recall": 1.0,
+      "tp": 1
+    }
+  },
+  "locked_at": "2026-07-23T23:35:29.852493+00:00",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 5,
+        "mae": 1.4,
+        "predicted": 5,
+        "recall": 1.0,
+        "rmse": 2.04939015319192
+      },
+      "carriers": {
+        "gold_asserted": 5,
+        "mae": 0.75,
+        "predicted": 4,
+        "recall": 0.8,
+        "rmse": 1.118033988749895
+      },
+      "unaffected": {
+        "gold_asserted": 5,
+        "mae": 0.6666666666666666,
+        "predicted": 3,
+        "recall": 0.6,
+        "rmse": 1.1547005383792517
+      }
+    },
+    "elapsed_seconds": 567.784,
+    "f1": 0.2702702702702703,
+    "fn": 0,
+    "fp": 27,
+    "papers": 20,
+    "precision": 0.15625,
+    "recall": 1.0,
+    "tp": 5
+  },
+  "papers": [
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 43.378,
+      "extra_predictions": [
+        "p.His29Asp (H29D)",
+        "p.Asp3638Ala (D3638A)",
+        "p.Met995Val (M995V)"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 3,
+      "gene": "RYR2",
+      "missed_gold": [],
+      "pmid": "37740238",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 345.907,
+      "extra_predictions": [
+        "p.K249X",
+        "p.D356N",
+        "p.G452C (c.1354G>T)",
+        "p.Q646RfsX6",
+        "p.L1308F",
+        "p.G1408R",
+        "p.L1412F (c.4234C>T)",
+        "p.Q1695H (c.5085G>A)",
+        "p.E1784K",
+        "p.S1787N",
+        "p.R1826P (c.5477G>C)",
+        "p.P2006A"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 12,
+      "gene": "SCN5A",
+      "missed_gold": [],
+      "pmid": "34649698",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 3.18,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "missed_gold": [],
+      "pmid": "34949099",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 3.161,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "missed_gold": [],
+      "pmid": "16945797",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 4.152,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "missed_gold": [],
+      "pmid": "22806714",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 11.247,
+      "extra_predictions": [
+        "ENST00000155840.12:c.877C>T:p.Arg293Cys (rs199472737)"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "missed_gold": [],
+      "pmid": "41564389",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 2.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 2.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -2,
+          "field": "carriers",
+          "gold": 3,
+          "predicted": 1,
+          "variant": "KCNH2 c.1909G>A (p.Glu637Lys; E637K)"
+        },
+        {
+          "error": -2,
+          "field": "affected",
+          "gold": 3,
+          "predicted": 1,
+          "variant": "KCNH2 c.1909G>A (p.Glu637Lys; E637K)"
+        }
+      ],
+      "elapsed_seconds": 4.922,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNH2",
+      "missed_gold": [],
+      "pmid": "12062363",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tool": "text",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 6.106,
+      "extra_predictions": [
+        "KCNQ1 c.1097G>A"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "missed_gold": [],
+      "pmid": "34860437",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 4.632,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "missed_gold": [],
+      "pmid": "33517120",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 22.976,
+      "extra_predictions": [
+        "K897T",
+        "P967L",
+        "R1047L",
+        "Q1068R"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 4,
+      "gene": "KCNH2",
+      "missed_gold": [],
+      "pmid": "14975928",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 3.892,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "missed_gold": [],
+      "pmid": "20226167",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 8.455,
+      "extra_predictions": [
+        "KCNH2 c.3331-9-8delGT"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNH2",
+      "missed_gold": [],
+      "pmid": "19957170",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.988,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "missed_gold": [],
+      "pmid": "21939669",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 4.925,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "missed_gold": [],
+      "pmid": "36693454",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 2.659,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "missed_gold": [],
+      "pmid": "35610155",
+      "precision": 1.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.82,
+      "extra_predictions": [
+        "unspecified KCNH2 (LQT2) mutation"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNH2",
+      "missed_gold": [],
+      "pmid": "19764488",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 7.448,
+      "extra_predictions": [
+        "rs4142933"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "RYR2",
+      "missed_gold": [],
+      "pmid": "24048583",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": 1.6666666666666667,
+          "predicted": 3,
+          "recall": 1.0,
+          "rmse": 2.3804761428476167
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": 0.5,
+          "predicted": 2,
+          "recall": 0.6666666666666666,
+          "rmse": 0.7071067811865476
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": 1.0,
+          "predicted": 2,
+          "recall": 0.6666666666666666,
+          "rmse": 1.4142135623730951
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 7,
+          "predicted": 8,
+          "variant": "c.1097G>A (p.Arg366Gln)"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "c.728G>A (p.Arg243His)"
+        },
+        {
+          "error": 4,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 4,
+          "variant": "c.1097G>A (p.Arg366Gln)"
+        },
+        {
+          "error": 2,
+          "field": "unaffected",
+          "gold": 0,
+          "predicted": 2,
+          "variant": "c.520C>T (p.Arg174Cys)"
+        }
+      ],
+      "elapsed_seconds": 45.4,
+      "extra_predictions": [
+        "c.477+1G>A"
+      ],
+      "f1": 0.8571428571428571,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "missed_gold": [],
+      "pmid": "29037160",
+      "precision": 0.75,
+      "recall": 1.0,
+      "tool": "text",
+      "tp": 3
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 0,
+          "mae": null,
+          "predicted": 0,
+          "recall": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 11.84,
+      "extra_predictions": [
+        "rs3778872"
+      ],
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNH2",
+      "missed_gold": [],
+      "pmid": "23166209",
+      "precision": 0.0,
+      "recall": null,
+      "tool": "text",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": 17.696,
+      "extra_predictions": [
+        "SCN5A deletion of exons 9\u201310"
+      ],
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 1,
+      "gene": "SCN5A",
+      "missed_gold": [],
+      "pmid": "27684715",
+      "precision": 0.5,
+      "recall": 1.0,
+      "tool": "text",
+      "tp": 1
+    }
+  ],
+  "run_id": "codex_20260723_seed2026072301",
+  "scored_at": "2026-07-23T23:39:27.947674+00:00",
+  "seed": 2026072301,
+  "token_usage": {
+    "estimate_method": null,
+    "input_tokens": 133861,
+    "model": "gpt-5.6-sol",
+    "output_tokens": 12385,
+    "reasoning_effort": "medium",
+    "telemetry_available": true,
+    "total_tokens": 146246
+  },
+  "tools_used": {
+    "text": 20
+  }
+}

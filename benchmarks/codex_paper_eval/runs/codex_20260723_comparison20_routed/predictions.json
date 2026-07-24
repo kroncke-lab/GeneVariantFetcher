@@ -1,0 +1,1315 @@
+{
+  "completed_at": "2026-07-24T00:06:00.587475+00:00",
+  "extraction_elapsed_seconds": 622.13,
+  "extraction_started_at": "2026-07-23T23:55:38.447624+00:00",
+  "papers": [
+    {
+      "elapsed_seconds": 10.063,
+      "gene": "SCN5A",
+      "notes": "No human SCN5A variant with carrier/patient phenotype evidence is reported. SCN5A Gln1478Lys was an engineered mutation introduced into human SCN5A cDNA solely for functional studies in transfected tsA201 cells; it corresponds to the familial hemiplegic migraine-associated SCN1A Gln1489Lys variant. No person was genotyped as carrying SCN5A Gln1478Lys (Methods\u2014Procedures; Results, paragraphs describing functional investigation).",
+      "pmid": "16054936",
+      "representations_available": [
+        "text",
+        "table",
+        "pdf"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 19002,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 596,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 19598
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text most clearly establishes that the human familial variant is in SCN1A, while SCN5A/Gln1478Lys was an engineered homolog used only for functional assays. The preserved tables and PDF webtable describe SCN1A mutation carriers or electrophysiology, not SCN5A carrier, affected, or unaffected person counts.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 7.149,
+      "gene": "SCN5A",
+      "notes": "The supplied text identifies phenotype associations for two human SCN5A variants but provides no individual-level pedigree or patient data from which distinct carrier, affected-carrier, or unaffected-carrier counts can be determined.",
+      "pmid": "16929919",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2883,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 550,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3433
+      },
+      "tool": "text",
+      "tool_rationale": "The text is the only substantive representation and identifies the SCN5A Y1795C and Y1795H variants with their associated phenotypes. The table representation contains only metadata and no variant-level carrier, affected, or unaffected counts.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The paper states that Y1795C was identified as a missense mutation 'causing the LQTS phenotype,' but gives no number of genotype-positive individuals.",
+          "source_location": "Abstract",
+          "unaffected": null,
+          "variant": "Y1795C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The paper states that Y1795H was identified as a missense mutation 'causing the BrS phenotype,' but gives no number of genotype-positive individuals.",
+          "source_location": "Abstract",
+          "unaffected": null,
+          "variant": "Y1795H"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 14.007,
+      "gene": "SCN5A",
+      "notes": "The paper identifies three SCN5A mutations as linked to LQT3 patients but provides no pedigrees, patient-level descriptions, or genotype-positive person counts. Therefore carrier and affected counts cannot be determined, and no unaffected carriers are explicitly described. Cell and experimental replicate counts were excluded. The text labels N1325S while parenthetically describing residue 1325 as Asp; the paper's variant label is retained.",
+      "pmid": "8917568",
+      "representations_available": [
+        "text",
+        "ocr"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 9858,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1068,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10926
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text directly identifies the three SCN5A variants and describes a heterologous functional study. The available images appear to be experimental figures rather than pedigrees needed for carrier or phenotype counts, so OCR is not authoritative for human genotype-phenotype evidence.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The paper states that \u0394KPQ was one of three SCN5A mutations identified in LQT patients and later calls it an LQT3 mutant; no number of genotype-positive patients is given.",
+          "source_location": "MAIN TEXT, opening paragraph; DISCUSSION, opening paragraph and Therapeutic Implications",
+          "unaffected": null,
+          "variant": "\u0394KPQ (deletion of Lys1505-Pro1506-Glu1507)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "N1325S is listed among three SCN5A mutations identified in LQT patients and is described as causing the long-QT defect, but patient or carrier numbers are not reported.",
+          "source_location": "MAIN TEXT, opening paragraph; DISCUSSION, opening paragraph and Therapeutic Implications",
+          "unaffected": null,
+          "variant": "N1325S"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "R1644H is listed among three SCN5A mutations identified in LQT patients and is described as an LQTS variant; no genotype-positive person count or unaffected carrier is reported.",
+          "source_location": "MAIN TEXT, opening paragraph; DISCUSSION, Molecular Interpretation and Therapeutic Implications",
+          "unaffected": null,
+          "variant": "R1644H"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 19.757,
+      "gene": "SCN5A",
+      "notes": "The supplied text names only two of the nine SCN5A variants reported. Healthy-control allele data were excluded, and no genotyped relatives were reported. All eligible study carriers were sudden unexplained death cases with negative autopsy; therefore unaffected carrier counts are 0. The Results section's \u201cH588R\u201d is treated as a typographical error for H558R, as used in the Abstract and Discussion.",
+      "pmid": "17544529",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 5215,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1509,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 6724
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the only substantive representation and reports the SCN5A variants and cohort-level carrier findings. The table representation contains metadata only and no preserved variant-level rows or person counts.",
+      "variants": [
+        {
+          "affected": 5,
+          "carriers": 5,
+          "evidence": "The SCN5A A>G substitution at codon 558, producing H558R, was identified in 5 sudden unexplained death cases. All study cases died suddenly with no cause identified at autopsy; the 101 healthy controls used for allele-frequency screening are excluded.",
+          "source_location": "Results, paragraph 1; Abstract; Materials and methods\u2014Study population",
+          "unaffected": 0,
+          "variant": "H558R"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "D1823D is described as one of the exonic SCN5A variants identified in this sudden unexplained death cohort, but the supplied text does not state how many cases carried it. All eligible cohort members had sudden unexplained death, and no unaffected relatives were genotyped.",
+          "source_location": "Discussion, paragraph 2; Results, paragraphs 1\u20132; Materials and methods\u2014Study population",
+          "unaffected": 0,
+          "variant": "D1823D"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 37.716,
+      "gene": "SCN5A",
+      "notes": "Included only SCN5A variants with an explicit family co-segregation result, the only carrier/phenotype evidence in the supplied material. ESP and Danish-control genotype frequencies were excluded because they are population/control counts. The co-segregation annotations do not provide numbers of genotype-positive, affected, or clinically normal individuals, so all counts are null. SCN5A variants marked 'No data available' for family co-segregation were omitted.",
+      "pmid": "23414114",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 9513,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 3011,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 12524
+      },
+      "tool": "table",
+      "tool_rationale": "The structured table directly reports SCN5A variants with genotype counts, including heterozygous and homozygous carriers and major-allele noncarriers across ancestry groups and overall. This preserves variant-level person counts more clearly than the repetitive running-text preview.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The phenotype-related annotation reports family co-segregation as 'No'; no individual carrier or phenotype counts are supplied.",
+          "source_location": "Structured table 'Gene | Amino acid | Genotype frequency | Functional data | Family co-segregation,' SCN5A p.G35S row; cDNA notation from the SCN5A genotype table, c.103G>A row.",
+          "unaffected": null,
+          "variant": "SCN5A c.103G>A (p.G35S)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The table reports family co-segregation as 'No'; it does not state how many carriers were affected or clinically normal.",
+          "source_location": "Structured table 'Gene | Amino acid | Genotype frequency | Functional data | Family co-segregation,' SCN5A p.S216L row; cDNA notation from the SCN5A genotype table, c.647C>T row.",
+          "unaffected": null,
+          "variant": "SCN5A c.647C>T (p.S216L)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The table reports family co-segregation as 'Yes,' indicating carrier/phenotype segregation evidence, but provides no person-level counts.",
+          "source_location": "Structured table 'Gene | Amino acid | Genotype frequency | Functional data | Family co-segregation,' SCN5A p.R376H row; cDNA notation from the SCN5A genotype table, c.1127G>A row.",
+          "unaffected": null,
+          "variant": "SCN5A c.1127G>A (p.R376H)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The table reports family co-segregation as 'No.' The separate ESP and Danish-control genotype observations are population/control counts and do not establish patient carrier, affected, or unaffected counts.",
+          "source_location": "Structured table 'Gene | Amino acid | Genotype frequency | Functional data | Family co-segregation,' SCN5A p.F2004L row; SCN5A genotype table, c.6010T>C row; Danish control/ESP population table, p.F2004L row.",
+          "unaffected": null,
+          "variant": "SCN5A c.6010T>C (p.F2004L)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 23.053,
+      "gene": "KCNH2",
+      "notes": "The table provides variant-specific evidence for one KCNH2-positive patient. This patient carried multiple variants, including two SCN5A variants, so the phenotype cannot be attributed uniquely to KCNH2. No genotype-positive relatives are reported.",
+      "pmid": "18452873",
+      "representations_available": [
+        "text",
+        "table",
+        "ocr"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7204,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1783,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8987
+      },
+      "tool": "table",
+      "tool_rationale": "The structured patient-level table directly links the KCNH2 insertion to patient 6 and preserves genotype, cohort, QTc, and age at AF onset. This is clearer for variant-level carrier and phenotype evidence than the fragmented running-text preview; no image-based evidence is required.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 6 carried the KCNH2 insertion and had LQTS diagnosed at 1 day of age (QTc 570 ms) and atrial fibrillation beginning at age 4 years.",
+          "source_location": "Second preserved table, patient-level early-onset AF genotype table, patient no. 6",
+          "unaffected": 0,
+          "variant": "KCNH2 INS \"GCGCGGGCG\" 569\u2013570 (INS GAG 189\u2013190)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 8.29,
+      "gene": "KCNH2",
+      "notes": "The supplied text identifies two unrelated Brugada syndrome patients, each carrying a different KCNH2 variant. No genotyped relatives or explicitly unaffected carriers are described, so unaffected counts are null.",
+      "pmid": "16043162",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 3933,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 621,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 4554
+      },
+      "tool": "text",
+      "tool_rationale": "The text explicitly identifies KCNH2 variants G873S and N985S in two unrelated affected patients. The table representation contains only artifact metadata and no variant-level carrier or phenotype counts.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Two unrelated SCN5A mutation-negative BrS patients had different KCNH2 amino-acid changes, G873S and N985S, establishing one affected patient with each variant.",
+          "source_location": "Abstract, Methods and results",
+          "unaffected": null,
+          "variant": "G873S"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Two unrelated SCN5A mutation-negative BrS patients had different KCNH2 amino-acid changes, G873S and N985S, establishing one affected patient with each variant.",
+          "source_location": "Abstract, Methods and results",
+          "unaffected": null,
+          "variant": "N985S"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 14.481,
+      "gene": "KCNH2",
+      "notes": "The paper identifies three KCNH2 variants among 133 genotyped repaired-tetralogy-of-Fallot patients, but reports phenotype counts only for aggregated long-QT-gene variants. It does not provide variant-specific carrier counts or assign individual KCNH2 variants to patients with versus without ventricular arrhythmia. Therefore, all person counts are null; no explicitly asymptomatic or clinically normal carriers are described per variant.",
+      "pmid": "29121719",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10205,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1176,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 11381
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the most complete representation: it names the KCNH2 variants (R92C, M645R, and K897T) and provides cohort-level carrier/phenotype context. The table preview contains only aggregate long-QT-gene counts and its artifact extraction failed content validation, so it does not preserve KCNH2 variant-level person counts.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "R92C was identified as a probable pathologic KCNH2 mutation/polymorphism in the genotyped rTOF cohort; no variant-specific carrier or phenotype breakdown was reported.",
+          "source_location": "Results, paragraph beginning \u201cWe investigated the long QT gene mutation/polymorphisms in the 133 patients\u201d",
+          "unaffected": null,
+          "variant": "KCNH2 p.R92C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "M645R was identified as a probable pathologic KCNH2 mutation/polymorphism in the genotyped rTOF cohort; no variant-specific carrier or phenotype breakdown was reported.",
+          "source_location": "Results, paragraph beginning \u201cWe investigated the long QT gene mutation/polymorphisms in the 133 patients\u201d",
+          "unaffected": null,
+          "variant": "KCNH2 p.M645R"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "K897T was identified as a probable pathologic KCNH2 mutation/polymorphism in the genotyped rTOF cohort; no variant-specific carrier or phenotype breakdown was reported.",
+          "source_location": "Results, paragraph beginning \u201cWe investigated the long QT gene mutation/polymorphisms in the 133 patients\u201d",
+          "unaffected": null,
+          "variant": "KCNH2 p.K897T"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 5.601,
+      "gene": "KCNH2",
+      "notes": "The supplied PDF layout text contains only Lippincott permission and reuse guidelines, with no article body, patient data, variant descriptions, tables, figures, or KCNH2 phenotype evidence. Therefore, no human KCNH2 variants or carrier counts can be extracted from the supplied local material.",
+      "pmid": "30844837",
+      "representations_available": [
+        "text",
+        "pdf",
+        "ocr"
+      ],
+      "source_completeness": "partial_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2369,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 331,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 2700
+      },
+      "tool": "pdf",
+      "tool_rationale": "No usable article body or variant-level table is available. The PDF is the most complete representation of the recovered artifact and preserves its layout, although the preview appears to contain only publisher permission material rather than KCNH2 carrier or phenotype evidence.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 59.205,
+      "gene": "KCNH2",
+      "notes": "Affected was defined as a genotype-positive person with the paper's relevant postpartum cardiac phenotype (syncope, aborted cardiac arrest, or sudden cardiac death). Each KCNH2 table row documents one mutation-positive case. For rows marked \u201cSelf,\u201d that case is the affected person; multiple events were not counted as multiple people, and unaffected is 0 because the sole documented carrier is explicitly event-positive. For rows assigning the event to a family member, the relative's genotype and the carrier case's own phenotype are not supplied, so affected and unaffected are null. Parenthetical (1)/(2) relationship annotations were not interpreted as person counts. The LQT1/KCNQ1 T322A row was excluded.",
+      "pmid": "15851119",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 6406,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 5290,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 11696
+      },
+      "tool": "table",
+      "tool_rationale": "The preserved table directly links each KCNH2 variant to case or family-member counts, cardiac-event phenotype, event timing, and genotype, making it the clearest source for variant-level carrier and affected-person evidence.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Case 1 carries the LQT2 mutation I31S, and \u201cSelf\u201d had one aborted cardiac arrest 16 weeks after delivery.",
+          "source_location": "Preserved table, Case No. 1 row",
+          "unaffected": 0,
+          "variant": "I31S"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 2 is assigned the LQT2 mutation T65P, but the postpartum syncope is assigned to \u201cFamily member (1)\u201d; that relative is not stated to be genotype-positive, and the case's own phenotype is not given.",
+          "source_location": "Preserved table, Case No. 2 row",
+          "unaffected": null,
+          "variant": "T65P"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 3 is assigned the LQT2 mutation Y475del, while the sudden cardiac death is reported for \u201cFamily member (1)\u201d without that relative's genotype.",
+          "source_location": "Preserved table, Case No. 3 row",
+          "unaffected": null,
+          "variant": "Y475del"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 4 is assigned the LQT2 mutation G572S, while the sudden cardiac death is reported for \u201cFamily member (1)\u201d without genotype confirmation for that relative.",
+          "source_location": "Preserved table, Case No. 4 row",
+          "unaffected": null,
+          "variant": "G572S"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 5 is assigned the LQT2 mutation N588D, but the aborted cardiac arrest occurred in \u201cFamily member (1)\u201d; the relative's carrier status and the case's own phenotype are not stated.",
+          "source_location": "Preserved table, Case No. 5 row",
+          "unaffected": null,
+          "variant": "N588D"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 6 is assigned the LQT2 mutation N633S, while the sudden cardiac death occurred in \u201cFamily member (1)\u201d whose genotype is not supplied.",
+          "source_location": "Preserved table, Case No. 6 row",
+          "unaffected": null,
+          "variant": "N633S"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 7 is assigned the LQT2 mutation V822M, while the sudden cardiac death is assigned to \u201cFamily member (2)\u201d without genotype evidence for that relative.",
+          "source_location": "Preserved table, Case No. 7 row",
+          "unaffected": null,
+          "variant": "V822M"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 8 is assigned the LQT2 mutation D837G, but the postpartum syncope is reported for \u201cFamily member (1)\u201d; the relative is not documented as genotype-positive.",
+          "source_location": "Preserved table, Case No. 8 row",
+          "unaffected": null,
+          "variant": "D837G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Case 9 carries the LQT2 mutation P910fs/16 and is marked \u201cSelf\u201d for two postpartum events, syncope and sudden cardiac death; these represent one affected carrier.",
+          "source_location": "Preserved table, Case No. 9 row",
+          "unaffected": 0,
+          "variant": "P910fs/16"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Case 10 carries the LQT2 mutation R920fs/51 and is marked \u201cSelf\u201d for two episodes of postpartum syncope; both events occurred in the same affected carrier.",
+          "source_location": "Preserved table, Case No. 10 row",
+          "unaffected": 0,
+          "variant": "R920fs/51"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 11 is assigned the LQT2 mutation N996I, while the aborted cardiac arrest occurred in \u201cFamily member (2)\u201d whose genotype is not reported.",
+          "source_location": "Preserved table, Case No. 11 row",
+          "unaffected": null,
+          "variant": "N996I"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Case 12 carries the LQT2 mutation R1005fs/50 and is marked \u201cSelf\u201d for postpartum syncope and aborted cardiac arrest; the two events represent one affected carrier.",
+          "source_location": "Preserved table, Case No. 12 row",
+          "unaffected": 0,
+          "variant": "R1005fs/50"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "Case 13 is assigned the LQT2 mutation R1033fs/23, while the sudden cardiac death occurred in \u201cFamily member (1)\u201d without genotype confirmation for that relative.",
+          "source_location": "Preserved table, Case No. 13 row",
+          "unaffected": null,
+          "variant": "R1033fs/23"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 14.029,
+      "gene": "KCNQ1",
+      "notes": "Only the abstract was available. It reports one sudden arrhythmic death case with a likely pathogenic KCNQ1 variant but does not provide variant nomenclature. Statements about clinically normal carrier relatives cannot be assigned specifically to KCNQ1, so the unaffected count is indeterminate.",
+      "pmid": "27000522",
+      "representations_available": [
+        "text"
+      ],
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 2460,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 774,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3234
+      },
+      "tool": "text",
+      "tool_rationale": "Text is the only available representation. It is an abstract-only fallback and reports one KCNQ1-positive case but lacks variant-level carrier, affected, and unaffected counts; no table, PDF, or OCR evidence is available.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Among 46 sudden cardiac death cases with normal hearts and suspected arrhythmic death, seven had likely pathogenic ion-channel variants, including one KCNQ1 case: \"KCNQ1 (1).\"",
+          "source_location": "Abstract, sentences describing the 46 normal-heart suspected arrhythmic death cases and ion-channelopathy findings",
+          "unaffected": null,
+          "variant": "unspecified likely pathogenic KCNQ1 variant"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 13.504,
+      "gene": "KCNQ1",
+      "notes": "Only one KCNQ1 variant is reported. The nine carriers were distinct study participants; healthy controls were excluded. All nine were explicitly described as asymptomatic, supporting 0 affected and 9 unaffected carriers.",
+      "pmid": "21138517",
+      "representations_available": [
+        "text",
+        "table",
+        "ocr"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7831,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 748,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8579
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is available from PMC XML and is the clearest source for the KCNQ1 carrier cohort and phenotype information. No structured tables are present, and the figures show aggregate QT responses rather than variant-level carrier, affected, or unaffected counts.",
+      "variants": [
+        {
+          "affected": 0,
+          "carriers": 9,
+          "evidence": "\u201cNine asymptomatic LQT1 carriers ... with the same C-terminal mutation (G589D)\u201d participated; all had normal or only slightly prolonged baseline QTc intervals.",
+          "source_location": "Methods, Patient population",
+          "unaffected": 9,
+          "variant": "G589D"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 21.408,
+      "gene": "KCNQ1",
+      "notes": "Only four KCNQ1 variants are named in the supplied text. The abstract reports their identification in Dutch LQTS families and states that pathogenicity was supported by familial segregation, but it provides no variant-specific person counts or pedigrees. The two families reported for G189R were not converted into people. Asymptomatic carriers are mentioned collectively without assignment to a specific variant; therefore all counts are null.",
+      "pmid": "10220144",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7579,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 1484,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 9063
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text contains the mutation and family-segregation narrative, whereas the table representation contains only artifact metadata and no preserved variant-level rows.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "Y184S was identified as a novel KCNQ1 missense mutation in the screened Dutch LQTS families; the mutations' pathogenicity was supported by segregation in families. Exact carrier and phenotype counts are not reported.",
+          "source_location": "Abstract, sentences 7-12",
+          "unaffected": null,
+          "variant": "Y184S"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "S373P was identified as a novel KCNQ1 missense mutation in the screened Dutch LQTS families; the mutations' pathogenicity was supported by segregation in families. Exact carrier and phenotype counts are not reported.",
+          "source_location": "Abstract, sentences 7-12",
+          "unaffected": null,
+          "variant": "S373P"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "W392R was identified as a novel KCNQ1 missense mutation in the screened Dutch LQTS families; the mutations' pathogenicity was supported by segregation in families. Exact carrier and phenotype counts are not reported.",
+          "source_location": "Abstract, sentences 7-12",
+          "unaffected": null,
+          "variant": "W392R"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The KCNQ1 G189R mutation was detected in two LQTS families, and pathogenicity was supported by familial segregation. Family count does not establish the number of distinct carriers, affected carriers, or unaffected carriers.",
+          "source_location": "Abstract, sentences 7, 11-12",
+          "unaffected": null,
+          "variant": "G189R"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 54.545,
+      "gene": "KCNQ1",
+      "notes": "Only the explicitly described M437V-positive LQT1 patient was counted. The pedigree lacks supplied genotype/phenotype annotations sufficient to classify relatives. A590W appears only in a mathematical-model figure and provides no human carrier evidence; experimental n values are cells, not people.",
+      "pmid": "31245483",
+      "representations_available": [
+        "text",
+        "table",
+        "pdf",
+        "ocr"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10959,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 3758,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 14717
+      },
+      "tool": "ocr",
+      "tool_rationale": "Figure 1B contains the family pedigree, and the caption states that members with both M437V and QT prolongation are marked visually in red. The pedigree image is therefore necessary to recover variant-level carrier and phenotype counts that are not enumerated in the text or tables.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The paper states, \"We identified the novel missense mutation M437V of KCNQ1 in a LQT1 patient\" and attributes that patient's QT prolongation to the mutation. Figure 1 identifies the case as an 18-year-old male LQT1 patient and shows the M437V substitution.",
+          "source_location": "Abstract; Figure 1A and 1C-D",
+          "unaffected": null,
+          "variant": "KCNQ1 p.Met437Val (M437V)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 7.609,
+      "gene": "KCNQ1",
+      "notes": "No human KCNQ1 variant with carrier/patient phenotype evidence is reported. The KCNQ1 substitutions described were experimentally engineered by site-directed mutagenesis and functionally studied in Xenopus laevis oocytes, not identified in genotype-positive people (Experimental Procedures, \u201cMolecular biology\u201d and \u201cElectrophysiology\u201d). Oocyte sample sizes and functional channel phenotypes were therefore not counted as human carriers or clinical phenotypes.",
+      "pmid": "18567635",
+      "representations_available": [
+        "text",
+        "table",
+        "ocr"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 30962,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 397,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 31359
+      },
+      "tool": "text",
+      "tool_rationale": "The full running text is the clearest authoritative source for the KCNQ1 variants and functional findings. No structured tables or person-level carrier, affected, or unaffected counts are indicated, and OCR figures are not needed to recover genotype-phenotype evidence.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 28.584,
+      "gene": "RYR2",
+      "notes": "The authoritative text names only two individual RYR2 variants. It reports 12 mutations overall, but the other 10 identifiers and their variant-specific pedigrees are not transcribed in the supplied text, so they cannot be represented without using the unprovided contents of the figure images. For each named mutation, the text describes exactly two sporadic genotype-positive cases and assigns a cardiac phenotype to both.",
+      "pmid": "12093772",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 8649,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 2122,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10771
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text is the most complete available representation and includes the clinical, genetic, and family-member descriptions. The table artifact preview contains only metadata and captions, without structured variant-level carrier, affected, or unaffected counts.",
+      "variants": [
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "The mutation was present in two sporadic cases: one had reproducible bidirectional ventricular tachycardia and the other had ventricular fibrillation.",
+          "source_location": "Discussion, genotype\u2013phenotype paragraph beginning \u201cThe mutations identified in patients with RyR2 CPVT\u2026\u201d",
+          "unaffected": 0,
+          "variant": "S2246L"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "The mutation was present in two sporadic cases, manifesting as typical bidirectional ventricular tachycardia in one patient and polymorphic ventricular tachycardia in the other.",
+          "source_location": "Discussion, genotype\u2013phenotype paragraph beginning \u201cThe mutations identified in patients with RyR2 CPVT\u2026\u201d",
+          "unaffected": 0,
+          "variant": "G3946S"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 11.892,
+      "gene": "RYR2",
+      "notes": "The supplied text identifies all three variants in CPVT probands but does not provide variant-specific numbers of genotype-positive people. Therefore exact carrier and affected counts are indeterminable. The statement that the mutations were absent in unaffected individuals supports zero explicitly unaffected carriers. Family and cohort totals were not converted into person counts.",
+      "pmid": "14571276",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "abstract_only",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 3046,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 926,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 3972
+      },
+      "tool": "text",
+      "tool_rationale": "The text contains the only substantive variant-level evidence, naming RYR2 V2306I, P4902L, and R4959Q and stating that they were absent in unaffected and control individuals. The table representation contains only artifact metadata and no preserved variant or person-count rows.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "Among 12 Finnish CPVT probands, the authors identified RYR2 V2306I; the three identified RYR2 mutations were absent in unaffected and control individuals. No variant-specific carrier count is given.",
+          "source_location": "Abstract",
+          "unaffected": 0,
+          "variant": "V2306I"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "Among 12 Finnish CPVT probands, the authors identified RYR2 P4902L; the three identified RYR2 mutations were absent in unaffected and control individuals. No variant-specific carrier count is given.",
+          "source_location": "Abstract",
+          "unaffected": 0,
+          "variant": "P4902L"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "Among 12 Finnish CPVT probands, the authors identified RYR2 R4959Q; the three identified RYR2 mutations were absent in unaffected and control individuals. No variant-specific carrier count is given.",
+          "source_location": "Abstract",
+          "unaffected": 0,
+          "variant": "R4959Q"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 253.804,
+      "gene": "RYR2",
+      "notes": "Counts use distinct subject IDs in Supplementary Table S1. The paper states that all derivation and validation subjects had exercise- or emotional stress-induced cardiac events, and every listed RYR2 carrier had syncope or cardiopulmonary arrest; therefore affected equals carriers and unaffected is 0. No genotyped relatives are reported. Variant labels follow Table S1 with capitalization and c./p. prefixes standardized; the adjacent c.2300C>G and c.2301G>T changes are treated as the single reported p.S767C complex variant. Reported nucleotide/protein pairings were not silently corrected.",
+      "pmid": "29925740",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "partial_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 14741,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 9956,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 24697
+      },
+      "tool": "text",
+      "tool_rationale": "The running text contains the relevant RYR2 carrier information, including that 9 of 104 initially diagnosed LQTS patients carried RYR2 mutations. The table representation contains only extraction metadata and no variant-level person-count rows.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 1 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 1",
+          "unaffected": 0,
+          "variant": "c.1258C>T (p.R420W)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 2 carried the reported adjacent substitutions producing p.S767C and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 2",
+          "unaffected": 0,
+          "variant": "c.[2300C>G;2301G>T] (p.S767C)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 2 also carried this RYR2 splice-site variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 2",
+          "unaffected": 0,
+          "variant": "c.14298+2T>C"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 3 carried the variant and had exercise- and emotion-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 3",
+          "unaffected": 0,
+          "variant": "c.2719G>C (p.V907L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 4 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 4",
+          "unaffected": 0,
+          "variant": "c.5764A>T (p.I1922L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 5 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 5",
+          "unaffected": 0,
+          "variant": "c.6511G>A (p.V2171M)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 6 carried the variant and had exercise- and emotion-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 6",
+          "unaffected": 0,
+          "variant": "c.6574A>T (p.M2192L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 7 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 7",
+          "unaffected": 0,
+          "variant": "c.7169C>T (p.T2390I)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 8 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 8",
+          "unaffected": 0,
+          "variant": "c.7199G>T (p.G2400T)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 9 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 1, patient 9",
+          "unaffected": 0,
+          "variant": "c.12458G>T (p.S4153I)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 105 and 106 carried the exon 3 deletion; both had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patients 105-106",
+          "unaffected": 0,
+          "variant": "RYR2 exon 3 deletion (p.N57_G91del35)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 107 carried the variant and had emotion-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 107",
+          "unaffected": 0,
+          "variant": "c.477G>T (p.W159C)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 108 and 152 carried the variant; patient 108 had exercise-triggered syncope and patient 152 had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 108; p. 4, patient 152",
+          "unaffected": 0,
+          "variant": "c.506G>A (p.R169Q)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 109 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 109",
+          "unaffected": 0,
+          "variant": "c.533G>C (p.G178A)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 110 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 110",
+          "unaffected": 0,
+          "variant": "c.1221A>T (p.R407S)"
+        },
+        {
+          "affected": 5,
+          "carriers": 5,
+          "evidence": "Patients 111, 112, 153, 154, and 155 carried the variant. Patients 111, 112, and 155 had cardiopulmonary arrest; patients 153 and 154 had syncope, all stress-triggered.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patients 111-112; p. 4, patients 153-155",
+          "unaffected": 0,
+          "variant": "c.1259G>A (p.R420Q)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 113 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 113",
+          "unaffected": 0,
+          "variant": "c.3766C>A (p.P1256T)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 114 and 115 carried the variant; both had exercise- and emotion-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patients 114-115",
+          "unaffected": 0,
+          "variant": "c.5170G>A (p.E1724K)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 116 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 116",
+          "unaffected": 0,
+          "variant": "c.6591C>G (p.C2197W)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 117 and 118 carried the variant; patient 117 had emotion-triggered cardiopulmonary arrest and patient 118 had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patients 117-118",
+          "unaffected": 0,
+          "variant": "c.6737C>T (p.S2246L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 119 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 119",
+          "unaffected": 0,
+          "variant": "c.6873C>A (p.N2291K)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 120 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 120",
+          "unaffected": 0,
+          "variant": "c.6983C>G (p.P2328R)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 121 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 121",
+          "unaffected": 0,
+          "variant": "c.7160C>T (p.A2387V)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 122 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 122",
+          "unaffected": 0,
+          "variant": "c.7420A>G (p.R2474G)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 123 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 123",
+          "unaffected": 0,
+          "variant": "c.11583G>T (p.Q3861H)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 124 carried the variant and had exercise- and emotion-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 124",
+          "unaffected": 0,
+          "variant": "c.11628C>G (p.D3876E)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 125 and 126 carried the variant; both had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patients 125-126",
+          "unaffected": 0,
+          "variant": "c.11836G>A (p.G3946S)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 127 carried the variant and had exercise- and emotion-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 127",
+          "unaffected": 0,
+          "variant": "c.12006G>A (p.M4002I)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 128 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 128",
+          "unaffected": 0,
+          "variant": "c.12301C>T (p.L4101F)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 129 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 129",
+          "unaffected": 0,
+          "variant": "c.12372C>A (p.S4124R)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 130 carried the variant and had exercise- and emotion-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 130",
+          "unaffected": 0,
+          "variant": "c.12475C>A (p.Q4159K)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 131 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 131",
+          "unaffected": 0,
+          "variant": "c.12502T>C (p.S4168P)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 132 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 132",
+          "unaffected": 0,
+          "variant": "c.12533A>G (p.N4178S)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 133 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 3, patient 133",
+          "unaffected": 0,
+          "variant": "c.12579C>G (p.C4193W)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 134 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 134",
+          "unaffected": 0,
+          "variant": "c.13489C>T (p.R4497C)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 135 carried the variant and had exercise- and emotion-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 135",
+          "unaffected": 0,
+          "variant": "c.13759A>G (p.I4587V)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 136 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 136",
+          "unaffected": 0,
+          "variant": "c.13798T>C (p.F4600L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 137 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 137",
+          "unaffected": 0,
+          "variant": "c.14251A>C (p.K4750Q)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 138 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 138",
+          "unaffected": 0,
+          "variant": "c.14593C>G (p.L4865V)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 139 carried the variant and had exercise- and emotion-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 139",
+          "unaffected": 0,
+          "variant": "c.14806C>A (p.Q4936K)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 156 and 157 carried the variant; patient 156 had exercise-triggered cardiopulmonary arrest and patient 157 had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patients 156-157",
+          "unaffected": 0,
+          "variant": "c.1372G>A (p.D458N)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 158 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 158",
+          "unaffected": 0,
+          "variant": "c.5756G>A (p.R1919Q)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 158 also carried this RYR2 variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 158",
+          "unaffected": 0,
+          "variant": "c.9260C>G (p.P3087R)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 159 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 159",
+          "unaffected": 0,
+          "variant": "c.6919T>C (p.F2307L)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 160 and 161 carried the variant; both had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patients 160-161",
+          "unaffected": 0,
+          "variant": "c.7024G>A (p.G2342R)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 162 carried the variant and had exercise-triggered syncope.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 162",
+          "unaffected": 0,
+          "variant": "c.7207G>A (p.A2403T)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 163 carried the reported nucleotide/protein variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 163",
+          "unaffected": 0,
+          "variant": "c.9910C>G (reported p.F4511L)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 163 also carried this reported RYR2 variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 163",
+          "unaffected": 0,
+          "variant": "c.14222C>T (reported p.A4247V)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 164 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 164",
+          "unaffected": 0,
+          "variant": "c.12385T>G (p.F4129V)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Patient 165 carried the variant and had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patient 165",
+          "unaffected": 0,
+          "variant": "c.14427G>T (p.M4809I)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "Patients 166 and 167 carried the variant; patient 166 had exercise-triggered syncope and patient 167 had exercise-triggered cardiopulmonary arrest.",
+          "source_location": "Supplementary File 1, Table S1, p. 4, patients 166-167",
+          "unaffected": 0,
+          "variant": "c.14461G>A (p.V4821I)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 7.692,
+      "gene": "RYR2",
+      "notes": "No extractable RYR2 variants. The supplied local representation contains article metadata and references but no abstract, methods, results, patient descriptions, pedigrees, or tables linking an RYR2 genotype to carriers or phenotypes. Variant names appearing only in cited-paper titles or later citing literature were excluded because they are not carrier/patient evidence supplied by this paper.",
+      "pmid": "23595086",
+      "representations_available": [
+        "text",
+        "table"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 10241,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 412,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 10653
+      },
+      "tool": "text",
+      "tool_rationale": "The table representation contains only extraction metadata and no structured variant or person-level rows. The running main text is therefore the most complete available source for RYR2 variant, carrier, affected, and unaffected evidence.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 9.487,
+      "gene": "RYR2",
+      "notes": "The father was counted as unaffected because the paper explicitly describes him as healthy, without symptoms or syncope, despite sporadic PVCs and sinus bradycardia on testing. The mother did not carry the substitution.",
+      "pmid": "27225049",
+      "representations_available": [
+        "text"
+      ],
+      "source_completeness": "full_text",
+      "token_usage": {
+        "estimate_method": null,
+        "input_tokens": 7359,
+        "model": "gpt-5.6-sol",
+        "output_tokens": 652,
+        "reasoning_efforts": [
+          "high",
+          "medium"
+        ],
+        "telemetry_available": true,
+        "total_tokens": 8011
+      },
+      "tool": "text",
+      "tool_rationale": "The running full text contains the case-level phenotype, the RYR2 c.7169C>T (p.T2390I) result, and familial inheritance evidence involving the father. No table, PDF, or OCR representation is available.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 2,
+          "evidence": "The 11-year-old proband had recurrent exertional syncope and ventricular fibrillation/cardiac arrest and was diagnosed with CPVT after identification of c.7169C>T (p.T2390I). Direct sequencing confirmed the same variant in his 41-year-old father, who had no symptoms or history of syncope. Figure 2 shows the substitution in the proband and father but not the mother.",
+          "source_location": "Case report, genetic-screening/family-testing paragraph; Discussion, paragraph beginning 'The present case of CPVT inherited from the father'; Figure 2 caption",
+          "unaffected": 1,
+          "variant": "RYR2 c.7169C>T (p.Thr2390Ile; p.T2390I)"
+        }
+      ]
+    }
+  ],
+  "run_id": "codex_20260723_comparison20_routed",
+  "schema_version": 1,
+  "started_at": "2026-07-23T23:55:31.516957+00:00",
+  "token_usage": {
+    "estimate_method": null,
+    "input_tokens": 180415,
+    "model": "gpt-5.6-sol",
+    "output_tokens": 37164,
+    "reasoning_efforts": [
+      "high",
+      "medium"
+    ],
+    "telemetry_available": true,
+    "total_tokens": 217579
+  }
+}
