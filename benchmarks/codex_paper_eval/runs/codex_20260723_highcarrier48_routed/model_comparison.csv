@@ -1,0 +1,6 @@
+system,score_view,tp,fp,fn,precision,recall,f1,extracted_variants,input_tokens,output_tokens,total_tokens,tokens_per_paper,elapsed_minutes,comparability_note
+Codex gpt-5.6-sol,audited notation equivalence,702,52,299,0.9310344827586207,0.7012987012987013,0.8,754,628595,228173,856768,17849.333333333332,58.1766,"Primary semantic score; post-lock matcher adjudication recovered 91 equivalent labels without changing predictions"
+Codex gpt-5.6-sol,pre-adjudication matcher,611,143,390,0.8103448275862069,0.6103896103896104,0.6962962962962962,754,628595,228173,856768,17849.333333333332,58.1766,"Preserved scorer-sensitivity baseline"
+Claude Fable 5,Claude soft-extra matcher,741,174,260,0.8098360655737705,0.7402597402597403,0.7734864300625652,915,,,3129963,65207.5625,14,"Claude subagent-token and wall-time accounting; not identical to Codex API telemetry or matcher"
+Claude Sonnet,Claude soft-extra matcher,729,160,272,0.8200224971878515,0.7282717282717283,0.7714285714285714,889,,,3590702,74806.29166666667,28,"Claude subagent-token and wall-time accounting; not identical to Codex API telemetry or matcher"
+Claude Haiku,Claude soft-extra matcher,650,178,351,0.785024154589372,0.6493506493506493,0.7107709130671768,828,,,2612908,54435.583333333336,11,"Claude subagent-token and wall-time accounting; not identical to Codex API telemetry or matcher"

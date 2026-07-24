@@ -1,0 +1,485 @@
+{
+  "completed_at": "2026-07-23T23:35:25.396939+00:00",
+  "papers": [
+    {
+      "elapsed_seconds": 43.378,
+      "gene": "RYR2",
+      "notes": "Counts include only explicitly identifiable genotype-positive people. Repeated descriptions of the H29D index patient were deduplicated. hiPSC clones, corrected isogenic cells, biological replicates, cells, videos, and cardiac-sheet regions were not counted as people. Unaffected counts are null because no carrier was explicitly described as asymptomatic or clinically normal. D3638A and M995V are contextual prior-study examples rather than participants in the present experiment; they are included because the paper explicitly links them to patient-derived or patient phenotype evidence. The unnumbered H29D family reference was not added because individual carrier status was not specified.",
+      "pmid": "37740238",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The PMC XML-derived full text is authoritative for patient and phenotype statements. No PDF was available, and the artifact/table data contain experimental summaries rather than additional person-level carrier information.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The study generated hiPSCs from one 32-year-old female index patient who carried RyR2-H29D and exhibited short-coupled polymorphic ventricular tachycardia at rest.",
+          "source_location": "Materials and methods, Cell lines; corroborated in Discussion, opening paragraph",
+          "unaffected": null,
+          "variant": "p.His29Asp (H29D)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The paper calls D3638A a CPVT RYR2 mutation studied in patient-derived cardiomyocytes, but gives no number of distinct patients; the functional cell experiments cannot be converted into person counts.",
+          "source_location": "Discussion, paragraph beginning \"We previously demonstrated that the RyR2-H29D single-point mutation\"; also paragraph beginning \"Regarding the specificity of flecainide\"",
+          "unaffected": null,
+          "variant": "p.Asp3638Ala (D3638A)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The paper states that another study treated short-coupled torsades de pointes in \"a patient carrying the RyR2-M995V mutation,\" explicitly establishing one affected carrier.",
+          "source_location": "Discussion, paragraph beginning \"Verapamil has been reported as an effective treatment for SC-TdP\"",
+          "unaffected": null,
+          "variant": "p.Met995Val (M995V)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 345.907,
+      "gene": "SCN5A",
+      "notes": "Only explicitly named current-study SCN5A variants are included. Table 2, Table 3, and the pedigree images were unavailable, so unnamed variants and some pedigree totals cannot be extracted. Counts from the 70-proband cohort were not applied indiscriminately to individual variants. For Q646RfsX6 and G1408R, exact totals are null because overlap between the reported unrelated probands and pedigree carriers cannot be resolved without the figures. Variants mentioned only as examples from prior publications were excluded. No named carrier was explicitly classified as clinically unaffected; the K249X-positive brother was clinically unknown, not unaffected.",
+      "pmid": "34649698",
+      "source_completeness": "partial_text",
+      "tool": "text",
+      "tool_rationale": "The narrative text and converted supplement are the only substantive representations available. The artifact contains metadata but no table cells, and no PDF, OCR, or figure images are available. Therefore, the text is authoritative, although pedigree and variant-table details cannot be recovered.",
+      "variants": [
+        {
+          "affected": 2,
+          "carriers": 3,
+          "evidence": "Genotype-positive twins both exhibited global J waves/ERS3; their genotype-positive brother was clinically unknown.",
+          "source_location": "Results, Clinical Characteristics, description of Figure 1H",
+          "unaffected": null,
+          "variant": "p.K249X"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "D356N was found in two unrelated probands; all enrolled probands had diagnosed BrS or ERS.",
+          "source_location": "Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.D356N"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "A 27-year-old Chinese male with aborted sudden cardiac death and inferolateral slurred J waves carried heterozygous G452C.",
+          "source_location": "Results, Functional expression and computer model studies, final paragraph; Figure 1F",
+          "unaffected": null,
+          "variant": "p.G452C (c.1354G>T)"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The variant occurred in two unrelated JWS probands, and a pedigree additionally describes a carrier father with ERS and carrier son with BrS. The text does not identify which pedigree member overlaps a reported proband, preventing an exact deduplicated count.",
+          "source_location": "Results, Clinical Characteristics, description of Figure 1G; Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.Q646RfsX6"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "L1308F was found in two unrelated probands; all enrolled probands had diagnosed BrS or ERS.",
+          "source_location": "Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.L1308F"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "G1408R occurred in two unrelated JWS probands, while a representative family contained 10 carriers with BrS, ERS, cardiac conduction disease, and/or bradycardia. Proband\u2013pedigree overlap and the number with each phenotype cannot be resolved from the supplied text.",
+          "source_location": "Results, Clinical Characteristics, description of Figure 1I; Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.G1408R"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "One heterozygous carrier was a 54-year-old woman with fever-augmented ERS and prior syncope; the other was a 57-year-old woman with fever-induced type 1 Brugada ECG. The variant was reported in two unrelated probands.",
+          "source_location": "Results, Fever-induced ERS; Results, Pathogenic variant yield and analysis, first paragraph; Supplementary Figure 1 description",
+          "unaffected": null,
+          "variant": "p.L1412F (c.4234C>T)"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Q1695H was identified as a novel pathogenic variant in a BrS proband and was not among the variants reported in two unrelated probands.",
+          "source_location": "Results, Pathogenic variant yield and analysis, third paragraph",
+          "unaffected": null,
+          "variant": "p.Q1695H (c.5085G>A)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "E1784K was found in two unrelated probands; all enrolled probands had diagnosed BrS or ERS.",
+          "source_location": "Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.E1784K"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "S1787N was found in two unrelated probands; all enrolled probands had diagnosed BrS or ERS.",
+          "source_location": "Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.S1787N"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "R1826P was identified as a novel pathogenic variant in a BrS proband and was not among the variants reported in two unrelated probands.",
+          "source_location": "Results, Pathogenic variant yield and analysis, third paragraph",
+          "unaffected": null,
+          "variant": "p.R1826P (c.5477G>C)"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "P2006A was found in two unrelated probands; all enrolled probands had diagnosed BrS or ERS.",
+          "source_location": "Results, Pathogenic variant yield and analysis, first paragraph",
+          "unaffected": null,
+          "variant": "p.P2006A"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 3.18,
+      "gene": "SCN5A",
+      "notes": "The abstract reports 18 rare SCN5A variants across 29 families and 173 affected individuals, but it does not identify any variant or provide variant-specific carrier, affected, or unaffected counts. Aggregate family and affected-person totals cannot be assigned to individual variants.",
+      "pmid": "34949099",
+      "source_completeness": "abstract_only",
+      "tool": "text",
+      "tool_rationale": "Only a local abstract-and-metadata text file was available; no full text, tables, artifacts, PDF, OCR, or figures were supplied.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 3.161,
+      "gene": "KCNQ1",
+      "notes": "No human KCNQ1 variant with carrier/patient phenotype evidence is reported. The patient-associated variants in this paper are in KCNE1 (compound-heterozygous Y81C and K70N). KCNQ1 variants R243C, R243H, and W248R are mentioned only in mechanistic discussion based on prior work, without human carrier or phenotype data in this paper. Experimental KCNQ1/KCNE1 expression-system results were not converted into person counts.",
+      "pmid": "16945797",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The supplied full-text representation is the only locally available source; no tables/artifacts, PDF, figures, or OCR were available.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 4.152,
+      "gene": "KCNQ1",
+      "notes": "The abstract reports 29 pediatric KCNQ1 mutation carriers but does not identify any specific KCNQ1 variant. Diagnostic QT results are reported for the combined 35-person KCNQ1/KCNH2 cohort and cannot be assigned to individual variants or even specifically to KCNQ1. Therefore, no variant-level carrier or phenotype counts can be extracted.",
+      "pmid": "22806714",
+      "source_completeness": "abstract_only",
+      "tool": "text",
+      "tool_rationale": "Text was the only locally available representation; no table artifacts, PDF, figures, or OCR were available.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 11.247,
+      "gene": "KCNQ1",
+      "notes": "The carrier was affected with the study phenotype of symptomatic obstructive coronary artery disease. Arrhythmia phenotypes were not systematically assessed, so no variant-specific arrhythmia phenotype is claimed. Functional-enrichment/HPO terms were not treated as patient phenotypes. No relatives were genotyped.",
+      "pmid": "41564389",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The full-text representation is the only authoritative local source containing both the variant table and prose needed to determine patient-level occurrence; no PDF or structured artifact was available, and the figures provide only aggregate counts.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "Table 2 identifies the KCNQ1 variant as likely pathogenic. The results state that all pathogenic/likely pathogenic/predicted-deleterious variants except recurrent TRPM4 were unique to individual patients; therefore this KCNQ1 variant occurred in one patient. Every enrolled participant had confirmed symptomatic obstructive CAD.",
+          "source_location": "Results, Table 2, KCNQ1 row; Results, 'Rare and potentially pathogenic variant identification'; Materials and methods, 'CAD patient cohort'",
+          "unaffected": 0,
+          "variant": "ENST00000155840.12:c.877C>T:p.Arg293Cys (rs199472737)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 4.922,
+      "gene": "KCNH2",
+      "notes": "Only the index patient is described as genotype-positive. No genotyped relatives or explicitly unaffected carriers are reported in the available material, so the unaffected count is null.",
+      "pmid": "12062363",
+      "source_completeness": "abstract_only",
+      "tool": "text",
+      "tool_rationale": "The supplied text contains the article abstract with the only usable human genotype\u2013phenotype evidence. No PDF, figures, or informative table/artifact data were available; the listed supplement yielded no relevant content.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "A 32-year-old woman with marked QT prolongation (QTc 0.61 s) and repeated syncope was found by genetic analysis to carry a G-to-A substitution at nucleotide 1909, predicted to cause E637K.",
+          "source_location": "Main text, Abstract, Objective",
+          "unaffected": null,
+          "variant": "KCNH2 c.1909G>A (p.Glu637Lys; E637K)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 6.106,
+      "gene": "KCNQ1",
+      "notes": "The abstract individually identifies only one KCNQ1 variant. It reports a rounded percentage rather than an exact number of genotype-positive patients, so carrier and affected counts cannot be determined reliably. No carrier relatives or explicitly unaffected carriers are described.",
+      "pmid": "34860437",
+      "source_completeness": "abstract_only",
+      "tool": "text",
+      "tool_rationale": "Only an abstract-only local text file was available; no table, artifact, PDF, or OCR source was provided.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The study investigated 57 unrelated patients with clinically diagnosed LQTS and states that KCNQ1 c.1097G>A was present in 42% of patients. The rounded percentage does not establish an exact person count.",
+          "source_location": "Abstract, Methods and Results",
+          "unaffected": null,
+          "variant": "KCNQ1 c.1097G>A"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 4.632,
+      "gene": "SCN5A",
+      "notes": "No human SCN5A carrier/patient phenotype evidence is reported. SCN5A p.E1784K (c.5350C>T) was introduced by CRISPR/base editing into the H9 human embryonic stem-cell line to create WAe009-A-48; a cell line is not a genotype-positive person. The statement that this mutation was previously reported to cause LQTS is background citation evidence, not phenotype evidence supplied by this paper.",
+      "pmid": "33517120",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The locally available full main text is authoritative; no PDF, figures, supplements, or substantive table artifact data were available.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 22.976,
+      "gene": "KCNH2",
+      "notes": "Only variants observed in the study's human SIDS or healthy reference cohorts are included. SIDS cases were treated as affected for the study phenotype and explicitly healthy reference participants as unaffected. Exact person counts cannot be reconstructed from allele frequencies alone. The paper also states that detailed cardiac clinical data were unavailable. Variants mentioned only as prior LQT2 mutations were excluded because this paper supplies no carrier phenotype evidence for them.",
+      "pmid": "14975928",
+      "source_completeness": "partial_text",
+      "tool": "text",
+      "tool_rationale": "Text was the only locally available representation; no table artifact, PDF, or OCR was available. The prose is authoritative, but the numerical contents of Table 1 are missing.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "K897T was observed in both the population-based SIDS cohort and healthy reference cohorts. The paper reports allele frequencies and that 6% of the Caucasian cohort were homozygous, but the missing Table 1 prevents determination of the total distinct carrier, affected-carrier, and unaffected-carrier counts.",
+          "source_location": "Results, 'Identification of four HERG polymorphisms'; Materials and Methods, 'Allelic variants'; Table 1 caption only",
+          "unaffected": null,
+          "variant": "K897T"
+        },
+        {
+          "affected": 1,
+          "carriers": 2,
+          "evidence": "P967L was found in one of 34 African-American SIDS infants and one of 100 African-American controls; the reference cohorts are described as healthy.",
+          "source_location": "Results, 'Identification of four HERG polymorphisms,' final sentence; Materials and Methods, 'Allelic variants'",
+          "unaffected": 1,
+          "variant": "P967L"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "R1047L was detected in the SIDS and healthy reference cohorts, but only aggregate allele-frequency information is present in the supplied text. The distinct numbers of carrier people by phenotype cannot be determined without Table 1.",
+          "source_location": "Results, 'Identification of four HERG polymorphisms'; Materials and Methods, 'Allelic variants'; Table 1 caption only",
+          "unaffected": null,
+          "variant": "R1047L"
+        },
+        {
+          "affected": 1,
+          "carriers": 2,
+          "evidence": "Q1068R was found in one of 34 African-American SIDS infants and one of 100 African-American controls; the reference cohorts are described as healthy.",
+          "source_location": "Results, 'Identification of four HERG polymorphisms,' final sentence; Materials and Methods, 'Allelic variants'",
+          "unaffected": 1,
+          "variant": "Q1068R"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 3.892,
+      "gene": "RYR2",
+      "notes": "No human RYR2 variant has carrier or patient phenotype evidence in this paper. R2474S is described as a human CPVT-type mutation, but all reported genotype-phenotype evidence concerns R2474S/+ knock-in mice, mouse hearts, or mouse cardiomyocytes; therefore it is excluded from human carrier counts. Evidence: Introduction, 'Using knock-in mice harboring human CPVT-type mutation (R2474S)'; Materials and methods\u2014Animal model, 'Knock-in mice with the RyR2 R2474S Mutation'; Results\u2014Triggered arrhythmia, induced ventricular tachycardia is reported in KI mice.",
+      "pmid": "20226167",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The PMC full text is the authoritative available representation: no PDF or tables were available, and the figures report only mouse/cardiomyocyte experiments.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 8.455,
+      "gene": "KCNH2",
+      "notes": "The KCNH2 variant was reported as having questionable pathogenicity and was found in the same symptomatic child as SCN5A c.895T>A. No relatives or additional carriers were reported.",
+      "pmid": "19957170",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The full text is authoritative because it provides the only individual-level KCNH2 variant and phenotype description; the tables and figures contain only aggregate cohort or screening data.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The paper reports this intron 14 KCNH2 variant in a single 3-year-old male subject with syncope, baseline QTc 427 ms, Schwartz score 1, and a negative epinephrine response.",
+          "source_location": "Results, Genetic Screening, paragraph beginning \u201cFurthermore, two mutations of questionable pathogenicity\u2026\u201d",
+          "unaffected": 0,
+          "variant": "KCNH2 c.3331-9-8delGT"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 7.988,
+      "gene": "RYR2",
+      "notes": "No human RYR2 variant with carrier or patient phenotype evidence is reported. RYR2 is examined only as a calcium-handling protein in transfected HL-1 cells and neonatal rat cardiac myocytes. E334K is a MYBPC3 variant, not an RYR2 variant; its cited human cases are from a previous report and are therefore not eligible as RYR2 evidence. Relevant locations: Results, 'UPS impairment due to E334K cMyBPC altered the protein levels of ion channels and Ca', where RyR2 protein levels are described; Materials and Methods, 'Cell culture and heterologous expression', identifying the experimental cell and rat models.",
+      "pmid": "21939669",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The full article text is the authoritative available representation; no PDF, figures, or variant/carrier tables were available, and the artifact contains only source metadata.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 4.925,
+      "gene": "RYR2",
+      "notes": "No human RYR2 sequence variants with carrier or patient phenotype evidence are reported. The human variants discussed are in CALM1/CALM2 (for example, N98I, D132E, D134H, Q136P, N98S, and N54I), while RYR2 is studied as their molecular binding target using porcine cardiac material, recombinant proteins, synthetic human RYR2 peptides, and cited functional experiments. RYR2 amino-acid ranges such as 3584-3602 and 4255-4271 are peptide regions, not patient variants. Therefore no RYR2 variant rows qualify.",
+      "pmid": "36693454",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The locally available main text is the authoritative representation; no PDF, OCR, figures, supplements, or phenotype-bearing tables were available, and the artifact contains only metadata.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 2.659,
+      "gene": "SCN5A",
+      "notes": "This paper concerns socioeconomic factors and IVF outcomes. It does not mention SCN5A, genetic variants, genotype-positive individuals, or cardiac phenotypes; therefore, no qualifying human SCN5A variants were identified.",
+      "pmid": "35610155",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The locally available full text is authoritative; no PDF or OCR was available, and the artifact contains only metadata without variant data.",
+      "variants": []
+    },
+    {
+      "elapsed_seconds": 7.82,
+      "gene": "KCNH2",
+      "notes": "The available material is a truncated landing-page text rather than the full case report. The title establishes one affected patient with an LQT2/KCNH2 mutation, but the exact molecular variant and any genotyped relatives are not reported locally.",
+      "pmid": "19764488",
+      "source_completeness": "partial_text",
+      "tool": "text",
+      "tool_rationale": "The selected text is the only representation containing patient-level phenotype information. The artifact contains only extraction metadata and no tables, figures, or additional clinical content.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The title describes a single case ('1\u4f8b') of long-QT syndrome with an LQT2 gene mutation who developed torsade de pointes triggered by fever.",
+          "source_location": "Main text, article title: \u300c\u767a\u71b1\u3092\u5951\u6a5f\u306btorsade de pointes\uff08Tdp\uff09\u3092\u767a\u75c7\u3057\u305fLQT2\u907a\u4f1d\u5b50\u5909\u7570\u3092\u4f34\u3046QT\u5ef6\u9577\u75c7\u5019\u7fa4\u306e1\u4f8b\u300d",
+          "unaffected": null,
+          "variant": "unspecified KCNH2 (LQT2) mutation"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 7.448,
+      "gene": "RYR2",
+      "notes": "The abstract states that RYR2 rs4142933 was genotyped in a 136-patient heart-failure cohort, but it provides no RYR2 genotype distribution or genotype-specific phenotype results. The overall cohort size and 34 ICD interventions cannot be converted into RYR2 carrier or phenotype counts.",
+      "pmid": "24048583",
+      "source_completeness": "abstract_only",
+      "tool": "text",
+      "tool_rationale": "The publisher text is the only substantive local representation. No PDF, figures, supplements, or extracted tables are available; the artifact contains only metadata.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "RYR2 rs4142933 was among the polymorphisms genotyped in 136 patients with heart failure. Although 34 patients had an appropriate ICD intervention, the abstract does not identify their RYR2 genotypes or report the number of rs4142933 carriers.",
+          "source_location": "Abstract, Purpose and Results paragraphs",
+          "unaffected": null,
+          "variant": "rs4142933"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 45.4,
+      "gene": "KCNQ1",
+      "notes": "The compound-heterozygous case 2 is counted under each constituent KCNQ1 variant. Prolonged QTc was treated as affected even when syncope was absent; genotype-positive relatives with explicitly normal ECG/QT findings were treated as unaffected. For c.728G>A, the prose confirms one affected homozygote but the caption only says that other family members' carrier statuses appear in the pedigree without enumerating them, so total carriers and unaffected carriers cannot be determined from the authoritative text.",
+      "pmid": "29037160",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The full PMC text provides explicit individual-level genotype and cardiac phenotype descriptions. The artifact contains no tables and only duplicates figure captions; no PDF or OCR representation is available. Pedigree details not stated in the text were not inferred from inheritance.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": null,
+          "evidence": "Case 1 (II-1) was homozygous for c.728G>A and diagnosed with JLNS, with recurrent ventricular arrhythmias. Other family-member carrier statuses are mentioned only as being displayed in the pedigree and are not enumerated in text.",
+          "source_location": "Case presentations, Case 1 (family-I), first two paragraphs; Fig. 1 caption",
+          "unaffected": null,
+          "variant": "c.728G>A (p.Arg243His)"
+        },
+        {
+          "affected": 1,
+          "carriers": 2,
+          "evidence": "Case 2 had compound heterozygosity including maternally derived c.477+1G>A and QTc 530 ms; her mother carried this allele, and both parents had normal resting ECGs.",
+          "source_location": "Case presentations, Case 2 (family II), paragraphs describing ECG and molecular genetic analysis",
+          "unaffected": 1,
+          "variant": "c.477+1G>A"
+        },
+        {
+          "affected": 1,
+          "carriers": 3,
+          "evidence": "Case 2 had compound heterozygosity including the paternally derived c.520C>T allele and QTc 530 ms. Her father had a normal resting ECG, and her heterozygous elder brother (III:4) had a normal QT interval.",
+          "source_location": "Case presentations, Case 2 (family II), paragraphs describing parental ECGs and molecular genetic analysis",
+          "unaffected": 2,
+          "variant": "c.520C>T (p.Arg174Cys)"
+        },
+        {
+          "affected": 4,
+          "carriers": 8,
+          "evidence": "Four homozygotes had prolonged QTc: proband IV-5 (520 ms), sister IV-4 (482 ms), brother IV-7 (475 ms), and cousin IV-6 (520 ms). The proband's two parents and the cousin's two parents were heterozygous and had normal resting ECGs.",
+          "source_location": "Case presentations, Case 3 (family III), all four paragraphs",
+          "unaffected": 4,
+          "variant": "c.1097G>A (p.Arg366Gln)"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 11.84,
+      "gene": "KCNH2",
+      "notes": "The supplementary material was referenced but not locally available. The overall GWAS sample size of 13,105 cannot be used as a carrier count, and the paper provides no genotype counts or person-level clinical classifications for rs3778872.",
+      "pmid": "23166209",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The PMC-derived main text is the authoritative available representation. The artifact contains only metadata and figure captions, while no local PDF, OCR, or supplementary tables were available.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "The paper reports that rs3778872 near KCNH2 was associated with quantitative QT interval in African Americans (p=3\u00d710^-6), but gives no number of genotype-positive individuals and does not classify carriers as affected or clinically normal.",
+          "source_location": "Results, 'Genome-Wide Association Study,' final paragraph",
+          "unaffected": null,
+          "variant": "rs3778872"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": 17.696,
+      "gene": "SCN5A",
+      "notes": "The exon 15\u201328 duplication was initially detected as a mosaic SCN5A rearrangement in the proband but was absent from blood, saliva, and skin sampled 11 years later; the initially genotype-positive person is counted once. Genotyped relatives were non-carriers and are excluded. The exon 9\u201310 deletion is included because the paper explicitly describes a previously published human carrier and phenotype; it is not part of the present cohort.",
+      "pmid": "27684715",
+      "source_completeness": "full_text",
+      "tool": "text",
+      "tool_rationale": "The PMC-derived full text is authoritative because it contains the complete Results and family-segregation statements needed for person counts. No PDF or tables were available, and the figure artifact captions add no carrier information beyond the text.",
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "The paper describes one previously reported Brugada syndrome patient, also affected by conduction system disease, with a deletion of SCN5A exons 9 and 10. No carrier relatives or clinically normal carriers are reported here.",
+          "source_location": "Introduction, paragraph beginning \u201cGenetic testing of BrS patients generally involves\u2026\u201d; Discussion, paragraph beginning \u201cOnly one large genomic imbalance\u2026\u201d",
+          "unaffected": null,
+          "variant": "SCN5A deletion of exons 9\u201310"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "One duplication was detected among 220 patients. Its carrier was a 48-year-old woman diagnosed with Brugada syndrome after syncope, with a type I Brugada ECG pattern and positive flecainide test. Her parents, two siblings, son, and daughter had neither the rearrangement nor a Brugada phenotype, leaving one affected carrier and no unaffected carriers.",
+          "source_location": "Results, \u201cCNVs in SCN5A,\u201d paragraphs beginning \u201cAmong the 220 genotype-negative BrS patients\u2026\u201d and \u201cThe patient with the SCN5A rearrangement\u2026\u201d; Fig. 1 and Fig. 2 captions",
+          "unaffected": 0,
+          "variant": "SCN5A duplication of exons 15\u201328 (mosaic)"
+        }
+      ]
+    }
+  ],
+  "run_id": "codex_20260723_seed2026072301",
+  "schema_version": 1,
+  "started_at": "2026-07-23T23:24:53.005684+00:00",
+  "token_usage": {
+    "estimate_method": null,
+    "input_tokens": 133861,
+    "model": "gpt-5.6-sol",
+    "output_tokens": 12385,
+    "reasoning_effort": "medium",
+    "telemetry_available": true,
+    "total_tokens": 146246
+  }
+}

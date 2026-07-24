@@ -1,0 +1,92 @@
+gene,pmid,predicted,gold,basis
+SCN5A,26669661,SCN5A c.53G>A (p.(Arg18Gln)),R18Q,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.1231G>A (p.(Val411Met)),V411M,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.1844G>A (p.(Gly615Glu)),G615E,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.2102C>T (p.(Pro701Leu)),P701L,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.2390G>T (p.(Gly797Val)),G797V,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.2441G>A (p.(Arg814Gln)),R814Q,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.2923C>T (p.(Arg975Trp)),R975W,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3094G>A (p.(Glu1032Lys)),E1032K,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3098A>G (p.(Gln1033Arg)),Q1033R,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3236C>T (p.(Ser1079Phe)),S1079F,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3285G>T (p.(Trp1095Cys)),W1095C,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3342C>A (p.(Asp1114Glu)),D1114E,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3556G>A (p.(Ala1186Thr)),A1186T,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3662C>T (p.(Ala1221Val)),A1221V,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3833T>A (p.(Ile1278Asn)),I1278N,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3911C>T (p.(Thr1304Met)),T1304M,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.3988G>A (p.(Ala1330Thr)),A1330T,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.4519_4527delCAGAAGCCC (p.(Gln1507_Pro1509del)),P.Q1507_P1509DEL,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.4850_4852del (p.(Phe1617del)),P.F1617DEL,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.4859C>T (p.(Thr1620Met)),T1620M,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.4931G>A (p.(Arg1644His)),R1644H,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.5236G>A (p.(Ala1746Thr)),A1746T,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.5302A>G (p.(Ile1768Val)),I1768V,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.5350G>A (p.(Glu1784Lys)),E1784K,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.5369A>G (p.(Asp1790Gly)),D1790G,embedded parenthetical protein notation
+SCN5A,26669661,SCN5A c.5385_5387dupTGA (p.(Tyr1795_Glu1796insAsp)),P.Y1795_E1796INSD,embedded parenthetical protein notation
+SCN5A,29709101,c.1045G>A (p.(Asp349Asn)),D349N,embedded parenthetical protein notation
+SCN5A,29709101,c.1100G>A (p.(Arg367His)),R367H,embedded parenthetical protein notation
+SCN5A,29709101,c.1127G>A (p.(Arg376His)),R376H,embedded parenthetical protein notation
+SCN5A,29709101,c.1312A>T (p.(Met438Leu)),M438L,embedded parenthetical protein notation
+SCN5A,29709101,c.2268_2271del (p.(Phe756Leufs*8)),c.2268_2271del,embedded parenthetical protein notation
+SCN5A,29709101,c.2466G>A (p.(Trp822*)),W822X,embedded parenthetical protein notation
+SCN5A,29709101,c.2658T>A (p.(His886Gln)),H886Q,embedded parenthetical protein notation
+SCN5A,29709101,c.4895G>A (p.(Arg1632His)),R1632H,embedded parenthetical protein notation
+SCN5A,28341781,870delC (N291TfsTer52),c.870delC,embedded parenthetical protein notation
+SCN5A,28341781,1537delC (R513VfsTer8),c.1537delC,embedded parenthetical protein notation
+SCN5A,28341781,4140_4142delCAA (del1380N),P.N1380DEL,embedded parenthetical protein notation
+SCN5A,28341781,4389_4396delCCTCTTTA (L1464WfsTer5),c.4389_4396delCCTCTTTA,embedded parenthetical protein notation
+SCN5A,28341781,4732_4733dupAA (L1579SfsTer53),c.4732_4733dupAA,embedded parenthetical protein notation
+SCN5A,28341781,5157delC (I1720SfsTer67),c.5157delC,embedded parenthetical protein notation
+SCN5A,28341781,5290delG (V1764SfsTer23),c.5290delG,embedded parenthetical protein notation
+SCN5A,28341781,IVS24+1 delG,c.4299+1delG,legacy deletion/insertion shorthand
+SCN5A,26921764,c.2559delT (p.F853LfsX16),c.2559delT,embedded parenthetical protein notation
+SCN5A,26921764,c.2582_2583delTT (p.F861WfsX90),c.2582_2583delTT,embedded parenthetical protein notation
+SCN5A,26921764,c.3666delG (p.A1223PfsX7),c.3667delG,embedded parenthetical protein notation
+SCN5A,26921764,c.5387_5388insTGA (p.1795_1796insD),P.Y1795_E1796INSD,embedded parenthetical protein notation
+SCN5A,10590249,1795insD (5537insTGA),P.Y1795_E1796INSD,embedded parenthetical protein notation
+SCN5A,25051102,4786T>A (Phe1596Ile),F1596I,embedded parenthetical protein notation
+KCNH2,29622001,c.221_242del,T74fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.453delC,T152fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.643delG,V215X,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.842dupG,R281fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.853_859dupGCCGACG,A285fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.1379delA,D460fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.1631_1632delAG,E544fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.2173_2196del,Q725fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.2959_2960delCT,L987fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.3017delG,G1006fsX,cDNA indel mapped to its protein codon event
+KCNH2,29622001,c.3160dupA,T1054fsX,cDNA indel mapped to its protein codon event
+KCNH2,11854117,593stop,I593X,legacy stop-label equivalence
+KCNH2,11854117,fsA83/37aa,A83fsX,embedded or normalized equivalent notation
+KCNH2,11854117,fsV295/63aa,V295fsX,embedded or normalized equivalent notation
+KCNH2,11854117,Q376splice,Q376SP,legacy splice-label equivalence
+KCNH2,11854117,L799splice,L799SP,legacy splice-label equivalence
+KCNH2,11854117,fsGly925,G925fsX,embedded or normalized equivalent notation
+KCNH2,11854117,fsP968/4aa,P968fsX,embedded or normalized equivalent notation
+KCNH2,26496715,c.461G>A (p.Trp154X),W154X,embedded parenthetical protein notation
+KCNH2,26496715,c.572delC (p.Pro191ArgX10),P191fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.739C>T (p.Gln247X),Q247X,embedded parenthetical protein notation
+KCNH2,26496715,c.1096C>T (p.Arg366X),R366X,embedded parenthetical protein notation
+KCNH2,26496715,c.1326delT (p.Thr443ProfsX78),T443fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.1328_1329delCC/insG (p.Thr443ArgfsX77),T443fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.1480_1482delTTC (p.Phe494del),F494del,embedded parenthetical protein notation
+KCNH2,26496715,c.2587C>T (p.Arg863X),R863X,embedded parenthetical protein notation
+KCNH2,26496715,c.2616delC (p.Gly873AlafsX5),G873fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.2682_2685delCACG (p.Asp896ArgfsX77),D896fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.2775_2776insG (p.Pro926AlaX14),P926fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.2944_2948dupGACAC (p.Cys984ThrfsX75),C984fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.2959-2960delCT (p.Leu987Valfs131X),L987fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.3048delC (p.Ala1017ProfsX40),A1017fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.3094_3095insC (p.Arg1032AlafsX86),R1032fsX,embedded parenthetical protein notation
+KCNH2,26496715,c.3102_3111delCCGGGGCGAC (p.Pro1034ArgfsX20),P1034fsX,embedded parenthetical protein notation
+KCNH2,10973849,G1128A (Q376sp),Q376SP,embedded parenthetical protein notation
+KCNH2,10973849,A1129-2G (Q376sp),Q376SP,embedded parenthetical protein notation
+KCNH2,10973849,del1913–1915 (delK638),K638del,embedded parenthetical protein notation
+KCNH2,10973849,G2398+1C (L799sp),L799SP,embedded parenthetical protein notation
+KCNH2,10973849,G2592+1A (D864sp),D864SP,embedded parenthetical protein notation
+RYR2,28237968,NM_001035.2:c.13350-13352del (p.Glu4451del),E4451del,embedded parenthetical protein notation
+RYR2,28237968,NM_001035.2:c.8596-8598del (p.Gly2866del),G2866del,embedded parenthetical protein notation
+RYR2,33606749,exon 3 deletion (N57_G91del35),N57_G91DEL35,embedded parenthetical protein notation
+RYR2,33606749,14834_14835insTCA (4944_4945insH),4944_4945INSH,embedded parenthetical protein notation

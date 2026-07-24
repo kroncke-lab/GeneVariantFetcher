@@ -1,0 +1,6 @@
+{
+  "locked_at": "2026-07-23T23:35:29.852493+00:00",
+  "predictions_sha256": "f055819c167878dab839e25a0803c7a3b0d7dcdb322a4685b3a32affeb49f526",
+  "selection_sha256": "4844c2a32fe08efa860d96027379f5db3ee6ab53080b183c23c5b9f09977e3ad",
+  "statement": "Predictions finalized before any database or gold-standard access."
+}
