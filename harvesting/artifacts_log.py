@@ -22,6 +22,7 @@ import logging
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,25 @@ class SupplementArtifact:
 
 
 @dataclass
+class SupplementLinkArtifact:
+    """A supplement link the paper advertised, recorded whether or not we got it.
+
+    Distinct from :class:`SupplementArtifact`, which describes a file we
+    actually processed. These rows are the *inventory*: what the markup said
+    existed. Kept structured (rather than only rendered into ``FULL_CONTEXT.md``
+    as a ``_link_:`` line) so a recovery pass can resolve and fetch them
+    afterwards — see ``harvesting.supplement_link_resolver``.
+    """
+
+    label: str
+    href: str
+    title: Optional[str] = None
+    media_type: Optional[str] = None
+    source: str = ""  # "pmc_xml", "pmc_html", "publisher_html", "browser_html"
+    downloaded: bool = False
+
+
+@dataclass
 class MainTextArtifact:
     source: str = ""  # "pmc_xml", "pmc_html", "elsevier_api", "wiley_api", "scraper"
     chars: int = 0
@@ -73,9 +93,20 @@ class ArtifactsManifest:
     main_text: MainTextArtifact = field(default_factory=MainTextArtifact)
     figures: List[FigureArtifact] = field(default_factory=list)
     supplements: List[SupplementArtifact] = field(default_factory=list)
+    supplement_links: List[SupplementLinkArtifact] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
+        downloaded_names = {
+            Path(s.path).name.lower() for s in self.supplements if s.converted or s.path
+        }
+        links_unfetched = sum(
+            1
+            for link in self.supplement_links
+            if not link.downloaded
+            and Path(urlparse(link.href).path or link.href).name.lower()
+            not in downloaded_names
+        )
         return {
             "pmid": self.pmid,
             "pmcid": self.pmcid,
@@ -85,6 +116,7 @@ class ArtifactsManifest:
             "main_text": asdict(self.main_text),
             "figures": [asdict(f) for f in self.figures],
             "supplements": [asdict(s) for s in self.supplements],
+            "supplement_links": [asdict(link) for link in self.supplement_links],
             "notes": list(self.notes),
             "summary": {
                 "figure_count": len(self.figures),
@@ -98,6 +130,10 @@ class ArtifactsManifest:
                 "supplements_total_chars": sum(
                     s.converted_chars for s in self.supplements
                 ),
+                # The recovery signal: the paper advertised links we never
+                # fetched. Non-zero here is what a source-recovery pass targets.
+                "supplement_link_count": len(self.supplement_links),
+                "supplement_links_unfetched": links_unfetched,
                 "main_text_chars": self.main_text.chars,
             },
         }
@@ -154,6 +190,44 @@ class ArtifactsLog:
 
     def record_supplement_dict(self, **kwargs: Any) -> None:
         self.manifest.supplements.append(SupplementArtifact(**kwargs))
+
+    def record_supplement_links(
+        self,
+        captions: Any,
+        source: str,
+    ) -> None:
+        """Record the supplement links a paper advertised, from a caption result.
+
+        Takes a ``figure_extractor.CaptionExtractionResult``. Only entries with
+        an href are recorded — a description with no link is already covered by
+        ``main_text.supplement_descriptions_count``. Marks each link
+        ``downloaded`` when a supplement of the same filename was processed, so
+        a recovery pass can target the genuine gaps.
+        """
+        fetched = {
+            Path(urlparse(s.url or "").path or s.url or "").name.lower()
+            for s in self.manifest.supplements
+            if s.url
+        } | {Path(s.path).name.lower() for s in self.manifest.supplements if s.path}
+        fetched.discard("")
+
+        seen = {link.href for link in self.manifest.supplement_links}
+        for supp in getattr(captions, "supplements", []) or []:
+            href = (getattr(supp, "href", None) or "").strip()
+            if not href or href in seen:
+                continue
+            seen.add(href)
+            name = Path(urlparse(href).path or href).name.lower()
+            self.manifest.supplement_links.append(
+                SupplementLinkArtifact(
+                    label=getattr(supp, "label", "") or "",
+                    href=href,
+                    title=getattr(supp, "title", None) or None,
+                    media_type=getattr(supp, "media_type", None),
+                    source=source,
+                    downloaded=bool(name) and name in fetched,
+                )
+            )
 
     def add_note(self, note: str) -> None:
         self.manifest.notes.append(note)
