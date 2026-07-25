@@ -88,6 +88,10 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 - Paywall recovery entry point: `scripts/fetch_paywalled.py`; authenticated
   browser strategies live under `harvesting/browser_html/`.
 - Elsevier supplement recovery: `scripts/fetch_elsevier_supplements.py`.
+- Linked-supplement recovery: `scripts/fetch_linked_supplements.py` — fetches
+  supplements a paper's markup advertised but that never landed on disk. Runs
+  by default inside `gvf-run` source recovery; use the script directly for a
+  corpus-wide backlog sweep (`--dry-run` first).
 - Review DB publish/adjudication: `gvf-run --publish-review` and
   `scripts/ingest_review_adjudications.py`; the full contract lives in
   `docs/VARIANT_BROWSER_INTEGRATION.md`.

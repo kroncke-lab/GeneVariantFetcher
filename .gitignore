@@ -149,3 +149,6 @@ tests/run_*.py
 # uv: requirements.lock is the canonical lockfile. uv.lock is a regenerated
 # local artifact (tracked historically, then removed) — do not commit it.
 /uv.lock
+
+# Linked-supplement recovery bookkeeping (scripts/fetch_linked_supplements.py)
+.gvf_linked_supplements/
