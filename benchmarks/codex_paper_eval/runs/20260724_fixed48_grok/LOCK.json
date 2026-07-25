@@ -1,0 +1,6 @@
+{
+  "locked_at": "2026-07-24T21:19:07.351249+00:00",
+  "predictions_sha256": "e25a024274d1bff8f7d9638e8af7ba8c5a8c8557b32bb00bc2ab0765d053e9c5",
+  "selection_sha256": "dd64cfb2616f4cdaf62c067be83f6b1d230af9ab7577661944bdff41ae075fe2",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}

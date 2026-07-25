@@ -1,0 +1,1136 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "eligible_counts": {
+    "KCNH2": 256,
+    "KCNQ1": 294,
+    "RYR2": 166,
+    "SCN5A": 675
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/highcarrier_48_papers_20260723.tsv",
+  "papers": [
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_artifacts.json",
+      "artifacts_sha256": "ad0af275029cbe28595b1dd048e7b17ed280071c372513aec36f6ccb263b75cf",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_figures/nihms810842f2.jpg": "3c1f3dacb8477a85e8bb3301cc6a92e0f3bf0534ca63931fa0c4a75139265fc7",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_figures/nihms810842f4a.jpg": "ed9946234598f33dc9404633c46676c541d35f5eae1c16fe937ee7ba15b6f8ae"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_figures/nihms810842f2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_figures/nihms810842f4a.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "27566755",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27566755/27566755_FULL_CONTEXT.md",
+      "source_bytes": 39431,
+      "source_sha256": "07969e3597a6feb332af345f5ac5d10523d582ac2dbea283eed31fa17ee4c354"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_1.jpg": "337a9f1e9c700309570bfb1968d0a1e44a42203deefc9f806351cefee5b22007",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_2.jpg": "1c4ac7e52d4a5af99bbf0fbc57661e4869459577975685dac514272e91a02d03",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_3.jpg": "f4348679e76f2b37829d93c98cb13365ea681b3ed8f76ec0600092ae5d59cd76",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_4.jpg": "d071a9688aebe10e70b92fde1337a627e6511828053e818e38f11f24fc206e0f"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_figures/fig_pmc_4.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "26669661",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26669661/26669661_FULL_CONTEXT.md",
+      "source_bytes": 171832,
+      "source_sha256": "55a19291120eeb5cadc2dd8427f0af0afeace689eed9ff93d1ea4d98989a87ed"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/20470418/20470418_artifacts.json",
+      "artifacts_sha256": "ab07f02740ec9ff28723a7dd2251f6253884af07ecf70444e4e38ba0c8a774f2",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/20470418/20470418_supplements/PMC2891713_supplements/1471-2350-11-74-1.jpg": "d03d604aa8f158ddf74d10d19dda7f47feec1ea41f6261a077e883603b9039bc"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/20470418/20470418_supplements/PMC2891713_supplements/1471-2350-11-74-1.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20470418",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/20470418/20470418_FULL_CONTEXT.md",
+      "source_bytes": 16928,
+      "source_sha256": "ba26971182bb0d257d4255cdb1984014dd1f9e5ad069407eadfd2a767e0a0c1b"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/28339995/28339995_artifacts.json",
+      "artifacts_sha256": "6b26624567ba82eba4e626c748435f14f1a716be38f9da2113cbcb09b8eeca5e",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "28339995",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/28339995/28339995_FULL_CONTEXT.md",
+      "source_bytes": 31182,
+      "source_sha256": "63be47d362d50de0915eab6d906b8668ebec903a24c64eb6ef1b31bd94b121d3"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_artifacts.json",
+      "artifacts_sha256": "bacafef88fb4916c748b71429a132506f87fa999f5a29babf53644f84cc19815",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g001.jpg": "90f13e94a10cc50a50f5f96dfa075d92af9d52b8902298a3f35bc97e68ab2582",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g002.jpg": "dd95b0fbd29ac0b15b96f573a87f2eb464ac9f364f4582b15ff65243b2c501c1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g003.jpg": "708a2583c5ef71c85a2ed97f1274f27882e7b7c1bab7302d63ae8391b4bd0099",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_1.jpg": "90f13e94a10cc50a50f5f96dfa075d92af9d52b8902298a3f35bc97e68ab2582",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_2.jpg": "dd95b0fbd29ac0b15b96f573a87f2eb464ac9f364f4582b15ff65243b2c501c1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_3.jpg": "708a2583c5ef71c85a2ed97f1274f27882e7b7c1bab7302d63ae8391b4bd0099"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/ANEC-23-e12548-g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_figures/fig_pmc_3.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "29709101",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/29709101/29709101_FULL_CONTEXT.md",
+      "source_bytes": 57555,
+      "source_sha256": "e6499c0013f8802845890134b62bf820ac2c23db7f064fb0775dfb5b0e2e77d8"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "28341781",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/28341781/28341781_FULL_CONTEXT.md",
+      "source_bytes": 170620,
+      "source_sha256": "7bb6682af891e332902491e39c35e1e1391c4468a8fb4793027185574cbebc73"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_artifacts.json",
+      "artifacts_sha256": "6b836590d62711638b379127c4899084213b32491add10e9ed65b2bf68cfd8d2",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_1.jpg": "76381c333474ec08bc04ad1b999f9a8fc31b9756112a148fde0c52e5075a73d4",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_2.jpg": "b0e9cd0f530995fbbf0cd24cb4b38719f0e7cdd7928a145151836cbdd50ecfc0",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_3.jpg": "85ba99562c05bf753777a17d5c786c32e41f82222ced9f016e76818cb6d0d48b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_4.jpg": "ca132e7e28038a15a2949adfb65641d4117f8cfa7fbede13568bc6d3175203b1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_5.jpg": "92e28f654a2e05db1cb209bcec713e8fdadea90cdcda8ed8755439988b46178e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_6.jpg": "71be4594dee0ae4549a8b59299fcaea6c4ef650d780d244a2f4154e5f8a8107c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_7.jpg": "ec5e2b9abf1a832fdc45ac9fd49e439885a49df6726a16f01f5873cbacaf5965"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_5.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_6.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_figures/fig_pmc_7.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "18451998",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/18451998/18451998_FULL_CONTEXT.md",
+      "source_bytes": 11775,
+      "source_sha256": "fbf204a62ab39cd85cc81cb042b96754451cdbebb6b2476ee76e2168ca35dcdb"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26921764/26921764_artifacts.json",
+      "artifacts_sha256": "daccdba613e4e6e6cf8d039fd10aad03ea678890670ea47e8b060af0437a84f3",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "26921764",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26921764/26921764_FULL_CONTEXT.md",
+      "source_bytes": 47855,
+      "source_sha256": "b53b772f2e5b0afc0d031da52fe9dfc3989901405a5be7e5b8cddf4170691067"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27554632/27554632_artifacts.json",
+      "artifacts_sha256": "7086452afd77e28e4affae1bd833246c5b0d3c981bf7fd0b00f3d3b2e2f18156",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "27554632",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/27554632/27554632_FULL_CONTEXT.md",
+      "source_bytes": 31527,
+      "source_sha256": "5dfb32c8205866b746435885d2fc8841658ae17123bb37dec630f19470af2bbd"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/10590249/10590249_artifacts.json",
+      "artifacts_sha256": "7e031d2575ba1aea19ce3f6c7f8718c33208e6aeebcee306af7da6970904b750",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "10590249",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/10590249/10590249_FULL_CONTEXT.md",
+      "source_bytes": 30695,
+      "source_sha256": "50abef5e70a9ed409a4ec17f65c3790b6cf6bb701f9aab14b2ae482d4c19ccc4"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_artifacts.json",
+      "artifacts_sha256": "59e8d3c90fddb931071b02730af044ddca5c23f65a62475aee67eebe43b5d236",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_figures/figures/fig_p1_0.jpeg": "f54225f0fad43f0349f0c17e033aee0ff3361075f344d32329d8d96b045b7dda"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_figures/figures/fig_p1_0.jpeg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_supplements/library_recommendation_form.pdf": "1fd893f9d284915876fbabe4aab04bf79e35b5d9250f6b50a5499b01b072b478"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_supplements/library_recommendation_form.pdf"
+      ],
+      "pmid": "25051102",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/25051102/25051102_FULL_CONTEXT.md",
+      "source_bytes": 43748,
+      "source_sha256": "e4137f433478a969b62702bf6feee5f661cc1a27a43240ac552c71d888c63786"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26746457/26746457_artifacts.json",
+      "artifacts_sha256": "6e5ef1822a2c9600d3b85fbca9846f686baff64027e78bf0b4f9aefa42a76620",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26746457/26746457_figures/nihms757466f1a.jpg": "e248e9fbaf58f5a70f253d350160ae44160b7c6b0c97bc01597877e9b1bff54e"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26746457/26746457_figures/nihms757466f1a.jpg"
+      ],
+      "gene": "SCN5A",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "26746457",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/SCN5A/26746457/26746457_FULL_CONTEXT.md",
+      "source_bytes": 27304,
+      "source_sha256": "fc542b5fc6d5d3d5026d4b54d2e6dbde7e32532e6ef8e4ddfdc780ea3f14181f"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig1_HTML.jpg": "d92414aa12fe0eee2d5306c80838fe796559f46e5448545e35f3963433162b99",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig2_HTML.jpg": "341a9e570beaca81d70eff082aac613a3d3deb8617f0c735c88d8e50d702eaf9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig3_HTML.jpg": "0ba187fce83818d5a2939854e746ec60fe3131e7aa4b30f4d07b0d0da6024ef4"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig1_HTML.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig2_HTML.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_supplements/PMC5887247_supplements/12881_2018_574_Fig3_HTML.jpg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "29622001",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/29622001/29622001_FULL_CONTEXT.md",
+      "source_bytes": 122016,
+      "source_sha256": "c0083353eaffda85b30336f468519cf2a49fc72c0040c060f5addee57c1c6f8a"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "11854117",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/11854117/11854117_FULL_CONTEXT.md",
+      "source_bytes": 13641,
+      "source_sha256": "3c1c92c2bacb74bc5e541c19785c5fd3b1ae3bafc8d22fa037a9360bcdcb45fe"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_figures/figures/fig_p1_1.png": "68886baac946881e79e12b990301fa7aa8b128eb20cf4c7a508fa1a708b68fdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_figures/figures/fig_p1_2.png": "a7cb86dc4dee8dff4777248a211a3030a17a9da3d8daa51bc6d6cbb832646264"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_figures/figures/fig_p1_1.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_figures/figures/fig_p1_2.png"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/IF-1751051230523.pdf": "a78a0409e1f02607211e87c54ce36c8c1aeb282f6c5a753026bf1cfc3e25e7eb",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/Reviewer-1702667087263.pdf": "a65cd1c2c0dfa405fda5431875a1b0c7c3ccfbb860b5fb9bc8300a5b160f1e94",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/Reviewer.pdf": "a65cd1c2c0dfa405fda5431875a1b0c7c3ccfbb860b5fb9bc8300a5b160f1e94",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/authoruser-1391784677250.pdf": "6d50943b393839a6f9f28d9e566dfa4536e91411ca2139a00bc74c07bf2b08c4"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/IF-1751051230523.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/Reviewer-1702667087263.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/Reviewer.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_supplements/authoruser-1391784677250.pdf"
+      ],
+      "pmid": "14661677",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/14661677/14661677_FULL_CONTEXT.md",
+      "source_bytes": 90682,
+      "source_sha256": "cadb576f5b162a45aba198901d0c6dd5866f0f6487fc21f3d15baa6432a47c97"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19160088/19160088_artifacts.json",
+      "artifacts_sha256": "d03228508967442055fabcb842dd8f3fc468818e9ce39675c71c5da099d9aad0",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19160088/19160088_figures/ukmss-4925-f0001.jpg": "011618b5f34799df2c9415dcc093ceeaf78fb1e811738e7232ca450b5aae6c03"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19160088/19160088_figures/ukmss-4925-f0001.jpg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "19160088",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19160088/19160088_FULL_CONTEXT.md",
+      "source_bytes": 22022,
+      "source_sha256": "1e2f7c0618eecce79e96d092f94ee34df9bddeeda3f65b636971dd269e96626a"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "26496715",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/26496715/26496715_FULL_CONTEXT.md",
+      "source_bytes": 35714,
+      "source_sha256": "1d7294cb6dc3a92d0a84eca957938fe774008ce749ac1d853ad9cdc29fd120ad"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNH2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/11844290/11844290_supplements/ANEC-7-40.pdf": "dbc7d483d1baf76edb74e984d293fa279bbc0f0bd237b07071090bbb8851654d"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/11844290/11844290_supplements/ANEC-7-40.pdf"
+      ],
+      "pmid": "11844290",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/11844290/11844290_FULL_CONTEXT.md",
+      "source_bytes": 9757,
+      "source_sha256": "7f271670f0c81d1602bd00637e4e41e3cdf035c38b87e94a8e4fa6fc35dab32d"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_artifacts.json",
+      "artifacts_sha256": "0635d02531873730a8c967f4ff0cfb53fac6624b9898b721424ea677c1e13bcd",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_1.jpeg": "40fca8496689493111438a6814d4f75cece10daf85722ef265be63849a5f548a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_2.jpeg": "ca5b884e598e31ba237b1d5551bd1f61d0e9670dca293f17e8a7fcba135ba137",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_3.jpeg": "cc5a28ab1219336599e7691e292aa7c6b41defdf736e50b372fbdb1b97b84bb8",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_4.jpeg": "da19544125e389a8934779579f1bea4fbb7ce411c1373e02f4151137bbac0fb5",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_5.jpeg": "ccc8c668992c3c90d06de3ab32598a086a420b393a8ba6b3761e7c55e61bf38a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_2.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_3.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_4.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_figures/fig_browser_5.jpeg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "10973849",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10973849/10973849_FULL_CONTEXT.md",
+      "source_bytes": 51882,
+      "source_sha256": "8ebaba94e4644f95ba4cedba7d6ab5878f79cddc083244ebaec1ce69fc8185e1"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "10862094",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10862094/10862094_FULL_CONTEXT.md",
+      "source_bytes": 20693,
+      "source_sha256": "640fb2b50907fc9248b83c5bcd4466799e62ad689772b67e1917b88fe72177fc"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "10841244",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/10841244/10841244_FULL_CONTEXT.md",
+      "source_bytes": 37926,
+      "source_sha256": "32a9275a5a172711c826178e9afd059a709d5fb640df6dc63d9287010757ceca"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_artifacts.json",
+      "artifacts_sha256": "329ff928edf1ed967323de10c3879807810b9ec117d9060f536363ba4ae3738c",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_1.jpg": "79d659097155b6dc70882d39f23912d271a7554e952b3a37fbd15dd9199a5a0b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_2.jpg": "ca9214a3ea09449e57bda3fc12dfecca3d84b405c5bd42a3c83bf64c4ed34597",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_3.jpg": "2553c089ce5e615af0f2a51ff6fc793b52a9194417b5e144c09ab00b43c9bf45",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_4.jpg": "316b53b6f1013787585235ff65b9e79b8e8abfd19f770f2ae90fb758bfcd6eec",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_5.jpg": "86303c7b3d658d8804fff5c8e59f088308fd35e24a1f9bd999fa1721f26e65fa",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_6.jpg": "7cc756af3de58b12efd47d78faf27fede9101d8f14048f8e6c2f4a495f88a182",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_7.jpg": "15d3f9247c9cd75827c64c3870c478f9d03c904716b962e5749fde7761fcef45"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_5.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_6.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_figures/fig_pmc_7.jpg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "23864605",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/23864605/23864605_FULL_CONTEXT.md",
+      "source_bytes": 47118,
+      "source_sha256": "c02e7008aa2aa60e4bd577e334438df3f54b2df05223c98febdffcb092ec58a8"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_1.jpg": "9d298d6e3d41a3d61ebdeba1634075e2c3c5a9faf1d7a7c5107167ef094a7f84",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_2.jpg": "a84e6fb6283bc5d77147d342d7c7886723df8ba02447edff89802be60df47998",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_3.jpg": "3ccd65bdb026c7e0acca96c419c44a072d0ff9bc4ec00b0d25bb097acb4e6059"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_figures/fig_pmc_3.jpg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "24667783",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/24667783/24667783_FULL_CONTEXT.md",
+      "source_bytes": 52591,
+      "source_sha256": "5c396f0181478eb4de537f5d8b33d8ab676bd3522d48cb7adf365f365c6fcc80"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_artifacts.json",
+      "artifacts_sha256": "61f3a63fbad8a43a3129dd75ae2758f11d175e310a4c70ebbfe5326312b543af",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_1.jpg": "983ee8f722beaebd898db1d19f2a4ef8167a61861c5f7cdeca0215ae8d026d8e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_2.jpg": "6ea721dc2c43a980d1c0ace91833d7afa2052590f2d360eadf62389fb4455632",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_3.jpg": "9188df65d9c5b9ddc2664dfe49e1e9ac4a079fbeb0f51a9036728b1ceaa78ffa",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/znl0480861240001.jpg": "6ea721dc2c43a980d1c0ace91833d7afa2052590f2d360eadf62389fb4455632"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_figures/znl0480861240001.jpg"
+      ],
+      "gene": "KCNH2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_supplements/6124.pdf": "cd50a010b92134d3a6b9e7f7747f3f8b7bd4d3458533d65f120d2198665b530a"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_supplements/6124.pdf"
+      ],
+      "pmid": "19038855",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNH2/19038855/19038855_FULL_CONTEXT.md",
+      "source_bytes": 35280,
+      "source_sha256": "12dc1dd0138ac508595cb5aaa65a65368a039828ebaa41342f7789f9cfdb0f24"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "19490272",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/19490272/19490272_FULL_CONTEXT.md",
+      "source_bytes": 39784,
+      "source_sha256": "ee5c06644d7e1ee67be80494b6b3726428754847d107665f97afd40c120a2e97"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/23153844/23153844_artifacts.json",
+      "artifacts_sha256": "5fd97c7ccc101c49865fa1a268077fc20ec6ade3bd7136c419d2c1ab3dfe996b",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "23153844",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/23153844/23153844_FULL_CONTEXT.md",
+      "source_bytes": 75395,
+      "source_sha256": "e6cf85c30aa36f7de5f9106639196154369de57b7b8a6e5d028cd9b8c0e4f642"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_artifacts.json",
+      "artifacts_sha256": "de9951a445a16a3814e00c2c2f91b5d28717c4971417c8b2575da95654c371cc",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_browser_1.jpeg": "bc26ce88a53225a0bf352627ad93742244d4f4806f203986c995261c8cd9a583",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_browser_2.jpeg": "b2c45dc9be493776eddbc19ba3d418aa0f537a015bfe35effa3f28fb390775f1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_pmc_1.jpg": "700194212820bf0cb9bd85d6e9669bb6ba840620e1bf848038f4fcce59319005",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_pmc_2.jpg": "978cad8c8e2b1c52b28a48444073db720e5172d5cd1f9c0966b5ac41d319b271"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_browser_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_browser_2.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_figures/fig_pmc_2.jpg"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "17470695",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17470695/17470695_CLEANED.md",
+      "source_bytes": 37690,
+      "source_sha256": "a47f1b960182287081ab01d061e5e241055bbb1ee3d6cab92d8a17cb50f922fb"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/14678125/14678125_artifacts.json",
+      "artifacts_sha256": "c7a2957d01643fe1d034b29e39e49ebd6484dda7672dfc32ec65d6505a511338",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "14678125",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/14678125/14678125_FULL_CONTEXT.md",
+      "source_bytes": 13805,
+      "source_sha256": "1b31fac089a169b3321c36efb6decf7cab314b1ed402051344dba750c7e9956f"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_artifacts.json",
+      "artifacts_sha256": "ab0d207a0585735496de228b604c4f13a64a4e23be5279201a3dfa09faad7d6d",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_figures/figures/fig_p1_1.png": "e45501b3492b5c1a20654d939aa054d317b6970dedbccc8937edc13754136eac"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_figures/figures/fig_p1_1.png"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_supplements/s12881-017-0435-2.pdf": "1f1d54055eed339cf22e8b9c0fcc2c55b2c180bc05d779b8ddef8a6d38c4784d"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_supplements/s12881-017-0435-2.pdf"
+      ],
+      "pmid": "28720088",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/28720088/28720088_FULL_CONTEXT.md",
+      "source_bytes": 117751,
+      "source_sha256": "77c3ef0f6b9f695716992179fbdd3306ac42c303f13a72e2b20a2d18673f0a8d"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "21129503",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/21129503/21129503_FULL_CONTEXT.md",
+      "source_bytes": 39326,
+      "source_sha256": "237237e0b6eae1fb9bdb4d36b4449727da9160b8a809809fb4f11b1212cfef4b"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_artifacts.json",
+      "artifacts_sha256": "a172fda5ce0ad3415f29b067021c62e79b2a20d963ef504f33ab3ff4e203b8cf",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_1.jpg": "3e0c16046572f7137bf251d04ea2b0cb1f15334cc580f2b7d73833d8e18c7adc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_2.jpg": "04f03e4e3695979b63e718dcd3a03ec349a27bdf9b6b9f1790428fae09abde81",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_3.jpg": "71dd570d32f9873d098b57d46837930c2a31ec0826de2cb45524b3bbf737ca04",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/nihms-618768-f0001.jpg": "3e0c16046572f7137bf251d04ea2b0cb1f15334cc580f2b7d73833d8e18c7adc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/nihms-618768-f0002.jpg": "04f03e4e3695979b63e718dcd3a03ec349a27bdf9b6b9f1790428fae09abde81"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/nihms-618768-f0001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_figures/nihms-618768-f0002.jpg"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25087618",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/25087618/25087618_FULL_CONTEXT.md",
+      "source_bytes": 33478,
+      "source_sha256": "4387fd8a48cc502007535926f0bcc2dd143565113fa5704a333e52dad7358960"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "17192539",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/17192539/17192539_FULL_CONTEXT.md",
+      "source_bytes": 22348,
+      "source_sha256": "f76940906347b535d25fe9b0117a68e40ebbbcd75276ef966248d45fcb556d96"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/24052033/24052033_artifacts.json",
+      "artifacts_sha256": "cbf32625ec01dfb6c7487d192a0069a6ffeddb24193e8f52dd135a9a6790a3ef",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "24052033",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/24052033/24052033_FULL_CONTEXT.md",
+      "source_bytes": 31636,
+      "source_sha256": "6800386f192b95a362fc8bea2bc1cc5328a59c3fefc1bfc97993aa31354ccb57"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_artifacts.json",
+      "artifacts_sha256": "416cb339a726aed4c40f769620f4410c51dca0d8dc528832c6652e2e304ad1fb",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_1.jpg": "d0e02db4aa1d88bbe34a3541bdf432fe12303d261a1bd0a0e756a793cf15a7aa",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_2.jpg": "194d5ee4bd14642c3adf6a14b874f06e6bd769488a8071bbb3565c130143855c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_3.jpg": "162fab5530edb2d89bac5ba1d5a35941a7f4b66e52e4e7c106e5062dbfc24734"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_figures/fig_pmc_3.jpg"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "18713323",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/18713323/18713323_FULL_CONTEXT.md",
+      "source_bytes": 34942,
+      "source_sha256": "d006c225308b25b4843c6d7fdf2ba03bc0e809b8a259612bf0280a2c1eb38a08"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_artifacts.json",
+      "artifacts_sha256": "372c250d41f7920760e750e2f49423eb5fff4e869b3bc232653b820f963bb440",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_figures/fig_pmc_1.jpg": "940c04a67b08096d5b5440d1432a07a7854e7aff475daf22e78f31092e57d7d4",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_figures/fig_pmc_2.jpg": "f9d4afdef4f93f20f2f992d55bc1ddc4846d290e0caa64a86ab365c9482d00b6"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_figures/fig_pmc_2.jpg"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "29197658",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/29197658/29197658_FULL_CONTEXT.md",
+      "source_bytes": 31851,
+      "source_sha256": "10c8f4539cf5d1296ebd3e8e643c93a5f996f97ddc1e034539a0f7fc08f31e9f"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_artifacts.json",
+      "artifacts_sha256": "f5d4b231f76412e37fc87a87d66ab56c5057af42c5e7738df4e79ea8598c364f",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_1.jpg": "e91e670656b4ad1be9ce4ba11e5903eec7ce8ca19900fca29ebe587d55433721",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_2.jpg": "58eaf4b734fa3664ad394da86aa4cfcd7f193f75ebd2a35116f32baf675f4442",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_3.jpg": "0bdcc3f37bc299bb80e92b017ae42c81f5772c25dafb75a83f2bd62d9769cf5c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_4.jpg": "d4cc0cec4577e576156c95bb3826bc86fa6e28477553cca668550f19a8492610",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_5.jpg": "2ffa7fb7915ed46b2eec64b69a63a0c3c72734b95c5c27e1ea6c368f2adcd038",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_6.jpg": "d36ba3e261c0aa105b6686080f52f9193397a4d77bd409512bebcc1b79a3e1a5",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p10_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p10_0.png": "f70ded9ecd4e25ca6de669463ee97000485995c360e5b71a6de7b8717bdbbd48",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p11_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p12_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p13_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p14_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p15_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p16_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p17_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p18_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p19_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p1_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p20_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p21_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p22_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p23_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p24_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p25_0.png": "5efbed35014642cc15ef990a655da5656f164c61e07fb709af2a9e78a7b9aa99",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p25_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p26_0.png": "771f911ecc4bb307d4592d14e9d37b02dc3f0b55c3fd5612a80c7f4e641b1d1b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p26_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p27_0.png": "37fcc727b1f9016a51fc9da5067494ba69eef1a11fd52b1293cdbb46643767fc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p27_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p28_0.png": "03e549b116bcff0a4f68061dab5f83f174a867f06d01e2dd176d34be7ec56384",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p28_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p29_0.png": "4d23e807504f50edb365cae1d59bc20ca35b0b879aace02adca65e1c0a0be866",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p29_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p2_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p30_0.png": "f648fdd2c0f9d3b22b3f8369e7b1b953274b3e443463028179abd9b2b79ad5b8",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p30_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p31_0.png": "74505b924229c6911f1650237c497376daebd70aae4b2da2f250a6cc74d4a2b7",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p31_1.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p3_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p4_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p5_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p6_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p7_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p8_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p9_0.jpeg": "0cc50f3cf04b539fa03fa385c88964b4f05a5916b2018fbf78a82d8221613b1f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g001.jpg": "e91e670656b4ad1be9ce4ba11e5903eec7ce8ca19900fca29ebe587d55433721",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g002.jpg": "d4cc0cec4577e576156c95bb3826bc86fa6e28477553cca668550f19a8492610",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g003.jpg": "58eaf4b734fa3664ad394da86aa4cfcd7f193f75ebd2a35116f32baf675f4442",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g004.jpg": "0bdcc3f37bc299bb80e92b017ae42c81f5772c25dafb75a83f2bd62d9769cf5c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g005.jpg": "2ffa7fb7915ed46b2eec64b69a63a0c3c72734b95c5c27e1ea6c368f2adcd038",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g006.jpg": "d36ba3e261c0aa105b6686080f52f9193397a4d77bd409512bebcc1b79a3e1a5"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_5.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/fig_pmc_6.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p10_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p10_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p11_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p12_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p13_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p14_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p15_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p16_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p17_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p18_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p19_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p1_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p20_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p21_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p22_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p23_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p24_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p25_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p25_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p26_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p26_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p27_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p27_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p28_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p28_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p29_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p29_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p2_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p30_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p30_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p31_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p31_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p4_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p5_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p6_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p7_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p8_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_figures/figures/fig_p9_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g004.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g005.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-g006.jpg"
+      ],
+      "gene": "KCNQ1",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-s001.pdf": "37b546a8cc469ce742192155c677aa6ea6dd81d585967c71cbc819c1c3173833",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-s003.pdf": "bca1073916c4168d65d66d35c3ff0c7660bafc80731c7bd100acc1b8f490daae"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-s001.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_supplements/PMC7748050_supplements/hcg-13-e003133-s003.pdf"
+      ],
+      "pmid": "33141630",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/33141630/33141630_FULL_CONTEXT.md",
+      "source_bytes": 259666,
+      "source_sha256": "6e7385899375d1213457259a043cdb078a82f04defbc48a2b7f16122ef6ee27b"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/25814417/25814417_artifacts.json",
+      "artifacts_sha256": "210abd6a33e2ce05a561b7c788e0f3f461a1800f62d74c369181315ce3f7387f",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25814417",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/25814417/25814417_FULL_CONTEXT.md",
+      "source_bytes": 62343,
+      "source_sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/29925740/29925740_artifacts.json",
+      "artifacts_sha256": "7bd3d093631596140786acf51f7ee91056dd0ea216daa1318caaedbde711ae37",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "29925740",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/29925740/29925740_FULL_CONTEXT.md",
+      "source_bytes": 28916,
+      "source_sha256": "9d0485a94387aa4328a46293ce64c4199ec3b04ef50a63e262fbac7f7c76cb15"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33315912/33315912_artifacts.json",
+      "artifacts_sha256": "aaa525ead899ab72f06579cd3c684ed174f081cbec22054c40932d14b858a4e2",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "33315912",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33315912/33315912_FULL_CONTEXT.md",
+      "source_bytes": 26151,
+      "source_sha256": "dff6d3b12ef81e88fac2c67ad3b08ba519d611cd2f056efc3c1957836de3a5d0"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_artifacts.json",
+      "artifacts_sha256": "6c722723cf1fc96d4494e7b4c4786bc301e90cb3070b9f57e4dad863f6f6d08a",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_figures/figures/fig_p4_0.png": "18ac7547f1a11ccbb899b9ffc395c36b0a0971de9a0e024ae7913c5bf7738616"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_figures/figures/fig_p4_0.png"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_supplements/v042p00863.pdf": "154a8ae1efbb9ab263eafe1575bb1b94cd70019e3f760801e8f178a78229c3a3"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_supplements/v042p00863.pdf"
+      ],
+      "pmid": "16272262",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/16272262/16272262_FULL_CONTEXT.md",
+      "source_bytes": 138035,
+      "source_sha256": "29cca7de868808f73468ff3b541bc8367a787762f3b2a0e225f3062713a4336d"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_artifacts.json",
+      "artifacts_sha256": "b1219ffb66ca3a30f41325d81be8afaaa359d0f868cf1561989ad3bfa979fa39",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g001.jpg": "6795a740d0931ba846e94874b573de5076b6f72b793246cab5bbc8bf25118b87",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g002.jpg": "1810a5fffb970e8a36a99ecae879626ec12b3234418a798065f723ffb369f8d9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g003.jpg": "41a71542c0be565e88d33cb567b0d9fc3c7a70678fad567e1434e2bb9cd83695",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g001.jpg": "6795a740d0931ba846e94874b573de5076b6f72b793246cab5bbc8bf25118b87",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g002.jpg": "1810a5fffb970e8a36a99ecae879626ec12b3234418a798065f723ffb369f8d9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g003.jpg": "41a71542c0be565e88d33cb567b0d9fc3c7a70678fad567e1434e2bb9cd83695",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g004.jpg": "d7ae049c8824a0a6685af74ee137b6a634408621c805084dec367547bd14234f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g005.jpg": "efb5f1e3e9bb7e6cbd3830784f210bd6409ddfa4f2800f7f46825580f41c1d72",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g006.jpg": "77d6e773a533748556e197886a6b55fd4abc21dd6b0123d327e8b8ee26337d5f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g007.jpg": "6a6362aaaf85ea6d1a1fa3b575f7fc74116dc94b774adc9f38a76ed27afc3818"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_figures/jpm-11-00579-g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g004.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g005.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g006.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_supplements/PMC8235491_supplements/jpm-11-00579-g007.jpg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "34202968",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/34202968/34202968_FULL_CONTEXT.md",
+      "source_bytes": 55926,
+      "source_sha256": "fc6049192d64383cc42f1fd6e6f36c0c37c642ccef3d2650f1fca78a0a08f024"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_artifacts.json",
+      "artifacts_sha256": "39e7a61f402fdb573ae53755c54b1f54d3d7278be2d6d1a714d7e00f06756479",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_1.jpg": "39d7c88f8c7a53c35a93bb798f750c2c78a26df87b09b1aa39663983b9761b0a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_2.jpg": "985b55c208a6b942b914e754b70c333d1df1dda1666c6068478d14cf98344b7c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_3.jpg": "bee8738981822518cc8246e13589b6819a3c5f4ac954390671f349620ac30a52",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_4.jpg": "8835bbd43a6cca2eae163e61a4db046424eadc53cbb4b466e6183ceac7d98485",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_5.jpg": "9b781beaf756c6c08310faf67c44165c5d422b3b587a3d86baeec213be2a6b7c"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_figures/fig_browser_5.jpg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_supplements/mmc1.pdf": "38a20d8cec54102205958d6d749b96ebea7baf8de864cfb27cc9ddbda5c7ca1d"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_supplements/mmc1.pdf"
+      ],
+      "pmid": "19926015",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/19926015/19926015_FULL_CONTEXT.md",
+      "source_bytes": 63180,
+      "source_sha256": "390a44d97085dcd3eefbc18260e190f26a906c299eec7a9b3671e4a50e0a4d5a"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_artifacts.json",
+      "artifacts_sha256": "e125c10d97339f52b2700f007e89f302c6a5b1fd46a8ce47f00a6f583c95dd47",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p10_0.jpeg": "4c6532f6bcc82e403bf00dfe6d2b628fa20bfd293bfef1d89cdfe86ab9f3e1ea",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p3_0.jpeg": "32c80db6ae3008bd8d6991d24de9dd825e7644592694c41d8580e5f10d7ca639",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p4_0.jpeg": "53c7643f9d6ed1aead573c074b5d9cd43fc8a5632f9d4de35815967db1fd4fef",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p5_0.jpeg": "3b084756345254cf5d246ad5218cea5629bc7fba5dbb2642416e91c5bec62fa0",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p6_0.jpeg": "a8e7333103617b2f4eba3b8a2a465fdf387f6d4cb8524843ba40582a0631205d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p7_0.jpeg": "83617e65523f0b9826a1eef207e6b0e1e1b5272466a6ea140a67008a7c8ab7ff",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p8_0.jpeg": "520f022f3fe0fc154fe20cf8de607fce98c8395f966242b7b6ca3b8b880c6419",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p9_0.jpeg": "695ea2d7f4b1ece30181569e9cc2edc2f86c88c5909b582f480ddcffd041cc80"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p10_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p4_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p5_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p6_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p7_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p8_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_figures/figures/fig_p9_0.jpeg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_supplements/JAH3-10-e017128.pdf": "6194e2a6d8e79236bde52fae4a0437bae56b0c5feffabb4861bb5dd0ac0e0d02"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_supplements/JAH3-10-e017128.pdf"
+      ],
+      "pmid": "33686871",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33686871/33686871_FULL_CONTEXT.md",
+      "source_bytes": 83409,
+      "source_sha256": "e737be2d4ea05a31196f4d9dc98257c81bb4b2c8addc35b72dc044cbc862a246"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_artifacts.json",
+      "artifacts_sha256": "255ac62fdecfc5cfa4f20957733447d263336740b349dc1a7545d3a799c70eb0",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p10_0.png": "b26f477c39d3c26837a86bf312810b1a40aa3ee791267dddd8668f45f86c747a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p11_0.png": "394cfdcc42019db86ec7c573131bb9752e0a14e0a8faa70ebe12c4d7a295298b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p12_0.png": "4718d855484b406c976c3d79eb3b3e72d0a653a66eb7eb0f2c9e71bd5624f09a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p13_0.png": "69dc0495a071ea8933a4fc8e7df1338ee241dfb9c91b25c893b7e4175eb44dfd",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p14_0.png": "e26b649c9e5050a611ac2f68106005c0e8f27f6489be70b144228592c4bf4b40",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p15_0.jpeg": "640ac6ff720d481aa96db5dcc15cf5f0faa4207cb837a271ece9e727fa5f0a7a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p16_0.png": "0d2aa6755d8bcdcbfc0ba88358f47e6f5a3359d5391a40f754cca0ca094b26dc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p17_0.png": "b9864a30e1de300b2eb0f613e1592e2f69998d45793230bf781be287457ff4ed",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p18_0.png": "ec255f216a7cf08f71c6b29009b662d5cd705113d57a3c1619c2e9fb7350ea93",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p19_0.png": "786e47f4f5014ec5a43fedd8f47c2fc1eb576a73a5ca8f6ab8b8e04983b1f09a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p20_0.png": "c6754e52737432ea83f91ad066c3e3f4d2e063c4793ae52e63a950cd7e2ec024",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p21_0.png": "8a4dd49a58afa273f9d2183baf2e557b45ea6bb1718ba4a9b49098f3268c3eca",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p22_0.png": "5ee0990796ee34ea46a4df1a04cb9c6225af3de2f0703203930d192913c4be42",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p23_0.jpeg": "1b0bbbb1ec7ed3c1c9ae8104ac7dfb23d67aadf841845a7e3477a22d81d5c41f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p24_0.jpeg": "015b34852a2b040155837cbe6811243a713cbf2fe5850d848b5edebf0a73115e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p2_0.png": "f2e9f392769366ae7e69247a1a31d0a38f79785ca92fbea62cde76a5a7dc3a5f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p3_0.jpeg": "02c206e937731f6ce1173889a0bfd0b5072c7586a7369101d53cbf59d8e3d24e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p3_0.png": "7b2fdedc8531605b75a9d11f7c320e439e09218c48eef1809e84ec5c6922547f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p4_0.png": "b1ba96a89fb1faa735c9c5c1cd083ce42ddc9811a4ee0818a445f3b5ac9b1043",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p5_0.png": "bd5d237b1dffda9a0ede1ae4d526ca74bd39d83f6767e5e22f5419764aa74db0",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p5_1.png": "bf19058b71d3c7eb2f4f7820deba0ff031ad1d11531effe04a5ad45fbb1058ac",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p6_0.png": "cf667b25267163a20db266acbe2b046e99708aabbe77830a4aeb86ee9082fa5b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p7_0.jpeg": "e493d855e7ee38ab1b9b76c913407cbff2e189e26bc7018760e7128ef837b5ef",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p8_0.png": "e187b40693c5338ab273a8e5bf6121cf14a2556a925a5813c3b850ccbd6dfdd3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p9_0.png": "d06874163349bc30e3aaf3190cc5855013129cd071bfa8f36c82d619c58bdd53"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p10_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p11_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p12_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p13_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p14_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p15_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p16_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p17_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p18_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p19_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p20_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p21_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p22_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p23_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p24_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p2_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p3_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p4_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p5_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p5_1.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p6_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p7_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p8_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_figures/figures/fig_p9_0.png"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_supplements/901.full.pdf": "e53a44010b6fc63cab13e0993b506f253b48ed489621d09f5ebafbecc3ea39f4",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_supplements/inline-supplementary-material-1.pdf": "0cb6d30397578acca0b8daadbd964e8443f2f6d4f2800c73a32c543fa716fcca"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_supplements/901.full.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_supplements/inline-supplementary-material-1.pdf"
+      ],
+      "pmid": "28237968",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/28237968/28237968_FULL_CONTEXT.md",
+      "source_bytes": 137115,
+      "source_sha256": "cfc608b694fd21064c66065b9c4a2abe7fb956406064d355c29201f94964500a"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/12106942/12106942_artifacts.json",
+      "artifacts_sha256": "b9b948b1edbf14ba8385605d0725d73115cb9a93f70e153fc2c785ce954ecd64",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "12106942",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/12106942/12106942_FULL_CONTEXT.md",
+      "source_bytes": 56792,
+      "source_sha256": "d9a8803347299b98860b44dacdece4d49f3b1104ac26b756fddafa92d24a65b0"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/22677073/22677073_artifacts.json",
+      "artifacts_sha256": "09c50710408c646b3fe5f957eb84d8325da8278b3ecf7ed367005b9fa348f2cc",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/22677073/22677073_figures/gr9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/22677073/22677073_figures/gr9.jpg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_artifacts.json",
+      "artifacts_sha256": "b982ac9305d78597d28f3a1b311ec5fea248ffaf23309dac7e92d56195dd5d98",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_1.jpg": "74707e877299b96b2c0ca8469a5b65fe07f17767384ecd7ffebac8e9a68b6022",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_2.jpg": "143f3690595b3f7b7e639f22f39a1cb3ec3e74b4e1cb07e85d057a22218432da",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_3.jpg": "3d8d56afc9a4f5914eac50aa76fcd627db969b02bc7f640d632d5a87513f47d6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p10_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p11_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p12_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p13_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p14_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p1_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p2_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p3_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p3_1.jpeg": "1c8c1f65ec0ad8917beffda0a13876174a3c50d00273ca010aa676160584ecb5",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p4_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p5_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p6_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p7_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p8_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p8_1.jpeg": "6a8a5f33ee285093b2dbb8c8139a8d4b760c85b2c7499c72f0f520810e0a80e1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p9_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p9_1.jpeg": "c0a6386951c1dc966c8f3a54c25980719f7ca80a68c769bb5e55bf9e224df7b0",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g001.jpg": "74707e877299b96b2c0ca8469a5b65fe07f17767384ecd7ffebac8e9a68b6022",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g002.jpg": "143f3690595b3f7b7e639f22f39a1cb3ec3e74b4e1cb07e85d057a22218432da",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g003.jpg": "3d8d56afc9a4f5914eac50aa76fcd627db969b02bc7f640d632d5a87513f47d6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.t001.jpg": "2583dedec0c95c70b959d5b2188365bedf2a9d6cd8ef269a5da3e54f27559a83",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.t002.jpg": "0a39d66a38fec1f5fdad5e95c3f3582f40742cb21a1d0346c5c5ca6a77ad7206"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p10_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p11_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p12_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p13_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p14_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p1_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p2_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p3_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p4_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p5_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p6_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p7_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p8_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p8_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p9_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_figures/figures/fig_p9_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.t001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/PMC6221297_supplements/pone.0205925.t002.jpg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/pone.0205925.pdf": "02d2a119db6c7afc1d859fe9ccfb54d23cbfa1b34043f382c13716c96fde5117"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_supplements/pone.0205925.pdf"
+      ],
+      "pmid": "30403697",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/30403697/30403697_FULL_CONTEXT.md",
+      "source_bytes": 231839,
+      "source_sha256": "ea17ca8850c27e8a1101d9e5fdd564d4b5125cb0f2d0ef0e2fcb4bd8437f0006"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_figures/figures/fig_p3_0.jpeg": "579c0ae3bfd5f71a24c0b80b5714f046c5d1840d023944dba207c673e3449dac",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_figures/figures/fig_p3_1.jpeg": "9ad5a10b6a86f948ee9c06b75ea6552d6409eaa78216b9ac6c6df6397cb0c45d"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_figures/figures/fig_p3_1.jpeg"
+      ],
+      "gene": "RYR2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_supplements/pone.0243476.pdf": "444df383a846ac7fe16a10eeb0850ee52f1930202580e1bbcba82f7d5d600974"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_supplements/pone.0243476.pdf"
+      ],
+      "pmid": "33606749",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/RYR2/33606749/33606749_FULL_CONTEXT.md",
+      "source_bytes": 24069,
+      "source_sha256": "3fd70a1dea351346a9a89f2bb3cb4d75b47604b2691a9c76c2cdf13ba4cfbf60"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-07-24T20:24:24.205560+00:00",
+  "run_id": "20260724_fixed48_grok",
+  "schema_version": 1,
+  "seed": 2026072401
+}
