@@ -50,6 +50,11 @@ CF_BLOCKED_DOMAINS: tuple[str, ...] = (
     # many legacy articles. Proxy so the subscriber IP returns licensed full text
     # instead of a "get full access to this article" stub.
     "ahajournals.org",
+    # NEJM (DOI 10.1056) — Cloudflare-fronted and subscription-walled. Verified
+    # 2026-07-24: a direct supplement fetch returns 403 with a CF challenge body,
+    # while the proxied host-rewrite reaches the EZproxy SSO. Its supplementary
+    # appendices carry the per-variant tables that the article body only aggregates.
+    "nejm.org",
 )
 
 # Resolution / API / CDN / infrastructure hosts that must NEVER be routed through
