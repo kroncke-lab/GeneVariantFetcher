@@ -8,6 +8,25 @@ making them easier to maintain, test, and iterate on.
 # Threshold for switching to compact extraction mode
 HIGH_VARIANT_THRESHOLD = 30
 
+# Canonical table-scope/attribution guidance. Lives here so every extractor shares
+# one copy: it was previously carried only inside an ad-hoc eval harness and was
+# lost when that harness was not retained. Consumed by
+# benchmarks/codex_paper_eval/run_eval.py; pinned by
+# tests/unit/test_codex_paper_eval.py. Keep it free of {} so it can be concatenated
+# into str.format templates.
+TABLE_ATTRIBUTION_GUIDANCE = """Understand each table before extracting from it:
+- Read its caption, column headers, footnotes, legends, symbol definitions, and the
+  prose introducing it.
+- Decide its scope: this study's own observations, a compilation citing other
+  studies, or both.
+- Decide what each column counts (families, individuals, alleles, probands, cases)
+  before mapping to carriers/affected/unaffected.
+- Judge every row and count for attributability using whatever provenance signal the
+  table offers - reference column, novel-vs-reported label, footnote marker, scoping
+  caption. Assume no fixed format or keyword.
+- Count only what this study observed; exclude anything credited to another
+  publication. If provenance is ambiguous, say so and do not fabricate a count."""
+
 CONTINUATION_PROMPT = """You previously extracted variants from this paper but the response was truncated.
 You extracted {extracted_count} variants so far. The paper contains approximately {expected_count} variants total.
 

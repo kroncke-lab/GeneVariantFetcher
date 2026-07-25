@@ -29,10 +29,18 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO))
 
+from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE  # noqa: E402
+
 GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
 DEFAULT_CORPUS = REPO / "corpus"
 DEFAULT_GOLD = REPO / "gene_variant_fetcher_gold_standard" / "normalized"
+# Cheap proxy for "does this rendering still carry variant-level evidence". Only
+# ever compared between candidate renderings of the same paper, so figure labels
+# and other systematic noise land on both sides and cancel out.
+VARIANT_TOKEN_RE = re.compile(
+    r"\b[A-Z]\d{1,4}[A-Z]\b|\bp\.[A-Za-z]{3}\d{1,4}[A-Za-z]{3}\b"
+)
 AA3_TO_1 = {
     "Ala": "A",
     "Arg": "R",
@@ -73,7 +81,53 @@ def write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
-def usable_sources(corpus: Path, gene: str, minimum_chars: int) -> list[dict]:
+def is_table_line(line: str) -> bool:
+    """Whether one line looks like a markdown or HTML table row.
+
+    Deliberately narrow. A corpus census showed tab- and whitespace-aligned
+    "tables" are almost entirely reference lists and PDF-justified prose, so
+    widening this would inject noise rather than recover rows.
+    """
+    return line.count("|") >= 2 or bool(
+        re.match(r"^\s*</?(?:table|tr|td|th)\b", line, flags=re.I)
+    )
+
+
+def table_row_count(text: str) -> int:
+    return sum(1 for line in text.splitlines() if is_table_line(line))
+
+
+def source_richness(path: Path) -> tuple[int, int, int]:
+    """Extraction-relevant content signals for one candidate rendering."""
+    text = path.read_text(errors="replace")
+    return table_row_count(text), len(set(VARIANT_TOKEN_RE.findall(text))), len(text)
+
+
+def choose_source(candidates: list[Path]) -> Path:
+    """Pick the richest rendering, preserving candidate order on ties.
+
+    Switching away from the first candidate requires Pareto dominance: at least
+    as many table rows, distinct variant tokens, and characters, and strictly
+    more of one. A rendering that trades prose for tables (or the reverse) leaves
+    the priority order alone, so this can only add material, never drop any.
+    """
+    best = candidates[0]
+    best_score = source_richness(best)
+    for candidate in candidates[1:]:
+        score = source_richness(candidate)
+        if score != best_score and all(
+            new >= old for new, old in zip(score, best_score)
+        ):
+            best, best_score = candidate, score
+    return best
+
+
+def usable_sources(
+    corpus: Path,
+    gene: str,
+    minimum_chars: int,
+    legacy_source_selection: bool = False,
+) -> list[dict]:
     papers = []
     for paper_dir in sorted(
         (corpus / gene).iterdir() if (corpus / gene).is_dir() else []
@@ -85,16 +139,14 @@ def usable_sources(corpus: Path, gene: str, minimum_chars: int) -> list[dict]:
             paper_dir / f"{pmid}_FULL_CONTEXT.md",
             paper_dir / f"{pmid}_CLEANED.md",
         ]
-        source = next(
-            (
-                p
-                for p in candidates
-                if p.is_file() and p.stat().st_size >= minimum_chars
-            ),
-            None,
-        )
-        if source is None:
+        usable = [
+            p for p in candidates if p.is_file() and p.stat().st_size >= minimum_chars
+        ]
+        if not usable:
             continue
+        # Legacy took the first candidate that cleared the size floor, so
+        # _FULL_CONTEXT.md always won regardless of what it actually contained.
+        source = usable[0] if legacy_source_selection else choose_source(usable)
         artifacts = paper_dir / f"{pmid}_artifacts.json"
         artifact_path = artifacts.resolve() if artifacts.is_file() else None
         pdf_paths = sorted(p.resolve() for p in paper_dir.rglob("*.pdf") if p.is_file())
@@ -263,7 +315,12 @@ def command_prepare(args) -> None:
     for gene in GENES:
         source_pool = {
             paper["pmid"]: paper
-            for paper in usable_sources(args.corpus_root, gene, args.minimum_chars)
+            for paper in usable_sources(
+                args.corpus_root,
+                gene,
+                args.minimum_chars,
+                legacy_source_selection=args.legacy_source_selection,
+            )
         }
         eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
         pools[gene] = {
@@ -416,7 +473,9 @@ Target gene: {gene}. PMID: {pmid}.
 
 Choose exactly one authoritative representation:
 - text: running full text is the clearest source.
-- table: structured table/artifact rows carry the variant-level person counts.
+- table: structured table rows carry the variant-level person counts. Note that a
+  table may be a compilation that cites other studies rather than a report of this
+  study's own observations; rows alone do not make it first-party data.
 - pdf: PDF-layout text is more complete or preserves a table the markdown loses.
 - ocr: figure/pedigree images are necessary because textual representations omit
   the genotype/phenotype evidence.
@@ -434,7 +493,8 @@ REPRESENTATION CATALOG:
 """
 
 
-EXTRACTION_INSTRUCTIONS = """You are independently curating one biomedical paper.
+EXTRACTION_INSTRUCTIONS = (
+    """You are independently curating one biomedical paper.
 You are BLINDED: do not use databases, prior extraction results, benchmark files,
 or any gold standard. Use only the supplied local paper material.
 
@@ -447,9 +507,14 @@ phenotype evidence. For each variant:
   relatives; exclude controls/population allele counts and non-carrier relatives.
 - affected: carrier people with the relevant cardiac phenotype in this paper.
 - unaffected: carrier people explicitly asymptomatic/clinically normal.
-Use null when a count cannot be determined, and 0 only when zero is explicit.
-Do not turn cohort size, alleles, families, events, or functional experiments
-into person counts. Do not double-count the same people across prose and tables.
+Use null when a count cannot be determined, and 0 only when zero is explicit; always
+emit the variant even when all three counts are null. Do not turn cohort size,
+alleles, families, events, or functional experiments into person counts. Do not
+double-count the same people across prose and tables.
+
+"""
+    + TABLE_ATTRIBUTION_GUIDANCE
+    + """
 
 The selected representation is supplied below. Cite concise evidence and a
 specific section/table/page/figure location for every row. Return JSON only:
@@ -464,6 +529,7 @@ specific section/table/page/figure location for every row. Return JSON only:
 LOCAL MATERIAL:
 {material}
 """
+)
 
 
 def parse_json_response(text: str) -> dict:
@@ -471,6 +537,20 @@ def parse_json_response(text: str) -> dict:
     if value.startswith("```"):
         value = value.split("\n", 1)[1].rsplit("```", 1)[0]
     return json.loads(value)
+
+
+def looks_truncated_json(text: str) -> bool:
+    """Whether ``text`` began as a JSON object but was cut off mid-emission.
+
+    Azure reports ``status="completed"`` even when a reasoning model runs out of
+    output budget mid-string, so the response envelope cannot be trusted for this.
+    Garbage that never started as JSON is a real failure and must still raise.
+    """
+    value = text.strip()
+    if value.startswith("```"):
+        value = value.split("\n", 1)[-1]
+    value = value.strip()
+    return value.startswith("{") and not value.endswith("}")
 
 
 def targeted_preview(text: str, gene: str, max_chars: int) -> str:
@@ -495,10 +575,7 @@ def markdown_table_material(text: str, max_chars: int) -> str:
     blocks: list[str] = []
     current: list[str] = []
     for line in text.splitlines():
-        is_table_line = line.count("|") >= 2 or bool(
-            re.match(r"^\s*</?(?:table|tr|td|th)\b", line, flags=re.I)
-        )
-        if is_table_line:
+        if is_table_line(line):
             current.append(line)
         elif current:
             if len(current) >= 2:
@@ -540,6 +617,32 @@ def image_data_url(path: Path) -> str:
         ".tiff": "image/tiff",
     }.get(path.suffix.lower(), "image/png")
     return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
+
+
+def reasoning_params(model: str, effort: str) -> dict:
+    """Responses-API reasoning kwargs the deployment will actually accept.
+
+    Grok-4-class deployments reason by default and reject ``reasoning.effort``
+    with a 400, so they get no reasoning block at all.
+    """
+    if "grok" in model.lower():
+        return {}
+    return {"reasoning": {"effort": effort}}
+
+
+def effective_effort(model: str, effort: str) -> str:
+    """The effort label to record, so reports never claim an unsent setting."""
+    return effort if reasoning_params(model, effort) else "model_default"
+
+
+def supports_images(model: str) -> bool:
+    """Whether the deployment accepts ``input_image`` content.
+
+    grok-4.3 on Azure rejects image input outright, so offering it an ocr route
+    would fail the paper instead of falling back to a textual representation. The
+    parsed artifact still carries figure captions on every route.
+    """
+    return "grok" not in model.lower()
 
 
 def response_usage(response) -> dict[str, int]:
@@ -615,7 +718,9 @@ def command_extract(args) -> None:
                 : args.max_artifact_chars
             ]
         table_text = markdown_table_material(source_text, args.max_source_chars)
-        if artifact_text:
+        if args.legacy_table_material and artifact_text:
+            # Legacy folded the artifact into the table string, which is what made
+            # "table" look available on papers with no table rows at all.
             table_text = (
                 f"### Parsed artifact data\n\n{artifact_text}\n\n"
                 f"### Tables preserved in text\n\n{table_text}"
@@ -624,13 +729,23 @@ def command_extract(args) -> None:
         figures = [Path(path) for path in paper.get("figures") or []]
         representations = {
             "text": bool(source_text.strip()),
+            # Real table rows only. The parsed artifact carries table and figure
+            # captions, not table bodies, so folding it in here advertised a table
+            # route for papers whose table rows never survived acquisition — and
+            # the route then delivered captions plus a keyword preview instead of
+            # the running text the model could otherwise have read.
             "table": bool(table_text.strip()),
             "pdf": bool(pdf_text.strip()),
-            "ocr": bool(figures),
+            "ocr": bool(figures) and supports_images(args.model),
         }
         target["representations_available"] = [
             name for name, available in representations.items() if available
         ]
+        # Distinguishes "this paper has no figures" from "this model cannot read
+        # them", so a text-only route is not mistaken for a routing decision.
+        target["figures_withheld_no_vision"] = bool(figures) and not supports_images(
+            args.model
+        )
         catalog = (
             f"Available={target['representations_available']}\n\n"
             f"## TEXT PREVIEW\n{targeted_preview(source_text, paper['gene'], args.route_preview_chars)}\n\n"
@@ -638,6 +753,15 @@ def command_extract(args) -> None:
             f"## PDF PREVIEW\n{targeted_preview(pdf_text, paper['gene'], args.route_preview_chars)}\n\n"
             f"## OCR INVENTORY\n"
             + "\n".join(path.name for path in figures[: args.max_ocr_images])
+            + (
+                # Attached to whichever route is chosen, so it is context for judging
+                # source_completeness, not a fifth option. Captions naming tables that
+                # have no rows above are the signal for partial_text.
+                f"\n\n## PARSED ARTIFACT (attached to every route)\n"
+                f"{targeted_preview(artifact_text, paper['gene'], args.route_preview_chars)}"
+                if artifact_text and not args.legacy_table_material
+                else ""
+            )
         )
         route_prompt = ROUTE_INSTRUCTIONS.format(
             gene=paper["gene"], pmid=paper["pmid"], catalog=catalog
@@ -650,15 +774,15 @@ def command_extract(args) -> None:
         route_response = client.responses.create(
             model=args.model,
             input=route_prompt,
-            reasoning={"effort": args.route_reasoning_effort},
-            max_output_tokens=1600,
+            max_output_tokens=args.route_max_output_tokens,
+            **reasoning_params(args.model, args.route_reasoning_effort),
         )
         add_usage(
             predictions,
             target,
             route_response,
             args.model,
-            args.route_reasoning_effort,
+            effective_effort(args.model, args.route_reasoning_effort),
         )
         write_json(predictions_path, predictions)
         route = parse_json_response(route_response.output_text)
@@ -676,10 +800,22 @@ def command_extract(args) -> None:
             tool = available_fallback
 
         if tool == "table":
+            # The table route carries the full running text, not a keyword preview.
+            # Deciding whether a row is this study's own observation needs the
+            # caption, footnotes, symbol definitions, and the prose that introduces
+            # the table; a 6k excerpt strips exactly that, which is how a compilation
+            # table gets read as first-party data.
+            supporting = (
+                source_text[: args.max_source_chars]
+                if not args.legacy_table_material
+                else targeted_preview(
+                    source_text, paper["gene"], args.route_preview_chars
+                )
+            )
             material = (
-                f"### Structured table/artifact material\n\n{table_text[: args.max_source_chars]}"
-                f"\n\n### Supporting targeted text\n\n"
-                f"{targeted_preview(source_text, paper['gene'], args.route_preview_chars)}"
+                f"### Structured table rows\n\n{table_text[: args.max_source_chars]}"
+                f"\n\n### Full running text (for table scope and provenance)\n\n"
+                f"{supporting}"
             )
         elif tool == "pdf":
             material = f"### PDF layout text\n\n{pdf_text[: args.max_source_chars]}"
@@ -689,6 +825,10 @@ def command_extract(args) -> None:
             )
         else:
             material = f"### Full/partial running text\n\n{source_text[: args.max_source_chars]}"
+        if artifact_text and not args.legacy_table_material:
+            # Captions and figure/supplement metadata are useful on every route, and
+            # the table route no longer has to spend its source budget carrying them.
+            material = f"### Parsed artifact data\n\n{artifact_text}\n\n{material}"
 
         prompt = EXTRACTION_INSTRUCTIONS.format(
             gene=paper["gene"], pmid=paper["pmid"], tool=tool, material=material
@@ -709,21 +849,44 @@ def command_extract(args) -> None:
             f"[{index}/{total_papers}] read {paper['gene']} {paper['pmid']} via {tool}",
             flush=True,
         )
-        extraction_response = client.responses.create(
-            model=args.model,
-            input=response_input,
-            reasoning={"effort": args.reasoning_effort},
-            max_output_tokens=args.max_output_tokens,
-        )
-        add_usage(
-            predictions,
-            target,
-            extraction_response,
-            args.model,
-            args.reasoning_effort,
-        )
-        write_json(predictions_path, predictions)
-        result = parse_json_response(extraction_response.output_text)
+        budget = args.max_output_tokens
+        for attempt in (1, 2):
+            extraction_response = client.responses.create(
+                model=args.model,
+                input=response_input,
+                max_output_tokens=budget,
+                **reasoning_params(args.model, args.reasoning_effort),
+            )
+            add_usage(
+                predictions,
+                target,
+                extraction_response,
+                args.model,
+                effective_effort(args.model, args.reasoning_effort),
+            )
+            write_json(predictions_path, predictions)
+            try:
+                result = parse_json_response(extraction_response.output_text)
+                break
+            except json.JSONDecodeError:
+                # Reasoning models spend hidden tokens against this budget before
+                # emitting JSON, so a long variant table can truncate mid-string.
+                # One paid retry beats aborting a 48-paper run on one paper.
+                truncated = getattr(
+                    extraction_response, "status", None
+                ) == "incomplete" or looks_truncated_json(
+                    extraction_response.output_text
+                )
+                if attempt == 2 or not truncated:
+                    raise
+                budget = min(budget * 4, args.max_output_tokens_ceiling)
+                target["output_budget_retry"] = budget
+                write_json(predictions_path, predictions)
+                print(
+                    f"[{index}/{total_papers}] retry {paper['gene']} {paper['pmid']} "
+                    f"— output truncated, raising budget to {budget}",
+                    flush=True,
+                )
         elapsed = time.monotonic() - started
         target.update(result)
         target["tool"] = tool
@@ -1568,6 +1731,11 @@ def parser() -> argparse.ArgumentParser:
         help="optional two-column GENE/PMID manifest; gold values remain hidden",
     )
     p.add_argument("--runs-dir", type=Path, default=HERE / "runs")
+    p.add_argument(
+        "--legacy-source-selection",
+        action="store_true",
+        help="ablation: take the first candidate rendering instead of the richest",
+    )
     p.add_argument("--run-id", default=lambda: None)
     p.set_defaults(func=command_prepare)
     p = sub.add_parser("lock")
@@ -1579,6 +1747,17 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--reasoning-effort", default="high")
     p.add_argument("--route-reasoning-effort", default="medium")
     p.add_argument("--max-output-tokens", type=int, default=24000)
+    # Models that reason by default spend hidden tokens against this budget before
+    # emitting the router JSON, so they need more headroom than 1600.
+    p.add_argument("--route-max-output-tokens", type=int, default=1600)
+    # Upper bound for the one truncation retry. 100000 is verified accepted by the
+    # Azure grok-4.3 and gpt-5.6 deployments.
+    p.add_argument("--max-output-tokens-ceiling", type=int, default=100000)
+    p.add_argument(
+        "--legacy-table-material",
+        action="store_true",
+        help="ablation: fold the artifact into the table string as the old code did",
+    )
     p.add_argument("--max-source-chars", type=int, default=120000)
     p.add_argument("--max-artifact-chars", type=int, default=30000)
     p.add_argument("--route-preview-chars", type=int, default=6000)
