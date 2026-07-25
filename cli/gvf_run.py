@@ -477,6 +477,8 @@ def step_source_recovery(
     fetch_input = source_qc_dir / "fetch_input.csv"
     supplement_input = source_qc_dir / "supplement_input.csv"
     supplement_source_override = source_qc_dir / "supplement_source_override.csv"
+    linked_source_override = source_qc_dir / "linked_supplement_source_override.csv"
+    linked_report = source_qc_dir / "linked_supplement_report.csv"
     source_override = source_qc_dir / "source_override.csv"
     fetch_dir = source_qc_dir / "fetch"
     outcome_summary = source_qc_dir / "acquisition_outcome_summary.json"
@@ -485,6 +487,38 @@ def step_source_recovery(
     if not worklist.exists():
         logger.warning("source recovery skipped: missing %s", worklist)
         return None
+
+    # Linked-supplement recovery: papers whose markup advertised supplement
+    # files that never landed on disk. Self-gating — it walks the harvest dir
+    # and no-ops unless a paper has recorded links and an empty supplements
+    # directory, so it costs one Europe PMC request per *affected* paper only.
+    # Runs first because it is free (no credentials, no browser) and its
+    # overrides join the same refresh below.
+    linked_cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "fetch_linked_supplements.py"),
+        "--gene",
+        gene,
+        "--harvest-dir",
+        str(run_dir / "pmc_fulltext"),
+        "--report-out",
+        str(linked_report),
+        "--source-override-out",
+        str(linked_source_override),
+    ]
+    logger.info("source-recovery linked-supplement fetch → %s", " ".join(linked_cmd))
+    linked_result = subprocess.run(linked_cmd, capture_output=True, text=True)
+    if linked_result.returncode != 0:
+        logger.warning(
+            "source-recovery linked-supplement fetch returned %s: %s",
+            linked_result.returncode,
+            (linked_result.stderr or linked_result.stdout)[-400:],
+        )
+        if stage_failures is not None:
+            stage_failures.append(
+                "source-recovery linked-supplement fetch "
+                f"(fetch_linked_supplements.py) exited {linked_result.returncode}"
+            )
 
     if _csv_has_nonheader_rows(supplement_input):
         supplement_cmd = [
@@ -591,6 +625,7 @@ def step_source_recovery(
         for path in (
             source_override,
             supplement_source_override,
+            linked_source_override,
             fetched_source_override,
         )
         if _csv_has_nonheader_rows(path)
