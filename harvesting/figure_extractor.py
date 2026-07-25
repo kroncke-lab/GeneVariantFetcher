@@ -13,6 +13,14 @@ Sources handled:
 
 The output is markdown with a stable `## FIGURE CAPTIONS` /
 `## SUPPLEMENT DESCRIPTIONS` heading so downstream consumers can locate it.
+
+Every extractor takes an optional ``base_url``: the address the document was
+read from. Publisher and PMC markup records supplement and image links as
+document-relative paths (``/doi/suppl/10.1056/NEJMoa042786/suppl_file/x.pdf``,
+``nihms123-supplement-1.xlsx``), so without a base the host — and for bare
+filenames the directory too — is lost at capture and the link can never be
+fetched afterwards. Pass the page URL and the recorded href comes out
+absolute and downloadable.
 """
 
 from __future__ import annotations
@@ -23,8 +31,37 @@ import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import List, Optional
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup, Tag
+
+# Href schemes that name something other than a fetchable document, so
+# resolving them against a page URL would produce nonsense.
+_NON_FETCHABLE_SCHEMES = ("data:", "mailto:", "javascript:", "tel:", "blob:")
+
+
+def _resolve_href(href: Optional[str], base_url: Optional[str]) -> Optional[str]:
+    """Absolutise a document-relative *href* against the page it was read from.
+
+    Returns *href* untouched when there is nothing to resolve against, when it
+    is already absolute, when it names a non-fetchable scheme, or when it is a
+    bare in-page anchor (``#sec1``) — an anchor is a section reference, not a
+    file, and inventing a URL for it would be misleading.
+    """
+    if not href or not base_url:
+        return href
+    value = href.strip()
+    if not value or value.startswith("#"):
+        return href
+    lowered = value.lower()
+    if lowered.startswith(_NON_FETCHABLE_SCHEMES):
+        return href
+    if urlparse(value).scheme:
+        return value
+    try:
+        return urljoin(base_url, value)
+    except ValueError:
+        return href
 
 
 @dataclass
@@ -173,8 +210,17 @@ def _caption_text_from_jats(fig: ET.Element) -> tuple[str, str]:
     return title_text, full_body
 
 
-def extract_from_jats_xml(xml_content: str) -> CaptionExtractionResult:
-    """Extract figure, table, and supplement captions from PMC JATS XML."""
+def extract_from_jats_xml(
+    xml_content: str, base_url: Optional[str] = None
+) -> CaptionExtractionResult:
+    """Extract figure, table, and supplement captions from PMC JATS XML.
+
+    ``base_url`` resolves ``<graphic>`` and ``<media>`` hrefs, which JATS
+    records as bare filenames. In PMC both are served out of the article's
+    ``bin/`` directory, so pass
+    ``https://pmc.ncbi.nlm.nih.gov/articles/<PMCID>/bin/`` — the trailing
+    ``bin/`` matters, since that is the directory the filenames are relative to.
+    """
     result = CaptionExtractionResult()
     if not xml_content or not xml_content.strip():
         return result
@@ -191,7 +237,7 @@ def extract_from_jats_xml(xml_content: str) -> CaptionExtractionResult:
             fig_idx += 1
             label = _figure_label_from_jats(elem, fig_idx)
             title, body = _caption_text_from_jats(elem)
-            href = _resolve_jats_graphic_href(elem)
+            href = _resolve_href(_resolve_jats_graphic_href(elem), base_url)
             fig_id = elem.attrib.get("id")
             if title or body:
                 result.figures.append(
@@ -256,7 +302,7 @@ def extract_from_jats_xml(xml_content: str) -> CaptionExtractionResult:
                     label=label,
                     title=title,
                     text=body,
-                    href=href,
+                    href=_resolve_href(href, base_url),
                     media_type=media_type,
                 )
             )
@@ -310,7 +356,9 @@ def _figcaption_text(fig: Tag) -> tuple[str, str]:
     return "", ""
 
 
-def _extract_figures_from_html(soup: BeautifulSoup) -> List[FigureCaption]:
+def _extract_figures_from_html(
+    soup: BeautifulSoup, base_url: Optional[str] = None
+) -> List[FigureCaption]:
     out: List[FigureCaption] = []
     seen_ids: set[str] = set()
 
@@ -320,7 +368,7 @@ def _extract_figures_from_html(soup: BeautifulSoup) -> List[FigureCaption]:
         if not (title or body):
             continue
         img = fig.find("img")
-        href = _resolve_image_url(img) if img else None
+        href = _resolve_href(_resolve_image_url(img) if img else None, base_url)
         fid = fig.get("id")
         label = ""
         # Try to find a label inside (e.g. "Figure 1.")
@@ -364,7 +412,7 @@ def _extract_figures_from_html(soup: BeautifulSoup) -> List[FigureCaption]:
             if not body:
                 continue
             img = div.find("img")
-            href = _resolve_image_url(img) if img else None
+            href = _resolve_href(_resolve_image_url(img) if img else None, base_url)
             fid = div.get("id")
             head = body.split(".", 1)[0]
             label = head.strip() if _FIGURE_LABEL_RE.match(head) else f"Figure {idx}"
@@ -381,7 +429,9 @@ def _extract_figures_from_html(soup: BeautifulSoup) -> List[FigureCaption]:
     return out
 
 
-def _extract_table_captions_from_html(soup: BeautifulSoup) -> List[TableCaption]:
+def _extract_table_captions_from_html(
+    soup: BeautifulSoup, base_url: Optional[str] = None
+) -> List[TableCaption]:
     out: List[TableCaption] = []
     for idx, tbl in enumerate(soup.find_all("table"), 1):
         cap_elem = tbl.find("caption")
@@ -437,7 +487,7 @@ def _extract_table_captions_from_html(soup: BeautifulSoup) -> List[TableCaption]
             label = head.strip() if _TABLE_LABEL_RE.match(head) else f"Table {idx}"
 
         img = section.find("img")
-        href = _resolve_image_url(img) if img else None
+        href = _resolve_href(_resolve_image_url(img) if img else None, base_url)
         out.append(
             TableCaption(
                 label=label,
@@ -452,6 +502,7 @@ def _extract_table_captions_from_html(soup: BeautifulSoup) -> List[TableCaption]
 
 def _extract_supplement_descriptions_from_html(
     soup: BeautifulSoup,
+    base_url: Optional[str] = None,
 ) -> List[SupplementDescription]:
     out: List[SupplementDescription] = []
 
@@ -490,7 +541,7 @@ def _extract_supplement_descriptions_from_html(
             if len(label) > 80:
                 label = label[:80] + "…"
             link = entry.find("a", href=True)
-            href = link["href"].strip() if link else None
+            href = _resolve_href(link["href"].strip() if link else None, base_url)
             out.append(
                 SupplementDescription(
                     label=label or "Supplement",
@@ -512,16 +563,30 @@ def _extract_supplement_descriptions_from_html(
     return deduped
 
 
-def extract_from_html(html_content: str) -> CaptionExtractionResult:
-    """Extract figure / table / supplement captions from a publisher HTML page."""
+def extract_from_html(
+    html_content: str, base_url: Optional[str] = None
+) -> CaptionExtractionResult:
+    """Extract figure / table / supplement captions from a publisher HTML page.
+
+    Pass ``base_url`` — the URL the page was fetched from — so relative
+    supplement and image links come out absolute. A ``<base href>`` in the
+    document takes precedence, per HTML resolution rules.
+    """
     result = CaptionExtractionResult()
     if not html_content or not html_content.strip():
         return result
 
     soup = BeautifulSoup(html_content, "html.parser")
-    result.figures = _extract_figures_from_html(soup)
-    result.tables = _extract_table_captions_from_html(soup)
-    result.supplements = _extract_supplement_descriptions_from_html(soup)
+
+    base_tag = soup.find("base", href=True)
+    if base_tag:
+        declared = (base_tag["href"] or "").strip()
+        if declared:
+            base_url = urljoin(base_url or "", declared) if base_url else declared
+
+    result.figures = _extract_figures_from_html(soup, base_url)
+    result.tables = _extract_table_captions_from_html(soup, base_url)
+    result.supplements = _extract_supplement_descriptions_from_html(soup, base_url)
     return result
 
 

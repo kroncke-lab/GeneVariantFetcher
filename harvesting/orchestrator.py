@@ -521,9 +521,11 @@ class PMCHarvester:
             logger.warning(f"Failed to fetch PMC article HTML for {pmcid}: {e}")
             return 0, empty_captions
 
-        # Extract structured caption metadata from the page.
+        # Extract structured caption metadata from the page. Pass the page URL
+        # so supplement/image hrefs are recorded absolute — PMC writes them
+        # relative, and an unresolved href can never be fetched later.
         try:
-            captions_result = extract_captions_from_html(html_text)
+            captions_result = extract_captions_from_html(html_text, base_url=pmc_url)
         except Exception as e:
             logger.warning(f"Caption extraction failed for {pmcid}: {e}")
             captions_result = CaptionExtractionResult()
@@ -1663,8 +1665,15 @@ class PMCHarvester:
         # Pull caption-like content (figures, table-wraps, supplementary-material
         # descriptions) from the JATS XML — these are silently dropped by
         # xml_to_markdown which only walks <sec>/<p>.
+        # JATS records <graphic>/<media> hrefs as bare filenames; in PMC both are
+        # served out of the article's bin/ directory, so that is the base.
+        jats_media_base = (
+            f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/bin/" if pmcid else None
+        )
         try:
-            xml_captions = extract_captions_from_jats_xml(xml_content)
+            xml_captions = extract_captions_from_jats_xml(
+                xml_content, base_url=jats_media_base
+            )
         except Exception as e:
             logger.warning(f"JATS caption extraction failed for {pmid}: {e}")
             xml_captions = CaptionExtractionResult()
@@ -1690,7 +1699,10 @@ class PMCHarvester:
                 # Even if XML markdown was longer, the HTML may carry
                 # additional <figure> blocks that the JATS extractor missed.
                 try:
-                    fallback_captions = extract_captions_from_html(html_response.text)
+                    fallback_captions = extract_captions_from_html(
+                        html_response.text,
+                        base_url=str(getattr(html_response, "url", "") or pmc_url),
+                    )
                     captions = merge_caption_results(captions, fallback_captions)
                 except Exception as exc:
                     logger.warning(
@@ -1705,6 +1717,9 @@ class PMCHarvester:
             supp_results,
         ) = self._process_supplements(pmid, pmcid, doi)
         self._record_supplement_results(artifacts, supp_results)
+        # Record the supplement links the markup advertised, so a later recovery
+        # pass can resolve and fetch whatever the PMC/publisher APIs missed.
+        artifacts.record_supplement_links(captions, source="pmc")
 
         # Persist a sidecar of the full caption set next to the figures dir.
         try:
@@ -1843,7 +1858,9 @@ class PMCHarvester:
         raw_html = getattr(fr, "main_html", None)
         if raw_html:
             try:
-                captions = extract_captions_from_html(raw_html)
+                captions = extract_captions_from_html(
+                    raw_html, base_url=getattr(fr, "final_url", None)
+                )
             except Exception as exc:
                 logger.warning(f"Tier 3.5 caption extraction failed for {pmid}: {exc}")
                 captions = CaptionExtractionResult()
@@ -1907,6 +1924,10 @@ class PMCHarvester:
         else:
             supplement_markdown = ""
             downloaded_count = 0
+
+        artifacts.record_supplement_links(
+            captions, source=f"browser_html:{fr.publisher or 'generic'}"
+        )
 
         from .free_text_output_service import FreeTextOutputSource
 
@@ -2031,7 +2052,9 @@ class PMCHarvester:
         captions = CaptionExtractionResult()
         if getattr(content_result, "raw_html", None):
             try:
-                captions = extract_captions_from_html(content_result.raw_html)
+                captions = extract_captions_from_html(
+                    content_result.raw_html, base_url=final_url
+                )
             except Exception as exc:
                 logger.warning(f"Free-text caption extraction failed for {pmid}: {exc}")
                 captions = CaptionExtractionResult()
@@ -2127,6 +2150,7 @@ class PMCHarvester:
         supplement_markdown = free_text_supp_result.supplement_markdown
         downloaded_count = free_text_supp_result.downloaded_count
         self._record_supplement_results(artifacts, free_text_supp_result.file_results)
+        artifacts.record_supplement_links(captions, source="publisher_html")
         source = source_from_free_text_flags(
             used_elsevier_api=used_elsevier_api,
             used_wiley_api=used_wiley_api,
