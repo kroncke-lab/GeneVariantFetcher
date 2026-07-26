@@ -90,3 +90,75 @@ def test_figure_artifact_records_size(tmp_path: Path):
     assert isinstance(fig, FigureArtifact)
     assert fig.size_bytes == 17
     assert fig.filename == "fig.png"
+
+
+# ---------------------------------------------------------------------------
+# supplement_links — the inventory of what the paper advertised
+# ---------------------------------------------------------------------------
+
+
+class _Supp:
+    """Minimal stand-in for figure_extractor.SupplementDescription."""
+
+    def __init__(self, label, href, title=None, media_type=None):
+        self.label = label
+        self.href = href
+        self.title = title
+        self.media_type = media_type
+
+
+class _Captions:
+    def __init__(self, supplements):
+        self.supplements = supplements
+
+
+def test_record_supplement_links_marks_unfetched_links(tmp_path: Path):
+    log = ArtifactsLog(pmid="26484152", output_dir=tmp_path, pmcid="PMC4535901")
+    log.record_supplement_dict(
+        filename="mmc1.xls",
+        path=str(tmp_path / "mmc1.xls"),
+        url="https://pmc.ncbi.nlm.nih.gov/articles/PMC4535901/bin/mmc1.xls",
+        converted=True,
+        converted_chars=500,
+    )
+    log.record_supplement_links(
+        _Captions([_Supp("Table S1", "mmc1.xls"), _Supp("Table S2", "mmc2.pdf")]),
+        source="pmc",
+    )
+
+    data = json.loads(log.save().read_text())
+    links = {link["label"]: link for link in data["supplement_links"]}
+    assert links["Table S1"]["downloaded"] is True
+    assert links["Table S2"]["downloaded"] is False
+    # The recovery signal a later pass targets.
+    assert data["summary"]["supplement_link_count"] == 2
+    assert data["summary"]["supplement_links_unfetched"] == 1
+    # Link rows must not inflate the processed-file count.
+    assert data["summary"]["supplement_count"] == 1
+
+
+def test_record_supplement_links_ignores_descriptions_without_an_href(tmp_path: Path):
+    log = ArtifactsLog(pmid="1", output_dir=tmp_path)
+    log.record_supplement_links(
+        _Captions([_Supp("Supplementary Methods", None), _Supp("Table S1", "  ")]),
+        source="publisher_html",
+    )
+    data = json.loads(log.save().read_text())
+    assert data["supplement_links"] == []
+    assert data["summary"]["supplement_links_unfetched"] == 0
+
+
+def test_record_supplement_links_dedupes_repeated_hrefs(tmp_path: Path):
+    log = ArtifactsLog(pmid="1", output_dir=tmp_path)
+    caps = _Captions([_Supp("A", "mmc1.xls"), _Supp("B", "mmc1.xls")])
+    log.record_supplement_links(caps, source="pmc")
+    log.record_supplement_links(caps, source="pmc")
+    data = json.loads(log.save().read_text())
+    assert len(data["supplement_links"]) == 1
+
+
+def test_older_manifests_still_report_zero_links(tmp_path: Path):
+    log = ArtifactsLog(pmid="1", output_dir=tmp_path)
+    data = json.loads(log.save().read_text())
+    assert data["supplement_links"] == []
+    assert data["summary"]["supplement_link_count"] == 0

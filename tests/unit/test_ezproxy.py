@@ -138,3 +138,24 @@ def test_explicit_base_override(monkeypatch):
     assert (
         ezproxy.wrap("https://karger.com/x") == "https://karger-com.ezp.example.edu/x"
     )
+
+
+def test_nejm_supplements_route_through_the_proxy(monkeypatch):
+    """NEJM 403s a direct supplement fetch; its appendices hold per-variant tables."""
+    from harvesting.browser_html import ezproxy
+
+    monkeypatch.setenv("GVF_EZPROXY_HOST", "login.proxy.library.vanderbilt.edu")
+    monkeypatch.delenv("GVF_EZPROXY_ALL", raising=False)
+    url = (
+        "https://www.nejm.org/doi/suppl/10.1056/NEJMoa042786"
+        "/suppl_file/nejm_imboden_2744sa1.pdf"
+    )
+
+    wrapped = ezproxy.wrap(url)
+
+    assert wrapped != url, "NEJM must be proxied without needing GVF_EZPROXY_ALL"
+    assert "proxy.library.vanderbilt.edu" in wrapped
+    # NCBI must still never be proxied.
+    assert ezproxy.wrap("https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1/") == (
+        "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1/"
+    )

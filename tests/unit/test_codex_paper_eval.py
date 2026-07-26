@@ -10,12 +10,20 @@ from types import ModuleType, SimpleNamespace
 import pytest
 
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
+from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
 from benchmarks.codex_paper_eval.run_eval import (
+    EXTRACTION_INSTRUCTIONS,
+    choose_source,
     command_extract,
     digest,
+    effective_effort,
     matches,
     material_digest_errors,
+    reasoning_params,
+    looks_truncated_json,
     selection_metadata,
+    supports_images,
+    usable_sources,
     write_json,
     write_markdown_report,
 )
@@ -238,6 +246,9 @@ def test_api_usage_is_checkpointed_before_response_parsing(
         route_reasoning_effort="medium",
         reasoning_effort="high",
         max_output_tokens=100,
+        route_max_output_tokens=1600,
+        max_output_tokens_ceiling=100000,
+        legacy_table_material=False,
     )
 
     with pytest.raises(json.JSONDecodeError):
@@ -298,3 +309,263 @@ def test_markdown_and_artifact_narratives_are_derived_from_report(tmp_path: Path
     assert "4 gold variant rows" in executive
     assert "123 exact API tokens" in executive
     assert "93.1%" not in json.dumps(payload)
+
+
+def _rendering(path: Path, rows: int, variants: int, padding: int = 0) -> Path:
+    """Write a candidate rendering with a known number of table rows/variants."""
+    lines = [f"| {chr(65 + i % 26)}{i + 1}V | {i} | carrier |" for i in range(rows)]
+    lines += [f"prose mentioning p.Ala{i + 1}Val here" for i in range(variants)]
+    lines.append("x" * padding)
+    path.write_text("\n".join(lines))
+    return path
+
+
+def test_choose_source_prefers_a_strictly_richer_rendering(tmp_path: Path):
+    full_context = _rendering(tmp_path / "a_FULL_CONTEXT.md", rows=0, variants=1)
+    cleaned = _rendering(tmp_path / "a_CLEANED.md", rows=12, variants=9)
+
+    assert choose_source([full_context, cleaned]) == cleaned
+
+
+def test_choose_source_keeps_priority_when_neither_rendering_dominates(tmp_path: Path):
+    """More table rows but less prose is a trade, not an improvement."""
+    full_context = _rendering(
+        tmp_path / "b_FULL_CONTEXT.md", rows=8, variants=9, padding=5000
+    )
+    cleaned = _rendering(tmp_path / "b_CLEANED.md", rows=12, variants=9)
+
+    assert choose_source([full_context, cleaned]) == full_context
+
+
+def test_usable_sources_selects_the_richer_rendering_on_disk(tmp_path: Path):
+    paper_dir = tmp_path / "KCNQ1" / "17470695"
+    paper_dir.mkdir(parents=True)
+    _rendering(paper_dir / "17470695_FULL_CONTEXT.md", rows=0, variants=1, padding=3000)
+    cleaned = _rendering(
+        paper_dir / "17470695_CLEANED.md", rows=40, variants=30, padding=3000
+    )
+
+    papers = usable_sources(tmp_path, "KCNQ1", minimum_chars=100)
+
+    assert [Path(p["source"]) for p in papers] == [cleaned.resolve()]
+
+
+def _extract_captured_prompts(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    source_text: str,
+    artifact: str,
+    route_tool: str = "table",
+) -> tuple[dict, list]:
+    source = tmp_path / "source.md"
+    source.write_text(source_text)
+    artifacts = tmp_path / "artifacts.json"
+    artifacts.write_text(artifact)
+    write_json(
+        tmp_path / "selection.json",
+        {
+            "papers": [
+                {
+                    "gene": "KCNQ1",
+                    "pmid": "17470695",
+                    "source": str(source),
+                    "source_sha256": digest(source),
+                    "artifacts": str(artifacts),
+                    "artifacts_sha256": digest(artifacts),
+                    "pdfs": [],
+                    "pdf_sha256": {},
+                    "figures": [],
+                    "figure_sha256": {},
+                }
+            ]
+        },
+    )
+    write_json(
+        tmp_path / "predictions.json",
+        {
+            "token_usage": None,
+            "papers": [
+                {
+                    "gene": "KCNQ1",
+                    "pmid": "17470695",
+                    "tool": None,
+                    "token_usage": None,
+                    "variants": [],
+                }
+            ],
+        },
+    )
+
+    prompts: list = []
+    responses = iter(
+        [
+            SimpleNamespace(
+                output_text=json.dumps(
+                    {
+                        "tool": route_tool,
+                        "tool_rationale": "Captions imply variant tables.",
+                        "source_completeness": "partial_text",
+                    }
+                ),
+                usage=SimpleNamespace(input_tokens=5, output_tokens=1),
+            ),
+            SimpleNamespace(
+                output_text=json.dumps({"notes": "", "variants": []}),
+                usage=SimpleNamespace(input_tokens=7, output_tokens=2),
+            ),
+        ]
+    )
+
+    def create(**kwargs):
+        prompts.append(kwargs["input"])
+        return next(responses)
+
+    fake_openai = ModuleType("openai")
+    fake_openai.OpenAI = lambda **_kwargs: SimpleNamespace(
+        responses=SimpleNamespace(create=create)
+    )
+    monkeypatch.setitem(sys.modules, "openai", fake_openai)
+    monkeypatch.setenv("AZURE_AI_API_BASE", "https://example.invalid")
+    monkeypatch.setenv("AZURE_AI_API_KEY", "test-key")
+    command_extract(
+        SimpleNamespace(
+            run_dir=tmp_path,
+            timeout=1,
+            model="test-model",
+            force=False,
+            max_artifact_chars=1000,
+            max_source_chars=10000,
+            route_preview_chars=5000,
+            max_ocr_images=1,
+            route_reasoning_effort="medium",
+            reasoning_effort="high",
+            max_output_tokens=100,
+            route_max_output_tokens=1600,
+            max_output_tokens_ceiling=100000,
+            legacy_table_material=False,
+        )
+    )
+    return json.loads((tmp_path / "predictions.json").read_text()), prompts
+
+
+def test_table_route_is_not_offered_without_real_table_rows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """An artifact full of captions must not advertise a table representation.
+
+    Regression for KCNQ1 17470695: the artifact wrapper made the table string
+    non-empty, the router picked ``table``, and the payload carried captions plus a
+    keyword preview instead of any table rows.
+    """
+    checkpoint, prompts = _extract_captured_prompts(
+        tmp_path,
+        monkeypatch,
+        source_text="KCNQ1 running text with no table rows at all.",
+        artifact='{"table_captions_count": 5, "main_text": "TABLE 2. Mutations"}',
+    )
+    paper = checkpoint["papers"][0]
+
+    assert paper["representations_available"] == ["text"]
+    assert paper["tool"] == "text"
+    assert "which was unavailable" in paper["tool_rationale"]
+    assert "## TABLE PREVIEW\n\n" in prompts[0]
+    assert "### Full/partial running text" in prompts[1]
+    assert "no table rows at all" in prompts[1]
+
+
+def test_parsed_artifact_reaches_the_model_on_a_non_table_route(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """The artifact used to ride along only on the table route."""
+    _, prompts = _extract_captured_prompts(
+        tmp_path,
+        monkeypatch,
+        source_text="KCNQ1 running text with no table rows at all.",
+        artifact='{"supplements": ["Supplemental_Material.docx"]}',
+    )
+
+    assert "### Parsed artifact data" in prompts[1]
+    assert "Supplemental_Material.docx" in prompts[1]
+    assert "## PARSED ARTIFACT (attached to every route)" in prompts[0]
+
+
+def test_grok_gets_no_reasoning_block_and_is_labelled_honestly():
+    """Grok-4-class deployments 400 on reasoning.effort; they reason by default."""
+    assert reasoning_params("gpt-5.6-sol", "high") == {"reasoning": {"effort": "high"}}
+    assert effective_effort("gpt-5.6-sol", "high") == "high"
+
+    assert reasoning_params("grok-4.3", "high") == {}
+    assert effective_effort("grok-4.3", "high") == "model_default"
+
+
+def test_ocr_route_is_withheld_from_a_model_without_vision():
+    """grok-4.3 rejects image input; offering ocr would fail the paper outright."""
+    assert supports_images("gpt-5.6-sol")
+    assert not supports_images("grok-4.3")
+
+
+def test_truncated_json_is_distinguished_from_garbage():
+    """Azure reports status=completed even when output is cut off mid-string."""
+    assert looks_truncated_json('{"variants": [{"variant": "A1V", "evidence": "row 1')
+    assert looks_truncated_json('```json\n{"variants": [{"variant": "A1V"')
+    assert not looks_truncated_json('{"variants": []}')
+    assert not looks_truncated_json("not valid JSON")
+
+
+def test_legacy_source_selection_ablation_restores_first_candidate(tmp_path: Path):
+    """The ablation must reproduce the old behaviour exactly, or it proves nothing."""
+    paper_dir = tmp_path / "KCNQ1" / "17470695"
+    paper_dir.mkdir(parents=True)
+    full = _rendering(
+        paper_dir / "17470695_FULL_CONTEXT.md", rows=0, variants=1, padding=3000
+    )
+    _rendering(paper_dir / "17470695_CLEANED.md", rows=40, variants=30, padding=3000)
+
+    legacy = usable_sources(
+        tmp_path, "KCNQ1", minimum_chars=100, legacy_source_selection=True
+    )
+    fixed = usable_sources(tmp_path, "KCNQ1", minimum_chars=100)
+
+    assert Path(legacy[0]["source"]) == full.resolve()
+    assert Path(fixed[0]["source"]) != full.resolve()
+
+
+def test_extraction_prompt_carries_table_attribution_guidance():
+    """Compilation tables caused the 10973849 over-attribution regression."""
+    # Pinned to the canonical copy so the harness cannot silently drift from it,
+    # and so the guidance survives this harness being replaced.
+    assert TABLE_ATTRIBUTION_GUIDANCE in EXTRACTION_INSTRUCTIONS
+    assert "compilation citing other" in TABLE_ATTRIBUTION_GUIDANCE
+    assert (
+        "families, individuals, alleles, probands, cases" in TABLE_ATTRIBUTION_GUIDANCE
+    )
+    assert "Count only what this study observed" in TABLE_ATTRIBUTION_GUIDANCE
+    assert "{" not in TABLE_ATTRIBUTION_GUIDANCE, "must be str.format-safe"
+    # The measured dominant failure was omitting uncountable variants entirely.
+    assert (
+        "always\nemit the variant even when all three counts are null"
+        in EXTRACTION_INSTRUCTIONS
+    )
+
+
+def test_table_route_carries_full_text_not_a_keyword_preview(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """Provenance needs the caption/footnotes; a 6k excerpt strips them.
+
+    Regression for KCNH2 10973849, where a compilation table read as first-party data.
+    """
+    marker = "SENTINEL_PROSE_FAR_FROM_ANY_VARIANT_MENTION"
+    source = (
+        "| Mutation | n | Type |\n| A1V | 2 | Missense |\n| G2R | 3 | Missense |\n"
+        # Long enough to fall outside targeted_preview's reach, short enough to
+        # survive max_source_chars, so the assertion tests the route not the cap.
+        + ("filler prose. " * 400)
+        + marker
+    )
+    _, prompts = _extract_captured_prompts(
+        tmp_path, monkeypatch, source_text=source, artifact="{}", route_tool="table"
+    )
+
+    assert "### Structured table rows" in prompts[1]
+    assert marker in prompts[1], "full running text must reach the table route"

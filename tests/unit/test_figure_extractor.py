@@ -178,6 +178,105 @@ def test_extract_from_html_handles_empty():
 
 
 # ---------------------------------------------------------------------------
+# base_url resolution
+#
+# A recorded href with the host stripped off can never be fetched afterwards,
+# which is how 1,549 linked supplement files ended up with empty supplements
+# directories on disk. These pin the resolution at capture time.
+# ---------------------------------------------------------------------------
+
+
+NEJM_SUPP_FIXTURE = textwrap.dedent("""\
+    <html><body>
+      <section id="supplementary-material">
+        <p><strong>Supplementary Appendix</strong>: per-variant carrier table.
+          <a href="/doi/suppl/10.1056/NEJMoa042786/suppl_file/nejm_2744sa1.pdf">Download</a>
+        </p>
+      </section>
+    </body></html>
+    """)
+
+
+def test_supplement_href_is_absolutised_against_the_page_url():
+    res = extract_from_html(
+        NEJM_SUPP_FIXTURE,
+        base_url="https://www.nejm.org/doi/full/10.1056/NEJMoa042786",
+    )
+    hrefs = [s.href for s in res.supplements if s.href]
+    assert hrefs == [
+        "https://www.nejm.org/doi/suppl/10.1056/NEJMoa042786"
+        "/suppl_file/nejm_2744sa1.pdf"
+    ]
+
+
+def test_supplement_href_stays_relative_without_a_base_url():
+    res = extract_from_html(NEJM_SUPP_FIXTURE)
+    hrefs = [s.href for s in res.supplements if s.href]
+    assert hrefs == ["/doi/suppl/10.1056/NEJMoa042786/suppl_file/nejm_2744sa1.pdf"]
+
+
+def test_bare_filename_href_resolves_against_the_containing_directory():
+    res = extract_from_html(
+        HTML_FIXTURE, base_url="https://pmc.ncbi.nlm.nih.gov/articles/PMC12345/"
+    )
+    hrefs = [s.href for s in res.supplements if s.href]
+    assert any(
+        h == "https://pmc.ncbi.nlm.nih.gov/articles/PMC12345/supp/S2.xlsx"
+        for h in hrefs
+    )
+
+
+def test_absolute_hrefs_and_images_are_left_alone():
+    res = extract_from_html(HTML_FIXTURE, base_url="https://example.org/article/1")
+    assert res.figures[0].image_url == "https://cdn.example.com/figs/fig2.png"
+    image_table = next(t for t in res.tables if t.table_id == "t3-6124")
+    assert image_table.image_url == "https://cdn.example.com/T3-6124.jpg"
+
+
+@pytest.mark.parametrize(
+    "href",
+    [
+        "data:application/pdf;base64,AAAA",
+        "mailto:author@example.org",
+        "javascript:void(0)",
+        "#supplementary-section",
+    ],
+)
+def test_non_fetchable_hrefs_are_not_turned_into_urls(href):
+    html = (
+        '<html><body><section id="supplement"><p><strong>Supplementary Table 1'
+        f'</strong>: data. <a href="{href}">link</a></p></section></body></html>'
+    )
+    res = extract_from_html(html, base_url="https://www.nejm.org/doi/full/10.1056/x")
+    assert [s.href for s in res.supplements] == [href]
+
+
+def test_html_base_tag_takes_precedence_over_the_fetch_url():
+    html = (
+        '<html><head><base href="https://cdn.example.org/reprint/"/></head>'
+        '<body><section id="supplement"><p><strong>Supplementary Table 1</strong>'
+        ': data. <a href="tables/s1.xlsx">link</a></p></section></body></html>'
+    )
+    res = extract_from_html(html, base_url="https://www.nejm.org/doi/full/10.1056/x")
+    assert res.supplements[0].href == "https://cdn.example.org/reprint/tables/s1.xlsx"
+
+
+def test_jats_media_href_resolves_against_the_pmc_bin_directory():
+    res = extract_from_jats_xml(
+        JATS_FIXTURE,
+        base_url="https://pmc.ncbi.nlm.nih.gov/articles/PMC999/bin/",
+    )
+    assert (
+        res.supplements[0].href
+        == "https://pmc.ncbi.nlm.nih.gov/articles/PMC999/bin/supp/S1.xlsx"
+    )
+    assert (
+        res.figures[0].image_url
+        == "https://pmc.ncbi.nlm.nih.gov/articles/PMC999/bin/figs/fig1.jpg"
+    )
+
+
+# ---------------------------------------------------------------------------
 # Rendering & merging
 # ---------------------------------------------------------------------------
 

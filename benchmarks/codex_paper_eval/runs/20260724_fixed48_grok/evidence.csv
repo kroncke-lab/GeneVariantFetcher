@@ -1,0 +1,661 @@
+gene,pmid,tool,source_completeness,variant,carriers,affected,unaffected,evidence,source_location
+SCN5A,27566755,text,partial_text,V125L,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,Q245K,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R340W,7,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,T370M,9,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,N406K,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,V411M,7,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,A413T,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,L604V,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,G615E,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,P627L,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,Q692K,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,S941N,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R971C,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,P1008S,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,P1021S,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,T1069M,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,D1114E,15,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,E1208K,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,N1269S,6,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,I1278N,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,T1304M,9,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,N1325S,21,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,A1330D,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,A1330T,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,I1448L,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,L1501V,13,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,K1505_Q1507del,9,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,Q1507_P1509del,55,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,L1560F,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,F1596I,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,F1617del,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R1623L,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R1623Q,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,G1631D,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R1644H,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,V1667I,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,A1746T,4,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,I1762del,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,V1763M,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,M1766L,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,M1766V,10,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,Y1767C,4,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,I1768V,58,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,V1777M,2,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,T1779M,5,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,E1781G,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,E1784K,70,,,Frequency listed for this LQT3 mutation; noted as lower-risk in multivariate analysis,Supplemental Table S1; Results (Tables 2-3)
+SCN5A,27566755,text,partial_text,L1786Q,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,D1790G,30,,,Frequency listed for this LQT3 mutation; noted as lower-risk in multivariate analysis,Supplemental Table S1; Results (Tables 2-3)
+SCN5A,27566755,text,partial_text,Y1795C,3,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,27566755,text,partial_text,R1991Q,1,,,Frequency listed for this LQT3 mutation,Supplemental Table S1
+SCN5A,26669661,text,partial_text,p.(Arg18Gln),4,,,Listed with 4 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.0?,2,,,Listed with 2 total carriers (splice site) in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Val411Met),6,,,Listed with 6 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Gly615Glu),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Pro701Leu),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Gly797Val),3,,,Listed with 3 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Arg814Gln),3,,,Listed with 3 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Arg975Trp),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Glu1032Lys),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Gln1033Arg),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ser1079Phe),3,,,Listed with 3 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Trp1095Cys),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Asp1114Glu),9,,,Listed with 9 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ala1186Thr),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ala1221Val),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ile1278Asn),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Thr1304Met),4,,,Listed with 4 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ala1330Thr),7,,,Listed with 7 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Gln1507_Pro1509del),3,,,Listed with 3 total carriers (in-frame deletion) in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Phe1617del),6,,,Listed with 6 total carriers (in-frame deletion) in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Thr1620Met),2,,,Listed with 2 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Arg1644His),16,,,Listed with 16 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ala1746Thr),4,,,Listed with 4 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Ile1768Val),27,,,Listed with 27 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Glu1784Lys),34,,,Listed with 34 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Asp1790Gly),14,,,Listed with 14 total carriers in LQT3 families,Supplemental Table 2
+SCN5A,26669661,text,partial_text,p.(Tyr1795_Glu1796insAsp),134,,,Listed with 134 total carriers (in-frame insertion) in LQT3 families,Supplemental Table 2
+SCN5A,20470418,text,full_text,p.Ser1103Tyr,26,17,,17 African-American SIDS cases and 9 non-SIDS infant death controls identified as heterozygous for SCN5A-p.Ser1103Tyr with intact RNA from postmortem heart tissue.,"Results; also Abstract (13 of 26, 50%)"
+SCN5A,28339995,text,full_text,D1790G,30,30,,"30 LQT3 patients (17F/13M, ages 0.5-77 y) enrolled; mutation identified by genetic testing in all; all had baseline QTc 522±45 ms; 3 prior cardiac events, 27 asymptomatic but still diagnosed with LQT3 phenotype.",Main text: Study population paragraph; Abstract; Results: Flecainide effects and Group A/B descriptions
+SCN5A,29709101,table,full_text,c.611+1G>A,9,,,8 BrS+ and 1 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.1045G>A (p.(Asp349Asn)),3,,,3 BrS+ and 0 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.1100G>A (p.(Arg367His)),1,,,1 BrS+ and 0 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.1127G>A (p.(Arg376His)),12,,,6 BrS+ and 6 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.1312A>T (p.(Met438Leu)),1,,,1 BrS+ and 0 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.2268_2271del (p.(Phe756Leufs*8)),4,,,1 BrS+ and 3 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.2466G>A (p.(Trp822*)),6,,,4 BrS+ and 2 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.2658T>A (p.(His886Gln)),7,,,4 BrS+ and 3 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.4437+5G>A,2,,,0 BrS+ and 2 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.4813+3_4813+6dup,24,,,13 BrS+ and 11 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.4895G>A (p.(Arg1632His)),8,,,2 BrS+ and 6 BrS− patients,SCN5A variants and number of patients table
+SCN5A,29709101,table,full_text,c.4978A>G (p.(Ile1660Val)),2,,,1 BrS+ and 1 BrS− patients,SCN5A variants and number of patients table
+SCN5A,28341781,text,full_text,L136P,2,2,0,Two probands carrying SCN5A L136P; both diagnosed with Brugada syndrome.,Table 2
+SCN5A,28341781,text,full_text,R282H,3,3,0,Three probands carrying SCN5A R282H; history of aborted cardiac arrest noted (and all have Brugada syndrome).,Table 2
+SCN5A,28341781,text,full_text,E1225K,2,2,0,Two probands carrying SCN5A E1225K; both diagnosed with Brugada syndrome.,Table 2
+SCN5A,28341781,text,full_text,E1784K,2,2,0,Two probands carrying SCN5A E1784K; 1 had history of aborted cardiac arrest and 1 had cardiac event during follow-up (all have Brugada syndrome).,Table 2
+SCN5A,18451998,text,partial_text,E1784K,41,9,32,"41 E1784K carriers; 9 symptomatic (syncope n=8, palpitations n=1); 32 asymptomatic mutation carriers; 38 long QTc, 9 BrS, 16 SND among carriers",Abstract; Figure 1 caption; Figure 2 caption (incl. Venn diagram)
+SCN5A,18451998,text,partial_text,V1098L,1,,,V1098L identified in compound heterozygous carrier II:2 (with E1784K); not present in I:2 (E1784K-only carrier),Figure 1 caption (family G description)
+SCN5A,26921764,table,full_text,934 +1 G>A,2,2,,Listed with 2 patients; splice site,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3840 +1 G>A,2,2,,Listed with 2 patients; splice site,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,844 C>T (R282C),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,1099 C>T (R367C),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,1106 T>A (M369K),3,3,,Listed with 2 patients (single) plus 1 patient in triple compound genotype; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,1120 T>G (W374G),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,1603 C>T (R535X),1,1,,Listed with 1 patient; nonsense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,2204 C>T (A735V),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,2516 T>C (L839P),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,2559delT (F853LfsX16),1,1,,Listed with 1 patient; frameshift,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,2582_2583delTT (F861WfsX90),1,1,,Listed with 1 patient; frameshift,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3666delG (A1223PfsX7),1,1,,Listed with 1 patient; frameshift,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3673 G>A (E1225K),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4079 T>G (F1360C),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4118 T>A (L1373X),1,1,,Listed with 1 patient; nonsense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4216 G>C (G1406R),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4222 G>A (G1408R),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4642 G>A (E1548K),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,4981 G>A (G1661R),1,1,,Listed with 1 patient; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,5015 C>A (S1672Y),3,3,,Listed with 3 patients; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,5228 G>A (G1743E),4,4,,Listed with 2 patients (single) plus 2 patients in compound genotype with D1243N; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,5350 G>A (E1784K),9,9,,Listed with 9 patients; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,5387_5388insTGA (1795_1796insD),1,1,,Listed with 1 patient; in-frame insertion,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,278 T>C (F93S),2,2,,Listed with 2 patients in compound genotype with R1193Q; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3727 G>A (D1243N),2,2,,Listed with 2 patients in compound genotype with G1743E; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3068 G>A (R1023H),1,1,,Listed with 1 patient in triple compound genotype with M369K and R1193Q; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,3578 G>A (R1193Q),3,3,,Listed with 2 patients (compound with F93S) plus 1 patient in triple compound genotype with M369K and R1023H; missense,"Structured table rows, first table (Number of patients column)"
+SCN5A,26921764,table,full_text,variant notation unavailable,16,16,,Listed with 16 patients having SCN5A variant(s) but notation unavailable,"Structured table rows, first table (Number of patients column)"
+SCN5A,27554632,table,full_text,T1247I,,,,potentially damaging and disease-causing variant,"Results paragraph (screening of 27 DCM, 12 HCM, 16 controls; exon 21)"
+SCN5A,27554632,table,full_text,A1260D,,,,potentially damaging and disease-causing variant,"Results paragraph (screening of 27 DCM, 12 HCM, 16 controls; exon 21)"
+SCN5A,27554632,table,full_text,G1262S,,,,potentially damaging and disease-causing variant,"Results paragraph (screening of 27 DCM, 12 HCM, 16 controls; exon 21)"
+SCN5A,10590249,text,full_text,1795insD,43,,,"79 adults had defined genetic status (mutation carriers, n=43). ECGs and clinical evaluation performed only on these adults; additional mentions of n=53 including children and 9 obligate carriers among SCD victims do not yield a single unambiguous total.","Results (paragraphs on linkage, mutation identification, and ECG analysis); Figure 4 caption"
+SCN5A,25051102,table,full_text,87G>A,14,14,,12 GA + 2 AA in AMI/VF+ (total 45 genotyped),Table V
+SCN5A,25051102,table,full_text,1673A>G (His558Arg),15,15,,14 AG + 1 GG in AMI/VF+ (n=49),Table V
+SCN5A,25051102,table,full_text,IVS16-6C>T,3,3,,3 CT in AMI/VF+ (n=48),Table V
+SCN5A,25051102,table,full_text,3578G>A (Arg1193Gln),1,1,,1 GA in AMI/VF+ (n=49),Table V
+SCN5A,25051102,table,full_text,4786T>A (Phe1596Ile),1,1,,1 TA in AMI/VF+ (n=49),Table V
+SCN5A,25051102,table,full_text,5457T>A,27,27,,20 TA + 7 AA in AMI/VF+ (n=47),Table V
+SCN5A,26746457,text,partial_text,SCN5A-R1193Q,19,7,,"found in 19/2022 participants; 7/19 had arrhythmia phenotypes, predominantly long QTc but <500 ms (five with Asian ancestry)","RESULTS, Arrhythmia and ECG Phenotypes paragraph; also referenced in Figure 1A caption"
+SCN5A,26746457,text,partial_text,SCN5A-D1243N,1,0,1,One participant had both rs199473599 (SCN5A-D1243N) and KCNH2-T983I ... no apparent arrhythmia phenotype,"RESULTS, Arrhythmia and ECG Phenotypes paragraph; also referenced in DISCUSSION"
+KCNH2,29622001,table,partial_text,p.R176W,86,,,Listed with 86 (36) carriers in 30 families; multiple device cases show syncope/ACA/ICD shocks.,"Locus/Mutation table; ICD/PM device tables; proband table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.L552S,73,,,Listed with 73 (31) carriers in 27 families; multiple device cases show syncope/TdP/ICD shocks.,"Locus/Mutation table; ICD/PM device tables; proband table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.A193V,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.H402R,1,,,Listed with 1 (0.4) carrier in 1 family; PM case with syncope/bradycardia.,"Locus/Mutation table; PM device table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.P451L,2,,,Listed with 2 (0.9) carriers in 1 family; PM case with syncope/bradycardia.,"Locus/Mutation table; PM device table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.A558E,3,,,Listed with 3 (1) carriers in 1 family; multiple ICD cases with syncope/bradycardia/family history.,"Locus/Mutation table; ICD device tables, Structured table rows"
+KCNH2,29622001,table,partial_text,p.A561T,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.A561V,2,,,Listed with 2 (0.9) carriers in 1 family; ICD and PM cases with syncope/ACA.,"Locus/Mutation table; ICD/PM device tables, Structured table rows"
+KCNH2,29622001,table,partial_text,p.Y569H,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.G572S,2,,,Listed with 2 (0.9) carriers in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.G584S,10,,,Listed with 10 (4) carriers in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.G601S,2,,,Listed with 2 (0.9) carriers in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.T613M,1,,,Listed with 1 (0.4) carrier in 1 family; PM case with syncope/QTc.,"Locus/Mutation table; PM device table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.N629S,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.A913V,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.G1036D,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.C39Ter,3,,,Listed with 3 (1) carriers in 1 family; LCSD case with syncope.,"Locus/Mutation table; LCSD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.221_242del,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.453delC,24,,,Listed with 24 (10) carriers in 2 families; text notes lower risk association.,"Locus/Mutation table; main text results, Structured table rows"
+KCNH2,29622001,table,partial_text,c.643delG,1,,,Listed with 1 (0.4) carrier in 1 family; ICD case with ACA.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.R273Ter,4,,,Listed with 4 (2) carriers in 2 families.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.842dupG,2,,,Listed with 2 (0.9) carriers in 2 families; PM case with syncope.,"Locus/Mutation table; PM device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.853_859dupGCCGACG,3,,,Listed with 3 (1) carriers in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.1129-58_1320del,1,,,Listed with 1 (0.4) carrier in 1 family; PM case with syncope/bradycardia.,"Locus/Mutation table; PM device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.1379delA,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.W497Ter,1,,,Listed with 1 (0.4) carrier in 1 family; ICD case with TdP.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.1558-1G>C,1,,,Listed with 1 (0.4) carrier in 1 family; ICD case with ACA.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.1631_1632delAG,4,,,Listed with 4 (2) carriers in 2 families.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.2173_2196del,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.2959_2960delCT,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,p.W1001Ter,1,,,Listed with 1 (0.4) carrier in 1 family; ICD case with syncopes.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.3017delG,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.3093_3106del,1,,,Listed with 1 (0.4) carrier in 1 family; ICD case with syncope/QTc.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.3152+1G>A,3,,,Listed with 3 (1) carriers in 1 family; ICD case with ACA.,"Locus/Mutation table; ICD device table, Structured table rows"
+KCNH2,29622001,table,partial_text,c.3160dupA,1,,,Listed with 1 (0.4) carrier in 1 family.,"Locus/Mutation table, Structured table rows"
+KCNH2,11854117,table,partial_text,L552S,4,,,No. of Subjects = 4,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,A561V,6,,,No. of Subjects = 6 (*2 families),"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,A561T,2,,,No. of Subjects = 2,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,P596L,2,,,No. of Subjects = 2,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,593stop,1,,,No. of Subjects = 1,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,G604S,2,,,No. of Subjects = 2,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,D609N,5,,,No. of Subjects = 5,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,T613M,1,,,No. of Subjects = 1,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,A614V,3,,,No. of Subjects = 3 (*2 families),"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,F627L,1,,,No. of Subjects = 1,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,G628S,2,,,No. of Subjects = 2 (*2 families),"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,N629S,2,,,No. of Subjects = 2,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,V630A,1,,,No. of Subjects = 1,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,K638E,3,,,No. of Subjects = 3,"HERG mutations table, Pore Region"
+KCNH2,11854117,table,partial_text,S26I,2,,,No. of Subjects = 2,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,F29L,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,N33T,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,C44stop,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,G47V,8,,,No. of Subjects = 8,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,R56Q,8,,,No. of Subjects = 8,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,C66G,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,H70R,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,P72Q,7,,,No. of Subjects = 7 (*2 families),"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,A78P,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,fsA83/37aa,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,L86R,7,,,No. of Subjects = 7,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,M124R,17,,,No. of Subjects = 17,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,fsV295/63aa,2,,,No. of Subjects = 2,"HERG mutations table, Nonpore N-terminus"
+KCNH2,11854117,table,partial_text,Q376splice,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore Transmembrane domains"
+KCNH2,11854117,table,partial_text,S428stop,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore Transmembrane domains"
+KCNH2,11854117,table,partial_text,S428L,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore Transmembrane domains"
+KCNH2,11854117,table,partial_text,T436M,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore Transmembrane domains"
+KCNH2,11854117,table,partial_text,R744stop,2,,,No. of Subjects = 2,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,R752W,33,,,No. of Subjects = 33 (*2 families),"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,L799splice,5,,,No. of Subjects = 5,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,F805C,11,,,No. of Subjects = 11,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,V822M,18,,,No. of Subjects = 18,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,R823W,8,,,No. of Subjects = 8 (†3 families),"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,N861I,3,,,No. of Subjects = 3,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,P917L,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,R920fs,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,fsGly925,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,fsP968/4aa,1,,,No. of Subjects = 1,"HERG mutations table, Nonpore C-terminus"
+KCNH2,11854117,table,partial_text,W1001stop,20,,,No. of Subjects = 20,"HERG mutations table, Nonpore C-terminus"
+KCNH2,19160088,text,full_text,KCNH2 L552S,2,,,2 individuals carried KCNH2 L552S; associated with prolonged QTc (manual measurement 456±12 ms),"Results section, 'Genetic analyses' and 'Results' genotyping paragraph (also Table I, Figure 1)"
+KCNH2,19160088,text,full_text,KCNH2 R176W,16,,,16 study participants carried KCNH2 R176W allele; associated with 22.2 ms longer adjusted QT interval (P=2.15×10-6) and manual QTc 433±27 ms,"Results section, 'Genetic analyses' and 'Results' genotyping paragraph (also Table I, Figure 1)"
+KCNH2,10973849,table,partial_text,F29L,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,N33T,,,,found in 2 RW families with LQTS,Table 3
+KCNH2,10973849,table,partial_text,C44X,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G47V,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G53R,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R56Q,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,C66G,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,H70R,,,,found in 2 RW families with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P72Q,,,,found in 2 RW families with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R73fs/31,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,A78P,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,A83fs/37,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,Q81X,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,L86R,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P141fs/2,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P151fs/179,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P241fs/89,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,V295fs/63,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R312C,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P347S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,Q376sp,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R531Q,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,L552S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G584S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,W585C,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,I593R,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,D609N,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,L615V,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G626S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,F627L,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P632S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,K638E,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,delK638,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,M645L,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,E682X,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,H739fs/63,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R752W,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,I798fs/10,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,F805S,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,F805C,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R823W,,,,found in 2 RW families with LQTS,Table 3
+KCNH2,10973849,table,partial_text,N861I,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,K886fs/85,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P917L,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R920fs/51,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R922W,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G925fs/13,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P968fs/4,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P986fs/130,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,R1014X,,,,found in 2 RW families with LQTS,Table 3
+KCNH2,10973849,table,partial_text,G1031fs/24,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10973849,table,partial_text,P1101fs,,,,found in 1 RW family with LQTS,Table 3
+KCNH2,10862094,text,full_text,G601S,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,P451L,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,453delC,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,R176W,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,1631delAG,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,G584S,,,,Present in affected relatives of proband; absent from nonaffected relatives and controls.,"Results, Table 1"
+KCNH2,10862094,text,full_text,Y569H,1,1,0,Detected only in proband (de novo); proband has LQTS phenotype.,"Results, Table 1"
+KCNH2,10862094,text,full_text,T613M,1,1,0,Detected only in proband (de novo); proband has LQTS phenotype.,"Results, Table 1"
+KCNH2,10841244,text,full_text,L552S,42,12,25,"2 homozygous siblings both symptomatic (index proband with TdP at age 2, QTc 677 ms; sister with neonatal bradycardia, 2:1 AV block, QTc 513 ms, died at age 4); 10 symptomatic (affected) heterozygotes and 25 asymptomatic (unaffected) heterozygotes out of 35 with phenotype data; total 40 heterozygotes identified (including the 2 parents who were asymptomatic).","Results: Phenotypic characteristics of the index family; Identification of the HERG-Fin mutation; Clinical characteristics of the HERG-Fin mutation carriers (p. 3-5, Fig. 1)"
+KCNH2,23864605,table,partial_text,G601S,9,3,6,"Genotype-positive subjects n=9 (6 female), symptomatic n=3 (3 female); mean QTc 460 ms indicates LQT2 phenotype in carriers.",Structured table rows: Genotype-positive G601S families section
+KCNH2,23864605,table,partial_text,A614V,25,14,11,"Genotype-positive subjects n=25 (16 female), symptomatic n=14 (10 female); mean QTc 500 ms indicates LQT2 phenotype in carriers.",Structured table rows: Genotype-positive A614V families section
+KCNQ1,19490272,table,partial_text,Y184S,14,,,14 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R190Q,4,,,4 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R190W,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,S225L,12,,,12 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,A226V,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R259C,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R259L,5,,,5 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,G269D,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,G269S,41,,,41 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,L273F,9,,,9 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,I274V,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,Y278H,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,G292D,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,L353P,4,,,4 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,Q357H,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R360G,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,H363N,17,,,17 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,R366W,15,,,15 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,S373P,6,,,6 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (lower tertile column)
+KCNQ1,19490272,table,partial_text,W120C,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,G168R,66,,,66 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,A178P,5,,,5 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,A178T,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,G189E,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,G189R,4,,,4 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,D242N,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,D242Y,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,L266P,22,,,22 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,S277L,7,,,7 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,F296S,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,A302V,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,G306R,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,A344V,18,,,18 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,S349W,15,,,15 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (middle tertile column)
+KCNQ1,19490272,table,partial_text,E160K,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,R174H,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,R243C,13,,,13 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,R243S,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,V254M,62,,,62 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,E284K,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,W304R,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,W305C,3,,,3 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,W305S,12,,,12 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,V310I,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,T312I,17,,,17 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,G314S,19,,,19 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,Y315C,10,,,10 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,Y315S,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,D317G,5,,,5 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,T322M,2,,,2 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,G325R,8,,,8 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,A341E,10,,,10 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,A341V,22,,,22 carriers with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,19490272,table,partial_text,P343S,1,,,1 carrier with mutation in LQT1 cohort,Mutations included in the study shown by tertiles table (upper tertile column)
+KCNQ1,23153844,table,full_text,M1V,1,,,Listed with 1 patient,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A150fs/133,2,,,Listed with 2 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,M159sp,4,,,Listed with 4 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,G168R,87,,,Listed with 87 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,Y171X,9,,,Listed with 9 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,Y184S,14,,,Listed with 14 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,L191fs+90X,2,,,Listed with 2 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,L191fs/90,8,,,Listed with 8 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,R195fs/40,2,,,Listed with 2 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,S225L,22,,,Listed with 22 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,R243C,13,,,Listed with 13 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,V254M,118,,,Listed with 118 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,L266P,32,,,Listed with 32 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,G269S,43,,,Listed with 43 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A287fs+59X,1,,,Listed with 1 patient,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,W305S,16,,,Listed with 16 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,T312I,17,,,Listed with 17 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,G314S,19,,,Listed with 19 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,Y315C,10,,,Listed with 10 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A341E,11,,,Listed with 11 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A341V,24,,,Listed with 24 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A344A/sp,41,,,Listed with 41 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,S349W,15,,,Listed with 15 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,S349X,9,,,Listed with 9 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,P400fs/62,7,,,Listed with 7 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,K422fsX10,1,,,Listed with 1 patient,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,P448fs/13,11,,,Listed with 11 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,R518X,20,,,Listed with 20 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,Q530X,26,,,Listed with 26 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,S571fs/20,3,,,Listed with 3 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,R591H,19,,,Listed with 19 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,R594Q,14,,,Listed with 14 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,D611Y,10,,,Listed with 10 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,23153844,table,full_text,A636fs/28,2,,,Listed with 2 patients,Online Table 1 (Mutation | No. of patients)
+KCNQ1,17470695,table,full_text,M1V,1,,,1 subject listed,"first structured table, N-terminus section"
+KCNQ1,17470695,table,full_text,G57V,1,,,1 subject listed,"first structured table, N-terminus section"
+KCNQ1,17470695,table,full_text,W120C,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,T144A,7,,,7 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A150fs/133 [del CT 451-452],2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,E160K,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G168R,44,,,44 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Y171X [513 C>G],6,,,6 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R174H,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A178P,5,,,5 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Y184S,18,,,18 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G185S,10,,,10 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G189E,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G189R,4,,,4 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R190Q,4,,,4 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,L191fs/90 [del TGCGC 572-576],8,,,8 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R195fs/40 [del G 585],2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,S225L,13,,,13 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A226V,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R237P,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,D242N,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R243C,13,,,13 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,V254 mol/L,59,,,59 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R258C,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,R259C,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,L266P,15,,,15 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G269D,35,,,35 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G269S,25,,,25 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,L273F,6,,,6 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,I274V,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,S277L,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Y278H,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,E284K,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G292D,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,F296S,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G306R,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,V310I,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,T312I,14,,,14 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G314S,8,,,8 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Y315C,10,,,10 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Y315S,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,D317G,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,P320H,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,T322 mol/L,2,,,2 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,G325R,3,,,3 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,delF340 [del CTT 1017-1019],7,,,7 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A341E,9,,,9 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A341V,20,,,20 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,P343S,1,,,1 subject listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A344A/sp [1032 G>A],27,,,27 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,A344V,17,,,17 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,S349W,15,,,15 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,L353P,4,,,4 subjects listed,"first structured table, Transmembrane section"
+KCNQ1,17470695,table,full_text,Q357H,3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R360G,3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,S373P,7,,,7 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,K393N,10,,,10 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R397W,5,,,5 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,P400fs/62 [ins C 1201-1022],6,,,6 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,P448fs/13 [ins G 1344-1345],11,,,11 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,I517T,3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R518X [1552 C>T],11,,,11 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,M520R,3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,V524G,4,,,4 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,Q530X [1588 C>T],13,,,13 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R562 mol/L,2,,,2 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,S566F,3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,I567S,6,,,6 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,S571fs/20 [del C 1714],3,,,3 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R591C,5,,,5 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R591H,6,,,6 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,R594Q,11,,,11 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,D611Y,10,,,10 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,A636fs/28 [del C 1909],2,,,2 subjects listed,"first structured table, C-terminus section"
+KCNQ1,17470695,table,full_text,IVS2+1 G>A,2,,,2 subjects listed,"first structured table, Intron section"
+KCNQ1,17470695,table,full_text,IVS4+5 G>A,2,,,2 subjects listed,"first structured table, Intron section"
+KCNQ1,17470695,table,full_text,IVS7+5 G>A,15,,,15 subjects listed,"first structured table, Intron section"
+KCNQ1,28720088,pdf,full_text,Y111C,148,,,"148 genotype-positive individuals (84 females) segregating the familial KCNQ1 Y111C pathogenic variant, with mean QTc 483 ± 34 ms (substantial variance noted across cohort)",Abstract; Table 1; Methods (study sample description); Results (QTc variability section)
+KCNQ1,28720088,pdf,full_text,R518*,79,,,"79 genotype-positive individuals (49 females) segregating the familial KCNQ1 R518* pathogenic variant, with mean QTc 462 ± 34 ms (substantial variance noted across cohort)",Abstract; Table 1; Methods (study sample description); Results (QTc variability section)
+KCNQ1,21129503,text,abstract_only,Y111C (KCNQ1),170,,,We identified 170 carriers of the Y111C/ KCNQ1 mutation in 37 Swedish proband families.,Abstract; Results: Patients and families
+KCNQ1,25087618,text,full_text,KCNQ1 p.Ala341Val (A341V),168,,,"Identical-by-descent KCNQ1 A341V mutation carried by all probands and genotyped relatives in 23 South African founder families; 168 mutation carriers with phenotype data (history, ECG, cardiac events) evaluated for LQT1 phenotype and AKAP9 modifiers.","Abstract (181 non-carriers and 168 mutation carriers); Materials and Method, Founder population subjects (A341V mutation status determined for all participants; 23 families); Results (349 genotyped including 168 MC)"
+KCNQ1,17192539,text,full_text,KCNQ1 G589D,,,,Finnish founder mutation in LQT1; 50 pedigrees and 191 nuclear families; transmission analysis showed 243 carriers among 451 descendants (54%); trend for more female carriers; 20% of these Finnish pedigrees had family history of sudden death; phenotypes otherwise referred to prior report and excluded.,Results section (paragraph beginning 'Since most pedigrees involved unique mutations...'); also Methods (genotyping/phenotyping paragraph) and Results (pedigrees paragraph)
+KCNQ1,24052033,text,full_text,Y111C,60,,,"DNA analysis identified 60 Y111C carriers (3 children <1 yr later excluded from VCG analysis); among 75 adult LQT1 carriers, 1 Y111C had aborted cardiac arrest and 23 total symptomatic vs 52 asymptomatic (mutation not further broken down).","METHODS (Genetic Analysis, population description) and RESULTS (Clinical Characteristics)"
+KCNQ1,24052033,text,full_text,R518X,42,,,DNA analysis identified 42 R518X carriers; adult symptomatic/asymptomatic counts (23 vs 52) reported only for combined LQT1 cohort.,METHODS (population description) and RESULTS (Clinical Characteristics)
+KCNQ1,18713323,table,full_text,A341V,20,,,4 Caucasian + 16 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,18713323,table,full_text,G314S,8,,,4 Caucasian + 4 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,18713323,table,full_text,R243C,13,,,9 Caucasian + 4 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,18713323,table,full_text,delF340,7,,,4 Caucasian + 3 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,18713323,table,full_text,A344A/sp,27,,,20 Caucasian + 7 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,18713323,table,full_text,G269S,25,,,21 Caucasian + 4 Japanese patients,Table: Mutation | Caucasian N=62 | Japanese N=38 (first table)
+KCNQ1,29197658,table,full_text,P73T,5,5,,No. of cases = 5 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,V110I,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,T153M,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,V172M,2,2,,No. of cases = 2 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,R195Q,3,3,,No. of cases = 3 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,P197L,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,I274V,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,A287E,2,2,,No. of cases = 2 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,G292D,3,3,,No. of cases = 3 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,R293C,5,5,,No. of cases = 5 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,A300T,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,K362R,14,14,,No. of cases = 14 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,A370V,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,K393N,8,8,,No. of cases = 8 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,R397W,3,3,,No. of cases = 3 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,A399S,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,P408A,4,4,,No. of cases = 4 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,D446E,2,2,,No. of cases = 2 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,P448R,11,11,,No. of cases = 11 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,R452Q,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,R452W,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,G460S,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,V576I,3,3,,No. of cases = 3 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,G589D,2,2,,No. of cases = 2 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,T600M,3,3,,No. of cases = 3 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,D611N,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,G629S,1,1,,No. of cases = 1 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,G643S,11,11,,No. of cases = 11 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,29197658,table,full_text,V648I,7,7,,No. of cases = 7 (LQT1 case-derived),"Variant table (columns: Variant, Region, No. of cases, gnomAD Count...)"
+KCNQ1,33141630,text,full_text,p.T224M (c.671C>T),124,,,"124 carriers identified (frequency 0.011); p.T224M associated with +20.2 ms QTc, higher syncope (32% vs 17%), family SCD <30 y (4.5% vs 0%), higher Schwartz scores, and clinical LQTS evidence in 38.6% of evaluated subgroup; no homozygotes or deafness in carriers; variable expressivity with ~46% normal mean QTc; reclassified pathogenic using ACMG criteria plus functional loss-of-IKs data.","Results: Identification of the c.671C>T (p.T224M) Variant in KCNQ1; Clinical Characteristics of p.T224M KCNQ1 Carriers; Table; Figures 1C, 2, 3, 5; Discussion"
+RYR2,25814417,table,partial_text,p.G357S,179,,,We identified the p.G357S_RyR2 mutation... in 179 family members and in 6 SCD cases. ... p.G357S_RyR2 positive subjects...,Abstract; CLINICAL AND TREATMENT FOLLOW-UP PROTOCOL section; Structured table rows (Patient 1–179)
+RYR2,29925740,text,full_text,c.1258C>T (p.R420W),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 1"
+RYR2,29925740,text,full_text,c.2300C>G;c.2301G>T (p.S767C),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 2"
+RYR2,29925740,text,full_text,c.14298+2T>C,1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 2"
+RYR2,29925740,text,full_text,c.2719G>C (p.V907L),1,1,,Patient had CPA triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patient 3"
+RYR2,29925740,text,full_text,c.5764A>T (p.I1922L),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 4"
+RYR2,29925740,text,full_text,c.6511G>A (p.V2171M),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 5"
+RYR2,29925740,text,full_text,c.6574A>T (p.M2192L),1,1,,Patient had CPA triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patient 6"
+RYR2,29925740,text,full_text,c.7169C>T (p.T2390I),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 7"
+RYR2,29925740,text,full_text,c.7199G>T (p.G2400T),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 8"
+RYR2,29925740,text,full_text,c.12458G>T (p.S4153I),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 9"
+RYR2,29925740,text,full_text,Exon 3 deletion (p.N57_G91del35),2,2,,Patients had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patients 105-106"
+RYR2,29925740,text,full_text,c.477G>T (p.W159C),1,1,,Patient had syncope triggered by emotion,"Suppl File 1, Table S1, derivation cohort, patient 107"
+RYR2,29925740,text,full_text,c.506G>A (p.R169Q),2,2,,Patients had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort patient 108; validation cohort patient 152"
+RYR2,29925740,text,full_text,c.533G>C (p.G178A),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 109"
+RYR2,29925740,text,full_text,c.1221A>T (p.R407S),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 110"
+RYR2,29925740,text,full_text,c.1259G>A (p.R420Q),5,5,,Patients had CPA or syncope triggered by exercise or exercise+emotion,"Suppl File 1, Table S1, derivation cohort patients 111-112; validation cohort patients 153-155"
+RYR2,29925740,text,full_text,c.3766C>A (p.P1256T),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 113"
+RYR2,29925740,text,full_text,c.5170G>A (p.E1724K),2,2,,Patients had syncope triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patients 114-115"
+RYR2,29925740,text,full_text,c.6591C>G (p.C2197W),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 116"
+RYR2,29925740,text,full_text,c.6737C>T (p.S2246L),2,2,,Patients had CPA or syncope triggered by emotion or exercise,"Suppl File 1, Table S1, derivation cohort, patients 117-118"
+RYR2,29925740,text,full_text,c.6873C>A (p.N2291K),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 119"
+RYR2,29925740,text,full_text,c.6983C>G (p.P2328R),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 120"
+RYR2,29925740,text,full_text,c.7160C>T (p.A2387V),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 121"
+RYR2,29925740,text,full_text,c.7420A>G (p.R2474G),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 122"
+RYR2,29925740,text,full_text,c.11583G>T (p.Q3861H),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 123"
+RYR2,29925740,text,full_text,c.11628C>G (p.D3876E),1,1,,Patient had CPA triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patient 124"
+RYR2,29925740,text,full_text,c.11836G>A (p.G3946S),2,2,,Patients had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patients 125-126"
+RYR2,29925740,text,full_text,c.12006G>A (p.M4002I),1,1,,Patient had syncope triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patient 127"
+RYR2,29925740,text,full_text,c.12301C>T (p.L4101F),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 128"
+RYR2,29925740,text,full_text,c.12372C>A (p.S4124R),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 129"
+RYR2,29925740,text,full_text,c.12475C>A (p.Q4159K),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 130"
+RYR2,29925740,text,full_text,c.12502T>C (p.S4168P),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 131"
+RYR2,29925740,text,full_text,c.12533A>G (p.N4178S),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 132"
+RYR2,29925740,text,full_text,c.12579C>G (p.C4193W),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 133"
+RYR2,29925740,text,full_text,c.13489C>T (p.R4497C),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 134"
+RYR2,29925740,text,full_text,c.13759A>G (p.I4587V),1,1,,Patient had syncope triggered by exercise+emotion,"Suppl File 1, Table S1, derivation cohort, patient 135"
+RYR2,29925740,text,full_text,c.13798T>C (p.F4600L),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 136"
+RYR2,29925740,text,full_text,c.14251A>C (p.K4750Q),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 137"
+RYR2,29925740,text,full_text,c.14593C>G (p.L4865V),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 138"
+RYR2,29925740,text,full_text,c.14806C>A (p.Q4936K),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, derivation cohort, patient 139"
+RYR2,29925740,text,full_text,c.5756G>A (p.R1919Q),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 158"
+RYR2,29925740,text,full_text,c.9260C>G (p.P3087R),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 158"
+RYR2,29925740,text,full_text,c.6919T>C (p.F2307L),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 159"
+RYR2,29925740,text,full_text,c.7024G>A (p.G2342R),2,2,,Patients had syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patients 160-161"
+RYR2,29925740,text,full_text,c.7207G>A (p.A2403T),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 162"
+RYR2,29925740,text,full_text,c.12385T>G (p.F4129V),1,1,,Patient had syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 164"
+RYR2,29925740,text,full_text,c.9910C>G (p.F4511L),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 163"
+RYR2,29925740,text,full_text,c.14222C>T (p.A4247V),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 163"
+RYR2,29925740,text,full_text,c.14427G>T (p.M4809I),1,1,,Patient had CPA triggered by exercise,"Suppl File 1, Table S1, validation cohort, patient 165"
+RYR2,29925740,text,full_text,c.14461G>A (p.V4821I),2,2,,Patients had CPA or syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patients 166-167"
+RYR2,29925740,text,full_text,c.1372G>A (p.D458N),2,2,,Patients had CPA or syncope triggered by exercise,"Suppl File 1, Table S1, validation cohort, patients 156-157"
+RYR2,33315912,table,full_text,p.P2328S,62,18,41,"62 mutation carriers identified; 18 with CE (3 ACA + 15 exercise/stress syncope), 41 with No CE","Abstract (main text); structured table rows (No CE n=41 (69%), CE n=18 (31%))"
+RYR2,16272262,table,full_text,E1724K,,,,Identified in CPVT proband/family 1; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,A2254V,,,,Identified in CPVT proband/family 2; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,A2394G,,,,Identified in CPVT proband/family 3 (SD 28); among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,F4020L,,,,Identified in CPVT proband/family 4; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,E4076K,,,,Identified in CPVT probands/families 5 and 6; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,N4104I,,,,Identified in CPVT proband/family 7 (SD 39); among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,H4108N,,,,De novo mutation in sporadic CPVT proband/family 8; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,H4108Q,,,,De novo mutation in sporadic CPVT proband/family 9; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,G4662S,,,,Identified (with H4762P) in CPVT proband/family 10; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,H4762P,,,,Identified (with G4662S) in CPVT proband/family 10; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,V4771I,,,,Previously reported; identified in CPVT proband/family 11; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,16272262,table,full_text,P4902S,,,,Identified in CPVT proband/family 12; among cohort with 78% penetrance,supplement PDF p.864-865 family table
+RYR2,34202968,text,full_text,p.Asp3291Val (c.9872A>T),,,,"Cosegregates with CPVT/SCD; 3 homozygous sisters (II.1/II.2/II.5) with syncope/PVT/positive EST; proband III.9 aborted SCD; numerous obligate heterozygotes with stress-triggered SCD or positive EST (e.g., III.11, IV.3, IV.13); some heterozygotes negative on EST (e.g., III.6/III.13/III.15/III.18/III.20/III.21 and grandmother I.2 in Fam2); also Fam2 proband III.2, Fam3 sudden death case.","Section 3.1.1 Family 1, 3.1.2 Family 2, 3.1.3 Family 3; Figure 1; Abstract"
+RYR2,33686871,pdf,full_text,G3118R,,4,,4 clinically affected members homozygous for G3118R with VF/sudden death or stress-induced arrhythmias; heterozygous relatives asymptomatic (one parent with rare arrhythmia but classified asymptomatic).,"RESULTS/Family Investigation, paragraph 1; Genetic Analysis, paragraph 1; Abstract"
+RYR2,28237968,text,full_text,c.5170G>A (p.Glu1724Lys),1,1,0,"Proband 1 (ASCD); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 1"
+RYR2,28237968,text,full_text,c.13890G>A (p.Thr4630Cys),3,3,0,"Proband 2 (ASCD); 0 asymptomatic, 2 symptomatic relatives","Table 2, proband 2"
+RYR2,28237968,text,full_text,c.14246G>A (p.Gly4749Glu),1,1,0,"Proband 3 (syncope); 0 asymptomatic, 0 symptomatic relatives; 7 relatives negative","Table 2, proband 3"
+RYR2,28237968,text,full_text,c.7159G>A (p.Ala2387Thr),3,2,1,"Proband 4 (syncope); 1 asymptomatic, 1 symptomatic relative","Table 2, proband 4"
+RYR2,28237968,text,full_text,c.6899A>C (p.Asp2300Ala),1,1,0,"Proband 5 (syncope); 0 asymptomatic, 0 symptomatic relatives; 7 relatives negative","Table 2, proband 5"
+RYR2,28237968,text,full_text,c.11983A>G (p.Ile3995Val),7,3,4,"Proband 6 (SCD); 4 asymptomatic, 2 symptomatic relatives","Table 2, proband 6"
+RYR2,28237968,text,full_text,c.13735C>T (p.His4579Tyr),11,8,3,"Proband 7 (SCD); 3 asymptomatic, 7 symptomatic relatives (incl. MAT cases)","Table 2, proband 7"
+RYR2,28237968,text,full_text,c.5614G>A (p.Asp1872Asn),2,1,1,"Proband 8 (SCD); 1 asymptomatic, 0 symptomatic relatives","Table 2, proband 8"
+RYR2,28237968,text,full_text,c.13350-13352del (p.Glu4451del),3,2,1,"Proband 9 (SCD); 1 asymptomatic, 1 symptomatic relative","Table 2, proband 9"
+RYR2,28237968,text,full_text,c.11147A>G (p.Glu3716Gln),1,1,0,Proband 10 (ASCD); relatives abroad (strong suspicion of co-segregation),"Table 2, proband 10"
+RYR2,28237968,text,full_text,c.14600T>C (p.Ile4867Thr),1,1,0,"Proband 11 (dyspnoea/MAT); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 11"
+RYR2,28237968,text,full_text,c.8596-8598del (p.Gly2866del),1,1,0,"Proband 12 (dyspnoea); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 12"
+RYR2,28237968,text,full_text,c.12470G>A (p.Arg4157Gln),1,1,0,"Proband 13 (syncope); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 13"
+RYR2,28237968,text,full_text,c.14553C>A (p.Phe4851Leu),1,1,0,"Proband 14 (ASCD/MAT); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 14"
+RYR2,28237968,text,full_text,c.1258C>T (p.Arg420Trp),1,1,0,"Proband 15; 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 15"
+RYR2,28237968,text,full_text,c.3407C>T (p.Ala1136Val),2,2,0,"Two independent families (probands 15, 16); 0 asymptomatic/0 symptomatic relatives per family","Table 2, probands 15 and 16"
+RYR2,28237968,text,full_text,c.5656G>A (p.Gly1886Ser),2,2,0,"Two independent families (probands 15, 21); 0 asymptomatic/0 symptomatic relatives per family","Table 2, probands 15 and 21"
+RYR2,28237968,text,full_text,c.3407C>T (p.Ala1136Val) [repeat count already aggregated],,,,Duplicate entry avoided; aggregated above,Table 2
+RYR2,28237968,text,full_text,c.14008C>T (p.Leu4670Phe),1,1,0,"Proband 17 (chest pain); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 17"
+RYR2,28237968,text,full_text,c.7160C>T (p.Ala2387Val),1,1,0,"Proband 18 (ASCD); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 18"
+RYR2,28237968,text,full_text,c.94C>A (p.Gln32Lys),5,4,1,"Proband 19 (ASCD); 0 asymptomatic, 4 symptomatic relatives; compound with p.Glu1083Lys","Table 2, proband 19"
+RYR2,28237968,text,full_text,c.3247G>A (p.Glu1083Lys),5,4,1,"Proband 19; compound with p.Gln32Lys; 0 asymptomatic, 4 symptomatic relatives","Table 2, proband 19"
+RYR2,28237968,text,full_text,c.1191G>A (p.Met3972Ile),1,1,0,"Proband 20 (ASCD); 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 20"
+RYR2,28237968,text,full_text,c.5654G>A (p.Gly1885Glu),1,1,0,"Proband 21; compound with p.Gly1886Ser; 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 21"
+RYR2,28237968,text,full_text,c.5656G>A (p.Gly1886Ser) [repeat count already aggregated],,,,Duplicate entry avoided; aggregated above,Table 2
+RYR2,28237968,text,full_text,c.6520G>T (p.Val2174Phe),1,1,0,"Proband 22 (ASCD); presumed de novo; 0 asymptomatic, 0 symptomatic relatives","Table 2, proband 22"
+RYR2,28237968,text,full_text,c.9569G>A (p.Arg3190Gln),2,1,1,"Proband 23 (SCD); 1 asymptomatic, 0 symptomatic relatives","Table 2, proband 23"
+RYR2,12106942,text,full_text,R420W,,,,Novel missense mutation detected in families 125 and 127; transmitted from patient to patient; not in controls; family 127 shares mutation/haplotype with affected family 125 but includes asymptomatic carriers and ungenotyped SD cases.,"Results, Identification of RyR2 mutations in affected family members (main text)"
+RYR2,12106942,text,full_text,Y2392C,,,,Novel missense mutation detected in family 126; occurred in evolutionarily conserved region; transmitted; not in controls.,"Results, Identification of RyR2 mutations in affected family members (main text)"
+RYR2,12106942,text,full_text,N2386I,16,,,Detected in families 102 and 123 (common haplotype); total 16 carriers; high inducibility of PVA on stress testing; transmitted; not in controls.,"Results, Identification of RyR2 mutations... and Discussion, Clinical findings (main text)"
+RYR2,12106942,text,full_text,T2504M,,,,Detected in families 115 and 129 (different haplotypes); in family 115 co-occurs with R176Q in affected subjects; transmitted; not in controls.,"Results, Identification of RyR2 mutations in affected family members (main text)"
+RYR2,12106942,text,full_text,L433P,,,,Detected in family 122; transmitted from patient to patient; not in controls.,"Results, Identification of RyR2 mutations in affected family members (main text)"
+RYR2,12106942,text,full_text,R176Q,,,,Additional mutation in exon 8 detected in affected subjects of family 115 (co-occurring with T2504M); not detected in control group.,"Results, Identification of RyR2 mutations in affected family members (main text)"
+RYR2,22677073,table,full_text,I217V,1,1,,"SUD event, positive family history of SCD","Table (cases 1-45), Case 26"
+RYR2,22677073,table,full_text,H240R,1,1,,Exertion SUD event,"Table (cases 1-45), Case 27"
+RYR2,22677073,table,full_text,T4158P,1,1,,Exertion SUD event,"Table (cases 1-45), Case 27"
+RYR2,22677073,table,full_text,D400H,1,1,,"Nonspecific SUD event, positive family history of SCD","Table (cases 1-45), Case 28"
+RYR2,22677073,table,full_text,R407I,1,1,,Nonspecific SUD event,"Table (cases 1-45), Case 29"
+RYR2,22677073,table,full_text,R420W,2,2,,"Exertion syncope (Case 30); nonspecific SUD (Case 31), positive family history of SCD (Case 31)","Table (cases 1-45), Cases 30 and 31"
+RYR2,22677073,table,full_text,V2113M,1,1,,Exertion SUD event,"Table (cases 1-45), Case 32"
+RYR2,22677073,table,full_text,G2227V,1,1,,Nonspecific SUD event,"Table (cases 1-45), Case 33"
+RYR2,22677073,table,full_text,S2246L,2,2,,Exertion SUD event (both cases); Case 34 also carries G643S-KCNQ1 and D85N-KCNE1,"Table (cases 1-45), Cases 34 and 35"
+RYR2,22677073,table,full_text,Y2392C,1,1,,"Exertion SUD event, positive family history of SCD, carries R1047L-KCNH2","Table (cases 1-45), Case 36"
+RYR2,22677073,table,full_text,T2510A,1,1,,Nonspecific SUD event,"Table (cases 1-45), Case 37"
+RYR2,22677073,table,full_text,L3879P,1,1,,Exertion syncope event,"Table (cases 1-45), Case 38"
+RYR2,22677073,table,full_text,Q3925E,1,1,,Exertion seizures event,"Table (cases 1-45), Case 39"
+RYR2,22677073,table,full_text,S3959L,1,1,,Exertion SUD event,"Table (cases 1-45), Case 40"
+RYR2,22677073,table,full_text,N4097S,1,1,,"Nonspecific SUD event, positive family history of SCD","Table (cases 1-45), Case 41"
+RYR2,22677073,table,full_text,E4146K,1,1,,"Sleep SUD event, positive family history of SCD","Table (cases 1-45), Case 42"
+RYR2,22677073,table,full_text,R4497C,1,1,,"Nonspecific SUD event, positive family history of SCD","Table (cases 1-45), Case 43"
+RYR2,22677073,table,full_text,W4645R,1,1,,Exertion SVT event,"Table (cases 1-45), Case 44"
+RYR2,22677073,table,full_text,G4936R,1,1,,Exertion seizures event,"Table (cases 1-45), Case 45"
+RYR2,30403697,table,full_text,RYR2-p.R417L,3,2,1,"Subjects 1 (proband, exertional syncope/VT) and 2 (sibling, exertional VT); father asymptomatic gene carrier","Main patient table, Subjects 1-2, Family History column"
+RYR2,30403697,table,full_text,RYR2-p.F3496L,3,2,1,"Subjects 1 (proband, exertional syncope/VT) and 2 (sibling, exertional VT); father asymptomatic gene carrier (cis with R417L)","Main patient table, Subjects 1-2, Family History column"
+RYR2,30403697,table,full_text,RYR2-p.S3938R,1,1,,"Subject 3 (proband, exertional SCA)","Main patient table, Subject 3"
+RYR2,30403697,table,full_text,RYR2-p.R485Q,1,1,,"Subject 3 (proband, exertional SCA)","Main patient table, Subject 3"
+RYR2,30403697,table,full_text,RYR2-p.I2075T,3,2,1,"Subjects 4 (SCA), 5 (SCA), 6 (asymptomatic) with paternal inheritance","Main patient table, Subjects 4-6, Inheritance/Family History columns"
+RYR2,30403697,table,full_text,RYR2-p.K4594R,3,2,1,"Subjects 4 (SCA), 5 (SCA), 6 (asymptomatic) with paternal inheritance","Main patient table, Subjects 4-6, Inheritance/Family History columns"
+RYR2,30403697,table,full_text,RYR2-p.R2028H,2,1,1,Subject 7 (exertional SCA); mother asymptomatic heterozygous carrier,"Main patient table, Subject 7, Family History column"
+RYR2,30403697,table,full_text,RYR2-p.Y4721C,2,1,1,Subject 7 (exertional SCA); father asymptomatic heterozygous carrier,"Main patient table, Subject 7, Family History column"
+RYR2,30403697,table,full_text,RYR2-p.T1107M,1,1,,Subject 8 (exertional syncope/SCA/VT),"Main patient table, Subject 8"
+RYR2,30403697,table,full_text,RYR2-p.R2474K,1,1,,"Subject 9 (exertional SCA, de novo)","Main patient table, Subject 9"
+RYR2,30403697,table,full_text,RYR2-p.A1136V,1,1,,"Subject 9 (exertional SCA, de novo)","Main patient table, Subject 9"
+RYR2,30403697,table,full_text,RYR2-p.L4188P,1,1,,Subject 10 (seizures/emotional SCA),"Main patient table, Subject 10"
+RYR2,30403697,table,full_text,RYR2-p.G1886S,2,2,,Subjects 10 (seizures/emotional SCA) and 11 (SCA),"Main patient table, Subjects 10-11"
+RYR2,30403697,table,full_text,RYR2-p.S2246L,1,1,,Subject 11 (SCA),"Main patient table, Subject 11"
+RYR2,30403697,table,full_text,RYR2-p.H2464D,1,1,,Subject 12 (exertional syncope/epilepsy),"Main patient table, Subject 12"
+RYR2,30403697,table,full_text,RYR2-p.G1885E,1,1,,Subject 12 (exertional syncope/epilepsy),"Main patient table, Subject 12"
+RYR2,30403697,table,full_text,RYR2-p.R2401H,1,1,,Subject 13 (exertional SCA),"Main patient table, Subject 13"
+RYR2,30403697,table,full_text,RYR2-p.G4772S,2,2,,Subject 14 (exertional syncope/SCA/VT storm); symptomatic cousin carries variant,"Main patient table, Subject 14, Family History column"
+RYR2,30403697,table,full_text,RYR2-p.A2317E,1,1,,Subject 15 (exertional SCA),"Main patient table, Subject 15"
+RYR2,33606749,table,full_text,N57_G91del35,4,4,0,"Patients 1 (mother AF) and 2 (mother syncope), both maternal inheritance","Structured table rows, Patients 1-2"
+RYR2,33606749,table,full_text,R169L,1,1,0,"Patient 3, de novo","Structured table rows, Patient 3"
+RYR2,33606749,table,full_text,R169Q,2,2,0,"Patients 4 and 5, both de novo","Structured table rows, Patients 4-5"
+RYR2,33606749,table,full_text,G178A,1,1,0,"Patient 6, de novo","Structured table rows, Patient 6"
+RYR2,33606749,table,full_text,R407S,1,1,0,"Patient 7, only proband (de novo or F)","Structured table rows, Patient 7"
+RYR2,33606749,table,full_text,R420Q,2,2,0,"Patient 8, maternal inheritance (mother syncope)","Structured table rows, Patient 8"
+RYR2,33606749,table,full_text,T1223A,2,1,1,"Patient 9, maternal inheritance (mother none)","Structured table rows, Patient 9"
+RYR2,33606749,table,full_text,P1256T,2,1,1,"Patient 10, maternal inheritance (mother none)","Structured table rows, Patient 10"
+RYR2,33606749,table,full_text,L1518F,2,1,1,"Patient 11, maternal inheritance (mother none)","Structured table rows, Patient 11"
+RYR2,33606749,table,full_text,E1724K,2,2,0,"Patient 12, maternal inheritance (mother syncope)","Structured table rows, Patient 12"
+RYR2,33606749,table,full_text,M2192L,2,1,1,"Patient 13, maternal inheritance (mother none)","Structured table rows, Patient 13"
+RYR2,33606749,table,full_text,S2246L,1,1,0,"Patient 14, de novo","Structured table rows, Patient 14"
+RYR2,33606749,table,full_text,G2342R,2,1,1,"Patient 15, paternal (mosaic) inheritance (father none)","Structured table rows, Patient 15"
+RYR2,33606749,table,full_text,T2390I,2,1,1,"Patient 16, paternal inheritance (father none)","Structured table rows, Patient 16"
+RYR2,33606749,table,full_text,G2400V,1,1,0,"Patient 17, de novo","Structured table rows, Patient 17"
+RYR2,33606749,table,full_text,V2475F,1,1,0,"Patient 18, only proband (de novo or P)","Structured table rows, Patient 18"
+RYR2,33606749,table,full_text,Q3861H,2,2,0,"Patients 19 and 20, both de novo","Structured table rows, Patients 19-20"
+RYR2,33606749,table,full_text,G3946S,2,2,0,"Patients 21 (only proband, de novo or P) and 22 (de novo)","Structured table rows, Patients 21-22"
+RYR2,33606749,table,full_text,D3973N,2,1,1,"Patient 23, maternal inheritance (mother none)","Structured table rows, Patient 23"
+RYR2,33606749,table,full_text,M4002I,1,1,0,"Patient 24, de novo","Structured table rows, Patient 24"
+RYR2,33606749,table,full_text,S4124N,2,1,1,"Patient 25, maternal inheritance (mother none)","Structured table rows, Patient 25"
+RYR2,33606749,table,full_text,S4153I,1,1,0,"Patient 26, only proband (de novo or M)","Structured table rows, Patient 26"
+RYR2,33606749,table,full_text,N4178S,1,1,0,"Patient 27, de novo","Structured table rows, Patient 27"
+RYR2,33606749,table,full_text,C4193W,1,1,0,"Patient 28, de novo","Structured table rows, Patient 28"
+RYR2,33606749,table,full_text,Q4488P,1,1,0,"Patient 29, de novo","Structured table rows, Patient 29"
+RYR2,33606749,table,full_text,F4600L,1,1,0,"Patient 30, de novo","Structured table rows, Patient 30"
+RYR2,33606749,table,full_text,Y4725C,1,1,0,"Patient 31, de novo","Structured table rows, Patient 31"
+RYR2,33606749,table,full_text,V4771I,3,3,0,"Patient 32 (maternal, mother syncope) and Patient 33 (only proband, de novo or P)","Structured table rows, Patients 32-33"
+RYR2,33606749,table,full_text,Q4936K,1,1,0,"Patient 34, de novo","Structured table rows, Patient 34"
+RYR2,33606749,table,full_text,4944_4945insH,1,1,0,"Patient 35, de novo","Structured table rows, Patient 35"
+RYR2,33606749,table,full_text,Q3304E,2,2,0,"Patient 36, maternal inheritance (mother syncope)","Structured table rows, Patient 36"
+RYR2,33606749,table,full_text,A4741V,2,2,0,"Patient 36, maternal inheritance (mother syncope)","Structured table rows, Patient 36"

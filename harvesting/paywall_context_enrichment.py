@@ -348,7 +348,7 @@ def enrich_paywall_full_context(
     captions = CaptionExtractionResult()
     if html:
         try:
-            captions = extract_from_html(html)
+            captions = extract_from_html(html, base_url=source_url)
         except Exception as exc:
             logger.warning("Caption extraction failed for PMID %s: %s", pmid, exc)
             captions = CaptionExtractionResult()
