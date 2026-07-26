@@ -36,6 +36,9 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
   access notes.
 - `docs/ARCHITECTURE.md` - pipeline architecture, module map, model/provider
   settings, and reasoning-effort knobs.
+- `docs/EXTRACTION_CONTRACT.md` - meta prompt: what extraction must capture and
+  must refuse, the reference prompt, and the map from each rule to the trust-gate
+  reason code that backs it (or the note that nothing does).
 - `docs/VARIANT_BROWSER_INTEGRATION.md` - publish/adjudication round trip with
   the sibling Variant_Browser app.
 - `benchmarks/curated_extraction_eval/README.md` - fast curated extraction

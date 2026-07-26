@@ -108,6 +108,7 @@ recall scorer before claiming a metric.
 | Re-run recall after new papers, credentials, or recovery code | [`docs/RECALL_REFRESH_RUNBOOK.md`](docs/RECALL_REFRESH_RUNBOOK.md) |
 | Run the portable recall workflow on another machine | [`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md) |
 | Understand pipeline internals | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| Know what extraction must capture and must refuse | [`docs/EXTRACTION_CONTRACT.md`](docs/EXTRACTION_CONTRACT.md) |
 | Inspect output schema | [`docs/OUTPUT_FORMAT.md`](docs/OUTPUT_FORMAT.md) |
 | Publish/adjudicate with Variant_Browser | [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md) |
 | Understand which support scripts to use | [`scripts/README.md`](scripts/README.md) |
@@ -157,8 +158,9 @@ GVF's default workflow is:
    `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test (Step 3.8). It emits
    exact fact/field findings and never mutates extracted counts.
 9. Compose high-severity, source-quoted objective contradictions (wrong column,
-   cohort total, population count, arithmetic or phenotype contradiction, or
-   wrong gene) into the trusted count-field projection (Step 3.9). Weak/absent-support findings
+   cohort total, population count, arithmetic or phenotype contradiction, wrong
+   gene, or a count the source credits to another publication) into the trusted
+   count-field projection (Step 3.9). Weak/absent-support findings
    remain advisory. Raw counts and variant identities remain auditable; grounded
    completeness gaps make run acceptance nonzero and require replay.
 10. Produce optional recall scoring and report handoff artifacts.

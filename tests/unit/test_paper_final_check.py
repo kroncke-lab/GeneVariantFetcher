@@ -138,7 +138,7 @@ class _Stub:
 def test_check_version_is_stable_and_effort_sensitive():
     a = check_version("azure_ai/gpt-5.6-sol", "xhigh")
     assert a == check_version("azure_ai/gpt-5.6-sol", "xhigh")
-    assert a.startswith("pfc7-")
+    assert a.startswith("pfc8-")
     assert a != check_version("azure_ai/gpt-5.6-sol", "high")
     assert a != check_version("anthropic/claude-sonnet-5", "xhigh")
 
@@ -479,7 +479,7 @@ def test_apply_records_and_is_idempotent(tmp_path):
     assert [r[0] for r in rows] == ["111", "222", "333"]
     assert all(r[1] == "flag" and r[2] == "m" and r[3] == "xhigh" for r in rows[:2])
     assert rows[2][1] == "skipped"
-    assert all(r[5] == "pfc7" for r in rows)
+    assert all(r[5] == "pfc8" for r in rows)
 
     # Re-run replaces (PRIMARY KEY on pmid), never duplicates.
     apply_paper_final_check(
@@ -1022,7 +1022,7 @@ def test_apply_source_grounded_writes_summary_and_missing(tmp_path):
         "SELECT quote_verified FROM paper_carrier_groups WHERE variant='p.Arg100Ter'"
     ).fetchone()[0]
     conn.close()
-    assert row == (1, "gaps", 1, "pfs12")
+    assert row == (1, "gaps", 1, "pfs13")
     assert groups["p.Arg100Ter"] == "reported_missing"
     assert groups["p.Val30Met"] == "reported_extracted"
     assert verified == 1
@@ -1147,12 +1147,12 @@ def test_apply_no_source_degrades_to_db_only(tmp_path):
         "SELECT source_grounded, prompt_version FROM paper_final_check WHERE pmid='111'"
     ).fetchone()
     conn.close()
-    assert row == (0, "pfc7")
+    assert row == (0, "pfc8")
 
 
 def test_summary_check_version_sensitive_to_budget():
     a = summary_check_version("m", "xhigh", 60000)
-    assert a.startswith("pfs12-")
+    assert a.startswith("pfs13-")
     assert a != summary_check_version("m", "xhigh", 40000)
     assert a != summary_check_version("m", "high", 60000)
 
@@ -1576,3 +1576,33 @@ def test_apply_stale_groups_cleared_when_degraded_to_db_only(tmp_path):
     n = conn.execute("SELECT COUNT(*) FROM paper_carrier_groups").fetchone()[0]
     conn.close()
     assert n == 0
+
+
+def test_attribution_reason_is_advertised_in_both_reviewer_prompts():
+    """A count credited to another paper is not this study's observation.
+
+    The reviewer can only emit a reason code the prompt offers, so both
+    templates must advertise it and both must explain the boundary against the
+    deliberately advisory ``unsupported_count``.
+    """
+    from pipeline.paper_final_check import (
+        _PROMPT_TEMPLATE,
+        _SUMMARY_PROMPT_TEMPLATE,
+        VALID_FLAG_REASONS,
+    )
+
+    assert "attributed_to_other_study" in VALID_FLAG_REASONS
+    for template in (_PROMPT_TEMPLATE, _SUMMARY_PROMPT_TEMPLATE):
+        assert "attributed_to_other_study" in template
+    # The summary template carries the per-code guidance.
+    assert "previously reported" in _SUMMARY_PROMPT_TEMPLATE
+
+
+def test_attribution_reason_is_enforceable_but_unsupported_count_is_not():
+    """Attribution is an objective contradiction; thin support stays advisory."""
+    from pipeline.paper_final_check import VALID_FLAG_REASONS
+    from pipeline.paper_final_check_gate import ENFORCEABLE_REASON_CODES
+
+    assert "attributed_to_other_study" in ENFORCEABLE_REASON_CODES
+    assert "unsupported_count" not in ENFORCEABLE_REASON_CODES
+    assert set(ENFORCEABLE_REASON_CODES) <= set(VALID_FLAG_REASONS)

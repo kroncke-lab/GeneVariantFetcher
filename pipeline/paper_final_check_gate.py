@@ -35,7 +35,7 @@ FIELD_ALIASES = {
     "uncertain_count": "uncertain",
 }
 PFC_REASON_PREFIX = "paper_final_check:"
-COMPOSE_POLICY_VERSION = "pfcg2"
+COMPOSE_POLICY_VERSION = "pfcg3"
 SEVERITY_RANK = {"low": 0, "medium": 1, "high": 2}
 ENFORCEABLE_REASON_CODES = frozenset(
     {
@@ -45,6 +45,10 @@ ENFORCEABLE_REASON_CODES = frozenset(
         "arith_inconsistent",
         "phenotype_misclassified",
         "wrong_gene",
+        # A count the source explicitly credits to another publication is not
+        # this study's observation, so it is an objective attribution error --
+        # enforceable, unlike the deliberately advisory ``unsupported_count``.
+        "attributed_to_other_study",
     }
 )
 

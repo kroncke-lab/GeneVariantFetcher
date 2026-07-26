@@ -72,8 +72,8 @@ DEFAULT_MAX_SOURCE_CHARS = 60000
 # Minimum usable source length (chars); below this, treat as no source.
 MIN_USABLE_SOURCE_CHARS = 200
 
-PROMPT_VERSION = "pfc7"  # source-quoted fact/field flags + phenotype reason
-SUMMARY_PROMPT_VERSION = "pfs12"  # attached table-title evidence + phenotype reason
+PROMPT_VERSION = "pfc8"  # + attributed_to_other_study reason
+SUMMARY_PROMPT_VERSION = "pfs13"  # + attributed_to_other_study reason
 SOURCE_RECIPE_VERSION = "src2"  # abstract + Data-Scout DATA_ZONES (no full text)
 
 VALID_VERDICTS = ("ok", "flag")
@@ -97,6 +97,7 @@ VALID_FLAG_REASONS = (
     "phenotype_misclassified",
     "unsupported_count",
     "wrong_gene",
+    "attributed_to_other_study",
     "other",
 )
 
@@ -124,6 +125,10 @@ A row is SUSPECT if any of these apply:
   table header/row context (watch especially for blank leading/group columns).
 - The count has no supporting quote or source location (treat as low confidence).
 - The magnitude is implausible for the carriers of a single variant.
+- The row or count is credited to ANOTHER publication rather than observed by this
+  paper: a reference/citation column or footnote marker, a "previously reported
+  (ref 12)" label, or a compilation table whose caption says it collects published
+  variants. Use ``attributed_to_other_study`` and quote the crediting text itself.
 
 Every flag MUST name the exact ``fact_id`` value(s) copied from
 ``captured_fact_index`` and the specific count field(s) that are suspect. Never
@@ -144,7 +149,8 @@ Return STRICT JSON only, no prose outside the object:
       "fields": ["total_carriers"|"affected"|"unaffected"|"uncertain"],
       "reason_code": "count_is_total"|"population_count"|"wrong_column"|
                      "arith_inconsistent"|"phenotype_misclassified"|
-                     "unsupported_count"|"wrong_gene"|"other",
+                     "unsupported_count"|"wrong_gene"|
+                     "attributed_to_other_study"|"other",
       "evidence_quote": "<verbatim header/row text that demonstrates the problem>",
       "issue": "<short reason the named fields are suspect>",
       "severity": "low" | "medium" | "high"}}
@@ -241,6 +247,15 @@ phenotype detail alone is not enough. ``unsupported_count`` means weak/absent
 support rather than a demonstrated contradiction; it is advisory and must not
 be presented as a hard column error.
 
+Use ``attributed_to_other_study`` ONLY when the source explicitly credits the row
+or count to a DIFFERENT publication instead of reporting it as this paper's own
+observation: a reference/citation column, a footnote marker pointing at a
+citation, a "previously reported (ref 12)" or "reported by Smith et al." label, or
+a compilation/review table whose caption says it collects published variants.
+Quote the crediting text itself — the reference cell, footnote, or caption. A
+count that is merely thin, unlocated, or unquoted is ``unsupported_count``, not
+this. When a table mixes its own and cited rows, flag only the cited rows.
+
 Return STRICT JSON only, no prose outside the object:
 {{
   "paper_verdict": "ok" | "flag",
@@ -271,7 +286,8 @@ Return STRICT JSON only, no prose outside the object:
       "fields": ["total_carriers"|"affected"|"unaffected"|"uncertain"],
       "reason_code": "count_is_total"|"population_count"|"wrong_column"|
                      "arith_inconsistent"|"phenotype_misclassified"|
-                     "unsupported_count"|"wrong_gene"|"other",
+                     "unsupported_count"|"wrong_gene"|
+                     "attributed_to_other_study"|"other",
       "evidence_quote": "<VERBATIM source header/row demonstrating the mismatch>",
       "issue": "<why the named fields are suspect>",
       "severity": "low"|"medium"|"high"}}

@@ -414,3 +414,47 @@ def test_gate_enforces_source_verified_phenotype_contradiction(tmp_path):
     assert phenotype_fields["affected"] == "quarantine"
     assert phenotype_fields["unaffected"] == "quarantine"
     assert phenotype_fields["total_carriers"] == "trusted"
+
+
+def test_attribution_flag_quarantines_the_field_and_preserves_raw(tmp_path):
+    """A high-severity, source-grounded attribution flag must compose.
+
+    Paper 222's only flag is advisory ``unsupported_count`` in the base fixture,
+    so row 12 stays trusted there. Re-coding the same flag as
+    ``attributed_to_other_study`` -- the source credits the count to another
+    publication -- must make it actionable while leaving the raw count readable.
+    """
+    db = tmp_path / "attribution.db"
+    _seed(db)
+
+    conn = sqlite3.connect(db)
+    (raw_flags,) = conn.execute(
+        "SELECT flags_json FROM paper_final_check WHERE pmid = '222'"
+    ).fetchone()
+    flags = json.loads(raw_flags)
+    assert len(flags) == 1
+    flags[0]["reason_code"] = "attributed_to_other_study"
+    flags[0]["evidence_quote"] = "Ref. 12 (previously reported)"
+    flags[0]["issue"] = "Row is credited to reference 12, not observed here"
+    conn.execute(
+        "UPDATE paper_final_check SET flags_json = ? WHERE pmid = '222'",
+        (json.dumps(flags),),
+    )
+    conn.commit()
+    conn.close()
+
+    stats = apply_paper_final_check_gate(db)
+
+    # The re-coded flag is now enforced rather than merely recorded.
+    assert stats["fields_quarantined"]["total_carriers"] == 1
+
+    row = next(r for r in _trust_rows(db) if r[0] == 12)
+    penetrance_id, total_carriers, affected, tier, reasons, field_trust = row[:6]
+    assert penetrance_id == 12
+    # Raw counts survive; only the projection changes.
+    assert (total_carriers, affected) == (5, 5)
+    assert tier == "quarantine"
+    assert json.loads(reasons) == [
+        "paper_final_check:attributed_to_other_study:high:total_carriers"
+    ]
+    assert json.loads(field_trust)["total_carriers"] == "quarantine"
