@@ -162,3 +162,44 @@ def test_older_manifests_still_report_zero_links(tmp_path: Path):
     data = json.loads(log.save().read_text())
     assert data["supplement_links"] == []
     assert data["summary"]["supplement_link_count"] == 0
+
+
+def test_a_link_delivered_inside_an_archive_counts_as_downloaded(tmp_path: Path):
+    """Europe PMC serves a whole article's supplements as one ZIP.
+
+    The advertised per-file links then exist only inside the extracted
+    directory. Matching on the archive's own name alone marked every one of
+    them unfetched and would send a recovery pass after files already held.
+    """
+    log = ArtifactsLog(pmid="30309222", output_dir=tmp_path, pmcid="PMC6639209")
+    extracted = tmp_path / "PMC6639209_supplements"
+    log.record_supplement_dict(
+        filename="PMC6639209_supplements.zip",
+        path=str(tmp_path / "PMC6639209_supplements.zip"),
+        url="https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6639209/supplementaryFiles",
+        converted=True,
+        converted_chars=4200,
+        nested_files=[
+            str(extracted / "crt-2018-312-suppl1.pdf"),
+            str(extracted / "crt-2018-312-suppl2.pdf"),
+        ],
+    )
+    log.record_supplement_links(
+        _Captions(
+            [
+                _Supp(
+                    "S1",
+                    "https://pmc.ncbi.nlm.nih.gov/articles/PMC6639209/bin/crt-2018-312-suppl1.pdf",
+                ),
+                _Supp("S2", "crt-2018-312-suppl2.pdf"),
+                _Supp("S3", "crt-2018-312-suppl3.pdf"),  # genuinely absent
+            ]
+        ),
+        source="pmc",
+    )
+
+    data = json.loads(log.save().read_text())
+    links = {link["label"]: link["downloaded"] for link in data["supplement_links"]}
+    assert links == {"S1": True, "S2": True, "S3": False}
+    # Only the genuinely absent one should drive a recovery pass.
+    assert data["summary"]["supplement_links_unfetched"] == 1

@@ -203,12 +203,22 @@ class ArtifactsLog:
         ``main_text.supplement_descriptions_count``. Marks each link
         ``downloaded`` when a supplement of the same filename was processed, so
         a recovery pass can target the genuine gaps.
+
+        Nested files count. A paper's supplements often arrive as one archive
+        (Europe PMC serves an entire article's set as ``<PMCID>_supplements.zip``),
+        and the individual files the markup advertised then exist only inside
+        the extracted directory. Matching on the archive's own name alone would
+        mark every one of those links unfetched and send a recovery pass after
+        files we already hold.
         """
-        fetched = {
-            Path(urlparse(s.url or "").path or s.url or "").name.lower()
-            for s in self.manifest.supplements
-            if s.url
-        } | {Path(s.path).name.lower() for s in self.manifest.supplements if s.path}
+        fetched: set[str] = set()
+        for supp in self.manifest.supplements:
+            if supp.url:
+                fetched.add(Path(urlparse(supp.url).path or supp.url).name.lower())
+            if supp.path:
+                fetched.add(Path(supp.path).name.lower())
+            for nested in supp.nested_files or ():
+                fetched.add(Path(nested).name.lower())
         fetched.discard("")
 
         seen = {link.href for link in self.manifest.supplement_links}
