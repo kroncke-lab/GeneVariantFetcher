@@ -288,8 +288,8 @@ Recommended staging routing:
 | Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
 | Tier 3 extraction | `azure_ai/grok-4.3` |
 | Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
-| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; canonical and default-on, with persisted exact fact/field findings |
-| Final-check trust composer (Step 3.9) | Deterministic; source-verified objective count/phenotype contradictions only by default; weak unsupported-count findings remain advisory and raw counts stay unchanged |
+| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; **PARKED — default off since 2026-07-26** (cost/latency not justified by measured effect). Code and tests retained; revive with `PAPER_FINAL_CHECK_ENABLED=1` *and* `PAPER_FINAL_CHECK_GATE_ENABLED=1` |
+| Final-check trust composer (Step 3.9) | Deterministic; **PARKED with Step 3.8** (alone it can only refuse stale findings and fail acceptance). When enabled: source-verified objective count/phenotype contradictions only; weak unsupported-count findings stay advisory and raw counts stay unchanged |
 | Optional exception-adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
 | Optional hard-case escalation | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
 
@@ -311,7 +311,7 @@ unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
 | `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
 | `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
 | `PAPER_FINAL_CHECK_REASONING_EFFORT` | Default-on final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` by default) |
-| `PAPER_FINAL_CHECK_GATE_ENABLED` | Enable exact, source-quoted final-check fact/field trust composition (default `true`); weak/unsupported-only reasons remain advisory |
+| `PAPER_FINAL_CHECK_GATE_ENABLED` | Enable exact, source-quoted final-check fact/field trust composition (default `false` — parked with `PAPER_FINAL_CHECK_ENABLED`); weak/unsupported-only reasons remain advisory |
 | `PAPER_FINAL_CHECK_GATE_MIN_SEVERITY` | Minimum applied severity (`high` by default) |
 | `PAPER_FINAL_CHECK_GATE_REQUIRE_SOURCE_GROUNDED` | Keep DB-only flags advisory (default `true`) |
 | `FINAL_ADJUDICATOR_REASONING_EFFORT` | Optional exception-adjudication queue when overridden to an OpenAI-style model |

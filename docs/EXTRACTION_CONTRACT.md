@@ -4,8 +4,10 @@
 must refuse to extract*, plus the reference prompt that encodes it. Use it three
 ways:
 
-1. As the source of truth when editing [`pipeline/prompts.py`](../pipeline/prompts.py)
-   — the live prompts are instantiations of this contract, not independent text.
+1. As the source of truth when editing [`pipeline/prompts.py`](../pipeline/prompts.py).
+   The live prompts are instantiations of this contract, not independent text: as of
+   2026-07-26 both share one `_CORE_RULES` block cut down to roughly the reference
+   prompt below, so a rule is stated once and cannot drift between them.
 2. As the brief to hand a reviewer, a coworker, or another model that needs to
    judge an extraction without reading the pipeline.
 3. As the map from each extraction rule to the code that catches it downstream —
@@ -133,12 +135,45 @@ says which is which. **Prompt-only** rows have no automated backup.
 | No study-wide totals per variant | `paper_outlier` (> 10× paper median, ≥ 50 absolute) — catches only the *large* cases | `trust_gate.py` |
 | No clinical counts from reviews / pure functional / GWAS | `study_type_mismatch` | `trust_gate.py` |
 | Never derive `unaffected = 0` | `implied_unaffected_zero` — masks **only** the `unaffected` field, in designs that enroll unaffected carriers (population, biobank, case-control, family segregation). Dormant on proband case reports and unknown design. | `trust_gate.py` |
-| Right column, right gene, right phenotype | `wrong_column`, `wrong_gene`, `phenotype_misclassified` — high-severity, source-quoted, fact+field-bound findings only | [`paper_final_check_gate.py`](../pipeline/paper_final_check_gate.py) |
+| Right column, right gene, right phenotype | `wrong_column`, `wrong_gene`, `phenotype_misclassified` — high-severity, source-quoted, fact+field-bound findings only. **Dormant: Steps 3.8/3.9 are parked** (see below). | **parked** |
 | Animal / model-organism subjects are not human carriers | **three layers.** Tier 2/Tier 3 relevance filters drop animal-only papers ([`filters.py:188`](../pipeline/filters.py:188), [`:475`](../pipeline/filters.py:475)); the prompt rule; then a deterministic post-extraction guard, `_apply_nonhuman_clinical_count_guard` ([`steps.py:322`](../pipeline/steps.py:322), wired at `:1946` and `:2012`), clears human clinical count fields when the source shows a strong species signal, preserving raw under `nonhuman_source_flags`. Conservative by design — background animal-model mentions do not trip it, and an explicit human section (`# HUMAN`, "cats and humans") is an escape hatch. | enforced |
 | Families ≠ individuals; probands ≠ all carriers | **classified but not acted on.** `family_count` / `proband_count` *are* inferred deterministically from column headers ([`table_router.py:1532`](../pipeline/table_router.py:1532), [`extraction.py:2003`](../pipeline/extraction.py:2003)) and written into `count_provenance`. But no default consumer enforces them: neither gate references them, and `pipeline/count_classifier.py` — which would flag any non-`per_variant_carrier` type — has `COUNT_CLASSIFIER_POLICY` defaulting to `off` ([`settings.py:321`](../config/settings.py:321)). The signal is on disk and unused. | **prompt-only in effect** |
-| Attribution: exclude counts credited to another publication | `attributed_to_other_study` — emitted when the source explicitly credits the row to a different publication (reference/citation column, footnote marker, "previously reported (ref 12)", compilation-table caption), and **enforceable**, so a high-severity source-quoted finding masks the field. Distinct from `unsupported_count` (thin or unlocated support), which stays advisory by design. A pinning test ([`test_codex_paper_eval.py:533`](../tests/unit/test_codex_paper_eval.py:533)) separately holds the prompt guidance in place. | enforced |
+| **Attribution: exclude counts credited to another publication** | `attributed_to_other_study` is in `ENFORCEABLE_REASON_CODES`, so when the reviewer runs, a high-severity source-quoted finding masks the field. But **Steps 3.8/3.9 are parked**, so today this rests on the prompt alone. A pinning test ([`test_codex_paper_eval.py:533`](../tests/unit/test_codex_paper_eval.py:533)) holds the prompt guidance in place. | **prompt-only while parked** |
 | **Row identifiers are not counts** | partial — only if a final-check finding lands as `wrong_column`. | **prompt-only in practice** |
 | Identity required; reject cell artifacts | schema/notation validation at load; `validate_position` **fails open** on unregistered genes | [`variant_normalizer.py`](../utils/variant_normalizer.py) |
+
+### Parked: the per-paper final check (Steps 3.8 / 3.9)
+
+**Default off since 2026-07-26.** One `@xhigh` reasoning call per paper cost more
+time and money than its measured effect justified, for a step that only *records*
+findings. The code, prompts, reason codes, and tests are all retained and stay
+green in CI, so this is a dormant switch and not a deletion.
+
+Revive **both together**:
+
+```bash
+PAPER_FINAL_CHECK_ENABLED=1 PAPER_FINAL_CHECK_GATE_ENABLED=1 \
+  gvf gvf-run <GENE> --email <you> --output ./results
+```
+
+Enabling only the composer (3.9) is a trap: with no live reviewer it can only
+refuse *stale* stored findings, and stale findings raise a stage failure
+demanding a "reviewer replay" that can never happen
+([`cli/gvf_run.py:1854`](../cli/gvf_run.py:1854)) — every run would fail
+acceptance forever.
+
+What parking costs: every reason code in the table above whose enforcement point
+is `paper_final_check_gate.py` goes dormant, which is why those rows read
+*parked* rather than *enforced*. What it does **not** cost: field trust already
+composed into existing DBs survives, because the structural gate (Step 3.7)
+deliberately preserves stored `paper_final_check:` reasons
+([`trust_gate.py`](../pipeline/trust_gate.py)). The structural rules — the whole
+gold-free set — are unaffected and still run.
+
+The standing design verdict (three-model review, 2026-07-20) is that the
+replacement is *not* a cheaper auditor but a **deterministic coverage-diff plus
+closed-loop re-extraction**: an open-loop LLM reviewer that only writes findings
+cannot fix what it finds.
 
 ### How quarantine behaves
 
@@ -167,9 +202,11 @@ guards that [`TASKS.md`](../TASKS.md) wants folded into the trust record.
 ## Changing the contract
 
 1. Edit this doc first — it is the spec.
-2. Update [`pipeline/prompts.py`](../pipeline/prompts.py). Both
-   `EXTRACTION_PROMPT` and `COMPACT_EXTRACTION_PROMPT` must stay in sync; shared
-   text belongs in `TABLE_ATTRIBUTION_GUIDANCE`. Compact mode triggers above
+2. Update `_CORE_RULES` in [`pipeline/prompts.py`](../pipeline/prompts.py) — one
+   edit reaches both `EXTRACTION_PROMPT` and `COMPACT_EXTRACTION_PROMPT`. Keep it
+   brace-free (it is concatenated into `str.format` templates) and keep it terse:
+   instruction overhead is paid on every paper and competes with the paper for the
+   window. Only the JSON output schemas are per-prompt. Compact mode triggers above
    `HIGH_VARIANT_THRESHOLD` (30) variants.
 3. If a new rule deserves automated backup, add a reason code to
    `trust_gate.RULE_IDS` (and to `REASON_FIELDS` if it should mask one field

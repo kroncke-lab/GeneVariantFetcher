@@ -24,9 +24,11 @@ marginal case — routed through
 [Variant_Browser](docs/VARIANT_BROWSER_INTEGRATION.md), off the per-paper and
 per-run critical path, never a required step. A per-fact **trust gate** sorts
 every extracted fact into a **trusted** or **quarantine** tier using gold-free
-structural checks plus exact source-grounded final-check findings
-(`pipeline/trust_gate.py` and `pipeline/paper_final_check_gate.py`, default-on in
-`gvf-run`; `scripts/trust_report.py` inspects the tiers). The comparison scorer
+structural checks (`pipeline/trust_gate.py`, default-on in `gvf-run`;
+`scripts/trust_report.py` inspects the tiers). The optional source-grounded
+final-check composer (`pipeline/paper_final_check_gate.py`) adds exact
+model-found contradictions on top, and is currently parked — see
+[`docs/EXTRACTION_CONTRACT.md`](docs/EXTRACTION_CONTRACT.md). The comparison scorer
 now defaults to the trusted field projection while preserving raw counts and
 variant identity; moving the remaining report/publish consumers and calibrating
 the gate per gene class are still in progress.
@@ -154,15 +156,18 @@ GVF's default workflow is:
 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
 6. Migrate extraction JSON to SQLite.
 7. Run DB-observed recovery layers and the default-on per-fact trust gate.
-8. After provisional structural trust gating, run the default-on
-   `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test (Step 3.8). It emits
-   exact fact/field findings and never mutates extracted counts.
+8. Optionally run the `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test
+   (Step 3.8). **Parked — default off since 2026-07-26**; the cost and latency of
+   an `@xhigh` call per paper were not justified by its measured effect on a step
+   that only records findings. Revive with `PAPER_FINAL_CHECK_ENABLED=1` together
+   with `PAPER_FINAL_CHECK_GATE_ENABLED=1`.
 9. Compose high-severity, source-quoted objective contradictions (wrong column,
    cohort total, population count, arithmetic or phenotype contradiction, wrong
    gene, or a count the source credits to another publication) into the trusted
-   count-field projection (Step 3.9). Weak/absent-support findings
-   remain advisory. Raw counts and variant identities remain auditable; grounded
-   completeness gaps make run acceptance nonzero and require replay.
+   count-field projection (Step 3.9) — **parked with Step 3.8**. When enabled,
+   weak/absent-support findings remain advisory, raw counts and variant
+   identities remain auditable, and grounded completeness gaps make run
+   acceptance nonzero and require replay.
 10. Produce optional recall scoring and report handoff artifacts.
 
 Technical details live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).

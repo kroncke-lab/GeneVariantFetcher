@@ -57,6 +57,8 @@ Scored artifact:
 
 ## Targeted pfs12 enforcement spot check (not the canonical baseline)
 
+> **Historical as of 2026-07-26.** The per-paper final check (Steps 3.8/3.9) is now **parked — default off** on cost/latency grounds; see `docs/EXTRACTION_CONTRACT.md` and `docs/PROTOCOL_CHANGELOG.md`. The numbers below record what the enforced `pfs12` protocol measured when it ran; they are not a description of the current default pipeline.
+
 The enforced paper-final-check protocol was replayed on fresh single/few-paper
 DBs for KCNH2 (PMIDs 15840476 and 33013630), KCNQ1 (30758498), RYR2
 (28404607), and SCN5A (29325976). Metrics below are restricted to those PMIDs;

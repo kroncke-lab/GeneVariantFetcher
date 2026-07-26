@@ -422,11 +422,15 @@ class Settings(BaseSettings):
     # trust without mutating raw counts. Default-on; skips gracefully when the
     # model is unreachable. See pipeline/paper_final_check.py.
     paper_final_check_enabled: bool = Field(
-        default=True,
+        default=False,
         validation_alias="PAPER_FINAL_CHECK_ENABLED",
         description=(
-            "Run the per-paper gpt-5.6-sol sniff test as a default gvf-run step "
-            "(Step 3.8). Set false to skip."
+            "Run the per-paper gpt-5.6-sol sniff test (Step 3.8). PARKED: "
+            "default off since 2026-07-26 -- an @xhigh call per paper cost more "
+            "time and money than its measured effect justified, and the step "
+            "only RECORDS findings. Code and tests are retained; re-enable "
+            "TOGETHER with PAPER_FINAL_CHECK_GATE_ENABLED (the composer refuses "
+            "stale findings and fails run acceptance without a live reviewer)."
         ),
     )
     paper_final_check_model: str = Field(
@@ -469,11 +473,16 @@ class Settings(BaseSettings):
         ),
     )
     paper_final_check_gate_enabled: bool = Field(
-        default=True,
+        default=False,
         validation_alias="PAPER_FINAL_CHECK_GATE_ENABLED",
         description=(
             "Compose exact source-grounded final-check fact/field flags into "
-            "the trusted count projection without changing raw extracted counts."
+            "the trusted count projection without changing raw extracted counts. "
+            "PARKED with Step 3.8 (see PAPER_FINAL_CHECK_ENABLED): with no live "
+            "reviewer this composer can only refuse stale stored findings, which "
+            "fails run acceptance with an unsatisfiable 'reviewer replay "
+            "required'. Already-composed field trust in existing DBs is "
+            "preserved by Step 3.7 either way."
         ),
     )
     paper_final_check_gate_min_severity: str = Field(

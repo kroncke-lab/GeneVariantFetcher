@@ -1748,11 +1748,16 @@ def run_gvf_pipeline(
     else:
         logger.info("⏭️  Step 3.7: trust gate — SKIPPED")
 
-    # Step 3.8: per-paper final check (sniff test). A strong reasoning model
-    # (default gpt-5.6-sol at xhigh, per config.settings) reviews each paper's
-    # extracted counts against source/provenance and records structured findings.
-    # It never mutates or deletes a raw count. Step 3.9 then composes exact
-    # source-grounded fact/field flags into the trusted projection.
+    # Step 3.8: per-paper final check (sniff test). PARKED (default off since
+    # 2026-07-26): one @xhigh call per paper cost more time and money than its
+    # measured effect justified for a step that only RECORDS findings. Set
+    # PAPER_FINAL_CHECK_ENABLED=1 to revive it, together with
+    # PAPER_FINAL_CHECK_GATE_ENABLED=1 -- Step 3.9 without a live reviewer can
+    # only refuse stale findings and fail acceptance. When enabled, a strong
+    # reasoning model reviews each paper's extracted counts against
+    # source/provenance and records structured findings; it never mutates or
+    # deletes a raw count, and Step 3.9 composes exact source-grounded fact/field
+    # flags into the trusted projection.
     if "paper-final-check" not in skip:
         logger.info("🧪 Step 3.8: per-paper final check")
         try:
