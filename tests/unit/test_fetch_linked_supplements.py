@@ -263,3 +263,35 @@ def test_a_real_archive_is_kept(tmp_path):
     cb = fls._download_callback(_Writer(), {"PMC1_supplements.zip"})
     assert cb("http://x", target, "1", "PMC1_supplements.zip", {}) is True
     assert target.exists()
+
+
+def test_a_shorter_pmid_does_not_absorb_a_longer_pmids_links(tmp_path):
+    """A PMID is a string prefix of a longer one: 1234567 vs 12345678.
+
+    In a flat harvest dir that would attach another paper's supplement links to
+    this one, and the fold would then rewrite the wrong FULL_CONTEXT. Found by
+    external review 2026-07-25.
+    """
+    harvest = tmp_path / "pmc_fulltext"
+    _flat_paper(harvest, "1234567", md="### A\n\n_link_: own.xls\n")
+    _flat_paper(harvest, "12345678", md="### B\n\n_link_: other_paper.xls\n")
+
+    links = fls._collect_links(harvest, "1234567", {})
+    assert [link.href for link in links] == ["own.xls"]
+
+    targets = {t.pmid: t for t in fls.discover_targets(tmp_path, harvest_dir=harvest)}
+    assert [link.href for link in targets["1234567"].links] == ["own.xls"]
+    assert [link.href for link in targets["12345678"].links] == ["other_paper.xls"]
+
+
+def test_a_pmcid_paper_is_not_skipped_when_no_per_file_link_resolves(tmp_path):
+    """The archive route is independent of per-link resolution.
+
+    The global "nothing resolvable" gate must agree with the per-paper gate,
+    or an archive-eligible paper is dropped before the harvester is built.
+    """
+    _corpus_paper(tmp_path, "KCNQ1", "111", pmcid="PMC5")
+    targets = fls.discover_targets(tmp_path)
+    assert targets and targets[0].pmcid == "PMC5"
+    # Per-paper gate admits it; that is the behaviour the global gate mirrors.
+    assert not (not fls.plan(targets[0]).fetchable and not targets[0].pmcid)

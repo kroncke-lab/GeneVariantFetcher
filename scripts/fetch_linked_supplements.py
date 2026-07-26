@@ -140,7 +140,10 @@ def _collect_links(paper_dir: Path, pmid: str, artifacts: dict) -> list[Suppleme
 
     seen: set[str] = set()
     out: list[SupplementLink] = []
-    for md in sorted(paper_dir.glob(f"{pmid}*.md")):
+    # The separator is load-bearing: "1234567*" also matches "12345678_...".
+    # In a flat harvest dir that would attach another paper's links to this one
+    # and fold its supplements into the wrong FULL_CONTEXT.
+    for md in sorted(paper_dir.glob(f"{pmid}_*.md")):
         try:
             text = md.read_text(encoding="utf-8", errors="replace")
         except OSError:
@@ -562,7 +565,8 @@ def main() -> int:
     if args.dry_run:
         print("\n--dry-run: nothing fetched.")
         return 0
-    if not fetchable:
+    archive_eligible = sum(1 for t in targets if t.pmcid)
+    if not fetchable and not archive_eligible:
         print("\nNothing resolvable; not fetching.")
         return 0
 

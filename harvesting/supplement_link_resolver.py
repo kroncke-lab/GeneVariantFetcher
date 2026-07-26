@@ -30,7 +30,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Iterable, List, Optional
-from urllib.parse import unquote, urljoin, urlparse
+from urllib.parse import quote, unquote, urljoin, urlparse
 
 # Extensions worth downloading as a body-text supplement. Anything else (images,
 # icons, .html landing pages) is either handled by the figure path or is chrome.
@@ -191,7 +191,13 @@ def links_from_artifacts(manifest: dict) -> List[SupplementLink]:
     entries = (manifest or {}).get("supplement_links") or []
     out: List[SupplementLink] = []
     for entry in entries:
-        href = (entry or {}).get("href") or ""
+        # Tolerate a bare href string, and never crash a paper's recovery on a
+        # malformed manifest entry.
+        if isinstance(entry, str):
+            entry = {"href": entry}
+        if not isinstance(entry, dict):
+            continue
+        href = entry.get("href") or ""
         if not href:
             continue
         out.append(
@@ -233,6 +239,17 @@ def doi_from_href(href: str) -> Optional[str]:
     return match.group(1).rstrip(".,;)")
 
 
+def encode_path_segment(filename: str) -> str:
+    """Percent-encode a decoded filename for use as a single URL path segment.
+
+    Filenames are decoded on the way in so they are correct on disk, but a
+    decoded name cannot be pasted back into a URL: ``Supplementary Table 1.xlsx``
+    would emit a raw space, and a name holding an encoded separator would turn
+    into two path segments and address a different object.
+    """
+    return quote(filename, safe="")
+
+
 def pmc_supplement_url(pmcid: str, filename: str) -> str:
     """The canonical PMC ``bin/`` URL for a supplement filename.
 
@@ -245,7 +262,10 @@ def pmc_supplement_url(pmcid: str, filename: str) -> str:
     :func:`europepmc_archive_job` for any open-access paper and keep this as
     the per-file fallback.
     """
-    return f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/bin/{filename}"
+    return (
+        f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/bin/"
+        f"{encode_path_segment(filename)}"
+    )
 
 
 def pmc_article_url(pmcid: str) -> str:
@@ -317,7 +337,10 @@ def resolve_link(
             unresolved_reason="empty href",
         )
 
-    filename = Path(unquote(urlparse(href).path or href)).name
+    # Basename first, decode second: unquoting up front would let an encoded
+    # separator ("a%2Fb.csv") split into two segments and silently address a
+    # different file.
+    filename = unquote(Path(urlparse(href).path or href).name)
     doi = doi_from_href(href)
 
     def job(
@@ -325,7 +348,7 @@ def resolve_link(
     ) -> SupplementJob:
         return SupplementJob(
             url=url,
-            name=filename or Path(unquote(urlparse(url).path)).name,
+            name=filename or unquote(Path(urlparse(url).path).name),
             base_url=base_url,
             original_url=original,
             description=description,
@@ -334,7 +357,14 @@ def resolve_link(
         )
 
     if urlparse(href).scheme in {"http", "https"}:
-        return job(href, page_url, href)
+        # base_url drives PMC URL-variant generation downstream, so it is only
+        # meaningful when it describes the same host the href points at. A PMC
+        # href gets its own article base; a foreign CDN href gets none.
+        href_host = (urlparse(href).hostname or "").lower()
+        same_host = href_host == (urlparse(page_url).hostname or "").lower()
+        if pmcid and "ncbi.nlm.nih.gov" in href_host:
+            return job(href, pmc_article_url(pmcid), href)
+        return job(href, page_url if page_url and same_host else None, href)
 
     if pmcid:
         # PMC serves every supplement out of the article's bin/ directory, so

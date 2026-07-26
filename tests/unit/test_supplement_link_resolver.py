@@ -290,3 +290,87 @@ def test_zip_magic_distinguishes_an_archive_from_an_error_bean():
     error_bean = b'<?xml version="1.0"?><errorBean><errCode>0</errCode></errorBean>'
     assert not error_bean.startswith(ZIP_MAGIC)
     assert b"PK\x03\x04somezipbody".startswith(ZIP_MAGIC)
+
+
+# ---------------------------------------------------------------------------
+# Percent-encoding round trip
+#
+# Filenames are decoded for disk use, so they must be re-encoded before going
+# back into a URL. Found by external review 2026-07-25.
+# ---------------------------------------------------------------------------
+
+
+def test_encoded_filename_is_re_encoded_in_the_pmc_url_but_decoded_on_disk():
+    job = resolve_link(
+        SupplementLink(href="Supplementary%20Table%201.xlsx"), pmcid="PMC1"
+    )
+    # The URL must not carry a raw space.
+    assert job.url == (
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC1/bin/Supplementary%20Table%201.xlsx"
+    )
+    assert " " not in job.url
+    # ...while the on-disk name is the human one.
+    assert job.name == "Supplementary Table 1.xlsx"
+
+
+def test_an_encoded_separator_does_not_split_into_a_different_object():
+    """%2F must stay part of the filename, not become a path separator."""
+    job = resolve_link(SupplementLink(href="cohort%2FtableS1.csv"), pmcid="PMC1")
+    assert job.name == "cohort/tableS1.csv"
+    assert job.url.endswith("/bin/cohort%2FtableS1.csv")
+    # The dangerous outcome would be addressing a *different* tableS1.csv.
+    assert not job.url.endswith("/bin/tableS1.csv")
+
+
+# ---------------------------------------------------------------------------
+# base_url only when it describes the href's own host
+# ---------------------------------------------------------------------------
+
+
+def test_a_foreign_absolute_href_gets_no_pmc_base_url():
+    """base_url drives PMC variant generation; a CDN asset must not inherit it."""
+    job = resolve_link(
+        SupplementLink(href="https://static.springer.com/esm/MOESM1.pdf"),
+        pmcid="PMC1",
+        page_url="https://pmc.ncbi.nlm.nih.gov/articles/PMC1/",
+    )
+    assert job.url == "https://static.springer.com/esm/MOESM1.pdf"
+    assert job.base_url is None
+    assert "base_url" not in job.to_dict()
+
+
+def test_an_absolute_pmc_href_keeps_its_article_base_for_variant_retries():
+    job = resolve_link(
+        SupplementLink(href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7/bin/mmc1.xls"),
+        pmcid="PMC7",
+    )
+    assert job.base_url == "https://pmc.ncbi.nlm.nih.gov/articles/PMC7/"
+
+
+def test_a_same_host_page_url_is_still_offered_as_the_base():
+    job = resolve_link(
+        SupplementLink(href="https://www.nejm.org/doi/suppl/x.pdf"),
+        page_url="https://www.nejm.org/doi/full/10.1056/NEJMoa042786",
+    )
+    assert job.base_url == "https://www.nejm.org/doi/full/10.1056/NEJMoa042786"
+
+
+# ---------------------------------------------------------------------------
+# Manifest robustness
+# ---------------------------------------------------------------------------
+
+
+def test_links_from_artifacts_survives_malformed_entries():
+    manifest = {
+        "supplement_links": [
+            "bare_string.pdf",
+            {"href": "proper.xls", "label": "S1"},
+            None,
+            42,
+            {"no_href": True},
+        ]
+    }
+    assert [link.href for link in links_from_artifacts(manifest)] == [
+        "bare_string.pdf",
+        "proper.xls",
+    ]
