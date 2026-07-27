@@ -1,5 +1,7 @@
 import sqlite3
 
+import pytest
+
 import utils.gene_metadata as gene_metadata
 from pipeline.steps import discover_synonyms
 from utils.gene_metadata import (
@@ -7,6 +9,7 @@ from utils.gene_metadata import (
     get_gene_aliases,
     get_gene_metadata,
     lookup_variantfeatures_residue,
+    resolve_variantfeatures_gene_symbols,
 )
 
 
@@ -311,6 +314,74 @@ def test_legacy_variants_schema_covers_both_casings(tmp_path, monkeypatch):
     assert legacy_residue.matched_hgvs_p is True
 
     clear_gene_metadata_cache()
+
+
+def test_resolve_gene_symbols_probes_exact_before_scanning(tmp_path):
+    """The multi-query helper: one casing decision, reused as an equality test.
+
+    ``_gene_rows`` fixes one query at a time. A caller running several gene-scoped
+    queries on one connection should not let each fall back on its own -- the
+    ``UPPER()`` form is exactly what costs the full scan.
+    """
+
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    conn = sqlite3.connect(db_path)
+    statements: list[str] = []
+    conn.set_trace_callback(statements.append)
+    try:
+        # Stored uppercase: resolved from the indexed probe, no scan at all.
+        assert resolve_variantfeatures_gene_symbols(conn, "COLL1") == ("COLL1",)
+        assert not any("UPPER(" in sql for sql in statements)
+
+        # Stored mixed-case only: the real casing comes back, so the caller can
+        # still bind an equality test. A bare exact match would return ().
+        statements.clear()
+        assert resolve_variantfeatures_gene_symbols(conn, "XORF1") == ("Xorf1",)
+        assert sum("UPPER(" in sql for sql in statements) == 1
+
+        # Absent: empty tuple, which is the caller's signal to skip its queries.
+        assert resolve_variantfeatures_gene_symbols(conn, "NOPE") == ()
+
+        # Lowercase input is normalized like every other gene entry point.
+        assert resolve_variantfeatures_gene_symbols(conn, "coll1") == ("COLL1",)
+        assert resolve_variantfeatures_gene_symbols(conn, "") == ()
+
+        # Same deliberate narrowing as _gene_rows: when the exact casing matches,
+        # the mixed-case twin ('Coll1', aa_pos 900) is not folded in.
+        assert "Coll1" not in resolve_variantfeatures_gene_symbols(conn, "COLL1")
+
+        # Other gene-scoped tables are reachable through the same helper.
+        assert resolve_variantfeatures_gene_symbols(
+            conn, "XORF1", table="transcripts"
+        ) == ("Xorf1",)
+        assert resolve_variantfeatures_gene_symbols(
+            conn, "XORF1", table="genes", column="symbol"
+        ) == ("Xorf1",)
+    finally:
+        conn.close()
+
+
+def test_resolve_gene_symbols_rejects_unsafe_identifiers(tmp_path):
+    """Table/column are interpolated, not bound, so they are validated."""
+
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    conn = sqlite3.connect(db_path)
+    try:
+        with pytest.raises(ValueError):
+            resolve_variantfeatures_gene_symbols(
+                conn, "COLL1", table="variant_consequences; DROP TABLE genes"
+            )
+        with pytest.raises(ValueError):
+            resolve_variantfeatures_gene_symbols(conn, "COLL1", column="gene_symbol)--")
+        assert _has_rows(conn, "genes")
+    finally:
+        conn.close()
+
+
+def _has_rows(conn, table):
+    return conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] > 0
 
 
 def test_discover_synonyms_keeps_builtin_aliases_when_ncbi_fails(monkeypatch):
