@@ -10,10 +10,12 @@ from __future__ import annotations
 import os
 import re
 import sqlite3
+import string
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
-from typing import Iterable, Optional
+from types import MappingProxyType
+from typing import Iterable, Mapping, Optional
 
 
 @dataclass(frozen=True)
@@ -218,11 +220,15 @@ def clear_gene_metadata_cache() -> None:
     """Clear cached metadata lookups.
 
     Tests and one-off scripts that change VARIANTFEATURES_DB at runtime need a
-    clean cache so the next lookup sees the new database path.
+    clean cache so the next lookup sees the new database path. The stored-spelling
+    census is keyed by file path, so rewriting a database in place -- which every
+    fixture-based test does -- also requires this call.
     """
 
     get_gene_metadata.cache_clear()
     gene_alias_regex.cache_clear()
+    lookup_variantfeatures_residue.cache_clear()
+    _stored_gene_spellings.cache_clear()
 
 
 def get_gene_aliases(
@@ -269,6 +275,7 @@ def gene_alias_regex(
     )
 
 
+@lru_cache(maxsize=8192)
 def lookup_variantfeatures_residue(
     gene_symbol: str,
     *,
@@ -281,6 +288,11 @@ def lookup_variantfeatures_residue(
 
     Returns None when VariantFeatures is unavailable or the gene/position is not
     represented. The lookup is intentionally read-only and best-effort.
+
+    Memoized because ``pipeline.target_gene_specificity`` calls this once per
+    parsed protein position, and papers repeat positions across variants and
+    tables. The return value is a frozen dataclass, so callers share it safely.
+    Cleared by :func:`clear_gene_metadata_cache`.
     """
 
     gene = normalize_gene_symbol(gene_symbol)
@@ -305,6 +317,7 @@ def lookup_variantfeatures_residue(
                 WHERE {gene_predicate} AND aa_pos = ?
                 LIMIT 500
                 """,
+                "variant_consequences",
                 "gene_symbol",
                 gene,
                 (position,),
@@ -443,6 +456,7 @@ def _read_variantfeatures_metadata(
         row = _first_gene_row(
             conn,
             "SELECT symbol, canonical_transcript, ncbi_id, ensembl_id FROM genes WHERE {gene_predicate}",
+            "genes",
             "symbol",
             gene,
         )
@@ -462,6 +476,7 @@ def _read_variantfeatures_metadata(
             ORDER BY is_mane_select DESC, is_canonical DESC, transcript_id
             LIMIT 20
             """,
+            "transcripts",
             "gene_symbol",
             gene,
         )
@@ -484,6 +499,7 @@ def _read_variantfeatures_metadata(
             FROM variant_consequences
             WHERE {gene_predicate}
             """,
+            "variant_consequences",
             "gene_symbol",
             gene,
         )
@@ -498,6 +514,7 @@ def _read_variantfeatures_metadata(
             WHERE {gene_predicate} AND transcript_id IS NOT NULL
             LIMIT 20
             """,
+            "variant_consequences",
             "gene_symbol",
             gene,
         )
@@ -509,6 +526,7 @@ def _read_variantfeatures_metadata(
         row = _first_gene_row(
             conn,
             "SELECT MAX(resnum) FROM variants WHERE {gene_predicate}",
+            "variants",
             "gene",
             gene,
         )
@@ -517,6 +535,7 @@ def _read_variantfeatures_metadata(
         rows = _gene_rows(
             conn,
             "SELECT DISTINCT uniprot_id FROM variants WHERE {gene_predicate} AND uniprot_id IS NOT NULL LIMIT 20",
+            "variants",
             "gene",
             gene,
         )
@@ -560,6 +579,7 @@ def _lookup_legacy_variantfeatures_residue(
         WHERE {gene_predicate} AND resnum = ?
         LIMIT 500
         """,
+        "variants",
         "gene",
         gene,
         (position,),
@@ -626,11 +646,12 @@ def _has_table(conn: sqlite3.Connection, name: str) -> bool:
 def _gene_rows(
     conn: sqlite3.Connection,
     sql: str,
+    table: str,
     column: str,
     gene: str,
     extra_params: tuple[object, ...] = (),
 ) -> list[tuple]:
-    """Run a gene-scoped query, preferring the indexed exact-match predicate.
+    """Run a gene-scoped query using only index-friendly equality predicates.
 
     ``sql`` must contain a single ``{gene_predicate}`` placeholder. ``gene`` is
     already uppercased by :func:`normalize_gene_symbol`, so the exact form
@@ -640,34 +661,189 @@ def _gene_rows(
     scan, which costs seconds per query on a multi-gigabyte VariantFeatures
     slice.
 
-    The ``UPPER()`` form is still tried as a fallback so genes stored only in
-    mixed case stay reachable -- HGNC keeps a lowercase ``orf`` in symbols such
-    as ``C19orf25``, and real databases carry those rows verbatim.
+    Genes stored only in mixed case must still resolve -- HGNC keeps a lowercase
+    ``orf`` in symbols such as ``C19orf25``, and real databases carry those rows
+    verbatim. Rather than reach for ``UPPER()``, the exact-match miss consults a
+    cached census of the spellings the column actually stores
+    (:func:`_stored_gene_spellings`) and re-queries those spellings by equality.
+    Because the census enumerates every stored value, ``column IN (<spellings>)``
+    selects exactly the rows ``UPPER(column) = ?`` would have, and a gene with no
+    stored spelling at all resolves to an in-memory miss with no second query --
+    which is the whole point, since a novel gene is by definition absent and the
+    scan used to be paid once per protein position.
 
     An aggregate such as ``SELECT MAX(aa_pos)`` always returns one row, so an
     empty result cannot drive the fallback on its own; a row of nothing but
     ``NULL`` is treated as "no match" for that reason.
     """
 
-    rows: list[tuple] = []
-    for predicate in (f"{column} = ?", f"UPPER({column}) = ?"):
-        rows = conn.execute(
-            sql.format(gene_predicate=predicate), (gene, *extra_params)
+    rows = conn.execute(
+        sql.format(gene_predicate=f"{column} = ?"), (gene, *extra_params)
+    ).fetchall()
+    if _has_payload(rows):
+        return rows
+
+    spellings = _upper_matched_spellings(conn, table, column, gene)
+    if spellings is None:
+        # No filename to key a census on (an in-memory or temporary database).
+        # Keep the original scanning fallback rather than assume the gene is
+        # absent: guessing wrong here silently zeroes a gene's metadata.
+        return conn.execute(
+            sql.format(gene_predicate=f"UPPER({column}) = ?"), (gene, *extra_params)
         ).fetchall()
-        if any(value is not None for row in rows for value in row):
-            return rows
-    return rows
+    if not spellings or spellings == (gene,):
+        # Either nothing is stored under this symbol, or the only stored spelling
+        # is the one the exact probe already tried. An aggregate over an empty
+        # set yields the same all-NULL row for any predicate, so the rows from
+        # that probe are what the scanning fallback would have returned.
+        return rows
+
+    placeholders = ", ".join("?" * len(spellings))
+    return conn.execute(
+        sql.format(gene_predicate=f"{column} IN ({placeholders})"),
+        (*spellings, *extra_params),
+    ).fetchall()
 
 
 def _first_gene_row(
     conn: sqlite3.Connection,
     sql: str,
+    table: str,
     column: str,
     gene: str,
     extra_params: tuple[object, ...] = (),
 ) -> Optional[tuple]:
-    rows = _gene_rows(conn, sql, column, gene, extra_params)
+    rows = _gene_rows(conn, sql, table, column, gene, extra_params)
     return rows[0] if rows else None
+
+
+def _has_payload(rows: list[tuple]) -> bool:
+    """True when ``rows`` carry at least one non-NULL value.
+
+    ``SELECT MAX(aa_pos)`` always returns one row, so ``if not rows`` cannot
+    distinguish "matched nothing" from "matched rows whose columns are NULL".
+    """
+
+    return any(value is not None for row in rows for value in row)
+
+
+def _upper_matched_spellings(
+    conn: sqlite3.Connection, table: str, column: str, gene: str
+) -> Optional[tuple[str, ...]]:
+    """Stored spellings of ``gene``, or ``None`` when no census is possible.
+
+    An empty tuple means the census ran and the gene is genuinely absent.
+    """
+
+    db_path = _connection_filename(conn)
+    if not db_path:
+        return None
+    return _stored_gene_spellings(db_path, table, column).get(gene, ())
+
+
+def _connection_filename(conn: sqlite3.Connection) -> str:
+    """Path backing the ``main`` schema, or ``""`` for in-memory databases."""
+
+    try:
+        for _, name, filename in conn.execute("PRAGMA database_list"):
+            if name == "main":
+                return filename or ""
+    except sqlite3.Error:
+        return ""
+    return ""
+
+
+@lru_cache(maxsize=32)
+def _stored_gene_spellings(
+    db_path: str, table: str, column: str
+) -> Mapping[str, tuple[str, ...]]:
+    """Map SQLite-``UPPER()`` of each stored gene symbol to its spellings.
+
+    Built lazily -- only an exact-match miss asks for it -- so a database that
+    stores uppercase symbols never pays for the census. On the real 38 GB slice
+    ``variant_consequences`` holds 3.47M rows but only 200 distinct symbols, and
+    the walk in :func:`_distinct_column_values` reaches them in 0.034s cold /
+    0.001s warm.
+
+    Cached for the life of the process and dropped by
+    :func:`clear_gene_metadata_cache`; a database rewritten in place without that
+    call will keep answering from the old census.
+    """
+
+    groups: dict[str, list[str]] = {}
+    try:
+        with _connect_readonly(Path(db_path)) as conn:
+            for value in _distinct_column_values(conn, table, column):
+                groups.setdefault(_sqlite_upper(value), []).append(value)
+    except sqlite3.Error:
+        return MappingProxyType({})
+    return MappingProxyType({key: tuple(values) for key, values in groups.items()})
+
+
+def _distinct_column_values(
+    conn: sqlite3.Connection, table: str, column: str
+) -> list[str]:
+    """Enumerate the distinct non-NULL values of one column."""
+
+    if _has_leading_index(conn, table, column):
+        # Loose index scan: one index seek per distinct value instead of walking
+        # every row. On variant_consequences that is ~200 seeks rather than a
+        # 3.47M-entry covering-index scan (0.034s versus 2.4-3.4s).
+        sql = f"""
+            WITH RECURSIVE walk(value) AS (
+                SELECT MIN({column}) FROM {table}
+                UNION ALL
+                SELECT (
+                    SELECT MIN({column}) FROM {table} WHERE {column} > walk.value
+                )
+                FROM walk
+                WHERE walk.value IS NOT NULL
+            )
+            SELECT value FROM walk WHERE value IS NOT NULL
+        """
+    else:
+        # Without an index the walk would degrade to one full scan per distinct
+        # value, so take a single pass instead. Still amortized: this replaces a
+        # scan paid on every lookup with one paid once.
+        sql = f"SELECT DISTINCT {column} FROM {table} WHERE {column} IS NOT NULL"
+    return [str(row[0]) for row in conn.execute(sql) if row[0] is not None]
+
+
+def _has_leading_index(conn: sqlite3.Connection, table: str, column: str) -> bool:
+    """True when some complete index has ``column`` as its first column.
+
+    Partial indexes do not count: SQLite only uses one when the query implies its
+    WHERE clause, which the unconstrained ``MIN()`` walk never does, so the walk
+    would silently fall back to a full scan per step.
+    """
+
+    try:
+        indexes = conn.execute(f"PRAGMA index_list({table})").fetchall()
+    except sqlite3.Error:
+        return False
+    for row in indexes:
+        name = row[1]
+        partial = row[4] if len(row) > 4 else 0
+        if partial:
+            continue
+        info = conn.execute(f"PRAGMA index_info({name})").fetchall()
+        if info and info[0][2] == column:
+            return True
+    return False
+
+
+_ASCII_UPPER = str.maketrans(string.ascii_lowercase, string.ascii_uppercase)
+
+
+def _sqlite_upper(value: str) -> str:
+    """Mirror SQLite's ``upper()``, which only folds ASCII.
+
+    ``normalize_gene_symbol`` uses Python's Unicode-aware ``str.upper()``, so
+    matching the census with that instead would diverge from the predicate this
+    replaces on any non-ASCII symbol.
+    """
+
+    return value.translate(_ASCII_UPPER)
 
 
 def _dedupe(values: Iterable[object]) -> tuple[str, ...]:

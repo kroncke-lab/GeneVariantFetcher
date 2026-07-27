@@ -19,14 +19,21 @@ def _write_case_fixture_db(db_path):
     ``XORF1`` exists only in mixed case, mirroring the HGNC lowercase ``orf``
     convention seen in real slices (``C19orf25``). ``COLL1`` is stored under both
     casings with deliberately different payloads so the exact-match-first
-    ordering is observable.
+    ordering is observable. ``YORF2`` is stored under *two* spellings, neither of
+    them the uppercase form, which is the only shape that forces the stored
+    spellings to be unioned.
+
+    The indexes mirror the real slice (``idx_consequences_gene``,
+    ``idx_transcripts_gene``, ``genes.symbol UNIQUE``). Without them the
+    stored-spelling census takes its unindexed ``SELECT DISTINCT`` branch, so the
+    loose index scan that production actually uses would run in zero tests.
     """
 
     conn = sqlite3.connect(db_path)
     conn.executescript(
         """
         CREATE TABLE genes (
-            symbol TEXT,
+            symbol TEXT UNIQUE,
             canonical_transcript TEXT,
             ncbi_id TEXT,
             ensembl_id TEXT
@@ -49,6 +56,8 @@ def _write_case_fixture_db(db_path):
             is_canonical INTEGER,
             is_mane_select INTEGER
         );
+        CREATE INDEX idx_consequences_gene ON variant_consequences(gene_symbol);
+        CREATE INDEX idx_transcripts_gene ON transcripts(gene_symbol);
         INSERT INTO genes VALUES
             ('Xorf1', 'ENST000LOWER', '999', 'ENSG000LOWER'),
             ('COLL1', 'ENST000UPPER', '111', 'ENSG000UPPER');
@@ -59,11 +68,52 @@ def _write_case_fixture_db(db_path):
             ('Xorf1', 'ENST000LOWER', 'ENSP000LOWER:p.Cys10Arg', 'ENST000LOWER:c.28T>C', 10, 'C', 'R'),
             ('Xorf1', 'ENST000LOWER', 'ENSP000LOWER:p.Ter101Ter', NULL, 101, '*', '*'),
             ('COLL1', 'ENST000UPPER', 'ENSP000UPPER:p.Ala20Gly', NULL, 20, 'A', 'G'),
-            ('Coll1', 'ENST000COLLLOWER', 'ENSP000COLLLOWER:p.Trp900Tyr', NULL, 900, 'W', 'Y');
+            ('Coll1', 'ENST000COLLLOWER', 'ENSP000COLLLOWER:p.Trp900Tyr', NULL, 900, 'W', 'Y'),
+            ('Yorf2', 'ENST000YLOW', 'ENSP000YLOW:p.Ser50Pro', NULL, 50, 'S', 'P'),
+            ('yorf2', 'ENST000YMIX', 'ENSP000YMIX:p.Gly300Asp', NULL, 300, 'G', 'D');
         """
     )
     conn.commit()
     conn.close()
+
+
+def _trace_statements(monkeypatch) -> list[str]:
+    """Capture every SQL statement the module executes.
+
+    sqlite3 hands the trace callback the *expanded* SQL, so bound symbols appear
+    as literals and each predicate can be pinned positively.
+    """
+
+    statements: list[str] = []
+    real_connect = gene_metadata._connect_readonly
+
+    def traced_connect(path):
+        conn = real_connect(path)
+        conn.set_trace_callback(statements.append)
+        return conn
+
+    monkeypatch.setattr(gene_metadata, "_connect_readonly", traced_connect)
+    return statements
+
+
+def _census_statements(statements, table: str, column: str) -> list[str]:
+    """The census passes over one column -- the walk or the DISTINCT fallback.
+
+    Matched on both table and column: the module's own ``SELECT DISTINCT
+    transcript_id`` query is not a census pass, and ``transcripts`` carries a
+    ``gene_symbol`` column of its own that would otherwise be double-counted.
+    """
+
+    return [
+        sql
+        for sql in statements
+        if (
+            f"MIN({column}) FROM {table}" in sql
+            and "RECURSIVE" in sql
+            and f"MIN({column}) FROM {table} WHERE" in sql
+        )
+        or f"SELECT DISTINCT {column} FROM {table}" in sql
+    ]
 
 
 def test_builtin_gene_aliases_include_common_protein_names_and_typos():
@@ -126,13 +176,13 @@ def test_variantfeatures_metadata_and_residue_lookup(tmp_path, monkeypatch):
     clear_gene_metadata_cache()
 
 
-def test_mixed_case_gene_symbol_still_resolves_via_upper_fallback(
+def test_mixed_case_gene_symbol_still_resolves_via_stored_spelling(
     tmp_path, monkeypatch
 ):
     """A gene stored only in mixed case must stay reachable.
 
     The exact-match probe misses, and because ``SELECT MAX(aa_pos)`` returns a
-    single all-NULL row rather than no rows, the fallback has to trigger on the
+    single all-NULL row rather than no rows, the recovery has to trigger on the
     NULL payload instead of on an empty result set.
     """
 
@@ -205,21 +255,11 @@ def test_exact_case_lookup_does_not_emit_an_upper_scan(tmp_path, monkeypatch):
     db_path = tmp_path / "variants.db"
     _write_case_fixture_db(db_path)
     monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
 
-    statements: list[str] = []
-    real_connect = gene_metadata._connect_readonly
-
-    def traced_connect(path):
-        conn = real_connect(path)
-        conn.set_trace_callback(statements.append)
-        return conn
-
-    monkeypatch.setattr(gene_metadata, "_connect_readonly", traced_connect)
-
-    # sqlite3 hands the trace callback the *expanded* SQL, so the bound symbol
-    # appears as a literal. That lets each gene-scoped table be pinned positively
-    # rather than relying on "some statement ran" — the four sqlite_master probes
-    # from _has_table would satisfy a bare non-empty check on their own.
+    # Each gene-scoped table is pinned positively rather than by "some statement
+    # ran" — the four sqlite_master probes from _has_table would satisfy a bare
+    # non-empty check on their own.
     def emitted(table: str, predicate: str) -> bool:
         return any(f"FROM {table}" in sql and predicate in sql for sql in statements)
 
@@ -230,22 +270,332 @@ def test_exact_case_lookup_does_not_emit_an_upper_scan(tmp_path, monkeypatch):
     assert emitted("transcripts", "gene_symbol = 'COLL1'")
     assert emitted("variant_consequences", "gene_symbol = 'COLL1'")
     assert not any("UPPER(" in sql for sql in statements)
+    # The census is lazy: every exact probe matched, so nothing should have
+    # enumerated the stored spellings.
+    assert _census_statements(statements, "variant_consequences", "gene_symbol") == []
+    assert _census_statements(statements, "genes", "symbol") == []
 
-    # The per-variant residue lookup is the hottest converted query — it has no
-    # lru_cache and runs once per parsed protein position, so a regression here
-    # is paid thousands of times per paper rather than once per gene.
+    # The per-variant residue lookup is the hottest converted query — it runs
+    # once per parsed protein position, so a regression here is paid thousands of
+    # times per paper rather than once per gene.
     statements.clear()
     residue = lookup_variantfeatures_residue("COLL1", position=20)
     assert residue is not None
     assert residue.reference_residues == ("A",)
     assert emitted("variant_consequences", "gene_symbol = 'COLL1' AND aa_pos = 20")
     assert not any("UPPER(" in sql for sql in statements)
+    assert _census_statements(statements, "variant_consequences", "gene_symbol") == []
 
-    # The mixed-case-only gene is the one case that still has to pay the scan.
+    # The mixed-case-only gene used to be the one case that still paid a full
+    # scan. It now resolves through the census by querying the stored spelling
+    # exactly, so no UPPER() predicate is emitted for it either.
     clear_gene_metadata_cache()
     statements.clear()
     get_gene_metadata("XORF1")
-    assert any("UPPER(" in sql for sql in statements)
+    assert not any("UPPER(" in sql for sql in statements)
+    assert emitted("variant_consequences", "gene_symbol IN ('Xorf1')")
+    assert emitted("genes", "symbol IN ('Xorf1')")
+    assert emitted("transcripts", "gene_symbol IN ('Xorf1')")
+    # Indexed columns take the loose index scan, not a whole-column walk.
+    assert all(
+        "RECURSIVE" in sql
+        for sql in _census_statements(statements, "variant_consequences", "gene_symbol")
+    )
+
+    clear_gene_metadata_cache()
+
+
+def test_absent_gene_resolves_from_the_census_without_any_scan(tmp_path, monkeypatch):
+    """The half of the index fix that 88d486c deliberately left open.
+
+    A gene that is absent misses the exact probe, so the old code fell back to
+    ``UPPER(<column>) = ?`` and paid a full index scan — 8.5-24s per call on the
+    real 38 GB slice, twice per ``get_gene_metadata`` and once per protein
+    position in ``lookup_variantfeatures_residue``. A novel gene is by definition
+    absent, which makes this the case a new-gene run pays on every lookup.
+    """
+
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
+    clear_gene_metadata_cache()
+    statements.clear()
+
+    metadata = get_gene_metadata("ZZZZ9")
+
+    # Absence still reports absence: base metadata only, no VariantFeatures.
+    assert metadata.sources == ()
+    assert metadata.protein_length is None
+    assert metadata.canonical_transcript is None
+
+    assert not any("UPPER(" in sql for sql in statements)
+    # Positive proof the verdict came from the census rather than from a lucky
+    # exact miss: the census ran, and it ran once per column despite two
+    # gene-scoped queries missing on variant_consequences.
+    assert (
+        len(_census_statements(statements, "variant_consequences", "gene_symbol")) == 1
+    )
+    # Only the two exact probes touched the data table; no second query per miss.
+    data_reads = [
+        sql
+        for sql in statements
+        if "FROM variant_consequences" in sql
+        and sql
+        not in _census_statements(statements, "variant_consequences", "gene_symbol")
+    ]
+    assert len(data_reads) == 2
+    assert all("gene_symbol = 'ZZZZ9'" in sql for sql in data_reads)
+
+    # Same for the per-position lookup, and the census is already warm.
+    statements.clear()
+    assert lookup_variantfeatures_residue("ZZZZ9", position=20) is None
+    assert not any("UPPER(" in sql for sql in statements)
+    assert _census_statements(statements, "variant_consequences", "gene_symbol") == []
+
+    clear_gene_metadata_cache()
+
+
+def test_every_stored_casing_is_unioned_when_the_exact_spelling_has_no_payload(
+    tmp_path, monkeypatch
+):
+    """``IN (<spellings>)`` has to select exactly what ``UPPER() = ?`` did.
+
+    ``YORF2`` is stored as both ``Yorf2`` and ``yorf2``, so the exact probe finds
+    nothing and the census owns the whole answer. Querying only the first stored
+    spelling would report aa_pos 50 instead of 300 — a silent metadata loss that
+    the two casing tests above cannot catch, because there each gene has a single
+    non-uppercase spelling.
+    """
+
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
+    clear_gene_metadata_cache()
+    statements.clear()
+
+    metadata = get_gene_metadata("YORF2")
+
+    assert metadata.protein_length == 299
+    assert "variantfeatures" in metadata.sources
+    assert not any("UPPER(" in sql for sql in statements)
+    unions = [
+        sql
+        for sql in statements
+        if "FROM variant_consequences" in sql and "gene_symbol IN (" in sql
+    ]
+    assert unions
+    assert all("'Yorf2'" in sql and "'yorf2'" in sql for sql in unions)
+
+    clear_gene_metadata_cache()
+
+
+def test_residue_lookup_is_memoized_per_gene_and_position(tmp_path, monkeypatch):
+    """``target_gene_specificity`` calls this once per parsed protein position.
+
+    Positions recur across a paper's variants and tables, so without memoization
+    each repeat reopens the database and re-queries it.
+    """
+
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
+    clear_gene_metadata_cache()
+
+    first = lookup_variantfeatures_residue("COLL1", position=20)
+    assert first is not None
+    assert statements, "the first call must reach the database"
+
+    statements.clear()
+    assert lookup_variantfeatures_residue("COLL1", position=20) is first
+    assert statements == []
+
+    # A different position is a distinct key and must still query.
+    statements.clear()
+    lookup_variantfeatures_residue("COLL1", position=900)
+    assert statements
+
+    # Misses are cached too — an absent gene is the hot path this protects.
+    statements.clear()
+    assert lookup_variantfeatures_residue("ZZZZ9", position=20) is None
+    assert statements
+    statements.clear()
+    assert lookup_variantfeatures_residue("ZZZZ9", position=20) is None
+    assert statements == []
+
+    clear_gene_metadata_cache()
+    statements.clear()
+    assert lookup_variantfeatures_residue("COLL1", position=20) is not None
+    assert statements, "clear_gene_metadata_cache must drop the residue cache"
+
+    clear_gene_metadata_cache()
+
+
+def test_census_cache_is_keyed_by_path_and_dropped_on_clear(tmp_path, monkeypatch):
+    """The census is a process-lifetime cache, so a stale one must be droppable.
+
+    Clearing only the metadata cache leaves the census in place and the gene still
+    reads as absent; ``clear_gene_metadata_cache`` has to drop both, or a fixture
+    rewritten in place answers from the previous database.
+    """
+
+    db_path = tmp_path / "variants.db"
+
+    def write(rows):
+        db_path.unlink(missing_ok=True)
+        conn = sqlite3.connect(db_path)
+        conn.executescript(
+            """
+            CREATE TABLE variant_consequences (
+                gene_symbol TEXT,
+                transcript_id TEXT,
+                hgvs_p TEXT,
+                hgvs_c TEXT,
+                aa_pos INTEGER,
+                aa_ref TEXT,
+                aa_alt TEXT
+            );
+            CREATE INDEX idx_consequences_gene ON variant_consequences(gene_symbol);
+            """
+        )
+        conn.executemany(
+            "INSERT INTO variant_consequences VALUES (?, 'ENST000X', NULL, NULL, ?, 'A', 'G')",
+            rows,
+        )
+        conn.commit()
+        conn.close()
+
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    write([("AAA1", 100)])
+    clear_gene_metadata_cache()
+
+    assert get_gene_metadata("BBB2").protein_length is None
+
+    write([("AAA1", 100), ("Bbb2", 400)])
+    gene_metadata.get_gene_metadata.cache_clear()
+    assert get_gene_metadata("BBB2").protein_length is None, (
+        "the census is expected to be cached, not re-read per lookup"
+    )
+
+    clear_gene_metadata_cache()
+    assert get_gene_metadata("BBB2").protein_length == 399
+
+    clear_gene_metadata_cache()
+
+
+def test_census_avoids_the_loose_walk_without_a_usable_index(tmp_path, monkeypatch):
+    """Pick the census strategy from the indexes, not unconditionally.
+
+    The recursive ``MIN()`` walk is one index seek per distinct value on an
+    indexed column, but one *full scan* per distinct value without an index — so
+    on an unindexed column a single ``SELECT DISTINCT`` pass is the cheaper
+    census. A partial index does not count: SQLite only uses one when the query
+    implies its WHERE clause, which the unconstrained walk never does.
+    """
+
+    db_path = tmp_path / "variants.db"
+    conn = sqlite3.connect(db_path)
+    conn.executescript(
+        """
+        CREATE TABLE variants (
+            gene TEXT,
+            resnum INTEGER,
+            uniprot_id TEXT,
+            var TEXT,
+            var_hgvs_p TEXT,
+            var_hgvs_c TEXT,
+            wt_aa TEXT,
+            mut_aa TEXT
+        );
+        CREATE INDEX idx_variants_partial ON variants(gene) WHERE resnum > 1000;
+        INSERT INTO variants VALUES
+            ('Leg3', 20, 'Q1', 'W20Y', 'p.Trp20Tyr', 'c.59G>A', 'W', 'Y');
+        """
+    )
+    conn.commit()
+    conn.close()
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
+    clear_gene_metadata_cache()
+    statements.clear()
+
+    # Resolves through the census even though only a partial index exists.
+    assert get_gene_metadata("LEG3").protein_length == 20
+
+    census = _census_statements(statements, "variants", "gene")
+    assert census, "the census must still run"
+    assert not any("RECURSIVE" in sql for sql in census)
+    assert not any("UPPER(" in sql for sql in statements)
+
+    clear_gene_metadata_cache()
+
+
+def test_gene_rows_keeps_the_scanning_predicate_when_no_census_is_possible():
+    """A connection with no backing file cannot be censused.
+
+    ``_resolve_variantfeatures_db`` only ever hands back real files, so this guard
+    exists for a caller that supplies its own connection. Reading "the census
+    returned nothing" as "the gene is absent" is exactly the silent
+    metadata-zeroing failure the census path is built to avoid, so the scanning
+    predicate has to stay reachable rather than being assumed unnecessary.
+    """
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE variant_consequences (gene_symbol TEXT, aa_pos INTEGER)")
+    conn.execute("INSERT INTO variant_consequences VALUES ('C19orf25', 142)")
+    statements: list[str] = []
+    conn.set_trace_callback(statements.append)
+
+    rows = gene_metadata._gene_rows(
+        conn,
+        "SELECT MAX(aa_pos) FROM variant_consequences WHERE {gene_predicate}",
+        "variant_consequences",
+        "gene_symbol",
+        "C19ORF25",
+    )
+
+    assert rows == [(142,)]
+    assert any("UPPER(gene_symbol)" in sql for sql in statements)
+    conn.close()
+
+
+def test_census_folds_case_like_sqlite_upper_not_like_python(tmp_path, monkeypatch):
+    """The census stands in for ``UPPER(column) = ?``, so it must fold identically.
+
+    SQLite's ``upper()`` only folds ASCII; Python's ``str.upper()`` is
+    Unicode-aware. ``UPPER('Xé1')`` is ``'Xé1'``, which never equalled the
+    ``'XÉ1'`` that ``normalize_gene_symbol`` produces — so this symbol did not
+    resolve before and must not start resolving now. Real HGNC symbols are ASCII,
+    which is precisely why a Unicode fold here would go unnoticed.
+    """
+
+    db_path = tmp_path / "variants.db"
+    conn = sqlite3.connect(db_path)
+    conn.executescript(
+        """
+        CREATE TABLE variant_consequences (
+            gene_symbol TEXT,
+            transcript_id TEXT,
+            hgvs_p TEXT,
+            hgvs_c TEXT,
+            aa_pos INTEGER,
+            aa_ref TEXT,
+            aa_alt TEXT
+        );
+        INSERT INTO variant_consequences VALUES
+            ('Xé1', 'ENST000ACC', NULL, NULL, 200, 'A', 'G');
+        """
+    )
+    conn.commit()
+    conn.close()
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    clear_gene_metadata_cache()
+
+    assert get_gene_metadata("xé1").protein_length is None
+    assert gene_metadata._sqlite_upper("Xé1") == "Xé1"
+    assert "Xé1".upper() == "XÉ1"
 
     clear_gene_metadata_cache()
 
