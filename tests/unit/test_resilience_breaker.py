@@ -1,6 +1,6 @@
 """Unit coverage for utils.resilience.CircuitBreaker half-open transitions.
 
-The pre-existing suites never exercised the half-open state: tests/test_circuit_breaker.py
+The pre-existing suites never exercised the half-open state: test_circuit_breaker.py
 covers an unrelated ExpertExtractor input-quality guard, and the integration test only
 drives closed -> open. These tests pin the half-open trial behavior, including the
 regression fixed here: a failed half-open trial must re-open the breaker instead of
