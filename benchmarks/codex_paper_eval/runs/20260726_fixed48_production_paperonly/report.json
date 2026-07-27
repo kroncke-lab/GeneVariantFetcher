@@ -1,0 +1,6343 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "by_gene": {
+    "KCNH2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 292,
+          "mae": 0.0,
+          "predicted": 59,
+          "recall": 0.20205479452054795,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 292,
+          "mae": 1.3243243243243243,
+          "predicted": 74,
+          "recall": 0.2534246575342466,
+          "rmse": 11.162194882485906
+        },
+        "unaffected": {
+          "gold_asserted": 292,
+          "mae": 0.0,
+          "predicted": 60,
+          "recall": 0.2054794520547945,
+          "rmse": 0.0
+        }
+      },
+      "elapsed_seconds": 0.0,
+      "f1": 0.6066225165562914,
+      "fn": 63,
+      "fp": 234,
+      "papers": 12,
+      "precision": 0.4946004319654428,
+      "recall": 0.7842465753424658,
+      "token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "tp": 229
+    },
+    "KCNQ1": {
+      "count": {
+        "affected": {
+          "gold_asserted": 271,
+          "mae": 3.4,
+          "predicted": 10,
+          "recall": 0.03690036900369004,
+          "rmse": 10.75174404457249
+        },
+        "carriers": {
+          "gold_asserted": 271,
+          "mae": 15.266666666666667,
+          "predicted": 15,
+          "recall": 0.055350553505535055,
+          "rmse": 50.691879691590316
+        },
+        "unaffected": {
+          "gold_asserted": 271,
+          "mae": 70.0,
+          "predicted": 1,
+          "recall": 0.0036900369003690036,
+          "rmse": 70.0
+        }
+      },
+      "elapsed_seconds": 0.0,
+      "f1": 0.41354723707664887,
+      "fn": 155,
+      "fp": 174,
+      "papers": 12,
+      "precision": 0.4,
+      "recall": 0.4280442804428044,
+      "token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "tp": 116
+    },
+    "RYR2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 218,
+          "mae": 0.03409090909090909,
+          "predicted": 88,
+          "recall": 0.4036697247706422,
+          "rmse": 0.2383656473113981
+        },
+        "carriers": {
+          "gold_asserted": 218,
+          "mae": 0.02040816326530612,
+          "predicted": 98,
+          "recall": 0.44954128440366975,
+          "rmse": 0.20203050891044214
+        },
+        "unaffected": {
+          "gold_asserted": 218,
+          "mae": 0.01694915254237288,
+          "predicted": 59,
+          "recall": 0.2706422018348624,
+          "rmse": 0.13018891098082386
+        }
+      },
+      "elapsed_seconds": 0.0,
+      "f1": 0.6196581196581196,
+      "fn": 73,
+      "fp": 105,
+      "papers": 12,
+      "precision": 0.58,
+      "recall": 0.6651376146788991,
+      "token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "tp": 145
+    },
+    "SCN5A": {
+      "count": {
+        "affected": {
+          "gold_asserted": 220,
+          "mae": 0.022058823529411766,
+          "predicted": 136,
+          "recall": 0.6181818181818182,
+          "rmse": 0.14852213144650114
+        },
+        "carriers": {
+          "gold_asserted": 220,
+          "mae": 0.9787234042553191,
+          "predicted": 141,
+          "recall": 0.6409090909090909,
+          "rmse": 6.910778917620426
+        },
+        "unaffected": {
+          "gold_asserted": 220,
+          "mae": 0.10714285714285714,
+          "predicted": 112,
+          "recall": 0.509090909090909,
+          "rmse": 1.1338934190276815
+        }
+      },
+      "elapsed_seconds": 0.0,
+      "f1": 0.7578947368421053,
+      "fn": 40,
+      "fp": 75,
+      "papers": 12,
+      "precision": 0.7058823529411765,
+      "recall": 0.8181818181818182,
+      "token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "tp": 180
+    }
+  },
+  "integrity": {
+    "predictions_sha256": "76f8f1814d323f3aaf1a9fa510fb04c0f83591d9fd2281e5519af5cffd80551e",
+    "selection_sha256": "af3f53af4db31b69036c80ce8361e3272e15e7e5828c57e524023d838d7ed744"
+  },
+  "locked_at": "2026-07-26T20:05:58.371588+00:00",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 1001,
+        "mae": 0.13651877133105803,
+        "predicted": 293,
+        "recall": 0.29270729270729273,
+        "rmse": 1.993162373148206
+      },
+      "carriers": {
+        "gold_asserted": 1001,
+        "mae": 1.423780487804878,
+        "predicted": 328,
+        "recall": 0.3276723276723277,
+        "rmse": 12.890604443812139
+      },
+      "unaffected": {
+        "gold_asserted": 1001,
+        "mae": 0.3577586206896552,
+        "predicted": 232,
+        "recall": 0.23176823176823177,
+        "rmse": 4.663227386174988
+      }
+    },
+    "elapsed_seconds": 0.0,
+    "f1": 0.5931828242585215,
+    "fn": 331,
+    "fp": 588,
+    "papers": 48,
+    "precision": 0.5325914149443561,
+    "recall": 0.6693306693306693,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "tp": 670
+  },
+  "papers": [
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "A1330D",
+          "predicted": "A1330D"
+        },
+        {
+          "gold": "A1330T",
+          "predicted": "A1330T"
+        },
+        {
+          "gold": "A1746T",
+          "predicted": "A1746T"
+        },
+        {
+          "gold": "A413T",
+          "predicted": "A413T"
+        },
+        {
+          "gold": "D1114E",
+          "predicted": "D1114E"
+        },
+        {
+          "gold": "D1790G",
+          "predicted": "D1790G"
+        },
+        {
+          "gold": "E1208K",
+          "predicted": "E1208K"
+        },
+        {
+          "gold": "E1781G",
+          "predicted": "E1781G"
+        },
+        {
+          "gold": "E1784K",
+          "predicted": "E1784K"
+        },
+        {
+          "gold": "F1596I",
+          "predicted": "F1596I"
+        },
+        {
+          "gold": "P.F1617DEL",
+          "predicted": "F1617del"
+        },
+        {
+          "gold": "G1631D",
+          "predicted": "G1631D"
+        },
+        {
+          "gold": "G615E",
+          "predicted": "G615E"
+        },
+        {
+          "gold": "I1278N",
+          "predicted": "I1278N"
+        },
+        {
+          "gold": "I1448L",
+          "predicted": "I1448L"
+        },
+        {
+          "gold": "P.I1762DEL",
+          "predicted": "I1762del"
+        },
+        {
+          "gold": "I1768V",
+          "predicted": "I1768V"
+        },
+        {
+          "gold": "P.K1505_Q1507DEL",
+          "predicted": "K1505_Q1507del"
+        },
+        {
+          "gold": "L1501V",
+          "predicted": "L1501V"
+        },
+        {
+          "gold": "L1560F",
+          "predicted": "L1560F"
+        },
+        {
+          "gold": "L1786Q",
+          "predicted": "L1786Q"
+        },
+        {
+          "gold": "L604V",
+          "predicted": "L604V"
+        },
+        {
+          "gold": "M1766L",
+          "predicted": "M1766L"
+        },
+        {
+          "gold": "M1766V",
+          "predicted": "M1766V"
+        },
+        {
+          "gold": "N1269S",
+          "predicted": "N1269S"
+        },
+        {
+          "gold": "N1325S",
+          "predicted": "N1325S"
+        },
+        {
+          "gold": "N406K",
+          "predicted": "N406K"
+        },
+        {
+          "gold": "P1008S",
+          "predicted": "P1008S"
+        },
+        {
+          "gold": "P1021S",
+          "predicted": "P1021S"
+        },
+        {
+          "gold": "P627L",
+          "predicted": "P627L"
+        },
+        {
+          "gold": "P.Q1507_P1509DEL",
+          "predicted": "Q1507_P1509del"
+        },
+        {
+          "gold": "Q245K",
+          "predicted": "Q245K"
+        },
+        {
+          "gold": "Q692K",
+          "predicted": "Q692K"
+        },
+        {
+          "gold": "R1623L",
+          "predicted": "R1623L"
+        },
+        {
+          "gold": "R1623Q",
+          "predicted": "R1623Q"
+        },
+        {
+          "gold": "R1644H",
+          "predicted": "R1644H"
+        },
+        {
+          "gold": "R1991Q",
+          "predicted": "R1991Q"
+        },
+        {
+          "gold": "R340W",
+          "predicted": "R340W"
+        },
+        {
+          "gold": "R971C",
+          "predicted": "R971C"
+        },
+        {
+          "gold": "S941N",
+          "predicted": "S941N"
+        },
+        {
+          "gold": "T1069M",
+          "predicted": "T1069M"
+        },
+        {
+          "gold": "T1304M",
+          "predicted": "T1304M"
+        },
+        {
+          "gold": "T1779M",
+          "predicted": "T1779M"
+        },
+        {
+          "gold": "T370M",
+          "predicted": "T370M"
+        },
+        {
+          "gold": "V125L",
+          "predicted": "V125L"
+        },
+        {
+          "gold": "V1667I",
+          "predicted": "V1667I"
+        },
+        {
+          "gold": "V1763M",
+          "predicted": "V1763M"
+        },
+        {
+          "gold": "V1777M",
+          "predicted": "V1777M"
+        },
+        {
+          "gold": "V411M",
+          "predicted": "V411M"
+        },
+        {
+          "gold": "Y1767C",
+          "predicted": "Y1767C"
+        },
+        {
+          "gold": "Y1795C",
+          "predicted": "Y1795C"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "27566755",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 51
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 27,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 27,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 0.037037037037037035,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 27,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A344sp",
+        "P.TYR1795_GLU1796INS",
+        "c.1231G>A",
+        "c.1844G>A",
+        "c.2102C>T",
+        "c.2390G>T",
+        "c.2441G>A",
+        "c.2923C>T",
+        "c.3094G>A",
+        "c.3098A>G",
+        "c.3236C>T",
+        "c.3285G>T",
+        "c.3342C>A",
+        "c.3556G>A",
+        "c.3662C>T",
+        "c.3833T>A",
+        "c.3911C>T",
+        "c.3988G>A",
+        "c.4519_4527delCAGAAGCCC",
+        "c.4850_4852del",
+        "c.4859C>T",
+        "c.4931G>A",
+        "c.5236G>A",
+        "c.5302A>G",
+        "c.5350G>A",
+        "c.5369A>G",
+        "c.5385_5387dupTGA",
+        "c.53G>A"
+      ],
+      "f1": 0.6419753086419752,
+      "fn": 1,
+      "fp": 28,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "A1186T",
+          "predicted": "A1186T"
+        },
+        {
+          "gold": "A1221V",
+          "predicted": "A1221V"
+        },
+        {
+          "gold": "A1330T",
+          "predicted": "A1330T"
+        },
+        {
+          "gold": "A1746T",
+          "predicted": "A1746T"
+        },
+        {
+          "gold": "D1114E",
+          "predicted": "D1114E"
+        },
+        {
+          "gold": "D1790G",
+          "predicted": "D1790G"
+        },
+        {
+          "gold": "E1032K",
+          "predicted": "E1032K"
+        },
+        {
+          "gold": "E1784K",
+          "predicted": "E1784K"
+        },
+        {
+          "gold": "G615E",
+          "predicted": "G615E"
+        },
+        {
+          "gold": "G797V",
+          "predicted": "G797V"
+        },
+        {
+          "gold": "I1278N",
+          "predicted": "I1278N"
+        },
+        {
+          "gold": "I1768V",
+          "predicted": "I1768V"
+        },
+        {
+          "gold": "P.Q1507_P1509DEL",
+          "predicted": "P.GLN1507_PRO1509DEL"
+        },
+        {
+          "gold": "P.F1617DEL",
+          "predicted": "P.PHE1617DEL"
+        },
+        {
+          "gold": "P701L",
+          "predicted": "P701L"
+        },
+        {
+          "gold": "Q1033R",
+          "predicted": "Q1033R"
+        },
+        {
+          "gold": "R1644H",
+          "predicted": "R1644H"
+        },
+        {
+          "gold": "R18Q",
+          "predicted": "R18Q"
+        },
+        {
+          "gold": "R814Q",
+          "predicted": "R814Q"
+        },
+        {
+          "gold": "R975W",
+          "predicted": "R975W"
+        },
+        {
+          "gold": "S1079F",
+          "predicted": "S1079F"
+        },
+        {
+          "gold": "T1304M",
+          "predicted": "T1304M"
+        },
+        {
+          "gold": "T1620M",
+          "predicted": "T1620M"
+        },
+        {
+          "gold": "V411M",
+          "predicted": "V411M"
+        },
+        {
+          "gold": "W1095C",
+          "predicted": "W1095C"
+        },
+        {
+          "gold": "c.703+1G>A",
+          "predicted": "c.703+1G>A"
+        }
+      ],
+      "missed_gold": [
+        "P.Y1795_E1796INSD"
+      ],
+      "pmid": "26669661",
+      "precision": 0.48148148148148145,
+      "recall": 0.9629629629629629,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 26
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 59.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 59.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -59,
+          "field": "carriers",
+          "gold": 85,
+          "predicted": 26,
+          "variant": "p.Ser1103Tyr c.3308C>A"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "S1102Y"
+      ],
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 1,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "S1103Y",
+          "predicted": "p.Ser1103Tyr c.3308C>A"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "20470418",
+      "precision": 0.5,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 55.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 55.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -55,
+          "field": "carriers",
+          "gold": 85,
+          "predicted": 30,
+          "variant": "p.D1790G"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "D1790G",
+          "predicted": "p.D1790G"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "28339995",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 11,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 11,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 11,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "F756L",
+        "F756fsX",
+        "I1660V",
+        "c.1045G>A",
+        "c.1100G>A",
+        "c.1127G>A",
+        "c.1312A>T",
+        "c.2465G>A",
+        "c.2466G>A",
+        "c.2658T>A",
+        "c.4895G>A",
+        "c.4978A>G"
+      ],
+      "f1": 0.6060606060606061,
+      "fn": 1,
+      "fp": 12,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "D349N",
+          "predicted": "D349N"
+        },
+        {
+          "gold": "H886Q",
+          "predicted": "H886Q"
+        },
+        {
+          "gold": "M438L",
+          "predicted": "M438L"
+        },
+        {
+          "gold": "R1632H",
+          "predicted": "R1632H"
+        },
+        {
+          "gold": "R367H",
+          "predicted": "R367H"
+        },
+        {
+          "gold": "R376H",
+          "predicted": "R376H"
+        },
+        {
+          "gold": "W822X",
+          "predicted": "W822*"
+        },
+        {
+          "gold": "c.2268_2271del",
+          "predicted": "c.2268_2271del"
+        },
+        {
+          "gold": "c.4437+5G>A",
+          "predicted": "c.4437+5G>A"
+        },
+        {
+          "gold": "c.611+1G>A",
+          "predicted": "c.611+1G>A"
+        }
+      ],
+      "missed_gold": [
+        "c.4813+3_4813_6dup"
+      ],
+      "pmid": "29709101",
+      "precision": 0.45454545454545453,
+      "recall": 0.9090909090909091,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 10
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 55,
+          "mae": 0.0,
+          "predicted": 52,
+          "recall": 0.9454545454545454,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 55,
+          "mae": 0.0,
+          "predicted": 52,
+          "recall": 0.9454545454545454,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 55,
+          "mae": 0.0,
+          "predicted": 52,
+          "recall": 0.9454545454545454,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "IVS21+1G>A"
+      ],
+      "f1": 0.9629629629629629,
+      "fn": 3,
+      "fp": 1,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "A1428S",
+          "predicted": "A1428S c.4282G>T"
+        },
+        {
+          "gold": "A735V",
+          "predicted": "A735V c.2204C>T"
+        },
+        {
+          "gold": "E1225K",
+          "predicted": "E1225K c.3673G>A"
+        },
+        {
+          "gold": "E1784K",
+          "predicted": "E1784K c.5350G>A"
+        },
+        {
+          "gold": "E428K",
+          "predicted": "E428K c.1282G>A"
+        },
+        {
+          "gold": "F532C",
+          "predicted": "F532C c.1595G>T"
+        },
+        {
+          "gold": "G1408R",
+          "predicted": "G1408R c.4222G>A"
+        },
+        {
+          "gold": "G1420R",
+          "predicted": "G1420R c.4258G>C"
+        },
+        {
+          "gold": "G1743R",
+          "predicted": "G1743R c.5227G>A"
+        },
+        {
+          "gold": "H1200Y",
+          "predicted": "H1200Y c.3598C>T"
+        },
+        {
+          "gold": "H1923D",
+          "predicted": "H1923D c.5767C>G"
+        },
+        {
+          "gold": "c.5157delC",
+          "predicted": "I1720SfsTer67 c.5157delC"
+        },
+        {
+          "gold": "K1527R",
+          "predicted": "K1527R c.4580A>G"
+        },
+        {
+          "gold": "L136P",
+          "predicted": "L136P c.407T>C"
+        },
+        {
+          "gold": "c.4389_4396delCCTCTTTA",
+          "predicted": "L1464WfsTer5 c.4389_4396delCCTCTTTA"
+        },
+        {
+          "gold": "c.4732_4733dupAA",
+          "predicted": "L1579SfsTer53 c.4732_4733dupAA"
+        },
+        {
+          "gold": "L276Q",
+          "predicted": "L276Q c.827T>A"
+        },
+        {
+          "gold": "L846R",
+          "predicted": "L846R c.2537T>G"
+        },
+        {
+          "gold": "P.N1380DEL",
+          "predicted": "N1380del c.4140_4142delCAA"
+        },
+        {
+          "gold": "c.870delC",
+          "predicted": "N291TfsTer52 c.870delC"
+        },
+        {
+          "gold": "N406S",
+          "predicted": "N406S c.1217A>G"
+        },
+        {
+          "gold": "Q55X",
+          "predicted": "Q55X c.163C>T"
+        },
+        {
+          "gold": "Q779K",
+          "predicted": "Q779K c.2335C>A"
+        },
+        {
+          "gold": "R104Q",
+          "predicted": "R104Q c.311G>A"
+        },
+        {
+          "gold": "R1195H",
+          "predicted": "R1195H c.3584G>A"
+        },
+        {
+          "gold": "R1432S",
+          "predicted": "R1432S c.4295G>C"
+        },
+        {
+          "gold": "R1623X",
+          "predicted": "R1623X c.4867C>T"
+        },
+        {
+          "gold": "R1644C",
+          "predicted": "R1644C c.4930C>T"
+        },
+        {
+          "gold": "R1644H",
+          "predicted": "R1644H c.4931G>A"
+        },
+        {
+          "gold": "R179X",
+          "predicted": "R179X c.535C>T"
+        },
+        {
+          "gold": "R1913C",
+          "predicted": "R1913C c.5737C>T"
+        },
+        {
+          "gold": "R1919H",
+          "predicted": "R1919H c.5756G>A"
+        },
+        {
+          "gold": "R282H",
+          "predicted": "R282H c.845G>A"
+        },
+        {
+          "gold": "R367H",
+          "predicted": "R367H c.1100G>A"
+        },
+        {
+          "gold": "R376H",
+          "predicted": "R376H c.1127G>A"
+        },
+        {
+          "gold": "c.1537delC",
+          "predicted": "R513VfsTer8 c.1537delC"
+        },
+        {
+          "gold": "R689H",
+          "predicted": "R689H c.2066G>A"
+        },
+        {
+          "gold": "R693C",
+          "predicted": "R693C c.2077C>T"
+        },
+        {
+          "gold": "R814Q",
+          "predicted": "R814Q c.2441G>A"
+        },
+        {
+          "gold": "R878C",
+          "predicted": "R878C c.2632C>T"
+        },
+        {
+          "gold": "R893C",
+          "predicted": "R893C c.2677C>T"
+        },
+        {
+          "gold": "R893H",
+          "predicted": "R893H c.2678G>A"
+        },
+        {
+          "gold": "R988Q",
+          "predicted": "R988Q c.2963G>A"
+        },
+        {
+          "gold": "T1247I",
+          "predicted": "T1247I c.3740C>T"
+        },
+        {
+          "gold": "T1709M",
+          "predicted": "T1709M c.5126C>T"
+        },
+        {
+          "gold": "V1328M",
+          "predicted": "V1328M c.3982G>A"
+        },
+        {
+          "gold": "V1405M",
+          "predicted": "V1405M c.4213G>A"
+        },
+        {
+          "gold": "c.5290delG",
+          "predicted": "V1764SfsTer23 c.5290delG"
+        },
+        {
+          "gold": "W1095X",
+          "predicted": "W1095X c.3285G>A"
+        },
+        {
+          "gold": "W904X",
+          "predicted": "W904X c.2711G>A"
+        },
+        {
+          "gold": "Y1409X",
+          "predicted": "Y1409X c.4227C>G"
+        },
+        {
+          "gold": "Y416C",
+          "predicted": "Y416C c.1247A>G"
+        }
+      ],
+      "missed_gold": [
+        "c.3840+1G>A",
+        "c.4245+1G>A",
+        "c.4299+1delG"
+      ],
+      "pmid": "28341781",
+      "precision": 0.9811320754716981,
+      "recall": 0.9454545454545454,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 52
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": 9.0,
+          "predicted": 1,
+          "recall": 0.5,
+          "rmse": 9.0
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -9,
+          "field": "carriers",
+          "gold": 50,
+          "predicted": 41,
+          "variant": "E1784K"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "p.Val1098Leu"
+      ],
+      "f1": 0.8,
+      "fn": 0,
+      "fp": 1,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "E1784K",
+          "predicted": "E1784K"
+        },
+        {
+          "gold": "T1304M",
+          "predicted": "T1304M"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "18451998",
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 27,
+          "mae": 0.08333333333333333,
+          "predicted": 24,
+          "recall": 0.8888888888888888,
+          "rmse": 0.28867513459481287
+        },
+        "carriers": {
+          "gold_asserted": 27,
+          "mae": 0.08333333333333333,
+          "predicted": 24,
+          "recall": 0.8888888888888888,
+          "rmse": 0.28867513459481287
+        },
+        "unaffected": {
+          "gold_asserted": 27,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -1,
+          "field": "carriers",
+          "gold": 3,
+          "predicted": 2,
+          "variant": "p.M369K c.1106T>A"
+        },
+        {
+          "error": -1,
+          "field": "carriers",
+          "gold": 3,
+          "predicted": 2,
+          "variant": "p.R1193Q c.3578G>A"
+        },
+        {
+          "error": -1,
+          "field": "affected",
+          "gold": 3,
+          "predicted": 2,
+          "variant": "p.M369K c.1106T>A"
+        },
+        {
+          "error": -1,
+          "field": "affected",
+          "gold": 3,
+          "predicted": 2,
+          "variant": "p.R1193Q c.3578G>A"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "c.5387_5388insTGA",
+        "p.L1373* c.4118T>A",
+        "p.R535* c.1603C>T"
+      ],
+      "f1": 0.8888888888888888,
+      "fn": 3,
+      "fp": 3,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "c.3840+1G>A",
+          "predicted": "c.3840+1G>A"
+        },
+        {
+          "gold": "c.934+1G>A",
+          "predicted": "c.934+1G>A"
+        },
+        {
+          "gold": "c.3667delG",
+          "predicted": "p.A1223PfsX7 c.3666delG"
+        },
+        {
+          "gold": "A735V",
+          "predicted": "p.A735V c.2204C>T"
+        },
+        {
+          "gold": "D1243N",
+          "predicted": "p.D1243N c.3727G>A"
+        },
+        {
+          "gold": "E1225K",
+          "predicted": "p.E1225K c.3673G>A"
+        },
+        {
+          "gold": "E1548K",
+          "predicted": "p.E1548K c.4642G>A"
+        },
+        {
+          "gold": "E1784K",
+          "predicted": "p.E1784K c.5350G>A"
+        },
+        {
+          "gold": "F1360C",
+          "predicted": "p.F1360C c.4079T>G"
+        },
+        {
+          "gold": "c.2559delT",
+          "predicted": "p.F853LfsX16 c.2559delT"
+        },
+        {
+          "gold": "c.2582_2583delTT",
+          "predicted": "p.F861WfsX90 c.2582_2583delTT"
+        },
+        {
+          "gold": "F93S",
+          "predicted": "p.F93S c.278T>C"
+        },
+        {
+          "gold": "G1406R",
+          "predicted": "p.G1406R c.4216G>C"
+        },
+        {
+          "gold": "G1408R",
+          "predicted": "p.G1408R c.4222G>A"
+        },
+        {
+          "gold": "G1661R",
+          "predicted": "p.G1661R c.4981G>A"
+        },
+        {
+          "gold": "G1743E",
+          "predicted": "p.G1743E c.5228G>A"
+        },
+        {
+          "gold": "L839P",
+          "predicted": "p.L839P c.2516T>C"
+        },
+        {
+          "gold": "M369K",
+          "predicted": "p.M369K c.1106T>A"
+        },
+        {
+          "gold": "R1023H",
+          "predicted": "p.R1023H c.3068G>A"
+        },
+        {
+          "gold": "R1193Q",
+          "predicted": "p.R1193Q c.3578G>A"
+        },
+        {
+          "gold": "R282C",
+          "predicted": "p.R282C c.844C>T"
+        },
+        {
+          "gold": "R367C",
+          "predicted": "p.R367C c.1099C>T"
+        },
+        {
+          "gold": "S1672Y",
+          "predicted": "p.S1672Y c.5015C>A"
+        },
+        {
+          "gold": "W374G",
+          "predicted": "p.W374G c.1120T>G"
+        }
+      ],
+      "missed_gold": [
+        "L1373X",
+        "P.Y1795_E1796INSD",
+        "R535X"
+      ],
+      "pmid": "26921764",
+      "precision": 0.8888888888888888,
+      "recall": 0.8888888888888888,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 24
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 9,
+          "mae": 0.14285714285714285,
+          "predicted": 7,
+          "recall": 0.7777777777777778,
+          "rmse": 0.3779644730092272
+        },
+        "carriers": {
+          "gold_asserted": 9,
+          "mae": 0.125,
+          "predicted": 8,
+          "recall": 0.8888888888888888,
+          "rmse": 0.3535533905932738
+        },
+        "unaffected": {
+          "gold_asserted": 9,
+          "mae": 0.0,
+          "predicted": 7,
+          "recall": 0.7777777777777778,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": -1,
+          "field": "carriers",
+          "gold": 19,
+          "predicted": 18,
+          "variant": "p.T1247I c.3740C>T"
+        },
+        {
+          "error": -1,
+          "field": "affected",
+          "gold": 19,
+          "predicted": 18,
+          "variant": "p.T1247I c.3740C>T"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A1180V",
+        "D1275N",
+        "T750N",
+        "V1279I",
+        "p.D1182D c.3546C>T",
+        "p.E547E c.1641A>G",
+        "p.H558R c.1673A>G",
+        "p.L561L c.1681C>T",
+        "p.S525S c.1575C>T",
+        "p.Y1261Y c.3783C>T"
+      ],
+      "f1": 0.6428571428571429,
+      "fn": 0,
+      "fp": 10,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "A1260D",
+          "predicted": "p.A1260D c.3779C>A"
+        },
+        {
+          "gold": "G1262S",
+          "predicted": "p.G1262S c.3784G>A"
+        },
+        {
+          "gold": "M1245I",
+          "predicted": "p.M1245I c.3735G>A"
+        },
+        {
+          "gold": "R513C",
+          "predicted": "p.R513C c.1537C>T"
+        },
+        {
+          "gold": "R513H",
+          "predicted": "p.R513H c.1538G>A"
+        },
+        {
+          "gold": "R526H",
+          "predicted": "p.R526H c.1577G>A"
+        },
+        {
+          "gold": "T1247I",
+          "predicted": "p.T1247I c.3740C>T"
+        },
+        {
+          "gold": "T512I",
+          "predicted": "p.T512I c.1535C>T"
+        },
+        {
+          "gold": "T570N",
+          "predicted": "p.T570N c.1709C>A"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "27554632",
+      "precision": 0.47368421052631576,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 9
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "D1790G",
+        "E1784K"
+      ],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 2,
+      "gene": "SCN5A",
+      "matched_variants": [],
+      "missed_gold": [
+        "P.Y1795_E1796INSD"
+      ],
+      "pmid": "10590249",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "G400A",
+        "IVS16-6C>T",
+        "Q371X",
+        "R1193E",
+        "R680H",
+        "S1103Y",
+        "S216L",
+        "V168M",
+        "c.1199G>C",
+        "c.287C>T",
+        "c.3183G>A",
+        "c.4509C>T",
+        "c.5457T>A",
+        "c.630G>A",
+        "c.87G>A",
+        "p.His558Arg c.1673A>G"
+      ],
+      "f1": 0.1904761904761905,
+      "fn": 1,
+      "fp": 16,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "R1193Q",
+          "predicted": "p.Arg1193Gln c.3578G>A"
+        },
+        {
+          "gold": "F1596I",
+          "predicted": "p.Phe1596Ile c.4786T>A"
+        }
+      ],
+      "missed_gold": [
+        "c.2788-6C>T"
+      ],
+      "pmid": "25051102",
+      "precision": 0.1111111111111111,
+      "recall": 0.6666666666666666,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 32,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.0625,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 32,
+          "mae": 6.0,
+          "predicted": 2,
+          "recall": 0.0625,
+          "rmse": 8.48528137423857
+        },
+        "unaffected": {
+          "gold_asserted": 32,
+          "mae": 6.0,
+          "predicted": 2,
+          "recall": 0.0625,
+          "rmse": 8.48528137423857
+        }
+      },
+      "count_errors": [
+        {
+          "error": 12,
+          "field": "carriers",
+          "gold": 7,
+          "predicted": 19,
+          "variant": "p.Arg1193Gln"
+        },
+        {
+          "error": 12,
+          "field": "unaffected",
+          "gold": 0,
+          "predicted": 12,
+          "variant": "p.Arg1193Gln"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "T983I"
+      ],
+      "f1": 0.11428571428571428,
+      "fn": 30,
+      "fp": 1,
+      "gene": "SCN5A",
+      "matched_variants": [
+        {
+          "gold": "R1193Q",
+          "predicted": "p.Arg1193Gln"
+        },
+        {
+          "gold": "D1243N",
+          "predicted": "p.Asp1243Asn"
+        }
+      ],
+      "missed_gold": [
+        "A1180V",
+        "A1270S",
+        "A1680T",
+        "A551V",
+        "C982R",
+        "D1275N",
+        "E1053K",
+        "E48K",
+        "F1596I",
+        "F532C",
+        "G1935S",
+        "G552W",
+        "G615E",
+        "I1836T",
+        "I848F",
+        "L1194M",
+        "L1704H",
+        "P717L",
+        "R1023H",
+        "R1195S",
+        "R1512W",
+        "R1739Q",
+        "R1898C",
+        "R2012C",
+        "R282C",
+        "R689H",
+        "S1904L",
+        "T1304M",
+        "V1353M",
+        "V1532I"
+      ],
+      "pmid": "26746457",
+      "precision": 0.6666666666666666,
+      "recall": 0.0625,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 35,
+          "mae": 0.0,
+          "predicted": 5,
+          "recall": 0.14285714285714285,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 35,
+          "mae": 0.0,
+          "predicted": 18,
+          "recall": 0.5142857142857142,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 35,
+          "mae": 0.0,
+          "predicted": 5,
+          "recall": 0.14285714285714285,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A341V",
+        "A525T",
+        "D202H",
+        "D317N",
+        "G269S",
+        "G325R",
+        "G589D",
+        "R366W",
+        "R518X",
+        "R561G",
+        "R594Q",
+        "S277DEL",
+        "S277L",
+        "S546L",
+        "T169K",
+        "T311I",
+        "W248C",
+        "Y171X",
+        "Y315C",
+        "c.1032G>A",
+        "c.1129-2A>G",
+        "c.3093_3106del",
+        "c.683+5G>A"
+      ],
+      "f1": 0.7252747252747254,
+      "fn": 2,
+      "fp": 23,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "L552S",
+          "predicted": "L552S"
+        },
+        {
+          "gold": "R176W",
+          "predicted": "R176W"
+        },
+        {
+          "gold": "D460fsX",
+          "predicted": "c.1379delA"
+        },
+        {
+          "gold": "c.1558-1G>C",
+          "predicted": "c.1558-1G>C"
+        },
+        {
+          "gold": "E544fsX",
+          "predicted": "c.1631_1632delAG"
+        },
+        {
+          "gold": "Q725fsX",
+          "predicted": "c.2173_2196del"
+        },
+        {
+          "gold": "T74fsX",
+          "predicted": "c.221_242del"
+        },
+        {
+          "gold": "L987fsX",
+          "predicted": "c.2959_2960delCT"
+        },
+        {
+          "gold": "G1006fsX",
+          "predicted": "c.3017delG"
+        },
+        {
+          "gold": "c.3152+1G>A",
+          "predicted": "c.3152+1G>A"
+        },
+        {
+          "gold": "T1054fsX",
+          "predicted": "c.3160dupA"
+        },
+        {
+          "gold": "T152fsX",
+          "predicted": "c.453delC"
+        },
+        {
+          "gold": "V215X",
+          "predicted": "c.643delG"
+        },
+        {
+          "gold": "R281fsX",
+          "predicted": "c.842dupG"
+        },
+        {
+          "gold": "A285fsX",
+          "predicted": "c.853_859dupGCCGACG"
+        },
+        {
+          "gold": "A193V",
+          "predicted": "p.A193V"
+        },
+        {
+          "gold": "A558E",
+          "predicted": "p.A558E"
+        },
+        {
+          "gold": "A561T",
+          "predicted": "p.A561T"
+        },
+        {
+          "gold": "A561V",
+          "predicted": "p.A561V"
+        },
+        {
+          "gold": "A913V",
+          "predicted": "p.A913V"
+        },
+        {
+          "gold": "C39X",
+          "predicted": "p.C39*"
+        },
+        {
+          "gold": "G1036D",
+          "predicted": "p.G1036D"
+        },
+        {
+          "gold": "G572S",
+          "predicted": "p.G572S"
+        },
+        {
+          "gold": "G584S",
+          "predicted": "p.G584S"
+        },
+        {
+          "gold": "G601S",
+          "predicted": "p.G601S"
+        },
+        {
+          "gold": "H402R",
+          "predicted": "p.H402R"
+        },
+        {
+          "gold": "N629S",
+          "predicted": "p.N629S"
+        },
+        {
+          "gold": "P451L",
+          "predicted": "p.P451L"
+        },
+        {
+          "gold": "R273X",
+          "predicted": "p.R273*"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "p.T613M"
+        },
+        {
+          "gold": "W1001X",
+          "predicted": "p.W1001*"
+        },
+        {
+          "gold": "W497X",
+          "predicted": "p.W497*"
+        },
+        {
+          "gold": "Y569H",
+          "predicted": "p.Y569H"
+        }
+      ],
+      "missed_gold": [
+        "c.1129-58_1320Del",
+        "P1034fsX"
+      ],
+      "pmid": "29622001",
+      "precision": 0.5892857142857143,
+      "recall": 0.9428571428571428,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 33
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 44,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 44,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 44,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.9135802469135803,
+      "fn": 7,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "A561T",
+          "predicted": "A561T"
+        },
+        {
+          "gold": "A561V",
+          "predicted": "A561V"
+        },
+        {
+          "gold": "A614V",
+          "predicted": "A614V"
+        },
+        {
+          "gold": "A78P",
+          "predicted": "A78P"
+        },
+        {
+          "gold": "C44X",
+          "predicted": "C44X"
+        },
+        {
+          "gold": "C66G",
+          "predicted": "C66G"
+        },
+        {
+          "gold": "D609N",
+          "predicted": "D609N"
+        },
+        {
+          "gold": "F29L",
+          "predicted": "F29L"
+        },
+        {
+          "gold": "F627L",
+          "predicted": "F627L"
+        },
+        {
+          "gold": "F805C",
+          "predicted": "F805C"
+        },
+        {
+          "gold": "G47V",
+          "predicted": "G47V"
+        },
+        {
+          "gold": "G604S",
+          "predicted": "G604S"
+        },
+        {
+          "gold": "G628S",
+          "predicted": "G628S"
+        },
+        {
+          "gold": "H70R",
+          "predicted": "H70R"
+        },
+        {
+          "gold": "K638E",
+          "predicted": "K638E"
+        },
+        {
+          "gold": "L552S",
+          "predicted": "L552S"
+        },
+        {
+          "gold": "L86R",
+          "predicted": "L86R"
+        },
+        {
+          "gold": "M124R",
+          "predicted": "M124R"
+        },
+        {
+          "gold": "N33T",
+          "predicted": "N33T"
+        },
+        {
+          "gold": "N629S",
+          "predicted": "N629S"
+        },
+        {
+          "gold": "N861I",
+          "predicted": "N861I"
+        },
+        {
+          "gold": "P596L",
+          "predicted": "P596L"
+        },
+        {
+          "gold": "P72Q",
+          "predicted": "P72Q"
+        },
+        {
+          "gold": "P917L",
+          "predicted": "P917L"
+        },
+        {
+          "gold": "R56Q",
+          "predicted": "R56Q"
+        },
+        {
+          "gold": "R744X",
+          "predicted": "R744X"
+        },
+        {
+          "gold": "R752W",
+          "predicted": "R752W"
+        },
+        {
+          "gold": "R823W",
+          "predicted": "R823W"
+        },
+        {
+          "gold": "R920fsX",
+          "predicted": "R920FS"
+        },
+        {
+          "gold": "S26I",
+          "predicted": "S26I"
+        },
+        {
+          "gold": "S428L",
+          "predicted": "S428L"
+        },
+        {
+          "gold": "S428X",
+          "predicted": "S428X"
+        },
+        {
+          "gold": "T436M",
+          "predicted": "T436M"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "T613M"
+        },
+        {
+          "gold": "V630A",
+          "predicted": "V630A"
+        },
+        {
+          "gold": "V822M",
+          "predicted": "V822M"
+        },
+        {
+          "gold": "W1001X",
+          "predicted": "W1001X"
+        }
+      ],
+      "missed_gold": [
+        "A83fsX",
+        "G925fsX",
+        "I593X",
+        "L799SP",
+        "P968fsX",
+        "Q376SP",
+        "V295fsX"
+      ],
+      "pmid": "11854117",
+      "precision": 1.0,
+      "recall": 0.8409090909090909,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 37
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 29,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 29,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 29,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 29,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [],
+      "missed_gold": [
+        "A1058E",
+        "A190T",
+        "A203T",
+        "A915V",
+        "C723R",
+        "G187del",
+        "G187S",
+        "G873S",
+        "H254Q",
+        "K897T",
+        "K897T",
+        "K897T",
+        "K897T",
+        "L1023del",
+        "N257H",
+        "N33T",
+        "P251A",
+        "P347S",
+        "P910L",
+        "P917L",
+        "P967L",
+        "Q1068R",
+        "R1035W",
+        "R1047L",
+        "R1047L",
+        "R176W",
+        "R181Q",
+        "T367S",
+        "V215G"
+      ],
+      "pmid": "14661677",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "mae": 48.0,
+          "predicted": 2,
+          "recall": 0.6666666666666666,
+          "rmse": 67.88225099390856
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -96,
+          "field": "carriers",
+          "gold": 112,
+          "predicted": 16,
+          "variant": "p.Arg176Trp"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.8,
+      "fn": 1,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "R176W",
+          "predicted": "p.Arg176Trp"
+        },
+        {
+          "gold": "L552S",
+          "predicted": "p.Leu552Ser"
+        }
+      ],
+      "missed_gold": [
+        "R176W"
+      ],
+      "pmid": "19160088",
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 54,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 0.9444444444444444,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 54,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 0.9444444444444444,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 54,
+          "mae": 0.0,
+          "predicted": 51,
+          "recall": 0.9444444444444444,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "p.Arg797Thr"
+      ],
+      "f1": 0.9622641509433962,
+      "fn": 3,
+      "fp": 1,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "c.1557+1G>A",
+          "predicted": "c.1557+1G>A"
+        },
+        {
+          "gold": "P926fsX",
+          "predicted": "c.2775_2776insG"
+        },
+        {
+          "gold": "L987fsX",
+          "predicted": "c.2959-2960delC"
+        },
+        {
+          "gold": "A1017fsX",
+          "predicted": "p.Ala1017ProfsX40"
+        },
+        {
+          "gold": "A169G",
+          "predicted": "p.Ala169Gly"
+        },
+        {
+          "gold": "A32T",
+          "predicted": "p.Ala32Thr c.94G>A"
+        },
+        {
+          "gold": "A561T",
+          "predicted": "p.Ala561Thr c.1681G>A"
+        },
+        {
+          "gold": "A561V",
+          "predicted": "p.Ala561Val c.1682C>T"
+        },
+        {
+          "gold": "A614V",
+          "predicted": "p.Ala614Val c.1841C>T"
+        },
+        {
+          "gold": "R1032fsX",
+          "predicted": "p.Arg1032AlafsX86 c.3094_3095insC"
+        },
+        {
+          "gold": "R366X",
+          "predicted": "p.Arg366X c.1096C>T"
+        },
+        {
+          "gold": "R534C",
+          "predicted": "p.Arg534Cys c.1600C>T"
+        },
+        {
+          "gold": "R823W",
+          "predicted": "p.Arg823Trp c.2467C>T"
+        },
+        {
+          "gold": "R863X",
+          "predicted": "p.Arg863X c.2587C>T"
+        },
+        {
+          "gold": "R912W",
+          "predicted": "p.Arg912Trp"
+        },
+        {
+          "gold": "N629S",
+          "predicted": "p.Asn629Ser c.1886A>G"
+        },
+        {
+          "gold": "N633S",
+          "predicted": "p.Asn633Ser c.1898A>G"
+        },
+        {
+          "gold": "D102H",
+          "predicted": "p.Asp102His c.304G>C"
+        },
+        {
+          "gold": "D609G",
+          "predicted": "p.Asp609Gly c.1826A>G"
+        },
+        {
+          "gold": "D837Y",
+          "predicted": "p.Asp837Tyr c.2509G>T"
+        },
+        {
+          "gold": "D896fsX",
+          "predicted": "p.Asp896ArgfsX77 c.2682_2685delC"
+        },
+        {
+          "gold": "C984fsX",
+          "predicted": "p.Cys984ThrfsX75 c.2944_2948dupG"
+        },
+        {
+          "gold": "Q247X",
+          "predicted": "p.Gln247X"
+        },
+        {
+          "gold": "E480V",
+          "predicted": "p.Glu480Val"
+        },
+        {
+          "gold": "E544A",
+          "predicted": "p.Glu544Ala"
+        },
+        {
+          "gold": "E575K",
+          "predicted": "p.Glu575Lys"
+        },
+        {
+          "gold": "G572S",
+          "predicted": "p.Gly572Ser c.1714G>A"
+        },
+        {
+          "gold": "G601S",
+          "predicted": "p.Gly601Ser c.1801G>A"
+        },
+        {
+          "gold": "G604S",
+          "predicted": "p.Gly604Ser c.1810G>A"
+        },
+        {
+          "gold": "G626S",
+          "predicted": "p.Gly626Ser"
+        },
+        {
+          "gold": "G628S",
+          "predicted": "p.Gly628Ser c.1882G>A"
+        },
+        {
+          "gold": "G71W",
+          "predicted": "p.Gly71Trp"
+        },
+        {
+          "gold": "G873fsX",
+          "predicted": "p.Gly873AlafsX5 c.2616delC"
+        },
+        {
+          "gold": "I782N",
+          "predicted": "p.Ile782Asn"
+        },
+        {
+          "gold": "L413P",
+          "predicted": "p.Leu413Pro c.1238T>C"
+        },
+        {
+          "gold": "L457P",
+          "predicted": "p.Leu457Pro c.1370T>C"
+        },
+        {
+          "gold": "L559H",
+          "predicted": "p.Leu559His c.1676T>A"
+        },
+        {
+          "gold": "F494del",
+          "predicted": "p.Phe494del c.1480_1482delT"
+        },
+        {
+          "gold": "F805S",
+          "predicted": "p.Phe805Ser"
+        },
+        {
+          "gold": "P1034fsX",
+          "predicted": "p.Pro1034ArgfsX20 c.3102_3111delC"
+        },
+        {
+          "gold": "P596S",
+          "predicted": "p.Pro596Ser"
+        },
+        {
+          "gold": "P72T",
+          "predicted": "p.Pro72Thr"
+        },
+        {
+          "gold": "P926S",
+          "predicted": "p.Pro926Ser"
+        },
+        {
+          "gold": "S620I",
+          "predicted": "p.Ser620Ile"
+        },
+        {
+          "gold": "S818L",
+          "predicted": "p.Ser818Leu c.2453C>T"
+        },
+        {
+          "gold": "S818W",
+          "predicted": "p.Ser818Trp"
+        },
+        {
+          "gold": "T443fsX",
+          "predicted": "p.Thr443ArgfsX77 c.1328_1329delC"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "p.Thr613Met c.1838C>T"
+        },
+        {
+          "gold": "T634P",
+          "predicted": "p.Thr634Pro"
+        },
+        {
+          "gold": "W154X",
+          "predicted": "p.Trp154X"
+        },
+        {
+          "gold": "Y475C",
+          "predicted": "p.Tyr475Cys c.1424A>G"
+        }
+      ],
+      "missed_gold": [
+        "P191fsX",
+        "T443fsX",
+        "A797T"
+      ],
+      "pmid": "26496715",
+      "precision": 0.9807692307692307,
+      "recall": 0.9444444444444444,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 51
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 5,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 5,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 5,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 5,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [],
+      "missed_gold": [
+        "R752W",
+        "F805C",
+        "M124R",
+        "V822M",
+        "W1001X"
+      ],
+      "pmid": "11844290",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 60,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 60,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 60,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A150fsX",
+        "A172C",
+        "A178P",
+        "A178T",
+        "A194P",
+        "A209G",
+        "A300T",
+        "A332G",
+        "A341E",
+        "A341V",
+        "A344V",
+        "A371T",
+        "A525T",
+        "A551C",
+        "A558P",
+        "A614V",
+        "A842G",
+        "A944C",
+        "A944G",
+        "A98C",
+        "C1022A",
+        "C1022T",
+        "C1024T",
+        "C1031T",
+        "C1039T",
+        "C1046G",
+        "C1066T",
+        "C1096T",
+        "C132A",
+        "C20T",
+        "C215A",
+        "C221T",
+        "C241T",
+        "C520T",
+        "C674T",
+        "C727T",
+        "C817T",
+        "C87A",
+        "C926G",
+        "C932T",
+        "C934T",
+        "C935T",
+        "C939G",
+        "C958G",
+        "D1114N",
+        "D242N",
+        "D317N",
+        "D76N",
+        "E160K",
+        "E261K",
+        "E543fsX",
+        "F157C",
+        "F167W",
+        "F640L",
+        "G1032A",
+        "G1032C",
+        "G1033C",
+        "G1034A",
+        "G1036fsX",
+        "G1097A",
+        "G1097C",
+        "G1111A",
+        "G1128A",
+        "G139T",
+        "G140T",
+        "G157C",
+        "G167A",
+        "G168R",
+        "G179S",
+        "G189fsX",
+        "G226A",
+        "G232C",
+        "G269D",
+        "G269S",
+        "G306R",
+        "G314S",
+        "G325R",
+        "G345E",
+        "G345R",
+        "G478A",
+        "G502A",
+        "G521A",
+        "G532A",
+        "G532C",
+        "G535A",
+        "G569A",
+        "G572C",
+        "G572R",
+        "G580C",
+        "G601S",
+        "G724A",
+        "G728A",
+        "G760A",
+        "G781A",
+        "G805A",
+        "G806A",
+        "G898A",
+        "G914C",
+        "G916A",
+        "G928A",
+        "G940A",
+        "G949A",
+        "G954C",
+        "G95A",
+        "G973A",
+        "I313M",
+        "I593G",
+        "K318N",
+        "L191fsX",
+        "L200fsX",
+        "L250H",
+        "L266P",
+        "L273F",
+        "L342F",
+        "L353P",
+        "L51H",
+        "L650fsX",
+        "N470D",
+        "N588D",
+        "N629D",
+        "N629K",
+        "N629S",
+        "N633S",
+        "P320A",
+        "P448R",
+        "P630fsX",
+        "P631fsX",
+        "Q356X",
+        "Q530X",
+        "Q725X",
+        "R174C",
+        "R174H",
+        "R190Q",
+        "R243C",
+        "R243H",
+        "R32H",
+        "R366P",
+        "R366Q",
+        "R366W",
+        "R518X",
+        "R534C",
+        "R539W",
+        "R555C",
+        "R582C",
+        "R583C",
+        "R591H",
+        "R594Q",
+        "S225L",
+        "S349W",
+        "S373P",
+        "S428X",
+        "S566F",
+        "S74L",
+        "S818L",
+        "T1058C",
+        "T1117C",
+        "T196G",
+        "T257G",
+        "T259C",
+        "T309R",
+        "T311I",
+        "T312I",
+        "T391I",
+        "T436M",
+        "T470G",
+        "T474I",
+        "T556fsX",
+        "T587M",
+        "T742C",
+        "T749A",
+        "T797C",
+        "V254M",
+        "V310I",
+        "V47F",
+        "V612L",
+        "V630A",
+        "V630L",
+        "V796fsX",
+        "V822M",
+        "W248R",
+        "W305S",
+        "W392R",
+        "W87R",
+        "Y111C",
+        "Y184S",
+        "Y281C",
+        "Y315C",
+        "Y315S",
+        "Y420fsX",
+        "Y493X",
+        "Y611H",
+        "Y611X"
+      ],
+      "f1": 0.35830618892508137,
+      "fn": 5,
+      "fp": 192,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "A561T",
+          "predicted": "A561T"
+        },
+        {
+          "gold": "A561V",
+          "predicted": "A561V"
+        },
+        {
+          "gold": "A78P",
+          "predicted": "A78P"
+        },
+        {
+          "gold": "A83fsX",
+          "predicted": "A83fsX"
+        },
+        {
+          "gold": "C66G",
+          "predicted": "C66G"
+        },
+        {
+          "gold": "D609N",
+          "predicted": "D609N"
+        },
+        {
+          "gold": "E682X",
+          "predicted": "E682X"
+        },
+        {
+          "gold": "F627L",
+          "predicted": "F627L"
+        },
+        {
+          "gold": "F805C",
+          "predicted": "F805C"
+        },
+        {
+          "gold": "F805S",
+          "predicted": "F805S"
+        },
+        {
+          "gold": "G1031fsX",
+          "predicted": "G1031fsX"
+        },
+        {
+          "gold": "G47V",
+          "predicted": "G47V"
+        },
+        {
+          "gold": "G53R",
+          "predicted": "G53R"
+        },
+        {
+          "gold": "G584S",
+          "predicted": "G584S"
+        },
+        {
+          "gold": "G604S",
+          "predicted": "G604S"
+        },
+        {
+          "gold": "G626S",
+          "predicted": "G626S"
+        },
+        {
+          "gold": "G628S",
+          "predicted": "G628S"
+        },
+        {
+          "gold": "G925fsX",
+          "predicted": "G925fsX"
+        },
+        {
+          "gold": "H70R",
+          "predicted": "H70R"
+        },
+        {
+          "gold": "H739fsX",
+          "predicted": "H739fsX"
+        },
+        {
+          "gold": "I593R",
+          "predicted": "I593R"
+        },
+        {
+          "gold": "I798fsX",
+          "predicted": "I798fsX"
+        },
+        {
+          "gold": "K638E",
+          "predicted": "K638E"
+        },
+        {
+          "gold": "K886fsX",
+          "predicted": "K886fsX"
+        },
+        {
+          "gold": "L552S",
+          "predicted": "L552S"
+        },
+        {
+          "gold": "L615V",
+          "predicted": "L615V"
+        },
+        {
+          "gold": "L86R",
+          "predicted": "L86R"
+        },
+        {
+          "gold": "M645L",
+          "predicted": "M645L"
+        },
+        {
+          "gold": "N861I",
+          "predicted": "N861I"
+        },
+        {
+          "gold": "P1101fsX",
+          "predicted": "P1101fsX"
+        },
+        {
+          "gold": "P141fsX",
+          "predicted": "P141fsX"
+        },
+        {
+          "gold": "P151fsX",
+          "predicted": "P151fsX"
+        },
+        {
+          "gold": "P241fsX",
+          "predicted": "P241fsX"
+        },
+        {
+          "gold": "P347S",
+          "predicted": "P347S"
+        },
+        {
+          "gold": "P632S",
+          "predicted": "P632S"
+        },
+        {
+          "gold": "P72Q",
+          "predicted": "P72Q"
+        },
+        {
+          "gold": "P917L",
+          "predicted": "P917L"
+        },
+        {
+          "gold": "P968fsX",
+          "predicted": "P968fsX"
+        },
+        {
+          "gold": "P986fsX",
+          "predicted": "P986fsX"
+        },
+        {
+          "gold": "Q81X",
+          "predicted": "Q81X"
+        },
+        {
+          "gold": "R1014X",
+          "predicted": "R1014X"
+        },
+        {
+          "gold": "R312C",
+          "predicted": "R312C"
+        },
+        {
+          "gold": "R531Q",
+          "predicted": "R531Q"
+        },
+        {
+          "gold": "R56Q",
+          "predicted": "R56Q"
+        },
+        {
+          "gold": "R73fsX",
+          "predicted": "R73fsX"
+        },
+        {
+          "gold": "R752W",
+          "predicted": "R752W"
+        },
+        {
+          "gold": "R823W",
+          "predicted": "R823W"
+        },
+        {
+          "gold": "R920fsX",
+          "predicted": "R920fsX"
+        },
+        {
+          "gold": "R922W",
+          "predicted": "R922W"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "T613M"
+        },
+        {
+          "gold": "V295fsX",
+          "predicted": "V295fsX"
+        },
+        {
+          "gold": "W585C",
+          "predicted": "W585C"
+        },
+        {
+          "gold": "N33T",
+          "predicted": "p.Asn33Thr c.98A>C"
+        },
+        {
+          "gold": "C44X",
+          "predicted": "p.Cys44* c.132C>A"
+        },
+        {
+          "gold": "F29L",
+          "predicted": "p.Phe29Leu c.87C>A"
+        }
+      ],
+      "missed_gold": [
+        "D864SP",
+        "K638del",
+        "L799SP",
+        "Q376SP",
+        "Q376SP"
+      ],
+      "pmid": "10973849",
+      "precision": 0.22267206477732793,
+      "recall": 0.9166666666666666,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 55
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 8,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.25,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 8,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.25,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 8,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 0.25,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "K897K",
+        "T897T",
+        "c.1631_1632delAG",
+        "c.1631delAG",
+        "c.453delC",
+        "p.Lys897Thr c.2690A>C"
+      ],
+      "f1": 0.6,
+      "fn": 2,
+      "fp": 6,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "R176W",
+          "predicted": "p.Arg176Trp c.526C>T"
+        },
+        {
+          "gold": "G584S",
+          "predicted": "p.Gly584Ser c.1750G>A"
+        },
+        {
+          "gold": "G601S",
+          "predicted": "p.Gly601Ser c.1801G>A"
+        },
+        {
+          "gold": "P451L",
+          "predicted": "p.Pro451Leu c.1352C>T"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "p.Thr613Met c.1838C>T"
+        },
+        {
+          "gold": "Y569H",
+          "predicted": "p.Tyr569His c.1705T>C"
+        }
+      ],
+      "missed_gold": [
+        "P151fsX",
+        "S543fsX"
+      ],
+      "pmid": "10862094",
+      "precision": 0.5,
+      "recall": 0.75,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 6
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 2.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": -2,
+          "field": "carriers",
+          "gold": 44,
+          "predicted": 42,
+          "variant": "p.Leu552Ser c.1655T>C"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "L552S",
+          "predicted": "p.Leu552Ser c.1655T>C"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "10841244",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 0.5,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "F805C",
+        "N470D",
+        "S25N",
+        "Y652T",
+        "p.Asn629Asp"
+      ],
+      "f1": 0.4444444444444445,
+      "fn": 0,
+      "fp": 5,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "A614V",
+          "predicted": "A614V"
+        },
+        {
+          "gold": "G601S",
+          "predicted": "G601S"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "23864605",
+      "precision": 0.2857142857142857,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 23,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 23,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 23,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.85,
+      "fn": 6,
+      "fp": 0,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "G262fsX",
+          "predicted": "G262fsX"
+        },
+        {
+          "gold": "A561V",
+          "predicted": "p.Ala561Val"
+        },
+        {
+          "gold": "R176W",
+          "predicted": "p.Arg176Trp c.526C>T"
+        },
+        {
+          "gold": "R356H",
+          "predicted": "p.Arg356His"
+        },
+        {
+          "gold": "R534C",
+          "predicted": "p.Arg534Cys c.1600C>T"
+        },
+        {
+          "gold": "R582C",
+          "predicted": "p.Arg582Cys c.1744C>T"
+        },
+        {
+          "gold": "N629S",
+          "predicted": "p.Asn629Ser c.1886A>G"
+        },
+        {
+          "gold": "G238R",
+          "predicted": "p.Gly238Arg c.712G>A"
+        },
+        {
+          "gold": "G785fsX",
+          "predicted": "p.Gly785Alafs*25 c.2354delG"
+        },
+        {
+          "gold": "G880V",
+          "predicted": "p.Gly880Val"
+        },
+        {
+          "gold": "L559H",
+          "predicted": "p.Leu559His c.1676T>A"
+        },
+        {
+          "gold": "M645V",
+          "predicted": "p.Met645Val c.1933A>G"
+        },
+        {
+          "gold": "P596L",
+          "predicted": "p.Pro596Leu c.1787C>T"
+        },
+        {
+          "gold": "P72R",
+          "predicted": "p.Pro72Arg c.215C>G"
+        },
+        {
+          "gold": "S428X",
+          "predicted": "p.Ser428* c.1283C>A"
+        },
+        {
+          "gold": "S818L",
+          "predicted": "p.Ser818Leu c.2453C>T"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "p.Thr613Met"
+        }
+      ],
+      "missed_gold": [
+        "A172V",
+        "E807X",
+        "L343fsX",
+        "S855R",
+        "S890C",
+        "W705fsX"
+      ],
+      "pmid": "24667783",
+      "precision": 1.0,
+      "recall": 0.7391304347826086,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 17
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 28,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 28,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 28,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "E689X c.2062C>T",
+        "F640V c.1918T>G",
+        "I642_V644del c.1926_1934del",
+        "N633S c.1898A>G",
+        "Q376sp c.1128G>A",
+        "Q901fs/71 c.2705delC",
+        "S649P c.1945T>C"
+      ],
+      "f1": 0.8333333333333334,
+      "fn": 3,
+      "fp": 7,
+      "gene": "KCNH2",
+      "matched_variants": [
+        {
+          "gold": "A193fsX",
+          "predicted": "A193fsX329 c.578_582del"
+        },
+        {
+          "gold": "A558P",
+          "predicted": "A558P c.1674C>G"
+        },
+        {
+          "gold": "C64Y",
+          "predicted": "C64Y c.191G>A"
+        },
+        {
+          "gold": "D456Y",
+          "predicted": "D456Y c.1366G>T"
+        },
+        {
+          "gold": "D501H",
+          "predicted": "D501H c.1501G>C"
+        },
+        {
+          "gold": "E876X",
+          "predicted": "E876X c.2626G>T"
+        },
+        {
+          "gold": "F640L",
+          "predicted": "F640L c.1920C>A"
+        },
+        {
+          "gold": "G1036fsX",
+          "predicted": "G1036fs/82X c.3108insG"
+        },
+        {
+          "gold": "G306W",
+          "predicted": "G306W c.916G>T"
+        },
+        {
+          "gold": "G572S",
+          "predicted": "G572S c.1714G>A"
+        },
+        {
+          "gold": "G925fsX",
+          "predicted": "G925fs/47 c.2775delG"
+        },
+        {
+          "gold": "I30T",
+          "predicted": "I30T c.89T>C"
+        },
+        {
+          "gold": "M645L",
+          "predicted": "M645L c.1933A>C"
+        },
+        {
+          "gold": "N629I",
+          "predicted": "N629I c.1886A>T"
+        },
+        {
+          "gold": "P241L",
+          "predicted": "P241L c.722C>T"
+        },
+        {
+          "gold": "P872fsX",
+          "predicted": "P872fs877 c.2616delC"
+        },
+        {
+          "gold": "Q676fsX",
+          "predicted": "Q676fsX721 c.2027_2028del"
+        },
+        {
+          "gold": "R176W",
+          "predicted": "R176W c.526C>T"
+        },
+        {
+          "gold": "R252fsX",
+          "predicted": "R252Q c.754delC"
+        },
+        {
+          "gold": "R366X",
+          "predicted": "R366X c.1096C>T"
+        },
+        {
+          "gold": "R534C",
+          "predicted": "R534C c.1600C>T"
+        },
+        {
+          "gold": "R582C",
+          "predicted": "R582C c.1744C>T"
+        },
+        {
+          "gold": "R73fsX",
+          "predicted": "R73fs/31 c.221_251del"
+        },
+        {
+          "gold": "T613M",
+          "predicted": "T613M c.1838C>T"
+        },
+        {
+          "gold": "Y99S",
+          "predicted": "Y99S c.296A>C"
+        }
+      ],
+      "missed_gold": [
+        "E698X",
+        "I560fsX",
+        "I642del"
+      ],
+      "pmid": "19038855",
+      "precision": 0.78125,
+      "recall": 0.8928571428571429,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 25
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 54,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 54,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 54,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "A178P",
+          "predicted": "A178P"
+        },
+        {
+          "gold": "A178T",
+          "predicted": "A178T"
+        },
+        {
+          "gold": "A226V",
+          "predicted": "A226V"
+        },
+        {
+          "gold": "A302V",
+          "predicted": "A302V"
+        },
+        {
+          "gold": "A341E",
+          "predicted": "A341E"
+        },
+        {
+          "gold": "A341V",
+          "predicted": "A341V"
+        },
+        {
+          "gold": "A344V",
+          "predicted": "A344V"
+        },
+        {
+          "gold": "D242N",
+          "predicted": "D242N"
+        },
+        {
+          "gold": "D242Y",
+          "predicted": "D242Y"
+        },
+        {
+          "gold": "D317G",
+          "predicted": "D317G"
+        },
+        {
+          "gold": "E160K",
+          "predicted": "E160K"
+        },
+        {
+          "gold": "E284K",
+          "predicted": "E284K"
+        },
+        {
+          "gold": "F296S",
+          "predicted": "F296S"
+        },
+        {
+          "gold": "G168R",
+          "predicted": "G168R"
+        },
+        {
+          "gold": "G189E",
+          "predicted": "G189E"
+        },
+        {
+          "gold": "G189R",
+          "predicted": "G189R"
+        },
+        {
+          "gold": "G269D",
+          "predicted": "G269D"
+        },
+        {
+          "gold": "G269S",
+          "predicted": "G269S"
+        },
+        {
+          "gold": "G292D",
+          "predicted": "G292D"
+        },
+        {
+          "gold": "G306R",
+          "predicted": "G306R"
+        },
+        {
+          "gold": "G314S",
+          "predicted": "G314S"
+        },
+        {
+          "gold": "G325R",
+          "predicted": "G325R"
+        },
+        {
+          "gold": "H363N",
+          "predicted": "H363N"
+        },
+        {
+          "gold": "I274V",
+          "predicted": "I274V"
+        },
+        {
+          "gold": "L266P",
+          "predicted": "L266P"
+        },
+        {
+          "gold": "L273F",
+          "predicted": "L273F"
+        },
+        {
+          "gold": "L353P",
+          "predicted": "L353P"
+        },
+        {
+          "gold": "P343S",
+          "predicted": "P343S"
+        },
+        {
+          "gold": "Q357H",
+          "predicted": "Q357H"
+        },
+        {
+          "gold": "R174H",
+          "predicted": "R174H"
+        },
+        {
+          "gold": "R190Q",
+          "predicted": "R190Q"
+        },
+        {
+          "gold": "R190W",
+          "predicted": "R190W"
+        },
+        {
+          "gold": "R243C",
+          "predicted": "R243C"
+        },
+        {
+          "gold": "R243S",
+          "predicted": "R243S"
+        },
+        {
+          "gold": "R259C",
+          "predicted": "R259C"
+        },
+        {
+          "gold": "R259L",
+          "predicted": "R259L"
+        },
+        {
+          "gold": "R360G",
+          "predicted": "R360G"
+        },
+        {
+          "gold": "R366W",
+          "predicted": "R366W"
+        },
+        {
+          "gold": "S225L",
+          "predicted": "S225L"
+        },
+        {
+          "gold": "S277L",
+          "predicted": "S277L"
+        },
+        {
+          "gold": "S349W",
+          "predicted": "S349W"
+        },
+        {
+          "gold": "S373P",
+          "predicted": "S373P"
+        },
+        {
+          "gold": "T312I",
+          "predicted": "T312I"
+        },
+        {
+          "gold": "T322M",
+          "predicted": "T322M"
+        },
+        {
+          "gold": "V254M",
+          "predicted": "V254M"
+        },
+        {
+          "gold": "V310I",
+          "predicted": "V310I"
+        },
+        {
+          "gold": "W120C",
+          "predicted": "W120C"
+        },
+        {
+          "gold": "W304R",
+          "predicted": "W304R"
+        },
+        {
+          "gold": "W305C",
+          "predicted": "W305C"
+        },
+        {
+          "gold": "W305S",
+          "predicted": "W305S"
+        },
+        {
+          "gold": "Y184S",
+          "predicted": "Y184S"
+        },
+        {
+          "gold": "Y278H",
+          "predicted": "Y278H"
+        },
+        {
+          "gold": "Y315C",
+          "predicted": "Y315C"
+        },
+        {
+          "gold": "Y315S",
+          "predicted": "Y315S"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "19490272",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 54
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "P400FS",
+        "p.A341E",
+        "p.G314S",
+        "p.M159*",
+        "p.Q357R",
+        "p.Q530*",
+        "p.R243C",
+        "p.S225L",
+        "p.S349W",
+        "p.T312I",
+        "p.W305S",
+        "p.Y171*"
+      ],
+      "f1": 0.7777777777777778,
+      "fn": 0,
+      "fp": 12,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "A150FS/133",
+          "predicted": "A150FS"
+        },
+        {
+          "gold": "A287fsX",
+          "predicted": "A287FS"
+        },
+        {
+          "gold": "A636FS/28",
+          "predicted": "A636FS"
+        },
+        {
+          "gold": "K422fsX",
+          "predicted": "K422FSX10"
+        },
+        {
+          "gold": "L191fsX",
+          "predicted": "L191FS"
+        },
+        {
+          "gold": "P448FS/13",
+          "predicted": "P448FS"
+        },
+        {
+          "gold": "R195FS/40",
+          "predicted": "R195FS"
+        },
+        {
+          "gold": "S571FS/20",
+          "predicted": "S571FS"
+        },
+        {
+          "gold": "A341V",
+          "predicted": "p.A341V"
+        },
+        {
+          "gold": "A344A/SP",
+          "predicted": "p.A344A"
+        },
+        {
+          "gold": "D611Y",
+          "predicted": "p.D611Y"
+        },
+        {
+          "gold": "G168R",
+          "predicted": "p.G168R"
+        },
+        {
+          "gold": "G269S",
+          "predicted": "p.G269S"
+        },
+        {
+          "gold": "L266P",
+          "predicted": "p.L266P"
+        },
+        {
+          "gold": "R518X",
+          "predicted": "p.R518*"
+        },
+        {
+          "gold": "R591H",
+          "predicted": "p.R591H"
+        },
+        {
+          "gold": "R594Q",
+          "predicted": "p.R594Q"
+        },
+        {
+          "gold": "S349X",
+          "predicted": "p.S349*"
+        },
+        {
+          "gold": "V254M",
+          "predicted": "p.V254M"
+        },
+        {
+          "gold": "Y184S",
+          "predicted": "p.Y184S"
+        },
+        {
+          "gold": "Y315C",
+          "predicted": "p.Y315C"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "23153844",
+      "precision": 0.6363636363636364,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 21
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 56,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 56,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 56,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A344A"
+      ],
+      "f1": 0.0,
+      "fn": 56,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "matched_variants": [],
+      "missed_gold": [
+        "M1V",
+        "T144A",
+        "A150FS/133[DELCT451-452]",
+        "E160K",
+        "G168R",
+        "Y171X[513 C>G]",
+        "R174H",
+        "A178P",
+        "Y184S",
+        "G185S",
+        "G189E",
+        "R190Q",
+        "L191FS/90[DELTGCGC572-576]",
+        "R195FS/40[DELG585]",
+        "S225L",
+        "A226V",
+        "R237P",
+        "D242N",
+        "R243C",
+        "V254M",
+        "R258C",
+        "R259C",
+        "L266P",
+        "G269S",
+        "L273F",
+        "I274V",
+        "S277L",
+        "G292D",
+        "F296S",
+        "G306R",
+        "T312I",
+        "G314S",
+        "Y315C",
+        "Y315S",
+        "P320H",
+        "T322M",
+        "G325R",
+        "DELF340[DELCTT1017-1019]",
+        "A341E",
+        "A341V",
+        "P343S",
+        "S349W",
+        "S373P",
+        "P400FS/62[INSC1201-1202]",
+        "I517T",
+        "R518X[1552C>T]",
+        "M520R",
+        "V524G",
+        "Q530X[1588C>T]",
+        "R562M",
+        "S566F",
+        "S571FS/20[DELC1714)",
+        "R591H",
+        "R594Q",
+        "D611Y",
+        "A636FS/28[DELC1909]"
+      ],
+      "pmid": "17470695",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 41,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 41,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 41,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 41,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [],
+      "missed_gold": [
+        "T144A",
+        "L151",
+        "G168R",
+        "Y171X",
+        "V172M",
+        "A178P",
+        "G185S",
+        "R190Q",
+        "S225L",
+        "R243C",
+        "V254L",
+        "V254M",
+        "L266P",
+        "G269D",
+        "G269S",
+        "L273F",
+        "E284K",
+        "A300T",
+        "G306R",
+        "T311I",
+        "T312I",
+        "Y315C",
+        "D317G",
+        "DELF340",
+        "A341E",
+        "A341V",
+        "A344/SP",
+        "A344A/SPLICE",
+        "G345R",
+        "S349W",
+        "Q357H",
+        "R366Q",
+        "R366W",
+        "K393N",
+        "R518X",
+        "V524G",
+        "Q530X",
+        "R539W",
+        "S566F",
+        "I567S",
+        "R594Q"
+      ],
+      "pmid": "14678125",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 0.5,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A341V",
+        "G589D",
+        "L353L",
+        "R518A",
+        "p.Arg518*"
+      ],
+      "f1": 0.25,
+      "fn": 1,
+      "fp": 5,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "Y111C",
+          "predicted": "p.Tyr111Cys"
+        }
+      ],
+      "missed_gold": [
+        "R519X"
+      ],
+      "pmid": "28720088",
+      "precision": 0.16666666666666666,
+      "recall": 0.5,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 0.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A341V"
+      ],
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 1,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "Y111C",
+          "predicted": "p.Tyr111Cys"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "21129503",
+      "precision": 0.5,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 1,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [],
+      "missed_gold": [
+        "A341V"
+      ],
+      "pmid": "25087618",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 57,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 57,
+          "mae": 193.0,
+          "predicted": 1,
+          "recall": 0.017543859649122806,
+          "rmse": 193.0
+        },
+        "unaffected": {
+          "gold_asserted": 57,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": 193,
+          "field": "carriers",
+          "gold": 50,
+          "predicted": 243,
+          "variant": "p.Gly589Asp"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.034482758620689655,
+      "fn": 56,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "G589D",
+          "predicted": "p.Gly589Asp"
+        }
+      ],
+      "missed_gold": [
+        "P117L",
+        "G168R",
+        "R174C",
+        "R174H",
+        "L175fsX",
+        "A178T",
+        "Y184S",
+        "R190W",
+        "R190Q",
+        "R190L",
+        "S225L",
+        "R231C",
+        "R243C",
+        "V254M",
+        "H258N",
+        "H258P",
+        "E261K",
+        "G269D",
+        "S277W",
+        "V280A",
+        "V280E",
+        "V288fsX",
+        "G306R",
+        "T309R",
+        "T311I",
+        "T312I",
+        "G314S",
+        "Y315S",
+        "Y315C",
+        "G316E",
+        "P320H",
+        "P320A",
+        "G325R",
+        "F339S",
+        "A341V",
+        "L342F",
+        "A344V",
+        "SP/A344A",
+        "Q359-K362DEL",
+        "R366W",
+        "A371T",
+        "S373P",
+        "W379S",
+        "K422fsX",
+        "M476L",
+        "M520R",
+        "R539W",
+        "R555C",
+        "R555H",
+        "S566P",
+        "I567T",
+        "T587M",
+        "A590T",
+        "R591H",
+        "R594C",
+        "Q604X"
+      ],
+      "pmid": "17192539",
+      "precision": 1.0,
+      "recall": 0.017543859649122806,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 2,
+          "mae": 0.0,
+          "predicted": 2,
+          "recall": 1.0,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 2,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "R518X",
+          "predicted": "p.Arg518*"
+        },
+        {
+          "gold": "Y111C",
+          "predicted": "p.Tyr111Cys"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "24052033",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 2
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "G643S",
+        "P488R"
+      ],
+      "f1": 0.8571428571428571,
+      "fn": 0,
+      "fp": 2,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "A341V",
+          "predicted": "A341V"
+        },
+        {
+          "gold": "A344A",
+          "predicted": "A344A"
+        },
+        {
+          "gold": "DELF340",
+          "predicted": "F340del"
+        },
+        {
+          "gold": "G269S",
+          "predicted": "G269S"
+        },
+        {
+          "gold": "G314S",
+          "predicted": "G314S"
+        },
+        {
+          "gold": "R243C",
+          "predicted": "R243C"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "18713323",
+      "precision": 0.75,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 6
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 29,
+          "mae": 0.0,
+          "predicted": 9,
+          "recall": 0.3103448275862069,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 29,
+          "mae": 0.0,
+          "predicted": 9,
+          "recall": 0.3103448275862069,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 29,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "F127L",
+        "L619M",
+        "P477L",
+        "p.Ala2Val",
+        "p.Lys398Arg",
+        "p.Phe479Leu",
+        "p.Ser389Pro"
+      ],
+      "f1": 0.8923076923076924,
+      "fn": 0,
+      "fp": 7,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "A287E",
+          "predicted": "p.Ala287Glu"
+        },
+        {
+          "gold": "A300T",
+          "predicted": "p.Ala300Thr"
+        },
+        {
+          "gold": "A370V",
+          "predicted": "p.Ala370Val"
+        },
+        {
+          "gold": "A399S",
+          "predicted": "p.Ala399Ser"
+        },
+        {
+          "gold": "R195Q",
+          "predicted": "p.Arg195Gln"
+        },
+        {
+          "gold": "R293C",
+          "predicted": "p.Arg293Cys"
+        },
+        {
+          "gold": "R397W",
+          "predicted": "p.Arg397Trp"
+        },
+        {
+          "gold": "R452Q",
+          "predicted": "p.Arg452Gln"
+        },
+        {
+          "gold": "R452W",
+          "predicted": "p.Arg452Trp"
+        },
+        {
+          "gold": "D446E",
+          "predicted": "p.Asp446Glu"
+        },
+        {
+          "gold": "D611N",
+          "predicted": "p.Asp611Asn"
+        },
+        {
+          "gold": "G292D",
+          "predicted": "p.Gly292Asp"
+        },
+        {
+          "gold": "G460S",
+          "predicted": "p.Gly460Ser"
+        },
+        {
+          "gold": "G589D",
+          "predicted": "p.Gly589Asp"
+        },
+        {
+          "gold": "G629S",
+          "predicted": "p.Gly629Ser"
+        },
+        {
+          "gold": "G643S",
+          "predicted": "p.Gly643Ser"
+        },
+        {
+          "gold": "I274V",
+          "predicted": "p.Ile274Val"
+        },
+        {
+          "gold": "K362R",
+          "predicted": "p.Lys362Arg"
+        },
+        {
+          "gold": "K393N",
+          "predicted": "p.Lys393Asn"
+        },
+        {
+          "gold": "P197L",
+          "predicted": "p.Pro197Leu"
+        },
+        {
+          "gold": "P408A",
+          "predicted": "p.Pro408Ala"
+        },
+        {
+          "gold": "P448R",
+          "predicted": "p.Pro448Arg"
+        },
+        {
+          "gold": "P73T",
+          "predicted": "p.Pro73Thr"
+        },
+        {
+          "gold": "T153M",
+          "predicted": "p.Thr153Met"
+        },
+        {
+          "gold": "T600M",
+          "predicted": "p.Thr600Met"
+        },
+        {
+          "gold": "V110I",
+          "predicted": "p.Val110Ile"
+        },
+        {
+          "gold": "V172M",
+          "predicted": "p.Val172Met"
+        },
+        {
+          "gold": "V576I",
+          "predicted": "p.Val576Ile"
+        },
+        {
+          "gold": "V648I",
+          "predicted": "p.Val648Ile"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "29197658",
+      "precision": 0.8055555555555556,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 29
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": 34.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 34.0
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": 36.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 36.0
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": 70.0,
+          "predicted": 1,
+          "recall": 1.0,
+          "rmse": 70.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 36,
+          "field": "carriers",
+          "gold": 88,
+          "predicted": 124,
+          "variant": "T224M"
+        },
+        {
+          "error": -34,
+          "field": "affected",
+          "gold": 34,
+          "predicted": 0,
+          "variant": "T224M"
+        },
+        {
+          "error": 70,
+          "field": "unaffected",
+          "gold": 54,
+          "predicted": 124,
+          "variant": "T224M"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A208V",
+        "A223A",
+        "A226A",
+        "A226V",
+        "A99V",
+        "C214C",
+        "C214Y",
+        "D202G",
+        "D202H",
+        "D202N",
+        "D75G",
+        "D75H",
+        "D75N",
+        "G216G",
+        "G219E",
+        "G219G",
+        "I100L",
+        "I204F",
+        "I204I",
+        "I204M",
+        "I227L",
+        "I77F",
+        "I77M",
+        "K218E",
+        "K91E",
+        "L203P",
+        "L76P",
+        "M210I",
+        "M210T",
+        "M83T",
+        "Q220K",
+        "S209F",
+        "S209P",
+        "S209S",
+        "S217F",
+        "S225L",
+        "S225S",
+        "S82F",
+        "S82P",
+        "S90F",
+        "S98L",
+        "T224T",
+        "T97M",
+        "V205M",
+        "V206L",
+        "V206V",
+        "V207L",
+        "V207M",
+        "V212V",
+        "V215G",
+        "V215M",
+        "V215V",
+        "V221V",
+        "V78M",
+        "V80M",
+        "V88G",
+        "V88M",
+        "c.223G>A",
+        "c.223G>C",
+        "c.224A>G",
+        "c.227T>C",
+        "c.229A>T",
+        "c.231C>G",
+        "c.232G>A",
+        "c.238G>A",
+        "c.244T>C",
+        "c.245C>T",
+        "c.248T>C",
+        "c.262G>A",
+        "c.263T>G",
+        "c.269C>T",
+        "c.271A>G",
+        "c.290C>T",
+        "c.293C>T",
+        "c.296C>T",
+        "c.298A>C",
+        "c.604+12C>T",
+        "c.604+16C>G",
+        "c.604+16C>T",
+        "c.604+17C>T",
+        "c.604+19G>A",
+        "c.604+1G>A",
+        "c.604+22G>A",
+        "c.604+24G>T",
+        "c.604+28A>C",
+        "c.604+29C>T",
+        "c.604+30G>A",
+        "c.604+33C>G",
+        "c.604+40C>G",
+        "c.604+41C>T",
+        "c.604+42A>T",
+        "c.604+43G>A",
+        "c.604+49G>A",
+        "c.604+49G>T",
+        "c.604+62C>A",
+        "c.604+72C>G",
+        "c.604+7C>T",
+        "c.604+9T>C",
+        "c.604G>A",
+        "c.605-10C>T",
+        "c.605-11G>A",
+        "c.605-16C>T",
+        "c.605-18C>A",
+        "c.605-18C>G",
+        "c.605-18C>T",
+        "c.605-24C>T",
+        "c.605-28A>G",
+        "c.605-30G>A",
+        "c.605-31C>T",
+        "c.605-33C>A",
+        "c.605-36G>A",
+        "c.605-37C>T",
+        "c.605-38G>A",
+        "c.605-41G>A",
+        "c.605-46T>G",
+        "c.605-48C>A",
+        "c.605-52G>T",
+        "c.605-65A>G",
+        "c.612C>T",
+        "c.613G>A",
+        "c.616G>C",
+        "c.618C>T",
+        "c.619G>A",
+        "c.619G>C",
+        "c.619G>T",
+        "c.623C>T",
+        "c.627C>T",
+        "c.630G>A",
+        "c.636C>G",
+        "c.641G>A",
+        "c.642C>T",
+        "c.643G>A",
+        "c.644T>G",
+        "c.645G>A",
+        "c.648C>A",
+        "c.648C>T",
+        "c.656G>A",
+        "c.657G>A",
+        "c.658C>A",
+        "c.663G>A",
+        "c.669C>T",
+        "c.672G>A",
+        "c.674C>T",
+        "c.675G>A",
+        "c.678C>G",
+        "c.678C>T"
+      ],
+      "f1": 0.013513513513513513,
+      "fn": 0,
+      "fp": 146,
+      "gene": "KCNQ1",
+      "matched_variants": [
+        {
+          "gold": "T224M",
+          "predicted": "T224M"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "33141630",
+      "precision": 0.006802721088435374,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "V2475F"
+      ],
+      "f1": 0.6666666666666666,
+      "fn": 0,
+      "fp": 1,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "G357S",
+          "predicted": "p.Gly357Ser c.1069G>A"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "25814417",
+      "precision": 0.5,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 49,
+          "recall": 0.9607843137254902,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 49,
+          "recall": 0.9607843137254902,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 51,
+          "mae": 0.0,
+          "predicted": 49,
+          "recall": 0.9607843137254902,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "N4178S c.12533A>G"
+      ],
+      "f1": 0.9702970297029702,
+      "fn": 2,
+      "fp": 1,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "A2387V",
+          "predicted": "A2387V c.7160C>T"
+        },
+        {
+          "gold": "A2403T",
+          "predicted": "A2403T c.7207G>A"
+        },
+        {
+          "gold": "A4247V",
+          "predicted": "A4247V c.14222C>T"
+        },
+        {
+          "gold": "C2197W",
+          "predicted": "C2197W c.6591C>G"
+        },
+        {
+          "gold": "C4193W",
+          "predicted": "C4193W c.12579C>G"
+        },
+        {
+          "gold": "D3876E",
+          "predicted": "D3876E c.11628C>G"
+        },
+        {
+          "gold": "D458N",
+          "predicted": "D458N c.1372G>A"
+        },
+        {
+          "gold": "E1724K",
+          "predicted": "E1724K c.5170G>A"
+        },
+        {
+          "gold": "F2307L",
+          "predicted": "F2307L c.6919T>C"
+        },
+        {
+          "gold": "F4129V",
+          "predicted": "F4129V c.12385T>G"
+        },
+        {
+          "gold": "F4511L",
+          "predicted": "F4511L c.9910C>G"
+        },
+        {
+          "gold": "F4600L",
+          "predicted": "F4600L c.13798T>C"
+        },
+        {
+          "gold": "G178A",
+          "predicted": "G178A c.533G>C"
+        },
+        {
+          "gold": "G2342R",
+          "predicted": "G2342R c.7024G>A"
+        },
+        {
+          "gold": "G2400T",
+          "predicted": "G2400T c.7199G>T"
+        },
+        {
+          "gold": "G3946S",
+          "predicted": "G3946S c.11836G>A"
+        },
+        {
+          "gold": "I1922L",
+          "predicted": "I1922L c.5764A>T"
+        },
+        {
+          "gold": "I4587V",
+          "predicted": "I4587V c.13759A>G"
+        },
+        {
+          "gold": "K4750Q",
+          "predicted": "K4750Q c.14251A>C"
+        },
+        {
+          "gold": "L4101F",
+          "predicted": "L4101F c.12301C>T"
+        },
+        {
+          "gold": "L4865V",
+          "predicted": "L4865V c.14593C>G"
+        },
+        {
+          "gold": "M2192L",
+          "predicted": "M2192L c.6574A>T"
+        },
+        {
+          "gold": "M4002I",
+          "predicted": "M4002I c.12006G>A"
+        },
+        {
+          "gold": "M4809I",
+          "predicted": "M4809I c.14427G>T"
+        },
+        {
+          "gold": "N2291K",
+          "predicted": "N2291K c.6873C>A"
+        },
+        {
+          "gold": "P1256T",
+          "predicted": "P1256T c.3766C>A"
+        },
+        {
+          "gold": "P2328R",
+          "predicted": "P2328R c.6983C>G"
+        },
+        {
+          "gold": "P3087R",
+          "predicted": "P3087R c.9260C>G"
+        },
+        {
+          "gold": "Q3861H",
+          "predicted": "Q3861H c.11583G>T"
+        },
+        {
+          "gold": "Q4159K",
+          "predicted": "Q4159K c.12475C>A"
+        },
+        {
+          "gold": "Q4936K",
+          "predicted": "Q4936K c.14806C>A"
+        },
+        {
+          "gold": "R169Q",
+          "predicted": "R169Q c.506G>A"
+        },
+        {
+          "gold": "R1919Q",
+          "predicted": "R1919Q c.5756G>A"
+        },
+        {
+          "gold": "R2474G",
+          "predicted": "R2474G c.7420A>G"
+        },
+        {
+          "gold": "R407S",
+          "predicted": "R407S c.1221A>T"
+        },
+        {
+          "gold": "R420Q",
+          "predicted": "R420Q c.1259G>A"
+        },
+        {
+          "gold": "R420W",
+          "predicted": "R420W c.1258C>T"
+        },
+        {
+          "gold": "R4497C",
+          "predicted": "R4497C c.13489C>T"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "S2246L c.6737C>T"
+        },
+        {
+          "gold": "S4124R",
+          "predicted": "S4124R c.12372C>A"
+        },
+        {
+          "gold": "S4153I",
+          "predicted": "S4153I c.12458G>T"
+        },
+        {
+          "gold": "S4168P",
+          "predicted": "S4168P c.12502T>C"
+        },
+        {
+          "gold": "S767C",
+          "predicted": "S767C c.2300C>G"
+        },
+        {
+          "gold": "T2390I",
+          "predicted": "T2390I c.7169C>T"
+        },
+        {
+          "gold": "V2171M",
+          "predicted": "V2171M c.6511G>A"
+        },
+        {
+          "gold": "V4821I",
+          "predicted": "V4821I c.14461G>A"
+        },
+        {
+          "gold": "V907L",
+          "predicted": "V907L c.2719G>C"
+        },
+        {
+          "gold": "W159C",
+          "predicted": "W159C c.477G>T"
+        },
+        {
+          "gold": "14298+2 T>C",
+          "predicted": "c.14298+2T>C"
+        }
+      ],
+      "missed_gold": [
+        "EXON 3 DELETION",
+        "N4168S"
+      ],
+      "pmid": "29925740",
+      "precision": 0.98,
+      "recall": 0.9607843137254902,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 49
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "G357S",
+        "c.6982C>T"
+      ],
+      "f1": 0.5,
+      "fn": 0,
+      "fp": 2,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "P2328S",
+          "predicted": "P2328S"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "33315912",
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 12,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 12,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 12,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A2387P",
+        "A2403T",
+        "A2428T",
+        "A4510T",
+        "A4607P",
+        "A4860G",
+        "E2311D",
+        "E4146K",
+        "E4950K",
+        "F4499C",
+        "G3946S",
+        "G4671R",
+        "H4833Y",
+        "I419F",
+        "I4848V",
+        "I4867M",
+        "L3778F",
+        "L433P",
+        "M450I",
+        "N2386I",
+        "N4097S",
+        "N4104K",
+        "N4895D",
+        "P164S",
+        "P2328S",
+        "Q4201R",
+        "R176Q",
+        "R2474S",
+        "R414L",
+        "R420W",
+        "R4497C",
+        "S2246L",
+        "T2504M",
+        "T4158P",
+        "V4653F",
+        "V4880A",
+        "Y2392C"
+      ],
+      "f1": 0.39344262295081966,
+      "fn": 0,
+      "fp": 37,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "A2254V",
+          "predicted": "p.A2254V"
+        },
+        {
+          "gold": "A2394G",
+          "predicted": "p.A2394G"
+        },
+        {
+          "gold": "E1724K",
+          "predicted": "p.E1724K"
+        },
+        {
+          "gold": "E4076K",
+          "predicted": "p.E4076K"
+        },
+        {
+          "gold": "F4020L",
+          "predicted": "p.F4020L"
+        },
+        {
+          "gold": "G4662S",
+          "predicted": "p.G4662S"
+        },
+        {
+          "gold": "H4108N",
+          "predicted": "p.H4108N"
+        },
+        {
+          "gold": "H4108Q",
+          "predicted": "p.H4108Q"
+        },
+        {
+          "gold": "H4762P",
+          "predicted": "p.H4762P"
+        },
+        {
+          "gold": "N4104I",
+          "predicted": "p.N4104I"
+        },
+        {
+          "gold": "P4902S",
+          "predicted": "p.P4902S"
+        },
+        {
+          "gold": "V4771I",
+          "predicted": "p.V4771I"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "16272262",
+      "precision": 0.24489795918367346,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 12
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 1,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A4860G",
+        "D3330G",
+        "D4646A",
+        "G2866DEL",
+        "G3037D",
+        "G357S",
+        "G4897D",
+        "N3308S",
+        "R3190Q"
+      ],
+      "f1": 0.18181818181818182,
+      "fn": 0,
+      "fp": 9,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "D3291V",
+          "predicted": "D3291V"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "34202968",
+      "precision": 0.1,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 40,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 40,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 40,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 0.0,
+      "fn": 40,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [],
+      "missed_gold": [
+        "L62F",
+        "M81L",
+        "E243K",
+        "F329L",
+        "R332W",
+        "G357S",
+        "V377M",
+        "T415R",
+        "R420Q",
+        "V507I",
+        "A549V",
+        "R739H",
+        "R1013Q",
+        "T1107M",
+        "A1136V",
+        "E1837K",
+        "E2045G",
+        "Y2156C",
+        "H2168Q",
+        "E2183V",
+        "D2216V",
+        "EXON 3 DELETION",
+        "E2296Q",
+        "R2420W",
+        "M3972I",
+        "D3973H",
+        "S4124G",
+        "Y4149S",
+        "R4157Q",
+        "Q4159P",
+        "N4178S",
+        "E4187Q",
+        "G4315E",
+        "K4650E",
+        "N4736 DEL",
+        "R4790Q",
+        "K4805R",
+        "R4822H",
+        "L3974Q",
+        "K3997E"
+      ],
+      "pmid": "19926015",
+      "precision": 0.0,
+      "recall": 0.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 0
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 8,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 0.125,
+          "rmse": 2.0
+        },
+        "carriers": {
+          "gold_asserted": 8,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 8,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -2,
+          "field": "affected",
+          "gold": 6,
+          "predicted": 4,
+          "variant": "p.G3118R"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "G357S"
+      ],
+      "f1": 0.2,
+      "fn": 7,
+      "fp": 1,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "G3118R",
+          "predicted": "p.G3118R"
+        }
+      ],
+      "missed_gold": [
+        "I3995V",
+        "D4112N",
+        "T4196I",
+        "D4646A",
+        "Q4879H",
+        "K4594R",
+        "I2075T"
+      ],
+      "pmid": "33686871",
+      "precision": 0.5,
+      "recall": 0.125,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 18,
+          "mae": 1.0,
+          "predicted": 1,
+          "recall": 0.05555555555555555,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 18,
+          "mae": 2.0,
+          "predicted": 1,
+          "recall": 0.05555555555555555,
+          "rmse": 2.0
+        },
+        "unaffected": {
+          "gold_asserted": 18,
+          "mae": 1.0,
+          "predicted": 1,
+          "recall": 0.05555555555555555,
+          "rmse": 1.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": -2,
+          "field": "carriers",
+          "gold": 3,
+          "predicted": 1,
+          "variant": "c.13352del"
+        },
+        {
+          "error": -1,
+          "field": "affected",
+          "gold": 2,
+          "predicted": 1,
+          "variant": "c.13352del"
+        },
+        {
+          "error": -1,
+          "field": "unaffected",
+          "gold": 1,
+          "predicted": 0,
+          "variant": "c.13352del"
+        }
+      ],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "c.11147A>G",
+        "c.1191G>A",
+        "c.11983A>G",
+        "c.12470G>A",
+        "c.1258C>T",
+        "c.13735C>T",
+        "c.13890G>A",
+        "c.14008C>T",
+        "c.14246G>A",
+        "c.14553C>A",
+        "c.14600T>C",
+        "c.3407C>T",
+        "c.5170G>A",
+        "c.5614G>A",
+        "c.5654G>A",
+        "c.6520G>T",
+        "c.6899A>C",
+        "c.7159G>A",
+        "c.7160C>T",
+        "c.8598del",
+        "c.94C>A",
+        "c.9569G>A"
+      ],
+      "f1": 0.04878048780487805,
+      "fn": 17,
+      "fp": 22,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "E4451del",
+          "predicted": "c.13352del"
+        }
+      ],
+      "missed_gold": [
+        "T4630C",
+        "G4749E",
+        "A2387T",
+        "D2300A",
+        "I3995V",
+        "H4579Y",
+        "D1872N",
+        "E3716Q",
+        "I4867T",
+        "G2866del",
+        "L4670F",
+        "A2387V",
+        "Q32K",
+        "E1083K",
+        "M3972I",
+        "V2174F",
+        "R3190Q"
+      ],
+      "pmid": "28237968",
+      "precision": 0.043478260869565216,
+      "recall": 0.05555555555555555,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 1
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 6,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "L433P",
+          "predicted": "L433P"
+        },
+        {
+          "gold": "N2386I",
+          "predicted": "N2386I"
+        },
+        {
+          "gold": "R176Q",
+          "predicted": "R176Q"
+        },
+        {
+          "gold": "R420W",
+          "predicted": "R420W"
+        },
+        {
+          "gold": "T2504M",
+          "predicted": "T2504M"
+        },
+        {
+          "gold": "Y2392C",
+          "predicted": "Y2392C"
+        }
+      ],
+      "missed_gold": [],
+      "pmid": "12106942",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 6
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 26,
+          "mae": 0.0,
+          "predicted": 9,
+          "recall": 0.34615384615384615,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 26,
+          "mae": 0.0,
+          "predicted": 20,
+          "recall": 0.7692307692307693,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 26,
+          "mae": 0.0,
+          "predicted": 9,
+          "recall": 0.34615384615384615,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A302V",
+        "D85N",
+        "F2004L",
+        "G643S",
+        "P2006A",
+        "R1047L",
+        "V1951L",
+        "W379R",
+        "c.2398+5G>T"
+      ],
+      "f1": 0.7931034482758621,
+      "fn": 3,
+      "fp": 9,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "G1885E",
+          "predicted": "G1885E"
+        },
+        {
+          "gold": "G1886S",
+          "predicted": "G1886S"
+        },
+        {
+          "gold": "R4037C",
+          "predicted": "R4037C"
+        },
+        {
+          "gold": "D400H",
+          "predicted": "p.D400H c.1198G>C"
+        },
+        {
+          "gold": "E4146K",
+          "predicted": "p.E4146K c.12436G>A"
+        },
+        {
+          "gold": "G2227V",
+          "predicted": "p.G2227V c.6680G>T"
+        },
+        {
+          "gold": "G4936R",
+          "predicted": "p.G4936R c.14803G>A"
+        },
+        {
+          "gold": "H240R",
+          "predicted": "p.H240R c.719A>G"
+        },
+        {
+          "gold": "I217V",
+          "predicted": "p.I217V c.649A>G"
+        },
+        {
+          "gold": "L3879P",
+          "predicted": "p.L3879P c.11636T>C"
+        },
+        {
+          "gold": "N4097S",
+          "predicted": "p.N4097S c.12290A>G"
+        },
+        {
+          "gold": "Q3925E",
+          "predicted": "p.Q3925E c.11773C>G"
+        },
+        {
+          "gold": "R407I",
+          "predicted": "p.R407I c.1220G>T"
+        },
+        {
+          "gold": "R420W",
+          "predicted": "p.R420W c.1258C>T"
+        },
+        {
+          "gold": "R4497C",
+          "predicted": "p.R4497C c.13610C>T"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "p.S2246L c.6737C>T"
+        },
+        {
+          "gold": "S3959L",
+          "predicted": "p.S3959L c.11876C>T"
+        },
+        {
+          "gold": "T1107M",
+          "predicted": "p.T1107M c.3321C>T"
+        },
+        {
+          "gold": "T2510A",
+          "predicted": "p.T2510A c.7528A>G"
+        },
+        {
+          "gold": "T4158P",
+          "predicted": "p.T4158P c.12472A>C"
+        },
+        {
+          "gold": "V2113M",
+          "predicted": "p.V2113M c.6337G>A"
+        },
+        {
+          "gold": "W4645R",
+          "predicted": "p.W4645R c.13933T>A"
+        },
+        {
+          "gold": "Y2392C",
+          "predicted": "p.Y2392C c.7175A>G"
+        }
+      ],
+      "missed_gold": [
+        "V2113M",
+        "Q2958R",
+        "A1136V"
+      ],
+      "pmid": "22677073",
+      "precision": 0.71875,
+      "recall": 0.8846153846153846,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 23
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 21,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "A103V",
+        "C1274Y",
+        "D4642H",
+        "D85N",
+        "H1042R",
+        "I882V",
+        "IVS5+1G>C",
+        "K296Q",
+        "K4742R",
+        "L714R",
+        "M0781T",
+        "Q584R",
+        "Q692K",
+        "R1458G",
+        "R485C",
+        "R4954K",
+        "S2774G",
+        "V288I",
+        "c.13781A>G",
+        "c.6224T>C",
+        "p.G4772S"
+      ],
+      "f1": 0.6451612903225806,
+      "fn": 1,
+      "fp": 21,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "A1136V",
+          "predicted": "A1136V"
+        },
+        {
+          "gold": "A2317E",
+          "predicted": "A2317E"
+        },
+        {
+          "gold": "I2075T",
+          "predicted": "I2075T"
+        },
+        {
+          "gold": "K4594R",
+          "predicted": "K4594R"
+        },
+        {
+          "gold": "L4188P",
+          "predicted": "L4188P"
+        },
+        {
+          "gold": "R2028H",
+          "predicted": "R2028H"
+        },
+        {
+          "gold": "R2401H",
+          "predicted": "R2401H"
+        },
+        {
+          "gold": "R2474K",
+          "predicted": "R2474K"
+        },
+        {
+          "gold": "R417L",
+          "predicted": "R417L"
+        },
+        {
+          "gold": "R485Q",
+          "predicted": "R485Q"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "S2246L"
+        },
+        {
+          "gold": "T1107M",
+          "predicted": "T1107M"
+        },
+        {
+          "gold": "Y4721C",
+          "predicted": "Y4721C"
+        },
+        {
+          "gold": "c.14091-11dupT",
+          "predicted": "c.14091-11dupT"
+        },
+        {
+          "gold": "c.3599-9delT",
+          "predicted": "c.3599-9delT"
+        },
+        {
+          "gold": "F3496L",
+          "predicted": "p.F3496L"
+        },
+        {
+          "gold": "G1885E",
+          "predicted": "p.G1885E"
+        },
+        {
+          "gold": "G1886S",
+          "predicted": "p.G1886S"
+        },
+        {
+          "gold": "H2464D",
+          "predicted": "p.H2464D"
+        },
+        {
+          "gold": "S3938R",
+          "predicted": "p.S3938R"
+        }
+      ],
+      "missed_gold": [
+        "G4722S"
+      ],
+      "pmid": "30403697",
+      "precision": 0.4878048780487805,
+      "recall": 0.9523809523809523,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 20
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 33,
+          "mae": 0.0,
+          "predicted": 28,
+          "recall": 0.8484848484848485,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 33,
+          "mae": 0.0,
+          "predicted": 28,
+          "recall": 0.8484848484848485,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 33,
+          "mae": null,
+          "predicted": 0,
+          "recall": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "G380R",
+        "c.14834_14835insTCA"
+      ],
+      "f1": 0.923076923076923,
+      "fn": 3,
+      "fp": 2,
+      "gene": "RYR2",
+      "matched_variants": [
+        {
+          "gold": "A4741V",
+          "predicted": "A4741V"
+        },
+        {
+          "gold": "Q3304E",
+          "predicted": "Q3304E"
+        },
+        {
+          "gold": "C4193W",
+          "predicted": "p.C4193W c.12579C>G"
+        },
+        {
+          "gold": "D3973N",
+          "predicted": "p.D3973N c.11917G>A"
+        },
+        {
+          "gold": "E1724K",
+          "predicted": "p.E1724K c.5170G>A"
+        },
+        {
+          "gold": "F4600L",
+          "predicted": "p.F4600L c.13798T>C"
+        },
+        {
+          "gold": "G178A",
+          "predicted": "p.G178A c.533G>C"
+        },
+        {
+          "gold": "G2342R",
+          "predicted": "p.G2342R c.7024G>A"
+        },
+        {
+          "gold": "G2400V",
+          "predicted": "p.G2400V c.7199G>T"
+        },
+        {
+          "gold": "G3946S",
+          "predicted": "p.G3946S c.11836G>A"
+        },
+        {
+          "gold": "L1518F",
+          "predicted": "p.L1518F c.4552C>T"
+        },
+        {
+          "gold": "M2192L",
+          "predicted": "p.M2192L c.6574A>T"
+        },
+        {
+          "gold": "M4002I",
+          "predicted": "p.M4002I c.12006G>A"
+        },
+        {
+          "gold": "N4178S",
+          "predicted": "p.N4178S c.12533A>G"
+        },
+        {
+          "gold": "P1256T",
+          "predicted": "p.P1256T c.3766C>A"
+        },
+        {
+          "gold": "Q3861H",
+          "predicted": "p.Q3861H c.11583G>C"
+        },
+        {
+          "gold": "Q4488P",
+          "predicted": "p.Q4488P c.13463A>C"
+        },
+        {
+          "gold": "Q4936K",
+          "predicted": "p.Q4936K c.14806C>A"
+        },
+        {
+          "gold": "R169L",
+          "predicted": "p.R169L c.506G>T"
+        },
+        {
+          "gold": "R169Q",
+          "predicted": "p.R169Q c.506G>A"
+        },
+        {
+          "gold": "R407S",
+          "predicted": "p.R407S c.1221A>T"
+        },
+        {
+          "gold": "R420Q",
+          "predicted": "p.R420Q c.1259G>A"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "p.S2246L c.6737C>T"
+        },
+        {
+          "gold": "S4124N",
+          "predicted": "p.S4124N c.12371G>A"
+        },
+        {
+          "gold": "S4153I",
+          "predicted": "p.S4153I c.12458G>T"
+        },
+        {
+          "gold": "T1223A",
+          "predicted": "p.T1223A c.3667A>G"
+        },
+        {
+          "gold": "T2390I",
+          "predicted": "p.T2390I c.7169C>T"
+        },
+        {
+          "gold": "V2475F",
+          "predicted": "p.V2475F c.7423G>T"
+        },
+        {
+          "gold": "V4771I",
+          "predicted": "p.V4771I c.14311G>A"
+        },
+        {
+          "gold": "Y4725C",
+          "predicted": "p.Y4725C c.14174A>G"
+        }
+      ],
+      "missed_gold": [
+        "N57_G91DEL35",
+        "Q3861H",
+        "4944_4945INSH"
+      ],
+      "pmid": "33606749",
+      "precision": 0.9375,
+      "recall": 0.9090909090909091,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 30
+    }
+  ],
+  "run_id": "20260726_fixed48_production",
+  "scored_at": "2026-07-26T20:06:10.465274+00:00",
+  "seed": 2026072401,
+  "selection": {
+    "description": "Paper selection used the fixed manifest `highcarrier_48_papers_20260723.tsv` (48 papers) from the downloaded-source, gold-count-eligible pool. Routing, extraction, counts, evidence, and source locations were gold-value-blind.",
+    "mode": "manifest",
+    "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/highcarrier_48_papers_20260723.tsv",
+    "per_gene": 5,
+    "population": "fixed manifest `highcarrier_48_papers_20260723.tsv` (48 papers)",
+    "seed": 2026072401
+  },
+  "timing": {
+    "completed_at": "2026-07-26T20:05:45.210197+00:00",
+    "started_at": null,
+    "summed_paper_seconds": 0.0,
+    "wall_seconds": 0.0
+  },
+  "token_usage": {
+    "note": "gvf-run does not aggregate per-run token usage; see run logs for wall clock",
+    "telemetry_available": false
+  },
+  "tools_used": {
+    "text": 48
+  }
+}

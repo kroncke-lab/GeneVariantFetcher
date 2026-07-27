@@ -1,0 +1,6 @@
+{
+  "locked_at": "2026-07-26T20:05:58.370887+00:00",
+  "selection_sha256": "4db3a283d673bfd37c2f7d5e662c99e0b9a821540c775d14deb180ea6910b596",
+  "predictions_sha256": "a7e48664fc4d16eed35c04601d6d2f7820d0a77b429e1d9612117e0a77f04de3",
+  "statement": "Predictions are a mechanical projection of production gvf-run SQLite output (all layers); no gold values were read during extraction or conversion. LOCK written by db_to_predictions flow rather than run_eval.py lock, because gvf-run does not emit the per-paper token telemetry that command_lock requires."
+}

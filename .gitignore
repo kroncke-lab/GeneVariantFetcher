@@ -124,6 +124,12 @@ validation_runs/
 # Cold-start benchmark live-run output + isolated corpora (never commit)
 benchmarks/cold_start_eval/runs/
 
+# Raw gvf-run output under a codex_paper_eval run (SQLite DBs + per-layer
+# artifacts, ~70MB per run). The scored summaries beside it ARE tracked:
+# selection/LOCK/predictions/report/paper_metrics/evidence.
+benchmarks/codex_paper_eval/runs/*/production_runs/
+benchmarks/codex_paper_eval/runs/*/driver.log
+
 # Consolidated source corpus (deduplicated full text + supplements + figures,
 # multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit)
 corpus/
