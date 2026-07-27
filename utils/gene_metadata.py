@@ -337,6 +337,73 @@ def lookup_variantfeatures_residue(
     )
 
 
+_IDENTIFIER_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+def resolve_variantfeatures_gene_symbols(
+    conn: sqlite3.Connection,
+    gene_symbol: str,
+    *,
+    table: str = "variant_consequences",
+    column: str = "gene_symbol",
+) -> tuple[str, ...]:
+    """Return the stored symbol casing(s) to match with an indexed equality test.
+
+    :func:`_gene_rows` fixes the index-defeat per query, which is right when a
+    caller runs one lookup. A caller that runs *several* gene-scoped queries
+    against the same connection should resolve the casing once instead: the
+    ``UPPER()`` fallback is what costs the full scan, so paying it once on the
+    small table beats letting every later query fall back on its own. Callers
+    then bind the result with ``column IN (?, ...)``, which SQLite still answers
+    from an index such as ``idx_consequences_gene``.
+
+    An empty result means the gene is absent from this database, which lets the
+    caller skip its remaining queries outright -- the common case for a gene
+    that has no VariantFeatures slice yet.
+
+    ``table``/``column`` are SQL identifiers and cannot be bound as parameters,
+    so they are checked against a conservative identifier pattern.
+    """
+
+    for identifier in (table, column):
+        if not _IDENTIFIER_RE.fullmatch(identifier):
+            raise ValueError(f"unsafe SQL identifier: {identifier!r}")
+
+    gene = normalize_gene_symbol(gene_symbol)
+    if not gene:
+        return ()
+    row = conn.execute(
+        f"SELECT 1 FROM {table} WHERE {column} = ? LIMIT 1", (gene,)
+    ).fetchone()
+    if row:
+        return (gene,)
+    # Mixed-case-only symbols stay reachable: HGNC keeps a lowercase ``orf`` in
+    # names such as ``C19orf25``, and real slices carry those rows verbatim.
+    return _dedupe_exact(
+        str(value).strip()
+        for (value,) in conn.execute(
+            f"SELECT DISTINCT {column} FROM {table} WHERE UPPER({column}) = ?", (gene,)
+        )
+        if value
+    )
+
+
+def _dedupe_exact(values: Iterable[str]) -> tuple[str, ...]:
+    """Dedupe preserving case, unlike :func:`_dedupe` which folds it.
+
+    Two casings of one symbol are distinct values to match here, so folding them
+    would drop rows.
+    """
+
+    seen: set[str] = set()
+    out: list[str] = []
+    for value in values:
+        if value and value not in seen:
+            seen.add(value)
+            out.append(value)
+    return tuple(out)
+
+
 def _load_variantfeatures_metadata(
     gene: str, variantfeatures_db: str | None = None
 ) -> Optional[GeneMetadata]:

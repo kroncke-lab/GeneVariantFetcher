@@ -21,7 +21,16 @@ import csv
 import json
 import re
 import sqlite3
+import sys
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from utils.gene_metadata import (  # noqa: E402
+    resolve_variantfeatures_gene_symbols,
+)
 
 VF_DEFAULT = Path.home() / "GitRepos" / "variantFeatures" / "data" / "variants.db"
 # Headline predictors get their own columns; all present ones go in scores_json.
@@ -109,17 +118,31 @@ def norm_cdna(hgvs_c: str) -> str | None:
     return s if s.startswith("c.") else None
 
 
-def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict]:
+def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict, int, set[int]]:
     con = sqlite3.connect(f"file:{vf}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
     try:
         prot_map, cdna_map, meta = {}, {}, {}
+        # Resolve the stored gene-symbol casing once, then bind it as an equality
+        # test in both queries below. `upper(gene_symbol)=?` cannot use
+        # idx_consequences_gene, so it degraded each query into a full scan --
+        # ~5 minutes on the pathogenicity join for byte-identical output.
+        symbols = resolve_variantfeatures_gene_symbols(con, gene)
+        if not symbols:
+            # Gene absent from variantFeatures -- the normal case for a gene with
+            # no slice yet. Returning here skips both scans, including the join
+            # over annotations_pathogenicity (43.5M rows). Empty maps and a max
+            # position of 0 are what the callers already expect for this case:
+            # everything reports unmatched and nothing is ever quarantined.
+            return {}, {}, {}, 0, set()
+        gene_ph = ",".join("?" * len(symbols))
         # Representative consequence per variant: prefer MANE select, then canonical.
         best: dict[int, tuple[int, sqlite3.Row]] = {}
         for r in con.execute(
             "SELECT variant_id, hgvs_c, hgvs_p, aa_pos, aa_ref, aa_alt, consequence, "
-            "is_canonical, is_mane_select FROM variant_consequences WHERE upper(gene_symbol)=?",
-            (gene.upper(),),
+            "is_canonical, is_mane_select FROM variant_consequences "
+            f"WHERE gene_symbol IN ({gene_ph})",
+            symbols,
         ):
             rank = (r["is_mane_select"] or 0) * 2 + (r["is_canonical"] or 0)
             cur = best.get(r["variant_id"])
@@ -145,9 +168,10 @@ def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict]:
         scores: dict[int, dict] = {}
         for r in con.execute(
             f"SELECT t.variant_id, t.predictor, t.score FROM annotations_pathogenicity t "
-            f"JOIN (SELECT DISTINCT variant_id FROM variant_consequences WHERE upper(gene_symbol)=?) c "
+            f"JOIN (SELECT DISTINCT variant_id FROM variant_consequences "
+            f"WHERE gene_symbol IN ({gene_ph})) c "
             f"ON t.variant_id=c.variant_id WHERE t.predictor IN ({ph})",
-            (gene.upper(), *PREDICTORS),
+            (*symbols, *PREDICTORS),
         ):
             if r["score"] is not None:
                 scores.setdefault(r["variant_id"], {})[r["predictor"]] = r["score"]
@@ -208,6 +232,12 @@ def main() -> int:
         match_method TEXT, canonical_hgvs_p TEXT, canonical_aa_key TEXT,
         canonical_hgvs_c TEXT, consequence TEXT, {cols}, scores_json TEXT, fp_class TEXT)""")
 
+    # `cur` is the GVF *run* DB, not variantFeatures -- a different `variants`
+    # table that does have gene_symbol (variantFeatures.variants does not).
+    # upper() stays here on purpose: migrate_to_sqlite stores gene_symbol exactly
+    # as extraction emitted it, with no case normalization, so the fold is
+    # load-bearing. It costs nothing to leave -- the run DB holds one gene's
+    # variants (thousands of rows, not millions).
     rows = list(
         cur.execute(
             "SELECT variant_id, protein_notation, cdna_notation FROM variants WHERE upper(gene_symbol)=?",
