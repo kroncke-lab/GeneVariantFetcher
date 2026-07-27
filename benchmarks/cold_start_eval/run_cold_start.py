@@ -34,6 +34,9 @@ from pathlib import Path
 from typing import Optional
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(BASE_DIR))  # so `python benchmarks/.../run_cold_start.py` works
+
+from utils.env_utils import local_data_discovery_disabled  # noqa: E402
 
 # Genes that already have a gold standard, are in the curated registry, are
 # cached in corpus/, or are cardiac -- i.e. NOT a genuine cold start. Sourced
@@ -111,12 +114,18 @@ def _covered_genes() -> set[str]:
     except (OSError, json.JSONDecodeError):
         pass
 
-    try:
-        for child in (BASE_DIR / "corpus").iterdir():
-            if child.is_dir() and not child.name.startswith("."):
-                covered.add(child.name.upper())
-    except OSError:
-        pass
+    # Unlike the sources above, corpus/ is gitignored: it exists in a developer's
+    # main checkout and nowhere else, so consulting it makes this set depend on
+    # which genes happen to have been run locally. Skipped when local-data
+    # discovery is disabled, which keeps the offline unit suite's answer the same
+    # in every checkout; a real cold-start run still scans it.
+    if not local_data_discovery_disabled():
+        try:
+            for child in (BASE_DIR / "corpus").iterdir():
+                if child.is_dir() and not child.name.startswith("."):
+                    covered.add(child.name.upper())
+        except OSError:
+            pass
 
     return covered
 

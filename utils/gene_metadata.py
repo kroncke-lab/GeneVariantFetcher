@@ -15,6 +15,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Iterable, Optional
 
+from utils.env_utils import local_data_discovery_disabled
+
 
 @dataclass(frozen=True)
 class VariantFeaturesResidue:
@@ -156,12 +158,20 @@ def normalize_gene_symbol(gene_symbol: str) -> str:
 
 
 def default_variantfeatures_db_path() -> Optional[Path]:
-    """Return a likely VariantFeatures SQLite path, if configured or present."""
+    """Return a likely VariantFeatures SQLite path, if configured or present.
+
+    An explicit ``VARIANTFEATURES_DB`` / ``VARIANT_FEATURES_DB`` always wins.
+    Absent that, a sibling checkout is only *guessed* at when local-data
+    discovery is enabled — see ``local_data_discovery_disabled``.
+    """
 
     for key in ("VARIANTFEATURES_DB", "VARIANT_FEATURES_DB"):
         value = os.environ.get(key)
         if value and Path(value).expanduser().is_file():
             return Path(value).expanduser()
+
+    if local_data_discovery_disabled():
+        return None
 
     repo_root = Path(__file__).resolve().parents[1]
     candidates = (

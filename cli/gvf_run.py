@@ -50,6 +50,7 @@ from utils.bootstrap import (
     initialize_runtime,
     llm_provider_key_status,
 )
+from utils.env_utils import local_data_discovery_disabled
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -1104,6 +1105,9 @@ def _find_review_repo(explicit: Optional[Path]) -> Optional[Path]:
     conventional sibling ``<repo parent>/Variant_Browser``. Returns the repo
     path only if its ``scripts/gvf_publish.sh`` actually exists, else None so
     the caller can warn-and-skip rather than fail the run.
+
+    The sibling guess is skipped when local-data discovery is disabled, so the
+    offline suite cannot pick up a developer's real Variant_Browser checkout.
     """
     candidates: list[Path] = []
     if explicit:
@@ -1112,7 +1116,8 @@ def _find_review_repo(explicit: Optional[Path]) -> Optional[Path]:
         val = os.environ.get(env_key)
         if val:
             candidates.append(Path(val).expanduser())
-    candidates.append(REPO_ROOT.parent / "Variant_Browser")
+    if not local_data_discovery_disabled():
+        candidates.append(REPO_ROOT.parent / "Variant_Browser")
     for repo in candidates:
         if (repo / "scripts" / "gvf_publish.sh").exists():
             return repo

@@ -43,6 +43,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional, Protocol
 
+from utils.env_utils import local_data_discovery_disabled
+
 logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -511,7 +513,7 @@ def _load_scout_zones(
     dirs: list[Path] = []
     if run_path is not None:
         dirs.append(run_path / "scout_output")
-    if gene:
+    if gene and not local_data_discovery_disabled():
         dirs.append(REPO_ROOT / "corpus" / gene / pmid)
     for d in dirs:
         f = d / f"{pmid}_DATA_ZONES.md"

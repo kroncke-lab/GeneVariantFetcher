@@ -23,6 +23,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from config.constants import DEFAULT_MAX_WORKERS
 from pipeline.source_quality import is_usable_fulltext_source
+from utils.env_utils import local_data_discovery_disabled
 
 logger = logging.getLogger(__name__)
 
@@ -1007,9 +1008,18 @@ def filter_papers(
 
 
 def _resolve_corpus_dir() -> Optional[Path]:
-    """Resolve the consolidated source corpus dir (GVF_CORPUS_DIR or <repo>/corpus)."""
+    """Resolve the consolidated source corpus dir (GVF_CORPUS_DIR or <repo>/corpus).
+
+    The ``<repo>/corpus`` fallback is a guess, so it is skipped when local-data
+    discovery is disabled; an explicit ``GVF_CORPUS_DIR`` is always honoured.
+    """
     env = os.environ.get("GVF_CORPUS_DIR")
-    corpus = Path(env) if env else Path(__file__).resolve().parents[1] / "corpus"
+    if env:
+        corpus = Path(env)
+    elif local_data_discovery_disabled():
+        return None
+    else:
+        corpus = Path(__file__).resolve().parents[1] / "corpus"
     return corpus if corpus.is_dir() else None
 
 
