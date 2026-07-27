@@ -63,19 +63,21 @@ class TestCircuitBreaker:
         )
 
     def test_html_garbage_triggers_circuit_breaker(self, extractor):
-        """Text with HTML markup garbage should be skipped."""
-        html_garbage = (
-            """
-        <div class="article-content">
-        <span style="font-size: 12px">
-        <script type="text/javascript">
-        var x = {"key": "value"};
-        </script>
-        </span>
-        </div>
+        """Markup that has crowded out the prose should be skipped.
+
+        Rewritten 2026-07-27: the gate measures markup *density* now, not how
+        many distinct markup patterns appear somewhere in the document. The old
+        fixture here was ~200 chars of tags padded with 500 chars of filler,
+        which is the same shape as a real paper carrying a converted nav bar --
+        see tests/unit/test_extraction_input_quality.py for the two cardiac
+        papers that shape used to discard. To still exercise the breaker the
+        document has to be mostly markup with nothing readable behind it.
         """
-            + "x" * 500
+        nav_chrome = (
+            '<div class="site-nav"><span style="display:none">'
+            "<script>var t={id:1};</script></span></div>"
         )
+        html_garbage = nav_chrome * 20 + " BRCA1 c.5266dupC carrier reported. "
 
         paper = Paper(
             pmid="12345678",
@@ -85,6 +87,22 @@ class TestCircuitBreaker:
         result = extractor.extract(paper)
         assert not result.success
         assert "SKIPPED" in result.error
+        assert "markup-dominated" in result.error.lower(), result.error
+
+    def test_trace_markup_does_not_trigger_circuit_breaker(self, extractor):
+        """A readable paper carrying a few stray tags must survive the breaker."""
+        body = (
+            """
+        We identified BRCA1 c.5266dupC (p.Gln1756fs) in 15 carriers, of whom
+        9 were affected and 6 unaffected at last follow-up. Segregation was
+        confirmed by Sanger sequencing in all available relatives.
+        """
+            * 40
+        )
+        traced = f'<div class="article-body">{body}<span>Table 1</span></div>'
+
+        is_usable, reason = extractor._assess_input_quality(traced, "BRCA1")
+        assert is_usable, f"trace markup should not discard a real paper: {reason}"
 
     def test_low_alphanumeric_ratio_triggers_circuit_breaker(self, extractor):
         """Text with low alphanumeric ratio should be skipped."""

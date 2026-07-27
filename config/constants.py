@@ -160,6 +160,23 @@ SCOUT_PREFER_CLEANED_ABOVE_CHARS: int = 5_000_000
 # Below this indicates garbage/placeholder text
 MIN_ALPHANUMERIC_RATIO: float = 0.3
 
+# Fraction of an extraction input that may sit inside HTML/JS markup before the
+# input is treated as markup rather than prose.
+#
+# This is a *density* bar, not a pattern-presence count. Until 2026-07-27 the
+# circuit breaker discarded any paper matching >=3 of five markup regexes
+# anywhere in the document, which threw away real full text: RYR2 PMID 19926015
+# carries 340 markup chars in 63 KB (0.54%) and lost all 40 of its gold
+# variants; KCNQ1 PMID 25087618 carries 602 in 35 KB (1.70%) and lost its
+# single gold variant.
+#
+# The bar is paired with a residual-content floor (MIN_EXTRACTION_INPUT_SIZE
+# worth of text outside the markup) because density alone still over-rejects:
+# across the 7,671-file source corpus the densest real papers reach ~46% markup
+# while retaining 20-60 KB of prose. Markup only justifies discarding a paper
+# when it has crowded the text out entirely.
+MAX_MARKUP_DENSITY: float = 0.25
+
 # Max characters to send to the LLM in a single extraction prompt
 TEXT_TRUNCATION_MAX_CHARS: int = 60_000
 

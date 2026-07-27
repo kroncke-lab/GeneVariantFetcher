@@ -18,6 +18,7 @@ from config.constants import (
     DETERMINISTIC_PARSER_MIN_VARIANTS,
     GENE_CONTEXT_WINDOW_LINES,
     LARGE_TABLE_ROW_THRESHOLD,
+    MAX_MARKUP_DENSITY,
     MIN_ALPHANUMERIC_RATIO,
     MIN_CONDENSED_SIZE,
     MIN_EXTRACTION_INPUT_SIZE,
@@ -5751,7 +5752,14 @@ Return strict JSON with this schema:
         "Session expired",
     ]
 
-    # Patterns indicating HTML/markup garbage
+    # Patterns indicating HTML/markup garbage.
+    #
+    # These are measured as character spans, not as presence flags: what matters
+    # is how much of the document sits inside markup, not how many of the
+    # patterns appear somewhere in it. Presence-counting is why `html_open` and
+    # `html_close` used to be worth two independent signals despite matching the
+    # two halves of the same tag pair, and why `json_frag` -- which also matches
+    # ordinary prose such as "{Table 1: ..." -- could cast the deciding vote.
     HTML_GARBAGE_PATTERNS = [
         r"<(?:div|span|script|style|html|body|head)[^>]*>",
         r"</(?:div|span|script|style|html|body|head)>",
@@ -5759,6 +5767,101 @@ Return strict JSON with this schema:
         r"class=[\"\'][^\"\']+[\"\']",
         r"style=[\"\'][^\"\']+[\"\']",
     ]
+
+    # Markup whose *body* is unusable too, so the whole element counts against
+    # the document rather than just its opening tag. A 40 KB inline script is
+    # 40 KB of markup, not the ~30 chars of `<script ...>`.
+    HTML_GARBAGE_BLOCK_TAGS = ("script", "style")
+
+    def _markup_block_spans(self, text: str) -> List[tuple[int, int]]:
+        """Locate `<script>`/`<style>` elements, bodies included.
+
+        Scanned with ``str.find`` rather than a regex because a non-greedy
+        ``<script\\b[^>]*>.*?</script>`` backtracks quadratically over openers
+        that never close -- and unclosed openers are exactly what a truncated
+        HTML dump is full of. An opener with no closer falls through to the tag
+        patterns, contributing only its own length.
+        """
+        spans: List[tuple[int, int]] = []
+        lowered = text.lower()
+        for tag in self.HTML_GARBAGE_BLOCK_TAGS:
+            opener, closer = f"<{tag}", f"</{tag}"
+            cursor = 0
+            while True:
+                start = lowered.find(opener, cursor)
+                if start == -1:
+                    break
+                after_name = start + len(opener)
+                # `<scriptural>` is prose, not a tag.
+                if lowered[after_name : after_name + 1] not in {
+                    " ",
+                    "\t",
+                    "\r",
+                    "\n",
+                    "/",
+                    ">",
+                }:
+                    cursor = after_name
+                    continue
+                tag_end = lowered.find(">", after_name)
+                if tag_end == -1:
+                    break
+                close_start = lowered.find(closer, tag_end)
+                close_end = lowered.find(">", close_start) if close_start != -1 else -1
+                if close_end == -1:
+                    # No usable closer at or after `tag_end`, so no opener later
+                    # in the document can have one either -- stop rather than
+                    # re-scanning the tail once per unclosed opener.
+                    break
+                spans.append((start, close_end + 1))
+                cursor = close_end + 1
+        return spans
+
+    def _markup_profile(self, text: str) -> tuple[float, int]:
+        """Measure how much of ``text`` is markup and how much prose survives it.
+
+        Returns ``(markup_density, content_chars)``: the fraction of characters
+        inside a recognized markup span, and the length of the
+        whitespace-collapsed remainder.
+
+        Overlapping matches are merged before measuring, so a
+        ``<div class="x">`` that matches both the tag pattern and the attribute
+        pattern is counted once, and an open/close tag pair contributes only the
+        characters it actually occupies.
+        """
+        if not text:
+            return 0.0, 0
+
+        spans: List[tuple[int, int]] = self._markup_block_spans(text)
+        for pattern in self.HTML_GARBAGE_PATTERNS:
+            for match in re.finditer(pattern, text):
+                spans.append(match.span())
+
+        if not spans:
+            return 0.0, len(" ".join(text.split()))
+
+        spans.sort()
+        merged: List[tuple[int, int]] = []
+        start, end = spans[0]
+        for span_start, span_end in spans[1:]:
+            if span_start > end:
+                merged.append((start, end))
+                start, end = span_start, span_end
+            else:
+                end = max(end, span_end)
+        merged.append((start, end))
+
+        markup_chars = sum(span_end - span_start for span_start, span_end in merged)
+
+        remainder: List[str] = []
+        cursor = 0
+        for span_start, span_end in merged:
+            remainder.append(text[cursor:span_start])
+            cursor = span_end
+        remainder.append(text[cursor:])
+        content_chars = len(" ".join("".join(remainder).split()))
+
+        return markup_chars / len(text), content_chars
 
     def _assess_input_quality(
         self, text: str, gene_symbol: Optional[str]
@@ -5770,9 +5873,13 @@ Return strict JSON with this schema:
         Checks for:
         - Minimum content length
         - Failed extraction placeholders
-        - HTML/markup garbage
+        - Markup that has crowded out the prose (density, not mere presence)
         - Sufficient alphanumeric content ratio
         - Relevant variant or gene content
+
+        Every rejection here costs a whole paper, so each check is written to
+        fire on documents that carry no extractable text rather than on
+        documents that merely look untidy.
 
         Returns:
             (is_usable, reason) - whether text is usable and why/why not
@@ -5798,12 +5905,21 @@ Return strict JSON with this schema:
                 f"Contains {failed_count} failed extraction markers",
             )
 
-        # Check 3: HTML/markup garbage detection
-        html_matches = sum(
-            1 for pattern in self.HTML_GARBAGE_PATTERNS if re.search(pattern, text)
-        )
-        if html_matches >= 3:
-            return False, f"Contains HTML/markup garbage ({html_matches} patterns)"
+        # Check 3: markup-dominated input
+        # Density plus a content floor, not pattern presence. Trace markup in an
+        # otherwise readable paper is not a reason to discard it; markup only
+        # disqualifies the input when it has crowded the prose out, leaving less
+        # real text behind it than Check 1 demands of any input at all.
+        markup_density, content_chars = self._markup_profile(text)
+        if (
+            markup_density >= MAX_MARKUP_DENSITY
+            and content_chars < MIN_EXTRACTION_INPUT_SIZE
+        ):
+            return (
+                False,
+                f"Markup-dominated input ({markup_density:.0%} markup, "
+                f"only {content_chars} chars of text outside it)",
+            )
 
         # Check 4: Alphanumeric content ratio
         # Filters out text that's mostly punctuation, whitespace, or special chars
