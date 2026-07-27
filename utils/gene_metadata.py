@@ -297,15 +297,18 @@ def lookup_variantfeatures_residue(
                     protein_notation=protein_notation,
                     cdna_notation=cdna_notation,
                 )
-            rows = conn.execute(
+            rows = _gene_rows(
+                conn,
                 """
                 SELECT transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt
                 FROM variant_consequences
-                WHERE UPPER(gene_symbol) = ? AND aa_pos = ?
+                WHERE {gene_predicate} AND aa_pos = ?
                 LIMIT 500
                 """,
-                (gene, position),
-            ).fetchall()
+                "gene_symbol",
+                gene,
+                (position,),
+            )
     except sqlite3.Error:
         return None
     if not rows:
@@ -370,10 +373,11 @@ def _read_variantfeatures_metadata(
     protein_length: int | None = None
 
     if _has_table(conn, "genes"):
-        row = _first_row(
+        row = _first_gene_row(
             conn,
-            "SELECT symbol, canonical_transcript, ncbi_id, ensembl_id FROM genes WHERE UPPER(symbol) = ?",
-            (gene,),
+            "SELECT symbol, canonical_transcript, ncbi_id, ensembl_id FROM genes WHERE {gene_predicate}",
+            "symbol",
+            gene,
         )
         if row:
             aliases.append(str(row[0]))
@@ -382,16 +386,18 @@ def _read_variantfeatures_metadata(
             ensembl_id = row[3]
 
     if _has_table(conn, "transcripts"):
-        rows = conn.execute(
+        rows = _gene_rows(
+            conn,
             """
             SELECT transcript_id, refseq_match, protein_id, cds_length
             FROM transcripts
-            WHERE UPPER(gene_symbol) = ?
+            WHERE {gene_predicate}
             ORDER BY is_mane_select DESC, is_canonical DESC, transcript_id
             LIMIT 20
             """,
-            (gene,),
-        ).fetchall()
+            "gene_symbol",
+            gene,
+        )
         for transcript_id, refseq_match, protein_id, cds_length in rows:
             if transcript_id and not canonical_transcript:
                 canonical_transcript = str(transcript_id)
@@ -404,43 +410,49 @@ def _read_variantfeatures_metadata(
                 protein_length = derived
 
     if _has_table(conn, "variant_consequences"):
-        row = _first_row(
+        row = _first_gene_row(
             conn,
             """
             SELECT MAX(aa_pos)
             FROM variant_consequences
-            WHERE UPPER(gene_symbol) = ?
+            WHERE {gene_predicate}
             """,
-            (gene,),
+            "gene_symbol",
+            gene,
         )
         if row and row[0]:
             # Saturation tables include the stop codon as the final aa_pos.
             protein_length = max(int(row[0]) - 1, 1)
-        rows = conn.execute(
+        rows = _gene_rows(
+            conn,
             """
             SELECT DISTINCT transcript_id
             FROM variant_consequences
-            WHERE UPPER(gene_symbol) = ? AND transcript_id IS NOT NULL
+            WHERE {gene_predicate} AND transcript_id IS NOT NULL
             LIMIT 20
             """,
-            (gene,),
-        ).fetchall()
+            "gene_symbol",
+            gene,
+        )
         for (transcript_id,) in rows:
             if transcript_id and not canonical_transcript:
                 canonical_transcript = str(transcript_id)
 
     elif _has_table(conn, "variants"):
-        row = _first_row(
+        row = _first_gene_row(
             conn,
-            "SELECT MAX(resnum) FROM variants WHERE UPPER(gene) = ?",
-            (gene,),
+            "SELECT MAX(resnum) FROM variants WHERE {gene_predicate}",
+            "gene",
+            gene,
         )
         if row and row[0]:
             protein_length = int(row[0])
-        rows = conn.execute(
-            "SELECT DISTINCT uniprot_id FROM variants WHERE UPPER(gene) = ? AND uniprot_id IS NOT NULL LIMIT 20",
-            (gene,),
-        ).fetchall()
+        rows = _gene_rows(
+            conn,
+            "SELECT DISTINCT uniprot_id FROM variants WHERE {gene_predicate} AND uniprot_id IS NOT NULL LIMIT 20",
+            "gene",
+            gene,
+        )
         protein_ids.extend(str(row[0]) for row in rows if row[0])
 
     if not any(
@@ -473,15 +485,18 @@ def _lookup_legacy_variantfeatures_residue(
 ) -> Optional[VariantFeaturesResidue]:
     if not _has_table(conn, "variants"):
         return None
-    rows = conn.execute(
+    rows = _gene_rows(
+        conn,
         """
         SELECT var, var_hgvs_p, var_hgvs_c, wt_aa, mut_aa, uniprot_id
         FROM variants
-        WHERE UPPER(gene) = ? AND resnum = ?
+        WHERE {gene_predicate} AND resnum = ?
         LIMIT 500
         """,
-        (gene, position),
-    ).fetchall()
+        "gene",
+        gene,
+        (position,),
+    )
     if not rows:
         return None
     protein_norm = _normalize_notation(protein_notation)
@@ -541,10 +556,51 @@ def _has_table(conn: sqlite3.Connection, name: str) -> bool:
     return bool(row)
 
 
-def _first_row(
-    conn: sqlite3.Connection, sql: str, params: tuple[object, ...]
+def _gene_rows(
+    conn: sqlite3.Connection,
+    sql: str,
+    column: str,
+    gene: str,
+    extra_params: tuple[object, ...] = (),
+) -> list[tuple]:
+    """Run a gene-scoped query, preferring the indexed exact-match predicate.
+
+    ``sql`` must contain a single ``{gene_predicate}`` placeholder. ``gene`` is
+    already uppercased by :func:`normalize_gene_symbol`, so the exact form
+    matches whenever the database stores uppercase symbols and can then use an
+    index such as ``idx_consequences_gene``. Wrapping the column in ``UPPER()``
+    makes the column non-indexable and degrades every lookup into a full index
+    scan, which costs seconds per query on a multi-gigabyte VariantFeatures
+    slice.
+
+    The ``UPPER()`` form is still tried as a fallback so genes stored only in
+    mixed case stay reachable -- HGNC keeps a lowercase ``orf`` in symbols such
+    as ``C19orf25``, and real databases carry those rows verbatim.
+
+    An aggregate such as ``SELECT MAX(aa_pos)`` always returns one row, so an
+    empty result cannot drive the fallback on its own; a row of nothing but
+    ``NULL`` is treated as "no match" for that reason.
+    """
+
+    rows: list[tuple] = []
+    for predicate in (f"{column} = ?", f"UPPER({column}) = ?"):
+        rows = conn.execute(
+            sql.format(gene_predicate=predicate), (gene, *extra_params)
+        ).fetchall()
+        if any(value is not None for row in rows for value in row):
+            return rows
+    return rows
+
+
+def _first_gene_row(
+    conn: sqlite3.Connection,
+    sql: str,
+    column: str,
+    gene: str,
+    extra_params: tuple[object, ...] = (),
 ) -> Optional[tuple]:
-    return conn.execute(sql, params).fetchone()
+    rows = _gene_rows(conn, sql, column, gene, extra_params)
+    return rows[0] if rows else None
 
 
 def _dedupe(values: Iterable[object]) -> tuple[str, ...]:
