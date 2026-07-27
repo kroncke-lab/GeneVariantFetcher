@@ -30,7 +30,7 @@ import json
 import logging
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
 
@@ -104,6 +104,92 @@ class RouterResult:
     raw_response: Optional[str] = None
     error: Optional[str] = None
     used_fallback: bool = False
+    # Every table id `enumerate_markdown_tables` produced for this paper, routed
+    # or not. Recorded so a decline can be told apart from "there was nothing to
+    # route" when auditing the router after the fact.
+    enumerated_table_ids: List[str] = field(default_factory=list)
+
+
+# Outcome codes written to extraction_metadata["table_router_outcome"].
+ROUTER_OUTCOME_APPROVED = "approved"
+# Router approved tables, but the caller found too few variants to short-circuit
+# the full-text path, so the router output was demoted to extraction hints.
+ROUTER_OUTCOME_APPROVED_BELOW_THRESHOLD = "approved_below_threshold"
+ROUTER_OUTCOME_NO_USABLE_TABLES = "no_usable_tables"
+ROUTER_OUTCOME_LLM_ERROR = "llm_error"
+ROUTER_OUTCOME_CRASHED = "crashed"
+ROUTER_OUTCOME_DISABLED = "disabled"
+# Feature flag on, but a precondition (gene symbol, source text) was missing.
+ROUTER_OUTCOME_SKIPPED = "skipped"
+
+ROUTER_OUTCOMES = (
+    ROUTER_OUTCOME_APPROVED,
+    ROUTER_OUTCOME_APPROVED_BELOW_THRESHOLD,
+    ROUTER_OUTCOME_NO_USABLE_TABLES,
+    ROUTER_OUTCOME_LLM_ERROR,
+    ROUTER_OUTCOME_CRASHED,
+    ROUTER_OUTCOME_DISABLED,
+    ROUTER_OUTCOME_SKIPPED,
+)
+
+# Caps so papers with dozens of supplementary tables cannot bloat the
+# extraction JSON. Counts stay exact; only the per-table detail is capped.
+MAX_ROUTER_DETAIL_TABLES = 12
+MAX_ROUTER_NOTE_CHARS = 200
+MAX_ROUTER_ERROR_CHARS = 300
+
+
+def build_router_decision_metadata(
+    *,
+    model: Optional[str],
+    outcome: str,
+    routed: Optional[Sequence[RoutedTable]] = None,
+    enumerated_table_ids: Optional[Sequence[str]] = None,
+    variants_parsed: int = 0,
+    error: Optional[str] = None,
+    max_detail_tables: int = MAX_ROUTER_DETAIL_TABLES,
+) -> Dict[str, Any]:
+    """Build a compact, JSON-safe record of one router decision.
+
+    The router's column->field mapping is applied deterministically to every row
+    of a routed table, so a single mapping error scales to hundreds of rows.
+    Persisting the mapping (plus what was enumerated but declined) is what makes
+    that judgment call auditable and scorable after the run.
+
+    Observability only: nothing here feeds back into routing.
+    """
+    routed_tables = list(routed or [])
+    enumerated = [str(t) for t in (enumerated_table_ids or [])]
+    routed_ids = {r.table_id for r in routed_tables}
+    declined = [t for t in enumerated if t not in routed_ids]
+
+    mappings: Dict[str, Dict[str, int]] = {}
+    confidences: Dict[str, float] = {}
+    notes: Dict[str, str] = {}
+    for r in routed_tables[:max_detail_tables]:
+        mappings[r.table_id] = dict(r.column_mapping or {})
+        if r.confidence is not None:
+            confidences[r.table_id] = r.confidence
+        if r.notes:
+            notes[r.table_id] = str(r.notes)[:MAX_ROUTER_NOTE_CHARS]
+
+    meta: Dict[str, Any] = {
+        "table_router_model": model,
+        "table_router_outcome": outcome,
+        "table_router_tables_enumerated": len(enumerated),
+        "table_router_tables_routed": len(routed_tables),
+        "table_router_variants_parsed": int(variants_parsed),
+        "table_router_mappings": mappings,
+        "table_router_confidences": confidences,
+        "table_router_notes": notes,
+    }
+    if declined:
+        meta["table_router_tables_declined"] = declined[:max_detail_tables]
+    if len(routed_tables) > max_detail_tables or len(declined) > max_detail_tables:
+        meta["table_router_detail_truncated"] = True
+    if error:
+        meta["table_router_error"] = str(error)[:MAX_ROUTER_ERROR_CHARS]
+    return meta
 
 
 _TABLE_CAPTION_RE = re.compile(
@@ -1340,6 +1426,7 @@ def route_tables(
     if not tables:
         return RouterResult(routed_tables=[], used_fallback=True)
 
+    enumerated_ids = [t.table_id for t in tables]
     deterministic: List[RoutedTable] = []
     llm_candidates: List[MarkdownTable] = []
     strict_cohort_labels = _strict_cohort_labels_enabled()
@@ -1363,11 +1450,17 @@ def route_tables(
             llm_candidates.append(table)
 
     if deterministic and not llm_candidates:
-        return RouterResult(routed_tables=deterministic, used_fallback=False)
+        return RouterResult(
+            routed_tables=deterministic,
+            used_fallback=False,
+            enumerated_table_ids=enumerated_ids,
+        )
 
     if not llm_candidates:
         return RouterResult(
-            routed_tables=deterministic, used_fallback=not deterministic
+            routed_tables=deterministic,
+            used_fallback=not deterministic,
+            enumerated_table_ids=enumerated_ids,
         )
 
     if llm_caller is None:
@@ -1416,6 +1509,7 @@ def route_tables(
             routed_tables=deterministic,
             error=str(e),
             used_fallback=not deterministic,
+            enumerated_table_ids=enumerated_ids,
         )
 
     if not raw.strip():
@@ -1425,6 +1519,7 @@ def route_tables(
             routed_tables=deterministic,
             error=error,
             used_fallback=not deterministic,
+            enumerated_table_ids=enumerated_ids,
         )
 
     routed = parse_router_response(raw)
@@ -1433,7 +1528,11 @@ def route_tables(
     for r in routed:
         r.table = by_id.get(r.table_id)
     routed = [r for r in routed if r.table is not None]
-    return RouterResult(routed_tables=deterministic + routed, raw_response=raw)
+    return RouterResult(
+        routed_tables=deterministic + routed,
+        raw_response=raw,
+        enumerated_table_ids=enumerated_ids,
+    )
 
 
 def extract_via_router(
@@ -1452,6 +1551,8 @@ def extract_via_router(
       - ``variants`` (list[dict]): variant records produced by the parser
       - ``used_fallback`` (bool): True if no usable tables were found
       - ``error`` (str|None): set when the router LLM call failed
+      - ``enumerated_table_ids`` (list[str]): every table id offered to the
+        router, so callers can record what was declined, not just what was kept
     """
     result = route_tables(
         text,
@@ -1473,6 +1574,7 @@ def extract_via_router(
         "variants": variants,
         "used_fallback": result.used_fallback or not result.routed_tables,
         "error": result.error,
+        "enumerated_table_ids": result.enumerated_table_ids,
     }
 
 

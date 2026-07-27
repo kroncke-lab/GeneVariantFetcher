@@ -10,7 +10,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from config.constants import (
     ADAPTIVE_TABLE_THRESHOLD,
@@ -192,6 +192,9 @@ class ExpertExtractor(BaseLLMCaller):
         self.evidence_packet_max_chars = settings.tier3_evidence_packet_max_chars
         self.adjudication_max_tokens = settings.tier3_adjudication_max_tokens
         self.max_verifier_cards = settings.tier3_max_verifier_cards
+        # Table-router decision for the extraction attempt in flight; folded into
+        # extraction_metadata so the routing call is auditable after the run.
+        self._last_table_router_decision: Optional[Dict[str, Any]] = None
 
         super().__init__(
             model=self.models[0],
@@ -5833,6 +5836,44 @@ Return strict JSON with this schema:
 
         return True, "Text appears usable"
 
+    def _record_table_router_decision(self, decision: Dict[str, Any]) -> None:
+        """Stash the router decision for the extraction attempt in flight.
+
+        `_attempt_extraction` folds it into the returned result's
+        extraction_metadata, which is how a decline (the overwhelmingly common
+        outcome) ends up on disk at all — the decline path returns None here and
+        the answer comes from the full-text Tier 3 path.
+        """
+        self._last_table_router_decision = decision
+
+    @property
+    def last_table_router_decision(self) -> Optional[Dict[str, Any]]:
+        """Router decision recorded by the most recent extraction attempt."""
+        return self._last_table_router_decision
+
+    def _apply_table_router_metadata(
+        self, result: ExtractionResult
+    ) -> ExtractionResult:
+        """Fold the recorded router decision into a result's extraction_metadata.
+
+        Existing keys win, so the approved path's inlined copy is authoritative.
+        Failed attempts carry no extracted_data, so their decision stays in the
+        logs only.
+        """
+        decision = self._last_table_router_decision
+        data = result.extracted_data
+        if not decision or not isinstance(data, dict):
+            return result
+        metadata = data.get("extraction_metadata")
+        if metadata is None:
+            metadata = {}
+            data["extraction_metadata"] = metadata
+        if not isinstance(metadata, dict):
+            return result
+        for key, value in decision.items():
+            metadata.setdefault(key, value)
+        return result
+
     def _try_table_router(
         self, paper: Paper, scanner_text: str
     ) -> Optional[ExtractionResult]:
@@ -5843,8 +5884,18 @@ Return strict JSON with this schema:
         across the routed tables — anything less means the paper is either
         narrative-only or has tables the router rejected, and the existing
         full-text path is a better answer.
+
+        Every path records a router decision via `_record_table_router_decision`
+        (observability only — routing and fallback behaviour are unchanged).
         """
-        from pipeline.table_router import extract_via_router
+        from pipeline.table_router import (
+            ROUTER_OUTCOME_APPROVED,
+            ROUTER_OUTCOME_CRASHED,
+            ROUTER_OUTCOME_LLM_ERROR,
+            ROUTER_OUTCOME_NO_USABLE_TABLES,
+            build_router_decision_metadata,
+            extract_via_router,
+        )
 
         settings = get_settings()
         router_model = settings.get_table_router_model()
@@ -5862,26 +5913,48 @@ Return strict JSON with this schema:
                 paper.pmid,
                 e,
             )
+            self._record_table_router_decision(
+                build_router_decision_metadata(
+                    model=router_model,
+                    outcome=ROUTER_OUTCOME_CRASHED,
+                    error=str(e),
+                )
+            )
             return None
 
         variants = outcome.get("variants") or []
+        routed = outcome.get("routed", []) or []
+
+        def _decision(outcome_code: str) -> Dict[str, Any]:
+            return build_router_decision_metadata(
+                model=router_model,
+                outcome=outcome_code,
+                routed=routed,
+                enumerated_table_ids=outcome.get("enumerated_table_ids") or [],
+                variants_parsed=len(variants),
+                error=outcome.get("error"),
+            )
+
         if outcome.get("error"):
             logger.info(
                 "PMID %s - Router LLM error (%s); falling back",
                 paper.pmid,
                 outcome["error"],
             )
+            self._record_table_router_decision(_decision(ROUTER_OUTCOME_LLM_ERROR))
             return None
         if not variants:
             logger.info(
                 "PMID %s - Router found no usable variant tables (%d candidates routed); "
                 "falling back to full-text Tier 3",
                 paper.pmid,
-                len(outcome.get("routed", []) or []),
+                len(routed),
+            )
+            self._record_table_router_decision(
+                _decision(ROUTER_OUTCOME_NO_USABLE_TABLES)
             )
             return None
 
-        routed = outcome.get("routed", []) or []
         table_ids = ", ".join(r.table_id for r in routed)
         logger.info(
             "PMID %s - Router approved tables [%s]; deterministically parsed %d variants",
@@ -5889,6 +5962,8 @@ Return strict JSON with this schema:
             table_ids,
             len(variants),
         )
+        decision = _decision(ROUTER_OUTCOME_APPROVED)
+        self._record_table_router_decision(decision)
 
         extracted_data = {
             "paper_metadata": {
@@ -5913,6 +5988,7 @@ Return strict JSON with this schema:
                     f"Router-first path: tables {table_ids} parsed deterministically "
                     f"using {router_model}"
                 ),
+                **decision,
             },
         }
         return ExtractionResult(
@@ -5935,6 +6011,9 @@ Return strict JSON with this schema:
         """
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         saved_model, saved_max_tokens = self.model, self.max_tokens
+        # Clear any decision left over from a previous paper/model attempt so a
+        # result can never inherit another attempt's routing metadata.
+        self._last_table_router_decision = None
         try:
             self.model = model
             self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
@@ -5942,6 +6021,7 @@ Return strict JSON with this schema:
             result = self._do_attempt_extraction(
                 paper, model, prepared_full_text, estimated_variants
             )
+            result = self._apply_table_router_metadata(result)
             if result.success:
                 result.extracted_data = self._backfill_variant_notation_pairs(
                     result.extracted_data
@@ -6147,9 +6227,17 @@ Return strict JSON with this schema:
         # parse them deterministically. Cuts ~10× tokens per typical paper
         # vs sending 60k chars of full text. Falls through to full-text Tier 3
         # below if the router finds no usable tables OR the router LLM fails.
+        from pipeline.table_router import (
+            ROUTER_OUTCOME_APPROVED_BELOW_THRESHOLD,
+            ROUTER_OUTCOME_DISABLED,
+            ROUTER_OUTCOME_SKIPPED,
+            build_router_decision_metadata,
+        )
+
         settings = get_settings()
         router_variants: List[dict] = []
-        if settings.enable_table_router and paper.gene_symbol and scanner_text:
+        router_enabled = bool(settings.enable_table_router)
+        if router_enabled and paper.gene_symbol and scanner_text:
             router_outcome = self._try_table_router(paper, scanner_text)
             if router_outcome is not None:
                 routed_data = router_outcome.extracted_data or {}
@@ -6165,6 +6253,28 @@ Return strict JSON with this schema:
                     paper.pmid,
                     len(router_variants),
                 )
+                # Router approved tables but its output was demoted to hints;
+                # record that so "approved" never overstates what was used.
+                if self._last_table_router_decision is not None:
+                    self._last_table_router_decision["table_router_outcome"] = (
+                        ROUTER_OUTCOME_APPROVED_BELOW_THRESHOLD
+                    )
+        else:
+            # We reached the router step but did not run it. Record why, so a
+            # flag-off or missing-gene run is distinguishable from a real
+            # decline. (Papers that short-circuit earlier — no text, unusable
+            # input, large-table deterministic parse — never reach this step and
+            # carry no table_router_* fields at all.)
+            self._record_table_router_decision(
+                build_router_decision_metadata(
+                    model=settings.get_table_router_model(),
+                    outcome=(
+                        ROUTER_OUTCOME_SKIPPED
+                        if router_enabled
+                        else ROUTER_OUTCOME_DISABLED
+                    ),
+                )
+            )
 
         truncated_text = self._truncate_text_for_prompt(
             full_text, gene_symbol=paper.gene_symbol

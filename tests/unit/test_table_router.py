@@ -888,3 +888,383 @@ def test_router_does_not_treat_unlabeled_row_ids_as_open_gene_groups():
 
     assert mapping is not None
     assert "gene" not in mapping
+
+
+# ---------------------------------------------------------------------------
+# Router decision observability
+#
+# The router's column->field mapping is applied deterministically to every row
+# of a routed table, so a mapping error scales to hundreds of rows, and a
+# decline silently hands the paper to the full-text path. These tests pin the
+# decision record onto extraction_metadata so both are auditable after a run.
+# ---------------------------------------------------------------------------
+
+
+FUNCTIONAL_ASSAY_PAPER = """Table 1. Functional assays (no variant data)
+
+| construct | tail current | activation V1/2 |
+|-----------|--------------|-----------------|
+| WT | 100% | -32 |
+| K897T | 95% | -30 |
+"""
+
+NARRATIVE_PAPER = (
+    "We followed a KCNH2 mutation carrier family with long QT syndrome. "
+    "The proband's variant was identified by sequencing. " * 20
+)
+
+# extract() has a 500-char circuit breaker, so pad the two-table sample with
+# prose (no pipes, so the enumerated table count stays at 2).
+SAMPLE_PAPER_PADDED = SAMPLE_PAPER + "\n\n" + NARRATIVE_PAPER
+
+
+def _extractor():
+    from pipeline.extraction import ExpertExtractor
+
+    return ExpertExtractor(models=["test-model"], tier_threshold=1)
+
+
+def _paper(pmid="12345678", full_text=NARRATIVE_PAPER, gene_symbol="KCNH2"):
+    from utils.models import Paper
+
+    return Paper(
+        pmid=pmid,
+        title="Router observability fixture",
+        gene_symbol=gene_symbol,
+        full_text=full_text,
+    )
+
+
+def _stub_router_llm(monkeypatch, content):
+    """Point the router's default llm_caller at a canned response."""
+    calls = []
+
+    def _fake(**kwargs):
+        calls.append(kwargs)
+        return _stub_response(content)
+
+    monkeypatch.setattr("utils.llm_utils.litellm_completion", _fake)
+    return calls
+
+
+def test_recorded_outcome_codes_are_documented():
+    """Pin the wire values downstream scoring will filter on."""
+    from pipeline.table_router import ROUTER_OUTCOMES
+
+    for code in (
+        "approved",
+        "approved_below_threshold",
+        "no_usable_tables",
+        "llm_error",
+        "crashed",
+        "disabled",
+        "skipped",
+    ):
+        assert code in ROUTER_OUTCOMES
+
+
+def test_build_router_decision_metadata_records_mapping_and_declines():
+    from pipeline.table_router import RoutedTable, build_router_decision_metadata
+
+    routed = [
+        RoutedTable(
+            table_id="T1",
+            column_mapping={"cdna": 0, "protein": 1, "patient_count": 2},
+            confidence=0.9,
+            notes="carrier counts in column 2",
+        )
+    ]
+
+    meta = build_router_decision_metadata(
+        model="azure_ai/Kimi-K2.6-1",
+        outcome="approved",
+        routed=routed,
+        enumerated_table_ids=["T1", "T2", "T3"],
+        variants_parsed=17,
+    )
+
+    assert meta["table_router_model"] == "azure_ai/Kimi-K2.6-1"
+    assert meta["table_router_outcome"] == "approved"
+    assert meta["table_router_tables_enumerated"] == 3
+    assert meta["table_router_tables_routed"] == 1
+    assert meta["table_router_variants_parsed"] == 17
+    assert meta["table_router_mappings"] == {
+        "T1": {"cdna": 0, "protein": 1, "patient_count": 2}
+    }
+    assert meta["table_router_confidences"] == {"T1": 0.9}
+    assert meta["table_router_notes"] == {"T1": "carrier counts in column 2"}
+    # The tables the router looked at and passed over are the audit target.
+    assert meta["table_router_tables_declined"] == ["T2", "T3"]
+    assert "table_router_error" not in meta
+    assert "table_router_detail_truncated" not in meta
+    # Must survive the extraction-JSON round trip.
+    assert json.loads(json.dumps(meta)) == meta
+
+
+def test_build_router_decision_metadata_caps_per_table_detail():
+    from pipeline.table_router import (
+        MAX_ROUTER_DETAIL_TABLES,
+        RoutedTable,
+        build_router_decision_metadata,
+    )
+
+    n = MAX_ROUTER_DETAIL_TABLES + 8
+    routed = [
+        RoutedTable(
+            table_id=f"T{i}",
+            column_mapping={"cdna": 0},
+            confidence=0.5,
+            notes="x" * 500,
+        )
+        for i in range(n)
+    ]
+
+    meta = build_router_decision_metadata(
+        model="m",
+        outcome="approved",
+        routed=routed,
+        enumerated_table_ids=[f"T{i}" for i in range(n)],
+        variants_parsed=3,
+    )
+
+    # Counts stay exact; only the per-table detail is capped.
+    assert meta["table_router_tables_routed"] == n
+    assert meta["table_router_tables_enumerated"] == n
+    assert len(meta["table_router_mappings"]) == MAX_ROUTER_DETAIL_TABLES
+    assert len(meta["table_router_confidences"]) == MAX_ROUTER_DETAIL_TABLES
+    assert all(len(v) <= 200 for v in meta["table_router_notes"].values())
+    assert meta["table_router_detail_truncated"] is True
+
+
+def test_build_router_decision_metadata_records_error():
+    from pipeline.table_router import build_router_decision_metadata
+
+    meta = build_router_decision_metadata(
+        model="m", outcome="llm_error", error="boom " * 200
+    )
+
+    assert meta["table_router_outcome"] == "llm_error"
+    assert meta["table_router_tables_enumerated"] == 0
+    assert meta["table_router_mappings"] == {}
+    assert len(meta["table_router_error"]) <= 300
+
+
+def test_extract_via_router_reports_enumerated_table_ids():
+    def stub(**_):
+        return _stub_response(json.dumps({"variant_tables": []}))
+
+    result = extract_via_router(
+        SAMPLE_PAPER, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    expected = [t.table_id for t in enumerate_markdown_tables(SAMPLE_PAPER)]
+    assert result["enumerated_table_ids"] == expected
+    assert len(expected) == 2
+
+
+def test_router_metadata_recorded_on_approved_path(monkeypatch):
+    """Approved path persists the model, mapping, confidence and declines."""
+    _stub_router_llm(monkeypatch, json.dumps({"variant_tables": []}))
+    extractor = _extractor()
+    paper = _paper(full_text=SAMPLE_PAPER)
+
+    result = extractor._try_table_router(paper, SAMPLE_PAPER)
+
+    assert result is not None and result.success
+    meta = result.extracted_data["extraction_metadata"]
+    assert meta["table_router_outcome"] == "approved"
+    assert (
+        meta["table_router_model"]
+        == extractor.last_table_router_decision["table_router_model"]
+    )
+    assert meta["table_router_tables_enumerated"] == 2
+    assert meta["table_router_tables_routed"] == 1
+    assert meta["table_router_variants_parsed"] == 2
+    # The mapping that was applied to every row of the routed table.
+    (mapping,) = meta["table_router_mappings"].values()
+    assert mapping["cdna"] == 0
+    assert mapping["patient_count"] == 2
+    # The functional-assay table was enumerated but not routed.
+    assert len(meta["table_router_tables_declined"]) == 1
+    # Pre-existing metadata is untouched.
+    assert meta["total_variants_found"] == 2
+    assert extractor.last_table_router_decision["table_router_outcome"] == "approved"
+
+
+def test_router_metadata_recorded_on_decline_path(monkeypatch):
+    """A decline records what was enumerated, so it can be re-examined later."""
+    _stub_router_llm(monkeypatch, json.dumps({"variant_tables": []}))
+    extractor = _extractor()
+    paper = _paper(full_text=FUNCTIONAL_ASSAY_PAPER)
+
+    result = extractor._try_table_router(paper, FUNCTIONAL_ASSAY_PAPER)
+
+    # Behaviour unchanged: the caller still falls through to full-text Tier 3.
+    assert result is None
+    decision = extractor.last_table_router_decision
+    assert decision["table_router_outcome"] == "no_usable_tables"
+    assert decision["table_router_tables_enumerated"] == 1
+    assert decision["table_router_tables_routed"] == 0
+    assert decision["table_router_variants_parsed"] == 0
+    assert decision["table_router_mappings"] == {}
+    assert len(decision["table_router_tables_declined"]) == 1
+
+
+def test_router_metadata_records_crash(monkeypatch):
+    import pipeline.table_router as table_router
+
+    def _boom(*_args, **_kwargs):
+        raise RuntimeError("router exploded")
+
+    monkeypatch.setattr(table_router, "extract_via_router", _boom)
+    extractor = _extractor()
+
+    assert extractor._try_table_router(_paper(), NARRATIVE_PAPER) is None
+    decision = extractor.last_table_router_decision
+    assert decision["table_router_outcome"] == "crashed"
+    assert "router exploded" in decision["table_router_error"]
+
+
+def test_router_metadata_records_llm_error(monkeypatch):
+    """An empty router response is recorded as llm_error, not a clean decline."""
+    _stub_router_llm(monkeypatch, "")
+    extractor = _extractor()
+
+    assert extractor._try_table_router(_paper(), SAMPLE_PAPER) is None
+    decision = extractor.last_table_router_decision
+    assert decision["table_router_outcome"] == "llm_error"
+    assert decision["table_router_error"]
+    assert decision["table_router_tables_enumerated"] == 2
+
+
+def _stub_full_text_extraction(monkeypatch, extractor):
+    """Make the full-text Tier 3 path offline and deterministic."""
+
+    class EmptyScanner:
+        variants = []
+
+        def get_hints_for_prompt(self, max_hints):
+            return ""
+
+    monkeypatch.setattr(extractor, "_extract_variants_from_tables", lambda *_: [])
+    monkeypatch.setattr(
+        "pipeline.extraction.scan_document_for_variants",
+        lambda *_, **__: EmptyScanner(),
+    )
+    monkeypatch.setattr(
+        extractor,
+        "call_llm_json_with_status",
+        lambda _prompt: (
+            {
+                "variants": [
+                    {"gene_symbol": "KCNH2", "protein_notation": "p.Arg176Trp"}
+                ],
+                "extraction_metadata": {"total_variants_found": 1},
+            },
+            False,
+            "{}",
+        ),
+    )
+
+
+def test_decline_metadata_lands_in_persisted_extraction_metadata(monkeypatch):
+    """The 51k-case shape: nothing to route, answer comes from full text."""
+    extractor = _extractor()
+    _stub_full_text_extraction(monkeypatch, extractor)
+
+    result = extractor.extract(_paper())
+
+    assert result.success
+    meta = result.extracted_data["extraction_metadata"]
+    assert meta["table_router_outcome"] == "no_usable_tables"
+    assert meta["table_router_tables_enumerated"] == 0
+    assert meta["table_router_tables_routed"] == 0
+    assert "table_router_tables_declined" not in meta
+
+
+def test_router_disabled_records_disabled_outcome(monkeypatch):
+    monkeypatch.setenv("ENABLE_TABLE_ROUTER", "false")
+    extractor = _extractor()
+    _stub_full_text_extraction(monkeypatch, extractor)
+
+    def _never(*_args, **_kwargs):
+        raise AssertionError("router must not run when disabled")
+
+    monkeypatch.setattr(extractor, "_try_table_router", _never)
+
+    result = extractor.extract(_paper())
+
+    assert result.success
+    meta = result.extracted_data["extraction_metadata"]
+    assert meta["table_router_outcome"] == "disabled"
+    assert meta["table_router_tables_enumerated"] == 0
+
+
+def test_router_skipped_when_gene_symbol_missing(monkeypatch):
+    extractor = _extractor()
+    _stub_full_text_extraction(monkeypatch, extractor)
+
+    def _never(*_args, **_kwargs):
+        raise AssertionError("router needs a gene symbol")
+
+    monkeypatch.setattr(extractor, "_try_table_router", _never)
+
+    result = extractor.extract(_paper(gene_symbol=None))
+
+    assert result.success
+    assert (
+        result.extracted_data["extraction_metadata"]["table_router_outcome"]
+        == "skipped"
+    )
+
+
+def test_approved_metadata_lands_in_persisted_extraction_metadata(monkeypatch):
+    """Router output becomes the answer: mapping is persisted with it."""
+    from pipeline.extraction import ExpertExtractor
+
+    _stub_router_llm(monkeypatch, json.dumps({"variant_tables": []}))
+    # tier_threshold=0 lowers the short-circuit bar to one variant.
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
+
+    result = extractor.extract(_paper(full_text=SAMPLE_PAPER_PADDED))
+
+    assert result.success
+    assert result.model_used.startswith("router+")
+    meta = result.extracted_data["extraction_metadata"]
+    assert meta["table_router_outcome"] == "approved"
+    assert meta["table_router_tables_routed"] == 1
+    assert list(meta["table_router_mappings"].values())[0]["patient_count"] == 2
+
+
+def test_approved_below_threshold_recorded_when_output_demoted_to_hints(monkeypatch):
+    """Router approved tables but too few variants to skip the full-text path."""
+    _stub_router_llm(monkeypatch, json.dumps({"variant_tables": []}))
+    extractor = _extractor()
+    _stub_full_text_extraction(monkeypatch, extractor)
+
+    result = extractor.extract(_paper(full_text=SAMPLE_PAPER_PADDED))
+
+    assert result.success
+    assert not (result.model_used or "").startswith("router+")
+    meta = result.extracted_data["extraction_metadata"]
+    # "approved" alone would overstate what the run actually used.
+    assert meta["table_router_outcome"] == "approved_below_threshold"
+    assert meta["table_router_tables_routed"] == 1
+    assert meta["table_router_variants_parsed"] == 2
+
+
+def test_router_decision_does_not_leak_between_papers(monkeypatch):
+    """A fresh attempt clears the previous paper's decision."""
+    _stub_router_llm(monkeypatch, json.dumps({"variant_tables": []}))
+    extractor = _extractor()
+
+    approved = extractor._try_table_router(_paper(full_text=SAMPLE_PAPER), SAMPLE_PAPER)
+    assert approved is not None
+    assert extractor.last_table_router_decision["table_router_outcome"] == "approved"
+
+    _stub_full_text_extraction(monkeypatch, extractor)
+    result = extractor.extract(_paper(pmid="87654321"))
+
+    meta = result.extracted_data["extraction_metadata"]
+    assert meta["table_router_outcome"] == "no_usable_tables"
+    assert meta["table_router_mappings"] == {}
