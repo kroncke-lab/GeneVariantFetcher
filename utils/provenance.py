@@ -142,14 +142,24 @@ def resolved_model_routing() -> dict[str, Any]:
         "paper_final_check_model",
         getattr(settings, "get_paper_final_check_model", None),
     )
+    # Count recovery WRITES scientific counts, so a run's provenance has to
+    # record which model filled them and at what effort.
+    _try(
+        "count_recovery_model",
+        getattr(settings, "get_count_recovery_model", None),
+    )
     for attr in (
         "tier2_reasoning_effort",
         "tier3_reasoning_effort",
+        "tier3_adjudicator_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
         "final_adjudicator_reasoning_effort",
         "final_arbiter_reasoning_effort",
         "paper_final_check_reasoning_effort",
+        "count_recovery_enabled",
+        "count_recovery_reasoning_effort",
+        "count_recovery_fields",
         "enable_table_router",
     ):
         routing[attr] = getattr(settings, attr, None)

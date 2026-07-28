@@ -24,6 +24,10 @@ full-gold scorer and metrics.
   python benchmarks/curated_extraction_eval/run_benchmark.py --mode extract --email you@example.com
   ```
 
+- **[`codex_paper_eval/`](codex_paper_eval/README.md)** — extraction-blinded,
+  hash-locked single-model and production-strategy paper evaluation. New runs
+  require per-paper raw call and decision traces inside the pre-gold lock.
+
 ## Adding a new set
 
 Copy the structure of `curated_extraction_eval/`: a `registry.tsv` listing the

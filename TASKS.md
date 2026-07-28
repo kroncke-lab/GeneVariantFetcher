@@ -1,6 +1,93 @@
 # GVF Tasks
 
 ## Current Focus
+- **LLM trace observability follow-up (2026-07-28).** The packaged recorder,
+  accepted/retry/failed linkage, per-run isolation, route-coverage panel, and
+  sharded offline HTML viewer are implemented and covered by the unit suite.
+  The full audit and independent verification live under `docs/reviews/`.
+  - [ ] Configure tracing by default for standalone `cli/extract.py`,
+        `cli/discover.py`, `scripts/targeted_land.py`,
+        `scripts/extract_figure_variants.py`, and `scripts/recall_audit/*`.
+        Today they inherit tracing only from `gvf-run` or an explicit
+        `GVF_LLM_TRACE_DIR`.
+  - [ ] Give `scripts/smoke_azure_models.py` a scoped connectivity decision
+        event; it currently records a raw call without a normalized decision.
+  - [ ] Move the remaining guarded shipped-package imports from `scripts.*`
+        into packaged modules: metadata backfill (`cli/gvf_run.py`), dashboard
+        trust readers (`cli/dashboard.py`), and institutional preflight's
+        paywall helpers (`cli/institutional_preflight.py`). They no longer crash
+        an installed package, but those optional capabilities degrade there.
+  - [ ] Add route-specific accepted-link tests for the single-call routes that
+        currently rely on the shared ledger derivation tests: clinical triage,
+        extraction-priority triage, claim verification, final check,
+        source-grounded summary, and synonym relevance.
+  - [ ] Open a real completed production report in an approved browser surface
+        and perform interaction/visual QA at desktop and mobile widths. The
+        self-contained HTML, JavaScript syntax, responsive CSS, keyboard focus,
+        clipboard fallback, dark theme, bounded bodies, sharding, and dead-link
+        guards are tested, but this Codex session's browser policy blocked direct
+        `file://` rendering.
+  - [x] Removed the ignored `.env.swp` and eliminated local review-scratch
+        directories during the 2026-07-28 main-branch consolidation. Credential
+        rotation remains an external account operation; no secret value was
+        read or exposed during cleanup.
+- **NEXT RUN — remeasure hardened count recovery v2; keep it default OFF
+  (2026-07-27).** `pipeline/count_recovery.py` + `scripts/recover_counts.py` +
+  gvf-run Step 3.55 implement the first *additive* count stage: the carrier
+  guard / outlier guard / count classifier only remove counts, so nothing else
+  fills a count the extractor never emitted.
+  - [x] Harden quote attribution and database edge cases. A count now needs
+        local evidence binding the value to the requested variant; HGVS position
+        digits, number-word substrings, and detached collapsed-table blocks no
+        longer count as grounding. Position-only cDNA↔protein matches and
+        unlabeled multi-number table rows fail closed. Gap discovery is
+        gene-scoped, possible cross-notation siblings participate in duplicate
+        collapse, and a write updates at most one NULL `penetrance_data` row.
+  - [x] **Rebuild the count-ROLE gate (2026-07-28, the audits' P0/P1).** The
+        table branch previously applied *no* role check and *no* negative-context
+        check — every table-branch call passed `field=None` and `quote_supports`
+        short-circuited `field is None → True`. All 15 integers the two audits
+        probed were accepted: prose denominators (`12 of 812`, `5/120`,
+        `n=7 among 913`), disease-cohort totals (`44 cases of Long QT`), and
+        explicitly non-carrier table columns (`allele count`, `gnomAD AC`,
+        `Age at diagnosis`, `families screened` — the PMID 33013630 failure
+        class, additively into previously-NULL slots). Now: denominator grammars
+        parsed and rejected, ≥2 prose candidates fail closed without an explicit
+        local carrier label, negative context applied to table labels/headers/
+        segments, structured `count_role` required (a non-per-variant declaration
+        is a veto), and role + `evidence_locator` persisted into
+        `variant_papers.count_provenance`. Rows land `trust_tier='quarantine'`
+        for Step 3.7 to promote (new rule `recovered_count_unverified`, tg4);
+        Step 3.55 refuses under `--skip trust-gate`; total failure is a stage
+        failure; `--dry-run` is faithful; the DB is backed up and each paper
+        commits under a `SAVEPOINT`. All 15 probe quotes are fixtures.
+        **This gate is strictly narrower than the v1/v2 that produced the
+        directional measurement, so the remeasurement below must be re-run.**
+  - [ ] Recreate database copies from the untouched
+        `20260726_fixed48_production` baseline, then rerun recovery through the
+        current `run_eval.py` validation and lock path. The obsolete untracked
+        pre-hardening v1 recovery directory and its ad-hoc scorer were removed
+        during the 2026-07-28 main-branch consolidation; they were never an
+        enablement gate. The replacement measurement must go through
+        `validate_predictions` + `command_lock` and the current trace contract.
+  - [ ] Inspect v2 rejections and missing targets by gene, especially the
+        PMID 10862094 KCNH2 collapsed table and the small RYR2 sample. A
+        deterministic replay of v1 quotes is useful for regression triage, but
+        is not a substitute for fresh model calls and clean database copies.
+  - [ ] Only if the clean v2 measurement improves count recall without an
+        unacceptable MAE or attribution regression, flip
+        `COUNT_RECOVERY_ENABLED` on and record the decision in
+        `docs/PROTOCOL_CHANGELOG.md` + `docs/RECALL_HISTORY.md`.
+  - [ ] Watch RYR2: it is the one regression (MAE 0.02 → 0.14 on only 15 recovered
+        counts) and had the lowest fill rate (11.8%). Do not average this away.
+  - [ ] Curator question, not a code bug: PMID 29622001 `c.453delC` recovered 24
+        from a clean table row `| c.453delC |24 (10)|2 |` while gold says 0; and
+        `p.L552S` recovered 73 vs gold 74. Both need a human call on column
+        semantics before they are treated as recovery errors.
+  - [ ] Only `carriers` is in scope (`COUNT_RECOVERY_FIELDS`). Do **not** widen to
+        affected/unaffected without measuring: on the same set a strong single
+        reader was *worse* than production on unaffected (76.7% vs 70.6%
+        omission), so that split is a genuinely harder judgment.
 - Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
   - Current metrics and failure split are in `docs/RECALL_STATUS.md`.
   - The forward plan lives here. Do not duplicate live recall tables in this file.
@@ -122,6 +209,15 @@ missed them** after the 1B parser land.
       `27452199`; KCNH2 `29650123` `16922724`.
 
 ### Lever 2 — Count-role attribution on matched rows
+- [ ] **Count OMISSION is the bigger half of this lever, and it now has a stage.**
+      Measured 2026-07-26 on the locked 48: of 789 gold variants production
+      correctly identified, it left the carrier count NULL on **461 (58.4%)**,
+      versus 11.3% for a single strong reader on the same sources. Accuracy was
+      never the problem (85.5% precision on count-bearing predictions) — the
+      blanks were. `pipeline/count_recovery.py` (Step 3.55) can fill them. The
+      preliminary v1 result is directional only; the hardened v2 attribution,
+      deduplication, and write semantics must be remeasured before enablement.
+      See **NEXT RUN** under `## Current Focus`.
 - [ ] Study-wide-N reuse is ~gone (~15). Residual is column-role confusion
       (affected/proband/case vs unaffected/asymptomatic/control vs study total).
       Point the count classifier / evidence-card validator at the `regex_table`
@@ -199,7 +295,8 @@ missed them** after the 1B parser land.
   - [x] Changed ClinVar/PubTator recovery layers to default to DB-observed PMIDs instead of gold PMIDs; gold-PMID enrichment is now explicit diagnostic mode.
   - [x] Turnkey recovery layers now back up the SQLite DB before mutation.
 - [x] **Four-gene turnkey long run and cleanup pass (2026-05-19)**
-  - [x] Ran KCNH2, KCNE1, RYR2, and SCN5A end to end under `validation_runs/turnkey_e2e_20260518_213934/`.
+  - [x] Ran KCNH2, KCNE1, RYR2, and SCN5A end to end; retained canonical DBs
+        are consolidated under `validation_runs/canonical_baseline/`.
   - [x] Confirmed KCNH2, RYR2, and SCN5A remain below 90% on all scored recall metrics except RYR2 unaffected.
   - [x] Confirmed KCNE1 extraction completes but cannot be scored without a gold recall input.
   - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.

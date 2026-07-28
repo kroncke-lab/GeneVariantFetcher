@@ -29,6 +29,11 @@ from pipeline.claim_verifier import (
     VariantClaimCard,
     normalize_verification,
 )
+from utils.llm_trace import (  # noqa: E402
+    attempt_link_summary,
+    llm_attempt_ledger,
+    llm_trace_scope,
+)
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 
 AGREEMENTS = {"agree", "disagree", "partial", "abstain"}
@@ -168,14 +173,69 @@ class ClaimDebateVerifier(BaseLLMCaller):
         baseline_model: str,
         baseline_verification: dict[str, Any],
     ) -> dict[str, Any]:
-        raw = self.call_llm_json(
-            build_debate_prompt(
-                card=card,
+        """Run one debate turn inside a gene/PMID/claim-scoped trace.
+
+        This route was completely unscoped: its records landed in
+        ``_unscoped/`` with no gene, PMID, claim or stage, and it emitted no
+        normalized decision, so a debate that overturned a baseline verification
+        could not be traced to the exact call that did it.
+        """
+        with (
+            llm_trace_scope(
+                gene=card.gene,
+                pmid=card.pmid,
+                variant=card.variant,
+                stage="variant_claim_debate",
+                component=self.__class__.__name__,
                 baseline_model=baseline_model,
-                baseline_verification=baseline_verification,
+            ),
+            llm_attempt_ledger(),
+        ):
+            try:
+                raw = self.call_llm_json(
+                    build_debate_prompt(
+                        card=card,
+                        baseline_model=baseline_model,
+                        baseline_verification=baseline_verification,
+                    )
+                )
+            except Exception as exc:  # noqa: BLE001 - record, then let the caller handle
+                self.record_llm_decision(
+                    "claim_debate_decision",
+                    {
+                        "gene": card.gene,
+                        "pmid": card.pmid,
+                        "variant": card.variant,
+                        "baseline_model": baseline_model,
+                        "debater_model": self.model,
+                        "decision_source": "call_failed",
+                        "error": f"{type(exc).__name__}: {exc}",
+                        **attempt_link_summary(),
+                    },
+                )
+                raise
+            normalized = normalize_debate(raw, card)
+            self.record_llm_decision(
+                "claim_debate_decision",
+                {
+                    "gene": card.gene,
+                    "pmid": card.pmid,
+                    "variant": card.variant,
+                    "baseline_model": baseline_model,
+                    "debater_model": self.model,
+                    "agreement": normalized.get("agreement"),
+                    "field_agreement": normalized.get("field_agreement"),
+                    "rationale": normalized.get("reason"),
+                    "decision_source": "model_debate",
+                    "selection_policy": (
+                        "One debater re-examines a baseline per-variant claim "
+                        "verification against the same evidence card; the "
+                        "agreement label is advisory pilot output."
+                    ),
+                    **attempt_link_summary(),
+                },
             )
-        )
-        return normalize_debate(raw, card)
+            return normalized
 
 
 def evaluate_debate(

@@ -112,7 +112,22 @@ RULE_IDS = (
     "study_type_mismatch",
     "negative_count",
     "implied_unaffected_zero",
+    "recovered_count_unverified",
 )
+
+#: Roles ``pipeline.count_recovery`` may stamp on a recovered count. A value
+#: written by recovery that does NOT carry one of these has no proven per-variant
+#: role, so it must not be promoted out of quarantine.
+RECOVERY_SOURCE = "count_recovery"
+PER_VARIANT_RECOVERY_ROLES = frozenset(
+    {"per_variant_carriers", "per_variant_affected", "per_variant_unaffected"}
+)
+#: The recovery role that legitimises each count field.
+_RECOVERY_ROLE_BY_FIELD = {
+    "carriers": "per_variant_carriers",
+    "affected": "per_variant_affected",
+    "unaffected": "per_variant_unaffected",
+}
 
 COUNT_TRUST_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
 
@@ -123,6 +138,7 @@ COUNT_TRUST_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
 # well-supported affected/total counts trusted.
 REASON_FIELDS: dict[str, tuple[str, ...]] = {
     "implied_unaffected_zero": ("unaffected",),
+    "recovered_count_unverified": ("total_carriers", "affected", "unaffected"),
 }
 
 
@@ -150,11 +166,14 @@ def rule_version() -> str:
                 UNAFFECTED_EXPECTED_ASCERTAINMENTS
             ),
             "reason_fields": {k: sorted(v) for k, v in sorted(REASON_FIELDS.items())},
+            "recovery_source": RECOVERY_SOURCE,
+            "per_variant_recovery_roles": sorted(PER_VARIANT_RECOVERY_ROLES),
         },
         sort_keys=True,
     )
-    # tg3: negative_count + full-partition arith + field-scoped implied_unaffected_zero.
-    return "tg3-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    # tg4: adds recovered_count_unverified — a count written by the additive
+    # recovery pass must carry a proven per-variant role to leave quarantine.
+    return "tg4-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
 def _as_int(value: Any) -> Optional[int]:
@@ -240,6 +259,18 @@ def evaluate_fact(
     ctype = str(provenance.get("carriers_count_type") or "").strip().lower()
     if ctype in DENOMINATOR_COUNT_TYPES:
         reasons.add("count_is_total")
+
+    # recovered_count_unverified: the additive count-recovery pass wrote this
+    # value. It only leaves quarantine when its provenance names the per-variant
+    # role for the field it filled — the pass lands rows as `quarantine` on
+    # purpose so this gate is what promotes them, not what would have to demote.
+    for field_name, expected_role in _RECOVERY_ROLE_BY_FIELD.items():
+        source = str(provenance.get(f"{field_name}_source") or "").strip().lower()
+        if source != RECOVERY_SOURCE:
+            continue
+        role = str(provenance.get(f"{field_name}_count_type") or "").strip().lower()
+        if role != expected_role:
+            reasons.add("recovered_count_unverified")
 
     # population_count: population allele magnitude, by label or by ceiling.
     label = str(provenance.get("carriers_column_label") or "")

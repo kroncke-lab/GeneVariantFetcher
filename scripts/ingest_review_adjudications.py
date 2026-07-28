@@ -67,15 +67,33 @@ from cli.compare_variants import (  # noqa: E402
     to_canonical_form,
 )
 
-# Verdicts the browser emits, mapped to the action this overlay records.
-VERDICT_TO_ACTION = {
-    "confirm": "gold_confirmed",
-    "correct_counts": "count_override",
-    "wrong_variant": "false_positive",
-    "wrong_paper": "excluded",
-    "missing": "followup_missing",
-    "other": "followup_other",
-}
+# The overlay contract (variant keying, verdict->action, gold tiers) lives in the
+# PACKAGED module so cli/compare_variants.py can import it in a wheel, where
+# `scripts` does not exist. Re-exported here for existing callers.
+from pipeline.adjudication_contract import (  # noqa: E402
+    BUILTIN_GOLD_TIERS,
+    CARDIAC_GENES,
+    VERDICT_TO_ACTION,
+    GoldSyncError,
+    gold_tier_includes_gene,
+    read_gold_tier_definition,
+)
+from pipeline.adjudication_contract import (  # noqa: E402
+    tier_definition_from_connection as _tier_definition_conn,
+)
+from pipeline.adjudication_contract import (  # noqa: E402
+    tier_includes_gene as _tier_includes_gene,
+)
+from pipeline.adjudication_contract import variant_key as _variant_key  # noqa: E402
+
+__all__ = [
+    "BUILTIN_GOLD_TIERS",
+    "CARDIAC_GENES",
+    "VERDICT_TO_ACTION",
+    "GoldSyncError",
+    "gold_tier_includes_gene",
+    "read_gold_tier_definition",
+]
 
 # Overlay schema. Extracted_* are the pipeline's values (kept), corrected_* are
 # the adjudicated values (the overlay). Both survive so metrics can be recomputed.
@@ -142,17 +160,6 @@ def _opt_int(value: Any) -> Optional[int]:
         return None
 
 
-def _variant_key(notation: str) -> str:
-    """Canonicalize a protein notation the same way the scorer aggregates the DB.
-
-    Mirrors ``aggregate_sqlite_data`` (canonical form, falling back to the
-    normalized form) so an export row keys to the same bucket as the extracted
-    (variant, paper) row would.
-    """
-    canon = to_canonical_form(notation)
-    return canon if canon else normalize_variant(notation)
-
-
 def parse_db_overrides(items: Optional[list[str]]) -> dict[str, Path]:
     """Parse repeatable ``--db GENE=path`` overrides into {GENE: Path}."""
     overrides: dict[str, Path] = {}
@@ -216,28 +223,6 @@ DEFAULT_CACHE_DB = (
     / "adjudications"
     / "review_gold.sqlite3"
 )
-CARDIAC_GENES = frozenset({"KCNH2", "KCNQ1", "RYR2", "SCN5A"})
-BUILTIN_GOLD_TIERS: dict[str, dict[str, Any]] = {
-    "all": {
-        "description": "All current lead-approved records, including non-cardiac genes.",
-        "gene_mode": "all",
-        "genes": [],
-    },
-    "cardiac": {
-        "description": "Canonical cardiac channelopathy genes only.",
-        "gene_mode": "include",
-        "genes": sorted(CARDIAC_GENES),
-    },
-    "noncardiac": {
-        "description": "Current records outside the canonical cardiac gene set.",
-        "gene_mode": "exclude",
-        "genes": sorted(CARDIAC_GENES),
-    },
-}
-
-
-class GoldSyncError(RuntimeError):
-    """The live gold contract could not be authenticated or validated."""
 
 
 def _validate_gold_rows(
@@ -708,37 +693,6 @@ def ensure_live_gold_schema(conn: sqlite3.Connection) -> None:
         )
 
 
-def _tier_definition_conn(conn: sqlite3.Connection, tier: str) -> dict[str, Any]:
-    name = str(tier or "").strip().lower()
-    row = conn.execute(
-        "SELECT name, description, gene_mode, genes_json, builtin "
-        "FROM review_gold_tiers WHERE name = ?",
-        (name,),
-    ).fetchone()
-    if row is None:
-        raise GoldSyncError(f"Unknown review-gold tier: {tier!r}.")
-    genes = json.loads(row[3])
-    if not isinstance(genes, list):
-        raise GoldSyncError(f"Review-gold tier {name!r} has invalid genes JSON.")
-    return {
-        "name": row[0],
-        "description": row[1],
-        "gene_mode": row[2],
-        "genes": sorted({str(g).strip().upper() for g in genes if str(g).strip()}),
-        "builtin": bool(row[4]),
-    }
-
-
-def _tier_includes_gene(definition: dict[str, Any], gene: str) -> bool:
-    normalized = str(gene or "").strip().upper()
-    genes = set(definition["genes"])
-    if definition["gene_mode"] == "all":
-        return True
-    if definition["gene_mode"] == "include":
-        return normalized in genes
-    return normalized not in genes
-
-
 def _count_tier_records_conn(
     conn: sqlite3.Connection,
     tier: str,
@@ -1121,35 +1075,6 @@ def read_live_sync_state(path: Path) -> dict[str, Any]:
     finally:
         conn.close()
     return dict(row) if row is not None else {}
-
-
-def read_gold_tier_definition(path: Optional[Path], tier: str) -> dict[str, Any]:
-    """Resolve a built-in or cache-defined tier without mutating the cache."""
-    name = str(tier or "").strip().lower()
-    builtin = BUILTIN_GOLD_TIERS.get(name)
-    if path is None or not path.exists():
-        if builtin is None:
-            raise GoldSyncError(
-                f"Review-gold tier {name!r} needs an existing cache definition."
-            )
-        return {"name": name, **builtin, "builtin": True}
-    try:
-        conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
-    except sqlite3.Error as exc:
-        raise GoldSyncError(f"Could not open review-gold cache: {exc}") from exc
-    try:
-        try:
-            return _tier_definition_conn(conn, name)
-        except sqlite3.Error:
-            if builtin is not None:
-                return {"name": name, **builtin, "builtin": True}
-            raise GoldSyncError(f"Unknown review-gold tier: {name!r}.") from None
-    finally:
-        conn.close()
-
-
-def gold_tier_includes_gene(path: Optional[Path], tier: str, gene: str) -> bool:
-    return _tier_includes_gene(read_gold_tier_definition(path, tier), gene)
 
 
 def current_gold_tier_counts(path: Path) -> dict[str, int]:

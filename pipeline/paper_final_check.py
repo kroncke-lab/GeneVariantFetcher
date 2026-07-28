@@ -1730,8 +1730,53 @@ class PaperFinalChecker:
         )
 
     def check(self, payload: dict[str, Any]) -> dict[str, Any]:
-        raw = self._caller.call_llm_json(build_paper_check_prompt(payload))
-        return normalize_result(raw, payload)
+        """Run the DB-only sniff test under its own trace stage + decision event.
+
+        This is the most expensive per-paper call in the pipeline
+        (``gpt-5.6-sol`` at ``xhigh``); it had no trace scope and no normalized
+        decision, so its verdict could not be traced back to the exact prompt.
+        """
+        from utils.llm_trace import (
+            attempt_link_summary,
+            llm_attempt_ledger,
+            llm_trace_scope,
+            record_trace_event,
+        )
+
+        with (
+            llm_trace_scope(
+                gene=payload.get("gene"),
+                pmid=str(payload.get("pmid") or "") or None,
+                stage="paper_final_check",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            raw = self._caller.call_llm_json(build_paper_check_prompt(payload))
+            result = normalize_result(raw, payload)
+            record_trace_event(
+                "paper_final_check_decision",
+                {
+                    "verdict": result.get("verdict"),
+                    "confidence": result.get("confidence"),
+                    "n_facts": result.get("n_facts"),
+                    "n_flagged": result.get("n_flagged"),
+                    "source_grounded": result.get("source_grounded"),
+                    "summary": result.get("summary"),
+                    "flagged_fields": [
+                        f"{flag.get('variant')}:{flag.get('field')}"
+                        for flag in (result.get("flags") or [])
+                        if isinstance(flag, dict)
+                    ],
+                    "selection_policy": (
+                        "Advisory per-paper review. Findings never mutate raw "
+                        "counts; only source-verified objective contradictions "
+                        "reach the trusted projection (Step 3.9)."
+                    ),
+                    **attempt_link_summary(),
+                },
+            )
+            return result
 
 
 class PaperSummaryChecker:
@@ -1756,10 +1801,41 @@ class PaperSummaryChecker:
     def check(
         self, payload: dict[str, Any], source_text: str, truncated: bool = False
     ) -> dict[str, Any]:
-        raw = self._caller.call_llm_json(
-            build_paper_summary_prompt(payload, source_text)
+        from utils.llm_trace import (
+            attempt_link_summary,
+            llm_attempt_ledger,
+            llm_trace_scope,
+            record_trace_event,
         )
-        return normalize_summary_result(raw, payload, source_text, truncated)
+
+        with (
+            llm_trace_scope(
+                gene=payload.get("gene"),
+                pmid=str(payload.get("pmid") or "") or None,
+                stage="paper_source_grounded_summary",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            raw = self._caller.call_llm_json(
+                build_paper_summary_prompt(payload, source_text)
+            )
+            result = normalize_summary_result(raw, payload, source_text, truncated)
+            record_trace_event(
+                "paper_source_grounded_summary_decision",
+                {
+                    "verdict": result.get("verdict"),
+                    "confidence": result.get("confidence"),
+                    "n_facts": result.get("n_facts"),
+                    "n_flagged": result.get("n_flagged"),
+                    "source_grounded": result.get("source_grounded"),
+                    "source_truncated": bool(truncated),
+                    "source_chars": len(source_text or ""),
+                    "summary": result.get("summary"),
+                    **attempt_link_summary(),
+                },
+            )
+            return result
 
 
 def _error_result(payload: dict[str, Any], exc: Exception) -> dict[str, Any]:

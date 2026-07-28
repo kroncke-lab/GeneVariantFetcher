@@ -17,6 +17,19 @@ from litellm import completion
 
 litellm.drop_params = True
 
+from .llm_trace import (
+    OUTCOME_DISCARDED,
+    OUTCOME_ERROR,
+    OUTCOME_PARSE_FAILED,
+    OUTCOME_PARSED,
+    capture_llm_call,
+    last_llm_trace,
+    llm_trace_scope,
+    next_attempt_number,
+    note_llm_attempt,
+    note_llm_outcome,
+    record_trace_event,
+)
 from .retry_utils import llm_retry
 
 # Configure LiteLLM retry behavior to reduce excessive retries
@@ -214,9 +227,16 @@ def resolve_litellm_model_and_kwargs(
 
 
 def litellm_completion(*, model: str, **kwargs: Any) -> Any:
-    """LiteLLM completion with Azure Foundry OpenAI v1 routing when configured."""
+    """LiteLLM completion with Azure routing and durable call tracing."""
     resolved_model, resolved_kwargs = resolve_litellm_model_and_kwargs(model, **kwargs)
-    return completion(model=resolved_model, **resolved_kwargs)
+    response, _trace = capture_llm_call(
+        provider="litellm",
+        requested_model=model,
+        resolved_model=resolved_model,
+        request={"model": resolved_model, **resolved_kwargs},
+        call=lambda: completion(model=resolved_model, **resolved_kwargs),
+    )
+    return response
 
 
 def normalize_reasoning_effort(effort: Optional[str]) -> Optional[str]:
@@ -479,6 +499,71 @@ class BaseLLMCaller:
             f"reasoning_effort={reasoning_effort}"
         )
 
+    # Trace scope is deliberately NOT instance state. A single InternFilter /
+    # ClinicalDataTriageFilter instance is shared across ~20 ThreadPoolExecutor
+    # workers (pipeline/steps.py), so an instance dict of {gene, pmid} is a
+    # data race: an 8-thread probe on the prior implementation bound 7 of 8
+    # calls to another thread's PMID, which put one paper's evidence under
+    # another paper's trace. Callers open `with llm_trace_scope(...)` inside the
+    # worker instead, and llm_trace's ContextVars keep it thread-local.
+    def _trace_scope(self, operation: str, **extra: Any):
+        """Scope one provider call to this component and operation.
+
+        Built as a single dict so a caller-supplied ``component``/``operation``
+        can never collide with this method's own — the prior ``**self.context,
+        component=...`` spelling raised ``TypeError: got multiple values for
+        keyword argument 'component'`` from inside ``call_llm_json``.
+        """
+        context: Dict[str, Any] = {
+            "component": self.__class__.__name__,
+            "operation": operation,
+        }
+        context.update(
+            {key: value for key, value in extra.items() if value is not None}
+        )
+        return llm_trace_scope(**context)
+
+    def record_llm_decision(
+        self, event_type: str, data: Dict[str, Any], **context: Any
+    ) -> Dict[str, Any] | None:
+        """Link a normalized pipeline decision to this caller's raw call trace.
+
+        Inherits gene/PMID from the enclosing ``llm_trace_scope`` (thread-local),
+        so it stays correct under concurrency. ``context`` overrides for callers
+        that know more than the surrounding scope.
+        """
+        merged: Dict[str, Any] = {
+            "component": self.__class__.__name__,
+            "stage": event_type,
+        }
+        merged.update(
+            {key: value for key, value in context.items() if value is not None}
+        )
+        with llm_trace_scope(**merged):
+            return record_trace_event(event_type, data)
+
+    def _traced_call(self, operation: str, make_call):
+        """Run one provider attempt, registering it in the active attempt ledger.
+
+        Returns ``(response, trace_id)``. The attempt number comes from the
+        LEDGER, not from a counter local to the calling method: ``@llm_retry``
+        re-enters ``call_llm_json`` wholesale on a retriable provider error, and
+        a method-local counter restarted at 1 each time, so one logical call
+        emitted several records all labelled ``attempt 1``.
+        """
+        attempt = next_attempt_number()
+        with self._trace_scope(operation, attempt=attempt):
+            try:
+                response = make_call()
+            except BaseException:
+                trace_id = note_llm_attempt(
+                    last_llm_trace(), attempt=attempt, role=operation
+                )
+                note_llm_outcome(trace_id, OUTCOME_ERROR)
+                raise
+        trace_id = note_llm_attempt(last_llm_trace(), attempt=attempt, role=operation)
+        return response, trace_id
+
     def _attempt_json_repair(self, raw_text: str) -> Optional[Dict[str, Any]]:
         """
         Best-effort repair for malformed/truncated JSON emitted by the LLM.
@@ -487,6 +572,11 @@ class BaseLLMCaller:
         trimming incomplete trailing items. Returns None on failure.
 
         For large variant extractions, uses higher token limits to preserve data.
+
+        The repair response can *become* the accepted extraction, so it runs at
+        the parent's reasoning effort and its trace is registered with role
+        ``json_repair`` — a curator must be able to see that the stored data came
+        from a repair rather than from the primary response.
         """
         # Use a larger char limit for repair - variant tables can be very large
         # Each variant is ~300-500 chars of JSON, so 150 variants needs ~75K chars
@@ -506,20 +596,25 @@ class BaseLLMCaller:
         # Default repair needs more tokens for 100+ variant extractions
         repair_max_tokens = min(self.max_tokens, 16000)
 
+        repair_trace_id: Optional[str] = None
         try:
             wait_for_llm_rate_limit(self.model)
-            response = litellm_completion(
-                model=self.model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You fix malformed JSON. Preserve all data including special characters like asterisks (*) in protein notation. Respond with JSON only.",
-                    },
-                    {"role": "user", "content": repair_prompt},
-                ],
-                temperature=0,
-                max_tokens=repair_max_tokens,
-                response_format={"type": "json_object"},
+            response, repair_trace_id = self._traced_call(
+                "json_repair",
+                lambda: litellm_completion(
+                    model=self.model,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You fix malformed JSON. Preserve all data including special characters like asterisks (*) in protein notation. Respond with JSON only.",
+                        },
+                        {"role": "user", "content": repair_prompt},
+                    ],
+                    temperature=0,
+                    max_tokens=repair_max_tokens,
+                    response_format={"type": "json_object"},
+                    **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+                ),
             )
             repaired_text = response.choices[0].message.content
             repaired = parse_llm_json_response(repaired_text)
@@ -534,13 +629,17 @@ class BaseLLMCaller:
                 logger.warning(
                     "JSON repair returned empty object — treating as failure."
                 )
+                note_llm_outcome(repair_trace_id, OUTCOME_DISCARDED)
                 return None
             if isinstance(repaired, list) and not repaired:
                 logger.warning("JSON repair returned empty list — treating as failure.")
+                note_llm_outcome(repair_trace_id, OUTCOME_DISCARDED)
                 return None
+            note_llm_outcome(repair_trace_id, OUTCOME_PARSED, repaired=True)
             return repaired
         except Exception as repair_exc:
             logger.error(f"JSON repair attempt failed: {repair_exc}")
+            note_llm_outcome(repair_trace_id, OUTCOME_DISCARDED)
             return None
 
     @llm_retry
@@ -563,18 +662,21 @@ class BaseLLMCaller:
         if response_format is None:
             response_format = {"type": "json_object"}
 
-        def _make_call():
+        def _make_call(role: str):
             wait_for_llm_rate_limit(self.model)
-            return litellm_completion(
-                model=self.model,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                response_format=response_format,
-                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+            return self._traced_call(
+                role,
+                lambda: litellm_completion(
+                    model=self.model,
+                    messages=messages,
+                    temperature=self.temperature,
+                    max_tokens=self.max_tokens,
+                    response_format=response_format,
+                    **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+                ),
             )
 
-        response = _make_call()
+        response, trace_id = _make_call("primary")
 
         result_text = response.choices[0].message.content
         finish_reason = getattr(response.choices[0], "finish_reason", None)
@@ -584,16 +686,21 @@ class BaseLLMCaller:
                 self.model,
                 finish_reason,
             )
-            response = _make_call()
+            note_llm_outcome(trace_id, OUTCOME_DISCARDED)
+            response, trace_id = _make_call("empty_content_retry")
             result_text = response.choices[0].message.content
             finish_reason = getattr(response.choices[0], "finish_reason", None)
         was_truncated = finish_reason == "length"
 
         try:
             result_data = parse_llm_json_response(result_text)
+            # `parsed`, not `accepted`: whether THIS response became the stored
+            # result is decided by the caller's selection step, if it has one.
+            note_llm_outcome(trace_id, OUTCOME_PARSED)
             return result_data, was_truncated, result_text
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse LLM JSON response: {e}")
+            note_llm_outcome(trace_id, OUTCOME_PARSE_FAILED)
             if was_truncated:
                 logger.warning(
                     "LLM response was cut off due to max_tokens; attempting repair."
@@ -652,21 +759,27 @@ class BaseLLMCaller:
             f"Calling LLM with model={self.model}, prompt length={len(prompt)}"
         )
 
+        trace_id: Optional[str] = None
         try:
 
-            def _make_call():
+            def _make_call(role: str):
                 wait_for_llm_rate_limit(self.model)
-                return litellm_completion(
-                    model=self.model,
-                    messages=messages,
-                    temperature=self.temperature,
-                    max_tokens=self.max_tokens,
-                    response_format=response_format,
-                    **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+                return self._traced_call(
+                    role,
+                    lambda: litellm_completion(
+                        model=self.model,
+                        messages=messages,
+                        temperature=self.temperature,
+                        max_tokens=self.max_tokens,
+                        response_format=response_format,
+                        **build_reasoning_effort_kwargs(
+                            self.model, self.reasoning_effort
+                        ),
+                    ),
                 )
 
             # Make the LLM API call
-            response = _make_call()
+            response, trace_id = _make_call("primary")
 
             # Extract response text
             result_text = response.choices[0].message.content
@@ -677,12 +790,15 @@ class BaseLLMCaller:
                     self.model,
                     finish_reason,
                 )
-                response = _make_call()
+                note_llm_outcome(trace_id, OUTCOME_DISCARDED)
+                response, trace_id = _make_call("empty_content_retry")
                 result_text = response.choices[0].message.content
                 finish_reason = getattr(response.choices[0], "finish_reason", None)
 
             # Parse JSON response
             result_data = parse_llm_json_response(result_text)
+            # `parsed`, not `accepted` — see call_llm_json_with_status.
+            note_llm_outcome(trace_id, OUTCOME_PARSED)
 
             logger.debug(
                 f"LLM call successful, response keys: {list(result_data.keys())}"
@@ -692,6 +808,7 @@ class BaseLLMCaller:
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse LLM JSON response: {e}")
             logger.error(f"Response text: {result_text[:500]}")
+            note_llm_outcome(trace_id, OUTCOME_PARSE_FAILED)
             if finish_reason == "length":
                 logger.warning(
                     "LLM response was cut off due to max_tokens; attempting repair."
@@ -733,15 +850,19 @@ class BaseLLMCaller:
 
         try:
             wait_for_llm_rate_limit(self.model)
-            response = litellm_completion(
-                model=self.model,
-                messages=messages,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+            response, trace_id = self._traced_call(
+                "text",
+                lambda: litellm_completion(
+                    model=self.model,
+                    messages=messages,
+                    temperature=self.temperature,
+                    max_tokens=self.max_tokens,
+                    **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
+                ),
             )
 
             result_text = response.choices[0].message.content
+            note_llm_outcome(trace_id, OUTCOME_PARSED)
             logger.debug(f"LLM text response received, length={len(result_text)}")
             return result_text
 

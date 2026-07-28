@@ -11,10 +11,12 @@ import pytest
 
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
+from utils.llm_trace import reset_llm_tracing
 from benchmarks.codex_paper_eval.run_eval import (
     EXTRACTION_INSTRUCTIONS,
     choose_source,
     command_extract,
+    command_lock,
     digest,
     effective_effort,
     matches,
@@ -31,6 +33,13 @@ from benchmarks.codex_paper_eval.run_eval import (
 
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
 GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
+
+
+@pytest.fixture(autouse=True)
+def _reset_trace_configuration():
+    reset_llm_tracing()
+    yield
+    reset_llm_tracing()
 
 
 def _count_metric(asserted: int = 1, predicted: int = 1) -> dict:
@@ -257,6 +266,14 @@ def test_api_usage_is_checkpointed_before_response_parsing(
     checkpoint = json.loads((tmp_path / "predictions.json").read_text())
     assert checkpoint["token_usage"]["total_tokens"] == 15
     assert checkpoint["papers"][0]["token_usage"]["total_tokens"] == 15
+    refs = checkpoint["papers"][0]["llm_trace_refs"]
+    assert [(ref["context"]["stage"], ref["success"]) for ref in refs] == [
+        ("representation_route", True),
+        ("representation_route_decision", None),
+        ("paper_curation", True),
+    ]
+    trace_files = list((tmp_path / "llm_traces" / "SCN5A" / "1").glob("*.json"))
+    assert len(trace_files) == 3
 
 
 def test_selection_metadata_describes_manifest_and_random_modes(tmp_path: Path):
@@ -348,6 +365,11 @@ def test_usable_sources_selects_the_richer_rendering_on_disk(tmp_path: Path):
     papers = usable_sources(tmp_path, "KCNQ1", minimum_chars=100)
 
     assert [Path(p["source"]) for p in papers] == [cleaned.resolve()]
+    audit = papers[0]["source_selection"]
+    assert audit["policy"] == "pareto_richness"
+    assert audit["selected"] == str(cleaned.resolve())
+    assert len(audit["candidates"]) == 2
+    assert "Pareto-dominated" in audit["rationale"]
 
 
 def _extract_captured_prompts(
@@ -383,6 +405,7 @@ def _extract_captured_prompts(
     write_json(
         tmp_path / "predictions.json",
         {
+            "schema_version": 2,
             "token_usage": None,
             "papers": [
                 {
@@ -410,7 +433,16 @@ def _extract_captured_prompts(
                 usage=SimpleNamespace(input_tokens=5, output_tokens=1),
             ),
             SimpleNamespace(
-                output_text=json.dumps({"notes": "", "variants": []}),
+                output_text=json.dumps(
+                    {
+                        "notes": "No in-scope rows.",
+                        "curation_rationale": (
+                            "The supplied material had no qualifying human "
+                            "variant/count row."
+                        ),
+                        "variants": [],
+                    }
+                ),
                 usage=SimpleNamespace(input_tokens=7, output_tokens=2),
             ),
         ]
@@ -446,6 +478,39 @@ def _extract_captured_prompts(
         )
     )
     return json.loads((tmp_path / "predictions.json").read_text()), prompts
+
+
+def test_successful_eval_has_four_hash_lockable_trace_stages(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    checkpoint, _ = _extract_captured_prompts(
+        tmp_path,
+        monkeypatch,
+        source_text=(
+            "| Variant | carriers |\n|---|---|\n| A1V | 2 |\nKCNQ1 patient evidence."
+        ),
+        artifact="{}",
+        route_tool="table",
+    )
+
+    refs = checkpoint["papers"][0]["llm_trace_refs"]
+    assert [ref["context"]["stage"] for ref in refs] == [
+        "representation_route",
+        "representation_route_decision",
+        "paper_curation",
+        "paper_curation_decision",
+    ]
+    command_lock(SimpleNamespace(run_dir=tmp_path))
+    lock = json.loads((tmp_path / "LOCK.json").read_text())
+    assert lock["llm_trace_manifest_sha256"]
+    assert lock["llm_trace_report_sha256"]
+    manifest = json.loads((tmp_path / "llm_traces" / "trace_manifest.json").read_text())
+    assert manifest["llm_call_count"] == 2
+    assert manifest["decision_event_count"] == 2
+    report = tmp_path / "llm_trace_report.html"
+    assert report.is_file()
+    assert "Sent to model" in report.read_text(encoding="utf-8")
+    assert report.stat().st_mode & 0o222 == 0
 
 
 def test_table_route_is_not_offered_without_real_table_rows(

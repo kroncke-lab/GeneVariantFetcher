@@ -290,6 +290,7 @@ def enrich_paywall_full_context(
     pmid: str,
     output_dir: Path,
     converter: Any,
+    gene: Optional[str] = None,
     session: Any = None,
     extra_captions: Optional[CaptionExtractionResult] = None,
     download_supplements: bool = True,
@@ -315,6 +316,8 @@ def enrich_paywall_full_context(
             ``<output_dir>/<pmid>_supplements/`` and the captions index lands
             under ``<output_dir>/<pmid>_figures/captions_index.json``.
         converter: Instance of :class:`harvesting.format_converters.FormatConverter`.
+        gene: Optional target gene symbol. Only used to scope the figure-image
+            vision trace to ``<GENE>/<PMID>/`` instead of a PMID-only group.
         session: ``requests.Session`` used to download supplement files.
             If None, supplement download is skipped and only the link list is
             preserved in the caption block (via ``extra_captions``).
@@ -480,7 +483,9 @@ def enrich_paywall_full_context(
                     from config.settings import get_settings
 
                     model = get_settings().get_vision_model()
-                    figure_image_text = extract_images_to_markdown(image_paths, model)
+                    figure_image_text = extract_images_to_markdown(
+                        image_paths, model, gene=gene, pmid=pmid
+                    )
             except Exception as exc:
                 logger.warning(
                     "Figure image text extraction failed for PMID %s: %s", pmid, exc

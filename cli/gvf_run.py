@@ -40,8 +40,9 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -50,7 +51,7 @@ from utils.bootstrap import (
     initialize_runtime,
     llm_provider_key_status,
 )
-from utils.env_utils import local_data_discovery_disabled
+from utils.env_utils import get_env_bool, local_data_discovery_disabled
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -652,6 +653,9 @@ def step_source_recovery(
         refresh_cmd.extend(["--source-override-csv", str(override_csv)])
 
     logger.info("source-recovery refresh → %s", " ".join(refresh_cmd))
+    # No explicit env=: refresh_run_db.py re-extracts, so it must inherit the
+    # GVF_LLM_TRACE_DIR / GVF_LLM_TRACE_RUN_ID that open_trace_session exported
+    # into os.environ, or its model calls land outside this run's trace tree.
     refresh_result = subprocess.run(refresh_cmd, capture_output=True, text=True)
     if refresh_result.returncode != 0:
         logger.error("source-recovery refresh failed: %s", refresh_result.stderr[-800:])
@@ -1251,6 +1255,81 @@ def step_carrier_guard(db: Path) -> dict:
     return apply_carrier_guard(db, logger=logger)
 
 
+def _count_recovery_enabled() -> bool:
+    """Read the default-off feature flag independently of full settings.
+
+    Prefers the validated ``Settings.count_recovery_enabled`` field so the
+    setting is actually consumed (it was previously dead: nothing read it and
+    this function went straight to the env var). Falls back to the raw env var
+    only when Settings cannot be constructed — otherwise an unrelated invalid
+    setting would turn explicit enablement into a silent skip, and
+    ``step_count_recovery`` should be the thing that raises.
+    """
+    try:
+        from config.settings import get_settings
+
+        return bool(get_settings().count_recovery_enabled)
+    except Exception:  # noqa: BLE001 - fall back to the raw flag
+        return get_env_bool("COUNT_RECOVERY_ENABLED", False)
+
+
+def step_count_recovery(gene: str, db: Path, run_dir: Optional[Path] = None) -> dict:
+    """Fill NULL per-variant counts for variants already found in each paper.
+
+    The additive counterpart to Step 3.5: the guards remove counts that should
+    not be there, this fills counts the extractor never emitted. Never
+    overwrites an existing count, and every value it writes is grounded in a
+    verbatim quote from the source that proves a per-variant role.
+
+    Imports the source resolver from ``pipeline.count_recovery`` (packaged), not
+    ``scripts.recover_counts`` (not in the wheel) — the old import degraded this
+    stage to a warning-and-continue in every installed deployment.
+    """
+    from config.settings import get_settings
+    from pipeline.count_recovery import (
+        default_source_roots,
+        make_source_resolver,
+        recover_counts,
+    )
+    from utils.llm_utils import litellm_completion
+
+    settings = get_settings()
+    model = settings.get_count_recovery_model()
+    settings.require_provider_credentials_for_model(model, label="count recovery")
+    fields = tuple(
+        f.strip()
+        for f in (settings.count_recovery_fields or "").split(",")
+        if f.strip()
+    )
+    roots: list[Path] = []
+    if run_dir is not None and (run_dir / "pmc_fulltext").is_dir():
+        roots.append(run_dir / "pmc_fulltext")
+    for root in default_source_roots(db):
+        if root not in roots:
+            roots.append(root)
+
+    stats = recover_counts(
+        db,
+        gene,
+        source_for_pmid=make_source_resolver(gene, roots),
+        llm_caller=litellm_completion,
+        model=model,
+        reasoning_effort=settings.count_recovery_reasoning_effort,
+        fields=fields or ("carriers",),
+        max_variants_per_call=settings.count_recovery_max_variants_per_call,
+        max_source_chars=settings.count_recovery_max_source_chars,
+    )
+    stats.pop("result_objects", None)
+    logger.info(
+        "count recovery: %d/%d gap(s) filled across %d paper(s) (%d rejected)",
+        stats["counts_written"],
+        stats["gaps_found"],
+        stats["papers_with_gaps"],
+        stats["counts_rejected"],
+    )
+    return stats
+
+
 def step_vf_enrich(gene: str, db: Path) -> dict:
     """variantFeatures: canonical names + in silico scores + wrong-gene FP quarantine."""
     from pipeline.vf_enrichment import enrich_and_quarantine
@@ -1371,6 +1450,173 @@ EXIT_INSTITUTIONAL_BLOCK = (
 )
 
 
+@dataclass
+class TraceSession:
+    """Where this gvf-run invocation writes its LLM traces, and under whose id.
+
+    A gvf-run that skips extraction reuses a *previous* run's directory. Writing
+    into that run's ``llm_traces/`` and rebuilding its ``trace_manifest.json``
+    under the current run id destroyed the earlier manifest and presented stale
+    traces as this run's artifact. So a reused directory gets its own
+    ``llm_traces_<run id>/`` and its own report file, and the earlier run's
+    artifacts are never touched.
+    """
+
+    run_id: str
+    trace_root: Path
+    report_path: Path
+    enabled: bool
+    owns_run_dir: bool
+
+
+def _new_gvf_run_id() -> str:
+    return f"gvfrun-{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}-{uuid.uuid4().hex[:8]}"
+
+
+def _existing_run_id(run_dir: Path) -> Optional[str]:
+    """The run id recorded by the extraction workflow that created ``run_dir``."""
+    manifest_path = run_dir / "run_manifest.json"
+    if not manifest_path.is_file():
+        return None
+    try:
+        return json.loads(manifest_path.read_text(encoding="utf-8")).get("run_id")
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def open_trace_session(
+    run_dir: Path, gvf_run_id: str, *, extraction_ran: bool
+) -> TraceSession:
+    """Configure process-wide tracing for the post-extraction gvf-run stages.
+
+    ``gvf-run`` never configured tracing itself: the only production
+    ``configure_llm_tracing`` lived inside the extraction workflow, so a
+    ``--skip extract`` run's count recovery and per-paper final check ran
+    completely untraced unless an operator happened to export
+    ``GVF_LLM_TRACE_DIR``.
+    """
+    from utils.llm_trace import (
+        configure_llm_tracing,
+        resolve_trace_location,
+        tracing_enabled_by_environment,
+    )
+    from utils.llm_trace_html import TRACE_REPORT_NAME
+
+    enabled = tracing_enabled_by_environment()
+    if extraction_ran:
+        # The extraction workflow already selected and EXPORTED a per-run child
+        # plus its id, so resolve_trace_location returns them verbatim and this
+        # run's extraction and post-extraction records share one tree and one id.
+        default_root = run_dir / "llm_traces"
+        default_run_id = _existing_run_id(run_dir) or gvf_run_id
+        owns = True
+    else:
+        # Skip-extract reuses an OLDER run's directory. Its own child keeps this
+        # pass from writing into — and later relabelling — that run's manifest.
+        default_root = run_dir / f"llm_traces_{gvf_run_id}"
+        default_run_id = gvf_run_id
+        owns = False
+    location = resolve_trace_location(default_run_id, default_root=default_root)
+    trace_root, run_id = location.root, location.run_id
+    report_path = (
+        run_dir / TRACE_REPORT_NAME
+        if owns
+        else run_dir / f"{gvf_run_id}_{TRACE_REPORT_NAME}"
+    )
+    configure_llm_tracing(trace_root, run_id=run_id, enabled=enabled)
+    # Subprocess stages that make model calls (scripts/refresh_run_db.py
+    # re-extraction) inherit the resolved child and id, so their calls land in
+    # this run's trace tree instead of nowhere — and, because the id is set, they
+    # use the directory verbatim instead of appending another level.
+    if enabled:
+        os.environ["GVF_LLM_TRACE_DIR"] = str(trace_root)
+        os.environ["GVF_LLM_TRACE_RUN_ID"] = run_id
+        logger.info("🧾 LLM traces -> %s (run %s)", trace_root, run_id)
+    else:
+        logger.info("🧾 LLM tracing disabled by GVF_LLM_TRACE_ENABLED")
+    return TraceSession(
+        run_id=run_id,
+        trace_root=trace_root,
+        report_path=report_path,
+        enabled=enabled,
+        owns_run_dir=owns,
+    )
+
+
+def finalize_trace_artifacts(
+    session: TraceSession,
+    gene: str,
+    stage_warnings: list[str],
+) -> Optional[dict]:
+    """Rebuild this run's manifest + HTML report, refusing to relabel another run."""
+    from utils.llm_trace import (
+        TRACE_MANIFEST_NAME,
+        TraceRunMismatchError,
+        build_trace_manifest,
+    )
+    from utils.llm_trace_html import build_trace_html_report
+
+    if not session.enabled or not session.trace_root.is_dir():
+        return None
+    try:
+        manifest = build_trace_manifest(
+            session.trace_root,
+            output_path=session.trace_root / TRACE_MANIFEST_NAME,
+            run_id=session.run_id,
+        )
+    except TraceRunMismatchError as exc:
+        warning = f"refused to relabel another run's trace manifest: {exc}"
+        logger.warning("%s", warning)
+        stage_warnings.append(warning)
+        return None
+    except Exception as exc:  # noqa: BLE001 - tracing must not change the outcome
+        warning = f"could not build LLM trace manifest: {exc}"
+        logger.warning("%s", warning)
+        stage_warnings.append(warning)
+        return None
+
+    logger.info(
+        "🧾 LLM trace manifest: %s calls, %s decision events, integrity=%s → %s",
+        manifest["llm_call_count"],
+        manifest["decision_event_count"],
+        manifest["verification"]["level"],
+        session.trace_root / TRACE_MANIFEST_NAME,
+    )
+    try:
+        data = build_trace_html_report(
+            session.trace_root,
+            output_path=session.report_path,
+            run_dir=session.report_path.parent,
+            title=f"{gene} · LLM curation trace review",
+            run_id=session.run_id,
+        )
+    except Exception as exc:  # noqa: BLE001
+        warning = f"could not build LLM trace report: {exc}"
+        logger.warning("%s", warning)
+        stage_warnings.append(warning)
+        return {"manifest": manifest}
+    logger.info("🌐 LLM trace report → %s", session.report_path)
+    for gap in data["coverage"]["missing_decision_links"]:
+        logger.info("   route-coverage gap: %s (%s)", gap["stage"], gap["reason"])
+    if data.get("omissions"):
+        logger.info(
+            "   %d trace body/record omission(s) listed in the report",
+            len(data["omissions"]),
+        )
+    return {
+        "run_id": session.run_id,
+        "trace_root": str(session.trace_root),
+        "report": str(session.report_path),
+        "llm_call_count": manifest["llm_call_count"],
+        "decision_event_count": manifest["decision_event_count"],
+        "integrity_level": manifest["verification"]["level"],
+        "integrity_errors": manifest["verification"]["errors"],
+        "missing_decision_links": data["coverage"]["missing_decision_links"],
+        "omissions": len(data.get("omissions") or []),
+        "sharded": bool(data.get("sharded")),
+    }
+
+
 def _write_run_status(
     run_dir: Path,
     gene: str,
@@ -1381,6 +1627,8 @@ def _write_run_status(
     started_at: float,
     active_db: Path,
     integrity: Optional[dict] = None,
+    count_recovery: Optional[dict] = None,
+    llm_trace: Optional[dict] = None,
 ) -> None:
     """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
     structured stage status (and the process exit code) instead of scraping
@@ -1415,6 +1663,10 @@ def _write_run_status(
         }
         if integrity is not None:
             payload["source_integrity"] = integrity
+        if count_recovery is not None:
+            payload["count_recovery"] = count_recovery
+        if llm_trace is not None:
+            payload["llm_trace"] = llm_trace
         (run_dir / "RUN_STATUS.json").write_text(
             json.dumps(payload, indent=2),
             encoding="utf-8",
@@ -1454,7 +1706,91 @@ def run_gvf_pipeline(
     carrier_guard: bool = True,
     vf_enrich: bool = True,
 ) -> int:
-    """Execute the full pipeline. Returns exit code."""
+    """Execute the full pipeline. Returns exit code.
+
+    Wraps the pipeline so the trace identity this invocation publishes
+    (``GVF_LLM_TRACE_DIR`` / ``GVF_LLM_TRACE_RUN_ID``, exported for nested and
+    subprocess stages) is restored on every exit path. A leaked run id would make
+    the NEXT in-process run adopt this run's identity and write into its trace
+    directory — which then mixes runs and makes the manifest rebuild refuse.
+    """
+    previous_dir = os.environ.get("GVF_LLM_TRACE_DIR")
+    previous_run = os.environ.get("GVF_LLM_TRACE_RUN_ID")
+    try:
+        return _run_gvf_pipeline(
+            gene=gene,
+            email=email,
+            output=output,
+            pmid_file=pmid_file,
+            max_pmids=max_pmids,
+            resume_dir=resume_dir,
+            include_v12=include_v12,
+            skip=skip,
+            source_recovery=source_recovery,
+            source_recovery_timeout_s=source_recovery_timeout_s,
+            allow_degraded_institutional=allow_degraded_institutional,
+            disease=disease,
+            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+            corpus_sync=corpus_sync,
+            publish_review=publish_review,
+            review_repo=review_repo,
+            publish_timeout_s=publish_timeout_s,
+            extraction_top_n=extraction_top_n,
+            extraction_priority_offset=extraction_priority_offset,
+            extraction_triage_mode=extraction_triage_mode,
+            extraction_triage_model=extraction_triage_model,
+            extraction_triage_include_defer=extraction_triage_include_defer,
+            extraction_triage_max_llm=extraction_triage_max_llm,
+            full_coverage=full_coverage,
+            extraction_model=extraction_model,
+            extraction_workers=extraction_workers,
+            taper_min_variants=taper_min_variants,
+            carrier_guard=carrier_guard,
+            vf_enrich=vf_enrich,
+        )
+    finally:
+        for key, value in (
+            ("GVF_LLM_TRACE_DIR", previous_dir),
+            ("GVF_LLM_TRACE_RUN_ID", previous_run),
+        ):
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
+def _run_gvf_pipeline(
+    *,
+    gene: str,
+    email: str,
+    output: Path,
+    pmid_file: Optional[Path] = None,
+    max_pmids: int = 1500,
+    resume_dir: Optional[Path] = None,
+    include_v12: bool = False,
+    skip: Optional[list[str]] = None,
+    source_recovery: bool = True,
+    source_recovery_timeout_s: int = 120,
+    allow_degraded_institutional: bool = False,
+    disease: Optional[str] = None,
+    include_all_clinigen_phenotypes: bool = False,
+    corpus_sync: bool = True,
+    publish_review: bool = False,
+    review_repo: Optional[Path] = None,
+    publish_timeout_s: int = 600,
+    extraction_top_n: Optional[int] = None,
+    extraction_priority_offset: int = 0,
+    extraction_triage_mode: Optional[str] = None,
+    extraction_triage_model: Optional[str] = None,
+    extraction_triage_include_defer: bool = False,
+    extraction_triage_max_llm: Optional[int] = None,
+    full_coverage: bool = False,
+    extraction_model: Optional[str] = None,
+    extraction_workers: Optional[int] = None,
+    taper_min_variants: int = 8,
+    carrier_guard: bool = True,
+    vf_enrich: bool = True,
+) -> int:
     initialize_runtime()
 
     skip = {s.lower() for s in (skip or [])}
@@ -1576,6 +1912,10 @@ def run_gvf_pipeline(
     # Step 2: extract (unless skipped)
     gene = gene.upper()
     run_dir: Optional[Path] = None
+    # Identifies THIS invocation, independent of the run dir it works in, so a
+    # skip-extract pass can isolate its own traces without borrowing (and then
+    # overwriting) the identity of the run that produced the directory.
+    gvf_run_id = _new_gvf_run_id()
     effective_extraction_top_n = extraction_top_n
     seeded_priority_count = 0
     if (
@@ -1632,6 +1972,13 @@ def run_gvf_pipeline(
     if not db:
         logger.error("No DB produced in %s", run_dir)
         return 4
+
+    # Trace the WHOLE remaining lifecycle, not just extraction. On the
+    # skip-extract path this points at a run-scoped directory so the previous
+    # run's manifest and report are never rewritten or relabelled.
+    trace_session = open_trace_session(
+        run_dir, gvf_run_id, extraction_ran="extract" not in skip
+    )
 
     # Step 2.5: full-coverage walk-to-taper extraction (opt-in via --full-coverage).
     # Continues priority extraction in offset batches until variant yield tapers,
@@ -1728,6 +2075,62 @@ def run_gvf_pipeline(
             stage_warnings.append(f"carrier guard failed: {e}")
     elif full_coverage and not carrier_guard:
         logger.info("⏭️  Step 3.5: carrier-count guard — SKIPPED")
+
+    # Step 3.55: targeted count recovery — fill NULL per-variant counts for
+    # variants the extractor already found. Default OFF (COUNT_RECOVERY_ENABLED)
+    # pending a clean v2 measurement; unlike the guards above it spends LLM calls.
+    count_recovery_status: Optional[dict] = None
+    if _count_recovery_enabled() and "count-recovery" not in skip:
+        if "trust-gate" in skip:
+            # Recovered counts land as `quarantine` for Step 3.7 to promote.
+            # Running 3.55 with 3.7 skipped would leave every recovered value
+            # quarantined and unevaluated, so refuse rather than half-apply.
+            failure = (
+                "count recovery refused: it lands values as quarantine for the "
+                "trust gate to promote, and --skip trust-gate would leave them "
+                "unevaluated. Run without --skip trust-gate, or also skip "
+                "count-recovery."
+            )
+            logger.error("%s", failure)
+            stage_failures.append(failure)
+            count_recovery_status = {"status": "refused", "reason": failure}
+        else:
+            logger.info("🔢 Step 3.55: targeted count recovery")
+            try:
+                count_recovery_stats = step_count_recovery(
+                    gene=gene, db=db, run_dir=run_dir
+                )
+                count_recovery_status = {
+                    key: value
+                    for key, value in count_recovery_stats.items()
+                    if key != "results"
+                }
+                count_recovery_status["status"] = "ran"
+                if count_recovery_stats.get("all_batches_failed"):
+                    # Total failure is a stage FAILURE (non-zero exit), not a
+                    # warning: every paper of paid model calls produced nothing.
+                    failure = (
+                        "count recovery failed on every attempted paper "
+                        f"({count_recovery_stats.get('batch_failures', 0)} batch "
+                        "failure(s)); no counts recovered"
+                    )
+                    logger.error("%s", failure)
+                    stage_failures.append(failure)
+                    count_recovery_status["status"] = "failed"
+                elif count_recovery_stats.get("papers_failed"):
+                    warning = (
+                        "count recovery had model/parse failures for "
+                        f"{count_recovery_stats['papers_failed']} paper(s)"
+                    )
+                    logger.warning("%s", warning)
+                    stage_warnings.append(warning)
+            except Exception as e:  # noqa: BLE001
+                # Explicit enablement that cannot run is a failure, not a
+                # silently-successful run with zero recovered counts.
+                logger.exception("count recovery failed (%s)", e)
+                stage_failures.append(f"count recovery failed: {e}")
+                count_recovery_status = {"status": "error", "reason": str(e)}
+
     if full_coverage and vf_enrich and "vf-enrich" not in skip:
         logger.info("🔬 Step 3.6: variantFeatures enrich + wrong-gene FP quarantine")
         try:
@@ -2002,6 +2405,11 @@ def run_gvf_pipeline(
     elif publish_review and "publish-review" in skip:
         logger.info("⏭️  Step 6: publish to review DB — SKIPPED")
 
+    # Rebuild after all gvf-run stages, because count recovery, claim checks, and
+    # other post-extraction reviewers may add calls after the inner workflow
+    # wrote its first manifest.
+    trace_summary = finalize_trace_artifacts(trace_session, gene, stage_warnings)
+
     exit_code = EXIT_STAGE_WARNINGS if stage_failures else 0
     status = "completed_with_warnings" if stage_failures else "completed"
     _write_run_status(
@@ -2014,6 +2422,8 @@ def run_gvf_pipeline(
         started,
         db,
         integrity_status,
+        count_recovery=count_recovery_status,
+        llm_trace=trace_summary,
     )
 
     if stage_failures:

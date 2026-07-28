@@ -62,9 +62,40 @@ def test_multiple_reasons_accumulate():
 
 
 def test_rule_version_is_stable_and_tagged():
+    # tg4 adds recovered_count_unverified. The prefix is bumped deliberately so a
+    # stored fact records which rule generation tiered it.
     version = trust_gate.rule_version()
-    assert version.startswith("tg3-")
+    assert version.startswith("tg4-")
     assert version == trust_gate.rule_version()
+
+
+def test_recovered_count_without_per_variant_role_is_quarantined():
+    """A count written by recovery must prove a per-variant role to be trusted."""
+    unproven = evaluate_fact(
+        {"carriers": 12},
+        provenance={"carriers_source": "count_recovery"},
+    )
+    assert "recovered_count_unverified" in unproven
+
+    proven = evaluate_fact(
+        {"carriers": 12},
+        provenance={
+            "carriers_source": "count_recovery",
+            "carriers_count_type": "per_variant_carriers",
+            "carriers_column_label": "Carriers",
+        },
+    )
+    assert "recovered_count_unverified" not in proven
+
+    mislabelled = evaluate_fact(
+        {"carriers": 12},
+        provenance={
+            "carriers_source": "count_recovery",
+            "carriers_count_type": "cohort_total",
+        },
+    )
+    assert "recovered_count_unverified" in mislabelled
+    assert "count_is_total" in mislabelled
 
 
 def test_study_type_mismatch_quarantines_review_functional_gwas():
@@ -137,7 +168,7 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert stats["trusted"] == 1
     assert stats["quarantine"] == 1
     assert stats["by_reason"].get("population_count") == 1
-    assert stats["rule_version"].startswith("tg3-")
+    assert stats["rule_version"].startswith("tg4-")
 
     conn = sqlite3.connect(db)
     try:

@@ -689,6 +689,8 @@ class PMCHarvester:
             extractor = PedigreeExtractor(
                 model=settings.vision_model,
                 detection_confidence_threshold=settings.pedigree_confidence_threshold,
+                gene=self.gene_symbol,
+                pmid=pmid,
             )
 
             print(f"  Analyzing {len(image_files)} figures for pedigrees...")

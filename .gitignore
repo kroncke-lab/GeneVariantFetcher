@@ -114,10 +114,6 @@ comparison_results/
 comparison_results_*/
 recall_metrics/
 
-# Agent/audit review scratch (local reports, never commit)
-codex-review/
-nightly-review/
-
 # Validation framework run artifacts (multi-GB snapshots, never commit)
 validation_runs/
 

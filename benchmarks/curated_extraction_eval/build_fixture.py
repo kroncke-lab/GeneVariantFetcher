@@ -100,13 +100,10 @@ CANON_HEADER = [
 # Canonical DBs (used here only for titles; run_benchmark.py defaults to these
 # for score mode). Kept in sync with docs/RECALL_STATUS.md.
 CANONICAL_DBS = {
-    "KCNH2": REPO / "results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db",
-    "KCNQ1": REPO
-    / "validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db",
-    "SCN5A": REPO
-    / "validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
-    "RYR2": REPO
-    / "validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db",
+    "KCNH2": REPO / "validation_runs/canonical_baseline/KCNH2.db",
+    "KCNQ1": REPO / "validation_runs/canonical_baseline/KCNQ1.db",
+    "SCN5A": REPO / "validation_runs/canonical_baseline/SCN5A.db",
+    "RYR2": REPO / "validation_runs/canonical_baseline/RYR2.db",
 }
 
 PUBMED = "https://pubmed.ncbi.nlm.nih.gov/{pmid}/"

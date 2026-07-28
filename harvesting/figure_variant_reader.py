@@ -43,6 +43,20 @@ from typing import Any, Dict, List, Optional
 import requests
 
 from config.settings import get_settings
+from utils.llm_trace import (
+    OUTCOME_DISCARDED,
+    OUTCOME_ERROR,
+    OUTCOME_PARSE_FAILED,
+    OUTCOME_PARSED,
+    attempt_link_summary,
+    capture_llm_call,
+    last_llm_trace,
+    llm_attempt_ledger,
+    llm_trace_scope,
+    note_llm_attempt,
+    note_llm_outcome,
+    record_trace_event,
+)
 from utils.llm_utils import (
     azure_responses_api_url,
     build_reasoning_effort_kwargs,
@@ -180,7 +194,10 @@ def read_images(
     model = model or _default_vision_model()
     report = PMIDFigureReport(pmid=pmid, gene=gene)
     for img in image_paths:
-        result = _read_one(img, gene, model)
+        # PMID is in hand here and must be forwarded: _trace_parent needs BOTH
+        # gene and pmid, so dropping it collapsed every figure read for every
+        # paper into a single gene-level group.
+        result = _read_one(img, gene, model, pmid=pmid)
         report.per_figure.append(result)
     return report
 
@@ -232,9 +249,22 @@ def _parse_response(text: str) -> List[Dict[str, Any]]:
     Accepts JSON object with ``variants`` key, raw JSON list, or fenced JSON.
     Returns ``[]`` on parse failure rather than raising.
     """
+    return _parse_response_status(text)[0]
+
+
+def _parse_response_status(text: str) -> tuple[List[Dict[str, Any]], str]:
+    """``(variants, status)`` where status is ``ok``/``empty_output``/``unparseable``.
+
+    The biomedical outcome is unchanged — an unparseable response still yields no
+    variants — but "the model returned nothing about this figure" and "the model
+    returned something we could not read" are different facts for a curator, and
+    a bare ``[]`` conflated them.
+    """
     if not text:
-        return []
+        return [], "empty_output"
     cleaned = text.strip()
+    if not cleaned:
+        return [], "empty_output"
     # Strip code fences if present
     if cleaned.startswith("```"):
         cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
@@ -246,38 +276,118 @@ def _parse_response(text: str) -> List[Dict[str, Any]]:
         m = re.search(r"\{[^{}]*\"variants\"\s*:\s*\[.*?\]\s*\}", cleaned, re.DOTALL)
         if not m:
             logger.warning("Could not parse figure-reader response: %s", cleaned[:200])
-            return []
+            return [], "unparseable"
         try:
             data = json.loads(m.group(0))
         except json.JSONDecodeError:
-            return []
+            return [], "unparseable"
     if isinstance(data, list):
-        return [v for v in data if isinstance(v, dict)]
+        return [v for v in data if isinstance(v, dict)], "ok"
     if isinstance(data, dict):
         vars_ = data.get("variants", [])
         if isinstance(vars_, list):
-            return [v for v in vars_ if isinstance(v, dict)]
-    return []
+            return [v for v in vars_ if isinstance(v, dict)], "ok"
+    return [], "unparseable"
 
 
-def _read_one(image_path: Path, gene: str, model: str) -> FigureReadResult:
+def _read_one(
+    image_path: Path, gene: str, model: str, *, pmid: str = ""
+) -> FigureReadResult:
     try:
         data_url = _image_to_data_url(image_path)
     except Exception as exc:
         return FigureReadResult(image_path=str(image_path), error=f"read_image: {exc}")
 
     prompt = _VARIANT_PROMPT.format(gene=gene)
+    responses_path = _uses_responses_api(model)
 
-    try:
-        if _uses_responses_api(model):
-            raw = _call_responses_api(data_url, model, prompt)
+    with (
+        llm_trace_scope(
+            gene=gene,
+            pmid=pmid or None,
+            stage="figure_variant_read",
+            component="figure_variant_reader",
+            operation="responses_api" if responses_path else "chat_completions",
+            image_path=str(image_path),
+        ),
+        llm_attempt_ledger(),
+    ):
+        trace_id: Optional[str] = None
+        try:
+            if responses_path:
+                raw = _call_responses_api(data_url, model, prompt)
+            else:
+                raw = _call_chat_completions(data_url, model, prompt)
+            trace_id = note_llm_attempt(last_llm_trace(), role="figure_variant_read")
+        except Exception as exc:
+            trace_id = note_llm_attempt(last_llm_trace(), role="figure_variant_read")
+            note_llm_outcome(trace_id, OUTCOME_ERROR)
+            _record_figure_variant_decision(
+                image_path,
+                gene,
+                model,
+                variant_count=0,
+                decision_source="call_failed",
+                error=str(exc),
+            )
+            return FigureReadResult(image_path=str(image_path), error=str(exc))
+
+        variants, status = _parse_response_status(raw)
+        if status == "unparseable":
+            note_llm_outcome(trace_id, OUTCOME_PARSE_FAILED)
+            decision_source = "unparseable_response"
+        elif status == "empty_output":
+            note_llm_outcome(trace_id, OUTCOME_DISCARDED)
+            decision_source = "empty_output"
+        elif not variants:
+            # Parsed cleanly and reported no variants: a real, usable answer.
+            note_llm_outcome(trace_id, OUTCOME_PARSED)
+            decision_source = "no_variants_reported"
         else:
-            raw = _call_chat_completions(data_url, model, prompt)
-    except Exception as exc:
-        return FigureReadResult(image_path=str(image_path), error=str(exc))
+            note_llm_outcome(trace_id, OUTCOME_PARSED)
+            decision_source = "variants_read"
+        _record_figure_variant_decision(
+            image_path,
+            gene,
+            model,
+            variant_count=len(variants),
+            decision_source=decision_source,
+            variants=[
+                str(v.get("variant") or v.get("notation") or "") for v in variants
+            ],
+        )
+        return FigureReadResult(image_path=str(image_path), variants=variants)
 
-    variants = _parse_response(raw)
-    return FigureReadResult(image_path=str(image_path), variants=variants)
+
+def _record_figure_variant_decision(
+    image_path: Path,
+    gene: str,
+    model: str,
+    *,
+    variant_count: int,
+    decision_source: str,
+    error: Optional[str] = None,
+    variants: Optional[List[str]] = None,
+) -> None:
+    record_trace_event(
+        "figure_variant_read_decision",
+        {
+            "image": image_path.name,
+            "image_path": str(image_path),
+            "gene": gene,
+            "model": model,
+            "variant_count": variant_count,
+            "variants": [v for v in (variants or []) if v][:40],
+            "decision_source": decision_source,
+            "error": error,
+            "selection_policy": (
+                "Read one figure image for target-gene variants. An unparseable "
+                "response and a clean 'no variants' answer both yield zero "
+                "variants but are recorded distinctly."
+            ),
+            **attempt_link_summary(),
+        },
+    )
 
 
 def _call_chat_completions(data_url: str, model: str, prompt: str) -> str:
@@ -324,17 +434,32 @@ def _call_responses_api(data_url: str, model: str, prompt: str) -> str:
             model, get_settings().vision_reasoning_effort
         ),
     }
-    response = requests.post(
-        url,
-        headers={"api-key": key, "Content-Type": "application/json"},
-        json=body,
-        timeout=120,
-    )
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"Responses API returned {response.status_code}: {response.text[:300]}"
+
+    def send_request() -> dict:
+        response = requests.post(
+            url,
+            headers={"api-key": key, "Content-Type": "application/json"},
+            json=body,
+            timeout=120,
         )
-    data = response.json()
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Responses API returned {response.status_code}: {response.text[:300]}"
+            )
+        try:
+            return response.json()
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"Responses API returned invalid JSON: {response.text[:300]}"
+            ) from exc
+
+    data, _trace = capture_llm_call(
+        provider="azure_openai_responses_http",
+        requested_model=model,
+        resolved_model=_strip_provider_prefix(model),
+        request={"endpoint": url, "body": body},
+        call=send_request,
+    )
     for item in data.get("output", []) or []:
         if item.get("type") != "message":
             continue

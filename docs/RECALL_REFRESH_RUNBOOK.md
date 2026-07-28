@@ -154,7 +154,8 @@ Karger (0.3%) and Sage (0.0%) carry almost none of the recall gap, so the payoff
 here is overwhelmingly **Wiley**.
 
 ## Notes
-- The canonical DBs live under `results/` / `validation_runs/` and are **gitignored
+- The canonical DBs live under `results/` and the consolidated local
+  `validation_runs/canonical_baseline/` directory. They are **gitignored
   (local)**; the refresh updates them in place (with backups). Commit only the
   code + docs, never the DBs.
 - Do **not** wholesale-rebuild a canonical DB with bare `migrate(extractions)` —

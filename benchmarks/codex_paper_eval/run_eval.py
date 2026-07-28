@@ -24,12 +24,28 @@ import time
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO))
 
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE  # noqa: E402
+from utils.llm_trace import (  # noqa: E402
+    TRACE_INDEX_NAME,
+    TRACE_MANIFEST_NAME,
+    build_trace_manifest,
+    capture_llm_call,
+    configure_llm_tracing,
+    llm_trace_scope,
+    record_trace_event,
+    trace_lock_targets,
+    validate_trace_manifest,
+)
+from utils.llm_trace_html import (  # noqa: E402
+    TRACE_REPORT_NAME,
+    build_trace_html_report,
+)
 
 GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
@@ -147,6 +163,32 @@ def usable_sources(
         # Legacy took the first candidate that cleared the size floor, so
         # _FULL_CONTEXT.md always won regardless of what it actually contained.
         source = usable[0] if legacy_source_selection else choose_source(usable)
+        candidate_scores = []
+        for candidate in usable:
+            table_rows, variant_tokens, characters = source_richness(candidate)
+            candidate_scores.append(
+                {
+                    "path": str(candidate.resolve()),
+                    "sha256": digest(candidate),
+                    "table_rows": table_rows,
+                    "distinct_variant_tokens": variant_tokens,
+                    "characters": characters,
+                }
+            )
+        # choose_source() must return one of `usable`; a bare next() would raise
+        # StopIteration (which propagates as a confusing RuntimeError inside a
+        # generator) if it ever returned something outside the scored set.
+        selected_path = str(source.resolve())
+        selected_score = next(
+            (item for item in candidate_scores if item["path"] == selected_path),
+            None,
+        )
+        if selected_score is None:
+            raise SystemExit(
+                f"PMID {pmid}: chosen source {selected_path} is not among the "
+                f"{len(candidate_scores)} scored candidates; selection.json would "
+                "not describe the source actually read."
+            )
         artifacts = paper_dir / f"{pmid}_artifacts.json"
         artifact_path = artifacts.resolve() if artifacts.is_file() else None
         pdf_paths = sorted(p.resolve() for p in paper_dir.rglob("*.pdf") if p.is_file())
@@ -165,6 +207,27 @@ def usable_sources(
                 "source": str(source.resolve()),
                 "source_sha256": digest(source),
                 "source_bytes": source.stat().st_size,
+                "source_selection": {
+                    "policy": (
+                        "first_usable_candidate"
+                        if legacy_source_selection
+                        else "pareto_richness"
+                    ),
+                    "selected": str(source.resolve()),
+                    "selected_metrics": selected_score,
+                    "candidates": candidate_scores,
+                    "rationale": (
+                        "Legacy ablation selected the first candidate clearing the "
+                        "size floor."
+                        if legacy_source_selection
+                        else (
+                            "Selected a candidate only when it Pareto-dominated the "
+                            "priority candidate on table rows, distinct variant "
+                            "tokens, and characters; preserved priority order when "
+                            "candidate renderings traded off."
+                        )
+                    ),
+                },
                 "artifacts": str(artifact_path) if artifact_path else None,
                 "artifacts_sha256": digest(artifact_path) if artifact_path else None,
                 "pdfs": pdfs,
@@ -367,7 +430,7 @@ def command_prepare(args) -> None:
         ),
     }
     predictions = {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": args.run_id,
         "started_at": now,
         "extraction_started_at": None,
@@ -390,7 +453,9 @@ def command_prepare(args) -> None:
                 "source_completeness": None,
                 "representations_available": None,
                 "token_usage": None,
+                "llm_trace_refs": [],
                 "notes": None,
+                "curation_rationale": None,
                 "variants": [],
             }
             for p in selected
@@ -416,6 +481,11 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         for key in ("tool", "tool_rationale", "elapsed_seconds", "source_completeness"):
             if p.get(key) in (None, ""):
                 errors.append(f"{label}: missing {key}")
+        if (
+            int(predictions.get("schema_version") or 1) >= 2
+            and not str(p.get("curation_rationale") or "").strip()
+        ):
+            errors.append(f"{label}: missing curation_rationale")
         for i, row in enumerate(p.get("variants", [])):
             if not (row.get("variant") or "").strip():
                 errors.append(f"{label} variant[{i}]: missing variant")
@@ -423,6 +493,10 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
                 errors.append(f"{label} variant[{i}]: missing evidence")
             if not (row.get("source_location") or "").strip():
                 errors.append(f"{label} variant[{i}]: missing source_location")
+            if int(predictions.get("schema_version") or 1) >= 2:
+                for rationale in ("inclusion_rationale", "count_rationale"):
+                    if not str(row.get(rationale) or "").strip():
+                        errors.append(f"{label} variant[{i}]: missing {rationale}")
             for field in COUNT_FIELDS:
                 value = row.get(field)
                 if value is not None and (
@@ -436,6 +510,24 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         usage = p.get("token_usage") or {}
         if not usage.get("telemetry_available") or not usage.get("total_tokens"):
             errors.append(f"{label}: missing exact token telemetry")
+        if int(predictions.get("schema_version") or 1) >= 2:
+            refs = p.get("llm_trace_refs") or []
+            stages = {
+                (ref.get("context") or {}).get("stage")
+                for ref in refs
+                if isinstance(ref, dict)
+            }
+            required_stages = {
+                "representation_route",
+                "representation_route_decision",
+                "paper_curation",
+                "paper_curation_decision",
+            }
+            missing_stages = sorted(required_stages - stages)
+            if missing_stages:
+                errors.append(
+                    f"{label}: missing locked LLM trace stages {missing_stages}"
+                )
     return errors
 
 
@@ -447,14 +539,58 @@ def command_lock(args) -> None:
     selection_path = run_dir / "selection.json"
     prediction_path = run_dir / "predictions.json"
     selection, predictions = read_json(selection_path), read_json(prediction_path)
+    trace_root = run_dir / "llm_traces"
+    trace_manifest_path = trace_root / TRACE_MANIFEST_NAME
+    trace_report_path = run_dir / TRACE_REPORT_NAME
+    trace_manifest = None
+    trace_index_path = trace_root / TRACE_INDEX_NAME
+    if int(predictions.get("schema_version") or 1) >= 2:
+        # Rebuilding at lock time is deliberate — extraction may have appended
+        # after its own manifest — but it now cross-checks each record against
+        # the WRITE-TIME digest in trace_index.jsonl, so a record forged between
+        # extraction and lock surfaces as an error instead of being re-blessed.
+        trace_manifest = build_trace_manifest(
+            trace_root,
+            output_path=trace_manifest_path,
+            run_id=selection.get("run_id"),
+        )
+        build_trace_html_report(
+            trace_root,
+            output_path=trace_report_path,
+            run_dir=run_dir,
+            title=f"{selection.get('run_id') or 'Paper evaluation'} · LLM trace review",
+            run_id=selection.get("run_id"),
+            locked=True,
+        )
     errors = validate_predictions(selection, predictions)
     errors.extend(selection_material_errors(selection))
+    if trace_manifest is not None:
+        errors.extend(validate_trace_manifest(trace_root, trace_manifest))
     if errors:
         raise SystemExit("prediction validation failed:\n- " + "\n- ".join(errors))
     lock = {
         "locked_at": datetime.now(timezone.utc).isoformat(),
         "selection_sha256": digest(selection_path),
         "predictions_sha256": digest(prediction_path),
+        "llm_trace_manifest_sha256": (
+            digest(trace_manifest_path) if trace_manifest is not None else None
+        ),
+        "llm_trace_report_sha256": (
+            digest(trace_report_path) if trace_manifest is not None else None
+        ),
+        # trace_index.jsonl holds the WRITE-TIME digest of every record. Leaving
+        # it out of the lock left the one artifact that can prove tampering
+        # unprotected, so "unchanged since lock" did not cover it.
+        "llm_trace_index_sha256": (
+            digest(trace_index_path)
+            if trace_manifest is not None and trace_index_path.is_file()
+            else None
+        ),
+        "llm_trace_integrity_level": (
+            trace_manifest["verification"]["level"]
+            if trace_manifest is not None
+            else None
+        ),
         "statement": (
             "Predictions finalized before gold values or gold row counts were "
             "exposed to extraction; score is the first phase that reads those values."
@@ -462,6 +598,13 @@ def command_lock(args) -> None:
     }
     write_json(lock_path, lock)
     prediction_path.chmod(0o444)
+    if trace_manifest is not None:
+        trace_manifest_path.chmod(0o444)
+        trace_report_path.chmod(0o444)
+        # trace_lock_targets() includes trace_index.jsonl, which the prior
+        # chmod set omitted.
+        for target in trace_lock_targets(trace_root):
+            target.chmod(0o444)
     print(lock_path)
 
 
@@ -520,9 +663,12 @@ The selected representation is supplied below. Cite concise evidence and a
 specific section/table/page/figure location for every row. Return JSON only:
 {{
   "notes": "...",
+  "curation_rationale": "Why evidence was included or excluded, including ambiguities.",
   "variants": [{{
     "variant": "...", "carriers": null, "affected": null, "unaffected": null,
-    "evidence": "...", "source_location": "..."
+    "evidence": "...", "source_location": "...",
+    "inclusion_rationale": "Why this is in-scope human variant evidence from this paper.",
+    "count_rationale": "How each integer or null count was derived without double counting."
   }}]
 }}
 
@@ -622,12 +768,20 @@ def image_data_url(path: Path) -> str:
 def reasoning_params(model: str, effort: str) -> dict:
     """Responses-API reasoning kwargs the deployment will actually accept.
 
-    Grok-4-class deployments reason by default and reject ``reasoning.effort``
-    with a 400, so they get no reasoning block at all.
+    Delegates the model allow-list to ``utils.llm_utils`` so the benchmark and
+    production agree about which deployments receive an effort setting. They did
+    not before: this function sent ``{"reasoning": {"effort": ...}}`` to
+    everything except grok, while production gated on
+    ``gpt-5|gpt5|o1|o3|o4-mini`` — so for any other deployment the benchmark
+    result did not describe the production configuration for the same model
+    string. Grok-4-class deployments reason by default and reject
+    ``reasoning.effort`` with a 400, so they still get no reasoning block.
     """
+    from utils.llm_utils import build_responses_reasoning_param
+
     if "grok" in model.lower():
         return {}
-    return {"reasoning": {"effort": effort}}
+    return build_responses_reasoning_param(model, effort)
 
 
 def effective_effort(model: str, effort: str) -> str:
@@ -677,6 +831,11 @@ def add_usage(
         }
 
 
+def add_trace_ref(target: dict, summary: dict[str, Any] | None) -> None:
+    if summary is not None:
+        target.setdefault("llm_trace_refs", []).append(summary)
+
+
 def command_extract(args) -> None:
     """Route and run isolated per-paper reads through the Azure OpenAI endpoint."""
     from openai import OpenAI
@@ -685,6 +844,11 @@ def command_extract(args) -> None:
     if (run_dir / "LOCK.json").exists():
         raise SystemExit("refusing to extract: run is already locked")
     selection = read_json(run_dir / "selection.json")
+    configure_llm_tracing(
+        run_dir / "llm_traces",
+        run_id=selection.get("run_id"),
+        enabled=True,
+    )
     material_errors = selection_material_errors(selection)
     if material_errors:
         raise SystemExit(
@@ -771,12 +935,27 @@ def command_extract(args) -> None:
             f"[{index}/{total_papers}] route {paper['gene']} {paper['pmid']}",
             flush=True,
         )
-        route_response = client.responses.create(
-            model=args.model,
-            input=route_prompt,
-            max_output_tokens=args.route_max_output_tokens,
+        route_request = {
+            "model": args.model,
+            "input": route_prompt,
+            "max_output_tokens": args.route_max_output_tokens,
             **reasoning_params(args.model, args.route_reasoning_effort),
-        )
+        }
+        with llm_trace_scope(
+            gene=paper["gene"],
+            pmid=paper["pmid"],
+            stage="representation_route",
+            component="codex_paper_eval",
+            attempt=1,
+        ):
+            route_response, route_trace = capture_llm_call(
+                provider="azure_openai_responses",
+                requested_model=args.model,
+                resolved_model=args.model,
+                request=route_request,
+                call=lambda: client.responses.create(**route_request),
+            )
+        add_trace_ref(target, route_trace)
         add_usage(
             predictions,
             target,
@@ -786,7 +965,9 @@ def command_extract(args) -> None:
         )
         write_json(predictions_path, predictions)
         route = parse_json_response(route_response.output_text)
-        tool = str(route.get("tool", "")).lower()
+        requested_tool = str(route.get("tool", "")).lower()
+        tool = requested_tool
+        route_fallback = None
         if tool not in representations or not representations[tool]:
             available_fallback = next(
                 name
@@ -797,7 +978,33 @@ def command_extract(args) -> None:
                 f"{route.get('tool_rationale', '')} Requested {tool or 'no tool'}, "
                 f"which was unavailable; used {available_fallback}."
             ).strip()
+            route_fallback = {
+                "requested_tool": requested_tool or None,
+                "selected_tool": available_fallback,
+                "reason": "requested representation was unavailable",
+            }
             tool = available_fallback
+        with llm_trace_scope(
+            gene=paper["gene"],
+            pmid=paper["pmid"],
+            stage="representation_route_decision",
+            component="codex_paper_eval",
+        ):
+            route_decision_trace = record_trace_event(
+                "representation_route_decision",
+                {
+                    "representations_available": target["representations_available"],
+                    "model_requested_tool": requested_tool or None,
+                    "selected_tool": tool,
+                    "fallback": route_fallback,
+                    "tool_rationale": route.get("tool_rationale"),
+                    "source_completeness": route.get("source_completeness"),
+                    "route_call_trace_id": (
+                        route_trace.get("trace_id") if route_trace else None
+                    ),
+                },
+            )
+        add_trace_ref(target, route_decision_trace)
 
         if tool == "table":
             # The table route carries the full running text, not a keyword preview.
@@ -851,12 +1058,28 @@ def command_extract(args) -> None:
         )
         budget = args.max_output_tokens
         for attempt in (1, 2):
-            extraction_response = client.responses.create(
-                model=args.model,
-                input=response_input,
-                max_output_tokens=budget,
+            extraction_request = {
+                "model": args.model,
+                "input": response_input,
+                "max_output_tokens": budget,
                 **reasoning_params(args.model, args.reasoning_effort),
-            )
+            }
+            with llm_trace_scope(
+                gene=paper["gene"],
+                pmid=paper["pmid"],
+                stage="paper_curation",
+                component="codex_paper_eval",
+                attempt=attempt,
+                selected_representation=tool,
+            ):
+                extraction_response, extraction_trace = capture_llm_call(
+                    provider="azure_openai_responses",
+                    requested_model=args.model,
+                    resolved_model=args.model,
+                    request=extraction_request,
+                    call=lambda: client.responses.create(**extraction_request),
+                )
+            add_trace_ref(target, extraction_trace)
             add_usage(
                 predictions,
                 target,
@@ -888,11 +1111,40 @@ def command_extract(args) -> None:
                     flush=True,
                 )
         elapsed = time.monotonic() - started
+        # Trace references are recorder-owned metadata. Do not let an unexpected
+        # model-emitted key replace the audited call history.
+        trace_refs = list(target.get("llm_trace_refs") or [])
         target.update(result)
+        target["llm_trace_refs"] = trace_refs
         target["tool"] = tool
         target["tool_rationale"] = route.get("tool_rationale")
         target["source_completeness"] = route.get("source_completeness")
         target["elapsed_seconds"] = round(elapsed, 3)
+        with llm_trace_scope(
+            gene=paper["gene"],
+            pmid=paper["pmid"],
+            stage="paper_curation_decision",
+            component="codex_paper_eval",
+        ):
+            curation_decision_trace = record_trace_event(
+                "paper_curation_decision",
+                {
+                    "selected_model": args.model,
+                    "selected_representation": tool,
+                    "variant_count": len(target.get("variants") or []),
+                    "curation_rationale": target.get("curation_rationale")
+                    or target.get("notes"),
+                    "accepted_response_trace_id": (
+                        extraction_trace.get("trace_id") if extraction_trace else None
+                    ),
+                    "selection_policy": (
+                        "The parsed response from the final successful extraction "
+                        "attempt became the locked paper prediction. A retry occurs "
+                        "only after a truncated JSON emission."
+                    ),
+                },
+            )
+        add_trace_ref(target, curation_decision_trace)
         write_json(predictions_path, predictions)
         print(
             f"[{index}/{total_papers}] done {paper['gene']} {paper['pmid']} "
@@ -905,6 +1157,18 @@ def command_extract(args) -> None:
     )
     # Token usage is checkpointed after every response so interrupted runs retain it.
     write_json(predictions_path, predictions)
+    trace_root = run_dir / "llm_traces"
+    build_trace_manifest(
+        trace_root,
+        output_path=trace_root / TRACE_MANIFEST_NAME,
+        run_id=selection.get("run_id"),
+    )
+    build_trace_html_report(
+        trace_root,
+        output_path=run_dir / TRACE_REPORT_NAME,
+        run_dir=run_dir,
+        title=f"{selection.get('run_id') or 'Paper evaluation'} · LLM trace review",
+    )
 
 
 def to_int(value):
@@ -1624,6 +1888,9 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "",
             "- `selection.json`: selected PMIDs, source paths, source hashes, and available representations.",
             "- `predictions.json`: immutable per-paper tools, rationales, extracted variants, counts, evidence quotes, source locations, elapsed time, and token telemetry.",
+            "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
+            "- `llm_traces/trace_manifest.json`: SHA-256 inventory locked before gold scoring; provider-returned reasoning summaries are retained, while private hidden chain-of-thought is not available.",
+            "- `llm_trace_report.html`: self-contained per-paper browser view of the locked trace timeline, prompts, responses, rationales, retries, and integrity state.",
             "- `evidence.csv`: flat evidence ledger for every predicted variant.",
             "- `paper_metrics.csv`: exact per-paper metrics.",
             "- `LOCK.json`: SHA-256 digests proving prediction finalization before scoring.",
@@ -1664,6 +1931,30 @@ def command_score(args) -> None:
         or digest(prediction_path) != lock["predictions_sha256"]
     ):
         raise SystemExit("refusing to score: locked input digest mismatch")
+    trace_manifest_digest = lock.get("llm_trace_manifest_sha256")
+    if trace_manifest_digest:
+        trace_root = run_dir / "llm_traces"
+        trace_manifest_path = trace_root / TRACE_MANIFEST_NAME
+        trace_report_path = run_dir / TRACE_REPORT_NAME
+        if (
+            not trace_manifest_path.is_file()
+            or digest(trace_manifest_path) != trace_manifest_digest
+        ):
+            raise SystemExit("refusing to score: locked LLM trace manifest mismatch")
+        trace_errors = validate_trace_manifest(
+            trace_root, read_json(trace_manifest_path)
+        )
+        if trace_errors:
+            raise SystemExit(
+                "refusing to score: LLM trace integrity failed:\n- "
+                + "\n- ".join(trace_errors)
+            )
+        trace_report_digest = lock.get("llm_trace_report_sha256")
+        if trace_report_digest and (
+            not trace_report_path.is_file()
+            or digest(trace_report_path) != trace_report_digest
+        ):
+            raise SystemExit("refusing to score: locked LLM trace report mismatch")
     selection, predictions = read_json(selection_path), read_json(prediction_path)
     pred_map = {(p["gene"], str(p["pmid"])): p for p in predictions["papers"]}
     scores = []
@@ -1695,6 +1986,8 @@ def command_score(args) -> None:
         "integrity": {
             "selection_sha256": lock["selection_sha256"],
             "predictions_sha256": lock["predictions_sha256"],
+            "llm_trace_manifest_sha256": trace_manifest_digest,
+            "llm_trace_report_sha256": lock.get("llm_trace_report_sha256"),
         },
         "blinding": selection.get("blinding"),
     }

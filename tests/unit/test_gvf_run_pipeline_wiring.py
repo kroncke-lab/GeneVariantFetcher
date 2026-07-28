@@ -13,6 +13,7 @@ no non-mocked completion test at all).
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -49,7 +50,7 @@ def _ok_doctor() -> dict:
     }
 
 
-def _fake_extract_factory(captured: dict):
+def _fake_extract_factory(captured: dict, name: str = "run1"):
     """Return a step_extract stand-in that records its kwargs and seeds a DB."""
 
     def fake_extract(
@@ -65,7 +66,7 @@ def _fake_extract_factory(captured: dict):
         captured["disease"] = disease
         captured["gene"] = gene
         captured["extract_kwargs"] = kwargs
-        run_dir = Path(output_dir) / gene / "run1"
+        run_dir = Path(output_dir) / gene / name
         run_dir.mkdir(parents=True, exist_ok=True)
         (run_dir / f"{gene}.db").write_bytes(b"sqlite")
         return run_dir
@@ -214,6 +215,166 @@ def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):
     assert (status_path.parent / status["active_db"]).resolve() == (
         report.parent / "TESTGENE.db"
     ).resolve()
+
+
+def test_count_recovery_runs_only_when_enabled_and_records_partial_failures(
+    tmp_path: Path, monkeypatch
+):
+    captured: dict = {}
+    calls: list[tuple[str, Path, Path]] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {"trusted": 0})
+    monkeypatch.setenv("COUNT_RECOVERY_ENABLED", "true")
+    monkeypatch.setattr(
+        gvf_run,
+        "step_count_recovery",
+        lambda gene, db, run_dir: (
+            calls.append((gene, db, run_dir))
+            or {"papers_failed": 2, "counts_accepted": 3, "counts_written": 3}
+        ),
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=[
+            "layers",
+            "source-qc",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+
+    assert rc == 0
+    assert len(calls) == 1
+    gene, db, run_dir = calls[0]
+    assert gene == "TESTGENE"
+    assert db == run_dir / "TESTGENE.db"
+    status = json.loads((run_dir / "RUN_STATUS.json").read_text())
+    assert (
+        "count recovery had model/parse failures for 2 paper(s)"
+        in status["stage_warnings"]
+    )
+    # Stats reach RUN_STATUS.json instead of being logged and dropped.
+    assert status["count_recovery"]["status"] == "ran"
+    assert status["count_recovery"]["counts_written"] == 3
+
+
+def test_count_recovery_refuses_when_trust_gate_is_skipped(tmp_path: Path, monkeypatch):
+    """Recovered counts land as quarantine, so 3.7 must run to promote them."""
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setenv("COUNT_RECOVERY_ENABLED", "true")
+    monkeypatch.setattr(
+        gvf_run,
+        "step_count_recovery",
+        lambda **kwargs: pytest.fail("recovery ran with the trust gate skipped"),
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=[
+            "layers",
+            "source-qc",
+            "trust-gate",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    run_dir = output / "TESTGENE" / "run1"
+    status = json.loads((run_dir / "RUN_STATUS.json").read_text())
+    assert status["count_recovery"]["status"] == "refused"
+    assert any("count recovery refused" in f for f in status["stage_failures"])
+
+
+def test_total_count_recovery_failure_is_a_stage_failure(tmp_path: Path, monkeypatch):
+    """Every paper failing is a failure, not a silently-successful no-op."""
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {"trusted": 0})
+    monkeypatch.setenv("COUNT_RECOVERY_ENABLED", "true")
+    monkeypatch.setattr(
+        gvf_run,
+        "step_count_recovery",
+        lambda gene, db, run_dir: {
+            "papers_attempted": 4,
+            "papers_failed": 4,
+            "batch_failures": 4,
+            "counts_accepted": 0,
+            "counts_written": 0,
+            "all_batches_failed": True,
+        },
+    )
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=[
+            "layers",
+            "source-qc",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+    assert status["severity"] == "warning"
+    assert status["count_recovery"]["status"] == "failed"
+    assert any("failed on every attempted paper" in f for f in status["stage_failures"])
+
+
+def test_count_recovery_explicit_skip_wins_over_enabled_flag(
+    tmp_path: Path, monkeypatch
+):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setenv("COUNT_RECOVERY_ENABLED", "true")
+    monkeypatch.setattr(
+        gvf_run,
+        "step_count_recovery",
+        lambda **kwargs: pytest.fail("explicitly skipped count recovery ran"),
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        corpus_sync=False,
+        skip=[
+            "layers",
+            "source-qc",
+            "count-recovery",
+            "trust-gate",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+    assert rc == 0
 
 
 def test_source_recovery_on_by_default(tmp_path: Path, monkeypatch):
@@ -747,3 +908,175 @@ def test_paper_final_check_gate_makes_missing_or_unbound_evidence_nonzero(
     status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
     assert any("binding" in value for value in status["stage_failures"])
     assert any("re-extraction required" in value for value in status["stage_failures"])
+
+
+# ---------------------------------------------------------------------------
+# Per-run trace isolation under GVF_LLM_TRACE_DIR. Each of these fails when the
+# override is treated as one exact directory rather than a storage base.
+# ---------------------------------------------------------------------------
+
+
+def _trace_children(base: Path) -> list[str]:
+    return sorted(p.name for p in base.iterdir() if p.is_dir())
+
+
+def _run_twice(tmp_path: Path, monkeypatch, *, skip_extract_second: bool) -> Path:
+    """Run the pipeline twice in ONE process and return the trace base."""
+    from utils.llm_trace import reset_llm_tracing
+
+    base = tmp_path / "vol"
+    base.mkdir()
+    monkeypatch.setenv("GVF_LLM_TRACE_DIR", str(base))
+    monkeypatch.delenv("GVF_LLM_TRACE_RUN_ID", raising=False)
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {"trusted": 0})
+
+    output = tmp_path / "out"
+    common = dict(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        corpus_sync=False,
+        skip=[
+            "layers",
+            "source-qc",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    assert gvf_run.run_gvf_pipeline(**common) == 0
+    reset_llm_tracing()
+
+    if skip_extract_second:
+        monkeypatch.setattr(
+            gvf_run,
+            "step_extract",
+            lambda **kwargs: pytest.fail("extract ran on the skip-extract pass"),
+        )
+        second = dict(common, skip=[*common["skip"], "extract"])
+    else:
+        captured2: dict = {}
+        monkeypatch.setattr(
+            gvf_run, "step_extract", _fake_extract_factory(captured2, name="run2")
+        )
+        second = common
+    assert gvf_run.run_gvf_pipeline(**second) == 0
+    reset_llm_tracing()
+    return base
+
+
+def test_trace_env_identity_is_restored_after_a_run(tmp_path: Path, monkeypatch):
+    """A leaked run id makes the NEXT run adopt this run's identity."""
+    from utils.llm_trace import reset_llm_tracing
+
+    base = tmp_path / "vol"
+    base.mkdir()
+    monkeypatch.setenv("GVF_LLM_TRACE_DIR", str(base))
+    monkeypatch.delenv("GVF_LLM_TRACE_RUN_ID", raising=False)
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_trust_gate", lambda db: {"trusted": 0})
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+
+    assert (
+        gvf_run.run_gvf_pipeline(
+            gene="TESTGENE",
+            email="x@example.com",
+            output=tmp_path / "out",
+            source_recovery=False,
+            corpus_sync=False,
+            skip=[
+                "layers",
+                "source-qc",
+                "paper-final-check",
+                "paper-final-check-gate",
+                "metadata-backfill",
+            ],
+        )
+        == 0
+    )
+    reset_llm_tracing()
+
+    assert os.environ["GVF_LLM_TRACE_DIR"] == str(base)
+    assert "GVF_LLM_TRACE_RUN_ID" not in os.environ
+
+
+def test_two_normal_runs_under_one_base_get_separate_trace_children(
+    tmp_path: Path, monkeypatch
+):
+    base = _run_twice(tmp_path, monkeypatch, skip_extract_second=False)
+
+    children = _trace_children(base)
+    assert len(children) == 2, f"runs shared a trace directory: {children}"
+    assert all(name.startswith("gvfrun-") for name in children), children
+    # Each child's manifest is attributed to exactly one run, so a later rebuild
+    # never raises TraceRunMismatchError. (Extraction is mocked here, so the
+    # record sets are empty; the point is that the trees are separate and each
+    # manifest names one run.)
+    from utils.llm_trace import build_trace_manifest
+
+    manifest_run_ids = set()
+    for name in children:
+        manifest = build_trace_manifest(base / name, run_id=name)
+        assert set(manifest["record_run_ids"]) <= {name}
+        manifest_run_ids.add(manifest["run_id"])
+    assert manifest_run_ids == set(children)
+
+
+def test_skip_extract_second_run_does_not_join_the_first_runs_tree(
+    tmp_path: Path, monkeypatch
+):
+    """Skip-extract reuses the run DIR; it must not reuse the run's trace tree."""
+    base = _run_twice(tmp_path, monkeypatch, skip_extract_second=True)
+
+    children = _trace_children(base)
+    assert len(children) == 2, f"skip-extract joined the earlier tree: {children}"
+
+
+def test_standalone_recovery_gets_a_per_run_child_of_the_base(
+    tmp_path: Path, monkeypatch
+):
+    """Two sequential standalone recoveries must not share a trace directory."""
+    import sqlite3
+
+    from utils.llm_trace import reset_llm_tracing
+    from scripts.recover_counts import main as recover_main
+
+    db = tmp_path / "T.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """
+        CREATE TABLE variants(variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
+            cdna_notation TEXT, protein_notation TEXT);
+        CREATE TABLE variant_papers(variant_id INTEGER, pmid TEXT,
+            source_location TEXT, key_quotes TEXT, source_layer TEXT);
+        CREATE TABLE penetrance_data(penetrance_id INTEGER PRIMARY KEY,
+            variant_id INTEGER, pmid TEXT, total_carriers_observed INTEGER,
+            affected_count INTEGER, unaffected_count INTEGER);
+        """
+    )
+    con.commit()
+    con.close()
+
+    base = tmp_path / "vol"
+    base.mkdir()
+    monkeypatch.setenv("GVF_LLM_TRACE_DIR", str(base))
+    monkeypatch.delenv("GVF_LLM_TRACE_RUN_ID", raising=False)
+
+    for _ in range(2):
+        assert (
+            recover_main(
+                ["--db", str(db), "--gene", "TESTGENE", "--dry-run", "--no-backup"]
+            )
+            == 0
+        )
+        reset_llm_tracing()
+
+    children = _trace_children(base)
+    assert len(children) == 2, f"sequential recoveries shared a directory: {children}"
+    assert all(name.startswith("recover-counts-") for name in children), children

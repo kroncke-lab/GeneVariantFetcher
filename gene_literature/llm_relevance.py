@@ -14,7 +14,32 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
+from utils.llm_trace import (
+    attempt_link_summary,
+    capture_llm_call,
+    last_llm_trace,
+    llm_attempt_ledger,
+    llm_trace_scope,
+    note_llm_attempt,
+    note_llm_outcome,
+    record_trace_event,
+)
+
 logger = logging.getLogger(__name__)
+
+
+_FALLBACK_REASONS = {
+    "no_api_key": "No API key provided; cannot assess relevance",
+    "client_unavailable": "anthropic package not installed",
+    "unparseable_response": "Could not parse LLM response",
+}
+
+
+def _fallback_reason(failure: Optional[str]) -> str:
+    """Human-readable fail-open reason that names the real failure mode."""
+    if failure and failure.startswith("api_error:"):
+        return f"LLM API call failed ({failure.split(':', 1)[1]}); failing open"
+    return _FALLBACK_REASONS.get(failure or "", "Could not parse LLM response")
 
 
 # =============================================================================
@@ -94,42 +119,62 @@ class BaseLLMRelevanceChecker(ABC):
             )
             return None
 
-    def _call_llm(self, prompt: str) -> Optional[Dict[str, Any]]:
+    def _call_llm(self, prompt: str) -> tuple[Optional[Dict[str, Any]], Optional[str]]:
         """Make an LLM call and parse the JSON response.
 
         Args:
             prompt: The prompt to send to the LLM
 
         Returns:
-            Parsed JSON dict or None if failed
+            ``(parsed_json, failure_kind)``. Exactly one is set. ``failure_kind``
+            distinguishes an **API failure** from an **unparseable response** —
+            collapsing both into ``None`` made the recorded
+            ``decision_source`` say ``fail_open_unparseable_response`` for a
+            provider outage, which reads to a curator as "the model answered
+            badly" instead of "the model never answered".
         """
         if not self.api_key:
-            return None
+            return None, "no_api_key"
 
         client = self._get_client()
         if client is None:
-            return None
+            return None, "client_unavailable"
 
+        trace_id: Optional[str] = None
         try:
-            message = client.messages.create(
-                model=self.model,
-                max_tokens=self.DEFAULT_MAX_TOKENS,
-                messages=[{"role": "user", "content": prompt}],
+            request = {
+                "model": self.model,
+                "max_tokens": self.DEFAULT_MAX_TOKENS,
+                "messages": [{"role": "user", "content": prompt}],
+            }
+            message, summary = capture_llm_call(
+                provider="anthropic_messages",
+                requested_model=self.model,
+                resolved_model=self.model,
+                request=request,
+                call=lambda: client.messages.create(**request),
             )
+            trace_id = note_llm_attempt(summary, attempt=1, role="primary")
 
             response_text = message.content[0].text.strip()
 
             # Extract JSON from response
             json_match = re.search(r"\{[^}]+\}", response_text, re.DOTALL)
             if json_match:
-                return json.loads(json_match.group())
-            else:
-                logger.warning(f"Could not parse LLM response: {response_text[:100]}")
-                return None
+                note_llm_outcome(trace_id, "accepted")
+                return json.loads(json_match.group()), None
+            logger.warning(f"Could not parse LLM response: {response_text[:100]}")
+            note_llm_outcome(trace_id, "parse_failed")
+            return None, "unparseable_response"
 
         except Exception as e:
             logger.error(f"LLM call failed: {e}")
-            return None
+            if trace_id is None:
+                trace_id = note_llm_attempt(last_llm_trace(), attempt=1, role="primary")
+            note_llm_outcome(trace_id, "error")
+            if isinstance(e, (json.JSONDecodeError, ValueError)):
+                return None, "unparseable_response"
+            return None, f"api_error:{type(e).__name__}"
 
     @abstractmethod
     def _build_prompt(self, **kwargs) -> str:
@@ -231,30 +276,61 @@ Lean toward relevance unless the abstract unmistakably indicates it is not about
         Returns:
             RelevanceScore with assessment
         """
-        if not self.api_key:
-            return self._create_fallback_result(
-                "No API key provided; cannot assess relevance", pmid=pmid
-            )
-
-        if self._get_client() is None:
-            return self._create_fallback_result(
-                "anthropic package not installed", pmid=pmid
-            )
-
-        prompt = self._build_prompt(gene_name=gene_name, title=title, abstract=abstract)
-        result = self._call_llm(prompt)
-
-        if result:
-            return RelevanceScore(
-                is_relevant=result.get("is_relevant", False),
-                confidence=float(result.get("confidence", 0.5)),
-                reasoning=result.get("reasoning", ""),
+        with (
+            llm_trace_scope(
+                gene=gene_name,
                 pmid=pmid,
+                stage="paper_relevance",
+                component=type(self).__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            if not self.api_key:
+                decision = self._create_fallback_result(
+                    "No API key provided; cannot assess relevance", pmid=pmid
+                )
+                decision_source = "fail_open_no_api_key"
+            elif self._get_client() is None:
+                decision = self._create_fallback_result(
+                    "anthropic package not installed", pmid=pmid
+                )
+                decision_source = "fail_open_client_unavailable"
+            else:
+                prompt = self._build_prompt(
+                    gene_name=gene_name, title=title, abstract=abstract
+                )
+                result, failure = self._call_llm(prompt)
+                if result:
+                    decision = RelevanceScore(
+                        is_relevant=result.get("is_relevant", False),
+                        confidence=float(result.get("confidence", 0.5)),
+                        reasoning=result.get("reasoning", ""),
+                        pmid=pmid,
+                    )
+                    decision_source = "parsed_model_response"
+                else:
+                    decision = self._create_fallback_result(
+                        _fallback_reason(failure), pmid=pmid
+                    )
+                    decision_source = f"fail_open_{failure or 'unparseable_response'}"
+
+            record_trace_event(
+                "paper_relevance_decision",
+                {
+                    "selected_model": self.model,
+                    "is_relevant": decision.is_relevant,
+                    "confidence": decision.confidence,
+                    "reasoning": decision.reasoning,
+                    "decision_source": decision_source,
+                    "selection_policy": (
+                        "Use the parsed relevance judgment when available; "
+                        "otherwise fail open so an unavailable or malformed LLM "
+                        "cannot silently discard a paper."
+                    ),
+                    **attempt_link_summary(),
+                },
             )
-        else:
-            return self._create_fallback_result(
-                "Could not parse LLM response", pmid=pmid
-            )
+            return decision
 
     def check_batch(
         self,
@@ -350,30 +426,63 @@ Be reasonably selective - the goal is to expand searches with useful terms while
         Returns:
             SynonymRelevance with assessment
         """
-        if not self.api_key:
-            return self._create_fallback_result(
-                "No API key provided; cannot assess relevance", synonym=synonym
-            )
-
-        if self._get_client() is None:
-            return self._create_fallback_result(
-                "anthropic package not installed", synonym=synonym
-            )
-
-        prompt = self._build_prompt(gene_name=gene_name, synonym=synonym, source=source)
-        result = self._call_llm(prompt)
-
-        if result:
-            return SynonymRelevance(
+        with (
+            llm_trace_scope(
+                gene=gene_name,
                 synonym=synonym,
-                is_relevant=result.get("is_relevant", False),
-                confidence=float(result.get("confidence", 0.5)),
-                reasoning=result.get("reasoning", ""),
+                stage="synonym_relevance",
+                component=type(self).__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            if not self.api_key:
+                decision = self._create_fallback_result(
+                    "No API key provided; cannot assess relevance", synonym=synonym
+                )
+                decision_source = "fail_open_no_api_key"
+            elif self._get_client() is None:
+                decision = self._create_fallback_result(
+                    "anthropic package not installed", synonym=synonym
+                )
+                decision_source = "fail_open_client_unavailable"
+            else:
+                prompt = self._build_prompt(
+                    gene_name=gene_name, synonym=synonym, source=source
+                )
+                result, failure = self._call_llm(prompt)
+                if result:
+                    decision = SynonymRelevance(
+                        synonym=synonym,
+                        is_relevant=result.get("is_relevant", False),
+                        confidence=float(result.get("confidence", 0.5)),
+                        reasoning=result.get("reasoning", ""),
+                    )
+                    decision_source = "parsed_model_response"
+                else:
+                    decision = self._create_fallback_result(
+                        _fallback_reason(failure), synonym=synonym
+                    )
+                    decision_source = f"fail_open_{failure or 'unparseable_response'}"
+
+            record_trace_event(
+                "synonym_relevance_decision",
+                {
+                    "selected_model": self.model,
+                    "synonym": synonym,
+                    "source": source,
+                    "is_relevant": decision.is_relevant,
+                    "confidence": decision.confidence,
+                    "reasoning": decision.reasoning,
+                    "decision_source": decision_source,
+                    "selection_policy": (
+                        "Use the parsed synonym judgment when available; "
+                        "otherwise fail open so an unavailable or malformed LLM "
+                        "does not suppress a legitimate search synonym."
+                    ),
+                    **attempt_link_summary(),
+                },
             )
-        else:
-            return self._create_fallback_result(
-                "Could not parse LLM response", synonym=synonym
-            )
+            return decision
 
     def check_synonyms_batch(
         self,

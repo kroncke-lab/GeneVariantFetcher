@@ -12,6 +12,7 @@ import re
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from utils.llm_trace import attempt_link_summary, llm_attempt_ledger, llm_trace_scope
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 
 SUPPORTED_VERDICTS = {"directly_supported", "inferred_supported"}
@@ -302,8 +303,23 @@ class VariantClaimVerifier(BaseLLMCaller):
         )
 
     def verify(self, card: VariantClaimCard) -> dict[str, Any]:
-        raw = self.call_llm_json(build_claim_verification_prompt(card))
-        return normalize_verification(raw, card=card)
+        with (
+            llm_trace_scope(
+                gene=card.gene,
+                pmid=card.pmid,
+                stage="variant_claim_verification",
+                component=self.__class__.__name__,
+                variant=card.variant,
+            ),
+            llm_attempt_ledger(),
+        ):
+            raw = self.call_llm_json(build_claim_verification_prompt(card))
+            normalized = normalize_verification(raw, card=card)
+            self.record_llm_decision(
+                "variant_claim_verification_decision",
+                {**normalized, **attempt_link_summary()},
+            )
+            return normalized
 
 
 def _disease_aliases(disease: str | None) -> set[str]:

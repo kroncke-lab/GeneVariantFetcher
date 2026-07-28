@@ -326,8 +326,8 @@ class TestEnrichVisionGate:
 
         captured: list = []
 
-        def _fake_extract(paths, model):
-            captured.append((paths, model))
+        def _fake_extract(paths, model, *, gene=None, pmid=None):
+            captured.append((paths, model, gene, pmid))
             return "\n\n## FIGURE IMAGE TEXT\n\n### Figure Image 1: env_fig.png\n\nEnv-triggered extraction.\n"
 
         monkeypatch.setattr(_mod, "extract_images_to_markdown", _fake_extract)
@@ -351,9 +351,12 @@ class TestEnrichVisionGate:
 
         assert "Env-triggered extraction" in result.unified_markdown
         assert len(captured) == 1
-        _, model_used = captured[0]
+        _, model_used, gene_used, pmid_used = captured[0]
         # Model comes from settings.get_vision_model() — just verify it's a string.
         assert isinstance(model_used, str) and model_used
+        # The PMID must reach the vision call so its trace is paper-scoped.
+        assert pmid_used == "33333333"
+        assert gene_used is None
 
     def test_non_image_nested_files_ignored(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

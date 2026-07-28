@@ -47,13 +47,12 @@ Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
 the 2026-07-12 four-gene supplement reconciliation, fold-gap closure, and the
 strictly gated SCN5A supplement-source land:
 
-- `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
-- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
-- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db`
-- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db`
+- `validation_runs/canonical_baseline/KCNH2.db`
+- `validation_runs/canonical_baseline/KCNQ1.db`
+- `validation_runs/canonical_baseline/SCN5A.db`
+- `validation_runs/canonical_baseline/RYR2.db`
 
-Scored artifact:
-`recall_metrics/fulltext_supplements_20260712/`.
+Current local scored artifact: `recall_metrics/current/`.
 
 ## Targeted pfs12 enforcement spot check (not the canonical baseline)
 

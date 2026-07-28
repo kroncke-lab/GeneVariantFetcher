@@ -39,6 +39,8 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
 - `docs/EXTRACTION_CONTRACT.md` - meta prompt: what extraction must capture and
   must refuse, the reference prompt, and the map from each rule to the trust-gate
   reason code that backs it (or the note that nothing does).
+- `docs/LLM_TRACING.md` - per-call prompt/response and decision trace contract,
+  benchmark locking, and the curator adjudication workflow.
 - `docs/VARIANT_BROWSER_INTEGRATION.md` - publish/adjudication round trip with
   the sibling Variant_Browser app.
 - `benchmarks/curated_extraction_eval/README.md` - fast curated extraction
@@ -98,6 +100,14 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 - Review DB publish/adjudication: `gvf-run --publish-review` and
   `scripts/ingest_review_adjudications.py`; the full contract lives in
   `docs/VARIANT_BROWSER_INTEGRATION.md`.
+- Additive count recovery: `pipeline/count_recovery.py` (gvf-run Step 3.55,
+  default OFF via `COUNT_RECOVERY_ENABLED`) with `scripts/recover_counts.py` as
+  the standalone CLI. Always `--dry-run` first; it refuses to run under
+  `--skip trust-gate`.
+- LLM traces: written for the whole `gvf-run` lifetime by `utils/llm_trace.py`;
+  the browser report is built by `utils/llm_trace_html.py`
+  (`scripts/build_llm_trace_html.py` is a thin CLI). Contract, run isolation,
+  integrity levels, and the report size policy are in `docs/LLM_TRACING.md`.
 
 ## Files To Know
 

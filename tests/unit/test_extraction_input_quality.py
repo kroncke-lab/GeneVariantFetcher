@@ -27,6 +27,7 @@ Offline: no model calls, no network.
 
 import re
 import time
+from pathlib import Path
 
 import pytest
 
@@ -35,7 +36,7 @@ from config.constants import (
     MIN_ALPHANUMERIC_RATIO,
     MIN_EXTRACTION_INPUT_SIZE,
 )
-from pipeline.extraction import ExpertExtractor
+from pipeline.extraction import ExpertExtractor, _find_data_zones_file
 
 PROSE = (
     "Proband II-3 presented with syncope during exercise and a corrected QT "
@@ -319,3 +320,15 @@ class TestMarkupProfile:
 
         assert density > 0.9
         assert elapsed < 2.0, f"markup profiling went superlinear: {elapsed:.2f}s"
+
+
+def test_data_zones_discovery_never_scans_implicit_working_tree(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A stale file in cwd must not be selected without an explicit run path."""
+    stale = tmp_path / "12345678_DATA_ZONES.md"
+    stale.write_text("stale cross-run artifact", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    assert _find_data_zones_file("12345678") is None
+    assert _find_data_zones_file("12345678", [str(tmp_path)]) == stale

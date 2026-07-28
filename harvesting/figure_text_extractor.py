@@ -21,6 +21,19 @@ from typing import List
 import requests
 
 from config.settings import get_settings
+from utils.llm_trace import (
+    OUTCOME_DISCARDED,
+    OUTCOME_ERROR,
+    OUTCOME_PARSED,
+    attempt_link_summary,
+    capture_llm_call,
+    last_llm_trace,
+    llm_attempt_ledger,
+    llm_trace_scope,
+    note_llm_attempt,
+    note_llm_outcome,
+    record_trace_event,
+)
 from utils.llm_utils import (
     azure_responses_api_url,
     build_reasoning_effort_kwargs,
@@ -67,12 +80,22 @@ def _strip_provider_prefix(model: str) -> str:
     return model
 
 
-def extract_images_to_markdown(image_paths: List[Path], model: str) -> str:
+def extract_images_to_markdown(
+    image_paths: List[Path],
+    model: str,
+    *,
+    gene: "str | None" = None,
+    pmid: "str | None" = None,
+) -> str:
     """Call a vision LLM on each image and return a combined markdown section.
 
     Returns an empty string when ``image_paths`` is empty — no API call is
     made. Individual image failures are logged and skipped; they do not abort
     the batch.
+
+    ``gene``/``pmid`` come from the caller because a figure OCR prompt contains
+    neither: without them every figure read for every paper collapsed into one
+    ``_unscoped/`` group in the trace tree.
     """
     if not image_paths:
         return ""
@@ -80,7 +103,7 @@ def extract_images_to_markdown(image_paths: List[Path], model: str) -> str:
     parts: List[str] = []
     for idx, img_path in enumerate(image_paths, start=1):
         try:
-            text = _extract_one(img_path, model)
+            text = _extract_one(img_path, model, gene=gene, pmid=pmid)
         except Exception as exc:
             logger.warning(
                 "Figure text extraction failed for %s: %s", img_path.name, exc
@@ -116,27 +139,101 @@ def _image_to_data_url(image_path: Path) -> str:
     return f"data:{mime};base64,{b64}"
 
 
-def _extract_one(image_path: Path, model: str) -> str:
+def _extract_one(
+    image_path: Path,
+    model: str,
+    *,
+    gene: "str | None" = None,
+    pmid: "str | None" = None,
+) -> str:
     data_url = _image_to_data_url(image_path)
-    if _uses_responses_api(model):
-        return _extract_one_responses_api(data_url, model)
+    responses_path = _uses_responses_api(model)
+    with (
+        llm_trace_scope(
+            gene=gene,
+            pmid=pmid,
+            stage="figure_text_extraction",
+            component="figure_text_extractor",
+            operation="responses_api" if responses_path else "chat_completions",
+            image_path=str(image_path),
+        ),
+        llm_attempt_ledger(),
+    ):
+        trace_id: "str | None" = None
+        try:
+            if responses_path:
+                text = _extract_one_responses_api(data_url, model)
+                trace_id = note_llm_attempt(last_llm_trace(), role="figure_ocr")
+            else:
+                response = litellm_completion(
+                    model=model,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": _EXTRACT_PROMPT},
+                                {"type": "image_url", "image_url": {"url": data_url}},
+                            ],
+                        }
+                    ],
+                    temperature=0,
+                    max_tokens=2048,
+                    **build_reasoning_effort_kwargs(
+                        model, get_settings().vision_reasoning_effort
+                    ),
+                )
+                trace_id = note_llm_attempt(last_llm_trace(), role="figure_ocr")
+                text = (response.choices[0].message.content or "").strip()
+        except BaseException as exc:
+            if trace_id is None:
+                trace_id = note_llm_attempt(last_llm_trace(), role="figure_ocr")
+            note_llm_outcome(trace_id, OUTCOME_ERROR)
+            _record_figure_text_decision(
+                image_path,
+                model,
+                characters=0,
+                decision_source="call_failed",
+                error=f"{type(exc).__name__}: {exc}",
+            )
+            raise
+        # An empty extraction is a legitimate outcome for a decorative figure —
+        # it must stay distinguishable from a provider failure and from real text.
+        note_llm_outcome(trace_id, OUTCOME_PARSED if text else OUTCOME_DISCARDED)
+        _record_figure_text_decision(
+            image_path,
+            model,
+            characters=len(text),
+            decision_source="text_extracted" if text else "empty_output",
+        )
+        return text
 
-    response = litellm_completion(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": _EXTRACT_PROMPT},
-                    {"type": "image_url", "image_url": {"url": data_url}},
-                ],
-            }
-        ],
-        temperature=0,
-        max_tokens=2048,
-        **build_reasoning_effort_kwargs(model, get_settings().vision_reasoning_effort),
+
+def _record_figure_text_decision(
+    image_path: Path,
+    model: str,
+    *,
+    characters: int,
+    decision_source: str,
+    error: "str | None" = None,
+) -> None:
+    record_trace_event(
+        "figure_text_extraction_decision",
+        {
+            "image": image_path.name,
+            "image_path": str(image_path),
+            "model": model,
+            "characters_extracted": characters,
+            "text_extracted": bool(characters),
+            "decision_source": decision_source,
+            "error": error,
+            "selection_policy": (
+                "OCR one figure image. An empty result means the figure carried "
+                "no usable text; it is not a failure and adds nothing to the "
+                "unified source."
+            ),
+            **attempt_link_summary(),
+        },
     )
-    return (response.choices[0].message.content or "").strip()
 
 
 def _extract_one_responses_api(image_data_url: str, model: str) -> str:
@@ -168,23 +265,32 @@ def _extract_one_responses_api(image_data_url: str, model: str) -> str:
             model, get_settings().vision_reasoning_effort
         ),
     }
-    response = requests.post(
-        url,
-        headers={"api-key": key, "Content-Type": "application/json"},
-        json=body,
-        timeout=120,
-    )
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"Responses API returned {response.status_code}: {response.text[:300]}"
-        )
 
-    try:
-        data = response.json()
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(
-            f"Responses API returned invalid JSON: {response.text[:300]}"
-        ) from exc
+    def send_request() -> dict:
+        response = requests.post(
+            url,
+            headers={"api-key": key, "Content-Type": "application/json"},
+            json=body,
+            timeout=120,
+        )
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Responses API returned {response.status_code}: {response.text[:300]}"
+            )
+        try:
+            return response.json()
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"Responses API returned invalid JSON: {response.text[:300]}"
+            ) from exc
+
+    data, _trace = capture_llm_call(
+        provider="azure_openai_responses_http",
+        requested_model=model,
+        resolved_model=_strip_provider_prefix(model),
+        request={"endpoint": url, "body": body},
+        call=send_request,
+    )
 
     for item in data.get("output", []) or []:
         if item.get("type") != "message":

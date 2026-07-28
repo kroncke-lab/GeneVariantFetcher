@@ -12,6 +12,11 @@ from typing import List, Optional
 from config.constants import FILTER_CLINICAL_KEYWORDS
 from config.settings import get_settings
 from utils.gene_metadata import get_gene_aliases
+from utils.llm_trace import (
+    attempt_link_summary,
+    llm_attempt_ledger,
+    llm_trace_scope,
+)
 from utils.llm_utils import BaseLLMCaller
 from utils.models import FilterDecision, FilterResult, FilterTier, Paper
 
@@ -315,12 +320,32 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
         """
         Apply LLM-based filter to classify the paper.
 
+        The trace scope is opened here, per call, and never stored on the
+        instance: ``pipeline/steps.py`` constructs ONE ``InternFilter`` and
+        submits ``_classify_pmid`` to a ~20-worker ``ThreadPoolExecutor``, so
+        instance-level scope state cross-attributes one thread's PMID onto
+        another thread's prompt/response record and decision event. The
+        ContextVar scope in :mod:`utils.llm_trace` is thread-local, so each
+        worker's records carry its own paper.
+
         Args:
             paper: Paper object with title and abstract.
 
         Returns:
             FilterResult with LLM-based decision.
         """
+        with (
+            llm_trace_scope(
+                gene=paper.gene_symbol,
+                pmid=paper.pmid,
+                stage="tier2_relevance_filter",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            return self._filter_traced(paper)
+
+    def _filter_traced(self, paper: Paper) -> FilterResult:
         if not paper.abstract or not paper.title:
             logger.warning(
                 f"PMID {paper.pmid} missing title/abstract for Intern filter"
@@ -373,7 +398,7 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                     f"PMID {paper.pmid} - Intern filter: malformed/empty LLM "
                     f"output (keys={list(result_data.keys())}); failing OPEN."
                 )
-                return FilterResult(
+                result = FilterResult(
                     decision=FilterDecision.PASS,
                     tier=FilterTier.TIER_2_INTERN,
                     reason="Inconclusive LLM output (missing/invalid decision key); fail-open",
@@ -385,6 +410,18 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                         "raw_keys": list(result_data.keys()),
                     },
                 )
+                self.record_llm_decision(
+                    "tier2_relevance_decision",
+                    {
+                        "model_decision": raw_decision,
+                        "final_decision": result.decision.value,
+                        "reason": result.reason,
+                        "fail_open": True,
+                        "decision_source": "fail_open_unparseable_response",
+                        **attempt_link_summary(),
+                    },
+                )
+                return result
 
             reason = result_data.get("reason") or "No reason provided"
             try:
@@ -424,6 +461,19 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                 f"(confidence: {confidence:.2f}) - {reason}"
             )
 
+            self.record_llm_decision(
+                "tier2_relevance_decision",
+                {
+                    "model_decision": decision_str,
+                    "final_decision": decision.value,
+                    "confidence": confidence,
+                    "confidence_threshold": self.confidence_threshold,
+                    "fail_open_target_gene_signal": fail_open_target_gene_signal,
+                    "reason": reason,
+                    "decision_source": "model_classification",
+                    **attempt_link_summary(),
+                },
+            )
             return FilterResult(
                 decision=decision,
                 tier=FilterTier.TIER_2_INTERN,
@@ -439,6 +489,18 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
 
         except Exception as e:
             logger.error(f"PMID {paper.pmid} - Intern filter failed: {e}")
+            self.record_llm_decision(
+                "tier2_relevance_decision",
+                {
+                    "model_decision": None,
+                    "final_decision": FilterDecision.PASS.value,
+                    "reason": f"LLM error (fail-open): {e}",
+                    "fail_open": True,
+                    "decision_source": "fail_open_call_failure",
+                    "error_type": type(e).__name__,
+                    **attempt_link_summary(),
+                },
+            )
             # On error, fail-open (PASS) to avoid losing papers due to transient LLM issues
             return FilterResult(
                 decision=FilterDecision.PASS,
@@ -577,7 +639,28 @@ Respond ONLY with valid JSON. Be recall-biased: when in doubt, KEEP with low con
                 - reason: Explanation for the decision
                 - confidence: Confidence score (0.0-1.0)
                 - pmid: PMID if provided
+
+        Like :meth:`InternFilter.filter`, the trace scope is per-call and
+        thread-local because one instance serves the whole filter thread pool.
         """
+        with (
+            llm_trace_scope(
+                gene=gene,
+                pmid=pmid,
+                stage="clinical_data_triage",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            return self._triage_traced(title, abstract, gene, pmid)
+
+    def _triage_traced(
+        self,
+        title: str,
+        abstract: str,
+        gene: str,
+        pmid: Optional[str],
+    ) -> str:
         if not abstract or not title:
             logger.warning(
                 f"Missing title or abstract for triage{f' (PMID: {pmid})' if pmid else ''}"
@@ -634,10 +717,31 @@ Respond ONLY with valid JSON. Be recall-biased: when in doubt, KEEP with low con
                 f"(confidence: {confidence:.2f}) - {reason}"
             )
 
+            self.record_llm_decision(
+                "clinical_data_triage_decision",
+                {
+                    **result,
+                    "decision_source": "model_triage",
+                    **attempt_link_summary(),
+                },
+            )
             return result
 
         except Exception as e:
             logger.error(f"Triage failed{f' for PMID {pmid}' if pmid else ''}: {e}")
+            self.record_llm_decision(
+                "clinical_data_triage_decision",
+                {
+                    "decision": "KEEP",
+                    "reason": f"Triage error (fail-open): {e}",
+                    "confidence": 0.0,
+                    "pmid": pmid,
+                    "fail_open": True,
+                    "decision_source": "fail_open_call_failure",
+                    "error_type": type(e).__name__,
+                    **attempt_link_summary(),
+                },
+            )
             # On error, fail-open (KEEP) to avoid losing papers due to transient LLM issues
             return {
                 "decision": "KEEP",

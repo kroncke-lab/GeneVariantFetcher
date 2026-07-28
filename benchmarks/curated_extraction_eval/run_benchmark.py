@@ -62,20 +62,16 @@ EXIT_STAGE_WARNINGS = 3
 # Canonical DBs — kept in sync with docs/RECALL_STATUS.md "Current Canonical
 # Baseline" and build_fixture.py.
 CANONICAL_DBS = {
-    "KCNH2": REPO / "results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db",
-    "KCNQ1": REPO
-    / "validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db",
-    "SCN5A": REPO
-    / "validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
-    "RYR2": REPO
-    / "validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db",
+    "KCNH2": REPO / "validation_runs/canonical_baseline/KCNH2.db",
+    "KCNQ1": REPO / "validation_runs/canonical_baseline/KCNQ1.db",
+    "SCN5A": REPO / "validation_runs/canonical_baseline/SCN5A.db",
+    "RYR2": REPO / "validation_runs/canonical_baseline/RYR2.db",
     # Non-cardiac diversity genes (gold via gold_overrides/). Existence-gated in
-    # resolve_dbs, so checkouts without these run dirs just skip them.
-    "BRCA1": REPO / "results/BRCA1/20260616_132646/BRCA1.db",
-    "BRCA2": REPO
-    / "results/BRCA2/20260606_134517_hereditary_breast_cancer_500/BRCA2/20260606_134519/BRCA2.refresh_20260606_205358.db",
-    "MYBPC3": REPO / "results/MYBPC3/20260616_132646/MYBPC3.refresh_20260617_091043.db",
-    "APOE": REPO / "results/APOE/20260621_072155_full_redo/APOE.db",
+    # resolve_dbs, so checkouts without the local baseline directory skip them.
+    "BRCA1": REPO / "validation_runs/canonical_baseline/BRCA1.db",
+    "BRCA2": REPO / "validation_runs/canonical_baseline/BRCA2.db",
+    "MYBPC3": REPO / "validation_runs/canonical_baseline/MYBPC3.db",
+    "APOE": REPO / "validation_runs/canonical_baseline/APOE.db",
 }
 
 

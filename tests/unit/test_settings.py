@@ -95,3 +95,27 @@ def test_explicit_overrides_win_over_provider_defaults(monkeypatch):
     settings = get_settings()
     assert settings.get_requests_per_minute() == 75
     assert settings.get_max_workers() == 5
+
+
+def test_count_recovery_settings_are_normalized(monkeypatch):
+    _baseline_env(monkeypatch, "azure")
+    monkeypatch.setenv("COUNT_RECOVERY_FIELDS", " Carriers,affected,carriers ")
+    monkeypatch.setenv("COUNT_RECOVERY_REASONING_EFFORT", "max")
+    settings = get_settings()
+    assert settings.count_recovery_fields == "carriers,affected"
+    assert settings.count_recovery_reasoning_effort == "xhigh"
+
+
+@pytest.mark.parametrize(
+    "name,value",
+    [
+        ("COUNT_RECOVERY_FIELDS", "carriers,unknown"),
+        ("COUNT_RECOVERY_MAX_VARIANTS_PER_CALL", "0"),
+        ("COUNT_RECOVERY_MAX_SOURCE_CHARS", "-1"),
+    ],
+)
+def test_invalid_count_recovery_settings_fail_early(monkeypatch, name, value):
+    _baseline_env(monkeypatch, "azure")
+    monkeypatch.setenv(name, value)
+    with pytest.raises(ValueError):
+        get_settings()

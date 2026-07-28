@@ -336,10 +336,82 @@ deployment names:
 .venv/bin/python scripts/smoke_azure_models.py --include-final
 ```
 
+### LLM execution and decision traces
+
+`gvf-run` configures `utils/llm_trace.py` for the **whole run lifetime** — not
+just extraction — so post-extraction stages (count recovery, per-paper final
+check, claim verification) are traced on every path, including `--skip extract`.
+The recorder preserves exact textual requests, secret-safe parameters, provider
+response envelopes, timing/usage, errors, and provider-exposed reasoning
+*content* (token counts are reported separately and never imply exposed
+reasoning). Scope is thread-local, which is what keeps the ~20 concurrent Tier-2
+filter workers that share one filter instance from cross-attributing one paper's
+evidence to another. Decision events carry `accepted_response_trace_id`,
+`discarded_trace_ids` and `attempt_trace_links`, so retries, JSON repairs, parse
+failures and fallbacks are distinguishable from the accepted response.
+
+Run isolation matters because a `--skip extract` run reuses an older run's
+directory: it writes to `llm_traces_<gvf run id>/` and its own report file, and a
+manifest rebuild refuses to relabel another run's records. Integrity is reported
+at one of three honest levels (`generated_now` / `write_time_verified` /
+`locked`) by cross-checking each record against the write-time digest in
+`trace_index.jsonl`.
+
+The extraction-blinded paper evaluation applies a stronger integrity contract:
+route, route-decision, extraction, and final-decision traces are required for
+every paper, hashed into `llm_traces/trace_manifest.json`, and locked (together
+with `trace_index.jsonl`) before gold scoring. `utils/llm_trace_html.py` renders
+those same records into the self-contained `llm_trace_report.html` per-paper
+browser timeline — with a route-coverage panel, bounded embedded bodies, and an
+explicit omissions list; `scripts/build_llm_trace_html.py` is a thin CLI over it.
+The benchmark hashes and locks that report before gold scoring as well. See
+`docs/LLM_TRACING.md`.
+
+### Additive count recovery (Step 3.55, default OFF)
+
+Every other count stage is *subtractive*: `carrier_guard` NULLs implausible
+counts, `count_outlier_guard` clears statistical outliers, `count_classifier`
+refuses counts whose provenance is not per-variant. `pipeline/count_recovery.py`
+is the only stage that **fills** a count the extractor never emitted — measured
+on the locked 48-paper set, production left `total_carriers_observed` NULL on
+58.4% of the gold variants it had correctly identified.
+
+Contract:
+
+- **Fill only.** It asks only about variants already stored for the paper, and
+  writes only into NULL columns. An existing count is never overwritten.
+- **Paper-derived only.** ClinVar/PubTator linkage-only variants are excluded by
+  default (`--include-linkage-rows` is an inspection mode), because asking for a
+  count the paper never states is meaningless.
+- **Quote-grounded, role-proven.** Every accepted value needs a verbatim quote
+  from the source text the model actually saw, which locally binds the number to
+  the requested variant *and* proves a per-variant role. Denominator grammars
+  (`X of Y`, `X/Y`, `among Y`, `N cases of <phenotype>`), allele counts,
+  population frequencies, family counts and measurements are rejected in both
+  the prose and table branches; prose with two or more candidate integers fails
+  closed unless the requested one carries an explicit carrier label locally. The
+  model also declares a structured `count_role`, and a non-per-variant
+  declaration is a veto.
+- **Role into the trust path.** Accepted values write `count_role` +
+  `evidence_locator` into `variant_papers.count_provenance` (merged, so a stale
+  `cohort_total` cannot spuriously fire `count_is_total`) and land as
+  `trust_tier='quarantine'`; trust-gate rule `recovered_count_unverified` (tg4)
+  keeps any recovery-sourced count without a proven role quarantined. Step 3.55
+  **refuses** to run when `--skip trust-gate` is in effect.
+- **Durable and reversible.** The DB is copied to `*.before_count_recovery.db`,
+  each paper commits under its own `SAVEPOINT`, and every write is logged to
+  `count_recovery_log` with quote, role, locator, model and effort.
+- **Auditable.** Each batch runs in a `count_recovery` trace scope and emits a
+  `count_recovery_decision` event.
+
+`COUNT_RECOVERY_ENABLED` stays **off** until a clean v2 measurement from
+untouched baseline DB copies shows it improves count recall without an
+unacceptable MAE or attribution regression (see `TASKS.md`).
+
 ### Gold-free trust gate (Step 3.7) and traceability
 
 Before the LLM final check, a deterministic **gold-free** gate
-(`pipeline/trust_gate.py`, rule generation **tg3**) soft-quarantines
+(`pipeline/trust_gate.py`, rule generation **tg4**) soft-quarantines
 structurally-implausible counts into a two-tier (`trusted` / `quarantine`)
 projection. It **never** deletes a row or NULLs a raw value — quarantined fields
 are only masked from the trusted projection the scorer/report read by default,
@@ -355,6 +427,7 @@ transfer from cardiac missense to BRCA case-control:
 | `paper_outlier` | carrier count is a wild within-paper outlier (median × k) |
 | `study_type_mismatch` | clinical carrier counts from a review/functional/GWAS paper |
 | `implied_unaffected_zero` | a *derived* unaffected=0 (affected=total, zero not sourced) in an affirmatively cohort/biobank/case-control/family-cascade study — masks **only** the unaffected field; dormant on proband/unknown-design papers |
+| `recovered_count_unverified` | a count written by Step 3.55 whose provenance does not name the per-variant role for the field it filled — recovery lands rows as `quarantine` on purpose, so this gate is what *promotes* them |
 
 Each reason maps to the count fields it masks (`REASON_FIELDS`); most mask the
 whole fact, `implied_unaffected_zero` masks only `unaffected`. The scorer reads

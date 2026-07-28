@@ -35,6 +35,15 @@ from pipeline.prompts import (
     HIGH_VARIANT_THRESHOLD,
 )
 from utils.gene_metadata import gene_alias_regex, known_gene_aliases
+from utils.llm_trace import (
+    attempt_link_summary,
+    finalize_attempt_selection,
+    ledger_mark,
+    ledger_trace_ids_since,
+    llm_attempt_ledger,
+    llm_trace_scope,
+    record_trace_event,
+)
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
 from utils.env_utils import get_env_int
@@ -61,13 +70,12 @@ TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 2
 def _find_data_zones_file(
     pmid: str, search_dirs: Optional[List[str]] = None
 ) -> Optional[Path]:
-    """
-    Search for a DATA_ZONES.md file for the given PMID.
+    """Find a DATA_ZONES.md file only within explicitly supplied directories.
 
-    .. deprecated::
-        This function uses directory scanning which is inefficient and fragile.
-        Prefer using manifest-based file discovery via `cli.extract` which reads
-        file paths directly from scout_manifest.json.
+    Production callers pass the run's full-text/scout directory. Broad scanning
+    of the repository root and test/output-shaped directories was deprecated
+    because it could silently select a stale artifact from another run; that
+    fallback has been removed.
 
     Args:
         pmid: PubMed ID to search for
@@ -77,8 +85,6 @@ def _find_data_zones_file(
     Returns:
         Path to DATA_ZONES.md if found, None otherwise
     """
-    import warnings
-
     filename = f"{pmid}_DATA_ZONES.md"
 
     # If explicit search directories provided, check them first
@@ -101,45 +107,6 @@ def _find_data_zones_file(
                         if zones_file.exists():
                             logger.debug(f"Found DATA_ZONES.md at {zones_file}")
                             return zones_file
-
-    # Fallback: search common output directory patterns (DEPRECATED behavior)
-    fallback_dirs = [".", "pmc_fulltext", "output"]
-    used_fallback = False
-    for search_dir in fallback_dirs:
-        path = Path(search_dir)
-        if path.exists() and path.is_dir():
-            zones_file = path / filename
-            if zones_file.exists():
-                if not used_fallback:
-                    warnings.warn(
-                        f"Using deprecated directory scanning fallback for {pmid}. "
-                        "Use cli.extract with --manifest for better reliability.",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
-                    used_fallback = True
-                logger.debug(f"Found DATA_ZONES.md at {zones_file} (fallback)")
-                return zones_file
-
-    # Also search subdirectories matching test/output patterns (DEPRECATED)
-    cwd = Path(".")
-    for subdir in cwd.iterdir():
-        if subdir.is_dir() and (
-            subdir.name.startswith("test_")
-            or subdir.name.startswith("output_")
-            or pmid in subdir.name
-        ):
-            zones_file = subdir / filename
-            if zones_file.exists():
-                if not used_fallback:
-                    warnings.warn(
-                        f"Using deprecated directory scanning fallback for {pmid}. "
-                        "Use cli.extract with --manifest for better reliability.",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
-                logger.debug(f"Found DATA_ZONES.md at {zones_file} (subdir fallback)")
-                return zones_file
 
     return None
 
@@ -192,10 +159,19 @@ class ExpertExtractor(BaseLLMCaller):
         self.adjudication_risk_threshold = settings.tier3_adjudication_risk_threshold
         self.evidence_packet_max_chars = settings.tier3_evidence_packet_max_chars
         self.adjudication_max_tokens = settings.tier3_adjudication_max_tokens
+        self.adjudicator_reasoning_effort = (
+            settings.tier3_adjudicator_reasoning_effort
+            if settings.tier3_adjudicator_reasoning_effort is not None
+            else settings.tier3_reasoning_effort
+        )
         self.max_verifier_cards = settings.tier3_max_verifier_cards
         # Table-router decision for the extraction attempt in flight; folded into
         # extraction_metadata so the routing call is auditable after the run.
         self._last_table_router_decision: Optional[Dict[str, Any]] = None
+        # {id(ExtractionResult): [trace_id, ...]} for the extraction in flight.
+        # Reset per `extract()` call; `pipeline/steps.py` uses a threading.local()
+        # extractor, so one instance is never shared across concurrent papers.
+        self._candidate_trace_ids: Dict[int, List[str]] = {}
 
         super().__init__(
             model=self.models[0],
@@ -4641,7 +4617,14 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
         try:
-            continuation_data = self.call_llm_json(prompt)
+            # Its own stage: a continuation call asks a different question of the
+            # same model, and inheriting "paper_variant_extraction" made it
+            # indistinguishable from the primary call in the trace.
+            with llm_trace_scope(
+                stage="paper_extraction_continuation",
+                component=f"{self.__class__.__name__}.continuation",
+            ):
+                continuation_data = self.call_llm_json(prompt)
             merged = self._merge_continuation_results(base_data, continuation_data)
             logger.info(
                 f"PMID {paper.pmid} - Continuation successful. Total variants now: {len(merged.get('variants', []))}"
@@ -5472,10 +5455,19 @@ Return strict JSON with this schema:
         return out
 
     def _call_adjudicator(self, model: str, prompt: str) -> dict[str, Any]:
-        saved_model, saved_max_tokens, saved_temperature = (
+        """Run one Tier-3 adjudication under its own trace stage.
+
+        Without the distinct stage the adjudicator's prompt/response record was
+        indistinguishable from primary extraction: same stage, same component,
+        different model. ``reasoning_effort`` is swapped too — the adjudicator
+        runs a different model, so inheriting the primary extractor's effort was
+        a silent mismatch (TIER3_ADJUDICATOR_REASONING_EFFORT now controls it).
+        """
+        saved_model, saved_max_tokens, saved_temperature, saved_effort = (
             self.model,
             self.max_tokens,
             self.temperature,
+            self.reasoning_effort,
         )
         try:
             self.model = model
@@ -5483,11 +5475,18 @@ Return strict JSON with this schema:
                 model, self.adjudication_max_tokens
             )
             self.temperature = 0.0
-            return self.call_llm_json(prompt)
+            self.reasoning_effort = self.adjudicator_reasoning_effort
+            with llm_trace_scope(
+                stage="paper_extraction_adjudication",
+                component=f"{self.__class__.__name__}.adjudicator",
+                adjudicator_model=model,
+            ):
+                return self.call_llm_json(prompt)
         finally:
             self.model = saved_model
             self.max_tokens = saved_max_tokens
             self.temperature = saved_temperature
+            self.reasoning_effort = saved_effort
 
     def _merge_adjudicated_extraction(
         self,
@@ -6596,6 +6595,76 @@ Return strict JSON with this schema:
             )
 
     def extract(self, paper: Paper) -> ExtractionResult:
+        """Extract one paper inside a PMID-scoped LLM/decision trace.
+
+        The attempt ledger spans the whole model-fallback loop, so the emitted
+        ``paper_extraction_selection`` event names the exact trace id that
+        produced the stored extraction and lists the ones that did not. Without
+        it a curator faced up to ~16 identically-scoped ``llm_call`` records
+        (``@llm_retry`` attempts, an empty-content retry, a JSON repair whose
+        output can become the accepted data) with no way to tell them apart.
+        """
+        with (
+            llm_trace_scope(
+                gene=paper.gene_symbol,
+                pmid=paper.pmid,
+                stage="paper_variant_extraction",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            self._candidate_trace_ids = {}
+            try:
+                result = self._extract_with_model_fallback(paper)
+                # Finalize only AFTER the winner is chosen. The fallback loop can
+                # run model B successfully and still keep model A's higher-yield
+                # result; without this, B's call (the last one to parse) was
+                # reported as accepted and A's was never marked discarded.
+                finalize_attempt_selection(
+                    self._candidate_trace_ids.get(id(result), [])
+                )
+                extracted = result.extracted_data or {}
+                record_trace_event(
+                    "paper_extraction_selection",
+                    {
+                        "success": result.success,
+                        "configured_models_in_order": list(self.models),
+                        "selected_model": result.model_used,
+                        "variant_count": len(extracted.get("variants") or []),
+                        "error": result.error,
+                        "selection_policy": (
+                            "Try configured models in order; continue after a "
+                            "failure or when variant yield is below the adaptive "
+                            "threshold, and retain the highest-yield successful "
+                            "extraction. accepted_response_trace_ids names the "
+                            "call(s) that produced the RETAINED result, which is "
+                            "not necessarily the last call made."
+                        ),
+                        **attempt_link_summary(),
+                    },
+                )
+                return result
+            finally:
+                self._candidate_trace_ids = {}
+
+    def _attempt_extraction_traced(
+        self, paper: Paper, model: str, **kwargs
+    ) -> ExtractionResult:
+        """One model attempt, remembering which provider calls it produced.
+
+        The association is by ``id(result)`` because the fallback loop compares
+        and returns whole ``ExtractionResult`` objects; the winner is identified
+        by object identity, so that is the correct key.
+        """
+        mark = ledger_mark()
+        result = self._attempt_extraction(paper, model, **kwargs)
+        trace_ids = ledger_trace_ids_since(mark)
+        if getattr(self, "_candidate_trace_ids", None) is None:
+            self._candidate_trace_ids = {}
+        self._candidate_trace_ids[id(result)] = trace_ids
+        return result
+
+    def _extract_with_model_fallback(self, paper: Paper) -> ExtractionResult:
         """
         Extract structured variant data from a paper using a tiered model approach.
         """
@@ -6642,7 +6711,7 @@ Return strict JSON with this schema:
             )
 
         for idx, model in enumerate(self.models):
-            result = self._attempt_extraction(
+            result = self._attempt_extraction_traced(
                 paper,
                 model,
                 prepared_full_text=prepared_full_text,

@@ -40,6 +40,7 @@ _TIER_ENV_VARS = {
     "table_router_model": "TABLE_ROUTER_MODEL",
     "vision_model": "VISION_MODEL",
     "paper_final_check_model": "PAPER_FINAL_CHECK_MODEL",
+    "count_recovery_model": "COUNT_RECOVERY_MODEL",
 }
 
 
@@ -285,6 +286,17 @@ class Settings(BaseSettings):
             "outputs. These models see compact evidence packets, not full papers."
         ),
     )
+    tier3_adjudicator_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="TIER3_ADJUDICATOR_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for Tier 3 adjudicator calls "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). None "
+            "inherits TIER3_REASONING_EFFORT — the adjudicator swaps model, "
+            "token budget and temperature, so without this knob it silently ran "
+            "at the primary extractor's effort on a different model."
+        ),
+    )
     tier3_adjudication_risk_threshold: int = Field(
         default=2,
         validation_alias="TIER3_ADJUDICATION_RISK_THRESHOLD",
@@ -340,6 +352,64 @@ class Settings(BaseSettings):
             "flag/clear (all|carriers,affected,unaffected). Use "
             "'affected,unaffected' to preserve carrier counts while refusing "
             "ambiguous affected-status splits."
+        ),
+    )
+    # Count RECOVERY is the additive counterpart to the three guards above:
+    # they remove counts that should not be there, this one fills counts the
+    # extractor never emitted. See pipeline/count_recovery.py.
+    count_recovery_enabled: bool = Field(
+        default=False,
+        validation_alias="COUNT_RECOVERY_ENABLED",
+        description=(
+            "Run the targeted carrier-count recovery pass (gvf-run Step 3.55). "
+            "Default off pending a clean measurement of the hardened v2 pass. "
+            "For variants already stored for a paper whose count columns are "
+            "NULL, a reasoning model is asked for only those counts and must "
+            "locally bind each value to its variant in a verbatim quote; "
+            "existing counts are never overwritten. Gold-free."
+        ),
+    )
+    count_recovery_model: str = Field(
+        default="azure_ai/gpt-5.6-sol",
+        validation_alias="COUNT_RECOVERY_MODEL",
+        description=(
+            "Model for the count-recovery pass. Defaults to the strongest "
+            "available reasoning deployment because count attribution is the "
+            "judgment-heaviest step; the prompt is a variant list plus source, "
+            "not a full re-extraction."
+        ),
+    )
+    count_recovery_reasoning_effort: Optional[str] = Field(
+        default="high",
+        validation_alias="COUNT_RECOVERY_REASONING_EFFORT",
+        description=(
+            "Reasoning effort for the count-recovery pass "
+            "(none|minimal|low|medium|high|xhigh). Ignored by models without an "
+            "OpenAI-style effort knob."
+        ),
+    )
+    count_recovery_fields: str = Field(
+        default="carriers",
+        validation_alias="COUNT_RECOVERY_FIELDS",
+        description=(
+            "Comma-separated count fields the recovery pass may fill "
+            "(carriers|affected|unaffected). Defaults to carriers only: that is "
+            "where the observed omission gap is largest and where a strong "
+            "reader most clearly beats the pipeline. Widen only after measuring."
+        ),
+    )
+    count_recovery_max_variants_per_call: int = Field(
+        default=40,
+        validation_alias="COUNT_RECOVERY_MAX_VARIANTS_PER_CALL",
+        description="Variants per recovery call; larger papers are batched.",
+    )
+    count_recovery_max_source_chars: int = Field(
+        default=120_000,
+        validation_alias="COUNT_RECOVERY_MAX_SOURCE_CHARS",
+        description=(
+            "Source characters sent per recovery call. Deliberately larger than "
+            "TEXT_TRUNCATION_MAX_CHARS (60k) because counts often sit in "
+            "supplementary tables at the end of a folded source."
         ),
     )
     strict_cohort_labels: bool = Field(
@@ -690,21 +760,23 @@ class Settings(BaseSettings):
         validation_alias="VISION_REASONING_EFFORT",
         description=(
             "OpenAI-style reasoning effort for figure/pedigree vision models "
-            "(minimal|low|medium|high). None = provider default. NOTE: the "
-            "figure/pedigree call sites bypass BaseLLMCaller and call "
-            "litellm.completion() directly, so this is inert until those sites "
-            "are wired (see pedigree_extractor.py / figure_*_reader.py)."
+            "(minimal|low|medium|high). None = provider default. Wired at all "
+            "four vision call sites: figure_text_extractor (chat + Responses) "
+            "and figure_variant_reader / pedigree_extractor. Ignored by models "
+            "without an OpenAI-style effort knob."
         ),
     )
 
     @field_validator(
         "tier2_reasoning_effort",
         "tier3_reasoning_effort",
+        "tier3_adjudicator_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
         "final_adjudicator_reasoning_effort",
         "final_arbiter_reasoning_effort",
         "paper_final_check_reasoning_effort",
+        "count_recovery_reasoning_effort",
     )
     @classmethod
     def _validate_reasoning_effort(cls, v: Optional[str]) -> Optional[str]:
@@ -771,6 +843,38 @@ class Settings(BaseSettings):
             if field not in fields:
                 fields.append(field)
         return ",".join(fields) if fields else "all"
+
+    @field_validator("count_recovery_fields")
+    @classmethod
+    def _validate_count_recovery_fields(cls, v: str) -> str:
+        """Normalize COUNT_RECOVERY_FIELDS; keep the measured scope explicit."""
+        v_norm = str(v or "").strip().lower()
+        if not v_norm:
+            return "carriers"
+        allowed = {"carriers", "affected", "unaffected"}
+        fields: list[str] = []
+        for item in v_norm.split(","):
+            field = item.strip()
+            if not field:
+                continue
+            if field not in allowed:
+                raise ValueError(
+                    f"count recovery fields must be one or more of "
+                    f"{sorted(allowed)}; got {field!r}"
+                )
+            if field not in fields:
+                fields.append(field)
+        return ",".join(fields) if fields else "carriers"
+
+    @field_validator(
+        "count_recovery_max_variants_per_call",
+        "count_recovery_max_source_chars",
+    )
+    @classmethod
+    def _validate_positive_count_recovery_limit(cls, v: int) -> int:
+        if v <= 0:
+            raise ValueError("count recovery limits must be positive")
+        return v
 
     @field_validator("reference_validation_policy")
     @classmethod
@@ -1155,6 +1259,50 @@ class Settings(BaseSettings):
     def get_final_arbiter_model(self) -> str:
         """Return the optional hard-case escalation model."""
         return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
+
+    def get_count_recovery_model(self) -> str:
+        """Return the count-recovery model, honouring ``model_provider``.
+
+        ``COUNT_RECOVERY_MODEL`` remains the strongest override. Without one, an
+        Anthropic-only deployment gets its strongest Anthropic model instead of
+        silently routing Step 3.55 to a hardcoded ``azure_ai/gpt-5.6-sol`` that
+        would fail every call — the defect this resolver exists to close.
+        """
+        if self._tier_env_set("count_recovery_model"):
+            return str(self.count_recovery_model).strip()
+        if self._is_anthropic():
+            return str(self.final_arbiter_model or FINAL_ARBITER_DEFAULT).strip()
+        return str(self.count_recovery_model or "").strip() or (
+            f"azure_ai/{AZURE_PAPER_FINAL_CHECK_DEFAULT}"
+        )
+
+    def provider_credential_for_model(self, model: str) -> tuple[str, Optional[str]]:
+        """Return ``(env var name, value)`` for the credential a model needs."""
+        name = (model or "").strip().lower()
+        if name.startswith("azure_ai/") or name.startswith("azure/"):
+            return "AZURE_AI_API_KEY", self.azure_ai_api_key
+        if name.startswith("anthropic/") or "claude" in name:
+            return "ANTHROPIC_API_KEY", self.anthropic_api_key
+        if name.startswith("openai/") or name.startswith("gpt-"):
+            return "OPENAI_API_KEY", self.openai_api_key
+        return "", "present"
+
+    def require_provider_credentials_for_model(
+        self, model: str, *, label: str = "stage"
+    ) -> None:
+        """Fail fast when a stage's model has no credential configured.
+
+        Cheaper and clearer than discovering it one provider error per paper.
+        """
+        env_var, value = self.provider_credential_for_model(model)
+        if not env_var:
+            return
+        if value is None or not str(value).strip() or self._is_placeholder(str(value)):
+            raise ValueError(
+                f"{label} is configured to use {model!r}, which needs {env_var}; "
+                f"it is unset or a placeholder. Set it, or point the stage at a "
+                f"model whose provider is configured."
+            )
 
     def get_paper_final_check_model(self) -> str:
         """Return the independent soft per-paper review model.

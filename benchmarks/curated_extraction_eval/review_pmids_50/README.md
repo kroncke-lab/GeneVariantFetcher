@@ -47,14 +47,14 @@ import sqlite3
 from utils.pmid_utils import is_valid_pmid
 
 DBS = {  # canonical run DBs, kept in sync with run_benchmark.py CANONICAL_DBS
- "APOE":"results/APOE/20260621_072155_full_redo/APOE.db",
- "BRCA1":"results/BRCA1/20260616_132646/BRCA1.db",
- "BRCA2":"results/BRCA2/20260606_134517_hereditary_breast_cancer_500/BRCA2/20260606_134519/BRCA2.refresh_20260606_205358.db",
- "KCNH2":"results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db",
- "KCNQ1":"validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db",
- "MYBPC3":"results/MYBPC3/20260616_132646/MYBPC3.refresh_20260617_091043.db",
- "RYR2":"validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db",
- "SCN5A":"validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db",
+ "APOE":"validation_runs/canonical_baseline/APOE.db",
+ "BRCA1":"validation_runs/canonical_baseline/BRCA1.db",
+ "BRCA2":"validation_runs/canonical_baseline/BRCA2.db",
+ "KCNH2":"validation_runs/canonical_baseline/KCNH2.db",
+ "KCNQ1":"validation_runs/canonical_baseline/KCNQ1.db",
+ "MYBPC3":"validation_runs/canonical_baseline/MYBPC3.db",
+ "RYR2":"validation_runs/canonical_baseline/RYR2.db",
+ "SCN5A":"validation_runs/canonical_baseline/SCN5A.db",
 }
 out=pathlib.Path("benchmarks/curated_extraction_eval/review_pmids_50"); out.mkdir(exist_ok=True)
 for g,p in DBS.items():

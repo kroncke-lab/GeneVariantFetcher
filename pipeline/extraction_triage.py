@@ -19,6 +19,12 @@ from pipeline.extraction_priority import (
     _gene_regex,
     _read_source_sample,
 )
+
+# Reuse the Tier-2 reasoning-model predicate rather than re-encoding the hint
+# list here; this triage runs the same model as the Tier-2 classifier and must
+# share its token floor.
+from pipeline.filters import _is_reasoning_model
+from utils.llm_trace import attempt_link_summary, llm_attempt_ledger, llm_trace_scope
 from utils.llm_utils import BaseLLMCaller
 from utils.pmid_utils import extract_pmid_from_filename
 
@@ -292,31 +298,53 @@ Use "skip" when it is unlikely to contain extractable target-gene carrier/varian
             signals=json.dumps(signals, indent=2),
             snippets=_evidence_snippets(candidate, gene_symbol, max_snippet_chars),
         )
-        data = self.call_llm_json(prompt, system_message=self.SYSTEM_MESSAGE)
-        decision = str(data.get("decision") or "").strip().lower()
-        if decision not in TRIAGE_DECISIONS:
-            decision = "defer"
-        try:
-            confidence = float(data.get("confidence", 0.5))
-        except (TypeError, ValueError):
-            confidence = 0.5
-        confidence = max(0.0, min(1.0, confidence))
-        useful = data.get("useful_info_types") or []
-        risks = data.get("false_positive_risks") or []
-        return TriageDecision(
-            pmid=candidate.pmid,
-            decision=decision,
-            confidence=confidence,
-            priority_rank=candidate.rank,
-            source_kind=candidate.source_kind,
-            source_file=candidate.source_file,
-            model=self.model,
-            llm_decision=decision,
-            llm_confidence=confidence,
-            useful_info_types=[str(item) for item in useful if str(item).strip()],
-            false_positive_risks=[str(item) for item in risks if str(item).strip()],
-            reasons=[str(data.get("reason") or "LLM triage decision")],
-        )
+        with (
+            llm_trace_scope(
+                gene=gene_symbol,
+                pmid=candidate.pmid,
+                stage="extraction_priority_triage",
+                component=self.__class__.__name__,
+            ),
+            llm_attempt_ledger(),
+        ):
+            data = self.call_llm_json(prompt, system_message=self.SYSTEM_MESSAGE)
+            raw_decision = str(data.get("decision") or "").strip().lower()
+            decision = raw_decision if raw_decision in TRIAGE_DECISIONS else "defer"
+            try:
+                confidence = float(data.get("confidence", 0.5))
+            except (TypeError, ValueError):
+                confidence = 0.5
+            confidence = max(0.0, min(1.0, confidence))
+            useful = data.get("useful_info_types") or []
+            risks = data.get("false_positive_risks") or []
+            result = TriageDecision(
+                pmid=candidate.pmid,
+                decision=decision,
+                confidence=confidence,
+                priority_rank=candidate.rank,
+                source_kind=candidate.source_kind,
+                source_file=candidate.source_file,
+                model=self.model,
+                llm_decision=decision,
+                llm_confidence=confidence,
+                useful_info_types=[str(item) for item in useful if str(item).strip()],
+                false_positive_risks=[str(item) for item in risks if str(item).strip()],
+                reasons=[str(data.get("reason") or "LLM triage decision")],
+            )
+            self.record_llm_decision(
+                "extraction_priority_triage_decision",
+                {
+                    **asdict(result),
+                    "model_decision": raw_decision or None,
+                    "decision_source": (
+                        "model_triage"
+                        if raw_decision in TRIAGE_DECISIONS
+                        else "defer_unrecognized_decision"
+                    ),
+                    **attempt_link_summary(),
+                },
+            )
+            return result
 
 
 def _merge_decisions(
@@ -368,14 +396,30 @@ def triage_priority_result(
 
     classifier: Optional[ExtractionTriageClassifier] = None
     if mode in {"llm", "hybrid"}:
-        if model is None:
-            from config.settings import get_settings
+        from config.settings import get_settings
 
-            model = get_settings().get_tier2_model()
+        settings = get_settings()
+        if model is None:
+            model = settings.get_tier2_model()
+        # Match the sibling Tier-2 classifier: this triage runs the SAME model,
+        # so it needs the same reasoning-model token floor and the same
+        # TIER2_REASONING_EFFORT. Without the floor a reasoning deployment
+        # spends the 1200-token budget on hidden reasoning and returns empty
+        # JSON, which silently degrades every candidate to "defer".
+        max_tokens = 1200
+        if _is_reasoning_model(model):
+            logger.info(
+                "ExtractionTriageClassifier: bumping max_tokens %d -> 8192 for "
+                "reasoning model %r (avoids empty-JSON truncation)",
+                max_tokens,
+                model,
+            )
+            max_tokens = 8192
         classifier = ExtractionTriageClassifier(
             model=model,
             temperature=0.0,
-            max_tokens=1200,
+            max_tokens=max_tokens,
+            reasoning_effort=settings.tier2_reasoning_effort,
         )
 
     decisions: list[TriageDecision] = []

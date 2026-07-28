@@ -65,6 +65,9 @@ Use these when preparing human review packets or Variant Browser round trips.
 | `build_adjudication_sheet.py` | Build reviewer spreadsheet inputs. |
 | `build_adjudication_html.py` | Build static reviewer HTML from adjudication data. |
 | `build_evidence_cards.py` | Build evidence-card rows for review. |
+| `build_llm_trace_manifest.py` | Hash/index per-call LLM and decision traces for adjudication (thin CLI over `utils.llm_trace`). |
+| `build_llm_trace_html.py` | Build a self-contained per-paper browser view of LLM traces (thin CLI over `utils.llm_trace_html`; bounded bodies, shards large runs). |
+| `recover_counts.py` | Standalone additive fill of NULL per-variant counts (`pipeline.count_recovery`). `--dry-run` first; refuses nothing but writes only NULL slots, lands them as `quarantine`, and backs up the DB. |
 
 ## Recall Audit
 

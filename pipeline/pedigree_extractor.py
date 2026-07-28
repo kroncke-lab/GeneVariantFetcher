@@ -19,6 +19,20 @@ from typing import Dict, List, Optional
 import requests
 
 from config.settings import get_settings
+from utils.llm_trace import (
+    OUTCOME_DISCARDED,
+    OUTCOME_ERROR,
+    OUTCOME_PARSE_FAILED,
+    OUTCOME_PARSED,
+    attempt_link_summary,
+    capture_llm_call,
+    last_llm_trace,
+    llm_attempt_ledger,
+    llm_trace_scope,
+    note_llm_attempt,
+    note_llm_outcome,
+    record_trace_event,
+)
 from utils.llm_utils import (
     azure_responses_api_url,
     build_reasoning_effort_kwargs,
@@ -92,29 +106,35 @@ def _call_azure_responses_api_vision(
             deployment, get_settings().vision_reasoning_effort
         ),
     }
-    try:
+
+    def send_request() -> dict:
         response = requests.post(
             url,
             headers={"api-key": key, "Content-Type": "application/json"},
             json=body,
             timeout=120,
         )
-    except requests.RequestException as e:
-        logger.error(f"Responses API request failed: {e}")
-        return None
-
-    if response.status_code != 200:
-        logger.error(
-            f"Responses API returned {response.status_code}: {response.text[:300]}"
-        )
-        return None
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Responses API returned {response.status_code}: {response.text[:300]}"
+            )
+        try:
+            return response.json()
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"Responses API returned invalid JSON: {response.text[:300]}"
+            ) from exc
 
     try:
-        data = response.json()
-    except json.JSONDecodeError as e:
-        logger.error(
-            f"Responses API JSON parse failed: {e}; body={response.text[:300]}"
+        data, _trace = capture_llm_call(
+            provider="azure_openai_responses_http",
+            requested_model=deployment,
+            resolved_model=deployment,
+            request={"endpoint": url, "body": body},
+            call=send_request,
         )
+    except (requests.RequestException, RuntimeError) as e:
+        logger.error("Responses API request failed: %s", e)
         return None
 
     # The Responses API returns an "output" array. Find the first output_text
@@ -216,6 +236,9 @@ class PedigreeExtractor:
         self,
         model: Optional[str] = None,
         detection_confidence_threshold: float = 0.7,
+        *,
+        gene: Optional[str] = None,
+        pmid: Optional[str] = None,
     ):
         """
         Initialize the PedigreeExtractor.
@@ -225,10 +248,21 @@ class PedigreeExtractor:
                    Must support image input (e.g., gpt-4o, gemini-1.5-pro, claude-3-5-sonnet).
             detection_confidence_threshold: Minimum confidence to consider an image
                                            a pedigree (0.0-1.0).
+            gene: Target gene symbol, used only to scope the vision trace.
+            pmid: PubMed ID, used only to scope the vision trace. A pedigree
+                  prompt contains neither, so without these the trace lands in
+                  ``_unscoped/`` and a curator cannot tell which paper a
+                  pedigree read belongs to.
         """
         settings = get_settings()
         self.model = model or settings.get_vision_model()
         self.detection_threshold = detection_confidence_threshold
+        self.gene = gene
+        self.pmid = pmid
+        # Why the last vision call produced no usable result, so the decision
+        # event can distinguish empty output / unparseable JSON / a failed call.
+        self._last_vision_status: Optional[str] = None
+        self._last_vision_error: Optional[str] = None
 
         logger.info(f"PedigreeExtractor initialized with model={self.model}")
 
@@ -261,6 +295,9 @@ class PedigreeExtractor:
         prompt: str,
         image_path: Path,
         max_tokens: int = 2000,
+        *,
+        stage: str = "pedigree_vision",
+        role: str = "pedigree_vision",
     ) -> Optional[Dict]:
         """
         Make a vision API call with an image.
@@ -270,6 +307,11 @@ class PedigreeExtractor:
         "operation unsupported" for those models. Other vision-capable models
         continue to use the standard chat-completions path via LiteLLM.
 
+        ``stage``/``role`` separate detection from extraction in the trace: they
+        ask different questions of the same model about the same image, and
+        collapsing them left a curator unable to tell which call produced a
+        detection confidence and which produced a family structure.
+
         Args:
             prompt: Text prompt for the model
             image_path: Path to the image file
@@ -278,44 +320,83 @@ class PedigreeExtractor:
         Returns:
             Parsed JSON response, or None on failure
         """
-        try:
-            image_url = self._image_to_base64_url(image_path)
+        responses_path = _uses_responses_api(self.model)
+        with llm_trace_scope(
+            gene=self.gene,
+            pmid=self.pmid,
+            stage=stage,
+            component=self.__class__.__name__,
+            operation="responses_api" if responses_path else "chat_completions",
+            image_path=str(image_path),
+        ):
+            trace_id: Optional[str] = None
+            try:
+                image_url = self._image_to_base64_url(image_path)
+                if responses_path:
+                    parsed = _call_azure_responses_api_vision(
+                        deployment=_strip_provider_prefix(self.model),
+                        prompt=prompt,
+                        image_data_url=image_url,
+                        # gpt-5 family uses reasoning tokens — give it a generous
+                        # budget so the visible output isn't pre-empted.
+                        max_output_tokens=max(max_tokens * 4, 4096),
+                    )
+                    trace_id = note_llm_attempt(last_llm_trace(), role=role)
+                    note_llm_outcome(
+                        trace_id,
+                        OUTCOME_PARSED if parsed else OUTCOME_PARSE_FAILED,
+                    )
+                    self._last_vision_status = (
+                        "parsed" if parsed else "unparseable_response"
+                    )
+                    return parsed
 
-            if _uses_responses_api(self.model):
-                return _call_azure_responses_api_vision(
-                    deployment=_strip_provider_prefix(self.model),
-                    prompt=prompt,
-                    image_data_url=image_url,
-                    # gpt-5 family uses reasoning tokens — give it a generous
-                    # budget so the visible output isn't pre-empted.
-                    max_output_tokens=max(max_tokens * 4, 4096),
+                response = litellm_completion(
+                    model=self.model,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                                {"type": "image_url", "image_url": {"url": image_url}},
+                            ],
+                        }
+                    ],
+                    temperature=0,
+                    max_tokens=max_tokens,
+                    response_format={"type": "json_object"},
+                    **build_reasoning_effort_kwargs(
+                        self.model, get_settings().vision_reasoning_effort
+                    ),
                 )
+                trace_id = note_llm_attempt(last_llm_trace(), role=role)
+                result_text = response.choices[0].message.content
+                if not (result_text or "").strip():
+                    note_llm_outcome(trace_id, OUTCOME_DISCARDED)
+                    self._last_vision_status = "empty_output"
+                    logger.error(
+                        f"Vision API returned no content for {image_path.name}"
+                    )
+                    return None
+                parsed = parse_llm_json_response(result_text)
+                note_llm_outcome(trace_id, OUTCOME_PARSED)
+                self._last_vision_status = "parsed"
+                return parsed
 
-            response = litellm_completion(
-                model=self.model,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": prompt},
-                            {"type": "image_url", "image_url": {"url": image_url}},
-                        ],
-                    }
-                ],
-                temperature=0,
-                max_tokens=max_tokens,
-                response_format={"type": "json_object"},
-                **build_reasoning_effort_kwargs(
-                    self.model, get_settings().vision_reasoning_effort
-                ),
-            )
-
-            result_text = response.choices[0].message.content
-            return parse_llm_json_response(result_text)
-
-        except Exception as e:
-            logger.error(f"Vision API call failed for {image_path.name}: {e}")
-            return None
+            except Exception as e:
+                if trace_id is None:
+                    trace_id = note_llm_attempt(last_llm_trace(), role=role)
+                # A JSON failure on a successful provider call is a parse failure;
+                # anything else means the call itself did not come back.
+                if isinstance(e, (json.JSONDecodeError, ValueError)):
+                    note_llm_outcome(trace_id, OUTCOME_PARSE_FAILED)
+                    self._last_vision_status = "unparseable_response"
+                else:
+                    note_llm_outcome(trace_id, OUTCOME_ERROR)
+                    self._last_vision_status = "call_failed"
+                self._last_vision_error = f"{type(e).__name__}: {e}"
+                logger.error(f"Vision API call failed for {image_path.name}: {e}")
+                return None
 
     def is_pedigree(self, image_path: Path) -> tuple[bool, float, str]:
         """
@@ -327,20 +408,70 @@ class PedigreeExtractor:
         Returns:
             Tuple of (is_pedigree, confidence, reason)
         """
-        result = self._call_vision_model(
-            PEDIGREE_DETECTION_PROMPT,
-            image_path,
-            max_tokens=200,
+        with llm_attempt_ledger():
+            self._reset_vision_status()
+            result = self._call_vision_model(
+                PEDIGREE_DETECTION_PROMPT,
+                image_path,
+                max_tokens=200,
+                stage="pedigree_detection",
+                role="pedigree_detect",
+            )
+
+            if result is None:
+                self._record_pedigree_decision(
+                    "pedigree_detection_decision",
+                    image_path,
+                    {"is_pedigree": False, "confidence": 0.0},
+                    decision_source=self._last_vision_status or "call_failed",
+                )
+                return False, 0.0, "Detection failed"
+
+            is_ped = result.get("is_pedigree", False)
+            confidence = result.get("confidence", 0.0)
+            reason = result.get("reason", "")
+            self._record_pedigree_decision(
+                "pedigree_detection_decision",
+                image_path,
+                {
+                    "is_pedigree": bool(is_ped),
+                    "confidence": confidence,
+                    "detection_threshold": self.detection_threshold,
+                    "passes_threshold": bool(
+                        is_ped
+                        and isinstance(confidence, (int, float))
+                        and confidence >= self.detection_threshold
+                    ),
+                    "rationale": reason,
+                },
+                decision_source="model_detection",
+            )
+            return is_ped, confidence, reason
+
+    def _reset_vision_status(self) -> None:
+        self._last_vision_status: Optional[str] = None
+        self._last_vision_error: Optional[str] = None
+
+    def _record_pedigree_decision(
+        self,
+        event_type: str,
+        image_path: Path,
+        data: Dict,
+        *,
+        decision_source: str,
+    ) -> None:
+        record_trace_event(
+            event_type,
+            {
+                "image": image_path.name,
+                "image_path": str(image_path),
+                "model": self.model,
+                "decision_source": decision_source,
+                "error": getattr(self, "_last_vision_error", None),
+                **data,
+                **attempt_link_summary(),
+            },
         )
-
-        if result is None:
-            return False, 0.0, "Detection failed"
-
-        is_ped = result.get("is_pedigree", False)
-        confidence = result.get("confidence", 0.0)
-        reason = result.get("reason", "")
-
-        return is_ped, confidence, reason
 
     def extract_pedigree(self, image_path: Path) -> Optional[Dict]:
         """
@@ -358,21 +489,53 @@ class PedigreeExtractor:
 
             Returns None on failure.
         """
-        result = self._call_vision_model(
-            PEDIGREE_EXTRACTION_PROMPT,
-            image_path,
-            max_tokens=4000,
-        )
+        with llm_attempt_ledger():
+            self._reset_vision_status()
+            result = self._call_vision_model(
+                PEDIGREE_EXTRACTION_PROMPT,
+                image_path,
+                max_tokens=4000,
+                stage="pedigree_extraction",
+                role="pedigree_extract",
+            )
 
-        if result is None:
-            return None
+            if result is None:
+                self._record_pedigree_decision(
+                    "pedigree_extraction_decision",
+                    image_path,
+                    {"individual_count": 0},
+                    decision_source=self._last_vision_status or "call_failed",
+                )
+                return None
 
-        # Validate required fields
-        if "individuals" not in result:
-            logger.warning(f"Extraction result missing 'individuals' for {image_path}")
-            return None
+            # Validate required fields
+            if "individuals" not in result:
+                logger.warning(
+                    f"Extraction result missing 'individuals' for {image_path}"
+                )
+                self._record_pedigree_decision(
+                    "pedigree_extraction_decision",
+                    image_path,
+                    {"individual_count": 0, "returned_keys": sorted(result)[:20]},
+                    decision_source="missing_individuals_field",
+                )
+                return None
 
-        return result
+            individuals = result.get("individuals")
+            self._record_pedigree_decision(
+                "pedigree_extraction_decision",
+                image_path,
+                {
+                    "individual_count": (
+                        len(individuals) if isinstance(individuals, list) else 0
+                    ),
+                    "total_generations": result.get("total_generations"),
+                    "inheritance_pattern": result.get("inheritance_pattern"),
+                    "rationale": result.get("family_notes"),
+                },
+                decision_source="model_extraction",
+            )
+            return result
 
     def process_figures_directory(
         self,

@@ -2326,16 +2326,17 @@ def create_comparison_row(
 def _adjudication_variant_key(notation: str) -> str:
     """Canonical key for matching an overlay row to a ComparisonRow.
 
-    Delegates to the overlay producer's ``_variant_key`` so the scorer and
+    Delegates to the shared overlay contract so the scorer and
     ``scripts/ingest_review_adjudications`` canonicalize a notation through one
-    shared implementation of the ``to_canonical_form(...) or
-    normalize_variant(...)`` keying -- a copy here could silently drift from the
-    producer. Imported lazily because ingest imports from this module at load
-    time (a module-level import would be circular).
+    implementation of the ``to_canonical_form(...) or normalize_variant(...)``
+    keying -- a copy here could silently drift from the producer. Imported from
+    the PACKAGED module: the previous ``from scripts.ingest_review_adjudications
+    import _variant_key`` was an unguarded hard crash in an installed wheel,
+    which killed the whole adjudication-overlay scoring path.
     """
-    from scripts.ingest_review_adjudications import _variant_key
+    from pipeline.adjudication_contract import variant_key
 
-    return _variant_key(notation)
+    return variant_key(notation)
 
 
 def load_adjudication_overlay(path: Path) -> Dict[Tuple[str, str], Dict[str, str]]:
@@ -2364,11 +2365,11 @@ def load_adjudication_overlay_db(
     tier: str = "cardiac",
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """Load one tier's active overlay from the versioned live-gold database."""
-    from scripts.ingest_review_adjudications import (
+    from pipeline.adjudication_contract import (
         GoldSyncError,
-        _variant_key,
         gold_tier_includes_gene,
     )
+    from pipeline.adjudication_contract import variant_key as _variant_key
 
     overlay: Dict[Tuple[str, str], Dict[str, Any]] = {}
     if path is None or not path.exists():
@@ -2459,15 +2460,14 @@ def _overlay_action(adj: Dict[str, str]) -> str:
 
     Prefers the explicit ``action`` column; when it is blank, translates the
     ``verdict`` through the SAME ``VERDICT_TO_ACTION`` table the ingest script
-    writes (imported, not re-encoded here), so a verdict newly added to ingest
-    resolves identically for the scorer instead of being silently ignored.
-    Imported lazily because ingest imports from this module at load time (a
-    module-level import would be circular).
+    writes (imported from the shared packaged contract, not re-encoded here), so
+    a verdict newly added to ingest resolves identically for the scorer instead
+    of being silently ignored.
     """
     action = (adj.get("action") or "").strip().lower()
     if action:
         return action
-    from scripts.ingest_review_adjudications import VERDICT_TO_ACTION
+    from pipeline.adjudication_contract import VERDICT_TO_ACTION
 
     verdict = (adj.get("verdict") or "").strip().lower()
     return VERDICT_TO_ACTION.get(verdict, "")

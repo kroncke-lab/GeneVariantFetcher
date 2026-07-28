@@ -163,6 +163,40 @@ def automated_variant_extraction_workflow(
     # Initialize run manifest
     run_manifest = RunManifestManager.create_for_workflow(gene_symbol, str(output_path))
 
+    # Every normal workflow gets a durable per-call LLM trace unless explicitly
+    # disabled.  An explicit GVF_LLM_TRACE_DIR can place traces on encrypted or
+    # high-capacity storage; otherwise they live with the run they explain.
+    from utils.llm_trace import (
+        TRACE_INDEX_NAME,
+        configure_llm_tracing,
+        resolve_trace_location,
+        tracing_enabled_by_environment,
+    )
+
+    trace_enabled = tracing_enabled_by_environment()
+    # GVF_LLM_TRACE_DIR is a storage BASE: this run gets its own child so
+    # sequential runs never mix records (which would make every later manifest
+    # rebuild raise TraceRunMismatchError). The selection is exported so
+    # gvf-run's post-extraction stages continue in the SAME tree under the SAME
+    # id instead of resolving a second one.
+    trace_location = resolve_trace_location(
+        run_manifest.run_id, default_root=output_path / "llm_traces"
+    )
+    trace_root = trace_location.root
+    trace_run_id = trace_location.run_id
+    configure_llm_tracing(trace_root, run_id=trace_run_id, enabled=trace_enabled)
+    if trace_enabled:
+        os.environ["GVF_LLM_TRACE_DIR"] = str(trace_root)
+        os.environ["GVF_LLM_TRACE_RUN_ID"] = trace_run_id
+        logger.info("LLM traces -> %s (run %s)", trace_root, trace_run_id)
+    run_manifest.update_output_locations(
+        llm_traces=str(trace_root),
+        llm_trace_index=str(trace_root / TRACE_INDEX_NAME),
+    )
+    run_manifest.set_config(
+        llm_tracing_enabled=trace_enabled, llm_trace_run_id=trace_run_id
+    )
+
     from gene_literature.disease_context import build_gene_disease_context
 
     disease_context = build_gene_disease_context(
@@ -1068,6 +1102,7 @@ def automated_variant_extraction_workflow(
             "penetrance_summary": str(penetrance_summary_file),
             "sqlite_database": str(db_path),
             "workflow_log": str(log_file),
+            "llm_traces": str(trace_root) if trace_enabled else None,
         },
         "database_migration": {
             "successful": migrate_result.stats.get("successful", 0),
@@ -1099,6 +1134,45 @@ def automated_variant_extraction_workflow(
     checkpoint_manager.save(checkpoint)
 
     # Final manifest updates
+    trace_manifest_path = None
+    trace_report_path = None
+    if trace_enabled:
+        try:
+            from utils.llm_trace import TRACE_MANIFEST_NAME, build_trace_manifest
+            from utils.llm_trace_html import (
+                TRACE_REPORT_NAME,
+                build_trace_html_report,
+            )
+
+            candidate_manifest_path = trace_root / TRACE_MANIFEST_NAME
+            build_trace_manifest(
+                trace_root,
+                output_path=candidate_manifest_path,
+                run_id=trace_run_id,
+            )
+            trace_manifest_path = candidate_manifest_path
+            candidate_report_path = output_path / TRACE_REPORT_NAME
+            report_data = build_trace_html_report(
+                trace_root,
+                output_path=candidate_report_path,
+                run_dir=output_path,
+                title=f"{gene_symbol} · LLM curation trace review",
+                run_id=trace_run_id,
+            )
+            trace_report_path = candidate_report_path
+            summary["files"]["llm_trace_report"] = str(trace_report_path)
+            summary["llm_trace"] = {
+                "integrity_level": report_data["integrity"]["level"],
+                "omissions": len(report_data.get("omissions") or []),
+                "sharded": bool(report_data.get("sharded")),
+                "missing_decision_links": report_data["coverage"][
+                    "missing_decision_links"
+                ],
+            }
+            with open(summary_file, "w") as f:
+                json.dump(summary, f, indent=2)
+        except Exception as trace_error:  # tracing remains best-effort
+            logger.warning("Could not finalize LLM trace artifacts: %s", trace_error)
     run_manifest.update_statistics(
         **workflow_stats,
         success_rate=success_rate,
@@ -1106,7 +1180,14 @@ def automated_variant_extraction_workflow(
         total_affected_carriers=total_affected,
     )
     run_manifest.update_output_locations(
-        workflow_summary=str(summary_file), workflow_log=str(log_file)
+        workflow_summary=str(summary_file),
+        workflow_log=str(log_file),
+        llm_trace_manifest=(
+            str(trace_manifest_path) if trace_manifest_path is not None else None
+        ),
+        llm_trace_report=(
+            str(trace_report_path) if trace_report_path is not None else None
+        ),
     )
     manifest_file = run_manifest.finalize(success=True)
 

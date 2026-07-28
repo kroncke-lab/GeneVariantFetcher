@@ -1414,6 +1414,7 @@ def route_tables(
     max_tokens: int = 8192,
     temperature: float = 0.0,
     reasoning_effort: Optional[str] = None,
+    pmid: Optional[str] = None,
 ) -> RouterResult:
     """Run the full enumerate → LLM-route flow and return parsed routes.
 
@@ -1421,7 +1422,96 @@ def route_tables(
     receives `model`, `messages`, `temperature`, and `max_tokens` kwargs and
     returns an object whose `.choices[0].message.content` is the model
     response. Plumbed as a parameter so tests can stub it out.
+
+    Routing runs under its own trace stage and emits a
+    ``table_routing_decision`` event. Previously the router's prompt/response
+    record carried no stage or component at all, so it was indistinguishable
+    from primary extraction, and the routing outcome existed only inside
+    ``extraction_metadata`` — not as a normalized decision a curator could
+    follow. ``pmid`` is accepted for standalone callers; inside extraction the
+    enclosing paper scope already supplies gene and PMID.
     """
+    from utils.llm_trace import (
+        attempt_link_summary,
+        llm_attempt_ledger,
+        llm_trace_scope,
+        record_trace_event,
+    )
+
+    with (
+        llm_trace_scope(
+            gene=gene_symbol,
+            pmid=pmid,
+            stage="clinical_table_routing",
+            component="table_router",
+        ),
+        llm_attempt_ledger(),
+    ):
+        result = _route_tables_impl(
+            text,
+            gene_symbol,
+            model=model,
+            llm_caller=llm_caller,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            reasoning_effort=reasoning_effort,
+        )
+        routed_ids = [r.table_id for r in result.routed_tables]
+        links = attempt_link_summary()
+        if links["provider_attempts"] == 0:
+            # Every table mapped deterministically (or there were none), so no
+            # model was consulted. Say so instead of implying a model call.
+            decision_source = "deterministic"
+        elif result.error:
+            decision_source = "router_call_failed"
+        elif links["accepted_response_trace_id"] is None:
+            decision_source = "router_response_unusable"
+        else:
+            decision_source = "model_routed"
+        record_trace_event(
+            "table_routing_decision",
+            {
+                "model": model if links["provider_attempts"] else None,
+                "enumerated_table_ids": list(result.enumerated_table_ids or []),
+                "routed_table_ids": routed_ids,
+                "declined_table_ids": [
+                    table_id
+                    for table_id in (result.enumerated_table_ids or [])
+                    if table_id not in set(routed_ids)
+                ],
+                "routed_table_count": len(routed_ids),
+                "deterministic_route_count": len(routed_ids)
+                - len(
+                    [
+                        r
+                        for r in result.routed_tables
+                        if r.notes != "deterministic header/data mapping"
+                    ]
+                ),
+                "used_fallback": result.used_fallback,
+                "error": result.error,
+                "decision_source": decision_source,
+                "selection_policy": (
+                    "Deterministic header/data mapping first; only unmapped "
+                    "tables are offered to the router model. A router failure "
+                    "or unusable response falls back to the deterministic routes."
+                ),
+                **links,
+            },
+        )
+        return result
+
+
+def _route_tables_impl(
+    text: str,
+    gene_symbol: str,
+    *,
+    model: str,
+    llm_caller: Optional[Any] = None,
+    max_tokens: int = 8192,
+    temperature: float = 0.0,
+    reasoning_effort: Optional[str] = None,
+) -> RouterResult:
     tables = enumerate_markdown_tables(text)
     if not tables:
         return RouterResult(routed_tables=[], used_fallback=True)
@@ -1473,35 +1563,56 @@ def route_tables(
             build_reasoning_effort_kwargs,
             wait_for_llm_rate_limit,
         )
+        from utils.llm_trace import (
+            OUTCOME_DISCARDED,
+            OUTCOME_ERROR,
+            OUTCOME_PARSE_FAILED,
+            OUTCOME_PARSED,
+            last_llm_trace,
+            note_llm_attempt,
+            note_llm_outcome,
+        )
         from utils.retry_utils import llm_retry
 
+        # The router calls litellm_completion DIRECTLY (it is not a
+        # BaseLLMCaller), so nothing registered its calls in the ledger: its
+        # decision event carried no accepted link and its empty-response retry
+        # and parse failures were invisible. Register each call here.
         @llm_retry
-        def _call() -> Any:
+        def _call(role: str) -> tuple[Any, Optional[str]]:
             wait_for_llm_rate_limit(model)
-            return llm_caller(
-                model=model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a careful router for biomedical table "
-                            "extraction. Output strict JSON. No prose."
-                        ),
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=temperature,
-                max_tokens=max_tokens,
-                **build_reasoning_effort_kwargs(model, reasoning_effort),
-            )
+            try:
+                response = llm_caller(
+                    model=model,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": (
+                                "You are a careful router for biomedical table "
+                                "extraction. Output strict JSON. No prose."
+                            ),
+                        },
+                        {"role": "user", "content": prompt},
+                    ],
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    **build_reasoning_effort_kwargs(model, reasoning_effort),
+                )
+            except BaseException:
+                note_llm_outcome(
+                    note_llm_attempt(last_llm_trace(), role=role), OUTCOME_ERROR
+                )
+                raise
+            return response, note_llm_attempt(last_llm_trace(), role=role)
 
-        response = _call()
+        response, router_trace_id = _call("table_router")
         raw = response.choices[0].message.content or ""
         if not raw.strip():
             logger.warning(
                 "table_router: empty LLM response from %s; retrying once", model
             )
-            response = _call()
+            note_llm_outcome(router_trace_id, OUTCOME_DISCARDED)
+            response, router_trace_id = _call("empty_content_retry")
             raw = response.choices[0].message.content or ""
     except Exception as e:  # noqa: BLE001
         logger.warning("table_router: LLM call failed: %s", e)
@@ -1515,6 +1626,7 @@ def route_tables(
     if not raw.strip():
         error = f"empty LLM response from table router model {model}"
         logger.warning("table_router: %s", error)
+        note_llm_outcome(router_trace_id, OUTCOME_DISCARDED)
         return RouterResult(
             routed_tables=deterministic,
             error=error,
@@ -1523,6 +1635,12 @@ def route_tables(
         )
 
     routed = parse_router_response(raw)
+    if not routed:
+        # Non-empty content that yielded no usable route is a parse failure, not
+        # an accepted response — the deterministic routes are what get used.
+        note_llm_outcome(router_trace_id, OUTCOME_PARSE_FAILED)
+    else:
+        note_llm_outcome(router_trace_id, OUTCOME_PARSED)
     # Attach the corresponding MarkdownTable for downstream parsing
     by_id = {t.table_id: t for t in llm_candidates}
     for r in routed:
@@ -1543,6 +1661,7 @@ def extract_via_router(
     llm_caller: Optional[Any] = None,
     max_tokens: int = 8192,
     reasoning_effort: Optional[str] = None,
+    pmid: Optional[str] = None,
 ) -> Dict[str, Any]:
     """End-to-end: route, then deterministically parse, returning a variant list.
 
@@ -1561,6 +1680,7 @@ def extract_via_router(
         llm_caller=llm_caller,
         max_tokens=max_tokens,
         reasoning_effort=reasoning_effort,
+        pmid=pmid,
     )
     variants: List[Dict[str, Any]] = []
     for routed in result.routed_tables:
