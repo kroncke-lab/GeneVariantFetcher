@@ -9,7 +9,7 @@ refresh explosion gate guards the DB rebuild, so this only assembles text.
 
 Examples::
 
-    python scripts/fold_supplements.py --run-dir results/SCN5A/20260506_102238
+    python scripts/fold_supplements.py --corpus corpus --genes SCN5A
     python scripts/fold_supplements.py --harvest-dir <dir> --pmids-file pmids.txt --dry-run
 """
 

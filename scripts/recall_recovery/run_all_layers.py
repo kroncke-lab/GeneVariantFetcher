@@ -16,13 +16,13 @@ runs and writes progression/QC artifacts.
 
 Usage::
 
-    # KCNH2 — opt in to the v12 merge because we have one on disk
+    # KCNH2 — opt in to the consolidated baseline merge
     python scripts/recall_recovery/run_all_layers.py \\
         --gene KCNH2 \\
-        --db results/KCNH2/20260517_074737/KCNH2.db \\
+        --db /path/to/new-run/KCNH2.db \\
         --gold gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv \\
-        --pmc-dir results/KCNH2/20260517_074737/pmc_fulltext \\
-        --with-v12 results/KCNH2/20260506_102238/end_to_end_20260515_manual_recovery/KCNH2_v12_manual_recovery_20260515.db
+        --pmc-dir corpus/KCNH2 \\
+        --with-v12 validation_runs/canonical_baseline/KCNH2.db
 
     # Cold-start/no-gold gene — no v12 path, just runs gene-agnostic layers
     python scripts/recall_recovery/run_all_layers.py \\
@@ -85,6 +85,13 @@ def score_layer(
         # compare raw counts so layer deltas do not depend on stale/default tiers.
         "--trust-tier",
         "all",
+        # The caller already selected an explicit gene/gold CSV. Production's
+        # default "cardiac" review tier would incorrectly reject non-cardiac
+        # genes and synthetic fixtures here.
+        "--review-gold-tier",
+        "all",
+        "--review-gold-sync",
+        "off",
     ]
     logger.info("score → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)

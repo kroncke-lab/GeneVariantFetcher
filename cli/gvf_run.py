@@ -13,8 +13,8 @@ Order of operations:
      migrate). Auto-resumes via GVF_RESUME_DIR when --resume-dir given.
   3. layers — runs scripts/recall_recovery/run_all_layers.py against
      the resulting DB. Auto-detects gold standard CSV under
-     gene_variant_fetcher_gold_standard/normalized/. The old KCNH2 v12
-     manual-recovery DB is opt-in only because it is not cold-start behavior.
+     gene_variant_fetcher_gold_standard/normalized/. The canonical KCNH2
+     baseline is opt-in only because merging it is not cold-start behavior.
   4. source-qc — writes a gold-free source acquisition/replay worklist.
   5. source-recovery — optional: fetch source-QC queue, summarize actual
      usable full text, and staged-refresh accepted sources.
@@ -322,15 +322,11 @@ def _find_gold(gene: str) -> Optional[Path]:
 
 
 def _find_v12_db(gene: str) -> Optional[Path]:
-    """KCNH2 has a v12 manually-curated baseline DB on disk; other genes don't."""
+    """Return the consolidated KCNH2 baseline; other genes have no v12 input."""
     if gene.upper() != "KCNH2":
         return None
-    candidates = list(
-        REPO_ROOT.glob("results/KCNH2/*/end_to_end_*manual_recovery/KCNH2_v12*.db")
-    )
-    if not candidates:
-        return None
-    return sorted(candidates, key=lambda p: p.stat().st_mtime)[-1]
+    baseline = REPO_ROOT / "validation_runs" / "canonical_baseline" / "KCNH2.db"
+    return baseline if baseline.is_file() else None
 
 
 def step_layers(

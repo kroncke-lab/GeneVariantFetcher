@@ -40,6 +40,16 @@ def test_find_pmid_figures(tmp_path: Path):
     assert find_pmid_figures(pmc_dir, "99999") == []
 
 
+def test_find_pmid_figures_in_nested_corpus(tmp_path: Path):
+    gene_dir = tmp_path / "corpus" / "KCNH2"
+    figs = gene_dir / "12345" / "12345_figures"
+    figs.mkdir(parents=True)
+    expected = figs / "figure.png"
+    expected.write_bytes(b"\x00")
+
+    assert find_pmid_figures(gene_dir, "12345") == [expected]
+
+
 def test_parse_response_object():
     body = json.dumps({"variants": [{"protein": "R176W"}, {"protein": "L552S"}]})
     out = _parse_response(body)

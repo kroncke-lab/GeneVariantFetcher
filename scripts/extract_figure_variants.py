@@ -11,16 +11,16 @@ Typical use::
     # Read figures for one PMID, just print JSON
     python scripts/extract_figure_variants.py \\
         --gene KCNH2 --pmid 24667783 \\
-        --pmc-dir results/KCNH2/20260517_074737/pmc_fulltext \\
+        --pmc-dir corpus/KCNH2 \\
         --out /tmp/figure_reads
 
     # Process the top blockers and inject into the recall DB
     python scripts/extract_figure_variants.py \\
         --gene KCNH2 \\
         --pmid 29650123 --pmid 24667783 --pmid 19038855 \\
-        --pmc-dir results/KCNH2/20260517_074737/pmc_fulltext \\
+        --pmc-dir corpus/KCNH2 \\
         --out recall_metrics/figure_reads_$(date +%Y%m%d) \\
-        --db results/KCNH2/20260517_074737/KCNH2.db
+        --db validation_runs/canonical_baseline/KCNH2.db
 """
 
 from __future__ import annotations
@@ -167,13 +167,15 @@ def _figure_variant_passes_gate(
 
 
 def _discover_pmids_with_figures(pmc_dir: Path) -> List[str]:
-    """Find every PMID under *pmc_dir* whose ``{PMID}_figures/`` has images."""
+    """Find PMIDs with images in a flat run cache or nested corpus."""
     from harvesting.figure_variant_reader import is_image_path  # noqa: E402
 
     pmids: List[str] = []
     if not pmc_dir.is_dir():
         return pmids
-    for fig_dir in sorted(pmc_dir.glob("*_figures")):
+    fig_dirs = list(pmc_dir.glob("*_figures"))
+    fig_dirs.extend(pmc_dir.glob("*/*_figures"))
+    for fig_dir in sorted(fig_dirs):
         if not fig_dir.is_dir():
             continue
         if any(is_image_path(p) for p in fig_dir.iterdir() if p.is_file()):

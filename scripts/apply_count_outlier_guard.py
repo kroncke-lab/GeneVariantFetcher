@@ -13,16 +13,16 @@ read or write gold standards.
 Typical usage:
 
     .venv/bin/python scripts/apply_count_outlier_guard.py \\
-        --extractions results/KCNH2/20260506_102238/extractions \\
+        --extractions results/KCNH2/<run>/extractions \\
         --policy flag \\
         --report-out /tmp/kcnh2_outlier_report.json
 
 When you are ready to actually drop suspected study-wide-N values:
 
     .venv/bin/python scripts/apply_count_outlier_guard.py \\
-        --extractions results/KCNH2/20260506_102238/extractions \\
+        --extractions results/KCNH2/<run>/extractions \\
         --policy clear \\
-        --backup-dir results/KCNH2/20260506_102238/outlier_guard_backup_20260527 \\
+        --backup-dir results/KCNH2/<run>/outlier_guard_backup \\
         --report-out /tmp/kcnh2_outlier_report.json
 
 After --policy clear, rebuild the DB with harvesting.migrate_to_sqlite and

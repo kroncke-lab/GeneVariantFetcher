@@ -158,8 +158,10 @@ def is_image_path(path: "str | Path") -> bool:
 
 
 def find_pmid_figures(pmc_fulltext_dir: Path, pmid: str) -> List[Path]:
-    """Return image paths the harvester saved for *pmid* under *pmc_fulltext_dir*."""
+    """Return images from a flat run cache or nested canonical corpus."""
     fig_dir = pmc_fulltext_dir / f"{pmid}_figures"
+    if not fig_dir.is_dir():
+        fig_dir = pmc_fulltext_dir / pmid / f"{pmid}_figures"
     if not fig_dir.is_dir():
         return []
     imgs = []

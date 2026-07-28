@@ -69,18 +69,6 @@ REGISTRY = HERE / "registry.tsv"
 
 VALID_STRATEGIES = {"table", "text", "figure", "mixed"}
 
-# Most benchmark source is synced into corpus/<GENE>/<PMID>/, but a few no-gold
-# new-gene runs only have their reusable cache under results/.../pmc_fulltext.
-RUN_LOCAL_SOURCE_DIRS = {
-    "BRCA1": [REPO / "results/BRCA1/20260616_132646/pmc_fulltext"],
-    "BRCA2": [
-        REPO
-        / "results/BRCA2/20260606_134517_hereditary_breast_cancer_500/BRCA2/20260606_134519/pmc_fulltext"
-    ],
-    "MYBPC3": [REPO / "results/MYBPC3/20260616_132646/pmc_fulltext"],
-    "APOE": [REPO / "results/APOE/20260616_132646/pmc_fulltext"],
-}
-
 # Canonical gold-CSV schema (matches the repo normalized recall inputs). The
 # first five are required; gold_v2_* are optional adjudication-overlay columns.
 CANON_HEADER = [
@@ -246,15 +234,8 @@ def title_for(gene: str, pmid: str) -> str:
 
 
 def source_full_context(gene: str, pmid: str) -> Path:
-    """Return the best cached FULL_CONTEXT path for a benchmark paper."""
-    corpus_fc = CORPUS / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
-    if corpus_fc.exists():
-        return corpus_fc
-    for root in RUN_LOCAL_SOURCE_DIRS.get(gene, []):
-        fc = root / f"{pmid}_FULL_CONTEXT.md"
-        if fc.exists():
-            return fc
-    return corpus_fc
+    """Return the canonical FULL_CONTEXT path for a benchmark paper."""
+    return CORPUS / gene / pmid / f"{pmid}_FULL_CONTEXT.md"
 
 
 def copy_source_snapshot(corpus_dir: Path, dst_dir: Path, pmid: str) -> int:

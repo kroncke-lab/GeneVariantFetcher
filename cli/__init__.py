@@ -582,7 +582,7 @@ def gvf_run_command(
         typer.Option(
             "--with-v12/--no-with-v12",
             help=(
-                "KCNH2 only: merge the old manually recovered v12 DB during "
+                "KCNH2 only: merge the consolidated canonical baseline during "
                 "scoring. Off by default because it is not cold-start behavior."
             ),
         ),
@@ -678,7 +678,7 @@ def gvf_run_command(
     Wraps extract → migrate → recovery layers → source acquisition
     (paywall/supplement recovery, on by default) → scoring + report into one
     command. Pass `--disease` to scope discovery and Tier-2 filtering to a
-    gene-disease pair. Auto-detects gold standard CSVs; KCNH2 v12 baseline
+    gene-disease pair. Auto-detects gold standard CSVs; KCNH2 canonical baseline
     merging is available only when explicitly requested with `--with-v12`.
     See cli/gvf_run.py for the per-step breakdown.
     """

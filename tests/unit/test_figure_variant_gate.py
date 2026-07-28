@@ -26,11 +26,20 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.extract_figure_variants import (  # noqa: E402
     FIGURE_VARIANT_GATE_ENV,
+    _discover_pmids_with_figures,
     _figure_variant_passes_gate,
     ingest_cached_variants,
 )
 
 GENE = "KCNH2"  # protein length 1159 in PROTEIN_LENGTHS
+
+
+def test_discovers_nested_corpus_figures(tmp_path: Path):
+    fig_dir = tmp_path / "12345" / "12345_figures"
+    fig_dir.mkdir(parents=True)
+    (fig_dir / "figure.png").write_bytes(b"\x00")
+
+    assert _discover_pmids_with_figures(tmp_path) == ["12345"]
 
 
 def _make_db(path: Path) -> Path:

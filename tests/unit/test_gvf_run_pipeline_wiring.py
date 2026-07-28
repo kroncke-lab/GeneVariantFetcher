@@ -37,6 +37,15 @@ def _skip_institutional_preflight(monkeypatch):
         "step_paper_final_check_gate",
         lambda db: {"skipped": "wiring fixture"},
     )
+    # Keep the wiring suite hermetic. The dedicated corpus-sync test below
+    # replaces this stub with a recorder and verifies default/disabled behavior.
+    # Calling the real step would scan and rewrite the user's local multi-GB
+    # corpus once per test.
+    monkeypatch.setattr(
+        gvf_run,
+        "step_corpus_sync",
+        lambda run_dir, stage_warnings=None: None,
+    )
 
 
 def _ok_doctor() -> dict:

@@ -64,12 +64,12 @@ gold standard.
 > ```
 >
 > ### 6. Figure-reader on existing data
-> If `results/KCNH2/20260517_074737/pmc_fulltext/*_figures/` exists, pick
+> If `corpus/KCNH2/*/*_figures/` exists, pick
 > one PMID with figures and run:
 > ```bash
 > .venv/bin/python scripts/extract_figure_variants.py \
 >   --gene KCNH2 --pmid 19038855 \
->   --pmc-dir results/KCNH2/20260517_074737/pmc_fulltext \
+>   --pmc-dir corpus/KCNH2 \
 >   --out /tmp/figure_test
 > ```
 > Expect a JSON report under `/tmp/figure_test/19038855.json` with a
@@ -79,7 +79,7 @@ gold standard.
 > ### 7. Score against gold
 > ```bash
 > .venv/bin/python scripts/run_recall_suite.py --score --genes KCNH2 \
->   --db KCNH2=results/KCNH2/20260517_074737/KCNH2.db \
+>   --db KCNH2=validation_runs/canonical_baseline/KCNH2.db \
 >   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
 > ```
 > Compare against the current baseline recorded in

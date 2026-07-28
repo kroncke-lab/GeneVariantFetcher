@@ -282,9 +282,9 @@ missed them** after the 1B parser land.
   - [x] Preserve affected vs unaffected counts when the row text indicates asymptomatic/control/unaffected status
   - [x] Keep pure nomenclature/list tables out of extraction unless clinical row context is present
 - [x] **Bulk KCNH2 stale-context reharvest (2026-05-14)**
-  - [x] Reharvested all 213 stale/missed KCNH2 FULL_CONTEXT files in `results/KCNH2/20260506_102238/pmc_fulltext/`
+  - [x] Reharvested all 213 stale/missed KCNH2 FULL_CONTEXT files; retained source is consolidated under `corpus/KCNH2/`.
   - [x] Recovered 17 real contexts; 196 still require paywall/manual/source access
-  - [x] Wrote audit artifacts under `results/KCNH2/20260506_102238/reharvest_out_20260514/`
+  - [x] Folded recovered source into the canonical corpus and removed the obsolete run-local audit directory.
 - [x] **KCNH2 v12 manual-recovery score + matcher patch (2026-05-15)**
   - [x] Scored `KCNH2_v12_manual_recovery_20260515.db` (PMID/row/unique-variant/patient recall recorded in `docs/RECALL_STATUS.md`)
   - [x] Added frameshift canonicalization for extraction spellings like `fsTer`, `fs/185`, `fs+*49`, and malformed `AlaX14`
