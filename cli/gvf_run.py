@@ -52,6 +52,7 @@ from utils.bootstrap import (
     llm_provider_key_status,
 )
 from utils.env_utils import get_env_bool, local_data_discovery_disabled
+from utils.local_storage import EXTERNAL_PATHS, external_path_state
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -175,6 +176,28 @@ def institutional_auth_status() -> dict:
     }
 
 
+def _apply_local_storage_checks(status: dict) -> None:
+    """Fold external-storage link state into a doctor status dict.
+
+    A *dangling* link means the volume was expected and is not mounted — the
+    accident case (drive removed, wrong machine). Block at Step 1 rather than
+    running cold and re-fetching the whole corpus over the network. An *absent*
+    link is a legitimate fresh checkout or collaborator setup, so it does not
+    block. `--skip doctor` overrides either way.
+
+    Split out of ``doctor`` so it is testable without doctor's network probes.
+    """
+    status["local_storage"] = {
+        name: external_path_state(name) for name in EXTERNAL_PATHS
+    }
+    for name, state in status["local_storage"].items():
+        if state == "dangling":
+            status["required"][
+                f"{name}/ external storage (mount 'Ezekers' at /Volumes/Ezekers)"
+            ] = False
+            status["ok"] = False
+
+
 def doctor() -> dict:
     """Return a status dict describing the environment.
 
@@ -206,6 +229,7 @@ def doctor() -> dict:
     # Browser-recovery tier: a hard dependency for source recovery, but easy to
     # leave un-provisioned (package installed, Chromium binary not). Surface it.
     status["browser_recovery"] = browser_recovery_status()
+    _apply_local_storage_checks(status)
     # Institutional auth readiness: whether authenticated paywalled recovery can
     # actually reach subscription content. Advisory only — never flips status.ok.
     status["institutional_auth"] = institutional_auth_status()

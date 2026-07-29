@@ -30,9 +30,12 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 REPO = Path(__file__).resolve().parents[1]
+
 # Allow ``from utils...`` when run as a standalone script from scripts/.
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
+
+from utils.env_utils import local_data_discovery_disabled  # noqa: E402
 
 # ESummary-derivable columns (also sourced from local abstract/artifact caches).
 COLS = ("first_author", "journal", "publication_date", "doi", "pmc_id")
@@ -108,10 +111,10 @@ def build_abstract_map(roots: List[Path]) -> Dict[str, dict]:
     return out
 
 
-def build_artifact_map(corpus: Path) -> Dict[str, dict]:
+def build_artifact_map(corpus: Optional[Path]) -> Dict[str, dict]:
     """pmid -> {doi, pmc_id} from corpus artifacts.json (picks first non-null seen)."""
     out: Dict[str, dict] = {}
-    if not corpus.exists():
+    if corpus is None or not corpus.exists():
         return out
     for f in corpus.rglob("*_artifacts.json"):
         pmid = f.parent.name
@@ -226,8 +229,18 @@ def run_backfill(
     max_fetch: Optional[int] = None,
 ) -> Dict[str, Dict[str, int]]:
     """Backfill one or more DBs. Reusable entry point (also called from gvf-run)."""
-    corpus = corpus or (REPO / "corpus")
-    roots = roots or [REPO / "results", REPO / "validation_runs"]
+    # Both defaults are repo-root *guesses*, so they go through the same guard as
+    # every other local-data fallback. Unguarded, an offline test that never passes
+    # `corpus` walks the developer's real corpus — now an external volume — and
+    # read_text()s every artifacts.json in it.
+    if corpus is None and not local_data_discovery_disabled():
+        corpus = REPO / "corpus"
+    if roots is None:
+        roots = (
+            []
+            if local_data_discovery_disabled()
+            else [REPO / "results", REPO / "validation_runs"]
+        )
     abstracts = build_abstract_map(roots)
     artifacts = build_artifact_map(corpus)
 

@@ -13,12 +13,15 @@ so they never depend on what is actually checked out next to this repo.
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
 import benchmarks.cold_start_eval.run_cold_start as run_cold_start
 import cli.gvf_run as gvf_run
 import pipeline.paper_final_check as paper_final_check
 import pipeline.steps as steps
+import scripts.backfill_paper_metadata as backfill_paper_metadata
 import utils.gene_metadata as gene_metadata
 from utils.env_utils import (
     DISABLE_LOCAL_DATA_ENV,
@@ -322,6 +325,57 @@ def test_cold_start_coverage_keeps_its_tracked_sources_under_the_guard():
     covered = run_cold_start._covered_genes()
 
     assert {"KCNH2", "BRCA1", "MYBPC3"} <= covered
+
+
+# ---------------------------------------------------------------------------
+# scripts.backfill_paper_metadata.run_backfill
+# ---------------------------------------------------------------------------
+
+
+def _plant_corpus_artifacts(monkeypatch, tmp_path, pmid="12345678", gene="KCNH2"):
+    """A corpus artifacts.json next to a fake repo root, as run_backfill guesses it."""
+    monkeypatch.setattr(backfill_paper_metadata, "REPO", tmp_path)
+    paper_dir = tmp_path / "corpus" / gene / pmid
+    paper_dir.mkdir(parents=True)
+    (paper_dir / f"{pmid}_artifacts.json").write_text(
+        json.dumps({"doi": "10.1000/test", "pmcid": "PMC1234567"}), encoding="utf-8"
+    )
+    return paper_dir
+
+
+@requires_guard
+def test_backfill_corpus_guess_is_skipped_under_the_guard(monkeypatch, tmp_path):
+    """`run_backfill` defaulted to <repo>/corpus and read_text() every artifact.
+
+    corpus/ is an external volume now, so an offline test that never passes
+    `corpus` walked multi-GB of it over USB — `test_gvf_run_pipeline_wiring.py`
+    hung for minutes instead of finishing in under a second.
+    """
+    _plant_corpus_artifacts(monkeypatch, tmp_path)
+
+    assert backfill_paper_metadata.run_backfill([]) == {}
+    assert backfill_paper_metadata.build_artifact_map(None) == {}
+
+
+def test_backfill_corpus_guess_is_used_when_discovery_is_allowed(
+    monkeypatch, tmp_path, allow_local_data_discovery
+):
+    """Production behaviour is unchanged: a real run still reads the corpus."""
+    _plant_corpus_artifacts(monkeypatch, tmp_path)
+
+    artifacts = backfill_paper_metadata.build_artifact_map(tmp_path / "corpus")
+
+    assert artifacts["12345678"]["doi"] == "10.1000/test"
+    assert artifacts["12345678"]["pmc_id"] == "PMC1234567"
+
+
+def test_explicit_backfill_corpus_wins_over_the_guard(monkeypatch, tmp_path):
+    """A caller that names its corpus is still honoured under the guard."""
+    _plant_corpus_artifacts(monkeypatch, tmp_path)
+
+    artifacts = backfill_paper_metadata.build_artifact_map(tmp_path / "corpus")
+
+    assert "12345678" in artifacts
 
 
 # ---------------------------------------------------------------------------

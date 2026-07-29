@@ -7,6 +7,7 @@ VariantFeatures SQLite database when available.
 
 from __future__ import annotations
 
+import logging
 import os
 import re
 import sqlite3
@@ -18,6 +19,8 @@ from types import MappingProxyType
 from typing import Iterable, Mapping, Optional
 
 from utils.env_utils import local_data_discovery_disabled
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -169,8 +172,21 @@ def default_variantfeatures_db_path() -> Optional[Path]:
 
     for key in ("VARIANTFEATURES_DB", "VARIANT_FEATURES_DB"):
         value = os.environ.get(key)
-        if value and Path(value).expanduser().is_file():
-            return Path(value).expanduser()
+        if not value:
+            continue
+        configured = Path(value).expanduser()
+        if configured.is_file():
+            return configured
+        # Explicitly configured but unreadable — typically the external volume
+        # holding it is not mounted. Falling through to built-in metadata is the
+        # documented behaviour, but doing it silently hides a real misconfiguration.
+        logger.warning(
+            "%s=%s is not a readable file — falling back to built-in gene "
+            "metadata. If this path lives on the 'Ezekers' volume, mount it at "
+            "/Volumes/Ezekers and re-run.",
+            key,
+            configured,
+        )
 
     if local_data_discovery_disabled():
         return None

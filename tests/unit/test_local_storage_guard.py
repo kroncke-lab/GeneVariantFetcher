@@ -20,7 +20,9 @@ from pathlib import Path
 
 import pytest
 
+import cli.gvf_run as gvf_run
 import pipeline.steps as steps
+import utils.gene_metadata as gene_metadata
 import utils.local_storage as local_storage
 from utils.local_storage import (
     ALLOW_LOCAL_ENV,
@@ -213,5 +215,91 @@ def test_absent_corpus_on_a_fresh_checkout_stays_quiet(
 
     with caplog.at_level(logging.WARNING, logger=steps.logger.name):
         assert steps._resolve_corpus_dir() is None
+
+    assert caplog.text == ""
+
+
+# ---------------------------------------------------------------------------
+# doctor — an unmounted volume must stop the run at Step 1
+# ---------------------------------------------------------------------------
+
+
+def _fresh_status() -> dict:
+    return {"required": {}, "ok": True}
+
+
+def test_doctor_blocks_when_the_volume_is_unmounted(fake_repo):
+    """The user's scenario: the drive was there, now it is not. Stop at Step 1."""
+    (fake_repo / "corpus").symlink_to(fake_repo / "never_mounted")
+    status = _fresh_status()
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is False
+    assert status["local_storage"] == {"corpus": "dangling"}
+    blocked = [k for k, v in status["required"].items() if not v]
+    assert len(blocked) == 1
+    assert "Ezekers" in blocked[0]
+
+
+def test_doctor_does_not_block_a_mounted_volume(fake_repo):
+    target = fake_repo / "external"
+    target.mkdir()
+    (fake_repo / "corpus").symlink_to(target)
+    status = _fresh_status()
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is True
+    assert status["required"] == {}
+
+
+def test_doctor_does_not_block_a_fresh_checkout_with_no_corpus(fake_repo):
+    """A collaborator with no corpus yet must still be able to run."""
+    status = _fresh_status()
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is True
+    assert status["local_storage"] == {"corpus": "absent"}
+
+
+def test_doctor_check_preserves_an_already_failing_status(fake_repo):
+    """Folding storage in must not resurrect an `ok` that something else cleared."""
+    target = fake_repo / "external"
+    target.mkdir()
+    (fake_repo / "corpus").symlink_to(target)
+    status = {"required": {"NCBI_EMAIL": False}, "ok": False}
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is False
+
+
+# ---------------------------------------------------------------------------
+# utils.gene_metadata — a configured-but-unreachable VariantFeatures DB
+# ---------------------------------------------------------------------------
+
+
+def test_unreachable_configured_variantfeatures_db_warns(monkeypatch, tmp_path, caplog):
+    """An unmounted volume must not silently downgrade to built-in metadata."""
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(tmp_path / "not_mounted.db"))
+
+    with caplog.at_level(logging.WARNING, logger=gene_metadata.logger.name):
+        assert gene_metadata.default_variantfeatures_db_path() is None
+
+    assert "VARIANTFEATURES_DB" in caplog.text
+    assert "Ezekers" in caplog.text
+
+
+def test_reachable_configured_variantfeatures_db_stays_quiet(
+    monkeypatch, tmp_path, caplog
+):
+    db = tmp_path / "variants.db"
+    db.write_bytes(b"SQLite format 3\x00")
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db))
+
+    with caplog.at_level(logging.WARNING, logger=gene_metadata.logger.name):
+        assert gene_metadata.default_variantfeatures_db_path() == db
 
     assert caplog.text == ""

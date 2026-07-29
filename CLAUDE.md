@@ -101,10 +101,30 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
   with no external volume. This is the write-side companion to
   `GVF_DISABLE_LOCAL_DATA`, which suppresses read-side discovery in the offline
   suite.
-- When `corpus/` is unreachable, corpus reuse is disabled rather than fatal:
-  `pipeline/steps.py::_resolve_corpus_dir` now logs a `corpus reuse DISABLED`
-  warning naming the volume, and `gvf-run`'s corpus sync records a stage warning.
-  A run in that state still completes, but re-fetches source it already has.
+- `gvf-run` doctor (Step 1) blocks the run when a guarded link is *dangling* —
+  the volume was expected and is not mounted (drive removed, wrong machine) — so
+  the run stops before Step 2 instead of re-fetching the whole corpus over the
+  network. An *absent* link is a legitimate fresh checkout or collaborator setup
+  and does not block. `--skip doctor` overrides either way. The logic lives in
+  `_apply_local_storage_checks`, split out of `doctor` so it is testable without
+  doctor's network probes.
+- When `corpus/` is unreachable but the run proceeds (`--skip doctor`), corpus
+  reuse is disabled rather than fatal: `pipeline/steps.py::_resolve_corpus_dir`
+  logs a `corpus reuse DISABLED` warning naming the volume, and `gvf-run`'s
+  corpus sync records a stage warning. Such a run still completes, but re-fetches
+  source it already has.
+- A `VARIANTFEATURES_DB` that is set but not a readable file (typically the
+  volume holding it is unmounted) now logs a warning in
+  `utils/gene_metadata.py` before falling back to built-in gene metadata. The
+  fallback is intentional; doing it silently was the problem.
+- Any helper that *guesses* a local data path must go through
+  `local_data_discovery_disabled()` — see `tests/unit/test_local_data_guard.py`
+  for the three-branch pattern (guard on, guard off, explicit wins). This is not
+  cosmetic: `scripts/backfill_paper_metadata.py::run_backfill` defaulted to
+  `REPO / "corpus"` and `read_text()`-ed every `*_artifacts.json` under it, so
+  once the corpus moved to an external volume the offline suite spent minutes
+  walking it over USB — `tests/unit/test_gvf_run_pipeline_wiring.py` hung
+  outright. With the guard applied, `pytest tests/unit` runs in ~43s.
 - Corpus cache: `corpus/<GENE>/<PMID>/`, indexed by `corpus/INDEX.json` and
   `corpus/INDEX.csv`, managed by `scripts/build_source_corpus.py`, and
   gitignored. `gvf-run` reuses usable cached source and folds new fetches back by
