@@ -75,10 +75,31 @@ test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/co
 
 If a check fails, mount the APFS volume named `Ezekers` at `/Volumes/Ezekers`.
 Do not replace the broken symlink or create a local `corpus/`, because that
-would send new papers to a second corpus on the internal disk. Other machines
-may use a normal local `corpus/` or set `GVF_CORPUS_DIR` explicitly. The
-workstation symlink is local-only and untracked; a fresh checkout must recreate
-it after verifying that the external target exists.
+would send new papers to a second corpus on the internal disk. The workstation
+symlink is local-only and untracked; a fresh checkout must recreate it after
+verifying that the external target exists.
+
+`gvf-run`'s doctor step enforces this: a **dangling** `corpus/` symlink (the drive
+was expected and is not attached) stops the run at Step 1 rather than silently
+re-fetching the whole corpus over the network. It names the volume from the link
+itself, so the message is correct on any machine. `--skip doctor` overrides.
+
+### On a collaborator's machine
+
+You do **not** need Brett's drive. `corpus/` is only a cache of already-fetched
+source, so an **absent** `corpus/` never blocks a run — it just starts cold. Pick
+one of:
+
+```bash
+mkdir corpus                      # plain local cache (needs the flag below)
+ln -s /path/to/your/storage corpus   # or your own external storage
+export GVF_CORPUS_DIR=/path/to/corpus   # or point at it without a symlink
+```
+
+A plain local `corpus/` on the internal disk is a deliberate choice, so confirm it
+with `GVF_ALLOW_LOCAL_CORPUS=1` (otherwise corpus-writing jobs refuse, to protect
+against an accidentally-detached drive). What you actually need for a first run is
+API keys — see [API_KEYS.md](API_KEYS.md).
 
 ## First Run
 

@@ -180,12 +180,19 @@ def default_variantfeatures_db_path() -> Optional[Path]:
         # Explicitly configured but unreadable — typically the external volume
         # holding it is not mounted. Falling through to built-in metadata is the
         # documented behaviour, but doing it silently hides a real misconfiguration.
+        parts = configured.parts
+        volume = parts[parts.index("Volumes") + 1] if "Volumes" in parts[:-1] else None
+        hint = (
+            f" That path is on the volume '{volume}' — mount it at "
+            f"/Volumes/{volume} and re-run."
+            if volume
+            else ""
+        )
         logger.warning(
-            "%s=%s is not a readable file — falling back to built-in gene "
-            "metadata. If this path lives on the 'Ezekers' volume, mount it at "
-            "/Volumes/Ezekers and re-run.",
+            "%s=%s is not a readable file — falling back to built-in gene metadata.%s",
             key,
             configured,
+            hint,
         )
 
     if local_data_discovery_disabled():

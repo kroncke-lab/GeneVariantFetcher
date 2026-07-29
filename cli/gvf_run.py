@@ -52,7 +52,12 @@ from utils.bootstrap import (
     llm_provider_key_status,
 )
 from utils.env_utils import get_env_bool, local_data_discovery_disabled
-from utils.local_storage import EXTERNAL_PATHS, external_path_state
+from utils.local_storage import (
+    EXTERNAL_PATHS,
+    external_link_target,
+    external_path_state,
+    external_volume_name,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -192,9 +197,14 @@ def _apply_local_storage_checks(status: dict) -> None:
     }
     for name, state in status["local_storage"].items():
         if state == "dangling":
-            status["required"][
-                f"{name}/ external storage (mount 'Ezekers' at /Volumes/Ezekers)"
-            ] = False
+            # Name the drive from the link, so this is right on any machine.
+            volume = external_volume_name(name)
+            remedy = (
+                f"attach '{volume}' and mount it at /Volumes/{volume}"
+                if volume
+                else f"restore its target ({external_link_target(name)})"
+            )
+            status["required"][f"{name}/ external storage ({remedy})"] = False
             status["ok"] = False
 
 
@@ -884,6 +894,12 @@ def step_report(
     lines.append("Subscription unlocks (not required, but lift recall):")
     for k, v in doctor_status.get("unlocks", {}).items():
         lines.append(f"  - {k}: {'✓' if v else '–'}")
+    storage = doctor_status.get("local_storage") or {}
+    if storage:
+        lines.append("External storage:")
+        for name, state in storage.items():
+            mark = {"linked": "✓", "dangling": "✗", "absent": "–"}.get(state, "?")
+            lines.append(f"  - {name}/: {mark} ({state})")
     lines.append(f"- NCBI reachable: {doctor_status.get('ncbi_reachable')}")
     lines.append("")
 

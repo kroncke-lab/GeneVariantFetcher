@@ -70,6 +70,64 @@ def external_path_state(name: str) -> str:
     return "absent"
 
 
+def external_link_target(name: str) -> Path | None:
+    """The symlink target of repo-relative ``name``, whether or not it resolves.
+
+    Read with ``os.readlink`` rather than ``resolve()`` so an unmounted volume
+    still reports where it was pointed — that string is what tells an operator
+    which drive to attach.
+    """
+    for anchor in _ANCHORS:
+        path = anchor / name
+        if path.is_symlink():
+            try:
+                return Path(os.readlink(path))
+            except OSError:
+                return None
+    return None
+
+
+def external_volume_name(name: str) -> str | None:
+    """The macOS volume a repo-relative link points into, e.g. ``Ezekers``.
+
+    Derived from the link itself rather than hardcoded, so this says the right
+    thing on a machine whose drive is named something else — and says nothing at
+    all on a collaborator's checkout that has no link to read.
+    """
+    target = external_link_target(name)
+    if target is None:
+        return None
+    parts = target.parts
+    try:
+        return parts[parts.index("Volumes") + 1]
+    except (ValueError, IndexError):
+        return None
+
+
+def _remedy_lines(name: str) -> list:
+    """Guidance for restoring ``name``, matched to what the checkout looks like.
+
+    A dangling link means a known drive is detached — say which one. Nothing to
+    read means a fresh clone, where telling someone to mount a volume they have
+    never heard of is worse than saying nothing: they need the setup path.
+    """
+    volume = external_volume_name(name)
+    if volume:
+        return [
+            f"Attach the volume {volume!r} and mount it at /Volumes/{volume}, then retry.",
+            f"The {name}/ symlink points at {external_link_target(name)}.",
+        ]
+    return [
+        f"This checkout has no {name}/ at all, which is the normal state of a "
+        f"fresh clone. The corpus is a cache of fetched source, so it is safe to "
+        f"start empty — it just has to be somewhere deliberate.",
+        "Set one up as either an absolute symlink to your own storage:",
+        f"    ln -s /path/to/your/storage {name}",
+        f"or a plain local directory, with {ALLOW_LOCAL_ENV}=1 set:",
+        f"    mkdir {name}",
+    ]
+
+
 def _guarded_root(target: Path) -> str | None:
     """Return the guarded repo-relative name containing ``target``, if any.
 
@@ -105,18 +163,15 @@ def require_external_storage(target: Path) -> None:
         return
 
     found = {
-        "absent": f"no {name!r} entry in the repo root at all",
-        "dangling": f"{name!r} is a symlink whose target is unreachable",
+        "absent": f"there is no {name}/ in the repo root",
+        "dangling": f"{name}/ is a symlink whose target is unreachable",
     }[state]
-    raise LocalStorageError(
-        f"refusing to create {target} — {found}.\n"
-        f"\n"
-        f"{name}/ is expected to be an absolute symlink to external storage, so "
-        f"creating it here would put a second copy on the internal disk that no "
-        f"later run reads — re-fetching source you already have.\n"
-        f"\n"
-        f"Mount the APFS volume 'Ezekers' at /Volumes/Ezekers (and recreate the "
-        f"{name}/ symlink if this is a fresh checkout), then retry. See "
-        f"CLAUDE.md > 'Operating Shape'.\n"
-        f"To use plain local storage on purpose, set {ALLOW_LOCAL_ENV}=1."
-    )
+    lines = [
+        f"cannot use {name}/ — {found}.",
+        "",
+        f"Refusing to create it, because {target} on the internal disk would be a "
+        f"second copy that no later run reads — re-fetching source you already have.",
+        "",
+        *_remedy_lines(name),
+    ]
+    raise LocalStorageError("\n".join(lines))

@@ -1007,6 +1007,18 @@ def filter_papers(
 # =============================================================================
 
 
+def _volume_of(link: Path) -> Optional[str]:
+    """The macOS volume a symlink points into, e.g. ``Ezekers``, or None."""
+    try:
+        parts = Path(os.readlink(link)).parts
+    except OSError:
+        return None
+    try:
+        return parts[parts.index("Volumes") + 1]
+    except (ValueError, IndexError):
+        return None
+
+
 def _resolve_corpus_dir() -> Optional[Path]:
     """Resolve the consolidated source corpus dir (GVF_CORPUS_DIR or <repo>/corpus).
 
@@ -1025,11 +1037,19 @@ def _resolve_corpus_dir() -> Optional[Path]:
     # Losing the corpus is not fatal — the harvester just re-fetches — but it is
     # expensive and invisible, so say so rather than quietly running cold.
     if corpus.is_symlink():
+        # Name the volume from the link itself, so this reads correctly on a
+        # machine whose drive is called something else.
+        volume = _volume_of(corpus)
+        remedy = (
+            f"Attach the volume '{volume}' and mount it at /Volumes/{volume}"
+            if volume
+            else f"Restore its target ({os.readlink(corpus)})"
+        )
         logger.warning(
             "corpus reuse DISABLED: %s is a symlink whose target is unreachable. "
-            "Mount the 'Ezekers' volume at /Volumes/Ezekers; this run will "
-            "re-fetch source that is already cached.",
+            "%s; this run will re-fetch source that is already cached.",
             corpus,
+            remedy,
         )
     elif env:
         logger.warning(

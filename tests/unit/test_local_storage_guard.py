@@ -76,7 +76,7 @@ def test_state_is_absent_on_a_fresh_checkout(fake_repo):
 
 def test_absent_link_is_refused(fake_repo):
     """The regression: a fresh checkout must not grow a local corpus/ tree."""
-    with pytest.raises(LocalStorageError, match="no 'corpus' entry"):
+    with pytest.raises(LocalStorageError, match="there is no corpus/ in the repo root"):
         require_external_storage(fake_repo / "corpus")
 
     assert not (fake_repo / "corpus").exists(), "the guard must not create anything"
@@ -89,12 +89,28 @@ def test_dangling_link_is_refused_with_the_mount_reason(fake_repo):
         require_external_storage(fake_repo / "corpus" / "KCNH2")
 
 
-def test_error_names_the_volume_and_the_escape_hatch(fake_repo):
+def test_detached_drive_names_the_volume_to_attach(fake_repo):
+    """A dangling link names its own volume, read from the link, not hardcoded."""
+    (fake_repo / "corpus").symlink_to("/Volumes/SomeOtherDisk/research/corpus")
+
     with pytest.raises(LocalStorageError) as excinfo:
         require_external_storage(fake_repo / "corpus")
 
     message = str(excinfo.value)
-    assert "Ezekers" in message
+    assert "SomeOtherDisk" in message
+    assert "/Volumes/SomeOtherDisk" in message
+
+
+def test_fresh_clone_is_not_told_to_mount_someone_elses_drive(fake_repo):
+    """A collaborator has no Ezekers; naming it reads as a broken setup."""
+    with pytest.raises(LocalStorageError) as excinfo:
+        require_external_storage(fake_repo / "corpus")
+
+    message = str(excinfo.value)
+    assert "Volumes" not in message
+    assert "mount" not in message.lower()
+    assert "fresh clone" in message
+    assert "ln -s" in message
     assert ALLOW_LOCAL_ENV in message
 
 
@@ -152,7 +168,7 @@ def test_corpus_builder_exits_nonzero_instead_of_creating_a_local_corpus(
 
     assert build_source_corpus.main() == 2
     assert not out.exists(), "the builder must not create a local corpus"
-    assert "refusing to create" in capsys.readouterr().err
+    assert "cannot use corpus/" in capsys.readouterr().err
 
 
 def test_corpus_builder_guards_before_rebuild_deletes_anything(
@@ -188,13 +204,14 @@ def test_unreachable_corpus_link_warns_instead_of_silently_running_cold(
     """
     monkeypatch.setattr(steps, "__file__", str(tmp_path / "pipeline" / "steps.py"))
     monkeypatch.delenv("GVF_CORPUS_DIR", raising=False)
-    (tmp_path / "corpus").symlink_to(tmp_path / "never_mounted")
+    (tmp_path / "corpus").symlink_to("/Volumes/SomeOtherDisk/research/corpus")
 
     with caplog.at_level(logging.WARNING, logger=steps.logger.name):
         assert steps._resolve_corpus_dir() is None
 
     assert "corpus reuse DISABLED" in caplog.text
-    assert "Ezekers" in caplog.text
+    # Named from the link, not hardcoded, so it is right on any machine.
+    assert "SomeOtherDisk" in caplog.text
 
 
 def test_misconfigured_corpus_env_var_warns(monkeypatch, tmp_path, caplog):
@@ -230,7 +247,7 @@ def _fresh_status() -> dict:
 
 def test_doctor_blocks_when_the_volume_is_unmounted(fake_repo):
     """The user's scenario: the drive was there, now it is not. Stop at Step 1."""
-    (fake_repo / "corpus").symlink_to(fake_repo / "never_mounted")
+    (fake_repo / "corpus").symlink_to("/Volumes/SomeOtherDisk/research/corpus")
     status = _fresh_status()
 
     gvf_run._apply_local_storage_checks(status)
@@ -239,7 +256,7 @@ def test_doctor_blocks_when_the_volume_is_unmounted(fake_repo):
     assert status["local_storage"] == {"corpus": "dangling"}
     blocked = [k for k, v in status["required"].items() if not v]
     assert len(blocked) == 1
-    assert "Ezekers" in blocked[0]
+    assert "SomeOtherDisk" in blocked[0]
 
 
 def test_doctor_does_not_block_a_mounted_volume(fake_repo):
@@ -283,13 +300,13 @@ def test_doctor_check_preserves_an_already_failing_status(fake_repo):
 
 def test_unreachable_configured_variantfeatures_db_warns(monkeypatch, tmp_path, caplog):
     """An unmounted volume must not silently downgrade to built-in metadata."""
-    monkeypatch.setenv("VARIANTFEATURES_DB", str(tmp_path / "not_mounted.db"))
+    monkeypatch.setenv("VARIANTFEATURES_DB", "/Volumes/SomeOtherDisk/vf/variants.db")
 
     with caplog.at_level(logging.WARNING, logger=gene_metadata.logger.name):
         assert gene_metadata.default_variantfeatures_db_path() is None
 
     assert "VARIANTFEATURES_DB" in caplog.text
-    assert "Ezekers" in caplog.text
+    assert "SomeOtherDisk" in caplog.text
 
 
 def test_reachable_configured_variantfeatures_db_stays_quiet(
