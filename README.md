@@ -70,6 +70,32 @@ permit programmatic full-text/supplement retrieval. To disable cookie loading,
 pass `--no-cookies` to `scripts/fetch_paywalled.py`; for a fast run with no
 paywall/cookie access at all, use `gvf gvf-run --no-source-recovery`.
 
+## Local Corpus Storage
+
+On Brett's current macOS workstation, GVF's large paper corpus is stored on the
+external APFS volume `Ezekers`:
+
+| Stable repo path | Physical storage |
+|---|---|
+| `corpus/` | `/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus` |
+
+`corpus/` is an absolute, local-only symlink, so normal GVF commands should
+continue to use the repo-relative path. The symlink is untracked and must be
+recreated in a fresh checkout on this workstation after verifying that its
+external target exists. `GVF_CORPUS_DIR` remains available for a deliberate
+override. Before any job that reads or writes the corpus, verify the link and
+mounted target:
+
+```bash
+test -L corpus && test -d corpus
+test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus"
+```
+
+If either check fails, mount the volume at `/Volumes/Ezekers` before continuing.
+Do not rename the volume, replace the broken link, or create a fallback local
+`corpus/`; doing so would split the canonical corpus across disks. The corpus
+remains untracked by Git.
+
 ## Current Status
 
 Live recall metrics and blockers live in

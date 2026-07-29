@@ -79,6 +79,32 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 
 ## Operating Shape
 
+- Local corpus storage on Brett's current workstation: the repo path `corpus/`
+  is an absolute symlink to
+  `/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus`. Keep code and
+  commands on the stable `corpus/` interface (or use `GVF_CORPUS_DIR` only for
+  a deliberate override). Before a corpus-reading or corpus-writing job, run
+  `test -L corpus && test -d corpus`; if it fails, mount the APFS volume named
+  `Ezekers` at `/Volumes/Ezekers`. Do not replace a broken symlink with a new
+  local directory or rename the volume. The symlink is intentionally local-only
+  and untracked, so a fresh checkout needs it recreated after the external
+  target has been verified. `.gitignore` ignores it with an anchored, slashless
+  `/corpus` rule — a trailing-slash `corpus/` pattern matches directories only,
+  so a recreated symlink would show as untracked in a fresh clone.
+- Corpus write guard: `utils/local_storage.py` enforces the above in code. A
+  *missing* `corpus` link does not fail on its own — `mkdir(parents=True)` would
+  create a real local `corpus/` and the run would build a second corpus on the
+  internal disk that no later run reads, re-fetching paywalled source already
+  cached on the volume. `require_external_storage()` refuses that write, so
+  `scripts/build_source_corpus.py` exits 2 with the mount instructions instead.
+  Set `GVF_ALLOW_LOCAL_CORPUS=1` to opt into plain local storage on a machine
+  with no external volume. This is the write-side companion to
+  `GVF_DISABLE_LOCAL_DATA`, which suppresses read-side discovery in the offline
+  suite.
+- When `corpus/` is unreachable, corpus reuse is disabled rather than fatal:
+  `pipeline/steps.py::_resolve_corpus_dir` now logs a `corpus reuse DISABLED`
+  warning naming the volume, and `gvf-run`'s corpus sync records a stage warning.
+  A run in that state still completes, but re-fetches source it already has.
 - Corpus cache: `corpus/<GENE>/<PMID>/`, indexed by `corpus/INDEX.json` and
   `corpus/INDEX.csv`, managed by `scripts/build_source_corpus.py`, and
   gitignored. `gvf-run` reuses usable cached source and folds new fetches back by

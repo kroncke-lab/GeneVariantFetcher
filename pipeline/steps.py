@@ -1020,7 +1020,22 @@ def _resolve_corpus_dir() -> Optional[Path]:
         return None
     else:
         corpus = Path(__file__).resolve().parents[1] / "corpus"
-    return corpus if corpus.is_dir() else None
+    if corpus.is_dir():
+        return corpus
+    # Losing the corpus is not fatal — the harvester just re-fetches — but it is
+    # expensive and invisible, so say so rather than quietly running cold.
+    if corpus.is_symlink():
+        logger.warning(
+            "corpus reuse DISABLED: %s is a symlink whose target is unreachable. "
+            "Mount the 'Ezekers' volume at /Volumes/Ezekers; this run will "
+            "re-fetch source that is already cached.",
+            corpus,
+        )
+    elif env:
+        logger.warning(
+            "corpus reuse DISABLED: GVF_CORPUS_DIR=%s is not a directory.", corpus
+        )
+    return None
 
 
 def _consolidate_from_corpus(

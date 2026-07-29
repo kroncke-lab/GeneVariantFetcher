@@ -61,6 +61,25 @@ NCBI_API_KEY=your-ncbi-key
 
 See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
 
+## Local Corpus Preflight
+
+On Brett's current workstation, the repo's `corpus/` path is an absolute
+symlink to
+`/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus`. Before the first run
+or any corpus maintenance job:
+
+```bash
+test -L corpus && test -d corpus
+test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus"
+```
+
+If a check fails, mount the APFS volume named `Ezekers` at `/Volumes/Ezekers`.
+Do not replace the broken symlink or create a local `corpus/`, because that
+would send new papers to a second corpus on the internal disk. Other machines
+may use a normal local `corpus/` or set `GVF_CORPUS_DIR` explicitly. The
+workstation symlink is local-only and untracked; a fresh checkout must recreate
+it after verifying that the external target exists.
+
 ## First Run
 
 `gvf gvf-run` is the one command you need. Point it at **your own gene** — any

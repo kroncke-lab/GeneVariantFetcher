@@ -127,8 +127,11 @@ benchmarks/codex_paper_eval/runs/*/production_runs/
 benchmarks/codex_paper_eval/runs/*/driver.log
 
 # Consolidated source corpus (deduplicated full text + supplements + figures,
-# multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit)
-corpus/
+# multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit).
+# Slashless and anchored on purpose: locally `corpus` is an absolute symlink to
+# external storage, and a trailing-slash pattern matches directories only — it
+# would leave a recreated symlink showing as untracked in a fresh checkout.
+/corpus
 
 # Ad-hoc local recall debugging helpers
 scripts/_analyze_missing.py

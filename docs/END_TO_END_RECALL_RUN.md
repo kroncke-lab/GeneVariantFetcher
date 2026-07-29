@@ -58,6 +58,12 @@ The current full-text corpus is intentionally not tracked by Git. To reuse
 papers already downloaded on this machine, copy the ignored `corpus/` directory
 and any specific ignored run directories you plan to refresh or score.
 
+On Brett's current workstation, `corpus/` resolves to
+`/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus`. Mount the `Ezekers`
+volume at `/Volumes/Ezekers` and confirm `test -L corpus && test -d corpus`
+before copying. Keep using `corpus/` as the rsync source so this runbook works
+through the repository's stable interface.
+
 Example transfer:
 
 ```bash

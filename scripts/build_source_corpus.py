@@ -47,6 +47,10 @@ if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
+from utils.local_storage import (  # noqa: E402
+    LocalStorageError,
+    require_external_storage,
+)
 
 DEFAULT_ROOTS = ["results", "validation_runs"]
 KNOWN_GENES = {
@@ -176,7 +180,15 @@ def main() -> int:
         ),
     )
     args = ap.parse_args()
-    out = Path(args.out).expanduser().resolve()
+    # Guard before resolve(): resolve() rewrites <repo>/corpus to its on-volume
+    # target, which would hide a missing link from the guard.
+    out_arg = Path(args.out).expanduser()
+    try:
+        require_external_storage(out_arg)
+    except LocalStorageError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 2
+    out = out_arg.resolve()
     dry = not args.apply
     source_bases = [(REPO / r).resolve() for r in args.roots]
 
