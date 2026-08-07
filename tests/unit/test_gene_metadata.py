@@ -126,6 +126,60 @@ def test_builtin_gene_aliases_include_common_protein_names_and_typos():
     assert metadata.protein_length == 1274
 
 
+def test_bmpr2_registration_turns_position_validation_back_on():
+    """An unregistered gene validates nothing, and says so silently.
+
+    ``validate_position`` returns True whenever ``protein_length`` is None and
+    ``variant_scanner`` falls back to a 9999 ceiling, so before BMPR2 was
+    registered every parsed position was accepted -- including positions carried
+    in from a co-tabulated gene. 1038 is NP_001195.2, the protein of the MANE
+    Select transcript NM_001204.7.
+    """
+
+    from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
+
+    metadata = get_gene_metadata("BMPR2")
+    assert metadata.protein_length == 1038
+    assert PROTEIN_LENGTHS["BMPR2"] == 1038
+    assert metadata.canonical_transcript == "NM_001204.7"
+
+    normalizer = VariantNormalizer("BMPR2")
+    assert normalizer.validate_position(1038) is True
+    assert normalizer.validate_position(1039) is False
+    # A RYR2-scale position is the shape a multi-gene PAH panel table leaks in.
+    assert normalizer.validate_position(2870) is False
+
+
+def test_bmpr2_aliases_do_not_match_the_other_pah_panel_genes():
+    """BMPR2 is tabulated next to the genes it must not absorb.
+
+    Heritable-PAH papers list BMPR2 alongside ACVRL1/ALK1, ENG, SMAD9 and CAV1,
+    so an over-broad alias here reads a neighbouring row as a BMPR2 mention. The
+    historical locus names PPH1/POVD1 still have to retrieve founder-era papers,
+    which is why they are query-only rather than gene-mention aliases.
+    """
+
+    mention = gene_metadata.gene_alias_regex("BMPR2", include_query_aliases=False)
+    query = gene_metadata.gene_alias_regex("BMPR2", include_query_aliases=True)
+
+    for text in ("BMPR2 mutation carriers", "BMPR-II protein", "BMPR3"):
+        assert mention.search(text), text
+
+    for text in (
+        "ACVRL1 (ALK1) variant",
+        "ENG mutation",
+        "SMAD9 carriers",
+        "CAV1 c.474delA",
+        "anaplastic lymphoma kinase (ALK)",
+    ):
+        assert not mention.search(text), text
+        assert not query.search(text), text
+
+    # Query-only: retrievable as literature terms, never a gene mention.
+    assert query.search("linkage to the PPH1 locus")
+    assert not mention.search("linkage to the PPH1 locus")
+
+
 def test_variantfeatures_metadata_and_residue_lookup(tmp_path, monkeypatch):
     db_path = tmp_path / "variants.db"
     conn = sqlite3.connect(db_path)

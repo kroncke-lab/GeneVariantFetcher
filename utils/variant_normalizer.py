@@ -85,6 +85,8 @@ PROTEIN_LENGTHS = {
     "GJA5": 406,
     "KCNA5": 507,
     "PITX2": 305,
+    # Pulmonary arterial hypertension genes
+    "BMPR2": 1038,
 }
 
 # Hotspot variants that are frequently mentioned as comparator/background
