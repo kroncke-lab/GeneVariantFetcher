@@ -86,6 +86,44 @@ MANUAL_DISEASE_ALIASES: dict[str, dict[str, list[str]]] = {
             "HOCM",
         ],
     },
+    "BMPR2": {
+        # "primary pulmonary hypertension" is the pre-2003 name for the same
+        # entity and still labels much of the BMPR2 founder literature, so it
+        # has to stay in scope alongside the current PAH/HPAH terms.
+        "DEFAULT": [
+            "pulmonary arterial hypertension",
+            "heritable pulmonary arterial hypertension",
+            "familial pulmonary arterial hypertension",
+            "idiopathic pulmonary arterial hypertension",
+            "primary pulmonary hypertension",
+            "pulmonary hypertension",
+            "pulmonary veno-occlusive disease",
+            "PAH",
+            "HPAH",
+            "FPAH",
+            "IPAH",
+            "PPH",
+            "PVOD",
+        ],
+        "PULMONARY ARTERIAL HYPERTENSION": [
+            "pulmonary arterial hypertension",
+            "heritable pulmonary arterial hypertension",
+            "familial pulmonary arterial hypertension",
+            "idiopathic pulmonary arterial hypertension",
+            "primary pulmonary hypertension",
+            "PAH",
+            "HPAH",
+            "FPAH",
+            "IPAH",
+            "PPH",
+        ],
+        "PULMONARY VENO-OCCLUSIVE DISEASE": [
+            "pulmonary veno-occlusive disease",
+            "pulmonary capillary hemangiomatosis",
+            "PVOD",
+            "PCH",
+        ],
+    },
 }
 
 

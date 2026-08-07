@@ -155,6 +155,40 @@ BUILTIN_GENE_METADATA: dict[str, GeneMetadata] = {
         protein_length=860,
         sources=("builtin",),
     ),
+    "BMPR2": GeneMetadata(
+        symbol="BMPR2",
+        aliases=(
+            "BMPR2",
+            "BMPR-2",
+            "BMPR-II",
+            "BMPRII",
+            "BMPR3",
+            "BMR2",
+            "BRK-3",
+            "bone morphogenetic protein receptor type 2",
+            "bone morphogenetic protein receptor type II",
+        ),
+        # PPH1/POVD1 are the historical disease-locus names and T-ALK an older
+        # receptor alias; they retrieve real BMPR2 papers but are too
+        # disease-shaped to treat as gene mentions during specificity checks.
+        query_aliases=(
+            "BMPR2",
+            "BMPR-II",
+            "BMPR3",
+            "BMR2",
+            "BRK-3",
+            "POVD1",
+            "PPH1",
+            "T-ALK",
+            "bone morphogenetic protein receptor type 2",
+        ),
+        protein_length=1038,
+        canonical_transcript="NM_001204.7",
+        refseq_transcripts=("NM_001204.7",),
+        ncbi_id="659",
+        protein_ids=("NP_001195.2",),
+        sources=("builtin",),
+    ),
 }
 
 
