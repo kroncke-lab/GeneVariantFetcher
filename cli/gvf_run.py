@@ -1097,20 +1097,29 @@ def _fmt(v: Optional[float]) -> str:
     return f"{v:.1f}%"
 
 
-def step_corpus_sync(run_dir: Path, stage_warnings: Optional[list[str]] = None) -> None:
+def step_corpus_sync(
+    run_dir: Path,
+    stage_warnings: Optional[list[str]] = None,
+    gene: Optional[str] = None,
+) -> None:
     """Incrementally fold this run's fetched source into the consolidated corpus.
 
     Scoped to ``run_dir`` so it is fast; the builder is idempotent and only
     adds new (gene, PMID) papers or upgrades compromised categories, so a
-    rerun never re-fetches what the corpus already holds.
+    rerun never re-fetches what the corpus already holds. ``gene`` is passed
+    as ``--assume-gene``: a run-dir root has no gene path component below it,
+    so without the hint a NEW gene's papers are silently skipped.
     """
     builder = REPO_ROOT / "scripts" / "build_source_corpus.py"
     if not builder.exists():
         return
     logger.info("📦 Step 4.5: corpus sync (folding new source into corpus/)")
+    cmd = [sys.executable, str(builder), "--apply", "--roots", str(run_dir)]
+    if gene:
+        cmd += ["--assume-gene", gene]
     try:
         result = subprocess.run(
-            [sys.executable, str(builder), "--apply", "--roots", str(run_dir)],
+            cmd,
             capture_output=True,
             text=True,
             timeout=1800,
@@ -2389,7 +2398,7 @@ def _run_gvf_pipeline(
     # (idempotent incremental merge — adds new papers / upgrades compromised
     # categories only, so the next run reuses them instead of re-fetching).
     if corpus_sync and "corpus-sync" not in skip:
-        step_corpus_sync(run_dir=run_dir, stage_warnings=stage_warnings)
+        step_corpus_sync(run_dir=run_dir, stage_warnings=stage_warnings, gene=gene)
     elif "corpus-sync" in skip or not corpus_sync:
         logger.info("⏭️  Step 4.5: corpus sync — SKIPPED")
 

@@ -71,6 +71,19 @@ SUFFIX = "_FULL_CONTEXT.md"
 IMG_EXT = {".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff", ".webp", ".bmp"}
 
 
+def index_rel_path(path: Path, fallback: Path) -> str:
+    """Repo-relative string when ``path`` is inside the repo, else ``fallback``.
+
+    The corpus usually lives outside the repo — the ``corpus`` symlink points at
+    an external volume, or ``--out`` names another disk — where
+    ``relative_to(REPO)`` raises ValueError.
+    """
+    try:
+        return str(path.relative_to(REPO))
+    except ValueError:
+        return str(fallback)
+
+
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -92,6 +105,7 @@ def infer_gene(
     pmid: str,
     corpus_pmid_gene: dict[str, str],
     source_bases: list[Path],
+    assume_gene: str | None = None,
 ) -> str | None:
     for base in source_bases:
         try:
@@ -108,6 +122,11 @@ def infer_gene(
     # Already-known PMID -> reuse its gene (handles gene-less manual dirs).
     if pmid in corpus_pmid_gene:
         return corpus_pmid_gene[pmid]
+    # The caller knows which gene this run fetched for (gvf-run's scoped
+    # run-dir sync, where the gene never appears below the root). Beats the
+    # body scan: a new gene is not in KNOWN_GENES at all.
+    if assume_gene:
+        return assume_gene
     # Last resort: scan the body for a single known gene token.
     try:
         head = p.read_text(encoding="utf-8", errors="replace")[:8192].upper()
@@ -179,6 +198,15 @@ def main() -> int:
             "Pass legacy/ad-hoc roots explicitly when needed."
         ),
     )
+    ap.add_argument(
+        "--assume-gene",
+        help=(
+            "File gene-less candidates under this gene after path/corpus "
+            "inference fails (gvf-run passes the run's gene: a scoped run-dir "
+            "root has no gene component below it, so a NEW gene's papers were "
+            "silently skipped)."
+        ),
+    )
     args = ap.parse_args()
     # Guard before resolve(): resolve() rewrites <repo>/corpus to its on-volume
     # target, which would hide a missing link from the guard.
@@ -216,7 +244,13 @@ def main() -> int:
             pmid = ft.name[: -len(SUFFIX)]
             if not pmid.isdigit():
                 continue
-            gene = infer_gene(ft.resolve(), pmid, corpus_pmid_gene, source_bases)
+            gene = infer_gene(
+                ft.resolve(),
+                pmid,
+                corpus_pmid_gene,
+                source_bases,
+                assume_gene=(args.assume_gene or "").upper() or None,
+            )
             if not gene:
                 skipped_no_gene.append(ft.as_posix())
                 continue
@@ -278,14 +312,19 @@ def main() -> int:
             {
                 "gene": gene,
                 "pmid": pmid,
-                "fulltext": str((dest / best_ft["ft"].name).relative_to(REPO)),
+                "fulltext": index_rel_path(
+                    dest / best_ft["ft"].name,
+                    Path("corpus") / gene / pmid / best_ft["ft"].name,
+                ),
                 "fulltext_bytes": best_ft["ft_size"],
                 "source_sha256": new_sha,
                 "full_text_status": "ok" if best_ft["usable"] else "stub",
                 "n_figures": max(best_fig["nfigs"], cur_nfig),
                 "n_supplement_files": max(best_sup["nsuppl"], cur_nsup),
                 "n_source_copies": sum(1 for r in recs if not r.get("_corpus")),
-                "chosen_from": str(best_ft["ft"].parent.relative_to(REPO))
+                "chosen_from": index_rel_path(
+                    best_ft["ft"].parent, best_ft["ft"].parent
+                )
                 if not best_ft.get("_corpus")
                 else "corpus",
             }
