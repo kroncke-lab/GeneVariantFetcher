@@ -71,6 +71,19 @@ SUFFIX = "_FULL_CONTEXT.md"
 IMG_EXT = {".png", ".jpg", ".jpeg", ".gif", ".tif", ".tiff", ".webp", ".bmp"}
 
 
+def index_rel_path(path: Path, fallback: Path) -> str:
+    """Repo-relative string when ``path`` is inside the repo, else ``fallback``.
+
+    The corpus usually lives outside the repo — the ``corpus`` symlink points at
+    an external volume, or ``--out`` names another disk — where
+    ``relative_to(REPO)`` raises ValueError.
+    """
+    try:
+        return str(path.relative_to(REPO))
+    except ValueError:
+        return str(fallback)
+
+
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -278,14 +291,19 @@ def main() -> int:
             {
                 "gene": gene,
                 "pmid": pmid,
-                "fulltext": str((dest / best_ft["ft"].name).relative_to(REPO)),
+                "fulltext": index_rel_path(
+                    dest / best_ft["ft"].name,
+                    Path("corpus") / gene / pmid / best_ft["ft"].name,
+                ),
                 "fulltext_bytes": best_ft["ft_size"],
                 "source_sha256": new_sha,
                 "full_text_status": "ok" if best_ft["usable"] else "stub",
                 "n_figures": max(best_fig["nfigs"], cur_nfig),
                 "n_supplement_files": max(best_sup["nsuppl"], cur_nsup),
                 "n_source_copies": sum(1 for r in recs if not r.get("_corpus")),
-                "chosen_from": str(best_ft["ft"].parent.relative_to(REPO))
+                "chosen_from": index_rel_path(
+                    best_ft["ft"].parent, best_ft["ft"].parent
+                )
                 if not best_ft.get("_corpus")
                 else "corpus",
             }
