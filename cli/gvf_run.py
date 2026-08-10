@@ -236,6 +236,15 @@ def doctor() -> dict:
     for k in RECOMMENDED_ENV + CREDENTIAL_UNLOCKS:
         bucket = "unlocks" if k in CREDENTIAL_UNLOCKS else "recommended"
         status[bucket][k] = bool(os.environ.get(k))
+    # EZproxy accepts four spellings (PREFIX/HOST × GVF_/plain); the BMPR2 run's
+    # doctor printed "GVF_EZPROXY_PREFIX: –" while the proxy was fully configured
+    # via GVF_EZPROXY_HOST. Report the resolved state, not one literal env var.
+    try:
+        from harvesting.browser_html import ezproxy as _ezproxy
+
+        status["unlocks"]["GVF_EZPROXY_PREFIX"] = _ezproxy.is_configured()
+    except Exception:  # noqa: BLE001 - doctor must never crash on an import
+        pass
     # Browser-recovery tier: a hard dependency for source recovery, but easy to
     # leave un-provisioned (package installed, Chromium binary not). Surface it.
     status["browser_recovery"] = browser_recovery_status()
@@ -1495,6 +1504,88 @@ EXIT_INSTITUTIONAL_BLOCK = (
 )
 
 
+def _attempt_ezproxy_self_heal(access) -> Optional[object]:
+    """Try a headless EZproxy session refresh and re-probe; None when not healed.
+
+    Fires only for the failure classes a relogin can fix — an expired session
+    (login redirect) or a missing session cookie — and only when the operator
+    has already bootstrapped the dedicated browser profile
+    (``scripts/ezproxy_relogin.py --bootstrap``). Disable with
+    ``GVF_EZPROXY_AUTOHEAL=0``. A Cloudflare wall or probe error is not
+    healable by a new cookie, so those still block immediately.
+    """
+    if (os.environ.get("GVF_EZPROXY_AUTOHEAL") or "").strip().lower() in (
+        "0",
+        "false",
+        "no",
+    ):
+        return None
+    if not (getattr(access, "login_redirect", False) or access.ez_cookies == 0):
+        return None
+    try:
+        from utils.env_utils import local_data_discovery_disabled
+
+        # The profile check probes a home-directory path; the offline suite
+        # must never discover developer state through it.
+        if local_data_discovery_disabled():
+            return None
+        from scripts.ezproxy_relogin import (
+            profile_is_bootstrapped,
+            resolve_profile_dir,
+        )
+    except ImportError:
+        return None  # installed package without scripts/ — manual refresh only
+    profile_dir = resolve_profile_dir()
+    if not profile_is_bootstrapped(profile_dir):
+        logger.info(
+            "institutional preflight: no bootstrapped EZproxy profile at %s — "
+            "run scripts/ezproxy_relogin.py --bootstrap once to enable self-heal.",
+            profile_dir,
+        )
+        return None
+    logger.info(
+        "🔁 institutional preflight: attempting EZproxy session self-heal "
+        "(profile: %s)…",
+        profile_dir,
+    )
+    try:
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(REPO_ROOT / "scripts" / "ezproxy_relogin.py"),
+                "--skip-verify",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+    except Exception as e:  # noqa: BLE001 - self-heal must never brick the run
+        logger.warning("EZproxy self-heal errored (%s); keeping original result.", e)
+        return None
+    if result.returncode != 0:
+        logger.warning(
+            "EZproxy self-heal did not complete (exit %d): %s",
+            result.returncode,
+            (result.stderr or result.stdout or "").strip()[-300:],
+        )
+        return None
+    try:
+        from cli.institutional_preflight import probe_institutional_access
+
+        healed = probe_institutional_access()
+    except Exception as e:  # noqa: BLE001
+        logger.warning("post-heal re-probe errored (%s); keeping original result.", e)
+        return None
+    if healed.viable:
+        logger.info("✅ EZproxy self-heal succeeded — session refreshed.")
+    else:
+        logger.warning(
+            "EZproxy self-heal refreshed cookies but access is still blocked (%s).",
+            healed.reason,
+        )
+    return healed
+
+
 @dataclass
 class TraceSession:
     """Where this gvf-run invocation writes its LLM traces, and under whose id.
@@ -1928,6 +2019,10 @@ def _run_gvf_pipeline(
             stage_warnings.append(
                 "institutional preflight probe could not run; access unverified"
             )
+        if access is not None and access.should_block:
+            healed = _attempt_ezproxy_self_heal(access)
+            if healed is not None:
+                access = healed
         if access is not None:
             for ln in access.lines:
                 logger.info("   %s", ln)
