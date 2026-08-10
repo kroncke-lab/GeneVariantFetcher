@@ -10,6 +10,7 @@ and the no-DB path.
 """
 
 import csv
+import email.message
 import hashlib
 import io
 import json
@@ -681,6 +682,88 @@ def test_live_sync_redirect_handler_fails_explicitly():
             {},
             "https://other.invalid/gold",
         )
+
+
+class _FlakyOpener:
+    """Opener that raises queued exceptions before finally serving payload."""
+
+    def __init__(self, failures, payload=None):
+        self.failures = list(failures)
+        self.payload = payload
+        self.attempts = 0
+
+    def open(self, request, timeout):
+        self.attempts += 1
+        if self.failures:
+            raise self.failures.pop(0)
+        return _FakeResponse(json.dumps(self.payload).encode())
+
+
+def _wake_http_error(code, retry_after=None):
+    headers = email.message.Message()
+    if retry_after is not None:
+        headers["Retry-After"] = str(retry_after)
+    return ingest.urllib.error.HTTPError(
+        "https://variantbrowser.org/review/api/gold-standard/",
+        code,
+        "unavailable",
+        headers,
+        None,
+    )
+
+
+def test_live_sync_retries_through_staging_wake(tmp_path):
+    source_rows = list(csv.DictReader(_write_export(tmp_path).open()))
+    payload = _live_payload(source_rows)
+    opener = _FlakyOpener(
+        [_wake_http_error(503, retry_after=2), _wake_http_error(500)],
+        payload,
+    )
+    sleeps = []
+
+    rows, metadata = ingest.fetch_live_gold(
+        "https://variantbrowser.org/review/api/gold-standard/",
+        "secret-token-" * 4,
+        opener=opener,
+        retry_sleep=sleeps.append,
+    )
+
+    assert opener.attempts == 3
+    assert sleeps == [2.0, 15.0]  # Retry-After honored, then the default delay
+    assert metadata["record_count"] == len(rows) == len(source_rows)
+
+
+def test_live_sync_wake_retries_stop_at_budget():
+    opener = _FlakyOpener([_wake_http_error(503, retry_after=60)] * 5)
+    sleeps = []
+
+    with pytest.raises(ingest.GoldSyncError, match="HTTP 503"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/",
+            "secret-token-" * 4,
+            opener=opener,
+            retry_budget_s=150,
+            retry_sleep=sleeps.append,
+        )
+
+    assert opener.attempts == 3  # a third 60s wait would exceed the 150s budget
+    assert sleeps == [60.0, 60.0]
+
+
+def test_live_sync_never_retries_client_errors():
+    opener = _FlakyOpener([_wake_http_error(401)])
+    sleeps = []
+
+    with pytest.raises(ingest.GoldSyncError, match="HTTP 401"):
+        ingest.fetch_live_gold(
+            "https://variantbrowser.org/review/api/gold-standard/",
+            "secret-token-" * 4,
+            opener=opener,
+            retry_sleep=sleeps.append,
+        )
+
+    assert opener.attempts == 1
+    assert sleeps == []
 
 
 def test_read_live_sync_state_handles_paths_with_spaces(tmp_path):

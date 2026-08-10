@@ -46,6 +46,7 @@ import json
 import os
 import sqlite3
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -217,6 +218,13 @@ GOLD_EXPORT_MARKERS = {
 ACCEPTED_GOLD_STATUSES = {"gold_standard", "adjudicated"}
 LIVE_GOLD_SCHEMA_VERSION = 1
 DEFAULT_LIVE_GOLD_URL = "https://variantbrowser.org/review/api/gold-standard/"
+# The review database behind the gold endpoint is Azure SQL serverless and
+# auto-pauses when idle; the first request of the day both fails (HTTP 500, or
+# 503 + Retry-After once Variant_Browser's wake middleware answers) and starts
+# the 30-60s resume. Retrying within a bounded budget rides that out.
+RETRYABLE_HTTP_STATUSES = frozenset({500, 502, 503, 504})
+WAKE_RETRY_BUDGET_S = 180.0
+WAKE_RETRY_DEFAULT_DELAY_S = 15.0
 DEFAULT_CACHE_DB = (
     REPO
     / "gene_variant_fetcher_gold_standard"
@@ -317,14 +325,33 @@ def _validated_source_url(source_url: str) -> str:
     return urllib.parse.urlunsplit(parsed)
 
 
+def _retry_delay_s(headers: Any) -> float:
+    """Server-suggested Retry-After in seconds, clamped, defaulted when absent."""
+    raw = ""
+    if headers is not None:
+        raw = str(headers.get("Retry-After") or "").strip()
+    try:
+        delay = float(raw)
+    except ValueError:
+        delay = WAKE_RETRY_DEFAULT_DELAY_S
+    return min(max(delay, 1.0), 60.0)
+
+
 def fetch_live_gold(
     source_url: str,
     token: str,
     *,
     timeout_s: int = 30,
     opener: Any = None,
+    retry_budget_s: float = WAKE_RETRY_BUDGET_S,
+    retry_sleep: Any = time.sleep,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Fetch and independently validate one complete Azure gold snapshot."""
+    """Fetch and independently validate one complete Azure gold snapshot.
+
+    Transient failures (5xx, network errors) are retried until
+    ``retry_budget_s`` is exhausted, because the very request that finds the
+    review database paused is the one that wakes it.
+    """
     source_url = _validated_source_url(source_url)
     token = (token or "").strip()
     if len(token) < 32:
@@ -339,15 +366,41 @@ def fetch_live_gold(
         method="GET",
     )
     opener = opener or urllib.request.build_opener(_NoRedirect())
-    try:
-        with opener.open(request, timeout=timeout_s) as response:
-            payload = json.load(response)
-    except urllib.error.HTTPError as exc:
-        raise GoldSyncError(
-            f"Variant Browser gold sync returned HTTP {exc.code}."
-        ) from exc
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-        raise GoldSyncError(f"Variant Browser gold sync failed: {exc}") from exc
+    waited_s = 0.0
+    while True:
+        try:
+            with opener.open(request, timeout=timeout_s) as response:
+                payload = json.load(response)
+            break
+        except urllib.error.HTTPError as exc:
+            delay = _retry_delay_s(exc.headers)
+            if exc.code not in RETRYABLE_HTTP_STATUSES or (
+                waited_s + delay > retry_budget_s
+            ):
+                raise GoldSyncError(
+                    f"Variant Browser gold sync returned HTTP {exc.code}."
+                ) from exc
+            waited_s += delay
+            print(
+                f"Gold endpoint returned HTTP {exc.code} (review DB likely "
+                f"waking); retrying in {delay:.0f}s "
+                f"({waited_s:.0f}s of {retry_budget_s:.0f}s budget used).",
+                file=sys.stderr,
+            )
+            retry_sleep(delay)
+        except json.JSONDecodeError as exc:
+            raise GoldSyncError(f"Variant Browser gold sync failed: {exc}") from exc
+        except (urllib.error.URLError, TimeoutError) as exc:
+            delay = WAKE_RETRY_DEFAULT_DELAY_S
+            if waited_s + delay > retry_budget_s:
+                raise GoldSyncError(f"Variant Browser gold sync failed: {exc}") from exc
+            waited_s += delay
+            print(
+                f"Gold endpoint unreachable ({exc}); retrying in {delay:.0f}s "
+                f"({waited_s:.0f}s of {retry_budget_s:.0f}s budget used).",
+                file=sys.stderr,
+            )
+            retry_sleep(delay)
 
     if not isinstance(payload, dict) or payload.get("ok") is not True:
         raise GoldSyncError("Variant Browser returned an invalid gold response.")
