@@ -63,6 +63,36 @@ def test_out_dir_outside_repo_indexes_with_corpus_interface_paths(tmp_path):
     assert (out / "BMPR2" / "12345678" / "12345678_FULL_CONTEXT.md").exists()
 
 
+def test_assume_gene_files_run_dir_candidates_for_a_new_gene(tmp_path):
+    """A scoped run-dir root has no gene component below it, so a NEW gene
+    (not in KNOWN_GENES, empty corpus) is only reachable via --assume-gene —
+    gvf-run's Step 4.5 passes the run's gene."""
+    run_dir = tmp_path / "20260807_163246"
+    (run_dir / "pmc_fulltext").mkdir(parents=True)
+    (run_dir / "pmc_fulltext" / "87654321_FULL_CONTEXT.md").write_text(USABLE_MD)
+    out = tmp_path / "external_corpus"
+
+    skipped = run_builder("--apply", "--roots", str(run_dir), "--out", str(out))
+    assert skipped.returncode == 0, skipped.stderr
+    assert "skipped (gene not inferable)" in skipped.stdout
+    assert not (out / "INDEX.json").exists()
+
+    filed = run_builder(
+        "--apply",
+        "--roots",
+        str(run_dir),
+        "--out",
+        str(out),
+        "--assume-gene",
+        "bmpr2",
+    )
+    assert filed.returncode == 0, filed.stderr
+    data = json.loads((out / "INDEX.json").read_text())
+    assert list(data["genes"]) == ["BMPR2"]
+    assert list(data["genes"]["BMPR2"]) == ["87654321"]
+    assert (out / "BMPR2" / "87654321" / "87654321_FULL_CONTEXT.md").exists()
+
+
 def test_existing_corpus_only_entry_indexes_without_crashing(tmp_path):
     """The production crash: a corpus-resident paper with no source candidate."""
     out = tmp_path / "external_corpus"

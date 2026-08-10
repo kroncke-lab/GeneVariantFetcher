@@ -44,7 +44,7 @@ def _skip_institutional_preflight(monkeypatch):
     monkeypatch.setattr(
         gvf_run,
         "step_corpus_sync",
-        lambda run_dir, stage_warnings=None: None,
+        lambda run_dir, stage_warnings=None, gene=None: None,
     )
 
 
@@ -451,7 +451,7 @@ def test_corpus_sync_runs_by_default_and_is_skippable(tmp_path: Path, monkeypatc
     monkeypatch.setattr(
         gvf_run,
         "step_corpus_sync",
-        lambda run_dir, stage_warnings=None: calls.append(run_dir),
+        lambda run_dir, stage_warnings=None, gene=None: calls.append((run_dir, gene)),
     )
 
     # default: corpus_sync on
@@ -463,6 +463,9 @@ def test_corpus_sync_runs_by_default_and_is_skippable(tmp_path: Path, monkeypatc
         skip=["layers", "source-qc"],
     )
     assert rc == 0 and len(calls) == 1, "corpus sync should run by default"
+    assert calls[0][1] == "TESTGENE", (
+        "the run's gene must reach corpus sync as the --assume-gene hint"
+    )
 
     # explicit off
     calls.clear()
@@ -610,7 +613,9 @@ def test_stage_failure_sets_nonzero_exit_and_status(tmp_path: Path, monkeypatch)
     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
     monkeypatch.setattr(
-        gvf_run, "step_corpus_sync", lambda run_dir, stage_warnings=None: None
+        gvf_run,
+        "step_corpus_sync",
+        lambda run_dir, stage_warnings=None, gene=None: None,
     )
     monkeypatch.setattr(gvf_run, "step_backfill_metadata", lambda **kwargs: None)
 
