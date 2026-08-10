@@ -1,0 +1,438 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "eligible_counts": {
+    "BRCA2": 8
+  },
+  "gold_sources": {
+    "BRCA2": "/Users/kronckbm/GitRepos/GeneVariantFetcher/.claude/worktrees/ezproxy-relogin-automation-f8a04f/benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/.claude/worktrees/ezproxy-relogin-automation-f8a04f/benchmarks/codex_paper_eval/brca2_8_papers_20260810.tsv",
+  "papers": [
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_artifacts.json",
+      "artifacts_sha256": "187a63f0971676c61add392e55e8967037c5bda25bdd4094a5afca24c109f8b8",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p10_0.jpeg": "a8342837086a0b2a0805ace973b4874e98bc650eb491e79e048562261dae93c4",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p1_0.jpeg": "a282f5bf075dad7a75001e1e7ce8efed7f18bfa46f343a07c6392b1d3a46cc4a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p9_0.jpeg": "e8d685d44c5c6e1a9ac58e07c1e1e44b7d24dd5cbdc660aadc4971b8fa5bc5e8"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p10_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p1_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_figures/figures/fig_p9_0.jpeg"
+      ],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_supplements/nihms-417860.pdf": "604e7f1b6116fba302ee01aef7cd2c9f2a457c7c8bd77bc417321423b2357055"
+      },
+      "pdfs": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_supplements/nihms-417860.pdf"
+      ],
+      "pmid": "10398279",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_FULL_CONTEXT.md",
+      "source_bytes": 56890,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 56730,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_FULL_CONTEXT.md",
+            "sha256": "03f5e3f7ba47dfb9dcb962556fefa7dec77abc943f037b420e088371a8b94888",
+            "table_rows": 0
+          },
+          {
+            "characters": 28652,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_CLEANED.md",
+            "sha256": "ea90daa9f2433652ed2be30816636cc7326081fd9f4c3bcd409a876b46f0847f",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 56730,
+          "distinct_variant_tokens": 0,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/10398279/10398279_FULL_CONTEXT.md",
+          "sha256": "03f5e3f7ba47dfb9dcb962556fefa7dec77abc943f037b420e088371a8b94888",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "03f5e3f7ba47dfb9dcb962556fefa7dec77abc943f037b420e088371a8b94888"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_artifacts.json",
+      "artifacts_sha256": "88fa2454c55ed824786de78d9cf260b9a2a64ea0d5e3e5ef7199a67b8023672c",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_supplements/746.pdf": "e184f94df843b948c59508afe9b5ee91ae3459f8278bc79e2dac44d335a6c0ef"
+      },
+      "pdfs": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_supplements/746.pdf"
+      ],
+      "pmid": "15365993",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_FULL_CONTEXT.md",
+      "source_bytes": 25633,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 25563,
+            "distinct_variant_tokens": 17,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_FULL_CONTEXT.md",
+            "sha256": "0324ba36583e73829b0746415470c59a91e433402d6407681b49f1323624648c",
+            "table_rows": 0
+          },
+          {
+            "characters": 25378,
+            "distinct_variant_tokens": 17,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_CLEANED.md",
+            "sha256": "500c4659383ea9e58ef9e40823e5dc82bb6613175267aed9f9f41f1d8a6cccfa",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 25563,
+          "distinct_variant_tokens": 17,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/15365993/15365993_FULL_CONTEXT.md",
+          "sha256": "0324ba36583e73829b0746415470c59a91e433402d6407681b49f1323624648c",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "0324ba36583e73829b0746415470c59a91e433402d6407681b49f1323624648c"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_artifacts.json",
+      "artifacts_sha256": "1658c99c8edb5c272ee00f8adad26f66e2f3895871d2c1b4a431f06867d75e23",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "BRCA2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "18489799",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_FULL_CONTEXT.md",
+      "source_bytes": 39164,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 39007,
+            "distinct_variant_tokens": 8,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_FULL_CONTEXT.md",
+            "sha256": "fe22155e3685a269e9aa4767eb05161534f4f82060459c2b9a7a97df14b2b521",
+            "table_rows": 118
+          },
+          {
+            "characters": 39004,
+            "distinct_variant_tokens": 8,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_CLEANED.md",
+            "sha256": "f4e71e012b807c139f64aa0e000a6fcb0ad1dbc8521ea1fa34ab103d5a3ec936",
+            "table_rows": 118
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 39007,
+          "distinct_variant_tokens": 8,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/18489799/18489799_FULL_CONTEXT.md",
+          "sha256": "fe22155e3685a269e9aa4767eb05161534f4f82060459c2b9a7a97df14b2b521",
+          "table_rows": 118
+        }
+      },
+      "source_sha256": "fe22155e3685a269e9aa4767eb05161534f4f82060459c2b9a7a97df14b2b521"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_artifacts.json",
+      "artifacts_sha256": "d30092d8446374fdc6892fb51bb2a9e7c231d013140f6e9e798f248d04556573",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_1.jpg": "a2d3a2b05feeb6d3b9d7476bd4a6a5802968a61fbc4b06a179d9f5e7ef23265f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_2.jpg": "194a13dda1afad3fa6ba00180437cf96f08cba835c9d22fa0c5f2f697eb8a289",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_3.jpg": "dd3361ee7724096c5f3d337b6c4863731a37f90099b10604461fbdf5033b474d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_4.jpg": "6aec0c8537beff479278b915829ba41babb0fc515ab90463bef639a5ab966510",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_5.jpg": "61bd3da5b2283e8747dd6500c2cdb2e0f917d803b1875688909707156667700f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_6.jpg": "1a997b10808e0ecf113c3f38ac023650652529a87480854163300674cdaf38c7",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_7.jpg": "9e4dc5004f19588dca3f3713fceca0e4d7d2729c0acebb5a32b5ea60de4b0c78",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_8.jpg": "3dd9ca544d5a56983051edd820de3417c22f24546b14f692d0eef0e1d6d95e2c",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-1.jpg": "a2d3a2b05feeb6d3b9d7476bd4a6a5802968a61fbc4b06a179d9f5e7ef23265f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-2.jpg": "194a13dda1afad3fa6ba00180437cf96f08cba835c9d22fa0c5f2f697eb8a289",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-3.jpg": "dd3361ee7724096c5f3d337b6c4863731a37f90099b10604461fbdf5033b474d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-4.jpg": "6aec0c8537beff479278b915829ba41babb0fc515ab90463bef639a5ab966510",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-5.jpg": "61bd3da5b2283e8747dd6500c2cdb2e0f917d803b1875688909707156667700f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-6.jpg": "1a997b10808e0ecf113c3f38ac023650652529a87480854163300674cdaf38c7",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-7.jpg": "9e4dc5004f19588dca3f3713fceca0e4d7d2729c0acebb5a32b5ea60de4b0c78",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-8.jpg": "3dd9ca544d5a56983051edd820de3417c22f24546b14f692d0eef0e1d6d95e2c"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_3.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_4.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_5.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_6.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_7.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_figures/fig_pmc_8.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-3.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-4.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-5.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-6.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-7.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_supplements/PMC3109589_supplements/bcr2832-8.jpg"
+      ],
+      "gene": "BRCA2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "21356067",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_FULL_CONTEXT.md",
+      "source_bytes": 72009,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 71990,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_FULL_CONTEXT.md",
+            "sha256": "549bd4339acb7bc59e005bd77f28ffb8e099be98f797209f10473f89514cb47c",
+            "table_rows": 381
+          },
+          {
+            "characters": 51556,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_CLEANED.md",
+            "sha256": "4710579feed8dad840c9052483ed28768fcf79227777d08e6c03d28e790a047b",
+            "table_rows": 139
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 71990,
+          "distinct_variant_tokens": 0,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/21356067/21356067_FULL_CONTEXT.md",
+          "sha256": "549bd4339acb7bc59e005bd77f28ffb8e099be98f797209f10473f89514cb47c",
+          "table_rows": 381
+        }
+      },
+      "source_sha256": "549bd4339acb7bc59e005bd77f28ffb8e099be98f797209f10473f89514cb47c"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_artifacts.json",
+      "artifacts_sha256": "1f37093392928bebf77f20840e16e8f6491c4e353fdfc83c9c67db8961f47d1a",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "BRCA2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22655046",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_FULL_CONTEXT.md",
+      "source_bytes": 32485,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 32415,
+            "distinct_variant_tokens": 14,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_FULL_CONTEXT.md",
+            "sha256": "61448ac02b7a8fc95f97c57adb94073c37d2b30ce583831e34e193f72e3c4cfb",
+            "table_rows": 86
+          },
+          {
+            "characters": 32412,
+            "distinct_variant_tokens": 14,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_CLEANED.md",
+            "sha256": "547ec1716a42e0ea5561d56481bf4bc53ee9b53b6c2fa4c11d5dbcaedf50a6ee",
+            "table_rows": 86
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 32415,
+          "distinct_variant_tokens": 14,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/22655046/22655046_FULL_CONTEXT.md",
+          "sha256": "61448ac02b7a8fc95f97c57adb94073c37d2b30ce583831e34e193f72e3c4cfb",
+          "table_rows": 86
+        }
+      },
+      "source_sha256": "61448ac02b7a8fc95f97c57adb94073c37d2b30ce583831e34e193f72e3c4cfb"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_artifacts.json",
+      "artifacts_sha256": "67055b7c33d5c9dc0c7c265012a033123562907bc22ad72ee078ece1ce7e7e4d",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_figures/fig_pmc_1.jpg": "ffefa22b8d8289d61ae364c569303e18d5c3b57a36ae3d43e77d5f32b2019ff8",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_figures/fig_pmc_2.jpg": "a033c1ee4e30ec6d066f19c6c1e041ef04d4a77b94141322b762e600d621d7f0",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-f1.jpg": "ffefa22b8d8289d61ae364c569303e18d5c3b57a36ae3d43e77d5f32b2019ff8",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-f2.jpg": "a033c1ee4e30ec6d066f19c6c1e041ef04d4a77b94141322b762e600d621d7f0",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-sd1.tif": "39732b7bc5ff9a51940657559669ce3c706cb92184327494322344cc77c56681",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-sd2.tif": "d52416bcb400b450b844246b5b5248e987abc4c1b5ddc80a476c8678e79e4446"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-f1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-f2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-sd1.tif",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_supplements/PMC4367084_supplements/mgg30003-0121-sd2.tif"
+      ],
+      "gene": "BRCA2",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25802882",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_FULL_CONTEXT.md",
+      "source_bytes": 58704,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 58478,
+            "distinct_variant_tokens": 30,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_FULL_CONTEXT.md",
+            "sha256": "29cc2132baac70fb58a332bbc847250c817cae59942e196c26b1da0fde8ee401",
+            "table_rows": 236
+          },
+          {
+            "characters": 28519,
+            "distinct_variant_tokens": 30,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_CLEANED.md",
+            "sha256": "3718a0649202f0474bc0450f1bcbae496b38a0cf0df26e53ca37bd40d5eb1c82",
+            "table_rows": 67
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 58478,
+          "distinct_variant_tokens": 30,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/25802882/25802882_FULL_CONTEXT.md",
+          "sha256": "29cc2132baac70fb58a332bbc847250c817cae59942e196c26b1da0fde8ee401",
+          "table_rows": 236
+        }
+      },
+      "source_sha256": "29cc2132baac70fb58a332bbc847250c817cae59942e196c26b1da0fde8ee401"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_artifacts.json",
+      "artifacts_sha256": "bc3d2a9567986fbb21e04a033db60a48ea3abf3481c70accdc71286a30cb22d8",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_supplements/10689_2016_9875_MOESM1_ESM.pdf": "1f15b99a1744fb7683a005a9db53e9383dfbc8c7d729675879c76de9e9445837",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_supplements/10689_2016_9875_MOESM2_ESM.pdf": "579dfe18578fd99b119b1133e9d8d2eea49c9ad382548985cf919c9ab9065b42"
+      },
+      "pdfs": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_supplements/10689_2016_9875_MOESM1_ESM.pdf",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_supplements/10689_2016_9875_MOESM2_ESM.pdf"
+      ],
+      "pmid": "26833046",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_FULL_CONTEXT.md",
+      "source_bytes": 16443,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 16405,
+            "distinct_variant_tokens": 1,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_FULL_CONTEXT.md",
+            "sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f",
+            "table_rows": 0
+          },
+          {
+            "characters": 9067,
+            "distinct_variant_tokens": 1,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_CLEANED.md",
+            "sha256": "9b8d961645106e0d8994045184118cacfd588d564933e7308384dda76d142dca",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 16405,
+          "distinct_variant_tokens": 1,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26833046/26833046_FULL_CONTEXT.md",
+          "sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_artifacts.json",
+      "artifacts_sha256": "2d4e3cdfbb66bdc8c6688c8e809bebe5166511755d313c0d2ebf2f9b6c054b33",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_1.jpg": "d62a0a15f39c63d39bad8d478f6c76afb75ad2b1ed75db773eff8b49ae8cc958",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_2.jpg": "8baafc8c011ee2001d2aaa10d77324c53ba95d089ac299de31cd39ca0652c5e9",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_3.jpg": "8df2c0803076b22aa72408f06863b68fcdf1d443e78203e2800df3a927c3d6a9",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_4.jpg": "d58adb6c89d69d9f47f01e8f70fe269cd5b87c63c974d843ecb87c3cacca7eea",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g001.jpg": "d62a0a15f39c63d39bad8d478f6c76afb75ad2b1ed75db773eff8b49ae8cc958",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g002.jpg": "8baafc8c011ee2001d2aaa10d77324c53ba95d089ac299de31cd39ca0652c5e9",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g003.jpg": "8df2c0803076b22aa72408f06863b68fcdf1d443e78203e2800df3a927c3d6a9",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g004.jpg": "d58adb6c89d69d9f47f01e8f70fe269cd5b87c63c974d843ecb87c3cacca7eea"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_3.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_figures/fig_pmc_4.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g001.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g002.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g003.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g004.jpg"
+      ],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-s001.pdf": "5f267c28c7b4a9433d43cfacef694672a50bcb843a7a8f4a0e8aad391cb58b89"
+      },
+      "pdfs": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-s001.pdf"
+      ],
+      "pmid": "26848529",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_FULL_CONTEXT.md",
+      "source_bytes": 316850,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 311701,
+            "distinct_variant_tokens": 122,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_FULL_CONTEXT.md",
+            "sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8",
+            "table_rows": 883
+          },
+          {
+            "characters": 78001,
+            "distinct_variant_tokens": 122,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_CLEANED.md",
+            "sha256": "17e192872249c84a937e729bf1ddb646e72d93c4730a311cc3807cccfef0ae67",
+            "table_rows": 388
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 311701,
+          "distinct_variant_tokens": 122,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/BRCA2/26848529/26848529_FULL_CONTEXT.md",
+          "sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8",
+          "table_rows": 883
+        }
+      },
+      "source_sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-08-10T18:29:17.901527+00:00",
+  "run_id": "20260810_brca2_8_production",
+  "schema_version": 1,
+  "seed": 2026081002
+}

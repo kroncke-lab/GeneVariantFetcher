@@ -12,15 +12,22 @@ import pytest
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
 from utils.llm_trace import reset_llm_tracing
+import benchmarks.codex_paper_eval.run_eval as run_eval_module
 from benchmarks.codex_paper_eval.run_eval import (
+    CARDIAC_GENES,
+    DEFAULT_GOLD,
     EXTRACTION_INSTRUCTIONS,
     choose_source,
     command_extract,
     command_lock,
+    command_prepare,
     digest,
     effective_effort,
+    gold_count_eligible_pmids,
+    gold_csv_path,
     matches,
     material_digest_errors,
+    read_paper_manifest,
     reasoning_params,
     looks_truncated_json,
     selection_metadata,
@@ -611,6 +618,198 @@ def test_extraction_prompt_carries_table_attribution_guidance():
         "always\nemit the variant even when all three counts are null"
         in EXTRACTION_INSTRUCTIONS
     )
+
+
+# ---------------------------------------------------------------------------
+# BRCA2 arm: manifest support + gold fallback to the adjudicated overrides
+# ---------------------------------------------------------------------------
+
+GOLD_CSV_HEADER = "variant,pmid,carriers,affected,unaffected\n"
+
+
+def _write_gold_csv(path: Path, pmid: str = "1") -> None:
+    path.write_text(GOLD_CSV_HEADER + f"A1V,{pmid},2,1,1\n")
+
+
+def _paper_dir(corpus: Path, gene: str, pmid: str) -> None:
+    paper = corpus / gene / pmid
+    paper.mkdir(parents=True)
+    _rendering(paper / f"{pmid}_FULL_CONTEXT.md", rows=10, variants=5, padding=500)
+
+
+def _prepare_args(tmp_path: Path, **overrides) -> SimpleNamespace:
+    defaults = dict(
+        seed=1,
+        per_gene=1,
+        minimum_chars=100,
+        corpus_root=tmp_path / "corpus",
+        gold_root=tmp_path / "gold",
+        paper_manifest=None,
+        runs_dir=tmp_path / "runs",
+        run_id="run",
+        legacy_source_selection=False,
+    )
+    defaults.update(overrides)
+    return SimpleNamespace(**defaults)
+
+
+def test_gold_csv_path_prefers_root_then_adjudicated_overrides(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    root = tmp_path / "gold"
+    overrides = tmp_path / "overrides"
+    root.mkdir()
+    overrides.mkdir()
+    _write_gold_csv(root / "KCNH2_recall_input.csv")
+    _write_gold_csv(overrides / "KCNH2_recall_input.csv")
+    _write_gold_csv(overrides / "BRCA2_recall_input.csv")
+    monkeypatch.setattr(run_eval_module, "GOLD_OVERRIDES", overrides)
+
+    # An explicit root always wins for genes it carries; only absent genes fall
+    # back, and a gene in neither location fails loudly instead of scoring empty.
+    assert gold_csv_path(root, "KCNH2") == root / "KCNH2_recall_input.csv"
+    assert gold_csv_path(root, "BRCA2") == overrides / "BRCA2_recall_input.csv"
+    with pytest.raises(SystemExit, match="no gold CSV for APOE"):
+        gold_csv_path(root, "APOE")
+
+
+def test_paper_manifest_accepts_brca2_and_rejects_unregistered_genes(tmp_path: Path):
+    good = tmp_path / "good.tsv"
+    good.write_text("SCN5A\t123\nBRCA2\t26848529\n")
+    assert read_paper_manifest(good) == [("SCN5A", "123"), ("BRCA2", "26848529")]
+
+    bad = tmp_path / "bad.tsv"
+    bad.write_text("APOE\t123\n")
+    with pytest.raises(SystemExit):
+        read_paper_manifest(bad)
+
+
+@pytest.mark.parametrize(
+    "manifest_name, expected_total, expected_brca2",
+    [
+        ("highcarrier48_plus_brca2_20260810.tsv", 56, 8),
+        ("brca2_8_papers_20260810.tsv", 8, 8),
+    ],
+)
+def test_shipped_manifests_are_fully_gold_count_eligible(
+    manifest_name: str, expected_total: int, expected_brca2: int
+):
+    """Every row of the shipped manifests must clear prepare's eligibility rule.
+
+    Pins the manifests against drift in either answer key: the cardiac rows
+    against the manual gold standard, the BRCA2 rows against the adjudicated
+    gold_overrides the fallback resolves to.
+    """
+    manifest = Path(run_eval_module.__file__).parent / manifest_name
+    papers = read_paper_manifest(manifest)
+    assert len(papers) == expected_total
+    assert sum(1 for gene, _ in papers if gene == "BRCA2") == expected_brca2
+    for gene in dict.fromkeys(gene for gene, _ in papers):
+        eligible = gold_count_eligible_pmids(DEFAULT_GOLD, gene)
+        missing = [pmid for g, pmid in papers if g == gene and pmid not in eligible]
+        assert not missing, f"{gene}: not gold-count-eligible: {missing}"
+
+
+def test_random_prepare_samples_cardiac_genes_only(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """Seeded random runs must not require BRCA2 gold, source, or overrides."""
+    gold = tmp_path / "gold"
+    gold.mkdir()
+    for gene in CARDIAC_GENES:
+        _paper_dir(tmp_path / "corpus", gene, "1")
+        _write_gold_csv(gold / f"{gene}_recall_input.csv")
+    monkeypatch.setattr(run_eval_module, "GOLD_OVERRIDES", tmp_path / "absent")
+
+    command_prepare(_prepare_args(tmp_path))
+
+    selection = json.loads((tmp_path / "runs" / "run" / "selection.json").read_text())
+    assert sorted(p["gene"] for p in selection["papers"]) == sorted(CARDIAC_GENES)
+    assert set(selection["eligible_counts"]) == set(CARDIAC_GENES)
+    assert set(selection["gold_sources"]) == set(CARDIAC_GENES)
+
+
+def test_manifest_prepare_scores_brca2_against_override_gold(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    gold = tmp_path / "gold"
+    gold.mkdir()
+    overrides = tmp_path / "overrides"
+    overrides.mkdir()
+    _paper_dir(tmp_path / "corpus", "BRCA2", "99")
+    _write_gold_csv(overrides / "BRCA2_recall_input.csv", pmid="99")
+    monkeypatch.setattr(run_eval_module, "GOLD_OVERRIDES", overrides)
+    manifest = tmp_path / "manifest.tsv"
+    manifest.write_text("BRCA2\t99\n")
+
+    command_prepare(_prepare_args(tmp_path, paper_manifest=manifest))
+
+    selection = json.loads((tmp_path / "runs" / "run" / "selection.json").read_text())
+    assert [(p["gene"], p["pmid"]) for p in selection["papers"]] == [("BRCA2", "99")]
+    assert selection["gold_sources"] == {
+        "BRCA2": str(overrides / "BRCA2_recall_input.csv")
+    }
+    # A cardiac-only manifest run in the same layout must not touch BRCA2 pools.
+    assert "SCN5A" not in selection["eligible_counts"]
+
+
+def test_schema1_production_import_locks_without_call_telemetry():
+    """Schema 1 is the external-import contract (production gvf-run projection).
+
+    gvf-run does not aggregate per-paper wall time or exact token usage, so
+    those checks must bind only to schema >= 2 (harness-native extraction) —
+    otherwise the production baseline can never be locked and scored.
+    """
+    from benchmarks.codex_paper_eval.run_eval import validate_predictions
+
+    paper = {
+        "gene": "BRCA2",
+        "pmid": "99",
+        "tool": "text",
+        "tool_rationale": "Production gvf-run strategy.",
+        "source_completeness": "corpus_as_locked",
+        "elapsed_seconds": None,
+        "token_usage": {"telemetry_available": False, "total_tokens": None},
+        "variants": [
+            {
+                "variant": "c.1T>A",
+                "carriers": 1,
+                "affected": 1,
+                "unaffected": 0,
+                "evidence": "Table 1 row",
+                "source_location": "Table 1",
+            }
+        ],
+    }
+    selection = {"papers": [{"gene": "BRCA2", "pmid": "99"}]}
+
+    assert (
+        validate_predictions({**selection}, {"schema_version": 1, "papers": [paper]})
+        == []
+    )
+    native_errors = validate_predictions(
+        {**selection}, {"schema_version": 2, "papers": [dict(paper)]}
+    )
+    assert any("elapsed_seconds" in e for e in native_errors)
+    assert any("token telemetry" in e for e in native_errors)
+
+
+def test_markdown_report_renders_only_genes_present_in_run():
+    report = _report_fixture()
+    report["by_gene"]["BRCA2"] = report["by_gene"]["SCN5A"]
+
+    lines = []
+
+    class _Sink:
+        def write_text(self, text):
+            lines.append(text)
+
+    write_markdown_report(report, _Sink())
+    assert "| BRCA2 |" in lines[0]
+
+    del report["by_gene"]["BRCA2"]
+    write_markdown_report(report, _Sink())
+    assert "| BRCA2 |" not in lines[1]
 
 
 def test_table_route_carries_full_text_not_a_keyword_preview(

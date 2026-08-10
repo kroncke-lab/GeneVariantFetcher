@@ -8,7 +8,9 @@ import csv
 import json
 from pathlib import Path
 
-GENE_ORDER = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
+# Display order. A run only reports the genes it actually contains, so every
+# lookup filters on membership in report["by_gene"].
+GENE_ORDER = ("SCN5A", "KCNH2", "KCNQ1", "RYR2", "BRCA2")
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
 FAILURE_ISSUES = {
     ("KCNQ1", "17192539"): "Narrative names one mutation; remaining identities absent",
@@ -67,7 +69,7 @@ def build_payload(run_dir: Path) -> dict:
     )
     gene_metrics = []
     gene_prf = []
-    for gene in GENE_ORDER:
+    for gene in (g for g in GENE_ORDER if g in report["by_gene"]):
         metric = report["by_gene"][gene]
         row = {
             "gene": gene,
@@ -216,7 +218,8 @@ def build_payload(run_dir: Path) -> dict:
         (
             (gene, report["by_gene"][gene]["recall"])
             for gene in GENE_ORDER
-            if report["by_gene"][gene]["recall"] is not None
+            if gene in report["by_gene"]
+            and report["by_gene"][gene]["recall"] is not None
         ),
         key=lambda item: item[1],
         reverse=True,

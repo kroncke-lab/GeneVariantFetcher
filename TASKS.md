@@ -1,6 +1,26 @@
 # GVF Tasks
 
 ## Current Focus
+- **Standard strategy-comparison set is now the 56-paper blinded manifest
+  (2026-08-10).** `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_20260810.tsv`
+  = the frozen cardiac 48 + the 8 BRCA2 gold papers (scored against the
+  adjudicated `gold_overrides` answer key via the harness's per-gene fallback;
+  reported separately from the cardiac headline). Production baselines for both
+  arms live in `benchmarks/codex_paper_eval/runs/` — see the README's
+  "Standard comparison set" section. Protocol refinements should be measured on
+  this set before any full re-extraction.
+  - [ ] Close the two open BRCA2 curator follow-ups that keep BRCA2 count MAE
+        provisional: 26833046 count semantics, 26848529 subset.
+- **EZproxy relogin automation (designed 2026-08-10, not yet built).** The
+  recurring preflight exit-5 is the short-lived EZproxy session cookie dying
+  server-side while the long-lived VUMC Microsoft SSO session stays valid, so
+  the refresh is silently automatable: a `scripts/ezproxy_relogin.py` driving a
+  dedicated Playwright persistent profile (`AuthenticatedBrowserPool` already
+  supports one) through `login.proxy.library.vanderbilt.edu/login?url=...`,
+  dumping `context.cookies()` to `GVF_COOKIE_FILE` in Netscape format, then
+  verifying via `probe_institutional_access()`. Headed one-time MFA bootstrap;
+  wire into gvf-run preflight as self-heal on login-redirect failure. Keep the
+  profile dir untracked/chmod 700 (holds live SSO tokens).
 - **LLM trace observability follow-up (2026-07-28).** The packaged recorder,
   accepted/retry/failed linkage, per-run isolation, route-coverage panel, and
   sharded offline HTML viewer are implemented and covered by the unit suite.

@@ -45,6 +45,29 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-10 — Strategy-comparison standard extended to 56 papers (+BRCA2 arm); first BRCA2 production baseline
+Benchmark-surface change; the four-gene canonical headline is untouched. The
+blinded paper-eval standard (`benchmarks/codex_paper_eval/`) grew from the
+fixed cardiac 48 to a **56-paper manifest**
+(`highcarrier48_plus_brca2_20260810.tsv`): the frozen 48 plus the 8 BRCA2 gold
+papers from the curated extraction benchmark. The harness gained per-gene gold
+resolution — cardiac genes score against the manual gold standard, BRCA2 falls
+back to the curator-adjudicated `gold_overrides` answer key, and the resolved
+path is recorded per gene in `selection.json`/`report.json` (`gold_sources`) so
+the provenance difference is never silent. Seeded random sampling stays
+cardiac-only. Schema-1 (production-import) predictions now lock without
+per-paper token telemetry, which gvf-run structurally does not aggregate;
+schema-2 harness-native runs still require it.
+
+First BRCA2 production baseline (`runs/20260810_brca2_8_production`, same
+calibrated replay as the cardiac `20260726_fixed48_production`): **variant
+recall 80.9%** (89/110; cardiac production is 78.8%), paper-only view 73.6%.
+Precision 18.2% is dominated by the two known subset-gold papers (26833046,
+26848529 — 198 of 400 FPs; curator follow-ups open), so treat BRCA2
+precision/count-MAE as provisional. Counts: carriers 41% supplied / MAE 0.31,
+affected 34% / 1.38, unaffected 34% / 0.32 — same commit-rarely-but-accurately
+shape as cardiac. Detail: `runs/20260810_brca2_8_production/COMPARISON.md`.
+
 ### 2026-07-20 — Trust, provenance, and gold-integrity hardening (#161–#165); recall headline unchanged
 A run of protocol changes that harden **trustworthiness and BRCA-readiness**
 rather than four-gene recall. All were designed gold-free / additive /
