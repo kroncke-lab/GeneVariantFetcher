@@ -161,6 +161,60 @@ def rows_for_gene(db: Path, pmids: set[str], exclude_layers: set[str]):
     return out, dropped
 
 
+def trace_telemetry(trace_root: Path, pmids: set[str]) -> dict[str, dict]:
+    """Aggregate exact provider telemetry from one finalized gvf-run trace tree.
+
+    A paper that took only a deterministic extraction path legitimately has
+    zero calls/tokens; the presence of the finalized trace index distinguishes
+    that from missing telemetry.
+    """
+    if not (trace_root / "trace_index.jsonl").is_file():
+        raise SystemExit(f"missing finalized trace index: {trace_root}")
+
+    totals = {
+        pmid: {
+            "telemetry_available": True,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 0,
+            "elapsed_seconds": 0.0,
+            "models": set(),
+        }
+        for pmid in pmids
+    }
+    for path in trace_root.rglob("*.json"):
+        try:
+            record = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if record.get("record_type") != "llm_call":
+            continue
+        context = record.get("context") or {}
+        pmid = str(context.get("pmid") or "")
+        if pmid not in totals:
+            continue
+        response = record.get("response") or {}
+        usage = response.get("usage") or {}
+        item = totals[pmid]
+        item["input_tokens"] += int(
+            usage.get("prompt_tokens") or usage.get("input_tokens") or 0
+        )
+        item["output_tokens"] += int(
+            usage.get("completion_tokens") or usage.get("output_tokens") or 0
+        )
+        item["total_tokens"] += int(usage.get("total_tokens") or 0)
+        item["elapsed_seconds"] += float(response.get("duration_seconds") or 0.0)
+        item["call_count"] += 1
+        if context.get("model"):
+            item["models"].add(str(context["model"]))
+
+    for item in totals.values():
+        item["models"] = sorted(item["models"])
+        item["elapsed_seconds"] = round(item["elapsed_seconds"], 6)
+    return totals
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", type=Path, default=HERE)
@@ -181,11 +235,13 @@ def main() -> int:
         wanted[p["gene"]].add(str(p["pmid"]))
 
     per_gene = {}
+    per_gene_telemetry = {}
     dbs = {}
     merged_away = 0
     for gene, pmids in sorted(wanted.items()):
         db = find_db(args.production_root, gene)
         dbs[gene] = str(db.relative_to(REPO)) if db.is_relative_to(REPO) else str(db)
+        per_gene_telemetry[gene] = trace_telemetry(db.parent / "llm_traces", pmids)
         raw, _ = rows_for_gene(db, pmids, excl)
         collapsed = {}
         for pmid, rows in raw.items():
@@ -198,6 +254,7 @@ def main() -> int:
     for p in selection["papers"]:
         gene, pmid = p["gene"], str(p["pmid"])
         variants = per_gene[gene].get(pmid, [])
+        telemetry = per_gene_telemetry[gene][pmid]
         papers.append(
             {
                 "gene": gene,
@@ -205,16 +262,27 @@ def main() -> int:
                 "tool": "text",
                 "tool_rationale": TOOL_RATIONALE,
                 "source_completeness": "corpus_as_locked",
-                "elapsed_seconds": None,
+                "elapsed_seconds": telemetry["elapsed_seconds"],
                 "token_usage": {
-                    "telemetry_available": False,
-                    "total_tokens": None,
-                    "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
-                    "note": "gvf-run does not aggregate per-run token usage",
+                    key: value
+                    for key, value in telemetry.items()
+                    if key != "elapsed_seconds"
                 },
                 "variants": variants,
             }
         )
+
+    aggregate_usage = {
+        "telemetry_available": True,
+        "input_tokens": sum(p["token_usage"]["input_tokens"] for p in papers),
+        "output_tokens": sum(p["token_usage"]["output_tokens"] for p in papers),
+        "total_tokens": sum(p["token_usage"]["total_tokens"] for p in papers),
+        "call_count": sum(p["token_usage"]["call_count"] for p in papers),
+        "models": sorted(
+            {model for p in papers for model in p["token_usage"].get("models", [])}
+        ),
+        "note": "Summed from finalized gvf-run LLM call traces.",
+    }
 
     predictions = {
         "schema_version": 1,
@@ -226,9 +294,16 @@ def main() -> int:
         "extraction_started_at": None,
         "extraction_elapsed_seconds": None,
         "completed_at": datetime.now(timezone.utc).isoformat(),
-        "token_usage": {
-            "telemetry_available": False,
-            "note": "gvf-run does not aggregate per-run token usage; see run logs for wall clock",
+        "token_usage": aggregate_usage,
+        "prelock_gold_usage": {
+            "read_only_layer_scoring_possible": True,
+            "scores_feed_back_into_predictions": False,
+            "gold_pmid_enrichment_enabled": False,
+            "note": (
+                "gvf-run automatically emits read-only layer scorecards when "
+                "registered gold is available; this external projection is not "
+                "the native lock-before-any-gold-read harness."
+            ),
         },
         "papers": papers,
     }

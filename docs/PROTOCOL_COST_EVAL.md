@@ -1,6 +1,72 @@
-# Protocol cost & quality — small sample (2026-07-20)
+# Protocol cost & quality
 
-**Purpose.** Measure the *current* extraction protocol's **cost (time + money)**
+## Experimental reason-class routing (2026-08-10; default OFF)
+
+The highest-leverage fixed-48 cost lane was compact claim verification: 146
+calls / 394,420 tokens in the 2026-08-08 replay. The A1 experiment changed only
+its opening condition. Count-semantic/precision risks still open the verifier;
+completeness-only, missing-count, and source blockers are classified for their
+appropriate recovery lanes. Models, prompts, evidence cards, ranking, cap,
+primary extraction, trust, and recovery behavior stayed fixed.
+
+| Route | 2026-08-08 baseline | A1 | Change |
+|---|---:|---:|---:|
+| Sol claim verification | 146 calls / 394,420 tokens | 106 / 285,472 | **-27.6% tokens** |
+| All fixed-48 LLM work | 279 calls / 1,372,842 tokens | 244 / 1,270,531 | **-7.5% tokens** |
+| Summed provider-call time | 3,670.5s | 3,522.4s | -4.0% |
+
+Variant quality stayed inside the predeclared gates: all-layer precision,
+recall, and F1 moved -0.18pp, -0.20pp, and -0.20pp; paper-only F1 moved -0.28pp.
+The raw carrier-MAE gate failed, however (0.723→0.902). A causal audit did not
+locate that regression in the rerouted papers: the eight changed-decision papers
+had identical TP/FP/FN and slightly lower total absolute carrier error. Because
+the gate was declared on the aggregate run, the switch remains default off
+pending a paired same-primary-output ablation or independent locked replicate.
+
+The full 56-paper run added eight BRCA2 diagnostic entries and used 303 calls /
+1,538,140 tokens in total. BRCA2 results are directional only because the
+curator/derived `gold_overrides` are not fully manual headline gold. Reproduction
+scripts, source/prediction hashes, exact route telemetry, and the full decision
+record are in
+`benchmarks/codex_paper_eval/runs/20260810_failure_routing_a1_56/`.
+
+## Current traced fixed-48 measurement (2026-08-08)
+
+The source-snapshot production replay supplied exact provider usage rather than
+the proxies used in the older sample below. Across 48 cardiac papers it made
+279 calls: 978,972 input tokens, 314,432 output tokens, and 1,372,842 total
+tokens. The four gene jobs ran in parallel and completed in about 17 minutes
+wall-clock; summed provider-call duration was 3,670.5 seconds.
+
+| Route | Calls | Input | Output | Total | Summed call time |
+|---|---:|---:|---:|---:|---:|
+| Kimi table routing | 13 | 15,916 | 30,463 | 46,379 | 121.6s |
+| Grok paper extraction | 43 | 567,021 | 196,948 | 843,407 | 2,030.9s |
+| Sol claim verification | 146 | 325,510 | 68,910 | 394,420 | 1,029.5s |
+| Sol figure reading | 76 | 68,519 | 17,948 | 86,467 | 485.6s |
+| Sol paper adjudication | 1 | 2,006 | 163 | 2,169 | 2.9s |
+
+Because this was an explicit `--pmid-file` benchmark, discovery plus Tier 1/2
+relevance were skipped. Luna therefore had no legitimate Tier 2 work in this
+run. The largest Sol lanes were source-grounded claim verification and figure
+vision, both judgment-sensitive; replacing them merely because Luna is cheaper
+would confound cost and quality. The clean first Luna A/B is Tier 2 relevance or
+extraction-priority triage on a separate labeled discovery set, with all other
+routes fixed. Terra is a possible midpoint. Pricing was not embedded in the
+traces, so token totals are exact but dollar cost remains deployment-contract
+dependent.
+
+Quality results and lock hashes are recorded in
+`benchmarks/codex_paper_eval/runs/20260808_fixed48_snapshot_replay/SUMMARY.md`.
+
+## Historical small sample (2026-07-20)
+
+> Historical configuration. This sample deliberately included Steps 3.8/3.9.
+> The pair has been parked/default-off since 2026-07-26, so its timings and cost
+> are evidence for that decision, not a description of the 2026-08-08 default
+> pipeline. See `docs/ARCHITECTURE.md` for current routing.
+
+**Purpose.** Measure that extraction protocol's **cost (time + money)**
 and **quality** on a small sample, so we can decide whether to spend a full
 cardiac re-extraction before running over all ~1,500 gold papers. This is a
 **sample, not the full suite** — do not read these as headline recall (that lives
@@ -139,7 +205,7 @@ catches missed groups on that bucket, which is the calibration question. On our
 zero-count catalogue.
 
 **Rollout gate before enforcing (per codex/grok):** shadow-calibrate on the
-101-paper staging set + all known count-role/missing-carrier failures; require
+current curated staging set + all known count-role/missing-carrier failures; require
 ~100% escalation of known high-severity count errors, no missed quote-verified
 carrier gap, and ≥50% projected `@xhigh` cost reduction. **Deferred:** the live
 `apply_paper_final_check` wiring (shadow/enforce modes + cheap-tier + separate

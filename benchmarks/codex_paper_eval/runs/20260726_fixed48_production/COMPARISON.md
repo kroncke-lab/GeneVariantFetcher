@@ -105,10 +105,14 @@ usage, so its cost column is empty by construction rather than by measurement.
 4. **KCNH2 11844290 is a shared zero,** not a production failure: its corpus source
    is 9,580 chars of abstract plus a 190-char supplement fold, the regex scanner
    found 0 candidates, and both production and sol returned 0 variants.
-5. **`LOCK.json` was written by the conversion flow, not `run_eval.py lock`,**
-   because `command_lock` requires exact per-paper token telemetry that `gvf-run`
-   does not emit. The guarantee it encodes still holds: predictions were finalized
-   before any gold value was read.
+5. **`LOCK.json` was written by the conversion flow, not the native blinded
+   extraction path.** `gvf-run` may have written read-only per-layer scorecards
+   from registered gold before the external projection lock. Those scores did
+   not feed back into extraction, and gold-PMID enrichment was not enabled, so
+   prediction content remained gold-independent; however, this artifact does
+   not satisfy the stricter claim that no component read a gold value before
+   the external lock. A future production projection needs `--no-score` / blind
+   recovery mode to make that stronger guarantee.
 
 ## Reproduce
 

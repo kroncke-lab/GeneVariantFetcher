@@ -66,6 +66,34 @@ TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = get_env_int(
 )
 TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 250)
 
+# Risk assessment is shared by several recovery concerns, but claim verification
+# is only useful for fact-level count/provenance uncertainty. Completeness and
+# missing-source signals need different recovery stages; sending those papers to
+# a claim verifier spends tokens without giving that verifier evidence it can use
+# to recover omitted rows or missing table bodies.
+CLAIM_VERIFICATION_RISK_REASONS = frozenset(
+    {
+        "paper_census_denominator_columns",
+        "repeated_large_count_tuple",
+        "count_arithmetic_mismatch",
+        "count_bearing_high_risk_source_layer",
+        "non_per_variant_count_provenance",
+        "unknown_large_count_provenance",
+        "extracted_carrier_sum_above_census",
+        "study_wide_count_suppressed",
+    }
+)
+COMPLETENESS_RESCUE_RISK_REASONS = frozenset(
+    {
+        "low_variant_yield_vs_table_hint",
+        "low_variant_yield_vs_scanner",
+        "low_variant_yield_vs_census",
+        "below_census_low_variant_rows",
+    }
+)
+COUNT_RECOVERY_RISK_REASONS = frozenset({"many_variants_missing_counts"})
+EXTRACTION_RISK_ROUTING_POLICY = "reason_class_v1"
+
 
 def _find_data_zones_file(
     pmid: str, search_dirs: Optional[List[str]] = None
@@ -155,6 +183,7 @@ class ExpertExtractor(BaseLLMCaller):
         self.fulltext_dir = fulltext_dir
         self.use_condensed = settings.scout_use_condensed
         self.enable_ensemble_qa = settings.enable_tier3_ensemble_qa
+        self.enable_reason_class_routing = settings.enable_tier3_reason_class_routing
         self.adjudicator_models = settings.get_tier3_adjudicator_models()
         self.adjudication_risk_threshold = settings.tier3_adjudication_risk_threshold
         self.evidence_packet_max_chars = settings.tier3_evidence_packet_max_chars
@@ -5125,6 +5154,34 @@ class ExpertExtractor(BaseLLMCaller):
             ranked.append((idx, score, reasons))
         return sorted(ranked, key=lambda item: (-item[1], item[0]))
 
+    @staticmethod
+    def _route_extraction_risk(
+        reasons: list[str], source_blockers: list[str]
+    ) -> dict[str, list[str]]:
+        """Partition risk signals by the stage capable of resolving them."""
+        routes: dict[str, list[str]] = {
+            "source_recovery": sorted(set(source_blockers)),
+            "completeness_rescue": [],
+            "count_recovery": [],
+            "claim_verification": [],
+            "unclassified": [],
+        }
+        for reason in reasons:
+            reason_name = str(reason).partition(":")[0]
+            if reason_name in CLAIM_VERIFICATION_RISK_REASONS:
+                route = "claim_verification"
+            elif reason_name in COMPLETENESS_RESCUE_RISK_REASONS:
+                route = "completeness_rescue"
+            elif reason_name in COUNT_RECOVERY_RISK_REASONS:
+                route = "count_recovery"
+            else:
+                route = "unclassified"
+            routes[route].append(reason)
+
+        for route in routes:
+            routes[route] = sorted(set(routes[route]))
+        return routes
+
     def _assess_extraction_risk(
         self,
         *,
@@ -5301,15 +5358,24 @@ class ExpertExtractor(BaseLLMCaller):
                 f"many_variants_missing_counts:{variants_with_counts}/{len(variants)}"
             )
 
+        source_blockers = sorted(set(source_blockers))
+        risk_routes = self._route_extraction_risk(reasons, source_blockers)
+        requires_adjudication = score >= self.adjudication_risk_threshold
+        has_claim_verification_signal = bool(risk_routes["claim_verification"])
         return {
             "score": score,
             "reasons": reasons,
-            "source_blockers": sorted(set(source_blockers)),
+            "source_blockers": source_blockers,
             "estimated_variants": estimated_variants,
             "scanner_variant_count": scanner_variant_count,
             "paper_census": paper_census,
             "variant_count": len(variants),
-            "requires_adjudication": score >= self.adjudication_risk_threshold,
+            "routing_policy": EXTRACTION_RISK_ROUTING_POLICY,
+            "reason_class_routing_enabled": self.enable_reason_class_routing,
+            "risk_routes": risk_routes,
+            "requires_adjudication": requires_adjudication,
+            "requires_claim_verification": requires_adjudication
+            and (not self.enable_reason_class_routing or has_claim_verification_signal),
         }
 
     def _select_evidence_lines(
@@ -5674,6 +5740,11 @@ Return strict JSON with this schema:
         if risk["source_blockers"] and not risk["reasons"]:
             metadata["adjudication_skipped_reason"] = (
                 "source_blocker_without_extraction_risk"
+            )
+            return extracted_data
+        if not risk["requires_claim_verification"]:
+            metadata["adjudication_skipped_reason"] = (
+                "risk_not_routed_to_claim_verification"
             )
             return extracted_data
 

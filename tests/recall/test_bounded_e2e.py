@@ -194,6 +194,7 @@ def test_scoring_pipeline_round_trip(tmp_path: Path):
             "all",
             "--review-gold-sync",
             "off",
+            "--skip-disagreement-artifacts",
         ],
         capture_output=True,
         text=True,
@@ -202,6 +203,7 @@ def test_scoring_pipeline_round_trip(tmp_path: Path):
     summary_file = out_dir / "summary.json"
     assert summary_file.exists(), "summary.json was not written"
     data = json.loads(summary_file.read_text())
+    assert data["disagreement_artifacts_skipped"] is True
     agg = data["aggregate_recall"]
 
     # 2 of the 3 unique gold variants match (R100W, G300S match; Y50N + T400I miss).

@@ -117,4 +117,4 @@ scoring answer comes from: `repo` (gene_variant_fetcher_gold_standard) or
 | SCN5A | [30059973](https://pubmed.ncbi.nlm.nih.gov/30059973/) | table | repo | 185 | 445/445/0 | and broad notched or slurred R wave in leads I, aVL, V5 and V6, eventually associated with a RS |
 | SCN5A | [32533946](https://pubmed.ncbi.nlm.nih.gov/32533946/) | text | repo | 83 | 0/0/0 | High-Throughput Reclassification of SCN5A Variants |
 
-**105 papers** · 3110 gold variant-rows · by strategy: {'table': 58, 'mixed': 11, 'figure': 12, 'text': 24} · by gene: { KCNH2: 15, KCNQ1: 19, SCN5A: 19, RYR2: 20, BRCA1: 10, BRCA2: 8, MYBPC3: 8, APOE: 6 }
+**104 unique papers / 105 gene-paper entries** · 3110 gold variant-rows · by strategy: {'table': 58, 'mixed': 11, 'figure': 12, 'text': 24} · by gene: { KCNH2: 15, KCNQ1: 19, SCN5A: 19, RYR2: 20, BRCA1: 10, BRCA2: 8, MYBPC3: 8, APOE: 6 }

@@ -32,6 +32,7 @@ Elsevier insttoken.
 | **2026-06-12** | **+ targeted lands KCNH2/SCN5A/RYR2 (all four genes)** | **2591/3010 (86.1%)** | **5518/6833 (80.8%)** | **0.615** |
 | **2026-07-12** | **Four-gene supplement reconciliation + gated SCN5A land** | **2596/3010 (86.2%)** | **5546/6833 (81.2%)** | **0.614** |
 | 2026-07-20 | Trust/provenance/gold-integrity arc (#161–#165) — *no recall change by design* | 2596/3010 (86.2%) | 5546/6833 (81.2%) | 0.614 |
+| 2026-08-08 | Hermetic canonical-DB rescore; stale MAE denominator corrected | 2596/3010 (86.2%) | 5546/6833 (81.2%) | 0.613 |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
 Gap to the 90% unique-variant target: **113** variants (was 1126 at the 62.6%
@@ -44,6 +45,67 @@ RYR2 **83.7%**.
 ---
 
 ## Timeline (newest first)
+
+### 2026-08-10 — Failure-routing A1 pilot; cost win, rollout held on count gate
+
+An experimental `ENABLE_TIER3_REASON_CLASS_ROUTING` switch separates
+count-semantic/precision risks, which still open compact claim verification,
+from completeness-only, missing-count, and source blockers, which are classified
+for their appropriate recovery lanes. The switch defaults off, so the current
+production protocol and canonical four-gene headline are unchanged.
+
+On a fresh, source-hash-locked replay of the same 48 cardiac papers, verifier
+usage fell from 146 calls / 394,420 tokens to 106 / 285,472 (-27.6% tokens),
+and total traced tokens fell 7.5%. All-layer precision/recall/F1 moved only
+-0.18/-0.20/-0.20 percentage points; paper-only F1 moved -0.28pp. Raw carrier
+MAE nevertheless worsened from 0.723 to 0.902, failing the predeclared count
+gate. The changed-decision slice itself did not regress: the eight papers skipped
+by A1 had the same 58 TP / 203 FP / 30 FN as baseline, and their total absolute
+carrier error improved 43→42 as coverage rose 7→10. The aggregate degradation
+came from the other 40 papers, led by a newly extracted 26-versus-gold-85 SCN5A
+count on a paper that still received semantic verification. This is evidence to
+run a paired same-primary-output ablation or locked replicate, not evidence to
+promote the route.
+
+The same run also covered all eight BRCA2 curated diagnostic entries: 99/110
+rows, 93/103 unique variants, and carrier MAE 0.192. Those entries are
+curator/derived `gold_overrides`, not a fully manual gold standard, so they do
+not enter headline metrics. Exact telemetry, lock hashes, and the causal audit
+live in `benchmarks/codex_paper_eval/runs/20260810_failure_routing_a1_56/`.
+
+### 2026-08-08 — Benchmark and protocol audit; recall headline reproduced
+
+The four canonical cardiac DBs were rescored with local-data fallback disabled
+and the source-backed disagreement report skipped. All recall values reproduced
+exactly: 2596/3010 unique variants and 5546/6833 variant rows. The current
+scorer uses 3729 matched carrier assertions rather than the stale 3724 recorded
+in the status doc, so carrier MAE is 2287/3729 = 0.613. Counted-extra precision
+is 5546/(5546+1637) = 77.2%.
+
+The locked 48-paper production predictions also reproduced exactly under the
+current matcher: 789 TP, 985 FP, 212 FN (78.8% recall, 44.5% raw precision,
+56.9% F1). The curated cardiac fixture rescored at 92.0% unique-variant recall;
+its one-row-stale expected baseline was refreshed. The broader diagnostic set is
+104 unique papers / 105 gene-paper entries, including eight BRCA2 entries, but
+non-cardiac curator/derived overrides remain excluded from headline metrics.
+GPT-5.6 Luna and Terra connectivity probes passed; neither route was promoted
+without a controlled A/B.
+
+A fresh production replay of the same 48 source-locked papers completed across
+all four genes. The all-layer projection scored 831 TP / 1060 FP / 170 FN
+(83.0% recall, 43.9% precision, 57.5% F1), while the paper-derived-only view
+scored 710 / 592 / 291 (70.9%, 54.5%, 61.7%). Relative to the July lock, that is
++42 TP all-layer and +40 TP paper-only. Almost all improvement came from RYR2
+PMID 19926015, formerly discarded by the markup circuit breaker; external
+ClinVar linkage added substantial noise on that paper. Exact trace telemetry
+was 279 calls / 1,372,842 tokens. This fixed-48 diagnostic does **not** replace
+the canonical 1,502-PMID recall headline above.
+
+The replay also made a count-semantics defect measurable: carrier-only table
+totals can still be copied into `affected` without explicit phenotype evidence
+(notably KCNQ1 PMID 18713323). The affected-count MAE therefore rose from 0.137
+to 0.673 even as carrier-count MAE improved from 1.424 to 0.723. The proposed
+deterministic fix is tracked in `TASKS.md` and is not yet promoted.
 
 ### 2026-07-20 — Trust, provenance, and gold-integrity hardening (#161–#165); recall headline unchanged
 A run of protocol changes that harden **trustworthiness and BRCA-readiness**

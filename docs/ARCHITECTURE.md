@@ -64,10 +64,11 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 3: Variant Extraction (ExpertExtractor)                                     │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
-│   • Cheap paper census estimates variant/count ranges for escalation only         │
-│   • Kimi routes candidate tables; deterministic parser extracts table rows         │
-│   • Grok 4.3 runs primary full-text extraction when table parsing is insufficient  │
-│   • GPT-5.4 / DeepSeek / Kimi verify compact claim cards for high-risk outputs    │
+│   • Cheap deterministic census estimates ranges/risk for escalation only          │
+│   • Fixed-width, vertical, and large Markdown tables have deterministic fast paths │
+│   • An LLM routes other candidate tables; deterministic code reads their cells     │
+│   • Tier 3 LLM full-text extraction fills gaps when table paths are insufficient   │
+│   • High-risk results receive compact evidence-card verification/adjudication      │
 │   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
 │     - Detects concatenated gene+variant (HERGG604S, KCNH2A561V)                  │
 │     - Unicode arrow normalization (→, ➔, ⟶)                                      │
@@ -89,6 +90,16 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │   • Normalized relational schema (8 core tables)                                 │
 │   • Indexed for efficient querying                                               │
 │   OUTPUT: {gene}.db                                                              │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEPS 3.5–4.6 in gvf-run: recovery, trust, source QA, publication                │
+│   • ClinVar / PubTator / figure recovery layers add attributable rows             │
+│   • Optional count recovery fills only NULL fields (default off)                  │
+│   • Deterministic trust gate creates trusted/quarantine field projections          │
+│   • Per-paper reasoning review + composer are parked together (default off)        │
+│   • Source QA/recovery, corpus sync, report and publish finish the run             │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
   ▼
@@ -267,31 +278,91 @@ extractions/{gene}_PMID_*.json
 | **Unpaywall** | Email | 100k/day | OA link resolution |
 | **LLM provider** | API key | Per plan | One provider required for extraction — Azure AI, Anthropic, or OpenAI |
 
-### Model Provider And Reasoning Effort
+### Extraction decision hierarchy
 
-`config/settings.py` resolves the effective model for each stage. The current
-forward strategy keeps routine triage/table routing/extraction/debate on Azure,
-then runs a separate, default-on final per-paper sniff test with GPT-5.6 Sol at
-`xhigh` (Step 3.8). That check records exact fact/field findings; it does not
-replace routine Tier 2 or mutate extracted counts. Step 3.9 deterministically
-composes source-verified, objective contradictions into a field-level trusted
-projection. Weak unsupported-count findings remain advisory. Sonnet/Opus are
-reserved for optional exception-adjudication and
-hard-case escalation over compact claim cards.
+The word "tier" is used in two related places. Discovery tiers decide which
+papers deserve extraction; extraction layers decide how facts are read from a
+selected paper.
 
-Recommended staging routing:
+1. **Discovery and relevance.** Tier 1 is a fail-open keyword/regex screen.
+   Tier 2 is an LLM relevance classifier. Supplying `--pmid-file`, as the fixed
+   benchmarks do, intentionally skips discovery and both filters.
+2. **Source resolution.** Cached consolidated context is preferred, then the
+   harvester tries PMC/publisher/OA routes and folds convertible supplements.
+   Data Scout may make a smaller high-value context, but the deterministic
+   variant scanner always sees the original full context.
+3. **Deterministic extraction first where structure is strong.** Regex scanning,
+   PDF-linearized table reconstruction, large-Markdown-table parsing,
+   fixed-width tables, and vertical tables run without an LLM. These paths
+   normalize cells and counts using explicit rules.
+4. **LLM-assisted routing, deterministic reading.** The table router classifies
+   candidate tables and maps their columns. Code—not the routing model—then
+   walks every selected row/cell. An empty, malformed, or unusable route falls
+   through instead of suppressing Tier 3.
+5. **Tier 3 full-text extraction.** A provider-routed model reads source context
+   when deterministic/table routes are insufficient. Regex and router results
+   are merged with its structured output. A deterministic paper census supplies
+   only ranges and risk flags; it never becomes an extracted fact.
+6. **Risk-gated judgment.** High-risk outputs are converted to compact evidence
+   cards for a second-model verifier/adjudicator. This is not a second full-paper
+   extraction on every paper. Production currently opens this lane for any risk
+   score above threshold. The experimental, default-off
+   `ENABLE_TIER3_REASON_CLASS_ROUTING` policy narrows that decision to
+   count-semantic/precision reasons; it classifies completeness-only,
+   missing-count, and source blockers for their appropriate recovery lanes.
+   Those route labels are provenance today, not newly implemented recovery
+   stages.
+7. **Post-extraction layers.** JSON normalization/migration is followed by
+   ClinVar, PubTator and figure recovery. Optional count recovery fills only
+   NULL count fields with quote/role evidence and is currently off. The
+   deterministic trust gate is on and masks questionable fields only in the
+   trusted projection. The per-paper final review and its deterministic composer
+   are parked together/off; source QA and recovery then finish the run.
 
-| Stage | Model |
-|-------|-------|
-| Tier 2 triage | `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint) |
-| Cheap paper census | deterministic regex/table/count pass; stored as `extraction_metadata.paper_census` |
-| Table routing | `azure_ai/Kimi-K2.6-1`; falls back on empty/bad routes |
-| Tier 3 extraction | `azure_ai/grok-4.3` |
-| Internal claim QA/debate | `azure_ai/gpt-5.4`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
-| Final per-paper sniff test (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`; **PARKED — default off since 2026-07-26** (cost/latency not justified by measured effect). Code and tests retained; revive with `PAPER_FINAL_CHECK_ENABLED=1` *and* `PAPER_FINAL_CHECK_GATE_ENABLED=1` |
-| Final-check trust composer (Step 3.9) | Deterministic; **PARKED with Step 3.8** (alone it can only refuse stale findings and fail acceptance). When enabled: source-verified objective count/phenotype contradictions only; weak unsupported-count findings stay advisory and raw counts stay unchanged |
-| Optional exception-adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
-| Optional hard-case escalation | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
+### Model provider and reasoning effort
+
+`config/settings.py` resolves each stage independently. Environment variables
+can override any stage, so code defaults are not proof of what a particular run
+used. The authoritative record is that run's `run_manifest.json`, which stores
+the resolved models, reasoning efforts, enablement/policy switches, git state,
+dependency hash, and a hash over behavior-defining extraction files. Exact
+redacted requests, responses, repairs, fallbacks, and accepted decisions live in
+the run's `llm_traces/` tree.
+
+The active workstation routing recorded when the 2026-08-08 fixed-48 rerun
+started is:
+
+| Stage | Resolved route / state |
+|-------|------------------------|
+| Tier 1 relevance | deterministic keyword/regex; skipped for explicit benchmark PMIDs |
+| Tier 2 relevance | `azure_ai/gpt-5.6-sol`; skipped for explicit benchmark PMIDs |
+| Paper census | deterministic only |
+| Table routing | `azure_ai/Kimi-K2.6-1` |
+| Tier 3 full-text extraction | `azure_ai/grok-4.3` |
+| High-risk Tier 3 adjudication | `azure_ai/gpt-5.6-sol` over compact evidence cards |
+| Reason-class verifier routing | **off**; production retains the above-threshold rule |
+| Early debate candidates | `azure_ai/gpt-5.6-sol`, `azure_ai/DeepSeek-V4-Pro`, `azure_ai/Kimi-K2.6-1` |
+| Count recovery (Step 3.55) | `azure_ai/gpt-5.6-sol` at `high`, **off** |
+| Trust gate (Step 3.7) | deterministic, **on** |
+| Final paper review (Step 3.8) | `azure_ai/gpt-5.6-sol` at `xhigh`, **parked/off** |
+| Final-review composer (Step 3.9) | deterministic, **parked/off** |
+
+GPT-5.6 Luna and Terra were both connectivity-smoked successfully against the
+configured Azure endpoint on 2026-08-08. They are registered as optional
+deployment aliases, not production defaults. Luna is the first candidate for
+high-volume, low-judgment work such as Tier 2 relevance and extraction-priority
+triage; it should not be assigned count attribution, high-risk adjudication, or
+final review until a fixed-set A/B shows no quality regression. Terra is the
+intermediate candidate. Change one route at a time and score both the curated
+fixture and the locked fixed-48 set before retaining it.
+
+The fixed-48 run itself cannot evaluate Luna for Tier 2: an explicit PMID
+manifest bypasses discovery and both relevance tiers. Its 279 calls instead
+landed in Kimi table routing (13), Grok extraction (43), Sol source-grounded
+claim verification (146), Sol figure reading (76), and Sol paper adjudication
+(1). The two large Sol lanes require attribution or visual judgment, so the
+first Luna experiment belongs on a separately labeled relevance/priority set,
+not as an unmeasured swap inside this fixed-paper replay.
 
 The paper census is deliberately approximate. It produces ranges for variant
 rows, unique variants, carriers, affected, and unaffected counts plus risk flags
@@ -302,15 +373,16 @@ escalated.
 
 OpenAI-style reasoning models expose a reasoning-effort knob. GVF can set it per
 pipeline stage through environment variables. Routine-stage efforts default to
-unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
+unset; Step 3.8 is parked, but would use `xhigh` when explicitly enabled:
 
 | Variable | Stage |
 |----------|-------|
 | `TIER2_REASONING_EFFORT` | Tier 2 relevance filtering in `pipeline/filters.py` |
 | `TIER3_REASONING_EFFORT` | Tier 3 extraction and compact claim adjudication in `pipeline/extraction.py` |
+| `ENABLE_TIER3_REASON_CLASS_ROUTING` | Experimental reason-class verifier gate (default `false`); completeness/missing-count/source risks are classified but do not open claim verification |
 | `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
 | `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
-| `PAPER_FINAL_CHECK_REASONING_EFFORT` | Default-on final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` by default) |
+| `PAPER_FINAL_CHECK_REASONING_EFFORT` | Parked final per-paper review in `pipeline/paper_final_check.py` (`xhigh` when enabled) |
 | `PAPER_FINAL_CHECK_GATE_ENABLED` | Enable exact, source-quoted final-check fact/field trust composition (default `false` — parked with `PAPER_FINAL_CHECK_ENABLED`); weak/unsupported-only reasons remain advisory |
 | `PAPER_FINAL_CHECK_GATE_MIN_SEVERITY` | Minimum applied severity (`high` by default) |
 | `PAPER_FINAL_CHECK_GATE_REQUIRE_SOURCE_GROUNDED` | Keep DB-only flags advisory (default `true`) |
@@ -334,6 +406,8 @@ deployment names:
 
 ```bash
 .venv/bin/python scripts/smoke_azure_models.py --include-final
+.venv/bin/python scripts/smoke_azure_models.py \
+  azure_ai/gpt-5.6-luna azure_ai/gpt-5.6-terra
 ```
 
 ### LLM execution and decision traces
@@ -433,6 +507,14 @@ Each reason maps to the count fields it masks (`REASON_FIELDS`); most mask the
 whole fact, `implied_unaffected_zero` masks only `unaffected`. The scorer reads
 `penetrance_data.field_trust` per field (`cli/compare_variants.py`), falling back
 to the row-level `trust_tier` when field masks are absent.
+
+Known current limitation: some extraction fallbacks still copy a generic
+`patients.count` or carrier-only table total into `affected` when a variant is
+disease-associated. That is not equivalent to an explicit phenotype split and
+was visible in the 2026-08-08 fixed-48 replay (KCNQ1 PMID 18713323). Until the
+tracked deterministic fix and legacy-row trust backstop are measured and
+promoted, consumers should require an explicit affected label/provenance before
+treating such an affected count as high-confidence.
 
 **Traceability.** `variant_papers.source_notation` stores the verbatim variant
 string as written in each paper (before normalization), captured from the LLM

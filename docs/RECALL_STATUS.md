@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-07-20.
+Last updated: 2026-08-08.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -29,17 +29,16 @@ into the reported recall/precision/MAE. To reproduce the headline numbers,
 restrict scoring to the four cardiac genes, e.g.
 `run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
 
-## Current protocol note (2026-07-20)
+## Current protocol note (2026-08-08)
 
-The trust/provenance/gold-integrity arc **#161–#165** has landed (see
-`docs/RECALL_HISTORY.md`). These are gold-free / additive / scorer-invariant
-changes — they harden trustworthiness and BRCA-readiness and **do not change the
-four-gene headline** below (`#165` was verified to add 0 new cardiac quarantine
-on KCNH2). The current end-to-end protocol is described in
-`docs/ARCHITECTURE.md`. A small **sample** cost-and-quality measurement of the
-current protocol (time, approximate spend, sample recall/MAE, and the new-guard
-behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
-spending a full cardiac re-extraction to move the headline.
+The canonical DBs were rescored from scratch on 2026-08-08 with local-data
+fallback disabled and source-heavy disagreement artifacts explicitly skipped.
+All six recall numerators/denominators below reproduced exactly. The rescore did
+correct slightly stale matched-count denominators and source-layer precision
+totals in this file. It made no extraction or canonical-DB mutation. The current
+end-to-end strategy and resolved workstation route are described in
+`docs/ARCHITECTURE.md`; per-run `run_manifest.json` and `llm_traces/` remain the
+authoritative execution record.
 
 ## Current Canonical Baseline
 
@@ -97,9 +96,13 @@ Rows-mode MAE:
 
 | Count field | Sum abs error / N | MAE |
 | --- | ---: | ---: |
-| Carriers | 2287 / 3724 | **0.614** |
-| Affected | 1535 / 3116 | **0.493** |
+| Carriers | 2287 / 3729 | **0.613** |
+| Affected | 1535 / 3121 | **0.492** |
 | Unaffected | 323 / 271 | **1.192** |
+
+End-to-end count MAE (all asserted gold rows, treating a missed extraction as
+zero rather than dropping it from the denominator): carriers **1.744**
+(10413/5971), affected **1.414** (7566/5349), unaffected **3.862** (3240/839).
 
 ## Per-Gene Recall
 
@@ -107,7 +110,7 @@ Rows-mode MAE:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
 | KCNQ1 | 285/305 (93.4%) | 1499/1741 (86.1%) | 563/622 (**90.5%**) | 6995/7793 (89.8%) | 3909/4306 (90.8%) | 1319/1484 (88.9%) | 0.935 |
-| SCN5A | 622/757 (82.2%) | 2461/3128 (78.7%) | 1027/1183 (86.8%) | 5068/6219 (81.5%) | 3884/4876 (79.7%) | 1184/1343 (88.2%) | 0.452 |
+| SCN5A | 622/757 (82.2%) | 2461/3128 (78.7%) | 1027/1183 (86.8%) | 5068/6219 (81.5%) | 3884/4876 (79.7%) | 1184/1343 (88.2%) | 0.450 |
 | RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
 
 ## Full-Text and Supplement Coverage
@@ -126,23 +129,20 @@ available through current publisher access; they are not an on-disk fold gap.
 
 Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
 denominator to extra rows on gold PMIDs that carry at least one extracted count:
-`5546 / (5546 + 1629) = 77.3%`.
+`5546 / (5546 + 1637) = 77.2%`.
 
 The looser raw proxy remains useful only as a false-positive upper bound:
 `5546 / (5546 + 13036) = 29.8%`.
 
 Why the raw proxy is pessimistic:
 
-- 11,407 / 13,036 current extra-on-gold-PMID rows have zero patient counts and
+- 11,399 / 13,036 current extra-on-gold-PMID rows have zero patient counts and
   are ClinVar/PubTator-style linkage attributions rather than count-bearing paper
   extractions.
-- Only 1,631 extra rows carry any carrier/affected/unaffected count.
-- About 97% are well-formed variants absent from the count-curated gold packet,
-  not malformed output.
-- The scorer now rejects 64 obvious figure/regex-table junk rows before scoring
-  (gene-symbol-as-variant, <=2-character protein notation, residue prose). This
-  removed 41 extra-on-gold-PMID rows, including 8 counted extras, with recall and
-  MAE unchanged.
+- Only 1,637 extra rows carry any carrier/affected/unaffected count.
+- The scorer rejected 63 obvious figure/regex-table junk rows before this
+  rescore (gene-symbol-as-variant, <=2-character protein notation, residue
+  prose); recall and MAE are computed after that deterministic filter.
 - 53 structural/CNV rows are real biology but currently unmatchable by the
   variant matcher.
 
@@ -150,21 +150,23 @@ Current per-layer precision proxy:
 
 | Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| clinvar | 444 | 2484 | 71 | 15.2% | 86.2% |
-| figure | 236 | 465 | 39 | 33.7% | 85.8% |
-| llm_table | 892 | 477 | 275 | 65.2% | 76.4% |
-| llm_text | 455 | 823 | 168 | 35.6% | 73.0% |
-| mixed | 1949 | 392 | 176 | 83.3% | 91.7% |
+| clinvar | 441 | 2416 | 79 | 15.4% | 84.8% |
+| figure | 231 | 460 | 39 | 33.4% | 85.6% |
+| llm_table | 883 | 477 | 274 | 64.9% | 76.3% |
+| llm_text | 480 | 823 | 168 | 36.8% | 74.1% |
+| mixed | 1899 | 393 | 176 | 82.9% | 91.5% |
 | pubtator | 12 | 159 | 0 | 7.0% | 100.0% |
-| regex_table | 1256 | 3864 | 929 | 24.5% | 57.5% |
-| regex_text | 213 | 4971 | 2 | 4.1% | 99.1% |
+| regex_table | 1442 | 3734 | 899 | 27.9% | 61.6% |
+| regex_text | 158 | 4574 | 2 | 3.3% | 98.8% |
 
-Interpretation: recall gains are mostly adding real signal; the raw proxy
-overstates true false positives by roughly 7x.
+Interpretation: the raw proxy counts roughly eight times as many extra rows as
+the count-bearing proxy, so neither should be presented as clean precision.
 
-## Current Failure Split
+## Last Source-Backed Failure Split (2026-07-20)
 
-Current failure-mode split from `paper_disagreement_report.csv`:
+The 2026-08-08 run was intentionally metric-only. The last completed
+source-backed split from `paper_disagreement_report.csv` is retained below and
+should be regenerated before claiming that its categories moved:
 
 | Failure mode | Missing rows | What it means |
 | --- | ---: | --- |
@@ -186,7 +188,7 @@ Use `TASKS.md` for the active checklist. The current blocker shape is:
 2. **Available-source underextraction.** Some usable sources are present but
    mutation-list tables are not exhausted.
 3. **Count semantics and regex-table precision.** `regex_table` is the dominant
-   count-bearing false-positive surface (`929` counted extras, 57.5% counted
+   count-bearing false-positive surface (`899` counted extras, 61.6% counted
    precision), so count-role attribution should be validated there first.
 4. **Matcher notation and structural lanes.** Some already-extracted variants
    fail exact matching because indels, compound rows, splice/IVS rows, or
@@ -196,8 +198,8 @@ Use `TASKS.md` for the active checklist. The current blocker shape is:
 
 ## Scope Guard
 
-This file should stay short: current metrics, current precision/failure split,
-and current blockers only.
+This file should stay short: current metrics/precision, the latest dated
+source-backed failure split, and current blockers only.
 
 Historical recovery details, dated session logs, and superseded plans belong in
 `docs/RECALL_HISTORY.md`. Operational procedures belong in the runbooks. Active

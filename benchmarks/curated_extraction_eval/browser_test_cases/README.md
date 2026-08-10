@@ -11,7 +11,7 @@ toy testing, not as a replacement for the full scored benchmark.
 - 20 candidate/non-public papers: `APOE`, `BRCA1`, `MYBPC3`
 
 Use `browser_scope` to filter to the current public browser genes when needed.
-Every row has cached source and source-verified gold in the 101-paper curated
+Every row has cached source and source-verified gold in the broader curated
 fixture, so this set can be used without running extraction mode.
 
 Coverage summary:

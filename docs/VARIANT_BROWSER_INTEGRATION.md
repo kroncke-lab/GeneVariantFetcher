@@ -74,7 +74,7 @@ GVF needs **no** Azure credentials for this — `gvf_publish.sh` loads them from
 
 Wired in `cli/gvf_run.py` (`step_publish_review`, `_find_review_repo`).
 
-### Curated 101-paper staging publish
+### Curated 104-unique-paper / 105-entry staging publish
 
 For the fixed curated benchmark, publish the benchmark DBs only to the
 Variant_Browser staging/review surface, not the public site:

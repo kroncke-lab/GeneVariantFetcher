@@ -5,8 +5,7 @@
 This hash-locked run evaluated **48 papers** (**12 per cardiac gene**) after selecting only PMIDs with downloaded source and gold assertions for carriers, affected, and unaffected. Codex predictions were finalized before scoring.
 
 - Variant precision **44.5%**, recall **78.8%**, F1 **56.9%** (789 TP, 985 FP, 212 FN).
-- Exact API telemetry: **0 total tokens** (0 input; 0 output).
-- Elapsed: **0.0s wall clock**; 0.0s summed per-paper route + read time.
+- Exact API token and timing telemetry was not captured for this legacy production projection; zero placeholders must not be interpreted as zero cost.
 - Representation choices: {'text': 48}.
 
 ## Blinding and scorer audit
@@ -37,54 +36,54 @@ Count recall is the share of all gold count assertions for which the locked pred
 
 | gene | PMID | tool | TP | FP | FN | precision | recall | F1 | carrier recall / MAE | affected recall / MAE | unaffected recall / MAE | seconds | tokens |
 |---|---:|---|---:|---:|---:|---:|---:|---:|---|---|---|---:|---:|
-| SCN5A | 27566755 | text | 51 | 11 | 0 | 82.3% | 100.0% | 90.3% | 100.0% / 0.000 | 100.0% / 0.000 | 100.0% / 0.000 | 0.0 | 0 |
-| SCN5A | 26669661 | text | 26 | 33 | 1 | 44.1% | 96.3% | 60.5% | 3.7% / 0.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 20470418 | text | 1 | 1 | 0 | 50.0% | 100.0% | 66.7% | 100.0% / 59.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 28339995 | text | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 55.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 29709101 | text | 10 | 17 | 1 | 37.0% | 90.9% | 52.6% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 28341781 | text | 52 | 26 | 3 | 66.7% | 94.5% | 78.2% | 94.5% / 0.000 | 94.5% / 0.000 | 94.5% / 0.000 | 0.0 | 0 |
-| SCN5A | 18451998 | text | 2 | 4 | 0 | 33.3% | 100.0% | 50.0% | 50.0% / 9.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 26921764 | text | 24 | 3 | 3 | 88.9% | 88.9% | 88.9% | 88.9% / 0.083 | 88.9% / 0.083 | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 27554632 | text | 9 | 14 | 0 | 39.1% | 100.0% | 56.2% | 88.9% / 0.125 | 77.8% / 0.143 | 77.8% / 0.000 | 0.0 | 0 |
-| SCN5A | 10590249 | text | 0 | 3 | 1 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 25051102 | text | 2 | 20 | 1 | 9.1% | 66.7% | 16.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| SCN5A | 26746457 | text | 6 | 19 | 26 | 24.0% | 18.8% | 21.1% | 6.2% / 6.000 | 6.2% / 0.000 | 6.2% / 6.000 | 0.0 | 0 |
-| KCNH2 | 29622001 | text | 33 | 25 | 2 | 56.9% | 94.3% | 71.0% | 51.4% / 0.000 | 14.3% / 0.000 | 14.3% / 0.000 | 0.0 | 0 |
-| KCNH2 | 11854117 | text | 37 | 13 | 7 | 74.0% | 84.1% | 78.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 14661677 | text | 23 | 2 | 6 | 92.0% | 79.3% | 85.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 19160088 | text | 2 | 0 | 1 | 100.0% | 66.7% | 80.0% | 66.7% / 48.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 26496715 | text | 52 | 5 | 2 | 91.2% | 96.3% | 93.7% | 94.4% / 0.000 | 94.4% / 0.000 | 94.4% / 0.000 | 0.0 | 0 |
-| KCNH2 | 11844290 | text | 0 | 0 | 5 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 10973849 | text | 56 | 424 | 4 | 11.7% | 93.3% | 20.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 10862094 | text | 6 | 10 | 2 | 37.5% | 75.0% | 50.0% | 25.0% / 0.000 | 25.0% / 0.000 | 25.0% / 0.000 | 0.0 | 0 |
-| KCNH2 | 10841244 | text | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 2.000 | 100.0% / 0.000 | 100.0% / 0.000 | 0.0 | 0 |
-| KCNH2 | 23864605 | text | 2 | 5 | 0 | 28.6% | 100.0% | 44.4% | 0.0% / n/a | 0.0% / n/a | 50.0% / 0.000 | 0.0 | 0 |
-| KCNH2 | 24667783 | text | 20 | 0 | 3 | 100.0% | 87.0% | 93.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNH2 | 19038855 | text | 25 | 8 | 3 | 75.8% | 89.3% | 82.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 19490272 | text | 54 | 7 | 0 | 88.5% | 100.0% | 93.9% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 23153844 | text | 21 | 12 | 0 | 63.6% | 100.0% | 77.8% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 17470695 | text | 46 | 35 | 10 | 56.8% | 82.1% | 67.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 14678125 | text | 35 | 9 | 6 | 79.5% | 85.4% | 82.4% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 28720088 | text | 1 | 5 | 1 | 16.7% | 50.0% | 25.0% | 50.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 21129503 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 100.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 25087618 | text | 0 | 0 | 1 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 17192539 | text | 4 | 0 | 53 | 100.0% | 7.0% | 13.1% | 1.8% / 193.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 24052033 | text | 2 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 18713323 | text | 6 | 2 | 0 | 75.0% | 100.0% | 85.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 29197658 | text | 29 | 7 | 0 | 80.6% | 100.0% | 89.2% | 31.0% / 0.000 | 31.0% / 0.000 | 0.0% / n/a | 0.0 | 0 |
-| KCNQ1 | 33141630 | text | 1 | 147 | 0 | 0.7% | 100.0% | 1.3% | 100.0% / 36.000 | 100.0% / 34.000 | 100.0% / 70.000 | 0.0 | 0 |
-| RYR2 | 25814417 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 29925740 | text | 49 | 1 | 2 | 98.0% | 96.1% | 97.0% | 96.1% / 0.000 | 96.1% / 0.000 | 96.1% / 0.000 | 0.0 | 0 |
-| RYR2 | 33315912 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 16272262 | text | 12 | 41 | 0 | 22.6% | 100.0% | 36.9% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 34202968 | text | 1 | 9 | 0 | 10.0% | 100.0% | 18.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 19926015 | text | 0 | 0 | 40 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 33686871 | text | 1 | 1 | 7 | 50.0% | 12.5% | 20.0% | 0.0% / n/a | 12.5% / 2.000 | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 28237968 | text | 3 | 25 | 15 | 10.7% | 16.7% | 13.0% | 5.6% / 2.000 | 5.6% / 1.000 | 5.6% / 1.000 | 0.0 | 0 |
-| RYR2 | 12106942 | text | 6 | 1 | 0 | 85.7% | 100.0% | 92.3% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 22677073 | text | 24 | 9 | 2 | 72.7% | 92.3% | 81.4% | 76.9% / 0.000 | 34.6% / 0.000 | 34.6% / 0.000 | 0.0 | 0 |
-| RYR2 | 30403697 | text | 20 | 23 | 1 | 46.5% | 95.2% | 62.5% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | 0.0 | 0 |
-| RYR2 | 33606749 | text | 30 | 2 | 3 | 93.8% | 90.9% | 92.3% | 84.8% / 0.000 | 84.8% / 0.000 | 0.0% / n/a | 0.0 | 0 |
+| SCN5A | 27566755 | text | 51 | 11 | 0 | 82.3% | 100.0% | 90.3% | 100.0% / 0.000 | 100.0% / 0.000 | 100.0% / 0.000 | n/a | n/a |
+| SCN5A | 26669661 | text | 26 | 33 | 1 | 44.1% | 96.3% | 60.5% | 3.7% / 0.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 20470418 | text | 1 | 1 | 0 | 50.0% | 100.0% | 66.7% | 100.0% / 59.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 28339995 | text | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 55.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 29709101 | text | 10 | 17 | 1 | 37.0% | 90.9% | 52.6% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 28341781 | text | 52 | 26 | 3 | 66.7% | 94.5% | 78.2% | 94.5% / 0.000 | 94.5% / 0.000 | 94.5% / 0.000 | n/a | n/a |
+| SCN5A | 18451998 | text | 2 | 4 | 0 | 33.3% | 100.0% | 50.0% | 50.0% / 9.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 26921764 | text | 24 | 3 | 3 | 88.9% | 88.9% | 88.9% | 88.9% / 0.083 | 88.9% / 0.083 | 0.0% / n/a | n/a | n/a |
+| SCN5A | 27554632 | text | 9 | 14 | 0 | 39.1% | 100.0% | 56.2% | 88.9% / 0.125 | 77.8% / 0.143 | 77.8% / 0.000 | n/a | n/a |
+| SCN5A | 10590249 | text | 0 | 3 | 1 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 25051102 | text | 2 | 20 | 1 | 9.1% | 66.7% | 16.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| SCN5A | 26746457 | text | 6 | 19 | 26 | 24.0% | 18.8% | 21.1% | 6.2% / 6.000 | 6.2% / 0.000 | 6.2% / 6.000 | n/a | n/a |
+| KCNH2 | 29622001 | text | 33 | 25 | 2 | 56.9% | 94.3% | 71.0% | 51.4% / 0.000 | 14.3% / 0.000 | 14.3% / 0.000 | n/a | n/a |
+| KCNH2 | 11854117 | text | 37 | 13 | 7 | 74.0% | 84.1% | 78.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 14661677 | text | 23 | 2 | 6 | 92.0% | 79.3% | 85.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 19160088 | text | 2 | 0 | 1 | 100.0% | 66.7% | 80.0% | 66.7% / 48.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 26496715 | text | 52 | 5 | 2 | 91.2% | 96.3% | 93.7% | 94.4% / 0.000 | 94.4% / 0.000 | 94.4% / 0.000 | n/a | n/a |
+| KCNH2 | 11844290 | text | 0 | 0 | 5 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 10973849 | text | 56 | 424 | 4 | 11.7% | 93.3% | 20.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 10862094 | text | 6 | 10 | 2 | 37.5% | 75.0% | 50.0% | 25.0% / 0.000 | 25.0% / 0.000 | 25.0% / 0.000 | n/a | n/a |
+| KCNH2 | 10841244 | text | 1 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 2.000 | 100.0% / 0.000 | 100.0% / 0.000 | n/a | n/a |
+| KCNH2 | 23864605 | text | 2 | 5 | 0 | 28.6% | 100.0% | 44.4% | 0.0% / n/a | 0.0% / n/a | 50.0% / 0.000 | n/a | n/a |
+| KCNH2 | 24667783 | text | 20 | 0 | 3 | 100.0% | 87.0% | 93.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNH2 | 19038855 | text | 25 | 8 | 3 | 75.8% | 89.3% | 82.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 19490272 | text | 54 | 7 | 0 | 88.5% | 100.0% | 93.9% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 23153844 | text | 21 | 12 | 0 | 63.6% | 100.0% | 77.8% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 17470695 | text | 46 | 35 | 10 | 56.8% | 82.1% | 67.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 14678125 | text | 35 | 9 | 6 | 79.5% | 85.4% | 82.4% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 28720088 | text | 1 | 5 | 1 | 16.7% | 50.0% | 25.0% | 50.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 21129503 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 100.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 25087618 | text | 0 | 0 | 1 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 17192539 | text | 4 | 0 | 53 | 100.0% | 7.0% | 13.1% | 1.8% / 193.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 24052033 | text | 2 | 0 | 0 | 100.0% | 100.0% | 100.0% | 100.0% / 0.000 | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 18713323 | text | 6 | 2 | 0 | 75.0% | 100.0% | 85.7% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 29197658 | text | 29 | 7 | 0 | 80.6% | 100.0% | 89.2% | 31.0% / 0.000 | 31.0% / 0.000 | 0.0% / n/a | n/a | n/a |
+| KCNQ1 | 33141630 | text | 1 | 147 | 0 | 0.7% | 100.0% | 1.3% | 100.0% / 36.000 | 100.0% / 34.000 | 100.0% / 70.000 | n/a | n/a |
+| RYR2 | 25814417 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 29925740 | text | 49 | 1 | 2 | 98.0% | 96.1% | 97.0% | 96.1% / 0.000 | 96.1% / 0.000 | 96.1% / 0.000 | n/a | n/a |
+| RYR2 | 33315912 | text | 1 | 2 | 0 | 33.3% | 100.0% | 50.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 16272262 | text | 12 | 41 | 0 | 22.6% | 100.0% | 36.9% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 34202968 | text | 1 | 9 | 0 | 10.0% | 100.0% | 18.2% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 19926015 | text | 0 | 0 | 40 | 0.0% | 0.0% | 0.0% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 33686871 | text | 1 | 1 | 7 | 50.0% | 12.5% | 20.0% | 0.0% / n/a | 12.5% / 2.000 | 0.0% / n/a | n/a | n/a |
+| RYR2 | 28237968 | text | 3 | 25 | 15 | 10.7% | 16.7% | 13.0% | 5.6% / 2.000 | 5.6% / 1.000 | 5.6% / 1.000 | n/a | n/a |
+| RYR2 | 12106942 | text | 6 | 1 | 0 | 85.7% | 100.0% | 92.3% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 22677073 | text | 24 | 9 | 2 | 72.7% | 92.3% | 81.4% | 76.9% / 0.000 | 34.6% / 0.000 | 34.6% / 0.000 | n/a | n/a |
+| RYR2 | 30403697 | text | 20 | 23 | 1 | 46.5% | 95.2% | 62.5% | 0.0% / n/a | 0.0% / n/a | 0.0% / n/a | n/a | n/a |
+| RYR2 | 33606749 | text | 30 | 2 | 3 | 93.8% | 90.9% | 92.3% | 84.8% / 0.000 | 84.8% / 0.000 | 0.0% / n/a | n/a | n/a |
 
 ## Errors and representation choices
 
@@ -412,7 +411,7 @@ Count recall is the share of all gold count assertions for which the locked pred
 ## Scope, method, and limitations
 
 - Population: fixed manifest `highcarrier_48_papers_20260723.tsv` (48 papers); 12 per cardiac gene; every PMID has downloaded source and at least one gold assertion in each count field.
-- Blinding: gold was used only for PMID eligibility and count-field presence during selection; extraction exported no gold values or row counts, and predictions were made read-only and SHA-256 locked before `score` opened gold.
+- Blinding: prediction content was finalized and SHA-256 locked before this external score. The source `gvf-run` workflow may have read registered gold for read-only per-layer scorecards before the projection lock; those scores did not feed back into extraction, and gold-PMID enrichment was disabled. This is not the stricter native lock-before-any-gold-read protocol.
 - Variant metrics are micro-averaged over gold rows. Precision treats unmatched predictions as false positives, although the curated recall packet may omit some real variants.
 - Count MAE/RMSE are conditional on a supplied value. Count recall must be read alongside them because abstentions and missed variants are excluded from error magnitude.
 - Source acquisition and gold completeness are separate from model reading quality; abstract-only or incomplete source is retained and labeled rather than silently excluded.
@@ -421,7 +420,8 @@ Count recall is the share of all gold count assertions for which the locked pred
 ## Reproducibility and evidence
 
 - `selection.json`: selected PMIDs, source paths, source hashes, and available representations.
-- `predictions.json`: immutable per-paper tools, rationales, extracted variants, counts, evidence quotes, source locations, elapsed time, and token telemetry.
+- `predictions.json`: immutable per-paper tools, rationales, extracted variants, counts, evidence quotes, source locations, and telemetry when captured.
+- Exact per-call LLM traces are not attached to this evaluation lock; source `gvf-run` trace trees may exist separately, while legacy runs require a rerun for a trace-complete audit.
 - `evidence.csv`: flat evidence ledger for every predicted variant.
 - `paper_metrics.csv`: exact per-paper metrics.
 - `LOCK.json`: SHA-256 digests proving prediction finalization before scoring.

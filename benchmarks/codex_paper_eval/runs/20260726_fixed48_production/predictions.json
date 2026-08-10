@@ -3,6 +3,12 @@
   "excluded_source_layers": [],
   "extraction_elapsed_seconds": null,
   "extraction_started_at": null,
+  "prelock_gold_usage": {
+    "gold_pmid_enrichment_enabled": false,
+    "note": "gvf-run automatically emits read-only layer scorecards when registered gold is available; this external projection is not the native lock-before-any-gold-read harness.",
+    "read_only_layer_scoring_possible": true,
+    "scores_feed_back_into_predictions": false
+  },
   "papers": [
     {
       "elapsed_seconds": null,

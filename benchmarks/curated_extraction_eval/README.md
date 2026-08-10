@@ -42,7 +42,7 @@ full gold standard before claiming a headline number.
 # From the repo root. Uses the project venv if present.
 
 # 1) SCORE MODE (default, NO LLM tokens, takes seconds):
-#    Score every canonical DB in the 101-paper set.
+#    Score every canonical DB in the 104-unique-paper / 105-entry set.
 python benchmarks/curated_extraction_eval/run_benchmark.py
 
 # 2) Headline cardiac-only score (the fully human-curated gold scope):
@@ -234,18 +234,20 @@ recall; picks were chosen to add era anchors (e.g. KCNH2 7889573 / 1995, RYR2
 case reports), strategy coverage, and in-source failure cases the pipeline misses
 (KCNH2 29650123, RYR2 19398665/27452199, SCN5A 24144883, KCNQ1 24667783).
 
-**Non-cardiac arm (28 papers · BRCA1/BRCA2/MYBPC3/APOE).** These genes have no
-repo gold standard, so each paper's gold answer was **curated by hand into
-`gold_overrides/` from the cached full text/tables** (the extraction DB was used
-only as a row locator, never trusted as gold). Counts the source did not state
-were left out rather than inferred; APOE allele-frequency-only papers were dropped
-in favor of ones with concrete coding variants + patient counts. The arm spans
+**Non-cardiac arm (31 unique papers / 32 gene-paper entries ·
+BRCA1/BRCA2/MYBPC3/APOE).** These genes have no full repo gold standard, so the
+benchmark uses reconciled curator/derived answers in `gold_overrides/`. They are
+useful generalization diagnostics but are not equivalent to the fully manual
+cardiac gold and must not be folded into headline program metrics. Counts the
+source did not state were left out rather than inferred; APOE
+allele-frequency-only papers were dropped in favor of ones with concrete coding
+variants + patient counts. The arm spans
 1989 (APOE 2539388) to 2025 (MYBPC3 40453736) and includes count-role-confusion
 cases (BRCA2 21356067, BRCA1 33468216) on purpose.
 
 **Strategy tags** (`table | text | figure | mixed`, from the dominant source
-route) — current mix: **54 table · 24 text · 12 figure · 11 mixed**, across
-**KCNH2 15 · KCNQ1 19 · SCN5A 19 · RYR2 20 · BRCA1 8 · BRCA2 6 · MYBPC3 8 ·
+route) — current mix: **58 table · 24 text · 12 figure · 11 mixed**, across
+**KCNH2 15 · KCNQ1 19 · SCN5A 19 · RYR2 20 · BRCA1 10 · BRCA2 8 · MYBPC3 8 ·
 APOE 6**. Plus 4 `negative_cases/` guards (gold-free FP assertions). See
 `manifest.md` for the full list with titles and links.
 

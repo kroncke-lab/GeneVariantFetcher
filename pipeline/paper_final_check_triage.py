@@ -44,7 +44,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-# ---- Thresholds (v1; calibrate on the 101-paper shadow set before enforcing) ----
+# ---- Thresholds (v1; calibrate on the curated shadow set before enforcing) ----
 # A count surface this large is worth the full audit regardless of trust tier.
 MAX_SIMPLE_COUNT_FACTS = 24
 # This many distinct count roles on one paper signals a mixed/complex table.

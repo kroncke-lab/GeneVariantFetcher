@@ -1,6 +1,70 @@
 # GVF Tasks
 
 ## Current Focus
+- **Failure-routing A1 pilot (2026-08-10): implemented, measured, default OFF.**
+  `ENABLE_TIER3_REASON_CLASS_ROUTING` limits compact claim verification to
+  count-semantic/precision risks; completeness-only, missing-count, and source
+  blockers are classified for their appropriate recovery lanes instead of
+  opening the verifier. The source-locked 48-paper cardiac replay cut verifier
+  tokens 27.6% and total tokens 7.5%; variant precision/recall/F1 stayed within
+  the predeclared gates. The raw aggregate carrier MAE worsened 0.723→0.902,
+  however, so production retains the prior above-threshold behavior. On the
+  eight papers whose routing decision actually changed, variants were identical
+  and absolute carrier error improved 43→42, suggesting stochastic primary-
+  extraction variance rather than a demonstrated routing regression.
+  - [x] Implement reason-class routing, provenance, rollout flag, and focused
+        tests; run the hash-locked 48 cardiac + eight BRCA2 diagnostic papers.
+  - [ ] Run a paired same-primary-output ablation or an independent locked
+        replicate before considering promotion. Require the aggregate count
+        gate as well as the variant and ≥25% verifier-token gates to pass.
+  - [ ] If the replicate passes, explicitly implement and measure the currently
+        classification-only `completeness_rescue`, `count_recovery`, and
+        `source_recovery` lanes before treating them as active recovery stages.
+  - The eight BRCA2 `gold_overrides` papers remain a curator/derived diagnostic,
+    not a manual headline gold standard. Full results and lock hashes:
+    `benchmarks/codex_paper_eval/runs/20260810_failure_routing_a1_56/`.
+- **Benchmark/protocol audit (2026-08-08).** Re-established which fixed sets are
+  authoritative, rechecked the canonical metrics, and reconciled the documented
+  extraction/model strategy with the actual resolved configuration.
+  - [x] Hermetically rescore the four canonical cardiac DBs. All recall values
+        reproduced; corrected the stale matched-count denominators and
+        source-layer precision totals in `docs/RECALL_STATUS.md`.
+  - [x] Rescore the hash-locked 48-paper cardiac production predictions with
+        the current matcher/scorer. Paper-level metrics reproduced exactly.
+  - [x] Rescore both curated profiles and refresh the one-row-stale cardiac
+        expected baseline. The broader fixture is 104 unique papers / 105
+        gene-paper entries, including eight BRCA2 diagnostic entries.
+  - [x] Add a hermetic `--skip-disagreement-artifacts` scorer mode, expand run
+        provenance to cover behavior-defining files/policies, and register Luna
+        and Terra as opt-in Azure probe aliases. Live connectivity probes passed
+        for both deployments.
+  - [x] Finish and score the fresh fixed-48 production extraction under
+        `validation_runs/20260808_fixed48_snapshot_replay_hermetic`. The locked
+        all-layer projection scored 831 TP / 1060 FP / 170 FN (83.0% recall,
+        43.9% precision, 57.5% F1); the paper-derived-only projection scored
+        710 / 592 / 291 (70.9%, 54.5%, 61.7%). Versus 2026-07-26 this is +42 TP
+        all-layer and +40 TP paper-only, driven almost entirely by recovery of
+        the formerly circuit-broken RYR2 PMID 19926015. Exact trace telemetry:
+        279 calls, 1,372,842 tokens. Durable record:
+        `benchmarks/codex_paper_eval/runs/20260808_fixed48_snapshot_replay/`.
+  - [ ] Run a controlled Luna A/B on a low-judgment stage (Tier 2 relevance or
+        extraction-priority triage), holding the fixed papers and every other
+        route constant. Do not use Luna for count attribution or adjudication
+        without a separate quality gate.
+  - [ ] Add a production-projection blind-eval switch that passes no gold (or
+        `--no-score`) to recovery layers until the external predictions lock is
+        written. Current per-layer scores are read-only and enrichment remains
+        DB-PMID-scoped, but strict lock-before-any-gold-read should be explicit.
+  - [ ] Build a genuinely manual BRCA2 gold tier before reporting BRCA2 as a
+        headline gold-standard result; the existing eight-paper
+        `gold_overrides` set remains diagnostic only.
+  - [ ] Stop carrier-only table totals from becoming affected counts. The fresh
+        replay exposed KCNQ1 PMID 18713323 rows where a carrier column was
+        copied into both `total_carriers` and `affected` despite no explicit
+        phenotype split. Change `_populate_penetrance_from_patient_count` and
+        deterministic table fallbacks to leave affected/unaffected NULL unless
+        phenotype evidence is explicit; add a trust-gate backstop for legacy
+        rows; then rerun the fixed-48 count metrics before promotion.
 - **LLM trace observability follow-up (2026-07-28).** The packaged recorder,
   accepted/retry/failed linkage, per-run isolation, route-coverage panel, and
   sharded offline HTML viewer are implemented and covered by the unit suite.
@@ -331,18 +395,13 @@ missed them** after the 1B parser land.
   - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
-- [ ] **Adopt Azure-first routine routing plus the canonical GPT-5.6 per-paper
-      final check for the 101-paper staging loop.** Routine triage/table
-      routing/extraction/debate should use Azure deployments (`gpt-5.4`,
-      `Kimi-K2.6-1`, `grok-4.3`, `DeepSeek-V4-Pro`). Step 3.8 is the separate,
-      default-on final per-paper sniff test using `azure_ai/gpt-5.6-sol` at
-      `xhigh`; it records exact fact/field findings and must not replace routine
-      Tier 2. Step 3.9 composes source-verified objective contradictions into
-      the trusted field projection without changing raw counts; weak
-      unsupported-count findings remain advisory. Sonnet 5 and Opus
-      4.8 remain optional exception-adjudication and hard-case escalation queues.
-      Calibrate quarantine/recall effects on the curated staging set before
-      considering full-gene refreshes.
+- [ ] **Measure cheaper Azure routing one stage at a time.** The active
+      workstation currently routes Tier 2 and compact high-risk adjudication to
+      GPT-5.6 Sol, tables to Kimi K2.6, and primary Tier 3 extraction to Grok
+      4.3. Luna and Terra are reachable but opt-in. Start with Luna on a
+      low-judgment classifier, compare against the exact fixed fixture, and keep
+      the Step 3.8/3.9 final-review pair parked/off unless a new cost-quality
+      measurement justifies enabling both.
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
       the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
       unique-variant blocker.

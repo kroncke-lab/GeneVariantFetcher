@@ -26,6 +26,7 @@ from benchmarks.codex_paper_eval.run_eval import (
     selection_metadata,
     supports_images,
     usable_sources,
+    validate_predictions,
     write_json,
     write_markdown_report,
 )
@@ -65,6 +66,7 @@ def _report_fixture() -> dict:
             "source_completeness": "full_text",
             "elapsed_seconds": 1.0,
             "token_usage": {
+                "telemetry_available": True,
                 "input_tokens": 20,
                 "output_tokens": 5,
                 "total_tokens": 25,
@@ -142,6 +144,7 @@ def _report_fixture() -> dict:
             "started_at": "2026-07-24T00:00:00+00:00",
             "completed_at": "2026-07-24T00:01:00+00:00",
         },
+        "integrity": {"llm_trace_manifest_sha256": "fixture-digest"},
     }
 
 
@@ -313,6 +316,8 @@ def test_markdown_and_artifact_narratives_are_derived_from_report(tmp_path: Path
     assert "fixture.tsv" in markdown
     assert "gold-ranked" not in markdown
     assert "high-carrier" not in markdown
+    assert "Exact API telemetry" in markdown
+    assert "llm_traces/<GENE>/<PMID>/" in markdown
 
     payload = build_payload(tmp_path)
     manifest = payload["manifest"]
@@ -326,6 +331,78 @@ def test_markdown_and_artifact_narratives_are_derived_from_report(tmp_path: Path
     assert "4 gold variant rows" in executive
     assert "123 exact API tokens" in executive
     assert "93.1%" not in json.dumps(payload)
+
+
+def test_markdown_does_not_invent_legacy_telemetry_or_traces(tmp_path: Path):
+    report = _report_fixture()
+    report["integrity"] = {
+        "llm_trace_manifest_sha256": None,
+        "llm_trace_report_sha256": None,
+    }
+    for paper in report["papers"]:
+        paper["elapsed_seconds"] = 0.0
+        paper["token_usage"] = {
+            "telemetry_available": False,
+            "total_tokens": None,
+        }
+    report["token_usage"] = {"telemetry_available": False}
+
+    markdown_path = tmp_path / "legacy_report.md"
+    write_markdown_report(report, markdown_path)
+    markdown = markdown_path.read_text()
+
+    assert "token and timing telemetry was not captured" in markdown
+    assert "zero placeholders must not be interpreted as zero cost" in markdown
+    assert "Exact per-call LLM traces are not attached" in markdown
+    assert "`llm_traces/<GENE>/<PMID>/`" not in markdown
+    assert "| n/a | n/a |" in markdown
+
+
+def test_markdown_discloses_production_projection_prelock_scoring(tmp_path: Path):
+    report = _report_fixture()
+    report["prelock_gold_usage"] = {
+        "read_only_layer_scoring_possible": True,
+        "scores_feed_back_into_predictions": False,
+        "gold_pmid_enrichment_enabled": False,
+    }
+
+    markdown_path = tmp_path / "projection_report.md"
+    write_markdown_report(report, markdown_path)
+    markdown = markdown_path.read_text()
+
+    assert (
+        "may have read registered gold for read-only per-layer scorecards" in markdown
+    )
+    assert "not the stricter native lock-before-any-gold-read protocol" in markdown
+
+
+def test_prediction_validation_accepts_explicit_deterministic_zero_tokens():
+    report = _report_fixture()
+    selection = {
+        "papers": [
+            {"gene": report["papers"][0]["gene"], "pmid": report["papers"][0]["pmid"]}
+        ]
+    }
+    prediction = {
+        "schema_version": 1,
+        "papers": [
+            {
+                "gene": report["papers"][0]["gene"],
+                "pmid": report["papers"][0]["pmid"],
+                "tool": "table",
+                "tool_rationale": "deterministic fixed-width parser",
+                "elapsed_seconds": 0.0,
+                "source_completeness": "full_text",
+                "token_usage": {
+                    "telemetry_available": True,
+                    "total_tokens": 0,
+                },
+                "variants": [],
+            }
+        ],
+    }
+
+    assert validate_predictions(selection, prediction) == []
 
 
 def _rendering(path: Path, rows: int, variants: int, padding: int = 0) -> Path:

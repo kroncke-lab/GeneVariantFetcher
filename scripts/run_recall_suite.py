@@ -886,6 +886,14 @@ def main() -> int:
             "(default: %(default)s)."
         ),
     )
+    parser.add_argument(
+        "--skip-disagreement-artifacts",
+        action="store_true",
+        help=(
+            "Skip source-backed paper disagreement reports. Use this for a "
+            "hermetic metric-only rescore; aggregate scoring is unaffected."
+        ),
+    )
     parser.add_argument("--score", action="store_true", help="Score only; skip pytest")
     parser.add_argument(
         "--review-gold-sync",
@@ -1061,16 +1069,19 @@ def main() -> int:
     )
     summary["review_gold_sync"] = review_gold_sync
     summary["trust_tier"] = args.trust_tier
-    try:
-        summary["disagreement_artifacts"] = write_disagreement_artifacts(
-            outdir=outdir,
-            gene_results=gene_results,
-            results_dir=results_dir,
-            gold_dir=gold_dir,
-        )
-    except Exception as exc:  # noqa: BLE001
-        logger.exception("Paper-level disagreement report generation failed")
-        summary["disagreement_artifacts_error"] = str(exc)
+    if args.skip_disagreement_artifacts:
+        summary["disagreement_artifacts_skipped"] = True
+    else:
+        try:
+            summary["disagreement_artifacts"] = write_disagreement_artifacts(
+                outdir=outdir,
+                gene_results=gene_results,
+                results_dir=results_dir,
+                gold_dir=gold_dir,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.exception("Paper-level disagreement report generation failed")
+            summary["disagreement_artifacts_error"] = str(exc)
     write_run_summary(summary, outdir)
     print_scorecard(summary)
 

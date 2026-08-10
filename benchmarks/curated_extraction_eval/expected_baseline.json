@@ -54,7 +54,7 @@
         "affected": 1.4781285659946748,
         "unaffected": 3.295698924731183
       },
-      "fixture_sha256": "3aea898aa02c12479da94e04189ae6896744fabe9642be9d93c2d0ea4da5237f"
+      "fixture_sha256": "8130c88904601c7fcc5dc51148b49c4a654e2e955e0e99c7d9877a026add562c"
     },
     "KCNH2,KCNQ1,RYR2,SCN5A": {
       "genes": [
@@ -63,7 +63,6 @@
         "RYR2",
         "SCN5A"
       ],
-      "fixture_sha256": "5e309f822b1b0ee72cc3f6b3131c2572819e6d64058cbb8071dd997f5df6ad55",
       "recall": {
         "pmids": {
           "matched": 72,
@@ -71,9 +70,9 @@
           "recall": 0.9863013698630136
         },
         "variant_rows": {
-          "matched": 2436,
+          "matched": 2435,
           "gold": 2714,
-          "recall": 0.8975681650700074
+          "recall": 0.8971997052321297
         },
         "unique_variants": {
           "matched": 1584,
@@ -105,7 +104,8 @@
         "carriers": 1.3554578168732507,
         "affected": 1.3345959595959596,
         "unaffected": 2.025
-      }
+      },
+      "fixture_sha256": "5e309f822b1b0ee72cc3f6b3131c2572819e6d64058cbb8071dd997f5df6ad55"
     }
   }
 }

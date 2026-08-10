@@ -180,6 +180,10 @@ GVF's default workflow is:
    authenticated recovery routes when configured.
 4. Reuse or update the local source corpus under `corpus/`.
 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
+   Regex scanning and structured-table fast paths are deterministic; an LLM
+   routes ambiguous tables, deterministic code reads their cells, and Tier 3
+   full-text extraction fills the remaining gaps. Only high-risk results are
+   sent through compact claim-card adjudication.
 6. Migrate extraction JSON to SQLite.
 7. Run DB-observed recovery layers and the default-on per-fact trust gate.
 8. Optionally run the `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test
@@ -196,7 +200,10 @@ GVF's default workflow is:
    acceptance nonzero and require replay.
 10. Produce optional recall scoring and report handoff artifacts.
 
-Technical details live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The exact models and switches are resolved per stage and recorded in
+`run_manifest.json`; exact redacted LLM calls and accepted/fallback decisions
+are stored under `llm_traces/`. Technical details and the current route map live
+in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Output
 

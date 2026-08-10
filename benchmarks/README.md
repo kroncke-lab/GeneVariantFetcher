@@ -11,8 +11,9 @@ full-gold scorer and metrics.
 
 ## Sets
 
-- **[`curated_extraction_eval/`](curated_extraction_eval/README.md)** — 101
-  hand-picked, strategy-diverse gold papers across KCNH2, KCNQ1, SCN5A, RYR2,
+- **[`curated_extraction_eval/`](curated_extraction_eval/README.md)** — 104
+  unique papers (105 gene-paper entries), hand-picked and strategy-diverse,
+  across KCNH2, KCNQ1, SCN5A, RYR2,
   BRCA1, BRCA2, MYBPC3, and APOE, spanning tables, figures, in-text evidence,
   negative cases, and false-positive guard cases. It scores existing DBs or runs
   the fixed PMID set through the regular default `gvf-run` post-selection

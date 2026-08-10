@@ -390,7 +390,8 @@ def main(argv: list[str]) -> int:
         by_strat_md[str(r["strategy"])] = by_strat_md.get(str(r["strategy"]), 0) + 1
     md += [
         "",
-        f"**{len(manifest_rows)} papers** · "
+        f"**{len({str(r['pmid']) for r in manifest_rows})} unique papers / "
+        f"{len(manifest_rows)} gene-paper entries** · "
         f"{sum(int(r['gold_variant_rows']) for r in manifest_rows)} gold variant-rows · "
         f"by strategy: {by_strat_md} · "
         f"by gene: {{ {', '.join(f'{g}: {len(v)}' for g, v in by_gene.items())} }}",
@@ -402,7 +403,11 @@ def main(argv: list[str]) -> int:
     by_strat: dict[str, int] = {}
     for r in manifest_rows:
         by_strat[str(r["strategy"])] = by_strat.get(str(r["strategy"]), 0) + 1
-    print(f"Wrote {len(manifest_rows)} papers across {len(by_gene)} genes.")
+    unique_papers = len({str(r["pmid"]) for r in manifest_rows})
+    print(
+        f"Wrote {unique_papers} unique papers / {len(manifest_rows)} "
+        f"gene-paper entries across {len(by_gene)} genes."
+    )
     print(f"  total gold variant-rows: {total_gold}")
     print(f"  by strategy: {by_strat}")
     print(f"  by gene: {{ {', '.join(f'{g}: {len(v)}' for g, v in by_gene.items())} }}")

@@ -112,9 +112,25 @@ class Settings(BaseSettings):
         default=None,
         validation_alias="AZURE_DEPLOYMENT_GPT56_SOL",
         description=(
-            "Optional Azure AI Foundry GPT-5.6 Sol deployment used by the "
-            "separate per-paper final check, not routine extraction or the "
-            "optional Anthropic exception-adjudication queue."
+            "Optional Azure AI Foundry GPT-5.6 Sol deployment. It is exposed "
+            "for explicit per-stage routing and side-by-side model probes; "
+            "setting the alias alone does not change routine extraction."
+        ),
+    )
+    azure_deployment_gpt56_luna: Optional[str] = Field(
+        default=None,
+        validation_alias="AZURE_DEPLOYMENT_GPT56_LUNA",
+        description=(
+            "Optional low-cost Azure AI Foundry GPT-5.6 Luna deployment for "
+            "explicit low-judgment stages and side-by-side model probes."
+        ),
+    )
+    azure_deployment_gpt56_terra: Optional[str] = Field(
+        default=None,
+        validation_alias="AZURE_DEPLOYMENT_GPT56_TERRA",
+        description=(
+            "Optional Azure AI Foundry GPT-5.6 Terra deployment for explicit "
+            "per-stage routing and side-by-side model probes."
         ),
     )
     azure_deployment_deepseek: Optional[str] = Field(
@@ -276,6 +292,15 @@ class Settings(BaseSettings):
         description=(
             "Run a compact second-model adjudication pass for high-risk "
             "extractions instead of sending every full paper to every model."
+        ),
+    )
+    enable_tier3_reason_class_routing: bool = Field(
+        default=False,
+        validation_alias="ENABLE_TIER3_REASON_CLASS_ROUTING",
+        description=(
+            "Experimental: open Tier 3 claim verification only for qualifying "
+            "count-semantic/provenance risks. Completeness, missing-count, and "
+            "source-recovery signals remain recorded but do not open the verifier."
         ),
     )
     tier3_adjudicator_models: Union[str, List[str]] = Field(
@@ -489,8 +514,8 @@ class Settings(BaseSettings):
     # Per-paper "final check" (sniff test). A strong reasoning model reviews
     # each paper's extracted counts against source/provenance and records exact
     # fact/field findings. The companion gate composes grounded findings into
-    # trust without mutating raw counts. Default-on; skips gracefully when the
-    # model is unreachable. See pipeline/paper_final_check.py.
+    # trust without mutating raw counts. The reviewer and composer are currently
+    # parked/default-off together. See pipeline/paper_final_check.py.
     paper_final_check_enabled: bool = Field(
         default=False,
         validation_alias="PAPER_FINAL_CHECK_ENABLED",
@@ -1223,6 +1248,8 @@ class Settings(BaseSettings):
         models = [
             self._azure_model_string(self.azure_deployment_gpt54),
             self._azure_model_string(self.azure_deployment_deepseek),
+            self._azure_model_string(self.azure_deployment_gpt56_luna),
+            self._azure_model_string(self.azure_deployment_gpt56_terra),
         ]
         return [model for model in models if model]
 

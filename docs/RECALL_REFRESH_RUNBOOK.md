@@ -83,9 +83,16 @@ python scripts/refresh_run_db.py --gene SCN5A --run-dir <run> \
     --harvest-dir /tmp/harvest/SCN5A --stage-extractions \
     --output-db /tmp/SCN5A.refreshed.db --skip-recovery
 # 5. score
-python scripts/run_recall_suite.py --score --genes SCN5A \
-    --db SCN5A=/tmp/SCN5A.refreshed.db --outdir /tmp/score
+GVF_DISABLE_LOCAL_DATA=1 python scripts/run_recall_suite.py --score \
+    --genes SCN5A --db SCN5A=/tmp/SCN5A.refreshed.db \
+    --outdir /tmp/score --skip-disagreement-artifacts
 ```
+
+`--skip-disagreement-artifacts` is the reproducible metric-only path: it avoids
+opening the corpus or source-context files and does not change aggregate scoring.
+Omit it when you explicitly want the slower source-backed
+`paper_disagreement_report.csv`; that audit depends on the current corpus mount
+and is not hermetic.
 
 For turnkey source recovery, `source_acquisition_audit.py` writes a separate
 `supplement_input.csv`. `gvf-run` sends that queue to

@@ -45,6 +45,12 @@ def test_risk_flags_repeated_large_non_deterministic_counts():
         reason.startswith("repeated_large_count_tuple") for reason in risk["reasons"]
     )
     assert risk["requires_adjudication"] is True
+    assert risk["requires_claim_verification"] is True
+    assert risk["routing_policy"] == "reason_class_v1"
+    assert any(
+        reason.startswith("repeated_large_count_tuple")
+        for reason in risk["risk_routes"]["claim_verification"]
+    )
 
 
 def test_evidence_packet_is_compact_and_contains_count_lines():
@@ -255,6 +261,116 @@ def test_risk_flags_count_bearing_regex_table_rows():
     assert risk["score"] >= 2
     assert "count_bearing_high_risk_source_layer:2" in risk["reasons"]
     assert risk["requires_adjudication"] is True
+    assert risk["requires_claim_verification"] is True
+
+
+def test_completeness_only_risk_does_not_open_claim_verification(monkeypatch):
+    def fail_if_called(*_args, **_kwargs):
+        raise AssertionError("completeness risk must not open claim verification")
+
+    monkeypatch.setattr(
+        ExpertExtractor, "_verify_claim_cards_for_extraction", fail_if_called
+    )
+    monkeypatch.setattr(ExpertExtractor, "_call_adjudicator", fail_if_called)
+
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    extractor.adjudicator_models = ["verifier-model"]
+    extractor.adjudication_risk_threshold = 2
+    extractor.enable_reason_class_routing = True
+    data = {
+        "variants": [_variant("p.Arg420Trp", total=1, affected=1, unaffected=0)],
+        "extraction_metadata": {},
+    }
+
+    out = extractor._maybe_adjudicate_extraction(
+        paper=Paper(pmid="1", title="Incomplete table", gene_symbol="RYR2"),
+        primary_model="primary-model",
+        extracted_data=data,
+        source_text="One RYR2 variant was extracted from a much larger table.",
+        estimated_variants=20,
+        scanner_variant_count=10,
+    )
+
+    risk = out["extraction_metadata"]["extraction_risk"]
+    assert risk["requires_adjudication"] is True
+    assert risk["requires_claim_verification"] is False
+    assert risk["risk_routes"]["claim_verification"] == []
+    assert len(risk["risk_routes"]["completeness_rescue"]) == 2
+    assert (
+        out["extraction_metadata"]["adjudication_skipped_reason"]
+        == "risk_not_routed_to_claim_verification"
+    )
+
+
+def test_reason_class_routing_flag_preserves_old_open_condition_when_disabled():
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    extractor.adjudication_risk_threshold = 2
+    extractor.enable_reason_class_routing = False
+    data = {
+        "variants": [_variant("p.Arg420Trp", total=1, affected=1, unaffected=0)],
+        "extraction_metadata": {},
+    }
+
+    risk = extractor._assess_extraction_risk(
+        extracted_data=data,
+        source_text="One RYR2 variant was extracted from a much larger table.",
+        estimated_variants=20,
+        scanner_variant_count=10,
+    )
+
+    assert risk["reason_class_routing_enabled"] is False
+    assert risk["risk_routes"]["claim_verification"] == []
+    assert risk["requires_adjudication"] is True
+    assert risk["requires_claim_verification"] is True
+
+
+def test_missing_counts_routes_to_count_recovery_not_claim_verification():
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    extractor.adjudication_risk_threshold = 1
+    extractor.enable_reason_class_routing = True
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "RYR2",
+                "protein_notation": f"p.Arg{index}Trp",
+            }
+            for index in range(1, 7)
+        ],
+        "extraction_metadata": {},
+    }
+
+    risk = extractor._assess_extraction_risk(
+        extracted_data=data,
+        source_text="Six RYR2 variants were reported without per-variant counts.",
+        estimated_variants=6,
+        scanner_variant_count=0,
+    )
+
+    assert risk["requires_adjudication"] is True
+    assert risk["requires_claim_verification"] is False
+    assert risk["risk_routes"]["claim_verification"] == []
+    assert risk["risk_routes"]["count_recovery"] == ["many_variants_missing_counts:0/6"]
+
+
+def test_semantic_risk_opens_verification_alongside_completeness_risk():
+    extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
+    extractor.adjudication_risk_threshold = 2
+    extractor.enable_reason_class_routing = True
+    data = {
+        "variants": [_variant(f"p.Arg{index}Trp") for index in range(1, 5)],
+        "extraction_metadata": {},
+    }
+
+    risk = extractor._assess_extraction_risk(
+        extracted_data=data,
+        source_text="RYR2 mutation carriers were described.",
+        estimated_variants=40,
+        scanner_variant_count=20,
+    )
+
+    assert risk["risk_routes"]["completeness_rescue"]
+    assert risk["risk_routes"]["claim_verification"]
+    assert risk["requires_claim_verification"] is True
 
 
 def test_low_risk_extraction_skips_adjudicator(monkeypatch):

@@ -508,7 +508,13 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         if p.get("tool") not in {"text", "table", "pdf", "ocr"}:
             errors.append(f"{label}: invalid tool {p.get('tool')!r}")
         usage = p.get("token_usage") or {}
-        if not usage.get("telemetry_available") or not usage.get("total_tokens"):
+        total_tokens = usage.get("total_tokens")
+        if (
+            not usage.get("telemetry_available")
+            or not isinstance(total_tokens, int)
+            or isinstance(total_tokens, bool)
+            or total_tokens < 0
+        ):
             errors.append(f"{label}: missing exact token telemetry")
         if int(predictions.get("schema_version") or 1) >= 2:
             refs = p.get("llm_trace_refs") or []
@@ -568,6 +574,21 @@ def command_lock(args) -> None:
         errors.extend(validate_trace_manifest(trace_root, trace_manifest))
     if errors:
         raise SystemExit("prediction validation failed:\n- " + "\n- ".join(errors))
+    prelock_gold_usage = predictions.get("prelock_gold_usage") or {}
+    production_projection = bool(
+        prelock_gold_usage.get("read_only_layer_scoring_possible")
+    )
+    lock_statement = (
+        "Prediction content was finalized before external scoring. The source "
+        "production workflow may have read registered gold for read-only per-layer "
+        "scorecards before this projection lock; those scores did not feed back "
+        "into extraction."
+        if production_projection
+        else (
+            "Predictions finalized before gold values or gold row counts were "
+            "exposed to extraction; score is the first phase that reads those values."
+        )
+    )
     lock = {
         "locked_at": datetime.now(timezone.utc).isoformat(),
         "selection_sha256": digest(selection_path),
@@ -591,10 +612,7 @@ def command_lock(args) -> None:
             if trace_manifest is not None
             else None
         ),
-        "statement": (
-            "Predictions finalized before gold values or gold row counts were "
-            "exposed to extraction; score is the first phase that reads those values."
-        ),
+        "statement": lock_statement,
     }
     write_json(lock_path, lock)
     prediction_path.chmod(0o444)
@@ -1687,6 +1705,17 @@ def write_matcher_adjudication_csv(
 def write_markdown_report(report: dict, path: Path) -> None:
     overall = report["overall"]
     token_usage = report["token_usage"] or {}
+    telemetry_available = bool(report.get("papers")) and all(
+        bool((score.get("token_usage") or {}).get("telemetry_available"))
+        for score in report["papers"]
+    )
+    traces_locked = bool(
+        (report.get("integrity") or {}).get("llm_trace_manifest_sha256")
+    )
+    timing = report.get("timing") or {}
+    wall_timing_available = bool(timing.get("started_at")) and bool(
+        timing.get("completed_at")
+    )
     papers_per_gene = {
         gene: metric["papers"] for gene, metric in report["by_gene"].items()
     }
@@ -1708,6 +1737,63 @@ def write_markdown_report(report: dict, path: Path) -> None:
         "population",
         f"recorded evaluation set ({overall['papers']} papers)",
     )
+    prelock_gold_usage = report.get("prelock_gold_usage") or {}
+    if prelock_gold_usage.get("read_only_layer_scoring_possible"):
+        blinding_line = (
+            "- Blinding: prediction content was finalized and SHA-256 locked "
+            "before this external score. The source `gvf-run` workflow may have "
+            "read registered gold for read-only per-layer scorecards before the "
+            "projection lock; those scores did not feed back into extraction, and "
+            "gold-PMID enrichment was disabled. This is not the stricter native "
+            "lock-before-any-gold-read protocol."
+        )
+    else:
+        blinding_line = (
+            "- Blinding: gold was used only for PMID eligibility and count-field "
+            "presence during selection; extraction exported no gold values or row "
+            "counts, and predictions were made read-only and SHA-256 locked before "
+            "`score` opened gold."
+        )
+    token_lines = (
+        [
+            (
+                f"- Exact API telemetry: **{token_usage.get('total_tokens', 0):,} "
+                f"total tokens** ({token_usage.get('input_tokens', 0):,} input; "
+                f"{token_usage.get('output_tokens', 0):,} output)."
+            ),
+        ]
+        if telemetry_available
+        else [
+            "- Exact API token and timing telemetry was not captured for this legacy production projection; zero placeholders must not be interpreted as zero cost."
+        ]
+    )
+    timing_lines = (
+        [
+            (
+                f"- Elapsed: **{timing['wall_seconds']:.1f}s wall clock**; "
+                f"{overall['elapsed_seconds']:.1f}s summed per-paper route + read time."
+            )
+        ]
+        if wall_timing_available
+        else (
+            [
+                f"- Traced API duration: **{overall['elapsed_seconds']:.1f}s** summed across papers; end-to-end wall time was not aggregated into this evaluation projection."
+            ]
+            if telemetry_available
+            else []
+        )
+    )
+    trace_evidence_lines = (
+        [
+            "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
+            "- `llm_traces/trace_manifest.json`: SHA-256 inventory locked before gold scoring; provider-returned reasoning summaries are retained, while private hidden chain-of-thought is not available.",
+            "- `llm_trace_report.html`: self-contained per-paper browser view of the locked trace timeline, prompts, responses, rationales, retries, and integrity state.",
+        ]
+        if traces_locked
+        else [
+            "- Exact per-call LLM traces are not attached to this evaluation lock; source `gvf-run` trace trees may exist separately, while legacy runs require a rerun for a trace-complete audit."
+        ]
+    )
     lines = [
         f"# Codex extraction-blinded paper evaluation — `{report['run_id']}`",
         "",
@@ -1726,15 +1812,8 @@ def write_markdown_report(report: dict, path: Path) -> None:
             f"**{format_rate(overall['f1'])}** "
             f"({overall['tp']} TP, {overall['fp']} FP, {overall['fn']} FN)."
         ),
-        (
-            f"- Exact API telemetry: **{token_usage.get('total_tokens', 0):,} total "
-            f"tokens** ({token_usage.get('input_tokens', 0):,} input; "
-            f"{token_usage.get('output_tokens', 0):,} output)."
-        ),
-        (
-            f"- Elapsed: **{report['timing']['wall_seconds']:.1f}s wall clock**; "
-            f"{overall['elapsed_seconds']:.1f}s summed per-paper route + read time."
-        ),
+        *token_lines,
+        *timing_lines,
         f"- Representation choices: {report['tools_used']}.",
         "",
         "## Blinding and scorer audit",
@@ -1830,14 +1909,23 @@ def write_markdown_report(report: dict, path: Path) -> None:
             count = score["count"][field]
             return f"{format_rate(count['recall'])} / {format_number(count['mae'])}"
 
+        seconds_cell = (
+            f"{float(score.get('elapsed_seconds') or 0):.1f}"
+            if telemetry_available
+            else "n/a"
+        )
+        tokens_cell = (
+            f"{int((score.get('token_usage') or {}).get('total_tokens') or 0):,}"
+            if telemetry_available
+            else "n/a"
+        )
         lines.append(
             f"| {score['gene']} | {score['pmid']} | {score.get('tool') or 'n/a'} | "
             f"{score['tp']} | {score['fp']} | {score['fn']} | "
             f"{format_rate(score['precision'])} | {format_rate(score['recall'])} | "
             f"{format_rate(score['f1'])} | {short_count('carriers')} | "
             f"{short_count('affected')} | {short_count('unaffected')} | "
-            f"{float(score.get('elapsed_seconds') or 0):.1f} | "
-            f"{int((score.get('token_usage') or {}).get('total_tokens') or 0):,} |"
+            f"{seconds_cell} | {tokens_cell} |"
         )
 
     lines.extend(["", "## Errors and representation choices", ""])
@@ -1878,7 +1966,7 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "## Scope, method, and limitations",
             "",
             f"- Population: {selection_population}; {per_gene_label}; every PMID has downloaded source and at least one gold assertion in each count field.",
-            "- Blinding: gold was used only for PMID eligibility and count-field presence during selection; extraction exported no gold values or row counts, and predictions were made read-only and SHA-256 locked before `score` opened gold.",
+            blinding_line,
             "- Variant metrics are micro-averaged over gold rows. Precision treats unmatched predictions as false positives, although the curated recall packet may omit some real variants.",
             "- Count MAE/RMSE are conditional on a supplied value. Count recall must be read alongside them because abstentions and missed variants are excluded from error magnitude.",
             "- Source acquisition and gold completeness are separate from model reading quality; abstract-only or incomplete source is retained and labeled rather than silently excluded.",
@@ -1887,10 +1975,8 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "## Reproducibility and evidence",
             "",
             "- `selection.json`: selected PMIDs, source paths, source hashes, and available representations.",
-            "- `predictions.json`: immutable per-paper tools, rationales, extracted variants, counts, evidence quotes, source locations, elapsed time, and token telemetry.",
-            "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
-            "- `llm_traces/trace_manifest.json`: SHA-256 inventory locked before gold scoring; provider-returned reasoning summaries are retained, while private hidden chain-of-thought is not available.",
-            "- `llm_trace_report.html`: self-contained per-paper browser view of the locked trace timeline, prompts, responses, rationales, retries, and integrity state.",
+            "- `predictions.json`: immutable per-paper tools, rationales, extracted variants, counts, evidence quotes, source locations, and telemetry when captured.",
+            *trace_evidence_lines,
             "- `evidence.csv`: flat evidence ledger for every predicted variant.",
             "- `paper_metrics.csv`: exact per-paper metrics.",
             "- `LOCK.json`: SHA-256 digests proving prediction finalization before scoring.",
@@ -1990,6 +2076,7 @@ def command_score(args) -> None:
             "llm_trace_report_sha256": lock.get("llm_trace_report_sha256"),
         },
         "blinding": selection.get("blinding"),
+        "prelock_gold_usage": predictions.get("prelock_gold_usage"),
     }
     raw_report_path = run_dir / "report_raw_matcher.json"
     if raw_report_path.exists():

@@ -54,11 +54,15 @@ def test_experimental_azure_models_are_prefixed():
     settings = _settings(
         azure_deployment_gpt54="gpt-5.4",
         azure_deployment_deepseek="DeepSeek-V4-Pro",
+        azure_deployment_gpt56_luna="gpt-5.6-luna",
+        azure_deployment_gpt56_terra="azure_ai/gpt-5.6-terra",
     )
 
     assert settings.get_experimental_azure_models() == [
         "azure_ai/gpt-5.4",
         "azure_ai/DeepSeek-V4-Pro",
+        "azure_ai/gpt-5.6-luna",
+        "azure_ai/gpt-5.6-terra",
     ]
 
 
@@ -66,6 +70,8 @@ def test_experimental_azure_models_accept_existing_prefix():
     settings = _settings(
         azure_deployment_gpt54="azure_ai/gpt-5.4",
         azure_deployment_deepseek="",
+        azure_deployment_gpt56_luna="",
+        azure_deployment_gpt56_terra="",
     )
 
     assert settings.get_experimental_azure_models() == ["azure_ai/gpt-5.4"]
