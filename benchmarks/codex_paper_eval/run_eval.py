@@ -47,10 +47,18 @@ from utils.llm_trace_html import (  # noqa: E402
     build_trace_html_report,
 )
 
-GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
+# Genes eligible for seeded random sampling: the cardiac four with a manual,
+# fully human-curated gold standard (gene_variant_fetcher_gold_standard/).
+CARDIAC_GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
+# All genes a fixed manifest may reference. Genes outside CARDIAC_GENES score
+# against the curated benchmark's adjudicated gold_overrides answer key (see
+# gold_csv_path) — adjudicated, but not the manual gold standard — so report
+# their results separately; never fold them into the cardiac headline.
+GENES = CARDIAC_GENES + ("BRCA2",)
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
 DEFAULT_CORPUS = REPO / "corpus"
 DEFAULT_GOLD = REPO / "gene_variant_fetcher_gold_standard" / "normalized"
+GOLD_OVERRIDES = REPO / "benchmarks" / "curated_extraction_eval" / "gold_overrides"
 # Cheap proxy for "does this rendering still carry variant-level evidence". Only
 # ever compared between candidate renderings of the same paper, so figure labels
 # and other systematic noise land on both sides and cancel out.
@@ -296,13 +304,30 @@ def selection_material_errors(selection: dict) -> list[str]:
     ]
 
 
+def gold_csv_path(gold_root: Path, gene: str) -> Path:
+    """Resolve the gold CSV for one gene: the explicit root first, then overrides.
+
+    The manual cardiac gold standard does not carry every gene a manifest may
+    name. A gene absent from ``gold_root`` (BRCA2) resolves to the curated
+    benchmark's curator-adjudicated ``gold_overrides`` answer key. Callers record
+    the resolved path in run artifacts so a fallback is never silent.
+    """
+    primary = gold_root / f"{gene}_recall_input.csv"
+    if primary.is_file():
+        return primary
+    fallback = GOLD_OVERRIDES / f"{gene}_recall_input.csv"
+    if fallback.is_file():
+        return fallback
+    raise SystemExit(f"no gold CSV for {gene}: neither {primary} nor {fallback} exists")
+
+
 def gold_count_eligible_pmids(gold_root: Path, gene: str) -> set[str]:
     """Return PMIDs with gold rows and at least one assertion for every count field.
 
     Only PMID membership and field presence are used during selection. Gold values
     and gold row counts are never written into the selection or extraction prompt.
     """
-    path = gold_root / f"{gene}_recall_input.csv"
+    path = gold_csv_path(gold_root, gene)
     coverage: dict[str, set[str]] = defaultdict(set)
     with path.open(newline="") as fh:
         for row in csv.DictReader(fh):
@@ -375,7 +400,19 @@ def command_prepare(args) -> None:
     selected: list[dict] = []
     eligible: dict[str, int] = {}
     pools: dict[str, dict[str, dict]] = {}
-    for gene in GENES:
+    # Manifest mode builds pools only for the genes the manifest names, so a
+    # cardiac-only manifest never requires BRCA2 gold or corpus and vice versa.
+    # Random mode samples the cardiac genes only: the extra genes have too few
+    # gold papers to sample, and widening would change historical seeded draws.
+    requested = (
+        read_paper_manifest(args.paper_manifest) if args.paper_manifest else None
+    )
+    run_genes = (
+        tuple(dict.fromkeys(gene for gene, _ in requested))
+        if requested is not None
+        else CARDIAC_GENES
+    )
+    for gene in run_genes:
         source_pool = {
             paper["pmid"]: paper
             for paper in usable_sources(
@@ -391,8 +428,7 @@ def command_prepare(args) -> None:
         }
         eligible[gene] = len(pools[gene])
 
-    if args.paper_manifest:
-        requested = read_paper_manifest(args.paper_manifest)
+    if requested is not None:
         for gene, pmid in requested:
             if pmid not in pools[gene]:
                 raise SystemExit(
@@ -400,7 +436,7 @@ def command_prepare(args) -> None:
                 )
             selected.append(pools[gene][pmid])
     else:
-        for gene in GENES:
+        for gene in run_genes:
             pool = list(pools[gene].values())
             if len(pool) < args.per_gene:
                 raise SystemExit(
@@ -418,6 +454,12 @@ def command_prepare(args) -> None:
         "per_gene": args.per_gene,
         "minimum_source_chars": args.minimum_chars,
         "eligible_counts": eligible,
+        # Which answer key each gene resolves to (manual cardiac gold vs the
+        # adjudicated gold_overrides fallback) — recorded so scoring provenance
+        # is explicit in the pre-gold lock.
+        "gold_sources": {
+            gene: str(gold_csv_path(args.gold_root, gene)) for gene in run_genes
+        },
         "paper_manifest": str(args.paper_manifest.resolve())
         if args.paper_manifest
         else None,
@@ -476,9 +518,18 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         errors.append(
             f"paper set mismatch: missing={sorted(expected - actual)} extra={sorted(actual - expected)}"
         )
+    # Schema 1 is the external-import contract (e.g. a production gvf-run DB
+    # projected by db_to_predictions.py): tool/rationale/variants are required,
+    # but per-paper wall time and exact token telemetry don't exist there —
+    # gvf-run does not aggregate them. Schema 2 is harness-native extraction,
+    # where both are recorded per call and therefore mandatory.
+    native = int(predictions.get("schema_version") or 1) >= 2
     for p in predictions.get("papers", []):
         label = f"{p.get('gene')}:{p.get('pmid')}"
-        for key in ("tool", "tool_rationale", "elapsed_seconds", "source_completeness"):
+        required = ("tool", "tool_rationale", "source_completeness") + (
+            ("elapsed_seconds",) if native else ()
+        )
+        for key in required:
             if p.get(key) in (None, ""):
                 errors.append(f"{label}: missing {key}")
         if (
@@ -508,7 +559,9 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         if p.get("tool") not in {"text", "table", "pdf", "ocr"}:
             errors.append(f"{label}: invalid tool {p.get('tool')!r}")
         usage = p.get("token_usage") or {}
-        if not usage.get("telemetry_available") or not usage.get("total_tokens"):
+        if native and (
+            not usage.get("telemetry_available") or not usage.get("total_tokens")
+        ):
             errors.append(f"{label}: missing exact token telemetry")
         if int(predictions.get("schema_version") or 1) >= 2:
             refs = p.get("llm_trace_refs") or []
@@ -1181,7 +1234,7 @@ def to_int(value):
 
 
 def load_gold(gold_root: Path, gene: str, pmid: str) -> list[dict]:
-    path = gold_root / f"{gene}_recall_input.csv"
+    path = gold_csv_path(gold_root, gene)
     with path.open(newline="") as fh:
         rows = []
         for row in csv.DictReader(fh):
@@ -1798,7 +1851,7 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "|---|---:|---:|---:|---:|---:|---:|---|---|---|",
         ]
     )
-    for gene in GENES:
+    for gene in (g for g in GENES if g in report["by_gene"]):
         metric = report["by_gene"][gene]
 
         def count_cell(field: str) -> str:
@@ -1961,8 +2014,10 @@ def command_score(args) -> None:
     for paper in selection["papers"]:
         key = (paper["gene"], paper["pmid"])
         scores.append(score_one(*key, pred_map[key], load_gold(args.gold_root, *key)))
+    present_genes = [gene for gene in GENES if any(s["gene"] == gene for s in scores)]
     by_gene = {
-        gene: aggregate([s for s in scores if s["gene"] == gene]) for gene in GENES
+        gene: aggregate([s for s in scores if s["gene"] == gene])
+        for gene in present_genes
     }
     report = {
         "run_id": selection["run_id"],
@@ -1973,6 +2028,9 @@ def command_score(args) -> None:
         "by_gene": by_gene,
         "papers": scores,
         "selection": selection_metadata(selection),
+        "gold_sources": {
+            gene: str(gold_csv_path(args.gold_root, gene)) for gene in present_genes
+        },
         "tools_used": dict(Counter(s.get("tool") or "unspecified" for s in scores)),
         "token_usage": predictions.get("token_usage"),
         "timing": {

@@ -1,0 +1,10 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-10T19:07:38.107235+00:00",
+  "predictions_sha256": "b29c4dfce3c37b24073e13a9194d7d6c3d7625cfd4721a45d11305d41faf1fc4",
+  "selection_sha256": "0b0b4df2cbfe7336d1c1facc4d594e80565028160287278297983fa9c341c04f",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}
