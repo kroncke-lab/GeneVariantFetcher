@@ -734,6 +734,9 @@ def test_paper_manifest_accepts_brca2_and_rejects_unregistered_genes(tmp_path: P
 @pytest.mark.parametrize(
     "manifest_name, expected_total, expected_brca2",
     [
+        ("highcarrier48_plus_brca2_collaborator2_20260811.tsv", 50, 2),
+        ("brca2_2_collaborator_reviewed_20260811.tsv", 2, 2),
+        # Historical frozen manifests remain test-covered for reproducibility.
         ("highcarrier48_plus_brca2_20260810.tsv", 56, 8),
         ("brca2_8_papers_20260810.tsv", 8, 8),
     ],
@@ -743,9 +746,10 @@ def test_shipped_manifests_are_fully_gold_count_eligible(
 ):
     """Every row of the shipped manifests must clear prepare's eligibility rule.
 
-    Pins the manifests against drift in either answer key: the cardiac rows
-    against the manual gold standard, the BRCA2 rows against the adjudicated
-    gold_overrides the fallback resolves to.
+    Pins active and historical manifests against drift in either answer key:
+    cardiac rows against the manual gold standard and BRCA2 rows against the
+    fallback override. Active BRCA2 membership is separately restricted to the
+    two lead-approved Variant Browser papers.
     """
     manifest = Path(run_eval_module.__file__).parent / manifest_name
     papers = read_paper_manifest(manifest)

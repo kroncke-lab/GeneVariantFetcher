@@ -11,6 +11,12 @@ COHORT_DIR = (
     / "curated_extraction_eval"
     / "review_pmids_50"
 )
+ACTIVE_BRCA2_DIR = (
+    Path(__file__).resolve().parents[2]
+    / "benchmarks"
+    / "curated_extraction_eval"
+    / "review_pmids_20260811_brca2_provenance"
+)
 EXPECTED_GENES = {
     "APOE",
     "BRCA1",
@@ -36,3 +42,26 @@ def test_review_cohort_has_50_unique_valid_pmids_per_gene():
     kcnh2_pmids = (COHORT_DIR / "KCNH2.txt").read_text().splitlines()
     assert "34546463" in kcnh2_pmids
     assert "PMC9522753" not in kcnh2_pmids
+
+
+def test_active_brca2_review_scope_excludes_six_and_keeps_nate_papers():
+    historical = set((COHORT_DIR / "BRCA2.txt").read_text().splitlines())
+    active = [
+        line.strip()
+        for line in (ACTIVE_BRCA2_DIR / "BRCA2.txt").read_text().splitlines()
+        if line.strip()
+    ]
+    excluded = {
+        "10398279",
+        "15365993",
+        "18489799",
+        "21356067",
+        "22655046",
+        "25802882",
+    }
+
+    assert len(active) == 46
+    assert len(set(active)) == 46
+    assert all(is_valid_pmid(pmid) for pmid in active)
+    assert set(active) == historical - excluded
+    assert {"26833046", "26848529"} <= set(active)

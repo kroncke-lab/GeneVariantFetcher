@@ -21,11 +21,12 @@ Live view: the published status dashboard renders these numbers at
 **Recall, precision, and MAE are computed only against the four cardiac genes —
 KCNH2, KCNQ1, SCN5A, RYR2 — because only those have a fully human-curated,
 manually derived gold standard** (`gene_variant_fetcher_gold_standard/`). The
-non-cardiac genes (APOE, BRCA1, BRCA2, MYBPC3) have only curator/LLM-derived
-`gold_overrides/` answer keys, which are useful for review but are **not** a
-manual gold standard, so they are **excluded from every headline metric here and
-on the dashboard**. Score them for spot checks if you like, but never fold them
-into the reported recall/precision/MAE. To reproduce the headline numbers,
+non-cardiac genes do not have a complete manually derived gold standard. BRCA2
+now has two papers with collaborator review and lead approval in Variant
+Browser, while its remaining override rows and the APOE/BRCA1/MYBPC3 keys are
+internally derived. All remain **excluded from every headline metric here and
+on the dashboard**. Score them as explicitly labeled strata, but never fold them
+into the reported cardiac recall/precision/MAE. To reproduce the headline numbers,
 restrict scoring to the four cardiac genes, e.g.
 `run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
 
@@ -41,13 +42,33 @@ current protocol (time, approximate spend, sample recall/MAE, and the new-guard
 behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
 spending a full cardiac re-extraction to move the headline.
 
-## Locked 56-paper count-semantics audit (not the canonical headline)
+## Active 50-paper collaborator-grounded count-semantics cohort
 
-The 2026-08-10 count-semantics study used a deliberately difficult, fixed set
+As of 2026-08-11, the active scored count evaluation and new strategy comparisons use the fixed
+cardiac 48 plus only the two BRCA2 papers with lead-approved Variant Browser
+adjudications by Nate (PMIDs 26833046 and 26848529). The six internally derived
+BRCA2 papers have been removed from active membership without changing the
+historical run.
+
+The live BRCA2 reviewer queue is now 46 papers: four of the six were removed
+from the prior 50-paper snapshot and two were already absent. Nate's two papers
+and their 87 current gold records remain intact.
+
+Projecting the already locked predictions onto this 50-paper cohort required no
+new model calls. Carrier MAE is **0.0608 (20/329)** after count-scope repair
+versus 0.9058 (298/329) under the legacy answer key; count recall is 32.67%
+(329/1007). Report the strata alongside the combined result: cardiac 48 is
+0.0491 (16/326), while the two-paper BRCA2 stratum is 1.3333 (4/3) and retains
+known scope limitations. Details:
+`benchmarks/count_semantics_eval/runs/20260811_collaborator_gold_50/`.
+
+## Historical locked 56-paper count-semantics audit (not the active cohort)
+
+The preserved 2026-08-10 count-semantics study used a deliberately difficult, fixed set
 of 48 cardiac papers plus 8 BRCA2 papers. It is an error-analysis benchmark,
 not a replacement for the four-gene canonical baseline below. The cardiac
-papers use the manual cardiac gold standard; the BRCA2 arm uses a
-curator/LLM-derived answer key and remains provisional.
+papers use the manual cardiac gold standard; the BRCA2 arm used a
+mixed-provenance internal answer key and remains a historical diagnostic only.
 
 Most importantly, the **predictions were locked and did not change**. Compact
 source cards and a blind independent audit showed that the largest apparent

@@ -45,12 +45,34 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
-### 2026-08-10 — Count-scope adjudication repaired the 56-paper error estimate; extraction predictions unchanged
+### 2026-08-11 — Active cohort narrowed to the two collaborator-reviewed BRCA2 papers
+
+A provenance audit found that only BRCA2 PMIDs 26833046 and 26848529 in the
+eight-paper override were traceable to lead-approved Variant Browser
+adjudications by Nate. PMIDs 10398279, 15365993, 18489799, 21356067, 22655046,
+and 25802882 originated in an internal candidate re-derivation/review pass.
+Those six were excluded from active Variant Browser review publishing and new
+strategy-comparison membership. Four were present and removed from the live
+BRCA2 snapshot; two were already absent. Nate's two papers and all 87 associated
+current gold records were retained. The dated 56-paper locked predictions and
+machine-readable metrics remain unchanged for reproducibility.
+
+The replacement active manifest is the cardiac 48 plus the two approved BRCA2
+papers (50 total). A PMID-filtered projection of the same locked predictions
+gives carrier MAE 0.9058→0.0608 (298→20 absolute error over 329 supplied
+counts), with count recall 32.64%→32.67%. Strata are essential: cardiac is
+0.0491 (16/326), whereas BRCA2 collaborator-2 is 1.3333 (4/3). No model calls
+were made for this scope correction. Full methods and arithmetic:
+`benchmarks/count_semantics_eval/METHODS_20260811_COLLABORATOR_GOLD.md` and
+`runs/20260811_collaborator_gold_50/metrics.json`.
+
+### 2026-08-10 — Count-scope adjudication repaired the historical 56-paper error estimate; extraction predictions unchanged
 
 This was a prospective-policy, locked-prediction error analysis, not a fresh
 extraction experiment. The fixed cohort was the 48 cardiac papers in the
 standard paper-eval set plus 8 BRCA2 curated-benchmark papers. Cardiac rows used
-manual gold; BRCA2 used the provisional curator/LLM-derived answer key.
+manual gold; BRCA2 used a mixed-provenance internal answer key. The 2026-08-11
+audit subsequently removed six BRCA2 papers from active membership.
 Prediction files were SHA-256 locked before adjudication, and all 378 supplied
 carrier predictions remained byte-identical.
 

@@ -36,18 +36,22 @@ Runs made before trace schema v2 cannot be treated as exact request/response
 audits. Their final predictions and rationales remain useful, but rerunning the
 fixed manifest is required to produce authentic raw call traces.
 
-## Standard comparison set: 56 papers (48 cardiac + 8 BRCA2)
+## Standard comparison set: 50 papers (48 cardiac + 2 collaborator-reviewed BRCA2)
 
-**As of 2026-08-10 the standard set for comparing paper-processing strategies
-is the 56-paper manifest** `highcarrier48_plus_brca2_20260810.tsv`: the fixed
-cardiac 48 plus the 8 BRCA2 gold papers from the curated extraction benchmark
-(10398279, 15365993, 18489799, 21356067, 22655046, 25802882, 26833046,
-26848529). A protocol change is evaluated by running it on this set (or on the
-arm it affects) and comparing against the production baselines below. Use the
-same `prepare`/`extract`/`lock`/`score` flow by passing the manifest as
-`--paper-manifest`; the BRCA2-only arm is `brca2_8_papers_20260810.tsv`.
-Both the original 48-paper manifest and these are frozen — do not edit them;
-runs scored on a frozen manifest stay comparable across time.
+**As of 2026-08-11 the active set for comparing paper-processing strategies is
+the 50-paper manifest**
+`highcarrier48_plus_brca2_collaborator2_20260811.tsv`: the fixed cardiac 48 plus
+the two BRCA2 papers with lead-approved Variant Browser adjudications by Nate
+(26833046 and 26848529). The active BRCA2-only arm is
+`brca2_2_collaborator_reviewed_20260811.tsv`.
+
+The dated `highcarrier48_plus_brca2_20260810.tsv` and
+`brca2_8_papers_20260810.tsv` files remain frozen historical artifacts. Their
+six internally derived BRCA2 papers are not part of the active scored benchmark
+or new strategy comparisons. Do not edit or relabel historical runs scored on
+them. The live Variant Browser queue is a separate 46-paper operational review
+set: Nate's two gold papers plus 44 additional papers awaiting or supporting
+review.
 
 Current-production baselines (the numbers a change must beat):
 
@@ -55,23 +59,23 @@ Current-production baselines (the numbers a change must beat):
   all layers) and `runs/20260726_fixed48_production_paperonly` (paper-derived
   layers only). Single-model references: `runs/20260724_fixed48_sol`,
   `runs/20260724_fixed48_grok`.
-- BRCA2 arm: `runs/20260810_brca2_8_production` (same pipeline, same
-  `--pmid-file --no-source-recovery` calibrated replay) and its
-  `_paperonly` sibling.
+- BRCA2 reference extraction: the historical
+  `runs/20260810_brca2_8_production` and `_paperonly` sibling. Active
+  two-paper metrics are a PMID-filtered projection of those locked predictions;
+  rerun the two-paper manifest for a new protocol comparison.
 
 Gold provenance differs by arm, and the harness records it per gene in
 `selection.json` and `report.json` under `gold_sources`:
 
 - Cardiac genes score against the manual, human-curated gold standard
   (`gene_variant_fetcher_gold_standard/normalized/`).
-- BRCA2 has no manual gold; it scores against the curator-adjudicated answer
-  key `benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv`
-  (Azure lead-approved adjudications). That is adjudicated, not manual gold —
-  mirror `docs/RECALL_STATUS.md` scope rules: report BRCA2 results separately
-  and never fold them into cardiac headline metrics.
+- BRCA2 has no manual gold. The active arm selects only the two rows sets in
+  `benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv`
+  that are traceable to lead-approved Variant Browser adjudications. Report
+  BRCA2 separately and never fold it into cardiac headline metrics.
 
-Known open adjudication follow-ups on the BRCA2 key (26833046 count semantics,
-26848529 subset) are tracked in the curated benchmark; treat BRCA2 count MAE
-as provisional until they close. Seeded random sampling (`--per-gene` without a
+Known scope limitations remain: 26833046 has family-versus-carrier count
+semantics and 26848529 is a reviewed-positive subset rather than exhaustive
+paper-level gold. Seeded random sampling (`--per-gene` without a
 manifest) remains cardiac-only: BRCA2 has too few gold papers to sample and
 widening the pool would change historical seeded draws.

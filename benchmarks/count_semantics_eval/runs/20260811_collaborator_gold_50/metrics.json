@@ -1,0 +1,105 @@
+{
+  "active_cohort": {
+    "brca2_collaborator_pmids": ["26833046", "26848529"],
+    "brca2_papers": 2,
+    "cardiac_papers": 48,
+    "excluded_brca2_pmids": [
+      "10398279",
+      "15365993",
+      "18489799",
+      "21356067",
+      "22655046",
+      "25802882"
+    ],
+    "manifest": "benchmarks/codex_paper_eval/highcarrier48_plus_brca2_collaborator2_20260811.tsv",
+    "papers": 50
+  },
+  "count_fields": {
+    "affected": {
+      "after": {
+        "absolute_error": 194,
+        "assertions": 1006,
+        "mae": 0.7185185185,
+        "predicted": 270,
+        "recall": 0.2683896620
+      },
+      "before": {
+        "absolute_error": 193,
+        "assertions": 1008,
+        "mae": 0.7148148148,
+        "predicted": 270,
+        "recall": 0.2678571429
+      }
+    },
+    "carriers": {
+      "after": {
+        "absolute_error": 20,
+        "assertions": 1007,
+        "mae": 0.0607902736,
+        "predicted": 329,
+        "recall": 0.3267130089
+      },
+      "before": {
+        "absolute_error": 298,
+        "assertions": 1008,
+        "mae": 0.9057750760,
+        "predicted": 329,
+        "recall": 0.3263888889
+      }
+    },
+    "unaffected": {
+      "after": {
+        "absolute_error": 25,
+        "assertions": 1005,
+        "mae": 0.1004016064,
+        "predicted": 249,
+        "recall": 0.2477611940
+      },
+      "before": {
+        "absolute_error": 39,
+        "assertions": 1008,
+        "mae": 0.1566265060,
+        "predicted": 249,
+        "recall": 0.2470238095
+      }
+    }
+  },
+  "projection": {
+    "brca2_collaborator_contribution": {
+      "affected": {"absolute_error": 4, "assertions": 7, "predicted": 3},
+      "carriers": {"absolute_error": 4, "assertions": 7, "predicted": 3},
+      "unaffected": {"absolute_error": 0, "assertions": 7, "predicted": 3}
+    },
+    "historical_source_metrics": "benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/metrics.json",
+    "method": "PMID-filtered projection of the locked historical predictions; no extraction or adjudication calls were rerun",
+    "predictions_changed": false
+  },
+  "provenance": {
+    "brca2_gold_status": "lead-approved Variant Browser adjudications",
+    "decided_by": "kronckbm",
+    "source_reviewer": "nate",
+    "warning": "PMID 26833046 retains family-versus-carrier scope uncertainty and PMID 26848529 is a reviewed-positive subset rather than exhaustive paper-level gold"
+  },
+  "result": {
+    "absolute_error_reduction": 278,
+    "absolute_error_reduction_fraction": 0.9328859060,
+    "brca2_2_carrier_absolute_error": 4,
+    "brca2_2_carrier_mae": 1.3333333333,
+    "brca2_2_carrier_observations": 3,
+    "cardiac_48_carrier_absolute_error": 16,
+    "cardiac_48_carrier_mae": 0.0490797546,
+    "cardiac_48_carrier_observations": 326,
+    "carrier_absolute_error_sum_after": 20,
+    "carrier_absolute_error_sum_before": 298,
+    "carrier_count_recall_after": 0.3267130089,
+    "carrier_count_recall_before": 0.3263888889,
+    "carrier_mae_after": 0.0607902736,
+    "carrier_mae_before": 0.9057750760,
+    "papers": 50
+  },
+  "schema_version": 1,
+  "source_locks": {
+    "brca2_eight_paper_predictions_sha256": "cff24d2c18579b2eed82e2be08c26c43919e6265166f654f99cff23ac8960613",
+    "cardiac_predictions_sha256": "9c61cd0263131a822a1d616dfd01d10d47310d39012dbf459fb8c5afe85022a5"
+  }
+}

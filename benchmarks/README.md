@@ -30,7 +30,7 @@ full-gold scorer and metrics.
 
 - **[`count_semantics_eval/`](count_semantics_eval/README.md)** — carrier-count
   scope and MAE audit on locked paper predictions. The 2026-08-10 Luna xhigh run
-  plus a blind Grok/AGY/Claude audit reduced exact 56-paper carrier MAE from
+  plus a blind Grok/AGY/Claude audit reduced the historical 56-paper carrier MAE from
   0.8148 to 0.0794 without removing any predicted count observations.
 
 ## Adding a new set

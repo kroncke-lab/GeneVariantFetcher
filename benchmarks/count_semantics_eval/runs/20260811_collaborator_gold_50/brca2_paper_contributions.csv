@@ -1,0 +1,9 @@
+pmid,carriers_assertions,carriers_predicted,carriers_absolute_error,affected_assertions,affected_predicted,affected_absolute_error,unaffected_assertions,unaffected_predicted,unaffected_absolute_error,active_collaborator_gold
+10398279,1,1,0,1,1,0,1,0,0,false
+15365993,27,0,0,27,0,0,27,0,0,false
+18489799,41,21,0,41,21,45,41,21,0,false
+21356067,6,2,0,6,2,2,6,2,2,false
+22655046,10,10,10,10,2,0,10,2,10,false
+25802882,18,15,0,18,9,0,18,9,0,false
+26833046,4,0,0,4,0,0,4,0,0,true
+26848529,3,3,4,3,3,4,3,3,0,true

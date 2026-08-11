@@ -1,8 +1,13 @@
 # GVF Tasks
 
 ## Current Focus
-- **56-paper carrier-count MAE repaired and Luna failure route validated
-  (2026-08-10).** On the exact locked A1 predictions, carrier MAE is now 0.0794
+- **Active collaborator-grounded count-evaluation cohort is 50 papers
+  (2026-08-11).** The historical 56-paper audit is preserved, but the scored evaluation and new strategy
+  comparisons now use the cardiac 48 plus only the two BRCA2 papers with
+  lead-approved Variant Browser adjudications by Nate. On the PMID-filtered
+  locked A1 predictions, active-cohort carrier MAE is 0.0608 (20/329) after
+  count-scope repair, versus 0.9058 (298/329) under the legacy answer key.
+  The historical 56-paper result was 0.0794
   (30 absolute error / 378 observed counts), down from 0.8148 (308/378) with no
   predicted count removed. The dominant apparent failures were stale or
   inconsistent count-scope labels; one scorer ignored populated `gold_v2_*`
@@ -12,7 +17,8 @@
   carrier totals and exposed six control-row defects. The two controls that
   retained gold=3 despite prediction=2 and a one-point affected-error regression
   guard against prediction-following adjudication. Durable result:
-  `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`.
+  `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`; the active
+  projection is `benchmarks/count_semantics_eval/runs/20260811_collaborator_gold_50/`.
   - [ ] Move compact count-semantics verification after all extraction/recovery
         layers merge; today the verifier inside `ExpertExtractor` cannot review
         a later figure/ClinVar/recovery winner.
@@ -22,16 +28,18 @@
   - [ ] Rebuild the two blind cards with missing decisive source evidence
         (RYR2 PMID 28237968 `c.13352del`; KCNH2 PMID 10862094 `c.526C>T`) and
         review the other seven untested variants in RYR2 PMID 33606749.
-- **Standard strategy-comparison set is now the 56-paper blinded manifest
-  (2026-08-10).** `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_20260810.tsv`
-  = the frozen cardiac 48 + the 8 BRCA2 gold papers (scored against the
-  adjudicated `gold_overrides` answer key via the harness's per-gene fallback;
-  reported separately from the cardiac headline). Production baselines for both
-  arms live in `benchmarks/codex_paper_eval/runs/` — see the README's
+- **Standard strategy-comparison set is now the 50-paper blinded manifest
+  (2026-08-11).**
+  `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_collaborator2_20260811.tsv`
+  = the frozen cardiac 48 + Nate's two lead-approved BRCA2 papers. The six
+  internally derived BRCA2 papers remain in frozen historical manifests only
+  for scoring. They are also excluded from the live reviewer queue, which still
+  contains 44 other BRCA2 review targets plus Nate's two papers. Baselines and
+  historical artifacts live in `benchmarks/codex_paper_eval/runs/` — see the README's
   "Standard comparison set" section. Protocol refinements should be measured on
   this set before any full re-extraction.
-  - [ ] Close the two open BRCA2 curator follow-ups that keep BRCA2 count MAE
-        provisional: 26833046 count semantics, 26848529 subset.
+  - [ ] Resolve the remaining BRCA2 scope limitations: 26833046 count semantics
+        and whether 26848529 should become exhaustive paper-level gold.
 - **EZproxy relogin automation (designed + BUILT 2026-08-10).**
   `scripts/ezproxy_relogin.py` drives a dedicated persistent browser profile
   (`~/.gvf/ezproxy_profile`, chmod 700, `GVF_EZPROXY_PROFILE_DIR`) through

@@ -76,6 +76,14 @@ Wired in `cli/gvf_run.py` (`step_publish_review`, `_find_review_repo`).
 
 ### Curated 101-paper staging publish
 
+The historical curated benchmark contains eight BRCA2 papers, but active
+curated review publishing excludes six without lead-approved collaborator gold;
+`benchmarks/curated_extraction_eval/review_scope_exclusions.tsv` is applied by
+the helper. The broader operational BRCA2 queue is separately pinned at 46
+papers in
+`benchmarks/curated_extraction_eval/review_pmids_20260811_brca2_provenance/`.
+Do not publish the historical `review_pmids_50/BRCA2.txt` again.
+
 For the fixed curated benchmark, publish the benchmark DBs only to the
 Variant_Browser staging/review surface, not the public site:
 

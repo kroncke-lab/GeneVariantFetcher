@@ -1,5 +1,16 @@
 # Protocol cost & quality
 
+## Collaborator-gold scope correction (2026-08-11; no new calls)
+
+Active comparison/review scope is now the cardiac 48 plus the two BRCA2 papers
+with lead-approved Variant Browser adjudications by Nate. The six internally
+derived BRCA2 papers were excluded by PMID from active publishing and metrics.
+The 50-paper metrics are a deterministic projection of the locked 56-paper
+predictions, so this correction cost **zero additional model tokens and zero
+provider calls**. Historical production and Luna costs below remain attributed
+to the full 56-paper diagnostic run and must not be presented as the marginal
+cost of the active 50-paper cohort.
+
 ## Luna count-semantics failure route (2026-08-10; shadow)
 
 The exact A1 56-paper predictions were held locked while the scorer and answer

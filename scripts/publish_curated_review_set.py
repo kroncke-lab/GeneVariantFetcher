@@ -2,9 +2,12 @@
 """Publish the curated extraction-eval papers into Variant_Browser staging.
 
 This is intentionally a staging/review helper, not the full-gene publish path.
-It publishes the fixed curated paper set using the per-gene
+It publishes the curated paper set after applying `review_scope_exclusions.tsv`
+and any per-gene `review_pmids/` override, using the per-gene
 ``results/<GENE>/review_staging_test/<GENE>.db`` SQLite artifacts and the
-generated ``benchmarks/curated_extraction_eval/pmids/<GENE>.txt`` manifests.
+generated manifests. The broader operational reviewer queues live in versioned
+``review_pmids_*`` directories and should be published directly with
+``Variant_Browser/scripts/gvf_publish.sh``.
 """
 
 from __future__ import annotations
@@ -23,6 +26,8 @@ REPO = Path(__file__).resolve().parents[1]
 BENCH = REPO / "benchmarks" / "curated_extraction_eval"
 MANIFEST = BENCH / "manifest.csv"
 PMID_DIR = BENCH / "pmids"
+REVIEW_PMID_DIR = BENCH / "review_pmids"
+REVIEW_SCOPE_EXCLUSIONS = BENCH / "review_scope_exclusions.tsv"
 DEFAULT_REVIEW_REPO = REPO.parent / "Variant_Browser"
 
 DISEASE_DEFAULTS = {
@@ -37,12 +42,34 @@ DISEASE_DEFAULTS = {
 }
 
 
+def load_review_scope_exclusions() -> set[tuple[str, str]]:
+    """Return benchmark papers that must not be published for active review."""
+    if not REVIEW_SCOPE_EXCLUSIONS.is_file():
+        return set()
+    excluded: set[tuple[str, str]] = set()
+    with REVIEW_SCOPE_EXCLUSIONS.open() as f:
+        for line_number, raw in enumerate(f, 1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 2 or not parts[1].isdigit():
+                raise SystemExit(
+                    f"{REVIEW_SCOPE_EXCLUSIONS}:{line_number}: expected GENE<TAB>PMID"
+                )
+            excluded.add((parts[0].strip().upper(), parts[1].strip()))
+    return excluded
+
+
 def load_manifest() -> dict[str, list[str]]:
+    excluded = load_review_scope_exclusions()
     out: dict[str, list[str]] = {}
     with MANIFEST.open(newline="") as f:
         for row in csv.DictReader(f):
             gene = row["gene"].strip().upper()
             pmid = row["pmid"].strip()
+            if (gene, pmid) in excluded:
+                continue
             out.setdefault(gene, []).append(pmid)
     return {gene: list(dict.fromkeys(pmids)) for gene, pmids in out.items()}
 
@@ -181,6 +208,11 @@ def main() -> int:
         action="store_true",
         help="print publish commands without mutating staging",
     )
+    ap.add_argument(
+        "--yes",
+        action="store_true",
+        help="confirm removal of papers excluded from the active review scope",
+    )
     args = ap.parse_args()
 
     manifest = load_manifest()
@@ -207,8 +239,11 @@ def main() -> int:
     for gene in genes:
         db_path = db_path_for(
             gene, db_overrides=db_overrides, extract_root=extract_root
+        ).resolve()
+        review_pmid_file = REVIEW_PMID_DIR / f"{gene}.txt"
+        pmid_file = (
+            review_pmid_file if review_pmid_file.is_file() else PMID_DIR / f"{gene}.txt"
         )
-        pmid_file = PMID_DIR / f"{gene}.txt"
         if not db_path.exists():
             raise SystemExit(f"{gene}: DB not found: {db_path}")
         if not pmid_file.exists():
@@ -242,6 +277,7 @@ def main() -> int:
                 "GVF_DATASET_NOTE": args.dataset_note,
                 "GVF_CREATE_PAIR": "1" if args.create_pairs else "",
                 "GVF_ALLOW_MISSING_PMIDS": "1" if args.allow_missing_pmids else "",
+                "GVF_YES": "1" if args.yes else "",
             }
         )
         if args.dry_run:

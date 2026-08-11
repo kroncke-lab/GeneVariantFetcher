@@ -1,5 +1,10 @@
 # Luna xhigh count-semantics result — 56 papers
 
+> **Historical mixed-provenance result.** The active cohort was narrowed on
+> 2026-08-11 to the cardiac 48 plus Nate's two lead-approved BRCA2 papers. See
+> `../20260811_collaborator_gold_50/`; do not describe this 56-paper result as
+> collaborator-gold performance.
+
 ## Outcome
 
 Carrier MAE fell from **0.8148 to 0.0794** on the exact A1 56-paper output, a

@@ -1,4 +1,11 @@
-# Fifty-paper-per-gene review cohort (current)
+# Fifty-paper-per-gene review cohort (historical initial cohort)
+
+> **BRCA2 was superseded on 2026-08-11 by
+> [`../review_pmids_20260811_brca2_provenance/`](../review_pmids_20260811_brca2_provenance/).**
+> Its active queue has 46 papers after excluding six internally derived
+> benchmark papers; four were removed from the live 50-paper snapshot and two
+> were already absent. The other seven gene files remain the current 50-paper
+> operational scopes.
 
 These PMID lists are the **initial review cohort: 50 papers per gene** across all
 eight gene-disease pairs (**400 papers total**) — the operational set published
@@ -23,7 +30,7 @@ Tie-break is ascending PMID, so the lists are reproducible.
 | RYR2 | 50 | **human-curated** (counts toward recall/MAE/precision) |
 | APOE | 50 | `gold_overrides` (curator/derived — **excluded** from headline metrics) |
 | BRCA1 | 50 | `gold_overrides` (curator/derived — **excluded** from headline metrics) |
-| BRCA2 | 50 | `gold_overrides` (curator/derived — **excluded** from headline metrics) |
+| BRCA2 | 50 historical; 46 active | two active benchmark papers have Variant Browser collaborator gold; all BRCA2 remains **excluded** from headline metrics |
 | MYBPC3 | 50 | `gold_overrides` (curator/derived — **excluded** from headline metrics) |
 
 Only the four cardiac genes have fully human-curated gold standards, so
