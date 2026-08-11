@@ -1,7 +1,7 @@
 # Extraction-blinded paper evaluation
 
 This harness compares paper-reading protocols on a fixed, gold-value-blinded
-cardiac paper set. `prepare` may use gold only to determine PMID eligibility and
+paper set. `prepare` may use gold only to determine PMID eligibility and
 whether all three count fields have assertions. Extraction is finalized and
 locked before `score` reads any gold value or row count.
 
@@ -10,7 +10,7 @@ locked before `score` reads any gold value or row count.
 ```bash
 .venv/bin/python benchmarks/codex_paper_eval/run_eval.py prepare \
   --seed 2026072301 \
-  --paper-manifest benchmarks/codex_paper_eval/highcarrier_48_papers_20260723.tsv \
+  --paper-manifest benchmarks/evaluation_tiers/tier1_gold_50.tsv \
   --run-id my_traced_run
 
 .venv/bin/python benchmarks/codex_paper_eval/run_eval.py extract \
@@ -39,10 +39,11 @@ fixed manifest is required to produce authentic raw call traces.
 ## Standard comparison set: 50 papers (48 cardiac + 2 collaborator-reviewed BRCA2)
 
 **As of 2026-08-11 the active set for comparing paper-processing strategies is
-the 50-paper manifest**
-`highcarrier48_plus_brca2_collaborator2_20260811.tsv`: the fixed cardiac 48 plus
-the two BRCA2 papers with lead-approved Variant Browser adjudications by Nate
-(26833046 and 26848529). The active BRCA2-only arm is
+[`../evaluation_tiers/tier1_gold_50.tsv`](../evaluation_tiers/tier1_gold_50.tsv):**
+the fixed cardiac 48 plus the two BRCA2 papers with lead-approved Variant
+Browser adjudications by Nate (26833046 and 26848529). The dated
+`highcarrier48_plus_brca2_collaborator2_20260811.tsv` is an exact source mirror,
+pinned by an integrity test. The active BRCA2-only arm is
 `brca2_2_collaborator_reviewed_20260811.tsv`.
 
 The dated `highcarrier48_plus_brca2_20260810.tsv` and

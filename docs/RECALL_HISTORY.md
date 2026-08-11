@@ -45,6 +45,18 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-11 — Evaluation rollout consolidated into three canonical tiers
+
+The active cohort surface was consolidated without changing predictions,
+answer keys, or headline metrics: 50 gold-scored gene–paper attempts, then 120
+cardiac reviewer attempts (98 unique PMIDs), then 396 attempts in the eight
+established private-review workspaces (357 unique PMIDs). The remembered
+“about 340 papers” referred to unique articles; repeated papers under different
+gene–disease pairs remain distinct extraction/review attempts. BMPR2 and the
+99-paper LMNA/TTN temporal runs remain historical experiments rather than
+silently widening the production cohort. Exact manifests and derivation tests
+live in `benchmarks/evaluation_tiers/`. No model calls or rescoring occurred.
+
 ### 2026-08-11 — Active cohort narrowed to the two collaborator-reviewed BRCA2 papers
 
 A provenance audit found that only BRCA2 PMIDs 26833046 and 26848529 in the

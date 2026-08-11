@@ -2,41 +2,31 @@
 
 Runnable evaluation sets for the GeneVariantFetcher (GVF) extraction pipeline.
 
-A "benchmark" here is a **small, fixed, curated set of gold-standard papers** plus
-a one-command runner that reports extraction quality (recall + MAE) on just that
-set — so pipeline changes can be measured **cheaply and repeatably**, without
-re-running the entire ~1,500-paper gold standard. These are the fast inner loop;
-`scripts/run_recall_suite.py` + `docs/RECALL_STATUS.md` remain the authoritative
-full-gold scorer and metrics.
+## Start here: the three active tiers
 
-## Sets
+[`evaluation_tiers/`](evaluation_tiers/README.md) is the only active cohort
+index. Protocol rollout proceeds in order:
 
-- **[`curated_extraction_eval/`](curated_extraction_eval/README.md)** — 101
-  hand-picked, strategy-diverse gold papers across KCNH2, KCNQ1, SCN5A, RYR2,
-  BRCA1, BRCA2, MYBPC3, and APOE, spanning tables, figures, in-text evidence,
-  negative cases, and false-positive guard cases. It scores existing DBs or runs
-  the fixed PMID set through the regular default `gvf-run` post-selection
-  pipeline. **Start here** — its README is self-contained.
+1. `gold_50`: 50 scored gene–paper attempts (48 cardiac + Nate's two BRCA2).
+2. `cardiac_120`: 120 cardiac reviewer attempts (98 unique PMIDs).
+3. `reviewer_396`: 396 attempts / 357 unique PMIDs in the eight established
+   private reviewer workspaces.
 
-  ```bash
-  python benchmarks/curated_extraction_eval/run_benchmark.py        # score canonical DBs (free)
-  python benchmarks/curated_extraction_eval/run_benchmark.py --db KCNH2=/path/to.db
-  python benchmarks/curated_extraction_eval/run_benchmark.py --mode extract --email you@example.com
-  ```
+No other directory is an active rollout cohort.
 
-- **[`codex_paper_eval/`](codex_paper_eval/README.md)** — extraction-blinded,
-  hash-locked single-model and production-strategy paper evaluation. New runs
-  require per-paper raw call and decision traces inside the pre-gold lock.
+## Specialized harnesses and historical evidence
 
-- **[`count_semantics_eval/`](count_semantics_eval/README.md)** — carrier-count
-  scope and MAE audit on locked paper predictions. The 2026-08-10 Luna xhigh run
-  plus a blind Grok/AGY/Claude audit reduced the historical 56-paper carrier MAE from
-  0.8148 to 0.0794 without removing any predicted count observations.
+- [`codex_paper_eval/`](codex_paper_eval/README.md): extraction-blinded,
+  hash-locked execution/scoring harness used by the first tier.
+- [`curated_extraction_eval/`](curated_extraction_eval/README.md): the
+  strategy-diverse regression fixture. It is useful for diagnostics but is not
+  a fourth active rollout tier.
+- [`count_semantics_eval/`](count_semantics_eval/README.md): frozen
+  count-scope/MAE audit artifacts, including the historical 56-paper study.
+- `cold_start_eval/` and `tier2_relevance_eval/`: specialized component tests,
+  not paper rollout cohorts.
 
-## Adding a new set
-
-Copy the structure of `curated_extraction_eval/`: a `registry.tsv` listing the
-papers, a `build_fixture.py` that regenerates all derived files from it, a frozen
-`gold/` subset (+ `gold_overrides/` for papers the repo gold doesn't cover), a
-`run_benchmark.py`, an `add_paper.py`, and a self-contained `README.md`. Keep
-paper full text out of git (gitignore `sources/`), matching repo policy.
+Dated runs remain immutable scientific evidence. New experiments belong in a
+dated run directory and do not become active merely because they exist.
+`scripts/run_recall_suite.py` plus `docs/RECALL_STATUS.md` remain authoritative
+for the full four-gene headline metrics.

@@ -1,5 +1,11 @@
 # Curated Extraction Eval — a small, fixed benchmark for prompt/harness/guardrail changes
 
+> This strategy-diverse regression fixture is not an additional active rollout
+> cohort. The only active sequence is
+> [`../evaluation_tiers/`](../evaluation_tiers/README.md): 50 gold-scored
+> attempts, 120 cardiac reviewer attempts, then the 396-attempt established
+> reviewer backlog.
+
 **What this is, in one sentence:** a hand-picked set of **104 gold-standard papers**
 across **8 gene-disease pairs** — the 4 cardiac channelopathy genes (KCNH2,
 KCNQ1, SCN5A, RYR2) plus hereditary cancer (BRCA1, BRCA2), hypertrophic

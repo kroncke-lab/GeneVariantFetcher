@@ -4,11 +4,14 @@
 > [`../review_pmids_20260811_brca2_provenance/`](../review_pmids_20260811_brca2_provenance/).**
 > Its active queue has 46 papers after excluding six internally derived
 > benchmark papers; four were removed from the live 50-paper snapshot and two
-> were already absent. The other seven gene files remain the current 50-paper
-> operational scopes.
+> were already absent. The frozen July files remain the source cohort. The
+> exact live eight-workspace snapshot is
+> [`../../evaluation_tiers/tier3_reviewer_396.tsv`](../../evaluation_tiers/tier3_reviewer_396.tsv);
+> SCN5A differs from this frozen list by one reconciled paper.
 
-These PMID lists are the **initial review cohort: 50 papers per gene** across all
-eight gene-disease pairs (**400 papers total**) — the operational set published
+These PMID lists are the **frozen initial review cohort: 50 papers per gene**
+across all eight gene-disease pairs (**400 gene–paper attempts**) — the
+operational set published
 for human adjudication / re-review. They are **not** a gold standard.
 
 ## Selection (deterministic, per gene)

@@ -42,6 +42,15 @@ current protocol (time, approximate spend, sample recall/MAE, and the new-guard
 behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
 spending a full cardiac re-extraction to move the headline.
 
+## Canonical rollout tiers
+
+The active rollout population is governed by exactly three manifests in
+`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, 120 cardiac reviewer
+attempts (98 unique PMIDs), and 396 established reviewer-backlog attempts (357
+unique PMIDs). These tiers govern evaluation/review scope, not the authoritative
+four-gene headline cohort below. BMPR2 and the LMNA/TTN temporal experiments are
+not active rollout tiers.
+
 ## Active 50-paper collaborator-grounded count-semantics cohort
 
 As of 2026-08-11, the active scored count evaluation and new strategy comparisons use the fixed

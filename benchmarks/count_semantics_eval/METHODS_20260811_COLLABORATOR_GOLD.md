@@ -46,7 +46,7 @@ and must always be reported with this decomposition.
 ## Reproducibility
 
 - Active manifests:
-  `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_collaborator2_20260811.tsv`
+  `benchmarks/evaluation_tiers/tier1_gold_50.tsv`
   and `brca2_2_collaborator_reviewed_20260811.tsv`.
 - Machine-readable projection:
   `runs/20260811_collaborator_gold_50/metrics.json`.

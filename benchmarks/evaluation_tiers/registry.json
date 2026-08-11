@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-08-11",
+  "count_unit": "gene_paper_attempt",
+  "tiers": [
+    {
+      "id": "gold_50",
+      "order": 1,
+      "manifest": "tier1_gold_50.tsv",
+      "sha256": "468bc6314abfe50b90ec9c37e056f358a30094394d61570642096324119c0ea8",
+      "attempt_count": 50,
+      "unique_pmid_count": 50,
+      "gene_attempt_counts": {
+        "BRCA2": 2,
+        "KCNH2": 12,
+        "KCNQ1": 12,
+        "RYR2": 12,
+        "SCN5A": 12
+      },
+      "role": "scored_gold_gate"
+    },
+    {
+      "id": "cardiac_120",
+      "order": 2,
+      "manifest": "tier2_cardiac_120.tsv",
+      "sha256": "fc1b026aef17ce824175472d6978959a7b828154ec2c39616e5551119c59541b",
+      "attempt_count": 120,
+      "unique_pmid_count": 98,
+      "gene_attempt_counts": {
+        "KCNH2": 30,
+        "KCNQ1": 30,
+        "RYR2": 30,
+        "SCN5A": 30
+      },
+      "role": "cardiac_reviewer_expansion"
+    },
+    {
+      "id": "reviewer_396",
+      "order": 3,
+      "manifest": "tier3_reviewer_396.tsv",
+      "sha256": "194761ebf891e6f88779caecded9d577711a22a6d9181954b3a2c5d9836eb693",
+      "attempt_count": 396,
+      "unique_pmid_count": 357,
+      "gene_attempt_counts": {
+        "APOE": 50,
+        "BRCA1": 50,
+        "BRCA2": 46,
+        "KCNH2": 50,
+        "KCNQ1": 50,
+        "MYBPC3": 50,
+        "RYR2": 50,
+        "SCN5A": 50
+      },
+      "role": "established_reviewer_backlog"
+    }
+  ],
+  "excluded_experimental_workspaces": {
+    "BMPR2": 50,
+    "LMNA": 99,
+    "TTN": 99
+  }
+}

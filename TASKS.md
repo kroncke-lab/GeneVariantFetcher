@@ -1,6 +1,19 @@
 # GVF Tasks
 
 ## Current Focus
+- **Use exactly three canonical rollout tiers (2026-08-11).** The machine-readable
+  index and manifests are in `benchmarks/evaluation_tiers/`; dated benchmark
+  runs are historical evidence, not additional active cohorts.
+  - [ ] Gate 1 — `gold_50`: compare the candidate protocol on 50 scored
+        gene–paper attempts (48 cardiac + Nate's two BRCA2), reporting cardiac
+        and BRCA2 separately.
+  - [ ] Gate 2 — `cardiac_120`: after Gate 1 passes, expand to 120 cardiac
+        reviewer attempts / 98 unique PMIDs (30 ranked papers per cardiac pair).
+  - [ ] Gate 3 — `reviewer_396`: after cardiac review is acceptable, process
+        the eight established private-review workspaces: 396 attempts / 357
+        unique PMIDs (seven queues of 50 plus BRCA2 at 46).
+  - [ ] Do not promote BMPR2 (50-paper cold start) or LMNA/TTN (99-paper temporal
+        runs) into this sequence without a separate, explicit cohort decision.
 - **Active collaborator-grounded count-evaluation cohort is 50 papers
   (2026-08-11).** The historical 56-paper audit is preserved, but the scored evaluation and new strategy
   comparisons now use the cardiac 48 plus only the two BRCA2 papers with
@@ -30,7 +43,7 @@
         review the other seven untested variants in RYR2 PMID 33606749.
 - **Standard strategy-comparison set is now the 50-paper blinded manifest
   (2026-08-11).**
-  `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_collaborator2_20260811.tsv`
+  `benchmarks/evaluation_tiers/tier1_gold_50.tsv`
   = the frozen cardiac 48 + Nate's two lead-approved BRCA2 papers. The six
   internally derived BRCA2 papers remain in frozen historical manifests only
   for scoring. They are also excluded from the live reviewer queue, which still

@@ -120,16 +120,19 @@ exclusions with `scripts/manage_review_gold.py`. Release scoring uses
 `scripts/run_recall_suite.py --review-gold-sync required`; see
 [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md).
 
-For fast regression checks while changing prompts, extraction logic, guardrails,
-or matching, use
-[`benchmarks/curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md).
-It is the small additive gold-paper set; confirm headline changes with the full
-recall scorer before claiming a metric.
+For protocol rollout, use only the three manifests in
+[`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md): 50
+gold-scored attempts, 120 cardiac reviewer attempts, then the 396-attempt
+established reviewer backlog. The strategy-diverse
+[`curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md)
+remains a specialized regression fixture, not a fourth rollout cohort. Confirm
+headline changes with the full recall scorer before claiming a metric.
 
 ## Start Here
 
 | Need | Start here |
 |------|------------|
+| Choose the active paper-evaluation cohort | [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) |
 | Install locally and run once | [`docs/QUICKSTART.md`](docs/QUICKSTART.md) |
 | Configure credentials | [`docs/API_KEYS.md`](docs/API_KEYS.md) |
 | Run a new gene-disease pair with no gold standard | [`docs/NEW_GENE_RUNBOOK.md`](docs/NEW_GENE_RUNBOOK.md) |
