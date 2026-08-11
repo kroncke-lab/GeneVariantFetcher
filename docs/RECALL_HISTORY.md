@@ -45,6 +45,20 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-11 — Full reviewer tier expanded to BMPR2, LMNA, and TTN
+
+The full private-review tier now includes every populated reviewer workspace:
+BMPR2 retains its existing 50-paper cohort, while LMNA and TTN are narrowed
+from their 99-paper temporal snapshots to 50 each by descending count-bearing
+evidence, descending total variant evidence, then PMID. Neither narrowed
+workspace had reviewer adjudications or current gold records. The full tier is
+now 546 gene–paper attempts / 507 unique PMIDs across 11 gene–disease pairs.
+The live queues match the committed manifests, every paper has stable review
+order and a non-empty paper-specific reviewer summary, and the LMNA/TTN source
+runs pin the selection policy and manifest checksums.
+This supersedes the earlier 396-attempt cohort definition without changing the
+50-paper scored gate, the 120-attempt cardiac gate, or any recall metric.
+
 ### 2026-08-11 — Evaluation rollout consolidated into three canonical tiers
 
 The active cohort surface was consolidated without changing predictions,

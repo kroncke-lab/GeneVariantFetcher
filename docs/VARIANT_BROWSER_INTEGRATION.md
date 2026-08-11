@@ -14,10 +14,10 @@ contract rather than querying Azure SQL tables directly, so the browser remains
 responsible for excluding raw, stale, disputed, withheld, and archived calls.
 
 The canonical private-review population is pinned in
-`benchmarks/evaluation_tiers/tier3_reviewer_396.tsv`: 396 gene–paper attempts
-across the eight established review-50 workspaces, representing 357 unique
-PMIDs. The separate BMPR2 cold-start and LMNA/TTN temporal workspaces visible
-on the private dashboard are experiments, not part of that rollout manifest.
+`benchmarks/evaluation_tiers/tier3_reviewer_546.tsv`: 546 gene–paper attempts
+across all 11 populated reviewer workspaces, representing 507 unique PMIDs.
+BMPR2 keeps its existing 50-paper cohort; LMNA and TTN use ranked 50-paper
+subsets of their former 99-paper temporal snapshots.
 
 ```
   GVF run (<GENE>.db)                              Variant_Browser (Azure vb-curation)

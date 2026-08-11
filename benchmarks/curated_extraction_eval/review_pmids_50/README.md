@@ -5,8 +5,8 @@
 > Its active queue has 46 papers after excluding six internally derived
 > benchmark papers; four were removed from the live 50-paper snapshot and two
 > were already absent. The frozen July files remain the source cohort. The
-> exact live eight-workspace snapshot is
-> [`../../evaluation_tiers/tier3_reviewer_396.tsv`](../../evaluation_tiers/tier3_reviewer_396.tsv);
+> exact full reviewer snapshot is
+> [`../../evaluation_tiers/tier3_reviewer_546.tsv`](../../evaluation_tiers/tier3_reviewer_546.tsv);
 > SCN5A differs from this frozen list by one reconciled paper.
 
 These PMID lists are the **frozen initial review cohort: 50 papers per gene**

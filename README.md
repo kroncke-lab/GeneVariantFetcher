@@ -122,8 +122,8 @@ exclusions with `scripts/manage_review_gold.py`. Release scoring uses
 
 For protocol rollout, use only the three manifests in
 [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md): 50
-gold-scored attempts, 120 cardiac reviewer attempts, then the 396-attempt
-established reviewer backlog. The strategy-diverse
+gold-scored attempts, 120 cardiac reviewer attempts, then the 546-attempt full
+reviewer backlog. The strategy-diverse
 [`curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md)
 remains a specialized regression fixture, not a fourth rollout cohort. Confirm
 headline changes with the full recall scorer before claiming a metric.

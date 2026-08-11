@@ -35,28 +35,44 @@
       "role": "cardiac_reviewer_expansion"
     },
     {
-      "id": "reviewer_396",
+      "id": "reviewer_546",
       "order": 3,
-      "manifest": "tier3_reviewer_396.tsv",
-      "sha256": "194761ebf891e6f88779caecded9d577711a22a6d9181954b3a2c5d9836eb693",
-      "attempt_count": 396,
-      "unique_pmid_count": 357,
+      "manifest": "tier3_reviewer_546.tsv",
+      "sha256": "cec880e96fbbc6b296a254b7de307af29513082e3b4063b723506140bea689c8",
+      "attempt_count": 546,
+      "unique_pmid_count": 507,
       "gene_attempt_counts": {
         "APOE": 50,
+        "BMPR2": 50,
         "BRCA1": 50,
         "BRCA2": 46,
         "KCNH2": 50,
         "KCNQ1": 50,
+        "LMNA": 50,
         "MYBPC3": 50,
         "RYR2": 50,
-        "SCN5A": 50
+        "SCN5A": 50,
+        "TTN": 50
       },
-      "role": "established_reviewer_backlog"
+      "review_order_manifests": {
+        "BMPR2": {
+          "manifest": "reviewer_pmids_50_20260811/BMPR2.txt",
+          "sha256": "b459f5b97d6caadf39ea25562d5521af74f2c23cbde2002f07dcd6d2cfd0abda",
+          "attempt_count": 50
+        },
+        "LMNA": {
+          "manifest": "reviewer_pmids_50_20260811/LMNA.txt",
+          "sha256": "85074c99207b5561e1ca57c350f41abab16c5cac54ddcab0965a15a5c55e0fe5",
+          "attempt_count": 50
+        },
+        "TTN": {
+          "manifest": "reviewer_pmids_50_20260811/TTN.txt",
+          "sha256": "a8e835f0dd34aca8517f0da8ea75b9b9d6d639f8e0141573895424ea34791e64",
+          "attempt_count": 50
+        }
+      },
+      "role": "full_reviewer_backlog"
     }
   ],
-  "excluded_experimental_workspaces": {
-    "BMPR2": 50,
-    "LMNA": 99,
-    "TTN": 99
-  }
+  "empty_legacy_workspaces": ["ALPL", "N4BP2L1", "TTR"]
 }

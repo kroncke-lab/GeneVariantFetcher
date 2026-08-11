@@ -46,10 +46,10 @@ spending a full cardiac re-extraction to move the headline.
 
 The active rollout population is governed by exactly three manifests in
 `benchmarks/evaluation_tiers/`: 50 gold-scored attempts, 120 cardiac reviewer
-attempts (98 unique PMIDs), and 396 established reviewer-backlog attempts (357
-unique PMIDs). These tiers govern evaluation/review scope, not the authoritative
-four-gene headline cohort below. BMPR2 and the LMNA/TTN temporal experiments are
-not active rollout tiers.
+attempts (98 unique PMIDs), and 546 full reviewer-backlog attempts (507 unique
+PMIDs). These tiers govern evaluation/review scope, not the authoritative
+four-gene headline cohort below. The full tier includes BMPR2 and ranked
+50-paper LMNA/TTN subsets.
 
 ## Active 50-paper collaborator-grounded count-semantics cohort
 

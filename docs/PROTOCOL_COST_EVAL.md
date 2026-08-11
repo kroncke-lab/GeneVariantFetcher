@@ -3,17 +3,17 @@
 ## Canonical rollout sizes (2026-08-11)
 
 The only active progression is 50 gold-scored gene–paper attempts, then 120
-cardiac attempts (98 unique PMIDs), then the 396-attempt established reviewer
-backlog (357 unique PMIDs). Cross-gene papers are intentionally processed once
+cardiac attempts (98 unique PMIDs), then the 546-attempt full reviewer backlog
+(507 unique PMIDs). Cross-gene papers are intentionally processed once
 per gene–disease workspace, so provider cost scales with attempts, not unique
 PMIDs.
 
 Using the older measured envelope of about **$0.50–$2 per typical attempt** only
 as a conservative planning range gives **$25–$100**, **$60–$240**, and
-**$198–$792** for the three tiers. These are not invoices or a measurement of
+**$273–$1,092** for the three tiers. These are not invoices or a measurement of
 the newer failure-routing protocol; exact approval still requires trace-derived
-token totals from Gate 1. BMPR2 and the 99-paper LMNA/TTN experiments are
-outside these estimates.
+token totals from Gate 1. The full-tier estimate includes BMPR2 and 50 papers
+each for LMNA and TTN.
 
 ## Collaborator-gold scope correction (2026-08-11; no new calls)
 

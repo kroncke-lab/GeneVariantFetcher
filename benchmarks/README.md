@@ -9,7 +9,7 @@ index. Protocol rollout proceeds in order:
 
 1. `gold_50`: 50 scored gene–paper attempts (48 cardiac + Nate's two BRCA2).
 2. `cardiac_120`: 120 cardiac reviewer attempts (98 unique PMIDs).
-3. `reviewer_396`: 396 attempts / 357 unique PMIDs in the eight established
+3. `reviewer_546`: 546 attempts / 507 unique PMIDs in all 11 populated
    private reviewer workspaces.
 
 No other directory is an active rollout cohort.

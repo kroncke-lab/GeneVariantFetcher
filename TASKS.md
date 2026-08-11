@@ -9,11 +9,10 @@
         and BRCA2 separately.
   - [ ] Gate 2 — `cardiac_120`: after Gate 1 passes, expand to 120 cardiac
         reviewer attempts / 98 unique PMIDs (30 ranked papers per cardiac pair).
-  - [ ] Gate 3 — `reviewer_396`: after cardiac review is acceptable, process
-        the eight established private-review workspaces: 396 attempts / 357
-        unique PMIDs (seven queues of 50 plus BRCA2 at 46).
-  - [ ] Do not promote BMPR2 (50-paper cold start) or LMNA/TTN (99-paper temporal
-        runs) into this sequence without a separate, explicit cohort decision.
+  - [ ] Gate 3 — `reviewer_546`: after cardiac review is acceptable, process
+        all 11 populated private-review workspaces: 546 attempts / 507 unique
+        PMIDs (ten queues of 50 plus BRCA2 at 46). BMPR2 is included at its
+        existing 50; LMNA and TTN use the ranked 50-paper subsets.
 - **Active collaborator-grounded count-evaluation cohort is 50 papers
   (2026-08-11).** The historical 56-paper audit is preserved, but the scored evaluation and new strategy
   comparisons now use the cardiac 48 plus only the two BRCA2 papers with
