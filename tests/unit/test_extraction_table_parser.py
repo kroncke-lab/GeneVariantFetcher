@@ -2,7 +2,7 @@
 
 from types import SimpleNamespace
 
-from pipeline.extraction import ExpertExtractor
+from pipeline.extraction import ExpertExtractor, _deterministic_study_summary
 from utils.models import ExtractionResult, Paper
 
 
@@ -20,6 +20,28 @@ def test_deterministic_parser_rejects_gwas_allele_table():
     variants = extractor._parse_markdown_table_variants(text, "KCNH2")
 
     assert variants == []
+
+
+def test_deterministic_study_summary_is_concise_and_paper_specific():
+    summary = _deterministic_study_summary(
+        title="  Finnish founder   cohort ",
+        gene_symbol="KCNH2",
+        variants=[
+            {
+                "protein_notation": "p.Leu552Ser",
+                "penetrance_data": {"total_carriers_observed": 40},
+            },
+            {
+                "protein_notation": "p.Arg176Trp",
+                "penetrance_data": {},
+            },
+        ],
+    )
+
+    assert summary.startswith('"Finnish founder cohort" yielded 2 KCNH2')
+    assert "1 record includes at least one carrier or phenotype count" in summary
+    assert "confirm the table headers and source locations" in summary
+    assert len(summary.split(".")) <= 3
 
 
 def test_deterministic_parser_keeps_clinical_variant_table():
@@ -661,6 +683,9 @@ CA/VF
     assert result.success
     assert result.model_used == "deterministic-table-parser"
     assert len(result.extracted_data["variants"]) == 110
+    summary = result.extracted_data["extraction_metadata"]["study_summary"]
+    assert summary.startswith('"LQT1 supplement" yielded 110 KCNQ1')
+    assert "carrier or phenotype count" in summary
 
 
 def test_fixed_width_parser_reads_lqts_compendium_summary_rows():

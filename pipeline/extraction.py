@@ -67,6 +67,60 @@ TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = get_env_int(
 TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 250)
 
 
+def _deterministic_study_summary(
+    *,
+    title: Optional[str],
+    gene_symbol: str,
+    variants: List[Dict[str, Any]],
+    route_label: str = "deterministic table parsing",
+) -> str:
+    """Build the reviewer-facing study summary for LLM-bypass paths.
+
+    Large-table and router-approved papers intentionally bypass the narrative
+    extractor.  They still need a concise, paper-specific explanation in the
+    review database, so summarize only facts the deterministic result can prove:
+    the paper identity, target gene, variant-row count, and whether any rows
+    contain carrier/phenotype counts.  The explicit route caveat prevents this
+    fallback from masquerading as a source-grounded study interpretation.
+    """
+    clean_title = " ".join(str(title or "").split())
+    if clean_title.casefold() in {"", "unknown title"}:
+        subject = "This paper"
+    else:
+        subject = f'"{clean_title}"'
+
+    variant_count = len(variants)
+    count_bearing = 0
+    for variant in variants:
+        penetrance = variant.get("penetrance_data") or {}
+        patients = variant.get("patients") or {}
+        if any(
+            value is not None
+            for value in (
+                penetrance.get("total_carriers_observed"),
+                penetrance.get("affected_count"),
+                penetrance.get("unaffected_count"),
+                patients.get("count"),
+            )
+        ):
+            count_bearing += 1
+
+    variant_word = "variant record" if variant_count == 1 else "variant records"
+    if count_bearing:
+        count_word = "record includes" if count_bearing == 1 else "records include"
+        count_sentence = (
+            f"{count_bearing} {count_word} at least one carrier or phenotype count"
+        )
+    else:
+        count_sentence = "No variant record includes a carrier or phenotype count"
+
+    return (
+        f"{subject} yielded {variant_count} {gene_symbol} {variant_word} from "
+        f"{route_label}. {count_sentence}; reviewers should confirm the table "
+        "headers and source locations before adjudication."
+    )
+
+
 def _find_data_zones_file(
     pmid: str, search_dirs: Optional[List[str]] = None
 ) -> Optional[Path]:
@@ -6098,6 +6152,12 @@ Return strict JSON with this schema:
             "extraction_metadata": {
                 "total_variants_found": len(variants),
                 "extraction_confidence": "medium",
+                "study_summary": _deterministic_study_summary(
+                    title=paper.title,
+                    gene_symbol=paper.gene_symbol,
+                    variants=variants,
+                    route_label="router-selected deterministic table parsing",
+                ),
                 "compact_mode": True,
                 "notes": (
                     f"Router-first path: tables {table_ids} parsed deterministically "
@@ -6245,6 +6305,11 @@ Return strict JSON with this schema:
                     "extraction_metadata": {
                         "total_variants_found": len(parsed_variants),
                         "extraction_confidence": "medium",
+                        "study_summary": _deterministic_study_summary(
+                            title=paper.title,
+                            gene_symbol=paper.gene_symbol,
+                            variants=parsed_variants,
+                        ),
                         "compact_mode": True,
                         "notes": "Bypassed LLM using markdown table parser for large table",
                         "paper_census": paper_census,
@@ -6317,6 +6382,11 @@ Return strict JSON with this schema:
                 "extraction_metadata": {
                     "total_variants_found": len(deterministic_variants),
                     "extraction_confidence": "medium",
+                    "study_summary": _deterministic_study_summary(
+                        title=paper.title,
+                        gene_symbol=paper.gene_symbol,
+                        variants=deterministic_variants,
+                    ),
                     "compact_mode": True,
                     "notes": "Bypassed LLM using deterministic parser for large PDF/vertical table",
                     "deterministic_parser_counts": {
