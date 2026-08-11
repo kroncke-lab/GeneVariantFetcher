@@ -26,6 +26,37 @@ def _variant(name: str, total: int = 43, affected: int = 28, unaffected: int = 1
     }
 
 
+def test_luna_xhigh_claim_verifier_has_reasoning_headroom():
+    verifier = VariantClaimVerifier(
+        model="azure_ai/gpt-5.6-luna",
+        max_tokens=2500,
+        reasoning_effort="max",
+    )
+
+    assert verifier.max_tokens == 64_000
+    assert verifier.reasoning_effort == "max"
+
+
+def test_claim_verifier_keeps_compact_budget_without_xhigh():
+    verifier = VariantClaimVerifier(
+        model="azure_ai/gpt-5.6-luna",
+        max_tokens=2500,
+        reasoning_effort="high",
+    )
+
+    assert verifier.max_tokens == 2_500
+
+
+def test_non_gpt56_xhigh_claim_verifier_keeps_compact_budget():
+    verifier = VariantClaimVerifier(
+        model="azure_ai/grok-4.5",
+        max_tokens=2500,
+        reasoning_effort="xhigh",
+    )
+
+    assert verifier.max_tokens == 2_500
+
+
 def test_risk_flags_repeated_large_non_deterministic_counts():
     extractor = ExpertExtractor(models=["primary-model"], tier_threshold=0)
     data = {
@@ -409,6 +440,46 @@ def test_claim_verification_infers_missing_count_from_supported_identity():
     assert normalized["field_verdicts"]["affected"] == "inferred_supported"
 
 
+def test_claim_verification_does_not_invent_partition_for_nested_cohort():
+    card = VariantClaimCard(
+        gene="KCNQ1",
+        disease="Long QT syndrome type 1",
+        pmid="33141630",
+        title="Amish founder variant",
+        variant="T224M",
+        extracted={"total_carriers": 124, "affected": None, "unaffected": None},
+        evidence=(
+            "The variant was found in 124 carriers. Of those, 88 consented to "
+            "phenotype follow-up and 34/88 had clinical evidence of LQTS."
+        ),
+    )
+    raw = {
+        "verdict": "unsupported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "directly_supported",
+            "unaffected": "unsupported",
+        },
+        "corrected_values": {
+            "total_carriers": 124,
+            "affected": 34,
+            "unaffected": None,
+        },
+        "reason": "Disease status is not established for every carrier.",
+        "evidence_quote": "124 carriers; 34/88 had clinical evidence",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"] == {
+        "total_carriers": 124,
+        "affected": 34,
+        "unaffected": None,
+    }
+    assert normalized["field_verdicts"]["unaffected"] == "unsupported"
+
+
 def test_claim_card_table_evidence_includes_header_context():
     text = "\n".join(
         [
@@ -441,3 +512,41 @@ def test_claim_card_table_evidence_includes_header_context():
     assert card is not None
     assert "Polyphen-2" in card.evidence
     assert "In silico functional analysis" in card.evidence
+
+
+def test_claim_card_finds_one_letter_alias_for_three_letter_variant():
+    text = "\n".join(
+        [
+            "A study-wide group included 63 participants.",
+            ("Long converted paragraph filler. " * 40)
+            + "One variant, SCN5A-R1193Q, was found in 19 participants; "
+            "7 of 19 had arrhythmia phenotypes.",
+        ]
+    )
+
+    for notation in ("p.Arg1193Gln", "Arg1193Gln", "ARG1193GLN"):
+        card = build_claim_card(
+            source_text=text,
+            gene="SCN5A",
+            disease="Long QT syndrome",
+            pmid="26746457",
+            title="Incidental variants",
+            variant=_variant(notation, total=19, affected=7, unaffected=12),
+        )
+
+        assert card is not None
+        assert "SCN5A-R1193Q" in card.evidence
+
+
+def test_claim_card_bridges_stop_codon_star_and_x_aliases():
+    card = build_claim_card(
+        source_text="The SCN5A-R1193X variant was present in one participant.",
+        gene="SCN5A",
+        disease="Long QT syndrome",
+        pmid="1",
+        title="Stop alias",
+        variant=_variant("p.Arg1193Ter", total=1, affected=1, unaffected=0),
+    )
+
+    assert card is not None
+    assert "SCN5A-R1193X" in card.evidence

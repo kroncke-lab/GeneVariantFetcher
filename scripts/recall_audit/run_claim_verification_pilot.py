@@ -49,6 +49,7 @@ from pipeline.claim_verifier import (
     build_claim_card,
     normalize_verification,
 )
+from utils.gold_standard import gold_v2_status
 
 
 FIELDS = ("total_carriers", "affected", "unaffected")
@@ -209,7 +210,7 @@ def values_from_row(row: dict[str, Any]) -> dict[str, int | None]:
 
 def has_adjudicated_gold(row: dict[str, Any]) -> bool:
     """Return true when a row carries an explicit v2/adjudicated gold decision."""
-    return bool(str(row.get("gold_v2_status") or "").strip())
+    return bool(gold_v2_status(row))
 
 
 def gold_value(

@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 
 import pandas as pd
+from utils.gold_standard import gold_row_excluded, gold_v2_status
 from utils.source_layers import (
     count_reasons,
     junk_notation_reason,
@@ -1771,6 +1772,10 @@ def aggregate_excel_data(
     aggregated = {}
 
     for _, row in df.iterrows():
+        if gold_row_excluded(row):
+            continue
+        adjudication_status = gold_v2_status(row)
+
         pmid = normalize_pmid(row[pmid_col])
         variant_raw = str(row[variant_col]) if pd.notna(row[variant_col]) else ""
         variant_norm = normalize_variant(variant_raw)
@@ -1795,23 +1800,37 @@ def aggregate_excel_data(
                 "phenotypes": set(),
             }
 
-        # Aggregate counts
-        if carriers_col and pd.notna(row.get(carriers_col)):
-            aggregated[key]["carriers_total"] += safe_int(row[carriers_col]) or 0
+        # A populated v2 status makes all three v2 count fields authoritative.
+        # Blank v2 cells are explicit nulls and must not fall back to legacy
+        # values. Rows without a status retain the legacy loading behavior.
+        if adjudication_status:
+            for target, source in (
+                ("carriers_total", "gold_v2_carriers"),
+                ("affected_count", "gold_v2_affected"),
+                ("unaffected_count", "gold_v2_unaffected"),
+            ):
+                if pd.notna(row.get(source)):
+                    aggregated[key][target] += safe_int(row[source]) or 0
+        else:
+            # Aggregate counts
+            if carriers_col and pd.notna(row.get(carriers_col)):
+                aggregated[key]["carriers_total"] += safe_int(row[carriers_col]) or 0
 
-        # Sum affected from multiple phenotype columns if available
-        if affected_phenotype_cols:
-            row_affected = 0
-            for pheno_col in affected_phenotype_cols:
-                if pd.notna(row.get(pheno_col)):
-                    row_affected += safe_int(row[pheno_col]) or 0
-            aggregated[key]["affected_count"] += row_affected
-        elif affected_col and pd.notna(row.get(affected_col)):
-            # Fallback to single affected column
-            aggregated[key]["affected_count"] += safe_int(row[affected_col]) or 0
+            # Sum affected from multiple phenotype columns if available
+            if affected_phenotype_cols:
+                row_affected = 0
+                for pheno_col in affected_phenotype_cols:
+                    if pd.notna(row.get(pheno_col)):
+                        row_affected += safe_int(row[pheno_col]) or 0
+                aggregated[key]["affected_count"] += row_affected
+            elif affected_col and pd.notna(row.get(affected_col)):
+                # Fallback to single affected column
+                aggregated[key]["affected_count"] += safe_int(row[affected_col]) or 0
 
-        if unaffected_col and pd.notna(row.get(unaffected_col)):
-            aggregated[key]["unaffected_count"] += safe_int(row[unaffected_col]) or 0
+            if unaffected_col and pd.notna(row.get(unaffected_col)):
+                aggregated[key]["unaffected_count"] += (
+                    safe_int(row[unaffected_col]) or 0
+                )
 
         if phenotype_col and pd.notna(row.get(phenotype_col)):
             aggregated[key]["phenotypes"].add(str(row[phenotype_col]))

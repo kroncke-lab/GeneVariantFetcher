@@ -60,6 +60,12 @@ RECOVERABLE_FIELDS = {
 #: this pass cannot introduce a row the guard would immediately quarantine.
 PLAUSIBLE_COUNT_CEILING = 100_000
 GROUNDING_QUOTE_MAX_CHARS = 2_000
+# GPT-5.6 at xhigh spends hidden reasoning tokens against the completion budget
+# before emitting JSON. The old fixed 8192 cap was consumed entirely by hidden
+# reasoning on real 6.6k- and 16.2k-token count-recovery prompts, yielding
+# finish_reason=length with an empty response. A high ceiling is not prepaid
+# token usage; it only prevents valid JSON from being truncated after reasoning.
+COUNT_RECOVERY_XHIGH_MAX_TOKENS = 64_000
 
 #: Spelled-out numbers accepted as grounding for a numeric count. Without this
 #: a quote reading "the variant was seen once" cannot support carriers=1, which
@@ -1984,13 +1990,24 @@ def _call_text(
         note_llm_attempt,
         note_llm_outcome,
     )
-    from utils.llm_utils import build_reasoning_effort_kwargs
+    from utils.llm_utils import (
+        build_reasoning_effort_kwargs,
+        clamp_max_tokens,
+        normalize_reasoning_effort,
+    )
+
+    normalized_effort = normalize_reasoning_effort(reasoning_effort)
+    requested_max_tokens = (
+        COUNT_RECOVERY_XHIGH_MAX_TOKENS
+        if "gpt-5.6" in model.lower() and normalized_effort == "xhigh"
+        else 8192
+    )
 
     kwargs: dict[str, Any] = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.0,
-        "max_tokens": 8192,
+        "max_tokens": clamp_max_tokens(model, requested_max_tokens),
     }
     kwargs.update(build_reasoning_effort_kwargs(model, reasoning_effort))
     try:

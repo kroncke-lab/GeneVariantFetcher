@@ -1,4 +1,4 @@
-variant,pmid,carriers,affected,unaffected
+variant,pmid,carriers,affected,unaffected,gold_v2_carriers,gold_v2_affected,gold_v2_unaffected,gold_v2_status,gold_v2_note,gold_v2_source
 G148R,34135346,1,0,1
 D202N,34135346,1,0,1
 S277L,34135346,1,0,1
@@ -37,7 +37,7 @@ Y111C,33382510,1,0,1
 V205M,33382510,1,0,1
 R591H,33382510,1,0,1
 G325R,33382510,1,1,0
-T224M,33141630,88,34,54
+T224M,33141630,88,34,54,124,34,54,adjudicated_genotyped_carrier_cohort,"The paper identifies 124 T224M carriers; 88 entered phenotype follow-up and 34/88 met its clinical LQTS definition. The remaining 54 is the followed, not-clinically-affected partition; 36 carriers were not phenotyped.",benchmarks/count_semantics_eval/ADJUDICATIONS_20260810.md
 W248F,33082985,1,0,1
 L347R,33082985,1,0,1
 W248F + L347R,33082985,1,1,0

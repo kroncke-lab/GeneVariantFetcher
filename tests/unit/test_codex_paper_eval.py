@@ -25,6 +25,7 @@ from benchmarks.codex_paper_eval.run_eval import (
     effective_effort,
     gold_count_eligible_pmids,
     gold_csv_path,
+    load_gold,
     matches,
     material_digest_errors,
     read_paper_manifest,
@@ -57,6 +58,52 @@ def _count_metric(asserted: int = 1, predicted: int = 1) -> dict:
         "mae": 0.0 if predicted else None,
         "rmse": 0.0 if predicted else None,
     }
+
+
+def test_load_gold_prefers_adjudicated_v2_counts_and_explicit_nulls(tmp_path):
+    gold = tmp_path / "SCN5A_recall_input.csv"
+    gold.write_text(
+        "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+        "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+        "S1103Y,20470418,85,39,46,26,17,9,adjudicated_variant_carrier_count\n"
+        "A1V,20470418,2,1,1,1,1,,adjudicated_null_unaffected\n"
+        "G2D,20470418,112,112,0,,,,excluded_duplicate_current_cohort\n"
+        "R2W,20470418,3,2,1,,,,\n"
+        "V3A,20470418,4,3,1\n"
+    )
+
+    assert load_gold(tmp_path, "SCN5A", "20470418") == [
+        {"variant": "S1103Y", "carriers": 26, "affected": 17, "unaffected": 9},
+        {"variant": "A1V", "carriers": 1, "affected": 1, "unaffected": None},
+        {"variant": "R2W", "carriers": 3, "affected": 2, "unaffected": 1},
+        {"variant": "V3A", "carriers": 4, "affected": 3, "unaffected": 1},
+    ]
+
+
+def test_load_gold_rejects_unknown_v2_status(tmp_path):
+    gold = tmp_path / "SCN5A_recall_input.csv"
+    gold.write_text(
+        "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+        "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+        "A1V,1,2,1,1,,,,needs_review\n"
+    )
+
+    with pytest.raises(ValueError, match="Unknown gold_v2_status"):
+        load_gold(tmp_path, "SCN5A", "1")
+
+
+def test_gold_count_eligibility_respects_v2_nulls_and_exclusions(tmp_path):
+    gold = tmp_path / "SCN5A_recall_input.csv"
+    gold.write_text(
+        "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+        "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+        "A1V,1,2,1,1,2,1,,adjudicated_null_unaffected\n"
+        "A2V,2,2,1,1,2,1,1,excluded_duplicate_current_cohort\n"
+        "A3V,3,2,1,1,,,,\n"
+        "A4V,4,9,9,0,3,2,1,adjudicated_variant_carrier_count\n"
+    )
+
+    assert gold_count_eligible_pmids(tmp_path, "SCN5A") == {"3", "4"}
 
 
 def _report_fixture() -> dict:

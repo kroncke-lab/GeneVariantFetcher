@@ -1,5 +1,7 @@
 """Tests for recall-audit claim-verification pilot helpers."""
 
+import pytest
+
 from scripts.recall_audit.run_claim_verification_pilot import (
     best_gold_row,
     candidate_rows,
@@ -56,6 +58,17 @@ def test_gold_v2_blank_count_is_explicit_null_when_status_populated():
 
     assert gold_value(row, "unaffected", gold_value_set="v2") is None
     assert gold_value(row, "unaffected", gold_value_set="original") == 1
+
+
+def test_gold_v2_unknown_status_fails_closed():
+    row = {
+        "carriers": "2",
+        "gold_v2_carriers": "",
+        "gold_v2_status": "needs_review",
+    }
+
+    with pytest.raises(ValueError, match="Unknown gold_v2_status"):
+        gold_value(row, "total_carriers", gold_value_set="v2")
 
 
 def test_best_gold_row_scores_against_adjudicated_values_when_present():

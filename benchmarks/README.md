@@ -28,6 +28,11 @@ full-gold scorer and metrics.
   hash-locked single-model and production-strategy paper evaluation. New runs
   require per-paper raw call and decision traces inside the pre-gold lock.
 
+- **[`count_semantics_eval/`](count_semantics_eval/README.md)** — carrier-count
+  scope and MAE audit on locked paper predictions. The 2026-08-10 Luna xhigh run
+  plus a blind Grok/AGY/Claude audit reduced exact 56-paper carrier MAE from
+  0.8148 to 0.0794 without removing any predicted count observations.
+
 ## Adding a new set
 
 Copy the structure of `curated_extraction_eval/`: a `registry.tsv` listing the

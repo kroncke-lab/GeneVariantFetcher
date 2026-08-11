@@ -31,6 +31,10 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO))
 
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE  # noqa: E402
+from utils.gold_standard import (  # noqa: E402
+    authoritative_gold_count,
+    gold_row_excluded,
+)
 from utils.llm_trace import (  # noqa: E402
     TRACE_INDEX_NAME,
     TRACE_MANIFEST_NAME,
@@ -331,11 +335,13 @@ def gold_count_eligible_pmids(gold_root: Path, gene: str) -> set[str]:
     coverage: dict[str, set[str]] = defaultdict(set)
     with path.open(newline="") as fh:
         for row in csv.DictReader(fh):
+            if gold_row_excluded(row):
+                continue
             pmid = str(row.get("pmid", "")).strip()
             if not pmid or not str(row.get("variant", "")).strip():
                 continue
             for field in COUNT_FIELDS:
-                if str(row.get(field, "")).strip() != "":
+                if authoritative_gold_count(row, field, parser=to_int) is not None:
                     coverage[pmid].add(field)
     return {pmid for pmid, fields in coverage.items() if fields == set(COUNT_FIELDS)}
 
@@ -1240,10 +1246,15 @@ def load_gold(gold_root: Path, gene: str, pmid: str) -> list[dict]:
         for row in csv.DictReader(fh):
             if str(row.get("pmid", "")).strip() != pmid:
                 continue
+            if gold_row_excluded(row):
+                continue
             rows.append(
                 {
                     "variant": str(row.get("variant", "")).strip(),
-                    **{field: to_int(row.get(field)) for field in COUNT_FIELDS},
+                    **{
+                        field: authoritative_gold_count(row, field, parser=to_int)
+                        for field in COUNT_FIELDS
+                    },
                 }
             )
         return rows

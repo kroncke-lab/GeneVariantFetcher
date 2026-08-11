@@ -286,6 +286,45 @@ class TestColumnDetection:
         assert ("34135346", "G148R") in aggregated
         assert aggregated[("34135346", "D202N")]["carriers_total"] == 2
 
+    def test_recall_csv_prefers_v2_counts_and_skips_excluded_rows(self, tmp_path):
+        csv_path = tmp_path / "SCN5A_recall_input.csv"
+        csv_path.write_text(
+            "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+            "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+            "R1193Q,26746457,7,7,0,19,7,12,adjudicated_variant_carrier_count\n"
+            "D1790G,28339995,85,85,0,30,30,,adjudicated_null_unaffected\n"
+            "R176W,19160088,16,0,16,16,0,16,excluded_duplicate_current_cohort\n"
+            "S1103Y,20470418,26,17,9,,,,\n",
+            encoding="utf-8",
+        )
+
+        df, detected = load_excel_data(csv_path, None, None)
+        aggregated = aggregate_excel_data(df, detected)
+
+        assert aggregated[("26746457", "R1193Q")]["carriers_total"] == 19
+        assert aggregated[("26746457", "R1193Q")]["affected_count"] == 7
+        assert aggregated[("26746457", "R1193Q")]["unaffected_count"] == 12
+        assert aggregated[("28339995", "D1790G")]["carriers_total"] == 30
+        assert aggregated[("28339995", "D1790G")]["affected_count"] == 30
+        assert aggregated[("28339995", "D1790G")]["unaffected_count"] == 0
+        assert ("19160088", "R176W") not in aggregated
+        assert aggregated[("20470418", "S1103Y")]["carriers_total"] == 26
+        assert aggregated[("20470418", "S1103Y")]["affected_count"] == 17
+        assert aggregated[("20470418", "S1103Y")]["unaffected_count"] == 9
+
+    def test_recall_csv_rejects_unknown_v2_status(self, tmp_path):
+        csv_path = tmp_path / "KCNH2_recall_input.csv"
+        csv_path.write_text(
+            "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+            "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+            "R176W,19160088,112,112,0,,,,needs_review\n",
+            encoding="utf-8",
+        )
+
+        df, detected = load_excel_data(csv_path, None, None)
+        with pytest.raises(ValueError, match="Unknown gold_v2_status"):
+            aggregate_excel_data(df, detected)
+
 
 # =============================================================================
 # VARIANT NORMALIZATION TESTS

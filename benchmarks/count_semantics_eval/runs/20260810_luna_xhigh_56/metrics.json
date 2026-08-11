@@ -1,0 +1,173 @@
+{
+  "answer_key": {
+    "adjudication_file": "benchmarks/count_semantics_eval/ADJUDICATIONS_20260810.md",
+    "adjudicated_rows": [
+      {
+        "action": "replace",
+        "authoritative": {"affected": null, "carriers": 16, "unaffected": null},
+        "gene": "KCNH2",
+        "legacy": {"affected": 112, "carriers": 112, "unaffected": 0},
+        "pmid": "19160088",
+        "status": "adjudicated_current_study_cohort",
+        "variant": "R176W"
+      },
+      {
+        "action": "exclude_duplicate",
+        "authoritative": {"affected": null, "carriers": null, "unaffected": null},
+        "gene": "KCNH2",
+        "legacy": {"affected": 0, "carriers": 16, "unaffected": 16},
+        "pmid": "19160088",
+        "status": "excluded_duplicate_current_cohort",
+        "variant": "R176W"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 34, "carriers": 124, "unaffected": 54},
+        "gene": "KCNQ1",
+        "legacy": {"affected": 34, "carriers": 88, "unaffected": 54},
+        "pmid": "33141630",
+        "status": "adjudicated_genotyped_carrier_cohort",
+        "variant": "T224M"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 30, "carriers": 30, "unaffected": 0},
+        "gene": "SCN5A",
+        "legacy": {"affected": 85, "carriers": 85, "unaffected": 0},
+        "pmid": "28339995",
+        "status": "adjudicated_current_treatment_cohort",
+        "variant": "D1790G"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 7, "carriers": 19, "unaffected": 12},
+        "gene": "SCN5A",
+        "legacy": {"affected": 7, "carriers": 7, "unaffected": 0},
+        "pmid": "26746457",
+        "status": "adjudicated_variant_carrier_count",
+        "variant": "R1193Q"
+      },
+      {
+        "action": "honor_existing_v2",
+        "authoritative": {"affected": 17, "carriers": 26, "unaffected": 9},
+        "gene": "SCN5A",
+        "legacy": {"affected": 39, "carriers": 85, "unaffected": 46},
+        "pmid": "20470418",
+        "status": "adjudicated_variant_carrier_count",
+        "variant": "S1103Y"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 12, "carriers": 42, "unaffected": 25},
+        "gene": "KCNH2",
+        "legacy": {"affected": 12, "carriers": 44, "unaffected": 25},
+        "pmid": "10841244",
+        "status": "adjudicated_genotyped_carrier_cohort",
+        "variant": "L552S"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 38, "carriers": 41, "unaffected": 3},
+        "gene": "SCN5A",
+        "legacy": {"affected": 47, "carriers": 50, "unaffected": 3},
+        "pmid": "18451998",
+        "status": "adjudicated_current_study_cohort",
+        "variant": "E1784K"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 73, "carriers": 185, "unaffected": 106},
+        "gene": "RYR2",
+        "legacy": {"affected": 73, "carriers": 179, "unaffected": 106},
+        "pmid": "25814417",
+        "status": "adjudicated_current_study_cohort",
+        "variant": "G357S"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 2, "carriers": 2, "unaffected": 0},
+        "gene": "RYR2",
+        "legacy": {"affected": 1, "carriers": 1, "unaffected": 0},
+        "pmid": "33606749",
+        "status": "adjudicated_genotyped_carrier_cohort",
+        "variant": "R420Q"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 1, "carriers": 2, "unaffected": 1},
+        "gene": "RYR2",
+        "legacy": {"affected": 1, "carriers": 1, "unaffected": 0},
+        "pmid": "33606749",
+        "status": "adjudicated_genotyped_carrier_cohort",
+        "variant": "T1223A"
+      },
+      {
+        "action": "replace",
+        "authoritative": {"affected": 1, "carriers": 2, "unaffected": 1},
+        "gene": "RYR2",
+        "legacy": {"affected": 1, "carriers": 1, "unaffected": 0},
+        "pmid": "33606749",
+        "status": "adjudicated_genotyped_carrier_cohort",
+        "variant": "T2390I"
+      }
+    ],
+    "carrier_assertions_after": 1110,
+    "carrier_assertions_before": 1111,
+    "excluded_duplicate_rows": 1,
+    "included_adjudicated_rows": 11,
+    "inventory_rows": 12,
+    "status_validation": "exact closed vocabulary in utils/gold_standard.py"
+  },
+  "count_fields": {
+    "affected": {
+      "after": {"absolute_error": 241, "assertions": 1109, "mae": 0.7901639344, "predicted": 305, "recall": 0.2750225428},
+      "before": {"absolute_error": 240, "assertions": 1111, "mae": 0.7868852459, "predicted": 305, "recall": 0.2745274527}
+    },
+    "carriers": {
+      "after": {"absolute_error": 30, "assertions": 1110, "mae": 0.0793650794, "predicted": 378, "recall": 0.3405405405},
+      "before": {"absolute_error": 308, "assertions": 1111, "mae": 0.8148148148, "predicted": 378, "recall": 0.3402340234}
+    },
+    "unaffected": {
+      "after": {"absolute_error": 37, "assertions": 1108, "mae": 0.1307420495, "predicted": 283, "recall": 0.2554151625},
+      "before": {"absolute_error": 51, "assertions": 1111, "mae": 0.1802120141, "predicted": 283, "recall": 0.2547254725}
+    }
+  },
+  "incremental_luna_shadow": {
+    "calls": 7,
+    "completion_tokens": 9781,
+    "duration_seconds": 80.869487,
+    "model": "azure_ai/gpt-5.6-luna",
+    "prompt_tokens": 17901,
+    "reasoning_effort": "xhigh",
+    "reasoning_tokens": 8265,
+    "total_tokens": 27682
+  },
+  "independent_review": {
+    "blind_cards": 15,
+    "models": ["grok-4.5/high", "gemini-3.1-pro-high/high", "claude-fable-5/max"],
+    "review_file": "benchmarks/count_semantics_eval/MULTIMODEL_REVIEW_20260810.md",
+    "unanimous_carrier_corrections": 11,
+    "unchanged_prediction-disagreeing_controls": 2
+  },
+  "locked_predictions": {
+    "brca2_predictions_sha256": "cff24d2c18579b2eed82e2be08c26c43919e6265166f654f99cff23ac8960613",
+    "cardiac_predictions_sha256": "9c61cd0263131a822a1d616dfd01d10d47310d39012dbf459fb8c5afe85022a5",
+    "predicted_carrier_counts": 378
+  },
+  "result": {
+    "absolute_error_reduction": 278,
+    "absolute_error_reduction_fraction": 0.9025974026,
+    "brca2_carrier_absolute_error": 14,
+    "brca2_carrier_mae": 0.2692307692,
+    "cardiac_carrier_absolute_error": 16,
+    "cardiac_carrier_mae": 0.0490797546,
+    "carrier_absolute_error_sum_after": 30,
+    "carrier_absolute_error_sum_before": 308,
+    "carrier_count_recall_after": 0.3405405405,
+    "carrier_count_recall_before": 0.3402340234,
+    "carrier_mae_after": 0.0793650794,
+    "carrier_mae_before": 0.8148148148,
+    "papers": 56
+  },
+  "schema_version": 3
+}

@@ -10,6 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from pipeline.count_recovery import (
+    COUNT_RECOVERY_XHIGH_MAX_TOKENS,
     PLAUSIBLE_COUNT_CEILING,
     CountRecoveryError,
     PaperGap,
@@ -68,10 +69,11 @@ def _make_db(tmp_path, rows):
 
 def _stub(payload_by_call):
     """Return an llm_caller yielding successive canned response strings."""
-    calls = {"n": 0, "prompts": []}
+    calls = {"n": 0, "prompts": [], "kwargs": []}
 
     def caller(**kwargs):
         calls["prompts"].append(kwargs["messages"][0]["content"])
+        calls["kwargs"].append(kwargs)
         i = calls["n"]
         calls["n"] += 1
         text = payload_by_call[min(i, len(payload_by_call) - 1)]
@@ -784,6 +786,41 @@ class TestWrite:
 
 
 class TestEndToEnd:
+    def test_xhigh_gpt56_has_room_for_reasoning_before_json(self, tmp_path):
+        db = _make_db(tmp_path, [(1, "p.Leu552Ser", None, "111", None, None, None)])
+        caller = _stub(['{"variants": []}'])
+
+        recover_counts(
+            db,
+            "KCNH2",
+            source_for_pmid=lambda p: SOURCE,
+            llm_caller=caller,
+            model="azure_ai/gpt-5.6-luna",
+            reasoning_effort="xhigh",
+            dry_run=True,
+        )
+
+        assert caller.calls["kwargs"][0]["max_tokens"] == (
+            COUNT_RECOVERY_XHIGH_MAX_TOKENS
+        )
+        assert caller.calls["kwargs"][0]["reasoning_effort"] == "xhigh"
+
+    def test_xhigh_non_gpt56_keeps_compact_output_budget(self, tmp_path):
+        db = _make_db(tmp_path, [(1, "p.Leu552Ser", None, "111", None, None, None)])
+        caller = _stub(['{"variants": []}'])
+
+        recover_counts(
+            db,
+            "KCNH2",
+            source_for_pmid=lambda p: SOURCE,
+            llm_caller=caller,
+            model="azure_ai/grok-4.5",
+            reasoning_effort="xhigh",
+            dry_run=True,
+        )
+
+        assert caller.calls["kwargs"][0]["max_tokens"] == 8192
+
     def test_recovers_and_is_idempotent(self, tmp_path):
         db = _make_db(
             tmp_path,

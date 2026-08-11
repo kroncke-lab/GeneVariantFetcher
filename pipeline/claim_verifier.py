@@ -13,11 +13,40 @@ from dataclasses import asdict, dataclass
 from typing import Any
 
 from utils.llm_trace import attempt_link_summary, llm_attempt_ledger, llm_trace_scope
-from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
+from utils.llm_utils import (
+    BaseLLMCaller,
+    clamp_max_tokens,
+    normalize_reasoning_effort,
+)
 
 SUPPORTED_VERDICTS = {"directly_supported", "inferred_supported"}
 UNTRUSTED_VERDICTS = {"ambiguous", "unsupported", "source_missing"}
 FIELD_NAMES = ("variant", "total_carriers", "affected", "unaffected")
+CLAIM_VERIFIER_DEFAULT_MAX_TOKENS = 2_500
+CLAIM_VERIFIER_XHIGH_MAX_TOKENS = 64_000
+AA3_TO_1 = {
+    "Ala": "A",
+    "Arg": "R",
+    "Asn": "N",
+    "Asp": "D",
+    "Cys": "C",
+    "Gln": "Q",
+    "Glu": "E",
+    "Gly": "G",
+    "His": "H",
+    "Ile": "I",
+    "Leu": "L",
+    "Lys": "K",
+    "Met": "M",
+    "Phe": "F",
+    "Pro": "P",
+    "Ser": "S",
+    "Thr": "T",
+    "Trp": "W",
+    "Tyr": "Y",
+    "Val": "V",
+}
+AA1_TO_3 = {one: three for three, one in AA3_TO_1.items()}
 
 
 @dataclass
@@ -73,6 +102,48 @@ def _variant_terms(variant: str) -> set[str]:
             terms.add(term[2:])
         if len(term) >= 3:
             terms.add(term.replace("p.", "").replace(" ", ""))
+        three_letter = re.fullmatch(
+            r"(?:p\.)?([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|Ter)",
+            term,
+            flags=re.IGNORECASE,
+        )
+        if three_letter:
+            ref, position, alt = three_letter.groups()
+            ref = ref.title()
+            alt = alt.title()
+            ref_one = AA3_TO_1.get(ref)
+            alt_one = "*" if alt == "Ter" else AA3_TO_1.get(alt)
+            if ref_one and alt_one:
+                one_letter_aliases = {
+                    f"{ref_one}{position}{alt_one}",
+                    f"p.{ref_one}{position}{alt_one}",
+                }
+                if alt == "Ter":
+                    one_letter_aliases.update(
+                        {f"{ref_one}{position}X", f"p.{ref_one}{position}X"}
+                    )
+                terms.update(one_letter_aliases)
+        one_letter = re.fullmatch(r"(?:p\.)?([A-Z])(\d+)([A-Z*X])", term)
+        if one_letter:
+            ref, position, alt = one_letter.groups()
+            ref_three = AA1_TO_3.get(ref)
+            alt_three = "Ter" if alt in {"*", "X"} else AA1_TO_3.get(alt)
+            if ref_three and alt_three:
+                terms.update(
+                    {
+                        f"{ref_three}{position}{alt_three}",
+                        f"p.{ref_three}{position}{alt_three}",
+                    }
+                )
+                if alt in {"*", "X"}:
+                    terms.update(
+                        {
+                            f"{ref}{position}*",
+                            f"p.{ref}{position}*",
+                            f"{ref}{position}X",
+                            f"p.{ref}{position}X",
+                        }
+                    )
     return {term for term in terms if term}
 
 
@@ -104,6 +175,32 @@ def _table_context_indices(lines: list[str], idx: int, max_scan: int = 60) -> se
         if lines[pos].strip() and not _is_markdown_table_line(lines[pos]):
             break
     return set()
+
+
+def _centered_line_excerpt(
+    line: str, *, preferred_terms: set[str], max_chars: int = 700
+) -> str:
+    """Keep the variant mention when source conversion creates a giant paragraph."""
+    if len(line) <= max_chars:
+        return line
+    lower = line.lower()
+    positions = [
+        lower.find(term.lower())
+        for term in sorted(preferred_terms, key=len, reverse=True)
+        if term and lower.find(term.lower()) >= 0
+    ]
+    if not positions:
+        return line[:max_chars]
+    target = min(positions)
+    start = max(0, target - max_chars // 3)
+    end = min(len(line), start + max_chars)
+    start = max(0, end - max_chars)
+    excerpt = line[start:end]
+    if start:
+        excerpt = "…" + excerpt[1:]
+    if end < len(line):
+        excerpt = excerpt[:-1] + "…"
+    return excerpt
 
 
 def build_evidence_snippet(
@@ -171,7 +268,14 @@ def build_evidence_snippet(
             if nearby in seen:
                 continue
             seen.add(nearby)
-            selected.append(f"L{nearby + 1}: {lines[nearby][:700]}")
+            excerpt = (
+                _centered_line_excerpt(
+                    lines[nearby], preferred_terms=variant_terms, max_chars=700
+                )
+                if nearby == idx
+                else lines[nearby][:700]
+            )
+            selected.append(f"L{nearby + 1}: {excerpt}")
         if sum(len(item) + 1 for item in selected) >= max_chars:
             break
     return "\n".join(selected)[:max_chars]
@@ -292,13 +396,26 @@ class VariantClaimVerifier(BaseLLMCaller):
         self,
         model: str,
         temperature: float = 0.0,
-        max_tokens: int = 2500,
+        max_tokens: int = CLAIM_VERIFIER_DEFAULT_MAX_TOKENS,
         reasoning_effort: str | None = None,
     ):
+        # GPT-5.6 xhigh spends output-budget tokens on hidden reasoning before it
+        # emits the small JSON verdict.  A 2.5k cap therefore returns an empty or
+        # truncated response even for a compact claim card.  Preserve the cheap
+        # default for ordinary models/efforts, but give xhigh the same validated
+        # reasoning headroom as the final paper check and count recovery.
+        requested_max_tokens = max_tokens
+        if (
+            "gpt-5.6" in model.lower()
+            and normalize_reasoning_effort(reasoning_effort) == "xhigh"
+        ):
+            requested_max_tokens = max(
+                requested_max_tokens, CLAIM_VERIFIER_XHIGH_MAX_TOKENS
+            )
         super().__init__(
             model=model,
             temperature=temperature,
-            max_tokens=clamp_max_tokens(model, max_tokens),
+            max_tokens=clamp_max_tokens(model, requested_max_tokens),
             reasoning_effort=reasoning_effort,
         )
 
@@ -480,6 +597,15 @@ def normalize_verification(
             ):
                 normalized["field_verdicts"][field] = "inferred_supported"
     normalized = _apply_consistency_guards(normalized, card)
+    # A claim card can contain nested cohorts (for example, 124 genotyped
+    # carriers but phenotype follow-up for only 88).  Inferring a missing
+    # partition as total-minus-affected would silently classify the 36
+    # unassessed people as unaffected.  Card-aware verification is fail-closed:
+    # retain only values the evidence/model actually supported.  The legacy
+    # card-free normalizer keeps its arithmetic completion for callers that
+    # deliberately provide a complete same-cohort tuple.
+    if card is not None:
+        return normalized
     return _apply_count_identity_guard(normalized)
 
 

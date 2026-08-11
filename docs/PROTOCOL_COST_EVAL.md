@@ -1,4 +1,31 @@
-# Protocol cost & quality — small sample (2026-07-20)
+# Protocol cost & quality
+
+## Luna count-semantics failure route (2026-08-10; shadow)
+
+The exact A1 56-paper predictions were held locked while the scorer and answer
+key were audited. Compact `azure_ai/gpt-5.6-luna@xhigh` claim cards targeted the
+few multi-cohort rows dominating carrier MAE.
+
+| Measure | Broad missing-count probe | Compact semantics cards |
+|---|---:|---:|
+| Attempted calls | 6 | 7 |
+| Completed/grounded gap checks | 162 / 0 | n/a |
+| Total tokens | 153,010 | 27,682 |
+| Wall time in traces | 525.7s | 80.9s |
+| Useful source decisions | 0 | 4 dominant count-scope decisions |
+
+The compact route used about 82% fewer tokens than the already-stopped broad
+probe, but these are diagnostic workloads rather than an apples-to-apples model
+efficiency benchmark. Source-backed answer-key/scorer repair reduced exact
+56-paper carrier MAE from 0.8148 to 0.0794 after a subsequent blind Grok/AGY/
+Claude source audit confirmed the headline rows and six control corrections.
+All 378 predicted carrier observations remain; count recall is 34.05%. This is
+a benchmark-quality result, not yet a production routing change. No Anthropic
+model participated in the original Luna run; Claude Fable 5 Max was used only
+in the later independent review. Full metrics and locked digests are in
+`benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`.
+
+## Historical small sample (2026-07-20)
 
 **Purpose.** Measure the *current* extraction protocol's **cost (time + money)**
 and **quality** on a small sample, so we can decide whether to spend a full

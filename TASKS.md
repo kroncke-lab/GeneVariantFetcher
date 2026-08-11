@@ -1,6 +1,27 @@
 # GVF Tasks
 
 ## Current Focus
+- **56-paper carrier-count MAE repaired and Luna failure route validated
+  (2026-08-10).** On the exact locked A1 predictions, carrier MAE is now 0.0794
+  (30 absolute error / 378 observed counts), down from 0.8148 (308/378) with no
+  predicted count removed. The dominant apparent failures were stale or
+  inconsistent count-scope labels; one scorer ignored populated `gold_v2_*`
+  adjudications. Source-grounded Luna xhigh cards resolved the largest
+  conflicts. A subsequent blind 15-card audit with Grok 4.5 High, AGY Gemini
+  3.1 Pro High, and Claude Fable 5 Max unanimously confirmed all five headline
+  carrier totals and exposed six control-row defects. The two controls that
+  retained gold=3 despite prediction=2 and a one-point affected-error regression
+  guard against prediction-following adjudication. Durable result:
+  `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`.
+  - [ ] Move compact count-semantics verification after all extraction/recovery
+        layers merge; today the verifier inside `ExpertExtractor` cannot review
+        a later figure/ClinVar/recovery winner.
+  - [ ] Route only count-bearing, multi-cohort/large-count ambiguities. Keep
+        broad missing-slot recovery default OFF: its completed 162-gap probe
+        grounded zero additions and spent far more tokens than the useful cards.
+  - [ ] Rebuild the two blind cards with missing decisive source evidence
+        (RYR2 PMID 28237968 `c.13352del`; KCNH2 PMID 10862094 `c.526C>T`) and
+        review the other seven untested variants in RYR2 PMID 33606749.
 - **Standard strategy-comparison set is now the 56-paper blinded manifest
   (2026-08-10).** `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_20260810.tsv`
   = the frozen cardiac 48 + the 8 BRCA2 gold papers (scored against the
@@ -94,6 +115,10 @@
         PMID 10862094 KCNH2 collapsed table and the small RYR2 sample. A
         deterministic replay of v1 quotes is useful for regression triage, but
         is not a substitute for fresh model calls and clean database copies.
+  - [x] Probe Luna xhigh with a reasoning-safe 64k output budget. PMID 10862094
+        plus the first four 40-gap batches of PMID 10973849 grounded 0/162
+        additions. This rejects a blind full-56 recovery sweep; the run was
+        stopped before spending the remaining false-positive-heavy batches.
   - [ ] Only if the clean v2 measurement improves count recall without an
         unacceptable MAE or attribution regression, flip
         `COUNT_RECOVERY_ENABLED` on and record the decision in

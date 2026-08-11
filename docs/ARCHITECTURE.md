@@ -318,7 +318,10 @@ unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
 | `FINAL_ARBITER_REASONING_EFFORT` | Optional hard-case queue when overridden to an OpenAI-style model |
 
 Valid values are `none`, `minimal`, `low`, `medium`, `high`, and `xhigh`; `max`
-is accepted as an alias for `xhigh`. Validation lives in `config/settings.py`.
+is accepted by GVF as an alias for `xhigh`. This compatibility mapping mattered
+in the Luna shadow: the tested Azure deployment rejected literal `max` and
+reported `xhigh` as its maximum accepted value. Validation lives in
+`config/settings.py`.
 Chat-completions calls use
 `utils/llm_utils.build_reasoning_effort_kwargs`; Responses API calls use
 `utils/llm_utils.build_responses_reasoning_param`. Both helpers no-op for models
@@ -367,6 +370,30 @@ explicit omissions list; `scripts/build_llm_trace_html.py` is a thin CLI over it
 The benchmark hashes and locks that report before gold scoring as well. See
 `docs/LLM_TRACING.md`.
 
+### Compact count-claim verification
+
+`pipeline/claim_verifier.py` verifies one count-bearing variant against a small
+source evidence card and fails closed field by field. GPT-5.6 at `xhigh` gets a
+64k output allowance because hidden reasoning consumes that budget before the
+small JSON response; ordinary efforts/models retain the 2.5k budget. Evidence
+routing expands one-letter/three-letter protein aliases and centers excerpts on
+the variant mention when a converted paper collapses a long paragraph onto one
+line. Generic `total - affected = unaffected` completion is disabled for
+card-aware verification because nested cohorts can have genotyped people who
+never entered phenotype follow-up.
+
+The verifier currently runs inside `ExpertExtractor`, before downstream figure
+and recovery layers settle. The next production change is to apply the same
+compact, risk-ranked check after all layers merge; until that is measured, Luna
+use here remains a shadow/evaluation route.
+
+Adjudicated count gold is resolved centrally by `utils/gold_standard.py`.
+`gold_v2_status` is an exact closed vocabulary: any unknown value raises rather
+than silently dropping a row. A populated status makes all three `gold_v2_*`
+fields authoritative, including explicit nulls, and exclusion states remove the
+row consistently from the paper evaluator, general comparison scorer, and
+claim-verification pilot.
+
 ### Additive count recovery (Step 3.55, default OFF)
 
 Every other count stage is *subtractive*: `carrier_guard` NULLs implausible
@@ -380,6 +407,10 @@ Contract:
 
 - **Fill only.** It asks only about variants already stored for the paper, and
   writes only into NULL columns. An existing count is never overwritten.
+- **Reasoning-safe budget.** GPT-5.6 `xhigh` calls receive a 64k output allowance;
+  other efforts retain the 8192 recovery budget. A 2-paper Luna probe showed
+  broad gap filling was low-yield on the fixed set (0/162 completed gaps), so
+  this stage remains default OFF.
 - **Paper-derived only.** ClinVar/PubTator linkage-only variants are excluded by
   default (`--include-linkage-rows` is an inspection mode), because asking for a
   count the paper never states is meaningless.
