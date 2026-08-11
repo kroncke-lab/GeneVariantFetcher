@@ -260,6 +260,17 @@ class AuthenticatedBrowserPool:
             self.start()
         return self._context.new_page()
 
+    def context_cookies(self) -> List[dict]:
+        """Snapshot every cookie currently in the browser context.
+
+        This is how a login flow's result is harvested (e.g. the EZproxy
+        session cookie minted after an SSO redirect chain) without reaching
+        into the private context handle.
+        """
+        if not self._context:
+            return []
+        return list(self._context.cookies())
+
     @contextmanager
     def page(self):
         if not self._started:

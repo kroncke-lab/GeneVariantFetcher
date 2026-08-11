@@ -128,6 +128,33 @@ authorized subscriber access, not circumvention of payment.)
    the `login.` host returns the full ~290 KB licensed Wiley article; the bare
    apex throws a cert error.)
 
+### Session refresh (when the preflight reports an expired session)
+
+The EZproxy *session* cookie dies server-side long before the VUMC Microsoft
+SSO session does, so the refresh is automatable. One-time bootstrap (a visible
+browser opens; complete the Microsoft MFA with your `@vumc.org` identity):
+
+```bash
+.venv/bin/python scripts/ezproxy_relogin.py --bootstrap
+```
+
+Every later refresh is headless and unattended — it re-mints the session
+cookie through the saved SSO session, merges it into `GVF_COOKIE_FILE`, and
+verifies with the same live probe `gvf-run` uses:
+
+```bash
+.venv/bin/python scripts/ezproxy_relogin.py
+```
+
+`gvf-run`'s institutional preflight also attempts this refresh by itself when
+it detects an expired session and the bootstrapped profile exists
+(`GVF_EZPROXY_AUTOHEAL=0` disables). The profile
+(`~/.gvf/ezproxy_profile`, override `GVF_EZPROXY_PROFILE_DIR`) holds live SSO
+tokens: it is created `chmod 700` and must never be committed or copied off
+the machine. Exit codes: `0` refreshed+verified, `3` the SSO session itself
+expired (re-run with `--bootstrap`), `4` cookie refreshed but the probe still
+blocked.
+
 ### Automated from then on
 With the cookie present and `GVF_EZPROXY_*` set, every CF-blocked publisher
 request is rewritten through the proxy automatically — `make_session()` installs

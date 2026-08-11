@@ -11,16 +11,24 @@
   this set before any full re-extraction.
   - [ ] Close the two open BRCA2 curator follow-ups that keep BRCA2 count MAE
         provisional: 26833046 count semantics, 26848529 subset.
-- **EZproxy relogin automation (designed 2026-08-10, not yet built).** The
-  recurring preflight exit-5 is the short-lived EZproxy session cookie dying
-  server-side while the long-lived VUMC Microsoft SSO session stays valid, so
-  the refresh is silently automatable: a `scripts/ezproxy_relogin.py` driving a
-  dedicated Playwright persistent profile (`AuthenticatedBrowserPool` already
-  supports one) through `login.proxy.library.vanderbilt.edu/login?url=...`,
-  dumping `context.cookies()` to `GVF_COOKIE_FILE` in Netscape format, then
-  verifying via `probe_institutional_access()`. Headed one-time MFA bootstrap;
-  wire into gvf-run preflight as self-heal on login-redirect failure. Keep the
-  profile dir untracked/chmod 700 (holds live SSO tokens).
+- **EZproxy relogin automation (designed + BUILT 2026-08-10).**
+  `scripts/ezproxy_relogin.py` drives a dedicated persistent browser profile
+  (`~/.gvf/ezproxy_profile`, chmod 700, `GVF_EZPROXY_PROFILE_DIR`) through
+  `login?url=...`, merges the fresh session cookie into `GVF_COOKIE_FILE`
+  (Netscape writer round-trips the pipeline's own reader, `#HttpOnly_`
+  included), and verifies with `probe_institutional_access()` (new structured
+  `AccessReport.login_redirect` field). gvf-run's preflight self-heals through
+  the same profile on expired-session/missing-cookie failures
+  (`_attempt_ezproxy_self_heal`; `GVF_EZPROXY_AUTOHEAL=0` disables; inert
+  under the offline local-data guard). Runbook: RECALL_REFRESH_RUNBOOK.md
+  "Session refresh".
+  - [ ] One-time operator step: `scripts/ezproxy_relogin.py --bootstrap`
+        (complete the @vumc.org MFA once), then rerun paywall recovery for the
+        ~270 stub BMPR2 papers (`fetch_paywalled.py` + `refresh_run_db.py` on
+        `results/BMPR2/20260807_163246`).
+  - [ ] Validate the headless refresh against the next real session expiry
+        (unit suite fakes the browser; the live path has not seen a real
+        expired-session refresh yet).
 - **LLM trace observability follow-up (2026-07-28).** The packaged recorder,
   accepted/retry/failed linkage, per-run isolation, route-coverage panel, and
   sharded offline HTML viewer are implemented and covered by the unit suite.
