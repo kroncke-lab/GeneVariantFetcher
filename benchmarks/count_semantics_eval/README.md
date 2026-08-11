@@ -9,5 +9,8 @@ The first run is in `runs/20260810_luna_xhigh_56/`. Source-level decisions that
 changed the answer key are recorded in `ADJUDICATIONS_20260810.md`; original
 columns remain intact and authoritative decisions live in `gold_v2_*`. The
 independent blind source review is recorded in `MULTIMODEL_REVIEW_20260810.md`.
+The publication-oriented study design, metric definitions, intervention steps,
+negative controls, production status, and reproducibility map are consolidated
+in `METHODS_20260810.md`.
 Status values use the exact vocabulary in `utils/gold_standard.py`; unknown
 values fail closed in both scorers and the claim-verification pilot.

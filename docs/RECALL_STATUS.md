@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-07-20.
+Last updated: 2026-08-11.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -40,6 +40,44 @@ on KCNH2). The current end-to-end protocol is described in
 current protocol (time, approximate spend, sample recall/MAE, and the new-guard
 behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
 spending a full cardiac re-extraction to move the headline.
+
+## Locked 56-paper count-semantics audit (not the canonical headline)
+
+The 2026-08-10 count-semantics study used a deliberately difficult, fixed set
+of 48 cardiac papers plus 8 BRCA2 papers. It is an error-analysis benchmark,
+not a replacement for the four-gene canonical baseline below. The cardiac
+papers use the manual cardiac gold standard; the BRCA2 arm uses a
+curator/LLM-derived answer key and remains provisional.
+
+Most importantly, the **predictions were locked and did not change**. Compact
+source cards and a blind independent audit showed that the largest apparent
+carrier errors were stale or inconsistent answer-key definitions of the
+current study cohort, plus one scorer that ignored an existing `gold_v2`
+adjudication. After correcting those reference/scoring defects, carrier MAE
+among the same 378 supplied predictions changed from **0.8148 (308/378)** to
+**0.0794 (30/378)**. This is a 90.3% reduction in measured absolute error, but
+it is **not** a 90.3% extraction improvement.
+
+| Fixed 56-paper metric | Before | After |
+| --- | ---: | ---: |
+| Carrier MAE | 0.8148 | **0.0794** |
+| Carrier count recall | 34.02% | **34.05%** |
+| Affected MAE | **0.7869** | 0.7902 |
+| Unaffected MAE | 0.1802 | **0.1307** |
+
+The slight affected-MAE regression is source-supported and is retained as a
+negative control against adjudicating toward the predictions. Cardiac-only
+carrier MAE on this selected set is 0.0491 (16/326); BRCA2 is 0.2692 (14/52).
+Neither value is directly comparable to the canonical all-paper cardiac MAE of
+0.614 because the cohorts and answer-key maturity differ.
+
+The risk-ranked claim-verification implementation is merged and enabled inside
+Tier-3 extraction, but the seven-call **Luna** experiment was a shadow analysis.
+The measured A1 production trace used GPT-5.6 Sol for claim verification. The
+planned post-recovery failure router has not yet been implemented or measured.
+Reproducible metrics and locked digests live in
+`benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`; the publication-
+oriented design record is `benchmarks/count_semantics_eval/METHODS_20260810.md`.
 
 ## Current Canonical Baseline
 

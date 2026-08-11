@@ -6,6 +6,13 @@ The exact A1 56-paper predictions were held locked while the scorer and answer
 key were audited. Compact `azure_ai/gpt-5.6-luna@xhigh` claim cards targeted the
 few multi-cohort rows dominating carrier MAE.
 
+The underlying A1 production trace used the current failure-routing shape, not
+Luna: 16 Kimi table-routing calls, 55 Grok 4.3 extraction calls, 90 GPT-5.6 Sol
+figure-reading calls, and 142 GPT-5.6 Sol risk-ranked claim-verification calls
+(303 provider calls total across 56 papers). The seven Luna calls below were an
+additional shadow adjudication of selected ambiguities. This separation matters
+when attributing either quality or cost to the production protocol.
+
 | Measure | Broad missing-count probe | Compact semantics cards |
 |---|---:|---:|
 | Attempted calls | 6 | 7 |

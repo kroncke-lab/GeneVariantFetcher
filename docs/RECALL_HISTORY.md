@@ -45,6 +45,49 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-10 — Count-scope adjudication repaired the 56-paper error estimate; extraction predictions unchanged
+
+This was a prospective-policy, locked-prediction error analysis, not a fresh
+extraction experiment. The fixed cohort was the 48 cardiac papers in the
+standard paper-eval set plus 8 BRCA2 curated-benchmark papers. Cardiac rows used
+manual gold; BRCA2 used the provisional curator/LLM-derived answer key.
+Prediction files were SHA-256 locked before adjudication, and all 378 supplied
+carrier predictions remained byte-identical.
+
+The intervention had six parts: define the count scope prospectively; rank
+count-bearing multi-cohort/large-count claims; build compact source cards;
+review the largest conflicts with GPT-5.6 Luna at xhigh; centralize the
+fail-closed `gold_v2` loader used by both scorers; and audit 15 randomized,
+prediction-blind source cards independently with Grok 4.5 High, Gemini 3.1 Pro
+High, and Claude Fable 5 Max. The three reviewers agreed on all five headline
+carrier totals and six corrected controls. Two additional controls deliberately
+retained gold=3 against prediction=2, and one corrected affected count worsened
+affected error by one, guarding against prediction-following adjudication.
+
+Measured carrier MAE on the same 378 supplied counts changed from **0.8148 to
+0.0794** (absolute error **308 to 30**, −90.3%). Count recall was essentially
+flat (**34.02% to 34.05%**) because predictions were not added; the small change
+comes from excluding one duplicate gold row. Affected MAE changed
+**0.7869 to 0.7902** and unaffected MAE **0.1802 to 0.1307**. The selected
+cardiac-48 slice ended at 0.0491 carrier MAE (16/326); BRCA2 ended at 0.2692
+(14/52) and remains provisional.
+
+What worked: compact ambiguity cards, explicit current-cohort rules, exact
+closed-vocabulary v2 status handling, notation-aware evidence routing, and
+blind negative controls. What did not work: broad missing-count recovery
+grounded **0/162** completed gap checks while consuming 153,010 tokens, and two
+blind cards lacked decisive source excerpts. Seven compact Luna calls consumed
+27,682 tokens and 80.9 seconds, but the workloads are not an apples-to-apples
+efficiency comparison.
+
+The scorer/claim-verification changes are in `4a23b42` and are contained by
+`origin/main`. The Luna route itself remains shadow-only, and compact
+verification still runs before downstream figure/recovery layers; therefore
+this result does not replace the canonical four-gene production headline.
+Design, equations, locks, decisions, negative results, and reproducibility
+pointers are consolidated in
+`benchmarks/count_semantics_eval/METHODS_20260810.md`.
+
 ### 2026-08-10 — Strategy-comparison standard extended to 56 papers (+BRCA2 arm); first BRCA2 production baseline
 Benchmark-surface change; the four-gene canonical headline is untouched. The
 blinded paper-eval standard (`benchmarks/codex_paper_eval/`) grew from the
