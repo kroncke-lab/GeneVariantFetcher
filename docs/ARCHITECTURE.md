@@ -293,6 +293,22 @@ Recommended staging routing:
 | Optional exception-adjudication queue | `FINAL_ADJUDICATOR_MODELS` (`anthropic/claude-sonnet-5` by default) |
 | Optional hard-case escalation | `FINAL_ARBITER_MODEL` (`anthropic/claude-opus-4-8` by default) |
 
+GPT-5.6 Luna is an opt-in candidate for high-volume, low-judgment routing. A
+2026-08-10 shadow on a locked 150-paper BMPR2 Tier-2 cohort matched 150/150 final
+routed decisions and 145/150 raw model decisions against the historical Sol run
+with no provider failures. At requested `max` / Azure-effective `xhigh`, Luna
+used 5.6% more total tokens and was 4.8% slower at median latency; public list
+prices nevertheless project 75.0% lower cost. The labels were diagnostic rather
+than manual relevance gold, and one productive paper needed the unchanged
+fail-open guard. No default changed; promotion requires a lower-effort replay
+and blind adjudication. Luna remains out of the **production** count-attribution
+route, but a separate 2026-08-10 quality gate on the locked 56-paper count tail
+validated it for compact source-grounded ambiguity cards at `xhigh`: the useful
+seven-call shadow consumed 27,682 tokens and exposed answer-key scope errors,
+while broad missing-slot recovery grounded nothing in its first 162 completed
+gap checks. Production promotion still requires the post-merge route and a
+no-gold shadow gate.
+
 The paper census is deliberately approximate. It produces ranges for variant
 rows, unique variants, carriers, affected, and unaffected counts plus risk flags
 such as denominator-like columns or missing table bodies. These values are never

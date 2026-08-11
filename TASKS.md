@@ -22,6 +22,18 @@
   - [ ] Rebuild the two blind cards with missing decisive source evidence
         (RYR2 PMID 28237968 `c.13352del`; KCNH2 PMID 10862094 `c.526C>T`) and
         review the other seven untested variants in RYR2 PMID 33606749.
+- **GPT-5.6 Luna Tier-2 shadow completed (2026-08-10; no route change).** A
+  locked 150-paper BMPR2 relevance cohort compared historical Sol with Luna at
+  requested `max` / Azure-effective `xhigh`. Luna matched 150/150 final routed
+  decisions and 145/150 raw model decisions with zero provider failures. Total
+  tokens rose 5.6% and median latency 4.8%; exact token telemetry at public
+  OpenAI list prices projects a 75.0% reduction. The cohort is diagnostic, not
+  manual relevance gold, and one productive paper needed the unchanged
+  fail-open guard, so no default changed.
+  - [ ] Repeat the identical cohort at Luna `low` and `none`, then blind-review
+        every disagreement plus a sample of agreements before promotion.
+  - Durable record: `benchmarks/tier2_relevance_eval/runs/
+    20260810_bmpr2_luna_max/`.
 - **Standard strategy-comparison set is now the 56-paper blinded manifest
   (2026-08-10).** `benchmarks/codex_paper_eval/highcarrier48_plus_brca2_20260810.tsv`
   = the frozen cardiac 48 + the 8 BRCA2 gold papers (scored against the

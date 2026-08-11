@@ -25,6 +25,39 @@ model participated in the original Luna run; Claude Fable 5 Max was used only
 in the later independent review. Full metrics and locked digests are in
 `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`.
 
+## GPT-5.6 Luna Tier-2 shadow (2026-08-10; no route change)
+
+Tier 2 is a high-volume, low-judgment model lane. A locked 150-paper BMPR2
+shadow held title/abstract input, prompt, JSON contract, threshold, disease
+context, and deterministic fail-open behavior constant while changing only the
+historical route from `azure_ai/gpt-5.6-sol` to `azure_ai/gpt-5.6-luna`. The
+cohort had 50 productive positives, 50 high-confidence historical negatives,
+and 50 historical fail-open boundary papers. It is diagnostic, not manual
+relevance gold.
+
+| Measure | Historical Sol | Luna requested `max` / effective `xhigh` | Change |
+|---|---:|---:|---:|
+| Final decisions | reference | 150/150 agreement | — |
+| Raw model decisions | reference | 145/150 agreement | — |
+| Provider failures | 0 | 0 | — |
+| Total tokens | 209,388 | 221,085 | +5.6% |
+| Output / reasoning tokens | 14,247 / 3,909 | 25,944 / 14,808 | +82.1% / +278.8% |
+| Median / p95 call latency | 1.861s / 4.029s | 1.951s / 4.514s | +4.8% / +12.0% |
+
+The Azure deployment rejected literal `max` and identified `xhigh` as its
+highest accepted value, so the valid run is recorded as requested max / effective
+xhigh. At public OpenAI list prices ($5/$30 per million Sol input/output tokens
+versus $1/$6 for Luna), exact telemetry projects $1.403→$0.351 for these calls,
+or **75.0% lower**. Scaling this mix to the source run's 974 Tier-2 calls
+projects $9.11→$2.28. These are public-price estimates, not Azure invoice data.
+
+Luna directly passed four papers Sol had left to the deterministic fail-open
+guard, but it raw-rejected one productive paper (PMID 23592887) that the same
+guard retained. The shadow therefore supports a lower-effort Luna follow-up,
+not production promotion. No prompt, schema, setting, or default route changed.
+Full cohort contract, hash, telemetry, and limitations:
+`benchmarks/tier2_relevance_eval/runs/20260810_bmpr2_luna_max/SUMMARY.md`.
+
 ## Historical small sample (2026-07-20)
 
 **Purpose.** Measure the *current* extraction protocol's **cost (time + money)**

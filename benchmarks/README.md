@@ -28,6 +28,11 @@ full-gold scorer and metrics.
   hash-locked single-model and production-strategy paper evaluation. New runs
   require per-paper raw call and decision traces inside the pre-gold lock.
 
+- **[`tier2_relevance_eval/`](tier2_relevance_eval/README.md)** — diagnostic
+  shadow replay for alternate high-volume relevance models. It compares exact
+  decisions, guard behavior, tokens, and latency against a historical run; its
+  inherited labels are not a manual relevance gold standard.
+
 - **[`count_semantics_eval/`](count_semantics_eval/README.md)** — carrier-count
   scope and MAE audit on locked paper predictions. The 2026-08-10 Luna xhigh run
   plus a blind Grok/AGY/Claude audit reduced exact 56-paper carrier MAE from
