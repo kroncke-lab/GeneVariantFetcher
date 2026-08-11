@@ -117,6 +117,9 @@ class AccessReport:
     ez_cookies: int = 0
     cookie_error: Optional[str] = None
     live_probe: str = "skipped"  # "PASS" | "blocked" | "skipped" | "error"
+    login_redirect: bool = (
+        False  # the probe landed on a login/SSO page (expired session)
+    )
     probe_detail: str = ""
     insttoken: bool = False
     elsevier_key: bool = False
@@ -270,6 +273,7 @@ def probe_institutional_access(
         cf = _looks_cf(r.text, r.status_code, r.headers)
         login = _looks_login(final_url)
         ok = (r.status_code == 200) and not cf and not login and len(r.text) > 4000
+        rpt.login_redirect = bool(login) and not ok
         rpt.live_probe = "PASS" if ok else "blocked"
         rpt.viable = ok
         rpt.should_block = not ok
@@ -334,7 +338,10 @@ def format_block_message(
         f"\nWhy: {rpt.reason}\n"
         "\nDetected:\n"
         f"{body}\n"
-        "\nTo fix (institutional path):\n"
+        "\nFast path (after a one-time bootstrap):\n"
+        "  .venv/bin/python scripts/ezproxy_relogin.py            # headless refresh\n"
+        "  .venv/bin/python scripts/ezproxy_relogin.py --bootstrap  # first time (MFA)\n"
+        "\nTo fix by hand (institutional path):\n"
         "  1. In .env set GVF_EZPROXY_HOST=login.proxy.library.vanderbilt.edu\n"
         "     (use the login. subdomain — the apex cert is not valid).\n"
         "  2. Log into the library EZproxy ONCE in Chrome via Vanderbilt SSO\n"
