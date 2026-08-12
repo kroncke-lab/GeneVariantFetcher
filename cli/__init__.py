@@ -471,7 +471,7 @@ def gvf_run_command(
             help=(
                 "Skip a pipeline step. Composable: --skip doctor, --skip extract, "
                 "--skip layers, --skip source-qc, --skip source-recovery, "
-                "--skip report."
+                "--skip count-repair, --skip report."
             ),
         ),
     ] = None,

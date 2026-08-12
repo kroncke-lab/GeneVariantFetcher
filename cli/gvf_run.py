@@ -1309,6 +1309,13 @@ def step_carrier_guard(db: Path) -> dict:
     return apply_carrier_guard(db, logger=logger)
 
 
+def step_count_repair(db: Path) -> dict:
+    """Adopt unread figure counts, refuse the all-unaffected split, derive the rest."""
+    from pipeline.count_repair import apply_count_repair
+
+    return apply_count_repair(db, logger=logger)
+
+
 def _count_recovery_enabled() -> bool:
     """Read the default-off feature flag independently of full settings.
 
@@ -2202,6 +2209,26 @@ def _run_gvf_pipeline(
         )
     else:
         logger.info("⏭️  Step 3: layers — SKIPPED")
+
+    # Step 3.45: deterministic count repair. Runs before every guard and before
+    # the trust gate so they judge the repaired values, and before count recovery
+    # so it does not spend a model call on a gap that arithmetic already closes.
+    # Free: no model call, no network, information already on disk.
+    if "count-repair" not in skip:
+        logger.info("🧮 Step 3.45: deterministic count repair")
+        try:
+            summary = step_count_repair(db=db)
+            if summary.get("rows_changed"):
+                logger.info(
+                    "   repaired %d rows (%d penetrance rows created)",
+                    summary["rows_changed"],
+                    summary.get("rows_created", 0),
+                )
+        except Exception as e:  # noqa: BLE001
+            logger.exception("count repair failed (%s); continuing", e)
+            stage_warnings.append(f"count repair failed: {e}")
+    else:
+        logger.info("⏭️  Step 3.45: deterministic count repair — SKIPPED")
 
     # Step 3.5: full-coverage data-quality passes on the finalized DB (opt-in).
     # carrier-guard neutralizes cohort/allele-number-as-carrier misreads; vf-enrich
