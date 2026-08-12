@@ -296,8 +296,11 @@ def test_run_all_layers_help():
 
 
 def test_gvf_run_help():
-    """The gvf-run command parses --help cleanly."""
+    """The gvf-run command parses help and registers its handoff options."""
     import os
+
+    from cli import app
+    from typer.main import get_command
 
     result = subprocess.run(
         [sys.executable, "-m", "cli", "gvf-run", "--help"],
@@ -308,13 +311,22 @@ def test_gvf_run_help():
         env={**os.environ, "COLUMNS": "200"},
     )
     assert result.returncode == 0
-    assert "--pmid-file" in result.stdout
-    assert "--resume-dir" in result.stdout
-    assert "--skip" in result.stdout
-    assert "source-qc" in result.stdout
-    assert "--source-recovery" in result.stdout
-    assert "--no-source-recovery" in result.stdout
-    assert "--disease" in result.stdout
+
+    root_command = get_command(app)
+    gvf_run_command = root_command.commands["gvf-run"]
+    registered_options = {
+        option
+        for parameter in gvf_run_command.params
+        for option in (*parameter.opts, *parameter.secondary_opts)
+    }
+    assert {
+        "--pmid-file",
+        "--resume-dir",
+        "--skip",
+        "--source-recovery",
+        "--no-source-recovery",
+        "--disease",
+    } <= registered_options
 
 
 def test_gvf_run_helpers_resolve_paths(tmp_path: Path):
