@@ -1,14 +1,8 @@
 """Deterministic per-variant count repair over a finalized run database.
 
-Two defects in the stored counts are fixable with no model call, no network, and
-no re-extraction, because the information is already on disk. Each was measured
-on the locked Tier-1 baseline (48 cardiac papers, 1,000 gold rows) before being
-written here; the per-fill accuracy is recorded against each rule.
-
-Both rules only ever move a count toward what some part of the pipeline already
-recorded. Neither computes a patient number that no lane asserted — on a gene
-with no gold standard that is the difference between a resource a curator can
-trust and one that quietly invents denominators.
+One defect in the stored counts is fixable with no model call, no network, and
+no re-extraction, because the information is already on disk. It was measured
+on the locked Tier-1 baseline (48 cardiac papers, 1,000 gold rows).
 
 ``adopt_figure_counts``
     The figure reader is prompted for carriers/affected/unaffected and packs
@@ -18,24 +12,12 @@ trust and one that quietly invents denominators.
     *Measured: 90 of 91 fills exactly match gold (the miss is 19 vs 20 read off
     a Kaplan-Meier at-risk table).*
 
-``refuse_all_unaffected``
-    ``carriers = N, affected = 0, unaffected = N`` **on a row the trust gate has
-    independently quarantined**. The shape alone is not a fabrication signature:
-    it is also exactly how a control-cohort or benign-variant paper reports a
-    real negative finding, and wiping those would delete the BS2-style evidence
-    this resource exists to carry. So the rule never fires on its own judgement
-    — it requires corroboration from a gate that reached its conclusion by a
-    different route. Only the phenotype split is cleared; the carrier total is
-    kept, because in this pattern it is the one number that is usually right.
-    *Measured on Tier 1: the two rows with this shape separate perfectly.
-    KCNQ1 33141630 T224M (124/0/124 against gold 124/34/54) is
-    ``quarantine``/``population_count`` and is repaired, removing 104 units of
-    absolute error while keeping the exact carrier total of 124. SCN5A 26746457
-    p.Asp1243Asn (1/0/1, correct) is ``trusted`` with no reasons and is left
-    alone.*
-
-Order is load-bearing: figure counts are adopted first so a real reading is
-available before any contradiction is judged.
+The former ``refuse_all_unaffected`` rule was retired after review. It cleared
+raw affected/unaffected observations whenever *any* structural rule quarantined
+the row. Quarantine is not proof that an all-unaffected observation is false,
+and deleting the raw value violated the trust gate's audit-preservation
+contract. Suspicious observations remain visible in raw data and are excluded
+through the field-level trusted projection instead.
 
 **Deliberately not implemented: ``unaffected = carriers - affected``.** It looks
 free and it scored 59/61 on cardiac gold, but every one of those 61 derivations
@@ -53,9 +35,9 @@ an explicit unassessed/unphenotyped partition so that
 ``carriers = affected + unaffected + unassessed`` can be represented honestly,
 not an arithmetic shortcut.
 
-Every change is recorded in ``count_repair_log`` with the previous value, so the
-pass is reversible and auditable, and it is idempotent: re-running finds nothing
-to do because each rule only writes into a null (or clears an exact pattern).
+Every adopted value is recorded in ``count_repair_log`` with the previous value,
+so the pass is reversible and auditable. It is idempotent because it only fills
+null fields.
 """
 
 from __future__ import annotations
@@ -71,7 +53,7 @@ COUNT_COLUMNS = {
     "affected": "affected_count",
     "unaffected": "unaffected_count",
 }
-RULES = ("adopt_figure_counts", "refuse_all_unaffected")
+RULES = ("adopt_figure_counts",)
 
 
 def _is_count(value: Any) -> bool:
@@ -144,63 +126,21 @@ def adopt_figure_counts(
     }
 
 
-def quarantined(trust_tier: Optional[str], trust_reasons: Optional[str]) -> bool:
-    """Whether the trust gate independently flagged this row.
-
-    Corroboration, not a second opinion from the same evidence: the gate reaches
-    ``quarantine`` from study design and count plausibility, which is a
-    different route than the arithmetic shape below.
-    """
-    del trust_reasons  # advisory reasons can sit on a trusted row; tier decides
-    return (trust_tier or "").strip().lower() == "quarantine"
-
-
-def refuse_all_unaffected(counts: dict, is_quarantined: bool = False) -> dict:
-    """Clear a 100%-non-penetrant split that the trust gate also distrusts.
-
-    Requires corroboration. ``carriers=N, affected=0, unaffected=N`` is equally
-    the shape of a fabricated split and of a real control-cohort finding, and on
-    a gene with no gold standard there is no way to tell them apart from the
-    numbers alone — so the numbers alone are not allowed to decide.
-    """
-    if not is_quarantined:
-        return {}
-    carriers, affected, unaffected = (
-        counts.get("carriers"),
-        counts.get("affected"),
-        counts.get("unaffected"),
-    )
-    if not _is_count(carriers) or carriers == 0:
-        return {}
-    if affected == 0 and unaffected == carriers:
-        return {"affected": None, "unaffected": None}
-    return {}
-
-
 def repair_counts(
     counts: dict,
     notes: Optional[str],
     layer: Optional[str],
     *,
-    trust_tier: Optional[str] = None,
-    trust_reasons: Optional[str] = None,
+    rules: Optional[set[str]] = None,
 ) -> dict:
-    """Apply every rule in order; return only the fields whose value changed."""
-    working = dict(counts)
-    changes: dict = {}
-    flagged = quarantined(trust_tier, trust_reasons)
-    # Each rule must see the previous rule's writes, so the deltas are computed
-    # one at a time against the mutated `working` -- not eagerly in a literal.
-    for rule, compute in (
-        ("adopt_figure_counts", lambda w: adopt_figure_counts(w, notes, layer)),
-        ("refuse_all_unaffected", lambda w: refuse_all_unaffected(w, flagged)),
-    ):
-        for field, value in compute(working).items():
-            if working.get(field) == value:
-                continue
-            working[field] = value
-            changes[field] = (value, rule)
-    return changes
+    """Apply enabled rules; return only fields whose stored value should change."""
+    enabled = set(RULES) if rules is None else {rule for rule in rules if rule in RULES}
+    if "adopt_figure_counts" not in enabled:
+        return {}
+    return {
+        field: (value, "adopt_figure_counts")
+        for field, value in adopt_figure_counts(counts, notes, layer).items()
+    }
 
 
 def apply_count_repair(
@@ -240,8 +180,6 @@ def apply_count_repair(
                               pd.total_carriers_observed AS carriers,
                               pd.affected_count          AS affected,
                               pd.unaffected_count        AS unaffected,
-                              pd.trust_tier    AS trust_tier,
-                              pd.trust_reasons AS trust_reasons,
                               vp.additional_notes AS additional_notes,
                               vp.source_layer     AS source_layer
                        FROM variant_papers vp
@@ -274,10 +212,8 @@ def apply_count_repair(
                     counts,
                     row["additional_notes"],
                     row["source_layer"],
-                    trust_tier=row["trust_tier"],
-                    trust_reasons=row["trust_reasons"],
+                    rules=enabled,
                 ).items()
-                if rule in enabled
             }
             if not changes:
                 continue
@@ -325,11 +261,10 @@ def apply_count_repair(
 
     if logger:
         logger.info(
-            "count repair%s: %d/%d rows changed (figure=%d refuse=%d)",
+            "count repair%s: %d/%d rows changed (figure=%d)",
             " (dry run)" if dry_run else "",
             summary["rows_changed"],
             summary["rows_examined"],
             summary["adopt_figure_counts"],
-            summary["refuse_all_unaffected"],
         )
     return summary

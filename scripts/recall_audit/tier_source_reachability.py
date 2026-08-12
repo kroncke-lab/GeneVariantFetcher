@@ -26,7 +26,8 @@ The three classes
     protocol had its chance. **Penalized.**
 ``body_absent``
     The paper has no usable body at all: nothing on disk, an abstract-only
-    fallback, or a stub too short to be an article. **Excluded and noted.**
+    fallback, or a stub too short to be an article, and no other on-disk
+    representation exposes the row. **Excluded and noted.**
 ``variant_absent_from_body``
     A usable body is on disk, no form of the variant appears in any searchable
     file, the notation is a plain substitution (the class where the probe is
@@ -91,6 +92,7 @@ if str(REPO) not in sys.path:
 from benchmarks.codex_paper_eval.run_eval import (  # noqa: E402
     COUNT_FIELDS,
     DEFAULT_GOLD,
+    extract_pdf_text,
     load_gold,
     matches,
     read_paper_manifest,
@@ -164,6 +166,7 @@ class PaperSource:
     unusable_reason: str = ""
     body_chars: int = 0
     supplement_files: int = 0
+    pdf_files: int = 0
     figure_files: int = 0
 
 
@@ -191,37 +194,42 @@ class BodyIndex:
         paper = self.corpus / gene / pmid
         out = PaperSource()
 
-        figures = paper / f"{pmid}_figures"
-        if figures.is_dir():
-            out.figure_files = sum(1 for f in figures.rglob("*") if f.is_file())
+        image_suffixes = {".png", ".jpg", ".jpeg", ".tif", ".tiff"}
+        out.figure_files = sum(
+            1
+            for f in paper.rglob("*")
+            if f.is_file() and f.suffix.lower() in image_suffixes
+        )
 
-        # The body decides usability: an abstract-only fallback or a stub means
-        # the article itself never landed, whatever else is lying around.
-        body = paper / f"{pmid}_FULL_CONTEXT.md"
-        if not body.is_file():
-            out.unusable_reason = "no source on disk"
-            return out
-        try:
-            raw = body.read_text(errors="replace")
-        except OSError as exc:
-            out.unusable_reason = f"source unreadable: {exc.strerror or exc}"
-            return out
-        if raw.lstrip().startswith(ABSTRACT_ONLY_MARKER):
-            out.unusable_reason = "abstract-only fallback"
-            return out
-        if len(raw) < MIN_FULL_TEXT_CHARS:
-            out.unusable_reason = "source too short to be a body"
-            return out
-        out.body_chars = len(raw)
-
-        parts = [raw]
-        budget = MAX_SEARCHABLE_BYTES - len(raw)
-        cleaned = paper / f"{pmid}_CLEANED.md"
-        if cleaned.is_file():
+        # A run can select CLEANED when FULL_CONTEXT is absent or weaker, and a
+        # PDF/supplement/figure may contain a row even when the body is only a
+        # stub. Inventory every representation before deciding that the source
+        # is unusable; otherwise the diagnostic can credit a miss that the
+        # benchmark reader actually had a chance to recover.
+        body_candidates = [
+            paper / f"{pmid}_FULL_CONTEXT.md",
+            paper / f"{pmid}_CLEANED.md",
+        ]
+        parts: list[str] = []
+        body_states: list[str] = []
+        for candidate in body_candidates:
+            if not candidate.is_file():
+                continue
             try:
-                parts.append(cleaned.read_text(errors="replace"))
-            except OSError:
-                pass
+                raw = candidate.read_text(errors="replace")
+            except OSError as exc:
+                body_states.append(f"unreadable: {exc.strerror or exc}")
+                continue
+            if raw.lstrip().startswith(ABSTRACT_ONLY_MARKER):
+                body_states.append("abstract-only fallback")
+                continue
+            if len(raw) < MIN_FULL_TEXT_CHARS:
+                body_states.append("source too short to be a body")
+            else:
+                out.body_chars = max(out.body_chars, len(raw))
+                parts.append(raw)
+
+        budget = MAX_SEARCHABLE_BYTES - sum(len(part) for part in parts)
         supplements = paper / f"{pmid}_supplements"
         if supplements.is_dir():
             for f in sorted(supplements.rglob("*")):
@@ -237,7 +245,29 @@ class BodyIndex:
                     continue
                 out.supplement_files += 1
                 budget -= f.stat().st_size
+        # Match the benchmark reader's PDF representation: pdftotext output is
+        # source the model can actually receive, even when the Markdown body
+        # does not contain the variant. Omitting this route could incorrectly
+        # exclude a hard row and make the diagnostic stratum look better.
+        pdfs = sorted(f for f in paper.rglob("*.pdf") if f.is_file())
+        out.pdf_files = len(pdfs)
+        if pdfs:
+            pdf_text = extract_pdf_text(
+                [str(path.resolve()) for path in pdfs], MAX_SEARCHABLE_BYTES
+            )
+            if pdf_text:
+                parts.append(pdf_text)
         out.text = _squash("\n".join(parts))
+        if not out.body_chars:
+            out.unusable_reason = (
+                body_states[0]
+                if body_states
+                else (
+                    "no usable article body on disk"
+                    if paper.exists()
+                    else "no source on disk"
+                )
+            )
         return out
 
 
@@ -281,15 +311,8 @@ class GoldRow:
 def classify_row(row: GoldRow, bodies: BodyIndex, forms: FormIndex) -> tuple[str, str]:
     """Classify one gold row's source reachability. Blind to any prediction."""
     src = bodies.get(row.gene, row.pmid)
-    if src.unusable_reason:
-        return "body_absent", src.unusable_reason
     if any(form in src.text for form in forms.get(row.gene, row.variant)):
         return "present_in_body", "variant string present in on-disk source"
-    if not is_substitution(row.variant):
-        return (
-            "notation_inconclusive",
-            "absent from searchable text but notation class is not reliably searchable",
-        )
     if src.figure_files:
         # We hold figure images for this paper and cannot string-search them, and
         # the pipeline has a figure-reading lane. "Absent from the text" is
@@ -299,6 +322,13 @@ def classify_row(row: GoldRow, bodies: BodyIndex, forms: FormIndex) -> tuple[str
             "absent_but_figures_present",
             f"absent from searchable text, but {src.figure_files} unsearchable "
             "figure image(s) are on disk",
+        )
+    if src.unusable_reason:
+        return "body_absent", src.unusable_reason
+    if not is_substitution(row.variant):
+        return (
+            "notation_inconclusive",
+            "absent from searchable text but notation class is not reliably searchable",
         )
     return (
         "variant_absent_from_body",
@@ -321,6 +351,15 @@ class Stratum:
     abs_err: dict = field(default_factory=lambda: {f: 0.0 for f in COUNT_FIELDS})
     sq_err: dict = field(default_factory=lambda: {f: 0.0 for f in COUNT_FIELDS})
     n_err: dict = field(default_factory=lambda: dict.fromkeys(COUNT_FIELDS, 0))
+    # Proper coverage-aware loss. A missing prediction is charged as predicting
+    # zero, with a one-unit floor so abstaining on an explicit gold zero is not
+    # free. MAE/RMSE above remain conditional on both sides supplying a value.
+    gold_row_abs_err: dict = field(
+        default_factory=lambda: {f: 0.0 for f in COUNT_FIELDS}
+    )
+    missing_predictions: dict = field(
+        default_factory=lambda: dict.fromkeys(COUNT_FIELDS, 0)
+    )
 
     def to_dict(self) -> dict:
         counts = {}
@@ -340,11 +379,12 @@ class Stratum:
                 if self.gold_valued[f]
                 else None,
                 "n_compared": n,
+                "missing_predictions": self.missing_predictions[f],
                 "mae": (self.abs_err[f] / n) if n else None,
                 "rmse": math.sqrt(self.sq_err[f] / n) if n else None,
                 # Monotone in both goals: total error spread over every gold row
                 # in the stratum, so leaving a count null is never free.
-                "error_per_gold_row": (self.abs_err[f] / self.gold_rows)
+                "error_per_gold_row": (self.gold_row_abs_err[f] / self.gold_rows)
                 if self.gold_rows
                 else None,
             }
@@ -519,20 +559,25 @@ def score_tier(
                     if gold_row.get(f) is not None:
                         stratum.gold_valued[f] += 1
 
-            if not matched:
-                continue
             for f in COUNT_FIELDS:
-                got = pred.get(f)
                 gold_value = gold_row.get(f)
+                if gold_value is None:
+                    continue
+                got = pred.get(f) if matched else None
                 # The harness counts an observation only when BOTH sides carry a
                 # value; a predicted 0 is a value, a null is not.
-                if got is None or gold_value is None:
+                if got is None:
+                    penalty = max(1, abs(gold_value))
+                    for stratum in targets:
+                        stratum.gold_row_abs_err[f] += penalty
+                        stratum.missing_predictions[f] += 1
                     continue
                 for stratum in targets:
                     stratum.predicted[f] += 1
                 diff = got - gold_value
                 for stratum in targets:
                     stratum.abs_err[f] += abs(diff)
+                    stratum.gold_row_abs_err[f] += abs(diff)
                     stratum.sq_err[f] += diff * diff
                     stratum.n_err[f] += 1
 
@@ -707,11 +752,15 @@ def render(tier_name: str, payload: dict) -> str:
 
     cal = payload["probe_calibration"]
     lines.append(
-        "SOURCE-REACHABLE is the protocol number: gold rows whose variant is\n"
+        "ALL GOLD remains the primary turnkey acceptance number. SOURCE-REACHABLE\n"
+        "is a secondary reader diagnostic: gold rows whose variant is\n"
         "present in the source on disk, plus rows whose notation the probe cannot\n"
         "reliably search (kept penalized on purpose). EXCLUDED rows had no usable\n"
         "body, or a usable body that demonstrably does not contain them — nothing\n"
-        "the reader could have done. Probe false-exclusion rate on this run: "
+        "the reader could have done. The calibration sample is conditional on\n"
+        "rows a paper layer matched and does not bound false exclusions among\n"
+        "missed rows, so it cannot promote this diagnostic to a gate. Observed\n"
+        "probe false-exclusion rate on matched rows: "
         f"{_pct(cal['false_exclusion_rate'])} "
         f"({cal['probe_missed']}/{cal['paper_matched_substitutions']}).\n"
     )

@@ -1309,11 +1309,11 @@ def step_carrier_guard(db: Path) -> dict:
     return apply_carrier_guard(db, logger=logger)
 
 
-def step_count_repair(db: Path) -> dict:
-    """Adopt unread figure counts, refuse the all-unaffected split, derive the rest."""
+def step_count_repair(db: Path, *, rules: Optional[set[str]] = None) -> dict:
+    """Run selected deterministic count-repair rules."""
     from pipeline.count_repair import apply_count_repair
 
-    return apply_count_repair(db, logger=logger)
+    return apply_count_repair(db, rules=rules, logger=logger)
 
 
 def _count_recovery_enabled() -> bool:
@@ -2210,25 +2210,25 @@ def _run_gvf_pipeline(
     else:
         logger.info("⏭️  Step 3: layers — SKIPPED")
 
-    # Step 3.45: deterministic count repair. Runs before every guard and before
-    # the trust gate so they judge the repaired values, and before count recovery
-    # so it does not spend a model call on a gap that arithmetic already closes.
-    # Free: no model call, no network, information already on disk.
+    # Step 3.45: adopt counts already read from patient-level figures. This must
+    # precede every guard and the trust gate so they judge the adopted values,
+    # and precede count recovery so it does not spend a model call on a filled
+    # gap. Suspicious raw values remain intact and are handled by trust projection.
     if "count-repair" not in skip:
-        logger.info("🧮 Step 3.45: deterministic count repair")
+        logger.info("🧮 Step 3.45: adopt deterministic figure counts")
         try:
-            summary = step_count_repair(db=db)
+            summary = step_count_repair(db=db, rules={"adopt_figure_counts"})
             if summary.get("rows_changed"):
                 logger.info(
-                    "   repaired %d rows (%d penetrance rows created)",
+                    "   adopted counts on %d rows (%d penetrance rows created)",
                     summary["rows_changed"],
                     summary.get("rows_created", 0),
                 )
         except Exception as e:  # noqa: BLE001
-            logger.exception("count repair failed (%s); continuing", e)
-            stage_warnings.append(f"count repair failed: {e}")
+            logger.exception("figure-count adoption failed (%s); continuing", e)
+            stage_warnings.append(f"figure-count adoption failed: {e}")
     else:
-        logger.info("⏭️  Step 3.45: deterministic count repair — SKIPPED")
+        logger.info("⏭️  Step 3.45: adopt deterministic figure counts — SKIPPED")
 
     # Step 3.5: full-coverage data-quality passes on the finalized DB (opt-in).
     # carrier-guard neutralizes cohort/allele-number-as-carrier misreads; vf-enrich

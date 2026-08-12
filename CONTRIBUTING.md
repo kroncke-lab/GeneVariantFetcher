@@ -23,9 +23,9 @@ Install pre-commit hooks after the project environment is active:
    "YOUR_GENE": 1234,  # canonical isoform length
    ```
 
-   For cardiac-channel genes, optionally add synonyms to
-   `config/cardiac_gene_synonyms.json`. There is no central `GeneConfig` class;
-   per-gene wiring is intentionally minimal.
+   Add runtime aliases/query aliases to `BUILTIN_GENE_METADATA` in
+   `utils/gene_metadata.py`. `config/cardiac_gene_synonyms.json` is a historical
+   cold-start benchmark input, not the runtime registry.
 
 2. **Add variant alias dictionary** (optional but recommended):
    ```

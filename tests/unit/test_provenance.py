@@ -47,6 +47,19 @@ def test_prompt_extractor_hash_tracks_real_files():
     assert provenance.dependency_lock_hash() is not None
 
 
+def test_provenance_tracks_post_extraction_scientific_mutators():
+    required = {
+        "config/settings.py",
+        "pipeline/claim_verifier.py",
+        "pipeline/count_recovery.py",
+        "pipeline/count_repair.py",
+        "pipeline/trust_gate.py",
+        "harvesting/migrate_to_sqlite.py",
+        "utils/llm_utils.py",
+    }
+    assert required <= set(provenance.PROMPT_EXTRACTOR_FILES)
+
+
 def test_collect_provenance_records_missing_hash_inputs():
     prov = provenance.collect_provenance()
     assert "prompt_extractor_files_missing" in prov

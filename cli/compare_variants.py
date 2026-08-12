@@ -1797,6 +1797,9 @@ def aggregate_excel_data(
                 "carriers_total": 0,
                 "affected_count": 0,
                 "unaffected_count": 0,
+                "carriers_total_present": False,
+                "affected_count_present": False,
+                "unaffected_count_present": False,
                 "phenotypes": set(),
             }
 
@@ -1810,27 +1813,40 @@ def aggregate_excel_data(
                 ("unaffected_count", "gold_v2_unaffected"),
             ):
                 if pd.notna(row.get(source)):
-                    aggregated[key][target] += safe_int(row[source]) or 0
+                    value = safe_int(row[source])
+                    if value is not None:
+                        aggregated[key][target] += value
+                        aggregated[key][f"{target}_present"] = True
         else:
             # Aggregate counts
             if carriers_col and pd.notna(row.get(carriers_col)):
-                aggregated[key]["carriers_total"] += safe_int(row[carriers_col]) or 0
+                value = safe_int(row[carriers_col])
+                if value is not None:
+                    aggregated[key]["carriers_total"] += value
+                    aggregated[key]["carriers_total_present"] = True
 
             # Sum affected from multiple phenotype columns if available
             if affected_phenotype_cols:
                 row_affected = 0
                 for pheno_col in affected_phenotype_cols:
                     if pd.notna(row.get(pheno_col)):
-                        row_affected += safe_int(row[pheno_col]) or 0
+                        value = safe_int(row[pheno_col])
+                        if value is not None:
+                            row_affected += value
+                            aggregated[key]["affected_count_present"] = True
                 aggregated[key]["affected_count"] += row_affected
             elif affected_col and pd.notna(row.get(affected_col)):
                 # Fallback to single affected column
-                aggregated[key]["affected_count"] += safe_int(row[affected_col]) or 0
+                value = safe_int(row[affected_col])
+                if value is not None:
+                    aggregated[key]["affected_count"] += value
+                    aggregated[key]["affected_count_present"] = True
 
             if unaffected_col and pd.notna(row.get(unaffected_col)):
-                aggregated[key]["unaffected_count"] += (
-                    safe_int(row[unaffected_col]) or 0
-                )
+                value = safe_int(row[unaffected_col])
+                if value is not None:
+                    aggregated[key]["unaffected_count"] += value
+                    aggregated[key]["unaffected_count_present"] = True
 
         if phenotype_col and pd.notna(row.get(phenotype_col)):
             aggregated[key]["phenotypes"].add(str(row[phenotype_col]))
@@ -1876,6 +1892,9 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
                 "carriers_total": 0,
                 "affected_count": 0,
                 "unaffected_count": 0,
+                "carriers_total_present": False,
+                "affected_count_present": False,
+                "unaffected_count_present": False,
                 "protein_notation": row.get("protein_notation"),
                 "cdna_notation": row.get("cdna_notation"),
                 "source_layer": source_layer,
@@ -1884,11 +1903,12 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
             aggregated[key]["source_layer"] = "mixed"
 
         # Aggregate counts (handle None values)
-        aggregated[key]["carriers_total"] += safe_int(row.get("carriers_total")) or 0
-        aggregated[key]["affected_count"] += safe_int(row.get("affected_count")) or 0
-        aggregated[key]["unaffected_count"] += (
-            safe_int(row.get("unaffected_count")) or 0
-        )
+        for target in ("carriers_total", "affected_count", "unaffected_count"):
+            value = safe_int(row.get(target))
+            if value is None:
+                continue
+            aggregated[key][target] += value
+            aggregated[key][f"{target}_present"] = True
 
     logger.info(
         f"Aggregated SQLite data into {len(aggregated)} unique (pmid, variant) pairs"
@@ -2261,13 +2281,13 @@ def compare_data(
                 match_type="none",
                 match_score=None,
                 excel_carriers_total=None,
-                sqlite_carriers_total=sqlite_entry["carriers_total"] or None,
+                sqlite_carriers_total=_aggregated_count(sqlite_entry, "carriers_total"),
                 carriers_diff=None,
                 excel_affected=None,
-                sqlite_affected=sqlite_entry["affected_count"] or None,
+                sqlite_affected=_aggregated_count(sqlite_entry, "affected_count"),
                 affected_diff=None,
                 excel_unaffected=None,
-                sqlite_unaffected=sqlite_entry["unaffected_count"] or None,
+                sqlite_unaffected=_aggregated_count(sqlite_entry, "unaffected_count"),
                 unaffected_diff=None,
                 missing_in_excel=True,
                 sqlite_source_layer=sqlite_entry.get("source_layer"),
@@ -2278,6 +2298,14 @@ def compare_data(
     return results
 
 
+def _aggregated_count(entry: Dict[str, Any], field: str) -> Optional[int]:
+    """Return an aggregated count without conflating explicit zero with null."""
+    present_key = f"{field}_present"
+    if present_key in entry and not entry[present_key]:
+        return None
+    return safe_int(entry.get(field))
+
+
 def create_comparison_row(
     excel_entry: Dict[str, Any],
     sqlite_entry: Optional[Dict[str, Any]],
@@ -2286,14 +2314,14 @@ def create_comparison_row(
 ) -> ComparisonRow:
     """Create a ComparisonRow from Excel and SQLite entries."""
 
-    excel_carriers = excel_entry["carriers_total"] or None
-    excel_affected = excel_entry["affected_count"] or None
-    excel_unaffected = excel_entry["unaffected_count"] or None
+    excel_carriers = _aggregated_count(excel_entry, "carriers_total")
+    excel_affected = _aggregated_count(excel_entry, "affected_count")
+    excel_unaffected = _aggregated_count(excel_entry, "unaffected_count")
 
     if sqlite_entry:
-        sqlite_carriers = sqlite_entry["carriers_total"] or None
-        sqlite_affected = sqlite_entry["affected_count"] or None
-        sqlite_unaffected = sqlite_entry["unaffected_count"] or None
+        sqlite_carriers = _aggregated_count(sqlite_entry, "carriers_total")
+        sqlite_affected = _aggregated_count(sqlite_entry, "affected_count")
+        sqlite_unaffected = _aggregated_count(sqlite_entry, "unaffected_count")
 
         carriers_diff = compute_diff(excel_carriers, sqlite_carriers)
         affected_diff = compute_diff(excel_affected, sqlite_affected)

@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-11.
+Last updated: 2026-08-12.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -11,6 +11,12 @@ carry the active work plan or dated session log.
 
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
+
+Audit note: the scorer now preserves explicit adjudicated zero counts instead
+of conflating them with null. The tables below remain the last published
+pre-correction baseline and must be re-scored before any changed headline is
+claimed. Source-reachable strata are secondary reader diagnostics; ALL GOLD
+remains the primary turnkey acceptance denominator.
 
 Live view: the published status dashboard renders these numbers at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> (built by

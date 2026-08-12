@@ -2,7 +2,7 @@
 name = "genevariantfetcher"
 version = "2.1.0"
 description = "A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
     "beautifulsoup4>=4.12.3",
@@ -50,7 +50,7 @@ mapping = [
 ]
 dev = [
     "pytest>=7.4.0",
-    "ruff>=0.1.6",
+    "ruff==0.15.20",
     "mypy>=1.5.0",
 ]
 
@@ -58,5 +58,14 @@ dev = [
 gvf = "cli:app"
 
 [tool.setuptools.packages.find]
-include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*"]
+include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*", "data*"]
 exclude = ["test_*", "automated_output*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+data = [
+    "*.json",
+    "*.md",
+    "reference_sequences/*.fasta",
+    "reference_sequences/*.json",
+]

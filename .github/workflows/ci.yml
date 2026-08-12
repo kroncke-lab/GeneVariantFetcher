@@ -20,7 +20,7 @@ jobs:
           python -m pip install --upgrade pip
           # Keep CI aligned with .pre-commit-config.yaml. Unpinned Ruff releases
           # may enable new rule families and fail on unrelated existing code.
-          pip install ruff==0.15.12
+          pip install ruff==0.15.20
       - name: Lint with ruff
         run: ruff check .
 

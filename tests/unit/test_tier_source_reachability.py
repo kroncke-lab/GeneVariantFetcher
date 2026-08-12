@@ -133,11 +133,49 @@ def test_a_variant_only_in_the_cleaned_file_is_reachable(tmp_path):
     assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
 
 
+def test_a_usable_cleaned_file_does_not_require_full_context(tmp_path):
+    paper = tmp_path / "KCNH2" / "1"
+    paper.mkdir(parents=True)
+    (paper / "1_CLEANED.md").write_text(
+        _padded("Table 2 lists R176W"), encoding="utf-8"
+    )
+
+    assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
+
+
 def test_a_variant_only_in_a_text_supplement_is_reachable(tmp_path):
     paper = tmp_path / "KCNH2" / "1"
     (paper / "1_supplements").mkdir(parents=True)
     (paper / "1_FULL_CONTEXT.md").write_text(_padded("see supplementary table"))
     (paper / "1_supplements" / "mmc1.csv").write_text("variant,n\nR176W,16\n")
+    assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
+
+
+def test_a_variant_only_in_reader_pdf_text_is_reachable(tmp_path, monkeypatch):
+    paper = tmp_path / "KCNH2" / "1"
+    paper.mkdir(parents=True)
+    (paper / "1_FULL_CONTEXT.md").write_text(_padded("only A561V in the body"))
+    (paper / "supplement.pdf").write_bytes(b"%PDF-placeholder")
+    monkeypatch.setattr(
+        "scripts.recall_audit.tier_source_reachability.extract_pdf_text",
+        lambda paths, max_chars: "PDF table lists p.Arg176Trp in 16 carriers",
+    )
+
+    assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
+
+
+def test_pdf_can_recover_a_row_when_body_is_abstract_only(tmp_path, monkeypatch):
+    paper = tmp_path / "KCNH2" / "1"
+    paper.mkdir(parents=True)
+    (paper / "1_FULL_CONTEXT.md").write_text(
+        _padded(f"{ABSTRACT_ONLY_MARKER}\nonly A561V"), encoding="utf-8"
+    )
+    (paper / "article.pdf").write_bytes(b"%PDF-placeholder")
+    monkeypatch.setattr(
+        "scripts.recall_audit.tier_source_reachability.extract_pdf_text",
+        lambda paths, max_chars: "PDF table lists p.Arg176Trp in 16 carriers",
+    )
+
     assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
 
 
@@ -160,6 +198,14 @@ def test_figures_on_disk_block_exclusion(tmp_path):
     (paper / "1_figures").mkdir(parents=True)
     (paper / "1_FULL_CONTEXT.md").write_text(_padded("only A561V in the text"))
     (paper / "1_figures" / "fig1.png").write_bytes(b"\x89PNG")
+    assert _classify(tmp_path, "KCNH2", "1", "R176W") == "absent_but_figures_present"
+
+
+def test_figures_block_exclusion_even_without_a_body(tmp_path):
+    paper = tmp_path / "KCNH2" / "1" / "figures"
+    paper.mkdir(parents=True)
+    (paper / "fig1.png").write_bytes(b"\x89PNG")
+
     assert _classify(tmp_path, "KCNH2", "1", "R176W") == "absent_but_figures_present"
 
 
@@ -319,7 +365,8 @@ def test_error_per_gold_row_penalizes_a_null_count(tmp_path):
 
     assert counts["mae"] == pytest.approx(0.0)
     assert counts["recall"] == pytest.approx(0.5)
-    assert counts["error_per_gold_row"] == pytest.approx(0.0)
+    assert counts["error_per_gold_row"] == pytest.approx(3.5)
+    assert counts["missing_predictions"] == 1
 
     # And a wrong count is charged over the same denominator.
     run2 = _run_dir(
@@ -332,7 +379,24 @@ def test_error_per_gold_row_penalizes_a_null_count(tmp_path):
     counts2 = score_tier([("KCNH2", "1")], run2, corpus, gold_dir=gold)["strata"][
         "source_reachable"
     ]["counts"]["carriers"]
-    assert counts2["error_per_gold_row"] == pytest.approx(2.0)
+    assert counts2["error_per_gold_row"] == pytest.approx(5.5)
+
+
+def test_missing_explicit_zero_still_has_a_one_unit_coverage_loss(tmp_path):
+    """A zero-valued key cannot disappear from the coverage-aware metric."""
+    corpus = tmp_path / "corpus"
+    _body(corpus, "KCNH2", "1", _padded("A561V appears here"))
+    gold = _gold_dir(tmp_path, ["A561V,1,7,7,0\n"])
+    run = _run_dir(tmp_path, [{"variant": "A561V", "unaffected": None}])
+
+    counts = score_tier([("KCNH2", "1")], run, corpus, gold_dir=gold)["strata"][
+        "source_reachable"
+    ]["counts"]["unaffected"]
+
+    assert counts["mae"] is None
+    assert counts["recall"] == pytest.approx(0.0)
+    assert counts["error_per_gold_row"] == pytest.approx(1.0)
+    assert counts["missing_predictions"] == 1
 
 
 def test_pairing_mismatch_is_a_hard_gate(tmp_path):

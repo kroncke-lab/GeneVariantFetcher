@@ -489,8 +489,8 @@ class Settings(BaseSettings):
     # Per-paper "final check" (sniff test). A strong reasoning model reviews
     # each paper's extracted counts against source/provenance and records exact
     # fact/field findings. The companion gate composes grounded findings into
-    # trust without mutating raw counts. Default-on; skips gracefully when the
-    # model is unreachable. See pipeline/paper_final_check.py.
+    # trust without mutating raw counts. PARKED/default-off since 2026-07-26;
+    # see pipeline/paper_final_check.py.
     paper_final_check_enabled: bool = Field(
         default=False,
         validation_alias="PAPER_FINAL_CHECK_ENABLED",

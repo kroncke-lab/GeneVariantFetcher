@@ -293,6 +293,7 @@ class TestColumnDetection:
             "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
             "R1193Q,26746457,7,7,0,19,7,12,adjudicated_variant_carrier_count\n"
             "D1790G,28339995,85,85,0,30,30,,adjudicated_null_unaffected\n"
+            "A561V,24606995,7,7,0,7,7,0,adjudicated_variant_carrier_count\n"
             "R176W,19160088,16,0,16,16,0,16,excluded_duplicate_current_cohort\n"
             "S1103Y,20470418,26,17,9,,,,\n",
             encoding="utf-8",
@@ -307,6 +308,9 @@ class TestColumnDetection:
         assert aggregated[("28339995", "D1790G")]["carriers_total"] == 30
         assert aggregated[("28339995", "D1790G")]["affected_count"] == 30
         assert aggregated[("28339995", "D1790G")]["unaffected_count"] == 0
+        assert not aggregated[("28339995", "D1790G")]["unaffected_count_present"]
+        assert aggregated[("24606995", "A561V")]["unaffected_count"] == 0
+        assert aggregated[("24606995", "A561V")]["unaffected_count_present"]
         assert ("19160088", "R176W") not in aggregated
         assert aggregated[("20470418", "S1103Y")]["carriers_total"] == 26
         assert aggregated[("20470418", "S1103Y")]["affected_count"] == 17
@@ -324,6 +328,22 @@ class TestColumnDetection:
         df, detected = load_excel_data(csv_path, None, None)
         with pytest.raises(ValueError, match="Unknown gold_v2_status"):
             aggregate_excel_data(df, detected)
+
+    def test_unparseable_count_is_missing_not_an_explicit_zero(self, tmp_path):
+        csv_path = tmp_path / "KCNH2_recall_input.csv"
+        csv_path.write_text(
+            "variant,pmid,carriers,affected,unaffected\n"
+            "A561V,24606995,not-reported,7,0\n",
+            encoding="utf-8",
+        )
+
+        df, detected = load_excel_data(csv_path, None, None)
+        entry = aggregate_excel_data(df, detected)[("24606995", "A561V")]
+
+        assert entry["carriers_total"] == 0
+        assert entry["carriers_total_present"] is False
+        assert entry["unaffected_count"] == 0
+        assert entry["unaffected_count_present"] is True
 
 
 # =============================================================================
@@ -706,6 +726,49 @@ class TestSQLiteIntrospection:
 
 
 class TestComparison:
+    def test_explicit_gold_zero_is_compared_but_null_is_not(self, tmp_path):
+        csv_path = tmp_path / "KCNH2_recall_input.csv"
+        csv_path.write_text(
+            "variant,pmid,carriers,affected,unaffected,gold_v2_carriers,"
+            "gold_v2_affected,gold_v2_unaffected,gold_v2_status\n"
+            "A561V,24606995,7,7,0,7,7,0,adjudicated_variant_carrier_count\n"
+            "D1790G,28339995,85,85,0,30,30,,adjudicated_null_unaffected\n",
+            encoding="utf-8",
+        )
+        df, detected = load_excel_data(csv_path, None, None)
+        gold = aggregate_excel_data(df, detected)
+        predicted = aggregate_sqlite_data(
+            pd.DataFrame(
+                [
+                    {
+                        "pmid": "24606995",
+                        "variant": "A561V",
+                        "carriers_total": 7,
+                        "affected_count": 7,
+                        "unaffected_count": 1,
+                    },
+                    {
+                        "pmid": "28339995",
+                        "variant": "D1790G",
+                        "carriers_total": 30,
+                        "affected_count": 30,
+                        "unaffected_count": 1,
+                    },
+                ]
+            )
+        )
+
+        by_variant = {
+            row.excel_variant_norm: row
+            for row in compare_data(gold, predicted, "exact", 0.85)
+        }
+
+        assert by_variant["A561V"].excel_unaffected == 0
+        assert by_variant["A561V"].unaffected_diff == -1
+        assert by_variant["A561V"].count_mismatch is True
+        assert by_variant["D1790G"].excel_unaffected is None
+        assert by_variant["D1790G"].unaffected_diff is None
+
     def test_compare_data_exact_match(self, sample_excel_df, sample_sqlite_db):
         # Prepare Excel data
         detected = {

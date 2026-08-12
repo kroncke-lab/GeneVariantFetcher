@@ -17,8 +17,6 @@ from pipeline.count_repair import (
     apply_count_repair,
     figure_context_is_patient_level,
     figure_counts,
-    quarantined,
-    refuse_all_unaffected,
     repair_counts,
 )
 
@@ -103,72 +101,6 @@ def test_adopt_fills_zero_which_is_a_real_count():
     assert got == {"carriers": 5, "affected": 0}
 
 
-# ------------------------------------------------------ arithmetic refusal
-
-
-def test_refuse_clears_the_all_unaffected_contradiction():
-    # The measured case: KCNQ1 33141630 T224M, 124/0/124 against gold 124/34/54,
-    # which the trust gate had already quarantined as a population_count.
-    assert refuse_all_unaffected(
-        {"carriers": 124, "affected": 0, "unaffected": 124}, True
-    ) == {"affected": None, "unaffected": None}
-
-
-def test_refuse_requires_independent_corroboration():
-    """The arithmetic shape alone must never be enough to delete evidence.
-
-    A control-cohort or benign-variant paper reports exactly this shape as a
-    real negative finding. The measured pair separates only on the trust tier:
-    SCN5A 26746457 p.Asp1243Asn is 1/0/1, correct, and `trusted`.
-    """
-    counts = {"carriers": 1, "affected": 0, "unaffected": 1}
-    assert refuse_all_unaffected(counts, False) == {}
-    assert refuse_all_unaffected(counts, True) != {}
-
-
-def test_refuse_keeps_the_carrier_total():
-    """The carrier count in this pattern is usually exact; only the split is junk."""
-    counts = {"carriers": 124, "affected": 0, "unaffected": 124}
-    assert "carriers" not in refuse_all_unaffected(counts, True)
-
-
-def test_refuse_declines_when_the_split_is_informative():
-    # A genuine partial split must survive untouched even under quarantine.
-    assert (
-        refuse_all_unaffected({"carriers": 10, "affected": 3, "unaffected": 7}, True)
-        == {}
-    )
-    assert (
-        refuse_all_unaffected({"carriers": 10, "affected": 0, "unaffected": 4}, True)
-        == {}
-    )
-    assert (
-        refuse_all_unaffected({"carriers": 10, "affected": 10, "unaffected": 0}, True)
-        == {}
-    )
-
-
-def test_refuse_declines_on_a_zero_carrier_row():
-    assert (
-        refuse_all_unaffected({"carriers": 0, "affected": 0, "unaffected": 0}, True)
-        == {}
-    )
-
-
-def test_refuse_declines_on_nulls():
-    assert (
-        refuse_all_unaffected({"carriers": 5, "affected": None, "unaffected": 5}, True)
-        == {}
-    )
-
-
-def test_quarantined_reads_the_tier_not_advisory_reasons():
-    assert quarantined("quarantine", None)
-    assert quarantined("QUARANTINE", "[]")
-    assert not quarantined("trusted", '["population_count"]')
-    assert not quarantined(None, None)
-
-
 # --------------------------------- the rule that was measured and REJECTED
 
 
@@ -192,34 +124,24 @@ def test_no_arithmetic_derivation_of_unaffected():
     assert changes == {}
 
 
-def test_a_quarantined_partial_split_is_left_alone():
-    """Only the exact 100%-non-penetrant shape is refused, even under quarantine."""
-    changes = repair_counts(
-        {"carriers": 10, "affected": 4, "unaffected": 6},
-        None,
-        "llm_text",
-        trust_tier="quarantine",
-    )
-    assert changes == {}
-
-
-# ------------------------------------------------------------- ordering
-
-
-def test_figure_counts_are_adopted_before_the_refusal_is_judged():
-    """The refusal must see the figure reading, not the pre-adoption nulls."""
+def test_rule_selection_happens_before_evaluation():
     notes = json.dumps(
         {"carriers": 12, "affected": 0, "unaffected": 12, "context": "pedigree"}
     )
-    changes = repair_counts(
-        {"carriers": None, "affected": None, "unaffected": None},
+    counts = {"carriers": None, "affected": None, "unaffected": None}
+
+    adopted = repair_counts(
+        counts,
         notes,
         "figure",
-        trust_tier="quarantine",
+        rules={"adopt_figure_counts"},
     )
-    assert changes["carriers"] == (12, "adopt_figure_counts")
-    assert changes["affected"] == (None, "refuse_all_unaffected")
-    assert changes["unaffected"] == (None, "refuse_all_unaffected")
+    assert adopted == {
+        "carriers": (12, "adopt_figure_counts"),
+        "affected": (0, "adopt_figure_counts"),
+        "unaffected": (12, "adopt_figure_counts"),
+    }
+    assert repair_counts(counts, notes, "figure", rules=set()) == {}
 
 
 def test_repair_reports_no_change_when_nothing_applies():
@@ -289,7 +211,7 @@ def test_apply_repairs_a_database(tmp_path):
                     {"carriers": 13, "affected": 5, "context": "pedigree"}
                 ),
             },
-            # quarantined -> the split is refused, the carrier total survives
+            # Existing raw observations are never destructively cleared.
             {
                 "carriers": 124,
                 "affected": 0,
@@ -298,7 +220,7 @@ def test_apply_repairs_a_database(tmp_path):
                 "tier": "quarantine",
                 "reasons": '["population_count"]',
             },
-            # same shape but trusted -> a real control-cohort finding, untouched
+            # A real control-cohort finding is likewise untouched.
             {
                 "carriers": 1,
                 "affected": 0,
@@ -310,10 +232,9 @@ def test_apply_repairs_a_database(tmp_path):
         ],
     )
     summary = apply_count_repair(db)
-    assert summary["rows_changed"] == 2
+    assert summary["rows_changed"] == 1
     assert summary["adopt_figure_counts"] == 2
-    assert summary["refuse_all_unaffected"] == 2
-    assert _counts(db) == [(13, 5, None), (124, None, None), (1, 0, 1)]
+    assert _counts(db) == [(13, 5, None), (124, 0, 124), (1, 0, 1)]
 
 
 def test_apply_is_idempotent(tmp_path):
@@ -348,17 +269,16 @@ def test_dry_run_changes_nothing(tmp_path):
         tmp_path,
         [
             {
-                "carriers": 9,
-                "affected": 0,
-                "unaffected": 9,
-                "layer": "llm_text",
-                "tier": "quarantine",
+                "layer": "figure",
+                "notes": json.dumps(
+                    {"carriers": 9, "affected": 0, "context": "pedigree"}
+                ),
             }
         ],
     )
     before = _counts(db)
     summary = apply_count_repair(db, dry_run=True)
-    assert summary["refuse_all_unaffected"] == 2
+    assert summary["adopt_figure_counts"] == 2
     assert summary["dry_run"] is True
     assert _counts(db) == before
     con = sqlite3.connect(db)
@@ -372,11 +292,10 @@ def test_every_change_is_logged_reversibly(tmp_path):
         tmp_path,
         [
             {
-                "carriers": 124,
-                "affected": 0,
-                "unaffected": 124,
-                "layer": "llm_text",
-                "tier": "quarantine",
+                "layer": "figure",
+                "notes": json.dumps(
+                    {"carriers": 13, "affected": 5, "context": "pedigree"}
+                ),
             }
         ],
     )
@@ -390,8 +309,8 @@ def test_every_change_is_logged_reversibly(tmp_path):
     )
     con.close()
     assert log == [
-        ("affected", 0, None, "refuse_all_unaffected"),
-        ("unaffected", 124, None, "refuse_all_unaffected"),
+        ("affected", None, 5, "adopt_figure_counts"),
+        ("carriers", None, 13, "adopt_figure_counts"),
     ]
 
 

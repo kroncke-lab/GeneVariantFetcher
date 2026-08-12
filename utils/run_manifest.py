@@ -219,9 +219,7 @@ def generate_run_manifest_cli():
     parser = argparse.ArgumentParser(
         description="Inspect GeneVariantFetcher run manifests"
     )
-    parser.add_argument(
-        "action", choices=["list", "show", "cleanup"], help="Action to perform"
-    )
+    parser.add_argument("action", choices=["list", "show"], help="Action to perform")
     parser.add_argument(
         "--directory",
         "-d",
@@ -230,14 +228,6 @@ def generate_run_manifest_cli():
         help="Directory to inspect (default: current)",
     )
     parser.add_argument("--run-id", "-r", help="Specific run ID to show details for")
-    parser.add_argument(
-        "--days",
-        "-t",
-        type=int,
-        default=30,
-        help="Age threshold in days for cleanup (default: 30)",
-    )
-
     args = parser.parse_args()
 
     if args.action == "list":
@@ -262,10 +252,6 @@ def generate_run_manifest_cli():
         else:
             print("--run-id required for show action")
             sys.exit(1)
-
-    elif args.action == "cleanup":
-        # This would be implemented when old manifest cleanup is needed
-        print("Manual cleanup not implemented - use workflow cleanup commands")
 
 
 if __name__ == "__main__":

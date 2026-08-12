@@ -93,6 +93,31 @@ def test_assume_gene_files_run_dir_candidates_for_a_new_gene(tmp_path):
     assert (out / "BMPR2" / "87654321" / "87654321_FULL_CONTEXT.md").exists()
 
 
+def test_assume_gene_beats_existing_shared_pmid_membership(tmp_path):
+    """A scoped run must not be filed under an arbitrary prior PMID gene."""
+    run_dir = tmp_path / "run"
+    (run_dir / "pmc_fulltext").mkdir(parents=True)
+    (run_dir / "pmc_fulltext" / "24433082_FULL_CONTEXT.md").write_text(USABLE_MD)
+    out = tmp_path / "external_corpus"
+    for gene in ("BMPR2", "BRCA1"):
+        seeded = out / gene / "24433082"
+        seeded.mkdir(parents=True)
+        (seeded / "24433082_FULL_CONTEXT.md").write_text(USABLE_MD)
+
+    result = run_builder(
+        "--apply",
+        "--roots",
+        str(run_dir),
+        "--out",
+        str(out),
+        "--assume-gene",
+        "KCNH2",
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert (out / "KCNH2" / "24433082" / "24433082_FULL_CONTEXT.md").exists()
+
+
 def test_existing_corpus_only_entry_indexes_without_crashing(tmp_path):
     """The production crash: a corpus-resident paper with no source candidate."""
     out = tmp_path / "external_corpus"

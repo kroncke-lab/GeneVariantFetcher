@@ -99,6 +99,12 @@ FINAL OUTPUTS:
   • run_manifest.json               (execution metadata)
 ```
 
+`gvf-run` is the current turnkey orchestrator. After migration it runs additive
+recovery layers, Step 3.45 figure-count adoption, optional full-coverage guards
+and count recovery, the default-on per-fact trust gate, source QC/recovery and
+corpus sync, then reporting and optional review publication. The older
+`automated-workflow` command remains a lower-level compatibility path.
+
 ## Module Responsibilities
 
 ### Core Pipeline Modules
@@ -106,7 +112,8 @@ FINAL OUTPUTS:
 | Module | Location | Responsibility |
 |--------|----------|----------------|
 | **CLI Entry** | `cli/__init__.py` | Typer app, command registration |
-| **Automated Workflow** | `cli/automated_workflow.py` | End-to-end orchestration |
+| **Turnkey Orchestrator** | `cli/gvf_run.py` | Current end-to-end orchestration, recovery, trust, corpus sync, and reporting |
+| **Legacy Workflow** | `cli/automated_workflow.py` | Lower-level compatibility orchestration |
 | **Pipeline Steps** | `pipeline/steps.py` | Individual step implementations |
 
 ### Discovery & Filtering
@@ -270,9 +277,9 @@ extractions/{gene}_PMID_*.json
 ### Model Provider And Reasoning Effort
 
 `config/settings.py` resolves the effective model for each stage. The current
-forward strategy keeps routine triage/table routing/extraction/debate on Azure,
-then runs a separate, default-on final per-paper sniff test with GPT-5.6 Sol at
-`xhigh` (Step 3.8). That check records exact fact/field findings; it does not
+forward strategy keeps routine triage/table routing/extraction/debate on Azure.
+A separate final per-paper sniff test with GPT-5.6 Sol at `xhigh` (Step 3.8) is
+retained but parked/default-off. When enabled, it records exact fact/field findings and does not
 replace routine Tier 2 or mutate extracted counts. Step 3.9 deterministically
 composes source-verified, objective contradictions into a field-level trusted
 projection. Weak unsupported-count findings remain advisory. Sonnet/Opus are
@@ -310,7 +317,7 @@ unset; the canonical Step 3.8 per-paper check defaults to `xhigh`:
 | `TIER3_REASONING_EFFORT` | Tier 3 extraction and compact claim adjudication in `pipeline/extraction.py` |
 | `TABLE_ROUTER_REASONING_EFFORT` | Clinical table classification in `pipeline/table_router.py` |
 | `VISION_REASONING_EFFORT` | Figure and pedigree extraction in `harvesting/figure_text_extractor.py`, `harvesting/figure_variant_reader.py`, and `pipeline/pedigree_extractor.py` |
-| `PAPER_FINAL_CHECK_REASONING_EFFORT` | Default-on final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` by default) |
+| `PAPER_FINAL_CHECK_REASONING_EFFORT` | Parked final per-paper sniff test in `pipeline/paper_final_check.py` (`xhigh` when enabled) |
 | `PAPER_FINAL_CHECK_GATE_ENABLED` | Enable exact, source-quoted final-check fact/field trust composition (default `false` — parked with `PAPER_FINAL_CHECK_ENABLED`); weak/unsupported-only reasons remain advisory |
 | `PAPER_FINAL_CHECK_GATE_MIN_SEVERITY` | Minimum applied severity (`high` by default) |
 | `PAPER_FINAL_CHECK_GATE_REQUIRE_SOURCE_GROUNDED` | Keep DB-only flags advisory (default `true`) |
@@ -551,8 +558,10 @@ intentionally minimal:
 
 - Add the canonical protein length to `PROTEIN_LENGTHS` in
   `utils/variant_normalizer.py`.
-- Optionally add synonyms to `config/cardiac_gene_synonyms.json` and a variant
-  alias map at `data/{gene_lower}_variant_aliases.json`.
+- Add runtime aliases/query aliases to `BUILTIN_GENE_METADATA` in
+  `utils/gene_metadata.py`, and optionally add a variant alias map at
+  `data/{gene_lower}_variant_aliases.json`. The cardiac-synonyms JSON is a
+  historical cold-start benchmark input, not the runtime registry.
 
 See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.
 

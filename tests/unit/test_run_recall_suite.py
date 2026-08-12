@@ -1,6 +1,9 @@
 """Tests for the canonical multi-gene recall runner."""
 
 import sqlite3
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -270,3 +273,17 @@ def test_combine_fbeta_zero_denominator_is_none():
         {"unique_variants": {"recall": 0.0}}, {"precision_vs_gold_pmids": 0.0}
     )
     assert fb["fbeta_vs_gold_pmids"] is None
+
+
+def test_help_exposes_hermetic_metric_only_rescore():
+    repo = Path(__file__).resolve().parents[2]
+    completed = subprocess.run(
+        [sys.executable, "scripts/run_recall_suite.py", "--help"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "--skip-disagreement-artifacts" in completed.stdout
+    assert "hermetic metric-only rescore" in completed.stdout

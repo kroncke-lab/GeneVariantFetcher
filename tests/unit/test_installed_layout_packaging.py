@@ -1,7 +1,7 @@
 """Isolated installed-layout smoke test for the shipped import graph.
 
-``pyproject.toml`` ships only ``pipeline* harvesting* config* utils*
-gene_literature* cli*``. A repository checkout hides every ``scripts.*`` import
+``pyproject.toml`` ships the runtime packages plus ``data*``. A repository
+checkout hides every ``scripts.*`` import
 from those packages because the repo root sits on ``sys.path``; an installed
 wheel does not contain ``scripts`` at all. Two whole features died there
 silently:
@@ -38,6 +38,7 @@ SHIPPED_PACKAGES = (
     "utils",
     "gene_literature",
     "cli",
+    "data",
 )
 
 
@@ -146,6 +147,26 @@ def test_scripts_package_is_absent_from_the_installed_layout(installed_layout: P
         import importlib.util
         assert importlib.util.find_spec("scripts") is None, "scripts leaked in"
         print("OK")
+        """,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "OK" in result.stdout
+
+
+def test_runtime_data_is_present_in_the_installed_layout(installed_layout: Path):
+    """Aliases and reference gates must not silently disappear from wheels."""
+    result = _run_in_layout(
+        installed_layout,
+        """
+        from pipeline.reference_validation import load_reference_protein
+        from utils.variant_normalizer import _load_gene_aliases
+
+        aliases = _load_gene_aliases("KCNH2")
+        assert len(aliases) > 4_000
+        assert aliases["P.ALA1058GLU"] == "A1058E"
+        sequence = load_reference_protein("KCNH2")
+        assert sequence is not None and len(sequence) == 1_159
+        print("OK", len(aliases), len(sequence))
         """,
     )
     assert result.returncode == 0, result.stderr

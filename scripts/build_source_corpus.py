@@ -103,7 +103,7 @@ def looks_like_gene_dir(name: str) -> bool:
 def infer_gene(
     p: Path,
     pmid: str,
-    corpus_pmid_gene: dict[str, str],
+    corpus_pmid_genes: dict[str, set[str]],
     source_bases: list[Path],
     assume_gene: str | None = None,
 ) -> str | None:
@@ -119,14 +119,18 @@ def infer_gene(
     for g in KNOWN_GENES:
         if f"/{g}/" in up or f"_{g}_" in up or f"_{g}." in up:
             return g
-    # Already-known PMID -> reuse its gene (handles gene-less manual dirs).
-    if pmid in corpus_pmid_gene:
-        return corpus_pmid_gene[pmid]
     # The caller knows which gene this run fetched for (gvf-run's scoped
-    # run-dir sync, where the gene never appears below the root). Beats the
-    # body scan: a new gene is not in KNOWN_GENES at all.
+    # run-dir sync, where the gene never appears below the root). This explicit
+    # scope must beat PMID reuse: biomedical papers routinely occur under more
+    # than one gene in the corpus.
     if assume_gene:
         return assume_gene
+    # Already-known, unambiguous PMID -> reuse its gene (handles gene-less
+    # manual dirs). An arbitrary first gene would silently misfile shared-PMID
+    # source, so ambiguous corpus membership deliberately falls through.
+    known_genes = corpus_pmid_genes.get(pmid, set())
+    if len(known_genes) == 1:
+        return next(iter(known_genes))
     # Last resort: scan the body for a single known gene token.
     try:
         head = p.read_text(encoding="utf-8", errors="replace")[:8192].upper()
@@ -227,10 +231,10 @@ def main() -> int:
         shutil.rmtree(out)
 
     # Map existing corpus PMID -> gene (for gene-less source dirs) and current entries.
-    corpus_pmid_gene: dict[str, str] = {}
+    corpus_pmid_gene: dict[str, set[str]] = defaultdict(set)
     if out.exists():
         for ft in out.rglob("*" + SUFFIX):
-            corpus_pmid_gene.setdefault(ft.parts[-2], ft.parts[-3])
+            corpus_pmid_gene[ft.parts[-2]].add(ft.parts[-3])
 
     # Gather candidates per (gene, pmid) from all source roots.
     cand: dict[tuple[str, str], list[dict]] = defaultdict(list)

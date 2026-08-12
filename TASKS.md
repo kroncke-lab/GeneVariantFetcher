@@ -34,6 +34,19 @@
   - [ ] Move compact count-semantics verification after all extraction/recovery
         layers merge; today the verifier inside `ExpertExtractor` cannot review
         a later figure/ClinVar/recovery winner.
+  - [ ] Merge figure observations into an existing variant-paper link and stamp
+        structured count role/evidence provenance before Step 3.45 adoption.
+        Today the figure script skips an already-known variant, and adopted
+        counts enter a new penetrance row without the stronger recovery gate's
+        role/locator and pending-quarantine contract.
+  - [ ] Re-score the three active tiers after the explicit-zero scorer repair;
+        prior reports could conflate an asserted zero with null.
+  - [ ] Complete the `unassessed_count` experiment end to end before merging it:
+        aggregation, adjudicator schemas, final-check/trust projections,
+        carrier-guard backup/clear behavior, provenance/rule versioning, and
+        migration of unassessed-only observations must all retain the field,
+        followed by a paired benchmark. The current schema/prompt WIP is
+        intentionally preserved outside `main` until those gaps are closed.
   - [ ] Route only count-bearing, multi-cohort/large-count ambiguities. Keep
         broad missing-slot recovery default OFF: its completed 162-gap probe
         grounded zero additions and spent far more tokens than the useful cards.
@@ -84,7 +97,8 @@
   - [ ] Move the remaining guarded shipped-package imports from `scripts.*`
         into packaged modules: metadata backfill (`cli/gvf_run.py`), dashboard
         trust readers (`cli/dashboard.py`), and institutional preflight's
-        paywall helpers (`cli/institutional_preflight.py`). They no longer crash
+        paywall helpers (`cli/institutional_preflight.py`), plus EZproxy
+        self-heal (`cli/gvf_run.py`). They no longer crash
         an installed package, but those optional capabilities degrade there.
   - [ ] Add route-specific accepted-link tests for the single-call routes that
         currently rely on the shared ledger derivation tests: clinical triage,
@@ -404,11 +418,11 @@ missed them** after the 1B parser land.
   - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
-- [ ] **Adopt Azure-first routine routing plus the canonical GPT-5.6 per-paper
-      final check for the 101-paper staging loop.** Routine triage/table
+- [ ] **Evaluate Azure-first routine routing and the parked GPT-5.6 per-paper
+      final check on the 101-paper staging loop.** Routine triage/table
       routing/extraction/debate should use Azure deployments (`gpt-5.4`,
       `Kimi-K2.6-1`, `grok-4.3`, `DeepSeek-V4-Pro`). Step 3.8 is the separate,
-      default-on final per-paper sniff test using `azure_ai/gpt-5.6-sol` at
+      explicitly enabled per-paper sniff test using `azure_ai/gpt-5.6-sol` at
       `xhigh`; it records exact fact/field findings and must not replace routine
       Tier 2. Step 3.9 composes source-verified objective contradictions into
       the trusted field projection without changing raw counts; weak

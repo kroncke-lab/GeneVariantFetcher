@@ -3,7 +3,10 @@
 These files add BMPR2, LMNA, and TTN to the canonical full reviewer tier.
 
 - BMPR2 preserves the exact 50-paper cohort already live in Variant Browser,
-  including its existing review order.
+  including its existing review order. Its 2026-08-08 source audit found 42
+  full-text papers and eight abstract-only papers; the latter remain reviewer
+  and source-recovery work, not evidence that the extractor saw the complete
+  article.
 - LMNA and TTN were legacy 99-paper temporal-mix snapshots. Each is narrowed to
   50 by descending count-bearing VariantEvidence rows, then descending total
   VariantEvidence rows, then ascending PMID. This prioritizes papers with
