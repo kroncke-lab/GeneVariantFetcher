@@ -55,6 +55,7 @@ below.
    gene association is unambiguous.
 8. **Remove/document stale behavior.** Removed the advertised no-op manifest
    cleanup command, aligned Ruff 0.15.20 across local and CI configuration,
+   moved GitHub's official checkout/setup actions to their Node-24 releases,
    corrected the parked final-check default and current orchestrator docs, and
    redirected gene-synonym documentation to the runtime registry.
 9. **Keep rescoring hermetic when requested.** `run_recall_suite.py` can skip
