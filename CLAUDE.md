@@ -6,10 +6,10 @@ The authoritative working directory is:
 
 `/Users/kronckbm/GitRepos/GeneVariantFetcher`
 
-Use that path for current GVF work unless Brett explicitly says otherwise. Do
-not treat `.claude/worktrees/`, `.codex/worktrees/`, old `Projects/`, or remote
-`/mnt/temp4/` copies as current; they are side worktrees or historical scratch
-checkouts.
+Use that path and the `main` branch for current GVF work unless Brett explicitly
+says otherwise. The 2026-08-12 handoff intentionally has no side worktrees or
+local feature branches. Old `Projects/` or remote `/mnt/temp4/` copies are
+historical scratch checkouts, not current sources.
 
 GVF extracts genetic variants, carrier counts, and phenotype data from
 biomedical literature for the Kroncke Lab variant interpretation pipeline.
@@ -18,6 +18,8 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
 
 - `TASKS.md` - active forward checklist and next-run plan. If a plan elsewhere
   conflicts with this file, `TASKS.md` wins.
+- `docs/README.md` - documentation authority map: current operating references,
+  append-only history, and dated evidence.
 - `docs/RECALL_STATUS.md` - live recall metrics, scored baseline artifacts,
   current blocker shape, and high-yield missing-PMID context. Do not copy recall
   numbers into this handoff.
@@ -25,8 +27,8 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
 - `docs/PROTOCOL_CHANGELOG.md` - per-iteration ledger of protocol changes (one
   row per protocol-affecting PR). Append here every iteration; keep it in sync
   with RECALL_HISTORY (metrics) and ARCHITECTURE (current shape).
-- `docs/PROTOCOL_COST_EVAL.md` - latest sample measurement of the current
-  protocol's cost (time/money) and quality; the gate before a full re-extraction.
+- `docs/PROTOCOL_COST_EVAL.md` - dated cost/quality measurements. It is evidence,
+  not a statement of current defaults; `TASKS.md` owns the next acceptance gate.
 - `docs/RECALL_REFRESH_RUNBOOK.md` - idempotent re-run path when source access,
   papers, or recovery logic changes.
 - `docs/NEW_GENE_RUNBOOK.md` - operational flow for a new gene-disease pair
@@ -185,14 +187,13 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 
 ## House Rules
 
-- Keep `CLAUDE.md`, `AGENTS.md`, and `CODEX.md` as pointers. Do not put live
-  metrics, dated plans, setup blocks, or API key inventories here.
+- Keep `AGENTS.md` and `CODEX.md` as pointers to this canonical handoff. Keep
+  live metrics and dated plans out of `CLAUDE.md`; link to their authorities.
 - Use the project `.venv` when available.
 - Do not commit `.env`, local `results/`, SQLite DBs, generated
   `recall_metrics/`, or agent scratch files (`HEARTBEAT.md`, `IDENTITY.md`,
   `SOUL.md`, `TOOLS.md`, `USER.md`, `.openclaw/`).
-- Side folders/worktrees are fine for experiments, but useful work should be
-  merged into the active checkout and pushed to `origin/main` before an agent
-  calls it current.
+- Maintain one checkout on `main`. Do not create local feature branches or
+  experimental worktrees unless Brett explicitly changes this handoff policy.
 - Pre-commit hooks may reformat staged files. Never use `--no-verify`; re-stage
   after hooks run.

@@ -18,9 +18,19 @@ pre-correction baseline and must be re-scored before any changed headline is
 claimed. Source-reachable strata are secondary reader diagnostics; ALL GOLD
 remains the primary turnkey acceptance denominator.
 
-Live view: the published status dashboard renders these numbers at
-<https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> (built by
-`scripts/build_status_dashboard.py` into `docs/dashboard/`).
+The deterministic parsers also now leave affected/unaffected null when the
+source supplied only a carrier total; explicit phenotype/control cells still
+preserve zero. Mutating zeros in an already-extracted DB does not reproduce that
+policy and changes the matched-count denominator, so promotion requires a paired
+live cardiac re-extraction and rescore with assertion coverage plus conditional
+and end-to-end error reported together. That gate is tracked in `TASKS.md`.
+
+Historical view: the published dashboard at
+<https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
+2026-07-08 pre-correction snapshot. It does **not** render the current table
+below. Regenerate it with `scripts/build_status_dashboard.py` only after the
+scorer rescore and parser re-extraction gate are accepted; until then this file
+remains authoritative.
 
 ## Metrics scope: cardiac four only
 
@@ -36,17 +46,16 @@ into the reported cardiac recall/precision/MAE. To reproduce the headline number
 restrict scoring to the four cardiac genes, e.g.
 `run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
 
-## Current protocol note (2026-07-20)
+## Protocol context (landed 2026-07-20)
 
 The trust/provenance/gold-integrity arc **#161–#165** has landed (see
 `docs/RECALL_HISTORY.md`). These are gold-free / additive / scorer-invariant
 changes — they harden trustworthiness and BRCA-readiness and **do not change the
 four-gene headline** below (`#165` was verified to add 0 new cardiac quarantine
 on KCNH2). The current end-to-end protocol is described in
-`docs/ARCHITECTURE.md`. A small **sample** cost-and-quality measurement of the
-current protocol (time, approximate spend, sample recall/MAE, and the new-guard
-behavior) lives in `docs/PROTOCOL_COST_EVAL.md` — this is the gate before
-spending a full cardiac re-extraction to move the headline.
+`docs/ARCHITECTURE.md`. Dated cost-and-quality measurements live in
+`docs/PROTOCOL_COST_EVAL.md`; they describe the routes used for those samples,
+not current defaults. The next acceptance sequence lives only in `TASKS.md`.
 
 ## Canonical rollout tiers
 

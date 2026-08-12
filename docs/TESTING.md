@@ -56,9 +56,10 @@ gold standard.
 > ### 5. Recovery scripts smoke test
 > Each of these should import + parse `--help` without error:
 > ```bash
-> for s in merge_v12_db ingest_clinvar ingest_pubtator recover_paywall_oa; do
+> for s in ingest_clinvar ingest_pubtator; do
 >   .venv/bin/python scripts/recall_recovery/$s.py --help || echo "FAIL $s"
 > done
+> .venv/bin/python scripts/recover_counts.py --help
 > .venv/bin/python scripts/extract_figure_variants.py --help
 > .venv/bin/python scripts/run_recall_suite.py --help
 > ```

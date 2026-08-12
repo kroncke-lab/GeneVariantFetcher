@@ -14,6 +14,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
+from config.settings import ANTHROPIC_HAIKU_MODEL_ID
 from utils.llm_trace import (
     attempt_link_summary,
     capture_llm_call,
@@ -79,7 +80,7 @@ class BaseLLMRelevanceChecker(ABC):
     Subclasses implement specific prompts and result handling.
     """
 
-    DEFAULT_MODEL = "claude-3-5-haiku-20241022"
+    DEFAULT_MODEL = ANTHROPIC_HAIKU_MODEL_ID
     DEFAULT_MAX_TOKENS = 200
 
     def __init__(
@@ -198,7 +199,7 @@ class RelevanceChecker(BaseLLMRelevanceChecker):
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "claude-3-5-haiku-20241022",
+        model: str = ANTHROPIC_HAIKU_MODEL_ID,
         batch_size: int = 10,
     ) -> None:
         """Initialize the relevance checker.

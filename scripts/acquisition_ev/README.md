@@ -5,10 +5,10 @@ how many phenotyped carriers and distinct genetic variants a full extraction wou
 likely yield — so the un-downloaded tail can be ranked and manual acquisition
 effort spent on the highest-payoff papers first.
 
-This is the deterministic **v1 + its honest evaluation**. It establishes that
-abstract-level signal ranks true full-paper yield well above chance. It is the
-evidence gate before wiring an acquisition score into the worklist and the Variant
-Browser paper list.
+This is the dated design and evaluation record for deterministic **v1**. It
+established that abstract-level signal ranks true full-paper yield above chance;
+`scripts/recall_audit/source_acquisition_audit.py` now consumes the score for
+worklist ranking. It is not a second active task list.
 
 ## What it does
 
@@ -120,13 +120,15 @@ background population"`. A curator sees *why* a paper was demoted and can overri
 - **`est_carriers`/`est_variants` are ordinal, not calibrated.** To publish real
   expected counts (not just a rank), fit/calibrate them against these gold labels.
 
-## Next steps once this is trusted
+## Unshipped research directions
 
-1. Add the population/GWAS penalty and re-measure (cheap, should lift precision@K).
-2. Optional LLM abstract-scorer for a sharper `p_relevant` + count estimate on the
+These are historical design options, not scheduled work; `TASKS.md` is the
+active checklist.
+
+1. Optional LLM abstract-scorer for a sharper `p_relevant` + count estimate on the
    promising tail (Tier1→Tier2 style two-stage).
-3. Run the scorer over the **full PubMed candidate universe** (via `cli/discover.py`),
+2. Run the scorer over the **full PubMed candidate universe** (via `cli/discover.py`),
    not just gold PMIDs, to surface the ranked manual-acquisition list.
-4. Surface `p_relevant` / `est_carriers` / `ev_score` per paper in Variant Browser
+3. Surface `p_relevant` / `est_carriers` / `ev_score` per paper in Variant Browser
    (see `docs/VARIANT_BROWSER_INTEGRATION.md`) so the to-acquire list is sortable
    there.

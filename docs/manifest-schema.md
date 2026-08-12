@@ -18,7 +18,7 @@ Current version: **1.0**
 
 Manifests are stored alongside processed data:
 ```
-output/
+{OUTPUT_DIR}/
   GENE/
     PMID/
       ...files...

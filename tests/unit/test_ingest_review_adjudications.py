@@ -163,6 +163,44 @@ def test_canonicalization_matches_scorer():
     assert ingest._variant_key("p.Ser818Leu") == ingest._variant_key("S818L")
 
 
+def test_extracted_count_distinguishes_explicit_zero_from_missing():
+    entry = {
+        "affected_count": 0,
+        "affected_count_present": False,
+        "unaffected_count": 0,
+        "unaffected_count_present": True,
+    }
+
+    assert ingest._extracted_count(entry, "affected_count") == ""
+    assert ingest._extracted_count(entry, "unaffected_count") == 0
+    # Compatibility for older/custom aggregate mappings that predate markers.
+    assert ingest._extracted_count({"affected_count": 0}, "affected_count") == 0
+    assert ingest._extracted_count(None, "affected_count") == ""
+
+
+def test_summary_does_not_turn_an_unknown_baseline_into_a_zero_delta():
+    summary = ingest.summarize(
+        [
+            {
+                "gene": "KCNH2",
+                "action": "count_override",
+                "match_status": "matched",
+                "extracted_affected": "",
+                "extracted_unaffected": 0,
+                "corrected_affected": 5,
+                "corrected_unaffected": 2,
+            }
+        ]
+    )["KCNH2"]
+
+    assert summary["net_affected_delta"] is None
+    assert summary["affected_delta_unknown_rows"] == 1
+    assert summary["affected_delta_known_rows"] == 0
+    assert summary["net_unaffected_delta"] == 2
+    assert summary["unaffected_delta_unknown_rows"] == 0
+    assert summary["unaffected_delta_known_rows"] == 1
+
+
 def test_verdicts_map_and_match_against_real_db(tmp_path):
     db = _build_db(tmp_path)
     out_dir = _run(tmp_path, "--db", f"KCNH2={db}")
@@ -181,6 +219,7 @@ def test_verdicts_map_and_match_against_real_db(tmp_path):
     assert confirm["match_status"] == "matched"
     # Both extracted and corrected survive; confirm keeps the extracted value.
     assert confirm["extracted_affected"] == "2"
+    assert confirm["extracted_unaffected"] == "0"
 
     override = rows["p.Ala561Val"]
     assert override["action"] == "count_override"

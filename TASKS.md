@@ -1,463 +1,145 @@
-# GVF Tasks
+# GVF Handoff Tasks
 
-## Current Focus
-- **Use exactly three canonical rollout tiers (2026-08-11).** The machine-readable
-  index and manifests are in `benchmarks/evaluation_tiers/`; dated benchmark
-  runs are historical evidence, not additional active cohorts.
-  - [ ] Gate 1 — `gold_50`: compare the candidate protocol on 50 scored
-        gene–paper attempts (48 cardiac + Nate's two BRCA2), reporting cardiac
-        and BRCA2 separately.
-  - [ ] Gate 2 — `cardiac_120`: after Gate 1 passes, expand to 120 cardiac
-        reviewer attempts / 98 unique PMIDs (30 ranked papers per cardiac pair).
-  - [ ] Gate 3 — `reviewer_546`: after cardiac review is acceptable, process
-        all 11 populated private-review workspaces: 546 attempts / 507 unique
-        PMIDs (ten queues of 50 plus BRCA2 at 46). BMPR2 is included at its
-        existing 50; LMNA and TTN use the ranked 50-paper subsets.
-- **Active collaborator-grounded count-evaluation cohort is 50 papers
-  (2026-08-11).** The historical 56-paper audit is preserved, but the scored evaluation and new strategy
-  comparisons now use the cardiac 48 plus only the two BRCA2 papers with
-  lead-approved Variant Browser adjudications by Nate. On the PMID-filtered
-  locked A1 predictions, active-cohort carrier MAE is 0.0608 (20/329) after
-  count-scope repair, versus 0.9058 (298/329) under the legacy answer key.
-  The historical 56-paper result was 0.0794
-  (30 absolute error / 378 observed counts), down from 0.8148 (308/378) with no
-  predicted count removed. The dominant apparent failures were stale or
-  inconsistent count-scope labels; one scorer ignored populated `gold_v2_*`
-  adjudications. Source-grounded Luna xhigh cards resolved the largest
-  conflicts. A subsequent blind 15-card audit with Grok 4.5 High, AGY Gemini
-  3.1 Pro High, and Claude Fable 5 Max unanimously confirmed all five headline
-  carrier totals and exposed six control-row defects. The two controls that
-  retained gold=3 despite prediction=2 and a one-point affected-error regression
-  guard against prediction-following adjudication. Durable result:
-  `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`; the active
-  projection is `benchmarks/count_semantics_eval/runs/20260811_collaborator_gold_50/`.
-  - [ ] Move compact count-semantics verification after all extraction/recovery
-        layers merge; today the verifier inside `ExpertExtractor` cannot review
-        a later figure/ClinVar/recovery winner.
-  - [ ] Merge figure observations into an existing variant-paper link and stamp
-        structured count role/evidence provenance before Step 3.45 adoption.
-        Today the figure script skips an already-known variant, and adopted
-        counts enter a new penetrance row without the stronger recovery gate's
-        role/locator and pending-quarantine contract.
-  - [ ] Re-score the three active tiers after the explicit-zero scorer repair;
-        prior reports could conflate an asserted zero with null.
-  - [ ] Complete the `unassessed_count` experiment end to end before merging it:
-        aggregation, adjudicator schemas, final-check/trust projections,
-        carrier-guard backup/clear behavior, provenance/rule versioning, and
-        migration of unassessed-only observations must all retain the field,
-        followed by a paired benchmark. The current schema/prompt WIP is
-        intentionally preserved outside `main` until those gaps are closed.
-  - [ ] Route only count-bearing, multi-cohort/large-count ambiguities. Keep
-        broad missing-slot recovery default OFF: its completed 162-gap probe
-        grounded zero additions and spent far more tokens than the useful cards.
-  - [ ] Rebuild the two blind cards with missing decisive source evidence
-        (RYR2 PMID 28237968 `c.13352del`; KCNH2 PMID 10862094 `c.526C>T`) and
-        review the other seven untested variants in RYR2 PMID 33606749.
-- **Standard strategy-comparison set is now the 50-paper blinded manifest
-  (2026-08-11).**
-  `benchmarks/evaluation_tiers/tier1_gold_50.tsv`
-  = the frozen cardiac 48 + Nate's two lead-approved BRCA2 papers. The six
-  internally derived BRCA2 papers remain in frozen historical manifests only
-  for scoring. They are also excluded from the live reviewer queue, which still
-  contains 44 other BRCA2 review targets plus Nate's two papers. Baselines and
-  historical artifacts live in `benchmarks/codex_paper_eval/runs/` — see the README's
-  "Standard comparison set" section. Protocol refinements should be measured on
-  this set before any full re-extraction.
-  - [ ] Resolve the remaining BRCA2 scope limitations: 26833046 count semantics
-        and whether 26848529 should become exhaustive paper-level gold.
-- **EZproxy relogin automation (designed + BUILT 2026-08-10).**
-  `scripts/ezproxy_relogin.py` drives a dedicated persistent browser profile
-  (`~/.gvf/ezproxy_profile`, chmod 700, `GVF_EZPROXY_PROFILE_DIR`) through
-  `login?url=...`, merges the fresh session cookie into `GVF_COOKIE_FILE`
-  (Netscape writer round-trips the pipeline's own reader, `#HttpOnly_`
-  included), and verifies with `probe_institutional_access()` (new structured
-  `AccessReport.login_redirect` field). gvf-run's preflight self-heals through
-  the same profile on expired-session/missing-cookie failures
-  (`_attempt_ezproxy_self_heal`; `GVF_EZPROXY_AUTOHEAL=0` disables; inert
-  under the offline local-data guard). Runbook: RECALL_REFRESH_RUNBOOK.md
-  "Session refresh".
-  - [ ] One-time operator step: `scripts/ezproxy_relogin.py --bootstrap`
-        (complete the @vumc.org MFA once), then rerun paywall recovery for the
-        ~270 stub BMPR2 papers (`fetch_paywalled.py` + `refresh_run_db.py` on
-        `results/BMPR2/20260807_163246`).
-  - [ ] Validate the headless refresh against the next real session expiry
-        (unit suite fakes the browser; the live path has not seen a real
-        expired-session refresh yet).
-- **LLM trace observability follow-up (2026-07-28).** The packaged recorder,
-  accepted/retry/failed linkage, per-run isolation, route-coverage panel, and
-  sharded offline HTML viewer are implemented and covered by the unit suite.
-  The full audit and independent verification live under `docs/reviews/`.
-  - [ ] Configure tracing by default for standalone `cli/extract.py`,
-        `cli/discover.py`, `scripts/targeted_land.py`,
-        `scripts/extract_figure_variants.py`, and `scripts/recall_audit/*`.
-        Today they inherit tracing only from `gvf-run` or an explicit
-        `GVF_LLM_TRACE_DIR`.
-  - [ ] Give `scripts/smoke_azure_models.py` a scoped connectivity decision
-        event; it currently records a raw call without a normalized decision.
-  - [ ] Move the remaining guarded shipped-package imports from `scripts.*`
-        into packaged modules: metadata backfill (`cli/gvf_run.py`), dashboard
-        trust readers (`cli/dashboard.py`), and institutional preflight's
-        paywall helpers (`cli/institutional_preflight.py`), plus EZproxy
-        self-heal (`cli/gvf_run.py`). They no longer crash
-        an installed package, but those optional capabilities degrade there.
-  - [ ] Add route-specific accepted-link tests for the single-call routes that
-        currently rely on the shared ledger derivation tests: clinical triage,
-        extraction-priority triage, claim verification, final check,
-        source-grounded summary, and synonym relevance.
-  - [ ] Open a real completed production report in an approved browser surface
-        and perform interaction/visual QA at desktop and mobile widths. The
-        self-contained HTML, JavaScript syntax, responsive CSS, keyboard focus,
-        clipboard fallback, dark theme, bounded bodies, sharding, and dead-link
-        guards are tested, but this Codex session's browser policy blocked direct
-        `file://` rendering.
-  - [x] Removed the ignored `.env.swp` and eliminated local review-scratch
-        directories during the 2026-07-28 main-branch consolidation. Credential
-        rotation remains an external account operation; no secret value was
-        read or exposed during cleanup.
-- **NEXT RUN — remeasure hardened count recovery v2; keep it default OFF
-  (2026-07-27).** `pipeline/count_recovery.py` + `scripts/recover_counts.py` +
-  gvf-run Step 3.55 implement the first *additive* count stage: the carrier
-  guard / outlier guard / count classifier only remove counts, so nothing else
-  fills a count the extractor never emitted.
-  - [x] Harden quote attribution and database edge cases. A count now needs
-        local evidence binding the value to the requested variant; HGVS position
-        digits, number-word substrings, and detached collapsed-table blocks no
-        longer count as grounding. Position-only cDNA↔protein matches and
-        unlabeled multi-number table rows fail closed. Gap discovery is
-        gene-scoped, possible cross-notation siblings participate in duplicate
-        collapse, and a write updates at most one NULL `penetrance_data` row.
-  - [x] **Rebuild the count-ROLE gate (2026-07-28, the audits' P0/P1).** The
-        table branch previously applied *no* role check and *no* negative-context
-        check — every table-branch call passed `field=None` and `quote_supports`
-        short-circuited `field is None → True`. All 15 integers the two audits
-        probed were accepted: prose denominators (`12 of 812`, `5/120`,
-        `n=7 among 913`), disease-cohort totals (`44 cases of Long QT`), and
-        explicitly non-carrier table columns (`allele count`, `gnomAD AC`,
-        `Age at diagnosis`, `families screened` — the PMID 33013630 failure
-        class, additively into previously-NULL slots). Now: denominator grammars
-        parsed and rejected, ≥2 prose candidates fail closed without an explicit
-        local carrier label, negative context applied to table labels/headers/
-        segments, structured `count_role` required (a non-per-variant declaration
-        is a veto), and role + `evidence_locator` persisted into
-        `variant_papers.count_provenance`. Rows land `trust_tier='quarantine'`
-        for Step 3.7 to promote (new rule `recovered_count_unverified`, tg4);
-        Step 3.55 refuses under `--skip trust-gate`; total failure is a stage
-        failure; `--dry-run` is faithful; the DB is backed up and each paper
-        commits under a `SAVEPOINT`. All 15 probe quotes are fixtures.
-        **This gate is strictly narrower than the v1/v2 that produced the
-        directional measurement, so the remeasurement below must be re-run.**
-  - [ ] Recreate database copies from the untouched
-        `20260726_fixed48_production` baseline, then rerun recovery through the
-        current `run_eval.py` validation and lock path. The obsolete untracked
-        pre-hardening v1 recovery directory and its ad-hoc scorer were removed
-        during the 2026-07-28 main-branch consolidation; they were never an
-        enablement gate. The replacement measurement must go through
-        `validate_predictions` + `command_lock` and the current trace contract.
-  - [ ] Inspect v2 rejections and missing targets by gene, especially the
-        PMID 10862094 KCNH2 collapsed table and the small RYR2 sample. A
-        deterministic replay of v1 quotes is useful for regression triage, but
-        is not a substitute for fresh model calls and clean database copies.
-  - [x] Probe Luna xhigh with a reasoning-safe 64k output budget. PMID 10862094
-        plus the first four 40-gap batches of PMID 10973849 grounded 0/162
-        additions. This rejects a blind full-56 recovery sweep; the run was
-        stopped before spending the remaining false-positive-heavy batches.
-  - [ ] Only if the clean v2 measurement improves count recall without an
-        unacceptable MAE or attribution regression, flip
-        `COUNT_RECOVERY_ENABLED` on and record the decision in
-        `docs/PROTOCOL_CHANGELOG.md` + `docs/RECALL_HISTORY.md`.
-  - [ ] Watch RYR2: it is the one regression (MAE 0.02 → 0.14 on only 15 recovered
-        counts) and had the lowest fill rate (11.8%). Do not average this away.
-  - [ ] Curator question, not a code bug: PMID 29622001 `c.453delC` recovered 24
-        from a clean table row `| c.453delC |24 (10)|2 |` while gold says 0; and
-        `p.L552S` recovered 73 vs gold 74. Both need a human call on column
-        semantics before they are treated as recovery errors.
-  - [ ] Only `carriers` is in scope (`COUNT_RECOVERY_FIELDS`). Do **not** widen to
-        affected/unaffected without measuring: on the same set a strong single
-        reader was *worse* than production on unaffected (76.7% vs 70.6%
-        omission), so that split is a genuinely harder judgment.
-- Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
-  - Current metrics and failure split are in `docs/RECALL_STATUS.md`.
-  - The forward plan lives here. Do not duplicate live recall tables in this file.
-- **Protocol-cost gate before the next full rescore.** The trust/provenance arc
-  #161–#165 has landed (headline unchanged by design; see `docs/RECALL_HISTORY.md`).
-  Before re-extracting the full gold set to move the headline, measure the current
-  protocol's **cost (time + money) and quality on a small sample** — recorded in
-  `docs/PROTOCOL_COST_EVAL.md`. Only greenlight a full cardiac re-extraction once
-  the sample shows the cost is acceptable and the new guards help without hurting
-  cardiac recall/MAE.
-- **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
-- **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
-- **Variant_Browser adjudication overlay is lead-gated and live-synced.** GVF
-  pulls current approved gold from the Azure-backed machine API into a versioned
-  SQLite cache; immutable snapshots, per-sync changes, reviewer/approver identity,
-  reversible exclusions, and cardiac/all/noncardiac tiers are retained. Raw,
-  disputed, withheld, stale, or checksum-invalid inputs fail closed. Required-sync
-  scoring reads the selected tier for recall/precision/MAE/RMSE.
+Last reviewed: 2026-08-12.
 
-## Autonomy at Scale (updated 2026-07-10) — trust-gate v1 landed; these are the open levers
+This is the only active GVF checklist. Current measurements and caveats live in
+[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
+lives in [`docs/RECALL_HISTORY.md`](docs/RECALL_HISTORY.md); protocol changes
+are append-only in
+[`docs/PROTOCOL_CHANGELOG.md`](docs/PROTOCOL_CHANGELOG.md). Dated reports and
+benchmark run directories are evidence, not competing plans.
 
-Fleet-honesty (non-zero exit + `RUN_STATUS.json` on stage failure, fail-closed
-regression gate) and the per-fact **trust gate v1** are MERGED (PR #140 + #142):
-`pipeline/trust_gate.py` soft-quarantines gold-free-implausible counts into a
-trusted/quarantine two-tier DB, default-on in `gvf-run` (Step 3.7). Full plan and
-rationale in [`docs/AUTONOMY_ROADMAP.md`](docs/AUTONOMY_ROADMAP.md). The open
-levers — what actually stands between here and "trust it unattended at scale":
+Execute the acceptance gates in order. Do not publish a new headline, update the
+dashboard, enable a default-off recovery stage, or advance to a larger cohort
+until the preceding gate passes and its artifact is recorded.
 
-- [x] **Make trusted count fields the DEFAULT for the scorer.**
-      `cli/compare_variants.py` now projects quarantined count fields as NULL by
-      default while retaining the raw row for PMID/variant recall; `--trust-tier
-      all` is the explicit raw-count diagnostic mode.
-- [ ] **Move reports, publish, and remaining downstream consumers to the trusted
-      projection.** Keep raw values visible as secondary audit data and report
-      trusted-tier precision plus quarantine rates before fleet rollout.
-- [ ] **Count-role / evidence-type axis.** Promote count role (patient / cohort
-      total / control / population) to a first-class field on `penetrance_data`
-      and have the trust gate score role consistency (case-control ≠ carrier
-      counts) — keeps BRCA case-control from looking like a cardiac penetrance
-      error. Sharpens Lever 2 below.
-- [ ] **Calibrate the trust gate per stratum** (cardiac + BRCA + one cold gene)
-      with `scripts/precision_sample.py`; a pooled CI hides BRCA failure under
-      cardiac volume. One-time human labeling per stratum, not per paper.
-- [ ] **BRCA1/BRCA2 readiness** (see `project_brca_generalization_readiness` in
-      memory): register BRCA2 in `PROTEIN_LENGTHS` / `gene_metadata`; handle
-      BRCA-class notation BY CLASS (legacy BIC indels, IVS, exon CNVs), not a
-      per-gene alias file; build a ClinVar silver standard to score against.
-- [ ] **Fail-CLOSED validation on unknown genes.** `utils/variant_normalizer.py`
-      `validate_position` returns True when a gene's length is unknown (MLH1,
-      BRCA2) — quarantine those (reason `no_gene_length`) instead of trusting.
-- [ ] **Fleet-scale nightly + acceptance metrics.** Wire `make regression-gate`
-      into a real nightly/cron (needs the gitignored canonical DBs → local /
-      self-hosted); define the gate's own acceptance metrics (trusted-tier
-      precision on cardiac AND BRCA; quarantine rate not exploding on cold genes).
-- [ ] **Fold the legacy guards into the trust record.** `carrier_guard` (NULLs
-      counts) and `vf`-quarantine (DELETEs rows) should write `trust_tier` and
-      preserve raw counts instead of destroying data.
+## 1. Re-establish the scientific baseline
 
-The supplement-acquisition recall ceiling (Levers 1/3 below) is the other half —
-finding more of the real evidence — and is orthogonal to the trust work.
+- [ ] Re-extract a paired live cardiac sample with the deterministic
+      phenotype-null parser and re-score with the explicit-zero-aware scorer.
+      Report assertion coverage and denominators beside matched-row and
+      end-to-end count error. Mutating stored zeros in an old DB is not a parser
+      test.
+- [ ] Run Gate 1, `gold_50`: 50 scored gene-paper attempts (48 cardiac plus the
+      two lead-approved BRCA2 papers). Report cardiac and BRCA2 separately and
+      retain the locked trace/selection artifacts.
+- [ ] If Gate 1 passes, run Gate 2, `cardiac_120`: 120 cardiac reviewer attempts
+      across 98 unique PMIDs.
+- [ ] If Gate 2 passes, run Gate 3, `reviewer_546`: 546 attempts across 507
+      unique PMIDs in the 11 populated reviewer workspaces.
+- [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
+      `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
+      the dashboard. Until then, the public dashboard remains an archived
+      pre-correction snapshot.
 
-### Stage 5 — study record + variant-class widening (landed 2026-07-10)
+The three manifests in
+[`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) are the
+only rollout cohorts. The curated extraction fixture and dated benchmark runs
+remain specialized or historical evidence, not extra gates.
 
-Teach extraction to model the study and stop dropping non-missense notations:
+## 2. Recover missing source before adding inference
 
-- [x] **C** — keep delins + IVS through `_filter_extraction_artifacts` (and
-      migration regexes); unit tests in `test_extraction_table_parser.py`.
-- [x] **A1–A2** — `study_design` / `ascertainment` / `cohort_source` /
-      `population` / `study_summary` in prompts + `extraction_metadata` SQLite
-      (also persists previously dropped `study_type`).
-- [x] **A3–A5** — study context in `count_classifier` + `trust_gate`
-      (`study_type_mismatch`, strengthened `population_count`; rule_version
-      `tg2-*`) + distributions in `trust_report.py`.
-- [x] **B** — `variant_class` + `structural_description` schema/persist;
-      scanner exon/BIC/delins patterns; normalizer + `to_canonical_form`
-      splice/delins/structural keys; deterministic synthetic cases in
-      `benchmarks/curated_extraction_eval/fixtures/structural_widening_cases.csv`
-      (kept separate from curated real-gene gold).
+- [ ] Complete the one-time EZproxy profile bootstrap with
+      `.venv/bin/python scripts/ezproxy_relogin.py --bootstrap`, then rerun
+      paywall recovery and `refresh_run_db.py` for the BMPR2 stub backlog.
+- [ ] Validate automatic headless EZproxy refresh against the next real session
+      expiry; unit tests currently cover only the simulated browser path.
+- [ ] Rebuild the two source cards that still lack decisive evidence: RYR2 PMID
+      28237968 `c.13352del` and KCNH2 PMID 10862094 `c.526C>T`. Review the other
+      seven untested variants in RYR2 PMID 33606749.
+- [ ] Work the current source-audit ranking, beginning with blocked SCN5A
+      supplements such as PMID 29325976. Use manual PDF acquisition only after
+      the current audit confirms the artifact is still missing, then ingest the
+      real PDF through `harvesting/format_converters.py`.
+- [ ] Re-run the Karger and Sage/Liebert access probes only when credentials or
+      publisher access change; the last recorded attempts remained blocked.
 
-**Follow-ons:** re-extract or LLM backfill study fields on existing DBs; expand
-structural/splice gold beyond the synthetic seed so B recall is measurable on
-cardiac missense-heavy gold.
+Source acquisition is still the dominant recall opportunity. Do not replace a
+missing paper or table with speculative count arithmetic.
 
-## Exact-Match Recovery Plan (2026-06-12) — START HERE
+## 3. Measure count semantics and recovery
 
-Root-caused decomposition of the exact-match gap to the manual gold curation.
-This is the tracked checklist — update boxes as items land. **Both Claude and
-Codex: resume the recall push from here.**
+- [ ] Move compact count-semantics verification after all extraction and
+      recovery layers so it evaluates the final winning observation rather than
+      only the early `ExpertExtractor` result.
+- [ ] Route only count-bearing multi-cohort or large-count ambiguities. Keep
+      broad missing-slot recovery off; its 162-gap probe grounded no additions.
+- [ ] Recreate clean DB copies from
+      `benchmarks/codex_paper_eval/runs/20260726_fixed48_production`, run the
+      hardened carrier-only count-recovery path through the current
+      `run_eval.py` validation/lock workflow, and inspect rejections by gene.
+- [ ] Treat RYR2 as its own acceptance stratum. Resolve curator questions for
+      PMID 29622001 `c.453delC` (24 versus gold 0) and `p.L552S` (73 versus 74)
+      before classifying them as recovery defects.
+- [ ] Enable `COUNT_RECOVERY_ENABLED` only if the clean measurement improves
+      count recall without unacceptable MAE, attribution, or RYR2 regression.
+      Keep `COUNT_RECOVERY_FIELDS=carriers`; affected/unaffected widening needs
+      a separate benchmark.
+- [ ] Resolve the two active BRCA2 gold-scope limitations: family-versus-carrier
+      semantics for PMID 26833046 and whether PMID 26848529 is exhaustive
+      paper-level gold.
+- [ ] Remove the known PMID 33013630 population-annotation contamination from
+      canonical data through a reversible, backed-up refresh; its gnomAD and
+      predictor columns are not patient carriers.
 
-Gap by root cause after the 1B parser land: acquisition (PMID absent) ~426 ·
-supplement/table not in source ~647 · in-source-but-not-extracted ~236 · matcher
-~67 · count-mismatch is tracked in `docs/RECALL_STATUS.md`.
+## 4. Finish the trust and fleet boundary
 
-### Lever 1 — Supplement/table-body recovery on already-fetched papers (~883 rows; dominant)
-Of the remaining approximate bucket: **~647 are NOT in the captured source text**
-(supplement table never fetched/folded); **~236 ARE in the text but extraction
-missed them** after the 1B parser land.
+- [ ] Move report, publish, and other downstream count consumers to the trusted
+      projection while keeping raw observations visible for audit. Report
+      trusted-tier precision and quarantine rates.
+- [ ] Promote count role/evidence type to a first-class persisted axis and have
+      the trust gate distinguish patient, cohort-total, control, and population
+      observations.
+- [ ] Calibrate the trust gate separately on cardiac, BRCA, and one cold-gene
+      stratum with `scripts/precision_sample.py`; do not use a pooled result to
+      hide a weak stratum.
+- [ ] Fail closed for unknown-gene position validation, expand BRCA notation by
+      class, and build a BRCA silver standard before claiming generalization.
+- [ ] Fold destructive legacy guards into the trust record so raw values remain
+      recoverable, then define and schedule a self-hosted nightly regression
+      gate with per-stratum acceptance metrics.
+- [ ] Create or import a source-reconciled KCNE1 per-PMID gold input before
+      making KCNE1 recall claims.
 
-- [x] **1B — Table-reconstruction preprocessor (parser track, NO fetching).**
-      Landed 2026-06-12. PDF-linearized supplement tables are reconstructed from
-      one-cell-per-line text into delimited rows before deterministic table
-      extraction. Strict no-MAE-regression land accepted the KCNQ1 replay that
-      improved recall and carriers MAE; KCNQ1 `30758498` reconstructs but remains
-      unpromoted until count semantics are fixed. Candidates that regressed
-      unique/row recall or MAE were withheld. Current score is in
-      `docs/RECALL_STATUS.md`.
-- [x] **1A — Supplement fetch+fold audit (local/Elsevier track).** Completed
-      2026-07-12: per-file Elsevier `mmc` reconciliation recovered 64 missing
-      files across 49 papers without body re-downloads; all on-disk convertible
-      supplements are folded (1,577/1,577, pre-pass gap 289). The turnkey source
-      audit now sends supplement-only gaps to this route instead of refetching a
-      usable body. Wiley/Springer referenced-but-absent supplements remain under
-      Lever 3 because they require publisher access, not fold work.
-- [ ] **1C — Targeted re-extraction of the top extraction-gap PMIDs**,
-      acceptance-gated via `scripts/refresh_recall.py`. Regenerate the ranked
-      list from the post-1B score before running; the pre-1B list included KCNQ1
-      `17192539` `30758498` `23631430` `19490272`; SCN5A `15840476` `20541041`
-      `23631430` `21273195` `25163546` `24631775` `29325976`; RYR2 `19398665`
-      `27452199`; KCNH2 `29650123` `16922724`.
+## 5. Engineering handoff follow-ups
 
-### Lever 2 — Count-role attribution on matched rows
-- [ ] **Count OMISSION is the bigger half of this lever, and it now has a stage.**
-      Measured 2026-07-26 on the locked 48: of 789 gold variants production
-      correctly identified, it left the carrier count NULL on **461 (58.4%)**,
-      versus 11.3% for a single strong reader on the same sources. Accuracy was
-      never the problem (85.5% precision on count-bearing predictions) — the
-      blanks were. `pipeline/count_recovery.py` (Step 3.55) can fill them. The
-      preliminary v1 result is directional only; the hardened v2 attribution,
-      deduplication, and write semantics must be remeasured before enablement.
-      See **NEXT RUN** under `## Current Focus`.
-- [ ] Study-wide-N reuse is ~gone (~15). Residual is column-role confusion
-      (affected/proband/case vs unaffected/asymptomatic/control vs study total).
-      Point the count classifier / evidence-card validator at the `regex_table`
-      layer; current counts and precision are in `docs/RECALL_STATUS.md`.
-- [ ] **Un-ingest the PMID 33013630 annotation-table contamination** (precision
-      FP cleanup). This review is a **garbage carrier source** — gnomAD allele
-      counts + SIFT/PolyPhen, no patient data (see `docs/RECALL_HISTORY.md`
-      2026-06-22). The root-cause `table_router.py` fix (blank-gene-cell inherit
-      + no infer on population-annotation tables) is **landed**, so the current
-      extractor yields 0 for it; the **May-29 canonical DBs are not yet cleaned**:
-      KCNH2 21 vars (9 sole-source FP incl. `Val759Ile`, 12 bogus-count), KCNQ1
-      14 vars (SCN5A/RYR2 clean). Drop this PMID's `variant_papers`/`penetrance_data`
-      rows + orphaned nodes at the next refresh (reversible, backup first). All
-      real KCNH2 variants it name-drops are already well-covered by primary
-      sources (e.g. `Gly924Ala` 38370760=65), so this is pure precision gain, no
-      recall loss.
+- [ ] Enable run-scoped LLM tracing for standalone extraction, discovery,
+      targeted landing, figure extraction, and recall-audit entry points.
+- [ ] Give `scripts/smoke_azure_models.py` a normalized, scoped connectivity
+      decision event.
+- [ ] Move reusable metadata-backfill, dashboard trust-reader, and EZproxy
+      self-heal code out of `scripts.*` so installed-package behavior matches a
+      source checkout.
+- [ ] Add accepted-link tests for clinical triage, extraction-priority triage,
+      claim verification, final check, source-grounded summary, and synonym
+      relevance.
+- [ ] Perform desktop and mobile interaction/visual QA on a completed production
+      trace report in an approved browser surface.
+- [ ] Extend matcher coverage for indels, isoform offsets, compound variants,
+      frameshifts, splice/IVS notation, and structural/CNV events; keep structural
+      rows out of precision claims until they are matchable or explicitly
+      excluded.
+- [ ] Investigate the residual `regex_table` count-role omissions and column
+      confusion without reintroducing source-free phenotype zeros.
+- [ ] Establish the Friday recall rerun/compare cadence only after the new
+      explicit-zero baseline is accepted.
 
-### Lever 3 — Acquisition of absent-PMID rows (426; SCN5A has 96 absent PMIDs)
-- [ ] Wiley/Springer supplements + remaining paywalls; restore Springer key; Wiley
-      supplement via EZproxy route. Access-gated (see Blocked).
+## Deliberate decisions and non-goals
 
-### Lever 4 — Matcher notation lanes (67 rows; cheap, already-extracted)
-- [ ] indel `GxxxDel`/`LxxxIns`/`c.x_yDel` (27); same-codon-position substitutions
-      that don't match — isoform offset / 1↔3-letter (27); compound `A + B` gold
-      rows (8); frameshift (3); splice/IVS (2). Extend `cli/compare_variants.py`.
-
-### Lever 5 — Structural/CNV matching lane (53 rows)
-- [ ] Exon deletions, breakpoints, translocations: real biology, unmatchable today.
-      Add a structural lane or exclude from the precision denominator.
-
-## Completed
-- [x] Springer API integration (full-text retrieval working)
-- [x] Wire `gene_literature/supplements/` UnifiedSupplementFetcher into orchestrator
-- [x] Fix all test failures and collection errors (18 → 0)
-- [x] Canonical form comparison for variant matching
-- [x] Remove 50-paper download cap (was silently dropping 350+ papers)
-- [x] Fail-open Tier 1 filter (min_keywords 2→1, no-abstract papers pass through)
-- [x] Add source-completeness report (Step 3.5: `source_completeness.json`)
-- [x] Add zero-variant QA flagging and re-extraction (GVF_QA_MODEL env var)
-- [x] Improve cohort/screening table carrier count extraction prompts
-- [x] Fix pytest environment (unit tests passing locally)
-- [x] **Paywall recovery pipeline (2026-05-11)**
-  - [x] `harvesting/browser_html/cookie_loader.py` reads Chrome cookies → Playwright format
-  - [x] `harvesting/browser_html/authenticated_pool.py` injects cookies + uses `channel="chrome"`
-  - [x] `harvesting/browser_html/content_quality.py` quality gate (paywall phrases + body floor + padding)
-  - [x] `harvesting/browser_html/dom_extract.py` DOM walker + CF detection + `pick_better_markdown`
-  - [x] Modernized strategies — AHA (`#bodymatter` + CF wait + reload), Elsevier (`/abstract→/fulltext` + imprint domains), generic (DOM walker fallback + CF wait), Wiley (CF wait)
-  - [x] `scripts/fetch_paywalled.py` CLI with DOI resolution, per-domain pacing, CF retry sweep, **PMC fallback**
-  - [x] Verified against 10 audit cases: 10/10 correctly classified by the gate
-- [x] **`cli/compare_variants.py` matcher refinements (2026-05-11)**
-  - [x] `_positions_compatible(a, b)` with subset rule (handles `p.Pro926AlafsTer14` (926, 14) vs `P926fsX` (926,))
-  - [x] `_cdna_indel_protein_positions(cdna)` codon math (c.842dupG → aa 281)
-  - [x] `_protein_indel_position(variant)` protein indel parser
-  - [x] `find_best_match(..., consumed: Set[str])` for 1-to-1 enforcement at match time
-  - [x] cDNA/protein bridge pass wired into greedy 1-to-1 matcher
-- [x] Cherry-picked from heuristic-chatelet worktree
-  - [x] Scanner: parenthesized HGVS pattern `p.(Arg176Trp)` (commit `f6307da`)
-  - [x] Harvest: log silent supplement-scrape failures with PMID context (commit `d3a639f`)
-  - [x] Extraction: reject DATA_ZONES that override full text with garbage (commit `e6daa24`)
-- [x] **Clinical mutation-list table extraction (2026-05-14)**
-  - [x] Deterministically infer one carrier per row for clinical mutation-list tables with variant/proband/family/patient context but no explicit count column
-  - [x] Preserve affected vs unaffected counts when the row text indicates asymptomatic/control/unaffected status
-  - [x] Keep pure nomenclature/list tables out of extraction unless clinical row context is present
-- [x] **Bulk KCNH2 stale-context reharvest (2026-05-14)**
-  - [x] Reharvested all 213 stale/missed KCNH2 FULL_CONTEXT files; retained source is consolidated under `corpus/KCNH2/`.
-  - [x] Recovered 17 real contexts; 196 still require paywall/manual/source access
-  - [x] Folded recovered source into the canonical corpus and removed the obsolete run-local audit directory.
-- [x] **KCNH2 v12 manual-recovery score + matcher patch (2026-05-15)**
-  - [x] Scored `KCNH2_v12_manual_recovery_20260515.db` (PMID/row/unique-variant/patient recall recorded in `docs/RECALL_STATUS.md`)
-  - [x] Added frameshift canonicalization for extraction spellings like `fsTer`, `fs/185`, `fs+*49`, and malformed `AlaX14`
-  - [x] Extended cDNA/protein bridge matching to multi-base cDNA indel ranges; recovered `P926fsX` (PMID 26496715) and `P1034fsX` (PMID 29622001)
-- [x] **Turnkey closeout and honest enrichment cleanup (2026-05-18)**
-  - [x] Added `gvf gvf-run` as the one-command doctor -> extract -> recovery layers -> report path.
-  - [x] Scored KCNH2/KCNQ1/RYR2/SCN5A under `validation_runs/closeout_20260518_124343/`.
-  - [x] Changed ClinVar/PubTator recovery layers to default to DB-observed PMIDs instead of gold PMIDs; gold-PMID enrichment is now explicit diagnostic mode.
-  - [x] Turnkey recovery layers now back up the SQLite DB before mutation.
-- [x] **Four-gene turnkey long run and cleanup pass (2026-05-19)**
-  - [x] Ran KCNH2, KCNE1, RYR2, and SCN5A end to end; retained canonical DBs
-        are consolidated under `validation_runs/canonical_baseline/`.
-  - [x] Confirmed KCNH2, RYR2, and SCN5A remain below 90% on all scored recall metrics except RYR2 unaffected.
-  - [x] Confirmed KCNE1 extraction completes but cannot be scored without a gold recall input.
-  - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.
-- [x] **Wiley TDM API verified working (2026-05-26)** — off-VPN probe with the current `WILEY_API_KEY` in `.env` returned a real 635 KB PDF for `10.1002/humu.21126` (HTTP 302 → CDN 200, `application/pdf`, 14 pages). The earlier "revoked" claim was stale. Human Mutation and other Wiley journals are reachable now via `harvesting/wiley_api.py` without any network change.
-- [x] **Source-driven DB refresh path (2026-05-25)**
-  - [x] Added `scripts/refresh_run_db.py` as the safe alternative to SQLite row patching: select stale/under-counted source artifacts, rewrite canonical extraction JSON, rebuild the DB, then run recovery layers.
-  - [x] Made recovery layers run in DB-PMID mode without requiring a gold standard, so no-gold genes still get ClinVar, PubTator, and figure recovery plus internal QC artifacts.
-  - [x] Added source fingerprints and abstract-only fallback guards so reruns skip already-refreshed JSON unless the source changes.
-- [x] **SUA replay rollback + DB-PMID recovery baseline (2026-05-26)**
-  - [x] Rolled back per-PMID extraction JSON regressions from the source-unbound-available sweep while preserving sweep wins.
-  - [x] Rebuilt active KCNH2/KCNQ1/SCN5A/RYR2 DBs and ran DB-observed ClinVar/PubTator recovery without gold-PMID enrichment.
-  - [x] Re-scored the four-gene aggregate at `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`; current live metrics and gaps are in `docs/RECALL_STATUS.md`.
-- [x] **KCNH2 acquisition replay + no-gold source QC (2026-06-01)**
-  - [x] Added a gold-free `source_acquisition_audit.py` and wired it into `gvf-run` as `source-qc`.
-  - [x] Added post-fetch outcome summarization that reports selected-for-fetch PMIDs separately from successfully usable-fulltext-downloaded PMIDs.
-  - [x] Added `gvf-run` source recovery (source QC, paywall fetch, acquisition outcome summary, and staged refresh without requiring a gold standard), now default-on; pass `--no-source-recovery` for a fast PMC/free-text-only pass.
-  - [x] Replayed 20 KCNH2 fetched sources through staged extraction; 17 passed acceptance gates after ClinVar+PubTator, figures skipped. Scored recall is in `docs/RECALL_STATUS.md`.
-- [x] **RYR2 acquisition replay (2026-06-01)**
-  - [x] Gold-assisted worklist selected 37 PMIDs for fetch and 59 PMIDs for source acquisition or rebinding.
-  - [x] Post-fetch summarizer recovered partial interrupted-fetch output: 17 usable full-text PMIDs actually landed after the stricter 500-character source gate.
-  - [x] Staged refresh replayed 41 candidates; 34 passed, 4 failed source-quality checks, and 3 were regression-gated.
-  - [x] RYR2 scored after DB-observed ClinVar+PubTator, figures skipped; recall is in `docs/RECALL_STATUS.md`.
-- [x] **SCN5A acquisition replay (2026-06-01)**
-  - [x] Gold-assisted worklist selected 148 PMIDs for fetch and 191 PMIDs for source acquisition or rebinding.
-  - [x] Existing-source replay accepted 35/41 PMIDs and improved SCN5A recall after DB-observed ClinVar+PubTator, figures skipped (see `docs/RECALL_STATUS.md`).
-  - [x] Partial `fetch_paywalled.py` output produced 44 usable full-text PMIDs; the outcome summary now reports selected-for-fetch recall and actual refresh-successful recall separately (values in `docs/RECALL_STATUS.md`).
-  - [x] Fetched-source replay accepted 44/47 candidates and scored after DB-observed ClinVar+PubTator, figures skipped (recall in `docs/RECALL_STATUS.md`).
-  - [x] Residual audit now routes explicit missing target-gene supplement pointers to acquisition. SCN5A PMID `29325976` has 87 missing distinct variants behind a blocked Supplemental Table 2 download; latest no-gold source QC finds 19 `missing_variant_supplement` PMIDs.
-  - [x] Added a Playwright/browser supplement download fallback and reran `29325976`: Elsevier API body recovery + staged refresh succeeded, but `mmc1.docx` still failed under 0-cookie browser context and extraction found 0 variants.
-  - [x] Added generalized publisher API fallback for Elsevier/Wiley/Springer and ran a 13-PMID residual Wiley/Springer batch: 2 usable full texts landed, 1 accepted into refreshed extraction JSON, and corrected no-figure SCN5A recall held steady (see `docs/RECALL_STATUS.md`).
-  - [x] Diagnosed `24667783` as a Word-supplement conversion miss, added `textutil` DOC fallback plus scanner/artifact guards, and accepted a forced one-PMID staged refresh that improved no-figure SCN5A row recall (see `docs/RECALL_STATUS.md`).
-  - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
-
-## Active Tasks
-- [ ] **Evaluate Azure-first routine routing and the parked GPT-5.6 per-paper
-      final check on the 101-paper staging loop.** Routine triage/table
-      routing/extraction/debate should use Azure deployments (`gpt-5.4`,
-      `Kimi-K2.6-1`, `grok-4.3`, `DeepSeek-V4-Pro`). Step 3.8 is the separate,
-      explicitly enabled per-paper sniff test using `azure_ai/gpt-5.6-sol` at
-      `xhigh`; it records exact fact/field findings and must not replace routine
-      Tier 2. Step 3.9 composes source-verified objective contradictions into
-      the trusted field projection without changing raw counts; weak
-      unsupported-count findings remain advisory. Sonnet 5 and Opus
-      4.8 remain optional exception-adjudication and hard-case escalation queues.
-      Calibrate quarantine/recall effects on the curated staging set before
-      considering full-gene refreshes.
-- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in
-      the Exact-Match Recovery Plan above; SCN5A is now the largest remaining
-      unique-variant blocker.
-  - [ ] Resolve blocked supplement downloads for SCN5A `29325976` (`mmc1.docx`, Cloudflare/redirect blocked even after browser fallback in a 0-cookie session) and similar `missing_variant_supplement` PMIDs.
-  - [ ] Resolve residual Wiley Cloudflare/TDM-403 and Springer content-gate failures from the 13-PMID SCN5A residual batch; current no-cookie run landed only `16643399` and `24667783`.
-- [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
-  - [x] General table-role validation: preserve positional blank cells, infer
-        unnamed open-vocabulary gene groups, reject clinical measures as carrier
-        columns, dedupe cross-table restatements on the deterministic path, and
-        feed compact header/neighbor-row evidence to the final check. PMID
-        `18627636` is retained only as one regression fixture for these process
-        invariants.
-- [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
-- [x] **Obtain Elsevier INSTTOKEN** (done 2026-05-21). Token issued by Elsevier Data Support (Jun Bautista) against the `@vanderbilt.edu`-registered API key labeled `GeneVariantFetcher`. Installed into `.env` with user-only file perms; sent only as `X-ELS-Insttoken` header by `harvesting/elsevier_api.py`. Unlock probe across KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 paywalled lists: 242/246 (98.4%) Elsevier candidates now return full text. Bodies saved into each run's `pmc_fulltext/` as `{PMID}_FULL_CONTEXT.md`. Details in `docs/RECALL_STATUS.md`.
-- [x] **Re-extract KCNH2/KCNQ1/RYR2/SCN5A with consolidated insttoken full text** (done 2026-05-25). The 242 `_FULL_CONTEXT.md` insttoken bodies were consumed via `scripts/refresh_run_db.py` on the multigene suite, then graft-gated by the 2026-05-26 acceptance-gated source replay. Current scored state is in `docs/RECALL_STATUS.md`.
-- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction. Keep paper-specific recovery lists in validation artifacts or `docs/RECALL_STATUS.md`, not in this checklist.
-- [ ] **Manual PDF download for hard-blocked/stub PMIDs** only after the current-status source audit confirms the artifact is still missing. Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
-- [ ] Set weekly recall cadence (Friday re-run + compare) — produces trajectory chart for grant.
-
-## Blocked
-- [ ] **Karger access** — Cloudflare interstitial doesn't clear even with 30+ cookies + `--no-headless`. TDM request status unknown.
-- [ ] **Sage/Liebert (PMID 23631430)** — Sage's CF instance refuses Playwright fingerprint even with the right cookies.
-
-## Backlog
-- [ ] Create a KCNE1 gold test set and keep all non-KCNH2 gold inputs source-reconciled.
-- [ ] Re-run extraction with regex disabled to measure regex vs LLM contribution.
-- [ ] Expand quality gate test set beyond the 10 audit files.
-- [x] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
-
-See `docs/RECALL_STATUS.md` for current measured status and `CLAUDE.md` for
-recovery architecture and handoff details.
+- **One checkout, one branch.** `main` is the handoff branch. Do not create local
+  feature branches or experimental worktrees unless the repository owner
+  explicitly changes this policy.
+- **No `unassessed_count` schema.** The partial experiment was reviewed and
+  retired during the 2026-08-12 consolidation. GVF records observed carrier,
+  affected, unaffected, and uncertain counts; an unobserved phenotype partition
+  remains SQL NULL. It must not be inferred as a residual. A future proposal
+  would need end-to-end aggregation, migration, trust/final-check/guard support,
+  adjudication and Variant_Browser compatibility, provenance versioning, and a
+  paired benchmark before changing the schema.
+- **Count recovery stays default off** until the clean carrier-only evaluation
+  passes.
+- **The per-paper final check and composer stay default off**; their measured
+  cost/latency did not justify default-on use.
+- **Historical artifacts are immutable.** Correct them with an erratum or a new
+  run; do not rewrite locked predictions, historical manifests, or append-only
+  recall/protocol history.

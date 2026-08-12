@@ -730,8 +730,12 @@ def dashboard_command(
     ] = None,
     out: Annotated[
         str,
-        typer.Option("--out", "-o", help="Output dir for the static HTML dashboard."),
-    ] = "corpus/dashboard",
+        typer.Option(
+            "--out",
+            "-o",
+            help="Output dir (default: <resolved corpus>/dashboard).",
+        ),
+    ] = "",
     corpus: Annotated[
         str,
         typer.Option(
@@ -787,7 +791,7 @@ def dashboard_command(
         g, p = spec.split("=", 1)
         db_map[g.upper()] = _Path(p).expanduser()
 
-    out_dir = _Path(out).expanduser()
+    out_dir = _Path(out).expanduser() if out else corpus_dir / "dashboard"
     stats = generate_dashboard(
         out_dir=out_dir,
         corpus_dir=corpus_dir,

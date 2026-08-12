@@ -179,6 +179,21 @@ def test_pdf_can_recover_a_row_when_body_is_abstract_only(tmp_path, monkeypatch)
     assert _classify(tmp_path, "KCNH2", "1", "R176W") == "present_in_body"
 
 
+def test_searchable_pdf_without_body_keeps_an_indel_penalized(tmp_path, monkeypatch):
+    paper = tmp_path / "SCN5A" / "1"
+    paper.mkdir(parents=True)
+    (paper / "1_FULL_CONTEXT.md").write_text(
+        _padded(f"{ABSTRACT_ONLY_MARKER}\nabstract only"), encoding="utf-8"
+    )
+    (paper / "article.pdf").write_bytes(b"%PDF-placeholder")
+    monkeypatch.setattr(
+        "scripts.recall_audit.tier_source_reachability.extract_pdf_text",
+        lambda paths, max_chars: "PDF table lists c.4389_4396delCCTCTTTA",
+    )
+
+    assert _classify(tmp_path, "SCN5A", "1", "P.N1380del") == "notation_inconclusive"
+
+
 def test_an_unsearchable_binary_supplement_does_not_grant_reachability(tmp_path):
     paper = tmp_path / "KCNH2" / "1"
     (paper / "1_supplements").mkdir(parents=True)

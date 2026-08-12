@@ -2,6 +2,9 @@
 
 Generated 2026-07-26 by `scripts/recall_audit/source_stratified_metrics.py`
 over the four canonical ion-channel DBs listed in `docs/RECALL_STATUS.md`.
+This is a frozen pre-correction diagnostic, not the current metric authority;
+use `docs/RECALL_STATUS.md` for current caveats and regenerate this file after
+the accepted explicit-zero rescore.
 Regenerate with:
 
 ```bash

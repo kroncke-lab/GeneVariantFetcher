@@ -1,4 +1,6 @@
 {
+  "status": "historical pre-correction snapshot",
+  "authoritative_status": "docs/RECALL_STATUS.md pending explicit-zero rescore",
   "generated_at": "2026-07-08 07:53 America/Chicago",
   "models": [
     "Codex scheduled-run workflow",
@@ -8,7 +10,7 @@
   "barriers": [
     {
       "title": "Fresh score still disagrees with the status snapshot",
-      "detail": "The score-only refresh wrote recall_metrics/nightly_20260708_124724 with unique variants 2589/3010 (86.0%), rows 5517/6833 (80.7%), and PMIDs 1273/1502 (84.8%). docs/RECALL_STATUS.md still reports 2591 unique, 5518 rows, and 1274 PMIDs from the June 12 status snapshot, so the latest matcher/scorer changes need reconciliation before changing the authoritative status."
+      "detail": "This archived score-only refresh wrote recall_metrics/nightly_20260708_124724. It predates the explicit-zero correction and no longer matches the authoritative docs/RECALL_STATUS.md baseline; retain it for historical comparison only until the accepted rescore regenerates the dashboard."
     },
     {
       "title": "Counted precision and count semantics are now first-class blockers",

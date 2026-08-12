@@ -1,8 +1,11 @@
 # GeneVariantFetcher Gold Standard
 
-Snapshot of the literature-curated variant counts that GeneVariantFetcher's recall
-analyses are scored against. Source of truth: the Variant_Browser Azure SQL
-database (`sandboxtest.database.windows.net::sandboxtest`).
+Committed baseline snapshot of the literature-curated variant counts used by
+GeneVariantFetcher recall analyses. The three SQL-derived gene exports preserve
+the legacy Variant_Browser source described below; RYR2 is spreadsheet-derived.
+For current lead-approved review corrections, scoring syncs the Variant_Browser
+machine API into `adjudications/review_gold.sqlite3` as documented in
+[`../docs/VARIANT_BROWSER_INTEGRATION.md`](../docs/VARIANT_BROWSER_INTEGRATION.md).
 
 ## What's here
 
@@ -34,10 +37,12 @@ while population-only gnomAD rows are preserved separately in
 `raw/RYR2_gnomad_rows.csv`. Treat RYR2 as an edge-case pilot rather than the
 clean Variant_Browser SQL baseline used for KCNH2/KCNQ1/SCN5A.
 
-## Regeneration command
+## Baseline-snapshot regeneration
 
-The exporter must run inside Variant_Browser's venv (ODBC + Django + creds
-already configured there):
+This command regenerates the committed baseline exports from their legacy source
+tables; it does not replace the live review-gold sync. Run it only when those
+tables and credentials are intentionally in scope. The exporter uses
+Variant_Browser's venv (ODBC + Django + credentials):
 
 ```bash
 cd /Users/kronckbm/GitRepos/Variant_Browser
@@ -49,7 +54,7 @@ venv/bin/python /Users/kronckbm/GitRepos/GeneVariantFetcher/scripts/build_gold_s
 It is idempotent — re-running overwrites `raw/`, `normalized/`, `qc/`, and
 `manifest.json` in place.
 
-## Provenance
+## Baseline snapshot provenance
 
 - **Source DB:** `sandboxtest.database.windows.net::sandboxtest` (Azure SQL)
 - **Source tables** (with schema brackets — important because the SCN5A table
@@ -123,12 +128,15 @@ Current adjudication semantics:
 - `affected` means variant carriers meeting the paper's disease/phenotype definition, including ECG/QTc-defined affection when the paper defines it that way.
 - `unaffected` means explicit unaffected/asymptomatic carriers. When v2 has a populated status and blank `gold_v2_unaffected`, the adjudicated value is intentionally null rather than the original unaffected count.
 
-## Review adjudications overlay (`adjudications/`)
+## Current review-gold overlay (`adjudications/`)
 
-`adjudications/` holds the **export-driven** correction overlay produced by the
-Variant_Browser round-trip — the live cousin of the hand-curated `gold_v2_*`
-columns above. After a run is published to the review DB
-(`gvf gvf-run --publish-review`) and collaborators adjudicate it, run:
+`adjudications/review_gold.sqlite3` holds the versioned current view, immutable
+snapshots, record changes, tiers, and reversible exclusions pulled from the
+Variant_Browser machine API. Release scoring uses
+`scripts/run_recall_suite.py --review-gold-sync required`; raw, disputed,
+withheld, stale, or checksum-invalid records fail closed.
+
+CSV export ingest remains a compatibility path for an explicit offline export:
 
 ```bash
 cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a
@@ -151,9 +159,10 @@ This writes (idempotently), per gene present in the export:
 - `adjudications/review_adjudications_summary.json` — per-gene counts + net count
   deltas.
 
-Like `gold_v2_*`, this overlay is **not yet consumed by the recall scorer**; it is
-a durable correction layer. See `docs/VARIANT_BROWSER_INTEGRATION.md` for the full
-contract.
+The scorer consumes the SQLite overlay by tier. The legacy per-gene CSV overlay
+is opt-in compatibility input. See
+[`../docs/VARIANT_BROWSER_INTEGRATION.md`](../docs/VARIANT_BROWSER_INTEGRATION.md)
+for the authoritative sync, schema, and scoring contract.
 
 ## Audit / QC outputs
 

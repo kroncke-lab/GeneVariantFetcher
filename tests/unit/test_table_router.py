@@ -425,7 +425,7 @@ def test_extract_via_router_infers_one_carrier_per_clinical_row_without_count():
     unaffected = by_protein["p.Asn629Ser"]["penetrance_data"]
     assert affected["total_carriers_observed"] == 1
     assert affected["affected_count"] == 1
-    assert affected["unaffected_count"] == 0
+    assert affected["unaffected_count"] is None
     assert unaffected["total_carriers_observed"] == 1
     assert unaffected["affected_count"] == 0
     assert unaffected["unaffected_count"] == 1
@@ -705,7 +705,9 @@ def test_infer_mapping_prefers_carrier_over_total_case_denominator():
     assert len(variants) == 1
     pen = variants[0]["penetrance_data"]
     assert pen["total_carriers_observed"] == 20
-    assert pen["affected_count"] == 20
+    assert pen["affected_count"] is None
+    assert variants[0]["count_provenance"]["affected_column_label"] is None
+    assert variants[0]["count_provenance"]["affected_count_type"] is None
 
 
 def test_parse_routed_table_treats_adult_number_as_row_identifier():

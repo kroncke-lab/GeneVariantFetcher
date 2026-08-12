@@ -80,7 +80,7 @@ GVF needs **no** Azure credentials for this — `gvf_publish.sh` loads them from
 
 Wired in `cli/gvf_run.py` (`step_publish_review`, `_find_review_repo`).
 
-### Curated 101-paper staging publish
+### Curated-fixture staging publish
 
 The historical curated benchmark contains eight BRCA2 papers, but active
 curated review publishing excludes six without lead-approved collaborator gold;
@@ -95,8 +95,8 @@ Variant_Browser staging/review surface, not the public site:
 
 ```bash
 python scripts/publish_curated_review_set.py \
-  --run-root validation_runs/azure_first_101_YYYYMMDD \
-  --dataset-label gvf_curated_101_YYYYMMDD \
+  --run-root validation_runs/curated_fixture_YYYYMMDD \
+  --dataset-label gvf_curated_fixture_YYYYMMDD \
   --create-pairs
 ```
 
@@ -104,8 +104,8 @@ Use `--dry-run` first to confirm the per-gene DBs and PMID manifests:
 
 ```bash
 python scripts/publish_curated_review_set.py \
-  --run-root validation_runs/azure_first_101_YYYYMMDD \
-  --dataset-label gvf_curated_101_YYYYMMDD \
+  --run-root validation_runs/curated_fixture_YYYYMMDD \
+  --dataset-label gvf_curated_fixture_YYYYMMDD \
   --dry-run
 ```
 
@@ -194,7 +194,9 @@ deleting prior source revisions:
   plus any actionable verdict whose round-trip key didn't resolve to an extracted
   row (`unmatched`) or that had no DB to verify against (`no_db`).
 - `review_adjudications_summary.json` — per-gene counts by action and match status,
-  plus net adjudicated count deltas (`net_affected_delta`, `net_unaffected_delta`)
+  plus net adjudicated count deltas (`net_affected_delta`, `net_unaffected_delta`).
+  A net is `null` when any corrected row lacks an asserted extracted baseline;
+  companion `*_delta_known_rows` / `*_delta_unknown_rows` fields expose coverage.
   for matched `count_override` rows.
 
 The built-in cardiac tier contains `KCNH2`, `KCNQ1`, `RYR2`, and `SCN5A`.

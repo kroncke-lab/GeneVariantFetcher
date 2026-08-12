@@ -17,8 +17,8 @@ to the **prompts, harness, guardrails, or variant matcher** helped or hurt — o
 **recall** and **mean absolute error (MAE)** — **without re-running the entire
 gold standard and burning a huge number of LLM tokens.**
 
-If you are GPT‑5.5, Gemini, Codex, or a human who just opened this folder: this
-README is self-contained. You do not need any other context to use it.
+This README is self-contained for agents and humans opening the fixture without
+prior session context.
 
 ---
 
@@ -48,7 +48,7 @@ full gold standard before claiming a headline number.
 # From the repo root. Uses the project venv if present.
 
 # 1) SCORE MODE (default, NO LLM tokens, takes seconds):
-#    Score every canonical DB in the 101-paper set.
+#    Score every canonical DB in the 105-entry fixture (104 unique papers).
 python benchmarks/curated_extraction_eval/run_benchmark.py
 
 # 2) Headline cardiac-only score (the fully human-curated gold scope):

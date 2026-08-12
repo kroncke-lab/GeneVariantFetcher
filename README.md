@@ -99,11 +99,12 @@ remains untracked by Git.
 ## Current Status
 
 Live recall metrics and blockers live in
-[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md), rendered as a published status
-dashboard at
-<https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/>. The active forward
-checklist lives in [`TASKS.md`](TASKS.md). Do not copy recall numbers into new
-docs; they drift.
+[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). The published
+[status dashboard](https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/)
+is an archived pre-correction snapshot until that file records an accepted
+rescore. The active forward checklist lives in [`TASKS.md`](TASKS.md), and the
+[documentation map](docs/README.md) identifies current authorities versus dated
+evidence. Do not copy recall numbers into new docs; they drift.
 
 **Recall, precision, MAE, and RMSE (RMSD) are reported only for the four cardiac genes
 (KCNH2, KCNQ1, SCN5A, RYR2)** — the only gene-disease pairs with a fully
@@ -132,6 +133,7 @@ headline changes with the full recall scorer before claiming a metric.
 
 | Need | Start here |
 |------|------------|
+| Distinguish current instructions from historical evidence | [`docs/README.md`](docs/README.md) |
 | Choose the active paper-evaluation cohort | [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) |
 | Install locally and run once | [`docs/QUICKSTART.md`](docs/QUICKSTART.md) |
 | Configure credentials | [`docs/API_KEYS.md`](docs/API_KEYS.md) |

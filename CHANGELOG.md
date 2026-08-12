@@ -5,7 +5,34 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-07-10
+## [Unreleased]
+
+### Added
+- Repository freshness checks for local Markdown links, dashboard status, the
+  single active task checklist, and retired runtime model references.
+- Installed-layout wheel coverage for runtime data and paywall-session helpers.
+
+### Changed
+- Consolidated the repository onto one authoritative `main` branch and one
+  checkout. `TASKS.md` is now the only active checklist; the documentation map
+  distinguishes current authorities from dated evidence.
+- Deterministic count parsing preserves SQL NULL for unobserved phenotype
+  partitions while retaining explicit source zeros. The scorer carries count
+  presence through aggregation and adjudication.
+- Figure observations enrich compatible variant-paper links, fail closed on
+  ambiguous cohorts, and retain structured count provenance pending trust review.
+- Recall-audit reports keep ALL GOLD as the primary denominator and can run
+  hermetically without reading the local corpus.
+
+### Fixed
+- Resumed runs honor `RUN_STATUS.json.active_db` before filename heuristics.
+- Packaged wheels include required alias/reference assets and avoid scanning the
+  external corpus.
+- Explicit gene assignment wins over ambiguous PMID-based corpus reuse.
+- CI uses the pinned Ruff version, Node-24-compatible actions, and a built-wheel
+  smoke test.
+
+## Historical development snapshot — 2026-07-10
 
 ### Added
 - Per-fact **trust gate** (`pipeline/trust_gate.py`): gold-free structural rules
@@ -55,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as `p.Q376splice`, `p.L799splice`, and `M159sp` without accepting trailing
   junk.
 
-## [Unreleased] - 2026-06-03
+## Historical development snapshot — 2026-06-03
 
 ### Changed
 - `CODEX.md` reduced to a pointer stub; `CLAUDE.md` is the canonical agent
@@ -64,7 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   default; pass `--no-source-recovery` for a fast PMC/free-text-only pass. New
   `--disease` flag scopes discovery and Tier-2 filtering to a gene-disease pair.
 
-## [Unreleased] - 2026-05-22
+## Historical development snapshot — 2026-05-22
 
 ### Added
 - `scripts/discover_recall.py` — PMID-level recall harness comparing the
@@ -97,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CODEX.md` is now a thin pointer stub to `CLAUDE.md` (the single canonical
   agent handoff), avoiding drift between three parallel agent files.
 
-## [Prior Unreleased] - 2026-05-21
+## Historical development snapshot — 2026-05-21
 
 ### Added
 - `scripts/test_insttoken_unlock.py` probes paywalled Elsevier DOIs through
@@ -117,7 +144,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/vanderbilt_api_access.md`, `CLAUDE.md`, and `TASKS.md` updated to
   reflect the insttoken activation and the new highest-ROI step (re-extraction).
 
-## [Pre-insttoken] - 2026-05-20
+## Historical pre-insttoken snapshot — 2026-05-20
 
 ### Added
 - `gvf gvf-run` turnkey driver for doctor checks, extraction, deterministic

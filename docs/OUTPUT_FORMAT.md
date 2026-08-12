@@ -1,6 +1,9 @@
 # GeneVariantFetcher — Output Format Reference
 
-Detailed specification of all files and formats GVF produces.
+Operational overview of the files and formats GVF produces. SQL excerpts below
+are intentionally abridged for readability; `create_schema()` in
+`harvesting/migrate_to_sqlite.py` is the executable authority for current
+columns, indexes, and migrations.
 
 ## Directory Structure
 
@@ -435,7 +438,7 @@ Discussion text...
   "total_carriers": 1245,
   "total_affected": 678,
   "success_rate_percent": 32.0,
-  "output_directory": "/path/to/output/KCNH2/20260210_143000"
+  "output_directory": "/path/to/results/KCNH2/20260210_143000"
 }
 ```
 
@@ -581,8 +584,8 @@ If you run GVF multiple times for the same gene:
 
 ```bash
 # Each run creates a timestamped directory
-output/KCNH2/20260210_143000/
-output/KCNH2/20260215_091500/
+results/KCNH2/20260210_143000/
+results/KCNH2/20260215_091500/
 
 # Use the most recent, or merge databases manually
 ```

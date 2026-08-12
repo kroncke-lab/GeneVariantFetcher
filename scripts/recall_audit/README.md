@@ -1,10 +1,13 @@
 # Recall Audit Scripts
 
 Small tools for inspecting scored recall failures without re-running the full
-pipeline. By default, scripts read the scored baseline from `docs/RECALL_STATUS.md`.
-Override with `--run-dir` or `GVF_RECALL_RUN_DIR` when auditing a different run.
+pipeline. By default, DB-backed scripts use the canonical database paths listed
+in `docs/RECALL_STATUS.md`, while score-backed scripts use its `Current local
+scored artifact` directory. Override an individual input with `--db` or
+`--recall-score`; use `--run-dir` or `GVF_RECALL_RUN_DIR` when auditing a
+different self-contained run.
 
-The run directory must contain `dbs/{GENE}.db` and `recall_score/`.
+An explicit run directory must contain `dbs/{GENE}.db` and `recall_score/`.
 
 ## Examples
 
@@ -56,16 +59,19 @@ high-risk trusted-consensus cases are queued even when debate agrees:
   --out-dir /tmp/final_arbiter_opus
 ```
 
-The intended routing is Azure-first for routine work, GPT-5.6 for the canonical
-final sniff test, and Anthropic only for optional exception queues:
+The shipped provider default is Anthropic. The measured Azure audit route below
+is selected with `MODEL_PROVIDER=azure`; explicit per-tier model variables still
+win. GPT-5.6 is used only when the parked final sniff-test experiment is enabled,
+and Anthropic exception queues are separately configurable:
 
 - Routine triage: `azure_ai/gpt-5.4` (`azure_ai/gpt-5.4-nano` only if deployed on the same endpoint)
 - Table routing: `azure_ai/Kimi-K2.6-1`
 - Main extraction: `azure_ai/grok-4.3`
 - Internal claim verification / debate: `azure_ai/gpt-5.4`,
   `azure_ai/DeepSeek-V4-Pro`, and `azure_ai/Kimi-K2.6-1`
-- Canonical final per-paper sniff test (Step 3.8):
-  `azure_ai/gpt-5.6-sol` at `xhigh`, default-on, with soft persisted verdicts
+- Parked final per-paper sniff test (Step 3.8):
+  `azure_ai/gpt-5.6-sol` at `xhigh`, default-off since 2026-07-26; re-enable
+  together with the companion gate only for a measured experiment
 - Optional exception adjudication: `FINAL_ADJUDICATOR_MODELS`, defaulting to
   `anthropic/claude-sonnet-5`
 - Optional hard-case escalation: `FINAL_ARBITER_MODEL`, defaulting to

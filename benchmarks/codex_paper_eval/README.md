@@ -54,7 +54,7 @@ them. The live Variant Browser queue is a separate 46-paper operational review
 set: Nate's two gold papers plus 44 additional papers awaiting or supporting
 review.
 
-Current-production baselines (the numbers a change must beat):
+Frozen production baselines (comparison evidence, not current defaults):
 
 - Cardiac arm: `runs/20260726_fixed48_production` (full gvf-run pipeline,
   all layers) and `runs/20260726_fixed48_production_paperonly` (paper-derived

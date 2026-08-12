@@ -790,7 +790,9 @@ def run_fetch_manager(
         if convert:
             print("\nNext steps:")
             print("  - Re-run extraction with gvf gvf-run or cli.extract")
-            print("  - Or run: python -m cli.automated_workflow ...")
+            print(
+                "  - Or run the compatibility entry point: python -m cli.automated_workflow ..."
+            )
 
 
 def main():

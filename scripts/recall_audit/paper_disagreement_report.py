@@ -18,6 +18,7 @@ try:
         REPO_ROOT,
         canonical_variant,
         context_status,
+        current_status_recall_score,
         find_full_contexts,
         normalize_pmid,
         parse_bool,
@@ -27,6 +28,7 @@ try:
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
+        resolve_status_gene_db,
         source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
@@ -36,6 +38,7 @@ except ModuleNotFoundError:  # pragma: no cover
         REPO_ROOT,
         canonical_variant,
         context_status,
+        current_status_recall_score,
         find_full_contexts,
         normalize_pmid,
         parse_bool,
@@ -45,6 +48,7 @@ except ModuleNotFoundError:  # pragma: no cover
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
+        resolve_status_gene_db,
         source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
@@ -671,9 +675,20 @@ def main() -> int:
 
     run_dir = resolve_run_dir(args.run_dir) if args.run_dir else None
     recall_score = resolve_recall_score(args.recall_score, run_dir)
+    db_paths_by_gene = None
+    if not args.db_dir and recall_score == current_status_recall_score():
+        # The canonical status contract deliberately splits score CSVs from
+        # databases. Preserve sibling ``dbs/`` discovery for explicit legacy
+        # runs, but pair the status-selected score with the status-selected DBs.
+        db_paths_by_gene = {
+            path.name.upper(): resolve_status_gene_db(path.name)
+            for path in recall_score.iterdir()
+            if path.is_dir()
+        }
     rows = build_paper_disagreement_rows(
         recall_score=recall_score,
         db_dir=repo_path(args.db_dir) if args.db_dir else None,
+        db_paths_by_gene=db_paths_by_gene,
         gold_dir=repo_path(args.gold_dir) if args.gold_dir else None,
         results_dir=repo_path(args.results_dir) if args.results_dir else None,
     )

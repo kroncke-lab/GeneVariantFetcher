@@ -7,7 +7,13 @@ correctly identifies papers with original clinical data vs. reviews, animal stud
 """
 
 import json
+
+import pytest
+
 from pipeline.filters import ClinicalDataTriageFilter
+
+
+pytestmark = [pytest.mark.requires_api, pytest.mark.requires_network]
 
 
 def test_case_report():

@@ -327,6 +327,17 @@ def test_gvf_run_helpers_resolve_paths(tmp_path: Path):
     (run_dir / "FOO.db").write_bytes(b"")
     assert _find_db(run_dir, "FOO") == run_dir / "FOO.db"
 
+    # A finalized refresh recorded by the prior run takes precedence over the
+    # original gene-named extraction DB during --skip extract resumes.
+    refreshed = run_dir / "FOO.refresh.db"
+    refreshed.write_bytes(b"")
+    (run_dir / "RUN_STATUS.json").write_text(
+        json.dumps({"active_db": refreshed.name}), encoding="utf-8"
+    )
+    assert _find_db(run_dir, "FOO") == refreshed
+    (run_dir / "RUN_STATUS.json").unlink()
+    refreshed.unlink()
+
     # _find_db falls back to latest *.db when no gene-named DB
     (run_dir / "FOO.db").unlink()
     (run_dir / "other.db").write_bytes(b"")

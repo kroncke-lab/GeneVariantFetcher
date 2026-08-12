@@ -73,8 +73,8 @@ def test_elsevier_xml_to_markdown_preserves_table_bodies_for_deterministic_parse
     assert by_protein["A422T"]["cdna_notation"] == "c.1264G>A"
     assert by_protein["A422T"]["penetrance_data"] == {
         "total_carriers_observed": 1,
-        "affected_count": 1,
-        "unaffected_count": 0,
+        "affected_count": None,
+        "unaffected_count": None,
     }
 
     scn5a_variants = extractor._parse_markdown_table_variants(markdown, "SCN5A")

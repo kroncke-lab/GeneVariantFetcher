@@ -2,7 +2,7 @@
 
 `gvf dashboard` reads the consolidated corpus (`corpus/INDEX.csv` + the per-paper
 source under `corpus/<GENE>/<PMID>/`) and the scored SQLite DB(s), and writes an
-offline static dashboard under `--out` (default `corpus/dashboard/`). Figures and
+offline static dashboard under `--out` (default `<resolved corpus>/dashboard/`). Figures and
 supplements are referenced relatively into the corpus (no duplication), so zip or
 serve the whole `corpus/` to share it:
 

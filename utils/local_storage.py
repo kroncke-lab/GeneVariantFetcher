@@ -56,17 +56,13 @@ def local_storage_allowed() -> bool:
 
 
 def external_path_state(name: str) -> str:
-    """Classify repo-relative path ``name`` as ``linked``, ``dangling``, or ``absent``.
-
-    ``linked`` covers both a symlink whose target is reachable and a real local
-    directory — either way the storage exists and a caller may write into it.
-    """
+    """Classify a guarded repo path as linked, local, dangling, or absent."""
     for anchor in _ANCHORS:
         path = anchor / name
-        if path.is_dir():
-            return "linked"
         if path.is_symlink():
-            return "dangling"
+            return "linked" if path.is_dir() else "dangling"
+        if path.is_dir():
+            return "local"
     return "absent"
 
 
@@ -165,6 +161,7 @@ def require_external_storage(target: Path) -> None:
     found = {
         "absent": f"there is no {name}/ in the repo root",
         "dangling": f"{name}/ is a symlink whose target is unreachable",
+        "local": f"{name}/ is a real local directory rather than an external link",
     }[state]
     lines = [
         f"cannot use {name}/ — {found}.",

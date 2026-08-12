@@ -8,7 +8,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_literature.llm_relevance import RelevanceChecker
+from config.settings import ANTHROPIC_HAIKU_MODEL_ID
+from gene_literature.llm_relevance import BaseLLMRelevanceChecker, RelevanceChecker
 from utils.llm_trace import (
     TRACE_INDEX_NAME,
     TRACE_MANIFEST_NAME,
@@ -42,6 +43,13 @@ def _reset_trace_configuration():
     reset_llm_tracing()
     yield
     reset_llm_tracing()
+
+
+def test_direct_anthropic_relevance_uses_the_central_active_haiku_model():
+    checker = RelevanceChecker(api_key="fixture-key")
+
+    assert BaseLLMRelevanceChecker.DEFAULT_MODEL == ANTHROPIC_HAIKU_MODEL_ID
+    assert checker.model == ANTHROPIC_HAIKU_MODEL_ID
 
 
 def test_call_trace_keeps_prompt_response_and_redacts_secrets(tmp_path: Path):

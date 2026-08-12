@@ -16,9 +16,10 @@ logger = logging.getLogger(__name__)
 # Default Anthropic model strings. Used by the get_*_model() helpers when
 # MODEL_PROVIDER=anthropic and the user has not set the per-tier env var.
 # All routed through LiteLLM, which understands the "anthropic/" prefix.
-ANTHROPIC_TIER2_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
+ANTHROPIC_HAIKU_MODEL_ID = "claude-haiku-4-5-20251001"
+ANTHROPIC_TIER2_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
 ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
-ANTHROPIC_TABLE_ROUTER_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
+ANTHROPIC_TABLE_ROUTER_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
 ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
 FINAL_ADJUDICATOR_DEFAULT = "anthropic/claude-sonnet-5"
 FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
@@ -72,7 +73,7 @@ class Settings(BaseSettings):
         default=None, validation_alias="SPRINGER_API_KEY"
     )
 
-    # Azure AI Foundry — primary LLM provider. Single resource hosts multiple
+    # Azure AI Foundry integration. A single resource can host multiple
     # deployments accessed via LiteLLM model strings like "azure_ai/<deployment>".
     # LiteLLM reads AZURE_AI_API_KEY / AZURE_AI_API_BASE from the process
     # environment automatically; we expose them here so other modules can read
@@ -129,8 +130,8 @@ class Settings(BaseSettings):
     # model strings default to the ANTHROPIC_* values below — but only for
     # tiers where the corresponding TIER*_MODEL env var is unset. Setting an
     # explicit env var always wins, so each tier remains independently
-    # configurable. Set MODEL_PROVIDER=azure (or pass --model-provider azure)
-    # to fall back to the Azure AI Foundry deployments.
+    # configurable. Set MODEL_PROVIDER=azure to use the Azure AI Foundry
+    # deployments (`gvf extract` also exposes a lower-level CLI override).
     model_provider: str = Field(
         default="anthropic",
         validation_alias="MODEL_PROVIDER",

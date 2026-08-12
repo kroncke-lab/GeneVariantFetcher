@@ -40,7 +40,6 @@ import os
 import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
-from urllib.parse import urlparse
 
 # Path bootstrap so `python scripts/fetch_paywalled.py` works without -m.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -66,6 +65,10 @@ from harvesting.format_converters import FormatConverter  # noqa: E402
 from harvesting.paywall_context_enrichment import (  # noqa: E402
     EnrichmentResult,
     enrich_paywall_full_context,
+)
+from harvesting.paywall_session import (  # noqa: E402
+    hydrate_session_with_browser_cookies,
+    make_session,
 )
 from harvesting.scholar_pdf_fallback import try_scholar_pdf  # noqa: E402
 from harvesting.springer_api import SpringerAPIClient  # noqa: E402
@@ -605,24 +608,6 @@ def pubmed_resolve_doi(
     return None
 
 
-def make_session() -> requests.Session:
-    s = requests.Session()
-    s.headers.update(
-        {
-            "User-Agent": (f"GVF-PaywalledFetch/1.0 (mailto:{_ncbi_email()})"),
-        }
-    )
-    # Auto-route Cloudflare-blocked publisher URLs (Wiley/Karger/Sage) through the
-    # institutional EZproxy when configured (GVF_EZPROXY_PREFIX/HOST). No-op
-    # otherwise. Article HTML and /action/downloadSupplement files both route.
-    from harvesting.browser_html import ezproxy
-
-    ezproxy.install_on_session(s)
-    if ezproxy.is_configured():
-        LOG.info("EZproxy routing active for CF-blocked publishers")
-    return s
-
-
 def prime_authenticated_browser(
     pool: AuthenticatedBrowserPool,
     auth_urls: List[str],
@@ -660,39 +645,6 @@ def prime_authenticated_browser(
                 "then press Enter to continue."
             )
             input()
-
-
-def hydrate_session_with_browser_cookies(
-    session: requests.Session, cookies: List[dict]
-) -> int:
-    """Copy Playwright-format browser cookies into a requests session.
-
-    The Playwright browser pool uses these cookies for publisher page access,
-    but supplement downloads run through ``requests`` in the enrichment step.
-    Mirroring the same cookie jar lets authenticated supplement files use the
-    same institutional session as the rendered article page.
-    """
-    added = 0
-    for cookie in cookies or []:
-        name = cookie.get("name")
-        value = cookie.get("value")
-        if not name or value is None:
-            continue
-
-        domain = cookie.get("domain") or ""
-        if not domain and cookie.get("url"):
-            domain = urlparse(str(cookie["url"])).hostname or ""
-        if not domain:
-            continue
-
-        session.cookies.set(
-            str(name),
-            str(value),
-            domain=str(domain),
-            path=str(cookie.get("path") or "/"),
-        )
-        added += 1
-    return added
 
 
 def _payload_looks_like_html_error(

@@ -116,12 +116,11 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
 ## Pull Request Process
 
-1. Create a feature branch from `main`
-2. Make focused changes with clear commits
-3. Add/update tests for new functionality
-4. Run full test suite and linting
-5. Update CHANGELOG.md under "Unreleased" section
-6. Submit PR with description of changes and any breaking changes
+This handoff keeps the authoritative local repository on one `main` branch with
+no experimental worktrees. Make focused commits on `main`, add or update tests,
+run the full suite and linting, update `CHANGELOG.md` under `Unreleased`, and
+push only after the tree is clean. External contributors can use a fork and a
+pull request without adding persistent branches to the handoff checkout.
 
 ## Project Structure
 

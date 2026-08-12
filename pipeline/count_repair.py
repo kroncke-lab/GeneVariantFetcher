@@ -54,6 +54,7 @@ COUNT_COLUMNS = {
     "unaffected": "unaffected_count",
 }
 RULES = ("adopt_figure_counts",)
+COUNT_REPAIR_VERSION = "count-repair-v2"
 
 
 def _is_count(value: Any) -> bool:
@@ -143,6 +144,86 @@ def repair_counts(
     }
 
 
+def _json_value(raw: Any, expected_type: type, default: Any) -> Any:
+    try:
+        value = json.loads(raw) if raw else default
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return default
+    return value if isinstance(value, expected_type) else default
+
+
+def _quarantine_figure_fields(
+    cur: sqlite3.Cursor,
+    penetrance_id: int,
+    fields: set[str],
+    columns: set[str],
+    *,
+    row_created: bool,
+) -> None:
+    """Keep newly adopted figure fields pending until the trust gate evaluates them."""
+    available = {
+        name
+        for name in (
+            "trust_tier",
+            "trust_reasons",
+            "trust_rule_version",
+            "field_trust",
+            "trust_sources",
+        )
+        if name in columns
+    }
+    field_scoped = "field_trust" in available
+    if not available or (not row_created and not field_scoped):
+        # Legacy rows without a field-level mask may already contain trusted
+        # text counts. Quarantining the whole row would hide those unrelated
+        # observations, so only a brand-new row may use the row-level fallback.
+        return
+    row = cur.execute(
+        f"SELECT {', '.join(sorted(available))} FROM penetrance_data "
+        "WHERE penetrance_id=?",
+        (penetrance_id,),
+    ).fetchone()
+    current = dict(zip(sorted(available), row)) if row else {}
+    assignments: list[str] = []
+    values: list[Any] = []
+
+    def assign(column: str, value: Any) -> None:
+        if column in available:
+            assignments.append(f"{column}=?")
+            values.append(value)
+
+    assign("trust_tier", "quarantine")
+    reasons = _json_value(current.get("trust_reasons"), list, [])
+    assign(
+        "trust_reasons",
+        json.dumps(
+            sorted(
+                {str(reason) for reason in reasons} | {"figure_count_pending_review"}
+            )
+        ),
+    )
+    field_trust = _json_value(current.get("field_trust"), dict, {})
+    trust_fields = {
+        "total_carriers" if field == "carriers" else field for field in fields
+    }
+    field_trust.update({field: "quarantine" for field in trust_fields})
+    assign("field_trust", json.dumps(field_trust, sort_keys=True))
+    sources = _json_value(current.get("trust_sources"), list, [])
+    assign(
+        "trust_sources",
+        json.dumps(
+            sorted({str(source) for source in sources} | {"figure_count_repair"})
+        ),
+    )
+    assign("trust_rule_version", COUNT_REPAIR_VERSION)
+    if assignments:
+        cur.execute(
+            f"UPDATE penetrance_data SET {', '.join(assignments)} "
+            "WHERE penetrance_id=?",
+            (*values, penetrance_id),
+        )
+
+
 def apply_count_repair(
     db,
     *,
@@ -157,6 +238,7 @@ def apply_count_repair(
         "rows_examined": 0,
         "rows_changed": 0,
         "rows_created": 0,
+        "ambiguous_variant_papers": 0,
         "dry_run": dry_run,
     }
     summary.update({rule: 0 for rule in RULES})
@@ -181,11 +263,18 @@ def apply_count_repair(
                               pd.affected_count          AS affected,
                               pd.unaffected_count        AS unaffected,
                               vp.additional_notes AS additional_notes,
-                              vp.source_layer     AS source_layer
+                              vp.source_layer     AS source_layer,
+                              (SELECT COUNT(*) FROM penetrance_data siblings
+                               WHERE siblings.variant_id = vp.variant_id
+                                 AND siblings.pmid = vp.pmid) AS penetrance_rows
                        FROM variant_papers vp
                        LEFT JOIN penetrance_data pd
-                              ON pd.variant_id = vp.variant_id
-                             AND pd.pmid = vp.pmid"""
+                              ON pd.penetrance_id = (
+                                  SELECT MIN(parent.penetrance_id)
+                                  FROM penetrance_data parent
+                                  WHERE parent.variant_id = vp.variant_id
+                                    AND parent.pmid = vp.pmid
+                              )"""
                 )
             )
         except sqlite3.OperationalError:
@@ -203,8 +292,16 @@ def apply_count_repair(
             )
 
         stamp = datetime.now(timezone.utc).isoformat()
+        penetrance_columns = {
+            info[1] for info in cur.execute("PRAGMA table_info(penetrance_data)")
+        }
         for row in rows:
             summary["rows_examined"] += 1
+            if row["penetrance_rows"] > 1:
+                # A single figure observation cannot be assigned safely to an
+                # unspecified cohort. Leave every sibling untouched.
+                summary["ambiguous_variant_papers"] += 1
+                continue
             counts = {f: row[f] for f in COUNT_COLUMNS}
             changes = {
                 field: (value, rule)
@@ -219,6 +316,7 @@ def apply_count_repair(
                 continue
             summary["rows_changed"] += 1
             penetrance_id = row["penetrance_id"]
+            row_created = penetrance_id is None
             if penetrance_id is None and not dry_run:
                 cur.execute(
                     "INSERT INTO penetrance_data(variant_id, pmid) VALUES(?,?)",
@@ -251,6 +349,14 @@ def apply_count_repair(
                         rule,
                         stamp,
                     ),
+                )
+            if not dry_run:
+                _quarantine_figure_fields(
+                    cur,
+                    penetrance_id,
+                    set(changes),
+                    penetrance_columns,
+                    row_created=row_created,
                 )
         if dry_run:
             con.rollback()

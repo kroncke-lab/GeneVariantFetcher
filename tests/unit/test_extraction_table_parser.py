@@ -112,8 +112,8 @@ Table 1. Summary of putative LQT1-associated mutations in KCNQ1
     )
     assert by_protein["G80fsX"]["penetrance_data"] == {
         "total_carriers_observed": 1,
-        "affected_count": 1,
-        "unaffected_count": 0,
+        "affected_count": None,
+        "unaffected_count": None,
     }
 
 
@@ -225,6 +225,24 @@ Table 1. KCNH2 affected and unaffected carriers
     assert pen["total_carriers_observed"] == 14
     assert pen["affected_count"] == 4
     assert pen["unaffected_count"] == 10
+
+
+def test_deterministic_parser_preserves_zero_in_a_later_mapped_column():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. KCNH2 phenotype observations
+
+| protein | affected | affected |
+|---------|----------|----------|
+| p.Lys897Thr | | 0 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNH2")
+
+    penetrance = variants[0]["penetrance_data"]
+    assert penetrance["affected_count"] == 0
+    assert penetrance["total_carriers_observed"] is None
+    assert penetrance["unaffected_count"] is None
 
 
 def test_markdown_caption_row_scopes_gene_without_gene_column():
@@ -351,10 +369,12 @@ Family characteristics and pathological characteristics of breast cancers of ind
         "c.1184insA",
     ]
     assert all(v["patients"]["count"] == 1 for v in variants)
-    assert all(v["penetrance_data"]["affected_count"] == 1 for v in variants)
+    assert all(v["penetrance_data"].get("affected_count") is None for v in variants)
     assert all(v["source_ref"] == "Table 5" for v in variants)
     first = variants[0]
     assert first["column_ref"] == "implicit one carrier per clinical row"
+    assert first["count_provenance"]["affected_column_label"] is None
+    assert first["count_provenance"]["affected_count_type"] is None
     assert "Header:" in first["evidence_quote"]
     assert "Target row: | BRCA2 | 490 delCT" in first["evidence_quote"]
     assert "Next row: |  | 1184 insA" in first["evidence_quote"]
@@ -389,7 +409,7 @@ Family characteristics of individuals with deleterious BRCA mutations
     assert [v["cdna_notation"] for v in deduped] == ["c.490delCT"]
     variant = deduped[0]
     assert variant["patients"]["count"] == 2
-    assert variant["penetrance_data"]["affected_count"] == 2
+    assert variant["penetrance_data"]["affected_count"] is None
     assert variant["source_ref"] == "Table 2"
     assert variant["count_provenance"]["carriers_count_type"] == "family_count"
 
@@ -438,7 +458,7 @@ c4519-4527del                 26        pGln1507_Pro1509del                     
     assert (
         by_variant["p.Glu1784Lys"]["penetrance_data"]["total_carriers_observed"] == 69
     )
-    assert by_variant["c.393-1C>T"]["penetrance_data"]["affected_count"] == 1
+    assert by_variant["c.393-1C>T"]["penetrance_data"].get("affected_count") is None
 
 
 def test_fixed_width_parser_reads_wes_gene_column_rows():
@@ -458,7 +478,7 @@ Chr1: 237608827   VUS     RYR2    IVS        c.1292+5T>C        N/A             
     assert set(by_variant) == {"p.A26T", "c.1292+5T>C"}
     assert by_variant["p.A26T"]["cdna_notation"] == "c.76G>A"
     assert by_variant["p.A26T"]["source_location"] == "Supplemental Table 1"
-    assert by_variant["c.1292+5T>C"]["penetrance_data"]["affected_count"] == 1
+    assert by_variant["c.1292+5T>C"]["penetrance_data"].get("affected_count") is None
 
 
 def test_fixed_width_parser_reads_patient_mutation_rows_under_gene_table_title():
@@ -512,7 +532,6 @@ eTable 3. LQT3 Mutations or Rare Variants
     assert by_protein["p.A341V"]["penetrance_data"] == {
         "total_carriers_observed": 35,
         "affected_count": 23,
-        "unaffected_count": 12,
     }
     assert by_protein["p.A344A"]["cdna_notation"] == "c.1032G>A"
     assert all(v["source_location"].startswith("eTable 1.") for v in variants)
@@ -608,22 +627,22 @@ N: N-terminus, C: C-terminus, MS: membrane spanning, CA/VF: cardiac arrest
     assert by_protein["p.R147H"]["penetrance_data"] == {
         "total_carriers_observed": 2,
         "affected_count": 1,
-        "unaffected_count": 1,
+        "unaffected_count": None,
     }
     assert by_protein["p.D317Y"]["penetrance_data"] == {
         "total_carriers_observed": 2,
         "affected_count": 2,
-        "unaffected_count": 0,
+        "unaffected_count": None,
     }
     assert by_protein["p.R561S"]["penetrance_data"] == {
         "total_carriers_observed": 3,
         "affected_count": 1,
-        "unaffected_count": 2,
+        "unaffected_count": None,
     }
     assert by_protein["p.G1031fsX1118"]["penetrance_data"] == {
         "total_carriers_observed": 2,
         "affected_count": 1,
-        "unaffected_count": 1,
+        "unaffected_count": None,
     }
 
 
@@ -889,8 +908,6 @@ TOTAL                       406
     }
     assert by_protein["Q1507_P1509del"]["penetrance_data"] == {
         "total_carriers_observed": 55,
-        "affected_count": 55,
-        "unaffected_count": 0,
     }
 
 
@@ -981,14 +998,12 @@ Nucleotide Change              Coding Effect            Region
     assert by_protein["Q55X"]["cdna_notation"] == "c.163C>T"
     assert by_protein["L136P"]["penetrance_data"] == {
         "total_carriers_observed": 2,
-        "affected_count": 2,
-        "unaffected_count": 0,
     }
     assert by_protein["L136P"]["count_provenance"] == {
         "carriers_column_label": "Coding Effect count",
         "carriers_count_type": "per_variant_carrier",
-        "affected_column_label": "Coding Effect count",
-        "affected_count_type": "per_variant_carrier",
+        "affected_column_label": None,
+        "affected_count_type": None,
         "unaffected_column_label": None,
         "unaffected_count_type": None,
     }
@@ -1125,11 +1140,11 @@ def test_deterministic_parser_skips_caption_unnamed_header_and_sums_case_columns
     pen = by_protein["p.Met1?"]["penetrance_data"]
     assert pen["total_carriers_observed"] == 3
     assert pen["affected_count"] == 3
-    assert pen["unaffected_count"] == 0
+    assert pen["unaffected_count"] is None
     pen = by_protein["p.Gly168Arg"]["penetrance_data"]
     assert pen["total_carriers_observed"] == 10
     assert pen["affected_count"] == 10
-    assert pen["unaffected_count"] == 0
+    assert pen["unaffected_count"] is None
 
 
 def test_deterministic_parser_infers_one_carrier_per_patient_row_without_count():
@@ -1150,7 +1165,7 @@ Table 1. KCNH2 mutation-positive patients
     assert by_protein["p.Arg176Trp"]["penetrance_data"] == {
         "total_carriers_observed": 1,
         "affected_count": 1,
-        "unaffected_count": 0,
+        "unaffected_count": None,
     }
     assert by_protein["p.Asn629Ser"]["penetrance_data"] == {
         "total_carriers_observed": 1,

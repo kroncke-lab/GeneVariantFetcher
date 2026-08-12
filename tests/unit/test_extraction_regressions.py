@@ -550,7 +550,7 @@ NT
     assert second["cdna_notation"] == "c.1259G>A"
     assert second["protein_notation"] == "R420Q"
     assert second["patients"]["count"] == 2
-    assert second["penetrance_data"]["affected_count"] == 2
+    assert second["penetrance_data"].get("affected_count") is None
     # A bare supplement catalogue must not assert pathogenicity per row.
     assert first["clinical_significance"] == "uncertain"
     assert second["clinical_significance"] == "uncertain"

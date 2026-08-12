@@ -27,6 +27,7 @@ import pytest
 
 import cli.gvf_run as gvf_run
 import cli.institutional_preflight as preflight
+import harvesting.paywall_session as paywall_session
 import scripts.ezproxy_relogin as relogin
 from harvesting.browser_html.cookie_loader import _cookies_from_file
 
@@ -533,17 +534,15 @@ def test_probe_sets_login_redirect_field(tmp_path, monkeypatch):
     relogin.write_cookie_file(cookie_file, [SESSION_COOKIE])
     monkeypatch.setenv("GVF_COOKIE_FILE", str(cookie_file))
 
-    import scripts.fetch_paywalled as fetch_paywalled
-
     class _FakeSession:
         def get(self, url, **kwargs):
             return _FakeResponse(
                 "https://login.proxy.library.vanderbilt.edu/login?auth=shibboleth"
             )
 
-    monkeypatch.setattr(fetch_paywalled, "make_session", lambda: _FakeSession())
+    monkeypatch.setattr(paywall_session, "make_session", lambda: _FakeSession())
     monkeypatch.setattr(
-        fetch_paywalled, "hydrate_session_with_browser_cookies", lambda s, c: None
+        paywall_session, "hydrate_session_with_browser_cookies", lambda s, c: None
     )
     report = preflight.probe_institutional_access(timeout_s=1)
     assert report.viable is False

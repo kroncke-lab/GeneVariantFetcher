@@ -44,10 +44,15 @@ Create a `.env` file in the repository root:
 # Required
 NCBI_EMAIL=brett.kroncke@gmail.com
 
-# Required: at least one LLM provider key
+# Required: select a provider and configure its key. Anthropic is the shipped
+# default; set MODEL_PROVIDER=azure or openai when using those providers.
+MODEL_PROVIDER=anthropic
 ANTHROPIC_API_KEY=your-anthropic-key
-# OPENAI_API_KEY=sk-your-openai-key-here
+# MODEL_PROVIDER=azure
 # AZURE_AI_API_KEY=your-azure-ai-key
+# AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+# MODEL_PROVIDER=openai
+# OPENAI_API_KEY=sk-your-openai-key-here
 
 # Optional: Publisher APIs for better paper coverage
 ELSEVIER_API_KEY=your-elsevier-key
@@ -138,10 +143,10 @@ prefer `gvf gvf-run` for normal work.
 
 ```bash
 # Limit papers for faster testing
-gvf extract KCNH2 --email brett.kroncke@gmail.com --max-pmids 20 --max-downloads 10
+gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --max-pmids 20 --max-downloads 10
 
 # Verbose output
-gvf extract KCNH2 --email brett.kroncke@gmail.com --verbose
+gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --verbose
 
 # Custom output directory
 gvf extract KCNH2 --email brett.kroncke@gmail.com --output /path/to/results
@@ -173,7 +178,7 @@ into GVF's local gold SQLite cache, see
 After completion, you'll find:
 
 ```
-./output/KCNH2/20260210_143022/
+./results/KCNH2/20260210_143022/
 ├── KCNH2.db                        # ← SQLite database (query this!)
 ├── KCNH2_pmids.txt                 # Discovered PMIDs
 ├── KCNH2_penetrance_summary.json   # Aggregated penetrance data
@@ -201,7 +206,7 @@ Papers with extractions: 72
 Total variants found: 234
 Success rate: 32%
 
-SQLite database: ./output/KCNH2/20260210_143022/KCNH2.db
+SQLite database: ./results/KCNH2/20260210_143022/KCNH2.db
 ================================================================================
 ```
 
@@ -209,7 +214,7 @@ SQLite database: ./output/KCNH2/20260210_143022/KCNH2.db
 
 ```bash
 # Open the database
-sqlite3 ./output/KCNH2/20260210_143022/KCNH2.db
+sqlite3 ./results/KCNH2/20260210_143022/KCNH2.db
 
 # Count variants
 sqlite> SELECT COUNT(*) FROM variants;
@@ -233,7 +238,7 @@ If you don't have publisher API keys, GVF still works using only PubMed Central:
 
 ```bash
 # Works without publisher keys; skips live paywall recovery
-gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./output --no-source-recovery
+gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --no-source-recovery
 ```
 
 **Limitations:**
@@ -262,7 +267,7 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 
 ### Extraction seems slow
 - LLM calls take time; this is normal
-- Use `--max-downloads 10` for testing
+- For a bounded fetch test, run `gvf extract ... --output ./results --max-downloads 10`; `gvf-run` does not expose that limit
 - Check `--verbose` output for progress
 
 ## Next Steps

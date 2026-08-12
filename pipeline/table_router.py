@@ -475,7 +475,6 @@ _UNAFFECTED_TEXT_RE = re.compile(
     r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
     re.IGNORECASE,
 )
-
 # Caption can also be embedded as the first cell of the header row, e.g.
 #   | Table S3: rare variants ... | ... |
 _EMBEDDED_TABLE_LABEL_RE = re.compile(
@@ -1784,7 +1783,7 @@ def _router_count_provenance(
         if count_idx == _INFER_ROW_PATIENT_COUNT
         else _header_label(table, count_idx)
     )
-    affected_label = _header_label(table, aff_idx) or carrier_label
+    affected_label = _header_label(table, aff_idx)
     unaffected_label = _header_label(table, unaff_idx)
     return {
         "carriers_column_label": carrier_label,
@@ -2058,26 +2057,31 @@ def parse_routed_table(
         affected = _coerce_int(cell(aff_idx))
         unaffected = _coerce_int(cell(unaff_idx))
         uncertain = _coerce_int(cell(unc_idx))
+        phenotype = cell(pheno_idx)
+        clinical = cell(clin_idx)
 
-        # If only patient_count exists, treat all carriers as affected (matches
-        # the assumption already used by _parse_markdown_table_variants).
+        # A carrier/patient total does not establish either phenotype partition.
+        # Only explicit phenotype or unaffected language can populate it.
         if total is not None and affected is None and unaffected is None:
             row_text = " ".join(cells)
             if infer_one_carrier and _UNAFFECTED_TEXT_RE.search(row_text):
                 affected = 0
                 unaffected = total
-            else:
+            elif (
+                infer_one_carrier
+                and phenotype
+                and re.search(r"[A-Za-z]", phenotype)
+                and not re.search(
+                    r"\b(unknown|uncertain|not reported|n/?a)\b", phenotype, re.I
+                )
+            ):
                 affected = total
-                unaffected = 0
 
         # If we have affected + unaffected but no total, derive it.
-        if total is None and (affected is not None or unaffected is not None):
-            total = (affected or 0) + (unaffected or 0) + (uncertain or 0)
+        if total is None and affected is not None and unaffected is not None:
+            total = affected + unaffected + (uncertain or 0)
             if total == 0:
                 total = None
-
-        phenotype = cell(pheno_idx)
-        clinical = cell(clin_idx)
 
         n_variants = max(len(cdna_values), len(protein_values), 1)
         for variant_idx in range(n_variants):

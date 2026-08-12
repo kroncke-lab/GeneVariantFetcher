@@ -1,5 +1,10 @@
 # Protocol cost & quality
 
+This is a dated measurement record. Model routes, prices, and default-on stages
+are those used by each named run; they are not current configuration guidance.
+Use `config/settings.py` and `docs/ARCHITECTURE.md` for current defaults and
+`TASKS.md` for the next acceptance gate.
+
 ## Canonical rollout sizes (2026-08-11)
 
 The only active progression is 50 gold-scored gene–paper attempts, then 120
@@ -32,7 +37,7 @@ The exact A1 56-paper predictions were held locked while the scorer and answer
 key were audited. Compact `azure_ai/gpt-5.6-luna@xhigh` claim cards targeted the
 few multi-cohort rows dominating carrier MAE.
 
-The underlying A1 production trace used the current failure-routing shape, not
+The underlying A1 production trace used the then-current failure-routing shape, not
 Luna: 16 Kimi table-routing calls, 55 Grok 4.3 extraction calls, 90 GPT-5.6 Sol
 figure-reading calls, and 142 GPT-5.6 Sol risk-ranked claim-verification calls
 (303 provider calls total across 56 papers). The seven Luna calls below were an
@@ -60,7 +65,7 @@ in the later independent review. Full metrics and locked digests are in
 
 ## Historical small sample (2026-07-20)
 
-**Purpose.** Measure the *current* extraction protocol's **cost (time + money)**
+**Purpose.** Measure the then-current extraction protocol's **cost (time + money)**
 and **quality** on a small sample, so we can decide whether to spend a full
 cardiac re-extraction before running over all ~1,500 gold papers. This is a
 **sample, not the full suite** — do not read these as headline recall (that lives
@@ -69,7 +74,7 @@ change history is in `docs/PROTOCOL_CHANGELOG.md`.
 
 ## What was run
 
-3 papers through the current default `gvf-run` protocol, **core LLM path only**:
+3 papers through the then-current Azure `gvf-run` route, **core LLM path only**:
 extract (Kimi table-routing → grok-4.3 extraction → gpt-5.4/DeepSeek/Kimi debate)
 → migrate → trust gate (Step 3.7, tg3) → source-grounded final check (Step 3.8,
 `gpt-5.6-sol@xhigh`) → composer (3.9). Run with `--pmid-file --no-source-recovery
@@ -98,15 +103,15 @@ at a time); production uses `MAX_WORKERS` / `AZURE_MAX_WORKERS` concurrency.
 
 ## Cost (money) — order of magnitude, needs real token accounting
 
-The pipeline does **not** currently aggregate per-run token usage, so an exact
+The pipeline did **not** aggregate per-run token usage in this sample, so an exact
 dollar figure is not yet defensible. Measured proxies: ~25 LLM calls/paper;
 per-paper input ≈ 14k tokens (56k-char full text) fanned across grok-4.3
 extraction, a 3-model debate, Kimi routing, and an `@xhigh` reasoning final
 check. Order of magnitude is **~$0.5–2 / typical paper**, so the full ~1,500-paper
 cardiac suite is roughly **~$1k–3k** — dominated by the `@xhigh` final check.
-**Recommended before a full run:** add token/cost logging (LiteLLM exposes
-`.usage`) so the next sample reports exact spend, and consider a cheaper or
-sampled final-check tier to cut the dominant cost.
+**Recommendation recorded with the sample:** add token/cost logging (LiteLLM
+exposes `.usage`) before budgeting a full run and consider a cheaper or sampled
+final-check tier.
 
 ## Quality — does it improve things?
 
@@ -136,7 +141,7 @@ curated four-gene benchmark score is unchanged.
 
 ## Verdict / recommendation
 
-- The current protocol is **~8 min and ~$0.5–2 per typical paper** (large papers
+- The measured 2026-07-20 route was **~8 min and ~$0.5–2 per typical paper** (large papers
   several× that), with the `@xhigh` final check as the dominant cost.
 - The #165 changes **improve honesty and traceability with no measured cardiac
   regression**, and demonstrably fix the BRCA fabrication the coworker flagged.
@@ -152,7 +157,7 @@ logs, and `timing.txt` under the session scratchpad._
 
 ## Final-check triage prototype (2026-07-20)
 
-The `@xhigh` final check is the dominant cost and runs on **every** paper, so we
+The `@xhigh` final check was the dominant measured cost and ran on **every** paper, so we
 prototyped triaging it. Design was reviewed three ways — **codex (gpt-5.6-sol,
 high), grok-4.5 (high), and agy/Antigravity (Gemini 3.1 Pro, high)** — which
 converged strongly.
@@ -163,8 +168,8 @@ re-extraction), so moving it earlier changes timing, not efficacy; and it would
 run before source recovery / recovery layers settle, forcing a second pass. (The
 one concern that turned out **not** to apply: `trust_gate.paper_outlier` is
 computed per-PMID, not cross-paper, so interleaving wouldn't corrupt it.) The
-real wall-clock lever is **bounded final-check concurrency** (the calls are
-currently sequential) + a **same-run targeted re-extraction loop** — both larger,
+real wall-clock lever was **bounded final-check concurrency** (the prototype's
+calls were sequential) plus a **same-run targeted re-extraction loop** — both larger,
 separate features, not a reorder. Keep batch `3.7 → 3.8 → 3.9`.
 
 **The real lever is risk-triage, but never "clean → skip."** The check does two
@@ -198,8 +203,8 @@ catches missed groups on that bucket, which is the calibration question. On our
 `zero_counts_with_source`) — correct, since they're either sparsely-quoted or a
 zero-count catalogue.
 
-**Rollout gate before enforcing (per codex/grok):** shadow-calibrate on the
-101-paper staging set + all known count-role/missing-carrier failures; require
+**Historical rollout gate before enforcing (per codex/grok):** shadow-calibrate
+on the canonical first-tier manifest plus all known count-role/missing-carrier failures; require
 ~100% escalation of known high-severity count errors, no missed quote-verified
 carrier gap, and ≥50% projected `@xhigh` cost reduction. **Deferred:** the live
 `apply_paper_final_check` wiring (shadow/enforce modes + cheap-tier + separate

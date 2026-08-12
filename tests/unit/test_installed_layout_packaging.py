@@ -173,6 +173,25 @@ def test_runtime_data_is_present_in_the_installed_layout(installed_layout: Path)
     assert "OK" in result.stdout
 
 
+def test_institutional_preflight_uses_shipped_session_helpers(installed_layout: Path):
+    result = _run_in_layout(
+        installed_layout,
+        """
+        from cli.institutional_preflight import probe_institutional_access
+        from harvesting.paywall_session import (
+            hydrate_session_with_browser_cookies, make_session,
+        )
+
+        assert callable(probe_institutional_access)
+        assert callable(make_session)
+        assert callable(hydrate_session_with_browser_cookies)
+        print("OK")
+        """,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "OK" in result.stdout
+
+
 def test_trace_html_builder_imports_and_runs_in_installed_layout(
     installed_layout: Path,
 ):

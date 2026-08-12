@@ -15,6 +15,7 @@ Covered:
 
 from __future__ import annotations
 
+import json
 import sqlite3
 import sys
 from pathlib import Path
@@ -67,6 +68,14 @@ def _make_db(path: Path) -> Path:
             additional_notes TEXT,
             key_quotes TEXT,
             PRIMARY KEY (variant_id, pmid)
+        );
+        CREATE TABLE penetrance_data (
+            penetrance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            variant_id INTEGER NOT NULL,
+            pmid TEXT NOT NULL,
+            total_carriers_observed INTEGER,
+            affected_count INTEGER,
+            unaffected_count INTEGER
         );
         """
     )
@@ -225,6 +234,186 @@ def test_ingest_empty_notation_dropped(tmp_path, monkeypatch):
     )
     assert added == 0
     assert _inserted_variants(db) == []
+
+
+def test_ingest_enriches_an_existing_variant_paper_link(tmp_path, monkeypatch):
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "existing_link.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, cdna_notation, protein_notation) VALUES(?,?,?)",
+        (GENE, "c.1682C>T", "p.Ala561Val"),
+    )
+    variant_id = con.execute("SELECT variant_id FROM variants").fetchone()[0]
+    con.execute(
+        """INSERT INTO variant_papers(
+               variant_id, pmid, source_location, additional_notes, key_quotes
+           ) VALUES(?,?,?,?,?)""",
+        (variant_id, "111", "Table 2", "text extraction note", "[]"),
+    )
+    con.commit()
+    con.close()
+
+    changed = ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "carriers": 13,
+                "affected": 5,
+                "context": "pedigree carrier counts",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    notes, layer, provenance = con.execute(
+        "SELECT additional_notes, source_layer, count_provenance FROM variant_papers"
+    ).fetchone()
+    con.close()
+    assert changed == 1
+    assert json.loads(notes)["prior_notes"] == "text extraction note"
+    assert json.loads(notes)["carriers"] == 13
+    assert layer == "figure"
+    assert json.loads(provenance)["carriers_count_type"] == "per_variant_carriers"
+
+
+def test_ingest_reuses_a_compatible_partial_variant_identity(tmp_path, monkeypatch):
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "partial_identity.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, protein_notation) VALUES(?,?)",
+        (GENE, "p.Ala561Val"),
+    )
+    con.commit()
+    con.close()
+
+    ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "context": "pedigree carrier counts",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    rows = con.execute(
+        "SELECT variant_id, cdna_notation, protein_notation FROM variants"
+    ).fetchall()
+    links = con.execute("SELECT variant_id, pmid FROM variant_papers").fetchall()
+    con.close()
+    assert rows == [(1, "c.1682C>T", "p.Ala561Val")]
+    assert links == [(1, "111")]
+
+
+def test_ingest_preserves_existing_figure_counts_while_filling_nulls(
+    tmp_path, monkeypatch
+):
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "fill_null_notes.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, cdna_notation, protein_notation) VALUES(?,?,?)",
+        (GENE, "c.1682C>T", "p.Ala561Val"),
+    )
+    variant_id = con.execute("SELECT variant_id FROM variants").fetchone()[0]
+    con.execute(
+        """INSERT INTO variant_papers(
+               variant_id, pmid, source_location, additional_notes, key_quotes
+           ) VALUES(?,?,?,?,?)""",
+        (
+            variant_id,
+            "111",
+            "prior figure",
+            json.dumps({"carriers": 8, "affected": None, "context": "pedigree"}),
+            "[]",
+        ),
+    )
+    con.commit()
+    con.close()
+
+    ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "carriers": 3,
+                "affected": 1,
+                "context": "pedigree reread",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    notes = json.loads(
+        con.execute("SELECT additional_notes FROM variant_papers").fetchone()[0]
+    )
+    con.close()
+    assert notes["carriers"] == 8
+    assert notes["affected"] == 1
+    assert notes["context"] == "pedigree reread"
+
+
+def test_ingest_does_not_relabel_an_existing_text_count_as_figure(
+    tmp_path, monkeypatch
+):
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "provenance_scope.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, cdna_notation, protein_notation) VALUES(?,?,?)",
+        (GENE, "c.1682C>T", "p.Ala561Val"),
+    )
+    variant_id = con.execute("SELECT variant_id FROM variants").fetchone()[0]
+    con.execute(
+        """INSERT INTO variant_papers(
+               variant_id, pmid, source_location, additional_notes, key_quotes
+           ) VALUES(?,?,?,?,?)""",
+        (variant_id, "111", "Table 2", "text extraction", "[]"),
+    )
+    con.execute(
+        """INSERT INTO penetrance_data(
+               variant_id, pmid, total_carriers_observed, affected_count
+           ) VALUES(?,?,?,?)""",
+        (variant_id, "111", None, 5),
+    )
+    con.commit()
+    con.close()
+
+    ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "carriers": 13,
+                "affected": 3,
+                "context": "pedigree reread",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    provenance = json.loads(
+        con.execute("SELECT count_provenance FROM variant_papers").fetchone()[0]
+    )
+    con.close()
+    assert provenance["carriers_source"] == "figure"
+    assert "affected_source" not in provenance
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -2,7 +2,7 @@
 Filter modules (The Sieves) for the Tiered Biomedical Extraction Pipeline.
 
 Tier 1: KeywordFilter - Fast, cheap keyword-based filtering
-Tier 2: InternFilter - LLM-based classification (gpt-4o-mini)
+Tier 2: InternFilter - provider-aware LLM classification
 """
 
 import logging

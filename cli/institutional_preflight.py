@@ -260,7 +260,7 @@ def probe_institutional_access(
 
     # 3. LIVE probe: route a Wiley DOI through EZproxy and confirm real full text.
     try:
-        from scripts.fetch_paywalled import (
+        from harvesting.paywall_session import (
             make_session,
             hydrate_session_with_browser_cookies,
         )

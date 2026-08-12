@@ -57,6 +57,7 @@ from utils.local_storage import (
     external_link_target,
     external_path_state,
     external_volume_name,
+    local_storage_allowed,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -195,7 +196,13 @@ def _apply_local_storage_checks(status: dict) -> None:
     status["local_storage"] = {
         name: external_path_state(name) for name in EXTERNAL_PATHS
     }
+    corpus_override = os.environ.get("GVF_CORPUS_DIR", "").strip()
     for name, state in status["local_storage"].items():
+        if name == "corpus" and corpus_override:
+            # A deliberate path override bypasses the repo-local corpus link;
+            # its target may legitimately start absent and be created by the
+            # corpus builder.
+            continue
         if state == "dangling":
             # Name the drive from the link, so this is right on any machine.
             volume = external_volume_name(name)
@@ -205,6 +212,11 @@ def _apply_local_storage_checks(status: dict) -> None:
                 else f"restore its target ({external_link_target(name)})"
             )
             status["required"][f"{name}/ external storage ({remedy})"] = False
+            status["ok"] = False
+        elif state == "local" and not local_storage_allowed():
+            status["required"][
+                f"{name}/ is local (set GVF_ALLOW_LOCAL_CORPUS=1 to opt in)"
+            ] = False
             status["ok"] = False
 
 
@@ -346,6 +358,25 @@ def step_extract(
 
 
 def _find_db(run_dir: Path, gene: str) -> Optional[Path]:
+    status_path = run_dir / "RUN_STATUS.json"
+    if status_path.is_file():
+        try:
+            status = json.loads(status_path.read_text(encoding="utf-8"))
+            active_ref = status.get("active_db") if isinstance(status, dict) else None
+            if isinstance(active_ref, str) and active_ref.strip():
+                active_db = Path(active_ref.strip()).expanduser()
+                if not active_db.is_absolute():
+                    active_db = run_dir / active_db
+                if active_db.is_file():
+                    return active_db
+                logger.warning(
+                    "RUN_STATUS.json names missing active_db %s; falling back to discovery",
+                    active_db,
+                )
+        except (OSError, ValueError, TypeError) as exc:
+            logger.warning(
+                "Could not read %s (%s); falling back to discovery", status_path, exc
+            )
     db = run_dir / f"{gene}.db"
     if db.exists():
         return db
@@ -1124,6 +1155,9 @@ def step_corpus_sync(
         return
     logger.info("📦 Step 4.5: corpus sync (folding new source into corpus/)")
     cmd = [sys.executable, str(builder), "--apply", "--roots", str(run_dir)]
+    corpus_override = os.environ.get("GVF_CORPUS_DIR", "").strip()
+    if corpus_override:
+        cmd += ["--out", corpus_override]
     if gene:
         cmd += ["--assume-gene", gene]
     try:

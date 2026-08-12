@@ -21,7 +21,9 @@ How to obtain API keys for each service GVF uses, and what works without them.
 ## Required: One LLM Provider Key
 
 **Purpose:** Powers LLM-based variant extraction (the core of GVF).
-GVF accepts Anthropic, OpenAI, or Azure AI credentials through LiteLLM.
+GVF accepts Anthropic, OpenAI, or Azure AI credentials through LiteLLM. A key
+does not select its provider: `MODEL_PROVIDER` must match the credential. The
+shipped default is `anthropic`.
 
 ### Common Options
 
@@ -33,15 +35,21 @@ GVF accepts Anthropic, OpenAI, or Azure AI credentials through LiteLLM.
 
 ```bash
 # In your .env file
+MODEL_PROVIDER=anthropic
 ANTHROPIC_API_KEY=your-anthropic-key
-# or OPENAI_API_KEY=sk-your-key-here
-# or AZURE_AI_API_KEY=your-azure-ai-key
+# or:
+# MODEL_PROVIDER=openai
+# OPENAI_API_KEY=sk-your-key-here
+# or:
+# MODEL_PROVIDER=azure
+# AZURE_AI_API_KEY=your-azure-ai-key
+# AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
 
 # Or as environment variable
 export ANTHROPIC_API_KEY=your-anthropic-key
 ```
 
-### Cost Estimate
+### Illustrative Cost Range
 
 | Gene Size | Papers Extracted | Approx Cost |
 |-----------|-----------------|-------------|
@@ -49,7 +57,9 @@ export ANTHROPIC_API_KEY=your-anthropic-key
 | Medium (100 papers) | ~60 | $2.00-8.00 |
 | Large (300 papers) | ~150 | $5.00-20.00 |
 
-*Costs vary based on paper length, provider, and extraction complexity.*
+*These are rough historical planning ranges, not current provider pricing.
+Verify deployed-model prices and measure actual token usage before budgeting a
+large run.*
 
 ---
 
@@ -63,7 +73,7 @@ This is just your email address, not an API key. NCBI uses it to contact you if 
 
 ```bash
 # Provided via command line
-gvf extract KCNH2 --email you@institution.edu
+gvf extract KCNH2 --email you@institution.edu --output ./results
 ```
 
 ---

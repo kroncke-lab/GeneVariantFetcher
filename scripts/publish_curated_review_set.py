@@ -189,9 +189,7 @@ def main() -> int:
     ap.add_argument(
         "--dataset-label", help="staging dataset slug stored by Variant_Browser"
     )
-    ap.add_argument(
-        "--dataset-note", default="101-paper curated GVF benchmark staging review"
-    )
+    ap.add_argument("--dataset-note", default="curated GVF benchmark staging review")
     ap.add_argument(
         "--create-pairs",
         action="store_true",

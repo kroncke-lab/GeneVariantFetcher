@@ -596,9 +596,9 @@ def extract_sqlite_data(
                 pmid,
                 variant_id,
                 COUNT(*) AS carriers_total,
-                SUM(CASE WHEN affected_status='affected' THEN 1 ELSE 0 END) AS affected_count,
-                SUM(CASE WHEN affected_status='unaffected' THEN 1 ELSE 0 END) AS unaffected_count,
-                SUM(CASE WHEN affected_status='uncertain' THEN 1 ELSE 0 END) AS uncertain_count
+                SUM(CASE WHEN affected_status='affected' THEN 1 END) AS affected_count,
+                SUM(CASE WHEN affected_status='unaffected' THEN 1 END) AS unaffected_count,
+                SUM(CASE WHEN affected_status='uncertain' THEN 1 END) AS uncertain_count
             FROM individual_records
             GROUP BY pmid, variant_id
         )"""
@@ -712,9 +712,9 @@ def extract_sqlite_data(
                 v.cdna_notation,
                 'llm_text' as source_layer,
                 COUNT(*) as carriers_total,
-                SUM(CASE WHEN ir.affected_status = 'affected' THEN 1 ELSE 0 END) as affected_count,
-                SUM(CASE WHEN ir.affected_status = 'unaffected' THEN 1 ELSE 0 END) as unaffected_count,
-                SUM(CASE WHEN ir.affected_status = 'uncertain' THEN 1 ELSE 0 END) as uncertain_count
+                SUM(CASE WHEN ir.affected_status = 'affected' THEN 1 END) as affected_count,
+                SUM(CASE WHEN ir.affected_status = 'unaffected' THEN 1 END) as unaffected_count,
+                SUM(CASE WHEN ir.affected_status = 'uncertain' THEN 1 END) as uncertain_count
             FROM individual_records ir
             JOIN variants v ON ir.variant_id = v.variant_id
             GROUP BY ir.pmid, v.variant_id

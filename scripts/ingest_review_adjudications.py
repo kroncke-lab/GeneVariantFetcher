@@ -485,9 +485,9 @@ def build_overlay_rows(
                     entry.get("protein_notation") if entry else ""
                 )
                 or "",
-                "extracted_carriers": entry.get("carriers_total") if entry else "",
-                "extracted_affected": entry.get("affected_count") if entry else "",
-                "extracted_unaffected": entry.get("unaffected_count") if entry else "",
+                "extracted_carriers": _extracted_count(entry, "carriers_total"),
+                "extracted_affected": _extracted_count(entry, "affected_count"),
+                "extracted_unaffected": _extracted_count(entry, "unaffected_count"),
                 "corrected_affected": _blank(raw.get("corrected_affected")),
                 "corrected_unaffected": _blank(raw.get("corrected_unaffected")),
                 "corrected_total": _blank(raw.get("corrected_total")),
@@ -502,6 +502,24 @@ def build_overlay_rows(
             }
         )
     return out
+
+
+def _extracted_count(entry: Optional[dict[str, Any]], field: str) -> Any:
+    """Serialize an aggregate count without turning an unobserved field into zero.
+
+    ``aggregate_sqlite_data`` initializes numeric accumulators to zero and carries
+    a parallel ``*_present`` marker.  Older/custom aggregate mappings may not have
+    that marker, so preserve their historical value; when the marker is present,
+    however, it is authoritative.  This keeps explicit zero while rendering an
+    unobserved category as blank in the durable adjudication overlay.
+    """
+    if entry is None:
+        return ""
+    present_key = f"{field}_present"
+    if present_key in entry and not bool(entry[present_key]):
+        return ""
+    value = entry.get(field)
+    return "" if value is None else value
 
 
 def _blank(value: Any) -> str:
@@ -535,6 +553,10 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "count_override_matched": 0,
             "net_affected_delta": 0,
             "net_unaffected_delta": 0,
+            "affected_delta_known_rows": 0,
+            "affected_delta_unknown_rows": 0,
+            "unaffected_delta_known_rows": 0,
+            "unaffected_delta_unknown_rows": 0,
         }
     )
     for row in rows:
@@ -547,10 +569,18 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
             ext_unaff = _opt_int(row["extracted_unaffected"])
             cor_aff = _opt_int(row["corrected_affected"])
             cor_unaff = _opt_int(row["corrected_unaffected"])
-            if ext_aff is not None and cor_aff is not None:
-                g["net_affected_delta"] += cor_aff - ext_aff
-            if ext_unaff is not None and cor_unaff is not None:
-                g["net_unaffected_delta"] += cor_unaff - ext_unaff
+            if cor_aff is not None:
+                if ext_aff is None:
+                    g["affected_delta_unknown_rows"] += 1
+                else:
+                    g["net_affected_delta"] += cor_aff - ext_aff
+                    g["affected_delta_known_rows"] += 1
+            if cor_unaff is not None:
+                if ext_unaff is None:
+                    g["unaffected_delta_unknown_rows"] += 1
+                else:
+                    g["net_unaffected_delta"] += cor_unaff - ext_unaff
+                    g["unaffected_delta_known_rows"] += 1
             g["count_override_matched"] += 1
     # Convert defaultdicts to plain dicts for JSON.
     return {
@@ -559,8 +589,20 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "actions": dict(data["actions"]),
             "match_status": dict(data["match_status"]),
             "count_override_matched": data["count_override_matched"],
-            "net_affected_delta": data["net_affected_delta"],
-            "net_unaffected_delta": data["net_unaffected_delta"],
+            "net_affected_delta": (
+                None
+                if data["affected_delta_unknown_rows"]
+                else data["net_affected_delta"]
+            ),
+            "net_unaffected_delta": (
+                None
+                if data["unaffected_delta_unknown_rows"]
+                else data["net_unaffected_delta"]
+            ),
+            "affected_delta_known_rows": data["affected_delta_known_rows"],
+            "affected_delta_unknown_rows": data["affected_delta_unknown_rows"],
+            "unaffected_delta_known_rows": data["unaffected_delta_known_rows"],
+            "unaffected_delta_unknown_rows": data["unaffected_delta_unknown_rows"],
         }
         for gene, data in sorted(per_gene.items())
     }

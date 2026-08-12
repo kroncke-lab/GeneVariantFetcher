@@ -62,7 +62,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
   │
   ▼
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│ STEP 3: Variant Extraction (ExpertExtractor)                                     │
+│ STEP 3: Variant Extraction (ExpertExtractor; Azure staging route shown)           │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
 │   • Cheap paper census estimates variant/count ranges for escalation only         │
 │   • Kimi routes candidate tables; deterministic parser extracts table rows         │
@@ -86,7 +86,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
   ▼
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 5: SQLite Migration                                                         │
-│   • Normalized relational schema (8 core tables)                                 │
+│   • Normalized relational schema                                                 │
 │   • Indexed for efficient querying                                               │
 │   OUTPUT: {gene}.db                                                              │
 └──────────────────────────────────────────────────────────────────────────────────┘
@@ -103,7 +103,8 @@ FINAL OUTPUTS:
 recovery layers, Step 3.45 figure-count adoption, optional full-coverage guards
 and count recovery, the default-on per-fact trust gate, source QC/recovery and
 corpus sync, then reporting and optional review publication. The older
-`automated-workflow` command remains a lower-level compatibility path.
+`python -m cli.automated_workflow` entry point remains a lower-level
+compatibility path; it is not registered as a `gvf` subcommand.
 
 ## Module Responsibilities
 
@@ -276,8 +277,10 @@ extractions/{gene}_PMID_*.json
 
 ### Model Provider And Reasoning Effort
 
-`config/settings.py` resolves the effective model for each stage. The current
-forward strategy keeps routine triage/table routing/extraction/debate on Azure.
+`config/settings.py` resolves the effective model for each stage. The shipped
+provider default is Anthropic. Set `MODEL_PROVIDER=azure` to use the measured
+Azure staging route below; explicit per-tier model environment variables always
+win. The lower-level `gvf extract` command also exposes `--model-provider`.
 A separate final per-paper sniff test with GPT-5.6 Sol at `xhigh` (Step 3.8) is
 retained but parked/default-off. When enabled, it records exact fact/field findings and does not
 replace routine Tier 2 or mutate extracted counts. Step 3.9 deterministically
@@ -286,7 +289,7 @@ projection. Weak unsupported-count findings remain advisory. Sonnet/Opus are
 reserved for optional exception-adjudication and
 hard-case escalation over compact claim cards.
 
-Recommended staging routing:
+Measured Azure staging routing:
 
 | Stage | Model |
 |-------|-------|

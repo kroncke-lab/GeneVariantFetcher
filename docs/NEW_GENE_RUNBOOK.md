@@ -36,22 +36,22 @@ Recommended credentials:
 
 Do not use SSO cookie scraping or institutional paywall credentials unless the run policy explicitly allows it.
 
-## 2. Discover PMIDs From Scratch
+## 2. Run The Turnkey Workflow From Scratch
 
 Run without `--pmid-file`; explicit PMID lists are for validation against known gold standards and bypass the discovery/filtering behavior that matters for a new gene.
 
 Prefer the `gvf <command>` console script. When it is not on `PATH`, use
 `.venv/bin/python -m cli <command>` as the fallback.
-Use the lower-level `extract` command here only when debugging individual stages;
-the preferred production path is the `gvf-run` command at the top of this runbook.
+The lower-level `extract` command is for debugging individual stages; the
+production path is `gvf-run`.
 
 ```bash
-gvf extract GENE --email "$NCBI_EMAIL" --output results/ --scout-first
+gvf gvf-run GENE --email "$NCBI_EMAIL" --output results/
 ```
 
 The workflow should discover PMIDs through PubMind and PubMed (Europe PMC is added only when `USE_EUROPEPMC=1`), then write `results/GENE/<timestamp>/GENE_pmids.txt`.
 
-## 3. Triage
+## 3. Inspect Automatic Triage
 
 Use Tier 1 keyword filtering and Tier 2 clinical LLM triage with the default thresholds first. Do not tune thresholds until you inspect false positives and false negatives from the new gene's first run.
 
@@ -61,28 +61,23 @@ Key outputs to inspect:
 - Tier 2 logs: malformed or low-confidence decisions should fail open or be reviewed.
 - `GENE_pmids.txt` versus filtered PMID count: a very small retained fraction is a warning sign.
 
-## 4. Harvest and Reuse Content
+## 4. Resume Harvesting And Extraction
 
-If resuming, point `GVF_RESUME_DIR` at the existing timestamped run directory.
+If resuming, point `--resume-dir` at the existing timestamped run directory.
 
 ```bash
-GVF_RESUME_DIR=results/GENE/<timestamp> \
-  gvf extract GENE --email "$NCBI_EMAIL" --output results/ --scout-first
+gvf gvf-run GENE --email "$NCBI_EMAIL" --output results/ \
+  --resume-dir results/GENE/<timestamp>
 ```
 
 The harvester should reuse non-empty `pmc_fulltext/*_FULL_CONTEXT.md` files and retry only empty, abstract-only, thin, or publisher-shell artifacts. Avoid re-downloading already valid content.
 
-## 5. Extract and Migrate
+## 5. Verify Migration And Refresh Recovered Source
 
-After extraction JSONs are written, migrate to SQLite.
-
-```bash
-python harvesting/migrate_to_sqlite.py \
-  --data-dir results/GENE/<timestamp> \
-  --db results/GENE/<timestamp>/GENE.db
-```
-
-Check that the DB has non-zero `papers`, `variants`, `variant_papers`, and, for clinical papers, `individual_records` or `penetrance_data`.
+`gvf-run` performs extraction, aggregation, migration, recovery layers, trust,
+and reporting. Check that its final DB has non-zero `papers`, `variants`,
+`variant_papers`, and, for clinical papers, `individual_records` or
+`penetrance_data`.
 
 If source recovery lands after the initial run, do not patch SQLite rows
 directly. Refresh from source artifacts so the run remains reproducible:

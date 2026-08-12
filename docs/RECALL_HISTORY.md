@@ -45,6 +45,19 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-12 — Phenotype-null and figure-link hardening (rescore required)
+
+Deterministic table paths now preserve NULL for affected/unaffected partitions
+the source did not assert, while explicit source zero remains an observation.
+The scorer carries assertion presence through aggregation and adjudication so
+zero and missing are no longer conflated. Figure observations now enrich a
+compatible existing variant-paper link, fail closed on ambiguous multi-cohort
+parents, and retain role/locator provenance pending trust review. No live
+extraction or headline rescore was performed. The 2026-07-12 headline therefore
+remains the pre-correction baseline; acceptance requires a paired live cardiac
+re-extraction and rescore with assertion coverage, matched-row error, and
+end-to-end error reported together.
+
 ### 2026-08-11 — Full reviewer tier expanded to BMPR2, LMNA, and TTN
 
 The full private-review tier now includes every populated reviewer workspace:

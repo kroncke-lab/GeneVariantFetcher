@@ -719,6 +719,68 @@ class TestSQLiteIntrospection:
         assert raw.iloc[0]["affected_count"] == 4
         conn.close()
 
+    def test_individual_records_do_not_assert_unobserved_phenotype_zeros(self):
+        conn = sqlite3.connect(":memory:")
+        conn.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
+                cdna_notation TEXT, protein_notation TEXT, genomic_position TEXT
+            );
+            CREATE TABLE variant_papers (
+                variant_id INTEGER, pmid TEXT, source_location TEXT, source_layer TEXT
+            );
+            CREATE TABLE penetrance_data (
+                penetrance_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+                total_carriers_observed INTEGER, affected_count INTEGER,
+                unaffected_count INTEGER, uncertain_count INTEGER
+            );
+            CREATE TABLE individual_records (
+                record_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+                affected_status TEXT
+            );
+            INSERT INTO variants VALUES (1, 'KCNH2', 'c.1A>G', 'p.Arg1Gly', NULL);
+            INSERT INTO variant_papers VALUES (1, '111', 'Table 2', 'llm_table');
+            INSERT INTO penetrance_data VALUES (10, 1, '111', NULL, NULL, NULL, NULL);
+            INSERT INTO individual_records VALUES (1, 1, '111', 'uncertain');
+            INSERT INTO individual_records VALUES (2, 1, '111', NULL);
+            """
+        )
+
+        row = extract_sqlite_data(conn, introspect_sqlite(conn)).iloc[0]
+
+        assert row["carriers_total"] == 2
+        assert pd.isna(row["affected_count"])
+        assert pd.isna(row["unaffected_count"])
+        assert row["uncertain_count"] == 1
+        conn.close()
+
+    def test_individual_records_only_strategy_preserves_missing_phenotypes(self):
+        conn = sqlite3.connect(":memory:")
+        conn.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
+                cdna_notation TEXT, protein_notation TEXT, genomic_position TEXT
+            );
+            CREATE TABLE individual_records (
+                record_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+                affected_status TEXT
+            );
+            INSERT INTO variants VALUES (1, 'KCNH2', 'c.1A>G', 'p.Arg1Gly', NULL);
+            INSERT INTO individual_records VALUES (1, 1, '111', NULL);
+            INSERT INTO individual_records VALUES (2, 1, '111', NULL);
+            """
+        )
+
+        row = extract_sqlite_data(conn, introspect_sqlite(conn)).iloc[0]
+
+        assert row["carriers_total"] == 2
+        assert pd.isna(row["affected_count"])
+        assert pd.isna(row["unaffected_count"])
+        assert pd.isna(row["uncertain_count"])
+        conn.close()
+
 
 # =============================================================================
 # COMPARISON TESTS

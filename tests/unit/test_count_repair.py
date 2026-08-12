@@ -403,3 +403,101 @@ def test_dry_run_counts_the_rows_it_would_create(tmp_path):
 def test_composite_layer_strings_still_adopt(layer):
     notes = json.dumps({"carriers": 7, "context": "pedigree"})
     assert adopt_figure_counts({"carriers": None}, notes, layer) == {"carriers": 7}
+
+
+def test_ambiguous_multi_cohort_parent_fails_closed(tmp_path):
+    path = tmp_path / "ambiguous.db"
+    con = sqlite3.connect(path)
+    con.executescript(
+        """CREATE TABLE penetrance_data(
+             penetrance_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+             total_carriers_observed INTEGER, affected_count INTEGER,
+             unaffected_count INTEGER, trust_tier TEXT, trust_reasons TEXT);
+           CREATE TABLE variant_papers(
+             variant_id INTEGER, pmid TEXT, additional_notes TEXT,
+             source_layer TEXT);
+           INSERT INTO penetrance_data VALUES(1, 7, '111', NULL, NULL, NULL, 'trusted', '[]');
+           INSERT INTO penetrance_data VALUES(2, 7, '111', NULL, NULL, NULL, 'trusted', '[]');
+           INSERT INTO variant_papers VALUES(
+             7, '111', '{"carriers": 13, "affected": 5, "context": "pedigree"}',
+             'figure'
+           );"""
+    )
+    con.commit()
+    con.close()
+
+    summary = apply_count_repair(path)
+
+    assert summary["ambiguous_variant_papers"] == 1
+    assert summary["rows_changed"] == 0
+    assert _counts(path) == [(None, None, None), (None, None, None)]
+
+
+def test_adopted_figure_fields_land_pending_trust_review(tmp_path):
+    db = _db(
+        tmp_path,
+        [
+            {
+                "carriers": None,
+                "layer": "figure",
+                "notes": json.dumps(
+                    {"carriers": 13, "affected": 5, "context": "pedigree"}
+                ),
+                "tier": "trusted",
+                "reasons": "[]",
+            }
+        ],
+    )
+    con = sqlite3.connect(db)
+    con.execute("DELETE FROM penetrance_data")
+    con.commit()
+    con.close()
+
+    apply_count_repair(db)
+
+    con = sqlite3.connect(db)
+    tier, reasons = con.execute(
+        "SELECT trust_tier, trust_reasons FROM penetrance_data"
+    ).fetchone()
+    con.close()
+    assert tier == "quarantine"
+    assert "figure_count_pending_review" in json.loads(reasons)
+
+
+def test_pending_figure_carriers_use_the_projection_field_name(tmp_path):
+    db = _db(
+        tmp_path,
+        [
+            {
+                "carriers": None,
+                "affected": 5,
+                "layer": "figure,llm_text",
+                "notes": json.dumps({"carriers": 13, "context": "pedigree"}),
+                "tier": "trusted",
+                "reasons": "[]",
+            }
+        ],
+    )
+    con = sqlite3.connect(db)
+    con.execute("ALTER TABLE penetrance_data ADD COLUMN field_trust TEXT")
+    con.execute("ALTER TABLE penetrance_data ADD COLUMN trust_sources TEXT")
+    con.execute("ALTER TABLE penetrance_data ADD COLUMN trust_rule_version TEXT")
+    con.execute(
+        "UPDATE penetrance_data SET field_trust=?, trust_sources='[]'",
+        (json.dumps({"affected": "trusted"}),),
+    )
+    con.commit()
+    con.close()
+
+    apply_count_repair(db)
+
+    con = sqlite3.connect(db)
+    tier, field_trust_raw = con.execute(
+        "SELECT trust_tier, field_trust FROM penetrance_data"
+    ).fetchone()
+    con.close()
+    field_trust = json.loads(field_trust_raw)
+    assert tier == "quarantine"
+    assert field_trust["total_carriers"] == "quarantine"
+    assert field_trust["affected"] == "trusted"
+    assert "carriers" not in field_trust

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """Shared helpers for recall-audit scripts.
 
-These scripts intentionally use the live scored artifact layout rather than a
-separate fixture schema:
+These scripts intentionally use the canonical artifacts named in
+``docs/RECALL_STATUS.md`` rather than a separate fixture schema. The current
+baseline may split its databases and scored CSVs across two roots:
 
-  validation_runs/.../<run>/dbs/{GENE}.db
-  validation_runs/.../<run>/recall_score/{GENE}/discrepancies.csv
+  validation_runs/canonical_baseline/{GENE}.db
+  recall_metrics/current/{GENE}/discrepancies.csv
   gene_variant_fetcher_gold_standard/normalized/{GENE}_recall_input.csv
+
+An explicit ``--run-dir`` or ``GVF_RECALL_RUN_DIR`` retains support for the
+older self-contained ``dbs/`` + ``recall_score/`` layout.
 """
 
 from __future__ import annotations
@@ -71,6 +75,30 @@ def current_status_run_dir() -> Path | None:
     if not match:
         return None
     return repo_path(match.group(1)).parent.parent
+
+
+def current_status_recall_score() -> Path | None:
+    """Return the current scored-artifact directory named by ``RECALL_STATUS``."""
+    if not STATUS_DOC.exists():
+        return None
+    text = STATUS_DOC.read_text(encoding="utf-8")
+    match = re.search(r"Current local scored artifact:\s*`([^`]+)`", text)
+    return repo_path(match.group(1)) if match else None
+
+
+def current_status_gene_db(gene: str) -> Path | None:
+    """Return the gene DB named in the current canonical-baseline section."""
+    if not STATUS_DOC.exists():
+        return None
+    text = STATUS_DOC.read_text(encoding="utf-8")
+    section = re.search(
+        r"(?ms)^## Current Canonical Baseline\s*\n(.*?)(?=^##\s|\Z)", text
+    )
+    if not section:
+        return None
+    pattern = re.compile(rf"`([^`]+/{re.escape(gene.upper())}\.db)`")
+    match = pattern.search(section.group(1))
+    return repo_path(match.group(1)) if match else None
 
 
 def normalize_pmid(value: Any) -> str:
@@ -222,7 +250,21 @@ def resolve_recall_score(
 ) -> Path:
     if recall_score:
         return repo_path(recall_score)
-    return resolve_run_dir(run_dir) / "recall_score"
+    if run_dir is not None or os.environ.get(RUN_DIR_ENV):
+        return resolve_run_dir(run_dir) / "recall_score"
+    current = current_status_recall_score()
+    if current is None:
+        raise SystemExit(
+            "No current recall-score directory configured. Pass --recall-score, "
+            f"set {RUN_DIR_ENV}/--run-dir, or name 'Current local scored artifact' "
+            f"in {STATUS_DOC.relative_to(REPO_ROOT)}."
+        )
+    if not current.is_dir():
+        raise SystemExit(
+            f"Current recall-score directory does not exist: {current}. Pass "
+            "--recall-score or update docs/RECALL_STATUS.md."
+        )
+    return current
 
 
 def resolve_gene_db(
@@ -230,7 +272,26 @@ def resolve_gene_db(
 ) -> Path:
     if db:
         return repo_path(db)
-    return resolve_run_dir(run_dir) / "dbs" / f"{gene.upper()}.db"
+    if run_dir is not None or os.environ.get(RUN_DIR_ENV):
+        return resolve_run_dir(run_dir) / "dbs" / f"{gene.upper()}.db"
+    return resolve_status_gene_db(gene)
+
+
+def resolve_status_gene_db(gene: str) -> Path:
+    """Resolve a status-listed DB without consulting run-directory overrides."""
+    current = current_status_gene_db(gene)
+    if current is None:
+        raise SystemExit(
+            f"No current {gene.upper()} database configured. Pass --db, set "
+            f"{RUN_DIR_ENV}/--run-dir, or name the database in "
+            f"{STATUS_DOC.relative_to(REPO_ROOT)}."
+        )
+    if not current.is_file():
+        raise SystemExit(
+            f"Current {gene.upper()} database does not exist: {current}. Pass --db "
+            "or update docs/RECALL_STATUS.md."
+        )
+    return current
 
 
 def resolve_gold_path(gene: str, gold_dir: str | Path | None = None) -> Path:

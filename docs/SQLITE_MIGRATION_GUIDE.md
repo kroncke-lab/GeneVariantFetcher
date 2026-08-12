@@ -55,7 +55,7 @@ To migrate a data directory to SQLite (the script lives at
 `harvesting/migrate_to_sqlite.py`; run it as a module from the repo root):
 
 ```bash
-python -m harvesting.migrate_to_sqlite --data-dir /path/to/output/TTR/20251125_114028
+python -m harvesting.migrate_to_sqlite --data-dir /path/to/results/TTR/20251125_114028
 ```
 
 This will:
@@ -69,7 +69,7 @@ To migrate AND clean up the file system:
 
 ```bash
 python -m harvesting.migrate_to_sqlite \
-    --data-dir /path/to/output/TTR/20251125_114028 \
+    --data-dir /path/to/results/TTR/20251125_114028 \
     --cleanup \
     --delete-pmc-after-archive
 ```
@@ -84,7 +84,7 @@ This will:
 
 ```bash
 python -m harvesting.migrate_to_sqlite \
-    --data-dir /path/to/output/TTR/20251125_114028 \
+    --data-dir /path/to/results/TTR/20251125_114028 \
     --db ttr_variants.db
 ```
 
@@ -94,7 +94,7 @@ If your extraction files are in a different subdirectory (e.g., `extractions_rer
 
 ```bash
 python -m harvesting.migrate_to_sqlite \
-    --data-dir /path/to/output/TTR/20251125_114028 \
+    --data-dir /path/to/results/TTR/20251125_114028 \
     --extractions-subdir extractions_rerun
 ```
 
@@ -104,7 +104,7 @@ To see what would happen without actually migrating:
 
 ```bash
 python -m harvesting.migrate_to_sqlite \
-    --data-dir /path/to/output/TTR/20251125_114028 \
+    --data-dir /path/to/results/TTR/20251125_114028 \
     --cleanup \
     --dry-run
 ```
@@ -215,7 +215,8 @@ The migration script includes validation:
 
 Before migration:
 
-1. **Backup original data**: `cp -r /path/to/output /path/to/output.backup`
+1. **Back up original data** with the snapshot method appropriate for its volume;
+   do not use a broad recursive copy of the entire results root.
 2. **Use dry-run first**: Test migration without changes
 3. **Archive before cleanup**: Ensure ZIP creation succeeds before deleting originals
 

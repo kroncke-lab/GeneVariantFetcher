@@ -239,6 +239,35 @@ def _ensure_variant(
     ).fetchone()
     if row:
         return row[0]
+
+    # Figure readers frequently recover the notation that the text path omitted
+    # (for example cDNA + protein after a protein-only extraction). Reuse a
+    # single compatible identity and fill its missing notation instead of
+    # minting a second variant solely because one side was NULL.
+    compatible = []
+    for candidate in con.execute(
+        """SELECT variant_id, cdna_notation, protein_notation FROM variants
+           WHERE gene_symbol=? AND genomic_position IS NULL
+             AND ((? IS NOT NULL AND cdna_notation=?)
+                  OR (? IS NOT NULL AND protein_notation=?))""",
+        (gene, cdna, cdna, protein, protein),
+    ):
+        candidate_id, stored_cdna, stored_protein = candidate
+        cdna_matches = cdna is not None and stored_cdna == cdna
+        protein_matches = protein is not None and stored_protein == protein
+        other_compatible = (
+            stored_cdna is None or cdna is None or stored_cdna == cdna
+        ) and (stored_protein is None or protein is None or stored_protein == protein)
+        if (cdna_matches or protein_matches) and other_compatible:
+            compatible.append((candidate_id, stored_cdna, stored_protein))
+    if len(compatible) == 1:
+        candidate_id, stored_cdna, stored_protein = compatible[0]
+        con.execute(
+            "UPDATE variants SET cdna_notation=?, protein_notation=? WHERE variant_id=?",
+            (stored_cdna or cdna, stored_protein or protein, candidate_id),
+        )
+        return int(candidate_id)
+
     cur = con.execute(
         "INSERT INTO variants (gene_symbol, cdna_notation, protein_notation) VALUES (?, ?, ?)",
         (gene, cdna, protein),
@@ -250,12 +279,106 @@ def _ensure_source_layer_column(con: sqlite3.Connection) -> None:
     columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
     if "source_layer" not in columns:
         con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+    if "count_provenance" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN count_provenance TEXT")
+
+
+def _json_object(raw: str | None) -> dict:
+    if not raw:
+        return {}
+    try:
+        parsed = json.loads(raw)
+    except (TypeError, ValueError):
+        return {"prior_notes": raw}
+    return parsed if isinstance(parsed, dict) else {"prior_notes": raw}
+
+
+def _figure_note(existing: str | None, candidate: dict, source_tag: str) -> str:
+    note = _json_object(existing)
+    note["source"] = "figure"
+    note["source_location"] = source_tag
+    for key in ("carriers", "affected", "unaffected"):
+        if candidate.get(key) is not None and note.get(key) is None:
+            note[key] = candidate[key]
+    if candidate.get("context") is not None:
+        note["context"] = candidate["context"]
+    return json.dumps(note, sort_keys=True)
+
+
+def _figure_count_provenance(
+    existing: str | None,
+    candidate: dict,
+    source_tag: str,
+    adoptable_fields: set[str],
+) -> str | None:
+    provenance = _json_object(existing)
+    roles = {
+        "carriers": "per_variant_carriers",
+        "affected": "per_variant_affected",
+        "unaffected": "per_variant_unaffected",
+    }
+    wrote = False
+    for field, role in roles.items():
+        value = candidate.get(field)
+        if (
+            field not in adoptable_fields
+            or not isinstance(value, int)
+            or isinstance(value, bool)
+            or value < 0
+        ):
+            continue
+        wrote = True
+        provenance.setdefault(f"{field}_column_label", source_tag)
+        provenance.setdefault(f"{field}_count_type", role)
+        provenance.setdefault(f"{field}_source", "figure")
+        provenance.setdefault(
+            f"{field}_figure",
+            {
+                "context": candidate.get("context"),
+                "source_location": source_tag,
+            },
+        )
+    return json.dumps(provenance, sort_keys=True) if wrote or provenance else None
+
+
+def _adoptable_figure_fields(
+    con: sqlite3.Connection, variant_id: int, pmid: str
+) -> set[str]:
+    """Return fields a later count-repair pass can safely fill from this figure."""
+    try:
+        rows = con.execute(
+            """SELECT total_carriers_observed, affected_count, unaffected_count
+               FROM penetrance_data WHERE variant_id=? AND pmid=?""",
+            (variant_id, pmid),
+        ).fetchall()
+    except sqlite3.OperationalError:
+        # Minimal/legacy databases may not have materialized the count table yet.
+        rows = []
+    if len(rows) > 1:
+        # Count repair also fails closed for multiple cohort parents. Do not
+        # attach generic provenance that could be mistaken for either cohort.
+        return set()
+    stored = rows[0] if rows else (None, None, None)
+    return {
+        field
+        for field, value in zip(
+            ("carriers", "affected", "unaffected"), stored, strict=True
+        )
+        if value is None
+    }
+
+
+def _with_figure_layer(existing: str | None) -> str:
+    layers = [part.strip() for part in (existing or "").split(",") if part.strip()]
+    if "figure" not in layers:
+        layers.append("figure")
+    return ",".join(layers)
 
 
 def ingest_report(
     report: PMIDFigureReport, db_path: Path, source_tag: str = "figure-reader"
 ) -> int:
-    """Write extracted variants to *db_path*. Returns number of new variant_papers rows."""
+    """Write extracted variants to *db_path* and return links written or enriched."""
     if not report.distinct_variants:
         return 0
     return ingest_cached_variants(
@@ -274,7 +397,7 @@ def ingest_cached_variants(
     db_path: Path,
     source_tag: str = "figure-reader (cached)",
 ) -> int:
-    """Write a pre-deduped variant list into *db_path*.
+    """Write or enrich a pre-deduped variant list in *db_path*.
 
     Each candidate passes through ``_figure_variant_passes_gate`` (controlled by
     ``GVF_FIGURE_VARIANT_GATE``, default ``validate``) *before* it is written.
@@ -312,20 +435,33 @@ def ingest_cached_variants(
                 )
                 continue
             vid = _ensure_variant(con, gene, cdna, protein)
-            exists = con.execute(
-                "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?",
+            existing = con.execute(
+                """SELECT additional_notes, source_layer, count_provenance
+                   FROM variant_papers WHERE variant_id=? AND pmid=?""",
                 (vid, pmid),
             ).fetchone()
-            if exists:
-                continue
-            note = json.dumps(
-                {k: v.get(k) for k in ("carriers", "affected", "unaffected", "context")}
+            note = _figure_note(existing[0] if existing else None, v, source_tag)
+            provenance = _figure_count_provenance(
+                existing[2] if existing else None,
+                v,
+                source_tag,
+                _adoptable_figure_fields(con, vid, pmid),
             )
+            if existing:
+                con.execute(
+                    """UPDATE variant_papers
+                       SET additional_notes=?, source_layer=?, count_provenance=?
+                       WHERE variant_id=? AND pmid=?""",
+                    (note, _with_figure_layer(existing[1]), provenance, vid, pmid),
+                )
+                added += 1
+                continue
             con.execute(
                 """INSERT INTO variant_papers
-                   (variant_id, pmid, source_location, additional_notes, key_quotes, source_layer)
-                   VALUES (?, ?, ?, ?, ?, 'figure')""",
-                (vid, pmid, source_tag, note, "[]"),
+                   (variant_id, pmid, source_location, additional_notes, key_quotes,
+                    count_provenance, source_layer)
+                   VALUES (?, ?, ?, ?, ?, ?, 'figure')""",
+                (vid, pmid, source_tag, note, "[]", provenance),
             )
             added += 1
         con.commit()
@@ -443,7 +579,7 @@ def run(args: argparse.Namespace) -> int:
             db_added = ingest_report(report, Path(args.db))
             total_db_added += db_added
         logger.info(
-            "PMID %s: %d distinct variant(s), %d added to DB",
+            "PMID %s: %d distinct variant(s), %d link(s) written or enriched",
             pmid,
             len(variants),
             db_added,

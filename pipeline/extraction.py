@@ -2389,8 +2389,6 @@ class ExpertExtractor(BaseLLMCaller):
             return None
         count = numeric_tokens[0]
         affected_count = numeric_tokens[-2]
-        unaffected_count = max(count - affected_count, 0)
-
         return self._attach_table_count_provenance(
             {
                 "gene_symbol": gene_symbol,
@@ -2404,7 +2402,6 @@ class ExpertExtractor(BaseLLMCaller):
                 "penetrance_data": {
                     "total_carriers_observed": count,
                     "affected_count": affected_count,
-                    "unaffected_count": unaffected_count,
                 },
                 "individual_records": [],
                 "functional_data": {"summary": "", "assays": []},
@@ -2420,10 +2417,10 @@ class ExpertExtractor(BaseLLMCaller):
             parser="fixed_width_lqt",
             carriers_label="N",
             affected_label="Syncope",
-            unaffected_label="N minus Syncope",
+            unaffected_label=None,
             carriers_count_type="per_variant_carrier",
             affected_count_type="case",
-            unaffected_count_type="per_variant_carrier",
+            unaffected_count_type=None,
             row_label=stripped,
         )
 
@@ -3698,15 +3695,16 @@ class ExpertExtractor(BaseLLMCaller):
                     return None
                 return sum(parsed)
 
-            patient_count = parse_count_sum(get_cols("count")) or parse_count(
-                patient_count_raw
-            )
-            affected_count = parse_count_sum(get_cols("affected")) or parse_count(
-                affected_raw
-            )
-            unaffected_count = parse_count_sum(get_cols("unaffected")) or parse_count(
-                unaffected_raw
-            )
+            def parsed_count_columns(
+                key: str, fallback: Optional[str]
+            ) -> Optional[int]:
+                """Prefer all mapped cells without treating an asserted zero as absent."""
+                summed = parse_count_sum(get_cols(key))
+                return summed if summed is not None else parse_count(fallback)
+
+            patient_count = parsed_count_columns("count", patient_count_raw)
+            affected_count = parsed_count_columns("affected", affected_raw)
+            unaffected_count = parsed_count_columns("unaffected", unaffected_raw)
             inferred_one_carrier = False
 
             # Fallback: use last cell if it looks numeric
@@ -3739,33 +3737,45 @@ class ExpertExtractor(BaseLLMCaller):
                     affected_count = 0
                     unaffected_count = 1
                 else:
-                    affected_count = 1
-                    unaffected_count = 0
+                    phenotype_cells = [
+                        cells[idx]
+                        for idx, header in enumerate(normalized_active_headers)
+                        if idx < len(cells)
+                        and any(
+                            token in header
+                            for token in (
+                                "phenotype",
+                                "diagnosis",
+                                "clinical",
+                                "symptom",
+                            )
+                        )
+                        and re.search(r"[A-Za-z]", cells[idx])
+                    ]
+                    phenotype_text = " ".join(phenotype_cells)
+                    if phenotype_text and not re.search(
+                        r"\b(unknown|uncertain|not reported|n/?a)\b",
+                        phenotype_text,
+                        re.IGNORECASE,
+                    ):
+                        affected_count = 1
 
-            if patient_count is None and (
-                affected_count is not None or unaffected_count is not None
+            if (
+                patient_count is None
+                and affected_count is not None
+                and unaffected_count is not None
             ):
-                patient_count = (affected_count or 0) + (unaffected_count or 0)
+                patient_count = affected_count + unaffected_count
 
             if row_control_like and patient_count is not None:
                 affected_count = 0
                 unaffected_count = patient_count
-            elif patient_count is not None:
-                if affected_count is None and unaffected_count is None:
-                    affected_count = patient_count
-                    unaffected_count = 0
-                elif affected_count is None and unaffected_count is not None:
-                    remainder = patient_count - unaffected_count
-                    affected_count = remainder if remainder >= 0 else None
-                elif unaffected_count is None and affected_count is not None:
-                    remainder = patient_count - affected_count
-                    unaffected_count = remainder if remainder >= 0 else None
 
             source_ref = active_table_label or "Markdown table"
             carrier_label = header_label("count")
             if inferred_one_carrier:
                 carrier_label = "implicit one carrier per clinical row"
-            affected_label = header_label("affected") or carrier_label
+            affected_label = header_label("affected")
             unaffected_label = header_label("unaffected")
 
             next_table_data_line = ""
@@ -3893,12 +3903,9 @@ class ExpertExtractor(BaseLLMCaller):
                 for obj, field in (
                     (patients, "count"),
                     (pdata, "total_carriers_observed"),
-                    (pdata, "affected_count"),
                 ):
                     value = obj.get(field)
                     obj[field] = 1 if value is None else value + 1
-                if pdata.get("unaffected_count") is None:
-                    pdata["unaffected_count"] = 0
                 return
 
             variant = {
@@ -3915,8 +3922,6 @@ class ExpertExtractor(BaseLLMCaller):
                 },
                 "penetrance_data": {
                     "total_carriers_observed": 1,
-                    "affected_count": 1,
-                    "unaffected_count": 0,
                 },
                 "individual_records": [],
                 "functional_data": {"summary": "", "assays": []},
@@ -4157,8 +4162,6 @@ class ExpertExtractor(BaseLLMCaller):
                             },
                             "penetrance_data": {
                                 "total_carriers_observed": count,
-                                "affected_count": count,
-                                "unaffected_count": 0,
                             },
                             "individual_records": [],
                             "functional_data": {"summary": "", "assays": []},
@@ -4174,10 +4177,10 @@ class ExpertExtractor(BaseLLMCaller):
                         or "Supplemental coding-effect count table",
                         parser="fixed_width_coding_effect_count",
                         carriers_label="COUNT",
-                        affected_label="COUNT",
+                        affected_label=None,
                         unaffected_label=None,
                         carriers_count_type="per_variant_carrier",
-                        affected_count_type="per_variant_carrier",
+                        affected_count_type=None,
                         row_label=stripped,
                     )
                 )
@@ -4231,8 +4234,6 @@ class ExpertExtractor(BaseLLMCaller):
                                 },
                                 "penetrance_data": {
                                     "total_carriers_observed": count,
-                                    "affected_count": count,
-                                    "unaffected_count": 0,
                                 },
                                 "individual_records": [],
                                 "functional_data": {"summary": "", "assays": []},
@@ -4250,12 +4251,10 @@ class ExpertExtractor(BaseLLMCaller):
                             carriers_label="Coding Effect"
                             if count == 1 and match.group("count") is None
                             else "Coding Effect count",
-                            affected_label="Coding Effect"
-                            if count == 1 and match.group("count") is None
-                            else "Coding Effect count",
+                            affected_label=None,
                             unaffected_label=None,
                             carriers_count_type="per_variant_carrier",
-                            affected_count_type="per_variant_carrier",
+                            affected_count_type=None,
                             row_label=stripped,
                         )
                     )
@@ -4403,8 +4402,6 @@ class ExpertExtractor(BaseLLMCaller):
                             },
                             "penetrance_data": {
                                 "total_carriers_observed": 1,
-                                "affected_count": 1,
-                                "unaffected_count": 0,
                             },
                             "individual_records": [],
                             "functional_data": {"summary": "", "assays": []},
@@ -4418,10 +4415,10 @@ class ExpertExtractor(BaseLLMCaller):
                         source_ref=current_table_label,
                         parser="fixed_width_patient_table",
                         carriers_label="implicit one carrier per clinical row",
-                        affected_label="implicit one affected carrier per clinical row",
+                        affected_label=None,
                         unaffected_label=None,
                         carriers_count_type="per_variant_carrier",
-                        affected_count_type="per_variant_carrier",
+                        affected_count_type=None,
                         row_label=stripped,
                     )
                 )
@@ -4460,8 +4457,6 @@ class ExpertExtractor(BaseLLMCaller):
                             },
                             "penetrance_data": {
                                 "total_carriers_observed": 1,
-                                "affected_count": 1,
-                                "unaffected_count": 0,
                             },
                             "individual_records": [],
                             "functional_data": {"summary": "", "assays": []},
@@ -4475,10 +4470,10 @@ class ExpertExtractor(BaseLLMCaller):
                         source_ref=current_table_label or "Supplemental Table 1",
                         parser="fixed_width_wes",
                         carriers_label="implicit one carrier per clinical row",
-                        affected_label="implicit one affected carrier per clinical row",
+                        affected_label=None,
                         unaffected_label=None,
                         carriers_count_type="per_variant_carrier",
-                        affected_count_type="per_variant_carrier",
+                        affected_count_type=None,
                         row_label=stripped,
                     )
                 )
@@ -4533,8 +4528,6 @@ class ExpertExtractor(BaseLLMCaller):
                         },
                         "penetrance_data": {
                             "total_carriers_observed": count,
-                            "affected_count": count,
-                            "unaffected_count": 0,
                         },
                         "individual_records": [],
                         "functional_data": {"summary": "", "assays": []},
@@ -4548,10 +4541,10 @@ class ExpertExtractor(BaseLLMCaller):
                     source_ref=current_table_label or "Fixed-width table",
                     parser="fixed_width_table",
                     carriers_label="n",
-                    affected_label="n",
+                    affected_label=None,
                     unaffected_label=None,
                     carriers_count_type="per_variant_carrier",
-                    affected_count_type="per_variant_carrier",
+                    affected_count_type=None,
                     row_label=stripped,
                 )
             )
@@ -4799,17 +4792,21 @@ class ExpertExtractor(BaseLLMCaller):
                     ]
                 )
 
-                # For disease-associated variants, patient count = affected count
+                # Disease association does not establish that every reported
+                # patient was phenotyped, nor that unmentioned carriers were
+                # unaffected. Preserve the carrier total without manufacturing
+                # either phenotype partition.
                 if is_disease_associated:
                     pdata["total_carriers_observed"] = patient_count
-                    pdata["affected_count"] = patient_count
-                    pdata["unaffected_count"] = 0
 
                     # Add note about the mapping
                     notes = variant.get("additional_notes", "") or ""
                     if notes:
                         notes += " "
-                    notes += f"[Penetrance data inferred from patient count: {patient_count} affected carriers]"
+                    notes += (
+                        "[Carrier total inferred from patient count; affected and "
+                        f"unaffected remain unassessed: {patient_count}]"
+                    )
                     variant["additional_notes"] = notes
                 else:
                     # For uncertain significance, just set total carriers

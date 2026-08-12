@@ -258,7 +258,10 @@ class BodyIndex:
             if pdf_text:
                 parts.append(pdf_text)
         out.text = _squash("\n".join(parts))
-        if not out.body_chars:
+        # A usable article representation can come entirely from a converted PDF
+        # or text supplement. Only mark the paper unusable when none of the
+        # representations produced searchable text.
+        if not out.text:
             out.unusable_reason = (
                 body_states[0]
                 if body_states

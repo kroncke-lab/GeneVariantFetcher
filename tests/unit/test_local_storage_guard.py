@@ -53,10 +53,10 @@ def test_state_is_linked_for_a_mounted_symlink(fake_repo):
     assert external_path_state("corpus") == "linked"
 
 
-def test_state_is_linked_for_a_real_local_directory(fake_repo):
+def test_state_distinguishes_a_real_local_directory(fake_repo):
     (fake_repo / "corpus").mkdir()
 
-    assert external_path_state("corpus") == "linked"
+    assert external_path_state("corpus") == "local"
 
 
 def test_state_is_dangling_when_the_volume_is_unmounted(fake_repo):
@@ -86,6 +86,13 @@ def test_dangling_link_is_refused_with_the_mount_reason(fake_repo):
     (fake_repo / "corpus").symlink_to(fake_repo / "never_mounted")
 
     with pytest.raises(LocalStorageError, match="target is unreachable"):
+        require_external_storage(fake_repo / "corpus" / "KCNH2")
+
+
+def test_real_local_directory_requires_the_explicit_escape_hatch(fake_repo):
+    (fake_repo / "corpus").mkdir()
+
+    with pytest.raises(LocalStorageError, match="real local directory"):
         require_external_storage(fake_repo / "corpus" / "KCNH2")
 
 
@@ -271,6 +278,30 @@ def test_doctor_does_not_block_a_mounted_volume(fake_repo):
     assert status["required"] == {}
 
 
+def test_doctor_requires_opt_in_for_a_real_local_corpus(fake_repo):
+    (fake_repo / "corpus").mkdir()
+    status = _fresh_status()
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is False
+    assert status["local_storage"] == {"corpus": "local"}
+    assert any("GVF_ALLOW_LOCAL_CORPUS" in key for key in status["required"])
+
+
+def test_doctor_honors_a_deliberate_corpus_override(fake_repo, monkeypatch, tmp_path):
+    """A configured output bypasses the unused repo-local corpus path."""
+    (fake_repo / "corpus").mkdir()
+    monkeypatch.setenv("GVF_CORPUS_DIR", str(tmp_path / "configured-corpus"))
+    status = _fresh_status()
+
+    gvf_run._apply_local_storage_checks(status)
+
+    assert status["ok"] is True
+    assert status["required"] == {}
+    assert status["local_storage"] == {"corpus": "local"}
+
+
 def test_doctor_does_not_block_a_fresh_checkout_with_no_corpus(fake_repo):
     """A collaborator with no corpus yet must still be able to run."""
     status = _fresh_status()
@@ -291,6 +322,43 @@ def test_doctor_check_preserves_an_already_failing_status(fake_repo):
     gvf_run._apply_local_storage_checks(status)
 
     assert status["ok"] is False
+
+
+# ---------------------------------------------------------------------------
+# gvf-run corpus sync — configured output must reach the builder
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("configured", [False, True])
+def test_corpus_sync_passes_the_configured_output(monkeypatch, tmp_path, configured):
+    commands = []
+
+    class Completed:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def fake_run(command, **_kwargs):
+        commands.append(command)
+        return Completed()
+
+    monkeypatch.setattr(gvf_run.subprocess, "run", fake_run)
+    if configured:
+        output = tmp_path / "configured corpus"
+        monkeypatch.setenv("GVF_CORPUS_DIR", str(output))
+    else:
+        output = None
+        monkeypatch.delenv("GVF_CORPUS_DIR", raising=False)
+
+    gvf_run.step_corpus_sync(tmp_path / "run", gene="KCNH2")
+
+    assert len(commands) == 1
+    command = commands[0]
+    assert command[command.index("--assume-gene") + 1] == "KCNH2"
+    if output is None:
+        assert "--out" not in command
+    else:
+        assert command[command.index("--out") + 1] == str(output)
 
 
 # ---------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 import pytest
 
+import scripts.recall_audit.paper_disagreement_report as report
 from scripts.recall_audit.common import find_full_contexts
 from scripts.recall_audit.paper_disagreement_report import (
     build_paper_disagreement_rows,
@@ -217,3 +218,35 @@ def test_paper_disagreement_rows_allow_missing_optional_score_csvs(tmp_path):
     assert rows[0]["missing_rows"] == 0
     assert rows[0]["count_mismatch_rows"] == 0
     assert rows[0]["extra_sqlite_rows"] == 0
+
+
+def test_main_pairs_the_status_score_with_status_databases(tmp_path, monkeypatch):
+    score = tmp_path / "recall_metrics" / "current"
+    for gene in ("KCNH2", "RYR2"):
+        (score / gene).mkdir(parents=True)
+    captured = {}
+
+    monkeypatch.setattr(report, "resolve_recall_score", lambda *_args: score)
+    monkeypatch.setattr(report, "current_status_recall_score", lambda: score)
+    monkeypatch.setattr(
+        report,
+        "resolve_status_gene_db",
+        lambda gene: tmp_path / "canonical" / f"{gene}.db",
+    )
+
+    def fake_build(**kwargs):
+        captured.update(kwargs)
+        return []
+
+    monkeypatch.setattr(report, "build_paper_disagreement_rows", fake_build)
+    monkeypatch.setattr(report, "write_csv_rows", lambda *_args: None)
+    monkeypatch.setattr(
+        "sys.argv",
+        ["paper_disagreement_report.py", "--out", str(tmp_path / "out.csv")],
+    )
+
+    assert report.main() == 0
+    assert captured["db_paths_by_gene"] == {
+        "KCNH2": tmp_path / "canonical" / "KCNH2.db",
+        "RYR2": tmp_path / "canonical" / "RYR2.db",
+    }

@@ -2,7 +2,7 @@
 
 ## Decision
 
-Current `main` was healthy before the audit: the offline unit, integration, and
+The base `main` revision was healthy before the audit: the offline unit, integration, and
 negative-case suites passed. The two open rescue branches were both stale and
 conflicted, and neither was safe to merge wholesale. This audit selectively
 ported the changes that were independently reviewable and testable, retired one
@@ -13,8 +13,8 @@ The review used seven independent reasoning passes:
 
 - Codex GPT-5.6 at maximum effort, including separate correctness, cleanup, and
   recall/benchmark reviews;
-- Grok 4.5 at `high`, the highest effort accepted by the installed CLI (`max`
-  was rejected);
+- Grok 4.5 and the final Grok 4.6 handoff audit at `high`, the highest effort
+  accepted by the installed CLI (`max` was rejected);
 - Gemini 3.1 Pro High through AGY; and
 - Claude Opus 4.6 Thinking through AGY. The native Claude CLI was not signed in.
 
@@ -82,19 +82,23 @@ gate. Its broad, older settings/extraction/docs changes should not be merged.
 
 ## Intentionally unmerged or still open
 
-- Figure-count recovery cannot yet enrich a variant-paper link that the text
-  extractor already created, and adopted counts lack the stronger structured
-  role/locator and pending-quarantine provenance used by count recovery. This is
-  the highest-priority count-path follow-up.
-- Claude's dirty `unassessed_count` worktree is preserved as WIP. Its schema,
-  prompt, migration, and arithmetic changes pass focused tests, but aggregation,
-  adjudicator schemas, final-check/trust projections, carrier-guard handling,
-  provenance/rule versioning, and unassessed-only migration are incomplete.
-  Merging it now could silently drop the new partition or trust an impossible
-  one.
+- Figure-count recovery follow-up was completed later on 2026-08-12: figure
+  observations now enrich existing links with structured roles, ambiguous
+  multi-cohort parents fail closed, and adopted fields land pending trust review.
+  The active-tier rescore remains open in `TASKS.md`.
+- The dirty `unassessed_count` experiment was reviewed and deliberately retired
+  during final consolidation. Its schema, prompt, migration, and arithmetic
+  changes covered only part of the data path: aggregation, adjudicator and
+  Variant_Browser schemas, final-check/trust projections, carrier-guard
+  backup/clear handling, provenance/rule versioning, and unassessed-only
+  migration were incomplete. Shipping it would silently drop the partition in
+  some consumers without benchmark evidence. The current contract instead keeps
+  unobserved phenotype partitions NULL and forbids residual inference; the
+  decision and requirements for any future proposal are in `TASKS.md`.
 - Installed `gvf` still guards optional imports from unshipped `scripts.*` for
-  metadata backfill, dashboard trust readers, institutional paywall preflight,
-  and EZproxy self-heal. Move the reusable code into packaged modules before
+  metadata backfill, dashboard trust readers, and EZproxy self-heal.
+  Institutional paywall preflight now uses shipped
+  `harvesting/paywall_session.py`. Move the remaining reusable code before
   claiming installed-feature parity.
 - Source acquisition remains the dominant recall opportunity. Current error
   inventory is much larger for missing/stub, abstract-only, and table-body
@@ -108,10 +112,12 @@ their caveats remain in `docs/RECALL_STATUS.md`.
 
 ## Validation
 
-- Offline unit suite: **1,835 passed, 1 skipped**.
-- Offline integration suite: **52 passed**.
+- Offline unit suite: **1,866 passed, 1 skipped**.
+- CI offline selection: **71 passed**; recall suite: **6 passed, 19 skipped**;
+  non-network integration: **5 passed, 11 network tests deselected**.
 - Curated negative/precision guards: **3 passed**.
-- Ruff 0.15.20 lint and format check: clean across **407 files**.
+- Ruff 0.15.20 lint and format check: clean across **410 files**.
 - Cold-start harness: LDLR dry-run passed without touching live services.
 - Wheel build: succeeded; the archive contains the KCNH2 alias dictionary and
-  reference-sequence assets, and installed-layout runtime checks passed.
+  reference-sequence assets plus the paywall-session helper, excludes `scripts`
+  as a package, and passed an isolated-venv import/runtime smoke test.

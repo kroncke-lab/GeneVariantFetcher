@@ -22,7 +22,9 @@ jobs:
           # may enable new rule families and fail on unrelated existing code.
           pip install ruff==0.15.20
       - name: Lint with ruff
-        run: ruff check .
+        run: |
+          ruff check .
+          ruff format --check .
 
   test:
     runs-on: ubuntu-latest
@@ -66,7 +68,38 @@ jobs:
           pytest -v \
             tests/test_manifest.py \
             tests/test_failure_logger.py \
-            tests/test_extract_cli.py
+            tests/test_extract_cli.py \
+            tests/test_pmid_input.py \
+            tests/recall/test_bounded_e2e.py
+
+  wheel-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Build and install the wheel in isolation
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel
+          python -m venv /tmp/gvf-wheel-smoke
+          /tmp/gvf-wheel-smoke/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/gvf-wheel-smoke/bin/python - <<'PY'
+          import importlib.util
+          from cli.institutional_preflight import probe_institutional_access
+          from harvesting.paywall_session import make_session
+          from pipeline.reference_validation import load_reference_protein
+          from utils.variant_normalizer import _load_gene_aliases
+
+          assert importlib.util.find_spec("scripts") is None
+          assert callable(probe_institutional_access)
+          assert callable(make_session)
+          assert len(_load_gene_aliases("KCNH2")) > 4_000
+          assert len(load_reference_protein("KCNH2")) == 1_159
+          PY
 
   benchmark-guards:
     # Gates the precision/negative benchmark cases (self-contained: no network,
