@@ -315,6 +315,56 @@ def test_ingest_reuses_a_compatible_partial_variant_identity(tmp_path, monkeypat
     assert links == [(1, "111")]
 
 
+def test_ingest_does_not_rewrite_an_identity_another_paper_asserts(
+    tmp_path, monkeypatch
+):
+    """Filling a blank notation is a global edit; it needs a sole claimant.
+
+    `variants` rows are shared across papers, so writing the missing side on the
+    word of one figure read would silently change what every other linked paper
+    asserts about that variant.
+    """
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "shared_identity.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, protein_notation) VALUES(?,?)",
+        (GENE, "p.Ala561Val"),
+    )
+    variant_id = con.execute("SELECT variant_id FROM variants").fetchone()[0]
+    con.execute("INSERT INTO papers(pmid, gene_symbol) VALUES('999',?)", (GENE,))
+    con.execute(
+        "INSERT INTO variant_papers(variant_id, pmid, key_quotes) VALUES(?, '999', '[]')",
+        (variant_id,),
+    )
+    con.commit()
+    con.close()
+
+    ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "context": "pedigree carrier counts",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    rows = con.execute(
+        "SELECT variant_id, cdna_notation, protein_notation FROM variants"
+    ).fetchall()
+    links = sorted(con.execute("SELECT variant_id, pmid FROM variant_papers"))
+    con.close()
+    # The cDNA stays NULL: PMID 999 never said anything about it.
+    assert rows == [(variant_id, None, "p.Ala561Val")]
+    # The identity is still reused rather than duplicated — that part was right.
+    assert links == [(variant_id, "111"), (variant_id, "999")]
+
+
 def test_ingest_preserves_existing_figure_counts_while_filling_nulls(
     tmp_path, monkeypatch
 ):

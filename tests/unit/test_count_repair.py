@@ -12,6 +12,7 @@ import sqlite3
 
 import pytest
 
+from harvesting.migrate_to_sqlite import create_database_schema
 from pipeline.count_repair import (
     adopt_figure_counts,
     apply_count_repair,
@@ -19,6 +20,7 @@ from pipeline.count_repair import (
     figure_counts,
     repair_counts,
 )
+from pipeline.trust_gate import FIGURE_REPAIR_SOURCE, apply_trust_gate
 
 
 # ----------------------------------------------------------- figure counts
@@ -163,7 +165,7 @@ def _db(tmp_path, rows):
              unaffected_count INTEGER, trust_tier TEXT, trust_reasons TEXT);
            CREATE TABLE variant_papers(
              variant_id INTEGER, pmid TEXT, additional_notes TEXT,
-             source_layer TEXT);"""
+             source_layer TEXT, count_provenance TEXT);"""
     )
     for i, r in enumerate(rows, start=1):
         con.execute(
@@ -180,8 +182,15 @@ def _db(tmp_path, rows):
             ),
         )
         con.execute(
-            "INSERT INTO variant_papers VALUES(?,?,?,?)",
-            (i, r.get("pmid", "1"), r.get("notes"), r.get("layer")),
+            "INSERT INTO variant_papers(variant_id, pmid, additional_notes, "
+            "source_layer, count_provenance) VALUES(?,?,?,?,?)",
+            (
+                i,
+                r.get("pmid", "1"),
+                r.get("notes"),
+                r.get("layer"),
+                r.get("provenance"),
+            ),
         )
     con.commit()
     con.close()
@@ -433,7 +442,13 @@ def test_ambiguous_multi_cohort_parent_fails_closed(tmp_path):
     assert _counts(path) == [(None, None, None), (None, None, None)]
 
 
-def test_adopted_figure_fields_land_pending_trust_review(tmp_path):
+def test_adopted_figure_fields_are_stamped_but_trust_is_left_to_the_gate(tmp_path):
+    """This pass writes values and provenance; the trust columns are not its own.
+
+    It used to set ``trust_tier``/``trust_reasons`` here, which the trust gate
+    then rebuilt from scratch a few steps later — so the quarantine was erased
+    inside the same run and the adopted counts landed trusted.
+    """
     db = _db(
         tmp_path,
         [
@@ -459,45 +474,61 @@ def test_adopted_figure_fields_land_pending_trust_review(tmp_path):
     tier, reasons = con.execute(
         "SELECT trust_tier, trust_reasons FROM penetrance_data"
     ).fetchone()
-    con.close()
-    assert tier == "quarantine"
-    assert "figure_count_pending_review" in json.loads(reasons)
-
-
-def test_pending_figure_carriers_use_the_projection_field_name(tmp_path):
-    db = _db(
-        tmp_path,
-        [
-            {
-                "carriers": None,
-                "affected": 5,
-                "layer": "figure,llm_text",
-                "notes": json.dumps({"carriers": 13, "context": "pedigree"}),
-                "tier": "trusted",
-                "reasons": "[]",
-            }
-        ],
+    provenance = json.loads(
+        con.execute("SELECT count_provenance FROM variant_papers").fetchone()[0]
     )
+    con.close()
+    assert tier is None and reasons is None
+    assert provenance["carriers_source"] == FIGURE_REPAIR_SOURCE
+    assert provenance["affected_source"] == FIGURE_REPAIR_SOURCE
+    assert provenance["carriers_count_type"] == "per_variant_carriers"
+
+
+def test_trust_gate_quarantines_exactly_the_adopted_figure_fields(tmp_path):
+    """The end-to-end contract: Step 3.45 adopts, Step 3.7 rules on what it adopted.
+
+    Runs the real gate rather than asserting on count-repair's own writes,
+    because the defect this pins was invisible to either step in isolation — each
+    behaved correctly alone and the second silently undid the first.
+    """
+    db = tmp_path / "run.db"
+    create_database_schema(db)
     con = sqlite3.connect(db)
-    con.execute("ALTER TABLE penetrance_data ADD COLUMN field_trust TEXT")
-    con.execute("ALTER TABLE penetrance_data ADD COLUMN trust_sources TEXT")
-    con.execute("ALTER TABLE penetrance_data ADD COLUMN trust_rule_version TEXT")
+    con.execute("INSERT INTO papers (pmid, gene_symbol) VALUES ('111','KCNH2')")
     con.execute(
-        "UPDATE penetrance_data SET field_trust=?, trust_sources='[]'",
-        (json.dumps({"affected": "trusted"}),),
+        "INSERT INTO variants (variant_id, gene_symbol, protein_notation) "
+        "VALUES (1,'KCNH2','p.A614V')"
+    )
+    # affected is already supplied by a text layer, so only carriers is adopted.
+    con.execute(
+        "INSERT INTO variant_papers (variant_id, pmid, additional_notes, source_layer) "
+        "VALUES (?,?,?,?)",
+        (1, "111", json.dumps({"carriers": 13, "context": "pedigree"}), "figure"),
+    )
+    con.execute(
+        "INSERT INTO penetrance_data (variant_id, pmid, affected_count) VALUES (1,'111',5)"
     )
     con.commit()
     con.close()
 
     apply_count_repair(db)
+    apply_trust_gate(db)
 
     con = sqlite3.connect(db)
-    tier, field_trust_raw = con.execute(
-        "SELECT trust_tier, field_trust FROM penetrance_data"
+    tier, reasons_raw, field_trust_raw, carriers, affected = con.execute(
+        "SELECT trust_tier, trust_reasons, field_trust, total_carriers_observed, "
+        "affected_count FROM penetrance_data"
     ).fetchone()
     con.close()
+
     field_trust = json.loads(field_trust_raw)
     assert tier == "quarantine"
+    assert "figure_count_unverified:total_carriers" in json.loads(reasons_raw)
+    # Field-scoped: the vision-read carrier total is masked, the text-sourced
+    # affected count on the same row is not. And the projection field name is
+    # `total_carriers`, not the provenance spelling `carriers`.
     assert field_trust["total_carriers"] == "quarantine"
     assert field_trust["affected"] == "trusted"
     assert "carriers" not in field_trust
+    # The raw counts survive either way — quarantine masks, it does not delete.
+    assert (carriers, affected) == (13, 5)

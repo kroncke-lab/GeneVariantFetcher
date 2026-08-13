@@ -222,16 +222,24 @@ def test_paper_disagreement_rows_allow_missing_optional_score_csvs(tmp_path):
 
 def test_main_pairs_the_status_score_with_status_databases(tmp_path, monkeypatch):
     score = tmp_path / "recall_metrics" / "current"
-    for gene in ("KCNH2", "RYR2"):
+    canonical = tmp_path / "canonical"
+    canonical.mkdir(parents=True)
+    # BMPR2 is scored but is not named in the status doc's canonical-baseline
+    # section, which lists only the four cardiac genes. It must drop out of the
+    # pairing, not abort the report — the whole point of this tool is genes with
+    # no gold standard, and this report is how we see where the recall gap is.
+    for gene in ("KCNH2", "RYR2", "BMPR2"):
         (score / gene).mkdir(parents=True)
+    for gene in ("KCNH2", "RYR2"):
+        (canonical / f"{gene}.db").write_text("", encoding="utf-8")
     captured = {}
 
     monkeypatch.setattr(report, "resolve_recall_score", lambda *_args: score)
     monkeypatch.setattr(report, "current_status_recall_score", lambda: score)
     monkeypatch.setattr(
         report,
-        "resolve_status_gene_db",
-        lambda gene: tmp_path / "canonical" / f"{gene}.db",
+        "current_status_gene_db",
+        lambda gene: canonical / f"{gene}.db" if gene.upper() != "BMPR2" else None,
     )
 
     def fake_build(**kwargs):
@@ -247,6 +255,6 @@ def test_main_pairs_the_status_score_with_status_databases(tmp_path, monkeypatch
 
     assert report.main() == 0
     assert captured["db_paths_by_gene"] == {
-        "KCNH2": tmp_path / "canonical" / "KCNH2.db",
-        "RYR2": tmp_path / "canonical" / "RYR2.db",
+        "KCNH2": canonical / "KCNH2.db",
+        "RYR2": canonical / "RYR2.db",
     }

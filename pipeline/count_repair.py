@@ -38,6 +38,19 @@ not an arithmetic shortcut.
 Every adopted value is recorded in ``count_repair_log`` with the previous value,
 so the pass is reversible and auditable. It is idempotent because it only fills
 null fields.
+
+**This pass writes values and provenance, never trust.** It runs at Step 3.45,
+ahead of the guards and the trust gate, so they judge the adopted numbers. It
+marks each field it filled with ``{field}_source = "figure_count_repair"``, and
+``pipeline/trust_gate.py`` turns that into a ``figure_count_unverified:<field>``
+quarantine of its own accord at Step 3.7.
+
+An earlier version set ``trust_tier``/``field_trust``/``trust_reasons`` here
+directly. That accomplished nothing — the gate rebuilds those columns from
+scratch and preserves only ``paper_final_check:`` reasons, so the quarantine was
+erased inside the same run and the adopted counts landed *trusted*, which is the
+opposite of what the code appeared to say. Trust columns belong to the gate; a
+step that lands a value states where it came from and lets the gate rule on it.
 """
 
 from __future__ import annotations
@@ -48,13 +61,27 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
+# The trust gate owns the reason vocabulary, and this source tag is the half of
+# it that this module writes. Imported rather than re-spelled so the producer and
+# the consumer cannot drift apart — which is exactly how the previous quarantine
+# came to be silently discarded.
+from pipeline.trust_gate import FIGURE_REPAIR_SOURCE
+
 COUNT_COLUMNS = {
     "carriers": "total_carriers_observed",
     "affected": "affected_count",
     "unaffected": "unaffected_count",
 }
 RULES = ("adopt_figure_counts",)
-COUNT_REPAIR_VERSION = "count-repair-v2"
+COUNT_REPAIR_VERSION = "count-repair-v3"
+
+#: Per-variant role stamped on each adopted field, in the vocabulary
+#: ``pipeline.trust_gate`` reads. Kept in sync with its ``_RECOVERY_ROLE_BY_FIELD``.
+FIGURE_COUNT_ROLES = {
+    "carriers": "per_variant_carriers",
+    "affected": "per_variant_affected",
+    "unaffected": "per_variant_unaffected",
+}
 
 
 def _is_count(value: Any) -> bool:
@@ -152,76 +179,43 @@ def _json_value(raw: Any, expected_type: type, default: Any) -> Any:
     return value if isinstance(value, expected_type) else default
 
 
-def _quarantine_figure_fields(
+def _stamp_figure_provenance(
     cur: sqlite3.Cursor,
-    penetrance_id: int,
+    variant_id: Any,
+    pmid: Any,
     fields: set[str],
     columns: set[str],
-    *,
-    row_created: bool,
 ) -> None:
-    """Keep newly adopted figure fields pending until the trust gate evaluates them."""
-    available = {
-        name
-        for name in (
-            "trust_tier",
-            "trust_reasons",
-            "trust_rule_version",
-            "field_trust",
-            "trust_sources",
-        )
-        if name in columns
-    }
-    field_scoped = "field_trust" in available
-    if not available or (not row_created and not field_scoped):
-        # Legacy rows without a field-level mask may already contain trusted
-        # text counts. Quarantining the whole row would hide those unrelated
-        # observations, so only a brand-new row may use the row-level fallback.
+    """Record which fields this pass filled, so the trust gate can rule on them.
+
+    This pass writes values and provenance; it does not write trust. An earlier
+    version set ``trust_tier``/``field_trust``/``trust_reasons`` directly, which
+    accomplished nothing: the trust gate (Step 3.7) rebuilds those columns from
+    scratch a few steps later and keeps only ``paper_final_check:`` reasons, so
+    the quarantine, its reason, and its source tag were all erased inside the
+    same run and the adopted counts landed trusted. Stamping provenance instead
+    lets the gate re-derive ``figure_count_unverified`` itself, which also makes
+    a standalone re-run of the gate idempotent.
+
+    Marks only the fields actually adopted here, not every field the figure
+    reader happened to see, so a count that some other layer supplied in the
+    meantime is not mistaken for a vision read.
+    """
+    if "count_provenance" not in columns:
         return
     row = cur.execute(
-        f"SELECT {', '.join(sorted(available))} FROM penetrance_data "
-        "WHERE penetrance_id=?",
-        (penetrance_id,),
+        "SELECT count_provenance FROM variant_papers WHERE variant_id=? AND pmid=?",
+        (variant_id, pmid),
     ).fetchone()
-    current = dict(zip(sorted(available), row)) if row else {}
-    assignments: list[str] = []
-    values: list[Any] = []
-
-    def assign(column: str, value: Any) -> None:
-        if column in available:
-            assignments.append(f"{column}=?")
-            values.append(value)
-
-    assign("trust_tier", "quarantine")
-    reasons = _json_value(current.get("trust_reasons"), list, [])
-    assign(
-        "trust_reasons",
-        json.dumps(
-            sorted(
-                {str(reason) for reason in reasons} | {"figure_count_pending_review"}
-            )
-        ),
+    provenance = _json_value(row[0] if row else None, dict, {})
+    for field in sorted(fields):
+        provenance[f"{field}_source"] = FIGURE_REPAIR_SOURCE
+        provenance.setdefault(f"{field}_count_type", FIGURE_COUNT_ROLES[field])
+    provenance["figure_count_repair_version"] = COUNT_REPAIR_VERSION
+    cur.execute(
+        "UPDATE variant_papers SET count_provenance=? WHERE variant_id=? AND pmid=?",
+        (json.dumps(provenance, sort_keys=True), variant_id, pmid),
     )
-    field_trust = _json_value(current.get("field_trust"), dict, {})
-    trust_fields = {
-        "total_carriers" if field == "carriers" else field for field in fields
-    }
-    field_trust.update({field: "quarantine" for field in trust_fields})
-    assign("field_trust", json.dumps(field_trust, sort_keys=True))
-    sources = _json_value(current.get("trust_sources"), list, [])
-    assign(
-        "trust_sources",
-        json.dumps(
-            sorted({str(source) for source in sources} | {"figure_count_repair"})
-        ),
-    )
-    assign("trust_rule_version", COUNT_REPAIR_VERSION)
-    if assignments:
-        cur.execute(
-            f"UPDATE penetrance_data SET {', '.join(assignments)} "
-            "WHERE penetrance_id=?",
-            (*values, penetrance_id),
-        )
 
 
 def apply_count_repair(
@@ -292,8 +286,8 @@ def apply_count_repair(
             )
 
         stamp = datetime.now(timezone.utc).isoformat()
-        penetrance_columns = {
-            info[1] for info in cur.execute("PRAGMA table_info(penetrance_data)")
+        variant_paper_columns = {
+            info[1] for info in cur.execute("PRAGMA table_info(variant_papers)")
         }
         for row in rows:
             summary["rows_examined"] += 1
@@ -316,7 +310,6 @@ def apply_count_repair(
                 continue
             summary["rows_changed"] += 1
             penetrance_id = row["penetrance_id"]
-            row_created = penetrance_id is None
             if penetrance_id is None and not dry_run:
                 cur.execute(
                     "INSERT INTO penetrance_data(variant_id, pmid) VALUES(?,?)",
@@ -351,12 +344,12 @@ def apply_count_repair(
                     ),
                 )
             if not dry_run:
-                _quarantine_figure_fields(
+                _stamp_figure_provenance(
                     cur,
-                    penetrance_id,
+                    row["variant_id"],
+                    row["pmid"],
                     set(changes),
-                    penetrance_columns,
-                    row_created=row_created,
+                    variant_paper_columns,
                 )
         if dry_run:
             con.rollback()

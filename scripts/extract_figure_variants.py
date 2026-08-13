@@ -228,8 +228,17 @@ def _ensure_paper(con: sqlite3.Connection, pmid: str, gene: str) -> None:
     )
 
 
+def _variant_is_private_to(con: sqlite3.Connection, variant_id: int, pmid: str) -> bool:
+    """Whether no paper other than *pmid* already asserts this variant identity."""
+    row = con.execute(
+        "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid<>? LIMIT 1",
+        (variant_id, pmid),
+    ).fetchone()
+    return row is None
+
+
 def _ensure_variant(
-    con: sqlite3.Connection, gene: str, cdna: str | None, protein: str | None
+    con: sqlite3.Connection, gene: str, cdna: str | None, protein: str | None, pmid: str
 ) -> int:
     row = con.execute(
         """SELECT variant_id FROM variants
@@ -262,10 +271,20 @@ def _ensure_variant(
             compatible.append((candidate_id, stored_cdna, stored_protein))
     if len(compatible) == 1:
         candidate_id, stored_cdna, stored_protein = compatible[0]
-        con.execute(
-            "UPDATE variants SET cdna_notation=?, protein_notation=? WHERE variant_id=?",
-            (stored_cdna or cdna, stored_protein or protein, candidate_id),
+        # `variants` rows are shared across papers, so filling a blank notation
+        # rewrites the identity every other linked paper asserts — on the word of
+        # one vision read, in the layer with the weakest identity precision. Reuse
+        # the row either way (that is the point: do not mint a duplicate), but
+        # only rewrite it when this paper is the sole claimant.
+        fills_a_blank = (stored_cdna is None and cdna is not None) or (
+            stored_protein is None and protein is not None
         )
+        if fills_a_blank and _variant_is_private_to(con, int(candidate_id), pmid):
+            con.execute(
+                "UPDATE variants SET cdna_notation=?, protein_notation=? "
+                "WHERE variant_id=?",
+                (stored_cdna or cdna, stored_protein or protein, candidate_id),
+            )
         return int(candidate_id)
 
     cur = con.execute(
@@ -434,7 +453,7 @@ def ingest_cached_variants(
                     reason,
                 )
                 continue
-            vid = _ensure_variant(con, gene, cdna, protein)
+            vid = _ensure_variant(con, gene, cdna, protein, pmid)
             existing = con.execute(
                 """SELECT additional_notes, source_layer, count_provenance
                    FROM variant_papers WHERE variant_id=? AND pmid=?""",

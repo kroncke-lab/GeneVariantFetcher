@@ -18,6 +18,7 @@ try:
         REPO_ROOT,
         canonical_variant,
         context_status,
+        current_status_gene_db,
         current_status_recall_score,
         find_full_contexts,
         normalize_pmid,
@@ -28,7 +29,6 @@ try:
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
-        resolve_status_gene_db,
         source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
@@ -38,6 +38,7 @@ except ModuleNotFoundError:  # pragma: no cover
         REPO_ROOT,
         canonical_variant,
         context_status,
+        current_status_gene_db,
         current_status_recall_score,
         find_full_contexts,
         normalize_pmid,
@@ -48,7 +49,6 @@ except ModuleNotFoundError:  # pragma: no cover
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
-        resolve_status_gene_db,
         source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
@@ -505,11 +505,10 @@ def build_paper_disagreement_rows(
                 and not parse_bool(row.get("missing_in_excel"))
             ]
         )
-        db_path = (
-            db_paths_by_gene.get(gene)
-            if db_paths_by_gene is not None
-            else db_root / f"{gene}.db"
-        )
+        # A gene the status doc does not name still gets the legacy sibling
+        # path, so one unlisted gene degrades to "no metadata for that gene"
+        # instead of taking the whole report down with it.
+        db_path = (db_paths_by_gene or {}).get(gene) or db_root / f"{gene}.db"
         metadata = _load_metadata(db_path)
 
         for pmid, gold_item in sorted(gold.items()):
@@ -680,11 +679,19 @@ def main() -> int:
         # The canonical status contract deliberately splits score CSVs from
         # databases. Preserve sibling ``dbs/`` discovery for explicit legacy
         # runs, but pair the status-selected score with the status-selected DBs.
-        db_paths_by_gene = {
-            path.name.upper(): resolve_status_gene_db(path.name)
-            for path in recall_score.iterdir()
-            if path.is_dir()
-        }
+        #
+        # Resolve leniently. `resolve_status_gene_db` raises SystemExit for a
+        # gene the status doc does not name, and that doc names only the four
+        # cardiac genes — so scoring any new gene used to abort the whole report
+        # rather than fall back for that one gene. This report is how we see
+        # where the recall gap is, and no-gold genes are the point of the tool.
+        db_paths_by_gene = {}
+        for path in sorted(recall_score.iterdir()):
+            if not path.is_dir():
+                continue
+            status_db = current_status_gene_db(path.name)
+            if status_db is not None and status_db.is_file():
+                db_paths_by_gene[path.name.upper()] = status_db
     rows = build_paper_disagreement_rows(
         recall_score=recall_score,
         db_dir=repo_path(args.db_dir) if args.db_dir else None,

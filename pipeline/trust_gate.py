@@ -113,6 +113,7 @@ RULE_IDS = (
     "negative_count",
     "implied_unaffected_zero",
     "recovered_count_unverified",
+    "figure_count_unverified",
 )
 
 #: Roles ``pipeline.count_recovery`` may stamp on a recovered count. A value
@@ -129,7 +130,19 @@ _RECOVERY_ROLE_BY_FIELD = {
     "unaffected": "per_variant_unaffected",
 }
 
+#: Provenance source stamped by ``pipeline.count_repair`` on a field it filled
+#: from the figure reader's own serialized reading (gvf-run Step 3.45).
+FIGURE_REPAIR_SOURCE = "figure_count_repair"
+FIGURE_REASON_PREFIX = "figure_count_unverified"
+
 COUNT_TRUST_FIELDS = ("total_carriers", "affected", "unaffected", "uncertain")
+
+#: Trusted-projection field name for each count-provenance field name.
+_TRUST_FIELD_BY_COUNT = {
+    "carriers": "total_carriers",
+    "affected": "affected",
+    "unaffected": "unaffected",
+}
 
 # Which count fields a reason masks from the trusted projection. A reason not
 # listed here masks the WHOLE fact (all count fields) — the historical
@@ -144,6 +157,12 @@ REASON_FIELDS: dict[str, tuple[str, ...]] = {
 
 def _fields_masked_by(reason: str) -> tuple[str, ...]:
     """Count fields a single reason quarantines (defaults to the whole fact)."""
+    if reason.startswith(f"{FIGURE_REASON_PREFIX}:"):
+        # Figure adoption is per field: a vision-read affected count must not
+        # drag a well-sourced carrier total on the same row out of the trusted
+        # projection, so the reason carries the field it applies to.
+        field = reason.rsplit(":", 1)[-1]
+        return (field,) if field in COUNT_TRUST_FIELDS else COUNT_TRUST_FIELDS
     return REASON_FIELDS.get(reason, COUNT_TRUST_FIELDS)
 
 
@@ -271,6 +290,23 @@ def evaluate_fact(
         role = str(provenance.get(f"{field_name}_count_type") or "").strip().lower()
         if role != expected_role:
             reasons.add("recovered_count_unverified")
+
+    # figure_count_unverified: gvf-run Step 3.45 filled this field from the
+    # figure reader's own serialized reading. The number is real and auditable
+    # — the raw column keeps it and count_repair_log records what it replaced —
+    # but nothing in the paper's text or tables corroborates it, and this is the
+    # layer with the weakest identity precision on gold PMIDs. It is masked from
+    # the trusted projection until a non-figure source or a curator agrees.
+    #
+    # Deliberately NOT routed through the recovery rule above: that rule only
+    # fires when the stamped *role* is wrong, so a well-formed figure fill would
+    # sail through it and land trusted — the very outcome this rule exists to
+    # prevent. A structured recovery fill and a vision read are not the same
+    # kind of claim and must not share a rule.
+    for count_field, trust_field in _TRUST_FIELD_BY_COUNT.items():
+        source = str(provenance.get(f"{count_field}_source") or "").strip().lower()
+        if source == FIGURE_REPAIR_SOURCE:
+            reasons.add(f"{FIGURE_REASON_PREFIX}:{trust_field}")
 
     # population_count: population allele magnitude, by label or by ceiling.
     label = str(provenance.get("carriers_column_label") or "")

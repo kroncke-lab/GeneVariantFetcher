@@ -292,6 +292,64 @@ def test_parse_routed_table_still_infers_clinical_list_without_annotation_column
     assert all(v["penetrance_data"]["total_carriers_observed"] == 1 for v in variants)
 
 
+def _one_carrier_row(phenotype: str, functional: str) -> dict:
+    """Parse a single clinical row and return its penetrance_data."""
+    header = "| Gene | Protein | Phenotype | Functional effect |"
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Mutations identified in long QT probands",
+        header_line=header,
+        header_cells=[c.strip() for c in header.strip("|").split("|")],
+        data_lines=[f"| KCNH2 | p.Ala561Val | {phenotype} | {functional} |"],
+        char_start=0,
+        char_end=400,
+    )
+    variants = parse_routed_table(
+        table, {"gene": 0, "protein": 1, "phenotype": 2}, "KCNH2"
+    )
+    assert len(variants) == 1
+    return variants[0]["penetrance_data"]
+
+
+@pytest.mark.parametrize(
+    "phenotype,functional,affected,unaffected",
+    [
+        # The bug: an unrelated functional-effect cell decided the phenotype.
+        # "normal"/"control"/"healthy" are ordinary assay English, and a
+        # row-wide search on them recorded a symptomatic proband as a confirmed
+        # unaffected carrier — fabricating the non-penetrance signal this
+        # database exists to measure.
+        ("LQT2, syncope", "normal trafficking", 1, None),
+        ("LQT2, aborted cardiac arrest", "control-like kinetics", 1, None),
+        ("LQT2, syncope", "reduced current", 1, None),
+        # Genotype-positive/phenotype-negative must survive: an unambiguous
+        # status term outranks a disease token in the same cell.
+        ("asymptomatic", "reduced current", 0, 1),
+        ("asymptomatic LQT2", "reduced current", 0, 1),
+        ("unaffected carrier", "reduced current", 0, 1),
+        # Ambiguous words are believed as the whole clinical cell, nowhere else.
+        ("normal", "reduced current", 0, 1),
+        ("healthy", "reduced current", 0, 1),
+        # A denied finding is neither: naming it affected because the cell also
+        # mentions a condition would invent the opposite partition.
+        ("normal ECG, no syncope", "reduced current", None, None),
+        ("LQT2 without arrhythmic events", "reduced current", None, None),
+        # ...but an ordinal is not a denial.
+        ("Patient No. 3, LQT2", "reduced current", 1, None),
+        # Silence stays silent.
+        ("unknown", "normal trafficking", None, None),
+        ("", "normal trafficking", None, None),
+    ],
+)
+def test_routed_clinical_row_reads_phenotype_only(
+    phenotype, functional, affected, unaffected
+):
+    pdata = _one_carrier_row(phenotype, functional)
+    assert pdata["total_carriers_observed"] == 1
+    assert pdata.get("affected_count") == affected
+    assert pdata.get("unaffected_count") == unaffected
+
+
 def test_parse_routed_table_drops_off_target_gene_cell_even_when_gene_unmapped():
     table = MarkdownTable(
         table_id="T1",

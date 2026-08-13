@@ -413,6 +413,18 @@ def _num(value):
         return None
 
 
+def _prediction_layers(pred: dict | None) -> frozenset[str]:
+    """Source layers a prediction claims.
+
+    Splits the comma-joined multi-layer form (``"llm_table,figure"``) that figure
+    ingest writes; an exact membership test against ``PAPER_LAYERS`` silently
+    dropped those. Returns empty when the prediction carries no layer at all,
+    which the caller must not confuse with "no paper layer matched".
+    """
+    raw = str((pred or {}).get("source_layer") or "").strip().lower()
+    return frozenset(part.strip() for part in raw.split(",") if part.strip())
+
+
 def _predictions_by_paper(predictions: Path) -> dict:
     """``{(gene, pmid): [variant_record, ...]}`` in locked prediction order."""
     payload = json.loads(predictions.read_text(encoding="utf-8"))
@@ -470,7 +482,15 @@ def score_tier(
     by_class: dict = {}
     per_gene: dict = {}
     noted: list[dict] = []
-    calibration = {"paper_matched_substitutions": 0, "probe_missed": 0}
+    calibration = {
+        "paper_matched_substitutions": 0,
+        "probe_missed": 0,
+        # A prediction file that carries no layer at all cannot calibrate
+        # anything. Counted so the report can say "unavailable" instead of
+        # printing 0/0, which reads as "measured, nothing wrong".
+        "layer_labelled_matches": 0,
+        "unlabelled_matches": 0,
+    }
     scored_papers = 0
     unscored: list[dict] = []
 
@@ -537,14 +557,16 @@ def score_tier(
             # Calibration: only a row a PAPER layer pulled out of this body is
             # evidence about the probe. A clinvar/pubtator match says nothing
             # about what the body contains.
-            if (
-                matched
-                and (pred.get("source_layer") or "unknown") in PAPER_LAYERS
-                and is_substitution(variant)
-            ):
-                calibration["paper_matched_substitutions"] += 1
-                if row.reachability == "variant_absent_from_body":
-                    calibration["probe_missed"] += 1
+            if matched and is_substitution(variant):
+                layers = _prediction_layers(pred)
+                if layers:
+                    calibration["layer_labelled_matches"] += 1
+                else:
+                    calibration["unlabelled_matches"] += 1
+                if layers & PAPER_LAYERS:
+                    calibration["paper_matched_substitutions"] += 1
+                    if row.reachability == "variant_absent_from_body":
+                        calibration["probe_missed"] += 1
 
             targets = [strata["all_gold"]]
             targets.append(
@@ -586,6 +608,11 @@ def score_tier(
 
     n = calibration["paper_matched_substitutions"]
     calibration["false_exclusion_rate"] = calibration["probe_missed"] / n if n else None
+    # Distinguish "no false exclusions observed" from "this prediction set cannot
+    # answer the question". The locked cardiac predictions.json files carry no
+    # `source_layer`, so the counters above were structurally pinned at zero and
+    # the report presented an unmeasured rule as a validated one.
+    calibration["available"] = calibration["layer_labelled_matches"] > 0
 
     gold_papers = scored_papers + len(unscored)
     outside = sorted(f"{g}:{p}" for (g, p) in predictions if (g, p) not in set(tier))
@@ -762,10 +789,17 @@ def render(tier_name: str, payload: dict) -> str:
         "body, or a usable body that demonstrably does not contain them — nothing\n"
         "the reader could have done. The calibration sample is conditional on\n"
         "rows a paper layer matched and does not bound false exclusions among\n"
-        "missed rows, so it cannot promote this diagnostic to a gate. Observed\n"
-        "probe false-exclusion rate on matched rows: "
-        f"{_pct(cal['false_exclusion_rate'])} "
-        f"({cal['probe_missed']}/{cal['paper_matched_substitutions']}).\n"
+        "missed rows, so it cannot promote this diagnostic to a gate. "
+        + (
+            "Observed probe false-exclusion rate on matched rows: "
+            f"{_pct(cal['false_exclusion_rate'])} "
+            f"({cal['probe_missed']}/{cal['paper_matched_substitutions']}).\n"
+            if cal.get("available")
+            else "**Probe false-exclusion rate is UNAVAILABLE for this run**: none\n"
+            f"of the {cal['unlabelled_matches']} matched substitutions carry a\n"
+            "`source_layer`, so the calibration counters cannot leave zero. Treat\n"
+            "the exclusion rule as unvalidated here, not as validated at 0%.\n"
+        )
     )
 
     lines.append("\n## Reachability of gold rows\n")

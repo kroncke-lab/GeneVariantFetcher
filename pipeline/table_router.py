@@ -471,10 +471,76 @@ _CLINICAL_MEASURE_TOKENS = (
     "year",
 )
 
-_UNAFFECTED_TEXT_RE = re.compile(
-    r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
+# Clinical status read out of free text, split by how much the wording can carry.
+#
+# The unambiguous set states the carrier's phenotype and nothing else, so it may
+# match anywhere inside a clinical cell — "asymptomatic LQT2 carrier" is how
+# papers write genotype-positive/phenotype-negative, and that row is the
+# non-penetrance signal this database exists to capture, so the disease token
+# must not outrank it.
+_UNAFFECTED_CLINICAL_RE = re.compile(
+    r"\b(unaffected|asymptomatic|no symptoms?)\b",
     re.IGNORECASE,
 )
+# The ambiguous set is ordinary assay and cohort English: "normal trafficking",
+# "control-like kinetics", "normal current density". A substring match on these
+# used to be enough to record a confirmed unaffected carrier, so a proband whose
+# phenotype cell said "aborted cardiac arrest" was stored as affected=0,
+# unaffected=1. They are only believed as the *entire* clinical cell.
+_UNAFFECTED_WHOLE_CELL_RE = re.compile(
+    r"^(unaffected|asymptomatic|control|controls|healthy|normal|"
+    r"no symptoms?|none|negative)$",
+    re.IGNORECASE,
+)
+_UNINFORMATIVE_PHENOTYPE_RE = re.compile(
+    r"\b(unknown|uncertain|not reported|n/?a)\b", re.IGNORECASE
+)
+# A negated finding ("normal ECG, no syncope", "without arrhythmia") describes a
+# carrier who was assessed and found well, but the wording is a denied symptom
+# rather than a status term, so it does not reach the unaffected lexicon above.
+# Naming it affected because the cell mentions a condition would invent the
+# opposite partition, and enumerating every symptom that can be negated is not a
+# rule anyone can keep correct. Such a cell yields null, which is honest.
+# The negator must be followed by a word, so an ordinal ("Patient No. 3") is not
+# read as a denial.
+_NEGATED_FINDING_RE = re.compile(
+    r"\b(?:no|without|free\s+of|denies|negative\s+for)\s+[a-z]|\bnone\b",
+    re.IGNORECASE,
+)
+
+
+def _phenotype_says_unaffected(phenotype: Optional[str]) -> bool:
+    """Whether the phenotype cell states the carrier had no disease phenotype.
+
+    Checked before the affirmative-condition branch on purpose: an unambiguous
+    status wins over a disease token in the same cell, because "asymptomatic
+    LQT2 carrier" is a genotype-positive/phenotype-negative row, not an affected
+    one. Silence is never read as unaffected — an empty or unmapped cell leaves
+    both partitions null.
+    """
+    text = (phenotype or "").strip()
+    if not text:
+        return False
+    return bool(
+        _UNAFFECTED_CLINICAL_RE.search(text) or _UNAFFECTED_WHOLE_CELL_RE.match(text)
+    )
+
+
+def _phenotype_names_a_condition(phenotype: Optional[str]) -> bool:
+    """Whether the phenotype cell affirmatively names a condition.
+
+    Runs only after ``_phenotype_says_unaffected`` has declined, so a cell that
+    both denies findings and names a condition ("normal ECG, no syncope") is
+    left null rather than counted as an affected carrier.
+    """
+    text = (phenotype or "").strip()
+    if not text or not re.search(r"[A-Za-z]", text):
+        return False
+    if _UNINFORMATIVE_PHENOTYPE_RE.search(text) or _NEGATED_FINDING_RE.search(text):
+        return False
+    return True
+
+
 # Caption can also be embedded as the first cell of the header row, e.g.
 #   | Table S3: rare variants ... | ... |
 _EMBEDDED_TABLE_LABEL_RE = re.compile(
@@ -2061,20 +2127,17 @@ def parse_routed_table(
         clinical = cell(clin_idx)
 
         # A carrier/patient total does not establish either phenotype partition.
-        # Only explicit phenotype or unaffected language can populate it.
+        # Only the mapped phenotype cell can populate one. Reading clinical
+        # status out of the whole row let an unrelated functional-effect cell
+        # ("normal trafficking", "control-like kinetics") record a symptomatic
+        # proband as a confirmed unaffected carrier. `clinical` is deliberately
+        # not consulted: `clinical_significance` is the variant's pathogenicity
+        # call, not the carrier's phenotype.
         if total is not None and affected is None and unaffected is None:
-            row_text = " ".join(cells)
-            if infer_one_carrier and _UNAFFECTED_TEXT_RE.search(row_text):
+            if infer_one_carrier and _phenotype_says_unaffected(phenotype):
                 affected = 0
                 unaffected = total
-            elif (
-                infer_one_carrier
-                and phenotype
-                and re.search(r"[A-Za-z]", phenotype)
-                and not re.search(
-                    r"\b(unknown|uncertain|not reported|n/?a)\b", phenotype, re.I
-                )
-            ):
+            elif infer_one_carrier and _phenotype_names_a_condition(phenotype):
                 affected = total
 
         # If we have affected + unaffected but no total, derive it.
