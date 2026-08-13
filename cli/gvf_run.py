@@ -187,9 +187,13 @@ def _apply_local_storage_checks(status: dict) -> None:
 
     A *dangling* link means the volume was expected and is not mounted — the
     accident case (drive removed, wrong machine). Block at Step 1 rather than
-    running cold and re-fetching the whole corpus over the network. An *absent*
-    link is a legitimate fresh checkout or collaborator setup, so it does not
-    block. `--skip doctor` overrides either way.
+    running cold and re-fetching the whole corpus over the network. A *local*
+    real directory also blocks, because writing there builds a second corpus on
+    the internal disk that no later run reads; `GVF_ALLOW_LOCAL_CORPUS=1` opts
+    in on a machine with no external volume. An *absent* link is a legitimate
+    fresh checkout or collaborator setup, so it does not block — the write-side
+    guard catches that case later with mount instructions. `--skip doctor`
+    overrides either way.
 
     Split out of ``doctor`` so it is testable without doctor's network probes.
     """

@@ -25,6 +25,16 @@ policy and changes the matched-count denominator, so promotion requires a paired
 live cardiac re-extraction and rescore with assertion coverage plus conditional
 and end-to-end error reported together. That gate is tracked in `TASKS.md`.
 
+A first paired rescore ran on 2026-08-13 against the 73-paper curated cardiac
+fixture and is recorded in `docs/RECALL_HISTORY.md`. It does **not** change the
+headline below: its KCNQ1 arm was degraded by a source-recovery failure, and its
+"before" side is an older DB rather than a re-extraction with the old code. Its
+one load-bearing result is that matched-row MAE and end-to-end count error move
+in **opposite** directions — conditional accuracy improves 16–57% while
+end-to-end carrier/affected error rises, because the pipeline now declines to
+answer more often. Any future report of one without the other is misleading.
+Gate 1 (`gold_50`) is still the next step.
+
 Historical view: the published dashboard at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
 2026-07-08 pre-correction snapshot. It does **not** render the current table

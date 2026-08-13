@@ -45,6 +45,56 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-13 — First paired rescore of the phenotype-null arc (not a headline)
+
+The re-extraction that `RECALL_STATUS.md` and `TASKS.md` have been demanding
+since the 2026-08-12 phenotype-null commit finally ran, together with five
+defect fixes in that same arc (see `PROTOCOL_CHANGELOG.md` for the defects).
+
+**Instrument.** The 73-paper cardiac arm of `benchmarks/curated_extraction_eval`
+through full default `gvf-run` (79 min), scored against the frozen gold subset.
+Both sides scored by the **current** scorer: the committed
+`expected_baseline.json` was written by the *old* scorer, so comparing to it
+would have conflated the scorer rewrite with the extraction rewrite. The "before"
+column is the four canonical baseline DBs re-scored on the same fixture today.
+
+| Metric | Before | After |
+| --- | ---: | ---: |
+| Unique variants | 1584/1721 (92.0%) | 1559/1721 (**90.6%**) |
+| Variant rows | 2435/2714 (89.7%) | 2391/2714 (**88.1%**) |
+| Affected | 5233/5615 (93.2%) | 5181/5615 (**92.3%**) |
+| Matched-row MAE — carriers | 0.393 | **0.168** |
+| Matched-row MAE — affected | 0.322 | **0.270** |
+| Matched-row MAE — unaffected | 0.377 | **0.201** |
+| End-to-end error — carriers | 1.289 | **1.654** |
+| End-to-end error — affected | 1.196 | **1.749** |
+| End-to-end error — unaffected | 0.285 | **0.137** |
+| Counted extras on gold PMIDs | 850 | **552** |
+| Counted precision | 74.1% | **81.2%** |
+
+**The two error families move in opposite directions, and that is the finding.**
+Matched-row MAE falls by 16–57% while end-to-end carrier/affected error *rises*.
+The pipeline stopped guessing: when it asserts a count it is far more often
+right, and it fabricates a third fewer counted rows, but it declines to answer
+more often, so total error against gold rows grows. Reporting only matched-row
+MAE would have shown a clean win that is not the whole truth. Whether
+null-instead-of-a-guess is worth that coverage cost is a deliberate policy
+choice; it currently exists as a side effect rather than a decision.
+
+**The recall delta is mostly acquisition, not parsing.** Of 96 lost rows, 57 come
+from three papers with recorded source failures — RYR2 33606749
+(`source_missing_or_stub`, zero bytes on disk), SCN5A 26746457 and 19251209
+(`source_missing_table_bodies`) — and only 2 rows classify as `count_semantics`.
+Real gains landed too: RYR2 19398665 went 2→26 matched rows as the figure path
+began contributing.
+
+**Why this is not a headline and not a gate pass.** The KCNQ1 arm was degraded
+(`fetch_paywalled.py` exited 1), and the before side is an older DB rather than a
+re-extraction with the old code, so the recall delta is not a controlled A/B.
+`expected_baseline.json` was deliberately not rewritten and the four-gene
+canonical headline in `RECALL_STATUS.md` is unchanged. Gate 1 (`gold_50`) in
+`TASKS.md` remains the next step.
+
 ### 2026-08-12 — Phenotype-null and figure-link hardening (rescore required)
 
 Deterministic table paths now preserve NULL for affected/unaffected partitions

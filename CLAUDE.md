@@ -103,13 +103,18 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
   with no external volume. This is the write-side companion to
   `GVF_DISABLE_LOCAL_DATA`, which suppresses read-side discovery in the offline
   suite.
-- `gvf-run` doctor (Step 1) blocks the run when a guarded link is *dangling* —
-  the volume was expected and is not mounted (drive removed, wrong machine) — so
-  the run stops before Step 2 instead of re-fetching the whole corpus over the
-  network. An *absent* link is a legitimate fresh checkout or collaborator setup
-  and does not block. `--skip doctor` overrides either way. The logic lives in
-  `_apply_local_storage_checks`, split out of `doctor` so it is testable without
-  doctor's network probes.
+- `gvf-run` doctor (Step 1) sorts `corpus/` into four states and blocks on two of
+  them. *dangling* — the volume was expected and is not mounted (drive removed,
+  wrong machine) — blocks, so the run stops before Step 2 instead of re-fetching
+  the whole corpus over the network. *local* — a real directory where the link
+  should be — also blocks, because writing there builds a second corpus on the
+  internal disk; set `GVF_ALLOW_LOCAL_CORPUS=1` to opt in on a machine that
+  legitimately has no external volume (CI, a collaborator's laptop). *linked*
+  and *absent* do not block: an absent link is a legitimate fresh checkout, and
+  the write-side guard in `require_external_storage` catches it later with mount
+  instructions. `GVF_CORPUS_DIR` bypasses the check entirely, and `--skip doctor`
+  overrides it. The logic lives in `_apply_local_storage_checks`, split out of
+  `doctor` so it is testable without doctor's network probes.
 - When `corpus/` is unreachable but the run proceeds (`--skip doctor`), corpus
   reuse is disabled rather than fatal: `pipeline/steps.py::_resolve_corpus_dir`
   logs a `corpus reuse DISABLED` warning naming the volume, and `gvf-run`'s

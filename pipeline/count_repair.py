@@ -179,6 +179,34 @@ def _json_value(raw: Any, expected_type: type, default: Any) -> Any:
     return value if isinstance(value, expected_type) else default
 
 
+#: Columns the driving query needs, per table.
+_REQUIRED_INPUTS = {
+    "variant_papers": ("variant_id", "pmid", "additional_notes", "source_layer"),
+    "penetrance_data": (
+        "penetrance_id",
+        "variant_id",
+        "pmid",
+        "total_carriers_observed",
+        "affected_count",
+        "unaffected_count",
+    ),
+}
+
+
+def _missing_inputs(cur: sqlite3.Cursor) -> list[str]:
+    """Which tables or columns the driving query needs and this DB lacks."""
+    missing: list[str] = []
+    for table, columns in _REQUIRED_INPUTS.items():
+        present = {info[1] for info in cur.execute(f"PRAGMA table_info({table})")}
+        if not present:
+            missing.append(f"no {table} table")
+            continue
+        absent = [name for name in columns if name not in present]
+        if absent:
+            missing.append(f"{table} is missing {', '.join(absent)}")
+    return missing
+
+
 def _stamp_figure_provenance(
     cur: sqlite3.Cursor,
     variant_id: Any,
@@ -271,9 +299,21 @@ def apply_count_repair(
                               )"""
                 )
             )
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as exc:
+            # Name what is actually missing. A bare handler here reported "no
+            # variant_papers table" for a missing *column* too, so a DB whose
+            # variant_papers predates the `source_layer` migration silently
+            # produced rows_examined=0 and the run looked like it had nothing to
+            # repair rather than like it could not look.
+            missing = _missing_inputs(cur)
+            message = (
+                f"count repair: {', '.join(missing)}; nothing to do"
+                if missing
+                else f"count repair: cannot read the count tables ({exc}); nothing to do"
+            )
             if logger:
-                logger.info("count repair: no variant_papers table; nothing to do")
+                logger.warning(message)
+            summary["skipped_reason"] = message
             return summary
 
         if not dry_run:

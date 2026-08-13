@@ -532,3 +532,50 @@ def test_trust_gate_quarantines_exactly_the_adopted_figure_fields(tmp_path):
     assert "carriers" not in field_trust
     # The raw counts survive either way — quarantine masks, it does not delete.
     assert (carriers, affected) == (13, 5)
+
+
+def test_unreadable_inputs_name_what_is_missing(tmp_path):
+    """A missing *column* must not be reported as a missing table.
+
+    The driving query sat under a bare `except sqlite3.OperationalError` that
+    logged "no variant_papers table" for either cause, so a DB whose
+    variant_papers predates the `source_layer` migration reported
+    rows_examined=0 and the run looked like it had nothing to repair rather
+    than like it could not look.
+    """
+    db = tmp_path / "legacy.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """CREATE TABLE penetrance_data(
+             penetrance_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+             total_carriers_observed INTEGER, affected_count INTEGER,
+             unaffected_count INTEGER);
+           CREATE TABLE variant_papers(
+             variant_id INTEGER, pmid TEXT, additional_notes TEXT);"""
+    )
+    con.commit()
+    con.close()
+
+    summary = apply_count_repair(db)
+
+    assert summary["rows_examined"] == 0
+    assert "source_layer" in summary["skipped_reason"]
+    assert "no variant_papers table" not in summary["skipped_reason"]
+
+
+def test_missing_variant_papers_table_is_still_named_plainly(tmp_path):
+    db = tmp_path / "empty.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """CREATE TABLE penetrance_data(
+             penetrance_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+             total_carriers_observed INTEGER, affected_count INTEGER,
+             unaffected_count INTEGER);"""
+    )
+    con.commit()
+    con.close()
+
+    summary = apply_count_repair(db)
+
+    assert summary["rows_examined"] == 0
+    assert "no variant_papers table" in summary["skipped_reason"]
