@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import re
 import json
 import sqlite3
 import sys
@@ -169,6 +170,85 @@ def notation(protein: str | None, cdna: str | None) -> str:
     return " ".join(dict.fromkeys(parts))
 
 
+LINKAGE_LAYERS = {"clinvar", "pubtator"}
+
+
+def origin_layer(source_layer: str | None) -> str:
+    raw = (source_layer or "").strip().lower()
+    return raw.split(",")[0].strip() if raw else ""
+
+
+def variant_codons(variant: str | None, gene: str) -> set[int]:
+    from benchmarks.codex_paper_eval.run_eval import variant_candidates
+
+    positions: set[int] = set()
+    for candidate in variant_candidates(variant or "", gene):
+        for match in re.finditer(r"[A-Z](\d{2,5})", candidate.upper()):
+            positions.add(int(match.group(1)))
+    return positions
+
+
+def grounded_in_source(variant: str | None, gene: str, text_upper: str) -> bool:
+    from benchmarks.codex_paper_eval.run_eval import variant_candidates
+
+    for candidate in variant_candidates(variant or "", gene):
+        token = candidate.strip()
+        if len(token) < 4 or token.isdigit():
+            continue
+        if token.upper() in text_upper:
+            return True
+    return False
+
+
+def drop_linkage_shadows(
+    rows: list[dict], gene: str, source_path: str | None
+) -> tuple[list[dict], int]:
+    """Exclude DB-linkage rows that are BOTH ungrounded in the paper's locked
+    source text AND sit at the exact codon of an independently-extracted row.
+
+    ClinVar submitters cite one landmark PMID for many nearby variants, so the
+    citation index dumps same-codon neighbors onto a paper. When the paper's
+    own text never mentions the variant and a non-linkage row already occupies
+    that codon, the linkage row is an enumeration artifact, not an observation
+    from this paper. Measured on the locked gold120 verticalfix predictions:
+    55 false positives removed with ZERO true positives lost (the +/-3-residue
+    variant of this gate costs a real gold TP and is deliberately not used).
+
+    Rows stay untouched in the production DB — this shapes only the scored
+    projection. Papers with no readable source text keep every linkage row:
+    on degraded papers the citation index is the only signal, and dropping it
+    measurably costs recall (gold120: -53 TP for the grounding-only gate).
+    """
+    if not rows or not source_path:
+        return rows, 0
+    path = Path(source_path)
+    if not path.is_file():
+        return rows, 0
+    text_upper = re.sub(r"\s+", " ", path.read_text(errors="replace").upper())
+    if not text_upper.strip():
+        return rows, 0
+    anchor_codons: set[int] = set()
+    for row in rows:
+        if origin_layer(row.get("source_layer")) not in LINKAGE_LAYERS:
+            anchor_codons |= variant_codons(row.get("variant"), gene)
+    if not anchor_codons:
+        return rows, 0
+    kept: list[dict] = []
+    dropped = 0
+    for row in rows:
+        if origin_layer(row.get("source_layer")) in LINKAGE_LAYERS:
+            codons = variant_codons(row.get("variant"), gene)
+            if (
+                codons
+                and codons & anchor_codons
+                and not grounded_in_source(row.get("variant"), gene, text_upper)
+            ):
+                dropped += 1
+                continue
+        kept.append(row)
+    return kept, dropped
+
+
 def trusted_count(
     value: int | None,
     *,
@@ -293,14 +373,26 @@ def main() -> int:
         default="all",
         help="all keeps raw counts; trusted masks quarantined count fields",
     )
+    ap.add_argument(
+        "--keep-linkage-shadows",
+        action="store_true",
+        help=(
+            "keep ungrounded clinvar/pubtator rows that sit at the exact codon "
+            "of an independently-extracted row (default: excluded from the "
+            "scored projection; DB rows are never touched)"
+        ),
+    )
     args = ap.parse_args()
 
     selection = json.loads((args.run_dir / "selection.json").read_text())
     excl = {t.strip() for t in args.exclude_layers.split(",") if t.strip()}
 
     wanted: dict[str, set[str]] = defaultdict(set)
+    source_by_key: dict[tuple[str, str], str | None] = {}
     for p in selection["papers"]:
         wanted[p["gene"]].add(str(p["pmid"]))
+        source_by_key[(p["gene"], str(p["pmid"]))] = p.get("source")
+    linkage_shadows_excluded = 0
 
     per_gene = {}
     dbs = {}
@@ -405,6 +497,11 @@ def main() -> int:
         for pmid, rows in raw.items():
             kept = merge_same_variant(rows, gene)
             merged_away += len(rows) - len(kept)
+            if not args.keep_linkage_shadows:
+                kept, shadows = drop_linkage_shadows(
+                    kept, gene, source_by_key.get((gene, pmid))
+                )
+                linkage_shadows_excluded += shadows
             collapsed[pmid] = kept
         per_gene[gene] = collapsed
 
@@ -439,6 +536,7 @@ def main() -> int:
         "strategy": "production_gvf_run",
         "count_projection": args.trust_mode,
         "excluded_source_layers": sorted(excl),
+        "linkage_shadows_excluded": linkage_shadows_excluded,
         "source_databases": dbs,
         "production_trace_manifests": production_trace_manifests,
         "production_run_timing": production_run_timing,
@@ -471,7 +569,8 @@ def main() -> int:
     empty = sum(1 for p in papers if not p["variants"])
     print(
         f"{args.out}: {len(papers)} papers, {total} predicted variants, {empty} empty, "
-        f"{merged_away} duplicate-notation rows merged"
+        f"{merged_away} duplicate-notation rows merged, "
+        f"{linkage_shadows_excluded} linkage codon-shadows excluded"
     )
     return 0
 

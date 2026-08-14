@@ -1240,3 +1240,73 @@ def test_score_one_reports_zero_stratified_count_recall():
     combined = aggregate([score])
     assert combined["count"]["unaffected"]["gold_asserted_zero"] == 2
     assert combined["count"]["carriers"]["recall_nonzero_gold"] == pytest.approx(1 / 2)
+
+
+def test_linkage_codon_shadows_are_excluded_from_the_projection(tmp_path: Path):
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    source = tmp_path / "PMID_FULL_CONTEXT.md"
+    source.write_text(
+        "The proband carried R376H. A relative carried p.Ala561Thr as well."
+    )
+    rows = [
+        # Independently-extracted anchors at codons 376 and 561.
+        {
+            "variant": "R376H",
+            "source_layer": "llm_text",
+            "carriers": 2,
+            "affected": 1,
+            "unaffected": None,
+        },
+        {
+            "variant": "A561V",
+            "source_layer": "llm_table",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # Ungrounded ClinVar neighbor at the SAME codon: enumeration artifact.
+        {
+            "variant": "p.Arg376Cys",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # ClinVar row at an anchored codon that IS in the text stays.
+        {
+            "variant": "p.Ala561Thr",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # Ungrounded ClinVar row at an UNANCHORED codon stays: on papers whose
+        # tables never reached disk, linkage is the only recall signal.
+        {
+            "variant": "p.Ser277del",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+    ]
+    kept, dropped = converter.drop_linkage_shadows(rows, "KCNQ1", str(source))
+    kept_variants = [r["variant"] for r in kept]
+    assert dropped == 1
+    assert "p.Arg376Cys" not in kept_variants
+    assert {"R376H", "A561V", "p.Ala561Thr", "p.Ser277del"} <= set(kept_variants)
+
+    # Missing or unreadable source keeps everything.
+    kept_all, dropped_none = converter.drop_linkage_shadows(
+        rows, "KCNQ1", str(tmp_path / "missing.md")
+    )
+    assert dropped_none == 0 and len(kept_all) == len(rows)
