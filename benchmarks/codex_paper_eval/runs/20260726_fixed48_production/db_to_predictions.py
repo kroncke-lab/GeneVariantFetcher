@@ -145,14 +145,14 @@ def merge_same_variant(rows: list[dict], gene: str) -> list[dict]:
     right, so rows are merged using the harness's own matches(), and the
     surviving record keeps the counts from the most authoritative layer.
     """
-    from benchmarks.codex_paper_eval.run_eval import matches
+    from benchmarks.codex_paper_eval.run_eval import twin_identical
 
     kept: list[dict] = []
     for row in sorted(
         rows, key=lambda r: (layer_rank(r["source_layer"]), r["variant"])
     ):
         for existing in kept:
-            if matches(row["variant"], existing["variant"], gene):
+            if twin_identical(row["variant"], existing["variant"], gene):
                 for field in ("carriers", "affected", "unaffected"):
                     if existing[field] is None and row[field] is not None:
                         existing[field] = row[field]

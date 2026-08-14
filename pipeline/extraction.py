@@ -427,12 +427,12 @@ class ExpertExtractor(BaseLLMCaller):
                         ):
                             break
                         end += 1
+                    body = [probe for probe in lines[idx + 1 : end] if probe.strip()]
                     digit_lines = sum(
-                        1
-                        for probe in lines[idx + 1 : end]
-                        if any(c.isdigit() for c in probe)
+                        1 for probe in body if any(c.isdigit() for c in probe)
                     )
-                    if digit_lines < 3:
+                    # A table body is digit-dense; prose after a caption is not.
+                    if digit_lines < 3 or not body or digit_lines / len(body) < 0.3:
                         end = idx + 1
                 if end > idx + 1:
                     secondary_segments.append((idx, end))
@@ -448,13 +448,19 @@ class ExpertExtractor(BaseLLMCaller):
         header = f"[GENE-FOCUSED TRUNCATION for {gene_symbol}]\n\n"
         separator_cost = 7  # "\n\n---\n\n" between pieces
         budget = max_chars - len(header)
-        reserved = min(
-            sum(
-                len("\n".join(lines[start:end])) + separator_cost
-                for start, end in merged_secondary
-            ),
-            max_chars // 4,
-        )
+        outside_spans = [
+            (start, end)
+            for start, end in merged_secondary
+            if not any(start >= p_start and end <= p_end for p_start, p_end in merged)
+        ]
+        span_size = lambda start, end: len("\n".join(lines[start:end])) + separator_cost  # noqa: E731
+        naive_reserve = sum(span_size(s_, e_) for s_, e_ in outside_spans)
+        primary_total = sum(span_size(s_, e_) for s_, e_ in merged)
+        if primary_total > budget - min(naive_reserve, max_chars // 4):
+            # A primary cut is coming, so table spans nominally covered by a
+            # primary window may still be lost — reserve for them too.
+            naive_reserve = sum(span_size(s_, e_) for s_, e_ in merged_secondary)
+        reserved = min(naive_reserve, max_chars // 4)
         primary_budget = budget - reserved
 
         pieces = []

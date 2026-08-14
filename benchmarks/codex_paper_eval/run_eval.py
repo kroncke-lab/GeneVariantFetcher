@@ -1546,10 +1546,9 @@ def cdna_splice_codon(value: str) -> int | None:
     qualify — exonic substitutions must match through translation, never
     through a codon bridge.
     """
-    match = re.search(
-        r"(?:^|[^A-Za-z0-9_])c?\.?(\d+)[+-]\d+[ACGT]>[ACGT]",
-        value,
-        flags=re.I,
+    match = re.fullmatch(
+        r"(?:C\.)?(\d+)[+-]\d+[ACGT]>[ACGT]",
+        re.sub(r"\s+", "", value.upper()),
     )
     return (int(match.group(1)) + 2) // 3 if match else None
 
@@ -1790,22 +1789,71 @@ def matches(a: str, b: str, gene: str) -> bool:
     return False
 
 
+def twin_identical(a: str, b: str, gene: str) -> bool:
+    """Strict equivalent-allele identity for prediction de-duplication.
+
+    Deliberately NARROWER than matches(): the scored matcher carries
+    position-level bridges (splice codon, terminal position, cDNA-indel
+    codon) that are correct scoring fuzz against curated gold shorthand but
+    are NOT allele identity — using them as identity fuses distinct alleles
+    (c.477+1G>A and c.477+2T>C both splice-bridge to M159X). Identity here
+    means: identical normalized notation, identical structural coordinates,
+    normalizer equality, or a nucleotide-verified cDNA<->protein translation.
+    """
+    from utils.variant_normalizer import normalize_variant, variants_match
+
+    if not a or not b:
+        return False
+    a = _ARROW_RE.sub(">", a)
+    b = _ARROW_RE.sub(">", b)
+    for left in variant_candidates(a, gene):
+        for right in variant_candidates(b, gene):
+            left_key = re.sub(r"^(?:P\.)|\s+", "", left.upper())
+            right_key = re.sub(r"^(?:P\.)|\s+", "", right.upper())
+            if left_key == right_key:
+                return True
+            left_structural = structural_event_key(left)
+            right_structural = structural_event_key(right)
+            if (
+                left_structural
+                and right_structural
+                and left_structural == right_structural
+            ):
+                return True
+            if cdna_protein_translation_consistent(left, right):
+                return True
+            if cdna_protein_translation_consistent(right, left):
+                return True
+            try:
+                if normalize_variant(left, gene) == normalize_variant(right, gene):
+                    return True
+                if variants_match(left, right, gene):
+                    return True
+            except Exception:
+                continue
+    return False
+
+
 def merge_notation_twins(rows: list[dict], gene: str) -> tuple[list[dict], int]:
     """Collapse same-paper prediction rows that are the same variant in a
     different notation (vertical tables emit the cDNA and protein halves as
     two rows; the matcher scores one TP and strands the twin as an FP).
 
-    Hard bounds: merge only on equivalent-allele identity via matches();
-    refuse when the row matches more than one kept row (ambiguity) and when
-    both rows carry conflicting non-null counts (D609G vs D609N carry
-    different patients' counts — notation twins agree). A merged twin only
-    fills count fields the kept row left null.
+    Hard bounds (grok-4.6 final review): identity is twin_identical(), never
+    the scored matches() with its position-level bridges; refuse when the row
+    matches more than one kept row (ambiguity); count fields transfer ONLY
+    when the kept row is all-null across COUNT_FIELDS (the classic vertical
+    split: identity-only protein row + count-bearing cDNA row). Complementary
+    unions of two partially-counted rows are refused — they can invent a
+    count vector no single source row asserted.
     """
     merged: list[dict] = []
     twins = 0
     for row in rows:
         homes = [
-            m for m in merged if matches(row.get("variant"), m.get("variant"), gene)
+            m
+            for m in merged
+            if twin_identical(row.get("variant"), m.get("variant"), gene)
         ]
         conflict = any(
             m.get(field) is not None
@@ -1819,9 +1867,10 @@ def merge_notation_twins(rows: list[dict], gene: str) -> tuple[list[dict], int]:
             continue
         home = homes[0]
         twins += 1
-        for field in COUNT_FIELDS:
-            if home.get(field) is None and row.get(field) is not None:
-                home[field] = row[field]
+        if all(home.get(field) is None for field in COUNT_FIELDS):
+            for field in COUNT_FIELDS:
+                if row.get(field) is not None:
+                    home[field] = row[field]
     return merged, twins
 
 

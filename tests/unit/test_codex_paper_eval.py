@@ -1175,8 +1175,10 @@ def test_merge_notation_twins_bounds():
     ]
     merged, twins = merge_notation_twins(rows, "SCN5A")
     assert twins == 1 and len(merged) == 3
-    # The twin fills fields the kept row left null, and never overwrites.
-    assert merged[0]["carriers"] == 12 and merged[0]["affected"] == 3
+    # The kept row already carries counts, so the complementary twin fields
+    # are REFUSED (a union of two partially-counted rows can invent a count
+    # vector no single source row asserted).
+    assert merged[0]["carriers"] == 12 and merged[0]["affected"] is None
 
     # Conflicting non-null counts refuse the merge (different patients).
     conflicted = [
@@ -1310,3 +1312,19 @@ def test_linkage_codon_shadows_are_excluded_from_the_projection(tmp_path: Path):
         rows, "KCNQ1", str(tmp_path / "missing.md")
     )
     assert dropped_none == 0 and len(kept_all) == len(rows)
+
+
+def test_twin_merge_never_fuses_distinct_splice_alleles():
+    from benchmarks.codex_paper_eval.run_eval import merge_notation_twins
+
+    # matches() may splice-bridge both intronic alleles to M159X for SCORING,
+    # but identity must not: protein-first order used to fuse all three.
+    rows = [
+        {"variant": "M159X", "carriers": None, "affected": None, "unaffected": None},
+        {"variant": "c.477+1G>A", "carriers": 2, "affected": 1, "unaffected": None},
+        {"variant": "c.477+2T>C", "carriers": 1, "affected": 1, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(rows, "KCNQ1")
+    assert len(merged) == 3 and twins == 0
+    # Scoring still bridges: matches() keeps the recall win.
+    assert matches("c.477+1G>A", "M159X", "KCNQ1")
