@@ -29,9 +29,9 @@ Install pre-commit hooks after the project environment is active:
 
 2. **Add variant alias dictionary** (optional but recommended):
    ```
-   data/{gene_lower}_variant_aliases.json
+   gvf_data/{gene_lower}_variant_aliases.json
    ```
-   Format: JSON mapping alias → canonical variant (see `data/kcnh2_variant_aliases.json` for example)
+   Format: JSON mapping alias → canonical variant (see `gvf_data/kcnh2_variant_aliases.json` for example)
 
 3. **Run discovery** to find papers:
    ```bash

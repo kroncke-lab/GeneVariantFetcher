@@ -5,20 +5,79 @@ are those used by each named run; they are not current configuration guidance.
 Use `config/settings.py` and `docs/ARCHITECTURE.md` for current defaults and
 `TASKS.md` for the next acceptance gate.
 
-## Canonical rollout sizes (2026-08-11)
+## Canonical rollout sizes (updated 2026-08-13)
 
 The only active progression is 50 gold-scored gene–paper attempts, then 120
-cardiac attempts (98 unique PMIDs), then the 546-attempt full reviewer backlog
-(507 unique PMIDs). Cross-gene papers are intentionally processed once
+manually curated cardiac-gold attempts (116 unique PMIDs), then the 546-attempt
+full reviewer backlog (507 unique PMIDs). Cross-gene papers are intentionally processed once
 per gene–disease workspace, so provider cost scales with attempts, not unique
 PMIDs.
 
-Using the older measured envelope of about **$0.50–$2 per typical attempt** only
-as a conservative planning range gives **$25–$100**, **$60–$240**, and
-**$273–$1,092** for the three tiers. These are not invoices or a measurement of
-the newer failure-routing protocol; exact approval still requires trace-derived
-token totals from Gate 1. The full-tier estimate includes BMPR2 and 50 papers
-each for LMNA and TTN.
+The patched gold-120 revalidation supplies the current exact trace-derived
+measurement. The 120 attempts used 527 calls, 2,351,247 tokens, and 7,903.6
+summed provider-seconds (131.7 minutes). The four gene jobs ran concurrently and
+completed in 34.4–38.9 minutes each. Public list-price arithmetic gives **$9.77
+total / $0.0814 per attempt**.
+This is a cost proxy, not an Azure invoice: Grok and Kimi use their public xAI
+and Fireworks prices because the deployment-specific Azure rates are not in the
+trace, cached-input discounts are ignored, and provider-returned total-minus-
+input is conservatively charged as output/reasoning.
+
+| Gene (30 attempts each) | Summed provider time | Calls (successful) | Tokens | Cost proxy | Cost / attempt |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 33.21 min | 108 (106) | 515,098 | $2.365 | $0.0788 |
+| KCNQ1 | 33.02 min | 166 (162) | 587,438 | $2.255 | $0.0752 |
+| RYR2 | 30.25 min | 132 (132) | 604,475 | $2.671 | $0.0890 |
+| SCN5A | 35.24 min | 121 (121) | 644,236 | $2.482 | $0.0827 |
+| **Total / mean** | **131.73 min** | **527 (521)** | **2,351,247** | **$9.774** | **$0.0814** |
+
+| Model role | Calls (successful) | Input tokens | Output/reasoning tokens | Provider time | Cost proxy |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Kimi K2.6 table routing | 19 (19) | 34,671 | 33,799 | 199.2 s | $0.168 |
+| Grok 4.3 primary extraction | 115 (114) | 1,165,102 | 452,388 | 4,571.4 s | $2.587 |
+| GPT-5.6 Sol verification/figure vision | 393 (388) | 517,604 | 147,683 | 3,133.0 s | $7.019 |
+
+The proxy uses $5/M input and $30/M output for
+[GPT-5.6 Sol](https://azure.microsoft.com/en-us/blog/gpt-5-6-now-available-in-microsoft-foundry/),
+$1.25/M and $2.50/M for
+[Grok 4.3](https://docs.x.ai/developers/models/grok-4.3), and $0.95/M and $4/M
+for [Kimi K2.6](https://docs.fireworks.ai/serverless/pricing). Actual Foundry
+cost depends on deployment, region, caching, and commercial terms.
+
+The fixed 146-attempt experiment is now complete, so the earlier cardiac-only
+projection can be compared with an actual BRCA-heavy run. It used 972 calls,
+4,261,341 tokens, 13,362.1 summed provider-seconds, and a **$23.664** cost proxy.
+The three genes ran concurrently and completed in 70.7--97.8 minutes. The large
+BRCA tables make this **$0.1621 per attempt**, about twice the cardiac-gold
+mean; gene/paper density is therefore a load-bearing planning variable.
+
+| Experimental gene | Attempts | Calls (successful) | Tokens | Provider time | Cost proxy |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| BMPR2 | 50 | 195 (195) | 1,023,662 | 0.730 h | $4.275 |
+| BRCA1 | 50 | 407 (405) | 1,559,111 | 1.439 h | $9.112 |
+| BRCA2 | 46 | 370 (370) | 1,678,568 | 1.543 h | $10.278 |
+| **Total** | **146** | **972 (970)** | **4,261,341** | **3.712 h** | **$23.664** |
+
+The completed 120-paper manual-gold comparison already lies inside the
+requested 100--150 comparison range; no experimental gene was widened.
+
+Straight-line calibration bounds are:
+
+| Scope | Attempts | Cardiac-like proxy | BRCA-heavy proxy | Planning allowance |
+| --- | ---: | ---: | ---: | ---: |
+| Completed experiment | 146 | $11.89 / 2.67 h | **$23.66 / 3.71 h actual** | observed 97.8 min concurrent wall |
+| Exact full reviewer tier | 546 | $44.47 / 9.99 h | $88.50 / 13.88 h | roster estimate $56–$72; budget $70–$90 and 10–20 elapsed h |
+| Generic 500–600 attempts | 500–600 | $40.72–$48.87 / 9.15–10.98 h | $81.04–$97.25 / 12.71–15.25 h | roughly $50–$120 before human review |
+
+The exact 546 roster has seven measured or directly scaled strata totaling
+about $39.95; applying the two observed rates to its four unmeasured 50-paper
+genes gives the narrower $56–$72 roster estimate. The allowance covers retry
+tails and source/QC variability; it does not include human curation time.
+Source recovery can add substantial elapsed time without adding much LLM spend.
+The patched Gate 2 revalidation passed its like-for-like counted-extra precision
+criterion (95.70% raw / 95.87% trusted versus the 77.3% floor). Detailed
+experimental cost, trust, source, and collaborator-gold QC is locked in
+`runs/20260813_experimental_146/EXPERIMENTAL_COST_AND_QC.md`.
 
 ## Collaborator-gold scope correction (2026-08-11; no new calls)
 

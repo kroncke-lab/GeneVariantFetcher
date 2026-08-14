@@ -6,7 +6,7 @@ or whose position is out of range. It is a **no-op for any gene without a cached
 reference sequence**, so it is turnkey-safe on uncached / unknown genes — it can
 only ever reject when it has ground truth to reject against.
 
-Reference protein sequences live under ``data/reference_sequences/<GENE>.fasta``
+Reference protein sequences live under ``gvf_data/reference_sequences/<GENE>.fasta``
 and are populated on demand by ``scripts/fetch_reference_sequences.py`` (NCBI
 Entrez; network). The expected length for the curated genes is cross-checked
 against ``utils.variant_normalizer.PROTEIN_LENGTHS`` when a sequence is loaded, so
@@ -21,12 +21,14 @@ from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass
+from importlib.resources import files
+from importlib.resources.abc import Traversable
 from pathlib import Path
 from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-_REF_DIR = Path(__file__).resolve().parents[1] / "data" / "reference_sequences"
+_REF_DIR = files("gvf_data").joinpath("reference_sequences")
 
 # Standard amino-acid three-letter -> one-letter map (plus Sec/Pyl).
 _AA3_TO_1 = {
@@ -136,7 +138,7 @@ def parse_reference_residue(protein_notation: str) -> Optional[tuple[str, int]]:
     return ref, pos
 
 
-def _read_fasta_sequence(path: Path) -> Optional[str]:
+def _read_fasta_sequence(path: Path | Traversable) -> Optional[str]:
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError:
@@ -150,7 +152,8 @@ def load_reference_protein(
 ) -> Optional[str]:
     """Return the cached reference protein sequence for ``gene``, or None.
 
-    Reads ``<cache_dir>/<GENE>.fasta`` (default ``data/reference_sequences/``).
+    Reads ``<cache_dir>/<GENE>.fasta`` (default
+    ``gvf_data/reference_sequences/``).
     Results are memoized per process. When a curated expected length is known
     (``utils.variant_normalizer.PROTEIN_LENGTHS``) and the loaded sequence does
     not match it, a warning is logged and the sequence is still returned (the
@@ -161,7 +164,7 @@ def load_reference_protein(
         return _SEQ_CACHE[key]
 
     base = cache_dir or _REF_DIR
-    seq = _read_fasta_sequence(base / f"{key}.fasta")
+    seq = _read_fasta_sequence(base.joinpath(f"{key}.fasta"))
 
     if seq is not None:
         try:

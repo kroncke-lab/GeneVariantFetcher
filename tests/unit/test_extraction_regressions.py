@@ -556,6 +556,38 @@ NT
     assert second["clinical_significance"] == "uncertain"
 
 
+def test_vertical_gene_table_parser_does_not_invent_carrier_for_catalogue_row():
+    extractor = ExpertExtractor(models=["noop"], tier_threshold=0)
+    text = """
+eTable 6. Designation of pathogenic variants by three expert laboratories
+Gene
+rsID
+Sequence Position
+Amino Acid Change
+Called Pathogenic by Laboratory 1
+Called Pathogenic by Laboratory 2
+Called Pathogenic by Laboratory 3
+KCNH2
+--
+150655539
+A175D
+No
+No
+No
+"""
+
+    variants = extractor._parse_vertical_gene_table_variants(text, "KCNH2")
+
+    assert len(variants) == 1
+    variant = variants[0]
+    assert variant["protein_notation"] == "A175D"
+    assert variant["patients"]["count"] is None
+    assert variant["penetrance_data"]["total_carriers_observed"] is None
+    assert "count_provenance" not in variant
+    assert variant["source_location"].startswith("eTable 6.")
+    assert "identity only" in variant["additional_notes"]
+
+
 def test_markdown_table_parser_prefers_carrier_over_total_case_denominator():
     extractor = ExpertExtractor(models=["noop"], tier_threshold=0)
     text = """

@@ -45,6 +45,113 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-13 — Fixed experimental queues refreshed in collaborator staging
+
+After the accepted gold-120 gate and paper/source QC, the current-system
+BMPR2 50, BRCA1 50, and BRCA2 46 outputs were imported into the existing
+Variant Browser review snapshots under dataset label
+`collaborator_reextract_current_system_20260813`. Every live PMID and review
+position exactly matches its pinned manifest; no paper was added or removed.
+Trusted live evidence changed from 528 to 482 for BMPR2, 6,299 to 7,260 for
+BRCA1, and 2,735 to 2,346 for BRCA2. The refresh exposes 470, 3,663, and 591
+individual records plus 3,871, 27,172, and 4,920 exact provenance facts.
+
+BRCA2's 111 prior adjudications and 111 gold-record keys were preserved exactly
+against before/after audit exports. Every adjudication is detached from the new
+evidence and marked `needs_re_review`: 98 subjects have a changed evidence
+fingerprint and 13 no longer have a current evidence subject. The 98 matching
+gold records are disputed/non-current; the 13 vanished-subject revisions remain
+historical but detached. Default export returns zero BRCA2 adjudications and
+zero gold records until collaborators review the new extraction. One reviewed
+frameshift identity was retained while five empty legacy aliases were moved to
+a reversible archive namespace before import. A source-grounded recovery dry-
+run on PMIDs 12942367 and 22382806 used two GPT-5.6 Sol `high` calls, found 26
+count gaps, grounded none, and wrote nothing. No public annotations were
+published. Full hashes and reconciliation details are in
+`runs/20260813_experimental_146/VARIANT_BROWSER_PUBLICATION.md`.
+
+### 2026-08-13 — Fixed BMPR2/BRCA1/BRCA2 experimental run completed
+
+The approved no-publish experiment stayed fixed at BMPR2 50, BRCA1 50, and
+BRCA2 46. All 146 attempts completed with write-time-verified trace manifests:
+972 calls (970 successful), 4,261,341 tokens, 3.712 summed provider-hours, and a
+$23.664 public-list-price proxy. The three jobs ran concurrently and finished
+in 70.7--97.8 minutes. Source integrity passed at 45/50, 50/50, and 45/46 full
+text. Trust gate tg5 retained 231/252, 2062/2527, and 416/479 count rows;
+family-count carrier fields remain raw-but-masked instead of being imported as
+patient counts.
+
+Only the two BRCA2 papers with collaborator-reviewed, lead-approved gold were
+scored. All 7/7 curated variant identities were recovered; carrier counts were
+supplied for 3/7 assertions with MAE 1.333. The seven selected records are not
+an exhaustive inventory of the papers, so the raw extra-variant denominator is
+not presented as true paper-level precision. Report-only somatic/germline QC
+found 12.94% somatic+ambiguous BRCA1 records and 18.31% ambiguous BRCA2 records;
+the initial run completed with publication disabled pending paper-level review.
+The subsequent collaborator-staging refresh is recorded above; public
+annotations remain unchanged. Detailed extraction evidence is in
+`runs/20260813_experimental_146/EXPERIMENTAL_COST_AND_QC.md`.
+
+### 2026-08-13 — Patched gold-120 revalidation accepted; experimental launch opened
+
+The fresh current-system run in `runs/20260813_gold120_verticalfix` locked 120
+attempts, exact run-local source digests, and four write-time-verified production
+trace manifests before scoring. It reproduced 534/635 variant recall (84.09%)
+with 1,438 predicted rows. The vertical-table fix reduced count-bearing extras
+to 24 raw / 23 trusted, yielding **95.70% / 95.87%** counted-extra precision;
+the separate count-bearing-only diagnostic is **86.05% / 85.80%**.
+
+Carrier MAE is 0.308 raw / 0.299 trusted. That remains roughly half the 0.614
+canonical all-paper baseline but is worse than the immediately preceding
+stochastic sample's 0.266 / 0.243, so this is recorded as a precision gain with
+a small conditional-MAE regression, not a universal quality improvement. Raw
+carrier absolute error is 45 across 146 supplied matched counts (prior: 41/154).
+The accepted lock opened the fixed BMPR2 50 / BRCA1 50 / BRCA2 46 experimental
+launch with publication disabled pending QC.
+
+### 2026-08-13 — Gate 2 precision-definition correction: passed
+
+The initial Gate 2 decision below compared 158 count-bearing matches / 216
+count-bearing predictions (73.15%) against the canonical 77.3%
+`precision_vs_counted_gold_pmids` floor. That comparison was invalid: the floor's
+numerator is **all matched gold rows**, while only its extra-row denominator is
+restricted to rows carrying a patient count. On the correct like-for-like
+definition, gold-120 is **534 / (534 + 58) = 90.20% raw** and
+**534 / (534 + 54) = 90.82% trusted**, so Gate 2 passed. The scorer now emits
+both metrics with explicit numerators to prevent recurrence.
+
+The audit also found a gold-independent deterministic defect: a vertical-table
+parser assigned one carrier to each row of a laboratory classification table.
+The patched parser retains all 42 variant identities but emits no patient count
+unless the table proves patient/subject row semantics. On the locked predictions
+the exact counterfactual reaches **95.36% raw / 96.04% trusted** counted-extra
+precision; raw/trusted carrier MAE are 0.278/0.254. A fresh patched-system
+gold-120 run is the final revalidation before the approved BMPR2 50, BRCA1 50,
+and BRCA2 46 launch.
+
+### 2026-08-13 — Gate 2 gold-120 initial decision (superseded above)
+
+The current full `gvf-run` route processed the fixed, gold-value-blinded
+`tier2_gold_120.tsv`: 30 count-eligible manual-gold papers per cardiac gene,
+120 gene-paper attempts / 116 unique PMIDs. Predictions plus the four exact
+production LLM trace manifests were locked before the scorer read gold. The
+run-local source snapshot was bound before scoring without changing cohort
+membership or reading gold values.
+
+| Metric | Raw primary | Trusted count projection |
+| --- | ---: | ---: |
+| Variant precision | 534/1440 (37.08%) | unchanged |
+| Variant recall | 534/635 (84.09%) | unchanged |
+| Count-bearing-only precision | 158/216 (**73.15%**) | 144/198 (**72.73%**) |
+| Carrier assertion coverage | 154/635 (24.25%) | 140/635 (22.05%) |
+| Carrier MAE | 0.266 | **0.243** |
+
+This initial interpretation is retained for audit but is **not current**. It
+mistook the count-bearing-only diagnostic for the repository's differently
+denominated counted-extra precision metric. The correction above supersedes its
+gate decision. Exact score, telemetry, and gate record:
+`benchmarks/codex_paper_eval/runs/20260813_gold120_current/`.
+
 ### 2026-08-13 — First paired rescore of the phenotype-null arc (not a headline)
 
 The re-extraction that `RECALL_STATUS.md` and `TASKS.md` have been demanding
@@ -94,6 +201,23 @@ re-extraction with the old code, so the recall delta is not a controlled A/B.
 `expected_baseline.json` was deliberately not rewritten and the four-gene
 canonical headline in `RECALL_STATUS.md` is unchanged. Gate 1 (`gold_50`) in
 `TASKS.md` remains the next step.
+
+### 2026-08-13 — Gate 1 approved; 120-paper gold comparison retained
+
+The lead approved advancing the current extraction system after reviewing the
+paired-rescore MAE and counted-precision evidence. The requested 100--150-paper
+scale refers to comparison with the already manually curated cardiac gold. The
+prior `cardiac_120` manifest was a reviewer queue and only 52/120 attempts had
+manual-gold rows, so it was replaced before measurement by `gold_120`: a fixed,
+gold-value-blinded sample of 30 source-available, count-eligible papers per
+cardiac gene (120 attempts / 116 unique PMIDs; seed 2026081301). The experimental
+BMPR2, BRCA1, and BRCA2 queues remain 50, 50, and 46 papers, including all six
+BRCA2 provenance exclusions. A mistakenly widened BMPR2 100-paper run and an
+initial two-paper probe of the old cardiac reviewer manifest were stopped during
+extraction as soon as their scope mismatches were identified; neither was scored
+or published. Their partial artifacts remain under
+`results/bmpr2_brca_300_20260813/` and `results/cardiac_120_20260813/` as aborted
+historical runs. No headline metric changed.
 
 ### 2026-08-12 — Phenotype-null and figure-link hardening (rescore required)
 

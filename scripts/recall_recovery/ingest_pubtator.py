@@ -36,6 +36,12 @@ from typing import Optional
 import requests
 from dotenv import load_dotenv
 
+REPO = Path(__file__).resolve().parents[2]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from utils.source_layers import add_source_layer_witness
+
 logger = logging.getLogger("ingest_pubtator")
 
 NCBI_ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
@@ -147,6 +153,8 @@ def ensure_source_layer_column(con: sqlite3.Connection) -> None:
     columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
     if "source_layer" not in columns:
         con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+    if "observed_source_layers" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN observed_source_layers TEXT")
 
 
 def parse_hgvs(hgvs: str) -> tuple[Optional[str], Optional[str]]:
@@ -319,14 +327,35 @@ def main() -> int:
             if not (cdna or protein):
                 continue
             vid = ensure_variant(con, gene, cdna, protein)
-            if not con.execute(
-                "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?",
+            existing = con.execute(
+                """SELECT source_layer, observed_source_layers,
+                          source_location, additional_notes
+                   FROM variant_papers WHERE variant_id=? AND pmid=?""",
                 (vid, pmid),
-            ).fetchone():
+            ).fetchone()
+            if existing:
+                # Preserve/infer the extraction origin on legacy rows. A later
+                # PubTator witness is corroboration, not a replacement origin.
+                primary, observed = add_source_layer_witness(
+                    source_layer=existing["source_layer"],
+                    observed_source_layers=existing["observed_source_layers"],
+                    witness_layer="pubtator",
+                    source_location=existing["source_location"],
+                    additional_notes=existing["additional_notes"],
+                )
+                con.execute(
+                    """UPDATE variant_papers
+                       SET source_layer=?, observed_source_layers=?
+                       WHERE variant_id=? AND pmid=?""",
+                    (primary, observed, vid, pmid),
+                )
+            else:
                 con.execute(
                     """INSERT INTO variant_papers
-                       (variant_id, pmid, source_location, additional_notes, source_layer)
-                       VALUES (?, ?, 'PubTator3 (text-mined)', ?, 'pubtator')""",
+                       (variant_id, pmid, source_location, additional_notes,
+                        source_layer, observed_source_layers)
+                       VALUES (?, ?, 'PubTator3 (text-mined)', ?,
+                               'pubtator', 'pubtator')""",
                     (vid, pmid, text),
                 )
                 added += 1

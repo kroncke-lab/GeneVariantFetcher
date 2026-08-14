@@ -1,7 +1,8 @@
 # Runtime Data
 
-This directory contains small tracked inputs used by GVF at runtime. It is not
-generated pipeline output.
+This owned Python package contains small tracked inputs used by GVF at runtime.
+It avoids publishing the collision-prone top-level package name ``data`` and is
+not generated pipeline output.
 
 ## Contents
 

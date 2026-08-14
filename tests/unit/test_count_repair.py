@@ -414,6 +414,36 @@ def test_composite_layer_strings_still_adopt(layer):
     assert adopt_figure_counts({"carriers": None}, notes, layer) == {"carriers": 7}
 
 
+def test_observed_figure_layer_drives_adoption_without_rewriting_primary(tmp_path):
+    path = tmp_path / "observed_figure.db"
+    con = sqlite3.connect(path)
+    con.executescript(
+        """CREATE TABLE penetrance_data(
+             penetrance_id INTEGER PRIMARY KEY, variant_id INTEGER, pmid TEXT,
+             total_carriers_observed INTEGER, affected_count INTEGER,
+             unaffected_count INTEGER, trust_tier TEXT, trust_reasons TEXT);
+           CREATE TABLE variant_papers(
+             variant_id INTEGER, pmid TEXT, additional_notes TEXT,
+             source_layer TEXT, observed_source_layers TEXT);
+           INSERT INTO variant_papers VALUES(
+             1, '1', '{"carriers": 7, "context": "pedigree"}',
+             'llm_table', 'llm_table,figure'
+           );"""
+    )
+    con.commit()
+    con.close()
+
+    summary = apply_count_repair(path)
+
+    assert summary["adopt_figure_counts"] == 1
+    assert _counts(path) == [(7, None, None)]
+    con = sqlite3.connect(path)
+    assert con.execute("SELECT source_layer FROM variant_papers").fetchone() == (
+        "llm_table",
+    )
+    con.close()
+
+
 def test_ambiguous_multi_cohort_parent_fails_closed(tmp_path):
     path = tmp_path / "ambiguous.db"
     con = sqlite3.connect(path)

@@ -44,6 +44,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
+from utils.source_layers import source_layer_tokens
+
 logger = logging.getLogger(__name__)
 
 COUNT_RECOVERY_VERSION = "count-recovery-v2"
@@ -372,10 +374,19 @@ def find_count_gaps(
     con = sqlite3.connect(f"file:{Path(db)}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
     try:
+        variant_paper_columns = {
+            row[1] for row in con.execute("PRAGMA table_info(variant_papers)")
+        }
+        observed_layer_expr = (
+            "COALESCE(vp.observed_source_layers, vp.source_layer)"
+            if "observed_source_layers" in variant_paper_columns
+            else "vp.source_layer"
+        )
         rows = con.execute(
-            """
+            f"""
             SELECT vp.pmid AS pmid, vp.variant_id AS variant_id,
                    vp.source_layer AS source_layer,
+                   {observed_layer_expr} AS observed_source_layers,
                    v.protein_notation AS protein, v.cdna_notation AS cdna,
                    pd.total_carriers_observed AS carriers,
                    pd.affected_count AS affected,
@@ -405,7 +416,7 @@ def find_count_gaps(
         notation = " ".join(parts)
         if not notation:
             continue  # nothing to name the variant by; cannot ask about it
-        layers = {t.strip() for t in (r["source_layer"] or "").split(",") if t.strip()}
+        layers = source_layer_tokens(r["observed_source_layers"])
         is_paper_derived = bool(layers & PAPER_DERIVED_LAYERS)
         missing = [f for f in fields if r[f] is None]
         # A variant can appear on several joined rows (multiple source layers,

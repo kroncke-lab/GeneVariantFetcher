@@ -106,6 +106,21 @@ corpus sync, then reporting and optional review publication. The older
 `python -m cli.automated_workflow` entry point remains a lower-level
 compatibility path; it is not registered as a `gvf` subcommand.
 
+Variant-paper provenance separates origin from corroboration:
+`variant_papers.source_layer` is one primary enum, while
+`observed_source_layers` is the ordered, de-duplicated set of every lane that
+observed the link. Consumers use the primary for diagnostic stratification and
+the observed set for membership questions such as figure-count adoption.
+Legacy comma-joined rows are read origin-first and normalized on replay.
+
+Run-manifest provenance uses a versioned combined extractor digest. Its code
+component hashes executable Python tokens (comments and cosmetic whitespace do
+not churn it); its configuration component hashes the allowlisted resolved
+model/routing/scientific knobs. The manifest records both components, the
+algorithm and Python minor, plus the pre-v2 raw-byte digest for historical
+auditability. Runtime alias and reference assets are loaded from the owned
+`gvf_data` package through `importlib.resources`.
+
 ## Module Responsibilities
 
 ### Core Pipeline Modules
@@ -563,7 +578,7 @@ intentionally minimal:
   `utils/variant_normalizer.py`.
 - Add runtime aliases/query aliases to `BUILTIN_GENE_METADATA` in
   `utils/gene_metadata.py`, and optionally add a variant alias map at
-  `data/{gene_lower}_variant_aliases.json`. The cardiac-synonyms JSON is a
+  `gvf_data/{gene_lower}_variant_aliases.json`. The cardiac-synonyms JSON is a
   historical cold-start benchmark input, not the runtime registry.
 
 See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.

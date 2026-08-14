@@ -123,7 +123,10 @@ benchmarks/cold_start_eval/runs/
 # Raw gvf-run output under a codex_paper_eval run (SQLite DBs + per-layer
 # artifacts, ~70MB per run). The scored summaries beside it ARE tracked:
 # selection/LOCK/predictions/report/paper_metrics/evidence.
+# Slashless twin: a trailing-slash pattern matches directories only, so a
+# local production_runs SYMLINK (worktree convenience) would show untracked.
 benchmarks/codex_paper_eval/runs/*/production_runs/
+benchmarks/codex_paper_eval/runs/*/production_runs
 benchmarks/codex_paper_eval/runs/*/driver.log
 
 # Consolidated source corpus (deduplicated full text + supplements + figures,

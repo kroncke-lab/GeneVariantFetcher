@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-08-11",
+  "as_of": "2026-08-13",
   "count_unit": "gene_paper_attempt",
   "tiers": [
     {
@@ -20,19 +20,20 @@
       "role": "scored_gold_gate"
     },
     {
-      "id": "cardiac_120",
+      "id": "gold_120",
       "order": 2,
-      "manifest": "tier2_cardiac_120.tsv",
-      "sha256": "fc1b026aef17ce824175472d6978959a7b828154ec2c39616e5551119c59541b",
+      "manifest": "tier2_gold_120.tsv",
+      "sha256": "fdb94dff52ddee816e4e5e789517d2a723d3cc1fa7b33370f585fbfa2939840f",
       "attempt_count": 120,
-      "unique_pmid_count": 98,
+      "unique_pmid_count": 116,
       "gene_attempt_counts": {
         "KCNH2": 30,
         "KCNQ1": 30,
         "RYR2": 30,
         "SCN5A": 30
       },
-      "role": "cardiac_reviewer_expansion"
+      "selection_seed": 2026081301,
+      "role": "scored_gold_expansion"
     },
     {
       "id": "reviewer_546",

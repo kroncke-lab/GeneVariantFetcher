@@ -16,6 +16,8 @@ missense to BRCA truncating/case-control without per-gene tuning:
   is negative.
 - ``count_is_total``      the extracted "carrier" count is really a cohort
   denominator (count role is a total/screened-N), not per-variant carriers.
+- ``family_count_not_carrier``  the source reports families carrying a variant,
+  not individual carriers; only the total-carriers field is quarantined.
 - ``population_count``     the count is a population allele magnitude (gnomAD /
   MAF / allele-frequency label, or a carrier count above a population ceiling).
 - ``paper_outlier``       the carrier count is a wild outlier vs the other
@@ -107,6 +109,7 @@ _UNSOURCED_UNAFFECTED_TYPES = frozenset({"", "unknown"})
 RULE_IDS = (
     "arith_inconsistent",
     "count_is_total",
+    "family_count_not_carrier",
     "population_count",
     "paper_outlier",
     "study_type_mismatch",
@@ -151,6 +154,7 @@ _TRUST_FIELD_BY_COUNT = {
 # well-supported affected/total counts trusted.
 REASON_FIELDS: dict[str, tuple[str, ...]] = {
     "implied_unaffected_zero": ("unaffected",),
+    "family_count_not_carrier": ("total_carriers",),
     "recovered_count_unverified": ("total_carriers", "affected", "unaffected"),
 }
 
@@ -190,9 +194,9 @@ def rule_version() -> str:
         },
         sort_keys=True,
     )
-    # tg4: adds recovered_count_unverified — a count written by the additive
-    # recovery pass must carry a proven per-variant role to leave quarantine.
-    return "tg4-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    # tg5: family counts remain auditable raw evidence but no longer project as
+    # individual carrier totals.
+    return "tg5-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
 def _as_int(value: Any) -> Optional[int]:
@@ -278,6 +282,8 @@ def evaluate_fact(
     ctype = str(provenance.get("carriers_count_type") or "").strip().lower()
     if ctype in DENOMINATOR_COUNT_TYPES:
         reasons.add("count_is_total")
+    if ctype == "family_count":
+        reasons.add("family_count_not_carrier")
 
     # recovered_count_unverified: the additive count-recovery pass wrote this
     # value. It only leaves quarantine when its provenance names the per-variant

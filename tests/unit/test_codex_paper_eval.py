@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -11,12 +12,13 @@ import pytest
 
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
-from utils.llm_trace import reset_llm_tracing
+from utils.llm_trace import build_trace_manifest, reset_llm_tracing
 import benchmarks.codex_paper_eval.run_eval as run_eval_module
 from benchmarks.codex_paper_eval.run_eval import (
     CARDIAC_GENES,
     DEFAULT_GOLD,
     EXTRACTION_INSTRUCTIONS,
+    aggregate,
     choose_source,
     command_extract,
     command_lock,
@@ -28,8 +30,10 @@ from benchmarks.codex_paper_eval.run_eval import (
     load_gold,
     matches,
     material_digest_errors,
+    production_trace_lock_entries,
     read_paper_manifest,
     reasoning_params,
+    score_one,
     looks_truncated_json,
     selection_metadata,
     supports_images,
@@ -79,6 +83,38 @@ def test_load_gold_prefers_adjudicated_v2_counts_and_explicit_nulls(tmp_path):
         {"variant": "R2W", "carriers": 3, "affected": 2, "unaffected": 1},
         {"variant": "V3A", "carriers": 4, "affected": 3, "unaffected": 1},
     ]
+
+
+def test_counted_precision_metrics_keep_the_two_denominators_distinct():
+    prediction = {
+        "variants": [
+            {"variant": "A1V", "carriers": None},
+            {"variant": "A2V", "carriers": 1},
+            {"variant": "A3V", "carriers": None},
+            {"variant": "A4V", "carriers": 1},
+        ]
+    }
+    gold = [
+        {"variant": "A1V", "carriers": 1},
+        {"variant": "A2V", "carriers": 1},
+    ]
+
+    score = score_one("KCNH2", "1", prediction, gold)
+
+    assert score["counted_precision"] == {
+        "matched_rows": 2,
+        "counted_extra_rows": 1,
+        "precision_vs_counted_gold_pmids": pytest.approx(2 / 3),
+        "count_bearing_matched_rows": 1,
+        "precision_among_count_bearing_predictions": pytest.approx(1 / 2),
+    }
+    combined = aggregate([score])
+    assert combined["counted_precision"]["precision_vs_counted_gold_pmids"] == (
+        pytest.approx(2 / 3)
+    )
+    assert combined["counted_precision"][
+        "precision_among_count_bearing_predictions"
+    ] == pytest.approx(1 / 2)
 
 
 def test_load_gold_rejects_unknown_v2_status(tmp_path):
@@ -431,6 +467,22 @@ def test_markdown_discloses_production_projection_prelock_scoring(tmp_path: Path
     assert "not the stricter native lock-before-any-gold-read protocol" in markdown
 
 
+def test_markdown_discloses_locked_production_trace_manifests(tmp_path: Path):
+    report = _report_fixture()
+    report["integrity"] = {
+        "llm_trace_manifest_sha256": None,
+        "production_trace_manifests": [{"gene": "SCN5A", "sha256": "abc"}],
+    }
+
+    markdown_path = tmp_path / "projection_trace_report.md"
+    write_markdown_report(report, markdown_path)
+    markdown = markdown_path.read_text()
+
+    assert "production `gvf-run` trace manifest for every gene" in markdown
+    assert "evaluation projection does not copy or relabel" in markdown
+    assert "legacy runs require a rerun" not in markdown
+
+
 def test_prediction_validation_accepts_explicit_deterministic_zero_tokens():
     paper = {
         "gene": "KCNH2",
@@ -501,6 +553,27 @@ def test_usable_sources_selects_the_richer_rendering_on_disk(tmp_path: Path):
     assert audit["selected"] == str(cleaned.resolve())
     assert len(audit["candidates"]) == 2
     assert "Pareto-dominated" in audit["rationale"]
+
+
+def test_usable_sources_can_limit_expensive_hashing_to_eligible_pmids(tmp_path: Path):
+    for pmid in ("17470695", "99999999"):
+        paper_dir = tmp_path / "KCNQ1" / pmid
+        paper_dir.mkdir(parents=True)
+        _rendering(
+            paper_dir / f"{pmid}_FULL_CONTEXT.md",
+            rows=1,
+            variants=1,
+            padding=3000,
+        )
+
+    papers = usable_sources(
+        tmp_path,
+        "KCNQ1",
+        minimum_chars=100,
+        include_pmids={"17470695"},
+    )
+
+    assert [paper["pmid"] for paper in papers] == ["17470695"]
 
 
 def _extract_captured_prompts(
@@ -922,6 +995,88 @@ def test_schema1_production_import_locks_without_call_telemetry():
     assert any("token telemetry" in e for e in native_errors)
 
 
+def test_production_projection_applies_field_level_trust_masks():
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    mask = json.dumps(
+        {
+            "total_carriers": "quarantine",
+            "affected": "trusted",
+            "unaffected": "trusted",
+        }
+    )
+    assert (
+        converter.trusted_count(
+            7,
+            field="total_carriers",
+            trust_tier="quarantine",
+            field_trust=mask,
+        )
+        is None
+    )
+    assert (
+        converter.trusted_count(
+            5,
+            field="affected",
+            trust_tier="quarantine",
+            field_trust=mask,
+        )
+        == 5
+    )
+    assert (
+        converter.trusted_count(
+            2,
+            field="unaffected",
+            trust_tier="quarantine",
+            field_trust=None,
+        )
+        is None
+    )
+
+
+def test_production_projection_binds_and_revalidates_external_trace_manifest(
+    tmp_path: Path,
+):
+    trace_root = tmp_path / "production" / "llm_traces"
+    trace_root.mkdir(parents=True)
+    manifest_path = trace_root / "trace_manifest.json"
+    manifest = build_trace_manifest(
+        trace_root, output_path=manifest_path, run_id="production-run"
+    )
+    predictions = {
+        "strategy": "production_gvf_run",
+        "papers": [{"gene": "KCNH2", "pmid": "1"}],
+        "production_trace_manifests": [
+            {
+                "gene": "KCNH2",
+                "manifest": str(manifest_path),
+                "sha256": digest(manifest_path),
+                "run_id": manifest["run_id"],
+                "llm_call_count": manifest["llm_call_count"],
+                "decision_event_count": manifest["decision_event_count"],
+                "integrity_level": manifest["verification"]["level"],
+            }
+        ],
+    }
+
+    locked, roots, errors = production_trace_lock_entries(predictions)
+    assert errors == []
+    assert locked[0]["sha256"] == digest(manifest_path)
+    assert roots == [trace_root]
+
+    manifest_path.write_text(manifest_path.read_text() + "\n")
+    _locked, _roots, errors = production_trace_lock_entries(predictions)
+    assert any("digest mismatch" in error for error in errors)
+
+
 def test_markdown_report_renders_only_genes_present_in_run():
     report = _report_fixture()
     report["by_gene"]["BRCA2"] = report["by_gene"]["SCN5A"]
@@ -961,3 +1116,215 @@ def test_table_route_carries_full_text_not_a_keyword_preview(
 
     assert "### Structured table rows" in prompts[1]
     assert marker in prompts[1], "full running text must reach the table route"
+
+
+def test_matches_legacy_stop_star_and_frameshift_notations():
+    # HGVS '*' stop against legacy X, inside compound protein+cDNA strings.
+    assert matches("p.R518* c.1522C>T", "R518X", "KCNQ1")
+    assert matches("p.Q530* c.1588C>T", "Q530X", "KCNQ1")
+    # Legacy inline-stop-distance frameshifts and 3-letter fs without new AA.
+    assert matches("p.Arg192fs c.573_577del", "R192CFS91X", "KCNQ1")
+    assert matches("P400fs", "P400FS/62X", "KCNQ1")
+    # Distinct missense at the same codon must never match.
+    assert not matches("D609N", "D609G", "KCNH2")
+    assert not matches("p.Asp609Asn c.1825G>A", "D609G", "KCNH2")
+
+
+def test_matches_normalizes_legacy_arrow_spellings():
+    assert matches("c.2592+1G->A", "c.2592+1G>A", "KCNH2")
+    assert matches("c.2592+1G→A", "c.2592+1G>A", "KCNH2")
+
+
+def test_matches_splice_shorthand_tolerates_separators():
+    assert matches("A344/SP", "A344SP", "KCNQ1")
+    assert matches("A344A/SPLICE", "A344SP", "KCNQ1")
+
+
+def test_splice_bridge_requires_intronic_offset():
+    # Curators encode splice-site variants as a terminal event at the
+    # flanking codon: c.477+1G>A is M159X.
+    assert matches("c.477+1G>A", "M159X", "KCNQ1")
+    # An exonic substitution at the same codon must NOT codon-bridge.
+    assert not matches("c.477G>A", "M159X", "KCNQ1")
+    assert not matches("c.940G>A", "G314X", "KCNQ1")
+
+
+def test_translation_bridge_is_nucleotide_verified():
+    # c.1127G>A turns an Arg codon (CGC) into His (CAC): same allele.
+    assert matches("c.1127G>A", "R376H", "SCN5A")
+    assert matches("c.1826A>G", "D609G", "KCNH2")
+    # The same cDNA change can never be the other missense at that codon.
+    assert not matches("c.1826A>G", "D609N", "KCNH2")
+    # Codon-index agreement alone is not enough.
+    assert not matches("c.1130G>A", "R376H", "SCN5A")
+
+
+def test_merge_notation_twins_bounds():
+    from benchmarks.codex_paper_eval.run_eval import merge_notation_twins
+
+    rows = [
+        {
+            "variant": "p.Arg376His",
+            "carriers": 12,
+            "affected": None,
+            "unaffected": None,
+        },
+        {"variant": "c.1127G>A", "carriers": 12, "affected": 3, "unaffected": None},
+        {"variant": "D609G", "carriers": 2, "affected": 2, "unaffected": None},
+        {"variant": "D609N", "carriers": 1, "affected": 0, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(rows, "SCN5A")
+    assert twins == 1 and len(merged) == 3
+    # The kept row already carries counts, so the complementary twin fields
+    # are REFUSED (a union of two partially-counted rows can invent a count
+    # vector no single source row asserted).
+    assert merged[0]["carriers"] == 12 and merged[0]["affected"] is None
+
+    # Conflicting non-null counts refuse the merge (different patients).
+    conflicted = [
+        {
+            "variant": "p.Arg376His",
+            "carriers": 12,
+            "affected": None,
+            "unaffected": None,
+        },
+        {"variant": "c.1127G>A", "carriers": 4, "affected": None, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(conflicted, "SCN5A")
+    assert twins == 0 and len(merged) == 2
+
+
+def test_score_one_merges_twins_before_scoring():
+    prediction = {
+        "variants": [
+            {
+                "variant": "R376H",
+                "carriers": None,
+                "affected": None,
+                "unaffected": None,
+            },
+            {
+                "variant": "c.1127G>A",
+                "carriers": 12,
+                "affected": None,
+                "unaffected": None,
+            },
+        ]
+    }
+    gold = [{"variant": "R376H", "carriers": 12, "affected": None, "unaffected": None}]
+    score = score_one("SCN5A", "1", prediction, gold)
+    # One TP, no stranded cDNA FP, and the twin's count reaches the match.
+    assert (score["tp"], score["fp"], score["fn"]) == (1, 0, 0)
+    assert score["merged_notation_twin_rows"] == 1
+    assert score["count"]["carriers"]["predicted"] == 1
+
+
+def test_score_one_reports_zero_stratified_count_recall():
+    prediction = {
+        "variants": [
+            {"variant": "A1V", "carriers": 3, "affected": None, "unaffected": 0},
+            {"variant": "A2V", "carriers": None, "affected": None, "unaffected": None},
+        ]
+    }
+    gold = [
+        {"variant": "A1V", "carriers": 3, "affected": 3, "unaffected": 0},
+        {"variant": "A2V", "carriers": 2, "affected": 1, "unaffected": 0},
+    ]
+    score = score_one("KCNH2", "1", prediction, gold)
+    carriers = score["count"]["carriers"]
+    assert carriers["gold_asserted_nonzero"] == 2
+    assert carriers["gold_asserted_zero"] == 0
+    assert carriers["recall_nonzero_gold"] == pytest.approx(1 / 2)
+    unaffected = score["count"]["unaffected"]
+    assert unaffected["gold_asserted_zero"] == 2
+    assert unaffected["recall_zero_gold"] == pytest.approx(1 / 2)
+    assert unaffected["recall_nonzero_gold"] is None
+    combined = aggregate([score])
+    assert combined["count"]["unaffected"]["gold_asserted_zero"] == 2
+    assert combined["count"]["carriers"]["recall_nonzero_gold"] == pytest.approx(1 / 2)
+
+
+def test_linkage_codon_shadows_are_excluded_from_the_projection(tmp_path: Path):
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    source = tmp_path / "PMID_FULL_CONTEXT.md"
+    source.write_text(
+        "The proband carried R376H. A relative carried p.Ala561Thr as well."
+    )
+    rows = [
+        # Independently-extracted anchors at codons 376 and 561.
+        {
+            "variant": "R376H",
+            "source_layer": "llm_text",
+            "carriers": 2,
+            "affected": 1,
+            "unaffected": None,
+        },
+        {
+            "variant": "A561V",
+            "source_layer": "llm_table",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # Ungrounded ClinVar neighbor at the SAME codon: enumeration artifact.
+        {
+            "variant": "p.Arg376Cys",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # ClinVar row at an anchored codon that IS in the text stays.
+        {
+            "variant": "p.Ala561Thr",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        # Ungrounded ClinVar row at an UNANCHORED codon stays: on papers whose
+        # tables never reached disk, linkage is the only recall signal.
+        {
+            "variant": "p.Ser277del",
+            "source_layer": "clinvar",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+    ]
+    kept, dropped = converter.drop_linkage_shadows(rows, "KCNQ1", str(source))
+    kept_variants = [r["variant"] for r in kept]
+    assert dropped == 1
+    assert "p.Arg376Cys" not in kept_variants
+    assert {"R376H", "A561V", "p.Ala561Thr", "p.Ser277del"} <= set(kept_variants)
+
+    # Missing or unreadable source keeps everything.
+    kept_all, dropped_none = converter.drop_linkage_shadows(
+        rows, "KCNQ1", str(tmp_path / "missing.md")
+    )
+    assert dropped_none == 0 and len(kept_all) == len(rows)
+
+
+def test_twin_merge_never_fuses_distinct_splice_alleles():
+    from benchmarks.codex_paper_eval.run_eval import merge_notation_twins
+
+    # matches() may splice-bridge both intronic alleles to M159X for SCORING,
+    # but identity must not: protein-first order used to fuse all three.
+    rows = [
+        {"variant": "M159X", "carriers": None, "affected": None, "unaffected": None},
+        {"variant": "c.477+1G>A", "carriers": 2, "affected": 1, "unaffected": None},
+        {"variant": "c.477+2T>C", "carriers": 1, "affected": 1, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(rows, "KCNQ1")
+    assert len(merged) == 3 and twins == 0
+    # Scoring still bridges: matches() keeps the recall win.
+    assert matches("c.477+1G>A", "M159X", "KCNQ1")

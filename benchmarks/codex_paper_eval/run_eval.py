@@ -109,6 +109,90 @@ def write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
+def production_trace_lock_entries(
+    predictions: dict,
+) -> tuple[list[dict], list[Path], list[str]]:
+    """Validate trace manifests referenced by an external production projection.
+
+    Schema-1 projections cannot carry the harness-native per-paper trace refs,
+    but they can still bind each complete ``gvf-run`` trace manifest into the
+    prediction lock.  The manifest in turn hashes every call/decision record and
+    is checked against the write-time trace index here and again at score time.
+    """
+    supplied = predictions.get("production_trace_manifests") or []
+    errors: list[str] = []
+    locked: list[dict] = []
+    roots: list[Path] = []
+    # Historical schema-1 projections predate production trace binding.  Keep
+    # them readable/re-scoreable; new converter output opts into this stronger
+    # contract by supplying the manifests explicitly.
+    if not supplied:
+        return locked, roots, errors
+    if not isinstance(supplied, list):
+        return locked, roots, ["production_trace_manifests must be a list"]
+    seen_genes: set[str] = set()
+    for index, entry in enumerate(supplied):
+        label = f"production_trace_manifests[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        gene = str(entry.get("gene") or "").upper()
+        raw_path = str(entry.get("manifest") or "")
+        expected_sha = str(entry.get("sha256") or "")
+        if not gene or not raw_path or not expected_sha:
+            errors.append(f"{label} requires gene, manifest, and sha256")
+            continue
+        if gene in seen_genes:
+            errors.append(f"duplicate production trace manifest for {gene}")
+            continue
+        seen_genes.add(gene)
+        path = Path(raw_path)
+        if not path.is_absolute():
+            path = REPO / path
+        path = path.resolve()
+        if path.name != TRACE_MANIFEST_NAME or not path.is_file():
+            errors.append(f"{label}: trace manifest not found: {path}")
+            continue
+        actual_sha = digest(path)
+        if actual_sha != expected_sha:
+            errors.append(f"{label}: trace manifest digest mismatch")
+            continue
+        try:
+            manifest = read_json(path)
+            manifest_errors = validate_trace_manifest(path.parent, manifest)
+        except Exception as exc:  # noqa: BLE001 - surface malformed audit artifacts
+            errors.append(f"{label}: could not validate trace manifest: {exc}")
+            continue
+        errors.extend(f"{label}: {error}" for error in manifest_errors)
+        for field in ("run_id", "llm_call_count", "decision_event_count"):
+            if entry.get(field) != manifest.get(field):
+                errors.append(f"{label}: {field} does not match trace manifest")
+        integrity_level = (manifest.get("verification") or {}).get("level")
+        if entry.get("integrity_level") != integrity_level:
+            errors.append(f"{label}: integrity_level does not match trace manifest")
+        locked.append(
+            {
+                "gene": gene,
+                "manifest": raw_path,
+                "sha256": actual_sha,
+                "run_id": manifest.get("run_id"),
+                "llm_call_count": manifest.get("llm_call_count"),
+                "decision_event_count": manifest.get("decision_event_count"),
+                "integrity_level": integrity_level,
+            }
+        )
+        roots.append(path.parent)
+    prediction_genes = {
+        str(p.get("gene") or "").upper() for p in predictions.get("papers", [])
+    }
+    if supplied and seen_genes != prediction_genes:
+        errors.append(
+            "production trace genes do not match prediction genes: "
+            f"traces={sorted(seen_genes)} predictions={sorted(prediction_genes)}"
+        )
+    return locked, roots, errors
+
+
 def is_table_line(line: str) -> bool:
     """Whether one line looks like a markdown or HTML table row.
 
@@ -155,6 +239,7 @@ def usable_sources(
     gene: str,
     minimum_chars: int,
     legacy_source_selection: bool = False,
+    include_pmids: set[str] | None = None,
 ) -> list[dict]:
     papers = []
     for paper_dir in sorted(
@@ -163,6 +248,8 @@ def usable_sources(
         if not paper_dir.is_dir() or not paper_dir.name.isdigit():
             continue
         pmid = paper_dir.name
+        if include_pmids is not None and pmid not in include_pmids:
+            continue
         candidates = [
             paper_dir / f"{pmid}_FULL_CONTEXT.md",
             paper_dir / f"{pmid}_CLEANED.md",
@@ -419,6 +506,7 @@ def command_prepare(args) -> None:
         else CARDIAC_GENES
     )
     for gene in run_genes:
+        eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
         source_pool = {
             paper["pmid"]: paper
             for paper in usable_sources(
@@ -426,9 +514,9 @@ def command_prepare(args) -> None:
                 gene,
                 args.minimum_chars,
                 legacy_source_selection=args.legacy_source_selection,
+                include_pmids=eligible_pmids,
             )
         }
-        eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
         pools[gene] = {
             pmid: paper for pmid, paper in source_pool.items() if pmid in eligible_pmids
         }
@@ -607,6 +695,9 @@ def command_lock(args) -> None:
     trace_report_path = run_dir / TRACE_REPORT_NAME
     trace_manifest = None
     trace_index_path = trace_root / TRACE_INDEX_NAME
+    production_trace_locks, production_trace_roots, production_trace_errors = (
+        production_trace_lock_entries(predictions)
+    )
     if int(predictions.get("schema_version") or 1) >= 2:
         # Rebuilding at lock time is deliberate — extraction may have appended
         # after its own manifest — but it now cross-checks each record against
@@ -627,6 +718,7 @@ def command_lock(args) -> None:
         )
     errors = validate_predictions(selection, predictions)
     errors.extend(selection_material_errors(selection))
+    errors.extend(production_trace_errors)
     if trace_manifest is not None:
         errors.extend(validate_trace_manifest(trace_root, trace_manifest))
     if errors:
@@ -669,6 +761,7 @@ def command_lock(args) -> None:
             if trace_manifest is not None
             else None
         ),
+        "production_trace_manifests": production_trace_locks,
         "statement": lock_statement,
     }
     write_json(lock_path, lock)
@@ -679,6 +772,9 @@ def command_lock(args) -> None:
         # trace_lock_targets() includes trace_index.jsonl, which the prior
         # chmod set omitted.
         for target in trace_lock_targets(trace_root):
+            target.chmod(0o444)
+    for production_trace_root in production_trace_roots:
+        for target in trace_lock_targets(production_trace_root):
             target.chmod(0o444)
     print(lock_path)
 
@@ -1276,8 +1372,15 @@ def load_gold(gold_root: Path, gene: str, pmid: str) -> list[dict]:
         return rows
 
 
+_VARIANT_CANDIDATE_CACHE: dict[tuple[str, str], list[str]] = {}
+
+
 def variant_candidates(value: str, gene: str) -> list[str]:
     """Return embedded notations without changing the locked prediction."""
+    cache_key = (value, gene)
+    cached = _VARIANT_CANDIDATE_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
     candidates = [value]
     patterns = (
         r"\bp\.\(?[A-Z][a-z]{2}\d+(?:[A-Z][a-z]{2}|Ter|fs[^\s,;)]*)\)?",
@@ -1285,7 +1388,9 @@ def variant_candidates(value: str, gene: str) -> list[str]:
             r"\bc\.[0-9*?+-]+(?:_[0-9*?+-]+)?"
             r"(?:delins[ACGT]+|del[ACGT]*|dup[ACGT]*|ins[ACGT]+|[ACGT]>[ACGT])"
         ),
-        r"\b[A-Z]\d{1,5}(?:[A-Z]|\*|X)\b",
+        # A trailing "*" is not a \b boundary, so keep the bare-star
+        # alternative unanchored on the right.
+        r"\b[A-Z]\d{1,5}(?:[A-Z]\b|X\b|\*)",
     )
     for pattern in patterns:
         candidates.extend(re.findall(pattern, value, flags=re.I))
@@ -1370,6 +1475,20 @@ def variant_candidates(value: str, gene: str) -> list[str]:
         r"\b([A-Z])(\d{1,5})[A-Z]fs(?:Ter|X)?\d*\b", value, flags=re.I
     ):
         candidates.append(f"{residue.upper()}{position}fsX")
+    # Legacy compact frameshifts that carry the stop distance inline:
+    # R192CFS91X, P400FS/62X.
+    for residue, position in re.findall(
+        r"\b([A-Z])(\d{1,5})[A-Z]?fs[/+*]?\d*(?:X|Ter)\b", value, flags=re.I
+    ):
+        candidates.append(f"{residue.upper()}{position}fsX")
+    # 3-letter frameshift with no new-residue letter: p.Arg192fs.
+    for original, position in re.findall(r"p\.\(?([A-Z][a-z]{2})(\d{1,5})fs", value):
+        if left := AA3_TO_1.get(original):
+            candidates.append(f"{left}{position}fsX")
+    # 1-letter stop with a bare '*' (p.Q530*): '*' is not a \b boundary, so
+    # the generic pattern above misses it; emit the legacy X form directly.
+    for residue, position in re.findall(r"\b([A-Z])(\d{1,5})\*", value):
+        candidates.append(f"{residue}{position}X")
     for residue, position in re.findall(
         r"\bfs([A-Z])(\d{1,5})(?:[/+*]?\d+|aa)*\b", value, flags=re.I
     ):
@@ -1379,8 +1498,10 @@ def variant_candidates(value: str, gene: str) -> list[str]:
     ):
         if left := AA3_TO_1.get(residue):
             candidates.append(f"{left}{position}fsX")
+    # Curated splice shorthands tolerate a separator and a synonymous residue
+    # letter before the marker: A344SP, A344/SP, A344A/SPLICE.
     for residue, position in re.findall(
-        r"\b([A-Z])(\d{1,5})(?:sp|splice)\b", value, flags=re.I
+        r"\b([A-Z])(\d{1,5})(?:[A-Z]?/)?(?:sp|splice)\b", value, flags=re.I
     ):
         candidates.append(f"{residue.upper()}{position}SP")
     for position, residue in re.findall(r"\bdel(\d{1,5})([A-Z])\b", value, flags=re.I):
@@ -1403,7 +1524,9 @@ def variant_candidates(value: str, gene: str) -> list[str]:
         )
         if insertion:
             candidates.append(f"G{insertion.group(1)}ins")
-    return list(dict.fromkeys(c.strip() for c in candidates))
+    result = list(dict.fromkeys(c.strip() for c in candidates))
+    _VARIANT_CANDIDATE_CACHE[cache_key] = result
+    return result
 
 
 def cdna_indel_position(value: str) -> int | None:
@@ -1413,6 +1536,135 @@ def cdna_indel_position(value: str) -> int | None:
         flags=re.I,
     )
     return int(match.group(1)) // 3 + 1 if match else None
+
+
+def cdna_splice_codon(value: str) -> int | None:
+    """Codon adjacent to an intronic-offset substitution (splice-site cDNA).
+
+    Curators encode splice-site variants as a terminal protein event at the
+    flanking codon (M159X for c.477+1G>A). Only intronic-offset substitutions
+    qualify — exonic substitutions must match through translation, never
+    through a codon bridge.
+    """
+    match = re.fullmatch(
+        r"(?:C\.)?(\d+)[+-]\d+[ACGT]>[ACGT]",
+        re.sub(r"\s+", "", value.upper()),
+    )
+    return (int(match.group(1)) + 2) // 3 if match else None
+
+
+def splice_event_position(value: str) -> int | None:
+    compact = re.sub(r"^(?:P\.)|[\s/]", "", value.upper())
+    match = re.fullmatch(r"[A-Z](\d+)[A-Z]?(?:SP|SPLICE)", compact)
+    return int(match.group(1)) if match else None
+
+
+_CODONS_BY_AA: dict[str, tuple[str, ...]] = {}
+for _codon, _aa in {
+    "TTT": "F",
+    "TTC": "F",
+    "TTA": "L",
+    "TTG": "L",
+    "CTT": "L",
+    "CTC": "L",
+    "CTA": "L",
+    "CTG": "L",
+    "ATT": "I",
+    "ATC": "I",
+    "ATA": "I",
+    "ATG": "M",
+    "GTT": "V",
+    "GTC": "V",
+    "GTA": "V",
+    "GTG": "V",
+    "TCT": "S",
+    "TCC": "S",
+    "TCA": "S",
+    "TCG": "S",
+    "AGT": "S",
+    "AGC": "S",
+    "CCT": "P",
+    "CCC": "P",
+    "CCA": "P",
+    "CCG": "P",
+    "ACT": "T",
+    "ACC": "T",
+    "ACA": "T",
+    "ACG": "T",
+    "GCT": "A",
+    "GCC": "A",
+    "GCA": "A",
+    "GCG": "A",
+    "TAT": "Y",
+    "TAC": "Y",
+    "CAT": "H",
+    "CAC": "H",
+    "CAA": "Q",
+    "CAG": "Q",
+    "AAT": "N",
+    "AAC": "N",
+    "AAA": "K",
+    "AAG": "K",
+    "GAT": "D",
+    "GAC": "D",
+    "GAA": "E",
+    "GAG": "E",
+    "TGT": "C",
+    "TGC": "C",
+    "TGG": "W",
+    "CGT": "R",
+    "CGC": "R",
+    "CGA": "R",
+    "CGG": "R",
+    "AGA": "R",
+    "AGG": "R",
+    "GGT": "G",
+    "GGC": "G",
+    "GGA": "G",
+    "GGG": "G",
+    "TAA": "X",
+    "TAG": "X",
+    "TGA": "X",
+}.items():
+    _CODONS_BY_AA.setdefault(_aa, ())
+    _CODONS_BY_AA[_aa] = (*_CODONS_BY_AA[_aa], _codon)
+
+
+def cdna_protein_translation_consistent(cdna: str, protein: str) -> bool:
+    """True when an exonic cDNA substitution and a protein substitution are
+    the same allele: same codon index, and some codon of the reference
+    residue turns into a codon of the alternate residue under exactly that
+    nucleotide change at that in-codon offset. Never matches on codon index
+    alone (c.1826A>G can be p.D609G, never p.D609N)."""
+    cdna_match = re.fullmatch(
+        r"(?:C\.)?(\d+)([ACGT])>([ACGT])",
+        re.sub(r"\s+", "", cdna.upper()),
+    )
+    protein_match = re.fullmatch(
+        r"(?:P\.)?([A-Z])(\d{1,5})([A-Z]|\*)",
+        re.sub(r"\s+", "", protein.upper()),
+    )
+    if not cdna_match or not protein_match:
+        return False
+    base, ref_nt, alt_nt = (
+        int(cdna_match.group(1)),
+        cdna_match.group(2),
+        cdna_match.group(3),
+    )
+    ref_aa, position, alt_aa = (
+        protein_match.group(1),
+        int(protein_match.group(2)),
+        "X" if protein_match.group(3) == "*" else protein_match.group(3),
+    )
+    if (base + 2) // 3 != position:
+        return False
+    offset = (base - 1) % 3
+    alt_codons = set(_CODONS_BY_AA.get(alt_aa, ()))
+    return any(
+        codon[offset] == ref_nt
+        and codon[:offset] + alt_nt + codon[offset + 1 :] in alt_codons
+        for codon in _CODONS_BY_AA.get(ref_aa, ())
+    )
 
 
 def protein_event_position(value: str) -> int | None:
@@ -1444,11 +1696,17 @@ def structural_event_key(value: str) -> tuple[int, int | None, str, str] | None:
     return int(start), int(end) if end else None, operation, inserted
 
 
+_ARROW_RE = re.compile(r"\s*(?:-+>|→)\s*")
+
+
 def matches(a: str, b: str, gene: str) -> bool:
     from utils.variant_normalizer import normalize_variant, variants_match
 
     if not a or not b:
         return False
+    # Legacy arrow spellings (2592+1G->A, G→A) mean '>'.
+    a = _ARROW_RE.sub(">", a)
+    b = _ARROW_RE.sub(">", b)
     compact_left = re.sub(r"^(?:C\.)|\s+", "", a.upper())
     compact_right = re.sub(r"^(?:C\.)|\s+", "", b.upper())
     cdna_pattern = re.compile(r"^\d+(?:[+-]\d+)?[ACGT]*>[ACGT]+$")
@@ -1477,6 +1735,30 @@ def matches(a: str, b: str, gene: str) -> bool:
             left_terminal = terminal_event_position(left)
             right_terminal = terminal_event_position(right)
             if left_terminal is not None and left_terminal == right_terminal:
+                return True
+            # Splice bridge: an intronic-offset cDNA substitution matches a
+            # terminal/splice protein event at the flanking codon (M159X vs
+            # c.477+1G>A). Requires exactly one side to be intronic cDNA and
+            # the other a protein X/fs/del/SP event — missense never bridges.
+            left_splice = cdna_splice_codon(left)
+            right_splice = cdna_splice_codon(right)
+            if left_splice is not None and right_splice is None:
+                target = protein_event_position(right)
+                if target is None:
+                    target = splice_event_position(right)
+                if target is not None and left_splice == target:
+                    return True
+            if right_splice is not None and left_splice is None:
+                target = protein_event_position(left)
+                if target is None:
+                    target = splice_event_position(left)
+                if target is not None and right_splice == target:
+                    return True
+            # Exonic substitution bridge: nucleotide-verified translation
+            # only (c.1127G>A <-> R376H); codon index alone never matches.
+            if cdna_protein_translation_consistent(left, right):
+                return True
+            if cdna_protein_translation_consistent(right, left):
                 return True
             left_structural = structural_event_key(left)
             right_structural = structural_event_key(right)
@@ -1507,8 +1789,93 @@ def matches(a: str, b: str, gene: str) -> bool:
     return False
 
 
+def twin_identical(a: str, b: str, gene: str) -> bool:
+    """Strict equivalent-allele identity for prediction de-duplication.
+
+    Deliberately NARROWER than matches(): the scored matcher carries
+    position-level bridges (splice codon, terminal position, cDNA-indel
+    codon) that are correct scoring fuzz against curated gold shorthand but
+    are NOT allele identity — using them as identity fuses distinct alleles
+    (c.477+1G>A and c.477+2T>C both splice-bridge to M159X). Identity here
+    means: identical normalized notation, identical structural coordinates,
+    normalizer equality, or a nucleotide-verified cDNA<->protein translation.
+    """
+    from utils.variant_normalizer import normalize_variant, variants_match
+
+    if not a or not b:
+        return False
+    a = _ARROW_RE.sub(">", a)
+    b = _ARROW_RE.sub(">", b)
+    for left in variant_candidates(a, gene):
+        for right in variant_candidates(b, gene):
+            left_key = re.sub(r"^(?:P\.)|\s+", "", left.upper())
+            right_key = re.sub(r"^(?:P\.)|\s+", "", right.upper())
+            if left_key == right_key:
+                return True
+            left_structural = structural_event_key(left)
+            right_structural = structural_event_key(right)
+            if (
+                left_structural
+                and right_structural
+                and left_structural == right_structural
+            ):
+                return True
+            if cdna_protein_translation_consistent(left, right):
+                return True
+            if cdna_protein_translation_consistent(right, left):
+                return True
+            try:
+                if normalize_variant(left, gene) == normalize_variant(right, gene):
+                    return True
+                if variants_match(left, right, gene):
+                    return True
+            except Exception:
+                continue
+    return False
+
+
+def merge_notation_twins(rows: list[dict], gene: str) -> tuple[list[dict], int]:
+    """Collapse same-paper prediction rows that are the same variant in a
+    different notation (vertical tables emit the cDNA and protein halves as
+    two rows; the matcher scores one TP and strands the twin as an FP).
+
+    Hard bounds (grok-4.6 final review): identity is twin_identical(), never
+    the scored matches() with its position-level bridges; refuse when the row
+    matches more than one kept row (ambiguity); count fields transfer ONLY
+    when the kept row is all-null across COUNT_FIELDS (the classic vertical
+    split: identity-only protein row + count-bearing cDNA row). Complementary
+    unions of two partially-counted rows are refused — they can invent a
+    count vector no single source row asserted.
+    """
+    merged: list[dict] = []
+    twins = 0
+    for row in rows:
+        homes = [
+            m
+            for m in merged
+            if twin_identical(row.get("variant"), m.get("variant"), gene)
+        ]
+        conflict = any(
+            m.get(field) is not None
+            and row.get(field) is not None
+            and m.get(field) != row.get(field)
+            for m in homes
+            for field in COUNT_FIELDS
+        )
+        if len(homes) != 1 or conflict:
+            merged.append(dict(row))
+            continue
+        home = homes[0]
+        twins += 1
+        if all(home.get(field) is None for field in COUNT_FIELDS):
+            for field in COUNT_FIELDS:
+                if row.get(field) is not None:
+                    home[field] = row[field]
+    return merged, twins
+
+
 def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
-    pred = predicted.get("variants", [])
+    pred, merged_twin_rows = merge_notation_twins(predicted.get("variants", []), gene)
     used = set()
     pairs, fps = [], []
     for p in pred:
@@ -1521,7 +1888,7 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
             None,
         )
         if hit is None:
-            fps.append(p["variant"])
+            fps.append(p)
         else:
             used.add(hit)
             pairs.append((p, gold[hit]))
@@ -1536,14 +1903,34 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
     )
     count = {}
     disagreements = []
+    count_bearing_tp = sum(
+        any(p.get(field) is not None for field in COUNT_FIELDS) for p, _g in pairs
+    )
+    counted_extra_rows = sum(
+        any(p.get(field) is not None for field in COUNT_FIELDS) for p in fps
+    )
+    precision_vs_counted_gold_pmids = (
+        tp / (tp + counted_extra_rows) if tp + counted_extra_rows else None
+    )
+    count_bearing_precision = (
+        count_bearing_tp / (count_bearing_tp + counted_extra_rows)
+        if count_bearing_tp + counted_extra_rows
+        else None
+    )
     for field in COUNT_FIELDS:
         gold_asserted = sum(1 for row in gold if row.get(field) is not None)
+        gold_asserted_zero = sum(1 for row in gold if row.get(field) == 0)
         observed = [
             (p.get(field), g.get(field), p["variant"])
             for p, g in pairs
             if g.get(field) is not None and p.get(field) is not None
         ]
         errors = [pv - gv for pv, gv, _ in observed]
+        # Gold encodes "no <field> reported" as an explicit 0 while the
+        # pipeline deliberately abstains with NULL, so pooled count recall
+        # mixes a convention gap with real attribution misses. Stratify.
+        observed_zero = sum(1 for _pv, gv, _v in observed if gv == 0)
+        gold_asserted_nonzero = gold_asserted - gold_asserted_zero
         count[field] = {
             "gold_asserted": gold_asserted,
             "predicted": len(observed),
@@ -1552,6 +1939,18 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
             "rmse": math.sqrt(statistics.fmean(e * e for e in errors))
             if errors
             else None,
+            "gold_asserted_zero": gold_asserted_zero,
+            "gold_asserted_nonzero": gold_asserted_nonzero,
+            "predicted_on_zero_gold": observed_zero,
+            "predicted_on_nonzero_gold": len(observed) - observed_zero,
+            "recall_zero_gold": (
+                observed_zero / gold_asserted_zero if gold_asserted_zero else None
+            ),
+            "recall_nonzero_gold": (
+                (len(observed) - observed_zero) / gold_asserted_nonzero
+                if gold_asserted_nonzero
+                else None
+            ),
         }
         disagreements.extend(
             {
@@ -1574,16 +1973,30 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
         "tp": tp,
         "fp": fp,
         "fn": fn,
+        "merged_notation_twin_rows": merged_twin_rows,
         "token_usage": predicted.get("token_usage"),
         "precision": precision,
         "recall": recall,
         "f1": f1,
+        "counted_precision": {
+            # This is the repository's established
+            # precision_vs_counted_gold_pmids definition: every matched gold row
+            # is signal; only extra predictions that assert a patient count enter
+            # the false-positive denominator.
+            "matched_rows": tp,
+            "counted_extra_rows": counted_extra_rows,
+            "precision_vs_counted_gold_pmids": precision_vs_counted_gold_pmids,
+            # Keep the stricter, differently-denominated diagnostic explicit so
+            # it cannot be compared accidentally with the metric above.
+            "count_bearing_matched_rows": count_bearing_tp,
+            "precision_among_count_bearing_predictions": count_bearing_precision,
+        },
         "count": count,
         "matched_variants": [
             {"predicted": p["variant"], "gold": g["variant"]} for p, g in pairs
         ],
         "missed_gold": [g["variant"] for g in misses],
-        "extra_predictions": fps,
+        "extra_predictions": [p["variant"] for p in fps],
         "count_errors": disagreements,
     }
 
@@ -1597,6 +2010,9 @@ def aggregate(scores: list[dict]) -> dict:
         "tp": tp,
         "fp": fp,
         "fn": fn,
+        "merged_notation_twin_rows": sum(
+            int(s.get("merged_notation_twin_rows") or 0) for s in scores
+        ),
         "precision": precision,
         "recall": recall,
         "f1": 2 * precision * recall / (precision + recall)
@@ -1611,6 +2027,28 @@ def aggregate(scores: list[dict]) -> dict:
         },
         "count": {},
     }
+    counted_extra_rows = sum(
+        int((s.get("counted_precision") or {}).get("counted_extra_rows") or 0)
+        for s in scores
+    )
+    count_bearing_matched_rows = sum(
+        int((s.get("counted_precision") or {}).get("count_bearing_matched_rows") or 0)
+        for s in scores
+    )
+    result["counted_precision"] = {
+        "matched_rows": tp,
+        "counted_extra_rows": counted_extra_rows,
+        "precision_vs_counted_gold_pmids": (
+            tp / (tp + counted_extra_rows) if tp + counted_extra_rows else None
+        ),
+        "count_bearing_matched_rows": count_bearing_matched_rows,
+        "precision_among_count_bearing_predictions": (
+            count_bearing_matched_rows
+            / (count_bearing_matched_rows + counted_extra_rows)
+            if count_bearing_matched_rows + counted_extra_rows
+            else None
+        ),
+    }
     for field in COUNT_FIELDS:
         asserted = sum(s["count"][field]["gold_asserted"] for s in scores)
         observed = sum(s["count"][field]["predicted"] for s in scores)
@@ -1623,12 +2061,30 @@ def aggregate(scores: list[dict]) -> dict:
             ((s["count"][field]["rmse"] or 0) ** 2) * s["count"][field]["predicted"]
             for s in scores
         )
+        asserted_zero = sum(
+            int(s["count"][field].get("gold_asserted_zero") or 0) for s in scores
+        )
+        observed_zero = sum(
+            int(s["count"][field].get("predicted_on_zero_gold") or 0) for s in scores
+        )
+        asserted_nonzero = asserted - asserted_zero
+        observed_nonzero = observed - observed_zero
         result["count"][field] = {
             "gold_asserted": asserted,
             "predicted": observed,
             "recall": observed / asserted if asserted else None,
             "mae": abs_sum / observed if observed else None,
             "rmse": math.sqrt(sq_sum / observed) if observed else None,
+            "gold_asserted_zero": asserted_zero,
+            "gold_asserted_nonzero": asserted_nonzero,
+            "predicted_on_zero_gold": observed_zero,
+            "predicted_on_nonzero_gold": observed_nonzero,
+            "recall_zero_gold": (
+                observed_zero / asserted_zero if asserted_zero else None
+            ),
+            "recall_nonzero_gold": (
+                observed_nonzero / asserted_nonzero if asserted_nonzero else None
+            ),
         }
     return result
 
@@ -1680,6 +2136,12 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
         "precision",
         "recall",
         "f1",
+        "merged_notation_twin_rows",
+        "matched_rows",
+        "counted_extra_rows",
+        "precision_vs_counted_gold_pmids",
+        "count_bearing_matched_rows",
+        "precision_among_count_bearing_predictions",
         "elapsed_seconds",
         "input_tokens",
         "output_tokens",
@@ -1693,6 +2155,12 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
                 f"{field}_recall",
                 f"{field}_mae",
                 f"{field}_rmse",
+                f"{field}_gold_asserted_zero",
+                f"{field}_gold_asserted_nonzero",
+                f"{field}_predicted_on_zero_gold",
+                f"{field}_predicted_on_nonzero_gold",
+                f"{field}_recall_zero_gold",
+                f"{field}_recall_nonzero_gold",
             ]
         )
     with path.open("w", newline="") as fh:
@@ -1701,7 +2169,10 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
         for score in scores:
             usage = score.get("token_usage") or {}
             row = {
-                **{key: score.get(key) for key in columns[:11]},
+                **{key: score.get(key) for key in columns[:10]},
+                **(score.get("counted_precision") or {}),
+                "merged_notation_twin_rows": score.get("merged_notation_twin_rows"),
+                "elapsed_seconds": score.get("elapsed_seconds"),
                 "input_tokens": usage.get("input_tokens"),
                 "output_tokens": usage.get("output_tokens"),
                 "total_tokens": usage.get("total_tokens"),
@@ -1766,14 +2237,15 @@ def write_matcher_adjudication_csv(
 
 def write_markdown_report(report: dict, path: Path) -> None:
     overall = report["overall"]
+    counted_precision = overall.get("counted_precision") or {}
     token_usage = report["token_usage"] or {}
     telemetry_available = bool(report.get("papers")) and all(
         bool((score.get("token_usage") or {}).get("telemetry_available"))
         for score in report["papers"]
     )
-    traces_locked = bool(
-        (report.get("integrity") or {}).get("llm_trace_manifest_sha256")
-    )
+    integrity = report.get("integrity") or {}
+    native_traces_locked = bool(integrity.get("llm_trace_manifest_sha256"))
+    production_traces_locked = bool(integrity.get("production_trace_manifests"))
     timing = report.get("timing") or {}
     wall_timing_available = bool(timing.get("started_at")) and bool(
         timing.get("completed_at")
@@ -1846,16 +2318,24 @@ def write_markdown_report(report: dict, path: Path) -> None:
             else []
         )
     )
-    trace_evidence_lines = (
+    native_trace_evidence_lines = (
         [
             "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
             "- `llm_traces/trace_manifest.json`: SHA-256 inventory locked before gold scoring; provider-returned reasoning summaries are retained, while private hidden chain-of-thought is not available.",
             "- `llm_trace_report.html`: self-contained per-paper browser view of the locked trace timeline, prompts, responses, rationales, retries, and integrity state.",
         ]
-        if traces_locked
+        if native_traces_locked
         else [
             "- Exact per-call LLM traces are not attached to this evaluation lock; legacy runs require a rerun for a trace-complete audit."
         ]
+    )
+    trace_evidence_lines = (
+        [
+            "- The production `gvf-run` trace manifest for every gene, including its exact call/decision records and write-time digest index, is SHA-256-bound in `predictions.json` and `LOCK.json` and revalidated before scoring.",
+            "- Each source run retains its own `llm_traces/<GENE>/<PMID>/` records and `llm_trace_report.html`; the evaluation projection does not copy or relabel those run-scoped records.",
+        ]
+        if production_traces_locked
+        else native_trace_evidence_lines
     )
     lines = [
         f"# Codex extraction-blinded paper evaluation — `{report['run_id']}`",
@@ -1875,8 +2355,25 @@ def write_markdown_report(report: dict, path: Path) -> None:
             f"**{format_rate(overall['f1'])}** "
             f"({overall['tp']} TP, {overall['fp']} FP, {overall['fn']} FN)."
         ),
+        (
+            "- Precision versus counted extras "
+            f"**{format_rate(counted_precision.get('precision_vs_counted_gold_pmids'))}** "
+            f"({counted_precision.get('matched_rows', 0)} matched rows; "
+            f"{counted_precision.get('counted_extra_rows', 0)} extra rows with "
+            "patient counts). The stricter count-bearing-only diagnostic is "
+            f"**{format_rate(counted_precision.get('precision_among_count_bearing_predictions'))}** "
+            "and has a different numerator; it is not comparable to the "
+            "repository's counted-extra precision floor."
+        ),
         *token_lines,
         *timing_lines,
+        (
+            "- Notation twins merged before scoring: "
+            f"**{overall.get('merged_notation_twin_rows', 0)}** same-paper "
+            "prediction rows that were the same variant in another notation "
+            "(equivalent-allele identity only; ambiguous or count-conflicting "
+            "rows were left separate)."
+        ),
         f"- Representation choices: {report['tools_used']}.",
         "",
         "## Blinding and scorer audit",
@@ -1930,10 +2427,39 @@ def write_markdown_report(report: dict, path: Path) -> None:
     lines.extend(
         [
             "",
+            (
+                'Gold encodes "no such individuals reported" as an explicit 0 '
+                "while the pipeline deliberately abstains with NULL, so pooled "
+                "count recall mixes that convention gap with real attribution "
+                "misses. The stratified view separates them; the non-zero column "
+                "is the actionable attribution number."
+            ),
+            "",
+            (
+                "| field | non-zero gold: supplied / asserted | non-zero recall "
+                "| zero gold: supplied / asserted | zero recall |"
+            ),
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
+    for field in COUNT_FIELDS:
+        metric = overall["count"][field]
+        lines.append(
+            f"| {field} | {metric.get('predicted_on_nonzero_gold', 'n/a')} / "
+            f"{metric.get('gold_asserted_nonzero', 'n/a')} | "
+            f"{format_rate(metric.get('recall_nonzero_gold'))} | "
+            f"{metric.get('predicted_on_zero_gold', 'n/a')} / "
+            f"{metric.get('gold_asserted_zero', 'n/a')} | "
+            f"{format_rate(metric.get('recall_zero_gold'))} |"
+        )
+
+    lines.extend(
+        [
+            "",
             "## Per-gene results",
             "",
-            "| gene | TP | FP | FN | precision | recall | F1 | carrier count recall / MAE / RMSE | affected count recall / MAE / RMSE | unaffected count recall / MAE / RMSE |",
-            "|---|---:|---:|---:|---:|---:|---:|---|---|---|",
+            "| gene | TP | FP | FN | precision | recall | F1 | precision vs counted extras | count-bearing-only precision | carrier count recall / MAE / RMSE | affected count recall / MAE / RMSE | unaffected count recall / MAE / RMSE |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|",
         ]
     )
     for gene in (g for g in GENES if g in report["by_gene"]):
@@ -1949,7 +2475,10 @@ def write_markdown_report(report: dict, path: Path) -> None:
         lines.append(
             f"| {gene} | {metric['tp']} | {metric['fp']} | {metric['fn']} | "
             f"{format_rate(metric['precision'])} | {format_rate(metric['recall'])} | "
-            f"{format_rate(metric['f1'])} | {count_cell('carriers')} | "
+            f"{format_rate(metric['f1'])} | "
+            f"{format_rate((metric.get('counted_precision') or {}).get('precision_vs_counted_gold_pmids'))} | "
+            f"{format_rate((metric.get('counted_precision') or {}).get('precision_among_count_bearing_predictions'))} | "
+            f"{count_cell('carriers')} | "
             f"{count_cell('affected')} | {count_cell('unaffected')} |"
         )
 
@@ -2076,6 +2605,7 @@ def command_score(args) -> None:
         or digest(prediction_path) != lock["predictions_sha256"]
     ):
         raise SystemExit("refusing to score: locked input digest mismatch")
+    selection, predictions = read_json(selection_path), read_json(prediction_path)
     trace_manifest_digest = lock.get("llm_trace_manifest_sha256")
     if trace_manifest_digest:
         trace_root = run_dir / "llm_traces"
@@ -2100,7 +2630,18 @@ def command_score(args) -> None:
             or digest(trace_report_path) != trace_report_digest
         ):
             raise SystemExit("refusing to score: locked LLM trace report mismatch")
-    selection, predictions = read_json(selection_path), read_json(prediction_path)
+    production_trace_locks, _production_trace_roots, production_trace_errors = (
+        production_trace_lock_entries(predictions)
+    )
+    if production_trace_locks != (lock.get("production_trace_manifests") or []):
+        production_trace_errors.append(
+            "production trace lock entries differ from locked predictions"
+        )
+    if production_trace_errors:
+        raise SystemExit(
+            "refusing to score: production LLM trace integrity failed:\n- "
+            + "\n- ".join(production_trace_errors)
+        )
     pred_map = {(p["gene"], str(p["pmid"])): p for p in predictions["papers"]}
     scores = []
     for paper in selection["papers"]:
@@ -2138,6 +2679,7 @@ def command_score(args) -> None:
             "predictions_sha256": lock["predictions_sha256"],
             "llm_trace_manifest_sha256": trace_manifest_digest,
             "llm_trace_report_sha256": lock.get("llm_trace_report_sha256"),
+            "production_trace_manifests": production_trace_locks,
         },
         "blinding": selection.get("blinding"),
         "prelock_gold_usage": predictions.get("prelock_gold_usage")

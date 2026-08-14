@@ -262,14 +262,38 @@ def test_insert_variant_data_writes_source_layer(tmp_path):
 
     rows = conn.execute(
         """
-        SELECT v.protein_notation, vp.source_layer
+        SELECT v.protein_notation, vp.source_layer, vp.observed_source_layers
         FROM variant_papers vp
         JOIN variants v ON v.variant_id = vp.variant_id
         ORDER BY v.protein_notation
         """
     ).fetchall()
-    assert rows == [("p.Ala341Val", "pubtator"), ("p.Val254Met", "llm_table")]
+    assert rows == [
+        ("p.Ala341Val", "pubtator", "pubtator"),
+        ("p.Val254Met", "llm_table", "llm_table"),
+    ]
     conn.close()
+
+
+def test_replayed_link_keeps_primary_and_adds_observed_layer(tmp_path):
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+    base = {
+        "gene_symbol": "KCNQ1",
+        "protein_notation": "p.Val254Met",
+        "source_location": "Supplement Table S4",
+        "source_layer": "llm_table",
+    }
+    insert_variant_data(cur, "32893267", dict(base))
+    insert_variant_data(cur, "32893267", {**base, "source_layer": "figure"})
+    conn.commit()
+
+    row = conn.execute(
+        "SELECT source_layer, observed_source_layers FROM variant_papers"
+    ).fetchone()
+    conn.close()
+    assert row == ("llm_table", "llm_table,figure")
 
 
 def test_insert_variant_data_writes_standard_fact_provenance_idempotently(tmp_path):

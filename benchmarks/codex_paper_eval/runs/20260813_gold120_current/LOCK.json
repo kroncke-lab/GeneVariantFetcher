@@ -1,0 +1,48 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-13T21:45:55.514717+00:00",
+  "predictions_sha256": "d2e8c9e8f767a4cb2d69be247ce05a41cf0a2ff7373ec82066fde93b6794f96b",
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 141,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 112,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_current/production_runs/KCNH2/20260813_141959/llm_traces/trace_manifest.json",
+      "run_id": "6d3d284a-1aea-4745-b993-1b5c77498f01",
+      "sha256": "1f6f21385c3ef60fa01a6b0713158971cceae30c2c47653b0fa4c06c64180021"
+    },
+    {
+      "decision_event_count": 195,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 167,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_current/production_runs/KCNQ1/20260813_145516/llm_traces/trace_manifest.json",
+      "run_id": "870f5491-dbbd-47c0-8b31-12786f6930dd",
+      "sha256": "58f84cbdc5485f405028364ceb2e9bb4a5fef47288abfbcf54fcac494d8f41db"
+    },
+    {
+      "decision_event_count": 158,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 132,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_current/production_runs/RYR2/20260813_152144/llm_traces/trace_manifest.json",
+      "run_id": "d2bb8c77-6045-422c-b08e-75e8ade8f756",
+      "sha256": "18a2cbed71f1abd1a82402206656266a9d1330841af2f56f41383cb36b1163f6"
+    },
+    {
+      "decision_event_count": 143,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 121,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_current/production_runs/SCN5A/20260813_161211/llm_traces/trace_manifest.json",
+      "run_id": "557c7d7f-9ca8-421d-b327-6c6cefccb026",
+      "sha256": "3bd201be42e60d800fe503e84a4aa7ab9b19a2de06e15ba0cc5645fcabfdbbe9"
+    }
+  ],
+  "selection_sha256": "7107731db378e10a89f543d560fc46fe667923690522bacdee0fe07e98ff9824",
+  "statement": "Prediction content was finalized before external scoring. This external production projection may come from a workflow that read registered gold for read-only layer scorecards; those scores do not feed back into extraction."
+}

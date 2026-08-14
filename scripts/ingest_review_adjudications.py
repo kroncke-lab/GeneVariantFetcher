@@ -87,6 +87,8 @@ from pipeline.adjudication_contract import (  # noqa: E402
 )
 from pipeline.adjudication_contract import variant_key as _variant_key  # noqa: E402
 
+ADJUDICATION_SUMMARY_CONTRACT_VERSION = 2
+
 __all__ = [
     "BUILTIN_GOLD_TIERS",
     "CARDIAC_GENES",
@@ -544,7 +546,7 @@ def _needs_followup(row: dict[str, Any]) -> Optional[str]:
 
 
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """Per-gene counts + net adjudicated count deltas (for metric recompute)."""
+    """Per-gene counts + coverage-qualified adjudicated count deltas."""
     per_gene: dict[str, dict[str, Any]] = defaultdict(
         lambda: {
             "total": 0,
@@ -585,19 +587,24 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     # Convert defaultdicts to plain dicts for JSON.
     return {
         gene: {
+            "summary_contract_version": ADJUDICATION_SUMMARY_CONTRACT_VERSION,
             "total": data["total"],
             "actions": dict(data["actions"]),
             "match_status": dict(data["match_status"]),
             "count_override_matched": data["count_override_matched"],
             "net_affected_delta": (
-                None
-                if data["affected_delta_unknown_rows"]
-                else data["net_affected_delta"]
+                data["net_affected_delta"]
+                if data["affected_delta_known_rows"]
+                else (None if data["affected_delta_unknown_rows"] else 0)
             ),
             "net_unaffected_delta": (
-                None
-                if data["unaffected_delta_unknown_rows"]
-                else data["net_unaffected_delta"]
+                data["net_unaffected_delta"]
+                if data["unaffected_delta_known_rows"]
+                else (None if data["unaffected_delta_unknown_rows"] else 0)
+            ),
+            "affected_delta_is_complete": data["affected_delta_unknown_rows"] == 0,
+            "unaffected_delta_is_complete": (
+                data["unaffected_delta_unknown_rows"] == 0
             ),
             "affected_delta_known_rows": data["affected_delta_known_rows"],
             "affected_delta_unknown_rows": data["affected_delta_unknown_rows"],

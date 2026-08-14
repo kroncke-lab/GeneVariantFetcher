@@ -10,7 +10,11 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
+        # Locked benchmark artifacts must stay byte-identical to their
+        # LOCK.json digests; predictions.json is also chmod read-only.
+        exclude: ^benchmarks/codex_paper_eval/runs/
       - id: end-of-file-fixer
+        exclude: ^benchmarks/codex_paper_eval/runs/
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1200"]

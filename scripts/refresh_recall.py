@@ -51,14 +51,28 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 PY = sys.executable
 
-# variant_papers rows written by the recovery layers (NOT extraction) — preserved
-# across a surgical land so re-extraction never drops ClinVar/PubTator/figure rows.
-_LAYER = (
-    "(LOWER(COALESCE(source_layer,'')) IN ('clinvar', 'pubtator', 'figure') "
-    "OR LOWER(COALESCE(source_location,'')) LIKE '%clinvar%' "
-    "OR LOWER(COALESCE(source_location,'')) LIKE '%pubtator%' "
-    "OR LOWER(COALESCE(source_location,'')) LIKE '%figure%')"
-)
+
+def _recovery_layer_predicate(con: sqlite3.Connection) -> str:
+    """SQL predicate preserving any recovery-observed variant-paper row."""
+
+    columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
+    observed = (
+        "observed_source_layers"
+        if "observed_source_layers" in columns
+        else "source_layer"
+    )
+    token_set = (
+        "(',' || REPLACE(REPLACE(LOWER(COALESCE("
+        f"{observed},'')), ';', ','), '|', ',') || ',')"
+    )
+    return (
+        f"({token_set} LIKE '%,clinvar,%' "
+        f"OR {token_set} LIKE '%,pubtator,%' "
+        f"OR {token_set} LIKE '%,figure,%' "
+        "OR LOWER(COALESCE(source_location,'')) LIKE '%clinvar%' "
+        "OR LOWER(COALESCE(source_location,'')) LIKE '%pubtator%' "
+        "OR LOWER(COALESCE(source_location,'')) LIKE '%figure%')"
+    )
 
 
 def _run(cmd: list[str], label: str) -> None:
@@ -299,6 +313,7 @@ def _land(
     shutil.copy2(canonical_db, out)
     con = create_database_schema(str(out))  # idempotent + ALTERs any missing columns
     cur = con.cursor()
+    recovery_layer = _recovery_layer_predicate(con)
     for pm in changed_pmids:
         js = staged_dir / f"{gene}_PMID_{pm}.json"
         if not js.exists():
@@ -310,7 +325,10 @@ def _land(
         )
         cur.execute("DELETE FROM penetrance_data WHERE pmid=?", (pm,))
         cur.execute("DELETE FROM individual_records WHERE pmid=?", (pm,))
-        cur.execute(f"DELETE FROM variant_papers WHERE pmid=? AND NOT {_LAYER}", (pm,))
+        cur.execute(
+            f"DELETE FROM variant_papers WHERE pmid=? AND NOT {recovery_layer}",
+            (pm,),
+        )
         migrate_extraction_file(cur, js, replace_existing_paper=True)
     con.commit()
     con.close()

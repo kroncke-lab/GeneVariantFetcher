@@ -58,12 +58,12 @@ dev = [
 gvf = "cli:app"
 
 [tool.setuptools.packages.find]
-include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*", "data*"]
+include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*", "gvf_data*"]
 exclude = ["test_*", "automated_output*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-data = [
+gvf_data = [
     "*.json",
     "*.md",
     "reference_sequences/*.fasta",

@@ -394,11 +394,14 @@ def _best_source_for_pmid(harvest_dir: Path, pmid: str) -> Path | None:
     return None
 
 
-def _source_sha_mismatch(metadata: dict[str, Any], source_file: Path | None) -> bool:
-    if source_file is None or not source_file.exists():
-        return False
+def _source_sha_mismatch(metadata: dict[str, Any], source_files: list[Path]) -> bool:
     existing_sha = metadata.get("source_sha256")
-    return bool(existing_sha and existing_sha != _sha256(source_file))
+    if not existing_sha:
+        return False
+    candidates = [path for path in source_files if path.exists()]
+    return bool(
+        candidates and all(existing_sha != _sha256(path) for path in candidates)
+    )
 
 
 def _load_ev_record(
@@ -469,7 +472,9 @@ def classify_pmid(
         if metadata
         else False
     )
-    sha_mismatch = _source_sha_mismatch(metadata, source_file)
+    sha_mismatch = _source_sha_mismatch(
+        metadata, _source_candidates_for_pmid(harvest_dir, pmid)
+    )
     zero_variant_qc = pmid in zero_variant_pmids or (
         source_file is not None and status in DATA_AVAILABLE_STATUSES and variants == 0
     )

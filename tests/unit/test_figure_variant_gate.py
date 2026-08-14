@@ -270,15 +270,62 @@ def test_ingest_enriches_an_existing_variant_paper_link(tmp_path, monkeypatch):
     )
 
     con = sqlite3.connect(db)
-    notes, layer, provenance = con.execute(
-        "SELECT additional_notes, source_layer, count_provenance FROM variant_papers"
+    notes, layer, observed_layers, provenance = con.execute(
+        """SELECT additional_notes, source_layer, observed_source_layers,
+                  count_provenance
+           FROM variant_papers"""
     ).fetchone()
     con.close()
     assert changed == 1
     assert json.loads(notes)["prior_notes"] == "text extraction note"
     assert json.loads(notes)["carriers"] == 13
     assert layer == "figure"
+    assert observed_layers == "figure"
     assert json.loads(provenance)["carriers_count_type"] == "per_variant_carriers"
+
+
+def test_ingest_preserves_existing_primary_and_records_figure_observation(
+    tmp_path, monkeypatch
+):
+    monkeypatch.delenv(FIGURE_VARIANT_GATE_ENV, raising=False)
+    db = _make_db(tmp_path / "primary_layer.db")
+    con = sqlite3.connect(db)
+    con.execute(
+        "INSERT INTO variants(gene_symbol, cdna_notation, protein_notation) VALUES(?,?,?)",
+        (GENE, "c.1682C>T", "p.Ala561Val"),
+    )
+    variant_id = con.execute("SELECT variant_id FROM variants").fetchone()[0]
+    con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+    con.execute("ALTER TABLE variant_papers ADD COLUMN observed_source_layers TEXT")
+    con.execute(
+        """INSERT INTO variant_papers(
+               variant_id, pmid, source_location, additional_notes, key_quotes,
+               source_layer, observed_source_layers
+           ) VALUES(?,?,?,?,?,?,?)""",
+        (variant_id, "111", "Table 2", "text note", "[]", "llm_table", "llm_table"),
+    )
+    con.commit()
+    con.close()
+
+    ingest_cached_variants(
+        pmid="111",
+        gene=GENE,
+        distinct=[
+            {
+                "cdna": "c.1682C>T",
+                "protein": "p.Ala561Val",
+                "context": "pedigree carrier counts",
+            }
+        ],
+        db_path=db,
+    )
+
+    con = sqlite3.connect(db)
+    layers = con.execute(
+        "SELECT source_layer, observed_source_layers FROM variant_papers"
+    ).fetchone()
+    con.close()
+    assert layers == ("llm_table", "llm_table,figure")
 
 
 def test_ingest_reuses_a_compatible_partial_variant_identity(tmp_path, monkeypatch):

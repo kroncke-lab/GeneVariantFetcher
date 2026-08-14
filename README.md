@@ -123,7 +123,7 @@ exclusions with `scripts/manage_review_gold.py`. Release scoring uses
 
 For protocol rollout, use only the three manifests in
 [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md): 50
-gold-scored attempts, 120 cardiac reviewer attempts, then the 546-attempt full
+gold-scored attempts, 120 manually curated cardiac-gold attempts, then the 546-attempt full
 reviewer backlog. The strategy-diverse
 [`curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md)
 remains a specialized regression fixture, not a fourth rollout cohort. Confirm
@@ -241,8 +241,8 @@ Project dependencies are defined in [`pyproject.toml`](pyproject.toml). Install
 with `pip install -e ".[browser,dev]"`. A pinned snapshot of a known-good
 environment is committed as [`requirements.lock`](requirements.lock)
 (`uv pip install -r requirements.lock`); each run records that lock's hash, the
-git SHA, the prompt/extractor hash, and the resolved model routing in its
-`run_manifest.json` under `provenance`.
+git SHA, versioned extractor code/config hashes, the legacy raw digest, and the
+resolved model routing in its `run_manifest.json` under `provenance`.
 
 ## Repository Hygiene
 
@@ -250,7 +250,7 @@ Do not commit `.env`, local `results/`, SQLite DBs, generated `recall_metrics/`,
 `validation_runs/`, the fetched `corpus/`, or agent scratch files. These are
 intentionally gitignored.
 
-Tracked runtime data lives in [`data/`](data/README.md): variant aliases and
+Tracked runtime data lives in [`gvf_data/`](gvf_data/README.md): variant aliases and
 reference protein sequences used by validation code.
 
 ## Citation

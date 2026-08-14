@@ -1,0 +1,48 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-13T22:47:29.732782+00:00",
+  "predictions_sha256": "d54dc4cd7262d53d398f468a714f0f3ea9508efe77a27593188176b85c8572a9",
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 137,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 108,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/production_runs/KCNH2/20260813_170731/llm_traces/trace_manifest.json",
+      "run_id": "bc394f6a-0f71-4bab-aa62-91e93f0dfaf6",
+      "sha256": "a45bb46a8c5279b4952d3e5ab9fe0147983197317feb8767251d21ee88dba51d"
+    },
+    {
+      "decision_event_count": 193,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 166,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/production_runs/KCNQ1/20260813_170731/llm_traces/trace_manifest.json",
+      "run_id": "c82c7241-f6cf-4023-b676-2feeb383421b",
+      "sha256": "819ea05f0f12a75c3b81a1803a7a711f11d13f18529799254107958e9823fb78"
+    },
+    {
+      "decision_event_count": 158,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 132,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/production_runs/RYR2/20260813_170731/llm_traces/trace_manifest.json",
+      "run_id": "e10ba76b-2009-49d7-a896-39e318808079",
+      "sha256": "4db6e6559ba0902a35ad059b237772a36d817a7f7f2a73f7e8b57fa1199ce208"
+    },
+    {
+      "decision_event_count": 143,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 121,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/production_runs/SCN5A/20260813_170732/llm_traces/trace_manifest.json",
+      "run_id": "9992e6f1-b9bd-498a-a4c5-c496d82aab82",
+      "sha256": "4f3da8954a8a4101e34be81c3c23f69bab577333e841ee5781cab3e244cfb2e0"
+    }
+  ],
+  "selection_sha256": "0e659cf8738464a2980fad70cfb401be01e7759e3d85499c3fa3f51c9dcdad17",
+  "statement": "Prediction content was finalized before external scoring. This external production projection may come from a workflow that read registered gold for read-only layer scorecards; those scores do not feed back into extraction."
+}

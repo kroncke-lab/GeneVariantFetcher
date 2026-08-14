@@ -1,6 +1,6 @@
 """Isolated installed-layout smoke test for the shipped import graph.
 
-``pyproject.toml`` ships the runtime packages plus ``data*``. A repository
+``pyproject.toml`` ships the runtime packages plus ``gvf_data*``. A repository
 checkout hides every ``scripts.*`` import
 from those packages because the repo root sits on ``sys.path``; an installed
 wheel does not contain ``scripts`` at all. Two whole features died there
@@ -38,7 +38,7 @@ SHIPPED_PACKAGES = (
     "utils",
     "gene_literature",
     "cli",
-    "data",
+    "gvf_data",
 )
 
 
@@ -167,6 +167,27 @@ def test_runtime_data_is_present_in_the_installed_layout(installed_layout: Path)
         sequence = load_reference_protein("KCNH2")
         assert sequence is not None and len(sequence) == 1_159
         print("OK", len(aliases), len(sequence))
+        """,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "OK" in result.stdout
+
+
+def test_extractor_code_fingerprint_matches_installed_layout(installed_layout: Path):
+    """The active code digest must not depend on repo-only scripts."""
+
+    from utils.provenance import extractor_code_hash
+
+    expected = extractor_code_hash()
+    result = _run_in_layout(
+        installed_layout,
+        f"""
+        from utils.provenance import collect_provenance
+
+        provenance = collect_provenance()
+        assert provenance["extractor_code_sha256"] == {expected!r}
+        assert provenance["extractor_code_files_missing"] == []
+        print("OK")
         """,
     )
     assert result.returncode == 0, result.stderr

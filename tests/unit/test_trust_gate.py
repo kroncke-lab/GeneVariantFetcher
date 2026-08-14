@@ -31,6 +31,13 @@ def test_count_is_total_role():
     assert reasons == ["count_is_total"]
 
 
+def test_family_count_is_not_an_individual_carrier_count():
+    reasons = evaluate_fact(
+        {"carriers": 12}, provenance={"carriers_count_type": "family_count"}
+    )
+    assert reasons == ["family_count_not_carrier"]
+
+
 def test_population_count_by_label_and_by_ceiling():
     by_label = evaluate_fact(
         {"carriers": 250}, provenance={"carriers_column_label": "gnomAD allele count"}
@@ -62,10 +69,10 @@ def test_multiple_reasons_accumulate():
 
 
 def test_rule_version_is_stable_and_tagged():
-    # tg4 adds recovered_count_unverified. The prefix is bumped deliberately so a
+    # tg5 adds family_count_not_carrier. The prefix is bumped deliberately so a
     # stored fact records which rule generation tiered it.
     version = trust_gate.rule_version()
-    assert version.startswith("tg4-")
+    assert version.startswith("tg5-")
     assert version == trust_gate.rule_version()
 
 
@@ -168,7 +175,7 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert stats["trusted"] == 1
     assert stats["quarantine"] == 1
     assert stats["by_reason"].get("population_count") == 1
-    assert stats["rule_version"].startswith("tg4-")
+    assert stats["rule_version"].startswith("tg5-")
 
     conn = sqlite3.connect(db)
     try:
@@ -187,6 +194,45 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert "population_count" in rows[2][2]
     # soft-quarantine: the raw count is preserved, never NULLed.
     assert rows[2][3] == 200_000
+
+
+def test_apply_trust_gate_masks_family_count_only_from_carrier_total(tmp_path):
+    db = str(tmp_path / "t.db")
+    conn = create_database_schema(db)
+    try:
+        _seed(
+            conn,
+            1,
+            "111",
+            {"carriers": 12, "affected": 7},
+            count_provenance={"carriers_count_type": "family_count"},
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    stats = apply_trust_gate(db)
+    assert stats["quarantine"] == 1
+    assert stats["by_reason"] == {"family_count_not_carrier": 1}
+
+    conn = sqlite3.connect(db)
+    try:
+        row = conn.execute(
+            "SELECT total_carriers_observed, affected_count, trust_tier, "
+            "trust_reasons, field_trust FROM penetrance_data"
+        ).fetchone()
+    finally:
+        conn.close()
+
+    assert row[:2] == (12, 7)  # raw evidence remains auditable
+    assert row[2] == "quarantine"
+    assert "family_count_not_carrier" in json.loads(row[3])
+    assert json.loads(row[4]) == {
+        "affected": "trusted",
+        "total_carriers": "quarantine",
+        "unaffected": "trusted",
+        "uncertain": "trusted",
+    }
 
 
 def test_apply_trust_gate_is_idempotent(tmp_path):
