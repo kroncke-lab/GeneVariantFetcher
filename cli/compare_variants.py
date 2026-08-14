@@ -1879,10 +1879,7 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
 
         key = (pmid, variant_key)
 
-        raw_source_layer = str(row.get("source_layer") or "").strip()
-        source_layer = normalize_source_layer(raw_source_layer) or "llm_text"
-        if "," in raw_source_layer:
-            source_layer = "mixed"
+        source_layer = normalize_source_layer(row.get("source_layer")) or "llm_text"
 
         if key not in aggregated:
             aggregated[key] = {

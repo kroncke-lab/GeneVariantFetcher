@@ -66,6 +66,7 @@ from typing import Any, Optional
 # the consumer cannot drift apart — which is exactly how the previous quarantine
 # came to be silently discarded.
 from pipeline.trust_gate import FIGURE_REPAIR_SOURCE
+from utils.source_layers import source_layer_tokens
 
 COUNT_COLUMNS = {
     "carriers": "total_carriers_observed",
@@ -147,7 +148,7 @@ def adopt_figure_counts(
     counts: dict, notes: Optional[str], layer: Optional[str]
 ) -> dict:
     """Fill null counts from the figure reader's own serialized reading."""
-    if "figure" not in (layer or ""):
+    if "figure" not in source_layer_tokens(layer):
         return {}
     return {
         f: value for f, value in figure_counts(notes).items() if counts.get(f) is None
@@ -271,6 +272,14 @@ def apply_count_repair(
     try:
         con.row_factory = sqlite3.Row
         cur = con.cursor()
+        variant_paper_columns = {
+            info[1] for info in cur.execute("PRAGMA table_info(variant_papers)")
+        }
+        observed_layer_expr = (
+            "COALESCE(vp.observed_source_layers, vp.source_layer)"
+            if "observed_source_layers" in variant_paper_columns
+            else "vp.source_layer"
+        )
         # Driven from variant_papers, not penetrance_data. A penetrance row only
         # exists once some count was already non-null (harvesting/
         # migrate_to_sqlite.py), so the figure rows this pass exists to rescue
@@ -278,7 +287,7 @@ def apply_count_repair(
         try:
             rows = list(
                 cur.execute(
-                    """SELECT pd.penetrance_id AS penetrance_id,
+                    f"""SELECT pd.penetrance_id AS penetrance_id,
                               vp.variant_id    AS variant_id,
                               vp.pmid          AS pmid,
                               pd.total_carriers_observed AS carriers,
@@ -286,6 +295,7 @@ def apply_count_repair(
                               pd.unaffected_count        AS unaffected,
                               vp.additional_notes AS additional_notes,
                               vp.source_layer     AS source_layer,
+                              {observed_layer_expr} AS observed_source_layers,
                               (SELECT COUNT(*) FROM penetrance_data siblings
                                WHERE siblings.variant_id = vp.variant_id
                                  AND siblings.pmid = vp.pmid) AS penetrance_rows
@@ -326,9 +336,6 @@ def apply_count_repair(
             )
 
         stamp = datetime.now(timezone.utc).isoformat()
-        variant_paper_columns = {
-            info[1] for info in cur.execute("PRAGMA table_info(variant_papers)")
-        }
         for row in rows:
             summary["rows_examined"] += 1
             if row["penetrance_rows"] > 1:
@@ -342,7 +349,7 @@ def apply_count_repair(
                 for field, (value, rule) in repair_counts(
                     counts,
                     row["additional_notes"],
-                    row["source_layer"],
+                    row["observed_source_layers"],
                     rules=enabled,
                 ).items()
             }

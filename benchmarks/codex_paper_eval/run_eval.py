@@ -109,6 +109,90 @@ def write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
+def production_trace_lock_entries(
+    predictions: dict,
+) -> tuple[list[dict], list[Path], list[str]]:
+    """Validate trace manifests referenced by an external production projection.
+
+    Schema-1 projections cannot carry the harness-native per-paper trace refs,
+    but they can still bind each complete ``gvf-run`` trace manifest into the
+    prediction lock.  The manifest in turn hashes every call/decision record and
+    is checked against the write-time trace index here and again at score time.
+    """
+    supplied = predictions.get("production_trace_manifests") or []
+    errors: list[str] = []
+    locked: list[dict] = []
+    roots: list[Path] = []
+    # Historical schema-1 projections predate production trace binding.  Keep
+    # them readable/re-scoreable; new converter output opts into this stronger
+    # contract by supplying the manifests explicitly.
+    if not supplied:
+        return locked, roots, errors
+    if not isinstance(supplied, list):
+        return locked, roots, ["production_trace_manifests must be a list"]
+    seen_genes: set[str] = set()
+    for index, entry in enumerate(supplied):
+        label = f"production_trace_manifests[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        gene = str(entry.get("gene") or "").upper()
+        raw_path = str(entry.get("manifest") or "")
+        expected_sha = str(entry.get("sha256") or "")
+        if not gene or not raw_path or not expected_sha:
+            errors.append(f"{label} requires gene, manifest, and sha256")
+            continue
+        if gene in seen_genes:
+            errors.append(f"duplicate production trace manifest for {gene}")
+            continue
+        seen_genes.add(gene)
+        path = Path(raw_path)
+        if not path.is_absolute():
+            path = REPO / path
+        path = path.resolve()
+        if path.name != TRACE_MANIFEST_NAME or not path.is_file():
+            errors.append(f"{label}: trace manifest not found: {path}")
+            continue
+        actual_sha = digest(path)
+        if actual_sha != expected_sha:
+            errors.append(f"{label}: trace manifest digest mismatch")
+            continue
+        try:
+            manifest = read_json(path)
+            manifest_errors = validate_trace_manifest(path.parent, manifest)
+        except Exception as exc:  # noqa: BLE001 - surface malformed audit artifacts
+            errors.append(f"{label}: could not validate trace manifest: {exc}")
+            continue
+        errors.extend(f"{label}: {error}" for error in manifest_errors)
+        for field in ("run_id", "llm_call_count", "decision_event_count"):
+            if entry.get(field) != manifest.get(field):
+                errors.append(f"{label}: {field} does not match trace manifest")
+        integrity_level = (manifest.get("verification") or {}).get("level")
+        if entry.get("integrity_level") != integrity_level:
+            errors.append(f"{label}: integrity_level does not match trace manifest")
+        locked.append(
+            {
+                "gene": gene,
+                "manifest": raw_path,
+                "sha256": actual_sha,
+                "run_id": manifest.get("run_id"),
+                "llm_call_count": manifest.get("llm_call_count"),
+                "decision_event_count": manifest.get("decision_event_count"),
+                "integrity_level": integrity_level,
+            }
+        )
+        roots.append(path.parent)
+    prediction_genes = {
+        str(p.get("gene") or "").upper() for p in predictions.get("papers", [])
+    }
+    if supplied and seen_genes != prediction_genes:
+        errors.append(
+            "production trace genes do not match prediction genes: "
+            f"traces={sorted(seen_genes)} predictions={sorted(prediction_genes)}"
+        )
+    return locked, roots, errors
+
+
 def is_table_line(line: str) -> bool:
     """Whether one line looks like a markdown or HTML table row.
 
@@ -155,6 +239,7 @@ def usable_sources(
     gene: str,
     minimum_chars: int,
     legacy_source_selection: bool = False,
+    include_pmids: set[str] | None = None,
 ) -> list[dict]:
     papers = []
     for paper_dir in sorted(
@@ -163,6 +248,8 @@ def usable_sources(
         if not paper_dir.is_dir() or not paper_dir.name.isdigit():
             continue
         pmid = paper_dir.name
+        if include_pmids is not None and pmid not in include_pmids:
+            continue
         candidates = [
             paper_dir / f"{pmid}_FULL_CONTEXT.md",
             paper_dir / f"{pmid}_CLEANED.md",
@@ -419,6 +506,7 @@ def command_prepare(args) -> None:
         else CARDIAC_GENES
     )
     for gene in run_genes:
+        eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
         source_pool = {
             paper["pmid"]: paper
             for paper in usable_sources(
@@ -426,9 +514,9 @@ def command_prepare(args) -> None:
                 gene,
                 args.minimum_chars,
                 legacy_source_selection=args.legacy_source_selection,
+                include_pmids=eligible_pmids,
             )
         }
-        eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
         pools[gene] = {
             pmid: paper for pmid, paper in source_pool.items() if pmid in eligible_pmids
         }
@@ -607,6 +695,9 @@ def command_lock(args) -> None:
     trace_report_path = run_dir / TRACE_REPORT_NAME
     trace_manifest = None
     trace_index_path = trace_root / TRACE_INDEX_NAME
+    production_trace_locks, production_trace_roots, production_trace_errors = (
+        production_trace_lock_entries(predictions)
+    )
     if int(predictions.get("schema_version") or 1) >= 2:
         # Rebuilding at lock time is deliberate — extraction may have appended
         # after its own manifest — but it now cross-checks each record against
@@ -627,6 +718,7 @@ def command_lock(args) -> None:
         )
     errors = validate_predictions(selection, predictions)
     errors.extend(selection_material_errors(selection))
+    errors.extend(production_trace_errors)
     if trace_manifest is not None:
         errors.extend(validate_trace_manifest(trace_root, trace_manifest))
     if errors:
@@ -669,6 +761,7 @@ def command_lock(args) -> None:
             if trace_manifest is not None
             else None
         ),
+        "production_trace_manifests": production_trace_locks,
         "statement": lock_statement,
     }
     write_json(lock_path, lock)
@@ -679,6 +772,9 @@ def command_lock(args) -> None:
         # trace_lock_targets() includes trace_index.jsonl, which the prior
         # chmod set omitted.
         for target in trace_lock_targets(trace_root):
+            target.chmod(0o444)
+    for production_trace_root in production_trace_roots:
+        for target in trace_lock_targets(production_trace_root):
             target.chmod(0o444)
     print(lock_path)
 
@@ -1521,7 +1617,7 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
             None,
         )
         if hit is None:
-            fps.append(p["variant"])
+            fps.append(p)
         else:
             used.add(hit)
             pairs.append((p, gold[hit]))
@@ -1536,6 +1632,20 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
     )
     count = {}
     disagreements = []
+    count_bearing_tp = sum(
+        any(p.get(field) is not None for field in COUNT_FIELDS) for p, _g in pairs
+    )
+    counted_extra_rows = sum(
+        any(p.get(field) is not None for field in COUNT_FIELDS) for p in fps
+    )
+    precision_vs_counted_gold_pmids = (
+        tp / (tp + counted_extra_rows) if tp + counted_extra_rows else None
+    )
+    count_bearing_precision = (
+        count_bearing_tp / (count_bearing_tp + counted_extra_rows)
+        if count_bearing_tp + counted_extra_rows
+        else None
+    )
     for field in COUNT_FIELDS:
         gold_asserted = sum(1 for row in gold if row.get(field) is not None)
         observed = [
@@ -1578,12 +1688,25 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
         "precision": precision,
         "recall": recall,
         "f1": f1,
+        "counted_precision": {
+            # This is the repository's established
+            # precision_vs_counted_gold_pmids definition: every matched gold row
+            # is signal; only extra predictions that assert a patient count enter
+            # the false-positive denominator.
+            "matched_rows": tp,
+            "counted_extra_rows": counted_extra_rows,
+            "precision_vs_counted_gold_pmids": precision_vs_counted_gold_pmids,
+            # Keep the stricter, differently-denominated diagnostic explicit so
+            # it cannot be compared accidentally with the metric above.
+            "count_bearing_matched_rows": count_bearing_tp,
+            "precision_among_count_bearing_predictions": count_bearing_precision,
+        },
         "count": count,
         "matched_variants": [
             {"predicted": p["variant"], "gold": g["variant"]} for p, g in pairs
         ],
         "missed_gold": [g["variant"] for g in misses],
-        "extra_predictions": fps,
+        "extra_predictions": [p["variant"] for p in fps],
         "count_errors": disagreements,
     }
 
@@ -1610,6 +1733,28 @@ def aggregate(scores: list[dict]) -> dict:
             for field in ("input_tokens", "output_tokens", "total_tokens")
         },
         "count": {},
+    }
+    counted_extra_rows = sum(
+        int((s.get("counted_precision") or {}).get("counted_extra_rows") or 0)
+        for s in scores
+    )
+    count_bearing_matched_rows = sum(
+        int((s.get("counted_precision") or {}).get("count_bearing_matched_rows") or 0)
+        for s in scores
+    )
+    result["counted_precision"] = {
+        "matched_rows": tp,
+        "counted_extra_rows": counted_extra_rows,
+        "precision_vs_counted_gold_pmids": (
+            tp / (tp + counted_extra_rows) if tp + counted_extra_rows else None
+        ),
+        "count_bearing_matched_rows": count_bearing_matched_rows,
+        "precision_among_count_bearing_predictions": (
+            count_bearing_matched_rows
+            / (count_bearing_matched_rows + counted_extra_rows)
+            if count_bearing_matched_rows + counted_extra_rows
+            else None
+        ),
     }
     for field in COUNT_FIELDS:
         asserted = sum(s["count"][field]["gold_asserted"] for s in scores)
@@ -1680,6 +1825,11 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
         "precision",
         "recall",
         "f1",
+        "matched_rows",
+        "counted_extra_rows",
+        "precision_vs_counted_gold_pmids",
+        "count_bearing_matched_rows",
+        "precision_among_count_bearing_predictions",
         "elapsed_seconds",
         "input_tokens",
         "output_tokens",
@@ -1701,7 +1851,9 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
         for score in scores:
             usage = score.get("token_usage") or {}
             row = {
-                **{key: score.get(key) for key in columns[:11]},
+                **{key: score.get(key) for key in columns[:10]},
+                **(score.get("counted_precision") or {}),
+                "elapsed_seconds": score.get("elapsed_seconds"),
                 "input_tokens": usage.get("input_tokens"),
                 "output_tokens": usage.get("output_tokens"),
                 "total_tokens": usage.get("total_tokens"),
@@ -1766,14 +1918,15 @@ def write_matcher_adjudication_csv(
 
 def write_markdown_report(report: dict, path: Path) -> None:
     overall = report["overall"]
+    counted_precision = overall.get("counted_precision") or {}
     token_usage = report["token_usage"] or {}
     telemetry_available = bool(report.get("papers")) and all(
         bool((score.get("token_usage") or {}).get("telemetry_available"))
         for score in report["papers"]
     )
-    traces_locked = bool(
-        (report.get("integrity") or {}).get("llm_trace_manifest_sha256")
-    )
+    integrity = report.get("integrity") or {}
+    native_traces_locked = bool(integrity.get("llm_trace_manifest_sha256"))
+    production_traces_locked = bool(integrity.get("production_trace_manifests"))
     timing = report.get("timing") or {}
     wall_timing_available = bool(timing.get("started_at")) and bool(
         timing.get("completed_at")
@@ -1846,16 +1999,24 @@ def write_markdown_report(report: dict, path: Path) -> None:
             else []
         )
     )
-    trace_evidence_lines = (
+    native_trace_evidence_lines = (
         [
             "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
             "- `llm_traces/trace_manifest.json`: SHA-256 inventory locked before gold scoring; provider-returned reasoning summaries are retained, while private hidden chain-of-thought is not available.",
             "- `llm_trace_report.html`: self-contained per-paper browser view of the locked trace timeline, prompts, responses, rationales, retries, and integrity state.",
         ]
-        if traces_locked
+        if native_traces_locked
         else [
             "- Exact per-call LLM traces are not attached to this evaluation lock; legacy runs require a rerun for a trace-complete audit."
         ]
+    )
+    trace_evidence_lines = (
+        [
+            "- The production `gvf-run` trace manifest for every gene, including its exact call/decision records and write-time digest index, is SHA-256-bound in `predictions.json` and `LOCK.json` and revalidated before scoring.",
+            "- Each source run retains its own `llm_traces/<GENE>/<PMID>/` records and `llm_trace_report.html`; the evaluation projection does not copy or relabel those run-scoped records.",
+        ]
+        if production_traces_locked
+        else native_trace_evidence_lines
     )
     lines = [
         f"# Codex extraction-blinded paper evaluation — `{report['run_id']}`",
@@ -1874,6 +2035,16 @@ def write_markdown_report(report: dict, path: Path) -> None:
             f"**{format_rate(overall['recall'])}**, F1 "
             f"**{format_rate(overall['f1'])}** "
             f"({overall['tp']} TP, {overall['fp']} FP, {overall['fn']} FN)."
+        ),
+        (
+            "- Precision versus counted extras "
+            f"**{format_rate(counted_precision.get('precision_vs_counted_gold_pmids'))}** "
+            f"({counted_precision.get('matched_rows', 0)} matched rows; "
+            f"{counted_precision.get('counted_extra_rows', 0)} extra rows with "
+            "patient counts). The stricter count-bearing-only diagnostic is "
+            f"**{format_rate(counted_precision.get('precision_among_count_bearing_predictions'))}** "
+            "and has a different numerator; it is not comparable to the "
+            "repository's counted-extra precision floor."
         ),
         *token_lines,
         *timing_lines,
@@ -1932,8 +2103,8 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "",
             "## Per-gene results",
             "",
-            "| gene | TP | FP | FN | precision | recall | F1 | carrier count recall / MAE / RMSE | affected count recall / MAE / RMSE | unaffected count recall / MAE / RMSE |",
-            "|---|---:|---:|---:|---:|---:|---:|---|---|---|",
+            "| gene | TP | FP | FN | precision | recall | F1 | precision vs counted extras | count-bearing-only precision | carrier count recall / MAE / RMSE | affected count recall / MAE / RMSE | unaffected count recall / MAE / RMSE |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|",
         ]
     )
     for gene in (g for g in GENES if g in report["by_gene"]):
@@ -1949,7 +2120,10 @@ def write_markdown_report(report: dict, path: Path) -> None:
         lines.append(
             f"| {gene} | {metric['tp']} | {metric['fp']} | {metric['fn']} | "
             f"{format_rate(metric['precision'])} | {format_rate(metric['recall'])} | "
-            f"{format_rate(metric['f1'])} | {count_cell('carriers')} | "
+            f"{format_rate(metric['f1'])} | "
+            f"{format_rate((metric.get('counted_precision') or {}).get('precision_vs_counted_gold_pmids'))} | "
+            f"{format_rate((metric.get('counted_precision') or {}).get('precision_among_count_bearing_predictions'))} | "
+            f"{count_cell('carriers')} | "
             f"{count_cell('affected')} | {count_cell('unaffected')} |"
         )
 
@@ -2076,6 +2250,7 @@ def command_score(args) -> None:
         or digest(prediction_path) != lock["predictions_sha256"]
     ):
         raise SystemExit("refusing to score: locked input digest mismatch")
+    selection, predictions = read_json(selection_path), read_json(prediction_path)
     trace_manifest_digest = lock.get("llm_trace_manifest_sha256")
     if trace_manifest_digest:
         trace_root = run_dir / "llm_traces"
@@ -2100,7 +2275,18 @@ def command_score(args) -> None:
             or digest(trace_report_path) != trace_report_digest
         ):
             raise SystemExit("refusing to score: locked LLM trace report mismatch")
-    selection, predictions = read_json(selection_path), read_json(prediction_path)
+    production_trace_locks, _production_trace_roots, production_trace_errors = (
+        production_trace_lock_entries(predictions)
+    )
+    if production_trace_locks != (lock.get("production_trace_manifests") or []):
+        production_trace_errors.append(
+            "production trace lock entries differ from locked predictions"
+        )
+    if production_trace_errors:
+        raise SystemExit(
+            "refusing to score: production LLM trace integrity failed:\n- "
+            + "\n- ".join(production_trace_errors)
+        )
     pred_map = {(p["gene"], str(p["pmid"])): p for p in predictions["papers"]}
     scores = []
     for paper in selection["papers"]:
@@ -2138,6 +2324,7 @@ def command_score(args) -> None:
             "predictions_sha256": lock["predictions_sha256"],
             "llm_trace_manifest_sha256": trace_manifest_digest,
             "llm_trace_report_sha256": lock.get("llm_trace_report_sha256"),
+            "production_trace_manifests": production_trace_locks,
         },
         "blinding": selection.get("blinding"),
         "prelock_gold_usage": predictions.get("prelock_gold_usage")

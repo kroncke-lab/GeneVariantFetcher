@@ -107,6 +107,8 @@ CREATE TABLE variant_papers (
     pmid TEXT,
     source_location TEXT,
     key_quotes TEXT,  -- JSON array
+    source_layer TEXT,  -- one primary/origin enum
+    observed_source_layers TEXT,  -- ordered comma-separated witness set
     PRIMARY KEY (variant_id, pmid),
     FOREIGN KEY (variant_id) REFERENCES variants(variant_id),
     FOREIGN KEY (pmid) REFERENCES papers(pmid)

@@ -6,7 +6,7 @@ that runs over a variant list right before insertion) and the end-to-end
 the new ``Settings.reference_validation_policy`` knob.
 
 The helper-level tests exercise the real committed KCNH2 reference cache
-(``data/reference_sequences/KCNH2.fasta`` == NP_000229.1), so the verdicts are
+(``gvf_data/reference_sequences/KCNH2.fasta`` == NP_000229.1), so the verdicts are
 ground-truth: position 561 is Ala (A561V is OK), 628 is Gly (G628S is OK), 178 is
 Ser and 341 is Val (so A178T / A341E are reference-residue mismatches). These are
 stable: the manifest pins the accession and the loader cross-checks its length.

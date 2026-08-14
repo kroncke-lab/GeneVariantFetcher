@@ -217,6 +217,27 @@ class TestMarkupDominatedRejected:
 class TestOtherChecksStillFire:
     """Check 3 got looser; the checks around it did not."""
 
+    def test_one_overlapping_supplement_placeholder_does_not_discard_paper(
+        self, extractor
+    ):
+        text = (
+            _body(20_000)
+            + "\n[PDF file available at: figures.pdf - text extraction failed, "
+            "manual review required]\n"
+        )
+
+        matching_patterns = [
+            pattern
+            for pattern in extractor.FAILED_EXTRACTION_PATTERNS
+            if pattern in text
+        ]
+        assert len(matching_patterns) >= 3
+        is_usable, reason = extractor._assess_input_quality(text, "KCNQ1")
+        assert is_usable, (
+            "one failed supplement line must not discard readable article prose: "
+            f"{reason}"
+        )
+
     def test_paywall_placeholder_still_rejected(self, extractor):
         text = (
             "[PDF file available at: http://example.com/paper.pdf]\n"

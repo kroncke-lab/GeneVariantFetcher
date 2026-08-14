@@ -1,7 +1,8 @@
-"""Populate data/reference_sequences/<GENE>.fasta from NCBI (Entrez).
+"""Populate gvf_data/reference_sequences/<GENE>.fasta from NCBI (Entrez).
 
 Operational step for the reference-transcript validation gate
-(pipeline/reference_validation.py). Reads data/reference_sequences/manifest.json,
+(pipeline/reference_validation.py). Reads
+gvf_data/reference_sequences/manifest.json,
 fetches each gene's canonical RefSeq protein via Entrez efetch, validates the
 fetched length against the manifest's expected_length (which matches
 utils.variant_normalizer.PROTEIN_LENGTHS), and writes the FASTA only when the
@@ -28,7 +29,7 @@ from pathlib import Path
 
 logger = logging.getLogger("fetch_reference_sequences")
 
-_REF_DIR = Path(__file__).resolve().parents[1] / "data" / "reference_sequences"
+_REF_DIR = Path(__file__).resolve().parents[1] / "gvf_data" / "reference_sequences"
 _MANIFEST = _REF_DIR / "manifest.json"
 
 

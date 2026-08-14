@@ -16,7 +16,7 @@ def _documentation_files() -> list[Path]:
     roots = list(REPO.glob("*.md"))
     for directory in (
         "benchmarks",
-        "data",
+        "gvf_data",
         "docs",
         "gene_variant_fetcher_gold_standard",
         "scripts",

@@ -1,0 +1,199 @@
+{
+  "by_gene": {
+    "KCNH2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 89,
+          "mae": 1.3548387096774193,
+          "predicted": 31,
+          "recall": 0.34831460674157305,
+          "rmse": 2.449489742783178
+        },
+        "carriers": {
+          "gold_asserted": 89,
+          "mae": 0.21428571428571427,
+          "predicted": 42,
+          "recall": 0.47191011235955055,
+          "rmse": 0.5976143046671969
+        },
+        "unaffected": {
+          "gold_asserted": 89,
+          "mae": 1.4444444444444444,
+          "predicted": 18,
+          "recall": 0.20224719101123595,
+          "rmse": 2.4037008503093262
+        }
+      },
+      "elapsed_seconds": 1662.927072,
+      "f1": 0.484375,
+      "fn": 27,
+      "fp": 105,
+      "papers": 30,
+      "precision": 0.3712574850299401,
+      "recall": 0.6966292134831461,
+      "token_usage": {
+        "input_tokens": 376461,
+        "output_tokens": 144476,
+        "total_tokens": 520937
+      },
+      "tp": 62
+    },
+    "KCNQ1": {
+      "count": {
+        "affected": {
+          "gold_asserted": 167,
+          "mae": 0.4,
+          "predicted": 20,
+          "recall": 0.11976047904191617,
+          "rmse": 0.7745966692414834
+        },
+        "carriers": {
+          "gold_asserted": 167,
+          "mae": 0.34615384615384615,
+          "predicted": 26,
+          "recall": 0.15568862275449102,
+          "rmse": 0.8086075400626399
+        },
+        "unaffected": {
+          "gold_asserted": 167,
+          "mae": 0.4666666666666667,
+          "predicted": 15,
+          "recall": 0.08982035928143713,
+          "rmse": 0.9309493362512627
+        }
+      },
+      "elapsed_seconds": 1428.48407,
+      "f1": 0.38565022421524664,
+      "fn": 81,
+      "fp": 193,
+      "papers": 30,
+      "precision": 0.30824372759856633,
+      "recall": 0.5149700598802395,
+      "token_usage": {
+        "input_tokens": 457680,
+        "output_tokens": 136656,
+        "total_tokens": 594336
+      },
+      "tp": 86
+    },
+    "RYR2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 180,
+          "mae": 0.0,
+          "predicted": 11,
+          "recall": 0.06111111111111111,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 180,
+          "mae": 0.14285714285714285,
+          "predicted": 42,
+          "recall": 0.23333333333333334,
+          "rmse": 0.5345224838248488
+        },
+        "unaffected": {
+          "gold_asserted": 179,
+          "mae": 0.05555555555555555,
+          "predicted": 18,
+          "recall": 0.1005586592178771,
+          "rmse": 0.23570226039551584
+        }
+      },
+      "elapsed_seconds": 2741.7805049999997,
+      "f1": 0.5824847250509165,
+      "fn": 37,
+      "fp": 168,
+      "papers": 30,
+      "precision": 0.45980707395498394,
+      "recall": 0.7944444444444444,
+      "token_usage": {
+        "input_tokens": 445525,
+        "output_tokens": 157086,
+        "total_tokens": 602611
+      },
+      "tp": 143
+    },
+    "SCN5A": {
+      "count": {
+        "affected": {
+          "gold_asserted": 199,
+          "mae": 1.75,
+          "predicted": 8,
+          "recall": 0.04020100502512563,
+          "rmse": 4.949747468305833
+        },
+        "carriers": {
+          "gold_asserted": 199,
+          "mae": 0.40476190476190477,
+          "predicted": 42,
+          "recall": 0.21105527638190955,
+          "rmse": 1.318368399991155
+        },
+        "unaffected": {
+          "gold_asserted": 199,
+          "mae": 2.3333333333333335,
+          "predicted": 6,
+          "recall": 0.03015075376884422,
+          "rmse": 4.932882862316247
+        }
+      },
+      "elapsed_seconds": 1726.714057,
+      "f1": 0.7131782945736435,
+      "fn": 15,
+      "fp": 133,
+      "papers": 30,
+      "precision": 0.580441640378549,
+      "recall": 0.9246231155778895,
+      "token_usage": {
+        "input_tokens": 452377,
+        "output_tokens": 193331,
+        "total_tokens": 645708
+      },
+      "tp": 184
+    }
+  },
+  "excluded_layers": [
+    "clinvar",
+    "pubtator"
+  ],
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 635,
+        "mae": 0.9142857142857143,
+        "predicted": 70,
+        "recall": 0.11023622047244094,
+        "rmse": 2.3724610489050035
+      },
+      "carriers": {
+        "gold_asserted": 635,
+        "mae": 0.26973684210526316,
+        "predicted": 152,
+        "recall": 0.23937007874015748,
+        "rmse": 0.8773464777984027
+      },
+      "unaffected": {
+        "gold_asserted": 634,
+        "mae": 0.8421052631578947,
+        "predicted": 57,
+        "recall": 0.08990536277602523,
+        "rmse": 2.1521103473958814
+      }
+    },
+    "elapsed_seconds": 7559.905704,
+    "f1": 0.5558806319485079,
+    "fn": 160,
+    "fp": 599,
+    "papers": 120,
+    "precision": 0.44227188081936686,
+    "recall": 0.7480314960629921,
+    "token_usage": {
+      "input_tokens": 1732043,
+      "output_tokens": 631549,
+      "total_tokens": 2363592
+    },
+    "tp": 475
+  },
+  "status": "post-lock diagnostic; not a second blinded lock"
+}

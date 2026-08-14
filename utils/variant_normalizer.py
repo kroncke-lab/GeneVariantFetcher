@@ -30,6 +30,7 @@ Usage:
 
 import logging
 import re
+from importlib.resources import files
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
@@ -165,7 +166,7 @@ for canonical, aliases in KCNH2_VARIANT_ALIASES.items():
 
 
 # Per-gene comprehensive alias dictionary loader.
-# Reads ``data/{gene_lower}_variant_aliases.json`` on first use, caches result.
+# Reads ``gvf_data/{gene_lower}_variant_aliases.json`` on first use, caches result.
 # JSON shape: ``{"aliases": {"ALIAS_UPPER": "canonical", ...}}``.
 # Returns an empty dict for genes without an alias file — never raises.
 _DATA_DIR = None
@@ -180,13 +181,12 @@ def _load_gene_aliases(gene: str) -> dict[str, str]:
         return _alias_cache[gene_upper]
     try:
         import json
-        from pathlib import Path
 
         if _DATA_DIR is None:
-            _DATA_DIR = Path(__file__).parent.parent / "data"
-        path = _DATA_DIR / f"{gene.lower()}_variant_aliases.json"
-        if path.exists():
-            with open(path) as f:
+            _DATA_DIR = files("gvf_data")
+        path = _DATA_DIR.joinpath(f"{gene.lower()}_variant_aliases.json")
+        if path.is_file():
+            with path.open(encoding="utf-8") as f:
                 payload = json.load(f)
             aliases = payload.get("aliases", {})
             logger.debug("Loaded %d %s aliases from %s", len(aliases), gene_upper, path)

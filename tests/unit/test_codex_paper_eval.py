@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -11,12 +12,13 @@ import pytest
 
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
-from utils.llm_trace import reset_llm_tracing
+from utils.llm_trace import build_trace_manifest, reset_llm_tracing
 import benchmarks.codex_paper_eval.run_eval as run_eval_module
 from benchmarks.codex_paper_eval.run_eval import (
     CARDIAC_GENES,
     DEFAULT_GOLD,
     EXTRACTION_INSTRUCTIONS,
+    aggregate,
     choose_source,
     command_extract,
     command_lock,
@@ -28,8 +30,10 @@ from benchmarks.codex_paper_eval.run_eval import (
     load_gold,
     matches,
     material_digest_errors,
+    production_trace_lock_entries,
     read_paper_manifest,
     reasoning_params,
+    score_one,
     looks_truncated_json,
     selection_metadata,
     supports_images,
@@ -79,6 +83,38 @@ def test_load_gold_prefers_adjudicated_v2_counts_and_explicit_nulls(tmp_path):
         {"variant": "R2W", "carriers": 3, "affected": 2, "unaffected": 1},
         {"variant": "V3A", "carriers": 4, "affected": 3, "unaffected": 1},
     ]
+
+
+def test_counted_precision_metrics_keep_the_two_denominators_distinct():
+    prediction = {
+        "variants": [
+            {"variant": "A1V", "carriers": None},
+            {"variant": "A2V", "carriers": 1},
+            {"variant": "A3V", "carriers": None},
+            {"variant": "A4V", "carriers": 1},
+        ]
+    }
+    gold = [
+        {"variant": "A1V", "carriers": 1},
+        {"variant": "A2V", "carriers": 1},
+    ]
+
+    score = score_one("KCNH2", "1", prediction, gold)
+
+    assert score["counted_precision"] == {
+        "matched_rows": 2,
+        "counted_extra_rows": 1,
+        "precision_vs_counted_gold_pmids": pytest.approx(2 / 3),
+        "count_bearing_matched_rows": 1,
+        "precision_among_count_bearing_predictions": pytest.approx(1 / 2),
+    }
+    combined = aggregate([score])
+    assert combined["counted_precision"]["precision_vs_counted_gold_pmids"] == (
+        pytest.approx(2 / 3)
+    )
+    assert combined["counted_precision"][
+        "precision_among_count_bearing_predictions"
+    ] == pytest.approx(1 / 2)
 
 
 def test_load_gold_rejects_unknown_v2_status(tmp_path):
@@ -431,6 +467,22 @@ def test_markdown_discloses_production_projection_prelock_scoring(tmp_path: Path
     assert "not the stricter native lock-before-any-gold-read protocol" in markdown
 
 
+def test_markdown_discloses_locked_production_trace_manifests(tmp_path: Path):
+    report = _report_fixture()
+    report["integrity"] = {
+        "llm_trace_manifest_sha256": None,
+        "production_trace_manifests": [{"gene": "SCN5A", "sha256": "abc"}],
+    }
+
+    markdown_path = tmp_path / "projection_trace_report.md"
+    write_markdown_report(report, markdown_path)
+    markdown = markdown_path.read_text()
+
+    assert "production `gvf-run` trace manifest for every gene" in markdown
+    assert "evaluation projection does not copy or relabel" in markdown
+    assert "legacy runs require a rerun" not in markdown
+
+
 def test_prediction_validation_accepts_explicit_deterministic_zero_tokens():
     paper = {
         "gene": "KCNH2",
@@ -501,6 +553,27 @@ def test_usable_sources_selects_the_richer_rendering_on_disk(tmp_path: Path):
     assert audit["selected"] == str(cleaned.resolve())
     assert len(audit["candidates"]) == 2
     assert "Pareto-dominated" in audit["rationale"]
+
+
+def test_usable_sources_can_limit_expensive_hashing_to_eligible_pmids(tmp_path: Path):
+    for pmid in ("17470695", "99999999"):
+        paper_dir = tmp_path / "KCNQ1" / pmid
+        paper_dir.mkdir(parents=True)
+        _rendering(
+            paper_dir / f"{pmid}_FULL_CONTEXT.md",
+            rows=1,
+            variants=1,
+            padding=3000,
+        )
+
+    papers = usable_sources(
+        tmp_path,
+        "KCNQ1",
+        minimum_chars=100,
+        include_pmids={"17470695"},
+    )
+
+    assert [paper["pmid"] for paper in papers] == ["17470695"]
 
 
 def _extract_captured_prompts(
@@ -920,6 +993,88 @@ def test_schema1_production_import_locks_without_call_telemetry():
     )
     assert any("elapsed_seconds" in e for e in native_errors)
     assert any("token telemetry" in e for e in native_errors)
+
+
+def test_production_projection_applies_field_level_trust_masks():
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    mask = json.dumps(
+        {
+            "total_carriers": "quarantine",
+            "affected": "trusted",
+            "unaffected": "trusted",
+        }
+    )
+    assert (
+        converter.trusted_count(
+            7,
+            field="total_carriers",
+            trust_tier="quarantine",
+            field_trust=mask,
+        )
+        is None
+    )
+    assert (
+        converter.trusted_count(
+            5,
+            field="affected",
+            trust_tier="quarantine",
+            field_trust=mask,
+        )
+        == 5
+    )
+    assert (
+        converter.trusted_count(
+            2,
+            field="unaffected",
+            trust_tier="quarantine",
+            field_trust=None,
+        )
+        is None
+    )
+
+
+def test_production_projection_binds_and_revalidates_external_trace_manifest(
+    tmp_path: Path,
+):
+    trace_root = tmp_path / "production" / "llm_traces"
+    trace_root.mkdir(parents=True)
+    manifest_path = trace_root / "trace_manifest.json"
+    manifest = build_trace_manifest(
+        trace_root, output_path=manifest_path, run_id="production-run"
+    )
+    predictions = {
+        "strategy": "production_gvf_run",
+        "papers": [{"gene": "KCNH2", "pmid": "1"}],
+        "production_trace_manifests": [
+            {
+                "gene": "KCNH2",
+                "manifest": str(manifest_path),
+                "sha256": digest(manifest_path),
+                "run_id": manifest["run_id"],
+                "llm_call_count": manifest["llm_call_count"],
+                "decision_event_count": manifest["decision_event_count"],
+                "integrity_level": manifest["verification"]["level"],
+            }
+        ],
+    }
+
+    locked, roots, errors = production_trace_lock_entries(predictions)
+    assert errors == []
+    assert locked[0]["sha256"] == digest(manifest_path)
+    assert roots == [trace_root]
+
+    manifest_path.write_text(manifest_path.read_text() + "\n")
+    _locked, _roots, errors = production_trace_lock_entries(predictions)
+    assert any("digest mismatch" in error for error in errors)
 
 
 def test_markdown_report_renders_only_genes_present_in_run():

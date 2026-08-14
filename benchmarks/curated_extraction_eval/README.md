@@ -3,7 +3,7 @@
 > This strategy-diverse regression fixture is not an additional active rollout
 > cohort. The only active sequence is
 > [`../evaluation_tiers/`](../evaluation_tiers/README.md): 50 gold-scored
-> attempts, 120 cardiac reviewer attempts, then the 546-attempt full
+> attempts, 120 manually curated cardiac-gold attempts, then the 546-attempt full
 > reviewer backlog.
 
 **What this is, in one sentence:** a hand-picked set of **104 gold-standard papers**

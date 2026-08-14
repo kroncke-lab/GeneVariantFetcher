@@ -36,6 +36,20 @@ Runs made before trace schema v2 cannot be treated as exact request/response
 audits. Their final predictions and rationales remain useful, but rerunning the
 fixed manifest is required to produce authentic raw call traces.
 
+External production projections can satisfy the same audit boundary by listing
+each finalized `gvf-run` trace manifest under `production_trace_manifests` in
+`predictions.json`. `lock` validates the manifest and its call/decision index,
+binds its SHA-256 into `LOCK.json`, and `score` repeats the validation before
+reading gold. When production stages or refolds richer run-local material after
+eligibility selection, run `rebind_production_sources.py` before locking so
+`selection.json` hashes the exact FULL_CONTEXT/artifact/PDF/figure inputs used
+by extraction; this must not change cohort membership or consult gold values.
+
+The production converter defaults to the raw count projection. Its optional
+`--trust-mode trusted` masks persisted field-level quarantine states while
+preserving variant-paper identity. Treat that output as a post-lock diagnostic,
+not a second blinded primary.
+
 ## Standard comparison set: 50 papers (48 cardiac + 2 collaborator-reviewed BRCA2)
 
 **As of 2026-08-11 the active set for comparing paper-processing strategies is

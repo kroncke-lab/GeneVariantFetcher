@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-12.
+Last updated: 2026-08-13.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -33,7 +33,29 @@ one load-bearing result is that matched-row MAE and end-to-end count error move
 in **opposite** directions — conditional accuracy improves 16–57% while
 end-to-end carrier/affected error rises, because the pipeline now declines to
 answer more often. Any future report of one without the other is misleading.
-Gate 1 (`gold_50`) is still the next step.
+The lead approved advancement from Gate 1 on 2026-08-13 without changing the
+headline. Gate 2 (`gold_120`) then ran as a fixed, gold-value-blinded sample of
+30 source-available, count-eligible papers per cardiac gene (120 attempts / 116
+unique PMIDs; seed 2026081301). The patched-system revalidation **passed the
+precision gate**: `precision_vs_counted_gold_pmids` is 95.70% raw and 95.87%
+trusted, above the current 77.3% floor. Variant recall is 84.09%; carrier MAE is
+0.308 raw / 0.299 trusted, versus the 0.614 canonical all-paper baseline. The
+immediately preceding stochastic sample was lower at 0.266 / 0.243, so the
+accepted revalidation improves precision while showing a small conditional-MAE
+regression relative to that one run. The experimental BMPR2, BRCA1, and BRCA2
+queues remain 50, 50, and 46 papers; their no-publish extraction/QC run is
+complete. It used 972 calls, 4.261M tokens, 3.712 summed provider-hours, and a
+$23.664 public-price proxy. The two lead-approved BRCA2 gold papers recovered
+all 7/7 curated variant identities; carrier-count coverage is 3/7 with MAE
+1.333. That sparse seven-record stratum is not an exhaustive paper-level
+precision denominator. After this gate passed, the fixed BMPR2 50 / BRCA1 50 /
+BRCA2 46 queues were refreshed in collaborator-facing Variant Browser staging
+from the current-system run. Live trusted evidence counts are 482, 7,260, and
+2,346, with exact manifest membership and order. All 111 historical BRCA2
+adjudications remain auditable and now require re-review; none is eligible for
+the default adjudication or gold export. A bounded two-paper BRCA2 count-
+recovery dry-run added no inferred counts (0/26 gaps grounded). Public
+annotations remain unchanged.
 
 Historical view: the published dashboard at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
@@ -70,11 +92,38 @@ not current defaults. The next acceptance sequence lives only in `TASKS.md`.
 ## Canonical rollout tiers
 
 The active rollout population is governed by exactly three manifests in
-`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, 120 cardiac reviewer
-attempts (98 unique PMIDs), and 546 full reviewer-backlog attempts (507 unique
-PMIDs). These tiers govern evaluation/review scope, not the authoritative
+`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, a 120-attempt cardiac
+gold expansion (116 unique PMIDs), and 546 full reviewer-backlog attempts (507
+unique PMIDs). These tiers govern evaluation/review scope, not the authoritative
 four-gene headline cohort below. The full tier includes BMPR2 and ranked
-50-paper LMNA/TTN subsets.
+50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 46
+rather than expanding the experimental genes.
+
+## Gate 2 patched gold-120 result (not a headline; passed rollout gate)
+
+The locked run is
+`benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/`. Exact production
+trace manifests for all four genes are bound into both the predictions and the
+pre-gold lock. The primary score preserves all raw count observations; the
+read-only trusted diagnostic masks only persisted quarantined fields.
+
+| Projection | Variant precision | Variant recall | Precision vs counted extras | Count-bearing-only precision | Carrier supplied | Carrier MAE |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Raw locked primary | 534/1438 (37.13%) | 534/635 (84.09%) | 534/(534+24) (**95.70%**) | 148/(148+24) (86.05%) | 146/635 (22.99%) | 0.308 |
+| Trusted diagnostic | unchanged | unchanged | 534/(534+23) (**95.87%**) | 139/(139+23) (85.80%) | 137/635 (21.57%) | 0.299 |
+
+The acceptance metric counts every matched gold row as signal and restricts
+only the extra-row denominator to predictions carrying a patient count. The
+86.05% diagnostic instead restricts the numerator to count-bearing matches and
+is intentionally stricter, but it cannot be compared with the 77.3% floor. The
+trust projection removes one counted extra and masks nine matched carrier
+assertions. The generic parser fix retains vertical-table variant identity but
+declines to invent one carrier per row unless the table proves patient/subject
+row semantics; the fresh run confirms all 42 PMID 26746457 classification-table
+identities survive with null carrier counts. Relative to the prior locked run,
+counted extras fell 58→24 while carrier absolute error moved 41/154→45/146 raw
+(41/137 trusted). This sample does not replace the canonical all-paper
+four-gene headline below.
 
 ## Active 50-paper collaborator-grounded count-semantics cohort
 

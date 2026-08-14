@@ -1,0 +1,21 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-14T00:27:31.648845+00:00",
+  "predictions_sha256": "b50d6a729e3520be2c1fe225d202b31af584d8f114c2ea9b701abe2d9306fb8d",
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 396,
+      "gene": "BRCA2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 370,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260813_experimental_146/production_runs/BRCA2/20260813_174842/llm_traces/trace_manifest.json",
+      "run_id": "cc190c01-f45c-402e-a6c0-da82ce4d5296",
+      "sha256": "1735899a7d6d75685b022f4f25b9637f2ace6b09749b56a6b45a831234d84062"
+    }
+  ],
+  "selection_sha256": "26c293e294781abb7f557e939b44f746ebcd2c2803671a13ebbbad210000ef5c",
+  "statement": "Prediction content was finalized before external scoring. This external production projection may come from a workflow that read registered gold for read-only layer scorecards; those scores do not feed back into extraction."
+}

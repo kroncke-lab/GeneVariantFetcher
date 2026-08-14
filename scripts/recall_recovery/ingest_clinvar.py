@@ -34,6 +34,12 @@ from typing import Optional
 import requests
 from dotenv import load_dotenv
 
+REPO = Path(__file__).resolve().parents[2]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from utils.source_layers import add_source_layer_witness
+
 logger = logging.getLogger("ingest_clinvar")
 
 NCBI_ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
@@ -180,6 +186,8 @@ def ensure_source_layer_column(con: sqlite3.Connection) -> None:
     columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
     if "source_layer" not in columns:
         con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+    if "observed_source_layers" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN observed_source_layers TEXT")
 
 
 def ensure_variant(
@@ -321,14 +329,36 @@ def main() -> int:
             continue
         for cdna, protein, title in res:
             vid = ensure_variant(con, gene, cdna, protein)
-            if not con.execute(
-                "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?",
+            existing = con.execute(
+                """SELECT source_layer, observed_source_layers,
+                          source_location, additional_notes
+                   FROM variant_papers WHERE variant_id=? AND pmid=?""",
                 (vid, pmid),
-            ).fetchone():
+            ).fetchone()
+            if existing:
+                # An older DB may not have populated source_layer. Infer the
+                # extraction origin from its persisted evidence; corroboration
+                # by ClinVar must not retroactively become the primary origin.
+                primary, observed = add_source_layer_witness(
+                    source_layer=existing["source_layer"],
+                    observed_source_layers=existing["observed_source_layers"],
+                    witness_layer="clinvar",
+                    source_location=existing["source_location"],
+                    additional_notes=existing["additional_notes"],
+                )
+                con.execute(
+                    """UPDATE variant_papers
+                       SET source_layer=?, observed_source_layers=?
+                       WHERE variant_id=? AND pmid=?""",
+                    (primary, observed, vid, pmid),
+                )
+            else:
                 con.execute(
                     """INSERT INTO variant_papers
-                       (variant_id, pmid, source_location, additional_notes, key_quotes, source_layer)
-                       VALUES (?, ?, 'ClinVar (PMID citation)', ?, ?, 'clinvar')""",
+                       (variant_id, pmid, source_location, additional_notes,
+                        key_quotes, source_layer, observed_source_layers)
+                       VALUES (?, ?, 'ClinVar (PMID citation)', ?, ?,
+                               'clinvar', 'clinvar')""",
                     (vid, pmid, title, json.dumps([])),
                 )
                 added += 1

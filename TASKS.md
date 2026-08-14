@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-12.
+Last reviewed: 2026-08-13.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -15,18 +15,43 @@ until the preceding gate passes and its artifact is recorded.
 
 ## 1. Re-establish the scientific baseline
 
-- [ ] Re-extract a paired live cardiac sample with the deterministic
-      phenotype-null parser and re-score with the explicit-zero-aware scorer.
-      Report assertion coverage and denominators beside matched-row and
-      end-to-end count error. Mutating stored zeros in an old DB is not a parser
-      test.
-- [ ] Run Gate 1, `gold_50`: 50 scored gene-paper attempts (48 cardiac plus the
-      two lead-approved BRCA2 papers). Report cardiac and BRCA2 separately and
-      retain the locked trace/selection artifacts.
-- [ ] If Gate 1 passes, run Gate 2, `cardiac_120`: 120 cardiac reviewer attempts
-      across 98 unique PMIDs.
-- [ ] If Gate 2 passes, run Gate 3, `reviewer_546`: 546 attempts across 507
-      unique PMIDs in the 11 populated reviewer workspaces.
+The paired live cardiac rescore and Gate 1 review were recorded on 2026-08-13.
+The lead approved advancement from Gate 1 without changing the published
+headline. The requested 100--150-paper scale applies to comparison against the
+already manually curated cardiac gold standard. Gate 2 is therefore the fixed,
+gold-value-blinded `gold_120` sample: 30 source-available, count-eligible papers
+per cardiac gene (120 attempts / 116 unique PMIDs; seed 2026081301). It does not
+widen the experimental genes.
+
+Gate 2 is complete and **passed**. The patched-system revalidation is locked in
+`runs/20260813_gold120_verticalfix`: counted-extra precision is 95.70% raw and
+95.87% trusted, above the 77.3% floor; the distinct count-bearing-only
+diagnostic is 86.05% / 85.80%. Variant recall remains 84.09%, and carrier MAE is
+0.308 raw / 0.299 trusted, still about half the 0.614 canonical all-paper
+baseline. The immediately preceding stochastic run was lower at 0.266 / 0.243,
+so the revalidation is a precision improvement, not a claim that every
+conditional error metric improved on that one sample. The vertical-table fix
+retained all 42 classification-table identities and correctly left their
+carrier counts null.
+
+The revalidation used 527 calls / 2.351M tokens and a $9.774 public-price
+proxy. All four production traces are write-time verified and bound into the
+prediction lock. The approved BMPR2 50 / BRCA1 50 / BRCA2 46 launch began only
+after this lock and score completed.
+
+- [ ] Finish Gate 3, `reviewer_546`: 546 attempts across 507
+      unique PMIDs in the 11 populated reviewer workspaces. The first approved
+      experimental strata are the existing BMPR2 50-, BRCA1 50-, and BRCA2
+      46-paper queues; do not expand those to 100 papers per gene. Start with
+      those three queues after the patched gold-120 revalidation. The fixed
+      50/50/46 run is complete and cost/QC-locked: 972 calls, 4.261M tokens,
+      $23.664 proxy, 45/50 + 50/50 + 45/46 full-text source integrity, and
+      write-time-verified traces. The three fixed collaborator queues were
+      refreshed in Variant Browser staging on 2026-08-13 under dataset label
+      `collaborator_reextract_current_system_20260813`; pinned paper membership
+      and order remained exactly 50/50/46. All 111 historical BRCA2 calls were
+      preserved and moved to re-review, with zero stale calls eligible for the
+      default adjudication/gold export. Public annotations were not published.
 - [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived

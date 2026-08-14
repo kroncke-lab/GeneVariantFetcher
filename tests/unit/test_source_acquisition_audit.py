@@ -57,6 +57,39 @@ def test_audit_uses_full_context_when_data_zones_is_stub(tmp_path: Path):
     assert summary["pmid_coverage"]["selected_for_source_refresh"]["pmids"] == 1
 
 
+def test_audit_accepts_fingerprint_of_any_run_local_source_candidate(tmp_path: Path):
+    run_dir = tmp_path / "run"
+    harvest_dir = run_dir / "pmc_fulltext"
+    extraction_dir = run_dir / "extractions"
+    harvest_dir.mkdir(parents=True)
+    extraction_dir.mkdir()
+
+    pmid = "112"
+    full_context = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
+    cleaned = harvest_dir / f"{pmid}_CLEANED.md"
+    _write_article(full_context)
+    cleaned.write_text(full_context.read_text() + "\nDerived cleaned footer.\n")
+    (extraction_dir / f"KCNH2_PMID_{pmid}.json").write_text(
+        json.dumps(
+            {
+                "variants": [{"protein_notation": "p.Arg1His"}],
+                "extraction_metadata": {
+                    "pmid": pmid,
+                    "source_sha256": audit._sha256(full_context),
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    rows, _ = audit.build_audit(gene="KCNH2", run_dir=run_dir)
+
+    assert len(rows) == 1
+    assert rows[0]["available_context_path"] == str(cleaned)
+    assert rows[0]["source_sha_mismatch"] is False
+    assert rows[0]["route"] != "source_fingerprint_mismatch"
+
+
 def test_audit_fetch_queue_reports_selected_pmids_without_gold(tmp_path: Path):
     run_dir = tmp_path / "run"
     harvest_dir = run_dir / "pmc_fulltext"

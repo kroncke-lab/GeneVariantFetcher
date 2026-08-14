@@ -61,6 +61,14 @@ What it does:
 - Idempotent on the browser side: re-running replaces that gene's carrier data on
   the current snapshot.
 
+Count publication uses the trusted projection. When a current GVF DB supplies a
+valid `field_trust` map, each masked count field is imported as null while the
+raw GVF value remains available in its source DB for audit. A fully masked row
+does not create a zero-valued `count_observation` and does not mark the carrier
+record as count-bearing. Legacy DBs without trust columns retain their previous
+behavior. Identity, source location, quotes, and non-count provenance remain
+publishable even when count provenance is quarantined.
+
 **Best-effort:** a missing repo, a non-zero exit, or a timeout is logged and
 warned — it never fails the GVF run. So a run that scored fine still produces its
 report even if the review DB is unreachable.
@@ -89,6 +97,25 @@ the helper. The broader operational BRCA2 queue is separately pinned at 46
 papers in
 `benchmarks/curated_extraction_eval/review_pmids_20260811_brca2_provenance/`.
 Do not publish the historical `review_pmids_50/BRCA2.txt` again.
+
+### Current-system collaborator refresh (2026-08-13)
+
+The fixed experimental outputs were imported to the live review database under
+dataset label `collaborator_reextract_current_system_20260813`:
+
+| Gene | Pinned papers | Live evidence | Individuals | Exact fact sources |
+| --- | ---: | ---: | ---: | ---: |
+| BMPR2 | 50 | 482 | 470 | 3,871 |
+| BRCA1 | 50 | 7,260 | 3,663 | 27,172 |
+| BRCA2 | 46 | 2,346 | 591 | 4,920 |
+
+All three live paper lists and review positions match their permanent manifests
+exactly. BRCA2 retained all 111 historical adjudication and gold keys, but all
+prior calls are detached and marked for re-review; no stale call is returned by
+the default adjudication or gold export. Before/after exports, input hashes, and
+the reversible legacy-identity reconciliation are recorded in
+`benchmarks/codex_paper_eval/runs/20260813_experimental_146/VARIANT_BROWSER_PUBLICATION.md`.
+This was a staging-only refresh; `publish_annotations` was not run.
 
 For the fixed curated benchmark, publish the benchmark DBs only to the
 Variant_Browser staging/review surface, not the public site:
@@ -195,9 +222,11 @@ deleting prior source revisions:
   row (`unmatched`) or that had no DB to verify against (`no_db`).
 - `review_adjudications_summary.json` — per-gene counts by action and match status,
   plus net adjudicated count deltas (`net_affected_delta`, `net_unaffected_delta`).
-  A net is `null` when any corrected row lacks an asserted extracted baseline;
-  companion `*_delta_known_rows` / `*_delta_unknown_rows` fields expose coverage.
-  for matched `count_override` rows.
+  Summary contract v2 reports the sum over measurable rows whenever at least
+  one baseline is known and uses `null` only when every corrected baseline is
+  unknown. Companion `*_delta_known_rows` / `*_delta_unknown_rows` fields expose
+  coverage, while `*_delta_is_complete` prevents a partial net from being read
+  as complete. With no corrected rows the net is zero and complete.
 
 The built-in cardiac tier contains `KCNH2`, `KCNQ1`, `RYR2`, and `SCN5A`.
 The cache always retains all genes; a tier changes only which records and genes
@@ -286,5 +315,6 @@ are not rewritten. This keeps model output and human truth separately auditable.
 
 ## Coverage
 
-Only KCNH2, KCNQ1, SCN5A, RYR2, and BRCA2 have carrier data in the review DB today.
+The review DB now includes carrier evidence for KCNH2, KCNQ1, SCN5A, RYR2,
+BMPR2, BRCA1, and BRCA2.
 TTR / ALPL / N4BP2L1 have no GVF extraction yet.

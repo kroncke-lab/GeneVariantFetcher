@@ -125,6 +125,25 @@ class TestFindCountGaps:
         with pytest.raises(ValueError):
             find_count_gaps(db, "KCNH2", fields=("penetrance",))
 
+    def test_observed_paper_layer_makes_linkage_primary_recoverable(self, tmp_path):
+        db = _make_db(
+            tmp_path,
+            [(1, "p.Leu552Ser", None, "111", None, None, None)],
+        )
+        con = sqlite3.connect(db)
+        con.execute("ALTER TABLE variant_papers ADD COLUMN observed_source_layers TEXT")
+        con.execute(
+            """UPDATE variant_papers
+               SET source_layer='clinvar',
+                   observed_source_layers='clinvar,figure'"""
+        )
+        con.commit()
+        con.close()
+
+        gaps = find_count_gaps(db, "KCNH2", fields=("carriers",))
+
+        assert gaps and gaps[0].variants[0].paper_derived
+
 
 class TestQuoteGrounding:
     @pytest.mark.parametrize(

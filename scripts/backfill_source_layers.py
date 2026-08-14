@@ -66,6 +66,7 @@ def backfill(db_path: Path, *, backup_suffix: str) -> tuple[Path, int]:
             WHERE source_layer IS NULL
                OR TRIM(source_layer) = ''
                OR LOWER(TRIM(source_layer)) = 'manual_or_legacy'
+               OR source_layer GLOB '*[,;|]*'
             """
         )
         con.commit()

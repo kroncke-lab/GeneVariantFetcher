@@ -622,6 +622,31 @@ class TestSQLiteIntrospection:
         assert df.iloc[0]["source_layer"] == "figure"
         conn.close()
 
+    def test_legacy_figure_corroboration_keeps_primary_layer(self):
+        conn = sqlite3.connect(":memory:")
+        conn.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
+                cdna_notation TEXT, protein_notation TEXT, genomic_position TEXT
+            );
+            CREATE TABLE variant_papers (
+                variant_id INTEGER, pmid TEXT, source_location TEXT,
+                source_layer TEXT
+            );
+            INSERT INTO variants VALUES (1, 'KCNH2', NULL, 'p.Arg123His', NULL);
+            INSERT INTO variant_papers
+            VALUES (1, '12345678', 'Table 2', 'llm_table,figure');
+            """
+        )
+
+        df = extract_sqlite_data(conn, introspect_sqlite(conn))
+        aggregated = aggregate_sqlite_data(df)
+
+        assert df.iloc[0]["source_layer"] == "llm_table"
+        assert aggregated[("12345678", "R123H")]["source_layer"] == "llm_table"
+        conn.close()
+
     def test_extract_sqlite_data_rejects_junk_in_figure_and_regex_table_layers(self):
         conn = sqlite3.connect(":memory:")
         cur = conn.cursor()
@@ -1031,6 +1056,19 @@ class TestComparison:
         assert by_layer["llm_table"]["extra_on_gold_pmids"] == 1
         assert by_layer["llm_table"]["counted_extra_on_gold_pmids"] == 1
         assert by_layer["llm_table"]["precision_vs_counted_gold_pmids"] == 0.5
+
+    def test_precision_summary_uses_primary_layer_for_legacy_composite(self):
+        results = [
+            _make_row(
+                pmid="111",
+                matched=True,
+                sqlite_source_layer="llm_table,figure",
+            )
+        ]
+
+        precision = compute_precision_summary(results)
+
+        assert set(precision["by_source_layer"]) == {"llm_table"}
 
     def test_precision_summary_non_gold_extras_do_not_change_ratio(self):
         """Adding only non-gold-PMID extra rows leaves precision at 1.0."""

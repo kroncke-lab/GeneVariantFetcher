@@ -3889,14 +3889,51 @@ class ExpertExtractor(BaseLLMCaller):
         variants: List[dict] = []
         by_key: dict[tuple[str, str], dict] = {}
         current_table_label = ""
+        current_table_context: list[str] = []
+        current_table_has_patient_rows: Optional[bool] = None
         target_gene = gene_symbol.strip().upper()
         lines = full_text.splitlines()
 
-        def add_variant(cdna: Optional[str], protein: Optional[str]) -> None:
+        def table_has_patient_rows() -> bool:
+            """Whether this table proves one carrier-bearing person per row.
+
+            A vertical layout preserves cell order but not column boundaries.
+            Merely seeing ``GENE`` followed by a variant proves identity, not a
+            carrier.  Require explicit subject-row semantics and reject common
+            variant-catalogue/classification contexts before inferring one.
+            """
+            if not current_table_label:
+                return False
+            context = " ".join(current_table_context).lower()
+            has_person_axis = bool(
+                re.search(
+                    r"\b(?:patient|subject|proband|individual|participant|"
+                    r"family|kindred)s?\b",
+                    context,
+                )
+            )
+            catalogue_axis = bool(
+                re.search(
+                    r"\b(?:variant(?:s)?\s+identified|classification|designation|"
+                    r"pathogenicity|functional|laborator(?:y|ies)|allele\s+"
+                    r"frequency|population)\b",
+                    context,
+                )
+            )
+            return has_person_axis and not catalogue_axis
+
+        def add_variant(
+            cdna: Optional[str],
+            protein: Optional[str],
+            *,
+            one_carrier_per_row: bool,
+        ) -> None:
             key = ((cdna or "").lower(), (protein or "").lower())
             if not key[0] and not key[1]:
                 return
             if key in by_key:
+                if not one_carrier_per_row:
+                    return
                 existing = by_key[key]
                 patients = existing.setdefault("patients", {})
                 pdata = existing.setdefault("penetrance_data", {})
@@ -3917,11 +3954,15 @@ class ExpertExtractor(BaseLLMCaller):
                 # variant (over-attribution). Scoring ignores this field.
                 "clinical_significance": "uncertain",
                 "patients": {
-                    "count": 1,
-                    "phenotype": f"{gene_symbol}-associated disease",
+                    "count": 1 if one_carrier_per_row else None,
+                    "phenotype": (
+                        f"{gene_symbol}-associated disease"
+                        if one_carrier_per_row
+                        else ""
+                    ),
                 },
                 "penetrance_data": {
-                    "total_carriers_observed": 1,
+                    "total_carriers_observed": 1 if one_carrier_per_row else None,
                 },
                 "individual_records": [],
                 "functional_data": {"summary": "", "assays": []},
@@ -3929,35 +3970,48 @@ class ExpertExtractor(BaseLLMCaller):
                 "population_frequency": None,
                 "evidence_level": "medium",
                 "source_location": current_table_label or "Vertical gene table",
-                "additional_notes": "Parsed via deterministic vertical gene-table parser",
+                "additional_notes": (
+                    "Parsed via deterministic vertical gene-table parser"
+                    if one_carrier_per_row
+                    else "Parsed variant identity only via deterministic vertical "
+                    "gene-table parser; no patient-row semantics proven"
+                ),
                 "key_quotes": [],
             }
-            source_ref = current_table_label or "Vertical gene table"
-            variant = self._attach_table_count_provenance(
-                variant,
-                source_ref=source_ref,
-                parser="vertical_gene_table",
-                carriers_label="implicit one carrier per clinical row",
-                affected_label="implicit one affected carrier per clinical row",
-                unaffected_label=None,
-                carriers_count_type="per_variant_carrier",
-                affected_count_type="per_variant_carrier",
-                row_label=f"{target_gene} {cdna or ''} {protein or ''}".strip(),
-            )
+            if one_carrier_per_row:
+                source_ref = current_table_label or "Vertical gene table"
+                variant = self._attach_table_count_provenance(
+                    variant,
+                    source_ref=source_ref,
+                    parser="vertical_gene_table",
+                    carriers_label="implicit one carrier per clinical row",
+                    affected_label="implicit one affected carrier per clinical row",
+                    unaffected_label=None,
+                    carriers_count_type="per_variant_carrier",
+                    affected_count_type="per_variant_carrier",
+                    row_label=f"{target_gene} {cdna or ''} {protein or ''}".strip(),
+                )
             by_key[key] = variant
             variants.append(variant)
 
         for idx, line in enumerate(lines):
             stripped = line.strip()
             if re.match(
-                r"^(?:Supplementary|Supplemental)?\s*Table\s+\w+",
+                r"^(?:eTable|(?:Supplementary|Supplemental)?\s*Table)\s+\w+",
                 stripped,
                 re.IGNORECASE,
             ):
                 current_table_label = stripped[:240]
+                current_table_context = [current_table_label]
+                current_table_has_patient_rows = None
 
             if stripped.upper() != target_gene:
+                if current_table_label and current_table_has_patient_rows is None:
+                    current_table_context.append(stripped[:240])
                 continue
+
+            if current_table_has_patient_rows is None:
+                current_table_has_patient_rows = table_has_patient_rows()
 
             window: list[str] = []
             for raw in lines[idx + 1 : idx + 9]:
@@ -3987,7 +4041,11 @@ class ExpertExtractor(BaseLLMCaller):
                     break
 
             if cdna or protein:
-                add_variant(cdna, protein)
+                add_variant(
+                    cdna,
+                    protein,
+                    one_carrier_per_row=bool(current_table_has_patient_rows),
+                )
 
         if variants:
             logger.info(
@@ -5946,8 +6004,15 @@ Return strict JSON with this schema:
             )
 
         # Check 2: Failed extraction placeholders
+        # Count placeholder *lines*, not matching substrings. A single folded
+        # supplement notice can contain several overlapping phrases such as
+        # ``[PDF file available at:]``, ``text extraction failed``, and
+        # ``manual review required``. Treating those as three independent
+        # failures discarded an otherwise readable full article.
         failed_count = sum(
-            1 for pattern in self.FAILED_EXTRACTION_PATTERNS if pattern in text
+            1
+            for line in text.splitlines()
+            if any(pattern in line for pattern in self.FAILED_EXTRACTION_PATTERNS)
         )
         if failed_count >= 2:
             return (

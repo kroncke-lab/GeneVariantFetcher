@@ -194,11 +194,63 @@ def test_summary_does_not_turn_an_unknown_baseline_into_a_zero_delta():
     )["KCNH2"]
 
     assert summary["net_affected_delta"] is None
+    assert summary["affected_delta_is_complete"] is False
     assert summary["affected_delta_unknown_rows"] == 1
     assert summary["affected_delta_known_rows"] == 0
     assert summary["net_unaffected_delta"] == 2
+    assert summary["unaffected_delta_is_complete"] is True
     assert summary["unaffected_delta_unknown_rows"] == 0
     assert summary["unaffected_delta_known_rows"] == 1
+
+
+def test_summary_reports_known_partial_delta_with_explicit_incomplete_flag():
+    rows = [
+        {
+            "gene": "KCNH2",
+            "action": "count_override",
+            "match_status": "matched",
+            "extracted_affected": 3,
+            "extracted_unaffected": 1,
+            "corrected_affected": 5,
+            "corrected_unaffected": 4,
+        },
+        {
+            "gene": "KCNH2",
+            "action": "count_override",
+            "match_status": "matched",
+            "extracted_affected": "",
+            "extracted_unaffected": 2,
+            "corrected_affected": 9,
+            "corrected_unaffected": 1,
+        },
+    ]
+
+    summary = ingest.summarize(rows)["KCNH2"]
+
+    assert summary["summary_contract_version"] == 2
+    assert summary["net_affected_delta"] == 2
+    assert summary["affected_delta_known_rows"] == 1
+    assert summary["affected_delta_unknown_rows"] == 1
+    assert summary["affected_delta_is_complete"] is False
+    assert summary["net_unaffected_delta"] == 2
+    assert summary["unaffected_delta_is_complete"] is True
+
+
+def test_summary_without_count_overrides_is_zero_and_complete():
+    summary = ingest.summarize(
+        [
+            {
+                "gene": "KCNH2",
+                "action": "gold_confirmed",
+                "match_status": "matched",
+            }
+        ]
+    )["KCNH2"]
+
+    assert summary["net_affected_delta"] == 0
+    assert summary["net_unaffected_delta"] == 0
+    assert summary["affected_delta_is_complete"] is True
+    assert summary["unaffected_delta_is_complete"] is True
 
 
 def test_verdicts_map_and_match_against_real_db(tmp_path):

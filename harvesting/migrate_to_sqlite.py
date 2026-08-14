@@ -51,8 +51,10 @@ from utils.pmid_utils import (
 )
 from utils.geo_ancestry import enrich_ethnicity_origin
 from utils.source_layers import (
+    combine_source_layers,
     infer_source_layer_from_text,
     junk_notation_reason,
+    normalize_source_layer,
 )
 from utils.protein_notation import PROTEIN_NOTATION_RE
 from utils.variant_normalizer import structural_variant_identity
@@ -644,6 +646,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             key_quotes TEXT,  -- JSON array of quotes
             count_provenance TEXT,  -- JSON: which column/count-type each carrier/affected count came from (the "why")
             source_layer TEXT,  -- stable provenance layer: llm_table, clinvar, pubtator, figure, etc.
+            observed_source_layers TEXT,  -- ordered set of every layer that observed this paper-variant link
 
             PRIMARY KEY (variant_id, pmid),
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
@@ -769,6 +772,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("variant_papers", "key_quotes", "TEXT"),
         ("variant_papers", "count_provenance", "TEXT"),
         ("variant_papers", "source_layer", "TEXT"),
+        ("variant_papers", "observed_source_layers", "TEXT"),
         ("penetrance_data", "trust_tier", "TEXT DEFAULT 'trusted'"),
         ("penetrance_data", "trust_reasons", "TEXT"),
         ("penetrance_data", "trust_rule_version", "TEXT"),
@@ -799,6 +803,18 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         existing = {r[1] for r in cursor.execute(f"PRAGMA table_info({table})")}
         if col not in existing:
             cursor.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
+
+    # Preserve legacy comma-joined witness sets before new writers normalize
+    # source_layer to one primary enum. Historical rows are otherwise left
+    # untouched until a normal replay or recovery write visits them.
+    cursor.execute(
+        """UPDATE variant_papers
+           SET observed_source_layers = source_layer
+           WHERE (observed_source_layers IS NULL
+                  OR TRIM(observed_source_layers) = '')
+             AND source_layer IS NOT NULL
+             AND TRIM(source_layer) != ''"""
+    )
 
     # Index for querying individual records by affected status
     cursor.execute("""
@@ -1877,6 +1893,11 @@ def insert_variant_data(
         variant_id, or None if the variant had no usable notation
     """
     source_layer = infer_source_layer(variant_data)
+    incoming_observed_layers = combine_source_layers(
+        source_layer,
+        variant_data.get("observed_source_layers"),
+        variant_data.get("source_layer"),
+    )
     junk_reason = junk_notation_reason(
         source_layer=source_layer,
         protein_notation=variant_data.get("protein_notation"),
@@ -1944,8 +1965,8 @@ def insert_variant_data(
         """
         INSERT OR IGNORE INTO variant_papers (
             variant_id, pmid, source_location, source_notation, additional_notes,
-            key_quotes, count_provenance, source_layer
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            key_quotes, count_provenance, source_layer, observed_source_layers
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
         (
             variant_id,
@@ -1958,17 +1979,32 @@ def insert_variant_data(
             if variant_data.get("count_provenance")
             else None,
             source_layer,
+            incoming_observed_layers,
         ),
+    )
+    persisted_layers = cursor.execute(
+        """SELECT source_layer, observed_source_layers
+           FROM variant_papers
+           WHERE variant_id = ? AND pmid = ?""",
+        (variant_id, pmid),
+    ).fetchone()
+    persisted_source = persisted_layers[0] if persisted_layers else None
+    persisted_observed = persisted_layers[1] if persisted_layers else None
+    primary_source = normalize_source_layer(persisted_source) or source_layer
+    observed_sources = combine_source_layers(
+        primary_source,
+        persisted_observed,
+        persisted_source,
+        incoming_observed_layers,
     )
     cursor.execute(
         """
         UPDATE variant_papers
-        SET source_layer = ?
+        SET source_layer = ?, observed_source_layers = ?
         WHERE variant_id = ?
           AND pmid = ?
-          AND (source_layer IS NULL OR TRIM(source_layer) = '')
         """,
-        (source_layer, variant_id, pmid),
+        (primary_source, observed_sources, variant_id, pmid),
     )
 
     _insert_standard_fact_provenance(

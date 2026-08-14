@@ -42,6 +42,10 @@ from harvesting.figure_variant_reader import (  # noqa: E402
     find_pmid_figures,
     read_figures_for_pmid,
 )
+from utils.source_layers import (  # noqa: E402
+    combine_source_layers,
+    normalize_source_layer,
+)
 from utils.variant_normalizer import VariantNormalizer  # noqa: E402
 
 
@@ -298,6 +302,8 @@ def _ensure_source_layer_column(con: sqlite3.Connection) -> None:
     columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
     if "source_layer" not in columns:
         con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+    if "observed_source_layers" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN observed_source_layers TEXT")
     if "count_provenance" not in columns:
         con.execute("ALTER TABLE variant_papers ADD COLUMN count_provenance TEXT")
 
@@ -387,11 +393,19 @@ def _adoptable_figure_fields(
     }
 
 
-def _with_figure_layer(existing: str | None) -> str:
-    layers = [part.strip() for part in (existing or "").split(",") if part.strip()]
-    if "figure" not in layers:
-        layers.append("figure")
-    return ",".join(layers)
+def _with_figure_layers(
+    existing_primary: str | None, existing_observed: str | None
+) -> tuple[str, str]:
+    """Preserve the originating layer and record figure corroboration."""
+
+    primary = normalize_source_layer(existing_primary) or "figure"
+    observed = combine_source_layers(
+        primary,
+        existing_observed,
+        existing_primary,
+        "figure",
+    )
+    return primary, observed or primary
 
 
 def ingest_report(
@@ -455,7 +469,8 @@ def ingest_cached_variants(
                 continue
             vid = _ensure_variant(con, gene, cdna, protein, pmid)
             existing = con.execute(
-                """SELECT additional_notes, source_layer, count_provenance
+                """SELECT additional_notes, source_layer, count_provenance,
+                          observed_source_layers
                    FROM variant_papers WHERE variant_id=? AND pmid=?""",
                 (vid, pmid),
             ).fetchone()
@@ -467,19 +482,30 @@ def ingest_cached_variants(
                 _adoptable_figure_fields(con, vid, pmid),
             )
             if existing:
+                primary_layer, observed_layers = _with_figure_layers(
+                    existing[1], existing[3]
+                )
                 con.execute(
                     """UPDATE variant_papers
-                       SET additional_notes=?, source_layer=?, count_provenance=?
+                       SET additional_notes=?, source_layer=?, count_provenance=?,
+                           observed_source_layers=?
                        WHERE variant_id=? AND pmid=?""",
-                    (note, _with_figure_layer(existing[1]), provenance, vid, pmid),
+                    (
+                        note,
+                        primary_layer,
+                        provenance,
+                        observed_layers,
+                        vid,
+                        pmid,
+                    ),
                 )
                 added += 1
                 continue
             con.execute(
                 """INSERT INTO variant_papers
                    (variant_id, pmid, source_location, additional_notes, key_quotes,
-                    count_provenance, source_layer)
-                   VALUES (?, ?, ?, ?, ?, ?, 'figure')""",
+                    count_provenance, source_layer, observed_source_layers)
+                   VALUES (?, ?, ?, ?, ?, ?, 'figure', 'figure')""",
                 (vid, pmid, source_tag, note, "[]", provenance),
             )
             added += 1

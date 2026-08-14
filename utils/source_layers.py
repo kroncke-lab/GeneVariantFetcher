@@ -105,10 +105,28 @@ _LLM_TEXT_MARKERS = (
 _RESIDUE_PROSE_RE = re.compile(r"\bresidues?\b", re.IGNORECASE)
 
 
-def normalize_source_layer(layer: object) -> str | None:
-    """Normalize a persisted or inferred source-layer label."""
+def _source_layer_parts(layer: object) -> list[str]:
+    """Ordered, non-empty labels from a persisted layer field."""
 
-    text = str(layer or "").strip().lower()
+    return [
+        part.strip().lower()
+        for part in re.split(r"[,;|]", str(layer or ""))
+        if part.strip()
+    ]
+
+
+def normalize_source_layer(layer: object) -> str | None:
+    """Return the primary persisted source layer.
+
+    New rows persist one stable enum in ``source_layer`` and keep the complete
+    witness set in ``observed_source_layers``. Older rows may contain the
+    append-only form ``llm_table,figure``; the first token is their originating
+    layer. Real run databases were audited before this contract was introduced:
+    every composite had its extraction origin first and ``figure`` last.
+    """
+
+    parts = _source_layer_parts(layer)
+    text = parts[0] if parts else ""
     if not text:
         return None
     if text == "manual_or_legacy":
@@ -118,15 +136,35 @@ def normalize_source_layer(layer: object) -> str | None:
     return None
 
 
-def source_layer_tokens(layer: object) -> set[str]:
-    """Split a layer string such as ``figure,regex_table`` into labels."""
+def source_layer_tokens(*layers: object) -> set[str]:
+    """Return every valid label across primary and observed layer fields."""
 
     tokens: set[str] = set()
-    for part in re.split(r"[,;|]", str(layer or "")):
-        normalized = normalize_source_layer(part)
-        if normalized:
-            tokens.add(normalized)
+    for layer in layers:
+        for part in _source_layer_parts(layer):
+            normalized = normalize_source_layer(part)
+            if normalized:
+                tokens.add(normalized)
     return tokens
+
+
+def combine_source_layers(primary: object, *observed: object) -> str | None:
+    """Build an ordered, de-duplicated all-observed layer string.
+
+    The primary layer is emitted first. Composite legacy values and later
+    corroborating layers retain their relative order after it.
+    """
+
+    primary_layer = normalize_source_layer(primary)
+    ordered: list[str] = []
+    if primary_layer:
+        ordered.append(primary_layer)
+    for value in (primary, *observed):
+        for part in _source_layer_parts(value):
+            normalized = normalize_source_layer(part)
+            if normalized and normalized not in ordered:
+                ordered.append(normalized)
+    return ",".join(ordered) or None
 
 
 def infer_source_layer_from_text(
@@ -163,6 +201,30 @@ def infer_source_layer_from_text(
     return "llm_text"
 
 
+def add_source_layer_witness(
+    *,
+    source_layer: object,
+    observed_source_layers: object,
+    witness_layer: object,
+    source_location: object = None,
+    additional_notes: object = None,
+) -> tuple[str, str]:
+    """Preserve/infer an existing origin while adding a corroborating witness."""
+
+    primary = normalize_source_layer(source_layer) or infer_source_layer_from_text(
+        source_location=source_location,
+        additional_notes=additional_notes,
+        source_layer=source_layer,
+    )
+    observed = combine_source_layers(
+        primary,
+        observed_source_layers,
+        source_layer,
+        witness_layer,
+    )
+    return primary, observed or primary
+
+
 def source_layer_sql_case(
     source_location_expr: str,
     source_layer_expr: str | None = None,
@@ -171,8 +233,15 @@ def source_layer_sql_case(
 ) -> str:
     """Return a SQLite CASE expression mirroring ``infer_source_layer_from_text``."""
 
-    explicit = (
+    explicit_raw = (
         f"NULLIF(LOWER(TRIM({source_layer_expr})), '')" if source_layer_expr else "NULL"
+    )
+    explicit_joined = f"REPLACE(REPLACE({explicit_raw}, ';', ','), '|', ',')"
+    explicit = (
+        "CASE "
+        f"WHEN INSTR({explicit_joined}, ',') > 0 "
+        f"THEN TRIM(SUBSTR({explicit_joined}, 1, INSTR({explicit_joined}, ',') - 1)) "
+        f"ELSE {explicit_joined} END"
     )
     loc = f"LOWER(COALESCE({source_location_expr}, ''))"
     notes = (
