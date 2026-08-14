@@ -56,6 +56,37 @@ after this lock and score completed.
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived
       pre-correction snapshot.
+- [ ] **Gold-120 refinement follow-through (2026-08-14 iteration).** The
+      matcher/twin-merge/zero-stratified scorer, the extraction circuit-breaker
+      and gene-less mutation-table truncation fixes, and the linkage
+      codon-shadow projection gate are merged with free-measurement evidence
+      (recall 84.09→85.04, raw precision 37.13→40.48+, counted-extra 95.70→
+      97.83, carrier count recall 23.0→24.9 at improving MAE; details in
+      `docs/PROTOCOL_CHANGELOG.md`). Remaining, in order:
+      1. Run the paid full gold-120 re-extraction arm (~$10 / ~40 min, same
+         `tier2_gold_120.tsv` manifest, new run dir + rebind + lock + score)
+         to realize the extraction fixes benchmark-wide; live 4-paper
+         validation already recovered 19/22 previously-missed gold rows.
+      2. Work `docs/GOLD_CURATION_QUEUE_2026-08-14.md` with the curator
+         (~15 label errors: 2 PMID typos, 11 editorial rows, 4 transcription
+         errors, 3 duplicate rows, 1 compound row; ~+1.2 recall points of
+         denominator correction).
+      3. Targeted acquisition: KCNH2 29650123 supplement (20 FNs in ONE
+         unfetched file), caption-stub table bodies (RYR2 19926015, KCNQ1
+         14678125, KCNQ1 31520628, KCNQ1 24667783), and the tracked
+         abstract-only stratum (21 gene-paper rows listed in the 2026-08-14
+         analysis).
+      4. Deterministic count-column binder for regex_table rows (the
+         26496715 wrapped-header case: 114 gold assertions sit in a table the
+         pipeline read and flagged itself on); only after that, the Luna-max
+         post-layer count-ambiguity route with cell-quoted, fill-NULL-only,
+         unit-enumerated cards (grok-4.6 constraint list, 2026-08-14).
+      5. Port the new matcher rules to `cli/compare_variants.py` and add the
+         exon-coordinate map (RYR2 EXON 3 DELETION ↔ p.Asn57_Gly91del is
+         extracted but unmatchable today).
+      6. Residual extraction misses to investigate: RYR2 28798025 G1885E
+         (in source, still missed), KCNQ1 31293497 A590T (absent from
+         acquirable source — gold provenance question).
 
 The three manifests in
 [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) are the
