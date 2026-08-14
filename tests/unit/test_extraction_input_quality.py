@@ -353,3 +353,84 @@ def test_data_zones_discovery_never_scans_implicit_working_tree(
 
     assert _find_data_zones_file("12345678") is None
     assert _find_data_zones_file("12345678", [str(tmp_path)]) == stale
+
+
+class TestFailedMarkerRefinements:
+    """Two refinements from papers the marker check wrongly discarded."""
+
+    def test_duplicate_notice_lines_count_once(self, extractor):
+        # KCNQ1 31293497: the same supplement notice folded in twice killed
+        # the whole readable paper. Identical lines are one fact.
+        notice = (
+            "[PDF file available at: Image_1.pdf - text extraction failed, "
+            "manual review required]"
+        )
+        text = _body(20_000) + f"\n{notice}\n{notice}\n"
+        is_usable, reason = extractor._assess_input_quality(text, "KCNQ1")
+        assert is_usable, reason
+
+    def test_distinct_supplement_notices_spare_a_real_article(self, extractor):
+        # Two different failed supplements attached to a full article body are
+        # facts about the supplements, not the article.
+        text = (
+            _body(20_000)
+            + "\n[PDF file available at: mmc1.pdf - text extraction failed]"
+            + "\n[PDF file available at: mmc2.pdf - text extraction failed]\n"
+        )
+        is_usable, reason = extractor._assess_input_quality(text, "KCNQ1")
+        assert is_usable, reason
+
+    def test_marker_stub_without_substantive_text_still_rejected(self, extractor):
+        text = "[Error converting PDF to text]\n[NO TEXT AVAILABLE]\n" + _body(2_000)
+        is_usable, reason = extractor._assess_input_quality(text, "KCNQ1")
+        assert not is_usable
+        assert "failed extraction markers" in reason
+
+
+class TestGeneLessMutationTableTruncation:
+    """KCNQ1 21956039: the supplement mutation table has no gene symbol in
+    its caption and no gene mention within the context window, so the
+    gene-focused truncation dropped every gold table row from the prompt."""
+
+    @staticmethod
+    def _paper_with_geneless_table() -> str:
+        prose = []
+        for i in range(400):
+            if i % 40 == 0:
+                prose.append(f"KCNQ1 was screened in cohort block {i}. " + "x" * 150)
+            else:
+                prose.append("Clinical prose without the gene name. " + "y" * 150)
+        table = ["Supplemental Table 1:  LQT1 and LQT2 Mutations by Location "]
+        for name, exon, n in [
+            ("Ile 235 Asn", 5, 2),
+            ("Gly 168 Arg", 3, 5),
+            ("Ala 46 Thr", 1, 2),
+            ("Arg 594 Gln", 12, 1),
+        ]:
+            table.extend([name, f"exon {exon}", str(n)])
+        return "\n".join(prose + [""] + table)
+
+    def test_mutation_table_reaches_the_prompt(self, extractor):
+        text = self._paper_with_geneless_table()
+        max_chars = len(text) // 2
+        truncated = extractor._truncate_text_for_prompt(
+            text, "KCNQ1", max_chars=max_chars
+        )
+        assert truncated.startswith("[GENE-FOCUSED")
+        for token in ("Ile 235 Asn", "Gly 168 Arg", "Arg 594 Gln"):
+            assert token in truncated, f"{token} missing from truncated prompt"
+
+    def test_prose_mention_of_a_table_is_not_a_caption(self, extractor):
+        text = self._paper_with_geneless_table()
+        prose_line = (
+            "Genotype data including mutation location are summarized in "
+            "Supplemental Table 1 for all patients enrolled in the study "
+            "across all participating centers during the enrollment period."
+        )
+        # The guard: caption anchoring means this long prose sentence never
+        # spawns a secondary segment (no crash, no prose block capture).
+        combined = prose_line + "\n" + text
+        truncated = extractor._truncate_text_for_prompt(
+            combined, "KCNQ1", max_chars=len(combined) // 2
+        )
+        assert truncated.startswith("[GENE-FOCUSED")

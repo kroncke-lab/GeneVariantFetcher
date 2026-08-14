@@ -347,6 +347,10 @@ class ExpertExtractor(BaseLLMCaller):
                 merged[-1][1] = max(merged[-1][1], end)
         return [(s, e) for s, e in merged]
 
+    _TABLE_CAPTION_START_RE = re.compile(
+        r"^\s*(?:supplemental|supplementary|online|e)?\s*table\s+[A-Z]?\d", re.I
+    )
+
     def _gene_focused_truncation(
         self,
         full_text: str,
@@ -364,51 +368,137 @@ class ExpertExtractor(BaseLLMCaller):
         lines = full_text.splitlines()
         lower_gene = gene_symbol.lower()
         segments: List[tuple] = []
+        # Mutation/variant tables whose caption never names the gene (e.g.
+        # "Supplemental Table 1: LQT1 and LQT2 Mutations by Location and
+        # Amino Acid Coding") used to vanish here: no gene symbol within the
+        # context window means no segment, and the paper's entire mutation
+        # table missed the prompt. Capture such captioned table blocks as
+        # SECONDARY segments — gene-anchored segments keep priority, and
+        # table blocks only fill whatever budget remains.
+        secondary_segments: List[tuple] = []
+
+        def table_block_end(caption_idx: int) -> int:
+            end = caption_idx + 1
+            while end < len(lines) and (
+                lines[end].strip() == ""
+                or lines[end].lstrip().startswith("|")
+                or lines[end].strip().startswith("*")
+            ):
+                end += 1
+            return end
 
         for idx, line in enumerate(lines):
             lower_line = line.lower()
 
             # Capture any table caption that pairs the gene with a table label
             if "table" in lower_line and lower_gene in lower_line:
-                end = idx + 1
-                while end < len(lines) and (
-                    lines[end].strip() == ""
-                    or lines[end].lstrip().startswith("|")
-                    or lines[end].strip().startswith("*")
-                ):
-                    end += 1
-                segments.append((max(0, idx - 5), end))
+                segments.append((max(0, idx - 5), table_block_end(idx)))
                 continue
 
             # Generic gene mentions get a surrounding window
             if lower_gene in lower_line:
                 segments.append((max(0, idx - context_window), idx + context_window))
+                continue
+
+            # Gene-less mutation-table captions: keep the caption + its table
+            # body only (no prose window), behind the gene-anchored segments.
+            # Caption-anchored (line starts with a table label and is short) so
+            # a prose sentence mentioning "Supplemental Table 1" never counts.
+            stripped = line.strip()
+            if (
+                len(stripped) < 200
+                and self._TABLE_CAPTION_START_RE.match(stripped)
+                and re.search(r"\b(mutation|variant|genotype)s?\b", lower_line)
+            ):
+                end = table_block_end(idx)
+                if end == idx + 1:
+                    # PDF-wrapped plain-text table body: one cell per line, no
+                    # markdown pipes. Scan to the next heading or float
+                    # caption, hard-capped, and require digit-bearing lines so
+                    # a prose block can never masquerade as a table body.
+                    limit = min(len(lines), idx + 1 + 500)
+                    end = idx + 1
+                    while end < limit:
+                        nxt = lines[end].strip()
+                        if nxt.startswith("#"):
+                            break
+                        if self._TABLE_CAPTION_START_RE.match(nxt) or re.match(
+                            r"(?i)^figure\s+[A-Z]?\d", nxt
+                        ):
+                            break
+                        end += 1
+                    digit_lines = sum(
+                        1
+                        for probe in lines[idx + 1 : end]
+                        if any(c.isdigit() for c in probe)
+                    )
+                    if digit_lines < 3:
+                        end = idx + 1
+                if end > idx + 1:
+                    secondary_segments.append((idx, end))
 
         merged = self._merge_segments(segments, len(lines))
         if not merged:
             return None
 
+        merged_secondary = self._merge_segments(secondary_segments, len(lines))
+        # Reserve a bounded slice of the budget for the mutation-table blocks:
+        # gene-anchored prose windows otherwise exhaust max_chars before the
+        # paper's actual mutation table gets a single character.
+        header = f"[GENE-FOCUSED TRUNCATION for {gene_symbol}]\n\n"
+        separator_cost = 7  # "\n\n---\n\n" between pieces
+        budget = max_chars - len(header)
+        reserved = min(
+            sum(
+                len("\n".join(lines[start:end])) + separator_cost
+                for start, end in merged_secondary
+            ),
+            max_chars // 4,
+        )
+        primary_budget = budget - reserved
+
         pieces = []
         total_len = 0
+        fully_emitted: List[tuple] = []
         for start, end in merged:
             block = "\n".join(lines[start:end])
-            block_len = len(block)
-            if total_len + block_len > max_chars:
+            block_len = len(block) + separator_cost
+            if total_len + block_len > primary_budget:
                 # Add as much as possible from this block
-                remaining = max_chars - total_len
+                remaining = primary_budget - total_len - separator_cost
                 if remaining <= 0:
                     break
                 block = block[:remaining]
-                block_len = len(block)
+                pieces.append(block)
+                total_len += len(block) + separator_cost
+                break
+            pieces.append(block)
+            fully_emitted.append((start, end))
+            total_len += block_len
+            if total_len >= primary_budget:
+                break
+        # A secondary block is skipped only when the budgeted primary output
+        # actually carried it — nominal window coverage that the budget cut
+        # away does not count.
+        for start, end in merged_secondary:
+            if any(
+                start >= p_start and end <= p_end for p_start, p_end in fully_emitted
+            ):
+                continue
+            block = "\n".join(lines[start:end])
+            block_len = len(block) + separator_cost
+            if total_len + block_len > budget:
+                remaining = budget - total_len - separator_cost
+                if remaining <= 0:
+                    break
+                block = block[:remaining]
+                block_len = len(block) + separator_cost
             pieces.append(block)
             total_len += block_len
-            if total_len >= max_chars:
+            if total_len >= budget:
                 break
 
-        focused = (
-            f"[GENE-FOCUSED TRUNCATION for {gene_symbol}]\n\n"
-            + "\n\n---\n\n".join(pieces)
-        )
+        focused = header + "\n\n---\n\n".join(pieces)
         return focused[:max_chars] if focused else None
 
     def _truncate_text_for_prompt(
@@ -5860,6 +5950,13 @@ Return strict JSON with this schema:
         "Session expired",
     ]
 
+    # Residual-content floor for the failed-marker circuit breaker: with two
+    # or more distinct marker lines, the paper survives only when the text
+    # BESIDES those lines could plausibly be an article body. Paywall/failed
+    # conversion stubs carry well under this much prose; real articles with a
+    # couple of failed-supplement notices carry far more.
+    FAILED_MARKER_RESIDUAL_FLOOR = 5_000
+
     # Patterns indicating HTML/markup garbage.
     #
     # These are measured as character spans, not as presence flags: what matters
@@ -6009,16 +6106,34 @@ Return strict JSON with this schema:
         # ``[PDF file available at:]``, ``text extraction failed``, and
         # ``manual review required``. Treating those as three independent
         # failures discarded an otherwise readable full article.
-        failed_count = sum(
-            1
-            for line in text.splitlines()
+        # Two refinements, both from papers this check wrongly discarded:
+        # identical notice lines are ONE fact (the same supplement notice can
+        # be folded in twice), and per-supplement notices attached to a full
+        # readable article are not evidence about the article itself — the
+        # breaker fires only when nothing substantive remains beside them.
+        lines = text.splitlines()
+        marker_lines = [
+            line
+            for line in lines
             if any(pattern in line for pattern in self.FAILED_EXTRACTION_PATTERNS)
-        )
-        if failed_count >= 2:
-            return (
-                False,
-                f"Contains {failed_count} failed extraction markers",
+        ]
+        unique_markers = len({line.strip() for line in marker_lines})
+        if unique_markers >= 2:
+            remaining = "\n".join(
+                line
+                for line in lines
+                if not any(
+                    pattern in line for pattern in self.FAILED_EXTRACTION_PATTERNS
+                )
             )
+            if len(remaining) < self.FAILED_MARKER_RESIDUAL_FLOOR:
+                return (
+                    False,
+                    (
+                        f"Contains {unique_markers} failed extraction markers "
+                        "and no substantive text besides them"
+                    ),
+                )
 
         # Check 3: markup-dominated input
         # Density plus a content floor, not pattern presence. Trace markup in an
