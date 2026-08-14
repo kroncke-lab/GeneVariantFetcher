@@ -1372,8 +1372,15 @@ def load_gold(gold_root: Path, gene: str, pmid: str) -> list[dict]:
         return rows
 
 
+_VARIANT_CANDIDATE_CACHE: dict[tuple[str, str], list[str]] = {}
+
+
 def variant_candidates(value: str, gene: str) -> list[str]:
     """Return embedded notations without changing the locked prediction."""
+    cache_key = (value, gene)
+    cached = _VARIANT_CANDIDATE_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
     candidates = [value]
     patterns = (
         r"\bp\.\(?[A-Z][a-z]{2}\d+(?:[A-Z][a-z]{2}|Ter|fs[^\s,;)]*)\)?",
@@ -1381,7 +1388,9 @@ def variant_candidates(value: str, gene: str) -> list[str]:
             r"\bc\.[0-9*?+-]+(?:_[0-9*?+-]+)?"
             r"(?:delins[ACGT]+|del[ACGT]*|dup[ACGT]*|ins[ACGT]+|[ACGT]>[ACGT])"
         ),
-        r"\b[A-Z]\d{1,5}(?:[A-Z]|\*|X)\b",
+        # A trailing "*" is not a \b boundary, so keep the bare-star
+        # alternative unanchored on the right.
+        r"\b[A-Z]\d{1,5}(?:[A-Z]\b|X\b|\*)",
     )
     for pattern in patterns:
         candidates.extend(re.findall(pattern, value, flags=re.I))
@@ -1466,6 +1475,20 @@ def variant_candidates(value: str, gene: str) -> list[str]:
         r"\b([A-Z])(\d{1,5})[A-Z]fs(?:Ter|X)?\d*\b", value, flags=re.I
     ):
         candidates.append(f"{residue.upper()}{position}fsX")
+    # Legacy compact frameshifts that carry the stop distance inline:
+    # R192CFS91X, P400FS/62X.
+    for residue, position in re.findall(
+        r"\b([A-Z])(\d{1,5})[A-Z]?fs[/+*]?\d*(?:X|Ter)\b", value, flags=re.I
+    ):
+        candidates.append(f"{residue.upper()}{position}fsX")
+    # 3-letter frameshift with no new-residue letter: p.Arg192fs.
+    for original, position in re.findall(r"p\.\(?([A-Z][a-z]{2})(\d{1,5})fs", value):
+        if left := AA3_TO_1.get(original):
+            candidates.append(f"{left}{position}fsX")
+    # 1-letter stop with a bare '*' (p.Q530*): '*' is not a \b boundary, so
+    # the generic pattern above misses it; emit the legacy X form directly.
+    for residue, position in re.findall(r"\b([A-Z])(\d{1,5})\*", value):
+        candidates.append(f"{residue}{position}X")
     for residue, position in re.findall(
         r"\bfs([A-Z])(\d{1,5})(?:[/+*]?\d+|aa)*\b", value, flags=re.I
     ):
@@ -1475,8 +1498,10 @@ def variant_candidates(value: str, gene: str) -> list[str]:
     ):
         if left := AA3_TO_1.get(residue):
             candidates.append(f"{left}{position}fsX")
+    # Curated splice shorthands tolerate a separator and a synonymous residue
+    # letter before the marker: A344SP, A344/SP, A344A/SPLICE.
     for residue, position in re.findall(
-        r"\b([A-Z])(\d{1,5})(?:sp|splice)\b", value, flags=re.I
+        r"\b([A-Z])(\d{1,5})(?:[A-Z]?/)?(?:sp|splice)\b", value, flags=re.I
     ):
         candidates.append(f"{residue.upper()}{position}SP")
     for position, residue in re.findall(r"\bdel(\d{1,5})([A-Z])\b", value, flags=re.I):
@@ -1499,7 +1524,9 @@ def variant_candidates(value: str, gene: str) -> list[str]:
         )
         if insertion:
             candidates.append(f"G{insertion.group(1)}ins")
-    return list(dict.fromkeys(c.strip() for c in candidates))
+    result = list(dict.fromkeys(c.strip() for c in candidates))
+    _VARIANT_CANDIDATE_CACHE[cache_key] = result
+    return result
 
 
 def cdna_indel_position(value: str) -> int | None:
@@ -1509,6 +1536,136 @@ def cdna_indel_position(value: str) -> int | None:
         flags=re.I,
     )
     return int(match.group(1)) // 3 + 1 if match else None
+
+
+def cdna_splice_codon(value: str) -> int | None:
+    """Codon adjacent to an intronic-offset substitution (splice-site cDNA).
+
+    Curators encode splice-site variants as a terminal protein event at the
+    flanking codon (M159X for c.477+1G>A). Only intronic-offset substitutions
+    qualify — exonic substitutions must match through translation, never
+    through a codon bridge.
+    """
+    match = re.search(
+        r"(?:^|[^A-Za-z0-9_])c?\.?(\d+)[+-]\d+[ACGT]>[ACGT]",
+        value,
+        flags=re.I,
+    )
+    return (int(match.group(1)) + 2) // 3 if match else None
+
+
+def splice_event_position(value: str) -> int | None:
+    compact = re.sub(r"^(?:P\.)|[\s/]", "", value.upper())
+    match = re.fullmatch(r"[A-Z](\d+)[A-Z]?(?:SP|SPLICE)", compact)
+    return int(match.group(1)) if match else None
+
+
+_CODONS_BY_AA: dict[str, tuple[str, ...]] = {}
+for _codon, _aa in {
+    "TTT": "F",
+    "TTC": "F",
+    "TTA": "L",
+    "TTG": "L",
+    "CTT": "L",
+    "CTC": "L",
+    "CTA": "L",
+    "CTG": "L",
+    "ATT": "I",
+    "ATC": "I",
+    "ATA": "I",
+    "ATG": "M",
+    "GTT": "V",
+    "GTC": "V",
+    "GTA": "V",
+    "GTG": "V",
+    "TCT": "S",
+    "TCC": "S",
+    "TCA": "S",
+    "TCG": "S",
+    "AGT": "S",
+    "AGC": "S",
+    "CCT": "P",
+    "CCC": "P",
+    "CCA": "P",
+    "CCG": "P",
+    "ACT": "T",
+    "ACC": "T",
+    "ACA": "T",
+    "ACG": "T",
+    "GCT": "A",
+    "GCC": "A",
+    "GCA": "A",
+    "GCG": "A",
+    "TAT": "Y",
+    "TAC": "Y",
+    "CAT": "H",
+    "CAC": "H",
+    "CAA": "Q",
+    "CAG": "Q",
+    "AAT": "N",
+    "AAC": "N",
+    "AAA": "K",
+    "AAG": "K",
+    "GAT": "D",
+    "GAC": "D",
+    "GAA": "E",
+    "GAG": "E",
+    "TGT": "C",
+    "TGC": "C",
+    "TGG": "W",
+    "CGT": "R",
+    "CGC": "R",
+    "CGA": "R",
+    "CGG": "R",
+    "AGA": "R",
+    "AGG": "R",
+    "GGT": "G",
+    "GGC": "G",
+    "GGA": "G",
+    "GGG": "G",
+    "TAA": "X",
+    "TAG": "X",
+    "TGA": "X",
+}.items():
+    _CODONS_BY_AA.setdefault(_aa, ())
+    _CODONS_BY_AA[_aa] = (*_CODONS_BY_AA[_aa], _codon)
+
+
+def cdna_protein_translation_consistent(cdna: str, protein: str) -> bool:
+    """True when an exonic cDNA substitution and a protein substitution are
+    the same allele: same codon index, and some codon of the reference
+    residue turns into a codon of the alternate residue under exactly that
+    nucleotide change at that in-codon offset. Never matches on codon index
+    alone (c.1826A>G can be p.D609G, never p.D609N)."""
+    cdna_match = re.fullmatch(
+        r"(?:C\.)?(\d+)([ACGT])>([ACGT])",
+        re.sub(r"\s+", "", cdna.upper()),
+    )
+    protein_match = re.fullmatch(
+        r"(?:P\.)?([A-Z])(\d{1,5})([A-Z]|\*)",
+        re.sub(r"\s+", "", protein.upper()),
+    )
+    if not cdna_match or not protein_match:
+        return False
+    base, ref_nt, alt_nt = (
+        int(cdna_match.group(1)),
+        cdna_match.group(2),
+        cdna_match.group(3),
+    )
+    ref_aa, position, alt_aa = (
+        protein_match.group(1),
+        int(protein_match.group(2)),
+        "X" if protein_match.group(3) == "*" else protein_match.group(3),
+    )
+    if (base + 2) // 3 != position:
+        return False
+    offset = (base - 1) % 3
+    alt_codons = set(_CODONS_BY_AA.get(alt_aa, ()))
+    return any(
+        codon[offset] == ref_nt
+        and codon[:offset] + alt_nt + codon[offset + 1 :] in alt_codons
+        for codon in _CODONS_BY_AA.get(ref_aa, ())
+    )
 
 
 def protein_event_position(value: str) -> int | None:
@@ -1540,11 +1697,17 @@ def structural_event_key(value: str) -> tuple[int, int | None, str, str] | None:
     return int(start), int(end) if end else None, operation, inserted
 
 
+_ARROW_RE = re.compile(r"\s*(?:-+>|→)\s*")
+
+
 def matches(a: str, b: str, gene: str) -> bool:
     from utils.variant_normalizer import normalize_variant, variants_match
 
     if not a or not b:
         return False
+    # Legacy arrow spellings (2592+1G->A, G→A) mean '>'.
+    a = _ARROW_RE.sub(">", a)
+    b = _ARROW_RE.sub(">", b)
     compact_left = re.sub(r"^(?:C\.)|\s+", "", a.upper())
     compact_right = re.sub(r"^(?:C\.)|\s+", "", b.upper())
     cdna_pattern = re.compile(r"^\d+(?:[+-]\d+)?[ACGT]*>[ACGT]+$")
@@ -1573,6 +1736,30 @@ def matches(a: str, b: str, gene: str) -> bool:
             left_terminal = terminal_event_position(left)
             right_terminal = terminal_event_position(right)
             if left_terminal is not None and left_terminal == right_terminal:
+                return True
+            # Splice bridge: an intronic-offset cDNA substitution matches a
+            # terminal/splice protein event at the flanking codon (M159X vs
+            # c.477+1G>A). Requires exactly one side to be intronic cDNA and
+            # the other a protein X/fs/del/SP event — missense never bridges.
+            left_splice = cdna_splice_codon(left)
+            right_splice = cdna_splice_codon(right)
+            if left_splice is not None and right_splice is None:
+                target = protein_event_position(right)
+                if target is None:
+                    target = splice_event_position(right)
+                if target is not None and left_splice == target:
+                    return True
+            if right_splice is not None and left_splice is None:
+                target = protein_event_position(left)
+                if target is None:
+                    target = splice_event_position(left)
+                if target is not None and right_splice == target:
+                    return True
+            # Exonic substitution bridge: nucleotide-verified translation
+            # only (c.1127G>A <-> R376H); codon index alone never matches.
+            if cdna_protein_translation_consistent(left, right):
+                return True
+            if cdna_protein_translation_consistent(right, left):
                 return True
             left_structural = structural_event_key(left)
             right_structural = structural_event_key(right)
@@ -1603,8 +1790,43 @@ def matches(a: str, b: str, gene: str) -> bool:
     return False
 
 
+def merge_notation_twins(rows: list[dict], gene: str) -> tuple[list[dict], int]:
+    """Collapse same-paper prediction rows that are the same variant in a
+    different notation (vertical tables emit the cDNA and protein halves as
+    two rows; the matcher scores one TP and strands the twin as an FP).
+
+    Hard bounds: merge only on equivalent-allele identity via matches();
+    refuse when the row matches more than one kept row (ambiguity) and when
+    both rows carry conflicting non-null counts (D609G vs D609N carry
+    different patients' counts — notation twins agree). A merged twin only
+    fills count fields the kept row left null.
+    """
+    merged: list[dict] = []
+    twins = 0
+    for row in rows:
+        homes = [
+            m for m in merged if matches(row.get("variant"), m.get("variant"), gene)
+        ]
+        conflict = any(
+            m.get(field) is not None
+            and row.get(field) is not None
+            and m.get(field) != row.get(field)
+            for m in homes
+            for field in COUNT_FIELDS
+        )
+        if len(homes) != 1 or conflict:
+            merged.append(dict(row))
+            continue
+        home = homes[0]
+        twins += 1
+        for field in COUNT_FIELDS:
+            if home.get(field) is None and row.get(field) is not None:
+                home[field] = row[field]
+    return merged, twins
+
+
 def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
-    pred = predicted.get("variants", [])
+    pred, merged_twin_rows = merge_notation_twins(predicted.get("variants", []), gene)
     used = set()
     pairs, fps = [], []
     for p in pred:
@@ -1648,12 +1870,18 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
     )
     for field in COUNT_FIELDS:
         gold_asserted = sum(1 for row in gold if row.get(field) is not None)
+        gold_asserted_zero = sum(1 for row in gold if row.get(field) == 0)
         observed = [
             (p.get(field), g.get(field), p["variant"])
             for p, g in pairs
             if g.get(field) is not None and p.get(field) is not None
         ]
         errors = [pv - gv for pv, gv, _ in observed]
+        # Gold encodes "no <field> reported" as an explicit 0 while the
+        # pipeline deliberately abstains with NULL, so pooled count recall
+        # mixes a convention gap with real attribution misses. Stratify.
+        observed_zero = sum(1 for _pv, gv, _v in observed if gv == 0)
+        gold_asserted_nonzero = gold_asserted - gold_asserted_zero
         count[field] = {
             "gold_asserted": gold_asserted,
             "predicted": len(observed),
@@ -1662,6 +1890,18 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
             "rmse": math.sqrt(statistics.fmean(e * e for e in errors))
             if errors
             else None,
+            "gold_asserted_zero": gold_asserted_zero,
+            "gold_asserted_nonzero": gold_asserted_nonzero,
+            "predicted_on_zero_gold": observed_zero,
+            "predicted_on_nonzero_gold": len(observed) - observed_zero,
+            "recall_zero_gold": (
+                observed_zero / gold_asserted_zero if gold_asserted_zero else None
+            ),
+            "recall_nonzero_gold": (
+                (len(observed) - observed_zero) / gold_asserted_nonzero
+                if gold_asserted_nonzero
+                else None
+            ),
         }
         disagreements.extend(
             {
@@ -1684,6 +1924,7 @@ def score_one(gene: str, pmid: str, predicted: dict, gold: list[dict]) -> dict:
         "tp": tp,
         "fp": fp,
         "fn": fn,
+        "merged_notation_twin_rows": merged_twin_rows,
         "token_usage": predicted.get("token_usage"),
         "precision": precision,
         "recall": recall,
@@ -1720,6 +1961,9 @@ def aggregate(scores: list[dict]) -> dict:
         "tp": tp,
         "fp": fp,
         "fn": fn,
+        "merged_notation_twin_rows": sum(
+            int(s.get("merged_notation_twin_rows") or 0) for s in scores
+        ),
         "precision": precision,
         "recall": recall,
         "f1": 2 * precision * recall / (precision + recall)
@@ -1768,12 +2012,30 @@ def aggregate(scores: list[dict]) -> dict:
             ((s["count"][field]["rmse"] or 0) ** 2) * s["count"][field]["predicted"]
             for s in scores
         )
+        asserted_zero = sum(
+            int(s["count"][field].get("gold_asserted_zero") or 0) for s in scores
+        )
+        observed_zero = sum(
+            int(s["count"][field].get("predicted_on_zero_gold") or 0) for s in scores
+        )
+        asserted_nonzero = asserted - asserted_zero
+        observed_nonzero = observed - observed_zero
         result["count"][field] = {
             "gold_asserted": asserted,
             "predicted": observed,
             "recall": observed / asserted if asserted else None,
             "mae": abs_sum / observed if observed else None,
             "rmse": math.sqrt(sq_sum / observed) if observed else None,
+            "gold_asserted_zero": asserted_zero,
+            "gold_asserted_nonzero": asserted_nonzero,
+            "predicted_on_zero_gold": observed_zero,
+            "predicted_on_nonzero_gold": observed_nonzero,
+            "recall_zero_gold": (
+                observed_zero / asserted_zero if asserted_zero else None
+            ),
+            "recall_nonzero_gold": (
+                observed_nonzero / asserted_nonzero if asserted_nonzero else None
+            ),
         }
     return result
 
@@ -1825,6 +2087,7 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
         "precision",
         "recall",
         "f1",
+        "merged_notation_twin_rows",
         "matched_rows",
         "counted_extra_rows",
         "precision_vs_counted_gold_pmids",
@@ -1843,6 +2106,12 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
                 f"{field}_recall",
                 f"{field}_mae",
                 f"{field}_rmse",
+                f"{field}_gold_asserted_zero",
+                f"{field}_gold_asserted_nonzero",
+                f"{field}_predicted_on_zero_gold",
+                f"{field}_predicted_on_nonzero_gold",
+                f"{field}_recall_zero_gold",
+                f"{field}_recall_nonzero_gold",
             ]
         )
     with path.open("w", newline="") as fh:
@@ -1853,6 +2122,7 @@ def write_paper_metrics_csv(scores: list[dict], path: Path) -> None:
             row = {
                 **{key: score.get(key) for key in columns[:10]},
                 **(score.get("counted_precision") or {}),
+                "merged_notation_twin_rows": score.get("merged_notation_twin_rows"),
                 "elapsed_seconds": score.get("elapsed_seconds"),
                 "input_tokens": usage.get("input_tokens"),
                 "output_tokens": usage.get("output_tokens"),
@@ -2048,6 +2318,13 @@ def write_markdown_report(report: dict, path: Path) -> None:
         ),
         *token_lines,
         *timing_lines,
+        (
+            "- Notation twins merged before scoring: "
+            f"**{overall.get('merged_notation_twin_rows', 0)}** same-paper "
+            "prediction rows that were the same variant in another notation "
+            "(equivalent-allele identity only; ambiguous or count-conflicting "
+            "rows were left separate)."
+        ),
         f"- Representation choices: {report['tools_used']}.",
         "",
         "## Blinding and scorer audit",
@@ -2096,6 +2373,35 @@ def write_markdown_report(report: dict, path: Path) -> None:
             f"| {field} | {metric['predicted']} / {metric['gold_asserted']} | "
             f"{format_rate(metric['recall'])} | {format_number(metric['mae'])} | "
             f"{format_number(metric['rmse'])} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            (
+                'Gold encodes "no such individuals reported" as an explicit 0 '
+                "while the pipeline deliberately abstains with NULL, so pooled "
+                "count recall mixes that convention gap with real attribution "
+                "misses. The stratified view separates them; the non-zero column "
+                "is the actionable attribution number."
+            ),
+            "",
+            (
+                "| field | non-zero gold: supplied / asserted | non-zero recall "
+                "| zero gold: supplied / asserted | zero recall |"
+            ),
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
+    for field in COUNT_FIELDS:
+        metric = overall["count"][field]
+        lines.append(
+            f"| {field} | {metric.get('predicted_on_nonzero_gold', 'n/a')} / "
+            f"{metric.get('gold_asserted_nonzero', 'n/a')} | "
+            f"{format_rate(metric.get('recall_nonzero_gold'))} | "
+            f"{metric.get('predicted_on_zero_gold', 'n/a')} / "
+            f"{metric.get('gold_asserted_zero', 'n/a')} | "
+            f"{format_rate(metric.get('recall_zero_gold'))} |"
         )
 
     lines.extend(

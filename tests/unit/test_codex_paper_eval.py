@@ -1116,3 +1116,127 @@ def test_table_route_carries_full_text_not_a_keyword_preview(
 
     assert "### Structured table rows" in prompts[1]
     assert marker in prompts[1], "full running text must reach the table route"
+
+
+def test_matches_legacy_stop_star_and_frameshift_notations():
+    # HGVS '*' stop against legacy X, inside compound protein+cDNA strings.
+    assert matches("p.R518* c.1522C>T", "R518X", "KCNQ1")
+    assert matches("p.Q530* c.1588C>T", "Q530X", "KCNQ1")
+    # Legacy inline-stop-distance frameshifts and 3-letter fs without new AA.
+    assert matches("p.Arg192fs c.573_577del", "R192CFS91X", "KCNQ1")
+    assert matches("P400fs", "P400FS/62X", "KCNQ1")
+    # Distinct missense at the same codon must never match.
+    assert not matches("D609N", "D609G", "KCNH2")
+    assert not matches("p.Asp609Asn c.1825G>A", "D609G", "KCNH2")
+
+
+def test_matches_normalizes_legacy_arrow_spellings():
+    assert matches("c.2592+1G->A", "c.2592+1G>A", "KCNH2")
+    assert matches("c.2592+1G→A", "c.2592+1G>A", "KCNH2")
+
+
+def test_matches_splice_shorthand_tolerates_separators():
+    assert matches("A344/SP", "A344SP", "KCNQ1")
+    assert matches("A344A/SPLICE", "A344SP", "KCNQ1")
+
+
+def test_splice_bridge_requires_intronic_offset():
+    # Curators encode splice-site variants as a terminal event at the
+    # flanking codon: c.477+1G>A is M159X.
+    assert matches("c.477+1G>A", "M159X", "KCNQ1")
+    # An exonic substitution at the same codon must NOT codon-bridge.
+    assert not matches("c.477G>A", "M159X", "KCNQ1")
+    assert not matches("c.940G>A", "G314X", "KCNQ1")
+
+
+def test_translation_bridge_is_nucleotide_verified():
+    # c.1127G>A turns an Arg codon (CGC) into His (CAC): same allele.
+    assert matches("c.1127G>A", "R376H", "SCN5A")
+    assert matches("c.1826A>G", "D609G", "KCNH2")
+    # The same cDNA change can never be the other missense at that codon.
+    assert not matches("c.1826A>G", "D609N", "KCNH2")
+    # Codon-index agreement alone is not enough.
+    assert not matches("c.1130G>A", "R376H", "SCN5A")
+
+
+def test_merge_notation_twins_bounds():
+    from benchmarks.codex_paper_eval.run_eval import merge_notation_twins
+
+    rows = [
+        {
+            "variant": "p.Arg376His",
+            "carriers": 12,
+            "affected": None,
+            "unaffected": None,
+        },
+        {"variant": "c.1127G>A", "carriers": 12, "affected": 3, "unaffected": None},
+        {"variant": "D609G", "carriers": 2, "affected": 2, "unaffected": None},
+        {"variant": "D609N", "carriers": 1, "affected": 0, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(rows, "SCN5A")
+    assert twins == 1 and len(merged) == 3
+    # The twin fills fields the kept row left null, and never overwrites.
+    assert merged[0]["carriers"] == 12 and merged[0]["affected"] == 3
+
+    # Conflicting non-null counts refuse the merge (different patients).
+    conflicted = [
+        {
+            "variant": "p.Arg376His",
+            "carriers": 12,
+            "affected": None,
+            "unaffected": None,
+        },
+        {"variant": "c.1127G>A", "carriers": 4, "affected": None, "unaffected": None},
+    ]
+    merged, twins = merge_notation_twins(conflicted, "SCN5A")
+    assert twins == 0 and len(merged) == 2
+
+
+def test_score_one_merges_twins_before_scoring():
+    prediction = {
+        "variants": [
+            {
+                "variant": "R376H",
+                "carriers": None,
+                "affected": None,
+                "unaffected": None,
+            },
+            {
+                "variant": "c.1127G>A",
+                "carriers": 12,
+                "affected": None,
+                "unaffected": None,
+            },
+        ]
+    }
+    gold = [{"variant": "R376H", "carriers": 12, "affected": None, "unaffected": None}]
+    score = score_one("SCN5A", "1", prediction, gold)
+    # One TP, no stranded cDNA FP, and the twin's count reaches the match.
+    assert (score["tp"], score["fp"], score["fn"]) == (1, 0, 0)
+    assert score["merged_notation_twin_rows"] == 1
+    assert score["count"]["carriers"]["predicted"] == 1
+
+
+def test_score_one_reports_zero_stratified_count_recall():
+    prediction = {
+        "variants": [
+            {"variant": "A1V", "carriers": 3, "affected": None, "unaffected": 0},
+            {"variant": "A2V", "carriers": None, "affected": None, "unaffected": None},
+        ]
+    }
+    gold = [
+        {"variant": "A1V", "carriers": 3, "affected": 3, "unaffected": 0},
+        {"variant": "A2V", "carriers": 2, "affected": 1, "unaffected": 0},
+    ]
+    score = score_one("KCNH2", "1", prediction, gold)
+    carriers = score["count"]["carriers"]
+    assert carriers["gold_asserted_nonzero"] == 2
+    assert carriers["gold_asserted_zero"] == 0
+    assert carriers["recall_nonzero_gold"] == pytest.approx(1 / 2)
+    unaffected = score["count"]["unaffected"]
+    assert unaffected["gold_asserted_zero"] == 2
+    assert unaffected["recall_zero_gold"] == pytest.approx(1 / 2)
+    assert unaffected["recall_nonzero_gold"] is None
+    combined = aggregate([score])
+    assert combined["count"]["unaffected"]["gold_asserted_zero"] == 2
+    assert combined["count"]["carriers"]["recall_nonzero_gold"] == pytest.approx(1 / 2)
