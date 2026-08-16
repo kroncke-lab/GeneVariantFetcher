@@ -362,6 +362,29 @@ def _apply_nonhuman_clinical_count_guard(
         }
 
 
+def _apply_phenotype_count_guard(
+    extracted_data: Optional[Dict[str, Any]],
+) -> None:
+    """Refuse copied affected/unaffected counts (always on; gold-free).
+
+    Sibling of the nonhuman guard, not of the optional outlier/classifier
+    hygiene pass: the contract forbids ``affected = carriers`` and derived
+    ``unaffected = 0`` even when COUNT_GUARD_POLICY is off.
+    """
+    if not isinstance(extracted_data, dict):
+        return
+    variants = extracted_data.get("variants")
+    if not isinstance(variants, list) or not variants:
+        return
+
+    from pipeline.phenotype_count_guard import apply_phenotype_count_guard
+
+    result = apply_phenotype_count_guard(variants)
+    if result.cleared:
+        md = extracted_data.setdefault("extraction_metadata", {})
+        md["phenotype_count_guard"] = result.as_dict()
+
+
 def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
     """Run the count-outlier guard then the count classifier in flag/clear mode.
 
@@ -1991,6 +2014,7 @@ def extract_variants(
                 _apply_nonhuman_clinical_count_guard(
                     result.extracted_data, source_text=content
                 )
+                _apply_phenotype_count_guard(result.extracted_data)
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)
                 with open(output_file, "w") as f:
@@ -2057,6 +2081,7 @@ def extract_variants(
                 _apply_nonhuman_clinical_count_guard(
                     result.extracted_data, source_text=abstract_text
                 )
+                _apply_phenotype_count_guard(result.extracted_data)
 
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)

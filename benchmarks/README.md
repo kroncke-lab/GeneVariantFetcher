@@ -8,7 +8,8 @@ Runnable evaluation sets for the GeneVariantFetcher (GVF) extraction pipeline.
 index. Protocol rollout proceeds in order:
 
 1. `gold_50`: 50 scored gene–paper attempts (48 cardiac + Nate's two BRCA2).
-2. `gold_120`: 120 manually curated cardiac-gold attempts (116 unique PMIDs).
+2. `gold_120`: 119 manually curated cardiac-gold attempts (115 unique PMIDs;
+   KCNH2 29 after removing PMID 10086972).
 3. `reviewer_546`: 546 attempts / 507 unique PMIDs in all 11 populated
    private reviewer workspaces.
 

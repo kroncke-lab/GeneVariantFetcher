@@ -2776,7 +2776,7 @@ c.4300-2A>T,1,splice,29325976,France Japan Italy Korea Belgium Taiwan Spain Neth
 c.4437+5G>A,1,splice,29325976,France Japan Italy Korea Belgium Taiwan Spain Netherlands Israel China UK Germany Denmark Canada,21273195,exclude,1,0,1,0,0,,Heart Rhythm,Milman,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2775
 c.4437+5G>A,1,intronic,29709101,Belgium,*,keep,2,2,0,0,0,,Ann Noninvasive Electrocardiol,Robyns,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2776
 c.4437+5G>A,1,splice,30059973,lots,20129283,exclude,1,0,0,1,0,,European Heart Journal,Baruteau,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2777
-c.4813+3_4813_6dup,1,intronic,29709101,Belgium,*,keep,24,11,13,0,0,,Ann Noninvasive Electrocardiol,Robyns,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2778
+c.4813+3_4813+6dup,1,intronic,29709101,Belgium,*,keep,24,11,13,0,0,,Ann Noninvasive Electrocardiol,Robyns,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2778
 c.4813+6_4819+9dupGGGT,1,splice,29325976,France Japan Italy Korea Belgium Taiwan Spain Netherlands Israel China UK Germany Denmark Canada,*,keep,1,0,1,0,0,,Heart Rhythm,Milman,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2779
 c.4895G>T,1,unknown,29325976,France Japan Italy Korea Belgium Taiwan Spain Netherlands Israel China UK Germany Denmark Canada,*,keep,1,0,1,0,0,,Heart Rhythm,Milman,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2780
 c.5265_5270del insA,1,frameshift,29325976,France Japan Italy Korea Belgium Taiwan Spain Netherlands Israel China UK Germany Denmark Canada,*,keep,1,0,1,0,0,,Heart Rhythm,Milman,2018,*,,,,,no,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2781

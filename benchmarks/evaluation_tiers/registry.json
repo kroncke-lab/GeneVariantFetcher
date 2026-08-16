@@ -23,11 +23,11 @@
       "id": "gold_120",
       "order": 2,
       "manifest": "tier2_gold_120.tsv",
-      "sha256": "fdb94dff52ddee816e4e5e789517d2a723d3cc1fa7b33370f585fbfa2939840f",
-      "attempt_count": 120,
-      "unique_pmid_count": 116,
+      "sha256": "535eb8b2ac4dca58a3843e41c552c37f92ff9dde0be93140bd99490468a189b8",
+      "attempt_count": 119,
+      "unique_pmid_count": 115,
       "gene_attempt_counts": {
-        "KCNH2": 30,
+        "KCNH2": 29,
         "KCNQ1": 30,
         "RYR2": 30,
         "SCN5A": 30

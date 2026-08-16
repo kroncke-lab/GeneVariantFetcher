@@ -59,13 +59,33 @@ def test_parse_response_object():
 def test_parse_response_list():
     body = json.dumps([{"protein": "G601S"}])
     out = _parse_response(body)
-    assert out == [{"protein": "G601S"}]
+    assert [v["protein"] for v in out] == ["G601S"]
+    assert out[0]["source_layer"] == "figure"
+
+
+def test_parse_response_refuses_copied_figure_phenotype():
+    body = json.dumps(
+        {
+            "variants": [
+                {
+                    "protein": "R176W",
+                    "carriers": 8,
+                    "affected": 8,
+                    "unaffected": 0,
+                }
+            ]
+        }
+    )
+    out = _parse_response(body)
+    assert out[0]["carriers"] == 8
+    assert out[0]["affected"] is None
+    assert out[0]["unaffected"] is None
 
 
 def test_parse_response_fenced_json():
     body = '```json\n{"variants": [{"protein": "K897T"}]}\n```'
     out = _parse_response(body)
-    assert out == [{"protein": "K897T"}]
+    assert [v["protein"] for v in out] == ["K897T"]
 
 
 def test_parse_response_garbage_returns_empty():

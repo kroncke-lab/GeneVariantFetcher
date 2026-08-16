@@ -1,6 +1,6 @@
 # GVF Documentation Map
 
-Last reviewed: 2026-08-12.
+Last reviewed: 2026-08-16.
 
 Use this page to distinguish current operating instructions from dated evidence.
 When two documents disagree, use the authority order below rather than choosing
@@ -11,6 +11,8 @@ the newest-looking filename.
 | Question | Authority |
 | --- | --- |
 | What should be done next? | [`../TASKS.md`](../TASKS.md) |
+| How to raise gold-120 identity precision and cut cost? | [`PRECISION_COST_LEVERS.md`](PRECISION_COST_LEVERS.md) (ranking); paper-level evidence in `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/` |
+| How to raise affected/unaffected *value* precision? | [`AFFECTED_UNAFFECTED_PRECISION.md`](AFFECTED_UNAFFECTED_PRECISION.md) (exact-match of emitted integers; not Gate 2) |
 | What are the current measured metrics and caveats? | [`RECALL_STATUS.md`](RECALL_STATUS.md) |
 | How does the current pipeline work? | [`ARCHITECTURE.md`](ARCHITECTURE.md) and [`EXTRACTION_CONTRACT.md`](EXTRACTION_CONTRACT.md) |
 | How do I install and run it? | [`QUICKSTART.md`](QUICKSTART.md) |

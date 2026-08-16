@@ -809,6 +809,63 @@ class ExpertExtractor(BaseLLMCaller):
             "estimated_unaffected": count_estimates["unaffected"],
         }
 
+    @staticmethod
+    def _variants_have_count_observation(variants: List[dict]) -> bool:
+        """True when any parsed table row already carries a patient count."""
+        for variant in variants:
+            penetrance = variant.get("penetrance_data") or {}
+            patients = variant.get("patients") or {}
+            if any(
+                penetrance.get(field) is not None
+                for field in (
+                    "total_carriers_observed",
+                    "affected_count",
+                    "unaffected_count",
+                )
+            ):
+                return True
+            if isinstance(patients, dict) and patients.get("count") is not None:
+                return True
+        return False
+
+    @staticmethod
+    def _census_saw_explicit_count_columns(census: Optional[dict]) -> bool:
+        """True when the cheap census summed a carrier/patient-like column."""
+        if not census:
+            return False
+        basis = set(census.get("basis") or [])
+        flags = set(census.get("risk_flags") or [])
+        return (
+            "count_columns" in basis
+            and "no_explicit_carrier_count_columns" not in flags
+        )
+
+    def _allow_deterministic_table_short_circuit(
+        self,
+        parsed_variants: List[dict],
+        paper_census: dict,
+        min_variants: int,
+    ) -> bool:
+        """Refuse the LLM bypass when identities landed but counts did not.
+
+        PMID 26496715 is the type specimen: the census sees ``No. of patients``
+        and the parser emits the mutation-list identities, then the large-table
+        short-circuit ships those rows as the final extract with NULL counts.
+        Fall through to router/LLM instead of blessing the half-parse.
+        """
+        if len(parsed_variants) < min_variants:
+            return False
+        if self._census_saw_explicit_count_columns(
+            paper_census
+        ) and not self._variants_have_count_observation(parsed_variants):
+            logger.info(
+                "Refusing deterministic table short-circuit: census saw count "
+                "columns but parsed %d identities carry no counts",
+                len(parsed_variants),
+            )
+            return False
+        return True
+
     def _extract_variants_from_tables(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -6462,6 +6519,7 @@ Return strict JSON with this schema:
         deterministic_min_variants = (
             1 if self.tier_threshold <= 0 else DETERMINISTIC_PARSER_MIN_VARIANTS
         )
+        markdown_table_variants: List[dict] = []
         if estimated_variants >= LARGE_TABLE_ROW_THRESHOLD:
             parsed_variants = self._parse_markdown_table_variants(
                 scanner_text, paper.gene_symbol
@@ -6472,7 +6530,12 @@ Return strict JSON with this schema:
             # the large-table short circuit obey the same contract instead of
             # writing multiple penetrance rows that downstream summaries add.
             parsed_variants = self._dedupe_table_variants(parsed_variants)
-            if len(parsed_variants) >= deterministic_min_variants:
+            markdown_table_variants = parsed_variants
+            if self._allow_deterministic_table_short_circuit(
+                parsed_variants,
+                paper_census,
+                deterministic_min_variants,
+            ):
                 extracted_data = {
                     "paper_metadata": {
                         "pmid": paper.pmid,
@@ -6549,7 +6612,11 @@ Return strict JSON with this schema:
                 deterministic_variants.append(variant)
                 deterministic_keys.add(key)
 
-        if len(deterministic_variants) >= fixed_width_min_variants:
+        if self._allow_deterministic_table_short_circuit(
+            deterministic_variants,
+            paper_census,
+            fixed_width_min_variants,
+        ):
             extracted_data = {
                 "paper_metadata": {
                     "pmid": paper.pmid,
@@ -6654,7 +6721,10 @@ Return strict JSON with this schema:
             scanner_text, paper.gene_symbol
         )
         table_hint_variants = (
-            router_variants + deterministic_variants + pre_extracted_variants
+            router_variants
+            + deterministic_variants
+            + markdown_table_variants
+            + pre_extracted_variants
         )
         table_hints = self._format_table_hints(table_hint_variants)
         if table_hint_variants:

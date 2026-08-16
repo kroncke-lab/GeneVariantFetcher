@@ -85,9 +85,8 @@ class TestGoldStandardFixture:
         assert len(set(pmids)) == len(pmids), "no duplicates allowed"
 
     def test_count_matches_expected_baseline(self):
-        # 262 distinct PMIDs derived from the curated KCNH2 Excel database
-        # (rows where excel_variant_raw is non-empty in discrepancies.csv).
-        # If this number changes, regenerate the fixture from the normalized
-        # KCNH2 gold input or scored discrepancy artifacts and update this test.
+        # 261 distinct PMIDs after the 2026-08-15 gold erratum (10086972 was
+        # a blood-pressure paper, not KCNH2). If this number changes, regenerate
+        # the fixture from the normalized KCNH2 gold input and update this test.
         pmids = _parse_pmid_arg(f"@{self.GOLD_PATH}")
-        assert len(pmids) == 262
+        assert len(pmids) == 261

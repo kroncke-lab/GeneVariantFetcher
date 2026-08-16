@@ -18,6 +18,12 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
 
 - `TASKS.md` - active forward checklist and next-run plan. If a plan elsewhere
   conflicts with this file, `TASKS.md` wins.
+- `docs/PRECISION_COST_LEVERS.md` - how to raise gold-120 identity precision
+  and cut extraction cost (which precision denominator, $0 vs paid). Do not
+  copy numbers into this handoff.
+- `docs/AFFECTED_UNAFFECTED_PRECISION.md` - how to raise exact-match precision
+  of emitted affected/unaffected integers on gold-120. Not Gate 2. Do not
+  copy numbers into this handoff.
 - `docs/README.md` - documentation authority map: current operating references,
   append-only history, and dated evidence.
 - `docs/RECALL_STATUS.md` - live recall metrics, scored baseline artifacts,

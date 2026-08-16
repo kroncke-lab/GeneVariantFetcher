@@ -1,7 +1,8 @@
 # Gold-standard PMIDs for KCNH2 — extracted from the curated Excel database
 # Source: KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls
 # Derived from: comparison_results/discrepancies.csv (rows where Excel side has a variant)
-# Generated: 2026-05-08, 262 distinct PMIDs
+# Generated: 2026-05-08, 261 distinct PMIDs after 2026-08-15 gold erratum
+# (10086972 removed: not a KCNH2 paper)
 #
 # Use to measure pure extraction recall, bypassing PubMed/PubMind discovery and
 # Tier 1/2 relevance filtering:
@@ -16,7 +17,6 @@
 9600240
 9693036
 10086971
-10086972
 10220144
 10491368
 10517660

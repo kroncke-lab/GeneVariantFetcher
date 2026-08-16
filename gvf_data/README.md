@@ -8,8 +8,11 @@ not generated pipeline output.
 
 - `kcnh2_variant_aliases.json` - gene-specific variant alias mappings loaded by
   `utils/variant_normalizer.py`.
-- `reference_sequences/` - canonical RefSeq protein FASTA files and
-  `manifest.json`, used by `pipeline/reference_validation.py`.
+- `reference_sequences/exon_maps.json` - NCBI coding-exon protein spans for
+  structural matching (`utils/structural_alleles.py`).
+- `reference_sequences/` - canonical RefSeq protein FASTA files,
+  `manifest.json`, and `exon_maps.json`, used by
+  `pipeline/reference_validation.py` and `utils/structural_alleles.py`.
 
 ## Maintenance
 

@@ -96,6 +96,11 @@ Rules:
     gene shown in the image (e.g. KCNQ1 in a multi-gene compendium), skip it.
   * If the image is a mutation map / topology diagram, treat every labeled
     residue as a variant even if no counts are given.
+  * Do NOT copy the carrier total onto affected. affected and unaffected are
+    only people the image marks as such (filled vs empty pedigree symbols,
+    or explicit Aff/Unaff columns). If you cannot count those groups
+    separately, omit affected and unaffected.
+  * Never emit unaffected=0 just because you did not see an unaffected count.
   * Single-letter and three-letter forms are both acceptable.
   * If the image has no {gene} variants, return an empty array.
 
@@ -284,12 +289,26 @@ def _parse_response_status(text: str) -> tuple[List[Dict[str, Any]], str]:
         except json.JSONDecodeError:
             return [], "unparseable"
     if isinstance(data, list):
-        return [v for v in data if isinstance(v, dict)], "ok"
+        variants = [v for v in data if isinstance(v, dict)]
+        return _sanitize_figure_phenotype_counts(variants), "ok"
     if isinstance(data, dict):
         vars_ = data.get("variants", [])
         if isinstance(vars_, list):
-            return [v for v in vars_ if isinstance(v, dict)], "ok"
+            variants = [v for v in vars_ if isinstance(v, dict)]
+            return _sanitize_figure_phenotype_counts(variants), "ok"
     return [], "unparseable"
+
+
+def _sanitize_figure_phenotype_counts(
+    variants: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Drop figure-reader phenotype copies before they reach extraction."""
+    from pipeline.phenotype_count_guard import sanitize_copied_phenotype
+
+    for variant in variants:
+        variant.setdefault("source_layer", "figure")
+        sanitize_copied_phenotype(variant)
+    return variants
 
 
 def _read_one(

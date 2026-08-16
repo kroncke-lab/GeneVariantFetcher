@@ -92,6 +92,25 @@ The subsequent collaborator-staging refresh is recorded above; public
 annotations remain unchanged. Detailed extraction evidence is in
 `runs/20260813_experimental_146/EXPERIMENTAL_COST_AND_QC.md`.
 
+### 2026-08-15 — Diagnostic gold-120 rescore (locked predictions, live gold)
+
+Free re-score of `runs/20260813_gold120_verticalfix` predictions against the
+live gold snapshot and current matcher. No new extraction. Locked parent
+reports were not rewritten; artifacts are in
+`diagnostics/current_gold_matcher_20260815/`.
+
+| Metric | Locked 2026-08-13 | Diagnostic 2026-08-15 |
+| --- | ---: | ---: |
+| Variant recall | 534/635 (84.09%) | **545/633 (86.10%)** |
+| Raw precision | 534/1438 (37.13%) | 545/1335 (40.82%) |
+| Counted-extra precision | 534/(534+24) (95.70%) | 545/(545+10) (98.20%) |
+| Carrier supplied | 146/635 (22.99%) | 160/633 (25.28%) |
+| Carrier MAE | 0.308 | 0.2875 |
+
+KCNH2 10086972 is empty on the live key, so the 120-paper and live 119-paper
+totals match. This is not a new Gate 2 lock and does not change the four-gene
+headline. Remaining 88 FNs are classified in that diagnostic `NOTES.md`.
+
 ### 2026-08-13 — Patched gold-120 revalidation accepted; experimental launch opened
 
 The fresh current-system run in `runs/20260813_gold120_verticalfix` locked 120

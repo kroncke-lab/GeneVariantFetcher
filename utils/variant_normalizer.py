@@ -1438,15 +1438,14 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
     if simple_lower_match:
         variant = f"{simple_lower_match.group(1).upper()}{simple_lower_match.group(2)}{simple_lower_match.group(3).upper()}"
 
-    # Check comprehensive KCNH2 alias lookup first
-    if gene_symbol.upper() == "KCNH2":
-        # Try comprehensive aliases (from JSON) first
-        canonical = _lookup_alias(variant, gene_symbol)
-        if canonical:
-            # Return canonical form (single-letter for protein, as-is for cDNA)
-            if canonical.startswith("c."):
-                return canonical
+    # Gene-specific aliases (ClinVar spellings, exon-coordinate maps, …)
+    # before any format guessing. Per-gene JSON is consulted for every gene;
+    # KCNH2 still falls back to the hardcoded map inside _lookup_alias.
+    canonical = _lookup_alias(variant, gene_symbol)
+    if canonical:
+        if canonical.startswith("c."):
             return canonical
+        return canonical
 
     # Create normalizer for the gene
     normalizer = VariantNormalizer(gene_symbol)

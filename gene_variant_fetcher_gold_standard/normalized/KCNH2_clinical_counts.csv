@@ -436,7 +436,7 @@ KCNH2,[dbo].[KCNH2_clinical],434,434,pubmed,,,21496174,,2011,A80P,A80P,normalize
 KCNH2,[dbo].[KCNH2_clinical],435,435,pubmed,,,16470702,,2006,7q34q36.2Del,7Q34Q36.2DEL,normalizer,2,,,,,,,0,,,,,2,,2,2,,"mental retardation, growth retardation, microcephaly, hypermetropia, squint, bulbous nasal tip, sensori-neural hearing imparment, low set ears",crosswalk_unmatched,unmatched,,,,,,,
 KCNH2,[dbo].[KCNH2_clinical],436,436,pubmed,,,18348270,,2007,7q36.1q36.2Del,7Q36.1Q36.2DEL,normalizer,1,,,,,,,0,,,,,1,,1,1,,"mental retardation, unusual facial features, renal hypoplasia",crosswalk_unmatched,unmatched,,,,,,,
 KCNH2,[dbo].[KCNH2_clinical],437,437,pubmed,,,23631430,,2013,H703fsX,H703fsX,normalizer,,,,,,,,0,,1,,,1,,1,0,,,,normalized,H703fsX,,,,,,
-KCNH2,[dbo].[KCNH2_clinical],438,438,pubmed,,,10086972,,2000,c.2592+1G->A,c.2592+1G->A,normalizer,4,,,,,,,0,,1,,,5,,5,4,,,crosswalk_unmatched,unmatched,,,,,,,
+KCNH2,[dbo].[KCNH2_clinical],438,438,pubmed,,,10086971,,2000,c.2592+1G->A,c.2592+1G->A,normalizer,4,,,,,,,0,,1,,,5,,5,4,,,crosswalk_unmatched,unmatched,,,,,,,
 KCNH2,[dbo].[KCNH2_clinical],439,439,pubmed,,,18452873,,2008,G189Ins,G189ins,normalizer,,,,,,,,1,1,,,,1,,1,0,,LQT3,,normalized,G189Ins,,,,,,
 KCNH2,[dbo].[KCNH2_clinical],440,440,pubmed,,,19169982,,2008,G601S,G601S,normalizer,1,,,,,1,,0,,,,,1,,1,1,,Seizures,,normalized,G601S,,,,,,
 KCNH2,[dbo].[KCNH2_clinical],441,441,pubmed,,,24103226,,2014,I571V,I571V,normalizer,1,,,,,,,0,,,,,1,,1,1,,Seizures,,normalized,I571V,,,,,,

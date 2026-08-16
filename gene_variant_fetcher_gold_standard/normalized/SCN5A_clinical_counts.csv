@@ -2776,7 +2776,7 @@ SCN5A,[SCN5A].[SCN5A_papers],2774,2774,pubmed,,,29325976,,2018,c.4300-2A>T,c.430
 SCN5A,[SCN5A].[SCN5A_papers],2775,2775,pubmed,,,29325976,,2018,c.4437+5G>A,c.4437+5G>A,normalizer,,0,1,,0,,,0,,,,,,1,1,1,0,,,normalized,c.4437+5G>A,,,,,,
 SCN5A,[SCN5A].[SCN5A_papers],2776,2776,pubmed,,,29709101,,2018,c.4437+5G>A,c.4437+5G>A,normalizer,,0,0,,0,,,2,,,,,,2,2,0,0,,,normalized,c.4437+5G>A,,,,,,
 SCN5A,[SCN5A].[SCN5A_papers],2777,2777,pubmed,,,30059973,,2018,c.4437+5G>A,c.4437+5G>A,normalizer,,1,0,,0,,,0,,,,,,1,1,1,0,,,normalized,c.4437+5G>A,,,,,,
-SCN5A,[SCN5A].[SCN5A_papers],2778,2778,pubmed,,,29709101,,2018,c.4813+3_4813_6dup,c.4813+3_4813_6dup,normalizer,,0,13,,0,,,11,,,,,,24,24,13,0,,crosswalk_unmatched,unmatched,,,,,,,
+SCN5A,[SCN5A].[SCN5A_papers],2778,2778,pubmed,,,29709101,,2018,c.4813+3_4813+6dup,c.4813+3_4813+6dup,normalizer,,0,13,,0,,,11,,,,,,24,24,13,0,,crosswalk_unmatched,unmatched,,,,,,,
 SCN5A,[SCN5A].[SCN5A_papers],2779,2779,pubmed,,,29325976,,2018,c.4813+6_4819+9dupGGGT,c.4813+6_4819+9dupGGGT,normalizer,,0,1,,0,,,0,,,,,,1,1,1,0,,crosswalk_unmatched,unmatched,,,,,,,
 SCN5A,[SCN5A].[SCN5A_papers],2780,2780,pubmed,,,29325976,,2018,c.4895G>T,c.4895G>T,normalizer,,0,1,,0,,,0,,,,,,1,1,1,0,,,normalized,R1632L,,,,,,
 SCN5A,[SCN5A].[SCN5A_papers],2781,2781,pubmed,,,29325976,,2018,c.5265_5270del insA,c.5265_5270del insA,normalizer,,0,1,,0,,,0,,,,,,1,1,1,0,,crosswalk_unmatched,unmatched,,,,,,,

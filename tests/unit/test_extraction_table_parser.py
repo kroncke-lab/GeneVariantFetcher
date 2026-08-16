@@ -646,6 +646,40 @@ N: N-terminus, C: C-terminus, MS: membrane spanning, CA/VF: cardiac arrest
     }
 
 
+def test_deterministic_short_circuit_refuses_when_census_saw_counts_but_rows_have_none():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    identities = [
+        {"protein_notation": f"A{idx}V", "penetrance_data": {}} for idx in range(60)
+    ]
+    counted = [
+        {
+            "protein_notation": "A561V",
+            "penetrance_data": {"total_carriers_observed": 2},
+        }
+    ]
+    census_with_counts = {
+        "basis": ["count_columns", "variant_tokens"],
+        "risk_flags": [],
+    }
+    census_without_counts = {
+        "basis": ["variant_tokens", "row_count_proxy"],
+        "risk_flags": ["no_explicit_carrier_count_columns"],
+    }
+
+    assert extractor._allow_deterministic_table_short_circuit(
+        counted, census_with_counts, min_variants=1
+    )
+    assert extractor._allow_deterministic_table_short_circuit(
+        identities, census_without_counts, min_variants=1
+    )
+    assert not extractor._allow_deterministic_table_short_circuit(
+        identities, census_with_counts, min_variants=1
+    )
+    assert not extractor._allow_deterministic_table_short_circuit(
+        identities[:1], census_without_counts, min_variants=50
+    )
+
+
 def test_pdf_linearized_table_updates_stale_estimate_for_deterministic_short_circuit():
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
     row_blocks = []

@@ -10,7 +10,7 @@
         "blank": 9,
         "personal_communication": 2
       },
-      "unique_pmid_count": 262
+      "unique_pmid_count": 261
     },
     "KCNQ1": {
       "normalized_rows": 2189,
@@ -31,8 +31,8 @@
       "unique_pmid_count": 757
     },
     "RYR2": {
-      "normalized_rows": 1015,
-      "recall_input_rows": 1015,
+      "normalized_rows": 1013,
+      "recall_input_rows": 1013,
       "source_type_breakdown": {
         "pubmed": 1015,
         "blank": 5094
@@ -43,7 +43,7 @@
   "anomaly_counts": {
     "unmatched_variants": 499,
     "count_balance_flags": 4,
-    "duplicate_variant_source_pairs": 166,
+    "duplicate_variant_source_pairs": 164,
     "browser_total_reconciliation_rows": 2056
   },
   "generated_at_utc_ryr2": "2026-05-14T19:56:27.851812+00:00"

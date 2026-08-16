@@ -63,11 +63,11 @@
       "source_mtime_utc": "2025-03-01T14:54:51+00:00",
       "source_size_bytes": 495186,
       "sheet_name": "Sheet1",
-      "raw_row_count_total": 6109,
-      "raw_row_count_literature": 1015,
+      "raw_row_count_total": 6107,
+      "raw_row_count_literature": 1013,
       "raw_row_count_gnomad_only": 5094,
-      "normalized_row_count": 1015,
-      "recall_input_row_count": 1015,
+      "normalized_row_count": 1013,
+      "recall_input_row_count": 1013,
       "source_type_breakdown": {
         "pubmed": 1015,
         "blank": 5094

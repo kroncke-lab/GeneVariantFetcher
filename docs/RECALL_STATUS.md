@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-13.
+Last updated: 2026-08-15.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -92,10 +92,10 @@ not current defaults. The next acceptance sequence lives only in `TASKS.md`.
 ## Canonical rollout tiers
 
 The active rollout population is governed by exactly three manifests in
-`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, a 120-attempt cardiac
-gold expansion (116 unique PMIDs), and 546 full reviewer-backlog attempts (507
-unique PMIDs). These tiers govern evaluation/review scope, not the authoritative
-four-gene headline cohort below. The full tier includes BMPR2 and ranked
+`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, a 119-attempt cardiac
+gold expansion (115 unique PMIDs; KCNH2 29 after removing 10086972), and 546
+full reviewer-backlog attempts (507 unique PMIDs). These tiers govern
+evaluation/review scope, not the authoritative four-gene headline cohort below. The full tier includes BMPR2 and ranked
 50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 46
 rather than expanding the experimental genes.
 
@@ -124,6 +124,12 @@ identities survive with null carrier counts. Relative to the prior locked run,
 counted extras fell 58→24 while carrier absolute error moved 41/154→45/146 raw
 (41/137 trusted). This sample does not replace the canonical all-paper
 four-gene headline below.
+
+A 2026-08-15 **diagnostic** rescore of the same locked predictions against
+the live gold snapshot and current matcher lives in
+`benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/`
+(545/633 = 86.10% recall). It is not a new lock and does not replace the
+table above.
 
 ## Active 50-paper collaborator-grounded count-semantics cohort
 

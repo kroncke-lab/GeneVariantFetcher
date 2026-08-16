@@ -164,6 +164,12 @@ def test_runtime_data_is_present_in_the_installed_layout(installed_layout: Path)
         aliases = _load_gene_aliases("KCNH2")
         assert len(aliases) > 4_000
         assert aliases["P.ALA1058GLU"] == "A1058E"
+        from utils.structural_alleles import exon_map_for
+
+        ryr2 = exon_map_for("RYR2")
+        assert ryr2 is not None
+        exon3 = next(rec for rec in ryr2["exons"] if rec["exon"] == 3)
+        assert exon3["protein_del"] == "N57_G91del"
         sequence = load_reference_protein("KCNH2")
         assert sequence is not None and len(sequence) == 1_159
         print("OK", len(aliases), len(sequence))
