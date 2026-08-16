@@ -550,6 +550,17 @@ class VariantScanner:
                 )
                 continue
 
+            if self._document_assigns_variant_elsewhere(text, v.raw_text):
+                filtered_count += 1
+                logger.debug(
+                    "Scanner: filtered %s; document attributes it to %s",
+                    v.raw_text,
+                    ", ".join(
+                        sorted(self._document_gene_attribution(text, v.raw_text))
+                    ),
+                )
+                continue
+
             # Skip common comparator hotspots only when they are not the target gene.
             hotspot_genes = NON_TARGET_HOTSPOT_GENES.get(v.normalized.upper())
             if hotspot_genes and self.gene_symbol not in hotspot_genes:
@@ -662,6 +673,62 @@ class VariantScanner:
             return after[0][1]
 
         return None
+
+    # A ±50-character window is enough to see "KCNQ1 L187P" but not
+    # "...nucleotide 560 of KCNQ1, which results in a substitution of amino
+    # acid residue leucine by proline (L187P)". The document-level pass below
+    # re-reads every occurrence of the token with a window wide enough to hold
+    # a full clause.
+    DOCUMENT_ATTRIBUTION_WINDOW = 240
+
+    def _document_gene_attribution(self, text: str, raw_text: str) -> set[str]:
+        """Genes this document attaches to ``raw_text``, across all mentions.
+
+        The per-hit filter only sees one narrow window, and papers that report
+        two genes routinely name the gene once per sentence rather than next to
+        every repetition of the variant. Reading every occurrence recovers the
+        attribution that a single window misses.
+        """
+        if not text or not raw_text:
+            return set()
+        pattern = rf"(?<![A-Za-z0-9]){re.escape(raw_text)}(?![A-Za-z0-9])"
+        assigned: set[str] = set()
+        for match in re.finditer(pattern, text, re.IGNORECASE):
+            start = max(0, match.start() - self.DOCUMENT_ATTRIBUTION_WINDOW)
+            end = min(len(text), match.end() + self.DOCUMENT_ATTRIBUTION_WINDOW)
+            window = text[start:end]
+            gene = self._gene_assigned_to_variant(window, raw_text)
+            if not gene:
+                continue
+            # ``_gene_assigned_to_variant`` prefers the nearest mention
+            # *before* the token and only falls back to the one after it, so a
+            # list like "P297S KCNH2 and P1177L SCN5A" assigns P1177L to
+            # KCNH2. When a window names another gene but also names the target
+            # gene, that single reading is not trustworthy: the window
+            # abstains. It must not vote for the target either, or one
+            # ambiguous sentence would rescue a token every other sentence in
+            # the paper attributes elsewhere.
+            if gene != self.gene_symbol.upper() and self._context_mentions_gene(
+                window, self.gene_symbol
+            ):
+                continue
+            assigned.add(gene)
+        return assigned
+
+    def _document_assigns_variant_elsewhere(self, text: str, raw_text: str) -> bool:
+        """True when the whole document only ever attaches this token to
+        another gene.
+
+        Fail-open by construction: a single mention that names the target gene,
+        or a document that names no gene at all, keeps the candidate. It fires
+        only on the unambiguous case -- every attributed mention belongs to a
+        different gene -- which is how ``L187P in KCNQ1`` stops being scanned
+        as a KCNH2 variant on a paper that sequenced both.
+        """
+        assigned = self._document_gene_attribution(text, raw_text)
+        if not assigned:
+            return False
+        return self.gene_symbol.upper() not in assigned
 
     def _has_conflicting_gene_context(self, context: str, raw_text: str = "") -> bool:
         """Return true when local context names another gene but not target."""

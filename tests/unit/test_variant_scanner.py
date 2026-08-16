@@ -748,3 +748,92 @@ class TestScanDocumentConvenience:
         result = scan_document_for_variants(text, "SCN5A")
         norms = {v.normalized for v in result.variants}
         assert "R1193Q" in norms
+
+
+# =============================================================================
+# DOCUMENT-LEVEL GENE ATTRIBUTION
+# =============================================================================
+
+
+# Real papers put whole paragraphs between mentions. These fixtures pad to more
+# than the ±240-character attribution window so each mention is judged locally,
+# the way it is in a real full text.
+_FILLER = (
+    "Clinical evaluation included resting electrocardiography, exercise "
+    "testing and Holter monitoring for every family member who consented. "
+    "Corrected QT intervals were measured with Bazett's formula by two "
+    "independent readers who were blinded to genotype, and disagreements "
+    "were resolved by consensus review of the tracings. "
+)
+
+
+class TestDocumentGeneAttribution:
+    """A ±50-char window often misses the gene label; the whole document does not.
+
+    Papers that sequence two genes name the gene once per sentence rather than
+    beside every repetition of the variant, so the per-hit conflict filter sees
+    a window with no gene in it at all and keeps the token for whichever gene
+    happens to be running.
+    """
+
+    TWO_GENE_TEXT = (
+        "All exons of KCNH2 and KCNQ1 were sequenced in the probands. "
+        + _FILLER
+        + "DNA sequence analysis of the proband revealed a heterozygous "
+        "transition at nucleotide 560 of KCNQ1, which results in a "
+        "substitution of amino acid residue leucine by proline (L187P). "
+        + _FILLER
+        + "The L187P mutation is located between domains S2 and S3 of KCNQ1."
+    )
+
+    def test_other_genes_variant_is_not_scanned_for_the_target(self):
+        norms = {
+            v.normalized
+            for v in scan_document_for_variants(self.TWO_GENE_TEXT, "KCNH2").variants
+        }
+        assert "L187P" not in norms
+
+    def test_the_owning_gene_still_scans_it(self):
+        norms = {
+            v.normalized
+            for v in scan_document_for_variants(self.TWO_GENE_TEXT, "KCNQ1").variants
+        }
+        assert "L187P" in norms
+
+    def test_attribution_is_collected_across_every_mention(self):
+        scanner = VariantScanner("KCNH2")
+        assert scanner._document_gene_attribution(self.TWO_GENE_TEXT, "L187P") == {
+            "KCNQ1"
+        }
+        assert scanner._document_assigns_variant_elsewhere(self.TWO_GENE_TEXT, "L187P")
+
+    def test_ambiguous_window_abstains_instead_of_voting(self):
+        """ "P297S KCNH2 and P1177L SCN5A" must not assign P1177L to KCNH2.
+
+        The per-hit assigner prefers the nearest mention *before* the token, so
+        this window reads as KCNH2 even though the label sits immediately after
+        the variant. A window that names the target gene too abstains, which
+        leaves the candidate in place.
+        """
+        text = (
+            "In total, 5 of 44 cases carried a mutation in 1 of the 3 genes "
+            "(R190W KCNQ1, F29L KCNH2, P297S KCNH2 and P1177L SCN5A)."
+        )
+        scanner = VariantScanner("SCN5A")
+        assert scanner._document_gene_attribution(text, "P1177L") == set()
+        assert not scanner._document_assigns_variant_elsewhere(text, "P1177L")
+
+    def test_document_with_no_gene_label_keeps_everything(self):
+        text = "The proband carried L187P and a second sequence change."
+        scanner = VariantScanner("KCNH2")
+        assert scanner._document_gene_attribution(text, "L187P") == set()
+        assert not scanner._document_assigns_variant_elsewhere(text, "L187P")
+
+    def test_target_gene_mention_keeps_its_own_variant(self):
+        text = (
+            "Sequencing of KCNH2 identified the A561V substitution in the "
+            "proband. " + _FILLER + "The A561V carrier had a prolonged QTc."
+        )
+        scanner = VariantScanner("KCNH2")
+        assert "KCNH2" in scanner._document_gene_attribution(text, "A561V")
+        assert not scanner._document_assigns_variant_elsewhere(text, "A561V")

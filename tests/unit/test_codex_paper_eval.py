@@ -1149,6 +1149,14 @@ def test_splice_bridge_requires_intronic_offset():
     assert not matches("c.940G>A", "G314X", "KCNQ1")
 
 
+def test_structural_alleles_are_gene_map_not_hardcoded():
+    assert matches("EXON 3 DELETION", "p.Asn57_Gly91del", "RYR2")
+    assert matches("p.N57_G91del", "EXON 3 DELETION", "RYR2")
+    assert not matches("EXON 3 DELETION", "p.Asn57_Gly91del", "KCNH2")
+    assert matches("ΔKPQ", "p.K1505_Q1507del", "SCN5A")
+    assert not matches("ΔKPQ", "p.K1505_Q1507del", "KCNH2")
+
+
 def test_translation_bridge_is_nucleotide_verified():
     # c.1127G>A turns an Arg codon (CGC) into His (CAC): same allele.
     assert matches("c.1127G>A", "R376H", "SCN5A")
@@ -1328,3 +1336,79 @@ def test_twin_merge_never_fuses_distinct_splice_alleles():
     assert len(merged) == 3 and twins == 0
     # Scoring still bridges: matches() keeps the recall win.
     assert matches("c.477+1G>A", "M159X", "KCNQ1")
+
+
+def test_deletion_span_bridge_matches_endpoint_spellings():
+    """``c.693delCA`` and ``c.692_693delCA`` are the same two-base event.
+
+    Curated gold only ever uses the span form (0 of 6971 rows use the
+    single-coordinate spelling), so without this bridge the paper's spelling
+    is scored as a false positive next to the gold row it is identical to.
+    """
+    assert run_eval_module.matches("c.693delCA", "c.692_693delCA", "SCN5A")
+    assert run_eval_module.matches("c.692delCA", "c.692_693delCA", "SCN5A")
+
+
+def test_deletion_span_bridge_refuses_unrelated_events():
+    match = run_eval_module.cdna_deletion_endpoint_match
+    # Different deleted bases are different alleles.
+    assert not match("c.693delCA", "c.692_693delCT")
+    # A coordinate that is not an endpoint of the span never bridges.
+    assert not match("c.694delCA", "c.692_693delCA")
+    # Two open spellings, or two closed spellings, are compared as text.
+    assert not match("c.693delCA", "c.694delCA")
+    assert not match("c.692_693delCA", "c.693_694delCA")
+    # Single-base deletions are already unambiguous and must not bridge to a
+    # range.
+    assert not match("c.123delA", "c.122_123delA")
+
+
+def test_deletion_span_parse_keeps_the_open_end_open():
+    parse = run_eval_module.cdna_deletion_span
+    assert parse("c.692_693delCA") == (692, 693, "CA")
+    assert parse("c.693delCA") == (693, None, "CA")
+    assert parse("c.1234A>G") is None
+
+
+def test_deletion_span_bridge_is_allele_identity_for_twin_merge():
+    """The bridge is identity, not scoring fuzz, so twin-merge may use it.
+
+    ``merge_notation_twins`` refuses a row that is identical to more than one
+    kept row, which is what keeps the residual ``c.693_694delCA`` ambiguity
+    from fusing distinct alleles.
+    """
+    assert run_eval_module.twin_identical("c.693delCA", "c.692_693delCA", "SCN5A")
+    rows = [
+        {"variant": "c.693delCA", "carriers": 2, "affected": None, "unaffected": None},
+        {
+            "variant": "c.692_693delCA",
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+    ]
+    merged, twins = run_eval_module.merge_notation_twins(rows, "SCN5A")
+    assert twins == 1
+    assert len(merged) == 1
+    assert merged[0]["carriers"] == 2
+
+
+def test_twin_merge_refuses_an_ambiguous_deletion_endpoint():
+    rows = [
+        {
+            "variant": "c.692_693delCA",
+            "carriers": 1,
+            "affected": None,
+            "unaffected": None,
+        },
+        {
+            "variant": "c.693_694delCA",
+            "carriers": 1,
+            "affected": None,
+            "unaffected": None,
+        },
+        {"variant": "c.693delCA", "carriers": 2, "affected": None, "unaffected": None},
+    ]
+    merged, twins = run_eval_module.merge_notation_twins(rows, "SCN5A")
+    assert twins == 0
+    assert len(merged) == 3

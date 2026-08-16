@@ -1,13 +1,19 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-13.
+Last reviewed: 2026-08-16.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
 lives in [`docs/RECALL_HISTORY.md`](docs/RECALL_HISTORY.md); protocol changes
 are append-only in
-[`docs/PROTOCOL_CHANGELOG.md`](docs/PROTOCOL_CHANGELOG.md). Dated reports and
-benchmark run directories are evidence, not competing plans.
+[`docs/PROTOCOL_CHANGELOG.md`](docs/PROTOCOL_CHANGELOG.md). How to raise
+gold-120 **identity** precision and cut cost (which denominator, the 10 counted
+extras, Sol/Grok/Kimi shares, $0 vs paid) lives in
+[`docs/PRECISION_COST_LEVERS.md`](docs/PRECISION_COST_LEVERS.md). How to raise
+**affected/unaffected value** exact-match precision (not Gate 2; no one-off
+aliases) lives in
+[`docs/AFFECTED_UNAFFECTED_PRECISION.md`](docs/AFFECTED_UNAFFECTED_PRECISION.md).
+Dated reports and benchmark run directories are evidence, not competing plans.
 
 Execute the acceptance gates in order. Do not publish a new headline, update the
 dashboard, enable a default-off recovery stage, or advance to a larger cohort
@@ -19,8 +25,9 @@ The paired live cardiac rescore and Gate 1 review were recorded on 2026-08-13.
 The lead approved advancement from Gate 1 without changing the published
 headline. The requested 100--150-paper scale applies to comparison against the
 already manually curated cardiac gold standard. Gate 2 is therefore the fixed,
-gold-value-blinded `gold_120` sample: 30 source-available, count-eligible papers
-per cardiac gene (120 attempts / 116 unique PMIDs; seed 2026081301). It does not
+gold-value-blinded `gold_120` sample: originally 30 source-available,
+count-eligible papers per cardiac gene (seed 2026081301). Live membership is
+119 attempts / 115 unique PMIDs after KCNH2 10086972 was removed. It does not
 widen the experimental genes.
 
 Gate 2 is complete and **passed**. The patched-system revalidation is locked in
@@ -56,37 +63,99 @@ after this lock and score completed.
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived
       pre-correction snapshot.
-- [ ] **Gold-120 refinement follow-through (2026-08-14 iteration).** The
-      matcher/twin-merge/zero-stratified scorer, the extraction circuit-breaker
-      and gene-less mutation-table truncation fixes, and the linkage
-      codon-shadow projection gate are merged with free-measurement evidence
-      (recall 84.09→85.04, raw precision 37.13→40.48+, counted-extra 95.70→
-      97.83, carrier count recall 23.0→24.9 at improving MAE; details in
-      `docs/PROTOCOL_CHANGELOG.md`). Remaining, in order:
-      1. Run the paid full gold-120 re-extraction arm (~$10 / ~40 min, same
-         `tier2_gold_120.tsv` manifest, new run dir + rebind + lock + score)
-         to realize the extraction fixes benchmark-wide; live 4-paper
-         validation already recovered 19/22 previously-missed gold rows.
-      2. Work `docs/GOLD_CURATION_QUEUE_2026-08-14.md` with the curator
-         (~15 label errors: 2 PMID typos, 11 editorial rows, 4 transcription
-         errors, 3 duplicate rows, 1 compound row; ~+1.2 recall points of
-         denominator correction).
-      3. Targeted acquisition: KCNH2 29650123 supplement (20 FNs in ONE
-         unfetched file), caption-stub table bodies (RYR2 19926015, KCNQ1
-         14678125, KCNQ1 31520628, KCNQ1 24667783), and the tracked
-         abstract-only stratum (21 gene-paper rows listed in the 2026-08-14
-         analysis).
-      4. Deterministic count-column binder for regex_table rows (the
-         26496715 wrapped-header case: 114 gold assertions sit in a table the
-         pipeline read and flagged itself on); only after that, the Luna-max
-         post-layer count-ambiguity route with cell-quoted, fill-NULL-only,
-         unit-enumerated cards (grok-4.6 constraint list, 2026-08-14).
-      5. Port the new matcher rules to `cli/compare_variants.py` and add the
-         exon-coordinate map (RYR2 EXON 3 DELETION ↔ p.Asn57_Gly91del is
-         extracted but unmatchable today).
-      6. Residual extraction misses to investigate: RYR2 28798025 G1885E
-         (in source, still missed), KCNQ1 31293497 A590T (absent from
-         acquirable source — gold provenance question).
+- [ ] **Gold-120 refinement follow-through.** Ranking and “do not”
+      constraints: [`docs/PRECISION_COST_LEVERS.md`](docs/PRECISION_COST_LEVERS.md).
+      Paper-level evidence:
+      `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/`
+      (`PRECISION_AND_COST.md`, `NOTES.md`, `remaining_fn.tsv`). Diagnostic
+      rescore (locked predictions, live gold + current matcher, not a new
+      lock): recall 545/633 (86.10%), raw precision 40.85%, **counted-extra
+      98.55% (the Gate 2 / intended precision number)**, carrier MAE 0.292.
+      Was 98.20% before the 2026-08-16 deletion-span bridge and the
+      document-level gene-attribution pass closed two of the ten extras.
+      Remaining, in this order — **do not start the paid 119-paper re-extract
+      to chase counted-extra precision**:
+      1. Curate the **8 remaining counted extras** (only Gate 2 FP surface
+         left, and now all curator work rather than code). List and classes in
+         `PRECISION_AND_COST.md` §2a and
+         `docs/GOLD_CURATION_QUEUE_2026-08-14.md` §8: two synonymous counted
+         rows, four identity TPs against gold `0/0/0`, and the
+         `GOLD_GAP_REAL_VARIANT` identities. Do **not** drop synonymous rows
+         as a class — gold carries them with real counts (KCNQ1 `A344A`, 23
+         carriers on 30758498). The other-gene `L187P` and the `c.693delCA`
+         near-twin are closed in code (2026-08-16).
+      2. Remaining gold-queue items (`docs/GOLD_CURATION_QUEUE_2026-08-14.md`):
+         14642689, 11 editorial rows, compound `W248F + L347R`. Do **not**
+         collapse the 19216760/24394973 exon-3 family pairs (two families).
+         Do **not** delete the 780 identity-only extras to raise raw 40.82% —
+         584 sit on papers that already matched every gold row. If raw
+         precision is the target, expand gold (26746457 first; 24
+         source-confirmed).
+      3. Scorer-only generic bridges. `c.693delCA` ↔ `c.692_693delCA` is
+         **done** in both scorers and in twin identity (endpoint match on
+         identical deleted bases; ambiguity refused; single-base deletions
+         never bridge). RYR2 `c.169-198_273+820del` ↔ EXON 3 is still open.
+         Port the remaining 2026-08-14 matcher rules (arrows, stop/fs,
+         splice/translation, twin-merge) from `run_eval.py` to
+         `cli/compare_variants.py`. Structural alleles already match via
+         `utils/structural_alleles.py`; the rescore added 0 structural TPs
+         (those identities were not extracted). No per-variant aliases.
+      4. $0 Sol audit: which of the 244 locked figure-vision calls added an
+         identity the text extract already had (72% of the $9.774 mix is Sol;
+         244/393 Sol calls are vision).
+      5. Paid gold-120 re-extract (~$10 / ~40 min) **only as a recall arm**
+         on the live 119-attempt `tier2_gold_120.tsv` (10086972 removed).
+         Realizes extraction-code already landed (KCNQ1 21956039 11/11 on
+         the 4-paper check, still FN on the lock). Does not move 98.20%.
+      6. Targeted acquisition: KCNH2 29650123 (20 FNs; `mmc1.docx` on disk,
+         mutation tables are TIFFs), caption-stub table bodies (RYR2
+         19926015, KCNQ1 14678125, 31520628, 24667783), abstract-only
+         stratum from the 2026-08-14 analysis.
+      7. Deterministic `regex_table` count-column binder (26496715
+         wrapped-header; 114 gold assertions). That paper has 0 counted
+         extras — this is MAE / count-recall, not Gate 2. Short-circuit
+         refuse already landed; binder is not done. Only after the binder:
+         Luna-max post-layer count-ambiguity cards.
+      8. Residual extraction misses: RYR2 28798025 G1885E (in source, still
+         missed), KCNQ1 31293497 A590T (absent from acquirable source —
+         gold provenance).
+
+- [ ] **Affected/unaffected value precision (active goal).** Metric and
+      rejected wider-NULL rules:
+      [`docs/AFFECTED_UNAFFECTED_PRECISION.md`](docs/AFFECTED_UNAFFECTED_PRECISION.md).
+      Exact-match among supplied values on the locked gold-120 predictions,
+      not Gate 2. Baseline 51/74 affected (68.9%) and 37/56 una (66.1%).
+      The always-on guard (`pipeline/phenotype_count_guard.py`) raises that to
+      **40/51 affected (78.4%)** and 27/40 una (67.5%) on the same lock, and
+      applies on the next extract. Four rules: family copy, figure copy, a
+      non-closing partition (`affected + unaffected != carriers`), and an
+      unsourced `affected = 0`. The last two are field-scoped to `affected`
+      and destroyed **0** exact rows. Measure any new candidate for free with
+      `scripts/phenotype_value_precision.py --compare` and quote
+      `kills / destroys`, never a bare percentage — every obvious predicate
+      (`pred == 1`, `unaffected == 0`, `layer == figure`) is majority-correct.
+      Remaining work, in this order — **no per-variant / per-paper aliases**:
+      1. Pedigree / figure: count filled vs empty symbols separately; if
+         the image is not a counted split, emit carriers only. Largest
+         leftover MAE is SCN5A 15671429 (figure 23/2 vs gold 7/15).
+      2. Move compact count-semantics verification after merge (already
+         §3 below). Target: symptoms ⊂ phenotype (KCNH2 25819988 6
+         “cardiac symptoms” vs gold 9/4) and off-by-one splits. **Prerequisite:**
+         settle `pipeline/claim_verifier.py` first. `_apply_count_identity_guard`
+         implements the forbidden `unaffected = carriers - affected` and is
+         correctly skipped when a card is supplied, but
+         `_apply_consistency_guards` still runs on every card and can write
+         `affected = total` with `unaffected = 0`. Verifying after the merge
+         without settling that can manufacture the exact pattern the phenotype
+         guard then wipes — on 25819988 it would land `13/13/0`, also wrong.
+         The correct action there is to keep `carriers=13` and null the split.
+         Free first step: count how many locked cards that rewrite touched.
+      3. Do **not** refuse every n=1 `affected=1` from a short evidence
+         quote — that dropped 49 exact case reports and lowered
+         affected precision. Prompt already forbids defaulting undescribed
+         status; enforce with a real quote, not the prediction stub.
+      4. Paid re-extract only after 1–2, as a measurement of those
+         general rules. It does not by itself fix 15671429.
 
 The three manifests in
 [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) are the

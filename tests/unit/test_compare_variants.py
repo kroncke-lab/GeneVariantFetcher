@@ -440,8 +440,64 @@ class TestVariantNormalization:
 
         match, score, match_type = find_best_match("p.A178-G189del", ["A178-G189DEL"])
         assert match == "A178-G189DEL"
+
+    def test_exon_deletion_matches_protein_range_via_gene_map(self):
+        match, score, match_type = find_best_match(
+            "EXON 3 DELETION", ["p.Asn57_Gly91del"], gene="RYR2"
+        )
+        assert match == "p.Asn57_Gly91del"
         assert score == 1.0
         assert match_type == "exact"
+        assert find_best_match(
+            "EXON 3 DELETION", ["p.Asn57_Gly91del"], gene="KCNH2"
+        ) == (None, 0.0, "none")
+
+    def test_deletion_span_bridge_matches_endpoint_spelling(self):
+        """``c.693delCA`` and ``c.692_693delCA`` are the same two-base event.
+
+        Papers use the single-coordinate spelling; curated gold only ever uses
+        the span form, so without this bridge the row scores as an extra next
+        to the gold row it is identical to.
+        """
+        match, score, match_type = find_best_match(
+            "c.693delCA", ["c.692_693delCA"], gene="SCN5A"
+        )
+        assert match == "c.692_693delCA"
+        assert score == 1.0
+        assert match_type == "deletion_span"
+
+        match, _score, match_type = find_best_match(
+            "c.692delCA", ["c.692_693delCA"], gene="SCN5A"
+        )
+        assert (match, match_type) == ("c.692_693delCA", "deletion_span")
+
+    def test_deletion_span_bridge_refuses_ambiguous_and_unrelated(self):
+        # Both spans contain 693 as an endpoint; binding either would be a
+        # guess, so the bridge declines.
+        assert (
+            find_best_match(
+                "c.693delCA", ["c.692_693delCA", "c.693_694delCA"], gene="SCN5A"
+            )[2]
+            == "none"
+        )
+        # Different bases, a non-endpoint coordinate, and single-base
+        # deletions never bridge.
+        for candidate in ("c.692_693delCT", "c.700_701delCA"):
+            assert find_best_match("c.693delCA", [candidate], gene="SCN5A")[2] == "none"
+        assert (
+            find_best_match("c.123delA", ["c.122_123delA"], gene="SCN5A")[2] == "none"
+        )
+
+    def test_deletion_span_bridge_respects_consumed_candidates(self):
+        assert (
+            find_best_match(
+                "c.693delCA",
+                ["c.692_693delCA"],
+                consumed={"c.692_693delCA"},
+                gene="SCN5A",
+            )[2]
+            == "none"
+        )
 
 
 # =============================================================================

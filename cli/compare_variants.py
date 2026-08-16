@@ -1368,7 +1368,7 @@ def remove_p_prefix(variant: str) -> Optional[str]:
     return None
 
 
-def get_variant_forms(variant: str) -> Set[str]:
+def get_variant_forms(variant: str, gene: Optional[str] = None) -> Set[str]:
     """
     Get all equivalent forms of a variant for matching.
 
@@ -1378,12 +1378,18 @@ def get_variant_forms(variant: str) -> Set[str]:
     - 3-letter to 1-letter conversion
     - 1-letter to 3-letter conversion
     - With and without p. prefix
+    - Structural aliases from the gene's exon map / reference protein
     """
     forms = set()
 
     normalized = normalize_variant(variant)
     if normalized:
         forms.add(normalized)
+
+    if gene:
+        from utils.structural_alleles import expand_structural_keys
+
+        forms.update(expand_structural_keys(str(variant), gene))
 
     # Add canonical form (the most important for matching)
     canonical = to_canonical_form(variant)
@@ -1505,11 +1511,55 @@ def _positions_compatible(a: str, b: str) -> bool:
     return sb.issubset(sa)
 
 
+_CDNA_DELETION_RE = re.compile(r"^C?\.?(\d+)(?:_(\d+))?DEL([ACGT]{2,})$")
+
+
+def _cdna_deletion_span(value: str) -> Optional[Tuple[int, Optional[int], str]]:
+    """Parse a multi-base cDNA deletion into ``(start, end, sequence)``.
+
+    ``c.692_693delCA`` -> ``(692, 693, "CA")``; the legacy single-coordinate
+    spelling ``c.693delCA`` -> ``(693, None, "CA")``. Single-base deletions are
+    excluded because ``c.123delA`` is already unambiguous.
+    """
+    compact = re.sub(r"\s+", "", str(value or "").upper())
+    match = _CDNA_DELETION_RE.fullmatch(compact)
+    if not match:
+        return None
+    start, end, sequence = match.groups()
+    return int(start), int(end) if end else None, sequence
+
+
+def _deletion_endpoint_match(left: str, right: str) -> bool:
+    """True when a one-coordinate deletion names an endpoint of the same span.
+
+    Papers write the same two-base event as ``c.693delCA`` or
+    ``c.692_693delCA``; curated gold only ever uses the span form. Requiring
+    identical deleted bases and the lone coordinate to *be* one of the span
+    endpoints avoids inventing a position -- it never bridges two open
+    spellings and never guesses which end was written. Span width is not
+    required to equal the sequence length because gold itself carries
+    ``c.4066_4068delTT`` and ``c.5355_5354delCT``.
+    """
+    first, second = _cdna_deletion_span(left), _cdna_deletion_span(right)
+    if not first or not second:
+        return False
+    left_start, left_end, left_seq = first
+    right_start, right_end, right_seq = second
+    if left_seq != right_seq:
+        return False
+    if (left_end is None) == (right_end is None):
+        return False
+    if left_end is None:
+        return left_start in (right_start, right_end)
+    return right_start in (left_start, left_end)
+
+
 def find_best_match(
     query_variant: str,
     candidates: List[str],
     threshold: float = 0.85,
     consumed: Optional[Set[str]] = None,
+    gene: Optional[str] = None,
 ) -> Tuple[Optional[str], float, str]:
     """
     Find the best matching variant from candidates.
@@ -1527,15 +1577,28 @@ def find_best_match(
         Tuple of (best_match, score, match_type).
     """
     consumed = consumed or set()
-    query_forms = get_variant_forms(query_variant)
+    query_forms = get_variant_forms(query_variant, gene)
 
     # First try exact match on any form.
     for candidate in candidates:
         if candidate in consumed:
             continue
-        candidate_forms = get_variant_forms(candidate)
+        candidate_forms = get_variant_forms(candidate, gene)
         if query_forms & candidate_forms:
             return (candidate, 1.0, "exact")
+
+    # Deletion-span bridge: one spelling names a single coordinate, the other
+    # the full span (c.693delCA vs c.692_693delCA). Refuse when more than one
+    # unconsumed candidate qualifies -- an ambiguous endpoint must not be
+    # bound arbitrarily.
+    span_hits = [
+        candidate
+        for candidate in candidates
+        if candidate not in consumed
+        and _deletion_endpoint_match(query_variant, candidate)
+    ]
+    if len(span_hits) == 1:
+        return (span_hits[0], 1.0, "deletion_span")
 
     # Fuzzy matching with a positional-digit guard. Only consider candidates
     # whose position digits overlap with the query — this prevents
@@ -1549,7 +1612,7 @@ def find_best_match(
         if not _positions_compatible(query_variant, candidate):
             continue
 
-        cand_forms = get_variant_forms(candidate)
+        cand_forms = get_variant_forms(candidate, gene)
         for q_form in query_forms:
             for c_form in cand_forms:
                 if not _positions_compatible(q_form, c_form):
@@ -2088,10 +2151,11 @@ def _find_cdna_protein_bridge(
     return None
 
 
-def _entry_variant_forms(entry: Dict[str, Any]) -> Set[str]:
+def _entry_variant_forms(entry: Dict[str, Any], gene: Optional[str] = None) -> Set[str]:
     """Return every comparable variant form stored on a SQLite aggregate row."""
 
     forms: Set[str] = set()
+    row_gene = gene or (str(entry["gene_symbol"]) if entry.get("gene_symbol") else None)
     for variant_field in ("variant_raw", "protein_notation", "cdna_notation"):
         value = entry.get(variant_field)
         if value is None or pd.isna(value):
@@ -2099,8 +2163,25 @@ def _entry_variant_forms(entry: Dict[str, Any]) -> Set[str]:
         text = str(value).strip()
         if not text:
             continue
-        forms.update(get_variant_forms(text))
+        forms.update(get_variant_forms(text, row_gene))
     return forms
+
+
+def _infer_comparison_gene(
+    excel_data: Dict[Tuple[str, str], Dict[str, Any]],
+    sqlite_data: Dict[Tuple[str, str], Dict[str, Any]],
+) -> Optional[str]:
+    counts: Dict[str, int] = {}
+    for entry in list(sqlite_data.values()) + list(excel_data.values()):
+        symbol = entry.get("gene_symbol")
+        if not symbol or pd.isna(symbol):
+            continue
+        key = str(symbol).strip().upper()
+        if key:
+            counts[key] = counts.get(key, 0) + 1
+    if not counts:
+        return None
+    return max(counts, key=counts.get)
 
 
 def compare_data(
@@ -2108,6 +2189,7 @@ def compare_data(
     sqlite_data: Dict[Tuple[str, str], Dict[str, Any]],
     match_mode: str,
     fuzzy_threshold: float,
+    gene: Optional[str] = None,
 ) -> List[ComparisonRow]:
     """
     Compare Excel and SQLite data with greedy 1-to-1 assignment.
@@ -2122,10 +2204,14 @@ def compare_data(
         sqlite_data: Aggregated SQLite data, keyed by (pmid, canonical_variant)
         match_mode: 'exact' or 'fuzzy'
         fuzzy_threshold: Threshold for fuzzy matching
+        gene: Optional gene symbol for exon-map / reference-protein expansion
 
     Returns:
         List of ComparisonRow objects
     """
+    gene = (
+        gene or _infer_comparison_gene(excel_data, sqlite_data) or ""
+    ).upper() or None
     results: List[ComparisonRow] = []
     consumed_sqlite_keys: Set[Tuple[str, str]] = set()
     matched_excel_keys: Set[Tuple[str, str]] = set()
@@ -2162,13 +2248,13 @@ def compare_data(
         available = _available_for(excel_pmid)
 
         row: Optional[ComparisonRow] = None
-        excel_forms = get_variant_forms(excel_entry["variant_raw"])
+        excel_forms = get_variant_forms(excel_entry["variant_raw"], gene)
 
         # Exact form-intersection against all notations carried by the SQLite
         # row. The aggregate display key prefers protein_notation, but a row can
         # also carry an exact cDNA match that would otherwise be hidden.
         for sqlite_key, entry in available:
-            if excel_forms & _entry_variant_forms(entry):
+            if excel_forms & _entry_variant_forms(entry, gene):
                 consumed_sqlite_keys.add(sqlite_key)
                 matched_excel_keys.add(excel_key)
                 row = create_comparison_row(excel_entry, entry, "exact", 1.0)
@@ -2201,7 +2287,7 @@ def compare_data(
             best_score = 0.0
             for sqlite_key, entry in available:
                 for q_form in excel_forms:
-                    for c_form in _entry_variant_forms(entry):
+                    for c_form in _entry_variant_forms(entry, gene):
                         if not _positions_compatible(q_form, c_form):
                             continue
                         score = compute_similarity(q_form, c_form)
@@ -2225,7 +2311,10 @@ def compare_data(
             if row is None:
                 candidate_raws = [entry["variant_raw"] for (_, entry) in available]
                 best_match, score, match_type = find_best_match(
-                    excel_entry["variant_raw"], candidate_raws, fuzzy_threshold
+                    excel_entry["variant_raw"],
+                    candidate_raws,
+                    fuzzy_threshold,
+                    gene=gene,
                 )
                 if best_match:
                     for sqlite_key, entry in available:
@@ -2246,7 +2335,10 @@ def compare_data(
             # exact raw-string helper.
             candidate_raws = [entry["variant_raw"] for (_, entry) in available]
             best_match, score, match_type = find_best_match(
-                excel_entry["variant_raw"], candidate_raws, fuzzy_threshold
+                excel_entry["variant_raw"],
+                candidate_raws,
+                fuzzy_threshold,
+                gene=gene,
             )
             if best_match:
                 for sqlite_key, entry in available:

@@ -1508,22 +1508,9 @@ def variant_candidates(value: str, gene: str) -> list[str]:
         candidates.append(f"{residue.upper()}{position}del")
     for residue, position in re.findall(r"\bdel([A-Z])(\d{1,5})\b", value, flags=re.I):
         candidates.append(f"{residue.upper()}{position}del")
-    structural = re.search(r"exons?\s+(\d+)\s*[–—-]\s*(\d+)", value, flags=re.I)
-    if structural and re.search(r"\bdup(?:lication)?\b", value, flags=re.I):
-        candidates.append(f"EXON{structural.group(1)}_{structural.group(2)}DUP")
-    single_exon_del = re.search(r"\bexon\s+(\d+)\b.*\bdel", value, flags=re.I)
-    if single_exon_del:
-        candidates.append(f"EXON{single_exon_del.group(1)}DEL")
-    if gene == "SCN5A" and re.search(r"(?:Δ|DELTA)\s*KPQ", value, flags=re.I):
-        candidates.append("K1505_Q1507del")
-    if gene == "KCNH2":
-        insertion = re.search(
-            r"\bINS\s+[ACGT]+\s+(\d+)(?:\s*[–—-]\s*\d+)?",
-            value,
-            flags=re.I,
-        )
-        if insertion:
-            candidates.append(f"G{insertion.group(1)}ins")
+    from utils.structural_alleles import expand_structural_keys
+
+    candidates.extend(expand_structural_keys(value, gene))
     result = list(dict.fromkeys(c.strip() for c in candidates))
     _VARIANT_CANDIDATE_CACHE[cache_key] = result
     return result
@@ -1696,6 +1683,53 @@ def structural_event_key(value: str) -> tuple[int, int | None, str, str] | None:
     return int(start), int(end) if end else None, operation, inserted
 
 
+_CDNA_DELETION_RE = re.compile(r"^C?\.?(\d+)(?:_(\d+))?DEL([ACGT]{2,})$")
+
+
+def cdna_deletion_span(value: str) -> tuple[int, int | None, str] | None:
+    """Parse a multi-base cDNA deletion into ``(start, end, sequence)``.
+
+    ``c.692_693delCA`` yields ``(692, 693, "CA")``; the legacy single-coordinate
+    spelling ``c.693delCA`` yields ``(693, None, "CA")``. Single-base deletions
+    are excluded: ``c.123delA`` is already unambiguous, and bridging it would
+    let a one-base event match a range.
+    """
+    compact = re.sub(r"\s+", "", value.upper())
+    match = _CDNA_DELETION_RE.fullmatch(compact)
+    if not match:
+        return None
+    start, end, sequence = match.groups()
+    return int(start), int(end) if end else None, sequence
+
+
+def cdna_deletion_endpoint_match(left: str, right: str) -> bool:
+    """True when a one-coordinate deletion names an endpoint of the same span.
+
+    Papers write the same two-base event as ``c.693delCA`` or as
+    ``c.692_693delCA``; curators only ever use the span form (0 of 6971 gold
+    rows use the single-coordinate spelling). Requiring the deleted bases to be
+    identical and the lone coordinate to *be* one of the two endpoints keeps
+    this from inventing a position: it never bridges two open spellings, never
+    bridges different sequences, and never has to guess which end was written.
+
+    Span width is deliberately not required to equal the sequence length --
+    gold itself carries ``c.4066_4068delTT`` and ``c.5355_5354delCT``, so a
+    width check would reject curated rows.
+    """
+    first, second = cdna_deletion_span(left), cdna_deletion_span(right)
+    if not first or not second:
+        return False
+    left_start, left_end, left_seq = first
+    right_start, right_end, right_seq = second
+    if left_seq != right_seq:
+        return False
+    if (left_end is None) == (right_end is None):
+        return False
+    if left_end is None:
+        return left_start in (right_start, right_end)
+    return right_start in (left_start, left_end)
+
+
 _ARROW_RE = re.compile(r"\s*(?:-+>|→)\s*")
 
 
@@ -1704,6 +1738,10 @@ def matches(a: str, b: str, gene: str) -> bool:
 
     if not a or not b:
         return False
+    from utils.structural_alleles import structural_keys_match
+
+    if structural_keys_match(a, b, gene):
+        return True
     # Legacy arrow spellings (2592+1G->A, G→A) mean '>'.
     a = _ARROW_RE.sub(">", a)
     b = _ARROW_RE.sub(">", b)
@@ -1760,6 +1798,8 @@ def matches(a: str, b: str, gene: str) -> bool:
                 return True
             if cdna_protein_translation_consistent(right, left):
                 return True
+            if cdna_deletion_endpoint_match(left, right):
+                return True
             left_structural = structural_event_key(left)
             right_structural = structural_event_key(right)
             if left_structural and right_structural:
@@ -1798,12 +1838,17 @@ def twin_identical(a: str, b: str, gene: str) -> bool:
     are NOT allele identity — using them as identity fuses distinct alleles
     (c.477+1G>A and c.477+2T>C both splice-bridge to M159X). Identity here
     means: identical normalized notation, identical structural coordinates,
-    normalizer equality, or a nucleotide-verified cDNA<->protein translation.
+    normalizer equality, a nucleotide-verified cDNA<->protein translation, or
+    a multi-base deletion whose one-coordinate spelling names a span endpoint.
     """
     from utils.variant_normalizer import normalize_variant, variants_match
 
     if not a or not b:
         return False
+    from utils.structural_alleles import structural_keys_match
+
+    if structural_keys_match(a, b, gene):
+        return True
     a = _ARROW_RE.sub(">", a)
     b = _ARROW_RE.sub(">", b)
     for left in variant_candidates(a, gene):
@@ -1823,6 +1868,13 @@ def twin_identical(a: str, b: str, gene: str) -> bool:
             if cdna_protein_translation_consistent(left, right):
                 return True
             if cdna_protein_translation_consistent(right, left):
+                return True
+            # Same deleted bases, and the one-coordinate spelling names an
+            # endpoint of the span: allele identity, not a position bridge.
+            # ``c.693delCA`` could in principle also mean ``c.693_694delCA``,
+            # so this is only safe because merge_notation_twins refuses a row
+            # that is identical to more than one kept row.
+            if cdna_deletion_endpoint_match(left, right):
                 return True
             try:
                 if normalize_variant(left, gene) == normalize_variant(right, gene):
