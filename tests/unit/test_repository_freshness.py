@@ -90,7 +90,7 @@ def test_tasks_is_the_single_forward_checklist_without_completed_history():
         "3. Measure count semantics and recovery",
         "4. Finish the trust and fleet boundary",
         "4b. Measurement-artifact integrity (opened 2026-08-17, all $0)",
-        "4c. Cross-gene attribution: remaining audit findings (opened 2026-08-18, all $0)",
+        "4c. Cross-gene attribution: re-extract and republish (opened 2026-08-18)",
         "5. Engineering handoff follow-ups",
         "Deliberate decisions and non-goals",
     ]

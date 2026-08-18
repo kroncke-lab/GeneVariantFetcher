@@ -329,53 +329,32 @@ lever ranking is derived from them.
       sprawl was previously flagged as a major failure. Confirm nothing is
       unmerged before pruning.
 
-## 4c. Cross-gene attribution: remaining audit findings (opened 2026-08-18, all $0)
+## 4c. Cross-gene attribution: re-extract and republish (opened 2026-08-18)
 
 Context: PMID 21232165 published BRCA1 table variants as BRCA2 to collaborator
-staging. Root cause was that a variant's gene was never grounded in the source.
-The fix landed 2026-08-18; a 41-agent adversarial audit plus a grok-4.6 review
-confirmed these remaining holes. All are deterministic and need no model calls.
-See `docs/PROTOCOL_CHANGELOG.md` 2026-08-18 for what was already fixed.
+staging. The code defects are fixed (see `docs/PROTOCOL_CHANGELOG.md`
+2026-08-18, three rows). What remains is data, not code.
 
-- [ ] **Fixed-width / PDF-layout parser gene scope is fail-open with stale
-      carry-over.** `pipeline/extraction.py` `_fixed_width_gene_scope_from_table_label`
-      only sets scope on a line matching `^(?:eTable|Table)\s+\w+`, so a caption
-      below the table, or "Supplementary Data 2. Variants in HHT genes", leaves
-      the scope empty *or stale from the previous table*, and rows are stamped
-      with the run's target gene. Reproduced: caption "Polymorphisms in the
-      BRCA1 gene among probands", target BRCA2, both BRCA1 founder alleles
-      emitted as BRCA2 with carrier counts 12 and 7.
-- [ ] **In-band dividers are blind to off-roster genes, so the previous
-      section's gene stays sticky.** `_gene_section_divider` resolves against the
-      14-gene builtin roster, so after `| BRCA1 |` a later `| TTN |` or
-      `| LMNA |` is not a divider and `section_gene` stays BRCA1 — every
-      following target row is dropped on a TTN/LMNA/MYH7/PKP2/DSP run. These are
-      exactly the turnkey/no-gold genes (LMNA alone has ~1,149 corpus papers).
-      Fix needs an open-vocabulary gene-shape test, not a bigger roster.
-- [ ] **`_join_wrapped_header` swallows the divider row in borderless tables.**
-      `pipeline/table_router.py` treats a row with one populated cell as a
-      wrapped header, and a divider row is by definition one populated cell, so
-      in the separator-less branch it is concatenated into the header before
-      `parse_routed_table` sees it and the table never partitions.
-- [ ] **Vertical parser's 8-line lookahead crosses row boundaries.** A bare gene
-      symbol fails both `_valid_table_cdna` and `_valid_table_protein` and is
-      stepped over, so `KCNQ1 / c.1032G>A / - / KCNH2 / c.1841C>T / A614V` with
-      target KCNQ1 yields the chimera `KCNQ1 c.1032G>A A614V`. Note
-      `_valid_table_protein('SCN5A')` returns `'SCN5A'` (the regex is
-      IGNORECASE).
-- [ ] **Attribution map is document-global and gene-blind on the token.** If the
-      only table mentioning a token is an off-target comparison list, every
-      extract of that token is rejected, including a legitimate prose or figure
-      hit. Key the map by table as well as notation.
-- [ ] **Re-extract and re-verify the two 50-paper collaborator queues, then
-      decide republication.** The 2026-08-14 staged BRCA1/BRCA2 output is still
-      live on collaborator staging and still wrong. A run was launched and
-      stopped twice (once for a compromised fix, once because grok's findings
-      landed mid-run); nothing has been republished. Source for all 100 papers is
-      already cached, so the cost is ~$16 and no fetching.
-- [ ] **Measure the four-gene headline and gold-120 Gate 2 after the re-extract.**
-      Both are currently unmeasured against this change set.
-
+- [ ] **Re-extract the two 50-paper collaborator queues and diff old vs new.**
+      `benchmarks/curated_extraction_eval/review_pmids_50/{BRCA1,BRCA2}.txt`.
+      Source for all 100 papers is already cached under `corpus/`, so this is
+      ~$16 and needs no fetching. A run was launched and stopped twice — once on
+      a compromised fix, once when review findings landed mid-run — so no
+      re-extracted output exists yet.
+- [ ] **Decide republication after reviewing the diff.** The 2026-08-14 staged
+      output is still live on collaborator staging and still wrong. Publishing
+      is outward-facing and is Brett's call, not an automatic follow-on from the
+      re-extract. PMID 26848529 is one of only two lead-approved BRCA2
+      collaborator papers and is affected, so the BRCA2 gold provenance needs a
+      look too.
+- [ ] **Measure the four-gene headline and gold-120 Gate 2 against this change
+      set.** Both are currently unmeasured. The change set both closes leaks and
+      adds rejections, so precision and recall can move in either direction and
+      neither has been quantified end-to-end.
+- [ ] **Re-check the shipped canonical DBs for residue.** `BRCA1.db` in the
+      20260814 run contains BRCA2-only `c.5291C>G` for PMID 21232165, which the
+      spaced-cDNA fix now catches at extraction time but does not retroactively
+      remove from stored rows.
 
 ## 5. Engineering handoff follow-ups
 

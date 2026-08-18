@@ -165,6 +165,55 @@ def _find_data_zones_file(
     return None
 
 
+# A fixed-width/PDF-layout caption often carries no "Table N" label at all —
+# "Polymorphisms in the BRCA1 gene among probands", "Supplementary Data 2.
+# Variants in HHT genes". Those lines were invisible to the label regex, so the
+# table's gene scope stayed EMPTY (fail-open: BRCA1 founder alleles 185delAG
+# and 5382insC shipped as BRCA2 with carrier counts) or, worse, STALE from the
+# previous table.
+#
+# Anchored on a caption noun rather than on arbitrary prose, and refused when
+# the line reads as a comparison, so "compared with BRCA1 carriers" above a
+# BRCA2 table cannot reject it.
+_FIXED_WIDTH_CAPTION_NOUNS = (
+    "mutation",
+    "variant",
+    "polymorphism",
+    "substitution",
+    "allele",
+    "sequence change",
+)
+
+_FIXED_WIDTH_CAPTION_REFUSALS = (
+    "compared",
+    "comparison",
+    "versus",
+    " vs ",
+    "unlike",
+    "previously reported",
+    "in contrast",
+    "negative",
+    "without",
+)
+
+
+def _table_label_key(text: Optional[str]) -> Optional[str]:
+    """Normalise a caption or source_location to a stable table key.
+
+    "Table 3. Polymorphisms in ...", "Table 3 (regex extraction)" and "Table 3"
+    must all resolve to the same table so a variant can be matched against the
+    table it actually came from.
+    """
+    if not text:
+        return None
+    match = re.search(
+        r"(e?table\s*\d+[a-z]?|tbl\.?\s*\d+[a-z]?)", str(text), re.IGNORECASE
+    )
+    if not match:
+        return None
+    return re.sub(r"\s+", " ", match.group(1)).strip().lower()
+
+
 def _anchored_table_caption(candidates: list) -> str:
     """Return a table's caption from the lines above it, or "" if unanchored.
 
@@ -1525,8 +1574,9 @@ class ExpertExtractor(BaseLLMCaller):
         from pipeline.table_router import _gene_section_divider
         from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 
-        attribution: dict[str, set] = {}
+        attribution: dict = {}
         caption_candidates: list[str] = []
+        current_label: Optional[str] = None
         table_scope: set = set()
         section_scope: set = set()
         in_table = False
@@ -1547,6 +1597,7 @@ class ExpertExtractor(BaseLLMCaller):
                 in_table = False
                 table_scope = set()
                 section_scope = set()
+                current_label = None
                 if stripped:
                     caption_candidates.append(stripped)
                     del caption_candidates[:-3]
@@ -1557,9 +1608,9 @@ class ExpertExtractor(BaseLLMCaller):
             cells = [c.strip() for c in stripped.strip("|").split("|")]
             if not in_table:
                 in_table = True
-                table_scope = self._gene_scope_from_table_label(
-                    _anchored_table_caption(caption_candidates)
-                )
+                caption = _anchored_table_caption(caption_candidates)
+                table_scope = self._gene_scope_from_table_label(caption)
+                current_label = _table_label_key(caption)
                 section_scope = set()
                 caption_candidates = []
                 continue  # header row carries no variant
@@ -1640,6 +1691,10 @@ class ExpertExtractor(BaseLLMCaller):
                     if token.upper() in {g.upper() for g in own}:
                         continue
                     attribution.setdefault(token.upper(), set()).update(scope)
+                    if current_label:
+                        attribution.setdefault(
+                            (current_label, token.upper()), set()
+                        ).update(scope)
 
         return attribution
 
@@ -1679,13 +1734,25 @@ class ExpertExtractor(BaseLLMCaller):
             gene = v.get("gene_symbol", "") or ""
             gene_upper = gene.upper()
 
+            # Attribution is only evidence about the table the row came from.
+            # The map is document-global, so a row extracted from prose, a
+            # figure, or the LLM's narrative pass was being deleted whenever
+            # some unrelated "previously reported in GENE_X" table happened to
+            # list the same notation. Only a row that carries table provenance
+            # is judged, and it is judged against ITS OWN table when that table
+            # is known.
+            source_table = _table_label_key(
+                v.get("source_table") or v.get("source_location")
+            )
             source_genes: set = set()
             for key in ("protein_notation", "cdna_notation"):
                 token = (v.get(key) or "").replace("p.", "").strip().upper()
                 token = re.sub(r"\s+", "", token)
                 if not token:
                     continue
-                if token in attribution:
+                if source_table and (source_table, token) in attribution:
+                    source_genes |= attribution[(source_table, token)]
+                elif source_table and token in attribution:
                     source_genes |= attribution[token]
             if source_genes and target_upper not in source_genes:
                 misattributed += 1
@@ -2280,6 +2347,23 @@ class ExpertExtractor(BaseLLMCaller):
     def _valid_table_protein(self, value: Optional[str]) -> Optional[str]:
         cleaned = self._clean_table_cell(value)
         if not cleaned:
+            return None
+        # A gene symbol is not a protein change. The notation regex below is
+        # IGNORECASE, so "SCN5A" parsed as a protein call (S-5-A) and a bare
+        # gene cell became a variant — and, in the vertical parser, the marker
+        # that should have ENDED the previous record instead disappeared into
+        # it. Checked against the roster and by symbol shape so off-roster
+        # panel genes are caught too.
+        from pipeline.table_router import _looks_like_gene_symbol
+        from utils.gene_metadata import known_gene_aliases
+
+        bare = cleaned.strip().strip("*: ")
+        if bare.upper() in {
+            str(g).strip().upper()
+            for g in known_gene_aliases(include_query_aliases=False)
+        }:
+            return None
+        if _looks_like_gene_symbol(bare) and not re.search(r"\d", bare[1:]):
             return None
         if (
             cleaned.lower().startswith("p")
@@ -4397,11 +4481,20 @@ class ExpertExtractor(BaseLLMCaller):
             if current_table_has_patient_rows is None:
                 current_table_has_patient_rows = table_has_patient_rows()
 
+            # Stop the lookahead at the next record's gene marker. Without a
+            # terminator the 8-line window ran past the end of this record and
+            # paired this gene's cDNA with the NEXT gene's protein change —
+            # `KCNQ1 / c.1032G>A / - / KCNH2 / c.1841C>T / A614V` yielded the
+            # chimera `KCNQ1 c.1032G>A A614V`, a variant that does not exist.
+            from pipeline.table_router import _gene_section_divider
+
             window: list[str] = []
             for raw in lines[idx + 1 : idx + 9]:
                 cell = raw.strip()
                 if not cell:
                     continue
+                if _gene_section_divider([cell]) is not None:
+                    break
                 window.append(cell)
                 if len(window) >= 6:
                     break
@@ -4454,6 +4547,8 @@ class ExpertExtractor(BaseLLMCaller):
         if not gene_symbol:
             return []
 
+        from utils.gene_metadata import gene_alias_regex, known_gene_aliases
+
         variants: List[dict] = []
         seen = set()
         current_table_label = ""
@@ -4472,11 +4567,51 @@ class ExpertExtractor(BaseLLMCaller):
 
         for line in full_text.splitlines():
             stripped = line.strip()
-            if re.match(
+            labelled = re.match(
                 r"^(?:eTable|(?:Supplementary|Supplemental)?\s*Table)\s+\w+",
                 stripped,
                 re.IGNORECASE,
-            ):
+            )
+            unlabelled_caption = False
+            if not labelled and 0 < len(stripped) <= 160:
+                low = stripped.lower()
+                if (
+                    any(n in low for n in _FIXED_WIDTH_CAPTION_NOUNS)
+                    and not any(r in low for r in _FIXED_WIDTH_CAPTION_REFUSALS)
+                    # A data row is not a caption. Header and body rows carry
+                    # variant notation and count columns; a caption does not.
+                    and not re.search(r"\d+\s*[ACGT]\s*>\s*[ACGT]", stripped)
+                    and not re.search(r"\bc\.?\s*\d", stripped, re.IGNORECASE)
+                    # A caption is prose; a header row is columns. Fixed-width
+                    # headers keep their column gaps ("# Patient   RyR2
+                    # Mutation   Blood glucose"), and such a row names the gene
+                    # and says "Mutation" while being nothing like a caption.
+                    and len(re.findall(r"\s{2,}", stripped)) <= 1
+                    and not stripped.lstrip().startswith("#")
+                ):
+                    # Rostered genes ONLY. `_fixed_width_gene_scope_from_table_label`
+                    # accepts any gene-shaped token, so the header row
+                    # "Status  e Change  Variant  Region" resolved "Change" to a
+                    # gene and rescoped the table to nothing real — the same
+                    # open-vocabulary trap an earlier iteration already hit with
+                    # `_GENE_SYMBOL_IGNORE`.
+                    named = {
+                        gene
+                        for gene in known_gene_aliases(include_query_aliases=False)
+                        if gene_alias_regex(gene, include_query_aliases=False).search(
+                            stripped
+                        )
+                    }
+                    if gene_symbol:
+                        target = gene_symbol.strip().upper()
+                        if re.search(
+                            rf"(?<![A-Za-z0-9]){re.escape(target)}(?![A-Za-z0-9])",
+                            stripped,
+                            re.IGNORECASE,
+                        ):
+                            named.add(target)
+                    unlabelled_caption = len(named) == 1
+            if labelled or unlabelled_caption:
                 current_table_label = stripped
                 label_lower = current_table_label.lower()
                 if "continued" not in label_lower:

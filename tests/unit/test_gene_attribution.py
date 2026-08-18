@@ -92,28 +92,103 @@ def _filter(extractor, variants, gene):
 
 def test_filter_drops_variants_the_source_assigns_to_another_gene(extractor):
     # Every variant self-reports the target gene, exactly as the extractor stamps it.
+    # Real extractor output carries table provenance, and rejection requires
+    # it: attribution is evidence about the table a row came from, not a
+    # document-wide blocklist (see test_variant_without_table_provenance_is_kept).
     variants = [
-        {"gene_symbol": "BRCA2", "protein_notation": "C61G"},  # Table 1 → BRCA1
-        {"gene_symbol": "BRCA2", "protein_notation": "Q356R"},  # Table 3 BRCA1 block
-        {"gene_symbol": "BRCA2", "protein_notation": "N289H"},  # Table 3 BRCA2 block
-        {"gene_symbol": "BRCA2", "protein_notation": "N288del"},  # Table 5 → BRCA2
+        {"gene_symbol": "BRCA2", "protein_notation": "C61G", "source_table": "Table 1"},
+        {
+            "gene_symbol": "BRCA2",
+            "protein_notation": "Q356R",
+            "source_table": "Table 3",
+        },
+        {
+            "gene_symbol": "BRCA2",
+            "protein_notation": "N289H",
+            "source_table": "Table 3",
+        },
+        {
+            "gene_symbol": "BRCA2",
+            "protein_notation": "N288del",
+            "source_table": "Table 5",
+        },
     ]
     assert _filter(extractor, variants, "BRCA2") == ["N289H", "N288del"]
 
 
 def test_filter_is_symmetric_for_the_other_gene(extractor):
     variants = [
-        {"gene_symbol": "BRCA1", "protein_notation": "C61G"},
-        {"gene_symbol": "BRCA1", "protein_notation": "Q356R"},
-        {"gene_symbol": "BRCA1", "protein_notation": "N289H"},
+        {"gene_symbol": "BRCA1", "protein_notation": "C61G", "source_table": "Table 1"},
+        {
+            "gene_symbol": "BRCA1",
+            "protein_notation": "Q356R",
+            "source_table": "Table 3",
+        },
+        {
+            "gene_symbol": "BRCA1",
+            "protein_notation": "N289H",
+            "source_table": "Table 3",
+        },
     ]
     assert _filter(extractor, variants, "BRCA1") == ["C61G", "Q356R"]
 
 
 def test_unscoped_variants_are_never_dropped(extractor):
     """Silence must not reject: only a positive assignment elsewhere rejects."""
-    variants = [{"gene_symbol": "BRCA2", "protein_notation": "V9999X"}]
+    variants = [
+        {
+            "gene_symbol": "BRCA2",
+            "protein_notation": "V9999X",
+            "source_table": "Table 1",
+        }
+    ]
     assert _filter(extractor, variants, "BRCA2") == ["V9999X"]
+
+
+def test_variant_without_table_provenance_is_kept(extractor):
+    """Attribution is evidence about a TABLE, not a document-wide blocklist.
+
+    A row extracted from prose, a figure, or the LLM's narrative pass carries no
+    source_table. Judging it against a document-global map deleted it whenever
+    an unrelated "previously reported in GENE_X" table listed the same notation.
+    """
+    variants = [{"gene_symbol": "BRCA2", "protein_notation": "C61G"}]
+    assert _filter(extractor, variants, "BRCA2") == ["C61G"]
+
+
+def test_variant_is_judged_against_its_own_table(extractor):
+    """Two tables listing the same notation must not contaminate each other."""
+    same_token = """# Paper
+
+Table 1. Variants in BRCA2 gene
+
+| cDNA | Protein | Carriers |
+|---|---|---|
+| c.9976A>T | R190W | 7 |
+
+Table 5. Previously reported BRCA1 variants
+
+| cDNA | Protein | Carriers |
+|---|---|---|
+| c.181T>G | R190W | 3 |
+"""
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA2",
+                "protein_notation": "R190W",
+                "source_table": "Table 1",
+            },
+            {
+                "gene_symbol": "BRCA2",
+                "protein_notation": "R190W",
+                "source_table": "Table 5",
+            },
+        ]
+    }
+    out = ExpertExtractor._filter_by_gene(extractor, data, "BRCA2", same_token)
+    kept = [v["source_table"] for v in out["variants"]]
+    assert kept == ["Table 1"]
 
 
 # --------------------------------------------------------------------------
@@ -170,3 +245,137 @@ def test_paired_two_gene_row_attributes_per_cell(extractor):
     )
     assert attribution["D1114N"] == {"SCN5A"}
     assert attribution["G314A"] == {"KCNQ1"}
+
+
+# --------------------------------------------------------------------------
+# TASKS.md section 4c — the audit findings not covered by the first fix round.
+# --------------------------------------------------------------------------
+
+
+def test_off_roster_gene_can_partition_a_table(extractor):
+    """Only 14 genes are registered, so `| TTN |` after `| BRCA1 |` was not a
+    divider: `section_gene` stayed BRCA1, the TTN run lost every row, and BRCA1
+    absorbed TTN's variant."""
+    from pipeline.table_router import (
+        _infer_column_mapping_from_headers,
+        enumerate_markdown_tables,
+        parse_routed_table,
+    )
+
+    paper = """# P
+
+Table 1. Panel variants
+
+| Nucleotide | Protein | Carriers |
+|---|---|---|
+| BRCA1 |  |  |
+| c.181T>G | C61G | 15 |
+| TTN |  |  |
+| c.43828C>T | R14610X | 12 |
+"""
+    table = enumerate_markdown_tables(paper)[0]
+    mapping = _infer_column_mapping_from_headers(table) or {}
+    assert [
+        r.get("cdna_notation") for r in parse_routed_table(table, mapping, "TTN")
+    ] == ["c.43828C>T"]
+    assert [
+        r.get("cdna_notation") for r in parse_routed_table(table, mapping, "BRCA1")
+    ] == ["c.181T>G"]
+
+
+def test_borderless_divider_is_not_swallowed_into_the_header(extractor):
+    """A divider has one populated cell — the same shape as a wrapped header
+    fragment — so the separator-less branch concatenated it into the header
+    ("Nucleotide" + "BRCA1") and the table never partitioned."""
+    from pipeline.table_router import (
+        _infer_column_mapping_from_headers,
+        _is_header_continuation,
+        enumerate_markdown_tables,
+        parse_routed_table,
+    )
+
+    assert _is_header_continuation(["BRCA2", "", ""]) is False
+
+    paper = """# P
+
+Table 3. Polymorphisms in BRCA1 and BRCA2 genes
+
+| Nucleotide | Protein | Carriers |
+| BRCA1 |  |  |
+| 1186A>G | Q356R | 25 |
+| BRCA2 |  |  |
+| 1093A>C | N289H | 18 |
+"""
+    got: dict = {}
+    for table in enumerate_markdown_tables(paper):
+        mapping = _infer_column_mapping_from_headers(table)
+        if not mapping:
+            continue
+        for gene in ("BRCA1", "BRCA2"):
+            got.setdefault(gene, []).extend(
+                r.get("protein_notation")
+                for r in parse_routed_table(table, mapping, gene)
+            )
+    assert [x for x in got["BRCA1"] if x] == ["Q356R"]
+    assert [x for x in got["BRCA2"] if x] == ["N289H"]
+
+
+def test_vertical_parser_does_not_pair_across_records(extractor):
+    """The 8-line lookahead ran past the end of a record and paired this gene's
+    cDNA with the NEXT gene's protein change, minting a variant that does not
+    exist."""
+    paper = """# P
+
+Table 2. Variants
+
+KCNQ1
+c.1032G>A
+-
+KCNH2
+c.1841C>T
+A614V
+"""
+    rows = ExpertExtractor._parse_vertical_gene_table_variants(
+        extractor, paper, "KCNQ1"
+    )
+    assert [(v.get("cdna_notation"), v.get("protein_notation")) for v in rows] == [
+        ("c.1032G>A", None)
+    ]
+
+
+def test_gene_symbol_is_not_a_protein_change(extractor):
+    """The protein regex is IGNORECASE, so "SCN5A" parsed as S-5-A."""
+    assert ExpertExtractor._valid_table_protein(extractor, "SCN5A") is None
+    assert ExpertExtractor._valid_table_protein(extractor, "p.R190W") == "p.R190W"
+
+
+def test_fixed_width_caption_without_a_table_label_still_scopes(extractor):
+    """PDF-layout captions often carry no "Table N" label, so the gene scope
+    stayed empty and BRCA1 founder alleles shipped as BRCA2 with counts."""
+    rows = """
+c185delAG   12   pGlu23fs   Pathogenic   40
+c5382insC    7   pGln1829fs Pathogenic   40
+"""
+    scoped = "Polymorphisms in the BRCA1 gene among probands\n" + rows
+    assert (
+        ExpertExtractor._parse_fixed_width_table_variants(extractor, scoped, "BRCA2")
+        == []
+    )
+    assert (
+        len(
+            ExpertExtractor._parse_fixed_width_table_variants(
+                extractor, scoped, "BRCA1"
+            )
+        )
+        == 2
+    )
+    # A comparison sentence is not a caption and must not reject the table.
+    compared = "Carriers compared with BRCA1 probands\n" + rows
+    assert (
+        len(
+            ExpertExtractor._parse_fixed_width_table_variants(
+                extractor, compared, "BRCA2"
+            )
+        )
+        == 2
+    )

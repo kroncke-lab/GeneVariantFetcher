@@ -994,6 +994,14 @@ def _is_header_continuation(cells: List[str]) -> bool:
     non_blank = sum(1 for c in cells if c.strip())
     if non_blank == 0:
         return False
+    # An in-band gene divider is, by definition, a row with exactly one
+    # populated cell — the same shape as a wrapped header fragment. In the
+    # separator-less branch it was therefore concatenated into the header
+    # ("Nucleotide" + "BRCA1" -> "NucleotideBRCA1") and the table never
+    # partitioned, so the second gene's rows leaked into the first gene's run.
+    # A cell that reads as a bare gene label is a divider, not a header.
+    if _gene_section_divider(cells) is not None:
+        return False
     return non_blank <= max(1, len(cells) // 3)
 
 
@@ -1656,7 +1664,24 @@ _DIVIDER_NEGATION_WORDS = {
 }
 
 
-def _gene_section_divider(cells: List[str]) -> Optional[str]:
+def _looks_like_gene_symbol(token: str) -> bool:
+    """Open-vocabulary gene-symbol shape test for a single token."""
+    token = token.strip().strip("*: ").upper()
+    if not (2 < len(token) <= 15):
+        return False
+    if not token[0].isalpha() or not token.replace("-", "").isalnum():
+        return False
+    if re.fullmatch(r"[A-Z]{1,2}\d{1,3}", token):  # F1, P040 — sample IDs
+        return False
+    return sum(c.isalpha() for c in token) >= 3
+
+
+def _gene_section_divider(
+    cells: List[str],
+    *,
+    target_gene: Optional[str] = None,
+    allow_unknown: bool = False,
+) -> Optional[str]:
     """Return the gene named by an in-band section-divider row, else None.
 
     Papers that report two genes in one table partition it with a row whose only
@@ -1687,7 +1712,25 @@ def _gene_section_divider(cells: List[str]) -> Optional[str]:
         for gene in known_gene_aliases(include_query_aliases=False)
         if gene_alias_regex(gene, include_query_aliases=False).search(token)
     }
-    if len(genes) != 1:
+    if len(genes) > 1:
+        return None
+    if not genes:
+        # Off-roster genes must be able to partition a table too. Only 14 genes
+        # are registered, so without this a `| TTN |` or `| LMNA |` row after a
+        # `| BRCA1 |` row is not a divider, `section_gene` stays BRCA1, and the
+        # TTN run loses every one of its rows while BRCA1 absorbs them.
+        #
+        # Two anchors keep this from becoming an open-vocabulary guess: the
+        # token is the gene we are extracting for, or this table has ALREADY
+        # demonstrated the bare-gene-cell partition idiom with a known gene.
+        # A gene-shaped token with neither anchor is left alone.
+        candidate = token.strip().strip("*: ")
+        if not _looks_like_gene_symbol(candidate):
+            return None
+        if target_gene and candidate.upper() == target_gene.strip().upper():
+            return candidate.upper()
+        if allow_unknown and len(words) == 1:
+            return candidate.upper()
         return None
     gene = next(iter(genes))
 
@@ -2498,6 +2541,7 @@ def parse_routed_table(
     # caption naming BOTH genes ("Polymorphisms in BRCA1 and BRCA2 genes")
     # legitimately passes the cross-gene reject yet still needs its rows split.
     section_gene: Optional[str] = None
+    seen_divider = False
 
     for row_number, row in enumerate(table.data_lines, start=1):
         cells = _split_pipe_row(row)
@@ -2506,9 +2550,12 @@ def parse_routed_table(
         if all(not c.strip() for c in cells):
             continue
 
-        divider_gene = _gene_section_divider(cells)
+        divider_gene = _gene_section_divider(
+            cells, target_gene=gene_symbol, allow_unknown=seen_divider
+        )
         if divider_gene is not None:
             section_gene = divider_gene
+            seen_divider = True
             continue
         if (
             section_gene is not None
