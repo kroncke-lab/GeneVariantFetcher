@@ -331,30 +331,33 @@ lever ranking is derived from them.
 
 ## 4c. Cross-gene attribution: re-extract and republish (opened 2026-08-18)
 
-Context: PMID 21232165 published BRCA1 table variants as BRCA2 to collaborator
-staging. The code defects are fixed (see `docs/PROTOCOL_CHANGELOG.md`
-2026-08-18, three rows). What remains is data, not code.
+Code is fixed (`cc86a5e`, `eb6666b`; see `docs/PROTOCOL_CHANGELOG.md`). What
+remains is data. Contamination is measured per paper in
+`docs/evidence/crossgene_contamination_20260818.{md,json}`: BRCA1 259/7,346
+(3.5%, 15 papers), BRCA2 113/1,426 (7.9%, 6 papers), **BMPR2 0/5,838 (clean)**.
 
-- [ ] **Re-extract the two 50-paper collaborator queues and diff old vs new.**
-      `benchmarks/curated_extraction_eval/review_pmids_50/{BRCA1,BRCA2}.txt`.
-      Source for all 100 papers is already cached under `corpus/`, so this is
-      ~$16 and needs no fetching. A run was launched and stopped twice — once on
-      a compromised fix, once when review findings landed mid-run — so no
-      re-extracted output exists yet.
-- [ ] **Decide republication after reviewing the diff.** The 2026-08-14 staged
-      output is still live on collaborator staging and still wrong. Publishing
-      is outward-facing and is Brett's call, not an automatic follow-on from the
-      re-extract. PMID 26848529 is one of only two lead-approved BRCA2
-      collaborator papers and is affected, so the BRCA2 gold provenance needs a
-      look too.
-- [ ] **Measure the four-gene headline and gold-120 Gate 2 against this change
-      set.** Both are currently unmeasured. The change set both closes leaks and
-      adds rejections, so precision and recall can move in either direction and
-      neither has been quantified end-to-end.
-- [ ] **Re-check the shipped canonical DBs for residue.** `BRCA1.db` in the
-      20260814 run contains BRCA2-only `c.5291C>G` for PMID 21232165, which the
-      spaced-cDNA fix now catches at extraction time but does not retroactively
-      remove from stored rows.
+Both contaminated run dirs already carry a `QUARANTINE.md` (gitignored, so a
+tracked companion lives in `docs/evidence/`); nothing was deleted and `corpus/`
+source is unaffected.
+
+- [ ] **Re-extract BRCA2 50 + BRCA1 50 on the fixed code, then BMPR2 50 as a
+      control** (`results/vb_reextract_20260818/`, publication OFF). BMPR2 is
+      expected to show no change; if it does, the fix is not inert on clean data
+      and that is a finding in itself. All 150 papers are cached, so ~$24 and no
+      fetching.
+- [ ] **Review the old-vs-new diff before touching Variant Browser.** Decided
+      2026-08-18: no detach, no banner, no republish until the per-paper diff is
+      read. The wrong calls are live on collaborator staging until then.
+- [ ] **Then decide VB isolation and replacement in one step.** PMID 26848529
+      (44/124 wrong) is one of only two lead-approved BRCA2 collaborator papers,
+      so the BRCA2 gold provenance needs review, not just the staged evidence.
+- [ ] **Measure the four-gene headline and gold-120 Gate 2** against this change
+      set. Unmeasured. The change set both closes leaks and adds rejections, so
+      precision and recall can move either way.
+- [ ] **Decide whether to clean stored rows in the canonical DBs.** They hold
+      1,783 rows (BRCA1) and 479 rows (BRCA2) on the affected PMIDs, and
+      `BRCA1.db` stores BRCA2-only `c.5291C>G` for 21232165. The fix prevents
+      new occurrences but does not retroactively remove stored rows.
 
 ## 5. Engineering handoff follow-ups
 

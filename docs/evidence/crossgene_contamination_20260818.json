@@ -1,0 +1,707 @@
+{
+  "generated": "2026-08-18",
+  "fixed_by": [
+    "cc86a5e",
+    "eb6666b"
+  ],
+  "what": "Per-paper cross-gene contamination in the collaborator-facing staged datasets, measured by replaying the fixed source-grounded gene filter over the stored extractions. Deterministic, no model calls.",
+  "datasets": {
+    "BRCA1": {
+      "papers_scanned": 50,
+      "variants": 7346,
+      "wrong_gene_variants": 259,
+      "pct": 3.53,
+      "affected_papers": {
+        "16949048": {
+          "variants": 56,
+          "wrong_gene": 1,
+          "examples": [
+            {
+              "variant": "K467X",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "18489799": {
+          "variants": 69,
+          "wrong_gene": 9,
+          "examples": [
+            {
+              "variant": "p.Asp156X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Phe559X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Lys1026X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Gln1037X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Ser1882X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Ser2213X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Gln2491X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Phe2638fsX",
+              "table": "Table 2"
+            }
+          ]
+        },
+        "18627636": {
+          "variants": 49,
+          "wrong_gene": 1,
+          "examples": [
+            {
+              "variant": "N72S",
+              "table": "Table 3"
+            }
+          ]
+        },
+        "20104584": {
+          "variants": 64,
+          "wrong_gene": 8,
+          "examples": [
+            {
+              "variant": "N289H",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "N991D",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "N372H",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "H743H",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "S455S",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "V1269V",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "K1132K",
+              "table": "Table 2b"
+            },
+            {
+              "variant": "G1529R",
+              "table": "Table 3"
+            }
+          ]
+        },
+        "21232165": {
+          "variants": 67,
+          "wrong_gene": 37,
+          "examples": [
+            {
+              "variant": "R259X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "E510X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "Q1089X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "S1764X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "F1870X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "Q2435X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "E3096X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "N289H",
+              "table": "Table 3"
+            }
+          ]
+        },
+        "22970155": {
+          "variants": 112,
+          "wrong_gene": 27,
+          "examples": [
+            {
+              "variant": "c.250C>T",
+              "table": "Table 1"
+            },
+            {
+              "variant": "Q421X",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1261C>T",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.2595delA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.2808_2811delACAA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "Q1037X",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.3109C>T",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.3202delG",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "23683081": {
+          "variants": 78,
+          "wrong_gene": 11,
+          "examples": [
+            {
+              "variant": "c.262_263delCT",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.1813dupA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.2830A>T",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.3263dupC",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.4631dupA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.5116_5119delAATA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.5576_5579delTTAA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.8042_8043delCA",
+              "table": "Table 4"
+            }
+          ]
+        },
+        "24549055": {
+          "variants": 217,
+          "wrong_gene": 49,
+          "examples": [
+            {
+              "variant": "c.736_755del",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.6848C>A",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.7069_7070del",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.9097dup",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.9435_9436del",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.7795_7797del",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1395A>C",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1389_1390del",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "25136594": {
+          "variants": 23,
+          "wrong_gene": 1,
+          "examples": [
+            {
+              "variant": "c.68-16delT",
+              "table": null
+            }
+          ]
+        },
+        "27741520": {
+          "variants": 135,
+          "wrong_gene": 45,
+          "examples": [
+            {
+              "variant": "c.2T>G",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.658_659delGT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1138delA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.2808_2811delACAA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.3858_3860delAAA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.4284dupT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.5073dupA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.5158_5159insA",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "27767231": {
+          "variants": 79,
+          "wrong_gene": 10,
+          "examples": [
+            {
+              "variant": "p.Asp1484fs",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Val1214fs",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Glu1511fs",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Cys1200*",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Lys944*",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Trp194*",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Ser1882*",
+              "table": "Table 1"
+            },
+            {
+              "variant": "p.Lys157fs",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "29936257": {
+          "variants": 83,
+          "wrong_gene": 19,
+          "examples": [
+            {
+              "variant": "c.658_659delGT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.771_775delTCAAA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1147delA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1899_1900insTT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.3599_3600delGT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.4284dupT",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.5213_5216delCTTA",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.5286T>A",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "30702160": {
+          "variants": 60,
+          "wrong_gene": 15,
+          "examples": [
+            {
+              "variant": "c.7655_7658delTTAA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.2636_2637delCT",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.2339C>G",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.6715G>T",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.956_957insA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.9098_9099insA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.755_755delA",
+              "table": "Table 4"
+            },
+            {
+              "variant": "c.9253delA",
+              "table": "Table 4"
+            }
+          ]
+        },
+        "31265121": {
+          "variants": 128,
+          "wrong_gene": 5,
+          "examples": [
+            {
+              "variant": "E294X",
+              "table": "Supplemental Table 2"
+            },
+            {
+              "variant": "G379R",
+              "table": "Supplemental Table 2"
+            },
+            {
+              "variant": "Q1073R",
+              "table": "Supplemental Table 2"
+            },
+            {
+              "variant": "F1241L",
+              "table": "Supplemental Table 2"
+            },
+            {
+              "variant": "S1630X",
+              "table": "Supplemental Table 2"
+            }
+          ]
+        },
+        "32211327": {
+          "variants": 94,
+          "wrong_gene": 21,
+          "examples": [
+            {
+              "variant": "c.1568A>G",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.4049A>G",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.6325G>A",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.544G>A",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.67+1G>C",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.1964delC",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.2920G>A",
+              "table": "Table 1"
+            },
+            {
+              "variant": "c.8542G>A",
+              "table": "Table 1"
+            }
+          ]
+        }
+      }
+    },
+    "BRCA2": {
+      "papers_scanned": 46,
+      "variants": 1426,
+      "wrong_gene_variants": 113,
+      "pct": 7.92,
+      "affected_papers": {
+        "15876480": {
+          "variants": 21,
+          "wrong_gene": 1,
+          "examples": [
+            {
+              "variant": "R332R",
+              "table": "Table 3"
+            }
+          ]
+        },
+        "18431501": {
+          "variants": 39,
+          "wrong_gene": 13,
+          "examples": [
+            {
+              "variant": "R762S",
+              "table": "Table 1"
+            },
+            {
+              "variant": "Y856H",
+              "table": "Table 1"
+            },
+            {
+              "variant": "L625L",
+              "table": "Table 1"
+            },
+            {
+              "variant": "P977P",
+              "table": "Table 1"
+            },
+            {
+              "variant": "K38K",
+              "table": "Table 1"
+            },
+            {
+              "variant": "D693N",
+              "table": "Table 1"
+            },
+            {
+              "variant": "S694S",
+              "table": "Table 1"
+            },
+            {
+              "variant": "L771L",
+              "table": "Table 1"
+            }
+          ]
+        },
+        "20807450": {
+          "variants": 20,
+          "wrong_gene": 13,
+          "examples": [
+            {
+              "variant": "C24X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "E143X",
+              "table": "Table 2"
+            },
+            {
+              "variant": "Q356R",
+              "table": "Table 2"
+            },
+            {
+              "variant": "D693N",
+              "table": "Table 2"
+            },
+            {
+              "variant": "S694S",
+              "table": "Table 2"
+            },
+            {
+              "variant": "L771L",
+              "table": "Table 2"
+            },
+            {
+              "variant": "P871L",
+              "table": "Table 2"
+            },
+            {
+              "variant": "E1038G",
+              "table": "Table 2"
+            }
+          ]
+        },
+        "21232165": {
+          "variants": 67,
+          "wrong_gene": 29,
+          "examples": [
+            {
+              "variant": "C39Y",
+              "table": "Table 1"
+            },
+            {
+              "variant": "C61G",
+              "table": "Table 1"
+            },
+            {
+              "variant": "C61S",
+              "table": "Table 1"
+            },
+            {
+              "variant": "C64Y",
+              "table": "Table 1"
+            },
+            {
+              "variant": "Q563X",
+              "table": "Table 1"
+            },
+            {
+              "variant": "R1751X",
+              "table": "Table 1"
+            },
+            {
+              "variant": "K1793X",
+              "table": "Table 1"
+            },
+            {
+              "variant": "C197C",
+              "table": "Table 3"
+            }
+          ]
+        },
+        "23683081": {
+          "variants": 93,
+          "wrong_gene": 13,
+          "examples": [
+            {
+              "variant": "c.68_69delAG",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.211A>G",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.470_471delCT",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.791_794delGTTC",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.1674delA",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.1687C>T",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.1965C>A",
+              "table": "Table 2"
+            },
+            {
+              "variant": "c.2900_2901dupCT",
+              "table": "Table 2"
+            }
+          ]
+        },
+        "26848529": {
+          "variants": 124,
+          "wrong_gene": 44,
+          "examples": [
+            {
+              "variant": "p.Cys328*",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Trp372*",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Asn704Cysfs*7",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Gln759*",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Lys519Argfs*13",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Ser713*",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Phe1177Leufs*33",
+              "table": "Table 2"
+            },
+            {
+              "variant": "p.Leu1306Aspfs*23",
+              "table": "Table 2"
+            }
+          ]
+        }
+      }
+    },
+    "BMPR2": {
+      "papers_scanned": 758,
+      "variants": 5838,
+      "wrong_gene_variants": 0,
+      "pct": 0.0,
+      "affected_papers": {}
+    }
+  }
+}
