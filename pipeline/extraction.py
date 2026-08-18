@@ -165,6 +165,35 @@ def _find_data_zones_file(
     return None
 
 
+def _anchored_table_caption(candidates: list) -> str:
+    """Return a table's caption from the lines above it, or "" if unanchored.
+
+    Only a line carrying an explicit table label ("Table 3.", "### Table 3")
+    counts. Treating the nearest few non-blank lines as a caption is a recall
+    bug, not a heuristic: PDF two-column linearisation and PMC markdown both put
+    arbitrary body prose — and de-piped table rows — directly above a table, so a
+    sentence such as "Carriers were compared with the KCNQ1 cohort" silently
+    rescopes an SCN5A table and every row is discarded. Measured on the cardiac
+    gold set this dropped 22 rows across 1,490 PMIDs, including all nine gold
+    variants of SCN5A 20541041.
+
+    Unanchored yields NO scope, which is fail-open: attribution then rejects
+    nothing, which is the correct direction for a recall-critical filter.
+    """
+    from pipeline.table_router import _TABLE_CAPTION_RE, _TABLE_HEADING_RE
+
+    preceding = list(reversed(candidates))
+    for pos, candidate in enumerate(preceding):
+        if _TABLE_CAPTION_RE.match(candidate):
+            return candidate
+        if _TABLE_HEADING_RE.match(candidate):
+            descriptive = preceding[pos - 1] if pos > 0 else ""
+            if descriptive and not _TABLE_HEADING_RE.match(descriptive):
+                return f"{candidate}. {descriptive}"
+            return candidate
+    return ""
+
+
 class ExpertExtractor(BaseLLMCaller):
     """
     Tier 3: Expert-level extraction using advanced LLM (GPT-4, etc.).
@@ -1045,6 +1074,26 @@ class ExpertExtractor(BaseLLMCaller):
                 row_ordinal = 0
                 header_cells = cells
                 current_table_label = _table_label(caption_candidates)
+                # Seed the table's gene scope from its CAPTION, not just its
+                # label. `_table_label` keeps only the matched "Table 1" group
+                # and throws the descriptive sentence away, so a table captioned
+                # "Mutations in BRCA1 gene in Slovenian population" carried no
+                # gene signal at all. A table with no gene column and no in-band
+                # divider row (PMID 21232165 Tables 1 and 4) then had nothing to
+                # filter on and every row inherited the run's target gene.
+                #
+                # Seeding rather than hard-rejecting is deliberate: a caption
+                # naming BOTH genes ("Polymorphisms in BRCA1 and BRCA2 genes")
+                # must stay open, and the in-band divider assignment below
+                # overwrites this seed when the table partitions itself.
+                # Anchored, for the same reason as _source_gene_attribution:
+                # an unanchored seed lets one prose sentence naming another gene
+                # delete every row of a table whose rows carry no gene of their
+                # own. Verified: "compared with the KCNQ1 cohort" above an
+                # SCN5A table returned 0 of 2 rows.
+                active_table_genes = self._gene_scope_from_table_label(
+                    _anchored_table_caption(caption_candidates)
+                )
                 caption_candidates = []
                 is_header_row = True
             else:
@@ -1439,7 +1488,164 @@ class ExpertExtractor(BaseLLMCaller):
         hints.append("\n--- END PRE-EXTRACTED HINTS ---\n")
         return "\n".join(hints)
 
-    def _filter_by_gene(self, extracted_data: dict, target_gene: str) -> dict:
+    def _source_gene_attribution(self, full_text: str) -> dict:
+        """Map each table-borne variant notation to the gene(s) the SOURCE gives it.
+
+        Gene attribution was never grounded in the source. `_filter_by_gene`
+        trusts `variant["gene_symbol"]`, but the extractor stamps that field
+        with the run's target gene, so the filter was a tautology: every
+        variant "matched" whatever gene we happened to be extracting for. On
+        PMID 21232165 that published Table 1 ("Mutations in BRCA1 gene") and
+        Table 4 ("Unclassified sequence variants in BRCA1 gene") as BRCA2 — and
+        the BRCA1 and BRCA2 runs produced byte-identical variant lists that
+        differed only in the gene column.
+
+        This walks the markdown tables and records, per notation, which genes
+        the paper itself assigns it, from two signals:
+
+          * the table CAPTION ("Mutations in BRCA1 gene ..."), and
+          * in-band partition rows (a row whose only populated cell is a bare
+            gene symbol), which split a two-gene table such as Table 3.
+
+        Returns ``{NOTATION_UPPER: {"BRCA1", ...}}``. Notations the source does
+        not scope to any gene are simply absent, so the caller drops nothing on
+        silence — this can only reject a variant the paper positively assigns
+        elsewhere.
+
+        Matching is LITERAL on purpose. An earlier version also minted a
+        position+event key ("288DEL") so BIC-style `del288N` would match the
+        emitted `N288del`. That key carries no gene, no allele and no coordinate
+        system, so a KCNQ1 `c.1032delG` and an RYR2 `c.1032_1034delAAG` collapse
+        onto one key and the legitimate variant is deleted. The gene-aware
+        primitive for this is `utils.variant_normalizer.structural_keys_match`.
+        Known residual: a structural allele written in a different order than it
+        is emitted stays unattributed, so it is kept rather than rejected —
+        fail-open, which is the correct direction for a recall-critical filter.
+        """
+        from pipeline.table_router import _gene_section_divider
+        from utils.gene_metadata import gene_alias_regex, known_gene_aliases
+
+        attribution: dict[str, set] = {}
+        caption_candidates: list[str] = []
+        table_scope: set = set()
+        section_scope: set = set()
+        in_table = False
+
+        notation_re = re.compile(
+            r"(?:p\.\s*)?([A-Z][a-z]{2}\d+[A-Za-z*]{0,3}|[A-Z]\d+[A-Za-z*]{0,3})"
+            # Allow internal spaces: PMC markdown writes `c.181T > G`, and a
+            # space-free class captured only `c.181T`, so the map key never met
+            # the emitted `c.181T>G` and the reject silently skipped. Whitespace
+            # is stripped from the captured token below.
+            r"|(c\.\s*[\w\[\]]+(?:\s*[>+\-_*]\s*[\w\[\]]+)*)"
+            r"|((?:del|dup|ins)\s*\d+\s*[A-Za-z]*|\d+\s*(?:del|dup|ins)[A-Za-z]*)"
+        )
+
+        for line in full_text.splitlines():
+            stripped = line.strip()
+            if not stripped.startswith("|"):
+                in_table = False
+                table_scope = set()
+                section_scope = set()
+                if stripped:
+                    caption_candidates.append(stripped)
+                    del caption_candidates[:-3]
+                continue
+            if set(stripped) <= {"|", "-", " ", ":"}:
+                continue
+
+            cells = [c.strip() for c in stripped.strip("|").split("|")]
+            if not in_table:
+                in_table = True
+                table_scope = self._gene_scope_from_table_label(
+                    _anchored_table_caption(caption_candidates)
+                )
+                section_scope = set()
+                caption_candidates = []
+                continue  # header row carries no variant
+
+            # Reuse the router's divider test rather than gene-scoping the
+            # cell text. `_gene_scope_from_table_label` uses `.search()`, so
+            # "BRCA1 negative subgroup" or "Patients without BRCA1 mutations"
+            # read as a BRCA1 divider and flip the section gene for the REST of
+            # the table, deleting the target gene's remaining rows.
+            divider_gene = _gene_section_divider(cells)
+            if divider_gene:
+                section_scope = {divider_gene}
+                continue
+
+            # Precedence: a gene named in the ROW itself beats the section
+            # divider, which beats the caption. A row reading
+            # `| BRCA2 | c.9976A>T | K3326X | 12 |` is unambiguous evidence
+            # about that row, and must not be overruled by a caption naming
+            # another gene — otherwise the row's own gene column gets it
+            # deleted. This mirrors the precedence the sibling regex parser
+            # already applies at `context_genes = set(row_genes) or ...`.
+            # Attribution is per CELL, not per row. Papers pair two genes on
+            # one line — PMID 20541041 has
+            # `| K  KCNQ1 | G314A | Pore | SCN5A  D1114N | DII/DIII |` — so a
+            # row-level scope is genuinely ambiguous and picking either gene
+            # mislabels the other one's variant. A notation sitting in a cell
+            # that also names exactly one gene belongs to THAT gene.
+            #
+            # Cells are matched with `_gene_section_divider`-style strictness
+            # only for the bare-label case; for a cell that carries both a gene
+            # and a notation we accept the gene mention directly, because the
+            # pairing is the evidence.
+            cell_genes: list = []
+            for cell in cells:
+                found = {
+                    gene
+                    for gene in known_gene_aliases(include_query_aliases=False)
+                    if gene_alias_regex(gene, include_query_aliases=False).search(cell)
+                }
+                cell_genes.append(found)
+
+            # The row-level fallback may only draw on cells that ARE a gene
+            # label. A prose cell that merely mentions one — a phenotype column
+            # reading "BRCA1-associated breast cancer" — must not claim the
+            # row, or the legitimate BRCA2 variant beside it is deleted.
+            row_genes: set = set()
+            for cell in cells:
+                label_gene = (
+                    _gene_section_divider([cell.strip()]) if cell.strip() else None
+                )
+                if label_gene:
+                    row_genes.add(label_gene)
+
+            for idx, cell in enumerate(cells):
+                own = cell_genes[idx]
+                if len(own) == 1:
+                    scope = own
+                elif own:
+                    continue  # this cell names several genes — ambiguous
+                elif len(row_genes) == 1:
+                    scope = set(row_genes)
+                elif row_genes:
+                    # multi-gene row and this cell names none of them: which
+                    # gene the notation belongs to is unknowable here, so stay
+                    # silent rather than guess. Silence rejects nothing.
+                    continue
+                else:
+                    scope = section_scope or table_scope
+                if not scope:
+                    continue
+                for match in notation_re.finditer(cell):
+                    token = (
+                        match.group(1) or match.group(2) or match.group(3) or ""
+                    ).strip()
+                    token = re.sub(r"\s+", "", token)
+                    if len(token) < 3:
+                        continue
+                    if token.upper() in {g.upper() for g in own}:
+                        continue
+                    attribution.setdefault(token.upper(), set()).update(scope)
+
+        return attribution
+
+    def _filter_by_gene(
+        self, extracted_data: dict, target_gene: str, full_text: str = ""
+    ) -> dict:
         """
         Filter variants to only keep those matching the target gene.
 
@@ -1463,15 +1669,40 @@ class ExpertExtractor(BaseLLMCaller):
         filtered_variants = []
         removed_genes = set()
 
+        # Source-grounded attribution: the self-reported gene_symbol below is
+        # stamped with the target gene, so on its own this filter can never
+        # reject anything. Consult what the paper's own tables say.
+        attribution = self._source_gene_attribution(full_text) if full_text else {}
+        misattributed = 0
+
         for v in variants:
             gene = v.get("gene_symbol", "") or ""
             gene_upper = gene.upper()
+
+            source_genes: set = set()
+            for key in ("protein_notation", "cdna_notation"):
+                token = (v.get(key) or "").replace("p.", "").strip().upper()
+                token = re.sub(r"\s+", "", token)
+                if not token:
+                    continue
+                if token in attribution:
+                    source_genes |= attribution[token]
+            if source_genes and target_upper not in source_genes:
+                misattributed += 1
+                removed_genes.update(source_genes)
+                continue
 
             # Keep if gene matches target or is empty/unknown
             if not gene or gene_upper == target_upper or gene_upper in ("UNKNOWN", ""):
                 filtered_variants.append(v)
             else:
                 removed_genes.add(gene)
+
+        if misattributed:
+            logger.info(
+                f"Gene attribution: dropped {misattributed} variant(s) the source "
+                f"assigns to a gene other than {target_upper}"
+            )
 
         removed_count = original_count - len(filtered_variants)
 
@@ -6561,6 +6792,17 @@ Return strict JSON with this schema:
                         "paper_census": paper_census,
                     },
                 }
+                # Ground the gene before returning. This path bypasses the
+                # LLM entirely, so it also bypassed the only source-grounded
+                # gene check in the pipeline (`_filter_by_gene`, reached far
+                # below): a large two-gene table returned every row stamped with
+                # the run's target gene. Already observed in production —
+                # results/BMPR2/20260807_163246 PMID 29650961, 120 variants,
+                # model_used="deterministic-table-parser".
+                if paper.gene_symbol:
+                    extracted_data = self._filter_by_gene(
+                        extracted_data, paper.gene_symbol, scanner_text
+                    )
                 return ExtractionResult(
                     pmid=paper.pmid,
                     success=True,
@@ -6651,6 +6893,11 @@ Return strict JSON with this schema:
                 if fixed_width_variants and not vertical_variants
                 else "deterministic-table-layout-parser"
             )
+            # Same grounding gap as the markdown large-table path above.
+            if paper.gene_symbol:
+                extracted_data = self._filter_by_gene(
+                    extracted_data, paper.gene_symbol, scanner_text
+                )
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
@@ -6681,6 +6928,13 @@ Return strict JSON with this schema:
                     paper_census
                 )
                 if len(router_variants) >= deterministic_min_variants:
+                    # The router applies its own caption/divider guards, but a
+                    # table it routed with no gene column and no divider is
+                    # still ungrounded; run the source check before returning.
+                    if paper.gene_symbol:
+                        router_outcome.extracted_data = self._filter_by_gene(
+                            routed_data, paper.gene_symbol, scanner_text
+                        )
                     return router_outcome
                 logger.info(
                     "PMID %s - Router parsed only %d variants; continuing with "
@@ -6870,7 +7124,9 @@ Return strict JSON with this schema:
 
             # Filter variants to only keep those matching the target gene
             if paper.gene_symbol:
-                extracted_data = self._filter_by_gene(extracted_data, paper.gene_symbol)
+                extracted_data = self._filter_by_gene(
+                    extracted_data, paper.gene_symbol, scanner_text
+                )
                 # Filter out extraction artifacts (p.XXX, invalid positions, etc.)
                 extracted_data = self._filter_extraction_artifacts(
                     extracted_data, paper.gene_symbol

@@ -64,6 +64,20 @@ BUILTIN_GENE_METADATA: dict[str, GeneMetadata] = {
         protein_length=1863,
         sources=("builtin",),
     ),
+    "BRCA2": GeneMetadata(
+        symbol="BRCA2",
+        aliases=("BRCA2", "FANCD1", "BRCC2", "FACD", "breast cancer 2"),
+        query_aliases=(
+            "BRCA2",
+            "FANCD1",
+            "BRCC2",
+            "FACD",
+            "FAD1",
+            "breast cancer 2",
+        ),
+        protein_length=3418,
+        sources=("builtin",),
+    ),
     "MYBPC3": GeneMetadata(
         symbol="MYBPC3",
         aliases=(

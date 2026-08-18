@@ -29,8 +29,9 @@ from __future__ import annotations
 import json
 import logging
 import re
+from functools import lru_cache
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
 
@@ -194,6 +195,14 @@ def build_router_decision_metadata(
 
 _TABLE_CAPTION_RE = re.compile(
     r"^\s*(e?table\s+\d+[a-z]?[.:]|tbl\.?\s*\d+[.:])", re.IGNORECASE
+)
+
+# A markdown heading that names a table ("### Table 1", "## eTable 2A"). PMC's
+# XML→markdown conversion emits the label as a heading and the descriptive
+# caption as a separate paragraph beneath it.
+_TABLE_HEADING_RE = re.compile(
+    r"^\s*#{1,6}\s*(e?table\s+\d+[a-z]?|tbl\.?\s*\d+[a-z]?)\s*[.:]?\s*$",
+    re.IGNORECASE,
 )
 
 
@@ -844,7 +853,14 @@ def _infer_column_mapping_from_headers(
         if "gene" not in mapping and any(
             kw in header for kw in _HEADER_FIELD_KEYWORDS["gene"]
         ):
-            mapping["gene"] = idx
+            # Substring matching on the normalized header alone is not enough:
+            # "Generation" and "General comments" both contain "gene". A false
+            # gene column is worse than none, because it (a) suppresses the
+            # whole-table caption reject and (b) makes the per-row gene filter
+            # compare variant rows against values like "F1"/"F2" and drop every
+            # one — a table with a Generation column lost ALL of its own rows.
+            if _column_values_look_like_genes(values):
+                mapping["gene"] = idx
 
         if (
             not non_variant_count_header
@@ -952,6 +968,115 @@ def _infer_column_mapping_from_headers(
     return mapping
 
 
+# A separator-less pipe block needs at least this many consecutive `|` rows
+# (header + >=2 data rows) before we treat it as a table. Office-format
+# supplements (.doc/.docx) converted to text emit pipe-delimited rows with no
+# `|---|` separator at all, so requiring one made every such table invisible.
+_MIN_BORDERLESS_ROWS = 3
+
+
+def _is_header_continuation(cells: List[str]) -> bool:
+    """Is this row a wrapped fragment of the header above it, not a data row?
+
+    Office-to-text conversion wraps a long header cell across physical lines,
+    leaving every *other* cell blank::
+
+        |Region |Nucleotide |Variant |Mutation Type |Location |No. of |
+        |       |           |        |              |         |patient|
+        |       |           |        |              |         |s      |
+
+    A data row fills most of its cells; a wrapped header fragment fills one or
+    two. Callers only consult this *before* the first real data row, so a
+    mostly-blank continuation of a data row can never reach it.
+    """
+    if not cells:
+        return False
+    non_blank = sum(1 for c in cells if c.strip())
+    if non_blank == 0:
+        return False
+    return non_blank <= max(1, len(cells) // 3)
+
+
+def _join_wrapped_header(
+    lines: List[str], header_idx: int, stop_idx: int
+) -> Tuple[List[str], int]:
+    """Rebuild a header split across physical lines.
+
+    Returns ``(header_cells, next_index)`` where ``next_index`` is the first
+    line that is *not* part of the header.
+
+    Fragments are concatenated with no separator. Whether the break was
+    mid-word (``patient`` + ``s``) or between words (``No. of`` + ``patients``)
+    is undecidable from the text alone, but the choice is immaterial for
+    matching: ``_normalize_header`` keeps only alphanumerics, so both
+    ``"No. ofpatients"`` and ``"No. of patient s"`` normalize to
+    ``noofpatients``. No-space join is preferred so a mid-word break — the
+    common case, since conversion wraps on width — stays one readable token in
+    the preview shipped to the router.
+    """
+    header_cells = _split_pipe_row(lines[header_idx])
+    idx = header_idx + 1
+    while idx < stop_idx:
+        cells = _split_pipe_row(lines[idx])
+        if not cells or not _is_header_continuation(cells):
+            break
+        for col, frag in enumerate(cells):
+            frag = frag.strip()
+            if not frag or col >= len(header_cells):
+                continue
+            header_cells[col] = (header_cells[col].rstrip() + frag).strip()
+        idx += 1
+    return header_cells, idx
+
+
+def _lookback_caption(lines: List[str], header_index: int) -> Optional[str]:
+    """Return the caption above a table header, or None when unanchored.
+
+    Two shapes occur in practice and both must be captured, because the caption
+    is the ONLY gene-scoping signal for a table with no gene column:
+
+        (a) inline      "Table 1. Mutations in BRCA1 gene"
+        (b) PMC/XML→md  "### Table 1" / blank / "Mutations in BRCA1 gene"
+
+    Shape (b) is what the PMC converter emits and it was invisible to the
+    original lookback, which required `_TABLE_CAPTION_RE` to match the first
+    non-blank line and then `break`ed unconditionally. Across a 400-paper corpus
+    sample that scanner captured 0 captions out of 330 tables, which silently
+    disabled every caption-derived guard — see the cross-gene reject in
+    `parse_routed_table`.
+
+    Deliberately anchored, not greedy: a descriptive line is accepted only when
+    it sits under a "Table N" label. Treating arbitrary preceding prose as a
+    caption lets a body paragraph naming another gene reject a legitimate table,
+    which is a measured recall loss, not a hypothetical one.
+    """
+    preceding: List[tuple[int, str]] = []
+    for back in range(1, 8):
+        idx = header_index - back
+        if idx < 0:
+            break
+        candidate = lines[idx].strip()
+        if not candidate:
+            continue
+        if candidate.startswith("|"):
+            break
+        preceding.append((idx, candidate))
+        if len(preceding) >= 3:
+            break
+
+    for pos, (_, candidate) in enumerate(preceding):
+        if _TABLE_CAPTION_RE.match(candidate):
+            return candidate
+        heading = _TABLE_HEADING_RE.match(candidate)
+        if heading:
+            label = heading.group(1).strip()
+            descriptive = preceding[pos - 1][1] if pos > 0 else ""
+            if descriptive and not _TABLE_HEADING_RE.match(descriptive):
+                return f"{label}. {descriptive}"
+            return label
+    return None
+
+
 def enumerate_markdown_tables(
     text: str, *, only_variant_like: bool = True
 ) -> List[MarkdownTable]:
@@ -1006,20 +1131,7 @@ def enumerate_markdown_tables(
                     continue
                 break
 
-            # Look back for a caption — up to 3 lines above the header
-            caption: Optional[str] = None
-            for back in range(2, 5):
-                idx = i - back
-                if idx < 0:
-                    break
-                candidate = lines[idx].strip()
-                if not candidate:
-                    continue
-                if candidate.startswith("|"):
-                    break
-                if _TABLE_CAPTION_RE.match(candidate):
-                    caption = candidate
-                break
+            caption = _lookback_caption(lines, i - 1)
 
             char_start = cum_offsets[max(0, i - 1)]
             char_end = cum_offsets[min(len(lines), j)]
@@ -1033,6 +1145,55 @@ def enumerate_markdown_tables(
                     data_lines=data_lines,
                     char_start=char_start,
                     char_end=char_end,
+                )
+            )
+            i = j
+            continue
+
+        # Separator-less pipe block. Office-format supplements (.doc/.docx)
+        # converted to text emit pipe-delimited rows with no `|---|` row at
+        # all, so the branch above never fired and the table was invisible to
+        # the router — the whole document scored as "no usable variant tables".
+        # Only claim a run that contains NO separator, so a bordered table is
+        # still handled by the branch above (which needs to see the separator
+        # first) and can never be emitted twice.
+        if line.strip().startswith("|") and not _is_separator(line):
+            j = i
+            saw_separator = False
+            while j < len(lines) and lines[j].strip().startswith("|"):
+                if _is_separator(lines[j]):
+                    saw_separator = True
+                    break
+                j += 1
+            run_len = j - i
+            if saw_separator or run_len < _MIN_BORDERLESS_ROWS:
+                i += 1
+                continue
+
+            header_cells, data_start = _join_wrapped_header(lines, i, j)
+            data_lines = [
+                row for row in lines[data_start:j] if row.strip().startswith("|")
+            ]
+            if len(header_cells) < 2 or not data_lines:
+                i += 1
+                continue
+
+            # Same anchored lookback as the bordered branch above — this
+            # branch was added in the same series and kept the pre-fix logic
+            # (first non-blank line, caption regex only, unconditional break),
+            # so borderless tables stayed captionless and unscoped.
+            caption = _lookback_caption(lines, i)
+
+            counter += 1
+            tables.append(
+                MarkdownTable(
+                    table_id=f"T{counter}",
+                    caption=caption,
+                    header_line=lines[i],
+                    header_cells=header_cells,
+                    data_lines=data_lines,
+                    char_start=cum_offsets[i],
+                    char_end=cum_offsets[min(len(lines), j)],
                 )
             )
             i = j
@@ -1346,6 +1507,52 @@ _GENE_SYMBOL_IGNORE = {
     "GRCH38",
     "HG19",
     "HG38",
+    # Mutation-type and protein-domain COLUMN VALUES. `_GENE_SYMBOL_CELL_RE`
+    # matches any 3-12 character uppercase token, so a `Mutation Type` cell
+    # reading "Missense" and a `Location` cell reading "N-Terminal" both
+    # registered as "some other gene" — and because
+    # `_row_has_off_target_gene_without_target` then saw an off-target token
+    # with no target token, it discarded EVERY row of the table. Any variant
+    # table carrying a mutation-type or domain column but no mapped Gene column
+    # lost all of its rows; PMID 26496715 (99 count-bearing cardiac gold rows)
+    # is the type specimen.
+    #
+    # This stays a denylist rather than a "must look like a gene symbol"
+    # allowlist because digit-free real symbols (LMNA, TTN, ENG, MYH7's
+    # all-alpha peers) must keep tripping the guard — that is the cross-gene
+    # contamination defense pinned by
+    # tests/unit/test_extraction_table_parser.py. The vocabulary below is a
+    # closed class (the value space of two column kinds), not open English.
+    "MISSENSE",
+    "NONSENSE",
+    "FRAMESHIFT",
+    "SYNONYMOUS",
+    "SILENT",
+    "TRUNCATING",
+    "SPLICE",
+    "SPLICING",
+    "INFRAME",
+    "INDEL",
+    "STOPGAIN",
+    "STOPLOSS",
+    "REGULATORY",
+    "INTRONIC",
+    "EXONIC",
+    "UTR",
+    "PROMOTER",
+    "TERMINAL",
+    "N-TERMINAL",
+    "C-TERMINAL",
+    "DOMAIN",
+    "LINKER",
+    "PORE",
+    "HELIX",
+    "TRANSMEMBRANE",
+    "CYTOPLASMIC",
+    "EXTRACELLULAR",
+    "TYPE",
+    "REGION",
+    "LOCATION",
 }
 
 
@@ -1355,15 +1562,146 @@ def _target_gene_tokens(gene_symbol: str) -> set[str]:
     return {alias.upper() for alias in aliases if alias} | {gene}
 
 
+# Query aliases that also read as ordinary clinical prose. "FH" is "family
+# history" far more often than it is familial hypercholesterolaemia, and this
+# scope drives a whole-table reject, so an ambiguous alias alone must not scope
+# a caption.
+_CAPTION_AMBIGUOUS_ALIASES = {"FH", "IRIS"}
+
+
+def _query_only_aliases(gene: str) -> tuple:
+    """Aliases a gene has ONLY as discovery/query terms, not as core synonyms."""
+    from utils.gene_metadata import BUILTIN_GENE_METADATA
+
+    meta = BUILTIN_GENE_METADATA.get(str(gene).strip().upper())
+    if not meta:
+        return ()
+    core = {a.upper() for a in (meta.aliases or ())}
+    return tuple(a for a in (meta.query_aliases or ()) if a.upper() not in core)
+
+
 def _caption_gene_scope(caption: Optional[str]) -> set[str]:
     """Return target genes explicitly implied by a table caption."""
     if not caption:
         return set()
+    # Query aliases mostly EARN their place in a caption: "LQT1" reliably means
+    # KCNQ1, "CPVT1" means RYR2, and those captions are the only gene signal a
+    # table without a gene column has.
+    #
+    # A few are ordinary prose, though, and this scope drives a whole-table
+    # reject. LDLR's query alias "FH" matches "probands with FH of sudden
+    # cardiac death" (family history), which scoped a cardiac mutation table to
+    # {LDLR} and discarded all of it. BRCA1's "IRIS" is the same shape. So a
+    # gene is admitted on a query alias only when at least one NON-ambiguous
+    # alias matched.
     scope: set[str] = set()
     for gene in known_gene_aliases(include_query_aliases=True):
-        if gene_alias_regex(gene, include_query_aliases=True).search(caption):
+        if gene_alias_regex(gene, include_query_aliases=False).search(caption):
+            scope.add(gene)
+            continue
+        if not gene_alias_regex(gene, include_query_aliases=True).search(caption):
+            continue
+        informative = [
+            alias
+            for alias in _query_only_aliases(gene)
+            if alias.upper() not in _CAPTION_AMBIGUOUS_ALIASES
+            and re.search(
+                rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])",
+                caption,
+                re.IGNORECASE,
+            )
+        ]
+        if informative:
             scope.add(gene)
     return scope
+
+
+# A divider cell may carry benign qualifiers around the gene symbol; real
+# corpus dividers include "BRCA1 Gene" and "BRCA1 gene mutations", so exact
+# match is too strict and reopens the cross-gene leak.
+_DIVIDER_BENIGN_WORDS = {
+    "gene",
+    "genes",
+    "mutation",
+    "mutations",
+    "variant",
+    "variants",
+    "alteration",
+    "alterations",
+    "sequence",
+    "carriers",
+}
+
+# ...but a cell that NEGATES or subsets the gene is not a divider at all.
+# "BRCA1 negative subgroup" describes patients WITHOUT the gene's mutations;
+# reading it as a divider flips the section gene for the rest of the table and
+# silently deletes the target gene's remaining rows.
+_DIVIDER_NEGATION_WORDS = {
+    "negative",
+    "without",
+    "non",
+    "excluding",
+    "excluded",
+    "wild",
+    "wt",
+    "vs",
+    "versus",
+    "free",
+    "absent",
+    "no",
+    "not",
+    "control",
+    "controls",
+    "unrelated",
+}
+
+
+def _gene_section_divider(cells: List[str]) -> Optional[str]:
+    """Return the gene named by an in-band section-divider row, else None.
+
+    Papers that report two genes in one table partition it with a row whose only
+    populated cell is a bare gene symbol::
+
+        | BRCA1 |  |  |  |
+        | 710 C > T | c.591C > T | C197C | ... |
+        | BRCA2 |  |  |  |
+        | 1093A > C | c.865A > C | N289H | ... |
+
+    Such a table has no gene *column*, so without recognising the divider every
+    row inherits the run's target gene and half the table is attributed to the
+    wrong one. PMID 21232165 Table 3 is the reference case.
+    """
+    populated = [c.strip() for c in cells if c.strip()]
+    if len(populated) != 1:
+        return None
+    token = populated[0].strip().strip("*: ")
+    if not token or len(token) > 40:
+        return None
+
+    words = [w for w in re.split(r"[\s,;/()\-]+", token.lower()) if w]
+    if any(word in _DIVIDER_NEGATION_WORDS for word in words):
+        return None
+
+    genes = {
+        gene
+        for gene in known_gene_aliases(include_query_aliases=False)
+        if gene_alias_regex(gene, include_query_aliases=False).search(token)
+    }
+    if len(genes) != 1:
+        return None
+    gene = next(iter(genes))
+
+    gene_lower = gene.lower()
+    leftover = [
+        word
+        for word in words
+        if word not in _DIVIDER_BENIGN_WORDS
+        and word not in gene_lower
+        and gene_lower not in word
+    ]
+    if leftover:
+        return None
+    return gene
 
 
 def _cell_mentions_target_gene(value: Optional[str], gene_symbol: str) -> bool:
@@ -1390,6 +1728,41 @@ def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
         if _GENE_SYMBOL_CELL_RE.match(token) and sum(ch.isalpha() for ch in token) >= 2:
             out.add(token)
     return out
+
+
+def _column_values_look_like_genes(values: List[str]) -> bool:
+    """True when a column's cells read as gene symbols rather than IDs/prose.
+
+    Deliberately open-vocabulary: a rostered symbol is strong evidence, but a
+    panel column naming genes GVF has never seen must still qualify, so an
+    all-caps alphanumeric token carrying a letter and not looking like a short
+    family/sample ID also counts.
+    """
+    seen = [v.strip() for v in values if v and v.strip()]
+    if not seen:
+        return False
+    recognized = {
+        str(gene).strip().upper()
+        for gene in known_gene_aliases(include_query_aliases=False)
+    }
+    for value in seen:
+        token = value.strip().strip("*: ").upper()
+        if not token or len(token) > 15:
+            continue
+        if token in recognized:
+            return True
+        # Gene-shaped: >=3 chars, starts with a letter, alphanumeric, and not a
+        # bare enumeration like F1/P040/S3.
+        if (
+            len(token) >= 3
+            and token[0].isalpha()
+            and token.replace("-", "").isalnum()
+            and not re.fullmatch(r"[A-Z]{1,2}\d{1,3}", token)
+            and any(c.isalpha() for c in token)
+            and sum(c.isalpha() for c in token) >= 3
+        ):
+            return True
+    return False
 
 
 def _infer_unnamed_gene_column(
@@ -2061,20 +2434,87 @@ def parse_routed_table(
     by_key: Dict[tuple[str, str], Dict[str, Any]] = {}
     target_gene_lower = gene_symbol.strip().lower() if gene_symbol else ""
     caption_scope = _caption_gene_scope(table.caption)
-    if caption_scope and gene_symbol.strip().upper() not in caption_scope:
+    # Reject a table whose caption names a DIFFERENT gene — but only when that
+    # absence is actually informative.
+    #
+    # `_caption_gene_scope` can only resolve genes in the built-in roster (14).
+    # For an off-roster TARGET (TTN, LMNA, MYH7, PKP2, DSP — LMNA alone has
+    # ~1,149 corpus papers) the target can never appear in any caption scope, so
+    # this test degenerates into "reject every captioned table" and the gene
+    # yields nothing at all. That breaks the standing requirement that GVF work
+    # turnkey on genes with no gold standard.
+    #
+    # A mapped Gene column is also strictly better evidence than the caption: it
+    # adjudicates per row, so a two-gene table keeps the target's rows instead of
+    # losing all of them. Let the row filter below handle those.
+    target_upper = gene_symbol.strip().upper()
+    target_is_rostered = target_upper in known_gene_aliases(include_query_aliases=True)
+    if (
+        caption_scope
+        and target_is_rostered
+        and gene_idx is None
+        and target_upper not in caption_scope
+    ):
         return []
+    # A caption that affirmatively scopes the table to the target gene ("Summary
+    # of putative LQT1-associated mutations in KCNQ1") has already answered the
+    # question the row-level off-target guard exists to answer, and answered it
+    # from a more reliable signal. Running the row guard anyway is not merely
+    # redundant, it is destructive: `_gene_symbol_tokens` accepts any 3-12
+    # character uppercase token, so protein-domain shorthand (CNBD, DII, DI-S6,
+    # PAC, SAR), mutation-type fragments (FRAME, SHIFT, DEL, INS, DUP, SITE) and
+    # even raw nucleotide runs (CGGGGCGAC) all read as "some other gene" and
+    # delete the row. That vocabulary is open-ended — the ignore-list cannot
+    # converge on it — but it only ever appears in tables whose gene is already
+    # established. PMID 26496715 lost 33 of 99 count-bearing gold rows this way
+    # even after the common mutation-type words were excluded by name.
+    #
+    # The guard still runs on captions that name no gene, which is the misrouted
+    # panel case it was written for, and a caption naming a DIFFERENT gene is
+    # rejected outright above (the cross-gene defense pinned by
+    # tests/unit/test_extraction_table_parser.py).
+    #
+    # UNAMBIGUOUS captions only. A caption naming SEVERAL genes ("Variant
+    # Calling of Germline Mutations in BRCA1 and BRCA2 in FFPE Samples") does
+    # NOT answer the question the row guard exists to answer — it says the
+    # table is about both, so the rows still need separating. Treating that as
+    # "scoped to the target" skipped the guard for the whole table and returned
+    # an identical row set for either gene. This was latent while captions were
+    # never captured; capturing them made it live, and it regressed
+    # PMID 27767231 (a BRCA1 review-queue paper whose gene lives in a
+    # "Germline mutation" column that `_infer_column_mapping_from_headers`
+    # maps to `protein`, not `gene`, so there is no gene-column guard either).
+    caption_scopes_to_target = (
+        len(caption_scope) == 1 and gene_symbol.strip().upper() in caption_scope
+    )
     # Markdown rowspan: a blank Gene cell inherits the gene from the row above
     # (gene-grouped tables list the gene once, then leave continuation rows
     # blank). Forward-fill so the gene-filter below sees the true gene of every
     # row; otherwise off-target continuation rows (e.g. HCN4 Val759Ile under a
     # KCNH2 extraction) leak through and are mis-stamped with the target gene.
     last_gene_cell = ""
+    # In-band gene partition: set by a section-divider row, applies to every
+    # row until the next divider. Independent of caption scope, because a
+    # caption naming BOTH genes ("Polymorphisms in BRCA1 and BRCA2 genes")
+    # legitimately passes the cross-gene reject yet still needs its rows split.
+    section_gene: Optional[str] = None
 
     for row_number, row in enumerate(table.data_lines, start=1):
         cells = _split_pipe_row(row)
         if not cells or len(cells) < 2:
             continue
         if all(not c.strip() for c in cells):
+            continue
+
+        divider_gene = _gene_section_divider(cells)
+        if divider_gene is not None:
+            section_gene = divider_gene
+            continue
+        if (
+            section_gene is not None
+            and gene_symbol
+            and section_gene.upper() != gene_symbol.strip().upper()
+        ):
             continue
 
         def cell(idx: Optional[int]) -> Optional[str]:
@@ -2096,7 +2536,7 @@ def parse_routed_table(
                 and not (gene_tokens & _target_gene_tokens(gene_symbol))
             ):
                 continue
-        elif target_gene_lower:
+        elif target_gene_lower and not caption_scopes_to_target:
             non_gene_context_indices = {
                 idx
                 for idx in (count_idx, aff_idx, unaff_idx, unc_idx, pheno_idx, clin_idx)

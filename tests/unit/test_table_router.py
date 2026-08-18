@@ -8,7 +8,10 @@ import pytest
 from pipeline.table_router import (
     MarkdownTable,
     _field_header_match,
+    _gene_symbol_tokens,
     _infer_column_mapping_from_headers,
+    _normalize_header,
+    _row_has_off_target_gene_without_target,
     enumerate_markdown_tables,
     extract_via_router,
     parse_routed_table,
@@ -1328,3 +1331,370 @@ def test_router_decision_does_not_leak_between_papers(monkeypatch):
     meta = result.extracted_data["extraction_metadata"]
     assert meta["table_router_outcome"] == "no_usable_tables"
     assert meta["table_router_mappings"] == {}
+
+
+# ---------------------------------------------------------------------------
+# Separator-less ("borderless") pipe tables with wrapped headers.
+#
+# Office-format supplements (.doc/.docx) converted to text emit pipe-delimited
+# rows with no `|---|` separator row anywhere in the document, and wrap long
+# header cells across physical lines. Before the borderless branch existed,
+# `enumerate_markdown_tables` required a separator, so every such table was
+# invisible and the whole paper scored "no usable variant tables" — PMID
+# 26496715 carries 100 count-bearing cardiac gold rows in exactly this shape.
+# ---------------------------------------------------------------------------
+
+BORDERLESS_WRAPPED = """Table 1.  Summary of putative LQT1-associated mutations in KCNQ1
+|Region  |Nucleotide  |Variant          |Mutation Type   |Location  |No. of |
+|        |            |                 |                |          |patient|
+|        |            |                 |                |          |s      |
+|Exon 1  |c.2T>C      |p.Met1Thr        |Missense        |N-Terminal|3      |
+|Exon 2  |c.420C>A    |p.Ser140Arg      |Missense        |S1 Domain |1      |
+|Exon 3  |c.551A>G    |p.Tyr184Cys      |Missense        |S2-S3     |2      |
+"""
+
+
+def test_borderless_table_is_enumerated_without_a_separator_row():
+    tables = enumerate_markdown_tables(BORDERLESS_WRAPPED)
+    assert len(tables) == 1, "a separator-less pipe block must still be a table"
+    table = tables[0]
+    assert table.caption is not None and table.caption.startswith("Table 1.")
+    assert len(table.data_lines) == 3
+
+
+def test_borderless_wrapped_header_is_rejoined_into_one_cell():
+    table = enumerate_markdown_tables(BORDERLESS_WRAPPED)[0]
+    # "No. of" + "patient" + "s" must land in the SAME column, not become
+    # extra data rows. The join is space-free; _normalize_header keeps only
+    # alphanumerics, so this is what the count-column matcher sees.
+    assert len(table.header_cells) == 6
+    assert _normalize_header(table.header_cells[-1]) == "noofpatients"
+
+
+def test_borderless_wrapped_header_rows_are_not_treated_as_data():
+    table = enumerate_markdown_tables(BORDERLESS_WRAPPED)[0]
+    # The two continuation lines are mostly-blank; if they leaked into
+    # data_lines the parser would emit two variant-less rows.
+    for row in table.data_lines:
+        assert "Exon" in row
+
+
+def test_borderless_wrapped_header_yields_a_patient_count_mapping():
+    """The point of the fix: the count column becomes bindable."""
+    table = enumerate_markdown_tables(BORDERLESS_WRAPPED)[0]
+    mapping = _infer_column_mapping_from_headers(table)
+    assert mapping is not None, "notation + count columns should both be found"
+    assert "patient_count" in mapping
+    assert mapping["patient_count"] == 5
+    assert mapping.get("protein") == 2
+
+
+def test_borderless_parse_binds_counts_to_variants():
+    table = enumerate_markdown_tables(BORDERLESS_WRAPPED)[0]
+    mapping = _infer_column_mapping_from_headers(table)
+    variants = parse_routed_table(table, mapping, gene_symbol="KCNQ1")
+    counts = {
+        v.get("protein_notation"): (v.get("patients") or {}).get("count")
+        for v in variants
+    }
+    assert len(variants) == 3, f"expected 3 variants, got {counts}"
+    assert counts == {"p.Met1Thr": 3, "p.Ser140Arg": 1, "p.Tyr184Cys": 2}
+    # The rebuilt header must reach count provenance, and the count must be
+    # typed as a per-variant carrier count rather than a cohort total.
+    prov = variants[0]["count_provenance"]
+    assert prov["carriers_count_type"] == "per_variant_carrier"
+    assert "patients" in prov["carriers_column_label"].replace(" ", "").lower()
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] == 3
+
+
+def test_structural_annotation_cells_are_not_read_as_other_genes():
+    """`Missense` / `N-Terminal` must not read as an off-target gene symbol.
+
+    A mutation-type or protein-domain column with no mapped Gene column used to
+    make `_row_has_off_target_gene_without_target` fire on every row, silently
+    discarding the entire table.
+    """
+    for word in (
+        "Missense",
+        "Nonsense",
+        "Frameshift",
+        "Splice",
+        "Domain",
+        "N-Terminal",
+        "C-Terminal",
+        "Synonymous",
+    ):
+        assert not _gene_symbol_tokens(word), word
+
+    row = ["Exon 1", "c.2T>C", "p.Met1Thr", "Missense", "N-Terminal"]
+    assert not _row_has_off_target_gene_without_target(row, "KCNQ1")
+
+
+def test_real_off_target_gene_symbols_still_trip_the_guard():
+    """The guard must keep working on genuine misrouted panel rows.
+
+    Digit-free symbols (LMNA, TTN, ENG) must keep counting as genes — that is
+    the cross-gene contamination defense, so the annotation vocabulary is
+    excluded by name rather than by a "must look like a gene" shape rule.
+    """
+    for symbol in ("SCN5A", "KCNH2", "CACNA1C", "BMPR2", "LMNA", "TTN", "ENG"):
+        assert _gene_symbol_tokens(symbol) == {symbol}, symbol
+    assert _row_has_off_target_gene_without_target(
+        ["SCN5A", "c.100A>G", "p.Lys34Arg"], "KCNQ1"
+    )
+    assert _row_has_off_target_gene_without_target(
+        ["LMNA", "c.100A>G", "p.Lys34Arg"], "KCNQ1"
+    )
+
+
+def test_bordered_table_is_not_emitted_twice_by_the_borderless_branch():
+    """A table WITH a separator must still be claimed by the separator path."""
+    bordered = """Table 1. Variants
+|Variant |Patients |
+|---|---|
+|p.Met1Thr |3 |
+|p.Ser140Arg |1 |
+"""
+    tables = enumerate_markdown_tables(bordered)
+    assert len(tables) == 1
+    assert len(tables[0].data_lines) == 2
+    assert _normalize_header(tables[0].header_cells[0]) == "variant"
+
+
+def test_short_pipe_runs_are_not_promoted_to_tables():
+    """Prose containing pipes must not become a table."""
+    prose = "Some text | with a pipe\n|only one row |here |\nmore prose\n"
+    assert enumerate_markdown_tables(prose, only_variant_like=False) == []
+
+
+def test_caption_scoped_table_ignores_row_level_gene_token_noise():
+    """Domain/mutation-type shorthand must not delete rows of a scoped table.
+
+    `_gene_symbol_tokens` accepts any 3-12 char uppercase token, so CNBD, DII,
+    DI-S6, FRAME, SHIFT, SITE and even raw nucleotide runs read as "some other
+    gene". When the caption already names the target gene, the row-level guard
+    is redundant and must not run.
+    """
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Summary of putative LQT1-associated mutations in KCNQ1",
+        header_line="|Variant |Mutation Type |Location |No. of patients |",
+        header_cells=["Variant", "Mutation Type", "Location", "No. of patients"],
+        data_lines=[
+            "|p.Met1Thr |Missense |N-Terminal |3 |",
+            "|p.His105Thrfs |Frame shift/del |CNBD |1 |",
+            "|p.Ser140Arg |Splice site |DI-S6 |2 |",
+        ],
+        char_start=0,
+        char_end=300,
+    )
+    mapping = {"protein": 0, "patient_count": 3}
+
+    variants = parse_routed_table(table, mapping, "KCNQ1")
+
+    assert len(variants) == 3, [v.get("protein_notation") for v in variants]
+    assert [v["penetrance_data"]["total_carriers_observed"] for v in variants] == [
+        3,
+        1,
+        2,
+    ]
+
+
+def test_caption_naming_another_gene_still_rejects_the_whole_table():
+    """The cross-gene defense must survive the scoped-caption exemption.
+
+    Note the scope check resolves gene names against the built-in roster, so an
+    off-roster symbol (LMNA, TTN) yields an EMPTY scope and the table reads as
+    unscoped — the row-level guard then still applies. That predates this
+    exemption; `test_unscoped_caption_still_runs_the_off_target_row_guard`
+    covers that path.
+    """
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Summary of SCN5A mutations in Brugada syndrome",
+        header_line="|Variant |Mutation Type |No. of patients |",
+        header_cells=["Variant", "Mutation Type", "No. of patients"],
+        data_lines=["|p.Met1Thr |Missense |3 |"],
+        char_start=0,
+        char_end=120,
+    )
+    mapping = {"protein": 0, "patient_count": 2}
+
+    assert parse_routed_table(table, mapping, "KCNQ1") == []
+
+
+def test_unscoped_caption_still_runs_the_off_target_row_guard():
+    """A caption naming no gene keeps the misrouted-panel guard active."""
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Variants identified by panel sequencing",
+        header_line="|Variant |Notes |No. of patients |",
+        header_cells=["Variant", "Notes", "No. of patients"],
+        data_lines=[
+            "|p.Met1Thr |seen in KCNQ1 |3 |",
+            "|p.Arg1623Gln |SCN5A |4 |",
+        ],
+        char_start=0,
+        char_end=200,
+    )
+    mapping = {"protein": 0, "patient_count": 2}
+
+    variants = parse_routed_table(table, mapping, "KCNQ1")
+    proteins = [v["protein_notation"] for v in variants]
+    assert "p.Arg1623Gln" not in proteins, "off-target SCN5A row must be dropped"
+
+
+# --------------------------------------------------------------------------
+# Cross-gene attribution (PMID 21232165 regression)
+#
+# These tests deliberately drive `enumerate_markdown_tables` on raw markdown
+# instead of hand-building `MarkdownTable(caption=...)`. Every other caption
+# test in this file injects a caption already in "Table N." form, so the whole
+# caption-derived guard stack stayed green while the real enumerator captured
+# 0 captions out of 330 corpus tables and the cross-gene reject never fired.
+# --------------------------------------------------------------------------
+
+PMC_HEADING_PAPER = """# Paper
+
+### Table 1
+
+Mutations in BRCA1 gene in Slovenian population.
+
+| BIC nomenclature | HGVS nomenclature | Protein change | No. of positive families |
+|---|---|---|---|
+| 300T > G | c.181T > G | C61G | 15 |
+| 1806C > T | c.1687C > T | Q563X | 13 |
+
+### Table 2
+
+Mutations in BRCA2 gene in Slovenian population.
+
+| BIC nomenclature | HGVS nomenclature | Protein change | No. of positive families |
+|---|---|---|---|
+| 8138delC | c.7910delC | R259X | 2 |
+"""
+
+
+MIXED_GENE_PAPER = """# Paper
+
+### Table 3
+
+Polymorphisms in BRCA1 and BRCA2 genes in Slovenian population.
+
+| BIC nomenclature | HGVS nomenclature | Protein change | No. of positive families |
+|---|---|---|---|
+| BRCA1 |  |  |  |
+| 1186A > G | c.1067A > G | Q356R | 25 |
+| 4956A > G | c.4837A > G | S1613G | 66 |
+| BRCA2 |  |  |  |
+| 1093A > C | c.865A > C | N289H | 18 |
+| 1342C > A | c.1114C > A | H372N | 160 |
+"""
+
+
+def _protein_calls(paper: str, table_index: int, gene: str) -> set[str]:
+    table = enumerate_markdown_tables(paper)[table_index]
+    mapping = {"cdna": 1, "protein": 2, "patient_count": 3}
+    return {
+        (row.get("protein_notation") or "").strip()
+        for row in parse_routed_table(table, mapping, gene)
+        if (row.get("protein_notation") or "").strip()
+    }
+
+
+def test_enumerate_captures_caption_under_markdown_heading():
+    """PMC's XML→markdown emits '### Table 1' then the caption as a paragraph."""
+    tables = enumerate_markdown_tables(PMC_HEADING_PAPER)
+    captions = [t.caption for t in tables]
+    assert captions == [
+        "Table 1. Mutations in BRCA1 gene in Slovenian population.",
+        "Table 2. Mutations in BRCA2 gene in Slovenian population.",
+    ]
+
+
+def test_caption_naming_other_gene_rejects_whole_table():
+    """A BRCA1-captioned table must contribute nothing to a BRCA2 extraction."""
+    assert _protein_calls(PMC_HEADING_PAPER, 0, "BRCA2") == set()
+    assert _protein_calls(PMC_HEADING_PAPER, 1, "BRCA1") == set()
+
+
+def test_caption_naming_target_gene_still_extracts():
+    """The reject must not cost recall on correctly-scoped tables."""
+    assert _protein_calls(PMC_HEADING_PAPER, 0, "BRCA1") == {"C61G", "Q563X"}
+    assert _protein_calls(PMC_HEADING_PAPER, 1, "BRCA2") == {"R259X"}
+
+
+def test_in_band_gene_divider_partitions_mixed_table():
+    """A caption naming both genes passes the reject; rows still must split."""
+    assert _protein_calls(MIXED_GENE_PAPER, 0, "BRCA1") == {"Q356R", "S1613G"}
+    assert _protein_calls(MIXED_GENE_PAPER, 0, "BRCA2") == {"N289H", "H372N"}
+
+
+def test_brca2_is_a_known_gene_for_caption_scoping():
+    """BRCA2 was absent from BUILTIN_GENE_METADATA, so no caption could scope
+    to it and every BRCA2-captioned table stayed unguarded."""
+    from pipeline.table_router import _caption_gene_scope
+
+    assert _caption_gene_scope("Table 5. Variants in BRCA2 gene") == {"BRCA2"}
+
+
+def test_ambiguous_query_alias_alone_does_not_scope_a_caption():
+    """ "FH" is "family history" far more often than it is LDLR.
+
+    `_caption_gene_scope` drives a whole-table reject, so admitting a gene on an
+    ambiguous alias discarded entire cardiac mutation tables.
+    """
+    from pipeline.table_router import _caption_gene_scope
+
+    assert (
+        _caption_gene_scope(
+            "Table 2. Mutations in probands with FH of sudden cardiac death"
+        )
+        == set()
+    )
+    # ...but an informative query alias must still scope, and a real mention of
+    # the gene alongside the ambiguous one must still resolve.
+    assert _caption_gene_scope("eTable 1. LQT1 Mutations or Rare Variants") == {"KCNQ1"}
+    assert _caption_gene_scope("Table 9. FH cohort LDLR variants") == {"LDLR"}
+
+
+def test_gene_header_substring_does_not_mint_a_gene_column():
+    """ "Generation" contains "gene". A false gene column is worse than none: it
+    suppresses the caption reject AND makes the row filter compare variants
+    against values like F1/F2, which dropped every row of the table."""
+    paper = (
+        "# P\n\nTable 1. Mutations in BRCA1 gene\n\n"
+        "| Generation | cDNA | Protein | Carriers |\n|---|---|---|---|\n"
+        "| F1 | c.181T>G | C61G | 15 |\n| F2 | c.1687C>T | Q563X | 13 |\n"
+    )
+    table = enumerate_markdown_tables(paper)[0]
+    mapping = _infer_column_mapping_from_headers(table)
+    assert "gene" not in (mapping or {})
+    # the table keeps its own rows, and the caption still rejects the other gene
+    assert len(parse_routed_table(table, mapping or {}, "BRCA1")) == 2
+    assert parse_routed_table(table, mapping or {}, "BRCA2") == []
+
+
+def test_real_gene_column_is_still_detected():
+    paper = (
+        "# P\n\nTable 1. Panel variants\n\n"
+        "| Gene | cDNA | Protein | Carriers |\n|---|---|---|---|\n"
+        "| TTN | c.43828C>T | R14610X | 12 |\n| MYBPC3 | c.1224-52G>A | R943X | 5 |\n"
+    )
+    table = enumerate_markdown_tables(paper)[0]
+    assert "gene" in (_infer_column_mapping_from_headers(table) or {})
+
+
+def test_borderless_table_captures_heading_caption():
+    """The separator-less branch kept the pre-fix lookback, so borderless
+    tables stayed captionless and therefore unscoped."""
+    from pipeline.table_router import _caption_gene_scope
+
+    paper = (
+        "# P\n\n### Table 4\n\nUnclassified sequence variants in BRCA1 gene\n\n"
+        "| Nucleotide | Protein | Carriers |\n"
+        "| 212C>G | I31M | 3 |\n| 462C>A | P115S | 1 |\n"
+    )
+    tables = enumerate_markdown_tables(paper)
+    assert tables
+    assert _caption_gene_scope(tables[0].caption) == {"BRCA1"}

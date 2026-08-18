@@ -107,15 +107,69 @@ after this lock and score completed.
          on the live 119-attempt `tier2_gold_120.tsv` (10086972 removed).
          Realizes extraction-code already landed (KCNQ1 21956039 11/11 on
          the 4-paper check, still FN on the lock). Does not move 98.20%.
-      6. Targeted acquisition: KCNH2 29650123 (20 FNs; `mmc1.docx` on disk,
-         mutation tables are TIFFs), caption-stub table bodies (RYR2
+      6. Targeted acquisition: caption-stub table bodies (RYR2
          19926015, KCNQ1 14678125, 31520628, 24667783), abstract-only
          stratum from the 2026-08-14 analysis.
+         **CORRECTION 2026-08-17 — KCNH2 29650123 is NOT a figure-OCR item.**
+         This entry, and the "20 FNs / source not readable as text (TIFF
+         tables) / needs figure OCR" row in
+         `runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/NOTES.md`,
+         were inferred from "`mmc1.docx` converts to text with zero variant
+         tokens" without opening the images. The three embedded TIFFs were
+         rendered and inspected: they are a stacked bar chart of patients per
+         decade of presentation and two hazard-ratio-vs-baseline-QTc curves
+         (restricted cubic spline + linear). There is **no mutation table in
+         any image**. `document.xml` holds only "Online Table 1.
+         Characteristics of the study population". Gold expects 22 rows for
+         this PMID (all `carriers=1`); the acquired `_FULL_CONTEXT.md` contains
+         exactly one of them (G628S). The mutation list was **never acquired** —
+         this is an acquisition gap, not an OCR gap, and figure vision on those
+         TIFFs would return zero variants. Reclassify the 20 FNs and re-derive
+         the "figure OCR → ~91%" rung of the gold-120 ceiling ladder, which
+         inherited the same error.
       7. Deterministic `regex_table` count-column binder (26496715
          wrapped-header; 114 gold assertions). That paper has 0 counted
          extras — this is MAE / count-recall, not Gate 2. Short-circuit
          refuse already landed; binder is not done. Only after the binder:
          Luna-max post-layer count-ambiguity cards.
+         **PARTLY LANDED 2026-08-17 — the diagnosis was wrong and the real
+         cause was worse.** The blocker was never a wrapped header alone.
+         `26496715_FULL_CONTEXT.md` (a `.doc` supplement converted to text)
+         contains **zero** `|---|` separator rows, and
+         `enumerate_markdown_tables` required one, so all three mutation tables
+         were invisible — the router literally never saw them and the paper
+         scored "no usable variant tables". Two deterministic fixes landed in
+         `pipeline/table_router.py`:
+         (a) a separator-less ("borderless") pipe-block branch that also
+         rejoins a header wrapped across physical lines (`No. of` + `patient` +
+         `s`), claiming only runs that contain no separator so bordered tables
+         are still owned by the existing path and never emitted twice; and
+         (b) a caption-scope exemption for the row-level off-target-gene guard.
+         (b) was necessary because `_gene_symbol_tokens` accepts any 3–12
+         character uppercase token, so `Missense`, `N-Terminal`, `CNBD`, `DII`,
+         `DI-S6`, `PAC`, `FRAME`, `SHIFT`, `SITE` and even the raw nucleotide
+         run `CGGGGCGAC` all read as "some other gene" and
+         `_row_has_off_target_gene_without_target` deleted **every row**. Any
+         variant table with a mutation-type or protein-domain column but no
+         mapped Gene column lost all of its rows. That vocabulary is open-ended
+         and an ignore-list does not converge on it (extending the list by name
+         still left 33/99 rows dead), so the guard is now skipped when the
+         caption already scopes the table to the target gene — a stronger
+         signal, and the misrouted-panel case it was written for (unscoped
+         caption) still runs it.
+         **$0 measurement, no model calls, source already on disk:** tables
+         visible to the router on 26496715 went **0 → 5**, and gold rows
+         recovered with an identity *and* an exactly-correct carrier count went
+         **0/99 → 87/99 (87.9%)** — KCNH2 48/53, KCNQ1 39/42, SCN5A 0/4, and
+         100% of supplied counts exact. Scored with
+         `utils/variant_normalizer.normalize_to_single_letter`, not
+         `cli/compare_variants.py`, so some of the 12 misses may be matcher
+         rather than extraction gaps. 12 new pinning tests; offline suite
+         1978 passed / 1 skipped. Still open: the SCN5A arm (0/4), an
+         end-to-end re-extract to confirm the short-circuit refuse stops firing
+         and the counts actually ship, and a corpus sweep — **132 of 22,148
+         `_FULL_CONTEXT.md` files are in this borderless class** (6,846 have
+         separators), several with 77 pipe rows.
       8. Residual extraction misses: RYR2 28798025 G1885E (in source, still
          missed), KCNQ1 31293497 A590T (absent from acquirable source —
          gold provenance).
@@ -225,6 +279,103 @@ missing paper or table with speculative count arithmetic.
       gate with per-stratum acceptance metrics.
 - [ ] Create or import a source-reconciled KCNE1 per-PMID gold input before
       making KCNE1 recall claims.
+
+## 4b. Measurement-artifact integrity (opened 2026-08-17, all $0)
+
+These are defects in the *map*, not the pipeline. They matter because the whole
+lever ranking is derived from them.
+
+- [ ] **Regenerate the disagreement artifacts.** `recall_metrics/current/` is
+      internally inconsistent: `summary.json` / `report.md` are 2026-08-08 and
+      reproduce the published headline (5546/6833 rows, 2596/3010 unique, MAE
+      0.6133), but `paper_disagreement_report.csv` in the same "current"
+      directory is **2026-07-21** and sums to 2918 matched / 3915 missing rows —
+      42.7% row recall, not 81.2%. Root cause is recorded in the summary itself:
+      `"disagreement_artifacts_skipped": true`. Consequence: the **failure split
+      published in `docs/RECALL_STATUS.md` cannot be regenerated from the
+      artifact it cites.** Its classes (568 / 250 / 248 / 184 / 82 / 36 / 8 =
+      1,376) do not appear in the on-disk CSV at all, whose classes are
+      dominated by `source_missing_or_stub` at 1,251 papers with
+      `context_bytes=0` — an unbound run. The 72.8%-acquisition framing that
+      anchors the strategy rests on this table, so re-derive it before ranking
+      any more work off it. Note also 1,376 ≠ the 1,287 row-recall gap.
+- [ ] **Reconcile the per-layer precision table with its artifact.**
+      `docs/RECALL_STATUS.md` publishes `regex_table` at **929** counted extras
+      / **57.5%** counted precision; `recall_metrics/current/summary.json`
+      (2026-08-08) says **899** / **61.60%**, with `matched_db` 1442 vs the
+      doc's 1256. Aggregate drifts too: summary has
+      `counted_extra_on_gold_pmids` 1637 and
+      `precision_vs_counted_gold_pmids` 0.7721, versus the doc's 1,629 and
+      77.3% (and a separate prose claim of 1,631). The per-layer column also
+      sums to 1,660, not 1,629/1,631/1,637. `regex_table` is the single
+      diagnostic that decides where count-attribution work starts, so a 4-point
+      drift on it is load-bearing. Grok's 2026-08-17 review additionally flags
+      that all of these predate the vertical-table fix and so may be fossils.
+- [ ] **Close the open-vocabulary hole in `_gene_symbol_tokens`.** The
+      2026-08-17 caption-scope exemption fixes scoped tables only. A table whose
+      caption names **no** gene still runs the row-level guard, and that guard
+      still reads `CNBD`, `DII`, `PAC`, `FRAME`, `SHIFT`, `SITE` and raw
+      nucleotide runs as off-target gene symbols. Note `_caption_gene_scope`
+      resolves against the 13-gene built-in roster only, so an off-roster
+      symbol (LMNA, TTN, BRCA2, ENG) produces an **empty** scope and its table
+      reads as unscoped. The durable fix is column-level: treat a token as
+      gene evidence only when its whole column looks like gene names. Do not
+      extend the ignore-list further — it demonstrably does not converge.
+- [ ] **Remove the three agent worktrees.** `git worktree list` shows
+      `.claude/worktrees/code-review-max-e46bda`,
+      `gold-standard-precision-ad637f`, and
+      `review-works-improvements-inefficiencies-1cad7f` on `claude/*` branches.
+      The handoff policy is one checkout on `main` with no worktrees; branch
+      sprawl was previously flagged as a major failure. Confirm nothing is
+      unmerged before pruning.
+
+## 4c. Cross-gene attribution: remaining audit findings (opened 2026-08-18, all $0)
+
+Context: PMID 21232165 published BRCA1 table variants as BRCA2 to collaborator
+staging. Root cause was that a variant's gene was never grounded in the source.
+The fix landed 2026-08-18; a 41-agent adversarial audit plus a grok-4.6 review
+confirmed these remaining holes. All are deterministic and need no model calls.
+See `docs/PROTOCOL_CHANGELOG.md` 2026-08-18 for what was already fixed.
+
+- [ ] **Fixed-width / PDF-layout parser gene scope is fail-open with stale
+      carry-over.** `pipeline/extraction.py` `_fixed_width_gene_scope_from_table_label`
+      only sets scope on a line matching `^(?:eTable|Table)\s+\w+`, so a caption
+      below the table, or "Supplementary Data 2. Variants in HHT genes", leaves
+      the scope empty *or stale from the previous table*, and rows are stamped
+      with the run's target gene. Reproduced: caption "Polymorphisms in the
+      BRCA1 gene among probands", target BRCA2, both BRCA1 founder alleles
+      emitted as BRCA2 with carrier counts 12 and 7.
+- [ ] **In-band dividers are blind to off-roster genes, so the previous
+      section's gene stays sticky.** `_gene_section_divider` resolves against the
+      14-gene builtin roster, so after `| BRCA1 |` a later `| TTN |` or
+      `| LMNA |` is not a divider and `section_gene` stays BRCA1 — every
+      following target row is dropped on a TTN/LMNA/MYH7/PKP2/DSP run. These are
+      exactly the turnkey/no-gold genes (LMNA alone has ~1,149 corpus papers).
+      Fix needs an open-vocabulary gene-shape test, not a bigger roster.
+- [ ] **`_join_wrapped_header` swallows the divider row in borderless tables.**
+      `pipeline/table_router.py` treats a row with one populated cell as a
+      wrapped header, and a divider row is by definition one populated cell, so
+      in the separator-less branch it is concatenated into the header before
+      `parse_routed_table` sees it and the table never partitions.
+- [ ] **Vertical parser's 8-line lookahead crosses row boundaries.** A bare gene
+      symbol fails both `_valid_table_cdna` and `_valid_table_protein` and is
+      stepped over, so `KCNQ1 / c.1032G>A / - / KCNH2 / c.1841C>T / A614V` with
+      target KCNQ1 yields the chimera `KCNQ1 c.1032G>A A614V`. Note
+      `_valid_table_protein('SCN5A')` returns `'SCN5A'` (the regex is
+      IGNORECASE).
+- [ ] **Attribution map is document-global and gene-blind on the token.** If the
+      only table mentioning a token is an off-target comparison list, every
+      extract of that token is rejected, including a legitimate prose or figure
+      hit. Key the map by table as well as notation.
+- [ ] **Re-extract and re-verify the two 50-paper collaborator queues, then
+      decide republication.** The 2026-08-14 staged BRCA1/BRCA2 output is still
+      live on collaborator staging and still wrong. A run was launched and
+      stopped twice (once for a compromised fix, once because grok's findings
+      landed mid-run); nothing has been republished. Source for all 100 papers is
+      already cached, so the cost is ~$16 and no fetching.
+- [ ] **Measure the four-gene headline and gold-120 Gate 2 after the re-extract.**
+      Both are currently unmeasured against this change set.
+
 
 ## 5. Engineering handoff follow-ups
 
