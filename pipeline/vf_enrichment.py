@@ -29,7 +29,11 @@ def enrich_and_quarantine(
     db,
     *,
     vf_db: Optional[Path] = None,
-    quarantine_classes: str = "misparse_out_of_range",
+    # Quarantine only what is demonstrably wrong: a residue that can't exist in
+    # this gene at all, or one that positively matches a DIFFERENT known gene.
+    # `residue_offset_suspect` (legacy BIC numbering) and `residue_unverified`
+    # are reported but kept — removing them would delete real variants.
+    quarantine_classes: str = "misparse_out_of_range,wrong_gene_residue_mismatch",
     stamp: Optional[str] = None,
     logger: Optional[Any] = None,
 ) -> dict:

@@ -69,6 +69,33 @@ REVIEW_ONLY_SIGNALS = (
 )
 
 
+# A species adjective directly modifying the gene symbol means the paper studies
+# that animal's ORTHOLOG, whose residue numbering does not map to human. PMID
+# 19944633 ("Single nucleotide variation in exon 11 of canine BRCA2") put 16 dog
+# variants into a human BRCA2 dataset headed for a clinical browser.
+#
+# Deliberately narrow: it must modify the GENE, not merely appear in the paper.
+# A model-system assay OF human variants is legitimate data and must survive —
+# PMID 30283497 ("Functional Interaction Between BRCA1 and DNA Repair in Yeast")
+# reports human C61G/A1708E/M1775R and is correctly kept.
+_ORTHOLOG_SPECIES = (
+    r"(?:canine|feline|murine|bovine|porcine|equine|ovine|rat|mouse|mice|dog|dogs|"
+    r"cat|cats|zebrafish|chicken|rabbit|xenopus|drosophila|c\.\s?elegans)"
+)
+
+
+def names_nonhuman_ortholog(text: Optional[str], gene: Optional[str] = None) -> bool:
+    """True when the text studies a non-human ortholog of the gene."""
+    if not text:
+        return False
+    symbol = re.escape(gene.strip()) if gene else r"[A-Z][A-Z0-9-]{1,9}"
+    return bool(
+        re.search(
+            rf"\b{_ORTHOLOG_SPECIES}\s+(?:\w+\s+)?{symbol}\b", text, re.IGNORECASE
+        )
+    )
+
+
 def _is_reasoning_model(model: Optional[str]) -> bool:
     if not model:
         return False

@@ -423,3 +423,55 @@ c5382insC    7   pGln1829fs Pathogenic   40
         )
         == 2
     )
+
+
+def test_nonhuman_ortholog_paper_contributes_no_variants(extractor):
+    """PMID 19944633 is "Single nucleotide variation in exon 11 of canine
+    BRCA2". Its residue numbering is the dog's and does not map to human, yet 16
+    variants were staged for a clinical browser."""
+    canine = (
+        "# MAIN TEXT\n\n## Single nucleotide variation in exon 11 of canine "
+        "BRCA2 in healthy and cancerous mammary tissue\n\n"
+        "| Protein | Carriers |\n|---|---|\n| p.Glu119Lys | 3 |\n"
+    )
+    data = {"variants": [{"gene_symbol": "BRCA2", "protein_notation": "p.Glu119Lys"}]}
+    out = ExpertExtractor._filter_by_gene(extractor, data, "BRCA2", canine)
+    assert out["variants"] == []
+    assert out["extraction_metadata"]["dropped_nonhuman_ortholog"] == 1
+
+
+def test_model_system_assay_of_human_variants_is_kept(extractor):
+    """A yeast/mouse assay OF human variants is legitimate human data. Only a
+    species adjective modifying the GENE means the animal's own ortholog."""
+    yeast = (
+        "# MAIN TEXT\n\n## Functional Interaction Between BRCA1 and DNA Repair in "
+        "Yeast May Uncover a Role of RAD50, RAD51, MRE11A\n\n"
+        "| Protein | Carriers |\n|---|---|\n| p.C61G | 1 |\n"
+    )
+    data = {"variants": [{"gene_symbol": "BRCA1", "protein_notation": "p.C61G"}]}
+    out = ExpertExtractor._filter_by_gene(extractor, data, "BRCA1", yeast)
+    assert [v["protein_notation"] for v in out["variants"]] == ["p.C61G"]
+
+
+def test_variant_with_no_identifier_is_dropped(extractor):
+    """Nameless rows reach the public browser as blank variants — 30 BMPR2,
+    14 BRCA1, 9 BRCA2 in the 150-paper re-extraction."""
+    data = {
+        "variants": [
+            {"gene_symbol": "BRCA2", "protein_notation": "p.R190W"},
+            {"gene_symbol": "BRCA2", "additional_notes": "carrier total inferred"},
+            # A structural event is legitimately notation-free and must survive.
+            {
+                "gene_symbol": "BRCA2",
+                "variant_class": "exon_duplication",
+                "structural_description": "duplication of exons 8-10",
+            },
+        ]
+    }
+    out = ExpertExtractor._filter_extraction_artifacts(extractor, data, "BRCA2")
+    kept = out["variants"]
+    assert [v.get("protein_notation") for v in kept if v.get("protein_notation")] == [
+        "p.R190W"
+    ]
+    assert any(v.get("variant_class") == "exon_duplication" for v in kept)
+    assert not any(v.get("additional_notes") for v in kept)

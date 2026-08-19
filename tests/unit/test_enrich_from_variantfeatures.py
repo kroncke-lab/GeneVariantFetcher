@@ -285,7 +285,7 @@ def test_enrichment_end_to_end_matches_and_flags(tmp_path, vf_db, capsys):
     assert report[1].endswith(",misparse_out_of_range,2")
 
 
-def test_residue_mismatch_is_flagged_even_when_position_is_in_range():
+def test_residue_mismatch_splits_wrong_gene_from_numbering_and_unknown():
     """Out-of-range was the only wrong-gene signal, and it is the weaker half.
 
     BRCA1's P871/E1038/K1183 haplotype sits comfortably inside BRCA2's 3,418
@@ -294,12 +294,26 @@ def test_residue_mismatch_is_flagged_even_when_position_is_in_range():
     504 BRCA1 / 230 BRCA2 / 64 BMPR2 rows; BMPR2 had ZERO out-of-range, so the
     old classifier reported nothing gene-related for it at all.
     """
-    residues = {871: {"L"}, 1038: {"K"}}
+    residues = {871: {"L"}, 872: {"P"}, 1038: {"K"}}
+    others = {"BRCA1": {871: {"P"}}}
 
-    # in range, reference residue disagrees -> wrong gene
+    # disagrees here AND positively matches another gene -> confident wrong gene
     assert (
-        enrich.classify_unmatched("p.P871L", "", 3418, residues)
+        enrich.classify_unmatched("p.P871L", "", 3418, {871: {"L"}}, others)
         == "wrong_gene_residue_mismatch"
+    )
+    # disagrees here but fits this gene one residue over -> legacy BIC numbering,
+    # NOT a wrong-gene row. Quarantining these deletes real data: 125 BRCA1,
+    # 29 BRCA2 and 24 BMPR2 rows in the 150-paper re-extraction.
+    assert (
+        enrich.classify_unmatched("p.P871L", "", 3418, residues, others)
+        == "residue_offset_suspect"
+    )
+    # disagrees here and matches no gene we know -> suspect, but not shown to be
+    # misattributed. Reported, never quarantined.
+    assert (
+        enrich.classify_unmatched("p.W500A", "", 3418, {500: {"K"}}, others)
+        == "residue_unverified"
     )
     # in range, reference residue agrees -> merely unseen by the warehouse
     assert enrich.classify_unmatched("p.L871P", "", 3418, residues) == "novel_in_range"

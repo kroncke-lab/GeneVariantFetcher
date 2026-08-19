@@ -1724,6 +1724,30 @@ class ExpertExtractor(BaseLLMCaller):
         if not variants:
             return extracted_data
 
+        # A paper about a non-human ORTHOLOG contributes no human variants. Its
+        # residue numbering does not map: PMID 19944633 ("Single nucleotide
+        # variation in exon 11 of canine BRCA2") put 16 dog variants into a
+        # human BRCA2 dataset headed for a clinical browser. Checked against the
+        # title block only, and only when the species modifies the gene, so a
+        # model-system assay OF human variants survives — PMID 30283497
+        # ("... BRCA1 and DNA Repair in Yeast") reports human C61G/A1708E/M1775R
+        # and is kept.
+        if full_text:
+            from pipeline.filters import names_nonhuman_ortholog
+
+            head = "\n".join(full_text.split("\n")[:8])
+            if names_nonhuman_ortholog(head, target_gene):
+                logger.warning(
+                    "Dropping all %d variant(s): paper studies a non-human %s "
+                    "ortholog, whose numbering does not map to human",
+                    len(variants),
+                    target_gene,
+                )
+                extracted_data["variants"] = []
+                meta = extracted_data.setdefault("extraction_metadata", {})
+                meta["dropped_nonhuman_ortholog"] = len(variants)
+                return extracted_data
+
         target_upper = target_gene.upper()
         original_count = len(variants)
 
@@ -1875,6 +1899,32 @@ class ExpertExtractor(BaseLLMCaller):
         from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
 
         variants = extracted_data.get("variants", [])
+
+        # A variant with no identifier is not a variant. These reach the public
+        # browser as nameless rows: 30 BMPR2, 14 BRCA1 and 9 BRCA2 in the
+        # 150-paper re-extraction (5.2% of BMPR2). Nothing downstream can render,
+        # match or adjudicate them.
+        named = [
+            v
+            for v in variants
+            if (v.get("cdna_notation") or "").strip()
+            or (v.get("protein_notation") or "").strip()
+            # A structural event is legitimately notation-free ("duplication of
+            # exons 8-10"), so it must survive on the same predicate the
+            # malformed-notation guard below already uses.
+            or (
+                (v.get("structural_description") or "").strip()
+                and (v.get("variant_class") or "").strip().lower()
+                in self.STRUCTURAL_ONLY_VARIANT_CLASSES
+            )
+        ]
+        if len(named) != len(variants):
+            logger.info(
+                "Dropped %d variant(s) with neither cDNA nor protein notation",
+                len(variants) - len(named),
+            )
+            variants = named
+            extracted_data["variants"] = variants
         if not variants:
             return extracted_data
 

@@ -207,7 +207,11 @@ _PROT_CALL_RE = re.compile(
 
 
 def classify_unmatched(
-    protein: str, cdna: str, max_pos: int, residues: Optional[dict] = None
+    protein: str,
+    cdna: str,
+    max_pos: int,
+    residues: Optional[dict] = None,
+    other_gene_residues: Optional[dict] = None,
 ) -> str:
     """High-confidence FP signal from variantFeatures non-coverage."""
     p = (protein or "").strip()
@@ -227,10 +231,28 @@ def classify_unmatched(
     # P871/E1038/K1183 haplotype under a BRCA2 run scores in-range at every one.
     call = _PROT_CALL_RE.match(bare)
     if call and residues:
+        aa = call.group(1).upper()
         pos = int(call.group(2))
         known = residues.get(pos)
-        if known and call.group(1).upper() not in known:
-            return "wrong_gene_residue_mismatch"
+        if known and aa not in known:
+            # A residue that disagrees is not automatically the wrong gene.
+            # Legacy BIC protein numbering is offset from RefSeq, so an older
+            # paper's call can land a few residues off and still be this gene's
+            # variant. Quarantining those would delete real data: 125 BRCA1,
+            # 29 BRCA2 and 24 BMPR2 rows in the 150-paper re-extraction fit
+            # their own gene once a small offset is allowed.
+            for off in (-3, -2, -1, 1, 2, 3):
+                if aa in residues.get(pos + off, set()):
+                    return "residue_offset_suspect"
+            if other_gene_residues:
+                for g, rmap in other_gene_residues.items():
+                    if aa in rmap.get(pos, set()):
+                        # Positively belongs to a different gene: the confident
+                        # wrong-gene class, and the only one safe to quarantine.
+                        return "wrong_gene_residue_mismatch"
+            # Disagrees with this gene and matches no other gene we know.
+            # Suspect, but not demonstrably misattributed — report, don't remove.
+            return "residue_unverified"
     return "novel_in_range"  # valid position, just not in the observed warehouse
 
 
@@ -245,6 +267,31 @@ def main() -> int:
     args = ap.parse_args()
 
     prot_map, cdna_map, meta, max_pos, vpos, residues = load_vf(args.vf, args.gene)
+    # Residue maps for the other genes GVF knows, so a mismatch can be told
+    # apart from a positive match elsewhere. Bounded and indexed by gene_symbol.
+    other_residues: dict = {}
+    try:
+        from utils.gene_metadata import known_gene_aliases
+
+        others = [
+            g
+            for g in known_gene_aliases(include_query_aliases=False)
+            if g.upper() != args.gene.upper()
+        ]
+        con = sqlite3.connect(f"file:{args.vf}?mode=ro", uri=True)
+        for g in others:
+            rmap: dict = {}
+            for pos, aa in con.execute(
+                "SELECT DISTINCT aa_pos, aa_ref FROM variant_consequences "
+                "WHERE gene_symbol=? AND aa_pos IS NOT NULL AND aa_ref IS NOT NULL",
+                (g,),
+            ):
+                rmap.setdefault(int(pos), set()).add(str(aa).upper())
+            if rmap:
+                other_residues[g] = rmap
+        con.close()
+    except Exception as e:  # noqa: BLE001 - QC must never fail the run
+        print(f"  (other-gene residue maps unavailable: {e})")
     print(
         f"variantFeatures[{args.gene}]: {len(meta)} variants  "
         f"(protein keys={len(prot_map)}, cDNA keys={len(cdna_map)}, "
@@ -293,7 +340,11 @@ def main() -> int:
         if vf_id is None:
             n_unmatched += 1
             cls = classify_unmatched(
-                r["protein_notation"], r["cdna_notation"], max_pos, residues
+                r["protein_notation"],
+                r["cdna_notation"],
+                max_pos,
+                residues,
+                other_residues,
             )
             fp_class_counts[cls] += 1
             out.append(
@@ -362,7 +413,7 @@ def main() -> int:
         SELECT v.variant_id, v.protein_notation, v.cdna_notation, e.fp_class,
                (SELECT COUNT(DISTINCT pmid) FROM variant_papers vp WHERE vp.variant_id=v.variant_id) AS papers
         FROM vf_enrichment e JOIN variants v ON v.variant_id=e.variant_id
-        WHERE e.fp_class IN ('misparse_out_of_range','no_notation_suspect','wrong_gene_residue_mismatch')
+        WHERE e.fp_class IN ('misparse_out_of_range','no_notation_suspect','wrong_gene_residue_mismatch','residue_unverified')
         ORDER BY papers DESC, v.variant_id""").fetchall()
     with open(fp_out, "w", newline="") as f:
         w = csv.writer(f)
