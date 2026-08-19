@@ -1,0 +1,39 @@
+
+BRCA1: 50 papers | old 7346 -> new 6093 variants
+   removed 1513  (confirmed wrong-gene 281 | unadjudicated 1232 | SUSPECT 0)   added 193
+   PMID         old   new     -     +  wrong-gene  unadj  susp
+   31159747    1017   348   669     0          53    616     0
+   32766142     188    64   156     0          21    135     0
+   29907814     375   284    91     0           0     91     0
+   24549055     217   144    71     0          51     20     0
+   29884136     112    56    57     0          39     18     0
+   27741520     135    84    50     0          21     29     0
+   32211327      94    74    49     0          21     28     0
+   29335924     103    47    42     0          32     10     0
+   21232165      67    30    37     0           0     37     0
+   29936257      83    46    37     0          19     18     0
+
+BRCA2: 46 papers | old 1426 -> new 1406 variants
+   removed 143  (confirmed wrong-gene 4 | unadjudicated 139 | SUSPECT 0)   added 132
+   PMID         old   new     -     +  wrong-gene  unadj  susp
+   26848529     124    80    44     0           0     44     0
+   21232165      67    38    29     0           0     29     0
+   23683081      93    59    25     0           1     24     0
+   17018160      23    18     8     2           1      7     0
+   19944633       8    16     8    16           0      8     0
+   19200354      15    11     4     0           0      4     0
+   17972177      17    15     3     1           0      3     0
+   23961350      85   111     3    24           0      3     0
+   26833046      79    76     3     0           0      3     0
+   19656415      46    47     2     3           1      1     0
+
+BMPR2 (CONTROL): 50 papers | old 474 -> new 581 variants
+   removed 1  (confirmed wrong-gene 0 | unadjudicated 1 | SUSPECT 0)   added 16
+   PMID         old   new     -     +  wrong-gene  unadj  susp
+   28017794       1     1     1     1           0      1     0
+   11484688       1     3     0     2           0      0     0
+   19324947       8     9     0     2           0      0     0
+   27077124       3     3     0     3           0      0     0
+   27811071      20    22     0     2           0      0     0
+   30894412       1     6     0     5           0      0     0
+   37094738       6     8     0     1           0      0     0

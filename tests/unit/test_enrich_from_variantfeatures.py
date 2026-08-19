@@ -106,7 +106,9 @@ def _hit(statements, table, needle):
 
 
 def test_uppercase_gene_uses_the_indexed_predicate_everywhere(vf_db, traced):
-    prot_map, cdna_map, meta, max_pos, positions = enrich.load_vf(vf_db, "KCNH2")
+    prot_map, cdna_map, meta, max_pos, positions, _residues = enrich.load_vf(
+        vf_db, "KCNH2"
+    )
 
     # Results first: the predicate change must not move any output.
     assert prot_map == {"C112R": 1, "K1194*": 2}
@@ -163,7 +165,9 @@ def test_mixed_case_only_gene_still_resolves_and_keeps_the_join_indexed(vf_db, t
     fallback path -- a per-query fallback would scan twice.
     """
 
-    prot_map, cdna_map, meta, max_pos, positions = enrich.load_vf(vf_db, "C19ORF25")
+    prot_map, cdna_map, meta, max_pos, positions, _residues = enrich.load_vf(
+        vf_db, "C19ORF25"
+    )
 
     assert prot_map == {"A30G": 10}
     assert cdna_map == {"c.89C>G": 10}
@@ -186,18 +190,27 @@ def test_mixed_case_only_gene_still_resolves_and_keeps_the_join_indexed(vf_db, t
 def test_absent_gene_never_touches_the_pathogenicity_join(vf_db, traced):
     """Every gene without a slice used to pay both full scans for zero rows."""
 
-    prot_map, cdna_map, meta, max_pos, positions = enrich.load_vf(vf_db, "NOSUCHGENE")
+    prot_map, cdna_map, meta, max_pos, positions, _residues = enrich.load_vf(
+        vf_db, "NOSUCHGENE"
+    )
 
     # Same empty shape the callers already handle: nothing matches, nothing is
     # quarantined because max_pos of 0 disables the out-of-range test.
-    assert (prot_map, cdna_map, meta, max_pos, positions) == ({}, {}, {}, 0, set())
+    assert (prot_map, cdna_map, meta, max_pos, positions, _residues) == (
+        {},
+        {},
+        {},
+        0,
+        set(),
+        {},
+    )
     assert not any("annotations_pathogenicity" in sql for sql in traced)
 
 
 def test_enrichment_end_to_end_matches_and_flags(tmp_path, vf_db, capsys):
     """Guards the whole script, so an import or arity slip cannot pass unnoticed.
 
-    ``load_vf`` returns five values against a three-value annotation; only a real
+    ``load_vf`` returns six values against a three-value annotation; only a real
     invocation catches an unpacking regression.
     """
 
@@ -270,3 +283,32 @@ def test_enrichment_end_to_end_matches_and_flags(tmp_path, vf_db, capsys):
     assert len(report) == 2
     assert report[1].startswith("3,")
     assert report[1].endswith(",misparse_out_of_range,2")
+
+
+def test_residue_mismatch_is_flagged_even_when_position_is_in_range():
+    """Out-of-range was the only wrong-gene signal, and it is the weaker half.
+
+    BRCA1's P871/E1038/K1183 haplotype sits comfortably inside BRCA2's 3,418
+    residues, so under a BRCA2 run every one scored "novel_in_range" and none
+    was ever flagged. On the 150-paper re-extraction the residue check flags
+    504 BRCA1 / 230 BRCA2 / 64 BMPR2 rows; BMPR2 had ZERO out-of-range, so the
+    old classifier reported nothing gene-related for it at all.
+    """
+    residues = {871: {"L"}, 1038: {"K"}}
+
+    # in range, reference residue disagrees -> wrong gene
+    assert (
+        enrich.classify_unmatched("p.P871L", "", 3418, residues)
+        == "wrong_gene_residue_mismatch"
+    )
+    # in range, reference residue agrees -> merely unseen by the warehouse
+    assert enrich.classify_unmatched("p.L871P", "", 3418, residues) == "novel_in_range"
+    # position the warehouse knows nothing about stays novel, never a false flag
+    assert enrich.classify_unmatched("p.M999T", "", 3418, residues) == "novel_in_range"
+    # out of range still wins
+    assert (
+        enrich.classify_unmatched("p.P9999L", "", 3418, residues)
+        == "misparse_out_of_range"
+    )
+    # no residue map (gene absent from the warehouse) must never flag
+    assert enrich.classify_unmatched("p.P871L", "", 3418, {}) == "novel_in_range"

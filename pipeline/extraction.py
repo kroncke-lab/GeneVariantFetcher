@@ -1587,7 +1587,13 @@ class ExpertExtractor(BaseLLMCaller):
             # space-free class captured only `c.181T`, so the map key never met
             # the emitted `c.181T>G` and the reject silently skipped. Whitespace
             # is stripped from the captured token below.
-            r"|(c\.\s*[\w\[\]]+(?:\s*[>+\-_*]\s*[\w\[\]]+)*)"
+            # `-` only WITHOUT surrounding spaces. Real HGVS writes intronic
+            # offsets tight ("c.68-7A>T"), while a table cell packs two calls
+            # into one field with a spaced dash: "c.300T>G - p.C61G". Allowing a
+            # spaced dash merged those into one token, so the cDNA half was
+            # never keyed and BRCA1's c.300T>G escaped the cross-gene reject
+            # even though its protein half (C61G) was caught (PMID 23469205).
+            r"|(c\.\s*[\w\[\]]+(?:(?:\s*[>+_*]\s*|-)[\w\[\]]+)*)"
             r"|((?:del|dup|ins)\s*\d+\s*[A-Za-z]*|\d+\s*(?:del|dup|ins)[A-Za-z]*)"
         )
 

@@ -20,6 +20,7 @@ import argparse
 import csv
 import json
 import re
+from typing import Optional
 import sqlite3
 import sys
 from pathlib import Path
@@ -134,7 +135,7 @@ def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict, int, set[int]]:
             # over annotations_pathogenicity (43.5M rows). Empty maps and a max
             # position of 0 are what the callers already expect for this case:
             # everything reports unmatched and nothing is ever quarantined.
-            return {}, {}, {}, 0, set()
+            return {}, {}, {}, 0, set(), {}
         gene_ph = ",".join("?" * len(symbols))
         # Representative consequence per variant: prefer MANE select, then canonical.
         best: dict[int, tuple[int, sqlite3.Row]] = {}
@@ -181,7 +182,18 @@ def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict, int, set[int]]:
         # variant at — used to classify unmatched GVF variants (out-of-range = FP).
         max_pos = max((m["aa_pos"] for m in meta.values() if m["aa_pos"]), default=0)
         positions = {m["aa_pos"] for m in meta.values() if m["aa_pos"]}
-        return prot_map, cdna_map, meta, max_pos, positions
+        # Reference residue by position. Out-of-range was the only wrong-gene
+        # signal here, and it is the weaker half: a BRCA1 polymorphism such as
+        # P871L sits comfortably inside BRCA2's 3,418 residues, so it was
+        # classified "novel_in_range" and never flagged even though BRCA2's
+        # residue 871 is not P. Residue identity catches that class.
+        residues: dict = {}
+        for m in meta.values():
+            if m["aa_pos"] and m["aa_ref"]:
+                residues.setdefault(int(m["aa_pos"]), set()).add(
+                    str(m["aa_ref"]).upper()
+                )
+        return prot_map, cdna_map, meta, max_pos, positions, residues
     finally:
         con.close()
 
@@ -189,19 +201,36 @@ def load_vf(vf: Path, gene: str) -> tuple[dict, dict, dict, int, set[int]]:
 _RES_RE = re.compile(r"(\d+)")
 
 
-def classify_unmatched(protein: str, cdna: str, max_pos: int) -> str:
+_PROT_CALL_RE = re.compile(
+    r"^([ACDEFGHIKLMNPQRSTVWY])(\d{1,5})(?![0-9])", re.IGNORECASE
+)
+
+
+def classify_unmatched(
+    protein: str, cdna: str, max_pos: int, residues: Optional[dict] = None
+) -> str:
     """High-confidence FP signal from variantFeatures non-coverage."""
     p = (protein or "").strip()
     c = (cdna or "").strip()
     if not p:
         return "cdna_only_unmatched" if "c." in c else "no_notation_suspect"
-    m = _RES_RE.search(p.replace("p.", ""))
+    bare = p.replace("p.", "")
+    m = _RES_RE.search(bare)
     if not m:
         return "no_notation_suspect"
     if max_pos and int(m.group(1)) > max_pos:
         return (
             "misparse_out_of_range"  # residue can't exist in this gene -> FP/wrong-gene
         )
+    # In range, but is the REFERENCE residue right for this gene? A wrong-gene
+    # row usually lands in range and is only betrayed by the residue: BRCA1's
+    # P871/E1038/K1183 haplotype under a BRCA2 run scores in-range at every one.
+    call = _PROT_CALL_RE.match(bare)
+    if call and residues:
+        pos = int(call.group(2))
+        known = residues.get(pos)
+        if known and call.group(1).upper() not in known:
+            return "wrong_gene_residue_mismatch"
     return "novel_in_range"  # valid position, just not in the observed warehouse
 
 
@@ -215,7 +244,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    prot_map, cdna_map, meta, max_pos, vpos = load_vf(args.vf, args.gene)
+    prot_map, cdna_map, meta, max_pos, vpos, residues = load_vf(args.vf, args.gene)
     print(
         f"variantFeatures[{args.gene}]: {len(meta)} variants  "
         f"(protein keys={len(prot_map)}, cDNA keys={len(cdna_map)}, "
@@ -263,7 +292,9 @@ def main() -> int:
                 n_cdna += 1
         if vf_id is None:
             n_unmatched += 1
-            cls = classify_unmatched(r["protein_notation"], r["cdna_notation"], max_pos)
+            cls = classify_unmatched(
+                r["protein_notation"], r["cdna_notation"], max_pos, residues
+            )
             fp_class_counts[cls] += 1
             out.append(
                 (
@@ -331,7 +362,7 @@ def main() -> int:
         SELECT v.variant_id, v.protein_notation, v.cdna_notation, e.fp_class,
                (SELECT COUNT(DISTINCT pmid) FROM variant_papers vp WHERE vp.variant_id=v.variant_id) AS papers
         FROM vf_enrichment e JOIN variants v ON v.variant_id=e.variant_id
-        WHERE e.fp_class IN ('misparse_out_of_range','no_notation_suspect')
+        WHERE e.fp_class IN ('misparse_out_of_range','no_notation_suspect','wrong_gene_residue_mismatch')
         ORDER BY papers DESC, v.variant_id""").fetchall()
     with open(fp_out, "w", newline="") as f:
         w = csv.writer(f)

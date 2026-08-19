@@ -1094,3 +1094,65 @@ def test_standalone_recovery_gets_a_per_run_child_of_the_base(
     children = _trace_children(base)
     assert len(children) == 2, f"sequential recoveries shared a directory: {children}"
     assert all(name.startswith("recover-counts-") for name in children), children
+
+
+def test_vf_enrich_runs_outside_full_coverage_when_warehouse_available(
+    tmp_path: Path, monkeypatch
+):
+    """The wrong-gene FP quarantine must not be full-coverage-only.
+
+    It is the only check that validates a variant's gene against an independent
+    reference, and it was reachable only in full-coverage discovery mode — so
+    every calibrated `--pmid-file` run, which is how the collaborator-facing
+    review sets are built, silently skipped it. Even the "SKIPPED" log line sat
+    inside the same branch, so nothing reported that it had not run.
+    """
+    captured: dict = {}
+    calls: list[str] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run, "step_vf_enrich", lambda **kwargs: calls.append("vf") or {}
+    )
+    warehouse = tmp_path / "variants.db"
+    warehouse.write_text("")
+    monkeypatch.setattr(
+        "utils.gene_metadata.default_variantfeatures_db_path", lambda: warehouse
+    )
+    monkeypatch.setattr("utils.env_utils.local_data_discovery_disabled", lambda: False)
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == 0
+    assert calls == ["vf"]
+
+
+def test_vf_enrich_unavailable_is_a_warning_not_silence(tmp_path: Path, monkeypatch):
+    """An absent warehouse must be loud. Silently skipping the only independent
+    gene check is how wrong-gene rows reached collaborator staging."""
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        "utils.gene_metadata.default_variantfeatures_db_path", lambda: None
+    )
+    monkeypatch.setattr("utils.env_utils.local_data_discovery_disabled", lambda: False)
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == 0
+    statuses = list((tmp_path / "out").rglob("RUN_STATUS.json"))
+    assert statuses, "no RUN_STATUS.json written"
+    status = json.loads(statuses[0].read_text())
+    warnings = " ".join(status.get("stage_warnings") or [])
+    assert "vf-enrich" in warnings and "VARIANTFEATURES_DB" in warnings

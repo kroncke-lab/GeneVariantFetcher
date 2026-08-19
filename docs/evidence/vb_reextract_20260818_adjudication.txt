@@ -1,0 +1,20 @@
+    1011  BRCA1: present but no gene cell in its row
+     368  BRCA1: correct removal (source names another gene)
+     134  BRCA1: not present in source in any form
+     117  BRCA2: present but no gene cell in its row
+      20  BRCA2: not present in source in any form
+       6  BRCA2: correct removal (source names another gene)
+
+SUSPECTS: 0
+
+NOT IN SOURCE (old run appears to have invented these): 154
+    ('BRCA1', '18627636', ['c.4265delCT'])
+    ('BRCA1', '19949876', ['c.516+1G>T'])
+    ('BRCA1', '19949876', ['T411C', 'Thr411*'])
+    ('BRCA1', '20104584', ['c.5677insA'])
+    ('BRCA1', '21156238', ['c.713-34T>C'])
+    ('BRCA1', '22713736', ['c.66_67delTA'])
+    ('BRCA1', '22713736', ['IVS2-91A>G'])
+    ('BRCA1', '22713736', ['IVS5+45T>A'])
+    ('BRCA1', '22713736', ['IVS6+55G>A'])
+    ('BRCA1', '22713736', ['IVS7+15delTTC'])

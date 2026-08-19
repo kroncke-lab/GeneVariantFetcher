@@ -2336,15 +2336,56 @@ def _run_gvf_pipeline(
                 stage_failures.append(f"count recovery failed: {e}")
                 count_recovery_status = {"status": "error", "reason": str(e)}
 
-    if full_coverage and vf_enrich and "vf-enrich" not in skip:
+    # NOT gated on full_coverage. This is the only check that validates a
+    # variant's gene against an independent reference, and it was reachable only
+    # in full-coverage discovery mode — so every calibrated `--pmid-file` run,
+    # which is how the collaborator-facing review sets are built, silently
+    # skipped it. Even the "SKIPPED" line below sat inside the same branch, so
+    # nothing said it had not run.
+    # ...but only when the warehouse is actually reachable. It is a 36GB SQLite
+    # on an external volume; forcing it unconditionally would hang a collaborator
+    # laptop or CI, and this same DB previously wedged the offline test suite for
+    # ~685s. Unavailable is a loud warning, never a silent no-op.
+    vf_db_path = None
+    try:
+        from utils.gene_metadata import default_variantfeatures_db_path
+        from utils.env_utils import local_data_discovery_disabled
+
+        if not local_data_discovery_disabled():
+            vf_db_path = default_variantfeatures_db_path()
+    except Exception as e:  # noqa: BLE001 - never fail a run on a QC lookup
+        logger.debug("vf-enrich: could not resolve variantFeatures DB (%s)", e)
+
+    if vf_enrich and "vf-enrich" not in skip and (full_coverage or vf_db_path):
         logger.info("🔬 Step 3.6: variantFeatures enrich + wrong-gene FP quarantine")
         try:
-            step_vf_enrich(gene=gene, db=db)
+            vf_stats = step_vf_enrich(gene=gene, db=db)
+            logger.info("vf-enrich: %s", vf_stats)
+            if isinstance(vf_stats, dict) and not vf_stats.get("enriched", True):
+                warning = (
+                    "vf-enrich did not run "
+                    f"({vf_stats.get('reason') or vf_stats.get('rc')}); "
+                    "wrong-gene FP quarantine was NOT applied"
+                )
+                logger.warning("%s", warning)
+                stage_warnings.append(warning)
         except Exception as e:  # noqa: BLE001
             logger.exception("vf-enrich failed (%s); continuing", e)
             stage_warnings.append(f"vf-enrich failed: {e}")
-    elif full_coverage and not vf_enrich:
-        logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED")
+    elif vf_enrich and "vf-enrich" not in skip:
+        warning = (
+            "vf-enrich SKIPPED: no readable variantFeatures DB "
+            "(set VARIANTFEATURES_DB). The wrong-gene FP quarantine — the only "
+            "check that validates a variant's gene against an independent "
+            "reference — was NOT applied to this run."
+        )
+        logger.warning("%s", warning)
+        stage_warnings.append(warning)
+    else:
+        logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED (disabled)")
+        stage_warnings.append(
+            "vf-enrich disabled; wrong-gene FP quarantine was NOT applied"
+        )
 
     # Step 3.7: per-fact trust gate — soft-quarantine gold-free-implausible count
     # facts into a two-tier (trusted/quarantine) DB. Default ON: this is the
