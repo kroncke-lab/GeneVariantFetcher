@@ -145,15 +145,59 @@ def test_unscoped_variants_are_never_dropped(extractor):
     assert _filter(extractor, variants, "BRCA2") == ["V9999X"]
 
 
-def test_variant_without_table_provenance_is_kept(extractor):
+def test_variant_without_table_provenance_survives_a_mere_mention(extractor):
     """Attribution is evidence about a TABLE, not a document-wide blocklist.
 
-    A row extracted from prose, a figure, or the LLM's narrative pass carries no
-    source_table. Judging it against a document-global map deleted it whenever
-    an unrelated "previously reported in GENE_X" table listed the same notation.
+    A row from prose, a figure, or the text scanner carries no source_table.
+    Judging it against a document-global map deleted it whenever an unrelated
+    table listed the same notation. It is kept as long as ANY table that carries
+    the notation attributes it to the target gene.
     """
-    variants = [{"gene_symbol": "BRCA2", "protein_notation": "C61G"}]
-    assert _filter(extractor, variants, "BRCA2") == ["C61G"]
+    mixed = """# Paper
+
+Table 1. Variants in BRCA2 gene
+
+| cDNA | Protein | Carriers |
+|---|---|---|
+| c.9976A>T | R190W | 7 |
+
+Table 5. Previously reported BRCA1 variants
+
+| cDNA | Protein | Carriers |
+|---|---|---|
+| c.181T>G | R190W | 3 |
+"""
+    data = {"variants": [{"gene_symbol": "BRCA2", "protein_notation": "R190W"}]}
+    out = ExpertExtractor._filter_by_gene(extractor, data, "BRCA2", mixed)
+    assert [v["protein_notation"] for v in out["variants"]] == ["R190W"]
+
+
+def test_unanimous_source_contradiction_rejects_even_without_provenance(extractor):
+    """The text scanner reads a table as prose and labels provenance
+    "Text scan (...)", so a row whose source reads
+    `| BRCA1 | c.4964C>T | p.S1655F |` was never judged and BRCA1's S1655F and
+    R1699Q published under BRCA2 (PMID 19563646).
+
+    When EVERY table carrying the notation attributes it to another gene, the
+    paper is unanimous and the row is wrong whichever pass produced it.
+    """
+    variants = [
+        {
+            "gene_symbol": "BRCA2",
+            "protein_notation": "C61G",
+            "source_location": "Text scan (protein_hgvs_short)",
+        }
+    ]
+    assert _filter(extractor, variants, "BRCA2") == []
+    # ...and the same row is kept for the gene the paper actually names.
+    keep = [
+        {
+            "gene_symbol": "BRCA1",
+            "protein_notation": "C61G",
+            "source_location": "Text scan (protein_hgvs_short)",
+        }
+    ]
+    assert _filter(extractor, keep, "BRCA1") == ["C61G"]
 
 
 def test_variant_is_judged_against_its_own_table(extractor):

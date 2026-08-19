@@ -1754,6 +1754,22 @@ class ExpertExtractor(BaseLLMCaller):
                     source_genes |= attribution[(source_table, token)]
                 elif source_table and token in attribution:
                     source_genes |= attribution[token]
+                elif token in attribution:
+                    # No table provenance. Rows extracted from prose, figures or
+                    # the text scanner must not be judged by a table that merely
+                    # MENTIONS the same notation — that deletes legitimate hits.
+                    # But when every table that carries this notation attributes
+                    # it to a different gene, the paper is unanimous and the row
+                    # is wrong regardless of which pass produced it.
+                    #
+                    # This is what let PMID 19563646 publish BRCA1's S1655F and
+                    # R1699Q under BRCA2: the source row reads
+                    # `| BRCA1 | c.4964C>T | 5083C>T | p.S1655F |`, but the
+                    # scanner labelled provenance "Text scan (protein_hgvs_short)"
+                    # so the row was never judged at all.
+                    unanimous = attribution[token]
+                    if unanimous and target_upper not in unanimous:
+                        source_genes |= unanimous
             if source_genes and target_upper not in source_genes:
                 misattributed += 1
                 removed_genes.update(source_genes)
