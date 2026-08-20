@@ -6907,6 +6907,33 @@ Return strict JSON with this schema:
                 model_used=model,
             )
 
+        # Gate non-human ortholog papers HERE, before any extraction runs. Doing
+        # it in `_filter_by_gene` was too late: that guard dropped all 24
+        # variants for PMID 19944633 (canine BRCA2) and a later merge stage put
+        # 8 back, because merges append after the filter. Gating up front also
+        # saves the LLM call entirely.
+        from pipeline.filters import names_nonhuman_ortholog
+
+        if paper.gene_symbol and names_nonhuman_ortholog(
+            "\n".join(full_text.split("\n")[:8]), paper.gene_symbol
+        ):
+            logger.warning(
+                "PMID %s studies a non-human %s ortholog; extracting nothing "
+                "(its residue numbering does not map to human)",
+                paper.pmid,
+                paper.gene_symbol,
+            )
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=True,
+                extracted_data={
+                    "paper_metadata": {"pmid": paper.pmid},
+                    "variants": [],
+                    "extraction_metadata": {"skipped_nonhuman_ortholog": True},
+                },
+                model_used="skipped-nonhuman-ortholog",
+            )
+
         # SCANNER TEXT: Always use the original full text for regex scanning
         # and table extraction, even when the LLM gets condensed DATA_ZONES.
         # The scanner is pure regex (no API cost), so it should see everything.

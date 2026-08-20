@@ -302,12 +302,31 @@ def test_residue_mismatch_splits_wrong_gene_from_numbering_and_unknown():
         enrich.classify_unmatched("p.P871L", "", 3418, {871: {"L"}}, others)
         == "wrong_gene_residue_mismatch"
     )
-    # disagrees here but fits this gene one residue over -> legacy BIC numbering,
-    # NOT a wrong-gene row. Quarantining these deletes real data: 125 BRCA1,
-    # 29 BRCA2 and 24 BMPR2 rows in the 150-paper re-extraction.
+    # disagrees here, fits this gene one residue over, and NO other gene claims
+    # the exact position -> legacy BIC numbering, not a wrong-gene row.
+    # Quarantining these deletes real data: 125 BRCA1, 29 BRCA2 and 24 BMPR2
+    # rows in the 150-paper re-extraction.
     assert (
-        enrich.classify_unmatched("p.P871L", "", 3418, residues, others)
+        enrich.classify_unmatched(
+            "p.P871L", "", 3418, residues, {"BRCA1": {999: {"P"}}}
+        )
         == "residue_offset_suspect"
+    )
+
+    # PRECEDENCE: an exact match in another gene outranks a fuzzy offset match
+    # in this one. On a 3,418-residue protein a +/-3 window finds some amino
+    # acid by coincidence almost every time -- BRCA2 has E at 1035/1036, so
+    # BRCA1's E1038G was rescued as "numbering" and published under BRCA2
+    # across five papers, while BRCA1 has E at exactly 1038.
+    assert (
+        enrich.classify_unmatched(
+            "p.E1038G",
+            "",
+            3418,
+            {1035: {"E"}, 1036: {"E"}, 1038: {"Y"}},
+            {"BRCA1": {1038: {"E"}}},
+        )
+        == "wrong_gene_residue_mismatch"
     )
     # disagrees here and matches no gene we know -> suspect, but not shown to be
     # misattributed. Reported, never quarantined.

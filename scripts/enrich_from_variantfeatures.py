@@ -241,15 +241,21 @@ def classify_unmatched(
             # variant. Quarantining those would delete real data: 125 BRCA1,
             # 29 BRCA2 and 24 BMPR2 rows in the 150-paper re-extraction fit
             # their own gene once a small offset is allowed.
-            for off in (-3, -2, -1, 1, 2, 3):
-                if aa in residues.get(pos + off, set()):
-                    return "residue_offset_suspect"
+            # Order matters. An EXACT match in another gene outranks a fuzzy
+            # offset match in this one: on a 3,418-residue protein a ±3 window
+            # finds some amino acid by coincidence almost every time. BRCA2 has
+            # E at 1035/1036 and K at 1180, so BRCA1's E1038G and K1183R were
+            # rescued as "numbering" and published under BRCA2 across 9 papers —
+            # while BRCA1 has E at exactly 1038 and K at exactly 1183.
             if other_gene_residues:
                 for g, rmap in other_gene_residues.items():
                     if aa in rmap.get(pos, set()):
                         # Positively belongs to a different gene: the confident
                         # wrong-gene class, and the only one safe to quarantine.
                         return "wrong_gene_residue_mismatch"
+            for off in (-3, -2, -1, 1, 2, 3):
+                if aa in residues.get(pos + off, set()):
+                    return "residue_offset_suspect"
             # Disagrees with this gene and matches no other gene we know.
             # Suspect, but not demonstrably misattributed — report, don't remove.
             return "residue_unverified"
