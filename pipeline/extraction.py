@@ -1410,7 +1410,50 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
     @staticmethod
-    def _secondary_study_table_reason(variant: dict) -> Optional[str]:
+    def _table_candidate_target_evidence(evidence_quote: str) -> str:
+        """Return only the candidate row from a bounded markdown audit packet.
+
+        Markdown candidates deliberately retain their header and adjacent rows
+        for audit.  Those neighbors are not attribution evidence about the
+        candidate itself.  Other producers quote only their target row and
+        therefore fall back to the original text unchanged.
+        """
+        evidence = str(evidence_quote or "")
+        target_parts: list[str] = []
+        in_target = False
+        for line in evidence.splitlines():
+            if line.startswith("Target row:"):
+                in_target = True
+                target_parts.append(line.split(":", 1)[1].lstrip())
+                continue
+            if not in_target:
+                continue
+            if line.startswith(("Header:", "Previous row:", "Next row:")):
+                break
+            target_parts.append(line)
+        return "\n".join(target_parts) if in_target else evidence
+
+    @classmethod
+    def _table_candidate_gene_evidence(cls, evidence_quote: str) -> str:
+        """Exclude neighboring rows while preserving gene-bearing headers.
+
+        A header can encode one column per gene.  Until a producer supplies an
+        exact source column binding, retaining those header genes makes the
+        fallback fail closed.  Previous and next data rows, however, must never
+        contaminate the target row.
+        """
+        evidence = str(evidence_quote or "")
+        if not any(line.startswith("Target row:") for line in evidence.splitlines()):
+            return evidence
+        header_parts = [
+            line.split(":", 1)[1].lstrip()
+            for line in evidence.splitlines()
+            if line.startswith("Header:")
+        ]
+        target = cls._table_candidate_target_evidence(evidence)
+        return "\n".join([*header_parts, target])
+
+    def _secondary_study_table_reason(self, variant: dict) -> Optional[str]:
         """Identify tables that summarize other studies rather than this cohort.
 
         Regex table extraction is an additive safety net, so it must not turn a
@@ -1441,10 +1484,11 @@ class ExpertExtractor(BaseLLMCaller):
 
         # A summary table can include a final row for the paper itself.  That row
         # is current-study evidence and is safe even though its table is otherwise
-        # historical.
+        # historical.  Inspect only the candidate row: a neighboring row saying
+        # "present study" cannot legalize a historical literature row.
         if re.search(
             r"\b(?:present|current|this|our)\s+(?:study|cohort|series)\b",
-            evidence,
+            self._table_candidate_target_evidence(evidence),
             re.IGNORECASE,
         ):
             return None
@@ -1483,7 +1527,7 @@ class ExpertExtractor(BaseLLMCaller):
             for key in ("protein_notation", "cdna_notation", "source_notation")
             if variant.get(key)
         }
-        tokens |= {token[2:] for token in tokens if token.startswith("P.")}
+        tokens |= {token[2:] for token in tokens if token.startswith(("P.", "C."))}
         for token in tokens:
             if table_key and (table_key, token) in attribution:
                 source_genes |= set(attribution[(table_key, token)])
@@ -1518,11 +1562,14 @@ class ExpertExtractor(BaseLLMCaller):
                 if attribution
                 else set()
             )
+            gene_evidence = self._table_candidate_gene_evidence(
+                str(variant.get("evidence_quote") or "")
+            )
             quote_genes = {
                 gene
                 for gene in known_gene_aliases(include_query_aliases=False)
                 if gene_alias_regex(gene, include_query_aliases=False).search(
-                    str(variant.get("evidence_quote") or "")
+                    gene_evidence
                 )
             }
             if reason is None and target and source_genes:
@@ -1864,7 +1911,11 @@ class ExpertExtractor(BaseLLMCaller):
         is emitted stays unattributed, so it is kept rather than rejected —
         fail-open, which is the correct direction for a recall-critical filter.
         """
-        from pipeline.table_router import _gene_section_divider
+        from pipeline.table_router import (
+            _gene_section_divider,
+            _infer_unnamed_gene_column,
+            _split_pipe_row,
+        )
         from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 
         attribution: dict = {}
@@ -1872,6 +1923,8 @@ class ExpertExtractor(BaseLLMCaller):
         current_label: Optional[str] = None
         table_scope: set = set()
         section_scope: set = set()
+        carried_row_scope: set = set()
+        gene_column_idx: Optional[int] = None
         in_table = False
 
         notation_re = re.compile(
@@ -1888,14 +1941,22 @@ class ExpertExtractor(BaseLLMCaller):
             # even though its protein half (C61G) was caught (PMID 23469205).
             r"|(c\.\s*[\w\[\]]+(?:(?:\s*[>+_*]\s*|-)[\w\[\]]+)*)"
             r"|((?:del|dup|ins)\s*\d+\s*[A-Za-z]*|\d+\s*(?:del|dup|ins)[A-Za-z]*)"
+            # BIC/legacy nucleotide columns often omit the c. prefix and add
+            # spaces ("649 A>G").  Retain the complete allele as a literal
+            # key; unlike a position-only alias this cannot collapse different
+            # substitutions or indels onto one another.
+            r"|(\d+(?:[+-]\d+)?\s*[ACGT]+\s*>\s*[ACGT]+)"
         )
 
-        for line in full_text.splitlines():
+        lines = full_text.splitlines()
+        for line_idx, line in enumerate(lines):
             stripped = line.strip()
             if not stripped.startswith("|"):
                 in_table = False
                 table_scope = set()
                 section_scope = set()
+                carried_row_scope = set()
+                gene_column_idx = None
                 current_label = None
                 if stripped:
                     caption_candidates.append(stripped)
@@ -1904,13 +1965,32 @@ class ExpertExtractor(BaseLLMCaller):
             if set(stripped) <= {"|", "-", " ", ":"}:
                 continue
 
-            cells = [c.strip() for c in stripped.strip("|").split("|")]
+            cells = _split_pipe_row(line)
             if not in_table:
                 in_table = True
                 caption = _anchored_table_caption(caption_candidates)
                 table_scope = self._gene_scope_from_table_label(caption)
                 current_label = _table_label_key(caption)
                 section_scope = set()
+                carried_row_scope = set()
+                gene_column_idx = next(
+                    (
+                        idx
+                        for idx, header in enumerate(cells)
+                        if self._header_matches(header, self.VARIANT_GENE_HEADERS)
+                    ),
+                    None,
+                )
+                if gene_column_idx is None:
+                    data_lines: list[str] = []
+                    for candidate in lines[line_idx + 1 :]:
+                        candidate_stripped = candidate.strip()
+                        if not candidate_stripped.startswith("|"):
+                            break
+                        if set(candidate_stripped) <= {"|", "-", " ", ":"}:
+                            continue
+                        data_lines.append(candidate)
+                    gene_column_idx = _infer_unnamed_gene_column(cells, data_lines)
                 caption_candidates = []
                 continue  # header row carries no variant
 
@@ -1922,6 +2002,7 @@ class ExpertExtractor(BaseLLMCaller):
             divider_gene = _gene_section_divider(cells)
             if divider_gene:
                 section_scope = {divider_gene}
+                carried_row_scope = set()
                 continue
 
             # Precedence: a gene named in the ROW itself beats the section
@@ -1963,12 +2044,31 @@ class ExpertExtractor(BaseLLMCaller):
                 if label_gene:
                     row_genes.add(label_gene)
 
+            # Markdown gene columns commonly use rowspan semantics: the gene is
+            # named once and subsequent cells stay blank until the next gene.
+            # Carry only the mapped Gene column, mirroring both deterministic
+            # parsers. A bare gene in a notes/modifier column may scope its own
+            # cell, but must never relabel later rows.
+            gene_column_scope: set = set()
+            if gene_column_idx is not None:
+                gene_cell = (
+                    cells[gene_column_idx].strip()
+                    if gene_column_idx < len(cells)
+                    else ""
+                )
+                if gene_cell:
+                    gene_column = _gene_section_divider([gene_cell])
+                    carried_row_scope = {gene_column} if gene_column else set()
+                gene_column_scope = set(carried_row_scope)
+
             for idx, cell in enumerate(cells):
                 own = cell_genes[idx]
                 if len(own) == 1:
                     scope = own
                 elif own:
                     continue  # this cell names several genes — ambiguous
+                elif gene_column_scope:
+                    scope = gene_column_scope
                 elif len(row_genes) == 1:
                     scope = set(row_genes)
                 elif row_genes:
@@ -1976,13 +2076,19 @@ class ExpertExtractor(BaseLLMCaller):
                     # gene the notation belongs to is unknowable here, so stay
                     # silent rather than guess. Silence rejects nothing.
                     continue
+                elif carried_row_scope:
+                    scope = set(carried_row_scope)
                 else:
                     scope = section_scope or table_scope
                 if not scope:
                     continue
                 for match in notation_re.finditer(cell):
                     token = (
-                        match.group(1) or match.group(2) or match.group(3) or ""
+                        match.group(1)
+                        or match.group(2)
+                        or match.group(3)
+                        or match.group(4)
+                        or ""
                     ).strip()
                     token = re.sub(r"\s+", "", token)
                     if len(token) < 3:
@@ -2074,11 +2180,22 @@ class ExpertExtractor(BaseLLMCaller):
                 token = re.sub(r"\s+", "", token)
                 if not token:
                     continue
-                if source_table and (source_table, token) in attribution:
-                    source_genes |= attribution[(source_table, token)]
-                elif source_table and token in attribution:
-                    source_genes |= attribution[token]
-                elif token in attribution:
+                tokens = {token}
+                if token.startswith("C."):
+                    tokens.add(token[2:])
+                table_matches = {
+                    candidate
+                    for candidate in tokens
+                    if source_table and (source_table, candidate) in attribution
+                }
+                if table_matches:
+                    for candidate in table_matches:
+                        source_genes |= attribution[(source_table, candidate)]
+                elif source_table:
+                    for candidate in tokens:
+                        if candidate in attribution:
+                            source_genes |= attribution[candidate]
+                else:
                     # No table provenance. Rows extracted from prose, figures or
                     # the text scanner must not be judged by a table that merely
                     # MENTIONS the same notation — that deletes legitimate hits.
@@ -2091,9 +2208,12 @@ class ExpertExtractor(BaseLLMCaller):
                     # `| BRCA1 | c.4964C>T | 5083C>T | p.S1655F |`, but the
                     # scanner labelled provenance "Text scan (protein_hgvs_short)"
                     # so the row was never judged at all.
-                    unanimous = attribution[token]
-                    if unanimous and target_upper not in unanimous:
-                        source_genes |= unanimous
+                    for candidate in tokens:
+                        if candidate not in attribution:
+                            continue
+                        unanimous = attribution[candidate]
+                        if unanimous and target_upper not in unanimous:
+                            source_genes |= unanimous
             if source_genes and target_upper not in source_genes:
                 misattributed += 1
                 removed_genes.update(source_genes)

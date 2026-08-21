@@ -255,6 +255,151 @@ BRCA1 and BRCA2 variants observed in hereditary cancer probands
     }
 
 
+def test_table_candidate_filter_ignores_neighboring_row_genes():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+Current-study variants in unrelated probands
+| Patient | Gene | Nucleotide change | Phenotype |
+|---|---|---|---|
+| 1 | KCNE2 | 161 T>C | affected |
+| 2 | RYR2 | 649 A>G | affected |
+| 3 | KCNQ1 | 905 C>T | affected |
+"""
+    candidates = extractor._parse_markdown_table_variants(text, "RYR2")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="RYR2",
+        document_text=text,
+    )
+
+    assert [variant["cdna_notation"] for variant in eligible] == ["c.649A>G"]
+    assert skipped == []
+    quote = eligible[0]["evidence_quote"]
+    assert "Previous row: | 1 | KCNE2" in quote
+    assert "Target row: | 2 | RYR2" in quote
+    assert "Next row: | 3 | KCNQ1" in quote
+    assert eligible[0]["key_quotes"] == [quote]
+
+
+def test_table_candidate_filter_binds_unprefixed_cdna_beside_modifier_gene():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+Current-study variants in unrelated probands
+| Patient | Gene | Nucleotide change | Modifier polymorphisms | Phenotype |
+|---|---|---|---|---|
+| 1 | RYR2 | 7175 A>G | R1047L-KCNH2 | affected |
+"""
+    candidates = [
+        *extractor._parse_markdown_table_variants(text, "RYR2"),
+        *extractor._extract_variants_from_tables(text, "RYR2"),
+    ]
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="RYR2",
+        document_text=text,
+    )
+
+    assert {variant.get("cdna_notation") for variant in eligible} == {"c.7175A>G"}
+    assert [(item["variant"], item["reason"]) for item in skipped] == [
+        ("R1047L", "wrong_gene")
+    ]
+
+
+def test_table_candidate_filter_forward_fills_blank_gene_cells():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 3
+Current-study RYR2 and KCNQ1 variants
+| Gene | Nucleotide change | Phenotype |
+|---|---|---|
+| RYR2 | 1258 C>T | affected |
+|  | 14864 G>A | affected |
+| KCNQ1 | 940 G>A | affected |
+"""
+    candidates = extractor._parse_markdown_table_variants(text, "RYR2")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="RYR2",
+        document_text=text,
+    )
+
+    assert [variant["cdna_notation"] for variant in eligible] == [
+        "c.1258C>T",
+        "c.14864G>A",
+    ]
+    assert skipped == []
+    attribution = extractor._source_gene_attribution(text)
+    assert attribution[("table 3", "14864G>A")] == {"RYR2"}
+    assert attribution[("table 3", "940G>A")] == {"KCNQ1"}
+
+
+def test_table_candidate_filter_retains_gene_bearing_header_as_fail_closed_signal():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    candidate = {
+        "cdna_notation": "c.181T>G",
+        "source_table": "Table 1",
+        "evidence_quote": (
+            "Header: | RYR2 variant | KCNQ1 variant |\n"
+            "Target row: | c.181T>G | c.940G>A |"
+        ),
+    }
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        [candidate], target_gene="RYR2"
+    )
+
+    assert eligible == []
+    assert [(item["variant"], item["reason"]) for item in skipped] == [
+        ("c.181T>G", "gene_ambiguous")
+    ]
+
+
+def test_present_study_neighbor_does_not_legalize_historical_row():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    candidate = {
+        "cdna_notation": "c.4034delA",
+        "source_table": "Table 4",
+        "source_table_caption": "Summary of prior BRCA1 studies",
+        "evidence_quote": (
+            "Header: | Study | Variant |\n"
+            "Previous row: | Present study | c.181T>G |\n"
+            "Target row: | Ewald et al., 2011 | c.4034delA |"
+        ),
+    }
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        [candidate], target_gene="BRCA1"
+    )
+
+    assert eligible == []
+    assert [(item["variant"], item["reason"]) for item in skipped] == [
+        ("c.4034delA", "secondary_study_table")
+    ]
+
+
+def test_present_study_target_row_survives_secondary_table_caption():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    candidate = {
+        "cdna_notation": "c.181T>G",
+        "source_table": "Table 4",
+        "source_table_caption": "Summary of prior BRCA1 studies",
+        "evidence_quote": (
+            "Header: | Study | Variant |\n"
+            "Previous row: | Ewald et al., 2011 | c.4034delA |\n"
+            "Target row: | Present study | c.181T>G |"
+        ),
+    }
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        [candidate], target_gene="BRCA1"
+    )
+
+    assert eligible == [candidate]
+    assert skipped == []
+
+
 def test_table_candidate_filter_binds_multi_gene_row_per_cell():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

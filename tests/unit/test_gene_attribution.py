@@ -291,6 +291,74 @@ def test_paired_two_gene_row_attributes_per_cell(extractor):
     assert attribution["G314A"] == {"KCNQ1"}
 
 
+def test_filter_matches_hgvs_cdna_to_unprefixed_table_allele(extractor):
+    """The parser emits ``c.649A>G`` from a legacy ``649 A>G`` cell.
+
+    The production filter must consult that exact source assignment rather than
+    trusting the target gene stamped onto the extracted row.
+    """
+    paper = """# Paper
+
+Table 2. Current-study panel variants
+
+| Gene | Nucleotide change | Carriers |
+|---|---|---|
+| RYR2 | 649 A>G | 1 |
+| KCNQ1 | 905 C>T | 1 |
+"""
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "KCNQ1",
+                "cdna_notation": "c.649A>G",
+                "source_table": "Table 2",
+            }
+        ]
+    }
+
+    out = ExpertExtractor._filter_by_gene(extractor, data, "KCNQ1", paper)
+
+    assert out["variants"] == []
+
+
+def test_gene_column_carry_ignores_bare_gene_in_notes_column(extractor):
+    """Only a mapped Gene column has rowspan/forward-fill semantics.
+
+    A notes or modifier cell containing a bare gene can scope that cell, but it
+    must not relabel the current allele or every blank-gene continuation row.
+    """
+    paper = """# Paper
+
+Table 3. Current-study panel variants
+
+| Gene | Nucleotide change | Compared gene |
+|---|---|---|
+| RYR2 | 1258 C>T |  |
+|  | 14864 G>A | KCNH2 |
+|  | 940 G>A |  |
+"""
+    attribution = ExpertExtractor._source_gene_attribution(extractor, paper)
+    assert attribution[("table 3", "14864G>A")] == {"RYR2"}
+    assert attribution[("table 3", "940G>A")] == {"RYR2"}
+
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "c.14864G>A",
+                "source_table": "Table 3",
+            },
+            {
+                "gene_symbol": "KCNH2",
+                "cdna_notation": "c.940G>A",
+                "source_table": "Table 3",
+            },
+        ]
+    }
+    out = ExpertExtractor._filter_by_gene(extractor, data, "KCNH2", paper)
+    assert out["variants"] == []
+
+
 # --------------------------------------------------------------------------
 # TASKS.md section 4c — the audit findings not covered by the first fix round.
 # --------------------------------------------------------------------------
