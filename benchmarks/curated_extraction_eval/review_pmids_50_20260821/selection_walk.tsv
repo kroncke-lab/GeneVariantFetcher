@@ -1,0 +1,15 @@
+rank	pmid	carrier_rows	decision	reason
+51	25136594	7	reject	Diagnostic-validation/methods paper; validation-table observations were previously observed by Sanger and the BRCA2 corpus lacks the primary cohort table body.
+52	26183948	7	include	Primary human germline BRCA1/2 cohort of 200 Bulgarian breast-cancer patients; supplement recovery is required before acceptance.
+53	21719596	6	reject	Mouse embryonic-stem-cell functional assay, not human clinical carrier evidence.
+54	23704879	6	reject	Computational/functional phosphorylation analysis of VUS, not a clinical carrier cohort.
+55	24764757	6	reject	Narrative review of Latin-American founder mutations; other-study observations are out of scope.
+56	25916844	6	reject	Somatic high-grade serous ovarian tumour genomics, not a germline clinical carrier cohort.
+57	25923920	6	include	Primary human familial breast-cancer exome study with this-study pathogenic BRCA2 observations.
+58	27067391	6	reject	Computational prioritization framework for non-coding VUS, not a clinical carrier cohort.
+59	18694767	5	reject	Canonical BRCA2 rank is wrong-gene contamination from BRCA1 polymorphisms.
+60	20380699	5	include	Primary human Estonian BRCA1/2 clinical series; fresh extraction must recover its reported pathogenic BRCA2 alleles and reject historical BRCA1 contamination.
+61	21989022	5	reject	Primary study is a BRCA1 deletion; its BRCA2 rows are literature-review/other-study observations.
+62	25884701	5	include	Primary human ovarian-cancer founder cohort; BRCA2 calls are reported germline, with tumour-DNA samples requiring per-observation caution.
+63	26543556	5	reject	Methods-heavy dual-gene study with other-study tables and an internally inconsistent BRCA1/BRCA2 assignment for 6005delT.
+64	26843898	5	include	Primary human Southern-Polish germline cohort; fresh extraction must distinguish the current-study column from literature-compilation tables.

@@ -141,3 +141,22 @@ def test_gold_expansion_is_separate_from_the_full_reviewer_backlog():
     assert ("BRCA2", "19944633") not in tier3
 
     assert not tier2 <= tier3
+
+
+def test_corrected_brca2_50_extends_the_safe_45_without_restoring_exclusions():
+    active_45 = _pmids(REVIEW / "review_pmids_20260811_brca2_provenance" / "BRCA2.txt")
+    corrected_50 = _pmids(REVIEW / "review_pmids_50_20260821" / "BRCA2.txt")
+
+    assert corrected_50[:45] == active_45
+    assert corrected_50[45:] == [
+        "26183948",
+        "25923920",
+        "20380699",
+        "25884701",
+        "26843898",
+    ]
+    assert len(corrected_50) == len(set(corrected_50)) == 50
+    assert all(is_valid_pmid(pmid) for pmid in corrected_50)
+
+    excluded = {"15365993", "18489799", "19944633", "22655046", "25802882"}
+    assert excluded.isdisjoint(corrected_50)
