@@ -177,6 +177,11 @@ def shell_quote(value: Path | str) -> str:
     return shlex.quote(str(value))
 
 
+def runtime_python() -> Path:
+    """Return the active environment entrypoint without dereferencing it."""
+    return Path(sys.executable).absolute()
+
+
 def make_extraction_script(
     *, run_dir: Path, genes: list[str], email: str, python: Path
 ) -> str:
@@ -351,7 +356,10 @@ def create(args: argparse.Namespace) -> Path:
     for gene, pmids in by_gene.items():
         (pmid_dir / f"{gene}.txt").write_text("\n".join(pmids) + "\n")
 
-    python = Path(sys.executable).resolve()
+    # Preserve the virtual-environment entrypoint. Resolving the symlink can
+    # select the dependency-free base interpreter and make the generated
+    # launcher fail before importing the CLI.
+    python = runtime_python()
     if not python.is_file():
         raise SetupError(f"Python interpreter is unavailable: {python}")
     environment_names = configured_environment_names()

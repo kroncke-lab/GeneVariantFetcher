@@ -26,6 +26,20 @@ def test_direct_cli_entrypoint_resolves_repository_imports(tmp_path: Path):
     assert "check" in result.stdout
 
 
+def test_setup_preserves_virtual_environment_interpreter_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    base = tmp_path / "base-python"
+    base.write_text("")
+    environment_python = tmp_path / "venv" / "bin" / "python"
+    environment_python.parent.mkdir(parents=True)
+    environment_python.symlink_to(base)
+    monkeypatch.setattr(setup.sys, "executable", str(environment_python))
+
+    assert setup.runtime_python() == environment_python.absolute()
+    assert setup.runtime_python() != environment_python.resolve()
+
+
 def test_live_gold120_contract_is_the_corrected_119_attempt_cohort():
     contract = setup.cohort_contract(setup.DEFAULT_MANIFEST, setup.DEFAULT_REGISTRY)
 
