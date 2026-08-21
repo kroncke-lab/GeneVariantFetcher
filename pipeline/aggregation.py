@@ -369,10 +369,14 @@ class DataAggregator:
                     elif status == "uncertain":
                         uncertain += 1
 
-        # Calculate penetrance percentage
+        # Do not calculate penetrance from raw extraction integers. Aggregation
+        # runs before the DB trust projection, and missing phenotype fields are
+        # represented as zero by the additive counters above. A derived ratio
+        # here therefore turns abstentions or a wrong split into an apparently
+        # authoritative clinical percentage. Explicit source-stated values stay
+        # on their per-paper records; a trusted downstream analysis may derive a
+        # ratio later under an explicit statistical contract.
         penetrance_percentage = None
-        if total_carriers > 0 and affected is not None:
-            penetrance_percentage = (affected / total_carriers) * 100
 
         # Aggregate age-dependent penetrance
         age_dependent = []
@@ -388,9 +392,7 @@ class DataAggregator:
             "affected": affected,
             "unaffected": unaffected,
             "uncertain": uncertain,
-            "penetrance_percentage": round(penetrance_percentage, 2)
-            if penetrance_percentage is not None
-            else None,
+            "penetrance_percentage": penetrance_percentage,
             "age_dependent_penetrance": age_dependent,
             "individual_records_count": len(individual_records),
             "cohort_studies_count": len(penetrance_points),

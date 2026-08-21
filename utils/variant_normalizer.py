@@ -33,6 +33,8 @@ import re
 from importlib.resources import files
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from utils.deprecations import warn_deprecated
+
 logger = logging.getLogger(__name__)
 
 # Amino acid single-letter to three-letter code mapping
@@ -1538,6 +1540,10 @@ def normalize_protein_variant(variant: str) -> str:
     Returns:
         Normalized variant in short format (A561V)
     """
+    warn_deprecated(
+        "utils.variant_normalizer.normalize_protein_variant",
+        "normalize_variant",
+    )
     if not variant:
         return ""
 
@@ -1558,6 +1564,10 @@ def normalize_cdna_variant(variant: str) -> str:
     Returns:
         Normalized cDNA variant (c.1682C>T)
     """
+    warn_deprecated(
+        "utils.variant_normalizer.normalize_cdna_variant",
+        "VariantNormalizer.normalize_cdna",
+    )
     if not variant:
         return ""
 
@@ -1608,6 +1618,11 @@ def find_matching_variants(
         - missed: List of expected variants not found in extracted
         - extra: List of extracted variants not found in expected
     """
+    warn_deprecated(
+        "utils.variant_normalizer.find_matching_variants",
+        "variants_match or match_variants_to_baseline",
+    )
+
     # Normalize all variants
     norm_extracted = {normalize_variant(v, gene_symbol): v for v in extracted if v}
     norm_expected = {normalize_variant(v, gene_symbol): v for v in expected if v}
@@ -1665,193 +1680,3 @@ def create_variant_key(variant: Dict[str, Any], gene_symbol: str = "KCNH2") -> s
         return f"{gene_symbol}:{genomic.strip()}"
 
     return f"{gene_symbol}:unknown_variant"
-
-
-if __name__ == "__main__":
-    # Test the normalizer
-    print("=" * 60)
-    print("Variant Normalizer Test Suite")
-    print("=" * 60)
-
-    norm = VariantNormalizer("KCNH2")
-
-    # Test protein normalization
-    test_variants = [
-        "A561V",
-        "p.Ala561Val",
-        "Ala561Val",
-        "p.A561V",
-        "A193fsX",
-        "G584S",
-        "R864stop",
-        "G184Del",
-        "p.Arg534Cys",
-        "R534C",  # Common variant in multiple notations
-    ]
-
-    print("\n1. Protein Normalization (Class-based):")
-    for v in test_variants:
-        forms = norm.get_all_forms(v)
-        print(
-            f"  {v:15} -> single: {forms.get('single', 'N/A'):12} three: {forms.get('three', 'N/A')}"
-        )
-
-    # Test standalone normalize_variant function
-    print("\n2. Standalone normalize_variant() Function:")
-    standalone_tests = [
-        "p.Ala561Val",  # Three-letter protein
-        "A561V",  # Already normalized
-        "c.1682C>T",  # cDNA
-        "1682C>T",  # cDNA without prefix
-        "IVS10+1G>A",  # Splice variant (IVS notation)
-        "A193fsX10",  # Frameshift with position
-        "R864*",  # Stop codon
-        "p.Gly628Ser",  # KCNH2 variant
-    ]
-    for v in standalone_tests:
-        normalized = normalize_variant(v)
-        print(f"  {v:18} -> {normalized}")
-
-    # === NEW TESTS: Normalization gap fixes (2026-02-10) ===
-    print("\n8. NEW Normalization Gap Fixes (2026-02-10):")
-
-    # Test 8a: Trailing asterisk removal (DMS artifacts)
-    print("\n  8a. Trailing Asterisk Removal (DMS artifacts):")
-    asterisk_tests = [
-        ("A561V*", "A561V"),  # DMS artifact
-        ("p.Arg231Cys*", "R231C"),  # Three-letter with asterisk
-        ("M291T*", "M291T"),  # DMS study variant
-        ("R864*", "R864X"),  # Stop codon - should convert * to X
-    ]
-    for v, expected in asterisk_tests:
-        result = normalize_variant(v)
-        status = "✓" if result == expected else f"✗ (got {result})"
-        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
-
-    # Test 8b: Trailing annotation removal
-    print("\n  8b. Trailing Annotation Removal:")
-    annotation_tests = [
-        ("R176W(het)", "R176W"),
-        ("A561V/WT", "A561V"),
-        ("G584S(hom)", "G584S"),
-        ("R534C/+", "R534C"),
-    ]
-    for v, expected in annotation_tests:
-        result = normalize_variant(v)
-        status = "✓" if result == expected else f"✗ (got {result})"
-        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
-
-    # Test 8c: Case normalization
-    print("\n  8c. Case Normalization:")
-    case_tests = [
-        ("a561v", "A561V"),
-        ("r176w", "R176W"),
-        ("g584s", "G584S"),
-    ]
-    for v, expected in case_tests:
-        result = normalize_variant(v)
-        status = "✓" if result == expected else f"✗ (got {result})"
-        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
-
-    # Test 8d: Frameshift standardization
-    print("\n  8d. Frameshift Standardization:")
-    fs_tests = [
-        ("A193fs*46", "A193fsX"),
-        ("p.Gly262Alafs*98", "G262fsX"),
-        ("G262fsX10", "G262fsX"),
-        ("A1077fs+X*", "A1077fsX"),
-        ("p.Arg518fs*", "R518fsX"),
-        ("Gly24fsTer58", "G24fsX"),
-    ]
-    for v, expected in fs_tests:
-        result = normalize_variant(v)
-        status = "✓" if result == expected else f"✗ (got {result})"
-        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
-
-    # Test 8e: p. prefix removal (should already work)
-    print("\n  8e. p. Prefix Removal:")
-    prefix_tests = [
-        ("p.R176W", "R176W"),
-        ("p.A561V", "A561V"),
-        ("p.Ala561Val", "A561V"),
-    ]
-    for v, expected in prefix_tests:
-        result = normalize_variant(v)
-        status = "✓" if result == expected else f"✗ (got {result})"
-        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
-
-    # Test non-target detection
-    non_target_tests = [
-        "R248W",  # TP53 hotspot
-        "G12D",  # KRAS hotspot
-        "V600E",  # BRAF hotspot
-        "P2006A",  # Position > KCNH2 length
-        "A561V",  # Valid KCNH2 variant
-    ]
-
-    print("\n3. Non-Target Variant Detection:")
-    for v in non_target_tests:
-        is_non, reason = norm.is_non_target_variant(v)
-        status = f"⚠️  NON-TARGET: {reason}" if is_non else "✓ Valid"
-        print(f"  {v:12} -> {status}")
-
-    # Test cDNA normalization
-    cdna_tests = [
-        "c.1234A>G",
-        "1234A>G",  # Missing c. prefix
-        "c.3152+1G>A",  # Intronic
-        "3152+1G>A",  # Missing prefix, intronic
-    ]
-
-    print("\n4. cDNA Normalization:")
-    for v in cdna_tests:
-        normalized = norm.normalize_cdna(v)
-        print(f"  {v:18} -> {normalized}")
-
-    # Test variant matching
-    print("\n5. variants_match() Function:")
-    match_tests = [
-        ("p.Ala561Val", "A561V"),
-        ("p.Arg534Cys", "R534C"),
-        ("c.1682C>T", "1682C>T"),
-        ("A561V", "G584S"),  # Should NOT match
-    ]
-    for v1, v2 in match_tests:
-        result = variants_match(v1, v2)
-        status = "✓ MATCH" if result else "✗ no match"
-        print(f"  {v1:15} vs {v2:10} -> {status}")
-
-    # Test create_variant_key for aggregation
-    print("\n6. create_variant_key() for Aggregation:")
-    key_tests = [
-        {"protein_notation": "p.Ala561Val", "cdna_notation": "c.1682C>T"},
-        {"protein_notation": "A561V"},
-        {"protein_notation": "p.Arg534Cys"},
-        {"cdna_notation": "c.1600C>T"},
-    ]
-    for vdict in key_tests:
-        key = create_variant_key(vdict)
-        print(f"  {vdict} -> {key}")
-
-    # Test baseline matching
-    print("\n7. Baseline Matching with Fuzzy Position:")
-    baseline = {"A561V", "G584S", "R534C", "c.1234A>G"}
-    extracted = ["p.Ala561Val", "G585S", "R248W", "1234A>G", "unknown"]
-
-    results = match_variants_to_baseline(
-        extracted, baseline, "KCNH2", fuzzy_position=True
-    )
-
-    print(f"  Matches: {len(results['matches'])}")
-    for m in results["matches"]:
-        print(f"    {m['extracted']} -> {m['matched_to']} ({m['match_type']})")
-
-    print(f"  Filtered (non-target): {len(results['filtered_non_target'])}")
-    for v, reason in results["filtered_non_target"]:
-        print(f"    {v}: {reason}")
-
-    print(f"  Unmatched: {results['unmatched']}")
-    print(f"  Stats: {results['stats']}")
-
-    print("\n" + "=" * 60)
-    print("All tests complete!")

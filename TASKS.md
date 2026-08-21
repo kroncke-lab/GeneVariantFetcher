@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-21.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -30,35 +30,64 @@ count-eligible papers per cardiac gene (seed 2026081301). Live membership is
 119 attempts / 115 unique PMIDs after KCNH2 10086972 was removed. It does not
 widen the experimental genes.
 
-Gate 2 is complete and **passed**. The patched-system revalidation is locked in
-`runs/20260813_gold120_verticalfix`: counted-extra precision is 95.70% raw and
-95.87% trusted, above the 77.3% floor; the distinct count-bearing-only
-diagnostic is 86.05% / 85.80%. Variant recall remains 84.09%, and carrier MAE is
-0.308 raw / 0.299 trusted, still about half the 0.614 canonical all-paper
-baseline. The immediately preceding stochastic run was lower at 0.266 / 0.243,
-so the revalidation is a precision improvement, not a claim that every
-conditional error metric improved on that one sample. The vertical-table fix
-retained all 42 classification-table identities and correctly left their
-carrier counts null.
+The last completed Gate 2 **passed** under the 2026-08-20 no-inference
+contract. The extraction-blinded lock is
+`benchmarks/codex_paper_eval/runs/20260820_gold119_noinference`: counted-extra
+precision is 97.51%, above the 77.3% floor; the distinct count-bearing-only
+diagnostic is 93.30%. Variant recall is 86.57% (548/633), up from 84.09% on the
+accepted 2026-08-13 run. Carrier coverage is 30.49%, but conditional carrier
+MAE regressed to 0.425 from 0.308. Affected and unaffected coverage deliberately
+fell to 7.58% and 5.06% because the pipeline now refuses to infer partitions
+from diagnoses, enrollment totals, or arithmetic. This is an identity
+recall/precision pass, not a new penetrance or phenotype-count baseline. The
+run retained all 42 PMID 26746457 classification identities with null counts
+and recorded circuit-breaker empties rather than silently dropping them.
 
-The revalidation used 527 calls / 2.351M tokens and a $9.774 public-price
-proxy. All four production traces are write-time verified and bound into the
-prediction lock. The approved BMPR2 50 / BRCA1 50 / BRCA2 46 launch began only
-after this lock and score completed.
+That run predates the current fail-closed source-identifier, active-DB,
+trace-presence, trusted-count, and trusted-identity projection changes. A fresh
+119-attempt scaffold must be created from a clean commit and run before these
+changes are accepted; `20260821_current_changes_gold119` is only a stale
+pre-extraction scaffold, not evidence of a completed test.
 
-- [ ] Finish Gate 3, `reviewer_546`: 546 attempts across 507
+The run used 554 calls / 2.464M tokens. All four production traces are
+write-time verified and bound into the prediction lock. The approved BMPR2 50 /
+BRCA1 50 / BRCA2 no-publish launch began only after this lock and score
+completed. The first, then-46-paper BRCA2 result is a rejected historical
+artifact; the corrected active queue has 45 papers after removing canine PMID
+19944633 and has now been rerun cleanly.
+
+- [ ] Finish Gate 3, `reviewer_545`: 545 attempts across 506
       unique PMIDs in the 11 populated reviewer workspaces. The first approved
       experimental strata are the existing BMPR2 50-, BRCA1 50-, and BRCA2
-      46-paper queues; do not expand those to 100 papers per gene. Start with
-      those three queues after the patched gold-120 revalidation. The fixed
-      50/50/46 run is complete and cost/QC-locked: 972 calls, 4.261M tokens,
-      $23.664 proxy, 45/50 + 50/50 + 45/46 full-text source integrity, and
-      write-time-verified traces. The three fixed collaborator queues were
-      refreshed in Variant Browser staging on 2026-08-13 under dataset label
-      `collaborator_reextract_current_system_20260813`; pinned paper membership
-      and order remained exactly 50/50/46. All 111 historical BRCA2 calls were
-      preserved and moved to re-review, with zero stale calls eligible for the
-      default adjudication/gold export. Public annotations were not published.
+      45-paper queues; do not expand those to 100 papers per gene. Start with
+      those three queues after the patched gold-120 revalidation. The accepted
+      structural set is exact manifests 50/50 BRCA1, 45/45 BRCA2, and 50/50
+      BMPR2, with full-text source integrity 50/50, 44/45, and 45/50. All three
+      have write-time-verified extraction traces, mandatory VariantFeatures
+      enrichment/quarantine, and no live variant lacking a VariantFeatures audit
+      row. The hardened collaborator audit reports 5,348 / 1,917 / 554 final
+      variants, zero nameless rows, zero species-scope links, and 324 / 137 / 32
+      VariantFeatures quarantines. It now correctly **fails** all three raw DBs:
+      BRCA1 retains 346 ambiguous live identities, BRCA2 129, and BMPR2 56
+      outside the defensible unmatched classes `novel_in_range` and
+      `cdna_only_unmatched`. The trusted Variant Browser projection holds these
+      out of collaborator staging, but still requires end-to-end import/UI
+      verification. The rejected
+      46-paper BRCA2 DB remains evidence of the original failure and must never
+      be imported. The corrected 45-paper DB contains no PMID 19944633 row or
+      downstream evidence in any PMID-bearing table. During its source-recovery
+      attempt a second fail-open defect was caught before replay: Scholar had
+      returned a 2021 Frontiers paper that merely cited target PMID 26824983.
+      The foreign source was moved to a recoverable quarantine, never entered
+      the DB/shared corpus, and source acceptance now requires matching stable
+      identity in the candidate URL plus the paper header. A later Grok 4.6
+      `xhigh` pass found DOI-prefix and PMID-digit-concatenation bypasses plus
+      readiness/publish fail-open paths; regression tests now pin those fixes,
+      so there is no unqualified reviewer GO. Next: run the fresh cardiac
+      acceptance test, obtain a source-grounded precision sample, and validate
+      the trusted-only Variant Browser import before promotion. The 2026-08-13
+      staging dataset and its 111 historical BRCA2 adjudications remain
+      auditable; public annotations were not changed.
 - [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived
@@ -381,7 +410,6 @@ source is unaffected.
       confusion without reintroducing source-free phenotype zeros.
 - [ ] Establish the Friday recall rerun/compare cadence only after the new
       explicit-zero baseline is accepted.
-
 ## Deliberate decisions and non-goals
 
 - **One checkout, one branch.** `main` is the handoff branch. Do not create local

@@ -41,6 +41,11 @@ if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
 from utils.source_layers import add_source_layer_witness
+from utils.paper_scope import (
+    db_paper_scope_exclusions,
+    purge_excluded_paper_evidence,
+)
+from pipeline.filters import names_nonhuman_ortholog
 
 logger = logging.getLogger("ingest_pubtator")
 
@@ -83,7 +88,7 @@ def resolve_gene_id(gene: str, email: str, api_key: str) -> Optional[str]:
 
 
 def fetch_pubtator_mutations(
-    pmids: list[str], gene_id: str, batch_size: int = 50
+    pmids: list[str], gene_id: str, batch_size: int = 50, gene: str | None = None
 ) -> dict[str, list[tuple[str, str]]]:
     """Return ``{pmid: [(text, hgvs), ...]}`` for *gene_id* across *pmids*."""
     out: dict[str, list[tuple[str, str]]] = defaultdict(list)
@@ -105,6 +110,15 @@ def fetch_pubtator_mutations(
             continue
         for doc in data.get("PubTator3", []):
             pmid = doc.get("id")
+            passages = doc.get("passages", [])
+            title_text = str(passages[0].get("text") or "") if passages else ""
+            if gene and names_nonhuman_ortholog(title_text, gene):
+                logger.warning(
+                    "PMID %s: PubTator document rejected as a non-human %s ortholog paper",
+                    pmid,
+                    gene,
+                )
+                continue
             for passage in doc.get("passages", []):
                 for ann in passage.get("annotations", []):
                     t = ann.get("infons", {}).get("type", "")
@@ -293,15 +307,26 @@ def main() -> int:
     con.row_factory = sqlite3.Row
     ensure_source_layer_column(con)
 
+    excluded_pmids = db_paper_scope_exclusions(con)
+    purged = purge_excluded_paper_evidence(con)
+    if purged:
+        con.commit()
+        logger.warning(
+            "Purged %d evidence link(s) from %d paper-scope exclusion(s)",
+            purged,
+            len(excluded_pmids),
+        )
+
     pmids = (
         load_gold_pmids(gold_path)
         if args.pmid_source == "gold" and gold_path
         else load_db_pmids(con, gene)
     )
+    pmids -= set(excluded_pmids)
     logger.info("%s PMIDs: %d", args.pmid_source.upper(), len(pmids))
 
     pmid_list = sorted(pmids)
-    all_muts = fetch_pubtator_mutations(pmid_list, gene_id)
+    all_muts = fetch_pubtator_mutations(pmid_list, gene_id, gene=gene)
     logger.info(
         "PMIDs with %s mutations: %d (total annotations: %d)",
         gene,
@@ -368,6 +393,8 @@ def main() -> int:
                 "gene_id": gene_id,
                 "added": added,
                 "pmids": len(pmids),
+                "paper_scope_excluded_pmids": len(excluded_pmids),
+                "paper_scope_links_purged": purged,
                 "pmid_source": args.pmid_source,
             }
         )

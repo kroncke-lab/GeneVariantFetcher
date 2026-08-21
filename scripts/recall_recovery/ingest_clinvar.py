@@ -38,7 +38,12 @@ REPO = Path(__file__).resolve().parents[2]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
+from pipeline.filters import names_nonhuman_ortholog
 from utils.source_layers import add_source_layer_witness
+from utils.paper_scope import (
+    db_paper_scope_exclusions,
+    purge_excluded_paper_evidence,
+)
 
 logger = logging.getLogger("ingest_clinvar")
 
@@ -160,6 +165,44 @@ def variants_for_pmid(
             _throttle(api_key)
         return all_variants
     return None
+
+
+def find_nonhuman_pubmed_pmids(
+    pmids: set[str],
+    gene: str,
+    email: str,
+    api_key: str,
+    batch_size: int = 200,
+) -> set[str]:
+    """Return PMIDs whose PubMed title names a non-human target ortholog."""
+
+    excluded: set[str] = set()
+    ordered = sorted(pmids)
+    for start in range(0, len(ordered), batch_size):
+        batch = ordered[start : start + batch_size]
+        params = {
+            "db": "pubmed",
+            "id": ",".join(batch),
+            "retmode": "json",
+            **_eutils_params(email, api_key),
+        }
+        try:
+            response = requests.get(NCBI_ESUMMARY, params=params, timeout=30)
+        except Exception as exc:
+            logger.warning("PubMed scope preflight failed: %s", exc)
+            continue
+        if response.status_code != 200:
+            logger.warning(
+                "PubMed scope preflight returned status %d", response.status_code
+            )
+            continue
+        result = response.json().get("result", {})
+        for pmid in batch:
+            title = str((result.get(pmid) or {}).get("title") or "")
+            if names_nonhuman_ortholog(title, gene):
+                excluded.add(pmid)
+        _throttle(api_key)
+    return excluded
 
 
 # ---------------------------------------------------------------------------
@@ -310,11 +353,30 @@ def main() -> int:
     con.row_factory = sqlite3.Row
     ensure_source_layer_column(con)
 
+    excluded_pmids = db_paper_scope_exclusions(con)
+    purged = purge_excluded_paper_evidence(con)
+    if purged:
+        con.commit()
+        logger.warning(
+            "Purged %d evidence link(s) from %d paper-scope exclusion(s)",
+            purged,
+            len(excluded_pmids),
+        )
+
     pmids = (
         load_gold_pmids(gold_path)
         if args.pmid_source == "gold" and gold_path
         else load_db_pmids(con, gene)
     )
+    pmids -= set(excluded_pmids)
+    pubmed_scope_excluded = find_nonhuman_pubmed_pmids(pmids, gene, email, api_key)
+    if pubmed_scope_excluded:
+        logger.warning(
+            "PubMed title preflight rejected %d non-human target-ortholog paper(s): %s",
+            len(pubmed_scope_excluded),
+            ", ".join(sorted(pubmed_scope_excluded)),
+        )
+        pmids -= pubmed_scope_excluded
     logger.info("%s PMIDs: %d", args.pmid_source.upper(), len(pmids))
 
     added = 0
@@ -370,6 +432,9 @@ def main() -> int:
                 "gene": gene,
                 "added": added,
                 "pmids": len(pmids),
+                "paper_scope_excluded_pmids": len(excluded_pmids),
+                "pubmed_scope_excluded_pmids": len(pubmed_scope_excluded),
+                "paper_scope_links_purged": purged,
                 "pmid_source": args.pmid_source,
             }
         )

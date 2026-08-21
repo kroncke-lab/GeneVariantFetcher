@@ -2,11 +2,11 @@
 
 > **BRCA2 was superseded on 2026-08-11 by
 > [`../review_pmids_20260811_brca2_provenance/`](../review_pmids_20260811_brca2_provenance/).**
-> Its active queue has 46 papers after excluding six internally derived
-> benchmark papers; four were removed from the live 50-paper snapshot and two
-> were already absent. The frozen July files remain the source cohort. The
+> Its active queue has 45 papers after provenance exclusions plus removal of
+> the explicitly canine BRCA2 ortholog paper PMID 19944633. The frozen July
+> files remain the source cohort. The
 > exact full reviewer snapshot is
-> [`../../evaluation_tiers/tier3_reviewer_546.tsv`](../../evaluation_tiers/tier3_reviewer_546.tsv);
+> [`../../evaluation_tiers/tier3_reviewer_545.tsv`](../../evaluation_tiers/tier3_reviewer_545.tsv);
 > SCN5A differs from this frozen list by one reconciled paper.
 
 These PMID lists are the **frozen initial review cohort: 50 papers per gene**

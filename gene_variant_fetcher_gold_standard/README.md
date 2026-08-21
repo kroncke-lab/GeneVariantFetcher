@@ -45,10 +45,12 @@ tables and credentials are intentionally in scope. The exporter uses
 Variant_Browser's venv (ODBC + Django + credentials):
 
 ```bash
-cd /Users/kronckbm/GitRepos/Variant_Browser
+GVF_REPO=/absolute/path/to/GeneVariantFetcher
+VARIANT_BROWSER_REPO=/absolute/path/to/Variant_Browser
+cd "$VARIANT_BROWSER_REPO"
 set -a; source .env; set +a
-venv/bin/python /Users/kronckbm/GitRepos/GeneVariantFetcher/scripts/build_gold_standard_from_varbrowser.py \
-  --out /Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard
+venv/bin/python "$GVF_REPO/scripts/build_gold_standard_from_varbrowser.py" \
+  --out "$GVF_REPO/gene_variant_fetcher_gold_standard"
 ```
 
 It is idempotent — re-running overwrites `raw/`, `normalized/`, `qc/`, and

@@ -672,6 +672,17 @@ def gvf_run_command(
             ),
         ),
     ] = True,
+    require_vf_enrich: Annotated[
+        bool,
+        typer.Option(
+            "--require-vf-enrich/--allow-missing-vf-enrich",
+            help=(
+                "Fail run acceptance when variantFeatures enrichment or the "
+                "wrong-gene quarantine is unavailable. Automatically enabled "
+                "by --publish-review; use it for collaborator-facing runs."
+            ),
+        ),
+    ] = False,
 ):
     """One-shot end-to-end driver: cold start → scored variant DB.
 
@@ -713,6 +724,7 @@ def gvf_run_command(
         taper_min_variants=taper_min_variants,
         carrier_guard=carrier_guard,
         vf_enrich=vf_enrich,
+        require_vf_enrich=require_vf_enrich,
     )
     if exit_code != 0:
         raise typer.Exit(exit_code)

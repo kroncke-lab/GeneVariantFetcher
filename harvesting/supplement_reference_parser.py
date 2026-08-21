@@ -88,9 +88,9 @@ def parse_supplement_references(text: str) -> Dict[str, Any]:
     # Look for variant counts mentioned near supplement references
     # Pattern: "N variants/mutations in [supplement reference]"
     variant_count_patterns = [
-        r"(\d+)\s+(?:KCNH2\s+)?(?:variants?|mutations?)\s+(?:in|are\s+listed\s+in|shown\s+in).*?(?:suppl|table\s+S)",
+        r"(?<![A-Za-z0-9])(\d+)\s+(?:KCNH2\s+)?(?:variants?|mutations?)\s+(?:in|are\s+listed\s+in|shown\s+in).*?(?:suppl|table\s+S)",
         r"(?:suppl|table\s+S).*?(?:lists?|contains?|shows?)\s+(\d+)\s+(?:variants?|mutations?)",
-        r"(\d+)\s+(?:variants?|mutations?).*?\(.*?suppl",
+        r"(?<![A-Za-z0-9])(\d+)\s+(?:KCNH2\s+)?(?:variants?|mutations?).*?\(.*?suppl",
     ]
 
     for pattern in variant_count_patterns:
@@ -229,24 +229,3 @@ def check_supplement_gap(
         )
 
     return result
-
-
-if __name__ == "__main__":
-    # Test with example text
-    test_text = """
-    We identified 54 KCNH2 mutations (online suppl. table 1,
-    www.karger.com/doi/10.1159/000440608 for all online material).
-    The mutation spectrum is shown in supplementary figure S1.
-    See also Table S2 for detailed phenotype data.
-    """
-
-    result = parse_supplement_references(test_text)
-    print("Parsed references:")
-    for key, value in result.items():
-        print(f"  {key}: {value}")
-
-    # Test gap detection
-    gap = check_supplement_gap(test_text, downloaded_count=0, extracted_variant_count=4)
-    print("\nGap analysis:")
-    for key, value in gap.items():
-        print(f"  {key}: {value}")

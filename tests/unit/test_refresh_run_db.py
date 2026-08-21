@@ -56,6 +56,46 @@ def test_selects_stale_abstract_only_when_fulltext_exists(tmp_path):
     assert "stale_abstract_only" in candidates[0].reasons
 
 
+def test_does_not_replay_paper_scope_exclusion_even_when_forced(tmp_path):
+    harvest_dir = tmp_path / "pmc_fulltext"
+    extraction_dir = tmp_path / "extractions"
+    harvest_dir.mkdir()
+    extraction_dir.mkdir()
+
+    pmid = "19944633"
+    (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
+        "# Single nucleotide variation in canine BRCA2\n" + ("variant table\n" * 50),
+        encoding="utf-8",
+    )
+    (extraction_dir / f"BRCA2_PMID_{pmid}.json").write_text(
+        json.dumps(
+            {
+                "variants": [],
+                "extraction_metadata": {
+                    "skipped_nonhuman_ortholog": True,
+                    "paper_scope_exclusion_reason": "nonhuman_target_gene_ortholog",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    candidates = select_replay_candidates(
+        gene="BRCA2",
+        harvest_dir=harvest_dir,
+        extraction_dir=extraction_dir,
+        min_deterministic_variants=1,
+        min_deterministic_lift=1,
+        deterministic_lift_ratio=1.0,
+        include_source_newer=True,
+        replay_missing_fingerprint=True,
+        replay_unbound_source=True,
+        force_pmids={pmid},
+    )
+
+    assert candidates == []
+
+
 def test_does_not_select_stale_abstract_only_when_only_fallback_exists(tmp_path):
     harvest_dir = tmp_path / "pmc_fulltext"
     extraction_dir = tmp_path / "extractions"

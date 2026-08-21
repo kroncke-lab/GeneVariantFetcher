@@ -1,0 +1,11 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-20T21:05:07.884788+00:00",
+  "predictions_sha256": "cdbfe78f703c93d933bfb26eb1fb1efb03a81261c523a8a3a71152393fa91b5f",
+  "production_trace_manifests": [],
+  "selection_sha256": "549bd2f5f99162ab228ccc116a2691b298675cdab0db949931fecdd90ecbbcff",
+  "statement": "Prediction content was finalized before external scoring. This external production projection may come from a workflow that read registered gold for read-only layer scorecards; those scores do not feed back into extraction."
+}

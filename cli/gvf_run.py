@@ -37,6 +37,7 @@ import json
 import logging
 import os
 import shutil
+import sqlite3
 import subprocess
 import sys
 import time
@@ -63,6 +64,74 @@ from utils.local_storage import (
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 logger = logging.getLogger("gvf_run")
+
+
+def validate_prior_vf_enrichment(db: Path) -> dict:
+    """Prove a resumed DB already has complete VariantFeatures coverage.
+
+    A validated skip avoids re-reading the external ~38 GB warehouse when the
+    active DB was already enriched and wrong-gene rows were quarantined. Schema
+    presence alone is insufficient: every live variant must have an enrichment
+    row, and the quarantine audit table must exist.
+    """
+    result = {
+        "valid": False,
+        "variants": 0,
+        "enrichment_rows": 0,
+        "uncovered": 0,
+        "quarantined": 0,
+    }
+    try:
+        connection = sqlite3.connect(f"file:{Path(db).resolve()}?mode=ro", uri=True)
+        try:
+            tables = {
+                str(row[0])
+                for row in connection.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table'"
+                )
+            }
+            required = {"variants", "vf_enrichment", "quarantined_variants"}
+            if not required.issubset(tables):
+                result["reason"] = (
+                    "missing prior VariantFeatures audit tables: "
+                    + ", ".join(sorted(required - tables))
+                )
+                return result
+            result["variants"] = int(
+                connection.execute("SELECT COUNT(*) FROM variants").fetchone()[0]
+            )
+            result["enrichment_rows"] = int(
+                connection.execute("SELECT COUNT(*) FROM vf_enrichment").fetchone()[0]
+            )
+            result["uncovered"] = int(
+                connection.execute(
+                    """
+                    SELECT COUNT(*)
+                    FROM variants AS v
+                    LEFT JOIN vf_enrichment AS e USING (variant_id)
+                    WHERE e.variant_id IS NULL
+                    """
+                ).fetchone()[0]
+            )
+            result["quarantined"] = int(
+                connection.execute(
+                    "SELECT COUNT(*) FROM quarantined_variants"
+                ).fetchone()[0]
+            )
+        finally:
+            connection.close()
+    except (OSError, sqlite3.Error) as exc:
+        result["reason"] = str(exc)
+        return result
+
+    if result["uncovered"]:
+        result["reason"] = (
+            f"{result['uncovered']} live variant(s) lack VariantFeatures audit rows"
+        )
+        return result
+    result["valid"] = True
+    result["reason"] = "all live variants retain prior VariantFeatures audit coverage"
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -1258,6 +1327,7 @@ def step_publish_review(
     db: Path,
     disease: Optional[str],
     review_repo: Optional[Path],
+    pmid_file: Optional[Path] = None,
     timeout_s: int = 600,
 ) -> bool:
     """Push this gene's scored DB into the Variant_Browser review DB.
@@ -1281,13 +1351,38 @@ def step_publish_review(
         )
         return False
 
+    publish_env = os.environ.copy()
+    publish_env.pop("GVF_PMID_FILE", None)
+    if pmid_file is not None:
+        manifest = Path(pmid_file).expanduser().resolve()
+        if not manifest.is_file():
+            logger.warning(
+                "publish-review refused: pinned PMID manifest does not exist: %s",
+                manifest,
+            )
+            return False
+        publish_env["GVF_PMID_FILE"] = str(manifest)
+    elif publish_env.get("GVF_FULL_DB_REPLACE") != "1":
+        logger.warning(
+            "publish-review refused: no pinned PMID manifest was supplied. Pass "
+            "--pmid-file, or explicitly set GVF_FULL_DB_REPLACE=1 for a full "
+            "replacement."
+        )
+        return False
+
     script = repo / "scripts" / "gvf_publish.sh"
     cmd = ["bash", str(script), gene, str(db)]
     if disease:
         cmd.append(disease)
     logger.info("📤 publish-review → %s", " ".join(cmd))
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_s)
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+            env=publish_env,
+        )
     except subprocess.TimeoutExpired:
         logger.warning(
             "publish-review timed out after %ss; GVF run not affected", timeout_s
@@ -1886,6 +1981,7 @@ def run_gvf_pipeline(
     taper_min_variants: int = 8,
     carrier_guard: bool = True,
     vf_enrich: bool = True,
+    require_vf_enrich: bool = False,
 ) -> int:
     """Execute the full pipeline. Returns exit code.
 
@@ -1928,6 +2024,7 @@ def run_gvf_pipeline(
             taper_min_variants=taper_min_variants,
             carrier_guard=carrier_guard,
             vf_enrich=vf_enrich,
+            require_vf_enrich=require_vf_enrich,
         )
     finally:
         for key, value in (
@@ -1971,6 +2068,7 @@ def _run_gvf_pipeline(
     taper_min_variants: int = 8,
     carrier_guard: bool = True,
     vf_enrich: bool = True,
+    require_vf_enrich: bool = False,
 ) -> int:
     initialize_runtime()
 
@@ -2356,36 +2454,58 @@ def _run_gvf_pipeline(
     except Exception as e:  # noqa: BLE001 - never fail a run on a QC lookup
         logger.debug("vf-enrich: could not resolve variantFeatures DB (%s)", e)
 
+    vf_enrich_required = require_vf_enrich or publish_review
+
     if vf_enrich and "vf-enrich" not in skip and (full_coverage or vf_db_path):
         logger.info("🔬 Step 3.6: variantFeatures enrich + wrong-gene FP quarantine")
         try:
             vf_stats = step_vf_enrich(gene=gene, db=db)
             logger.info("vf-enrich: %s", vf_stats)
-            if isinstance(vf_stats, dict) and not vf_stats.get("enriched", True):
-                warning = (
+            enriched = isinstance(vf_stats, dict) and vf_stats.get("enriched") is True
+            quarantined = (
+                isinstance(vf_stats, dict) and vf_stats.get("quarantined") is True
+            )
+            if not enriched or not quarantined:
+                issue = (
                     "vf-enrich did not run "
-                    f"({vf_stats.get('reason') or vf_stats.get('rc')}); "
+                    f"({vf_stats.get('reason') or vf_stats.get('rc') or vf_stats}); "
                     "wrong-gene FP quarantine was NOT applied"
                 )
-                logger.warning("%s", warning)
-                stage_warnings.append(warning)
+                logger.warning("%s", issue)
+                (stage_failures if vf_enrich_required else stage_warnings).append(issue)
         except Exception as e:  # noqa: BLE001
             logger.exception("vf-enrich failed (%s); continuing", e)
-            stage_warnings.append(f"vf-enrich failed: {e}")
+            issue = f"vf-enrich failed: {e}"
+            (stage_failures if vf_enrich_required else stage_warnings).append(issue)
     elif vf_enrich and "vf-enrich" not in skip:
-        warning = (
+        issue = (
             "vf-enrich SKIPPED: no readable variantFeatures DB "
             "(set VARIANTFEATURES_DB). The wrong-gene FP quarantine — the only "
             "check that validates a variant's gene against an independent "
             "reference — was NOT applied to this run."
         )
-        logger.warning("%s", warning)
-        stage_warnings.append(warning)
+        logger.warning("%s", issue)
+        (stage_failures if vf_enrich_required else stage_warnings).append(issue)
+    elif vf_enrich and "vf-enrich" in skip:
+        prior_vf = validate_prior_vf_enrichment(db)
+        if prior_vf.get("valid"):
+            logger.info(
+                "⏭️  Step 3.6: VariantFeatures warehouse read — SKIPPED; "
+                "validated prior DB coverage: %s",
+                prior_vf,
+            )
+        else:
+            issue = (
+                "vf-enrich skipped without complete prior DB coverage "
+                f"({prior_vf.get('reason') or prior_vf}); wrong-gene FP quarantine "
+                "cannot be verified"
+            )
+            logger.warning("%s", issue)
+            (stage_failures if vf_enrich_required else stage_warnings).append(issue)
     else:
         logger.info("⏭️  Step 3.6: variantFeatures enrich — SKIPPED (disabled)")
-        stage_warnings.append(
-            "vf-enrich disabled; wrong-gene FP quarantine was NOT applied"
-        )
+        issue = "vf-enrich disabled; wrong-gene FP quarantine was NOT applied"
+        (stage_failures if vf_enrich_required else stage_warnings).append(issue)
 
     # Step 3.7: per-fact trust gate — soft-quarantine gold-free-implausible count
     # facts into a two-tier (trusted/quarantine) DB. Default ON: this is the
@@ -2639,13 +2759,19 @@ def _run_gvf_pipeline(
             pass
 
     # Step 6: publish to the Variant_Browser review DB (opt-in)
-    if publish_review and "publish-review" not in skip:
+    if publish_review and "publish-review" not in skip and stage_failures:
+        logger.error(
+            "🛑 Step 6: publish REFUSED — %d required stage failure(s)",
+            len(stage_failures),
+        )
+    elif publish_review and "publish-review" not in skip:
         logger.info("📤 Step 6: publish to review DB")
         step_publish_review(
             gene=gene,
             db=db,
             disease=disease,
             review_repo=review_repo,
+            pmid_file=pmid_file,
             timeout_s=publish_timeout_s,
         )
     elif publish_review and "publish-review" in skip:

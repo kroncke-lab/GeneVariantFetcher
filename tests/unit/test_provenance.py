@@ -84,10 +84,24 @@ def test_resolved_routing_is_a_closed_scientific_allowlist():
         "model_provider",
         *(key for key, _resolver in provenance.EXTRACTOR_MODEL_RESOLVERS),
         *provenance.EXTRACTOR_CONFIG_FIELDS,
+        *provenance.EXTRACTOR_RUNTIME_CONSTANTS,
     }
 
     assert set(routing) <= allowed
     assert {"output_dir", "email", "pmids", "timestamp"}.isdisjoint(routing)
+
+
+def test_provenance_records_extraction_runtime_constants_not_false_knobs():
+    routing = provenance.resolved_model_routing()
+
+    assert {
+        key: routing[key] for key in provenance.EXTRACTOR_RUNTIME_CONSTANTS
+    } == provenance.EXTRACTOR_RUNTIME_CONSTANTS
+    assert {
+        "extraction_max_chars",
+        "scanner_merge_confidence",
+        "scanner_max_hints",
+    }.isdisjoint(routing)
 
 
 def test_legacy_digest_retains_the_pre_v2_raw_file_set():

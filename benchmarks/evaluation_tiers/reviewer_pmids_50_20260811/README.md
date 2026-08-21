@@ -23,4 +23,4 @@ selection policy, and retained PMIDs in Variant Browser source runs labeled
 paper-specific reviewer summary.
 
 The files preserve ranking order. The combined full-tier manifest is
-`../tier3_reviewer_546.tsv`.
+`../tier3_reviewer_545.tsv`.

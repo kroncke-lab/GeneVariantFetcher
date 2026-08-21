@@ -16,7 +16,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Optional
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -30,6 +30,7 @@ PUBMED_SUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcg
 DEFAULT_SCHOLAR_MIN_REQUEST_INTERVAL = 10.0
 DEFAULT_SCHOLAR_BLOCK_BACKOFF_SECONDS = 15 * 60
 MAX_PDF_CANDIDATES = 4
+SOURCE_IDENTITY_PREFIX_CHARS = 12_000
 
 BLOCK_MARKERS = (
     "unusual traffic",
@@ -111,6 +112,7 @@ class ScholarPDFRecovery:
         *,
         pmid: str,
         title: Optional[str] = None,
+        doi: Optional[str] = None,
     ) -> ScholarPDFResult:
         attempts: list[tuple[str, str, str]] = []
         clean_title = _clean_title(title) if title else self._pubmed_title(pmid)
@@ -133,9 +135,31 @@ class ScholarPDFRecovery:
 
         for url in pdf_urls[:MAX_PDF_CANDIDATES]:
             markdown, detail = self._pdf_url_to_markdown(url)
+            identity_ok, identity_reason = _source_identity_matches(
+                markdown or "",
+                expected_title=clean_title,
+                expected_doi=doi,
+                expected_pmid=pmid,
+                source_url=url,
+            )
+            if markdown and not identity_ok:
+                attempts.append(
+                    (
+                        "scholar_pdf",
+                        "reject: source identity",
+                        f"{url}: {identity_reason}",
+                    )
+                )
+                continue
             ok, reason = self.quality_gate(markdown or "")
             if markdown and ok:
-                attempts.append(("scholar_pdf", "ok", f"{url}: {reason}"))
+                attempts.append(
+                    (
+                        "scholar_pdf",
+                        "ok",
+                        f"{url}: {reason}; {identity_reason}",
+                    )
+                )
                 return ScholarPDFResult(
                     success=True,
                     markdown=markdown,
@@ -284,6 +308,104 @@ def _clean_title(title: Optional[str]) -> Optional[str]:
     return cleaned or None
 
 
+def _compact_identity_text(value: Optional[str]) -> str:
+    """Normalize DOI/title text while tolerating PDF line-break loss."""
+    return re.sub(r"[^a-z0-9]+", "", str(value or "").lower())
+
+
+def _normalized_doi(value: Optional[str]) -> str:
+    """Return a bare, case-folded DOI without weakening identifier boundaries."""
+    normalized = unquote(str(value or "")).strip().lower()
+    normalized = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", normalized)
+    normalized = re.sub(r"^doi\s*:\s*", "", normalized)
+    return re.sub(r"\s+", "", normalized).rstrip(". ")
+
+
+def _url_carries_doi(source_url: Optional[str], expected_doi: Optional[str]) -> bool:
+    """Match a DOI as one complete URL identifier, never as a compact prefix."""
+    doi = _normalized_doi(expected_doi)
+    if not doi:
+        return False
+    decoded_url = unquote(str(source_url or "")).lower()
+    # Accept a bare DOI or a conventional ``<doi>.pdf`` path.  The leading and
+    # trailing guards deliberately reject DOI prefixes such as
+    # 10.1002/humu.1234 inside 10.1002/humu.12345.
+    return bool(
+        re.search(
+            rf"(?<![a-z0-9]){re.escape(doi)}(?:\.pdf)?(?=$|[/?#&])",
+            decoded_url,
+        )
+    )
+
+
+def _url_carries_pmid(source_url: Optional[str], expected_pmid: Optional[str]) -> bool:
+    """Match one complete PMID token without concatenating unrelated digits."""
+    pmid = str(expected_pmid or "").strip()
+    if not re.fullmatch(r"\d{5,9}", pmid):
+        return False
+    tokens = re.findall(r"(?<!\d)\d{5,9}(?!\d)", unquote(str(source_url or "")))
+    return pmid in tokens
+
+
+def _source_identity_matches(
+    markdown: str,
+    *,
+    expected_title: str,
+    expected_doi: Optional[str] = None,
+    expected_pmid: Optional[str] = None,
+    source_url: Optional[str] = None,
+) -> tuple[bool, str]:
+    """Fail closed unless the PDF front matter identifies the requested paper.
+
+    Scholar results can attach a PDF from a citing paper to the exact-title hit.
+    Searching the entire PDF is unsafe because the requested title and DOI may
+    occur only in that citing paper's references.  Require the compacted exact
+    title before the article's first content-section marker. Text alone cannot
+    distinguish a target paper from a citing PDF that quotes the full title and
+    DOI near the beginning, so the candidate URL must also carry the requested
+    stable identifier.
+    """
+    normalized_doi = _normalized_doi(expected_doi)
+    normalized_pmid = str(expected_pmid or "").strip()
+    if normalized_doi:
+        if not _url_carries_doi(source_url, normalized_doi):
+            return False, "Scholar PDF URL does not carry the requested DOI"
+    elif re.fullmatch(r"\d{5,9}", normalized_pmid):
+        if not _url_carries_pmid(source_url, normalized_pmid):
+            return False, "Scholar PDF URL does not carry the requested PMID"
+    else:
+        return (
+            False,
+            "no stable paper identifier was available for Scholar URL verification",
+        )
+
+    prefix = str(markdown or "")[:SOURCE_IDENTITY_PREFIX_CHARS]
+    marker = re.search(
+        r"(?i)\b(?:abstract|background|introduction|objective|objectives|summary|keywords?)\b",
+        prefix,
+    )
+    front_matter_end = marker.start() if marker else min(len(prefix), 1_200)
+    front_matter = prefix[:front_matter_end]
+
+    compact_title = _compact_identity_text(expected_title)
+    if len(compact_title) >= 16 and compact_title in _compact_identity_text(
+        front_matter
+    ):
+        compact_doi = _compact_identity_text(normalized_doi)
+        if normalized_doi and compact_doi not in _compact_identity_text(front_matter):
+            return (
+                False,
+                "expected title matched but DOI was absent from article header",
+            )
+        doi_detail = "; expected DOI also present" if normalized_doi else ""
+        return True, f"expected title present in PDF article header{doi_detail}"
+
+    expected = f"title={expected_title!r}"
+    if expected_doi:
+        expected += f", doi={expected_doi!r}"
+    return False, f"PDF front matter does not match requested paper ({expected})"
+
+
 def try_scholar_pdf(
     *,
     title: Optional[str],
@@ -293,6 +415,7 @@ def try_scholar_pdf(
     quality_gate: Callable[[str], tuple[bool, str]],
     email: Optional[str] = None,
     api_key: Optional[str] = None,
+    doi: Optional[str] = None,
 ) -> ScholarPDFResult:
     """Convenience wrapper used by the existing recovery flows."""
     client = ScholarPDFRecovery(
@@ -307,7 +430,7 @@ def try_scholar_pdf(
         or os.environ.get("NCBI_API_KEY")
         or os.environ.get("ENTREZ_API_KEY"),
     )
-    return client.recover(pmid=pmid, title=title)
+    return client.recover(pmid=pmid, title=title, doi=doi)
 
 
 def _looks_blocked(html: str, final_url: str) -> bool:

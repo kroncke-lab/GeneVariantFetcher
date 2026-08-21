@@ -95,6 +95,19 @@ def _load_fetch_output_dir(path: Path | None) -> list[dict[str, Any]]:
         return []
     output_dir = repo_path(path).expanduser()
     rows_by_pmid: dict[str, dict[str, Any]] = {}
+    summary_path = output_dir / "summary.json"
+    if summary_path.exists():
+        for row in _load_fetch_rows(summary_path):
+            pmid = normalize_pmid(row.get("pmid") or row.get("PMID"))
+            if pmid:
+                rows_by_pmid[pmid] = row
+        # Presence is authoritative even while the fetcher has initialized the
+        # file to an empty in-progress manifest.  Inferring old sidecars in that
+        # state would resurrect stale sources from a previous run.
+        return list(rows_by_pmid.values())
+
+    # Legacy/interrupted output without any summary manifest can still recover
+    # direct-publisher results whose sidecar proves nonzero extracted text.
     for result_path in sorted(output_dir.glob("*/result.json")):
         try:
             payload = json.loads(result_path.read_text(encoding="utf-8"))
@@ -111,10 +124,15 @@ def _load_fetch_output_dir(path: Path | None) -> list[dict[str, Any]]:
         ).expanduser()
         notes = payload.get("notes") or []
         reason = payload.get("error") or "; ".join(str(item) for item in notes)
-        if full_context.exists() and is_usable_fulltext_source(full_context):
-            outcome = "success_from_output_dir"
-        elif payload.get("error"):
+        markdown_chars = parse_int(payload.get("markdown_chars")) or 0
+        if payload.get("error"):
             outcome = "error"
+        elif (
+            markdown_chars > 0
+            and full_context.exists()
+            and is_usable_fulltext_source(full_context)
+        ):
+            outcome = "success_from_output_dir"
         else:
             outcome = "empty"
         rows_by_pmid[pmid] = {
@@ -126,18 +144,29 @@ def _load_fetch_output_dir(path: Path | None) -> list[dict[str, Any]]:
             "final_url": payload.get("final_url") or "",
         }
 
-    for context_path in sorted(output_dir.glob("*_FULL_CONTEXT.md")):
-        pmid = normalize_pmid(context_path.name.removesuffix("_FULL_CONTEXT.md"))
-        if not pmid or pmid in rows_by_pmid:
-            continue
-        if is_usable_fulltext_source(context_path):
-            rows_by_pmid[pmid] = {
-                "pmid": pmid,
-                "outcome": "success_from_output_dir",
-                "canonical_full_context_path": str(context_path),
-                "reason": "usable flat FULL_CONTEXT recovered before summary write",
-            }
     return list(rows_by_pmid.values())
+
+
+def merge_fetch_rows(
+    authoritative_rows: list[dict[str, Any]],
+    fallback_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge fetch evidence with explicit summary rows winning per PMID."""
+    rows_by_pmid: dict[str, dict[str, Any]] = {}
+    unkeyed: list[dict[str, Any]] = []
+    for row in fallback_rows:
+        pmid = normalize_pmid(row.get("pmid") or row.get("PMID"))
+        if pmid:
+            rows_by_pmid[pmid] = row
+        else:
+            unkeyed.append(row)
+    for row in authoritative_rows:
+        pmid = normalize_pmid(row.get("pmid") or row.get("PMID"))
+        if pmid:
+            rows_by_pmid[pmid] = row
+        else:
+            unkeyed.append(row)
+    return [*rows_by_pmid.values(), *unkeyed]
 
 
 def _pmids_from_refresh_summary(path: Path | None) -> tuple[set[str], set[str]]:
@@ -270,6 +299,11 @@ def successful_fetch_sources(
     for row in fetch_rows:
         pmid = normalize_pmid(row.get("pmid") or row.get("PMID"))
         if not pmid or str(row.get("outcome") or "") not in FETCH_SUCCESS_OUTCOMES:
+            continue
+        if (
+            str(row.get("outcome") or "") == "success_via_scholar_pdf"
+            and row.get("source_identity_verified") is not True
+        ):
             continue
         path = _fetch_source_path(row)
         if path is None or not path.exists() or not is_usable_fulltext_source(path):
@@ -549,10 +583,10 @@ def main() -> int:
     summary, source_override_rows = build_summary(
         gene=gene,
         worklist_rows=read_csv_rows(worklist),
-        fetch_rows=[
-            *_load_fetch_rows(fetch_summary),
-            *_load_fetch_output_dir(fetch_output_dir),
-        ],
+        fetch_rows=merge_fetch_rows(
+            _load_fetch_rows(fetch_summary),
+            _load_fetch_output_dir(fetch_output_dir),
+        ),
         refresh_attempted_pmids=(refresh_attempted_pmids if refresh_summary else None),
         refresh_success_pmids=(refresh_success_pmids if refresh_summary else None),
         gold_pmids=gold_pmids,

@@ -1,0 +1,117 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "eligible_counts": {
+    "BRCA2": 8
+  },
+  "gold_sources": {
+    "BRCA2": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/brca2_2_collaborator_reviewed_20260811.tsv",
+  "papers": [
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_artifacts.json",
+      "artifacts_sha256": "bc3d2a9567986fbb21e04a033db60a48ea3abf3481c70accdc71286a30cb22d8",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_supplements/10689_2016_9875_MOESM1_ESM.pdf": "1f15b99a1744fb7683a005a9db53e9383dfbc8c7d729675879c76de9e9445837",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_supplements/10689_2016_9875_MOESM2_ESM.pdf": "579dfe18578fd99b119b1133e9d8d2eea49c9ad382548985cf919c9ab9065b42"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_supplements/10689_2016_9875_MOESM1_ESM.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_supplements/10689_2016_9875_MOESM2_ESM.pdf"
+      ],
+      "pmid": "26833046",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_FULL_CONTEXT.md",
+      "source_bytes": 16443,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 16405,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_FULL_CONTEXT.md",
+            "sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f"
+          }
+        ],
+        "policy": "production_input_snapshot",
+        "rationale": "Bound after extraction, before gold scoring, to the exact run-local FULL_CONTEXT input staged by gvf-run. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 16405,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26833046_FULL_CONTEXT.md",
+          "sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f"
+        }
+      },
+      "source_sha256": "29031939bee3f9a80f79bd527d0f3b8a4df68b18ba813e5c5cf2de39cbbf6a2f"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_artifacts.json",
+      "artifacts_sha256": "2d4e3cdfbb66bdc8c6688c8e809bebe5166511755d313c0d2ebf2f9b6c054b33",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_1.jpg": "d62a0a15f39c63d39bad8d478f6c76afb75ad2b1ed75db773eff8b49ae8cc958",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_2.jpg": "8baafc8c011ee2001d2aaa10d77324c53ba95d089ac299de31cd39ca0652c5e9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_3.jpg": "8df2c0803076b22aa72408f06863b68fcdf1d443e78203e2800df3a927c3d6a9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_4.jpg": "d58adb6c89d69d9f47f01e8f70fe269cd5b87c63c974d843ecb87c3cacca7eea",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g001.jpg": "d62a0a15f39c63d39bad8d478f6c76afb75ad2b1ed75db773eff8b49ae8cc958",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g002.jpg": "8baafc8c011ee2001d2aaa10d77324c53ba95d089ac299de31cd39ca0652c5e9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g003.jpg": "8df2c0803076b22aa72408f06863b68fcdf1d443e78203e2800df3a927c3d6a9",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g004.jpg": "d58adb6c89d69d9f47f01e8f70fe269cd5b87c63c974d843ecb87c3cacca7eea"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-g004.jpg"
+      ],
+      "gene": "BRCA2",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-s001.pdf": "5f267c28c7b4a9433d43cfacef694672a50bcb843a7a8f4a0e8aad391cb58b89"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_supplements/PMC4891063_supplements/oncotarget-07-9600-s001.pdf"
+      ],
+      "pmid": "26848529",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_FULL_CONTEXT.md",
+      "source_bytes": 316850,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 311701,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_FULL_CONTEXT.md",
+            "sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8"
+          }
+        ],
+        "policy": "production_input_snapshot",
+        "rationale": "Bound after extraction, before gold scoring, to the exact run-local FULL_CONTEXT input staged by gvf-run. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 311701,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA2/20260820_132704/pmc_fulltext/26848529_FULL_CONTEXT.md",
+          "sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8"
+        }
+      },
+      "source_sha256": "4888932616b5cef48066009f20cec9705fcce83297bfeb90cc6ed8cc80e391b8"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-08-20T21:04:55.146405+00:00",
+  "production_source_rebinding": {
+    "changed_source_count": 0,
+    "cohort_membership_changed": false,
+    "gold_values_read": false,
+    "original_selection": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260820_brca2_gold2_noinference/selection_eligibility.json",
+    "original_selection_sha256": "545a7f119a3df108bf25b6a939ef80fc5540bd846c5630f259f95b6a844a5eae",
+    "paper_count": 2,
+    "rebound_at": "2026-08-20T21:05:03.231684+00:00"
+  },
+  "run_id": "20260820_brca2_gold2_noinference",
+  "schema_version": 1,
+  "seed": 2026082002
+}

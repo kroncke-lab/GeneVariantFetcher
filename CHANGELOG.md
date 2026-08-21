@@ -8,11 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- A fail-closed collaborator-readiness audit covering exact PMID manifests,
+  extraction payloads, source integrity, active-run identity, nonempty verified
+  traces, species scope, VariantFeatures coverage, and publishable identities.
+- A production evaluation harness that binds each paper prediction to one
+  completed `RUN_STATUS.active_db` and its write-time-verified extraction trace.
 - Repository freshness checks for local Markdown links, dashboard status, the
   single active task checklist, and retired runtime model references.
 - Installed-layout wheel coverage for runtime data and paywall-session helpers.
+- An AST-backed configuration-documentation gate covering direct environment
+  reads in runtime modules and operator scripts.
 
 ### Changed
+- Publication now uses a trusted count-and-identity projection. Ambiguous
+  VariantFeatures classes are retained for audit but held out of collaborator
+  staging; missing PMIDs, pre-trust databases, and stale run databases fail.
 - Consolidated the repository onto one authoritative `main` branch and one
   checkout. `TASKS.md` is now the only active checklist; the documentation map
   distinguishes current authorities from dated evidence.
@@ -25,12 +35,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hermetically without reading the local corpus.
 
 ### Fixed
+- Scholar fallback identity checks require exact DOI or PMID tokens, preventing
+  DOI-prefix and concatenated-digit false matches.
+- Paper-scope exclusions now survive every recovery path, so a non-human target
+  gene ortholog paper cannot be reattached by PubTator, ClinVar, figure, or
+  source replay after extraction declines it.
 - Resumed runs honor `RUN_STATUS.json.active_db` before filename heuristics.
 - Packaged wheels include required alias/reference assets and avoid scanning the
   external corpus.
 - Explicit gene assignment wins over ambiguous PMID-based corpus reuse.
 - CI uses the pinned Ruff version, Node-24-compatible actions, and a built-wheel
   smoke test.
+- Offline tests now live under `tests/unit`; opt-in network/API tests live under
+  `tests/integration`. Project deprecations fail tests instead of being hidden by
+  blanket warning suppression.
+- Removed obsolete embedded demo/command runners while retaining their tested
+  importable implementations.
 
 ## Historical development snapshot — 2026-07-10
 

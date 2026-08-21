@@ -46,6 +46,7 @@ from utils.llm_trace import (
 )
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.paper_scope import NONHUMAN_ORTHOLOG_REASON
 from utils.env_utils import get_env_int
 from utils.protein_notation import (
     PROTEIN_NOTATION_RE as STRICT_PROTEIN_NOTATION_RE,
@@ -119,6 +120,122 @@ def _deterministic_study_summary(
         f"{route_label}. {count_sentence}; reviewers should confirm the table "
         "headers and source locations before adjudication."
     )
+
+
+def _quoted_percentage(quote: str, expected: Any) -> bool:
+    """Return whether a quote explicitly states ``expected`` as a percentage."""
+    try:
+        target = float(expected)
+    except (TypeError, ValueError):
+        return False
+    for match in re.finditer(
+        r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:%|percent\b)",
+        quote or "",
+        re.IGNORECASE,
+    ):
+        try:
+            if abs(float(match.group(1)) - target) <= 0.05:
+                return True
+        except ValueError:
+            continue
+    return False
+
+
+def _quote_is_source_verbatim(quote: str, source_text: str) -> bool:
+    """Whitespace-tolerant exact-source check for a claimed evidence quote."""
+    normalized_quote = " ".join(str(quote or "").split()).casefold()
+    normalized_source = " ".join(str(source_text or "").split()).casefold()
+    return bool(normalized_quote and normalized_quote in normalized_source)
+
+
+def _quote_names_variant(quote: str, variant: Dict[str, Any]) -> bool:
+    """Require the percentage quote to identify the variant it is attached to."""
+    quote_key = re.sub(r"\s+", "", quote or "").casefold()
+    for field in ("source_notation", "cdna_notation", "protein_notation"):
+        notation = re.sub(r"\s+", "", str(variant.get(field) or "")).casefold()
+        if notation and notation in quote_key:
+            return True
+    return False
+
+
+def _guard_penetrance_claims(
+    extracted_data: Dict[str, Any], source_text: str
+) -> Dict[str, Any]:
+    """Keep only source-quoted, variant-specific penetrance percentages.
+
+    A percentage derived from extracted counts is an analysis result, not a
+    paper fact.  The raw rejected value remains in ``penetrance_guard_flags`` so
+    the decision is auditable without allowing it into SQLite or review output.
+    """
+    guarded = 0
+    for variant in extracted_data.get("variants") or []:
+        if not isinstance(variant, dict):
+            continue
+        pdata = variant.get("penetrance_data")
+        if not isinstance(pdata, dict):
+            continue
+        facts = variant.get("fact_provenance") or []
+        pct = pdata.get("penetrance_percentage")
+        if pct is not None:
+            supported = any(
+                isinstance(fact, dict)
+                and str(fact.get("fact_type") or "").casefold()
+                == "penetrance_percentage"
+                and _quoted_percentage(str(fact.get("evidence_quote") or ""), pct)
+                and _quote_is_source_verbatim(
+                    str(fact.get("evidence_quote") or ""), source_text
+                )
+                and _quote_names_variant(str(fact.get("evidence_quote") or ""), variant)
+                for fact in facts
+            )
+            if not supported:
+                variant.setdefault("penetrance_guard_flags", []).append(
+                    {
+                        "field": "penetrance_percentage",
+                        "raw_value": pct,
+                        "reason": (
+                            "not backed by a verbatim, variant-specific "
+                            "penetrance_percentage fact"
+                        ),
+                    }
+                )
+                pdata["penetrance_percentage"] = None
+                guarded += 1
+
+        age_points = pdata.get("age_dependent_penetrance")
+        if isinstance(age_points, list):
+            kept_points = []
+            for point in age_points:
+                if not isinstance(point, dict):
+                    continue
+                point_pct = point.get("penetrance_percentage")
+                quote = str(point.get("evidence_quote") or "")
+                if (
+                    point_pct is not None
+                    and _quoted_percentage(quote, point_pct)
+                    and _quote_is_source_verbatim(quote, source_text)
+                    and _quote_names_variant(quote, variant)
+                ):
+                    kept_points.append(point)
+                    continue
+                variant.setdefault("penetrance_guard_flags", []).append(
+                    {
+                        "field": "age_dependent_penetrance",
+                        "raw_value": point,
+                        "reason": (
+                            "not backed by a verbatim, variant-specific "
+                            "percentage quote"
+                        ),
+                    }
+                )
+                guarded += 1
+            pdata["age_dependent_penetrance"] = kept_points
+
+    if guarded:
+        extracted_data.setdefault("extraction_metadata", {})[
+            "penetrance_claims_guarded"
+        ] = guarded
+    return extracted_data
 
 
 def _find_data_zones_file(
@@ -1746,6 +1863,7 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data["variants"] = []
                 meta = extracted_data.setdefault("extraction_metadata", {})
                 meta["dropped_nonhuman_ortholog"] = len(variants)
+                meta["paper_scope_exclusion_reason"] = NONHUMAN_ORTHOLOG_REASON
                 return extracted_data
 
         target_upper = target_gene.upper()
@@ -6129,7 +6247,7 @@ Return strict JSON with this schema:
         "affected_count": "integer or null",
         "unaffected_count": "integer or null",
         "uncertain_count": "integer or null",
-        "penetrance_percentage": "float or null",
+        "penetrance_percentage": "float or null; only when explicitly stated by the source, never calculated from counts",
         "age_dependent_penetrance": []
       }},
       "source_location": "specific table/line/section if supported",
@@ -6929,7 +7047,10 @@ Return strict JSON with this schema:
                 extracted_data={
                     "paper_metadata": {"pmid": paper.pmid},
                     "variants": [],
-                    "extraction_metadata": {"skipped_nonhuman_ortholog": True},
+                    "extraction_metadata": {
+                        "skipped_nonhuman_ortholog": True,
+                        "paper_scope_exclusion_reason": NONHUMAN_ORTHOLOG_REASON,
+                    },
                 },
                 model_used="skipped-nonhuman-ortholog",
             )
@@ -7429,6 +7550,11 @@ Return strict JSON with this schema:
             self._candidate_trace_ids = {}
             try:
                 result = self._extract_with_model_fallback(paper)
+                if result.success and result.extracted_data:
+                    result.extracted_data = _guard_penetrance_claims(
+                        result.extracted_data,
+                        paper.full_text or "",
+                    )
                 # Finalize only AFTER the winner is chosen. The fallback loop can
                 # run model B successfully and still keep model A's higher-yield
                 # result; without this, B's call (the last one to parse) was

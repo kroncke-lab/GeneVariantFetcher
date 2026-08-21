@@ -44,7 +44,7 @@ def test_review_cohort_has_50_unique_valid_pmids_per_gene():
     assert "PMC9522753" not in kcnh2_pmids
 
 
-def test_active_brca2_review_scope_excludes_six_and_keeps_nate_papers():
+def test_active_brca2_review_scope_excludes_provenance_and_canine_papers():
     historical = set((COHORT_DIR / "BRCA2.txt").read_text().splitlines())
     active = [
         line.strip()
@@ -55,13 +55,14 @@ def test_active_brca2_review_scope_excludes_six_and_keeps_nate_papers():
         "10398279",
         "15365993",
         "18489799",
+        "19944633",
         "21356067",
         "22655046",
         "25802882",
     }
 
-    assert len(active) == 46
-    assert len(set(active)) == 46
+    assert len(active) == 45
+    assert len(set(active)) == 45
     assert all(is_valid_pmid(pmid) for pmid in active)
     assert set(active) == historical - excluded
     assert {"26833046", "26848529"} <= set(active)

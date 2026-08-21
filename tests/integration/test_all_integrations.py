@@ -10,8 +10,7 @@ Gold standard PMIDs (verified via API):
     - 30036649: PMC6198685, DOI 10.1016/j.ipej.2018.07.007 (Elsevier/IPEJ)
 
 Usage:
-    pytest tests/test_all_integrations.py -v
-    pytest tests/test_all_integrations.py -v -m "not slow"
+    pytest tests/integration/test_all_integrations.py -v -m requires_network
 """
 
 import logging
@@ -21,6 +20,8 @@ import traceback
 from pathlib import Path
 
 import pytest
+
+pytestmark = pytest.mark.requires_network
 
 logging.basicConfig(level=logging.INFO, format="%(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -392,7 +393,7 @@ def print_summary(request):
 def run_standalone():
     """Run tests outside pytest for quick smoke testing.
 
-    Usage: python tests/test_all_integrations.py
+    Usage: python tests/integration/test_all_integrations.py
     """
     tracker = _ResultTracker()
 

@@ -1,5 +1,7 @@
 """Tests for configuration validation."""
 
+import logging
+
 import pytest
 
 from config.settings import get_settings
@@ -119,3 +121,25 @@ def test_invalid_count_recovery_settings_fail_early(monkeypatch, name, value):
     monkeypatch.setenv(name, value)
     with pytest.raises(ValueError):
         get_settings()
+
+
+def test_explicit_false_setting_is_logged_as_deprecated(monkeypatch, caplog):
+    _baseline_env(monkeypatch, "anthropic")
+    monkeypatch.setenv("TIER1_MODEL", "unused-model")
+
+    with caplog.at_level(logging.WARNING, logger="config.settings"):
+        get_settings()
+
+    assert "TIER1_MODEL is deprecated" in caplog.text
+
+
+def test_changed_extraction_false_knob_reports_runtime_authority(monkeypatch, caplog):
+    _baseline_env(monkeypatch, "anthropic")
+    monkeypatch.setenv("EXTRACTION_MAX_CHARS", "80000")
+
+    with caplog.at_level(logging.WARNING, logger="config.settings"):
+        settings = get_settings()
+
+    assert settings.extraction_max_chars == 80_000
+    assert "EXTRACTION_MAX_CHARS=80000 is deprecated and ignored" in caplog.text
+    assert "TEXT_TRUNCATION_MAX_CHARS=60000" in caplog.text

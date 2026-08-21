@@ -35,6 +35,17 @@ Five invariants follow, and every extraction prompt must encode all five.
 | **Identity is load-bearing** | No variant identifier ⇒ no record. A mutation *class* is not a variant. |
 | **Human clinical carriers only** | Assay replicates, animals, cell lines, and population alleles are not carriers. |
 
+Two derived clinical claims are explicitly out of scope for extraction:
+
+- **Never calculate penetrance.** `penetrance_percentage` is populated only when
+  the paper explicitly states a variant-specific percentage and the exact source
+  quote is retained. `affected / carriers * 100` is a downstream analysis, not
+  a paper extraction.
+- **Never manufacture a phenotype partition.** A diagnosis label, enrollment in
+  a disease cohort, or absence of a reported diagnosis does not by itself prove
+  `affected` or `unaffected`. Do not fill either field by subtraction, by setting
+  `affected = carriers`, or by treating an unselected cohort as unaffected.
+
 ### Open blockers to the clinical-grade claim
 
 Recorded here because the contract is only as strong as its weakest consumer.
@@ -100,6 +111,12 @@ NEVER COUNT AS CARRIERS
 ABSTAIN (do not guess)
 - unaffected is null unless the paper explicitly describes carriers without disease.
   Never derive unaffected = 0.
+- affected is null unless the paper explicitly assigns the target phenotype to
+  those carriers. “N patients/probands carried the variant” is not enough when
+  the source separately reports a smaller symptom/event subset.
+- penetrance_percentage is null unless the paper explicitly states a
+  variant-specific percentage and supplies an exact quote. Never calculate it
+  from extracted counts.
 - Case report with undescribed status: count the carrier, leave affected/unaffected null.
 - "Novel mutation" with no described patient = a variant, not a carrier.
 - count_type in {cohort_total, screened_N, unknown}: leave the count null, note the
@@ -136,8 +153,11 @@ says which is which. **Prompt-only** rows have no automated backup.
 | No clinical counts from reviews / pure functional / GWAS | `study_type_mismatch` | `trust_gate.py` |
 | Never derive `unaffected = 0` | `implied_unaffected_zero` — masks **only** the `unaffected` field, in designs that enroll unaffected carriers (population, biobank, case-control, family segregation). Dormant on proband case reports and unknown design. | `trust_gate.py` |
 | Do not copy `carriers` onto `affected` | Always-on `pipeline/phenotype_count_guard.py`: clears `affected == carriers` with `unaffected in {0, None}` when N≥2 or `source_layer=figure`, unless a distinct phenotype column sourced the split. One-proband 1/1/0 text/table rows are left alone. Wired from `steps._apply_phenotype_count_guard` and figure-reader parse. Eval still scores raw, so this changes the emitted integers, not only trust. | enforced |
+| Do not calculate penetrance from extracted counts | Extraction keeps only an explicitly quoted, variant-specific percentage; `DataAggregator` never derives a percentage from raw pre-trust integers. | enforced |
+| Do not complete phenotype partitions arithmetically or from cohort labels | Claim verification clears ambiguous symptom-vs-diagnosis splits and never fills `affected`, `unaffected`, or their complement by subtraction. | enforced |
 | Right column, right gene, right phenotype | `wrong_column`, `wrong_gene`, `phenotype_misclassified` — high-severity, source-quoted, fact+field-bound findings only. **Dormant: Steps 3.8/3.9 are parked** (see below). | **parked** |
 | Animal / model-organism subjects are not human carriers | **three layers.** Tier 2/Tier 3 relevance filters in [`pipeline/filters.py`](../pipeline/filters.py) drop animal-only papers; the prompt rule reinforces that decision; then `_apply_nonhuman_clinical_count_guard` in [`pipeline/steps.py`](../pipeline/steps.py) clears human clinical count fields when the source shows a strong species signal, preserving raw under `nonhuman_source_flags`. Conservative by design — background animal-model mentions do not trip it, and an explicit human section (`# HUMAN`, "cats and humans") is an escape hatch. | enforced |
+| A non-human ortholog of the target gene is not a human clinical paper | The always-on title/full-text scope gate rejects the whole paper when a species adjective directly modifies the target gene (for example, "canine BRCA2"). Explicit PMID manifests cannot bypass it. The reason persists in extraction JSON and SQLite; source replay and ClinVar/PubTator/figure recovery honor it and purge legacy evidence links. This is narrower than the general animal-subject count guard and does not reject a human-variant study merely because it uses an animal model. | enforced |
 | Families ≠ individuals; probands ≠ all carriers | **classified but not acted on.** `family_count` / `proband_count` are inferred deterministically by [`pipeline/table_router.py`](../pipeline/table_router.py) and [`pipeline/extraction.py`](../pipeline/extraction.py), then written into `count_provenance`. No default consumer enforces them: `pipeline/count_classifier.py` would flag any non-`per_variant_carrier` type, but `COUNT_CLASSIFIER_POLICY` in [`config/settings.py`](../config/settings.py) defaults to `off`. The signal is on disk and unused. | **prompt-only in effect** |
 | **Attribution: exclude counts credited to another publication** | `attributed_to_other_study` is in `ENFORCEABLE_REASON_CODES`, so when the reviewer runs, a high-severity source-quoted finding masks the field. But **Steps 3.8/3.9 are parked**, so today this rests on the prompt alone. [`tests/unit/test_codex_paper_eval.py`](../tests/unit/test_codex_paper_eval.py) pins the prompt guidance. | **prompt-only while parked** |
 | **Row identifiers are not counts** | partial — only if a final-check finding lands as `wrong_column`. | **prompt-only in practice** |
@@ -190,13 +210,17 @@ count fields with `NULL` at query time while keeping the identity row — so PMI
 and unique-variant recall are unaffected and only the number is withheld.
 `--trust-tier all` is the raw diagnostic mode.
 
-**Exception worth knowing.** The non-human guard is a *pre-DB clear*, not a tier:
+**Exception worth knowing.** The general non-human subject/count guard is a
+*pre-DB clear*, not a tier:
 it zeroes the count in the extraction JSON before migration, keeping the raw value
 in `nonhuman_source_flags` and a summary in
 `extraction_metadata.nonhuman_count_guard`. So no `penetrance_data` row carries a
 `trust_tier` explaining it — the audit trail lives in the extraction JSON, not the
 database. This is the same shape as the legacy `carrier_guard` / `vf`-quarantine
 guards that [`TASKS.md`](../TASKS.md) wants folded into the trust record.
+The target-gene-ortholog exclusion is different: it is paper-level, persists as
+`extraction_metadata.paper_scope_exclusion_reason`, and blocks all downstream
+evidence recovery for that PMID.
 
 ---
 

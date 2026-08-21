@@ -45,6 +45,63 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-20 — No-publish BRCA1/BRCA2/BMPR2 refresh completed; BRCA2 failed structural scope
+
+After the gold-119 acceptance lock, the fixed collaborator manifests ran with
+publication disabled and mandatory VariantFeatures enrichment plus quarantine.
+BRCA1 completed 50/50 papers with 50 full texts, BRCA2 46/46 with 45 full texts,
+and BMPR2 50/50 with 45 full texts. All three exited 0 with no stage failures or
+warnings and write-time-verified traces (582, 374, and 192 LLM calls).
+
+| Gene | Final variants | Nameless | Penetrance percentages | VF quarantined | Structural gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| BRCA1 | 5,348 | 0 | 0 | 324 | PASS |
+| BRCA2 | 1,947 | 0 | 0 | 156 | **FAIL** |
+| BMPR2 | 554 | 0 | 0 | 32 | PASS |
+
+BRCA2 failed because the primary extractor correctly abstained on an explicitly
+canine BRCA2 paper (PMID 19944633), but downstream PubTator recovery attached
+four cDNA links. VariantFeatures did not quarantine them because in-range canine
+coordinates can look valid against the human gene. The reusable readiness audit
+now detects the strong species-scoped title pattern and fails the run, with a
+tested fallback to staged abstract metadata when the database title is blank.
+This establishes the need for paper/link-level relevance quarantine rather than
+variant-global residue quarantine alone.
+
+The two lead-approved BRCA2 papers retained 7/7 approved identities; carrier
+coverage remains 3/7 with MAE 1.333. That seven-record positive subset is not
+exhaustive paper-level gold, so unmatched predictions cannot be labeled false
+positives. No new precision claim is made for any of the three genes. Evidence:
+`docs/evidence/collaborator_readiness_20260820.md` and
+`benchmarks/codex_paper_eval/runs/20260820_brca2_gold2_noinference/`.
+
+### 2026-08-20 — No-inference gold-119 acceptance lock passed
+
+The live 119-attempt / 115-unique cardiac manifest was re-extracted after the
+penetrance and phenotype-partition no-inference changes. Production sources and
+all four write-time-verified trace manifests were rebound and SHA-256 locked
+before the scorer read gold. The primary projection contains 1,216 predicted
+variants over 119 papers; four papers are explicit empty predictions. KCNH2
+10086972 remains excluded from the live manifest.
+
+| Metric | 2026-08-13 accepted lock | 2026-08-20 no-inference lock |
+| --- | ---: | ---: |
+| Variant recall | 534/635 (84.09%) | **548/633 (86.57%)** |
+| Raw variant precision | 534/1438 (37.13%) | **548/1216 (45.07%)** |
+| Counted-extra precision | 534/(534+24) (95.70%) | **548/(548+14) (97.51%)** |
+| Count-bearing-only precision | 148/(148+24) (86.05%) | **195/(195+14) (93.30%)** |
+| Carrier supplied / MAE | 146/635 / **0.308** | **193/633** / 0.425 |
+| Affected supplied | 70/635 (11.02%) | 48/633 (7.58%) |
+| Unaffected supplied | 53/634 (8.36%) | 32/632 (5.06%) |
+
+The 97.51% counted-extra result passes the 77.3% rollout floor and variant
+recall improves. Carrier conditional MAE regresses, so this is not a universal
+metric win. Affected/unaffected supply falls because diagnosis, enrollment, and
+arithmetic completion no longer manufacture phenotype partitions; that is a
+deliberate abstention policy and must not be reported as a new penetrance
+baseline. Exact artifacts:
+`benchmarks/codex_paper_eval/runs/20260820_gold119_noinference/`.
+
 ### 2026-08-13 — Fixed experimental queues refreshed in collaborator staging
 
 After the accepted gold-120 gate and paper/source QC, the current-system

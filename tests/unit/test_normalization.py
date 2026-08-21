@@ -11,14 +11,15 @@ Includes test cases migrated from test_tier2_fixes.py (root) covering:
 import pytest
 
 from utils.variant_normalizer import (
+    VariantNormalizer,
+    match_variants_fuzzy,
+    match_variants_to_baseline,
     normalize_deletion,
     normalize_duplication,
     normalize_frameshift,
     normalize_nonsense,
     normalize_variant,
-    match_variants_fuzzy,
-    match_variants_to_baseline,
-    VariantNormalizer,
+    variants_match,
 )
 
 
@@ -133,3 +134,59 @@ def test_match_variants_to_baseline():
     assert len(results["matches"]) >= 4  # At least the exact-normalized ones
     assert len(results["filtered_non_target"]) >= 1
     assert len(results["unmatched"]) >= 1
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("A561V*", "A561V"),
+        ("p.Arg231Cys*", "R231C"),
+        ("M291T*", "M291T"),
+        ("R864*", "R864X"),
+        ("R176W(het)", "R176W"),
+        ("A561V/WT", "A561V"),
+        ("G584S(hom)", "G584S"),
+        ("R534C/+", "R534C"),
+        ("a561v", "A561V"),
+        ("G184Del", "G184del"),
+    ],
+)
+def test_normalize_variant_migrated_demo_cases(raw, expected):
+    """Keep the executable assertions formerly hidden in the demo runner."""
+
+    assert normalize_variant(raw) == expected
+
+
+def test_variant_normalizer_get_all_forms_migrated_demo_case():
+    forms = VariantNormalizer("KCNH2").get_all_forms("p.Arg534Cys")
+
+    assert forms["single"] == "R534C"
+    assert forms["three"] == "p.Arg534Cys"
+
+
+@pytest.mark.parametrize(
+    "variant, expected_non_target",
+    [
+        ("R248W", True),
+        ("G12D", True),
+        ("V600E", True),
+        ("P2006A", True),
+        ("A561V", False),
+    ],
+)
+def test_non_target_detection_migrated_demo_cases(variant, expected_non_target):
+    is_non_target, _reason = VariantNormalizer("KCNH2").is_non_target_variant(variant)
+
+    assert is_non_target is expected_non_target
+
+
+@pytest.mark.parametrize(
+    "left, right, expected",
+    [
+        ("p.Ala561Val", "A561V", True),
+        ("p.Arg534Cys", "R534C", True),
+        ("A561V", "G584S", False),
+    ],
+)
+def test_variants_match_migrated_demo_cases(left, right, expected):
+    assert variants_match(left, right) is expected

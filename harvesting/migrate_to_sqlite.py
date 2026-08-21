@@ -49,6 +49,7 @@ from utils.pmid_utils import (
     extract_pmid_from_filename,
     is_valid_pmid,
 )
+from utils.paper_scope import metadata_paper_scope_exclusion_reason
 from utils.geo_ancestry import enrich_ethnicity_origin
 from utils.source_layers import (
     combine_source_layers,
@@ -786,6 +787,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("extraction_metadata", "cohort_source", "TEXT"),
         ("extraction_metadata", "population", "TEXT"),
         ("extraction_metadata", "study_summary", "TEXT"),
+        ("extraction_metadata", "paper_scope_exclusion_reason", "TEXT"),
         ("variants", "variant_class", "TEXT"),
         ("variants", "structural_description", "TEXT"),
         *(
@@ -910,6 +912,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             challenges TEXT,  -- JSON array
             notes TEXT,
             model_used TEXT,
+            paper_scope_exclusion_reason TEXT,
             extraction_timestamp TEXT,
             source_type TEXT,  -- 'fulltext', 'abstract_only', or NULL
             abstract_only INTEGER DEFAULT 0,  -- 1 if extracted from abstract only
@@ -2525,8 +2528,8 @@ def migrate_extraction_file(
                     study_type, study_design, ascertainment, cohort_source,
                     population, study_summary,
                     challenges, notes, extraction_timestamp, source_type, abstract_only,
-                    source_file, model_used
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    source_file, model_used, paper_scope_exclusion_reason
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     pmid,
@@ -2545,6 +2548,7 @@ def migrate_extraction_file(
                     1 if extraction_meta.get("abstract_only") else 0,
                     source_file,
                     extraction_meta.get("model_used"),
+                    metadata_paper_scope_exclusion_reason(extraction_meta),
                 ),
             )
 

@@ -16,7 +16,6 @@ Output: CLEANED_CONTEXT.md — ready for LLM extraction
 
 import os
 import re
-import sys
 import json
 from pathlib import Path
 
@@ -266,24 +265,3 @@ class PaperPreprocessor:
             json.dump({"summary": classifications, "files": all_stats}, f, indent=2)
 
         return all_stats
-
-
-if __name__ == "__main__":
-    input_dir = (
-        sys.argv[1]
-        if len(sys.argv) > 1
-        else "/mnt/temp2/kronckbm/gvf_output/KCNH2/bulk_download"
-    )
-    output_dir = (
-        sys.argv[2]
-        if len(sys.argv) > 2
-        else "/mnt/temp2/kronckbm/gvf_output/KCNH2/cleaned_context"
-    )
-    abstracts_dir = (
-        sys.argv[3]
-        if len(sys.argv) > 3
-        else "/mnt/temp2/kronckbm/gvf_output/KCNH2/pubmed_abstracts"
-    )
-
-    preprocessor = PaperPreprocessor(abstracts_dir=abstracts_dir)
-    preprocessor.process_directory(input_dir, output_dir)

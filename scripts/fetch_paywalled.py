@@ -70,7 +70,10 @@ from harvesting.paywall_session import (  # noqa: E402
     hydrate_session_with_browser_cookies,
     make_session,
 )
-from harvesting.scholar_pdf_fallback import try_scholar_pdf  # noqa: E402
+from harvesting.scholar_pdf_fallback import (  # noqa: E402
+    _source_identity_matches,
+    try_scholar_pdf,
+)
 from harvesting.springer_api import SpringerAPIClient  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
 from harvesting.wiley_api import WileyAPIClient  # noqa: E402
@@ -262,6 +265,7 @@ def try_scholar_pdf_fallback(
     output_dir: Path,
     session: requests.Session,
     converter: Optional[FormatConverter] = None,
+    expected_doi: Optional[str] = None,
 ) -> Optional[Dict]:
     """Try Google Scholar title search for an author/lab-hosted PDF."""
     result = try_scholar_pdf(
@@ -271,8 +275,19 @@ def try_scholar_pdf_fallback(
         converter=converter or FormatConverter(),
         quality_gate=validate_article_content,
         email=_ncbi_email(),
+        doi=expected_doi,
     )
     if not result.success or not result.markdown:
+        return None
+
+    identity_ok, identity_reason = _source_identity_matches(
+        result.markdown,
+        expected_title=result.title or "",
+        expected_doi=expected_doi,
+        expected_pmid=pmid,
+        source_url=result.source_url,
+    )
+    if not identity_ok:
         return None
 
     pmid_dir = output_dir / pmid
@@ -292,6 +307,8 @@ def try_scholar_pdf_fallback(
         "path": str(canonical_path),
         "canonical_path": str(canonical_path),
         "per_pmid_path": str(per_pmid_full_ctx),
+        "source_identity_verified": True,
+        "source_identity_reason": identity_reason,
     }
 
 
@@ -310,6 +327,8 @@ def mark_scholar_pdf_success(row: Dict, scholar_row: Dict) -> None:
     row["path"] = scholar_row["path"]
     row["canonical_path"] = scholar_row["canonical_path"]
     row["per_pmid_path"] = scholar_row["per_pmid_path"]
+    row["source_identity_verified"] = bool(scholar_row.get("source_identity_verified"))
+    row["source_identity_reason"] = scholar_row.get("source_identity_reason") or ""
     row["supp_files"] = 0
 
 
@@ -1106,6 +1125,7 @@ def fetch_one(
             output_dir,
             recovery_session,
             converter=fetcher.converter,
+            expected_doi=doi,
         )
         if scholar_row is not None:
             mark_scholar_pdf_success(row, scholar_row)
@@ -1536,6 +1556,10 @@ def main() -> int:
     overrides = {**input_overrides, **overrides}
     output_dir: Path = args.output.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    # A reused or interrupted output directory must not retain a completed
+    # success manifest from an earlier attempt. Partial-result inference below
+    # is deliberately limited to result sidecars with nonzero extracted text.
+    (output_dir / "summary.json").write_text("[]\n", encoding="utf-8")
     browser_profile_dir = (
         args.browser_profile_dir.expanduser().resolve()
         if args.browser_profile_dir

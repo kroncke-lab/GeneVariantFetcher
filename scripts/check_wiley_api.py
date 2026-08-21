@@ -1,140 +1,27 @@
 #!/usr/bin/env python3
-"""
-Test script for the Wiley TDM API.
+"""Manual connectivity probe for the Wiley TDM API.
 
 Usage:
-    python tests/test_wiley_api.py                    # Run all tests
-    python tests/test_wiley_api.py --doi "10.1002/xxx"  # Test specific DOI
-    python tests/test_wiley_api.py --verbose          # Show full response
-    python tests/test_wiley_api.py --web-only         # Test web scraping only
+    python scripts/check_wiley_api.py
+    python scripts/check_wiley_api.py --doi "10.1002/xxx"
+    python scripts/check_wiley_api.py --verbose
+    python scripts/check_wiley_api.py --web-only
 
 This tests the Wiley TDM API configuration and functionality.
 """
 
 import argparse
+import logging
 import os
 import sys
-import logging
-import time
-from typing import Optional, Tuple
-from urllib.parse import quote
+from pathlib import Path
 
-import requests
-
-# Add parent directory to path to import the actual module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from harvesting.wiley_api import WileyAPIClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Try to import the actual WileyAPIClient, fall back to inline version if needed
-try:
-    from harvesting.wiley_api import WileyAPIClient, WILEY_DOI_PREFIXES
-
-    USING_REAL_MODULE = True
-    logger.info("Using actual WileyAPIClient from harvesting.wiley_api")
-except ImportError as e:
-    logger.warning(f"Could not import WileyAPIClient: {e}")
-    logger.warning("Using inline test version (web scraping not available)")
-    USING_REAL_MODULE = False
-
-    # Inline fallback for when module import fails
-    WILEY_DOI_PREFIXES = (
-        "10.1002/",  # Wiley main prefix
-        "10.1111/",  # Wiley-Blackwell
-        "10.1113/",  # The Physiological Society (Wiley)
-        "10.1096/",  # FASEB Journal (Wiley)
-        "10.1634/",  # Stem Cells (Wiley)
-        "10.1111/j.",  # Wiley journal articles
-    )
-
-    class WileyAPIClient:
-        """Fallback client for testing when module import fails."""
-
-        BASE_URL = "https://api.wiley.com/onlinelibrary/tdm/v1/articles"
-
-        def __init__(
-            self,
-            api_key: Optional[str] = None,
-            session: Optional[requests.Session] = None,
-        ):
-            self.api_key = api_key
-            self.session = session or requests.Session()
-            self._last_request_time = 0
-            self._min_request_interval = 0.5
-
-        @property
-        def is_available(self) -> bool:
-            return bool(self.api_key and self.api_key.strip())
-
-        @staticmethod
-        def is_wiley_doi(doi: str) -> bool:
-            if not doi:
-                return False
-            return doi.lower().startswith(WILEY_DOI_PREFIXES)
-
-        def _rate_limit(self):
-            elapsed = time.time() - self._last_request_time
-            if elapsed < self._min_request_interval:
-                time.sleep(self._min_request_interval - elapsed)
-            self._last_request_time = time.time()
-
-        def get_fulltext_by_doi(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
-            if not self.is_available:
-                return None, "Wiley API key not configured"
-
-            self._rate_limit()
-
-            encoded_doi = quote(doi, safe="/:")
-            url = f"{self.BASE_URL}/{encoded_doi}"
-            headers = {
-                "Wiley-TDM-Client-Token": self.api_key,
-                "Accept": "application/xml, text/xml, application/xhtml+xml, text/html",
-            }
-
-            try:
-                logger.info(f"Fetching full text from Wiley API for DOI: {doi}")
-                logger.info(f"Request URL: {url}")
-                response = self.session.get(url, headers=headers, timeout=30)
-                logger.info(f"Response status: {response.status_code}")
-
-                if response.status_code == 200:
-                    return response.text, None
-                elif response.status_code == 401:
-                    return None, "Invalid or unauthorized API key"
-                elif response.status_code == 403:
-                    return (
-                        None,
-                        "Access forbidden - API key may lack permissions or article not available",
-                    )
-                elif response.status_code == 404:
-                    return None, "Article not found via Wiley API"
-                elif response.status_code == 429:
-                    return None, "Rate limit exceeded"
-                else:
-                    return None, f"HTTP {response.status_code}: {response.reason}"
-
-            except requests.exceptions.Timeout:
-                return None, "Request timed out"
-            except requests.exceptions.RequestException as e:
-                return None, f"Request failed: {str(e)}"
-
-        def content_to_markdown(self, content: str) -> Optional[str]:
-            if not content:
-                return None
-            return f"Content received: {len(content)} chars"
-
-        def fetch_fulltext(
-            self, doi: str = None, url: str = None, try_web_scraping: bool = True
-        ) -> Tuple[Optional[str], Optional[str]]:
-            return None, "Web scraping not available in fallback mode"
-
-        def scrape_fulltext_from_web(
-            self, doi: str
-        ) -> Tuple[Optional[str], Optional[str]]:
-            return None, "Web scraping not available in fallback mode"
-
 
 # Known Wiley test DOIs (mix of newer and older articles)
 TEST_DOIS = [
@@ -153,8 +40,8 @@ TEST_DOIS = [
 ]
 
 
-def test_api_configuration():
-    """Test that the API client is properly configured."""
+def load_api_client() -> WileyAPIClient:
+    """Load a client while reporting whether a credential is configured."""
     print("=" * 60)
     print("Testing Wiley API Configuration")
     print("=" * 60)
@@ -245,12 +132,6 @@ def _run_web_scraping(
     if description:
         print(f"Description: {description}")
 
-    if not USING_REAL_MODULE:
-        print(
-            "⚠ Cannot test - real module not available (web scraping requires actual module)"
-        )
-        return False
-
     if not hasattr(client, "scrape_fulltext_from_web"):
         print("⚠ Cannot test - scrape_fulltext_from_web method not available")
         return False
@@ -301,10 +182,6 @@ def _run_fetch_fulltext(
     if description:
         print(f"Description: {description}")
 
-    if not USING_REAL_MODULE:
-        print("⚠ Cannot test - real module not available")
-        return False
-
     if not hasattr(client, "fetch_fulltext"):
         print("⚠ Cannot test - fetch_fulltext method not available")
         return False
@@ -352,11 +229,11 @@ def main():
     )
     args = parser.parse_args()
 
-    # If key provided via arg, set it in env for test_api_configuration
+    # If key provided via arg, set it in env for load_api_client.
     if args.key:
         os.environ["WILEY_API_KEY"] = args.key
 
-    client = test_api_configuration()
+    client = load_api_client()
 
     if args.doi:
         if args.web_only:

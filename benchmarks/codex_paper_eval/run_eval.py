@@ -123,10 +123,11 @@ def production_trace_lock_entries(
     errors: list[str] = []
     locked: list[dict] = []
     roots: list[Path] = []
-    # Historical schema-1 projections predate production trace binding.  Keep
-    # them readable/re-scoreable; new converter output opts into this stronger
-    # contract by supplying the manifests explicitly.
     if not supplied:
+        if predictions.get("strategy") == "production_gvf_run":
+            errors.append(
+                "production_gvf_run predictions require production_trace_manifests"
+            )
         return locked, roots, errors
     if not isinstance(supplied, list):
         return locked, roots, ["production_trace_manifests must be a list"]
@@ -170,6 +171,10 @@ def production_trace_lock_entries(
         integrity_level = (manifest.get("verification") or {}).get("level")
         if entry.get("integrity_level") != integrity_level:
             errors.append(f"{label}: integrity_level does not match trace manifest")
+        if integrity_level != "write_time_verified":
+            errors.append(f"{label}: trace is not write-time verified")
+        if int(manifest.get("llm_call_count") or 0) <= 0:
+            errors.append(f"{label}: trace contains no model calls")
         locked.append(
             {
                 "gene": gene,
@@ -373,6 +378,20 @@ def material_digest_errors(paper: dict) -> list[str]:
             check_one(kind, raw_path, recorded.get(raw_path))
 
     check_one("source", paper.get("source"), paper.get("source_sha256"))
+    if paper.get("production_extraction_record") or paper.get(
+        "production_extraction_record_sha256"
+    ):
+        check_one(
+            "production extraction record",
+            paper.get("production_extraction_record"),
+            paper.get("production_extraction_record_sha256"),
+        )
+    if paper.get("representations") or paper.get("representation_sha256"):
+        check_many(
+            "text representation",
+            list(paper.get("representations") or []),
+            paper.get("representation_sha256"),
+        )
     check_one(
         "artifact",
         paper.get("artifacts"),

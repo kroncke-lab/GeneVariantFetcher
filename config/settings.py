@@ -9,6 +9,12 @@ from typing import ClassVar, List, Optional, Union
 from pydantic import AliasChoices, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from config.constants import (
+    SCANNER_MAX_HINTS,
+    SCANNER_MERGE_MIN_CONFIDENCE,
+    TEXT_TRUNCATION_MAX_CHARS,
+)
+
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 logger = logging.getLogger(__name__)
 
@@ -47,6 +53,46 @@ _TIER_ENV_VARS = {
 
 class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
+
+    _DEPRECATED_NOOP_SETTINGS: ClassVar[dict[str, tuple[str, str]]] = {
+        "gemini_api_key": (
+            "GEMINI_API_KEY",
+            "GVF model routing does not read this Settings field; provider libraries may still read the environment variable directly",
+        ),
+        "azure_deployment_gpt5_codex": (
+            "AZURE_DEPLOYMENT_GPT5_CODEX",
+            "use the stage-specific model/deployment variables documented in .env.example",
+        ),
+        "tier1_model": (
+            "TIER1_MODEL",
+            "Tier 1 is heuristic; configure TIER2_MODEL for LLM classification",
+        ),
+        "enable_tier3": (
+            "ENABLE_TIER3",
+            "this flag does not gate extraction; select the intended extraction command/stages instead",
+        ),
+        "tier1_use_llm": (
+            "TIER1_USE_LLM",
+            "Tier 1 is heuristic; configure Tier 2 for LLM classification",
+        ),
+    }
+    _DEPRECATED_EXTRACTION_SETTINGS: ClassVar[dict[str, tuple[str, object, str]]] = {
+        "extraction_max_chars": (
+            "EXTRACTION_MAX_CHARS",
+            TEXT_TRUNCATION_MAX_CHARS,
+            "config.constants.TEXT_TRUNCATION_MAX_CHARS",
+        ),
+        "scanner_merge_confidence": (
+            "SCANNER_MERGE_CONFIDENCE",
+            SCANNER_MERGE_MIN_CONFIDENCE,
+            "config.constants.SCANNER_MERGE_MIN_CONFIDENCE",
+        ),
+        "scanner_max_hints": (
+            "SCANNER_MAX_HINTS",
+            SCANNER_MAX_HINTS,
+            "config.constants.SCANNER_MAX_HINTS",
+        ),
+    }
 
     # API Keys - all loaded from .env file
     openai_api_key: Optional[str] = Field(
@@ -1121,6 +1167,41 @@ class Settings(BaseSettings):
             "Literature sourcing enabled for %s. Set PUBMIND_ONLY=true or disable USE_PUBMED/USE_EUROPEPMC to limit discovery.",
             ", ".join(active_sources),
         )
+
+        return self
+
+    @model_validator(mode="after")
+    def warn_about_deprecated_noop_settings(self):
+        """Make explicitly configured false knobs visible without changing science."""
+
+        supplied_fields = self.model_fields_set
+        for field_name, (
+            env_var,
+            replacement,
+        ) in self._DEPRECATED_NOOP_SETTINGS.items():
+            if field_name in supplied_fields:
+                logger.warning(
+                    "%s is deprecated because GVF does not use it as a runtime knob; %s.",
+                    env_var,
+                    replacement,
+                )
+
+        for field_name, (
+            env_var,
+            runtime_value,
+            authority,
+        ) in self._DEPRECATED_EXTRACTION_SETTINGS.items():
+            if field_name not in supplied_fields:
+                continue
+            if getattr(self, field_name) == runtime_value:
+                continue
+            logger.warning(
+                "%s=%r is deprecated and ignored; extraction uses %s=%r.",
+                env_var,
+                getattr(self, field_name),
+                authority,
+                runtime_value,
+            )
 
         return self
 

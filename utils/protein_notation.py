@@ -46,9 +46,3 @@ PROTEIN_NOTATION_RE = re.compile(
     rf"|ins(?:{AMINO_ACID_SEQUENCE_PATTERN})?))",
     re.IGNORECASE,
 )
-
-
-def is_valid_protein_notation(value: str) -> bool:
-    """Return whether *value* is entirely covered by the GVF protein grammar."""
-
-    return bool(PROTEIN_NOTATION_RE.fullmatch(value))

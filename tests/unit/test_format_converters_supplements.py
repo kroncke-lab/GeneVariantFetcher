@@ -7,7 +7,9 @@ TSV, HTML supplement, XML supplement, and ZIP nested-extraction.
 from __future__ import annotations
 
 import subprocess
+import sys
 import textwrap
+import types
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
@@ -46,6 +48,31 @@ def test_pdf_to_markdown_accepts_string_path(tmp_path: Path):
     md = FormatConverter().pdf_to_markdown(str(p))
 
     assert "[Invalid PDF file: not_a_pdf.pdf]" in md
+
+
+def test_dense_pdf_bypasses_markitdown_layout_sort(tmp_path: Path, monkeypatch):
+    p = tmp_path / "dense_table.pdf"
+    p.write_bytes(b"%PDF-1.7\n")
+
+    class FakePage:
+        def get_text(self, sort=False):
+            return "p.Arg1Gly\tBMPR2\n" * 4_000
+
+    class FakeDoc(list):
+        def close(self):
+            return None
+
+    fake_fitz = types.SimpleNamespace(open=lambda _path: FakeDoc([FakePage()]))
+    monkeypatch.setitem(sys.modules, "fitz", fake_fitz)
+    converter = FormatConverter()
+    converter.markitdown = types.SimpleNamespace(
+        convert=lambda _path: pytest.fail("dense PDF reached MarkItDown")
+    )
+
+    md = converter.pdf_to_markdown(p)
+
+    assert "p.Arg1Gly" in md
+    assert md.startswith("### Page 1")
 
 
 def test_html_supplement_to_markdown_extracts_table_rows(converter, tmp_path: Path):

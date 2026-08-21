@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import os
 import sqlite3
 import subprocess
@@ -88,21 +89,45 @@ def parse_db_overrides(raw: list[str] | None) -> dict[str, Path]:
 
 
 def latest_gene_db(root: Path, gene: str) -> Path | None:
-    """Return the newest DB for a gene under a benchmark extraction root."""
-    search_roots = [root / gene, root]
-    candidates: list[Path] = []
-    seen: set[Path] = set()
-    for search_root in search_roots:
+    """Resolve one completed run's declared active DB; never guess by mtime."""
+    status_paths: set[Path] = set()
+    for search_root in (root, root / gene):
         if not search_root.exists():
             continue
-        for path in search_root.glob(f"**/{gene}*.db"):
-            resolved = path.resolve()
-            if resolved not in seen:
-                seen.add(resolved)
-                candidates.append(path)
+        direct = search_root / "RUN_STATUS.json"
+        if direct.is_file():
+            status_paths.add(direct.resolve())
+        status_paths.update(
+            path.resolve() for path in search_root.glob("**/RUN_STATUS.json")
+        )
+    candidates: dict[Path, Path] = {}
+    for status_path in sorted(status_paths):
+        try:
+            status = json.loads(status_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            status.get("status") != "completed"
+            or status.get("exit_code") != 0
+            or status.get("stage_failures")
+        ):
+            continue
+        active_raw = str(status.get("active_db") or "").strip()
+        active = Path(active_raw).expanduser()
+        if not active.is_absolute():
+            active = status_path.parent / active
+        active = active.resolve()
+        if active.name == f"{gene}.db" and active.is_file():
+            candidates[active] = status_path
     if not candidates:
         return None
-    return sorted(candidates, key=lambda p: (p.stat().st_mtime, str(p)))[-1]
+    if len(candidates) > 1:
+        details = ", ".join(str(path) for path in sorted(candidates))
+        raise SystemExit(
+            f"{gene}: multiple completed active DBs under {root}; pass --db explicitly: "
+            f"{details}"
+        )
+    return next(iter(candidates))
 
 
 def default_db_path_for(gene: str) -> Path:
@@ -179,7 +204,10 @@ def main() -> int:
     ap.add_argument(
         "--extract-root",
         type=Path,
-        help="Benchmark extract root containing per-gene GVF outputs; newest **/GENE*.db is used.",
+        help=(
+            "Benchmark extract root containing exactly one completed active GVF "
+            "run per gene; pass --db when the root contains history."
+        ),
     )
     ap.add_argument(
         "--run-root",
@@ -212,6 +240,10 @@ def main() -> int:
         help="confirm removal of papers excluded from the active review scope",
     )
     args = ap.parse_args()
+    if args.allow_missing_pmids:
+        raise SystemExit(
+            "--allow-missing-pmids is not permitted for collaborator publication"
+        )
 
     manifest = load_manifest()
     genes = parse_genes(args.genes, sorted(manifest))

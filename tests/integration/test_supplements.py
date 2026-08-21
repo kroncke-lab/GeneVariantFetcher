@@ -12,6 +12,8 @@ Test PMIDs:
 import pytest
 from dotenv import load_dotenv
 
+pytestmark = pytest.mark.requires_network
+
 load_dotenv()
 
 from gene_literature.supplements import (
@@ -40,38 +42,6 @@ def elsevier_fetcher():
 @pytest.fixture(scope="module")
 def unified_fetcher():
     return UnifiedSupplementFetcher(timeout=30)
-
-
-# ---------------------------------------------------------------------------
-# SupplementFile dataclass
-# ---------------------------------------------------------------------------
-
-
-class TestSupplementFile:
-    def test_to_dict(self):
-        sf = SupplementFile(
-            url="https://example.com/mmc1.pdf", name="mmc1.pdf", source="test"
-        )
-        d = sf.to_dict()
-        assert d == {"url": "https://example.com/mmc1.pdf", "name": "mmc1.pdf"}
-
-    def test_from_dict(self):
-        d = {"url": "https://example.com/supp.xlsx", "name": "supp.xlsx"}
-        sf = SupplementFile.from_dict(d, source="scraper")
-        assert sf.url == d["url"]
-        assert sf.name == d["name"]
-        assert sf.source == "scraper"
-
-    def test_extension(self):
-        sf = SupplementFile(url="https://example.com/data.xlsx", name="data.xlsx")
-        assert sf.extension == "xlsx"
-
-    def test_normalized_url(self):
-        sf = SupplementFile(url="https://example.com/file.pdf#page=2", name="file.pdf")
-        assert sf.normalized_url == "https://example.com/file.pdf"
-
-        sf2 = SupplementFile(url="https://example.com/file.pdf/", name="file.pdf")
-        assert sf2.normalized_url == "https://example.com/file.pdf"
 
 
 # ---------------------------------------------------------------------------

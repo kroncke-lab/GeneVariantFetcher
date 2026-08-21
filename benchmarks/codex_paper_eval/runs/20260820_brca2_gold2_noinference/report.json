@@ -1,0 +1,506 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "by_gene": {
+    "BRCA2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 7,
+          "gold_asserted_nonzero": 7,
+          "gold_asserted_zero": 0,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 7,
+          "gold_asserted_nonzero": 7,
+          "gold_asserted_zero": 0,
+          "mae": 1.3333333333333333,
+          "predicted": 3,
+          "predicted_on_nonzero_gold": 3,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.42857142857142855,
+          "recall_nonzero_gold": 0.42857142857142855,
+          "recall_zero_gold": null,
+          "rmse": 2.309401076758503
+        },
+        "unaffected": {
+          "gold_asserted": 7,
+          "gold_asserted_nonzero": 4,
+          "gold_asserted_zero": 3,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": 0.0,
+          "rmse": null
+        }
+      },
+      "counted_precision": {
+        "count_bearing_matched_rows": 3,
+        "counted_extra_rows": 73,
+        "matched_rows": 7,
+        "precision_among_count_bearing_predictions": 0.039473684210526314,
+        "precision_vs_counted_gold_pmids": 0.0875
+      },
+      "elapsed_seconds": 0.0,
+      "f1": 0.0875,
+      "fn": 0,
+      "fp": 146,
+      "merged_notation_twin_rows": 0,
+      "papers": 2,
+      "precision": 0.0457516339869281,
+      "recall": 1.0,
+      "token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "tp": 7
+    }
+  },
+  "gold_sources": {
+    "BRCA2": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv"
+  },
+  "integrity": {
+    "llm_trace_manifest_sha256": null,
+    "llm_trace_report_sha256": null,
+    "predictions_sha256": "cdbfe78f703c93d933bfb26eb1fb1efb03a81261c523a8a3a71152393fa91b5f",
+    "production_trace_manifests": [],
+    "selection_sha256": "549bd2f5f99162ab228ccc116a2691b298675cdab0db949931fecdd90ecbbcff"
+  },
+  "locked_at": "2026-08-20T21:05:07.884788+00:00",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 7,
+        "gold_asserted_nonzero": 7,
+        "gold_asserted_zero": 0,
+        "mae": null,
+        "predicted": 0,
+        "predicted_on_nonzero_gold": 0,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.0,
+        "recall_nonzero_gold": 0.0,
+        "recall_zero_gold": null,
+        "rmse": null
+      },
+      "carriers": {
+        "gold_asserted": 7,
+        "gold_asserted_nonzero": 7,
+        "gold_asserted_zero": 0,
+        "mae": 1.3333333333333333,
+        "predicted": 3,
+        "predicted_on_nonzero_gold": 3,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.42857142857142855,
+        "recall_nonzero_gold": 0.42857142857142855,
+        "recall_zero_gold": null,
+        "rmse": 2.309401076758503
+      },
+      "unaffected": {
+        "gold_asserted": 7,
+        "gold_asserted_nonzero": 4,
+        "gold_asserted_zero": 3,
+        "mae": null,
+        "predicted": 0,
+        "predicted_on_nonzero_gold": 0,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.0,
+        "recall_nonzero_gold": 0.0,
+        "recall_zero_gold": 0.0,
+        "rmse": null
+      }
+    },
+    "counted_precision": {
+      "count_bearing_matched_rows": 3,
+      "counted_extra_rows": 73,
+      "matched_rows": 7,
+      "precision_among_count_bearing_predictions": 0.039473684210526314,
+      "precision_vs_counted_gold_pmids": 0.0875
+    },
+    "elapsed_seconds": 0.0,
+    "f1": 0.0875,
+    "fn": 0,
+    "fp": 146,
+    "merged_notation_twin_rows": 0,
+    "papers": 2,
+    "precision": 0.0457516339869281,
+    "recall": 1.0,
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "tp": 7
+  },
+  "papers": [
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 4,
+          "gold_asserted_nonzero": 4,
+          "gold_asserted_zero": 0,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 4,
+          "gold_asserted_nonzero": 4,
+          "gold_asserted_zero": 0,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": null,
+          "rmse": null
+        },
+        "unaffected": {
+          "gold_asserted": 4,
+          "gold_asserted_nonzero": 4,
+          "gold_asserted_zero": 0,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": null,
+          "rmse": null
+        }
+      },
+      "count_errors": [],
+      "counted_precision": {
+        "count_bearing_matched_rows": 0,
+        "counted_extra_rows": 0,
+        "matched_rows": 4,
+        "precision_among_count_bearing_predictions": null,
+        "precision_vs_counted_gold_pmids": 1.0
+      },
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "c.130T>A",
+        "c.1310_1313delAAGA",
+        "c.145G>T",
+        "c.1556delA",
+        "c.1687C>T",
+        "c.1803delC",
+        "c.1813delA",
+        "c.181T>G",
+        "c.1877_1878insTAGT",
+        "c.190T>C",
+        "c.2231C>G",
+        "c.2450delA",
+        "c.2475delC",
+        "c.2523dupG",
+        "c.2787dupA",
+        "c.2808_2811delACAA",
+        "c.2812delGCAA",
+        "c.2830A>T",
+        "c.2943_2944insTGAGA",
+        "c.301+1G>C",
+        "c.3052_3053insTGAGA",
+        "c.3319G>T",
+        "c.3400G>T",
+        "c.3477_3479delAAAinsC",
+        "c.3599_3600delGT",
+        "c.3607C>T",
+        "c.3710delT",
+        "c.3718C>T",
+        "c.3765delT",
+        "c.3847_3848delGT",
+        "c.3860delA",
+        "c.3874delT",
+        "c.3904G>T",
+        "c.4035delA",
+        "c.4258delG",
+        "c.427G>T",
+        "c.4284_4285insT",
+        "c.4285_4286insT",
+        "c.469_470delAA",
+        "c.5089T>C",
+        "c.5096G>A",
+        "c.5130_5133delTGTA",
+        "c.5143A>C",
+        "c.5164_5165delAG",
+        "c.5213G>A",
+        "c.5219delT",
+        "c.5263insC",
+        "c.5266dupC",
+        "c.5351delA",
+        "c.5352delC",
+        "c.5722_5723delCT",
+        "c.583delT",
+        "c.5857G>T",
+        "c.6082_6086delGAAGA",
+        "c.6244G>T",
+        "c.6408_6414delAAATGTT",
+        "c.6443_6444delCT",
+        "c.6486_6489delACAA",
+        "c.6490_6492del",
+        "c.7069_7070delCT",
+        "c.7757G>A",
+        "c.7878G>C",
+        "c.7913_7917delTTCCT",
+        "c.7980T>G",
+        "c.8364G>A",
+        "c.8536G>T",
+        "c.8575delC",
+        "c.8754+3G>C",
+        "c.8953+1G>T",
+        "c.9097delA",
+        "c.9106C>T",
+        "c.7008-1G>C"
+      ],
+      "f1": 0.1,
+      "fn": 0,
+      "fp": 72,
+      "gene": "BRCA2",
+      "matched_variants": [
+        {
+          "gold": "c.6373delA",
+          "predicted": "c.6373delA"
+        },
+        {
+          "gold": "c.7008-1G>A",
+          "predicted": "c.7008-1G>A"
+        },
+        {
+          "gold": "c.7617+1G>A",
+          "predicted": "c.7617+1G>A"
+        },
+        {
+          "gold": "c.8474delC",
+          "predicted": "c.8474delC"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [],
+      "pmid": "26833046",
+      "precision": 0.05263157894736842,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 4
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 3,
+          "gold_asserted_nonzero": 3,
+          "gold_asserted_zero": 0,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": 0.0,
+          "recall_zero_gold": null,
+          "rmse": null
+        },
+        "carriers": {
+          "gold_asserted": 3,
+          "gold_asserted_nonzero": 3,
+          "gold_asserted_zero": 0,
+          "mae": 1.3333333333333333,
+          "predicted": 3,
+          "predicted_on_nonzero_gold": 3,
+          "predicted_on_zero_gold": 0,
+          "recall": 1.0,
+          "recall_nonzero_gold": 1.0,
+          "recall_zero_gold": null,
+          "rmse": 2.309401076758503
+        },
+        "unaffected": {
+          "gold_asserted": 3,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 3,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": -4,
+          "field": "carriers",
+          "gold": 5,
+          "predicted": 1,
+          "variant": "c.5576_5580delTTAAA"
+        }
+      ],
+      "counted_precision": {
+        "count_bearing_matched_rows": 3,
+        "counted_extra_rows": 73,
+        "matched_rows": 3,
+        "precision_among_count_bearing_predictions": 0.039473684210526314,
+        "precision_vs_counted_gold_pmids": 0.039473684210526314
+      },
+      "elapsed_seconds": null,
+      "extra_predictions": [
+        "c.7435+53C>T",
+        "c.7976+1G>A",
+        "p.Ala634Valfs*18 c.1901delC",
+        "p.Ala938Profs*21 c.2808_2811delACAA",
+        "p.Arg155Lysfs*26 c.464_468delGAGAT",
+        "p.Arg2108Cys c.6322C>T",
+        "p.Arg2336His c.7007G>A",
+        "p.Arg435Lysfs*17 c.1303dupA",
+        "p.Asn1287Ilefs*6 c.3860delA",
+        "p.Asn1473Glnfs*8 c.4416_4417delGA",
+        "p.Asn1822Ilefs*18 c.5465delA",
+        "p.Asn2051* c.6150_6151insT",
+        "p.Asn2101_Val2102del c.6301_6306delAATGTA",
+        "p.Asn361Metfs*6 c.1082delA",
+        "p.Asn863Lysfs*18 c.2588dupA",
+        "p.Asn991Asp c.2971A>G",
+        "p.Asp687* c.2059_2063delGATTA",
+        "p.Asp974Asn c.2920G>A",
+        "p.Gln1056Argfs*3 c.3167_3170delAAAA",
+        "p.Gln1291* c.3871C>T",
+        "p.Gln2655Asnfs*2 c.7963delC",
+        "p.Gln2829* c.8485C>T",
+        "p.Gln2941Leufs*34 c.8820_8823del",
+        "p.Gln3034Serfs*10 c.9098_9099insA",
+        "p.Gln3036Serfs*8 c.9105dupT",
+        "p.Glu2198Asnfs*4 c.6591_6592delTG",
+        "p.Glu3096* c.9286G>T",
+        "p.Glu3263Argfs*12 c.9788delA",
+        "p.Gly2901Asp c.8702G>A",
+        "p.Gly3003* c.9007G>T",
+        "p.His2021Pro",
+        "p.His372Asn c.1114C>A",
+        "p.Ile1724Lysfs*17 c.5171delT",
+        "p.Ile2986Lysfs*3 c.8956_8957insAA",
+        "p.Ile332Lysfs*18 c.993_994dupA",
+        "p.Ile605Tyrfs*9 c.1813delA",
+        "p.Ile770Phefs*2 c.2307delT",
+        "p.Leu1908Argfs*2 c.5722_5723delCT",
+        "p.Leu2080* c.6239T>G",
+        "p.Leu3119* c.9356_9357delTAinsG",
+        "p.Leu88Alafs*12 c.262_263delCT",
+        "p.Lys157Serfs*24 c.470_474delAGTCA",
+        "p.Lys2150Asnfs*19 c.6449_6450insTA",
+        "p.Lys3326* c.9976A>T",
+        "p.Lys467* c.1399A>T",
+        "p.Lys585Arg c.1754A>G",
+        "p.Met2393Lysfs*18 c.7178_7179delTG",
+        "p.Met815Trpfs*10 c.2442delC",
+        "p.Phe2801Leufs*10",
+        "p.Pro1702Thrfs*16 c.5103dupA",
+        "p.Pro2381Hisfs*13 c.7142delC",
+        "p.Pro628Hisfs*16 c.1881delA",
+        "p.Pro999Leu c.2996C>T",
+        "p.Ser1248Argfs*10 c.3744_3747delTGAG",
+        "p.Ser1722Tyrfs*4 c.5164_5165delAG",
+        "p.Ser1882* c.5645C>A",
+        "p.Ser1900* c.5699C>G",
+        "p.Ser1955* c.5864C>G",
+        "p.Ser2012Glnfs*5 c.6033_6034delTT",
+        "p.Ser2120* c.6359C>G",
+        "p.Ser2267* c.6800C>A",
+        "p.Ser2984Glnfs*4 c.8950delT",
+        "p.Ser611* c.1832C>A",
+        "p.Thr2471Hisfs*4 c.7409dupT",
+        "p.Thr2746Aspfs*18 c.8234dupT",
+        "p.Thr2867Ser c.8599A>T",
+        "p.Thr3085Glnfs*19 c.9253delA",
+        "p.Thr598Ala c.1792A>G",
+        "p.Trp2725Glyfs*8 c.8172delG",
+        "p.Tyr1894* c.5681dupA",
+        "p.Tyr2215*",
+        "p.Tyr2839* c.8517C>A",
+        "p.Val220Ilefs*4 c.658_659delGT",
+        "c.5576_5579delTTAA"
+      ],
+      "f1": 0.07500000000000001,
+      "fn": 0,
+      "fp": 74,
+      "gene": "BRCA2",
+      "matched_variants": [
+        {
+          "gold": "p.I1859fs",
+          "predicted": "c.5576_5580delTTAAA"
+        },
+        {
+          "gold": "p.N1066fs",
+          "predicted": "p.Asn1066Leufs*10 c.3195_3198delTAAT"
+        },
+        {
+          "gold": "p.N289H",
+          "predicted": "p.Asn289His c.865A>C"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [],
+      "pmid": "26848529",
+      "precision": 0.03896103896103896,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "tp": 3
+    }
+  ],
+  "prelock_gold_usage": {
+    "read_only_layer_scoring_possible": true,
+    "scores_feed_back_into_predictions": false
+  },
+  "run_id": "20260820_brca2_gold2_noinference",
+  "scored_at": "2026-08-20T21:05:10.635961+00:00",
+  "seed": 2026082002,
+  "selection": {
+    "description": "Paper selection used the fixed manifest `brca2_2_collaborator_reviewed_20260811.tsv` (2 papers) from the downloaded-source, gold-count-eligible pool. Routing, extraction, counts, evidence, and source locations were gold-value-blind.",
+    "mode": "manifest",
+    "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/brca2_2_collaborator_reviewed_20260811.tsv",
+    "per_gene": 5,
+    "population": "fixed manifest `brca2_2_collaborator_reviewed_20260811.tsv` (2 papers)",
+    "seed": 2026082002
+  },
+  "timing": {
+    "completed_at": "2026-08-20T21:05:03.071198+00:00",
+    "started_at": null,
+    "summed_paper_seconds": 0.0,
+    "wall_seconds": 0.0
+  },
+  "token_usage": {
+    "note": "gvf-run does not aggregate per-run token usage; see run logs for wall clock",
+    "telemetry_available": false
+  },
+  "tools_used": {
+    "text": 2
+  }
+}

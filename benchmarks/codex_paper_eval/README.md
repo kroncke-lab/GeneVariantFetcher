@@ -45,10 +45,39 @@ eligibility selection, run `rebind_production_sources.py` before locking so
 `selection.json` hashes the exact FULL_CONTEXT/artifact/PDF/figure inputs used
 by extraction; this must not change cohort membership or consult gold values.
 
-The production converter defaults to the raw count projection. Its optional
-`--trust-mode trusted` masks persisted field-level quarantine states while
-preserving variant-paper identity. Treat that output as a post-lock diagnostic,
-not a second blinded primary.
+The registry-aware production run uses `--trust-mode trusted` and
+`--identity-mode trusted`: quarantined count fields are masked and ambiguous
+VariantFeatures identity classes are held out, matching the collaborator-facing
+projection. Raw `all` projections remain diagnostics and must not replace the
+locked primary after scoring.
+
+## Current production gold_120 test
+
+Use the registry-aware setup command for a fresh test of the production pipeline:
+
+```bash
+.venv/bin/python benchmarks/codex_paper_eval/setup_production_eval.py create \
+  --run-id 20260821_current_changes_gold119 \
+  --email brett.kroncke@gmail.com
+```
+
+Despite its historical name, `gold_120` is now a pinned 119-attempt / 115-unique-
+PMID cohort: KCNH2 has 29 attempts after wrong-paper PMID 10086972 was removed;
+KCNQ1, RYR2, and SCN5A have 30 each. The setup refuses a manifest digest, count,
+seed, source-coverage, or code-fingerprint mismatch. It creates per-gene PMID
+files plus two executable phases inside the run directory:
+
+1. `run_extraction.sh` runs the current production `gvf-run` route without gold,
+   source recovery, corpus mutation, full-coverage add-ons, or publication.
+2. `lock_and_score.sh` rebinds the exact run-local sources, projects the final
+   production databases through the maintained `db_to_predictions.py`, locks
+   predictions and trace manifests, and only then opens gold for scoring.
+
+The generated `RUNBOOK.md` records the exact absolute commands and rationale.
+Create a new scaffold instead of bypassing its source-fingerprint check if code
+changes before extraction. The setup refuses multiple completed per-gene runs,
+backup DBs, missing or zero-call trace manifests, and any DB other than
+`RUN_STATUS.active_db`.
 
 ## Standard comparison set: 50 papers (48 cardiac + 2 collaborator-reviewed BRCA2)
 

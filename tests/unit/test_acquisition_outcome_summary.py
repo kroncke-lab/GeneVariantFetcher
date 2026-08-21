@@ -204,6 +204,7 @@ def test_acquisition_outcome_can_read_interrupted_fetch_output_dir(tmp_path):
                 "publisher": "aha",
                 "canonical_full_context_path": str(usable),
                 "error": None,
+                "markdown_chars": usable.stat().st_size,
                 "notes": [],
             }
         ),
@@ -271,6 +272,122 @@ def test_acquisition_outcome_rejects_short_flat_context_from_output_dir(tmp_path
     assert summary["fetch_outcomes"] == {"empty": 1}
     assert summary["pmid_recall"]["usable_fulltext_downloaded"]["pmids"] == 0
     assert source_override_rows == []
+
+
+def test_acquisition_outcome_summary_prevents_stale_context_from_overriding_completed_failure(
+    tmp_path,
+):
+    output_dir = tmp_path / "fetch"
+    output_dir.mkdir()
+    stale = output_dir / "26824983_FULL_CONTEXT.md"
+    stale.write_text(_fulltext("# WRONG CITING PAPER\n"), encoding="utf-8")
+    (output_dir / "summary.json").write_text(
+        json.dumps(
+            [
+                {
+                    "pmid": "26824983",
+                    "outcome": "empty",
+                    "reason": "Scholar PDF source identity mismatch",
+                    "path": str(stale),
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    rows = summary_mod._load_fetch_output_dir(output_dir)
+    summary, source_override_rows = summary_mod.build_summary(
+        gene="BRCA2",
+        worklist_rows=[{"gene": "BRCA2", "pmid": "26824983", "action": "fetch"}],
+        fetch_rows=rows,
+        gold_pmids=None,
+    )
+
+    assert summary["fetch_outcomes"] == {"empty": 1}
+    assert source_override_rows == []
+
+
+def test_acquisition_outcome_requires_identity_verified_scholar_source(tmp_path):
+    source = tmp_path / "123_FULL_CONTEXT.md"
+    source.write_text(_fulltext("# SOME PAPER\n"), encoding="utf-8")
+
+    _summary, source_override_rows = summary_mod.build_summary(
+        gene="BRCA2",
+        worklist_rows=[{"gene": "BRCA2", "pmid": "123", "action": "fetch"}],
+        fetch_rows=[
+            {
+                "pmid": "123",
+                "outcome": "success_via_scholar_pdf",
+                "path": str(source),
+            }
+        ],
+        gold_pmids=None,
+    )
+
+    assert source_override_rows == []
+
+
+def test_acquisition_outcome_does_not_promote_unproven_flat_context(tmp_path):
+    output_dir = tmp_path / "fetch"
+    output_dir.mkdir()
+    stale = output_dir / "26824983_FULL_CONTEXT.md"
+    stale.write_text(_fulltext("# WRONG CITING PAPER\n"), encoding="utf-8")
+
+    assert summary_mod._load_fetch_output_dir(output_dir) == []
+
+
+def test_explicit_failure_summary_wins_over_output_dir_row(tmp_path):
+    stale = tmp_path / "26824983_FULL_CONTEXT.md"
+    stale.write_text(_fulltext("# WRONG CITING PAPER\n"), encoding="utf-8")
+    merged = summary_mod.merge_fetch_rows(
+        [
+            {
+                "pmid": "26824983",
+                "outcome": "empty",
+                "reason": "Scholar source identity mismatch",
+            }
+        ],
+        [
+            {
+                "pmid": "26824983",
+                "outcome": "success_from_output_dir",
+                "path": str(stale),
+            }
+        ],
+    )
+
+    _summary, source_override_rows = summary_mod.build_summary(
+        gene="BRCA2",
+        worklist_rows=[{"gene": "BRCA2", "pmid": "26824983", "action": "fetch"}],
+        fetch_rows=merged,
+        gold_pmids=None,
+    )
+
+    assert source_override_rows == []
+
+
+def test_empty_summary_manifest_blocks_stale_result_sidecar(tmp_path):
+    output_dir = tmp_path / "fetch"
+    output_dir.mkdir()
+    (output_dir / "summary.json").write_text("[]\n", encoding="utf-8")
+    stale = output_dir / "26824983_FULL_CONTEXT.md"
+    stale.write_text(_fulltext("# WRONG CITING PAPER\n"), encoding="utf-8")
+    result_dir = output_dir / "26824983"
+    result_dir.mkdir()
+    (result_dir / "result.json").write_text(
+        json.dumps(
+            {
+                "pmid": "26824983",
+                "canonical_full_context_path": str(stale),
+                "error": None,
+                "markdown_chars": stale.stat().st_size,
+                "notes": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert summary_mod._load_fetch_output_dir(output_dir) == []
 
 
 def test_acquisition_outcome_reports_refresh_successful_pmid_recall(tmp_path):

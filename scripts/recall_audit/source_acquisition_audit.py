@@ -40,6 +40,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from harvesting.elsevier_api import ELSEVIER_DOI_PREFIXES  # noqa: E402
+from utils.paper_scope import metadata_paper_scope_exclusion_reason  # noqa: E402
 
 try:
     from scripts.recall_audit.common import (  # noqa: E402
@@ -463,6 +464,7 @@ def classify_pmid(
     extraction_file = extraction_dir / f"{gene}_PMID_{pmid}.json"
     data = _json_load(extraction_file) if extraction_file.exists() else {}
     metadata = data.get("extraction_metadata") or {}
+    paper_scope_excluded = bool(metadata_paper_scope_exclusion_reason(metadata))
     variants = _variant_count(data)
     extraction_abstract_only = _metadata_mentions_abstract_only(metadata)
     source_unbound = (
@@ -475,8 +477,13 @@ def classify_pmid(
     sha_mismatch = _source_sha_mismatch(
         metadata, _source_candidates_for_pmid(harvest_dir, pmid)
     )
-    zero_variant_qc = pmid in zero_variant_pmids or (
-        source_file is not None and status in DATA_AVAILABLE_STATUSES and variants == 0
+    zero_variant_qc = not paper_scope_excluded and (
+        pmid in zero_variant_pmids
+        or (
+            source_file is not None
+            and status in DATA_AVAILABLE_STATUSES
+            and variants == 0
+        )
     )
     missing_variant_supplement = (
         source_file is not None
@@ -488,7 +495,11 @@ def classify_pmid(
 
     route = ""
     publisher = infer_publisher(doi) if doi else ""
-    if status in MISSING_SOURCE_STATUSES:
+    if paper_scope_excluded:
+        action = "none"
+        route = "paper_scope_excluded"
+        notes.append("paper is a non-human target-gene ortholog exclusion")
+    elif status in MISSING_SOURCE_STATUSES:
         if doi:
             route, publisher = fetch_route_for_doi(doi)
             action = "manual_or_blocked" if route.startswith("blocked_") else "fetch"

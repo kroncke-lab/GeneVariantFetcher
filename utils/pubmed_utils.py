@@ -15,6 +15,7 @@ import requests
 from Bio import Entrez
 from Bio.Entrez.Parser import ValidationError
 
+from .deprecations import warn_deprecated
 from .retry_utils import api_retry, get_standard_retry_decorator
 
 logger = logging.getLogger(__name__)
@@ -125,6 +126,10 @@ def query_pubmed_for_gene(
         >>> pmids = query_pubmed_for_gene("BRCA1", max_results=50)
         >>> print(pmids)
     """
+    warn_deprecated(
+        "utils.pubmed_utils.query_pubmed_for_gene",
+        "query_pubmed_with_entrez or gene_literature.discovery",
+    )
     logger.info(f"Querying PubMed for gene symbol: {gene_symbol}")
 
     # Build query
@@ -462,5 +467,9 @@ def validate_pmid(pmid: str) -> bool:
         >>> is_valid = validate_pmid("12345678")
         >>> print(is_valid)
     """
+    warn_deprecated(
+        "utils.pubmed_utils.validate_pmid",
+        "utils.pmid_utils.is_valid_pmid for format checks or fetch_paper_metadata for existence checks",
+    )
     metadata = fetch_paper_metadata(pmid)
     return metadata is not None

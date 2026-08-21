@@ -45,7 +45,7 @@ def test_registry_names_exactly_three_ordered_active_tiers():
     assert [tier["id"] for tier in tiers] == [
         "gold_50",
         "gold_120",
-        "reviewer_546",
+        "reviewer_545",
     ]
     assert [tier["order"] for tier in tiers] == [1, 2, 3]
 
@@ -91,7 +91,7 @@ def test_tier2_is_seeded_30_per_gene_manual_gold_expansion():
 
 
 def test_tier3_tracks_all_eleven_reviewer_workspaces():
-    actual = set(_rows(TIERS / "tier3_reviewer_546.tsv"))
+    actual = set(_rows(TIERS / "tier3_reviewer_545.tsv"))
     expected = set()
 
     for gene in ("APOE", "BRCA1", "KCNH2", "KCNQ1", "MYBPC3", "RYR2", "SCN5A"):
@@ -136,6 +136,8 @@ def test_new_reviewer_order_manifests_are_pinned_and_in_full_tier():
 
 def test_gold_expansion_is_separate_from_the_full_reviewer_backlog():
     tier2 = set(_rows(TIERS / "tier2_gold_120.tsv"))
-    tier3 = set(_rows(TIERS / "tier3_reviewer_546.tsv"))
+    tier3 = set(_rows(TIERS / "tier3_reviewer_545.tsv"))
+
+    assert ("BRCA2", "19944633") not in tier3
 
     assert not tier2 <= tier3

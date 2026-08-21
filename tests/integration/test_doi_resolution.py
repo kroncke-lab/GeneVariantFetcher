@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""
-Test script to verify DOI resolution and supplemental file scraping.
-"""
+"""Live DOI-resolution and supplement-scraping checks."""
+
+from pathlib import Path
 
 import pytest
 
 from harvesting import PMCHarvester
-from pathlib import Path
-
 from tests.conftest import TEST_PMC_HARVEST_DIR
 
 
@@ -39,7 +37,6 @@ def test_doi_resolution():
         print(f"Using DOI: {doi}")
         print("=" * 80)
 
-        # Test DOI resolution
         # Test DOI resolution
         response = harvester.session.get(
             f"https://doi.org/{doi}", allow_redirects=True, timeout=30

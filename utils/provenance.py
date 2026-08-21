@@ -19,6 +19,12 @@ import tokenize
 from pathlib import Path
 from typing import Any, Callable, Iterable, Optional
 
+from config.constants import (
+    SCANNER_MAX_HINTS,
+    SCANNER_MERGE_MIN_CONFIDENCE,
+    TEXT_TRUNCATION_MAX_CHARS,
+)
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Versioned contract for the extractor fingerprint. Python minor is explicit:
@@ -27,7 +33,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 EXTRACTOR_HASH_ALGORITHM = (
     f"python-token-v1-py{sys.version_info.major}.{sys.version_info.minor}"
 )
-PROVENANCE_SCHEMA_VERSION = 2
+PROVENANCE_SCHEMA_VERSION = 3
 
 # Historical raw-byte input set retained so old run manifests remain auditable.
 LEGACY_PROMPT_EXTRACTOR_FILES = [
@@ -147,12 +153,14 @@ EXTRACTOR_CONFIG_FIELDS = (
     "scout_min_relevance",
     "scout_max_zones",
     "scout_use_condensed",
-    "extraction_max_chars",
-    "scanner_merge_confidence",
-    "scanner_max_hints",
     "extract_figures",
     "extract_pedigrees",
 )
+EXTRACTOR_RUNTIME_CONSTANTS = {
+    "TEXT_TRUNCATION_MAX_CHARS": TEXT_TRUNCATION_MAX_CHARS,
+    "SCANNER_MERGE_MIN_CONFIDENCE": SCANNER_MERGE_MIN_CONFIDENCE,
+    "SCANNER_MAX_HINTS": SCANNER_MAX_HINTS,
+}
 
 
 def _run_git(args: list[str]) -> Optional[str]:
@@ -341,6 +349,7 @@ def resolved_model_routing() -> dict[str, Any]:
         _try(key, getattr(settings, resolver_name, None))
     for attr in EXTRACTOR_CONFIG_FIELDS:
         routing[attr] = getattr(settings, attr, None)
+    routing.update(EXTRACTOR_RUNTIME_CONSTANTS)
     return routing
 
 

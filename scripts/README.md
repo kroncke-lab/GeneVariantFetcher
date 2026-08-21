@@ -16,6 +16,8 @@ Use these when updating an existing scored run or measuring recall.
 | `recall_mae.py` | Compare rows-mode MAE and run-to-run score changes. |
 | `trust_report.py` | Inspect the trust-gate two-tier DB (trusted/quarantine counts, rate, by reason). |
 | `precision_sample.py` | Draw + score an adjudicated precision-calibration sample (Wilson CI) for gate thresholds. |
+| `phenotype_value_precision.py` | Measure exact-match precision of supplied carrier/affected/unaffected values on an existing locked prediction set. |
+| `build_status_dashboard.py` | Render the self-contained historical strategy/status dashboard from scored artifacts. |
 
 ## Source And Corpus
 
@@ -25,6 +27,7 @@ Use these for full-text, supplement, figure, and corpus maintenance.
 | --- | --- |
 | `fetch_paywalled.py` | Authenticated paywall/full-text recovery. |
 | `fetch_elsevier_supplements.py` | Elsevier supplement recovery. |
+| `fetch_linked_supplements.py` | Recover supplement links already recorded in paper markup but missed by publisher/API acquisition. |
 | `fold_supplements.py` | Fold downloaded supplements into full-context source files. |
 | `fulltext_acquisition_pass.py` | Source-acquisition-only pass without extraction. |
 | `build_source_corpus.py` | Build or update the local ignored source corpus. |
@@ -34,6 +37,7 @@ Use these for full-text, supplement, figure, and corpus maintenance.
 | `fetch_gold_figures.py` | Fetch figures for gold-standard audit papers. |
 | `fetch_reference_sequences.py` | Fetch reference protein sequences used by validation code. |
 | `gold_source_worklist.py` | Build source recovery worklists from gold inputs. |
+| `ezproxy_relogin.py` | Bootstrap or refresh the persistent EZproxy session used by authenticated recovery. |
 
 ## Recovery Layers
 
@@ -68,11 +72,17 @@ Use these when preparing human review packets or Variant Browser round trips.
 | `build_llm_trace_manifest.py` | Hash/index per-call LLM and decision traces for adjudication (thin CLI over `utils.llm_trace`). |
 | `build_llm_trace_html.py` | Build a self-contained per-paper browser view of LLM traces (thin CLI over `utils.llm_trace_html`; bounded bodies, shards large runs). |
 | `recover_counts.py` | Standalone additive fill of NULL per-variant counts (`pipeline.count_recovery`). `--dry-run` first; refuses nothing but writes only NULL slots, lands them as `quarantine`, and backs up the DB. |
+| `publish_curated_review_set.py` | Publish the curated extraction-eval subset to Variant Browser staging after scope exclusions; not the full-gene publish path. |
 
 ## Recall Audit
 
 The `recall_audit/` subdirectory contains report builders and targeted audit
 pilots. Start with `recall_audit/README.md`.
+
+| Script | Purpose |
+| --- | --- |
+| `collaborator_readiness_audit.py` | Audit fixed collaborator cohorts for structural/source/trace/trust readiness while leaving publication on hold. |
+| `final_check_triage_report.py` | Produce a no-LLM shadow report for the parked final-check triage predicate. |
 
 ## Gold Input Builders
 
@@ -95,12 +105,14 @@ new recall work unless a runbook points here.
 | --- | --- |
 | `test_insttoken_unlock.py` | Manual credential probe. |
 | `check_ezproxy.py` | Manual institutional-access probe. |
+| `check_wiley_api.py` | Manual Wiley TDM credential/connectivity probe; requires network. |
 | `discover_recall.py` | Historical recall-discovery helper. |
 | `enrich_from_variantfeatures.py` | Manual enrichment helper for legacy VariantFeatures data. |
 | `run_priority_extraction.py` | Historical priority-walk driver support; prefer `gvf gvf-run` unless reproducing that experiment. |
 | `targeted_land.py` | Historical acceptance-gated DB promotion helper. |
-| `replay_cap_trip_extractions.py` | Historical replay/debug helper. |
-| `retry_failed_extractions.py` | Manual retry helper for failed extraction JSON. |
+| `replay_cap_trip_extractions.py` | Deprecated 2026-08-20; retained only to reproduce existing dense-table/scanner cap-trip run artifacts until `gvf-run` owns equivalent targeted replay. |
+| `retry_failed_extractions.py` | Deprecated 2026-08-20; retained for targeted repair of an existing run's failure CSV. New runs use the retry path in `pipeline.steps.extract_variants`. |
+| `smoke_azure_models.py` | Opt-in live connectivity/JSON smoke test for configured Azure LLM deployments. |
 
 ## Cleanup Rule
 

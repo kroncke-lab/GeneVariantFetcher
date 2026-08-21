@@ -12,6 +12,7 @@ from typing import Any, Dict, Set, Union
 import requests
 from bs4 import BeautifulSoup
 
+from utils.deprecations import warn_deprecated
 from utils.http_utils import get_browser_session
 
 logger = logging.getLogger(__name__)
@@ -39,6 +40,11 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
         >>> print(pmids)
         {'12345678'}
     """
+    warn_deprecated(
+        "utils.html_utils.extract_pmids_from_html",
+        "a source-specific parser (PubMind keeps its parser private)",
+    )
+
     # Convert to BeautifulSoup if necessary
     if isinstance(html, str):
         soup = BeautifulSoup(html, "html.parser")
@@ -145,6 +151,11 @@ def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
         >>> print(dois)
         {'10.1038/nature12345'}
     """
+    warn_deprecated(
+        "utils.html_utils.extract_dois_from_html",
+        "the source adapter's DOI parser",
+    )
+
     if isinstance(html, str):
         soup = BeautifulSoup(html, "html.parser")
     else:
@@ -196,6 +207,10 @@ def create_scraping_session() -> requests.Session:
         >>> session = create_scraping_session()
         >>> response = session.get("https://example.com")
     """
+    warn_deprecated(
+        "utils.html_utils.create_scraping_session",
+        "utils.http_utils.get_browser_session",
+    )
     logger.debug("Created scraping session with browser-like headers")
     return get_browser_session()
 
@@ -219,6 +234,10 @@ def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:
         >>> print(pmids)
         {'12345678', '87654321'}
     """
+    warn_deprecated(
+        "utils.html_utils.extract_pmids_from_json_results",
+        "the source adapter's typed response parser",
+    )
     pmids = set()
 
     def _recursive_search(obj, keys=("pmid", "pubmed_id", "PMID", "pubmedId")):

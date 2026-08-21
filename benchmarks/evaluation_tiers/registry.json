@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-08-13",
+  "as_of": "2026-08-20",
   "count_unit": "gene_paper_attempt",
   "tiers": [
     {
@@ -36,17 +36,17 @@
       "role": "scored_gold_expansion"
     },
     {
-      "id": "reviewer_546",
+      "id": "reviewer_545",
       "order": 3,
-      "manifest": "tier3_reviewer_546.tsv",
-      "sha256": "cec880e96fbbc6b296a254b7de307af29513082e3b4063b723506140bea689c8",
-      "attempt_count": 546,
-      "unique_pmid_count": 507,
+      "manifest": "tier3_reviewer_545.tsv",
+      "sha256": "1e2705981b6f88ccb4f93207e633649fe292a8514f867b43e62d94a6943f0b52",
+      "attempt_count": 545,
+      "unique_pmid_count": 506,
       "gene_attempt_counts": {
         "APOE": 50,
         "BMPR2": 50,
         "BRCA1": 50,
-        "BRCA2": 46,
+        "BRCA2": 45,
         "KCNH2": 50,
         "KCNQ1": 50,
         "LMNA": 50,

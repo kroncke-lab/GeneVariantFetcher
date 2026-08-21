@@ -1580,27 +1580,3 @@ def merge_scanner_results(
 # ==========================================================================
 # TESTING
 # ==========================================================================
-
-if __name__ == "__main__":
-    # Basic test with various variant formats
-    test_text = """
-    The patient carried the p.Arg534Cys mutation, also known as R534C.
-    This variant c.1600C>T was previously reported in LQT2 families.
-    We also identified A561V, Gly628Ser, and the frameshift mutation L987fsX.
-    The IVS9+1G>A splice variant was found in 3 families.
-    The intronic variant c.2398+1G>A causes splicing defects.
-    The W1001X nonsense mutation leads to truncation.
-    In Table 2, we list the mutations: T613M, N470D, and the deletion p.Leu552del.
-    Also found: c.526C>T (R176W), p.Thr613Met, and c.1234del.
-    """
-
-    result = scan_document_for_variants(test_text, "KCNH2")
-
-    print(f"\nFound {len(result.variants)} variants:")
-    for v in result.variants:
-        print(
-            f"  {v.normalized:15} [{v.variant_type:12}] conf={v.confidence:.2f} ({v.source})"
-        )
-
-    print(f"\nStats: {result.stats}")
-    print(f"\nHints for prompt:\n{result.get_hints_for_prompt()}")

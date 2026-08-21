@@ -1,0 +1,320 @@
+{
+  "genes": [
+    {
+      "cohort": {
+        "exact_order": true,
+        "expected": 50,
+        "extra_db_papers": [],
+        "extra_extractions": [],
+        "extracted": 50,
+        "invalid_extractions": [],
+        "missing_db_papers": [],
+        "missing_extractions": [],
+        "staged": 50
+      },
+      "counts": {
+        "affected_supplied": 234,
+        "age_penetrance_percentage_supplied": 0,
+        "carriers_supplied": 2113,
+        "impossible_partitions_raw": 1,
+        "impossible_partitions_unquarantined": 0,
+        "negative_rows": 0,
+        "penetrance_percentage_supplied": 0,
+        "rows": 2113,
+        "unaffected_supplied": 22
+      },
+      "gene": "BRCA1",
+      "manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/curated_extraction_eval/review_pmids_50/BRCA1.txt",
+      "paper_scope": {
+        "nonhuman_target_title_links": []
+      },
+      "publication_recommendation": "HOLD_PENDING_SOURCE_ADJUDICATION_AND_TRUSTED_IMPORT",
+      "run": {
+        "duration_seconds": 9357,
+        "exit_code": 0,
+        "stage_failures": [],
+        "stage_warnings": [],
+        "status": "completed"
+      },
+      "run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BRCA1/20260820_132704",
+      "source": {
+        "abstract_only": 0,
+        "abstract_only_pmids": [],
+        "fulltext": 50,
+        "fulltext_fraction": 1.0,
+        "total": 50
+      },
+      "structural_gate_failures": [
+        "mandatory VariantFeatures enrichment/quarantine gate leaves 346 ambiguous live variant identities"
+      ],
+      "structural_gate_passed": false,
+      "trace": {
+        "decision_events": 602,
+        "evidence_source": "RUN_STATUS.json",
+        "integrity_errors": [],
+        "integrity_level": "write_time_verified",
+        "llm_calls": 582,
+        "missing_decision_links": [],
+        "run_id": "09ff623a-fbd2-4df2-b474-0fc86516c6cd"
+      },
+      "trust": {
+        "quarantined_fields": {
+          "affected": 42,
+          "total_carriers": 145,
+          "unaffected": 49,
+          "uncertain": 41
+        },
+        "tiers": {
+          "quarantine": 152,
+          "trusted": 1961
+        }
+      },
+      "variant_features": {
+        "allowed_unmatched_classes": [
+          "cdna_only_unmatched",
+          "novel_in_range"
+        ],
+        "blocked_live_variants": 346,
+        "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
+        "matched": 2165,
+        "quarantined_variants": {
+          "misparse_out_of_range": 61,
+          "wrong_gene_residue_mismatch": 263
+        },
+        "residual_classes": {
+          "cdna_only_unmatched": 1348,
+          "no_notation_suspect": 58,
+          "none": 2165,
+          "novel_in_range": 1489,
+          "residue_offset_suspect": 77,
+          "residue_unverified": 211
+        },
+        "rows": 5348,
+        "uncovered_live_variants": 0,
+        "unmatched_live_variants": 3183
+      },
+      "variants": {
+        "nameless": 0,
+        "paper_variant_links": 6448,
+        "papers_in_db": 50,
+        "variants": 5348,
+        "wrong_gene_symbol": 0
+      },
+      "vf_gate_passed": false
+    },
+    {
+      "cohort": {
+        "exact_order": true,
+        "expected": 45,
+        "extra_db_papers": [],
+        "extra_extractions": [],
+        "extracted": 45,
+        "invalid_extractions": [],
+        "missing_db_papers": [],
+        "missing_extractions": [],
+        "staged": 45
+      },
+      "counts": {
+        "affected_supplied": 134,
+        "age_penetrance_percentage_supplied": 0,
+        "carriers_supplied": 403,
+        "impossible_partitions_raw": 0,
+        "impossible_partitions_unquarantined": 0,
+        "negative_rows": 0,
+        "penetrance_percentage_supplied": 0,
+        "rows": 431,
+        "unaffected_supplied": 5
+      },
+      "gene": "BRCA2",
+      "manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/curated_extraction_eval/review_pmids_20260811_brca2_provenance/BRCA2.txt",
+      "paper_scope": {
+        "nonhuman_target_title_links": []
+      },
+      "publication_recommendation": "HOLD_PENDING_SOURCE_ADJUDICATION_AND_TRUSTED_IMPORT",
+      "run": {
+        "duration_seconds": 2,
+        "exit_code": 0,
+        "stage_failures": [],
+        "stage_warnings": [],
+        "status": "completed"
+      },
+      "run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820_scopefix/BRCA2/20260820_194856",
+      "source": {
+        "abstract_only": 1,
+        "abstract_only_pmids": [
+          "14559878"
+        ],
+        "fulltext": 44,
+        "fulltext_fraction": 0.9777777777777777,
+        "total": 45
+      },
+      "structural_gate_failures": [
+        "mandatory VariantFeatures enrichment/quarantine gate leaves 129 ambiguous live variant identities"
+      ],
+      "structural_gate_passed": false,
+      "trace": {
+        "decision_events": 378,
+        "evidence_source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820_scopefix/BRCA2/20260820_194856/llm_traces/trace_manifest.json",
+        "integrity_errors": [],
+        "integrity_level": "write_time_verified",
+        "llm_calls": 351,
+        "missing_decision_links": [],
+        "run_id": "e1a256e2-11a2-435c-bc5c-25dc9843428c"
+      },
+      "trust": {
+        "quarantined_fields": {
+          "affected": 1,
+          "total_carriers": 62,
+          "unaffected": 2,
+          "uncertain": 1
+        },
+        "tiers": {
+          "quarantine": 63,
+          "trusted": 368
+        }
+      },
+      "variant_features": {
+        "allowed_unmatched_classes": [
+          "cdna_only_unmatched",
+          "novel_in_range"
+        ],
+        "blocked_live_variants": 129,
+        "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
+        "matched": 956,
+        "quarantined_variants": {
+          "misparse_out_of_range": 18,
+          "wrong_gene_residue_mismatch": 119
+        },
+        "residual_classes": {
+          "cdna_only_unmatched": 418,
+          "no_notation_suspect": 51,
+          "none": 956,
+          "novel_in_range": 414,
+          "residue_offset_suspect": 15,
+          "residue_unverified": 63
+        },
+        "rows": 1917,
+        "uncovered_live_variants": 0,
+        "unmatched_live_variants": 961
+      },
+      "variants": {
+        "nameless": 0,
+        "paper_variant_links": 2227,
+        "papers_in_db": 45,
+        "variants": 1917,
+        "wrong_gene_symbol": 0
+      },
+      "vf_gate_passed": false
+    },
+    {
+      "cohort": {
+        "exact_order": true,
+        "expected": 50,
+        "extra_db_papers": [],
+        "extra_extractions": [],
+        "extracted": 50,
+        "invalid_extractions": [],
+        "missing_db_papers": [],
+        "missing_extractions": [],
+        "staged": 50
+      },
+      "counts": {
+        "affected_supplied": 168,
+        "age_penetrance_percentage_supplied": 0,
+        "carriers_supplied": 241,
+        "impossible_partitions_raw": 0,
+        "impossible_partitions_unquarantined": 0,
+        "negative_rows": 0,
+        "penetrance_percentage_supplied": 0,
+        "rows": 242,
+        "unaffected_supplied": 45
+      },
+      "gene": "BMPR2",
+      "manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/reviewer_pmids_50_20260811/BMPR2.txt",
+      "paper_scope": {
+        "nonhuman_target_title_links": []
+      },
+      "publication_recommendation": "HOLD_PENDING_SOURCE_ADJUDICATION_AND_TRUSTED_IMPORT",
+      "run": {
+        "duration_seconds": 5438,
+        "exit_code": 0,
+        "stage_failures": [],
+        "stage_warnings": [],
+        "status": "completed"
+      },
+      "run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/vb_reextract_20260820/BMPR2/20260820_133842",
+      "source": {
+        "abstract_only": 5,
+        "abstract_only_pmids": [
+          "25543221",
+          "37278169",
+          "15059534",
+          "23139147",
+          "35229499"
+        ],
+        "fulltext": 45,
+        "fulltext_fraction": 0.9,
+        "total": 50
+      },
+      "structural_gate_failures": [
+        "mandatory VariantFeatures enrichment/quarantine gate leaves 56 ambiguous live variant identities"
+      ],
+      "structural_gate_passed": false,
+      "trace": {
+        "decision_events": 218,
+        "evidence_source": "RUN_STATUS.json",
+        "integrity_errors": [],
+        "integrity_level": "write_time_verified",
+        "llm_calls": 192,
+        "missing_decision_links": [],
+        "run_id": "891c66dc-cddd-40c6-8a9d-7aae802eafd9"
+      },
+      "trust": {
+        "quarantined_fields": {
+          "affected": 2,
+          "total_carriers": 5,
+          "unaffected": 3,
+          "uncertain": 2
+        },
+        "tiers": {
+          "quarantine": 6,
+          "trusted": 236
+        }
+      },
+      "variant_features": {
+        "allowed_unmatched_classes": [
+          "cdna_only_unmatched",
+          "novel_in_range"
+        ],
+        "blocked_live_variants": 56,
+        "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
+        "matched": 300,
+        "quarantined_variants": {
+          "wrong_gene_residue_mismatch": 32
+        },
+        "residual_classes": {
+          "cdna_only_unmatched": 132,
+          "no_notation_suspect": 24,
+          "none": 300,
+          "novel_in_range": 66,
+          "residue_offset_suspect": 8,
+          "residue_unverified": 24
+        },
+        "rows": 554,
+        "uncovered_live_variants": 0,
+        "unmatched_live_variants": 254
+      },
+      "variants": {
+        "nameless": 0,
+        "paper_variant_links": 610,
+        "papers_in_db": 50,
+        "variants": 554,
+        "wrong_gene_symbol": 0
+      },
+      "vf_gate_passed": false
+    }
+  ],
+  "publication_recommendation": "HOLD_PENDING_SOURCE_ADJUDICATION_AND_TRUSTED_IMPORT",
+  "schema_version": 1,
+  "scope": "collaborator_fixed_manifests"
+}

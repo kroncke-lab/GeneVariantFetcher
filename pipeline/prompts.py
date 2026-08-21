@@ -288,10 +288,12 @@ OUTPUT - JSON only:
                 "affected_count": "integer or null",
                 "unaffected_count": "integer or null",
                 "uncertain_count": "integer or null (unclear status or too young)",
-                "penetrance_percentage": "float or null (affected/total * 100)",
+                "penetrance_percentage": "float or null; ONLY when the paper explicitly states a variant-specific percentage; never calculate it from counts",
                 "age_dependent_penetrance": [
                     {{"age_range": "e.g. '40-50 years'", "penetrance_percentage": "float",
-                      "carriers_in_range": "integer", "affected_in_range": "integer"}}
+                      "carriers_in_range": "integer", "affected_in_range": "integer",
+                      "evidence_quote": "exact source quote containing the stated percentage",
+                      "source_location": "table/figure/section or null"}}
                 ]}},
             "count_provenance": {{
                 "carriers_column_label": "string or null (raw column header the count came from)",
@@ -320,7 +322,7 @@ OUTPUT - JSON only:
             "additional_notes": "string",
             "key_quotes": ["relevant quotes from paper"],
             "fact_provenance": [
-                {{"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
+                {{"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|penetrance_percentage|individual_affected_status",
                   "fact_value": "value", "individual_id": "string or null",
                   "source_location": "string", "source_table": "string or null",
                   "source_row": "string or null", "source_column": "string or null",

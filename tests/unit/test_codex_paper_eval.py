@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sqlite3
 import sys
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
@@ -12,7 +13,13 @@ import pytest
 
 from benchmarks.codex_paper_eval.build_report_artifact import build_payload
 from pipeline.prompts import TABLE_ATTRIBUTION_GUIDANCE
-from utils.llm_trace import build_trace_manifest, reset_llm_tracing
+from utils.llm_trace import (
+    build_trace_manifest,
+    capture_llm_call,
+    configure_llm_tracing,
+    llm_trace_scope,
+    reset_llm_tracing,
+)
 import benchmarks.codex_paper_eval.run_eval as run_eval_module
 from benchmarks.codex_paper_eval.run_eval import (
     CARDIAC_GENES,
@@ -245,12 +252,18 @@ def test_deletion_range_does_not_match_single_residue_deletion():
     assert matches("K1505_Q1507del", "K1505_Q1507del", "SCN5A")
 
 
-def test_material_digests_cover_source_artifact_pdf_and_figure(tmp_path: Path):
+def test_material_digests_cover_production_record_and_every_representation(
+    tmp_path: Path,
+):
     source = tmp_path / "source.md"
+    full_context = tmp_path / "full_context.md"
+    extraction_record = tmp_path / "extraction.json"
     artifact = tmp_path / "artifact.json"
     pdf = tmp_path / "paper.pdf"
     figure = tmp_path / "figure.png"
     source.write_text("source")
+    full_context.write_text("full source")
+    extraction_record.write_text("{}")
     artifact.write_text("{}")
     pdf.write_bytes(b"%PDF fixture")
     figure.write_bytes(b"PNG fixture")
@@ -259,6 +272,13 @@ def test_material_digests_cover_source_artifact_pdf_and_figure(tmp_path: Path):
         "pmid": "1",
         "source": str(source),
         "source_sha256": digest(source),
+        "production_extraction_record": str(extraction_record),
+        "production_extraction_record_sha256": digest(extraction_record),
+        "representations": [str(source), str(full_context)],
+        "representation_sha256": {
+            str(source): digest(source),
+            str(full_context): digest(full_context),
+        },
         "artifacts": str(artifact),
         "artifacts_sha256": digest(artifact),
         "pdfs": [str(pdf)],
@@ -269,9 +289,9 @@ def test_material_digests_cover_source_artifact_pdf_and_figure(tmp_path: Path):
 
     assert material_digest_errors(paper) == []
 
-    figure.write_bytes(b"changed")
+    full_context.write_text("changed")
     assert any(
-        "figure changed after selection" in error
+        "text representation changed after selection" in error
         for error in material_digest_errors(paper)
     )
 
@@ -998,7 +1018,7 @@ def test_schema1_production_import_locks_without_call_telemetry():
 def test_production_projection_applies_field_level_trust_masks():
     converter_path = (
         Path(__file__).parents[2]
-        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "benchmarks/codex_paper_eval"
         / "db_to_predictions.py"
     )
     spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)
@@ -1042,11 +1062,86 @@ def test_production_projection_applies_field_level_trust_masks():
     )
 
 
+def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_identity", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+    db = tmp_path / "BRCA2.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """
+        CREATE TABLE variants (
+          variant_id INTEGER PRIMARY KEY, protein_notation TEXT, cdna_notation TEXT
+        );
+        CREATE TABLE variant_papers (
+          variant_id INTEGER, pmid TEXT, source_location TEXT, key_quotes TEXT,
+          source_layer TEXT
+        );
+        CREATE TABLE penetrance_data (
+          variant_id INTEGER, pmid TEXT, total_carriers_observed INTEGER,
+          affected_count INTEGER, unaffected_count INTEGER, trust_tier TEXT,
+          field_trust TEXT
+        );
+        CREATE TABLE vf_enrichment (
+          variant_id INTEGER PRIMARY KEY, matched INTEGER, fp_class TEXT
+        );
+        INSERT INTO variants VALUES (1, 'p.Ala1Val', 'c.1C>T');
+        INSERT INTO variants VALUES (2, 'p.Ala2Val', 'c.2C>T');
+        INSERT INTO variants VALUES (3, 'p.Ala3Val', 'c.3C>T');
+        INSERT INTO variant_papers VALUES (1, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO variant_papers VALUES (2, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO variant_papers VALUES (3, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO penetrance_data VALUES (1, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (2, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (3, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO vf_enrichment VALUES (1, 1, NULL);
+        INSERT INTO vf_enrichment VALUES (2, 0, 'novel_in_range');
+        INSERT INTO vf_enrichment VALUES (3, 0, 'residue_unverified');
+        """
+    )
+    con.commit()
+    con.close()
+
+    rows, dropped = converter.rows_for_gene(
+        db,
+        {"99"},
+        set(),
+        trust_mode="trusted",
+        identity_mode="trusted",
+    )
+
+    assert [row["variant"] for row in rows["99"]] == [
+        "p.Ala1Val c.1C>T",
+        "p.Ala2Val c.2C>T",
+    ]
+    assert dict(dropped) == {"99": 1}
+
+
 def test_production_projection_binds_and_revalidates_external_trace_manifest(
     tmp_path: Path,
 ):
-    trace_root = tmp_path / "production" / "llm_traces"
-    trace_root.mkdir(parents=True)
+    trace_root = configure_llm_tracing(
+        tmp_path / "production" / "llm_traces", run_id="production-run"
+    )
+    with llm_trace_scope(gene="KCNH2", pmid="1", stage="fixture"):
+        capture_llm_call(
+            provider="fixture",
+            requested_model="fixture-model",
+            resolved_model="fixture-model",
+            request={"input": "fixture"},
+            call=lambda: SimpleNamespace(
+                output_text="fixture",
+                usage=SimpleNamespace(input_tokens=1, output_tokens=1, total_tokens=2),
+            ),
+        )
     manifest_path = trace_root / "trace_manifest.json"
     manifest = build_trace_manifest(
         trace_root, output_path=manifest_path, run_id="production-run"
@@ -1075,6 +1170,19 @@ def test_production_projection_binds_and_revalidates_external_trace_manifest(
     manifest_path.write_text(manifest_path.read_text() + "\n")
     _locked, _roots, errors = production_trace_lock_entries(predictions)
     assert any("digest mismatch" in error for error in errors)
+
+
+def test_new_production_projection_cannot_omit_trace_manifests():
+    _locked, _roots, errors = production_trace_lock_entries(
+        {
+            "strategy": "production_gvf_run",
+            "papers": [{"gene": "KCNH2", "pmid": "1"}],
+        }
+    )
+
+    assert errors == [
+        "production_gvf_run predictions require production_trace_manifests"
+    ]
 
 
 def test_markdown_report_renders_only_genes_present_in_run():
@@ -1255,7 +1363,7 @@ def test_score_one_reports_zero_stratified_count_recall():
 def test_linkage_codon_shadows_are_excluded_from_the_projection(tmp_path: Path):
     converter_path = (
         Path(__file__).parents[2]
-        / "benchmarks/codex_paper_eval/runs/20260726_fixed48_production"
+        / "benchmarks/codex_paper_eval"
         / "db_to_predictions.py"
     )
     spec = importlib.util.spec_from_file_location("db_to_predictions", converter_path)

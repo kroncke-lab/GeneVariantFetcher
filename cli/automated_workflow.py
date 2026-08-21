@@ -12,6 +12,7 @@ This module uses the shared step implementations from pipeline/steps.py,
 matching the `gvf-run` orchestration path.
 """
 
+import csv
 import json
 import logging
 import os
@@ -28,6 +29,56 @@ from utils.logging_utils import get_logger, setup_logging
 from utils.run_manifest import RunManifestManager
 
 logger = get_logger(__name__)
+
+
+def _apply_paper_scope_gate(
+    *,
+    pmids: list[str],
+    abstract_records: dict[str, str],
+    gene_symbol: str,
+    output_path: Path,
+) -> tuple[list[str], list[tuple[str, str]]]:
+    """Reject obvious non-human target-gene papers before any model call.
+
+    Explicit PMID manifests intentionally bypass the recall-oriented Tier 1 and
+    Tier 2 filters, but they must never bypass deterministic clinical scope.
+    Missing/unreadable abstracts pass through so full-text extraction can apply
+    the same gate later.
+    """
+
+    from pipeline.filters import names_nonhuman_ortholog
+
+    kept: list[str] = []
+    dropped: list[tuple[str, str]] = []
+    for pmid in pmids:
+        record_path = abstract_records.get(pmid)
+        record: dict = {}
+        if record_path:
+            try:
+                record = json.loads(Path(record_path).read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                record = {}
+        metadata = record.get("metadata") or {}
+        title = metadata.get("title")
+        abstract = record.get("abstract")
+        # Prefer the title: an abstract can legitimately mention an animal
+        # ortholog as background in an otherwise human study.
+        scope_text = title if isinstance(title, str) and title.strip() else abstract
+        if names_nonhuman_ortholog(scope_text, gene_symbol):
+            dropped.append(
+                (pmid, "paper studies a non-human ortholog of the target gene")
+            )
+        else:
+            kept.append(pmid)
+
+    status_dir = output_path / "pmid_status"
+    status_dir.mkdir(parents=True, exist_ok=True)
+    exclusion_path = status_dir / "paper_scope_exclusions.csv"
+    with exclusion_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=("pmid", "reason"))
+        writer.writeheader()
+        writer.writerows({"pmid": pmid, "reason": reason} for pmid, reason in dropped)
+    return kept, dropped
 
 
 def automated_variant_extraction_workflow(
@@ -72,9 +123,9 @@ def automated_variant_extraction_workflow(
         include_all_clinigen_phenotypes: Include every ClinGen disease label
             for the gene in the run's disease context, even when disease is set.
         pmids: Optional explicit PMID list. When provided, skips synonym discovery,
-            PMID search, AND Tier 1/Tier 2 relevance filtering — the list is fed
-            straight into harvest + extraction. Useful for measuring pure
-            extraction recall against a known gold-standard PMID set.
+            PMID search, AND recall-oriented Tier 1/Tier 2 relevance filtering.
+            The deterministic paper-scope gate still runs before harvest so a
+            non-human target-gene paper cannot enter a clinical dataset.
         extraction_top_n: Optional pre-LLM priority cap. When set, full-text and
             abstract candidates are scored for original variant/count evidence
             and only the top N are submitted for extraction first.
@@ -440,19 +491,32 @@ def automated_variant_extraction_workflow(
     run_manifest.update_status("filtering_papers")
     run_manifest.save()
 
+    scope_pmids, scope_dropped = _apply_paper_scope_gate(
+        pmids=pmids,
+        abstract_records=abstract_records,
+        gene_symbol=gene_symbol,
+        output_path=output_path,
+    )
+    if scope_dropped:
+        logger.warning(
+            "Paper-scope gate rejected %d PMID(s) before harvest: %s",
+            len(scope_dropped),
+            ", ".join(pmid for pmid, _ in scope_dropped),
+        )
+
     if explicit_pmids_provided:
         logger.info(
             "\n⏭️  STEP 1.6: Skipping Tier 1/Tier 2 filtering — explicit PMID "
-            "list provided. All %d PMIDs go straight to harvest + extraction.",
-            len(pmids),
+            "list provided. %d scope-eligible PMIDs go to harvest + extraction.",
+            len(scope_pmids),
         )
-        filtered_pmids = list(pmids)
-        dropped_pmids: list = []
+        filtered_pmids = list(scope_pmids)
+        dropped_pmids: list = list(scope_dropped)
     else:
         logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
 
         filter_result = filter_papers(
-            pmids=pmids,
+            pmids=scope_pmids,
             abstract_records=abstract_records,
             gene_symbol=gene_symbol,
             output_path=output_path,
@@ -465,7 +529,7 @@ def automated_variant_extraction_workflow(
         )
 
         filtered_pmids = filter_result.data.get("filtered_pmids", [])
-        dropped_pmids = filter_result.data.get("dropped_pmids", [])
+        dropped_pmids = scope_dropped + filter_result.data.get("dropped_pmids", [])
 
         logger.info(
             f"Filtering complete: {len(filtered_pmids)} passed filters, "

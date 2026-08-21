@@ -279,6 +279,44 @@ def test_audit_emits_source_override_for_zero_variant_fulltext(tmp_path: Path):
     ]
 
 
+def test_audit_does_not_requeue_paper_scope_exclusion(tmp_path: Path):
+    run_dir = tmp_path / "run"
+    harvest_dir = run_dir / "pmc_fulltext"
+    extraction_dir = run_dir / "extractions"
+    harvest_dir.mkdir(parents=True)
+    extraction_dir.mkdir()
+
+    pmid = "19944633"
+    full_context = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
+    _write_article(full_context, gene="BRCA2")
+    (extraction_dir / f"BRCA2_PMID_{pmid}.json").write_text(
+        json.dumps(
+            {
+                "variants": [],
+                "extraction_metadata": {
+                    "pmid": pmid,
+                    "model_used": "skipped-nonhuman-ortholog",
+                    "skipped_nonhuman_ortholog": True,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (run_dir / "source_completeness.json").write_text(
+        json.dumps({"zero_variant_pmids": [pmid]}), encoding="utf-8"
+    )
+
+    rows, summary = audit.build_audit(gene="BRCA2", run_dir=run_dir)
+    override = tmp_path / "source_override.csv"
+    audit.write_source_override(rows, override)
+
+    assert rows[0]["action"] == "none"
+    assert rows[0]["route"] == "paper_scope_excluded"
+    assert rows[0]["zero_variant_qc"] is False
+    assert summary["by_route"]["paper_scope_excluded"] == 1
+    assert _read_csv(override) == []
+
+
 def test_audit_ignores_raw_discovery_pmids_by_default(tmp_path: Path):
     run_dir = tmp_path / "run"
     harvest_dir = run_dir / "pmc_fulltext"

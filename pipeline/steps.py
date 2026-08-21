@@ -731,6 +731,7 @@ def filter_papers(
 
     filtered_pmids: List[str] = []
     dropped_pmids: List[Tuple[str, str]] = []
+    requested_pmids = set(pmids)
 
     processed_pmids: set[str] = set()
 
@@ -748,7 +749,7 @@ def filter_papers(
                         continue
 
                     pmid = str(rec.get("pmid", ""))
-                    if not pmid:
+                    if not pmid or pmid not in requested_pmids:
                         continue
 
                     processed_pmids.add(pmid)

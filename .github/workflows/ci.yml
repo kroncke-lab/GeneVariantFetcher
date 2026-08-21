@@ -50,7 +50,7 @@ jobs:
           NCBI_EMAIL: "ci@ncbi.test"
           OPENAI_API_KEY: "sk-test-dummy"
 
-  integration-offline:
+  bounded-offline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -63,14 +63,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest
-      - name: Run offline integration tests
-        run: |
-          pytest -v \
-            tests/test_manifest.py \
-            tests/test_failure_logger.py \
-            tests/test_extract_cli.py \
-            tests/test_pmid_input.py \
-            tests/recall/test_bounded_e2e.py
+      - name: Run bounded offline end-to-end test
+        run: pytest -v tests/recall/test_bounded_e2e.py
 
   wheel-smoke:
     runs-on: ubuntu-latest

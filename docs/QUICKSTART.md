@@ -36,6 +36,18 @@ pip install -e ".[browser,dev]"
 python -m playwright install chromium
 ```
 
+### Verify the installation
+
+Run this after installation and after rebuilding the virtual environment:
+
+```bash
+.venv/bin/gvf --help
+```
+
+A repository-root test run can import local source even when the console entry
+point is no longer installed, so green unit tests alone do not prove that the
+editable install survived a virtual-environment rebuild.
+
 ## Configuration
 
 Create a `.env` file in the repository root:

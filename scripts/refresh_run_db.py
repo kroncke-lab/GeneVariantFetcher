@@ -42,6 +42,7 @@ from harvesting.migrate_to_sqlite import (  # noqa: E402
 from pipeline.extraction import ExpertExtractor  # noqa: E402
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
 from utils.models import Paper  # noqa: E402
+from utils.paper_scope import metadata_paper_scope_exclusion_reason  # noqa: E402
 
 logger = logging.getLogger("refresh_run_db")
 
@@ -568,6 +569,9 @@ def select_replay_candidates(
         output_file = extraction_dir / f"{gene}_PMID_{pmid}.json"
         data = _json_load(output_file) if output_file.exists() else {}
         metadata = data.get("extraction_metadata") or {}
+        if metadata_paper_scope_exclusion_reason(metadata):
+            logger.info("PMID %s: paper-scope excluded; not eligible for replay", pmid)
+            continue
         current_count = _variant_count(data)
         det_variants = deterministic_variant_list(extractor, source_file, gene)
         deterministic_count = len(det_variants)

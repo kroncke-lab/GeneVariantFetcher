@@ -40,11 +40,11 @@ current protocol.
 
 `PROTOCOL_COST_EVAL.md`, `RECALL_SOURCE_STRATIFIED.md`,
 `SUPPLEMENT_ACQUISITION_PLAN.md`, `REPO_AUDIT_2026-08-12.md`, files under
-`docs/reviews/`, and dated benchmark run directories describe the protocol and
-data available when they were produced. Their measurements remain useful, but
-their commands, model routes, checklists, and status statements are not the
-current operating plan unless a current authority links to them for a specific
-step.
+`docs/reviews/`, dated files under `docs/evidence/`, and dated benchmark run
+directories describe the protocol and data available when they were produced.
+Their measurements remain useful, but their commands, model routes, checklists,
+and status statements are not the current operating plan unless a current
+authority links to them for a specific step.
 
 The published dashboard is also historical until `RECALL_STATUS.md` says it was
 regenerated from an accepted rescore.

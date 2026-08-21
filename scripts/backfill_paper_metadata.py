@@ -111,12 +111,29 @@ def build_abstract_map(roots: List[Path]) -> Dict[str, dict]:
     return out
 
 
-def build_artifact_map(corpus: Optional[Path]) -> Dict[str, dict]:
-    """pmid -> {doi, pmc_id} from corpus artifacts.json (picks first non-null seen)."""
+def build_artifact_map(
+    corpus: Optional[Path], pmids: Optional[Iterable[str]] = None
+) -> Dict[str, dict]:
+    """pmid -> {doi, pmc_id} from corpus artifacts.json.
+
+    When ``pmids`` is supplied, inspect only matching paper directories instead
+    of walking the entire (often external-volume) corpus.  The unfiltered mode
+    remains available for the standalone inventory use case.
+    """
     out: Dict[str, dict] = {}
     if corpus is None or not corpus.exists():
         return out
-    for f in corpus.rglob("*_artifacts.json"):
+    wanted = {str(pmid).strip() for pmid in pmids or [] if str(pmid).strip()}
+    if pmids is None:
+        files = corpus.rglob("*_artifacts.json")
+    else:
+        files = (
+            artifact
+            for pmid in sorted(wanted)
+            for paper_dir in corpus.glob(f"*/{pmid}")
+            for artifact in paper_dir.glob("*_artifacts.json")
+        )
+    for f in files:
         pmid = f.parent.name
         if not pmid.isdigit():
             continue
@@ -242,7 +259,12 @@ def run_backfill(
             else [REPO / "results", REPO / "validation_runs"]
         )
     abstracts = build_abstract_map(roots)
-    artifacts = build_artifact_map(corpus)
+    selected_pmids: set[str] = set()
+    for db in dbs:
+        db_path = Path(db).expanduser()
+        if db_path.exists():
+            selected_pmids.update(db_pmids(db_path))
+    artifacts = build_artifact_map(corpus, selected_pmids)
 
     fetched: Dict[str, dict] = {}
     if fetch_missing:

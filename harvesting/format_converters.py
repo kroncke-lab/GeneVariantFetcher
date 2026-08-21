@@ -19,6 +19,12 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
+# pdfminer/MarkItDown's layout sorter can consume many gigabytes on a single
+# vector-dense table page.  PyMuPDF returns the same selectable text in bounded
+# time for this class of supplement, so preflight per-page text density before
+# handing a PDF to MarkItDown.
+DENSE_PDF_PAGE_CHAR_LIMIT = 50_000
+
 try:
     from markitdown import MarkItDown
 
@@ -783,6 +789,40 @@ class FormatConverter:
         except Exception as e:
             print(f"    Error reading PDF header {file_path}: {e}")
             return f"[Error reading PDF file: {file_path.name}]\n\n"
+
+        # Avoid pdfminer's pathological layout sort on vector-dense pages.  A
+        # real BMPR2 supplement with two pages and 63k selectable characters on
+        # page 1 otherwise used >5 GB RSS for >10 minutes.  This is a generic
+        # complexity guard, not a PMID/file-name exception.
+        try:
+            import fitz  # PyMuPDF
+
+            doc = fitz.open(str(file_path))
+            dense_text = []
+            is_dense = False
+            try:
+                for page_num, page in enumerate(doc, 1):
+                    try:
+                        text = page.get_text(sort=True)
+                    except TypeError:
+                        text = page.get_text()
+                    if len(text) > DENSE_PDF_PAGE_CHAR_LIMIT:
+                        is_dense = True
+                    if text.strip():
+                        dense_text.append(f"### Page {page_num}\n\n{text.strip()}")
+            finally:
+                doc.close()
+            if is_dense and dense_text:
+                converted = "\n\n".join(dense_text) + "\n\n"
+                print(
+                    "    ✓ Extracted dense PDF via PyMuPDF fast path "
+                    f"({len(converted)} chars; MarkItDown bypassed)"
+                )
+                return converted
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"    Warning: dense-PDF preflight failed for {file_path.name}: {e}")
 
         # Try markitdown first (requires markitdown[pdf] extra for pdfminer.six)
         if self.markitdown:

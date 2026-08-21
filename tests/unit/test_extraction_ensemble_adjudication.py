@@ -345,11 +345,12 @@ def test_claim_prompt_distinguishes_disease_affected_from_symptomatic_subset():
 
     prompt = build_claim_verification_prompt(card)
 
-    assert "affected=N even if only a smaller subset is symptomatic" in prompt
+    assert "affected/unaffected split is null" in prompt
+    assert "not automatically\n  unaffected" in prompt
     assert "Long QT syndrome" in prompt
 
 
-def test_claim_verification_guard_corrects_symptom_subset_as_affected_count():
+def test_claim_verification_guard_clears_ambiguous_symptom_partition():
     card = VariantClaimCard(
         gene="KCNH2",
         disease="Long QT syndrome",
@@ -378,12 +379,14 @@ def test_claim_verification_guard_corrects_symptom_subset_as_affected_count():
 
     normalized = normalize_verification(raw, card=card)
 
-    assert normalized["corrected_values"]["affected"] == 112
-    assert normalized["corrected_values"]["unaffected"] == 0
-    assert normalized["field_verdicts"]["unaffected"] == "inferred_supported"
+    assert normalized["corrected_values"]["total_carriers"] == 112
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["field_verdicts"]["affected"] == "ambiguous"
+    assert normalized["field_verdicts"]["unaffected"] == "ambiguous"
 
 
-def test_claim_verification_promotes_supported_corrected_values():
+def test_claim_verification_does_not_promote_unsupported_partition_values():
     card = VariantClaimCard(
         gene="KCNH2",
         disease="Long QT syndrome",
@@ -412,11 +415,13 @@ def test_claim_verification_promotes_supported_corrected_values():
 
     normalized = normalize_verification(raw, card=card)
 
-    assert normalized["field_verdicts"]["affected"] == "inferred_supported"
-    assert normalized["field_verdicts"]["unaffected"] == "inferred_supported"
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["field_verdicts"]["affected"] == "unsupported"
+    assert normalized["field_verdicts"]["unaffected"] == "unsupported"
 
 
-def test_claim_verification_infers_missing_count_from_supported_identity():
+def test_claim_verification_does_not_complete_partition_arithmetically():
     raw = {
         "verdict": "inferred_supported",
         "field_verdicts": {
@@ -436,8 +441,8 @@ def test_claim_verification_infers_missing_count_from_supported_identity():
 
     normalized = normalize_verification(raw)
 
-    assert normalized["corrected_values"]["affected"] == 0
-    assert normalized["field_verdicts"]["affected"] == "inferred_supported"
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["field_verdicts"]["affected"] == "unsupported"
 
 
 def test_claim_verification_does_not_invent_partition_for_nested_cohort():

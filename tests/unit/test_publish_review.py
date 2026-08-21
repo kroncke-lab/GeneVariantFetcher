@@ -50,11 +50,18 @@ def test_publish_builds_command_with_disease(tmp_path, monkeypatch):
 
     def fake_run(cmd, **kwargs):
         captured["cmd"] = cmd
+        captured["env"] = kwargs["env"]
         return types.SimpleNamespace(returncode=0, stdout="Publishing KCNH2", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
+    manifest = tmp_path / "KCNH2.txt"
+    manifest.write_text("12345\n")
     ok = gvf_run.step_publish_review(
-        gene="KCNH2", db=db, disease="Long QT type 2", review_repo=repo
+        gene="KCNH2",
+        db=db,
+        disease="Long QT type 2",
+        review_repo=repo,
+        pmid_file=manifest,
     )
     assert ok is True
     assert captured["cmd"] == [
@@ -64,6 +71,7 @@ def test_publish_builds_command_with_disease(tmp_path, monkeypatch):
         str(db),
         "Long QT type 2",
     ]
+    assert captured["env"]["GVF_PMID_FILE"] == str(manifest.resolve())
 
 
 def test_publish_omits_disease_when_absent(tmp_path, monkeypatch):
@@ -77,8 +85,30 @@ def test_publish_omits_disease_when_absent(tmp_path, monkeypatch):
         return types.SimpleNamespace(returncode=0, stdout="", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setenv("GVF_FULL_DB_REPLACE", "1")
     gvf_run.step_publish_review(gene="SCN5A", db=db, disease=None, review_repo=repo)
     assert captured["cmd"][-1] == str(db)  # no trailing disease arg
+
+
+def test_publish_refuses_without_manifest_or_explicit_full_replace(
+    tmp_path, monkeypatch
+):
+    repo = _fake_repo(tmp_path)
+    monkeypatch.delenv("GVF_FULL_DB_REPLACE", raising=False)
+
+    def boom(*args, **kwargs):
+        raise AssertionError("subprocess.run should not be called")
+
+    monkeypatch.setattr(subprocess, "run", boom)
+    assert (
+        gvf_run.step_publish_review(
+            gene="SCN5A",
+            db=tmp_path / "SCN5A.db",
+            disease=None,
+            review_repo=repo,
+        )
+        is False
+    )
 
 
 def test_publish_missing_repo_is_noop(tmp_path, monkeypatch):

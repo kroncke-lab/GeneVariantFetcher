@@ -1156,3 +1156,57 @@ def test_vf_enrich_unavailable_is_a_warning_not_silence(tmp_path: Path, monkeypa
     status = json.loads(statuses[0].read_text())
     warnings = " ".join(status.get("stage_warnings") or [])
     assert "vf-enrich" in warnings and "VARIANTFEATURES_DB" in warnings
+
+
+def test_required_vf_enrich_unavailable_fails_acceptance(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        "utils.gene_metadata.default_variantfeatures_db_path", lambda: None
+    )
+    monkeypatch.setattr("utils.env_utils.local_data_discovery_disabled", lambda: False)
+
+    output = tmp_path / "out"
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=output,
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+        require_vf_enrich=True,
+    )
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+    failures = " ".join(status["stage_failures"])
+    assert "vf-enrich" in failures and "VARIANTFEATURES_DB" in failures
+
+
+def test_publish_refused_when_any_required_stage_failed(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    publish_calls: list[dict] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        "utils.gene_metadata.default_variantfeatures_db_path", lambda: None
+    )
+    monkeypatch.setattr("utils.env_utils.local_data_discovery_disabled", lambda: False)
+    monkeypatch.setattr(
+        gvf_run,
+        "step_publish_review",
+        lambda **kwargs: publish_calls.append(kwargs) or True,
+    )
+    manifest = tmp_path / "TESTGENE.txt"
+    manifest.write_text("12345\n")
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        pmid_file=manifest,
+        source_recovery=False,
+        publish_review=True,
+        skip=["layers", "source-qc"],
+    )
+    assert rc == gvf_run.EXIT_STAGE_WARNINGS
+    assert publish_calls == []

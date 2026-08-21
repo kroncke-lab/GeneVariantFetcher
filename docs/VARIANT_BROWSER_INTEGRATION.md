@@ -14,8 +14,8 @@ contract rather than querying Azure SQL tables directly, so the browser remains
 responsible for excluding raw, stale, disputed, withheld, and archived calls.
 
 The canonical private-review population is pinned in
-`benchmarks/evaluation_tiers/tier3_reviewer_546.tsv`: 546 gene–paper attempts
-across all 11 populated reviewer workspaces, representing 507 unique PMIDs.
+`benchmarks/evaluation_tiers/tier3_reviewer_545.tsv`: 545 gene–paper attempts
+across all 11 populated reviewer workspaces, representing 506 unique PMIDs.
 BMPR2 keeps its existing 50-paper cohort; LMNA and TTN use ranked 50-paper
 subsets of their former 99-paper temporal snapshots.
 
@@ -54,20 +54,24 @@ What it does:
   (variant, paper) carrier evidence (counts + source location + verbatim quotes),
   and per-patient phenotype/individual records. It matches GVF `protein_notation`
   to browser variant identities; non-missense (frameshift/nonsense/indel) become
-  carrier-only entries; cross-gene and unparseable rows are dropped.
+  carrier-only entries only when the trusted identity projection clears them.
+  Cross-gene, unparseable, residue-unverified, residue-offset-suspect, and
+  no-notation-suspect rows stay in GVF for audit but are held out of staging.
 - `DISEASE` is optional (resolved from the gene's review pair if omitted). **The
   gene-disease pair must already exist** in the browser — it is created upstream
   from variantFeatures; `gvf_publish.sh` errors clearly if not.
 - Idempotent on the browser side: re-running replaces that gene's carrier data on
   the current snapshot.
 
-Count publication uses the trusted projection. When a current GVF DB supplies a
-valid `field_trust` map, each masked count field is imported as null while the
-raw GVF value remains available in its source DB for audit. A fully masked row
-does not create a zero-valued `count_observation` and does not mark the carrier
-record as count-bearing. Legacy DBs without trust columns retain their previous
-behavior. Identity, source location, quotes, and non-count provenance remain
-publishable even when count provenance is quarantined.
+`gvf_publish.sh` always uses the trusted projection. It requires the exact
+`RUN_STATUS.active_db` from a completed run, a nonempty write-time-verified LLM
+trace, count-trust columns, complete requested PMID membership, and a
+VariantFeatures audit row for every evidence identity. Masked count fields are
+imported as null while raw values remain in GVF. Matched identities, truly
+novel in-range protein alleles, and cDNA-only unmatched alleles may enter
+review; ambiguous identity classes are recorded as holds in `SourceRun`
+metadata and do not enter staging. Pre-trust DBs and missing-PMID imports are
+refused by this publication path.
 
 **Best-effort:** a missing repo, a non-zero exit, or a timeout is logged and
 warned — it never fails the GVF run. So a run that scored fine still produces its
@@ -93,10 +97,11 @@ Wired in `cli/gvf_run.py` (`step_publish_review`, `_find_review_repo`).
 The historical curated benchmark contains eight BRCA2 papers, but active
 curated review publishing excludes six without lead-approved collaborator gold;
 `benchmarks/curated_extraction_eval/review_scope_exclusions.tsv` is applied by
-the helper. The broader operational BRCA2 queue is separately pinned at 46
+the helper. The broader active operational BRCA2 queue is separately pinned at 45
 papers in
 `benchmarks/curated_extraction_eval/review_pmids_20260811_brca2_provenance/`.
-Do not publish the historical `review_pmids_50/BRCA2.txt` again.
+PMID 19944633 is retained only as a wrong-species negative control. Do not
+publish the historical `review_pmids_50/BRCA2.txt` again.
 
 ### Current-system collaborator refresh (2026-08-13)
 
@@ -138,6 +143,8 @@ python scripts/publish_curated_review_set.py \
 
 The helper accepts repeatable `--db GENE=/path/to.db` overrides, or
 `--extract-root` when the extraction directory is not under `RUN_ROOT/extract`.
+An extraction root must resolve to exactly one completed active run per gene;
+history is never selected by filename or modification time.
 It still calls `Variant_Browser/scripts/gvf_publish.sh`; staging dataset labels,
 PMID restrictions, and optional pair creation are passed through environment
 variables consumed by the browser repo.

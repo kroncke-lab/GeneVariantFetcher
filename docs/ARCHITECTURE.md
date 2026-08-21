@@ -37,6 +37,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
   ▼
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 1.6: Filter Papers (Two-Tier)                                               │
+│   Scope gate: deterministic non-human target-ortholog rejection (always on)      │
 │   Tier 1: KeywordFilter (regex, fast) — ~65 clinical/variant keywords            │
 │   Tier 2: InternFilter (LLM, provider-aware model) — relevance classification     │
 │   OUTPUT: pmid_status/filtered_out.csv                                           │
@@ -79,7 +80,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │ STEP 4: Aggregation                                                              │
 │   • HGVS variant name normalization                                              │
 │   • Fuzzy matching for variant deduplication                                     │
-│   • Cross-paper penetrance aggregation                                           │
+│   • Cross-paper evidence aggregation; never derives penetrance from counts       │
 │   OUTPUT: {gene}_penetrance_summary.json                                         │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -100,11 +101,30 @@ FINAL OUTPUTS:
 ```
 
 `gvf-run` is the current turnkey orchestrator. After migration it runs additive
-recovery layers, Step 3.45 figure-count adoption, optional full-coverage guards
-and count recovery, the default-on per-fact trust gate, source QC/recovery and
-corpus sync, then reporting and optional review publication. The older
+recovery layers, Step 3.45 figure-count adoption, VariantFeatures enrichment and
+false-positive quarantine, the default-on per-fact trust gate, source
+QC/recovery and corpus sync, then reporting and optional review publication.
+VariantFeatures remains warning-only for ordinary exploratory runs; collaborator
+runs can make it mandatory with `--require-vf-enrich`, and publication always
+requires both enrichment and quarantine. Publication also requires the exact
+pinned PMID manifest and is refused after any failed stage. The older
 `python -m cli.automated_workflow` entry point remains a lower-level
 compatibility path; it is not registered as a `gvf` subcommand.
+
+Explicit PMID manifests bypass recall-oriented Tier 1/Tier 2 filtering, but not
+the deterministic paper-scope gate. A title that explicitly names a non-human
+ortholog of the target gene is rejected before harvest/model calls. If full text
+reveals the same condition later, extraction writes
+`paper_scope_exclusion_reason=nonhuman_target_gene_ortholog`; SQLite migration
+persists it, source replay refuses it even when forced, and ClinVar, PubTator,
+and figure recovery exclude the PMID and purge legacy evidence links while
+retaining the paper/extraction metadata as an audit record.
+
+Penetrance and phenotype partitions are source claims, not arithmetic outputs.
+Extraction retains a penetrance percentage only when a verbatim source quote
+contains that exact percentage and names the variant. Aggregation never computes
+`affected / carriers`, and claim verification never completes an
+affected/unaffected partition from diagnosis, enrollment, or subtraction.
 
 Variant-paper provenance separates origin from corroboration:
 `variant_papers.source_layer` is one primary enum, while
@@ -151,7 +171,7 @@ auditability. Runtime alias and reference assets are loaded from the owned
 | **Elsevier API** | `harvesting/elsevier_api.py` | ScienceDirect downloads |
 | **Springer API** | `harvesting/springer_api.py` | SpringerLink + Nature downloads |
 | **Wiley API** | `harvesting/wiley_api.py` | Wiley Online Library access |
-| **Format Converters** | `harvesting/format_converters.py` | XML/PDF/DOCX → Markdown |
+| **Format Converters** | `harvesting/format_converters.py` | XML/PDF/DOCX → Markdown; dense PDF pages use a bounded PyMuPDF fast path before pdfminer layout sorting |
 
 ### Extraction & Analysis
 
@@ -289,6 +309,20 @@ extractions/{gene}_PMID_*.json
 | **Wiley** | API key | Variable | TDM agreement needed |
 | **Unpaywall** | Email | 100k/day | OA link resolution |
 | **LLM provider** | API key | Per plan | One provider required for extraction — Azure AI, Anthropic, or OpenAI |
+
+### Configuration Surface
+
+GVF has two authoritative configuration surfaces:
+
+- `config/settings.py` contains typed, validated fields and provider/model
+  resolution.
+- `.env.example` documents direct environment reads in runtime modules and
+  operator scripts, including defaults and behavioral consequences.
+
+`tests/unit/test_env_documentation.py` scans shipped Python with the AST and
+fails when a direct environment read appears in neither surface. This prevents
+an undocumented stale shell value from silently changing paper selection,
+source policy, recovery, or scoring acceptance.
 
 ### Model Provider And Reasoning Effort
 

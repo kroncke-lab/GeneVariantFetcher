@@ -1,0 +1,1486 @@
+{
+  "completed_at": "2026-08-20T21:05:03.071198+00:00",
+  "excluded_source_layers": [],
+  "extraction_elapsed_seconds": null,
+  "extraction_started_at": null,
+  "papers": [
+    {
+      "elapsed_seconds": null,
+      "gene": "BRCA2",
+      "pmid": "26833046",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"Mutation/Families c.81-?_134+?del 3 c.81-?_4986+?del 6 c.130T>A 3\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.130T>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.317-?_425+?del 1 1 c.469_470delAA 1 1 c.583delT 1 1 c.1310_1313delAAGA 1 5\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.1310_1313delAAGA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"80 100 Mutation/Families c.145G>T 1 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.145G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.301+1G>C 1 c.671-?_4096+?del 1 c.843_846del4 1 c.1556delA 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.1556delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.671-?_4096+?del 1 c.843_846del4 1 c.1556delA 2 c.1687C>T 7\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.1687C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.843_846del4 1 c.1556delA 2 c.1687C>T 7 c.1803delC 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.1803delC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.469_470delAA 1 1 c.583delT 1 1 c.1310_1313delAAGA 1 5 c.1813delA 1 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.1813delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.81-?_134+?del 3 c.81-?_4986+?del 6 c.130T>A 3 c.181T>G 5\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.181T>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1687C>T 7 c.1803delC 1 c.1823_1826del4 1 c.1877_1878insTAGT 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.1877_1878insTAGT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.81-?_4986+?del 6 c.130T>A 3 c.181T>G 5 c.190T>C 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.190T>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.583delT 1 1 c.1310_1313delAAGA 1 5 c.1813delA 1 4 c.2231C>G 1 1\"]",
+          "merged_notations": [
+            "p.Ser744Ter c.2231C>G"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.2231C>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1310_1313delAAGA 1 5 c.1813delA 1 4 c.2231C>G 1 1 c.2450delA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2450delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1803delC 1 c.1823_1826del4 1 c.1877_1878insTAGT 2 c.2475delC 41\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2475delC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1823_1826del4 1 c.1877_1878insTAGT 2 c.2475delC 41 c.2523dupG 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2523dupG"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1813delA 1 4 c.2231C>G 1 1 c.2450delA 1 1 c.2787dupA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2787dupA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2231C>G 1 1 c.2450delA 1 1 c.2787dupA 1 1 c.2808_2811delACAA 1 3\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2808_2811delACAA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2450delA 1 1 c.2787dupA 1 1 c.2808_2811delACAA 1 3 c.2812delGCAA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2812delGCAA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2787dupA 1 1 c.2808_2811delACAA 1 3 c.2812delGCAA 1 1 c.2830A>T 1 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.2830A>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2808_2811delACAA 1 3 c.2812delGCAA 1 1 c.2830A>T 1 4 c.2943_2944insTGAGA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.2943_2944insTGAGA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.181T>G 5 c.190T>C 1 c.200-?_5592+?del 1 c.301+1G>C 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_intronic)",
+          "unaffected": null,
+          "variant": "c.301+1G>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.1877_1878insTAGT 2 c.2475delC 41 c.2523dupG 1 c.3052_3053insTGAGA 3\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3052_3053insTGAGA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2475delC 41 c.2523dupG 1 c.3052_3053insTGAGA 3 c.3319G>T 24\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.3319G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3052_3053insTGAGA 3 c.3319G>T 24 c.3331_3334del4 1 c.3400G>T 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.3400G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3319G>T 24 c.3331_3334del4 1 c.3400G>T 1 c.3477_3479delAAAinsC 3\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_delins)",
+          "unaffected": null,
+          "variant": "c.3477_3479delAAAinsC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2812delGCAA 1 1 c.2830A>T 1 4 c.2943_2944insTGAGA 1 1 c.3599_3600delGT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3599_3600delGT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3477_3480del4 1 c.3478_3479del2 1 c.3481_3491del11 1 c.3607C>T 5\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.3607C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3481_3491del11 1 c.3607C>T 5 c.3700_3704del5 4 c.3710delT 10\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3710delT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3607C>T 5 c.3700_3704del5 4 c.3710delT 10 c.3718C>T 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.3718C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2830A>T 1 4 c.2943_2944insTGAGA 1 1 c.3599_3600delGT 1 1 c.3765delT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3765delT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.2943_2944insTGAGA 1 1 c.3599_3600delGT 1 1 c.3765delT 1 1 c.3847_3848delGT 1 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3847_3848delGT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3599_3600delGT 1 1 c.3765delT 1 1 c.3847_3848delGT 1 4 c.3860delA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3860delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3700_3704del5 4 c.3710delT 10 c.3718C>T 2 c.3874delT 3\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.3874delT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3718C>T 2 c.3874delT 3 c.3875del4 1 c.3904G>T 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.3904G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3874delT 3 c.3875del4 1 c.3904G>T 1 c.4035delA 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.4035delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3765delT 1 1 c.3847_3848delGT 1 4 c.3860delA 1 1 c.4258delG 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.4258delG"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4186-?_4357+?dup 1 c.4186-?_4675+?del 1 c.4216-78_4304+69del 1 c.427G>T 7\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.427G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3847_3848delGT 1 4 c.3860delA 1 1 c.4258delG 1 1 c.4284_4285insT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.4284_4285insT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4186-?_4675+?del 1 c.4216-78_4304+69del 1 c.427G>T 7 c.4285_4286insT 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.4285_4286insT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"Mutation/Families c.145G>T 1 2 c.317-?_425+?del 1 1 c.469_470delAA 1 1\"]",
+          "merged_notations": [
+            "p.Lys157fs c.469_470del"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.469_470delAA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.427G>T 7 c.4285_4286insT 1 c.4987-?_5193+?del 3 c.5089T>C 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.5089T>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4285_4286insT 1 c.4987-?_5193+?del 3 c.5089T>C 4 c.5096G>A 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.5096G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3860delA 1 1 c.4258delG 1 1 c.4284_4285insT 1 1 c.5130_5133delTGTA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5130_5133delTGTA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4987-?_5193+?del 3 c.5089T>C 4 c.5096G>A 1 c.5143A>C 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.5143A>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4258delG 1 1 c.4284_4285insT 1 1 c.5130_5133delTGTA 1 1 c.5164_5165delAG 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5164_5165delAG"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"4986+?del, c.3319G>T (p.Glu1107*), c.3874delT and c.5213G>A (p.Gly1738Glu) and BRCA2 c.6373delA, c.7008\\u22121G>A,\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.5213G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.4284_4285insT 1 1 c.5130_5133delTGTA 1 1 c.5164_5165delAG 1 1 c.5219delT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5219delT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5096G>A 1 c.5143A>C 4 c.5213G>A 9 c.5263insC 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5263insC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5143A>C 4 c.5213G>A 9 c.5263insC 1 c.5266dupC 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5266dupC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5130_5133delTGTA 1 1 c.5164_5165delAG 1 1 c.5219delT 1 1 c.5351delA 1 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5351delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5164_5165delAG 1 1 c.5219delT 1 1 c.5351delA 1 2 c.5352delC 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5352delC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5219delT 1 1 c.5351delA 1 2 c.5352delC 1 1 c.5722_5723delCT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.5722_5723delCT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.145G>T 1 2 c.317-?_425+?del 1 1 c.469_470delAA 1 1 c.583delT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.583delT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5351delA 1 2 c.5352delC 1 1 c.5722_5723delCT 1 1 c.5857G>T 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.5857G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5352delC 1 1 c.5722_5723delCT 1 1 c.5857G>T 1 1 c.6082_6086delGAAGA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6082_6086delGAAGA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.5722_5723delCT 1 1 c.5857G>T 1 1 c.6082_6086delGAAGA 1 1 c.6244G>T 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.6244G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.3874delT and c.5213G>A (p.Gly1738Glu) and BRCA2 c.6373delA, c.7008\\u22121G>A, c.7617+1G>A and c.8474delC] were fo\"]",
+          "merged_notations": [
+            "p.Thr2125fs c.6373del"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6373delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6082_6086delGAAGA 1 1 c.6244G>T 1 1 c.6373delA 1 13 c.6408_6414delAAATGTT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6408_6414delAAATGTT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6244G>T 1 1 c.6373delA 1 13 c.6408_6414delAAATGTT 1 1 c.6443_6444delCT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6443_6444delCT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6373delA 1 13 c.6408_6414delAAATGTT 1 1 c.6443_6444delCT 1 1 c.6486_6489delACAA 1 10\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6486_6489delACAA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6408_6414delAAATGTT 1 1 c.6443_6444delCT 1 1 c.6486_6489delACAA 1 10 c.6490_6492del/insGACT 11\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.6490_6492del"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6443_6444delCT 1 1 c.6486_6489delACAA 1 10 c.6490_6492del/insGACT 11 c.7008-1G>A 1 4\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_intronic)",
+          "unaffected": null,
+          "variant": "c.7008-1G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.6486_6489delACAA 1 10 c.6490_6492del/insGACT 11 c.7008-1G>A 1 4 c.7069_7070delCT 1 5\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.7069_7070delCT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"(p.Gly1738Glu) and BRCA2 c.6373delA, c.7008\\u22121G>A, c.7617+1G>A and c.8474delC] were found to account for 23 % of\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_intronic)",
+          "unaffected": null,
+          "variant": "c.7617+1G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7008-1G>A 1 4 c.7069_7070delCT 1 5 c.7617+1G>A 1 17 c.7757G>A 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.7757G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7069_7070delCT 1 5 c.7617+1G>A 1 17 c.7757G>A 1 1 c.7878G>C 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.7878G>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7617+1G>A 1 17 c.7757G>A 1 1 c.7878G>C 1 1 c.7913_7917delTTCCT 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.7913_7917delTTCCT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7757G>A 1 1 c.7878G>C 1 1 c.7913_7917delTTCCT 1 1 c.7980T>G 1 1\"]",
+          "merged_notations": [
+            "p.Tyr2660Ter c.7980T>G"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.7980T>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7878G>C 1 1 c.7913_7917delTTCCT 1 1 c.7980T>G 1 1 c.8364G>A 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.8364G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"nd BRCA2 c.6373delA, c.7008\\u22121G>A, c.7617+1G>A and c.8474delC] were found to account for 23 % of the BRCA1 muta\"]",
+          "merged_notations": [
+            "p.Ala2825fs c.8474del"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.8474delC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.7980T>G 1 1 c.8364G>A 1 1 c.8474delC 1 4 c.8536G>T 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.8536G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.8364G>A 1 1 c.8474delC 1 4 c.8536G>T 1 1 c.8575delC 1 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.8575delC"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.8474delC 1 4 c.8536G>T 1 1 c.8575delC 1 2 c.8754+3G>C 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_intronic)",
+          "unaffected": null,
+          "variant": "c.8754+3G>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.8536G>T 1 1 c.8575delC 1 2 c.8754+3G>C 1 1 c.8953+1G>T 1 2\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_intronic)",
+          "unaffected": null,
+          "variant": "c.8953+1G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.8575delC 1 2 c.8754+3G>C 1 1 c.8953+1G>T 1 2 c.9097delA 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_indel)",
+          "unaffected": null,
+          "variant": "c.9097delA"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"c.8754+3G>C 1 1 c.8953+1G>T 1 2 c.9097delA 1 1 c.9106C>T 1 1\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (cdna_substitution)",
+          "unaffected": null,
+          "variant": "c.9106C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "c.7008-1G>C"
+        }
+      ]
+    },
+    {
+      "elapsed_seconds": null,
+      "gene": "BRCA2",
+      "pmid": "26848529",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "model": "azure_ai/grok-4.3 (+azure_ai/gpt-5.6-sol verify)",
+        "note": "gvf-run does not aggregate per-run token usage",
+        "telemetry_available": false,
+        "total_tokens": null
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run strategy: deterministic regex/table sweep over the untruncated source, Kimi table routing, grok-4.3 Tier 3 extraction on a 60k-char gene-focused prompt, gpt-5.6-sol claim verification on high-risk papers, then recovery layers. It reads the same corpus/ markdown the single-model runs read; --no-source-recovery kept the source identical. Mapped to the harness 'text' route because no single harness route describes a multi-source pipeline.",
+      "variants": [
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.5465delA           | p.Asn1822Ilefs*18      | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 5693delA            | Stop1839      | 58                 | nan                                                  | c.5465delA           | p.Asn1822Ilefs*18    |\\nTarget row: | Novel                                                                                                                | 11E          | c.5576_5580delTTAAA  | p.Ile1859_Lysfs*12     | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 5804delTTAAA        | Stop 1870     | 58                 | nan                                                  | c.5576_5580delTTAAA  | p.Ile1859Lysfs*12    |\\nNext row: | Novel                                                                                                                | 11E          | c.5681dupA           | p.Tyr1894*             | Nonsense  \"]",
+          "merged_notations": [
+            "p.Ile1859Lysfs*3 c.5576_5579delTTAA",
+            "p.Ile1859fs c.5576_5579del"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "c.5576_5580delTTAAA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 13           | c.7007G>A            | p.Arg2336His           | Missense       | 99           | 1            | nan                  | nan                    |          nan | 7007G>A             | p.R2336H      | 59                 | nan                                                  | c.7007G>A            | p.Arg2336His         |\\nTarget row: | Pending                                                                                                              | I-14         | c.7435+53C>T         | -                      | IVS            | 50           | 1            | 0.0725               | nan                    |          nan | IVS14+53C>T         | nan           | 39                 | nan                                                  | c.7435+53C>T         | -                    |\\nNext row: | Pending                                                                                                              | I-17         | c.7976+1G>A          | p.Ala2603_Arg2659del57 | IVS       \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "c.7435+53C>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | I-14         | c.7435+53C>T         | -                      | IVS            | 50           | 1            | 0.0725               | nan                    |          nan | IVS14+53C>T         | nan           | 39                 | nan                                                  | c.7435+53C>T         | -                    |\\nTarget row: | Pending                                                                                                              | I-17         | c.7976+1G>A          | p.Ala2603_Arg2659del57 | IVS            | 489          | 1            | nan                  | nan                    |          nan | IVS17 + 1G > A      | nan           | 34                 | nan                                                  | c.7976+1G>A          | -                    |\\nNext row: | Pending                                                                                                              | 19           | c.8702G>A            | p.Gly2901Asp           | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "c.7976+1G>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.2059_2063delGATTA  | p.Asp687*              | Nonsense       | 96           | 1            | nan                  | nan                    |          nan | 2059delGATTA        | nan           | 55                 | nan                                                  | c.2059_2063delGATTA  | p.Asp687*            |\\nTarget row: | Novel                                                                                                                | 11A          | c.1901delC           | p.Ala634Valfs*18       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 2129delC            | Stop643       | 36                 | nan                                                  | c.1901delC           | p.Ala634Valfs*18     |\\nNext row: | Novel                                                                                                                | 11A          | c.2307delT           | p.Ile770Phefs*2        | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ala634Valfs*18 c.1901delC"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 10           | c.1832C>A            | p.Ser611*              | Nonsense       | 518          | 4            | nan                  | nan                    |          nan | 2060C>A             | S611X         | 49, 58             | nan                                                  | c.1832C>A            | p.Ser611*            |\\nTarget row: | Class 5                                                                                                              | 11B          | c.2808_2811delACAA   | p.Ala938Profs*21       | Frameshift     | 1117         | 3            | nan                  | nan                    |          nan | 3034delAAAC         | Stop959       | 34,36, 49          | nan                                                  | c.2808_2811delACAA   | p.Ala938Profs*21     |\\nNext row: | Class 5                                                                                                              | 11B          | c.3167_3170delAAAA   | p.Gln1056Argfs*3       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ala938Profs*21 c.2808_2811delACAA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 27           | c.9976A>T            | p.Lys3326*             | Nonsense       | 35           | 1            | 0.0044               | nan                    |          nan | 9976A>T             | nan           | 55                 | nan                                                  | c.9976A>T            | p.Lys3326*           |\\nTarget row: | Novel                                                                                                                | 5            | c.464_468delGAGAT    | p.Arg155Lysfs*26       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 692del5             | Stop 180      | 34                 | nan                                                  | c.464_468delGAGAT    | p.Arg155Lysfs*26     |\\nNext row: | Novel                                                                                                                | 10           | c.993_994dupA        | p.Ile332Lysfs*18       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Arg155Lysfs*26 c.464_468delGAGAT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 10           | c.1792A>G            | p.Thr598Ala            | Missense       | 32           | 1            | 0.0006               | nan                    |          nan | 1792A>G             | Gly598Cys     | 47                 | nan                                                  | c.1792A>G            | p.Thr598Ala          |\\nTarget row: | Pending                                                                                                              | 11F          | c.6322C>T            | p.Arg2108Cys           | Missense       | 50           | 1            | 0.0012               | nan                    |          nan | 6322C>T             | Arg2108Cys    | 39                 | nan                                                  | c.6322C>T            | p.Arg2108Cys         |\\nNext row: | Pending                                                                                                              | 11F          | c.6449_6450insTA     | p.Lys2150Asnfs*19      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Arg2108Cys c.6322C>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 11F          | c.6449_6450insTA     | p.Lys2150Asnfs*19      | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 6677insTA           | Stop2168      | 49                 | nan                                                  | c.6449_6450insTA     | p.Lys2150fsAsnfs*19  |\\nTarget row: | Pending                                                                                                              | 13           | c.7007G>A            | p.Arg2336His           | Missense       | 99           | 1            | nan                  | nan                    |          nan | 7007G>A             | p.R2336H      | 59                 | nan                                                  | c.7007G>A            | p.Arg2336His         |\\nNext row: | Pending                                                                                                              | I-14         | c.7435+53C>T         | -                      | IVS       \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Arg2336His c.7007G>A"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.1082delA           | p.Asn361Metfs*6        | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 1308delA            | Stop 366      | 34                 | nan                                                  | c.1082delA           | p.Asn361Metfs*6      |\\nTarget row: | Novel                                                                                                                | 10           | c.1303dupA           | p.Arg435Lysfs*17       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 1527insA            | Stop451       | 34, 36             | nan                                                  | c.1303dupA           | p.Arg435Lysfs*17     |\\nNext row: | Novel                                                                                                                | 10           | c.1754A>G            | p.Lys585Arg            | Missense  \"]",
+          "merged_notations": [
+            "p.Arg435fs c.1303dup"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Arg435Lysfs*17 c.1303dupA"
+        },
+        {
+          "affected": null,
+          "carriers": 5,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11B          | c.3167_3170delAAAA   | p.Gln1056Argfs*3       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 3395del4            | Stop1058      | 49                 | nan                                                  | c.3167_3170delAAAA   | p.Gln1056Argfs*3     |\\nTarget row: | Class 5                                                                                                              | 11B          | c.3195_3198delTAAT   | p.Asn1066Leufs*10      | Frameshift     | 1226         | 5            | nan                  | nan                    |          nan | 3423del4            | Stop1075      | 34, 36, 49, 58     | nan                                                  | c.3195_3198delTAAT   | p.Asn1066Leufs*10    |\\nNext row: | Class 5                                                                                                              | 11C          | c.3744_3747delTGAG   | p.Ser1248Argfs*10      | Frameshift\"]",
+          "merged_notations": [
+            "c.3195_3198delTAAT"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn1066Leufs*10 c.3195_3198delTAAT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11B          | c.2996C>T            | p.Pro999Leu            | Missense       | 2            | 1            | nan                  | nan                    |          nan | 2996C>T             | P999L         | 56                 | nan                                                  | c.2996C>T            | p.Pro999Leu          |\\nTarget row: | Novel                                                                                                                | 11D          | c.3860delA           | p.Asn1287Ilefs*6       | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 4088delA            | Stop1292      | 58                 | nan                                                  | c.3860delA           | p.Asn1287Ilefs*6     |\\nNext row: | Novel                                                                                                                | 11D          | c.4416_4417delGA     | p.Asn1473Glnfs*8       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn1287Ilefs*6 c.3860delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11D          | c.3860delA           | p.Asn1287Ilefs*6       | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 4088delA            | Stop1292      | 58                 | nan                                                  | c.3860delA           | p.Asn1287Ilefs*6     |\\nTarget row: | Novel                                                                                                                | 11D          | c.4416_4417delGA     | p.Asn1473Glnfs*8       | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 4644delGA           | Stop1480      | 58                 | nan                                                  | c.4416_4417delGA     | p.Asn1473Glnfs*8     |\\nNext row: | Novel                                                                                                                | 11D          | c.5103dupA           | p.Pro1702Thrfs*16      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn1473Glnfs*8 c.4416_4417delGA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11D          | c.5171delT           | p.Ile1724Lysfs*17      | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 5399delT            | Stop1740      | 49                 | nan                                                  | c.5171delT           | p.Ile1724Lysfs*17    |\\nTarget row: | Novel                                                                                                                | 11E          | c.5465delA           | p.Asn1822Ilefs*18      | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 5693delA            | Stop1839      | 58                 | nan                                                  | c.5465delA           | p.Asn1822Ilefs*18    |\\nNext row: | Novel                                                                                                                | 11E          | c.5576_5580delTTAAA  | p.Ile1859_Lysfs*12     | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn1822Ilefs*18 c.5465delA"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.6062_6063delinsCA  | p.His2021Pro           | Missense       | 50           | 1            | nan                  | nan                    |          nan | 6062AT>CA           | His2021Pro    | 39                 | nan                                                  | c.6062_6063delinsCA  | p.His2021Pro         |\\nTarget row: | Novel                                                                                                                | 11F          | c.6150_6151insT      | p.Asn2051*             | Nonsense       | 109          | 2            | nan                  | nan                    |          nan | 6378insT            | Stop2059      | 58                 | nan                                                  | c.6150_6151insT      | p.Asn2051*           |\\nNext row: | Novel                                                                                                                | 11F          | c.6301_6306delAATGTA | p.Asn2101_Val2102del   | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn2051* c.6150_6151insT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11F          | c.6150_6151insT      | p.Asn2051*             | Nonsense       | 109          | 2            | nan                  | nan                    |          nan | 6378insT            | Stop2059      | 58                 | nan                                                  | c.6150_6151insT      | p.Asn2051*           |\\nTarget row: | Novel                                                                                                                | 11F          | c.6301_6306delAATGTA | p.Asn2101_Val2102del   | Frameshift     | 79           | 1            | nan                  | nan                    |          nan | 6529-6534delAATGTA  | nan           | 53                 | nan                                                  | c.6301_6306delAATGTA | p.Asn2101_Val2102del |\\nNext row: | Novel                                                                                                                | 11F          | c.6359C>G            | p.Ser2120*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn2101_Val2102del c.6301_6306delAATGTA"
+        },
+        {
+          "affected": null,
+          "carriers": 13,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 1                                                                                                              | 11B          | c.2971A>G            | p.Asn991Asp            | Missense       | 331          | 3            | 0.0801               | 0.198                  |          nan | 3199A>G             | Asn991Asp     | 21, 25, 35, 54     | nan                                                  | c.2971A>G            | p.Asn991Asp          |\\nTarget row: | Pending                                                                                                              | 10           | c.865A>C             | p.Asn289His            | Missense       | 321          | 13           | 0.0737               | nan                    |          nan | 1093A>C             | Asn289His     | 21, 50 ,54         | nan                                                  | c.865A>C             | p.Asn289His          |\\nNext row: | Pending                                                                                                              | 10           | c.1792A>G            | p.Thr598Ala            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn289His c.865A>C"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.993_994dupA        | p.Ile332Lysfs*18       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 1216insAA           | Stop349       | 49                 | nan                                                  | c.993_994dupA        | p.Ile332Lysfs*18     |\\nTarget row: | Novel                                                                                                                | 10           | c.1082delA           | p.Asn361Metfs*6        | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 1308delA            | Stop 366      | 34                 | nan                                                  | c.1082delA           | p.Asn361Metfs*6      |\\nNext row: | Novel                                                                                                                | 10           | c.1303dupA           | p.Arg435Lysfs*17       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn361Metfs*6 c.1082delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11A          | c.2442delC           | p.Met815Trpfs*10       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 2670delC            | Stop824       | 34, 36             | nan                                                  | c.2442delC           | p.Met815Trpfs*10     |\\nTarget row: | Novel                                                                                                                | 11A          | c.2588dupA           | p.Asn863Lysfs*18       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 2816insA            | Stop880       | 36                 | nan                                                  | c.2588dupA           | p.Asn863Lysfs*18     |\\nNext row: | Novel                                                                                                                | 11B          | c.2920G>A            | p.Asp974Asn            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn863Lysfs*18 c.2588dupA"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 1                                                                                                              | 10           | c.1114C>A            | p.His372Asn            | Missense       | 152          | 13           | nan                  | nan                    |          nan | 1342A>C             | His372Asn     | 21,25,26,47        | nan                                                  | c.1114A>A            | p.Asn372Asn          |\\nTarget row: | Class 1                                                                                                              | 11B          | c.2971A>G            | p.Asn991Asp            | Missense       | 331          | 3            | 0.0801               | 0.198                  |          nan | 3199A>G             | Asn991Asp     | 21, 25, 35, 54     | nan                                                  | c.2971A>G            | p.Asn991Asp          |\\nNext row: | Pending                                                                                                              | 10           | c.865A>C             | p.Asn289His            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asn991Asp c.2971A>G"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.1881delA           | p.Pro628Hisfs*16       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 2109delA            | Stop643       | 34, 36             | nan                                                  | c.1881delA           | p.Pro628Hisfs*16     |\\nTarget row: | Novel                                                                                                                | 10           | c.2059_2063delGATTA  | p.Asp687*              | Nonsense       | 96           | 1            | nan                  | nan                    |          nan | 2059delGATTA        | nan           | 55                 | nan                                                  | c.2059_2063delGATTA  | p.Asp687*            |\\nNext row: | Novel                                                                                                                | 11A          | c.1901delC           | p.Ala634Valfs*18       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asp687* c.2059_2063delGATTA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11A          | c.2588dupA           | p.Asn863Lysfs*18       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 2816insA            | Stop880       | 36                 | nan                                                  | c.2588dupA           | p.Asn863Lysfs*18     |\\nTarget row: | Novel                                                                                                                | 11B          | c.2920G>A            | p.Asp974Asn            | Missense       | 50           | 1            | nan                  | nan                    |          nan | 2920G>A             | Asp974Asn     | 39                 | nan                                                  | c.2920G>A            | p.Asp974Asn          |\\nNext row: | Novel                                                                                                                | 11B          | c.2996C>T            | p.Pro999Leu            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Asp974Asn c.2920G>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11B          | c.2808_2811delACAA   | p.Ala938Profs*21       | Frameshift     | 1117         | 3            | nan                  | nan                    |          nan | 3034delAAAC         | Stop959       | 34,36, 49          | nan                                                  | c.2808_2811delACAA   | p.Ala938Profs*21     |\\nTarget row: | Class 5                                                                                                              | 11B          | c.3167_3170delAAAA   | p.Gln1056Argfs*3       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 3395del4            | Stop1058      | 49                 | nan                                                  | c.3167_3170delAAAA   | p.Gln1056Argfs*3     |\\nNext row: | Class 5                                                                                                              | 11B          | c.3195_3198delTAAT   | p.Asn1066Leufs*10      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln1056Argfs*3 c.3167_3170delAAAA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11C          | c.3744_3747delTGAG   | p.Ser1248Argfs*10      | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 3972delTGAG         | Stop1257      | 34, 36             | nan                                                  | c.3744_3747delTGAG   | p.Ser1248Argfs*10    |\\nTarget row: | Class 5                                                                                                              | 11C          | c.3871C>T            | p.Gln1291*             | Nonsense       | 52           | 1            | nan                  | nan                    |          nan | 4099C>T             | Stop1291      | 35                 | nan                                                  | c.3871C>T            | p.Gln1291*           |\\nNext row: | Class 5                                                                                                              | 11D          | c.5164_5165delAG     | p.Ser1722Tyrfs*4       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln1291* c.3871C>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 14           | c.7409dupT           | p.Thr2471Hisfs*4       | Frameshift     | 99           | 1            | nan                  | nan                    |          nan | 7409dupT            | p.T2471Hfs*4  | 59                 | nan                                                  | c.7409dupT           | p.Thr2471Hisfs*4     |\\nTarget row: | Novel                                                                                                                | 17           | c.7963delC           | p.Gln2655Asnfs*2       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 8191delC            | Stop2656      | 49                 | nan                                                  | c.7963delC           | p.Gln2655Asnfs*2     |\\nNext row: | Novel                                                                                                                | 18           | c.8172delG           | p.Trp2725Glyfs*8       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln2655Asnfs*2 c.7963delC"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11F          | c.6591_6592delTG     | p.Glu2198Asnfs*4       | Frameshift     | 409          | 3            | nan                  | nan                    |          nan | 6819delTG           | Stop2201      | 49                 | nan                                                  | c.6591_6592delTG     | p.Glu2198Asnfs*4     |\\nTarget row: | Class 5                                                                                                              | 19           | c.8485C>T            | p.Gln2829*             | Nonsense       | 99           | 2            | nan                  | nan                    |          nan | 8485C>T             | p.Q2829*      | 59                 | nan                                                  | c.8485C>T            | p.Gln2829*           |\\nNext row: | Class 5                                                                                                              | 23           | c.9098_9099insA      | p.Gln3034Serfs*10      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln2829* c.8485C>T"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 20           | c.8599A>T            | p.Thr2867Ser           | Missense       | 219          | 1            | nan                  | nan                    |          nan | 8827A>T             | K2882*        | 36                 | nan                                                  | c.8599A>T            | p.Thr2867Ser         |\\nTarget row: | Novel                                                                                                                | 22           | c.8820_8823del       | p.Gln2941Leufs*34      | Frameshift     | 1013         | 3            | nan                  | nan                    |          nan | 9048delACAA         | Stop2974      | 33, 34, 49         | nan                                                  | c.8820_8823delACAA   | p.Gln2941Leufs*34    |\\nNext row: | Novel                                                                                                                | 22           | c.8950delT           | p.Ser2984Glnfs*4       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln2941Leufs*34 c.8820_8823del"
+        },
+        {
+          "affected": null,
+          "carriers": 4,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 19           | c.8485C>T            | p.Gln2829*             | Nonsense       | 99           | 2            | nan                  | nan                    |          nan | 8485C>T             | p.Q2829*      | 59                 | nan                                                  | c.8485C>T            | p.Gln2829*           |\\nTarget row: | Class 5                                                                                                              | 23           | c.9098_9099insA      | p.Gln3034Serfs*10      | Frameshift     | 518          | 4            | nan                  | nan                    |          nan | 9326 insA           | Stop3042      | 49, 58             | nan                                                  | c.9098_9099insA      | p.Gln3034Serfs*10    |\\nNext row: | Class 5                                                                                                              | 25           | c.9286G>T            | p.Glu3096*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln3034Serfs*10 c.9098_9099insA"
+        },
+        {
+          "affected": null,
+          "carriers": 4,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 23           | c.9007G>T            | p.Gly3003*             | Nonsense       | 409          | 1            | nan                  | nan                    |          nan | 9235G>T             | G3003X        | 49                 | nan                                                  | c.9007G>T            | p.Gly3003*           |\\nTarget row: | Novel                                                                                                                | 23           | c.9105dupT           | p.Gln3036Serfs*8       | Frameshift     | 109          | 4            | nan                  | nan                    |          nan | 9332insT            | Stop3043      | 58                 | nan                                                  | c.9105dupT           | p.Gln3036Serfs*8     |\\nNext row: | Novel                                                                                                                | 24           | c.9253delA           | p.Thr3085Glnfs*19      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gln3036Serfs*8 c.9105dupT"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11F          | c.6239T>G            | p.Leu2080*             | Nonsense       | 109          | 1            | nan                  | nan                    |          nan | 6467 T>G            | L2080X        | 58                 | nan                                                  | c.6239T>G            | p.Leu2080*           |\\nTarget row: | Class 5                                                                                                              | 11F          | c.6591_6592delTG     | p.Glu2198Asnfs*4       | Frameshift     | 409          | 3            | nan                  | nan                    |          nan | 6819delTG           | Stop2201      | 49                 | nan                                                  | c.6591_6592delTG     | p.Glu2198Asnfs*4     |\\nNext row: | Class 5                                                                                                              | 19           | c.8485C>T            | p.Gln2829*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Glu2198Asnfs*4 c.6591_6592delTG"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 23           | c.9098_9099insA      | p.Gln3034Serfs*10      | Frameshift     | 518          | 4            | nan                  | nan                    |          nan | 9326 insA           | Stop3042      | 49, 58             | nan                                                  | c.9098_9099insA      | p.Gln3034Serfs*10    |\\nTarget row: | Class 5                                                                                                              | 25           | c.9286G>T            | p.Glu3096*             | Nonsense       | 109          | 1            | nan                  | nan                    |          nan | 9514G>T             | E3096X        | 58                 | nan                                                  | c.9286G>T            | p.Glu3096*           |\\nNext row: | Class 5                                                                                                              | 27           | c.9788delA           | p.Glu3263Argfs*12      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Glu3096* c.9286G>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 25           | c.9286G>T            | p.Glu3096*             | Nonsense       | 109          | 1            | nan                  | nan                    |          nan | 9514G>T             | E3096X        | 58                 | nan                                                  | c.9286G>T            | p.Glu3096*           |\\nTarget row: | Class 5                                                                                                              | 27           | c.9788delA           | p.Glu3263Argfs*12      | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 10016delA           | Stop3274      | 58                 | nan                                                  | c.9788delA           | p.Lys3263Argfs*12    |\\nNext row: | Class 1                                                                                                              | 10           | c.1114C>A            | p.His372Asn            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Glu3263Argfs*12 c.9788delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | I-17         | c.7976+1G>A          | p.Ala2603_Arg2659del57 | IVS            | 489          | 1            | nan                  | nan                    |          nan | IVS17 + 1G > A      | nan           | 34                 | nan                                                  | c.7976+1G>A          | -                    |\\nTarget row: | Pending                                                                                                              | 19           | c.8702G>A            | p.Gly2901Asp           | Missense       | 50           | 1            | 0.0002               | nan                    |          nan | 8702G>A             | G2901D        | 39                 | nan                                                  | c.8702G>A            | p.Gly2901Asp         |\\nNext row: | Pending                                                                                                              | 27           | c.9976A>T            | p.Lys3326*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gly2901Asp c.8702G>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 22           | c.8956_8957insAA     | p.Ile2986Lysfs*3       | Frameshift     | 99           | 1            | nan                  | nan                    |          nan | 8956_8957insAA      | p.I2986Kfs*3  | 59                 | nan                                                  | c.8956_8957insAA     | p.Ile2986Lysfs*3     |\\nTarget row: | Novel                                                                                                                | 23           | c.9007G>T            | p.Gly3003*             | Nonsense       | 409          | 1            | nan                  | nan                    |          nan | 9235G>T             | G3003X        | 49                 | nan                                                  | c.9007G>T            | p.Gly3003*           |\\nNext row: | Novel                                                                                                                | 23           | c.9105dupT           | p.Gln3036Serfs*8       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Gly3003* c.9007G>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.6033_6034delTT     | p.Ser2012Glnfs*5       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 6261delTT           | Stop 2016     | 34                 | nan                                                  | c.6033_6034delTT     | p.Ser2012Glnfs*5     |\\nTarget row: | Novel                                                                                                                | 11E          | c.6062_6063delinsCA  | p.His2021Pro           | Missense       | 50           | 1            | nan                  | nan                    |          nan | 6062AT>CA           | His2021Pro    | 39                 | nan                                                  | c.6062_6063delinsCA  | p.His2021Pro         |\\nNext row: | Novel                                                                                                                | 11F          | c.6150_6151insT      | p.Asn2051*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.His2021Pro"
+        },
+        {
+          "affected": null,
+          "carriers": 13,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 27           | c.9788delA           | p.Glu3263Argfs*12      | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 10016delA           | Stop3274      | 58                 | nan                                                  | c.9788delA           | p.Lys3263Argfs*12    |\\nTarget row: | Class 1                                                                                                              | 10           | c.1114C>A            | p.His372Asn            | Missense       | 152          | 13           | nan                  | nan                    |          nan | 1342A>C             | His372Asn     | 21,25,26,47        | nan                                                  | c.1114A>A            | p.Asn372Asn          |\\nNext row: | Class 1                                                                                                              | 11B          | c.2971A>G            | p.Asn991Asp            | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.His372Asn c.1114C>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11D          | c.5103dupA           | p.Pro1702Thrfs*16      | Frameshift     | 12           | 1            | nan                  | nan                    |          nan | 5329insT            | Stop1732      | 45                 | nan                                                  | c.5103dupA           | p.Pro1702Thrfs*16    |\\nTarget row: | Novel                                                                                                                | 11D          | c.5171delT           | p.Ile1724Lysfs*17      | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 5399delT            | Stop1740      | 49                 | nan                                                  | c.5171delT           | p.Ile1724Lysfs*17    |\\nNext row: | Novel                                                                                                                | 11E          | c.5465delA           | p.Asn1822Ilefs*18      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ile1724Lysfs*17 c.5171delT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 22           | c.8950delT           | p.Ser2984Glnfs*4       | Frameshift     | 604          | 2            | nan                  | nan                    |          nan | 9178delT            | Stop2987      | 33, 34             | nan                                                  | c.8950delT           | p.Ser2984Glnfs*4     |\\nTarget row: | Novel                                                                                                                | 22           | c.8956_8957insAA     | p.Ile2986Lysfs*3       | Frameshift     | 99           | 1            | nan                  | nan                    |          nan | 8956_8957insAA      | p.I2986Kfs*3  | 59                 | nan                                                  | c.8956_8957insAA     | p.Ile2986Lysfs*3     |\\nNext row: | Novel                                                                                                                | 23           | c.9007G>T            | p.Gly3003*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ile2986Lysfs*3 c.8956_8957insAA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 5            | c.464_468delGAGAT    | p.Arg155Lysfs*26       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 692del5             | Stop 180      | 34                 | nan                                                  | c.464_468delGAGAT    | p.Arg155Lysfs*26     |\\nTarget row: | Novel                                                                                                                | 10           | c.993_994dupA        | p.Ile332Lysfs*18       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 1216insAA           | Stop349       | 49                 | nan                                                  | c.993_994dupA        | p.Ile332Lysfs*18     |\\nNext row: | Novel                                                                                                                | 10           | c.1082delA           | p.Asn361Metfs*6        | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ile332Lysfs*18 c.993_994dupA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.1754A>G            | p.Lys585Arg            | Missense       | 32           | 1            | nan                  | nan                    |          nan | 1982A>G             | Lys to Arg    | 47                 | nan                                                  | c.1754A>G            | p.Lys585Arg          |\\nTarget row: | Novel                                                                                                                | 10           | c.1813delA           | p.Ile605Tyrfs*9        | Frameshift     | 708          | 1            | nan                  | nan                    |          nan | 2041delA            | Stop615       | 34, 36             | nan                                                  | c.1813delA           | p.Ile605Tyrfs*9      |\\nNext row: | Novel                                                                                                                | 10           | c.1881delA           | p.Pro628Hisfs*16       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ile605Tyrfs*9 c.1813delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11A          | c.1901delC           | p.Ala634Valfs*18       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 2129delC            | Stop643       | 36                 | nan                                                  | c.1901delC           | p.Ala634Valfs*18     |\\nTarget row: | Novel                                                                                                                | 11A          | c.2307delT           | p.Ile770Phefs*2        | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 2535delT            | Stop771       | 58                 | nan                                                  | c.2307delT           | p.Ile770Phefs*2      |\\nNext row: | Novel                                                                                                                | 11A          | c.2442delC           | p.Met815Trpfs*10       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ile770Phefs*2 c.2307delT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11E          | c.5682C>G            | p.Tyr1894*             | Nonsense       | 99           | 2            | nan                  | nan                    |          nan | 5682C>G             | p.Y1894       | 59                 | nan                                                  | c.5682C>G            | p.Tyr1894*           |\\nTarget row: | Class 5                                                                                                              | 11E          | c.5722_5723delCT     | p.Leu1908Argfs*2       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 5950delCT           | Stop1910      | 34                 | nan                                                  | c.5722_5723delCT     | p.Leu1908Argfs*2     |\\nNext row: | Class 5                                                                                                              | 11F          | c.6239T>G            | p.Leu2080*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Leu1908Argfs*2 c.5722_5723delCT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11E          | c.5722_5723delCT     | p.Leu1908Argfs*2       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 5950delCT           | Stop1910      | 34                 | nan                                                  | c.5722_5723delCT     | p.Leu1908Argfs*2     |\\nTarget row: | Class 5                                                                                                              | 11F          | c.6239T>G            | p.Leu2080*             | Nonsense       | 109          | 1            | nan                  | nan                    |          nan | 6467 T>G            | L2080X        | 58                 | nan                                                  | c.6239T>G            | p.Leu2080*           |\\nNext row: | Class 5                                                                                                              | 11F          | c.6591_6592delTG     | p.Glu2198Asnfs*4       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Leu2080* c.6239T>G"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 24           | c.9253delA           | p.Thr3085Glnfs*19      | Frameshift     | 375          | 3            | nan                  | nan                    |          nan | 9481delA            | nan           | 53, 54, 57         | nan                                                  | c.9253delA           | p.Thr3085Glnfs*19    |\\nTarget row: | Novel                                                                                                                | 25           | c.9356_9357delTAinsG | p.Leu3119*             | Nonsense       | 32           | 1            | nan                  | nan                    |          nan | 9584delTAinsG       | Stop 3119     | 49                 | nan                                                  | c.9356_9357delTAinsG | p.Leu3119*           |\\nNext row: | Not used                                                                                                             | nan          | nan                  | nan                    | nan       \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Leu3119* c.9356_9357delTAinsG"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | nan                                                                                                                  | nan          | nan                  | nan                    | nan            | nan          | nan          | 1000 Genomes         | Han Chinese in Beijing |          nan | cDNA                | Protein       | nan                | nan                                                  | nan                  | nan                  |\\nTarget row: | Class 5                                                                                                              | 3            | c.262_263delCT       | p.Leu88Alafs*12        | Frameshift     | 518          | 2            | nan                  | nan                    |          nan | 490delCT            | Stop99        | 49, 58             | nan                                                  | c.262_263delCT       | p.Leu88Alafs*12      |\\nNext row: | Class 5                                                                                                              | 5            | c.470_474delAGTCA    | p.Lys157Serfs*24       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Leu88Alafs*12 c.262_263delCT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 3            | c.262_263delCT       | p.Leu88Alafs*12        | Frameshift     | 518          | 2            | nan                  | nan                    |          nan | 490delCT            | Stop99        | 49, 58             | nan                                                  | c.262_263delCT       | p.Leu88Alafs*12      |\\nTarget row: | Class 5                                                                                                              | 5            | c.470_474delAGTCA    | p.Lys157Serfs*24       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 698del5             | Stop180       | 36                 | nan                                                  | c.470_474delAGTCA    | p.Lys157Serfs*24     |\\nNext row: | Class 5                                                                                                              | 8            | c.658_659delGT       | p.Val220Ilefs*4        | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Lys157Serfs*24 c.470_474delAGTCA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 11F          | c.6322C>T            | p.Arg2108Cys           | Missense       | 50           | 1            | 0.0012               | nan                    |          nan | 6322C>T             | Arg2108Cys    | 39                 | nan                                                  | c.6322C>T            | p.Arg2108Cys         |\\nTarget row: | Pending                                                                                                              | 11F          | c.6449_6450insTA     | p.Lys2150Asnfs*19      | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 6677insTA           | Stop2168      | 49                 | nan                                                  | c.6449_6450insTA     | p.Lys2150fsAsnfs*19  |\\nNext row: | Pending                                                                                                              | 13           | c.7007G>A            | p.Arg2336His           | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Lys2150Asnfs*19 c.6449_6450insTA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 19           | c.8702G>A            | p.Gly2901Asp           | Missense       | 50           | 1            | 0.0002               | nan                    |          nan | 8702G>A             | G2901D        | 39                 | nan                                                  | c.8702G>A            | p.Gly2901Asp         |\\nTarget row: | Pending                                                                                                              | 27           | c.9976A>T            | p.Lys3326*             | Nonsense       | 35           | 1            | 0.0044               | nan                    |          nan | 9976A>T             | nan           | 55                 | nan                                                  | c.9976A>T            | p.Lys3326*           |\\nNext row: | Novel                                                                                                                | 5            | c.464_468delGAGAT    | p.Arg155Lysfs*26       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Lys3326* c.9976A>T"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 8            | c.658_659delGT       | p.Val220Ilefs*4        | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 886delGT            | Stop223       | 58                 | nan                                                  | c.658_659delGT       | p.Val220Ilefs*4      |\\nTarget row: | Class 5                                                                                                              | 10           | c.1399A>T            | p.Lys467*              | Nonsense       | 191          | 3            | nan                  | nan                    |          nan | 1627A>T             | K467X         | 52, 53, 57         | nan                                                  | c.1399A>T            | p.Lys467*            |\\nNext row: | Class 5                                                                                                              | 10           | c.1754_1754delA      | p.Lys585Argfs*29       | Frameshift\"]",
+          "merged_notations": [
+            "p.Lys467Ter c.1399A>T"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Lys467* c.1399A>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.1303dupA           | p.Arg435Lysfs*17       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 1527insA            | Stop451       | 34, 36             | nan                                                  | c.1303dupA           | p.Arg435Lysfs*17     |\\nTarget row: | Novel                                                                                                                | 10           | c.1754A>G            | p.Lys585Arg            | Missense       | 32           | 1            | nan                  | nan                    |          nan | 1982A>G             | Lys to Arg    | 47                 | nan                                                  | c.1754A>G            | p.Lys585Arg          |\\nNext row: | Novel                                                                                                                | 10           | c.1813delA           | p.Ile605Tyrfs*9        | Frameshift\"]",
+          "merged_notations": [
+            "p.Lys585Argfs*29 c.1754_1754delA"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Lys585Arg c.1754A>G"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 14           | c.7142delC           | p.Pro2381Hisfs*13      | Frameshift     | 99           | 5            | nan                  | nan                    |          nan | 7142delC            | p.P2381Hfs*13 | 59                 | nan                                                  | c.7142delC           | p.Pro2381Hisfs*13    |\\nTarget row: | Novel                                                                                                                | 14           | c.7178_7179delTG     | p.Met2393Lysfs*18      | Frameshift     | 35           | 1            | nan                  | nan                    |          nan | 7178delTG           | nan           | 55                 | nan                                                  | c.7178_7179delTG     | p.Met2393Lysfs*18    |\\nNext row: | Novel                                                                                                                | 14           | c.7409dupT           | p.Thr2471Hisfs*4       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Met2393Lysfs*18 c.7178_7179delTG"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11A          | c.2307delT           | p.Ile770Phefs*2        | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 2535delT            | Stop771       | 58                 | nan                                                  | c.2307delT           | p.Ile770Phefs*2      |\\nTarget row: | Novel                                                                                                                | 11A          | c.2442delC           | p.Met815Trpfs*10       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 2670delC            | Stop824       | 34, 36             | nan                                                  | c.2442delC           | p.Met815Trpfs*10     |\\nNext row: | Novel                                                                                                                | 11A          | c.2588dupA           | p.Asn863Lysfs*18       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Met815Trpfs*10 c.2442delC"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 18           | c.8234dupT           | p.Thr2746Aspfs*18      | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 8462insT            | Stop2763      | 34, 36             | nan                                                  | c.8234dupT           | p.Thr2746Aspfs*18    |\\nTarget row: | Novel                                                                                                                | 19           | c.8400_8403del4ins5  | p.Phe2801Leufs*10      | Nonsense       | 409          | 2            | nan                  | nan                    |          nan | 8628del4ins5        | Stop 2811     | 49                 | nan                                                  | c.8400_8403del4ins5  | p.Phe2801Leufs*10    |\\nNext row: | Novel                                                                                                                | 20           | c.8517C>A            | p.Tyr2839*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Phe2801Leufs*10"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11D          | c.4416_4417delGA     | p.Asn1473Glnfs*8       | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 4644delGA           | Stop1480      | 58                 | nan                                                  | c.4416_4417delGA     | p.Asn1473Glnfs*8     |\\nTarget row: | Novel                                                                                                                | 11D          | c.5103dupA           | p.Pro1702Thrfs*16      | Frameshift     | 12           | 1            | nan                  | nan                    |          nan | 5329insT            | Stop1732      | 45                 | nan                                                  | c.5103dupA           | p.Pro1702Thrfs*16    |\\nNext row: | Novel                                                                                                                | 11D          | c.5171delT           | p.Ile1724Lysfs*17      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Pro1702Thrfs*16 c.5103dupA"
+        },
+        {
+          "affected": null,
+          "carriers": 5,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11F          | c.6800C>A            | p.Ser2267*             | Nonsense       | 409          | 1            | nan                  | nan                    |          nan | 7028C>A             | S2267X        | 49                 | nan                                                  | c.6800C>A            | p.Ser2267*           |\\nTarget row: | Novel                                                                                                                | 14           | c.7142delC           | p.Pro2381Hisfs*13      | Frameshift     | 99           | 5            | nan                  | nan                    |          nan | 7142delC            | p.P2381Hfs*13 | 59                 | nan                                                  | c.7142delC           | p.Pro2381Hisfs*13    |\\nNext row: | Novel                                                                                                                | 14           | c.7178_7179delTG     | p.Met2393Lysfs*18      | Frameshift\"]",
+          "merged_notations": [
+            "c.7142delC",
+            "p.Pro2381fs c.7142del"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Pro2381Hisfs*13 c.7142delC"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 10           | c.1813delA           | p.Ile605Tyrfs*9        | Frameshift     | 708          | 1            | nan                  | nan                    |          nan | 2041delA            | Stop615       | 34, 36             | nan                                                  | c.1813delA           | p.Ile605Tyrfs*9      |\\nTarget row: | Novel                                                                                                                | 10           | c.1881delA           | p.Pro628Hisfs*16       | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 2109delA            | Stop643       | 34, 36             | nan                                                  | c.1881delA           | p.Pro628Hisfs*16     |\\nNext row: | Novel                                                                                                                | 10           | c.2059_2063delGATTA  | p.Asp687*              | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Pro628Hisfs*16 c.1881delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11B          | c.2920G>A            | p.Asp974Asn            | Missense       | 50           | 1            | nan                  | nan                    |          nan | 2920G>A             | Asp974Asn     | 39                 | nan                                                  | c.2920G>A            | p.Asp974Asn          |\\nTarget row: | Novel                                                                                                                | 11B          | c.2996C>T            | p.Pro999Leu            | Missense       | 2            | 1            | nan                  | nan                    |          nan | 2996C>T             | P999L         | 56                 | nan                                                  | c.2996C>T            | p.Pro999Leu          |\\nNext row: | Novel                                                                                                                | 11D          | c.3860delA           | p.Asn1287Ilefs*6       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Pro999Leu c.2996C>T"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11B          | c.3195_3198delTAAT   | p.Asn1066Leufs*10      | Frameshift     | 1226         | 5            | nan                  | nan                    |          nan | 3423del4            | Stop1075      | 34, 36, 49, 58     | nan                                                  | c.3195_3198delTAAT   | p.Asn1066Leufs*10    |\\nTarget row: | Class 5                                                                                                              | 11C          | c.3744_3747delTGAG   | p.Ser1248Argfs*10      | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 3972delTGAG         | Stop1257      | 34, 36             | nan                                                  | c.3744_3747delTGAG   | p.Ser1248Argfs*10    |\\nNext row: | Class 5                                                                                                              | 11C          | c.3871C>T            | p.Gln1291*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser1248Argfs*10 c.3744_3747delTGAG"
+        },
+        {
+          "affected": null,
+          "carriers": 4,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11C          | c.3871C>T            | p.Gln1291*             | Nonsense       | 52           | 1            | nan                  | nan                    |          nan | 4099C>T             | Stop1291      | 35                 | nan                                                  | c.3871C>T            | p.Gln1291*           |\\nTarget row: | Class 5                                                                                                              | 11D          | c.5164_5165delAG     | p.Ser1722Tyrfs*4       | Frameshift     | 518          | 4            | nan                  | nan                    |          nan | 5392delAG           | Stop1725      | 49, 58             | nan                                                  | c.5164_5165delAG     | p.Ser1722Tyrfs*4     |\\nNext row: | Class 5                                                                                                              | 11E          | c.5576_5579delTTAA   | p.Ile1859Lysfs*3       | Frameshift\"]",
+          "merged_notations": [
+            "p.Ser1722fs c.5164_5165del"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser1722Tyrfs*4 c.5164_5165delAG"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 11E          | c.5576_5579delTTAA   | p.Ile1859Lysfs*3       | Frameshift     | 1302         | 5            | nan                  | nan                    |          nan | 5802delAATT         | Stop1861      | 26, 31, 33, 34, 49 | nan                                                  | c.5576_5579delTTAA   | p.Ile1859Lysfs*3     |\\nTarget row: | Class 5                                                                                                              | 11E          | c.5645C>A            | p.Ser1882*             | Nonsense       | 52           | 1            | nan                  | nan                    |          nan | 5873C>A             | Stop1882      | 35                 | nan                                                  | c.5645C>A            | p.Ser1882*           |\\nNext row: | Class 5                                                                                                              | 11E          | c.5682C>A            | p.Tyr1894*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser1882* c.5645C>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.5681dupA           | p.Tyr1894*             | Nonsense       | 219          | 1            | nan                  | nan                    |          nan | 5909insA            | Stop1894      | 36                 | nan                                                  | c.5681dupA           | p.Tyr1894*           |\\nTarget row: | Novel                                                                                                                | 11E          | c.5699C>G            | p.Ser1900*             | Nonsense       | 99           | 1            | nan                  | nan                    |          nan | 5699C>G             | p.S1900*      | 59                 | nan                                                  | c.5699C>G            | p.Ser1900*           |\\nNext row: | Novel                                                                                                                | 11E          | c.5864C>G            | p.Ser1955*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser1900* c.5699C>G"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.5699C>G            | p.Ser1900*             | Nonsense       | 99           | 1            | nan                  | nan                    |          nan | 5699C>G             | p.S1900*      | 59                 | nan                                                  | c.5699C>G            | p.Ser1900*           |\\nTarget row: | Novel                                                                                                                | 11E          | c.5864C>G            | p.Ser1955*             | Nonsense       | 409          | 2            | nan                  | nan                    |          nan | 6092C>G             | S1955X        | 49                 | nan                                                  | c.5864C>G            | p.Ser1955*           |\\nNext row: | Novel                                                                                                                | 11E          | c.6033_6034delTT     | p.Ser2012Glnfs*5       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser1955* c.5864C>G"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.5864C>G            | p.Ser1955*             | Nonsense       | 409          | 2            | nan                  | nan                    |          nan | 6092C>G             | S1955X        | 49                 | nan                                                  | c.5864C>G            | p.Ser1955*           |\\nTarget row: | Novel                                                                                                                | 11E          | c.6033_6034delTT     | p.Ser2012Glnfs*5       | Frameshift     | 489          | 1            | nan                  | nan                    |          nan | 6261delTT           | Stop 2016     | 34                 | nan                                                  | c.6033_6034delTT     | p.Ser2012Glnfs*5     |\\nNext row: | Novel                                                                                                                | 11E          | c.6062_6063delinsCA  | p.His2021Pro           | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser2012Glnfs*5 c.6033_6034delTT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11F          | c.6301_6306delAATGTA | p.Asn2101_Val2102del   | Frameshift     | 79           | 1            | nan                  | nan                    |          nan | 6529-6534delAATGTA  | nan           | 53                 | nan                                                  | c.6301_6306delAATGTA | p.Asn2101_Val2102del |\\nTarget row: | Novel                                                                                                                | 11F          | c.6359C>G            | p.Ser2120*             | Nonsense       | 35           | 1            | nan                  | nan                    |          nan | 6359C>G             | nan           | 55                 | nan                                                  | c.6359C>G            | p.Ser2120*           |\\nNext row: | Novel                                                                                                                | 11F          | c.6645_6648CTCC      | p.Tyr2215*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser2120* c.6359C>G"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11F          | c.6645_6648CTCC      | p.Tyr2215*             | Nonsense       | 375          | 3            | nan                  | nan                    |          nan | 6873delCTCC         | nan           | 53, 54, 57         | nan                                                  | c.6645_6648delCTCC   | p.Tyr2215*           |\\nTarget row: | Novel                                                                                                                | 11F          | c.6800C>A            | p.Ser2267*             | Nonsense       | 409          | 1            | nan                  | nan                    |          nan | 7028C>A             | S2267X        | 49                 | nan                                                  | c.6800C>A            | p.Ser2267*           |\\nNext row: | Novel                                                                                                                | 14           | c.7142delC           | p.Pro2381Hisfs*13      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser2267* c.6800C>A"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 22           | c.8820_8823del       | p.Gln2941Leufs*34      | Frameshift     | 1013         | 3            | nan                  | nan                    |          nan | 9048delACAA         | Stop2974      | 33, 34, 49         | nan                                                  | c.8820_8823delACAA   | p.Gln2941Leufs*34    |\\nTarget row: | Novel                                                                                                                | 22           | c.8950delT           | p.Ser2984Glnfs*4       | Frameshift     | 604          | 2            | nan                  | nan                    |          nan | 9178delT            | Stop2987      | 33, 34             | nan                                                  | c.8950delT           | p.Ser2984Glnfs*4     |\\nNext row: | Novel                                                                                                                | 22           | c.8956_8957insAA     | p.Ile2986Lysfs*3       | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser2984Glnfs*4 c.8950delT"
+        },
+        {
+          "affected": null,
+          "carriers": 4,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 10           | c.1754_1754delA      | p.Lys585Argfs*29       | Frameshift     | 32           | 1            | nan                  | nan                    |          nan | 1982delA            | Stop613       | 47                 | nan                                                  | c.1754_1754delA      | p.Lys585Argfs*29     |\\nTarget row: | Class 5                                                                                                              | 10           | c.1832C>A            | p.Ser611*              | Nonsense       | 518          | 4            | nan                  | nan                    |          nan | 2060C>A             | S611X         | 49, 58             | nan                                                  | c.1832C>A            | p.Ser611*            |\\nNext row: | Class 5                                                                                                              | 11B          | c.2808_2811delACAA   | p.Ala938Profs*21       | Frameshift\"]",
+          "merged_notations": [
+            "p.Ser611Ter c.1832C>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Ser611* c.1832C>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 14           | c.7178_7179delTG     | p.Met2393Lysfs*18      | Frameshift     | 35           | 1            | nan                  | nan                    |          nan | 7178delTG           | nan           | 55                 | nan                                                  | c.7178_7179delTG     | p.Met2393Lysfs*18    |\\nTarget row: | Novel                                                                                                                | 14           | c.7409dupT           | p.Thr2471Hisfs*4       | Frameshift     | 99           | 1            | nan                  | nan                    |          nan | 7409dupT            | p.T2471Hfs*4  | 59                 | nan                                                  | c.7409dupT           | p.Thr2471Hisfs*4     |\\nNext row: | Novel                                                                                                                | 17           | c.7963delC           | p.Gln2655Asnfs*2       | Frameshift\"]",
+          "merged_notations": [
+            "p.Thr2471fs c.7409dup"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Thr2471Hisfs*4 c.7409dupT"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 18           | c.8172delG           | p.Trp2725Glyfs*8       | Frameshift     | 109          | 3            | nan                  | nan                    |          nan | 8400delG            | Stop2732      | 58                 | nan                                                  | c.8172delG           | p.Trp2725Glyfs*8     |\\nTarget row: | Novel                                                                                                                | 18           | c.8234dupT           | p.Thr2746Aspfs*18      | Frameshift     | 708          | 2            | nan                  | nan                    |          nan | 8462insT            | Stop2763      | 34, 36             | nan                                                  | c.8234dupT           | p.Thr2746Aspfs*18    |\\nNext row: | Novel                                                                                                                | 19           | c.8400_8403del4ins5  | p.Phe2801Leufs*10      | Nonsense  \"]",
+          "merged_notations": [
+            "p.Thr2746fs c.8234dup"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Thr2746Aspfs*18 c.8234dupT"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 20           | c.8517C>A            | p.Tyr2839*             | Nonsense       | 181          | 2            | nan                  | nan                    |          nan | 8517C>A             | nan           | 54, 59             | nan                                                  | c.8517C>A            | p.Tyr2839*           |\\nTarget row: | Novel                                                                                                                | 20           | c.8599A>T            | p.Thr2867Ser           | Missense       | 219          | 1            | nan                  | nan                    |          nan | 8827A>T             | K2882*        | 36                 | nan                                                  | c.8599A>T            | p.Thr2867Ser         |\\nNext row: | Novel                                                                                                                | 22           | c.8820_8823del       | p.Gln2941Leufs*34      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Thr2867Ser c.8599A>T"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 23           | c.9105dupT           | p.Gln3036Serfs*8       | Frameshift     | 109          | 4            | nan                  | nan                    |          nan | 9332insT            | Stop3043      | 58                 | nan                                                  | c.9105dupT           | p.Gln3036Serfs*8     |\\nTarget row: | Novel                                                                                                                | 24           | c.9253delA           | p.Thr3085Glnfs*19      | Frameshift     | 375          | 3            | nan                  | nan                    |          nan | 9481delA            | nan           | 53, 54, 57         | nan                                                  | c.9253delA           | p.Thr3085Glnfs*19    |\\nNext row: | Novel                                                                                                                | 25           | c.9356_9357delTAinsG | p.Leu3119*             | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Thr3085Glnfs*19 c.9253delA"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Pending                                                                                                              | 10           | c.865A>C             | p.Asn289His            | Missense       | 321          | 13           | 0.0737               | nan                    |          nan | 1093A>C             | Asn289His     | 21, 50 ,54         | nan                                                  | c.865A>C             | p.Asn289His          |\\nTarget row: | Pending                                                                                                              | 10           | c.1792A>G            | p.Thr598Ala            | Missense       | 32           | 1            | 0.0006               | nan                    |          nan | 1792A>G             | Gly598Cys     | 47                 | nan                                                  | c.1792A>G            | p.Thr598Ala          |\\nNext row: | Pending                                                                                                              | 11F          | c.6322C>T            | p.Arg2108Cys           | Missense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Thr598Ala c.1792A>G"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 17           | c.7963delC           | p.Gln2655Asnfs*2       | Frameshift     | 409          | 1            | nan                  | nan                    |          nan | 8191delC            | Stop2656      | 49                 | nan                                                  | c.7963delC           | p.Gln2655Asnfs*2     |\\nTarget row: | Novel                                                                                                                | 18           | c.8172delG           | p.Trp2725Glyfs*8       | Frameshift     | 109          | 3            | nan                  | nan                    |          nan | 8400delG            | Stop2732      | 58                 | nan                                                  | c.8172delG           | p.Trp2725Glyfs*8     |\\nNext row: | Novel                                                                                                                | 18           | c.8234dupT           | p.Thr2746Aspfs*18      | Frameshift\"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Trp2725Glyfs*8 c.8172delG"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11E          | c.5576_5580delTTAAA  | p.Ile1859_Lysfs*12     | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 5804delTTAAA        | Stop 1870     | 58                 | nan                                                  | c.5576_5580delTTAAA  | p.Ile1859Lysfs*12    |\\nTarget row: | Novel                                                                                                                | 11E          | c.5681dupA           | p.Tyr1894*             | Nonsense       | 219          | 1            | nan                  | nan                    |          nan | 5909insA            | Stop1894      | 36                 | nan                                                  | c.5681dupA           | p.Tyr1894*           |\\nNext row: | Novel                                                                                                                | 11E          | c.5699C>G            | p.Ser1900*             | Nonsense  \"]",
+          "merged_notations": [
+            "p.Tyr1894* c.5682C>A",
+            "p.Tyr1894* c.5682C>G"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Tyr1894* c.5681dupA"
+        },
+        {
+          "affected": null,
+          "carriers": 3,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 11F          | c.6359C>G            | p.Ser2120*             | Nonsense       | 35           | 1            | nan                  | nan                    |          nan | 6359C>G             | nan           | 55                 | nan                                                  | c.6359C>G            | p.Ser2120*           |\\nTarget row: | Novel                                                                                                                | 11F          | c.6645_6648CTCC      | p.Tyr2215*             | Nonsense       | 375          | 3            | nan                  | nan                    |          nan | 6873delCTCC         | nan           | 53, 54, 57         | nan                                                  | c.6645_6648delCTCC   | p.Tyr2215*           |\\nNext row: | Novel                                                                                                                | 11F          | c.6800C>A            | p.Ser2267*             | Nonsense  \"]",
+          "merged_notations": [
+            "p.Tyr2215Ter c.6645C>A",
+            "p.Tyr2215Ter c.6645C>G"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Tyr2215*"
+        },
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Novel                                                                                                                | 19           | c.8400_8403del4ins5  | p.Phe2801Leufs*10      | Nonsense       | 409          | 2            | nan                  | nan                    |          nan | 8628del4ins5        | Stop 2811     | 49                 | nan                                                  | c.8400_8403del4ins5  | p.Phe2801Leufs*10    |\\nTarget row: | Novel                                                                                                                | 20           | c.8517C>A            | p.Tyr2839*             | Nonsense       | 181          | 2            | nan                  | nan                    |          nan | 8517C>A             | nan           | 54, 59             | nan                                                  | c.8517C>A            | p.Tyr2839*           |\\nNext row: | Novel                                                                                                                | 20           | c.8599A>T            | p.Thr2867Ser           | Missense  \"]",
+          "merged_notations": [
+            "p.Tyr2839Ter c.8517C>G"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Tyr2839* c.8517C>A"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "[\"Header: | Class (BIC)                                                                                                          | Exon         | cDNA (U43746.1)      | Protein (AAB07223.1)   | Variation type | Total cases  | Carrier      | Population frequency | nan                    |          nan | Original annotation | nan           | References         | Remark                                               | NM_000059.3*         | NP_000050.2*         |\\nPrevious row: | Class 5                                                                                                              | 5            | c.470_474delAGTCA    | p.Lys157Serfs*24       | Frameshift     | 219          | 1            | nan                  | nan                    |          nan | 698del5             | Stop180       | 36                 | nan                                                  | c.470_474delAGTCA    | p.Lys157Serfs*24     |\\nTarget row: | Class 5                                                                                                              | 8            | c.658_659delGT       | p.Val220Ilefs*4        | Frameshift     | 109          | 1            | nan                  | nan                    |          nan | 886delGT            | Stop223       | 58                 | nan                                                  | c.658_659delGT       | p.Val220Ilefs*4      |\\nNext row: | Class 5                                                                                                              | 10           | c.1399A>T            | p.Lys467*              | Nonsense  \"]",
+          "source_layer": "regex_table",
+          "source_location": "Supplementary table 4. BRCA2 variants identified in mainland Chinese breast and ovarian cancer patients",
+          "unaffected": null,
+          "variant": "p.Val220Ilefs*4 c.658_659delGT"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=pubtator",
+          "source_layer": "pubtator",
+          "source_location": "PubTator3 (text-mined)",
+          "unaffected": null,
+          "variant": "c.5576_5579delTTAA"
+        }
+      ]
+    }
+  ],
+  "run_id": "20260820_brca2_gold2_noinference",
+  "schema_version": 1,
+  "source_databases": {
+    "BRCA2": "results/vb_reextract_20260820/BRCA2/20260820_132704/BRCA2.db"
+  },
+  "started_at": null,
+  "strategy": "production_gvf_run",
+  "token_usage": {
+    "note": "gvf-run does not aggregate per-run token usage; see run logs for wall clock",
+    "telemetry_available": false
+  }
+}

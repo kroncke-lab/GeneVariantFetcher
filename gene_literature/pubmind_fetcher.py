@@ -395,36 +395,3 @@ def fetch_pmids_for_variant(
         fetcher.save_pmids_to_file(pmids, output_file)
 
     return pmids
-
-
-if __name__ == "__main__":
-    # Quick test
-    import sys
-
-    logging.basicConfig(level=logging.INFO)
-
-    if len(sys.argv) < 2:
-        print("Usage: python pubmind_fetcher.py <gene_symbol>")
-        print("Example: python pubmind_fetcher.py BRCA1")
-        sys.exit(1)
-
-    gene = sys.argv[1]
-    email = input("Enter your email for NCBI: ") or "your.email@example.com"
-
-    print(f"\nFetching PMIDs for {gene}...")
-    pmids = fetch_pmids_for_gene(gene, email=email, max_results=50)
-
-    print(f"\nFound {len(pmids)} PMIDs:")
-    for idx, pmid in enumerate(pmids[:10], 1):
-        print(f"  {idx}. PMID: {pmid}")
-
-    if len(pmids) > 10:
-        print(f"  ... and {len(pmids) - 10} more")
-
-    # Offer to save
-    save = input("\nSave to file? (y/n): ")
-    if save.lower() == "y":
-        output = Path(f"{gene}_pmids.txt")
-        fetcher = PubMindFetcher(email=email)
-        fetcher.save_pmids_to_file(pmids, output)
-        print(f"Saved to {output}")

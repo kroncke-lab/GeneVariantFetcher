@@ -5,8 +5,10 @@ import sqlite3
 from scripts.backfill_paper_metadata import (
     _layer,
     backfill_db,
+    build_artifact_map,
     esummary_to_columns,
     pmids_missing_after_local,
+    run_backfill,
 )
 
 
@@ -98,3 +100,49 @@ def test_pmids_missing_after_local():
     artifacts = {"1": {"doi": "10.1/a", "pmc_id": "PMC1"}}
     missing = pmids_missing_after_local(["1", "2"], abstracts, artifacts)
     assert missing == ["1", "2"]
+
+
+def test_artifact_map_can_limit_reads_to_selected_pmids(tmp_path, monkeypatch):
+    corpus = tmp_path / "corpus"
+    selected = corpus / "BRCA1" / "111" / "111_artifacts.json"
+    unrelated = corpus / "BMPR2" / "222" / "222_artifacts.json"
+    selected.parent.mkdir(parents=True)
+    unrelated.parent.mkdir(parents=True)
+    selected.write_text('{"doi": "10.1/selected"}')
+    unrelated.write_text('{"doi": "10.1/unrelated"}')
+
+    original_read_text = type(selected).read_text
+
+    def tracked_read_text(path, *args, **kwargs):
+        assert "222_artifacts.json" not in path.name
+        return original_read_text(path, *args, **kwargs)
+
+    monkeypatch.setattr(type(selected), "read_text", tracked_read_text)
+
+    assert build_artifact_map(corpus, {"111"}) == {
+        "111": {"doi": "10.1/selected", "pmc_id": None}
+    }
+
+
+def test_run_backfill_does_not_walk_unrelated_corpus_pmids(tmp_path, monkeypatch):
+    db = tmp_path / "G.db"
+    _make_db(db, [("111", "P1")])
+    corpus = tmp_path / "corpus"
+    selected = corpus / "BRCA1" / "111" / "111_artifacts.json"
+    unrelated = corpus / "BMPR2" / "222" / "222_artifacts.json"
+    selected.parent.mkdir(parents=True)
+    unrelated.parent.mkdir(parents=True)
+    selected.write_text('{"doi": "10.1/selected"}')
+    unrelated.write_text('{"doi": "10.1/unrelated"}')
+
+    original_read_text = type(selected).read_text
+
+    def tracked_read_text(path, *args, **kwargs):
+        assert "222_artifacts.json" not in path.name
+        return original_read_text(path, *args, **kwargs)
+
+    monkeypatch.setattr(type(selected), "read_text", tracked_read_text)
+
+    result = run_backfill([str(db)], corpus=corpus, roots=[], fetch_missing=False)
+
+    assert result[str(db)]["doi"] == 1

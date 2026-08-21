@@ -343,20 +343,17 @@ Important rules:
 - Do not interpret unlabeled table numbers as carrier counts. First use the
   table header/title: prediction scores, classifications, exon/domain columns,
   allele frequencies, and functional scores are not carrier counts.
-- Affected means carriers with the target disease/phenotype, not a subset with
-  syncope, symptoms, sudden death, arrhythmic events, or severe presentation
-  unless that symptom/event is the target phenotype.
-- If evidence says N target-disease patients/probands carry the variant, then
-  affected=N even if only a smaller subset is symptomatic.
-- Example: "112 LQTS patients, of which 18 were symptomatic" means
-  total_carriers=112 and affected=112 for Long QT syndrome; 18 is a symptom or
-  event subset, not affected_count.
-- Example: "16 carriers in an unselected population cohort" means
-  total_carriers=16, and unaffected=16 if no target-disease diagnosis is
-  reported for those carriers.
-- If evidence says N carriers come from an unselected population, control, or
-  blood-donor cohort and does not report target-disease diagnosis in those
-  carriers, then unaffected=N for the target disease.
+- Affected means carriers the evidence explicitly assigns the target
+  disease/phenotype. Enrollment as a patient/proband or a smaller subset with
+  syncope, symptoms, sudden death, arrhythmic events, or severe presentation is
+  not enough to manufacture a complete affected/unaffected split.
+- Example: "112 LQTS patients, of which 18 were symptomatic" supports
+  total_carriers=112, but the affected/unaffected split is null unless the
+  source explicitly defines which status is being counted.
+- An unselected population, control, or blood-donor cohort is not automatically
+  unaffected. Absence of a reported diagnosis is not evidence of absence; set
+  unaffected only when the source explicitly calls those carriers unaffected,
+  healthy, asymptomatic, or clinically negative for the target phenotype.
 - Background/prior-literature, population-database, or referenced-study counts
   should not be treated as the present paper's primary cohort unless the claim
   explicitly describes that cohort.
@@ -507,57 +504,16 @@ def _apply_consistency_guards(
     if not _mentions_target_disease_group(card.evidence, card.disease, total):
         return normalized
 
-    corrected["affected"] = total
-    field_verdicts["affected"] = "directly_supported"
-    if field_verdicts.get("unaffected") not in SUPPORTED_VERDICTS:
-        corrected["unaffected"] = 0
-        field_verdicts["unaffected"] = "inferred_supported"
+    corrected["affected"] = None
+    field_verdicts["affected"] = "ambiguous"
+    corrected["unaffected"] = None
+    field_verdicts["unaffected"] = "ambiguous"
     normalized["reason"] = (
         normalized["reason"]
-        + " Consistency guard: target-disease patient/proband count overrides "
-        "a smaller symptom/event subset for affected_count."
+        + " Consistency guard: target-disease enrollment and a smaller "
+        "symptom/event subset do not prove an affected/unaffected partition; "
+        "the split was cleared."
     ).strip()
-    return normalized
-
-
-def _apply_count_identity_guard(normalized: dict[str, Any]) -> dict[str, Any]:
-    corrected = normalized["corrected_values"]
-    field_verdicts = normalized["field_verdicts"]
-
-    def supported(field: str) -> bool:
-        return (
-            corrected.get(field) is not None
-            and field_verdicts.get(field) in SUPPORTED_VERDICTS
-        )
-
-    total = corrected.get("total_carriers")
-    affected = corrected.get("affected")
-    unaffected = corrected.get("unaffected")
-    if (
-        supported("total_carriers")
-        and supported("affected")
-        and not supported("unaffected")
-    ):
-        inferred = total - affected
-        if inferred >= 0:
-            corrected["unaffected"] = inferred
-            field_verdicts["unaffected"] = "inferred_supported"
-    if (
-        supported("total_carriers")
-        and supported("unaffected")
-        and not supported("affected")
-    ):
-        inferred = total - unaffected
-        if inferred >= 0:
-            corrected["affected"] = inferred
-            field_verdicts["affected"] = "inferred_supported"
-    if (
-        supported("affected")
-        and supported("unaffected")
-        and not supported("total_carriers")
-    ):
-        corrected["total_carriers"] = affected + unaffected
-        field_verdicts["total_carriers"] = "inferred_supported"
     return normalized
 
 
@@ -589,24 +545,20 @@ def normalize_verification(
     }
     if normalized["verdict"] not in SUPPORTED_VERDICTS | UNTRUSTED_VERDICTS:
         normalized["verdict"] = "ambiguous"
-    if normalized["verdict"] in SUPPORTED_VERDICTS:
-        for field in ("total_carriers", "affected", "unaffected"):
-            if (
-                normalized["corrected_values"].get(field) is not None
-                and normalized["field_verdicts"].get(field) not in SUPPORTED_VERDICTS
-            ):
-                normalized["field_verdicts"][field] = "inferred_supported"
+    for field in ("total_carriers", "affected", "unaffected"):
+        if normalized["field_verdicts"].get(field) in UNTRUSTED_VERDICTS:
+            normalized["corrected_values"][field] = None
+    # Phenotype partitions must be directly supported. Inference from cohort
+    # labels, missing diagnosis text, or arithmetic is specifically forbidden by
+    # the extraction contract.
+    for field in ("affected", "unaffected"):
+        if normalized["field_verdicts"].get(field) == "inferred_supported":
+            normalized["field_verdicts"][field] = "ambiguous"
+            normalized["corrected_values"][field] = None
     normalized = _apply_consistency_guards(normalized, card)
-    # A claim card can contain nested cohorts (for example, 124 genotyped
-    # carriers but phenotype follow-up for only 88).  Inferring a missing
-    # partition as total-minus-affected would silently classify the 36
-    # unassessed people as unaffected.  Card-aware verification is fail-closed:
-    # retain only values the evidence/model actually supported.  The legacy
-    # card-free normalizer keeps its arithmetic completion for callers that
-    # deliberately provide a complete same-cohort tuple.
-    if card is not None:
-        return normalized
-    return _apply_count_identity_guard(normalized)
+    # Never complete a partition arithmetically. This applies equally to
+    # production claim cards and older card-free audit callers.
+    return normalized
 
 
 def apply_verification_to_variant(

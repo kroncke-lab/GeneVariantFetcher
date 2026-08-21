@@ -26,7 +26,7 @@ DEFAULT_OUT_DIR = DEFAULT_GOLD_DIR / "pilots"
 DEFAULT_GENES = ("KCNH2", "KCNQ1", "SCN5A")
 EDGE_CASE_GENES = ("RYR2",)
 
-# Existing integration-test PMIDs in tests/test_all_integrations.py. If a gene
+# Existing integration-test PMIDs in tests/integration/test_all_integrations.py. If a gene
 # has any of these in its gold input, include one so API-client smoke failures
 # can be compared against the older hand-verified test set.
 KNOWN_API_PMIDS = ("24667783", "19841300", "20173333", "30036649", "19716085")

@@ -46,6 +46,11 @@ from utils.source_layers import (  # noqa: E402
     combine_source_layers,
     normalize_source_layer,
 )
+from utils.paper_scope import (  # noqa: E402
+    db_paper_scope_exclusions,
+    paper_scope_exclusion_reason,
+    purge_excluded_paper_evidence,
+)
 from utils.variant_normalizer import VariantNormalizer  # noqa: E402
 
 
@@ -443,6 +448,17 @@ def ingest_cached_variants(
     gate_mode = _figure_variant_gate_mode()
     con = sqlite3.connect(str(db_path))
     try:
+        reason = paper_scope_exclusion_reason(con, pmid)
+        if reason:
+            purged = purge_excluded_paper_evidence(con)
+            con.commit()
+            logger.warning(
+                "PMID %s: skipped figure ingestion (%s); purged %d prior link(s)",
+                pmid,
+                reason,
+                purged,
+            )
+            return 0
         _ensure_source_layer_column(con)
         _ensure_paper(con, pmid, gene)
         added = 0
@@ -544,7 +560,36 @@ def run(args: argparse.Namespace) -> int:
     total_variants = 0
     total_db_added = 0
     cached_pmids = 0
+    excluded_pmids: dict[str, str] = {}
+    if args.db:
+        with sqlite3.connect(str(Path(args.db).expanduser())) as con:
+            excluded_pmids = db_paper_scope_exclusions(con)
+            purged = purge_excluded_paper_evidence(con)
+            if purged:
+                con.commit()
+                logger.warning(
+                    "Purged %d prior evidence link(s) from paper-scope exclusions",
+                    purged,
+                )
     for pmid in pmids:
+        if pmid in excluded_pmids:
+            logger.warning(
+                "PMID %s: skipped figure model and ingestion (%s)",
+                pmid,
+                excluded_pmids[pmid],
+            )
+            summary["pmids"].append(
+                {
+                    "pmid": pmid,
+                    "figures": 0,
+                    "variants": 0,
+                    "db_added": 0,
+                    "cached": False,
+                    "paper_scope_excluded": True,
+                    "exclusion_reason": excluded_pmids[pmid],
+                }
+            )
+            continue
         images = find_pmid_figures(pmc_dir, pmid)
         if not images:
             logger.warning("PMID %s: no figures on disk under %s", pmid, pmc_dir)
