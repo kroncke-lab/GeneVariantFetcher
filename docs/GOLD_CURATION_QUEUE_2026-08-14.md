@@ -30,19 +30,22 @@ RYR2 recall copy). Locked benchmark runs were not rewritten.
 | RYR2 16517285 R169Q ×2 | dropped the second identical `1/1/0` row |
 | RYR2 22677073 V2113M ×2 | dropped the second identical `1/1/0` row |
 
-Not applied: 19216760 EXON 3 DELETION ×2 (two families, 4/4/0 and 2/2/0);
-14642689; editorial PMIDs; compound row; any count edits.
+Not applied to the underlying gold snapshot: 19216760 EXON 3 DELETION ×2 (two
+families, 4/4/0 and 2/2/0); 14642689; editorial PMIDs; compound row; any count
+edits. KCNH2 14642689 was quarantined from the live Tier 2 manifest on
+2026-08-21 after a second blind run correctly returned no KCNH2 variant; its
+historical gold row remains unchanged until the intended source is identified.
 
-`tier2_gold_120.tsv` no longer includes KCNH2 10086972 (10086971 remains). Live
-tier membership is 119 attempts / 115 unique PMIDs. Locked gold-120 runs still
-contain the old attempt.
+`tier2_gold_120.tsv` no longer includes KCNH2 10086972 (10086971 remains) or
+KCNH2 14642689. Live tier membership is 118 attempts / 114 unique PMIDs. Locked
+gold-120 runs still contain the historical attempts.
 
 ## 1. PMID errors (2 rows)
 
 | gene | gold PMID | variant | evidence | proposed fix |
 |---|---|---|---|---|
 | KCNH2 | 10086972 | c.2592+1G->A (5 carriers / 4 affected / 0) | PubMed: 10086972 is "Relation of weight... Minneapolis Children's Blood Pressure Study" (Circulation 1999). The row's variant and counts exactly match the run's extraction from PMID **10086971** (Berthet et al., same issue, previous pages) — an off-by-one typo. The pipeline extracted c.2592+1G>A from 10086971 and was charged both an FP (10086971) and an FN (10086972). | change PMID to 10086971 |
-| KCNH2 | 14642689 | A561T | PubMed: 14642689 is "Expression of angiotensin II receptors... atrial fibrillation" (JACC 2003) — not a genetics paper. Correct target PMID unknown; A561T is a common KCNH2 LQT2 variant with many candidate sources. | curator to locate intended paper |
+| KCNH2 | 14642689 | A561T | PubMed: 14642689 is "Expression of angiotensin II receptors... atrial fibrillation" (JACC 2003) — not a genetics paper. Correct target PMID unknown; A561T is a common KCNH2 LQT2 variant with many candidate sources. | quarantined from live Tier 2; curator to locate intended paper before any restoration |
 
 ## 2. Editorial mis-attributions (11 rows)
 

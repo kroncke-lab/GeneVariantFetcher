@@ -80,11 +80,13 @@ def test_tier2_is_seeded_30_per_gene_manual_gold_expansion():
     actual = _rows(TIERS / "tier2_gold_120.tsv")
 
     assert registry["tiers"][1]["selection_seed"] == 2026081301
-    # KCNH2 is 29 after the 2026-08-15 PMID erratum removed 10086972
-    # (blood-pressure paper). The other three genes stay at the original 30.
+    # KCNH2 is 28 after quarantining two non-genetics PMIDs: 10086972 on
+    # 2026-08-15 and 14642689 on 2026-08-21. The other genes stay at 30.
     assert Counter(gene for gene, _ in actual) == Counter(
-        {"KCNH2": 29, "KCNQ1": 30, "RYR2": 30, "SCN5A": 30}
+        {"KCNH2": 28, "KCNQ1": 30, "RYR2": 30, "SCN5A": 30}
     )
+    assert ("KCNH2", "10086972") not in actual
+    assert ("KCNH2", "14642689") not in actual
     for gene in ("KCNH2", "KCNQ1", "RYR2", "SCN5A"):
         eligible = gold_count_eligible_pmids(DEFAULT_GOLD, gene)
         assert {pmid for row_gene, pmid in actual if row_gene == gene} <= eligible

@@ -7,7 +7,7 @@ gates and must not be described as current.
 | Order | Tier | Gene–paper attempts | Unique PMIDs | Use |
 |---:|---|---:|---:|---|
 | 1 | `gold_50` | 50 | 50 | Scored gate: fixed cardiac 48 plus Nate's two lead-approved BRCA2 papers |
-| 2 | `gold_120` | 119 | 115 | Scored cardiac expansion: originally 30/gene; KCNH2 is 29 after removing PMID 10086972 |
+| 2 | `gold_120` | 118 | 114 | Scored cardiac expansion: originally 30/gene; KCNH2 is 28 after quarantining two invalid PMIDs |
 | 3 | `reviewer_545` | 545 | 506 | Full reviewer backlog: ten 50-paper queues plus the 45-paper BRCA2 queue |
 
 Counts are **gene–paper extraction/review attempts**, not necessarily distinct
@@ -23,8 +23,11 @@ why the full backlog has 545 attempts but 506 unique PMIDs.
    cardiac gene, restricted to PMIDs with explicit gold assertions for carriers,
    affected, and unaffected. The original draw was 30 per gene. On 2026-08-15
    KCNH2 10086972 was removed because that PMID is not a genetics paper (the
-   gold row belonged to 10086971, already in the sample). Live membership is
-   119 attempts / 115 unique PMIDs (KCNH2 29). Selection used only PMID
+   gold row belonged to 10086971, already in the sample). On 2026-08-21 KCNH2
+   14642689 was also quarantined: PubMed identifies it as an angiotensin-II
+   receptor expression study, not a KCNH2 genetics paper, and the intended
+   source for its A561T gold row is unknown. Live membership is 118 attempts /
+   114 unique PMIDs (KCNH2 28). Selection used only PMID
    eligibility and assertion presence; extraction does not see gold values or
    row counts.
 3. `tier3_reviewer_545.tsv` is the full private-review population on

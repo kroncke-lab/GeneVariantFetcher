@@ -27,8 +27,8 @@ headline. The requested 100--150-paper scale applies to comparison against the
 already manually curated cardiac gold standard. Gate 2 is therefore the fixed,
 gold-value-blinded `gold_120` sample: originally 30 source-available,
 count-eligible papers per cardiac gene (seed 2026081301). Live membership is
-119 attempts / 115 unique PMIDs after KCNH2 10086972 was removed. It does not
-widen the experimental genes.
+118 attempts / 114 unique PMIDs after the non-genetics KCNH2 PMIDs 10086972
+and 14642689 were quarantined. It does not widen the experimental genes.
 
 The last completed Gate 2 **passed** under the 2026-08-20 no-inference
 contract. The extraction-blinded lock is
@@ -43,29 +43,25 @@ recall/precision pass, not a new penetrance or phenotype-count baseline. The
 run retained all 42 PMID 26746457 classification identities with null counts
 and recorded circuit-breaker empties rather than silently dropping them.
 
-The clean current-code 119-attempt replacement is now locked at
-`benchmarks/codex_paper_eval/runs/20260821_current_changes_gold119`. Its trusted
-primary is 489 TP / 438 FP / 144 FN (77.25% recall), counted-extra precision
-97.80%, and carrier MAE 0.247. The unexpectedly low trusted recall exposed a
-real SCN5A Q1077/Q1077del isoform-numbering defect plus a bare-proline parser
-bug. The constrained post-lock diagnostic recovers to 546/633 (86.26%) with
-452 FP, but it is in-sample calibration, not a new blind lock. The original
-lock is immutable; its conservative schema-v1 gold-provenance interpretation is
-corrected only by the adjacent `ERRATUM.md`.
-
-The run used 554 calls / 2.464M tokens. All four production traces are
-write-time verified and bound into the prediction lock. The approved BMPR2 50 /
-BRCA1 50 / BRCA2 no-publish launch began only after this lock and score
-completed. The first, then-46-paper BRCA2 result is a rejected historical
-artifact; the corrected active queue has 45 papers after removing canine PMID
-19944633 and has now been rerun cleanly.
+The clean candidate-local replacement is locked at
+`benchmarks/codex_paper_eval/runs/20260821_candidate_local_gold119`. It was run
+gold-free over the then-live 119-attempt manifest and scored only after a
+hash lock: 546 TP / 290 FP / 87 FN (86.26% recall, 65.31% raw precision),
+98.03% counted-extra precision, 94.44% count-bearing-only precision, and
+carrier MAE 0.255. All four production traces are write-time verified and
+bound into the lock (578 LLM calls / 2.552M tokens). The blind circuit breaker
+correctly returned no KCNH2 result for unrelated PMID 14642689; PubMed
+adjudication then quarantined that record from the live tier without rewriting
+the lock or underlying gold snapshot. New Gate 2 runs therefore use 118
+attempts, while this immutable run remains the accepted evidence for the code
+change.
 
 - [ ] Finish Gate 3, `reviewer_545`: 545 attempts across 506
       unique PMIDs in the 11 populated reviewer workspaces. The first approved
-      experimental strata are the existing BMPR2 50-, BRCA1 50-, and BRCA2
-      45-paper queues; do not expand those to 100 papers per gene. Start with
-      those three queues after the patched gold-120 revalidation. The accepted
-      structural set is exact manifests 50/50 BRCA1, 45/45 BRCA2, and 50/50
+      experimental strata are the existing BMPR2 50-, BRCA1 50-, and corrected
+      BRCA2 50-paper queues; do not expand those to 100 papers per gene. Start
+      with those three queues after the patched gold-120 revalidation. The prior
+      accepted structural set is exact manifests 50/50 BRCA1, 45/45 BRCA2, and 50/50
       BMPR2, with full-text source integrity 50/50, 44/45, and 45/50. All three
       have write-time-verified extraction traces, mandatory VariantFeatures
       enrichment/quarantine, and no live variant lacking a VariantFeatures audit
@@ -123,7 +119,9 @@ artifact; the corrected active queue has 45 papers after removing canine PMID
          carriers on 30758498). The other-gene `L187P` and the `c.693delCA`
          near-twin are closed in code (2026-08-16).
       2. Remaining gold-queue items (`docs/GOLD_CURATION_QUEUE_2026-08-14.md`):
-         14642689, 11 editorial rows, compound `W248F + L347R`. Do **not**
+         locate the intended source for quarantined 14642689 before any
+         restoration, adjudicate 11 editorial rows, and resolve compound
+         `W248F + L347R`. Do **not**
          collapse the 19216760/24394973 exon-3 family pairs (two families).
          Do **not** delete the 780 identity-only extras to raise raw 40.82% —
          584 sit on papers that already matched every gold row. If raw
@@ -141,10 +139,10 @@ artifact; the corrected active queue has 45 papers after removing canine PMID
       4. $0 Sol audit: which of the 244 locked figure-vision calls added an
          identity the text extract already had (72% of the $9.774 mix is Sol;
          244/393 Sol calls are vision).
-      5. Paid gold-120 re-extract (~$10 / ~40 min) **only as a recall arm**
-         on the live 119-attempt `tier2_gold_120.tsv` (10086972 removed).
-         Realizes extraction-code already landed (KCNQ1 21956039 11/11 on
-         the 4-paper check, still FN on the lock). Does not move 98.20%.
+      5. **DONE 2026-08-21:** paid blind re-extract over the then-live
+         119-attempt tier. The candidate-local lock records 546/633 recall and
+         98.03% counted-extra precision. The unrelated 14642689 paper was
+         quarantined afterward, so future live runs contain 118 attempts.
       6. Targeted acquisition: caption-stub table bodies (RYR2
          19926015, KCNQ1 14678125, 31520628, 24667783), abstract-only
          stratum from the 2026-08-14 analysis.

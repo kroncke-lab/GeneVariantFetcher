@@ -35,8 +35,9 @@ end-to-end carrier/affected error rises, because the pipeline now declines to
 answer more often. Any future report of one without the other is misleading.
 The lead approved advancement from Gate 1 on 2026-08-13 without changing the
 headline. Gate 2 (`gold_120`) is a fixed, extraction-blinded sample of 30
-source-available, count-eligible papers per cardiac gene, now 119 attempts / 115
-unique PMIDs after KCNH2 10086972 was removed. The 2026-08-20 no-inference
+source-available, count-eligible papers per cardiac gene, now 118 attempts / 114
+unique PMIDs after the non-genetics KCNH2 PMIDs 10086972 and 14642689 were
+quarantined. The 2026-08-20 no-inference
 revalidation **passed the precision gate**:
 `precision_vs_counted_gold_pmids` is 97.51%, above the current 77.3% floor, and
 variant recall is 86.57%. Carrier coverage is 30.49%, but conditional carrier
@@ -82,7 +83,16 @@ is 489 TP / 438 FP / 144 FN (77.25% recall), counted-extra precision 97.80%, and
 carrier MAE 0.247. A real SCN5A Q1077/Q1077del lookup mismatch over-held true
 identities; the constrained post-lock diagnostic is 546 TP / 452 FP / 87 FN
 (86.26% recall). Because that correction was informed by the locked residuals,
-the diagnostic is not a new blind lock or public headline.
+the diagnostic is not a new blind lock or public headline. The subsequent
+candidate-local run at
+`benchmarks/codex_paper_eval/runs/20260821_candidate_local_gold119/` is a fresh
+gold-free production run locked before scoring. It records 546 TP / 290 FP /
+87 FN (86.26% recall, 65.31% raw precision), 98.03% counted-extra precision,
+94.44% count-bearing-only precision, and carrier MAE 0.255. All four production
+statuses completed with zero stage failures and 1,245 trace records verified
+against their write-time hashes. Its explicit empty for unrelated PMID
+14642689 was correct; that record was quarantined from the live tier only after
+the immutable run was scored.
 
 Historical view: the published dashboard at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
@@ -119,14 +129,31 @@ not current defaults. The next acceptance sequence lives only in `TASKS.md`.
 ## Canonical rollout tiers
 
 The active rollout population is governed by exactly three manifests in
-`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, a 119-attempt cardiac
-gold expansion (115 unique PMIDs; KCNH2 29 after removing 10086972), and 545
+`benchmarks/evaluation_tiers/`: 50 gold-scored attempts, a cardiac gold
+expansion now containing 118 attempts (114 unique PMIDs; KCNH2 28 after
+quarantining 10086972 and 14642689), and 545
 full reviewer-backlog attempts (506 unique PMIDs). These tiers govern
 evaluation/review scope, not the authoritative four-gene headline cohort below. The full tier includes BMPR2 and ranked
 50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 45
 rather than expanding the experimental genes.
 
-## Current-code gold-119 lock and post-lock identity diagnostic
+## Current-code blind candidate-local lock
+
+The accepted clean blind lock is
+`benchmarks/codex_paper_eval/runs/20260821_candidate_local_gold119/`. It used
+the then-live 119-attempt cohort and remains immutable after the subsequent
+14642689 cohort quarantine.
+
+| Projection | TP | FP | FN | Variant recall | Variant precision | Counted-extra precision | Count-bearing-only precision | Carrier supplied | Carrier MAE |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Locked trusted production | 546 | 290 | 87 | 86.26% | 65.31% | 98.03% | 94.44% | 184/633 | 0.255 |
+
+The candidate-local table fix was specified from a production-path failure and
+reviewed before this run; no locked residual was fed back into its predictions.
+The source binding, prediction digest, four production trace-manifest digests,
+and post-lock score are recorded in the run directory.
+
+## Prior current-code lock and post-lock identity diagnostic
 
 The immutable current-code lock is
 `benchmarks/codex_paper_eval/runs/20260821_current_changes_gold119/`; its
