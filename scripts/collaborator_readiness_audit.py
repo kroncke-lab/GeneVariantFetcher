@@ -17,18 +17,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-
-_NONHUMAN_GENE_ADJECTIVES = (
-    "bovine",
-    "canine",
-    "dog",
-    "feline",
-    "murine",
-    "mouse",
-    "porcine",
-    "rat",
-    "zebrafish",
-)
+from pipeline.filters import names_nonhuman_ortholog
 
 # A VariantFeatures miss can still be a defensible paper identity: truly novel
 # protein alleles and transcript-bound cDNA variants are expected not to exist
@@ -150,15 +139,11 @@ def _nonhuman_gene_title_links(
 ) -> list[dict[str, Any]]:
     """Find conservatively species-scoped target-gene papers with live links.
 
-    This intentionally detects only the strong ``canine BRCA2``-style title
-    construction.  A broad animal-word search would wrongly reject papers that
-    assay explicitly human variants in yeast, mice, or other model systems.
+    The shared extractor predicate recognizes strong ortholog constructions in
+    either order.  It deliberately preserves papers that explicitly assay a
+    human gene in a model organism.
     """
 
-    species = "|".join(re.escape(term) for term in _NONHUMAN_GENE_ADJECTIVES)
-    pattern = re.compile(
-        rf"\b(?:{species})\s+(?:gene\s+)?{re.escape(gene)}\b", re.IGNORECASE
-    )
     findings: list[dict[str, Any]] = []
     for pmid, db_title, link_count in con.execute(
         """SELECT p.pmid, COALESCE(p.title, ''), COUNT(vp.variant_id)
@@ -178,7 +163,18 @@ def _nonhuman_gene_title_links(
                     )
                 except (OSError, json.JSONDecodeError):
                     title = ""
-        if pattern.search(title):
+        source_head = ""
+        for suffix in ("FULL_CONTEXT.md", "CLEANED.md"):
+            source_path = run_dir / "pmc_fulltext" / f"{pmid}_{suffix}"
+            if source_path.is_file():
+                try:
+                    source_head = "\n".join(source_path.read_text().splitlines()[:8])
+                except OSError:
+                    source_head = ""
+                break
+        if names_nonhuman_ortholog(title, gene) or names_nonhuman_ortholog(
+            source_head, gene
+        ):
             findings.append(
                 {"pmid": str(pmid), "title": str(title), "variant_links": link_count}
             )

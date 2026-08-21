@@ -1155,6 +1155,7 @@ class ExpertExtractor(BaseLLMCaller):
         in_table = False
         header_cells: List[str] = []
         current_table_label: Optional[str] = None
+        current_table_caption = ""
         caption_candidates: List[str] = []
         table_label_re = re.compile(
             r"((?:Supplementary\s+|Supplemental\s+|Supp\.?\s+)?(?:e|S)?"
@@ -1208,6 +1209,10 @@ class ExpertExtractor(BaseLLMCaller):
                 variant["source_notation"] = source_notation
             if source_table:
                 variant["source_table"] = source_table
+            if current_table_caption:
+                variant["source_table_caption"] = current_table_caption
+            if header_cells:
+                variant["source_table_headers"] = list(header_cells)
             if source_row:
                 variant["source_row"] = source_row
             if row_index is not None:
@@ -1240,6 +1245,7 @@ class ExpertExtractor(BaseLLMCaller):
                 row_ordinal = 0
                 header_cells = cells
                 current_table_label = _table_label(caption_candidates)
+                current_table_caption = _anchored_table_caption(caption_candidates)
                 # Seed the table's gene scope from its CAPTION, not just its
                 # label. `_table_label` keeps only the matched "Table 1" group
                 # and throws the descriptive sentence away, so a table captioned
@@ -1258,7 +1264,7 @@ class ExpertExtractor(BaseLLMCaller):
                 # own. Verified: "compared with the KCNQ1 cohort" above an
                 # SCN5A table returned 0 of 2 rows.
                 active_table_genes = self._gene_scope_from_table_label(
-                    _anchored_table_caption(caption_candidates)
+                    current_table_caption
                 )
                 caption_candidates = []
                 is_header_row = True
@@ -1391,6 +1397,162 @@ class ExpertExtractor(BaseLLMCaller):
                 f"{row_gene_filtered_count} off-target gene rows)"
             )
         return variants
+
+    @staticmethod
+    def _table_variant_label(variant: dict) -> str:
+        """Return the most useful human-readable identity for a table candidate."""
+        return str(
+            variant.get("cdna_notation")
+            or variant.get("protein_notation")
+            or variant.get("structural_description")
+            or variant.get("source_notation")
+            or "<unnamed>"
+        )
+
+    @staticmethod
+    def _secondary_study_table_reason(variant: dict) -> Optional[str]:
+        """Identify tables that summarize other studies rather than this cohort.
+
+        Regex table extraction is an additive safety net, so it must not turn a
+        literature-review table into current-study evidence.  This deliberately
+        uses only strong structural signals: a caption explicitly describing a
+        study/literature summary, or an ``Author(s), year`` column.  Generic
+        ``Reference`` columns remain allowed because primary variant tables often
+        cite ClinVar/BIC beside variants actually observed in the current cohort.
+        """
+        caption = " ".join(
+            str(variant.get(key) or "")
+            for key in (
+                "source_table_caption",
+                "source_location",
+                "source_table",
+            )
+        )
+        evidence = str(variant.get("evidence_quote") or "")
+        headers_value = variant.get("source_table_headers") or []
+        if isinstance(headers_value, str):
+            headers = headers_value
+        else:
+            headers = " | ".join(str(value or "") for value in headers_value)
+        if not headers:
+            # Router/fixed-layout candidates may retain their header only in the
+            # bounded evidence packet rather than a dedicated metadata field.
+            headers = evidence
+
+        # A summary table can include a final row for the paper itself.  That row
+        # is current-study evidence and is safe even though its table is otherwise
+        # historical.
+        if re.search(
+            r"\b(?:present|current|this|our)\s+(?:study|cohort|series)\b",
+            evidence,
+            re.IGNORECASE,
+        ):
+            return None
+
+        if re.search(
+            r"\b(?:summary|overview|review|comparison|characteristics)\b"
+            r".{0,100}\b(?:studies|literature|publications|reports)\b",
+            caption,
+            re.IGNORECASE,
+        ):
+            return "secondary_study_table"
+        if re.search(
+            r"\b(?:previous|previously|prior|published|reported)\b"
+            r".{0,80}\b(?:studies|literature|publications|reports|variants|mutations)\b",
+            caption,
+            re.IGNORECASE,
+        ):
+            return "secondary_study_table"
+        if re.search(
+            r"\bauthors?\s*[,/]?\s*(?:and\s+)?year\b"
+            r"|\byear\s*[,/]?\s*authors?\b",
+            headers,
+            re.IGNORECASE,
+        ):
+            return "secondary_study_table"
+        return None
+
+    def _table_variant_source_genes(self, variant: dict, attribution: dict) -> set[str]:
+        """Return source-grounded genes for one table candidate, when known."""
+        table_key = _table_label_key(
+            variant.get("source_table") or variant.get("source_location")
+        )
+        source_genes: set[str] = set()
+        tokens = {
+            re.sub(r"\s+", "", str(variant.get(key) or "")).upper()
+            for key in ("protein_notation", "cdna_notation", "source_notation")
+            if variant.get(key)
+        }
+        tokens |= {token[2:] for token in tokens if token.startswith("P.")}
+        for token in tokens:
+            if table_key and (table_key, token) in attribution:
+                source_genes |= set(attribution[(table_key, token)])
+            elif token in attribution:
+                # Some converted supplements preserve "Table 1" on the
+                # candidate but not on the attribution walk.  The notation-wide
+                # key is still safe here: multiple source assignments union and
+                # are rejected below as ambiguous rather than guessed.
+                source_genes |= set(attribution[token])
+        return source_genes
+
+    def _filter_table_candidates_for_current_study(
+        self,
+        table_variants: List[dict],
+        *,
+        target_gene: Optional[str] = None,
+        document_text: Optional[str] = None,
+    ) -> tuple[List[dict], List[dict]]:
+        """Fail closed before table candidates become hints or additive rows."""
+        attribution = (
+            self._source_gene_attribution(document_text)
+            if target_gene and document_text
+            else {}
+        )
+        target = str(target_gene or "").upper()
+        accepted: List[dict] = []
+        skipped: List[dict] = []
+        for variant in table_variants:
+            reason = self._secondary_study_table_reason(variant)
+            source_genes = (
+                self._table_variant_source_genes(variant, attribution)
+                if attribution
+                else set()
+            )
+            quote_genes = {
+                gene
+                for gene in known_gene_aliases(include_query_aliases=False)
+                if gene_alias_regex(gene, include_query_aliases=False).search(
+                    str(variant.get("evidence_quote") or "")
+                )
+            }
+            if reason is None and target and source_genes:
+                if target not in source_genes:
+                    reason = "wrong_gene"
+                elif len(source_genes) > 1:
+                    # A multi-gene scope without a per-variant binding cannot
+                    # safely support an additive row for either gene.
+                    reason = "gene_ambiguous"
+            elif reason is None and target and len(quote_genes) > 1:
+                # The source map stays silent when one cell names several genes.
+                # Silence is acceptable for recall-oriented rejection, but not
+                # for an additive row: the notation cannot be bound to one gene.
+                reason = "gene_ambiguous"
+            if reason is None:
+                accepted.append(variant)
+                continue
+            skipped.append(
+                {
+                    "variant": self._table_variant_label(variant),
+                    "reason": reason,
+                    "source_table": str(
+                        variant.get("source_table")
+                        or variant.get("source_location")
+                        or ""
+                    ),
+                    "quote": str(variant.get("evidence_quote") or "")[:300],
+                }
+            )
+        return accepted, skipped
 
     def _merge_table_variants(
         self, extracted_data: dict, table_variants: List[dict]
@@ -1580,10 +1742,21 @@ class ExpertExtractor(BaseLLMCaller):
         return selected, overflow
 
     def _merge_table_variants_with_overflow_qc(
-        self, extracted_data: dict, table_variants: List[dict], pmid: Optional[str]
+        self,
+        extracted_data: dict,
+        table_variants: List[dict],
+        pmid: Optional[str],
+        *,
+        target_gene: Optional[str] = None,
+        document_text: Optional[str] = None,
     ) -> dict:
         """Merge table candidates; when over cap, merge in bounded chunks with QC."""
-        selected, overflow = self._select_table_variants_for_merge(table_variants)
+        eligible, skipped = self._filter_table_candidates_for_current_study(
+            table_variants,
+            target_gene=target_gene,
+            document_text=document_text,
+        )
+        selected, overflow = self._select_table_variants_for_merge(eligible)
         if overflow:
             logger.warning(
                 "PMID %s - Table regex/router merge overflow: %d candidates "
@@ -1608,6 +1781,9 @@ class ExpertExtractor(BaseLLMCaller):
         after_count = len(extracted_data.get("variants", []) or [])
         metadata = extracted_data.setdefault("extraction_metadata", {})
         metadata["table_merge_candidate_count"] = len(table_variants)
+        metadata["table_merge_eligible_count"] = len(eligible)
+        if skipped:
+            metadata["table_merge_skipped"] = skipped
         if overflow:
             overflow["merged_added"] = max(0, after_count - before_count)
             metadata["table_merge_overflow"] = overflow
@@ -4498,6 +4674,8 @@ class ExpertExtractor(BaseLLMCaller):
                 "source_location": active_table_label or "Markdown table",
                 **observation_provenance,
                 "source_table": source_ref,
+                "source_table_caption": active_table_label,
+                "source_table_headers": list(active_headers),
                 "source_row": str(table_row_ordinal),
                 "source_column": carrier_label,
                 "evidence_quote": table_evidence,
@@ -7117,8 +7295,15 @@ Return strict JSON with this schema:
             # writing multiple penetrance rows that downstream summaries add.
             parsed_variants = self._dedupe_table_variants(parsed_variants)
             markdown_table_variants = parsed_variants
+            short_circuit_variants, short_circuit_skips = (
+                self._filter_table_candidates_for_current_study(
+                    parsed_variants,
+                    target_gene=paper.gene_symbol,
+                    document_text=scanner_text,
+                )
+            )
             if self._allow_deterministic_table_short_circuit(
-                parsed_variants,
+                short_circuit_variants,
                 paper_census,
                 deterministic_min_variants,
             ):
@@ -7131,22 +7316,29 @@ Return strict JSON with this schema:
                         "publication_date": paper.publication_date,
                         "doi": paper.doi,
                         "pmc_id": paper.pmc_id,
-                        "extraction_summary": f"Deterministic table parse of {len(parsed_variants)} variants",
+                        "extraction_summary": f"Deterministic table parse of {len(short_circuit_variants)} variants",
                     },
-                    "variants": parsed_variants,
+                    "variants": short_circuit_variants,
                     "extraction_metadata": {
-                        "total_variants_found": len(parsed_variants),
+                        "total_variants_found": len(short_circuit_variants),
                         "extraction_confidence": "medium",
                         "study_summary": _deterministic_study_summary(
                             title=paper.title,
                             gene_symbol=paper.gene_symbol,
-                            variants=parsed_variants,
+                            variants=short_circuit_variants,
                         ),
                         "compact_mode": True,
                         "notes": "Bypassed LLM using markdown table parser for large table",
                         "paper_census": paper_census,
                     },
                 }
+                if short_circuit_skips:
+                    extracted_data["extraction_metadata"]["table_candidate_filter"] = {
+                        "policy": "target_gene_current_study_v1",
+                        "candidate_count": len(parsed_variants),
+                        "eligible_count": len(short_circuit_variants),
+                        "skipped": short_circuit_skips,
+                    }
                 # Ground the gene before returning. This path bypasses the
                 # LLM entirely, so it also bypassed the only source-grounded
                 # gene check in the pipeline (`_filter_by_gene`, reached far
@@ -7209,8 +7401,15 @@ Return strict JSON with this schema:
                 deterministic_variants.append(variant)
                 deterministic_keys.add(key)
 
+        deterministic_short_variants, deterministic_short_skips = (
+            self._filter_table_candidates_for_current_study(
+                deterministic_variants,
+                target_gene=paper.gene_symbol,
+                document_text=scanner_text,
+            )
+        )
         if self._allow_deterministic_table_short_circuit(
-            deterministic_variants,
+            deterministic_short_variants,
             paper_census,
             fixed_width_min_variants,
         ):
@@ -7223,16 +7422,16 @@ Return strict JSON with this schema:
                     "publication_date": paper.publication_date,
                     "doi": paper.doi,
                     "pmc_id": paper.pmc_id,
-                    "extraction_summary": f"Deterministic table parse of {len(deterministic_variants)} variants",
+                    "extraction_summary": f"Deterministic table parse of {len(deterministic_short_variants)} variants",
                 },
-                "variants": deterministic_variants,
+                "variants": deterministic_short_variants,
                 "extraction_metadata": {
-                    "total_variants_found": len(deterministic_variants),
+                    "total_variants_found": len(deterministic_short_variants),
                     "extraction_confidence": "medium",
                     "study_summary": _deterministic_study_summary(
                         title=paper.title,
                         gene_symbol=paper.gene_symbol,
-                        variants=deterministic_variants,
+                        variants=deterministic_short_variants,
                     ),
                     "compact_mode": True,
                     "notes": "Bypassed LLM using deterministic parser for large PDF/vertical table",
@@ -7243,6 +7442,13 @@ Return strict JSON with this schema:
                     "paper_census": paper_census,
                 },
             }
+            if deterministic_short_skips:
+                extracted_data["extraction_metadata"]["table_candidate_filter"] = {
+                    "policy": "target_gene_current_study_v1",
+                    "candidate_count": len(deterministic_variants),
+                    "eligible_count": len(deterministic_short_variants),
+                    "skipped": deterministic_short_skips,
+                }
             parser_model = (
                 "deterministic-fixed-width-table-parser"
                 if fixed_width_variants and not vertical_variants
@@ -7279,10 +7485,25 @@ Return strict JSON with this schema:
             if router_outcome is not None:
                 routed_data = router_outcome.extracted_data or {}
                 router_variants = routed_data.get("variants", []) or []
+                router_short_variants, router_short_skips = (
+                    self._filter_table_candidates_for_current_study(
+                        router_variants,
+                        target_gene=paper.gene_symbol,
+                        document_text=scanner_text,
+                    )
+                )
                 routed_data.setdefault("extraction_metadata", {})["paper_census"] = (
                     paper_census
                 )
-                if len(router_variants) >= deterministic_min_variants:
+                if router_short_skips:
+                    routed_data["extraction_metadata"]["table_candidate_filter"] = {
+                        "policy": "target_gene_current_study_v1",
+                        "candidate_count": len(router_variants),
+                        "eligible_count": len(router_short_variants),
+                        "skipped": router_short_skips,
+                    }
+                if len(router_short_variants) >= deterministic_min_variants:
+                    routed_data["variants"] = router_short_variants
                     # The router applies its own caption/divider guards, but a
                     # table it routed with no gene column and no divider is
                     # still ungrounded; run the source check before returning.
@@ -7329,12 +7550,27 @@ Return strict JSON with this schema:
         pre_extracted_variants = self._extract_variants_from_tables(
             scanner_text, paper.gene_symbol
         )
-        table_hint_variants = (
+        raw_table_hint_variants = (
             router_variants
             + deterministic_variants
             + markdown_table_variants
             + pre_extracted_variants
         )
+        table_hint_variants, table_candidate_skips = (
+            self._filter_table_candidates_for_current_study(
+                raw_table_hint_variants,
+                target_gene=paper.gene_symbol,
+                document_text=scanner_text,
+            )
+        )
+        if table_candidate_skips:
+            logger.warning(
+                "PMID %s - Excluded %d/%d table candidates from hints and "
+                "additive merge because source attribution was not current-study safe",
+                paper.pmid,
+                len(table_candidate_skips),
+                len(raw_table_hint_variants),
+            )
         table_hints = self._format_table_hints(table_hint_variants)
         if table_hint_variants:
             logger.info(
@@ -7416,6 +7652,16 @@ Return strict JSON with this schema:
                 prompt
             )
 
+            if table_candidate_skips:
+                extracted_data.setdefault("extraction_metadata", {})[
+                    "table_candidate_filter"
+                ] = {
+                    "policy": "target_gene_current_study_v1",
+                    "candidate_count": len(raw_table_hint_variants),
+                    "eligible_count": len(table_hint_variants),
+                    "skipped": table_candidate_skips,
+                }
+
             # Normalize stop codon notation
             extracted_data = self._normalize_stop_codon_notation(extracted_data)
             extracted_data.setdefault("extraction_metadata", {})["paper_census"] = (
@@ -7447,7 +7693,11 @@ Return strict JSON with this schema:
             # instead of dropping the entire table safety-net.
             if table_hint_variants:
                 extracted_data = self._merge_table_variants_with_overflow_qc(
-                    extracted_data, table_hint_variants, paper.pmid
+                    extracted_data,
+                    table_hint_variants,
+                    paper.pmid,
+                    target_gene=paper.gene_symbol,
+                    document_text=scanner_text,
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)

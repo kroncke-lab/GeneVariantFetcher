@@ -139,6 +139,144 @@ def test_table_regex_skips_off_target_gene_column_rows():
     assert "c.3107G>A" not in cdnas
 
 
+def test_table_regex_candidates_exclude_secondary_study_summary_before_merge():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 1
+
+BRCA1 variants observed in the present cohort
+
+| Gene | cDNA | Protein | Reference |
+|---|---|---|---|
+| BRCA1 | c.181T>G | p.Cys61Gly | ClinVar |
+
+### Table 4
+
+Summary of Brazilian BRCA1 and/or BRCA2 studies
+
+| Sample size | Genetic test performed | Authors, year |
+|---|---|---|
+| 137 | BRCA1 c.68_69delAG and BRCA2 c.5946delT | Ewald, 2011 |
+| 616 | BRCA1 c.4034delA and BRCA2 c.8537_8538delAG | Schayek, 2015 |
+"""
+
+    candidates = extractor._extract_variants_from_tables(text, "BRCA1")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="BRCA1",
+        document_text=text,
+    )
+
+    eligible_names = {
+        variant.get("cdna_notation") or variant.get("protein_notation")
+        for variant in eligible
+    }
+    assert eligible_names == {"c.181T>G", "C61G"}
+    assert {item["reason"] for item in skipped} == {"secondary_study_table"}
+    assert {item["variant"] for item in skipped} == {
+        "c.68_69delAG",
+        "c.5946delT",
+        "c.4034delA",
+        "c.8537_8538delAG",
+    }
+    primary = next(v for v in eligible if v.get("cdna_notation") == "c.181T>G")
+    assert primary["source_table_caption"].startswith("### Table 1")
+    assert primary["source_table_headers"] == [
+        "Gene",
+        "cDNA",
+        "Protein",
+        "Reference",
+    ]
+
+
+def test_table_merge_records_secondary_study_abstentions():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 1
+BRCA1 variants observed in the present cohort
+| Gene | cDNA | Protein |
+|---|---|---|
+| BRCA1 | c.181T>G | p.Cys61Gly |
+
+### Table 4
+Summary of prior BRCA1 studies
+| Genetic test performed | Authors, year |
+|---|---|
+| BRCA1 c.4034delA | Schayek, 2015 |
+"""
+    candidates = extractor._extract_variants_from_tables(text, "BRCA1")
+    merged = extractor._merge_table_variants_with_overflow_qc(
+        {"variants": [], "extraction_metadata": {}},
+        candidates,
+        "27741520",
+        target_gene="BRCA1",
+        document_text=text,
+    )
+
+    names = {
+        variant.get("cdna_notation") or variant.get("protein_notation")
+        for variant in merged["variants"]
+    }
+    assert names == {"c.181T>G", "C61G"}
+    metadata = merged["extraction_metadata"]
+    assert metadata["table_merge_candidate_count"] == 3
+    assert metadata["table_merge_eligible_count"] == 2
+    assert metadata["table_merge_skipped"] == [
+        {
+            "variant": "c.4034delA",
+            "reason": "secondary_study_table",
+            "source_table": "Table 4",
+            "quote": "| BRCA1 c.4034delA | Schayek, 2015 |",
+        }
+    ]
+
+
+def test_table_merge_abstains_when_one_cell_mix_cannot_bind_variant_to_gene():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+BRCA1 and BRCA2 variants observed in hereditary cancer probands
+| Findings |
+|---|
+| BRCA1 c.181T>G and BRCA2 c.5946delT |
+"""
+    candidates = extractor._extract_variants_from_tables(text, "BRCA1")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="BRCA1",
+        document_text=text,
+    )
+
+    assert eligible == []
+    assert {item["reason"] for item in skipped} == {"gene_ambiguous"}
+    assert {item["variant"] for item in skipped} == {
+        "c.181T>G",
+        "c.5946delT",
+    }
+
+
+def test_table_candidate_filter_binds_multi_gene_row_per_cell():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 1
+Compound variants observed in probands
+| Variant 1 | Variant 2 |
+|---|---|
+| RYR2- p.Ala2317Glu | SCN5A- p.Gln692Lys |
+"""
+    candidates = extractor._extract_variants_from_tables(text, "RYR2")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="RYR2",
+        document_text=text,
+    )
+
+    assert [variant["protein_notation"] for variant in eligible] == ["A2317E"]
+    assert [(item["variant"], item["reason"]) for item in skipped] == [
+        ("Q692K", "wrong_gene")
+    ]
+
+
 def test_deterministic_parser_filters_generic_noncardiac_table_titles():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
@@ -1066,6 +1204,53 @@ Nucleotide Change              Coding Effect            Region
     assert result.success
     assert result.model_used == "deterministic-fixed-width-table-parser"
     assert len(result.extracted_data["variants"]) == 20
+
+
+def test_secondary_study_fixed_width_table_cannot_short_circuit(monkeypatch):
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    rows = "\n".join(
+        f"{100 + idx}A>G                         A{idx + 1}G                    Author {idx}, 2000"
+        for idx in range(20)
+    )
+    text = f"""
+Table 4. Summary of prior KCNH2 studies and reported variants
+Nucleotide Change              Coding Effect            Authors, year
+{rows}
+"""
+
+    class EmptyScanner:
+        variants = []
+
+        def get_hints_for_prompt(self, max_hints):
+            return ""
+
+    monkeypatch.setattr(
+        "pipeline.extraction.scan_document_for_variants",
+        lambda *_, **__: EmptyScanner(),
+    )
+    monkeypatch.setattr(
+        extractor,
+        "call_llm_json_with_status",
+        lambda _prompt: (
+            {"variants": [], "extraction_metadata": {"total_variants_found": 0}},
+            False,
+            "{}",
+        ),
+    )
+
+    result = extractor._attempt_extraction(
+        Paper(pmid="123", title="KCNH2 review", gene_symbol="KCNH2", full_text=text),
+        "test-model",
+        text,
+        estimated_variants=20,
+    )
+
+    assert result.success
+    assert result.model_used == "test-model"
+    assert result.extracted_data["variants"] == []
+    filtered = result.extracted_data["extraction_metadata"]["table_candidate_filter"]
+    assert filtered["eligible_count"] == 0
+    assert {item["reason"] for item in filtered["skipped"]} == {"secondary_study_table"}
 
 
 def test_fixed_width_caption_scopes_arbitrary_noncardiac_gene():

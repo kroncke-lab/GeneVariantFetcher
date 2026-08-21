@@ -7,6 +7,7 @@ from harvesting.migrate_to_sqlite import (
     create_database_schema,
     migrate_extraction_directory,
 )
+from pipeline.filters import names_nonhuman_ortholog
 from scripts.extract_figure_variants import ingest_cached_variants
 from scripts.recall_recovery import ingest_clinvar
 from scripts.recall_recovery import ingest_pubtator
@@ -118,6 +119,19 @@ def test_explicit_manifest_scope_gate_rejects_canine_title_before_models(
     assert (
         "19944633"
         in (tmp_path / "pmid_status" / "paper_scope_exclusions.csv").read_text()
+    )
+
+
+def test_nonhuman_ortholog_gate_catches_species_after_gene():
+    assert names_nonhuman_ortholog("BRCA1 variants in dogs", "BRCA1")
+
+
+def test_nonhuman_ortholog_gate_preserves_explicit_human_model_system():
+    assert not names_nonhuman_ortholog(
+        "Functional assays of human BRCA1 variants in mice", "BRCA1"
+    )
+    assert not names_nonhuman_ortholog(
+        "Functional Interaction Between BRCA1 and DNA Repair in Yeast", "BRCA1"
     )
 
 

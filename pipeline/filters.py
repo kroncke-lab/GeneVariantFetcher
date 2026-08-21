@@ -89,11 +89,24 @@ def names_nonhuman_ortholog(text: Optional[str], gene: Optional[str] = None) -> 
     if not text:
         return False
     symbol = re.escape(gene.strip()) if gene else r"[A-Z][A-Z0-9-]{1,9}"
-    return bool(
-        re.search(
-            rf"\b{_ORTHOLOG_SPECIES}\s+(?:\w+\s+)?{symbol}\b", text, re.IGNORECASE
-        )
+    if re.search(
+        rf"\b{_ORTHOLOG_SPECIES}\s+(?:\w+\s+)?{symbol}\b", text, re.IGNORECASE
+    ):
+        return True
+
+    # Also catch the equally explicit reverse construction ("BRCA1 variants in
+    # dogs").  Do not reject a paper that names the *human* gene in a model
+    # organism: "human BRCA1 variants assayed in mice" is legitimate evidence.
+    reverse = re.compile(
+        rf"\b{symbol}\b.{{0,40}}\b(?:in|of|from)\s+(?:the\s+)?"
+        rf"{_ORTHOLOG_SPECIES}\b",
+        re.IGNORECASE,
     )
+    for match in reverse.finditer(text):
+        context = text[max(0, match.start() - 24) : match.end()]
+        if not re.search(rf"\bhuman\s+{symbol}\b", context, re.IGNORECASE):
+            return True
+    return False
 
 
 def _is_reasoning_model(model: Optional[str]) -> bool:

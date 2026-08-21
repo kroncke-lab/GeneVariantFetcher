@@ -217,6 +217,23 @@ def test_audit_fails_when_species_scoped_gene_paper_retains_links(tmp_path):
     assert "non-human target-gene" in " ".join(result["structural_gate_failures"])
 
 
+def test_audit_fails_when_gene_precedes_species_in_source_heading(tmp_path):
+    run_dir, manifest = _build_run(tmp_path)
+    source_dir = run_dir / "pmc_fulltext"
+    source_dir.mkdir()
+    (source_dir / "111_FULL_CONTEXT.md").write_text(
+        "# BRCA1 variants in dogs\n\nVeterinary cohort.\n"
+    )
+
+    result = audit_gene("BRCA1", run_dir, manifest)
+
+    assert result["structural_gate_passed"] is False
+    assert result["paper_scope"]["nonhuman_target_title_links"] == [
+        {"pmid": "111", "title": "Human BRCA1 cohort", "variant_links": 1}
+    ]
+    assert "non-human target-gene" in " ".join(result["structural_gate_failures"])
+
+
 def test_audit_fails_empty_or_unbound_extraction_claims(tmp_path):
     run_dir, manifest = _build_run(tmp_path)
     (run_dir / "extractions" / "BRCA1_PMID_222.json").write_text("{}")
