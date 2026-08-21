@@ -1,0 +1,48 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-08-21T18:10:25.385592+00:00",
+  "predictions_sha256": "97615d652afa0c47821c7b55354d76809ef272da3fa5b8bb1d2048d18daa030b",
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 137,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 112,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260821_scanner_attribution_gold119/production_runs/KCNH2/20260821_122755/llm_traces/trace_manifest.json",
+      "run_id": "d13613b9-0b82-4983-9263-8339e9f12348",
+      "sha256": "b9382015cd951b12423b53a59de8f480005afba03ac61a7da5a49c543838e2a7"
+    },
+    {
+      "decision_event_count": 198,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 173,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260821_scanner_attribution_gold119/production_runs/KCNQ1/20260821_122755/llm_traces/trace_manifest.json",
+      "run_id": "7ccdcbb1-d7bf-453f-833c-00c67272ab6e",
+      "sha256": "ad7f5573d0383f9f0595d930c7b34b677a1e384399b413a205c625b808ac51f2"
+    },
+    {
+      "decision_event_count": 156,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 136,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260821_scanner_attribution_gold119/production_runs/RYR2/20260821_122755/llm_traces/trace_manifest.json",
+      "run_id": "32f80dd7-9297-42a4-892e-cadd7887b471",
+      "sha256": "a707292f8ee7b601480c95dd068070350c4f27283c0f9c4e9fa92905e0e3a1a2"
+    },
+    {
+      "decision_event_count": 146,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 128,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260821_scanner_attribution_gold119/production_runs/SCN5A/20260821_122755/llm_traces/trace_manifest.json",
+      "run_id": "5b74bc8c-bc3e-4b64-ae28-78003be5c10e",
+      "sha256": "e189cc07a6d314e92197a47389aef786a918399444497e7e6af435101d5dc782"
+    }
+  ],
+  "selection_sha256": "d410649fc6e9db39c9dd97f6f1ab17217fd8f8d5f2b3c9394e68234fe26d2301",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}
