@@ -289,10 +289,11 @@ write-time-verified trace manifest for every gene before proceeding.
 ```
 
 This second script binds the exact run-local source material and production
-trace manifests into `predictions.json`, locks predictions before any gold value
-is read, and only then invokes the scorer. The raw (`--trust-mode all`)
-projection is the blinded primary; trusted-field masking can be reported later
-as a clearly labeled post-lock diagnostic.
+trace manifests into `predictions.json`, applies the collaborator-facing trusted
+count and identity projection, locks predictions before any gold value is read,
+and only then invokes the scorer. A raw (`--trust-mode all --identity-mode all`)
+projection may be generated later only as a clearly labeled diagnostic; it must
+not replace the locked primary.
 """
     )
 
@@ -309,6 +310,11 @@ def create(args: argparse.Namespace) -> Path:
         raise SetupError(
             f"seed {args.seed} != registry selection seed {contract.get('selection_seed')}"
         )
+
+    # Capture repository state before ``command_prepare`` creates the run
+    # directory. Otherwise the scaffold marks a clean source commit dirty merely
+    # because the scaffold itself is untracked.
+    state = git_state()
 
     # Import only after the independent manifest/registry check above.
     from benchmarks.codex_paper_eval.run_eval import command_prepare
@@ -349,7 +355,6 @@ def create(args: argparse.Namespace) -> Path:
     if not python.is_file():
         raise SetupError(f"Python interpreter is unavailable: {python}")
     environment_names = configured_environment_names()
-    state = git_state()
     setup = {
         "schema_version": 1,
         "run_id": args.run_id,
@@ -377,7 +382,7 @@ def create(args: argparse.Namespace) -> Path:
             "publish_review": False,
             "full_coverage": False,
             "parallel_gene_processes": 4,
-            "primary_projection": "raw",
+            "primary_projection": "trusted_count_and_identity",
             "reason": (
                 "Apples-to-apples current-default recall arm against the accepted "
                 "20260820 gold119 production evaluation."

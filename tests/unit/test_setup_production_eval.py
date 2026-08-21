@@ -80,6 +80,25 @@ def test_finalize_projects_and_locks_before_opening_gold(tmp_path: Path):
     assert "--trust-mode trusted --identity-mode trusted" in script
 
 
+def test_runbook_labels_trusted_projection_as_primary(tmp_path: Path):
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    contract = {
+        "manifest": str(tmp_path / "tier.tsv"),
+        "sha256": "fixture",
+        "attempt_count": 1,
+        "unique_pmid_count": 1,
+        "gene_attempt_counts": {"KCNH2": 1},
+    }
+
+    setup.write_runbook(run_dir, contract, ["KCNH2"])
+
+    runbook = " ".join((run_dir / "RUNBOOK.md").read_text().split())
+    assert "trusted count and identity projection" in runbook
+    assert "must not replace the locked primary" in runbook
+    assert "raw (`--trust-mode all`) projection is the blinded primary" not in runbook
+
+
 def test_check_run_detects_pmid_drift_without_reading_gold(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ):
