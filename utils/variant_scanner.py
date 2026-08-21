@@ -73,6 +73,8 @@ class ScannedVariant:
     source: str  # Where it was found (narrative, table, etc.)
     variant_class: Optional[str] = None  # closed taxonomy when known
     structural_description: Optional[str] = None  # free-text structural event
+    start: Optional[int] = None  # first exact mention offset when available
+    end: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -85,6 +87,8 @@ class ScannedVariant:
             "source": self.source,
             "variant_class": self.variant_class,
             "structural_description": self.structural_description,
+            "start": self.start,
+            "end": self.end,
         }
 
 
@@ -584,6 +588,15 @@ class VariantScanner:
             # Skip duplicates
             if v.normalized in seen_normalized:
                 continue
+
+            # Matchers already know these offsets but the original scanner object
+            # discarded them. Persist a conservative first exact occurrence so
+            # downstream attribution can recover document position without
+            # trusting the shortened debug context.
+            if v.start is None and v.raw_text:
+                mention = re.search(re.escape(v.raw_text), text, re.IGNORECASE)
+                if mention:
+                    v.start, v.end = mention.span()
 
             seen_normalized.add(v.normalized)
             result.variants.append(v)
@@ -1483,23 +1496,270 @@ def merge_scanner_results(
     scan_result: ScanResult,
     gene_symbol: str,
     min_confidence: float = 0.5,
+    document_text: str = "",
 ) -> Dict[str, Any]:
     """
     Merge scanner-found variants with LLM-extracted variants.
 
-    Only adds variants that weren't already extracted by the LLM.
-    Scanner variants are added with lower evidence level.
+    Only adds variants that weren't already extracted by an authoritative layer
+    and whose source text independently supports both the target gene and a
+    current-study observation. Regex confidence is identity confidence, not
+    gene/study attribution; silence therefore fails closed.
 
     Args:
         extracted_data: LLM extraction result dict
         scan_result: Scanner result
         gene_symbol: Target gene symbol
         min_confidence: Minimum scanner confidence to include
+        document_text: Full source text used for gene/study attribution
 
     Returns:
         Updated extracted_data with merged variants
     """
     existing_variants = extracted_data.get("variants", [])
+    target_gene = gene_symbol.upper()
+    scanner = VariantScanner(target_gene)
+    source_text = document_text or "\n".join(
+        v.context for v in scan_result.variants if v.context
+    )
+
+    variant_token_re = re.compile(
+        r"(?:[cp]\.\(?[A-Za-z*][A-Za-z]{0,2}\d{1,6}[^\s,;)]*"
+        r"|\bIVS\d+[^\s,;)]*"
+        r"|\b[A-Z][a-z]{0,2}\d{2,5}(?:[A-Z*]|fs|del|dup|ins)[^\s,;)]*)",
+        re.IGNORECASE,
+    )
+    study_subject = (
+        r"(?:we|our\s+(?:study|cohort|series)|(?:the\s+)?(?:current|present)\s+study|"
+        r"patients?|probands?|carriers?|cases?|subjects?|participants?|individuals?|"
+        r"index\s+(?:case|patient)|famil(?:y|ies))"
+    )
+    observation = (
+        r"(?:identif(?:y|ied)|detect(?:ed)?|found|carri(?:ed|es)|harbou?r(?:ed|s)?|"
+        r"observ(?:ed|es)|present(?:ed)?\s+with|was\s+positive\s+for)"
+    )
+    positive_study_re = re.compile(
+        rf"(?:{study_subject}.{{0,180}}{observation}|"
+        rf"{observation}.{{0,180}}{study_subject})",
+        re.IGNORECASE | re.DOTALL,
+    )
+    background_re = re.compile(
+        r"\b(?:previous(?:ly)?|prior|earlier)\s+(?:been\s+)?"
+        r"(?:reported|described|published|identified|found|observed)\b|"
+        r"\b(?:literature|review|overview|catalog(?:ue)?|compilation|"
+        r"founder\s+(?:panel|mutation)|testing\s+panel|screened\s+for)\b|"
+        r"\b(?:reported|described|published)\s+by\b",
+        re.IGNORECASE,
+    )
+    reference_re = re.compile(
+        r"\bet\s+al\b|\b(?:references|bibliography)\b",
+        re.IGNORECASE,
+    )
+    negative_finding_re = re.compile(
+        r"\b(?:could\s+not|did\s+not|was\s+not|were\s+not|not)\s+"
+        r"(?:confirm(?:ed)?|replicat(?:ed|e)|validat(?:ed|e))\b|"
+        r"\b(?:sequencing|DNA|PCR|technical)\s+artifacts?\b|"
+        r"\bfalse[- ]positive\b",
+        re.IGNORECASE,
+    )
+
+    document_genes = {
+        gene
+        for gene in scanner._known_context_genes()
+        if scanner._context_mentions_gene(source_text, gene)
+    }
+    single_gene_scope = document_genes == {target_gene}
+    target_terms = {
+        re.sub(r"[^A-Z0-9]", "", term.upper())
+        for term in scanner._gene_context_terms(target_gene)
+    }
+    generic_gene_stopwords = {
+        "AIC",
+        "ANOVA",
+        "BIC",
+        "CDNA",
+        "CI",
+        "DNA",
+        "EDTA",
+        "HGVS",
+        "HR",
+        "MRI",
+        "NGS",
+        "OR",
+        "PCR",
+        "PMID",
+        "RNA",
+        "SNP",
+        "USA",
+    }
+
+    def scanner_key(sv: ScannedVariant) -> str:
+        if sv.notation_type == "structural":
+            structural = structural_variant_identity(
+                sv.structural_description or sv.normalized
+            )
+            return f"STRUCT:{structural}"
+        normalized = normalize_variant(sv.normalized or sv.raw_text, target_gene)
+        return (normalized or sv.normalized or sv.raw_text).upper()
+
+    def mention_contexts(sv: ScannedVariant) -> List[Tuple[str, str]]:
+        """Return (physical line, centered evidence window) for every mention."""
+        if not source_text or not sv.raw_text:
+            context = sv.context or ""
+            return [(context, context)] if context else []
+        pattern = re.compile(re.escape(sv.raw_text), re.IGNORECASE)
+        contexts: List[Tuple[str, str]] = []
+        for match in list(pattern.finditer(source_text))[:100]:
+            line_start = source_text.rfind("\n", 0, match.start()) + 1
+            line_end = source_text.find("\n", match.end())
+            if line_end == -1:
+                line_end = len(source_text)
+            line = source_text[line_start:line_end]
+            window_start = max(line_start, match.start() - 320)
+            window_end = min(line_end, match.end() + 320)
+            contexts.append((line, source_text[window_start:window_end]))
+        if not contexts and sv.context:
+            contexts.append((sv.context, sv.context))
+        return contexts
+
+    def nearby_generic_gene(window: str, raw_text: str) -> Optional[str]:
+        """Nearest gene-like symbol when it is absent from built-in metadata.
+
+        This is an abstention aid, not a new attribution oracle. A nearby
+        all-caps biomedical symbol such as PALB2 may veto a BRCA2 merge; it can
+        never positively establish the requested gene.
+        """
+        raw_match = re.search(re.escape(raw_text), window, re.IGNORECASE)
+        if not raw_match:
+            return None
+        candidates: List[Tuple[int, str]] = []
+        for match in re.finditer(
+            r"(?<![A-Za-z0-9])[A-Z][A-Z0-9-]{1,11}(?![A-Za-z0-9])", window
+        ):
+            if match.end() > raw_match.start() and match.start() < raw_match.end():
+                continue
+            label = re.sub(r"[^A-Z0-9]", "", match.group(0).upper())
+            if label in generic_gene_stopwords or label.isdigit():
+                continue
+            # Nearby variant tokens are not gene symbols. Without this guard,
+            # a valid list such as ``RYR2 H469Y, L2299F`` makes each allele
+            # falsely veto the other as an unknown gene label.
+            if re.fullmatch(r"[A-Z]\d{1,6}[A-Z*]", label):
+                continue
+            distance = min(
+                abs(raw_match.start() - match.end()),
+                abs(match.start() - raw_match.end()),
+            )
+            if distance <= 100:
+                candidates.append((distance, label))
+        if not candidates:
+            return None
+        candidates.sort(key=lambda item: item[0])
+        return candidates[0][1]
+
+    def is_table_like(line: str) -> bool:
+        token_count = len(variant_token_re.findall(line))
+        return bool(
+            line.count("|") >= 2
+            or token_count >= 3
+            or (
+                re.search(
+                    r"\b(?:e?table|supplement(?:al|ary)?\s+table)\s*\d*",
+                    line,
+                    re.IGNORECASE,
+                )
+                and token_count
+            )
+            or (len(line) > 500 and token_count >= 2)
+            or (
+                len(re.findall(r"\bet\s+al\b|\b(?:19|20)\d{2}\b", line, re.I)) >= 2
+                and token_count >= 2
+            )
+            or bool(re.search(r"-{4,}\d+-{1,}", line))
+        )
+
+    def attribution_decision(sv: ScannedVariant) -> Tuple[bool, str, str]:
+        """Fail-closed decision; any independently supported mention may pass."""
+        saw_table = False
+        saw_reference = False
+        saw_background = False
+        saw_wrong_gene = False
+        saw_gene_support = False
+        best_quote = sv.context or sv.raw_text
+
+        for line, window in mention_contexts(sv):
+            quote = " ".join(window.split())[:240]
+            best_quote = quote or best_quote
+            if is_table_like(line):
+                saw_table = True
+                continue
+            if reference_re.search(window):
+                saw_reference = True
+                continue
+            if negative_finding_re.search(window):
+                saw_background = True
+                continue
+
+            # "not previously reported" supports novelty; remove that phrase
+            # before applying the prior-literature veto.
+            veto_text = re.sub(
+                r"\bnot\s+(?:been\s+)?previously\s+"
+                r"(?:reported|described|published|identified|found|observed)\b",
+                "",
+                window,
+                flags=re.IGNORECASE,
+            )
+            if background_re.search(veto_text):
+                saw_background = True
+                continue
+
+            embedded_gene = re.match(
+                r"^([A-Z][A-Z0-9]{1,11})[_-]", sv.raw_text, re.IGNORECASE
+            )
+            if embedded_gene:
+                embedded = embedded_gene.group(1).upper()
+                if embedded not in target_terms:
+                    saw_wrong_gene = True
+                    continue
+
+            assigned_gene = scanner._gene_assigned_to_variant(window, sv.raw_text)
+            generic_gene = nearby_generic_gene(window, sv.raw_text)
+            if generic_gene and generic_gene not in target_terms:
+                saw_wrong_gene = True
+                continue
+            window_genes = {
+                gene
+                for gene in scanner._known_context_genes()
+                if scanner._context_mentions_gene(window, gene)
+            }
+            gene_supported = assigned_gene == target_gene or (
+                target_gene in window_genes and len(window_genes) == 1
+            )
+            if assigned_gene and assigned_gene != target_gene:
+                saw_wrong_gene = True
+                continue
+            if not gene_supported and single_gene_scope:
+                gene_supported = True
+            if not gene_supported:
+                continue
+            saw_gene_support = True
+
+            if positive_study_re.search(window):
+                return True, "current_study_target_gene", quote
+
+        if saw_wrong_gene and not saw_gene_support:
+            reason = "wrong_gene"
+        elif saw_table:
+            reason = "table_like"
+        elif saw_reference:
+            reason = "reference_list"
+        elif saw_background:
+            reason = "background_mention"
+        elif saw_gene_support:
+            reason = "study_unattributed"
+        else:
+            reason = "gene_unattributed"
+        return False, reason, " ".join(best_quote.split())[:240]
 
     # Build set of existing variant keys (normalized). Structural-only rows need
     # their description in this identity set; otherwise every scanner replay
@@ -1518,18 +1778,41 @@ def merge_scanner_results(
 
     # Add scanner variants not already present
     added_count = 0
+    skipped: List[Dict[str, Any]] = []
     for sv in scan_result.variants:
         if sv.confidence < min_confidence:
+            skipped.append(
+                {
+                    "variant": sv.normalized,
+                    "reason": "below_confidence",
+                    "quote": " ".join((sv.context or sv.raw_text).split())[:240],
+                }
+            )
             continue
 
-        scanner_key = sv.normalized.upper()
-        if sv.notation_type == "structural":
-            structural = structural_variant_identity(
-                sv.structural_description or sv.normalized
-            )
-            scanner_key = f"STRUCT:{structural}"
+        candidate_key = scanner_key(sv)
 
-        if scanner_key in existing_keys:
+        equivalent_existing = candidate_key in existing_keys
+        if not equivalent_existing and re.match(
+            r"^C\.\d+(?:_\d+)?(?:DEL|DUP|INS)$", candidate_key
+        ):
+            equivalent_existing = any(
+                existing_key.startswith(candidate_key) for existing_key in existing_keys
+            )
+
+        if equivalent_existing:
+            skipped.append(
+                {
+                    "variant": sv.normalized,
+                    "reason": "already_extracted",
+                    "quote": " ".join((sv.context or sv.raw_text).split())[:240],
+                }
+            )
+            continue
+
+        allowed, reason, quote = attribution_decision(sv)
+        if not allowed:
+            skipped.append({"variant": sv.normalized, "reason": reason, "quote": quote})
             continue
 
         # Create variant dict
@@ -1560,7 +1843,7 @@ def merge_scanner_results(
                 new_variant["structural_description"] = sv.normalized
 
         existing_variants.append(new_variant)
-        existing_keys.add(scanner_key)
+        existing_keys.add(candidate_key)
         added_count += 1
 
     if added_count > 0:
@@ -1572,6 +1855,16 @@ def merge_scanner_results(
                 existing_variants
             )
             extracted_data["extraction_metadata"]["scanner_added"] = added_count
+
+    metadata = extracted_data.setdefault("extraction_metadata", {})
+    metadata["scanner_merge"] = {
+        "policy": "target_gene_current_study_v1",
+        "candidate_count": len(scan_result.variants),
+        "hint_count": min(len(scan_result.variants), 50),
+        "added": added_count,
+        "skipped": skipped,
+    }
+    metadata["scanner_added"] = added_count
 
     extracted_data["variants"] = existing_variants
     return extracted_data

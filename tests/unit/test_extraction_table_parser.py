@@ -1517,7 +1517,7 @@ def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     assert {"p.Arg176Trp", "p.Leu552Ser", "p.His240His"} <= proteins
 
 
-def test_large_scanner_result_skips_hints_and_merge(monkeypatch):
+def test_large_scanner_result_keeps_bounded_hints_but_skips_merge(monkeypatch):
     import pipeline.extraction as extraction
 
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
@@ -1548,7 +1548,8 @@ def test_large_scanner_result_skips_hints_and_merge(monkeypatch):
             ]
 
         def get_hints_for_prompt(self, max_hints):
-            raise AssertionError("oversized scanner result should not provide hints")
+            assert max_hints == extraction.SCANNER_MAX_HINTS
+            return "\nBOUNDED_SCANNER_HINTS\n"
 
     def fail_scanner_merge(*args, **kwargs):
         raise AssertionError("oversized scanner result should not be merged")

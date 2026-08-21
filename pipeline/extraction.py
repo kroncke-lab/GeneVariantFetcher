@@ -7360,10 +7360,9 @@ Return strict JSON with this schema:
         scanner_merge_enabled = (
             scanner_variant_count <= SCANNER_REGEX_MERGE_MAX_VARIANTS
         )
-        effective_scanner_variant_count = scanner_variant_count
         if scanner_variant_count and not scanner_merge_enabled:
             logger.warning(
-                "PMID %s - Skipping scanner hints/merge for %d candidates; "
+                "PMID %s - Skipping additive scanner merge for %d candidates; "
                 "candidate count exceeds safety cap %d",
                 paper.pmid,
                 scanner_variant_count,
@@ -7371,14 +7370,9 @@ Return strict JSON with this schema:
             )
             print(
                 f"Variant scanner found {scanner_variant_count} potential variants; "
-                "skipping scanner hints/merge due safety cap"
+                "keeping bounded hints but skipping additive merge due safety cap"
             )
-            scanner_hints = ""
-            effective_scanner_variant_count = 0
-        else:
-            scanner_hints = scanner_result.get_hints_for_prompt(
-                max_hints=SCANNER_MAX_HINTS
-            )
+        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=SCANNER_MAX_HINTS)
 
         if scanner_variant_count:
             logger.info(
@@ -7463,6 +7457,7 @@ Return strict JSON with this schema:
                     scanner_result,
                     paper.gene_symbol or "UNKNOWN",
                     min_confidence=SCANNER_MERGE_MIN_CONFIDENCE,
+                    document_text=scanner_text,
                 )
             elif scanner_result.variants:
                 metadata = extracted_data.setdefault("extraction_metadata", {})
@@ -7493,7 +7488,7 @@ Return strict JSON with this schema:
                 extracted_data=extracted_data,
                 source_text=scanner_text,
                 estimated_variants=estimated_variants,
-                scanner_variant_count=effective_scanner_variant_count,
+                scanner_variant_count=scanner_variant_count,
                 paper_census=paper_census,
             )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)

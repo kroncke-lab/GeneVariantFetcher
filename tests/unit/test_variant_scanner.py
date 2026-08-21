@@ -644,7 +644,11 @@ class TestMergeScannerResults:
         ]
 
         merged = merge_scanner_results(
-            extracted, scan_result, "KCNH2", min_confidence=0.5
+            extracted,
+            scan_result,
+            "KCNH2",
+            min_confidence=0.5,
+            document_text="In our KCNH2 cohort, A561V was identified in a proband.",
         )
         protein_notations = [v.get("protein_notation") for v in merged["variants"]]
         assert "A561V" in protein_notations
@@ -703,10 +707,245 @@ class TestMergeScannerResults:
         ]
 
         merged = merge_scanner_results(
-            extracted, scan_result, "KCNH2", min_confidence=0.5
+            extracted,
+            scan_result,
+            "KCNH2",
+            min_confidence=0.5,
+            document_text="In our KCNH2 cohort, A561V was identified in a proband.",
         )
         assert merged["extraction_metadata"]["scanner_added"] == 1
         assert merged["extraction_metadata"]["total_variants_found"] == 1
+
+    def test_fails_closed_without_gene_or_current_study_support(self):
+        extracted = {"variants": [], "extraction_metadata": {}}
+        scan_result = ScanResult(
+            variants=[
+                ScannedVariant(
+                    "A561V", "A561V", "missense", "protein", 561, "", 0.90, "test"
+                )
+            ]
+        )
+
+        merged = merge_scanner_results(
+            extracted,
+            scan_result,
+            "KCNH2",
+            document_text="A561V is a well-known comparator mutation.",
+        )
+
+        assert merged["variants"] == []
+        assert merged["extraction_metadata"]["scanner_merge"]["skipped"][0][
+            "reason"
+        ] in {"gene_unattributed", "study_unattributed"}
+
+    def test_rejects_wrong_gene_even_when_study_observed_it(self):
+        text = (
+            "We examined BRCA1 and BRCA2. "
+            "The BRCA1 variant c.181T>G was identified in two patients."
+        )
+        scan_result = ScanResult(
+            variants=[
+                ScannedVariant(
+                    "c.181T>G",
+                    "c.181T>G",
+                    "substitution",
+                    "cdna",
+                    181,
+                    "",
+                    0.95,
+                    "test",
+                )
+            ]
+        )
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "BRCA2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+        assert (
+            merged["extraction_metadata"]["scanner_merge"]["skipped"][0]["reason"]
+            == "wrong_gene"
+        )
+
+    def test_rejects_embedded_other_gene_prefix(self):
+        text = (
+            "Four variants found in three subjects included KCNH2_R176W and "
+            "SCN5A_S1103Y."
+        )
+        scan_result = scan_document_for_variants(text, "SCN5A")
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "SCN5A",
+            document_text=text,
+        )
+
+        assert not any(v.get("protein_notation") == "R176W" for v in merged["variants"])
+        rejected = {
+            item["variant"]: item["reason"]
+            for item in merged["extraction_metadata"]["scanner_merge"]["skipped"]
+        }
+        assert rejected["R176W"] == "wrong_gene"
+
+    def test_rejects_bibliography_and_unconfirmed_artifact(self):
+        text = "\n".join(
+            [
+                "Christiansen M, Hedley P, et al. A founder family with p.F29L in KCNH2.",
+                "Five RYR2 mutations (H469Y, L2299F) were identified in cases; repeated sequencing could not confirm these DNA artifacts.",
+            ]
+        )
+        for gene in ("KCNH2", "RYR2"):
+            scan_result = scan_document_for_variants(text, gene)
+            merged = merge_scanner_results(
+                {"variants": [], "extraction_metadata": {}},
+                scan_result,
+                gene,
+                document_text=text,
+            )
+            assert merged["variants"] == []
+
+    def test_rejects_background_and_compilation_mentions(self):
+        text = "\n".join(
+            [
+                "BRCA2 recurrent mutations have been reported (c.658_659delGT).",
+                "Table 3 Overview of BRCA2 variants | Study | Variant |",
+                "| Smith et al. 2010 | c.3847_3848delGT | 1 |",
+            ]
+        )
+        scan_result = scan_document_for_variants(text, "BRCA2")
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "BRCA2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+        reasons = {
+            item["reason"]
+            for item in merged["extraction_metadata"]["scanner_merge"]["skipped"]
+        }
+        assert reasons & {"background_mention", "table_like", "reference_list"}
+
+    def test_any_independently_supported_mention_can_pass(self):
+        text = "\n".join(
+            [
+                "The KCNH2 A561V variant was previously reported by Smith et al.",
+                "In our KCNH2 cohort, A561V was identified in two probands.",
+            ]
+        )
+        scan_result = scan_document_for_variants(text, "KCNH2")
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "KCNH2",
+            document_text=text,
+        )
+
+        assert {v["protein_notation"] for v in merged["variants"]} == {"A561V"}
+
+    def test_current_study_two_variant_list_can_pass(self):
+        text = "In our RYR2 cohort, H469Y and L2299F were identified in two probands."
+        scan_result = scan_document_for_variants(text, "RYR2")
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "RYR2",
+            document_text=text,
+        )
+
+        assert {v["protein_notation"] for v in merged["variants"]} == {
+            "H469Y",
+            "L2299F",
+        }
+
+    def test_normalized_existing_identity_is_not_readded(self):
+        extracted = {
+            "variants": [
+                {
+                    "gene_symbol": "BRCA2",
+                    "protein_notation": "p.F2638*",
+                    "cdna_notation": "c.7913_7917delTTCCT",
+                }
+            ],
+            "extraction_metadata": {},
+        }
+        scan_result = ScanResult(
+            variants=[
+                ScannedVariant(
+                    "F2638*",
+                    "F2638*",
+                    "nonsense",
+                    "protein",
+                    2638,
+                    "",
+                    0.95,
+                    "test",
+                )
+            ]
+        )
+
+        merged = merge_scanner_results(
+            extracted,
+            scan_result,
+            "BRCA2",
+            document_text="BRCA2 F2638* was identified in one patient.",
+        )
+
+        assert len(merged["variants"]) == 1
+        assert (
+            merged["extraction_metadata"]["scanner_merge"]["skipped"][0]["reason"]
+            == "already_extracted"
+        )
+
+    def test_braca2_compilation_regression_keeps_only_authoritative_rows(self):
+        text = "\n".join(
+            [
+                "BRCA1, BRCA2 and PALB2 were examined. The PALB2 mutation c.509_510delGA was identified in two patients.",
+                "Some recurrent mutations of BRCA2 have been reported (c.658_659delGT, c.3847_3848delGT, c.5946delT).",
+                "Table 1 Molecular characteristics BRCA1 c.181T>G p.C61G BRCA2 c.1310_1313delAAGA c.9371A>T c.9403delC PALB2 c.509_510delGA",
+                "In ten BRCA2 patients, c.1310_1313delAAGA, c.6267_6269delinsC, c.7913_7917delTTCCT, c.9027delT, c.9371A>T, c.9403delC, and c.10095delCinsGAATTATATCT were identified.",
+                "Table 3 Overview of BRCA2 mutations Smith et al. 2000 Jones et al. 2004 c.658_659delGT c.3847_3848delGT c.5239_5240insT c.5946delT Current study",
+            ]
+        )
+        authoritative = [
+            "c.1310_1313delAAGA",
+            "c.6267_6269delinsC",
+            "c.7913_7917delTTCCT",
+            "c.9027delT",
+            "c.9371A>T",
+            "c.9403delC",
+            "c.10095delCinsGAATTATATCT",
+        ]
+        extracted = {
+            "variants": [
+                {"gene_symbol": "BRCA2", "cdna_notation": notation}
+                for notation in authoritative
+            ],
+            "extraction_metadata": {},
+        }
+        scan_result = scan_document_for_variants(text, "BRCA2")
+
+        merged = merge_scanner_results(
+            extracted,
+            scan_result,
+            "BRCA2",
+            document_text=text,
+        )
+
+        assert len(merged["variants"]) == 7
+        assert merged["extraction_metadata"]["scanner_added"] == 0
+        merged_notations = {v.get("cdna_notation") for v in merged["variants"]}
+        assert "c.509_510delGA" not in merged_notations
+        assert "c.658_659delGT" not in merged_notations
 
 
 # =============================================================================
