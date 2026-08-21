@@ -487,6 +487,22 @@ def test_markdown_discloses_production_projection_prelock_scoring(tmp_path: Path
     assert "not the stricter native lock-before-any-gold-read protocol" in markdown
 
 
+def test_markdown_discloses_explicit_gold_free_production_projection(tmp_path: Path):
+    report = _report_fixture()
+    report["prelock_gold_usage"] = {
+        "read_only_layer_scoring_possible": False,
+        "scores_feed_back_into_predictions": False,
+        "provenance": "all_production_run_statuses_record_gold_access_disabled",
+    }
+
+    markdown_path = tmp_path / "gold_free_projection_report.md"
+    write_markdown_report(report, markdown_path)
+    markdown = markdown_path.read_text()
+
+    assert "gold was used only for PMID eligibility" in markdown
+    assert "may have read registered gold" not in markdown
+
+
 def test_markdown_discloses_locked_production_trace_manifests(tmp_path: Path):
     report = _report_fixture()
     report["integrity"] = {
@@ -1096,15 +1112,19 @@ def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
         INSERT INTO variants VALUES (1, 'p.Ala1Val', 'c.1C>T');
         INSERT INTO variants VALUES (2, 'p.Ala2Val', 'c.2C>T');
         INSERT INTO variants VALUES (3, 'p.Ala3Val', 'c.3C>T');
+        INSERT INTO variants VALUES (4, 'p.Ala4Val', 'c.4C>T');
         INSERT INTO variant_papers VALUES (1, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO variant_papers VALUES (2, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO variant_papers VALUES (3, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO variant_papers VALUES (4, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO penetrance_data VALUES (1, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO penetrance_data VALUES (2, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO penetrance_data VALUES (3, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (4, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO vf_enrichment VALUES (1, 1, NULL);
         INSERT INTO vf_enrichment VALUES (2, 0, 'novel_in_range');
         INSERT INTO vf_enrichment VALUES (3, 0, 'residue_unverified');
+        INSERT INTO vf_enrichment VALUES (4, 0, 'known_isoform_offset');
         """
     )
     con.commit()
@@ -1121,6 +1141,7 @@ def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
     assert [row["variant"] for row in rows["99"]] == [
         "p.Ala1Val c.1C>T",
         "p.Ala2Val c.2C>T",
+        "p.Ala4Val c.4C>T",
     ]
     assert dict(dropped) == {"99": 1}
 

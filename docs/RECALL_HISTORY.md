@@ -45,6 +45,32 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-21 — Current-code gold-119 lock exposed and constrained an SCN5A isoform mismatch
+
+The clean `--gold-free-run` replacement completed all 119 attempts and locked
+the trusted count/identity projection at 489 TP / 438 FP / 144 FN (77.25%
+recall), 97.80% counted-extra precision, and 0.247 carrier MAE. The unexpectedly
+large trusted-only recall loss localized to VariantFeatures identity projection:
+the local SCN5A reference is the 2,015-aa Q1077del isoform while clinical papers
+commonly number the 2,016-aa Q1077 isoform.
+
+The post-lock correction preserves paper identity and uses a rigorously proven
+SCN5A `N-1` coordinate only as a VariantFeatures lookup key for simple
+missense/stop calls. It also fixes bare uppercase proline parsing. On the same
+locked predictions the trusted diagnostic is 546 TP / 452 FP / 87 FN (86.26%
+recall); raw is 551 / 578 / 82 (87.05%). This is in-sample calibration, not a
+new lock: the mixed delta is +57 TP / +14 FP (80.3% extra-match precision), and
+the original lock remains unchanged. Grok 4.6 xhigh returned GO for trusted
+staging and HOLD for public publication. See
+`docs/evidence/scn5a_q1077_identity_diagnostic_20260821.md`.
+
+The BRCA1 50 / BRCA2 45 / BMPR2 50 exact manifests were imported privately via
+the trusted projection. A Variant Browser fail-open gold bug found during the
+BRCA2 replay was fixed: vanished reviewed subjects now make their current gold
+revision disputed/non-current. Live BRCA2 has zero canine evidence, zero current
+canine gold, and zero current gold for all 111 detached/re-review subjects.
+Public annotations were not changed.
+
 ### 2026-08-20 — No-publish BRCA1/BRCA2/BMPR2 refresh completed; BRCA2 failed structural scope
 
 After the gold-119 acceptance lock, the fixed collaborator manifests ran with

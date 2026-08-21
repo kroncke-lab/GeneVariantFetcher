@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Publication now uses a trusted count-and-identity projection. Ambiguous
   VariantFeatures classes are retained for audit but held out of collaborator
   staging; missing PMIDs, pre-trust databases, and stale run databases fail.
+- SCN5A Q1077/Q1077del isoform handling is an explicit, reference-proven,
+  lookup-only identity class for simple missense/stop calls. Exact matches win,
+  emitted literature identity is preserved, and structural/generic offsets stay
+  held.
 - Consolidated the repository onto one authoritative `main` branch and one
   checkout. `TASKS.md` is now the only active checklist; the documentation map
   distinguishes current authorities from dated evidence.
@@ -38,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hermetically without reading the local corpus.
 
 ### Fixed
+- Bare uppercase proline in forms such as `P1730H` is no longer consumed as an
+  HGVS `p` prefix.
+- Gold-free run provenance is explicit instead of relying on a conservative
+  schema-v1 scoring fallback.
 - Scholar fallback identity checks require exact DOI or PMID tokens, preventing
   DOI-prefix and concatenated-digit false matches.
 - Paper-scope exclusions now survive every recovery path, so a non-human target

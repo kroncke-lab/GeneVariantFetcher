@@ -743,9 +743,15 @@ def command_lock(args) -> None:
     if errors:
         raise SystemExit("prediction validation failed:\n- " + "\n- ".join(errors))
     prelock_gold_usage = predictions.get("prelock_gold_usage") or {}
-    production_projection = int(predictions.get("schema_version") or 1) < 2 or bool(
-        prelock_gold_usage.get("read_only_layer_scoring_possible")
-    )
+    if "read_only_layer_scoring_possible" in prelock_gold_usage:
+        production_projection = bool(
+            prelock_gold_usage["read_only_layer_scoring_possible"]
+        )
+    else:
+        # Legacy production projections did not record whether gvf-run was
+        # allowed to auto-discover gold. Treat only that missing-provenance
+        # case conservatively; an explicit false value is affirmative evidence.
+        production_projection = int(predictions.get("schema_version") or 1) < 2
     lock_statement = (
         "Prediction content was finalized before external scoring. This external "
         "production projection may come from a workflow that read registered gold "

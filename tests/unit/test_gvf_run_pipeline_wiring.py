@@ -221,6 +221,10 @@ def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):
     assert status["status"] == "completed"
     assert status["severity"] == "ok"
     assert status["active_db"] == "TESTGENE.db"
+    assert status["gold_access"] == {
+        "disabled": False,
+        "mode": "auto_discovery_allowed",
+    }
     assert (status_path.parent / status["active_db"]).resolve() == (
         report.parent / "TESTGENE.db"
     ).resolve()
@@ -266,6 +270,8 @@ def test_gold_free_run_never_discovers_or_passes_gold_to_layers(
     )
 
     assert captured["layer_gold"] is None
+    status = json.loads(next((tmp_path / "out").rglob("RUN_STATUS.json")).read_text())
+    assert status["gold_access"] == {"disabled": True, "mode": "disabled"}
 
 
 def test_count_recovery_runs_only_when_enabled_and_records_partial_failures(

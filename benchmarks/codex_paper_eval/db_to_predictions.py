@@ -167,7 +167,9 @@ def notation(protein: str | None, cdna: str | None) -> str:
 
 
 LINKAGE_LAYERS = {"clinvar", "pubtator"}
-TRUSTED_UNMATCHED_VF_CLASSES = frozenset({"novel_in_range", "cdna_only_unmatched"})
+TRUSTED_UNMATCHED_VF_CLASSES = frozenset(
+    {"novel_in_range", "cdna_only_unmatched", "known_isoform_offset"}
+)
 
 
 def origin_layer(source_layer: str | None) -> str:
@@ -439,6 +441,7 @@ def main() -> int:
     dbs = {}
     production_trace_manifests = []
     production_run_timing = []
+    production_gold_access = []
     run_usage = empty_usage()
     usage_by_gene_pmid: dict[tuple[str, str], dict] = {}
     merged_away = 0
@@ -467,6 +470,21 @@ def main() -> int:
             or run_status.get("stage_failures")
         ):
             raise SystemExit(f"{gene}: active production run did not complete cleanly")
+        gold_access = run_status.get("gold_access")
+        gold_disabled = bool(
+            isinstance(gold_access, dict) and gold_access.get("disabled") is True
+        )
+        production_gold_access.append(
+            {
+                "gene": gene,
+                "disabled": gold_disabled,
+                "mode": (
+                    gold_access.get("mode")
+                    if isinstance(gold_access, dict)
+                    else "legacy_status_missing_provenance"
+                ),
+            }
+        )
         active_raw = str(run_status.get("active_db") or "").strip()
         active_db = Path(active_raw).expanduser()
         if not active_db.is_absolute():
@@ -607,6 +625,18 @@ def main() -> int:
         "source_databases": dbs,
         "production_trace_manifests": production_trace_manifests,
         "production_run_timing": production_run_timing,
+        "production_gold_access": production_gold_access,
+        "prelock_gold_usage": {
+            "read_only_layer_scoring_possible": not all(
+                row["disabled"] for row in production_gold_access
+            ),
+            "scores_feed_back_into_predictions": False,
+            "provenance": (
+                "all_production_run_statuses_record_gold_access_disabled"
+                if all(row["disabled"] for row in production_gold_access)
+                else "one_or_more_run_statuses_allow_or_do_not_prove_gold_disabled"
+            ),
+        },
         "started_at": None,
         "extraction_started_at": min(
             (

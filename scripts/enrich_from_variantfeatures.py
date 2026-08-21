@@ -75,7 +75,10 @@ AA3TO1 = {
     "pyl": "O",
     "xaa": "X",
 }
-_LEAD_P = re.compile(r"^p\.?", re.I)
+# HGVS's ``p.`` prefix is case-insensitive, but a bare uppercase ``P`` is the
+# one-letter amino-acid code for proline.  A case-insensitive ``^p\.?`` strips
+# that real residue from both ``P1730H`` and ``Pro871Leu``.
+_LEAD_P = re.compile(r"^(?:[pP]\.|p(?=[A-Z]))")
 
 
 def parse_protein_key(notation: str) -> str | None:
@@ -205,6 +208,99 @@ _PROT_CALL_RE = re.compile(
     r"^([ACDEFGHIKLMNPQRSTVWY])(\d{1,5})(?![0-9])", re.IGNORECASE
 )
 
+# The local MANE SCN5A slice is the prevalent 2,015-aa Q1077del isoform, while
+# a large body of clinical literature numbers the 2,016-aa Q1077-containing
+# isoform.  After residue 1077, a literature protein position N therefore maps
+# to Q1077del position N-1.  This is one named biological coordinate system,
+# not permission to trust the generic +/-3 residue heuristic.
+SCN5A_Q1077_POSITION = 1077
+SCN5A_Q1077DEL_LENGTH = 2015
+SCN5A_Q1077_LONG_LENGTH = 2016
+SCN5A_Q1077DEL_RESIDUE_AT_1077 = frozenset({"E"})
+_CANONICAL_AMINO_ACIDS = frozenset("ACDEFGHIKLMNPQRSTVWY")
+
+
+def scn5a_q1077del_reference_active(max_pos: int, residues: Optional[dict]) -> bool:
+    """Prove the warehouse reference is 2,015 aa plus an optional stop row."""
+    if not residues:
+        return False
+    amino_acid_positions = [
+        int(position)
+        for position, references in residues.items()
+        if set(references) & _CANONICAL_AMINO_ACIDS
+    ]
+    if not amino_acid_positions or max(amino_acid_positions) != 2015:
+        return False
+    # VariantFeatures represents a stop-loss at the terminal codon as aa_pos
+    # 2016.  That is still a 2,015-aa protein; a real amino acid at 2016 would
+    # instead prove the long reference and must disable this bridge.
+    if max_pos == 2015:
+        return True
+    return max_pos == 2016 and frozenset(residues.get(2016, set())) == frozenset({"*"})
+
+
+def scn5a_q1077_reference_offset(
+    gene: str,
+    protein: str,
+    max_pos: int,
+    residues: Optional[dict],
+) -> tuple[str, int] | None:
+    """Prove a long-isoform SCN5A reference residue maps to Q1077del N-1."""
+    if gene.upper() != "SCN5A" or not residues:
+        return None
+    if not scn5a_q1077del_reference_active(max_pos, residues):
+        return None
+    if (
+        frozenset(residues.get(SCN5A_Q1077_POSITION, set()))
+        != SCN5A_Q1077DEL_RESIDUE_AT_1077
+    ):
+        return None
+    bare = _LEAD_P.sub("", (protein or "").strip())
+    match = _PROT_CALL_RE.match(bare)
+    if not match:
+        return None
+    reference, raw_position = match.groups()
+    reference = reference.upper()
+    position = int(raw_position)
+    if not (SCN5A_Q1077_POSITION < position <= SCN5A_Q1077_LONG_LENGTH):
+        return None
+    if reference in residues.get(position, set()):
+        return None
+    shifted_position = position - 1
+    if reference not in residues.get(shifted_position, set()):
+        return None
+    return reference, shifted_position
+
+
+def scn5a_q1077_isoform_key(
+    gene: str,
+    protein: str,
+    max_pos: int,
+    residues: Optional[dict],
+) -> str | None:
+    """Return the exact Q1077del lookup key for one long-isoform protein call.
+
+    The emitted/source notation is never changed.  This key is only for a
+    VariantFeatures lookup.  Fail closed if the warehouse no longer proves the
+    expected 2,015-aa reference, if the call already fits the warehouse at its
+    stated position, or if it is not a simple nonsynonymous missense/stop call.
+    Structural alleles need a full-span mapping and remain held.
+    """
+    reference_offset = scn5a_q1077_reference_offset(gene, protein, max_pos, residues)
+    if reference_offset is None:
+        return None
+    key = parse_protein_key(protein)
+    if not key:
+        return None
+    match = re.fullmatch(r"([ACDEFGHIKLMNPQRSTVWY])(\d+)([ACDEFGHIKLMNPQRSTVWY*])", key)
+    if not match:
+        return None
+    reference, _raw_position, alternate = match.groups()
+    if reference == alternate:  # synonymous calls are not an isoform bridge
+        return None
+    _reference, shifted_position = reference_offset
+    return f"{reference}{shifted_position}{alternate}"
+
 
 def classify_unmatched(
     protein: str,
@@ -328,13 +424,14 @@ def main() -> int:
     )
     from collections import Counter
 
-    n_prot = n_cdna = n_unmatched = 0
+    n_prot = n_cdna = n_isoform = n_isoform_matched = n_unmatched = 0
     fp_class_counts: Counter = Counter()
     out = []
     for r in rows:
         vid_g = r["variant_id"]
         pkey = parse_protein_key(r["protein_notation"])
         method, vf_id = None, None
+        isoform_key = None
         if pkey and pkey in prot_map:
             vf_id, method = prot_map[pkey], "protein"
             n_prot += 1
@@ -343,22 +440,44 @@ def main() -> int:
             if ck and ck in cdna_map:
                 vf_id, method = cdna_map[ck], "cdna"
                 n_cdna += 1
+            else:
+                isoform_key = scn5a_q1077_isoform_key(
+                    args.gene,
+                    r["protein_notation"],
+                    max_pos,
+                    residues,
+                )
+                if isoform_key:
+                    method = "protein_known_isoform_offset"
+                    vf_id = prot_map.get(isoform_key)
+                    n_isoform += 1
+                    n_isoform_matched += int(vf_id is not None)
         if vf_id is None:
             n_unmatched += 1
-            cls = classify_unmatched(
-                r["protein_notation"],
-                r["cdna_notation"],
-                max_pos,
-                residues,
-                other_residues,
-            )
+            if isoform_key:
+                cls = "known_isoform_offset"
+            elif scn5a_q1077_reference_offset(
+                args.gene, r["protein_notation"], max_pos, residues
+            ):
+                # The coordinate is explained, but a structural allele needs
+                # a full-span translation before it can be trusted. Keep it in
+                # the generic held class and out of wrong-gene quarantine.
+                cls = "residue_offset_suspect"
+            else:
+                cls = classify_unmatched(
+                    r["protein_notation"],
+                    r["cdna_notation"],
+                    max_pos,
+                    residues,
+                    other_residues,
+                )
             fp_class_counts[cls] += 1
             out.append(
                 (
                     vid_g,
                     None,
                     0,
-                    None,
+                    method,
                     None,
                     None,
                     None,
@@ -399,10 +518,11 @@ def main() -> int:
         "SELECT COUNT(*) FROM vf_enrichment WHERE matched=1 AND scores_json IS NOT NULL"
     ).fetchone()[0]
     total = len(rows)
-    matched = n_prot + n_cdna
+    matched = n_prot + n_cdna + n_isoform_matched
     print(
         f"GVF[{args.gene}]: {total} variants | matched {matched} "
-        f"({100 * matched / total:.1f}%) = protein {n_prot} + cDNA {n_cdna} | with in-silico score {scored}"
+        f"({100 * matched / total:.1f}%) = protein {n_prot} + cDNA {n_cdna} "
+        f"+ known-SCN5A-isoform {n_isoform} | with in-silico score {scored}"
     )
     print(
         f"  unmatched {n_unmatched}: "

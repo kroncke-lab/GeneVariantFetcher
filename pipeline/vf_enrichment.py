@@ -32,7 +32,9 @@ def enrich_and_quarantine(
     # Quarantine only what is demonstrably wrong: a residue that can't exist in
     # this gene at all, or one that positively matches a DIFFERENT known gene.
     # `residue_offset_suspect` (legacy BIC numbering) and `residue_unverified`
-    # are reported but kept — removing them would delete real variants.
+    # are reported but kept — removing them would delete real variants.  The
+    # separately proven SCN5A Q1077 isoform coordinate is canonicalized by the
+    # enrichment script before this generic classifier runs.
     quarantine_classes: str = "misparse_out_of_range,wrong_gene_residue_mismatch",
     stamp: Optional[str] = None,
     logger: Optional[Any] = None,

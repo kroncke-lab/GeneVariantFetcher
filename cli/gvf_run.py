@@ -1905,6 +1905,7 @@ def _write_run_status(
     integrity: Optional[dict] = None,
     count_recovery: Optional[dict] = None,
     llm_trace: Optional[dict] = None,
+    gold_free_run: bool = False,
 ) -> None:
     """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
     structured stage status (and the process exit code) instead of scraping
@@ -1936,6 +1937,10 @@ def _write_run_status(
             "duration_seconds": int(time.time() - started_at),
             "stage_failures": list(stage_failures),
             "stage_warnings": list(stage_warnings),
+            "gold_access": {
+                "disabled": bool(gold_free_run),
+                "mode": "disabled" if gold_free_run else "auto_discovery_allowed",
+            },
         }
         if integrity is not None:
             payload["source_integrity"] = integrity
@@ -2809,6 +2814,7 @@ def _run_gvf_pipeline(
         integrity_status,
         count_recovery=count_recovery_status,
         llm_trace=trace_summary,
+        gold_free_run=gold_free_run,
     )
 
     if stage_failures:

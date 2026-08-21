@@ -43,14 +43,15 @@ recall/precision pass, not a new penetrance or phenotype-count baseline. The
 run retained all 42 PMID 26746457 classification identities with null counts
 and recorded circuit-breaker empties rather than silently dropping them.
 
-That run predates the current fail-closed source-identifier, active-DB,
-trace-presence, trusted-count, and trusted-identity projection changes. The
-first current-code 119-attempt attempt was stopped and invalidated before lock:
-`gvf-run` auto-discovered a local KCNH2 gold CSV and its recovery subprocess
-created three per-layer score directories. The outputs were moved to Trash and
-must not be reused. The harness now passes `--gold-free-run`, which disables
-gold discovery for the entire production run; a fresh scaffold from that clean
-commit is still required before these changes are accepted.
+The clean current-code 119-attempt replacement is now locked at
+`benchmarks/codex_paper_eval/runs/20260821_current_changes_gold119`. Its trusted
+primary is 489 TP / 438 FP / 144 FN (77.25% recall), counted-extra precision
+97.80%, and carrier MAE 0.247. The unexpectedly low trusted recall exposed a
+real SCN5A Q1077/Q1077del isoform-numbering defect plus a bare-proline parser
+bug. The constrained post-lock diagnostic recovers to 546/633 (86.26%) with
+452 FP, but it is in-sample calibration, not a new blind lock. The original
+lock is immutable; its conservative schema-v1 gold-provenance interpretation is
+corrected only by the adjacent `ERRATUM.md`.
 
 The run used 554 calls / 2.464M tokens. All four production traces are
 write-time verified and bound into the prediction lock. The approved BMPR2 50 /
@@ -73,9 +74,11 @@ artifact; the corrected active queue has 45 papers after removing canine PMID
       VariantFeatures quarantines. It now correctly **fails** all three raw DBs:
       BRCA1 retains 346 ambiguous live identities, BRCA2 129, and BMPR2 56
       outside the defensible unmatched classes `novel_in_range` and
-      `cdna_only_unmatched`. The trusted Variant Browser projection holds these
-      out of collaborator staging, but still requires end-to-end import/UI
-      verification. The rejected
+      `cdna_only_unmatched`. The trusted Variant Browser projection now holds
+      these out of the private staging database. Exact 50/45/50 manifest order,
+      titles, source locations, and source-run metadata were verified at the
+      database boundary; the authenticated browser UI could not be visually
+      exercised from the available app session. The rejected
       46-paper BRCA2 DB remains evidence of the original failure and must never
       be imported. The corrected 45-paper DB contains no PMID 19944633 row or
       downstream evidence in any PMID-bearing table. During its source-recovery
@@ -85,12 +88,15 @@ artifact; the corrected active queue has 45 papers after removing canine PMID
       the DB/shared corpus, and source acceptance now requires matching stable
       identity in the candidate URL plus the paper header. A later Grok 4.6
       `xhigh` pass found DOI-prefix and PMID-digit-concatenation bypasses plus
-      readiness/publish fail-open paths; regression tests now pin those fixes,
-      so there is no unqualified reviewer GO. Next: run the fresh cardiac
-      acceptance test, obtain a source-grounded precision sample, and validate
-      the trusted-only Variant Browser import before promotion. The 2026-08-13
-      staging dataset and its 111 historical BRCA2 adjudications remain
-      auditable; public annotations were not changed.
+      readiness/publish fail-open paths; regression tests now pin those fixes.
+      Staging uncovered one more fail-open bug: detached adjudications did not
+      invalidate current gold. Variant Browser now disputes those revisions;
+      the BRCA2 replay has zero canine evidence, zero current canine gold, and
+      zero current gold for all 111 detached/re-review subjects. Grok 4.6 xhigh
+      returned **GO for merge/trusted staging and HOLD for public publication**.
+      Next: source-ground the collaborator precision sample, re-review the 111
+      BRCA2 subjects, and run a disjoint pre-registered cardiac/SCN5A validation
+      before any public promotion. Public annotations were not changed.
 - [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived

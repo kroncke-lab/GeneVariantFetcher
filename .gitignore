@@ -127,6 +127,8 @@ benchmarks/cold_start_eval/runs/
 # local production_runs SYMLINK (worktree convenience) would show untracked.
 benchmarks/codex_paper_eval/runs/*/production_runs/
 benchmarks/codex_paper_eval/runs/*/production_runs
+benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs/
+benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs
 benchmarks/codex_paper_eval/runs/*/driver.log
 
 # Consolidated source corpus (deduplicated full text + supplements + figures,

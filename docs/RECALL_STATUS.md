@@ -50,9 +50,10 @@ failures or warnings, complete live-row VariantFeatures audit coverage, and
 write-time-verified extraction traces. The strengthened readiness gate now
 fails the raw databases because they retain ambiguous live identities outside
 the defensible `novel_in_range` and `cdna_only_unmatched` classes: 346 BRCA1,
-129 BRCA2, and 56 BMPR2. The trusted Variant Browser projection is designed to
-hold those identities out of staging, but has not yet been exercised against
-the live staging database. The
+129 BRCA2, and 56 BMPR2. The trusted Variant Browser projection has now held
+those identities out of the live private staging database. Database-level
+verification confirmed exact manifest order, no missing/extra papers, usable
+titles and source locations, and trusted source-run provenance. The
 fresh BRCA2 DB has 1,917 final variants, 137 VariantFeatures quarantines, zero
 nameless variants, zero species-scope links, and no PMID 19944633 row or evidence
 in any PMID-bearing table. The earlier 46-paper BRCA2 DB remains a rejected
@@ -63,16 +64,25 @@ recovery layer. A second source-identity defect found during the corrected run
 was stopped before DB replay. DOI-prefix and PMID digit-concatenation bypasses
 in the first URL check are now covered by exact-token regression tests. None of
 the three has a new source-adjudicated precision estimate.
-The previous 2026-08-13 collaborator staging dataset and its historical
-adjudications remain auditable but are not evidence that the new extraction is
-publication-ready. Public annotations remain unchanged.
+Staging also exposed and closed a Variant Browser fail-open path: a reviewed
+subject whose evidence vanished was detached but its gold revision could remain
+current. The importer now disputes that revision and a regression test pins the
+behavior. The BRCA2 replay has zero active canine evidence, zero current canine
+gold, and zero current gold for all 111 detached/re-review subjects. Historical
+revisions remain auditable. None of this is evidence that the new extraction is
+publication-ready; public annotations remain unchanged.
 
 The first 2026-08-21 current-code cardiac attempt is also not evidence. It was
 terminated before lock when the operator observed that `gvf-run` had
 auto-discovered the local KCNH2 gold CSV for intermediate recovery-layer
 scoring. No `RUN_STATUS.json`, prediction lock, or score was accepted. The
-replacement harness disables gold discovery for the entire production run via
-`--gold-free-run`; it must start from a new clean scaffold.
+replacement harness disabled gold discovery for the entire production run via
+`--gold-free-run` and completed from a clean scaffold. The locked trusted result
+is 489 TP / 438 FP / 144 FN (77.25% recall), counted-extra precision 97.80%, and
+carrier MAE 0.247. A real SCN5A Q1077/Q1077del lookup mismatch over-held true
+identities; the constrained post-lock diagnostic is 546 TP / 452 FP / 87 FN
+(86.26% recall). Because that correction was informed by the locked residuals,
+the diagnostic is not a new blind lock or public headline.
 
 Historical view: the published dashboard at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
@@ -116,6 +126,27 @@ evaluation/review scope, not the authoritative four-gene headline cohort below. 
 50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 45
 rather than expanding the experimental genes.
 
+## Current-code gold-119 lock and post-lock identity diagnostic
+
+The immutable current-code lock is
+`benchmarks/codex_paper_eval/runs/20260821_current_changes_gold119/`; its
+provenance erratum and the SCN5A analysis are linked from that run and
+`docs/evidence/scn5a_q1077_identity_diagnostic_20260821.md`.
+
+| Projection | TP | FP | FN | Variant recall | Variant precision | Counted-extra precision | Carrier supplied | Carrier MAE |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Locked trusted primary | 489 | 438 | 144 | 77.25% | 52.75% | 97.80% | 178/633 | 0.247 |
+| Post-lock trusted diagnostic | 546 | 452 | 87 | 86.26% | 54.71% | 98.03% | 188/633 | 0.250 |
+| Post-lock raw diagnostic | 551 | 578 | 82 | 87.05% | 48.80% | 98.04% | 202/633 | 0.535 |
+
+The lock-to-diagnostic delta is mixed: +57 TP and +14 FP, so the precision of
+net added identity matches is 80.3%, not the 98.03% counted-extra metric. The
+lookup is SCN5A-only, proves the local Q1077del reference, applies only after
+exact protein/cDNA matching fails, trusts simple missense/stop calls, and never
+rewrites the literature identity. Structural and generic offsets remain held.
+Grok 4.6 xhigh gave a GO for merge/trusted staging and a HOLD for public
+publication. A disjoint pre-registered validation is required.
+
 ## Prior Gate 2 no-inference gold-119 result (not current-code acceptance)
 
 The locked run is
@@ -141,8 +172,9 @@ than silently omitting them. Affected coverage is 48/633 (7.58%, MAE 0.688) and
 unaffected coverage is 32/632 (5.06%, MAE 1.000); these are abstention-driven
 coverage changes and must accompany any comparison. This sample does not
 replace the canonical all-paper four-gene headline below. It predates the
-current active-DB, trace-presence, and trusted-identity hardening, so a new
-locked 119-attempt run is required before the current tree advances.
+current active-DB, trace-presence, and trusted-identity hardening. The
+2026-08-21 lock above supersedes that outstanding rerun task but does not
+replace this historical comparison.
 
 ## Active 50-paper collaborator-grounded count-semantics cohort
 

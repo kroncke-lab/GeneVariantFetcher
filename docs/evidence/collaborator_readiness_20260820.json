@@ -72,11 +72,12 @@
       "variant_features": {
         "allowed_unmatched_classes": [
           "cdna_only_unmatched",
+          "known_isoform_offset",
           "novel_in_range"
         ],
         "blocked_live_variants": 346,
         "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
-        "matched": 2165,
+        "matched": 2186,
         "quarantined_variants": {
           "misparse_out_of_range": 61,
           "wrong_gene_residue_mismatch": 263
@@ -84,14 +85,14 @@
         "residual_classes": {
           "cdna_only_unmatched": 1348,
           "no_notation_suspect": 58,
-          "none": 2165,
-          "novel_in_range": 1489,
+          "none": 2186,
+          "novel_in_range": 1468,
           "residue_offset_suspect": 77,
           "residue_unverified": 211
         },
         "rows": 5348,
         "uncovered_live_variants": 0,
-        "unmatched_live_variants": 3183
+        "unmatched_live_variants": 3162
       },
       "variants": {
         "nameless": 0,
@@ -176,11 +177,12 @@
       "variant_features": {
         "allowed_unmatched_classes": [
           "cdna_only_unmatched",
+          "known_isoform_offset",
           "novel_in_range"
         ],
         "blocked_live_variants": 129,
         "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
-        "matched": 956,
+        "matched": 958,
         "quarantined_variants": {
           "misparse_out_of_range": 18,
           "wrong_gene_residue_mismatch": 119
@@ -188,14 +190,14 @@
         "residual_classes": {
           "cdna_only_unmatched": 418,
           "no_notation_suspect": 51,
-          "none": 956,
-          "novel_in_range": 414,
+          "none": 958,
+          "novel_in_range": 412,
           "residue_offset_suspect": 15,
           "residue_unverified": 63
         },
         "rows": 1917,
         "uncovered_live_variants": 0,
-        "unmatched_live_variants": 961
+        "unmatched_live_variants": 959
       },
       "variants": {
         "nameless": 0,
@@ -284,25 +286,26 @@
       "variant_features": {
         "allowed_unmatched_classes": [
           "cdna_only_unmatched",
+          "known_isoform_offset",
           "novel_in_range"
         ],
         "blocked_live_variants": 56,
         "gate_evidence": "every live variant is VariantFeatures-matched or belongs to an explicitly allowed novel/cDNA-only class; ambiguous and rejected identities remain in quarantined_variants only",
-        "matched": 300,
+        "matched": 303,
         "quarantined_variants": {
           "wrong_gene_residue_mismatch": 32
         },
         "residual_classes": {
           "cdna_only_unmatched": 132,
           "no_notation_suspect": 24,
-          "none": 300,
-          "novel_in_range": 66,
+          "none": 303,
+          "novel_in_range": 63,
           "residue_offset_suspect": 8,
           "residue_unverified": 24
         },
         "rows": 554,
         "uncovered_live_variants": 0,
-        "unmatched_live_variants": 254
+        "unmatched_live_variants": 251
       },
       "variants": {
         "nameless": 0,

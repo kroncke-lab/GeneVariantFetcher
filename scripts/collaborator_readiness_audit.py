@@ -35,7 +35,9 @@ _NONHUMAN_GENE_ADJECTIVES = (
 # in the reference feature table.  Every other live miss is held for manual
 # adjudication; high-confidence wrong-residue/out-of-range calls must live only
 # in ``quarantined_variants``.
-_ALLOWED_UNMATCHED_VF_CLASSES = frozenset({"novel_in_range", "cdna_only_unmatched"})
+_ALLOWED_UNMATCHED_VF_CLASSES = frozenset(
+    {"novel_in_range", "cdna_only_unmatched", "known_isoform_offset"}
+)
 
 
 def _read_json(path: Path) -> dict[str, Any]:

@@ -57,7 +57,7 @@ Grok's independent challenge is recorded in
 ## Verification after execution
 
 - Full offline unit suite with project deprecations promoted to errors:
-  **2,164 passed** after the follow-up source/readiness/publish hardening.
+  **2,183 passed** after the 2026-08-21 identity/provenance follow-up.
 - Bounded offline end-to-end harness: **6 passed**.
 - Curated negative precision guards: **3 passed**.
 - Integration default behavior: **4 passed / 43 network tests skipped**; the
@@ -76,10 +76,30 @@ Grok's independent challenge is recorded in
 - Post-execution cohort/source/trace membership is exact for BRCA1 **50/50**,
   BRCA2 **45/45** after removing the canine PMID, and BMPR2 **50/50**. A later
   fail-closed audit correctly marks all three raw DBs **FAIL** because 346 / 129
-  / 56 ambiguous live identities remain outside the allowed novel/cDNA-only
-  classes. The Variant Browser trusted projection holds those rows out, but
-  public publication remains **HOLD** pending the new cardiac run,
-  source-grounded adjudication, and staging/UI verification.
+  / 56 ambiguous live identities remain outside the allowed classes. The
+  Variant Browser trusted projection now holds those rows out of private
+  staging; public publication remains **HOLD** pending source-grounded
+  adjudication and disjoint validation.
+
+## 2026-08-21 follow-up labels
+
+- **REMOVE — DONE:** superseded `raw/` and `trusted/` intermediate SCN5A
+  diagnostic summaries were moved to recoverable Trash after the final
+  projections were frozen. Nested diagnostic `production_runs/` are now ignored
+  under the same policy as primary multi-megabyte production artifacts.
+- **KEEP:** the final trusted/raw diagnostic reports, immutable primary lock,
+  disputed Variant Browser gold history, and local production trace artifacts
+  are reproducibility evidence, not cruft.
+- **ADJUST — SEPARATE PATCH:** Variant Browser has no repository-wide Ruff
+  formatting baseline. A scan reports 26 existing lint findings and 126 files
+  that the current formatter would rewrite, including intentional local-settings
+  star imports and late test-module imports. Mixing thousands of mechanical
+  lines into the gold-safety fix would make review worse. Establish a pinned
+  formatter/config baseline separately, then remove the small proven unused
+  imports/assignments under its own test run.
+- **KEEP:** every new SCN5A helper and `known_isoform_offset` class has a runtime
+  caller plus direct and end-to-end tests; none is an unused static-analysis
+  candidate.
 
 ## Labels
 

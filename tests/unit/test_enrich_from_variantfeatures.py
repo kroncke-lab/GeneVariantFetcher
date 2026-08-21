@@ -345,3 +345,180 @@ def test_residue_mismatch_splits_wrong_gene_from_numbering_and_unknown():
     )
     # no residue map (gene absent from the warehouse) must never flag
     assert enrich.classify_unmatched("p.P871L", "", 3418, {}) == "novel_in_range"
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("P1730H", "P1730H"),
+        ("Pro871Leu", "P871L"),
+        ("p.P1730H", "P1730H"),
+        ("p.Pro871Leu", "P871L"),
+        ("pPro871Leu", "P871L"),
+    ],
+)
+def test_proline_is_not_consumed_as_an_hgvs_prefix(source, expected):
+    assert enrich.parse_protein_key(source) == expected
+
+
+@pytest.mark.parametrize(
+    ("protein", "position", "reference"),
+    [
+        ("S1140T", 1140, "S"),
+        ("G1319V", 1319, "G"),
+        ("D1243N", 1243, "D"),
+        ("L1346P", 1346, "L"),
+        ("S1382I", 1382, "S"),
+        ("E1574K", 1574, "E"),
+        ("R1583C", 1583, "R"),
+        ("N1722D", 1722, "N"),
+    ],
+)
+def test_scn5a_q1077_long_isoform_uses_lookup_offset_only(protein, position, reference):
+    source_identity = protein
+    residues = {
+        1077: {"E"},
+        2015: {"V"},
+        position: {"A" if reference != "A" else "C"},
+        position - 1: {reference},
+    }
+
+    shifted = enrich.scn5a_q1077_isoform_key("SCN5A", protein, 2015, residues)
+
+    # This is a warehouse lookup key. The source/literature identity remains
+    # byte-for-byte unchanged in the run DB and scored projection.
+    assert shifted == f"{reference}{position - 1}{protein[-1]}"
+    assert protein == source_identity
+
+
+def test_scn5a_q1077_isoform_bridge_is_narrow_and_fail_closed():
+    residues = {
+        1077: {"E"},
+        1078: {"S"},
+        1139: {"S"},
+        1140: {"T"},
+        1318: {"G"},
+        1319: {"M"},
+        2015: {"W"},
+    }
+
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "G1319V", 2015, residues) == "G1318V"
+    assert (
+        enrich.scn5a_q1077_isoform_key("SCN5A", "P.G1319V", 2015, residues) == "G1318V"
+    )
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "G1319X", 2015, residues) == "G1318*"
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "E1078V", 2015, residues) == "E1077V"
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "W2016X", 2015, residues) == "W2015*"
+    # Exact same-coordinate reference wins; do not double-shift a MANE call.
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "M1319V", 2015, residues) is None
+    # The insertion residue, out-of-range calls, synonymous and structural
+    # alleles are not eligible for the simple missense/stop bridge.
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "E1077V", 2015, residues) is None
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "W2017X", 2015, residues) is None
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "G1319G", 2015, residues) is None
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "G1319del", 2015, residues) is None
+    # No DNA-coordinate shifting, no other-gene generalization, and no use
+    # after a warehouse reference update to the 2,016-aa isoform.
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "c.3956G>T", 2015, residues) is None
+    assert enrich.scn5a_q1077_isoform_key("KCNH2", "G1319V", 2015, residues) is None
+    assert enrich.scn5a_q1077_isoform_key("SCN5A", "G1319V", 2016, residues) is None
+    long_length_reference = {**residues, 2016: {"A"}}
+    assert (
+        enrich.scn5a_q1077_isoform_key("SCN5A", "G1319V", 2016, long_length_reference)
+        is None
+    )
+    long_reference = {**residues, 1077: {"Q"}}
+    assert (
+        enrich.scn5a_q1077_isoform_key("SCN5A", "G1319V", 2015, long_reference) is None
+    )
+
+
+def test_scn5a_q1077_enrichment_preserves_identity_and_other_gene_precedence(
+    tmp_path, capsys
+):
+    vf = tmp_path / "scn5a_variants.db"
+    con = sqlite3.connect(vf)
+    con.executescript(
+        VF_SCHEMA
+        + """
+        INSERT INTO variant_consequences
+          (variant_id, transcript_id, gene_symbol, consequence, hgvs_c, hgvs_p,
+           aa_pos, aa_ref, aa_alt, is_canonical, is_mane_select)
+        VALUES
+          (1, 'SCN5A_MANE', 'SCN5A', 'missense_variant', 'c.3230A>C',
+           'p.Glu1077Ala', 1077, 'E', 'A', 1, 1),
+          (2, 'SCN5A_MANE', 'SCN5A', 'missense_variant', 'c.3953G>T',
+           'p.Gly1318Val', 1318, 'G', 'V', 1, 1),
+          (3, 'SCN5A_MANE', 'SCN5A', 'missense_variant', 'c.3956A>G',
+           'p.Met1319Val', 1319, 'M', 'V', 1, 1),
+          (4, 'SCN5A_MANE', 'SCN5A', 'missense_variant', 'c.6044A>G',
+           'p.Ile2015Val', 2015, 'I', 'V', 1, 1),
+          (5, 'OTHER_MANE', 'KCNH2', 'missense_variant', 'c.3956G>T',
+           'p.Gly1319Val', 1319, 'G', 'V', 1, 1);
+        """
+    )
+    con.commit()
+    con.close()
+
+    run_db = tmp_path / "SCN5A.db"
+    con = sqlite3.connect(run_db)
+    con.executescript(
+        """
+        CREATE TABLE variants (
+          variant_id INTEGER PRIMARY KEY, gene_symbol TEXT NOT NULL,
+          cdna_notation TEXT, protein_notation TEXT
+        );
+        CREATE TABLE variant_papers (variant_id INTEGER, pmid TEXT);
+        INSERT INTO variants VALUES (1, 'SCN5A', NULL, 'G1319V');
+        INSERT INTO variants VALUES (2, 'SCN5A', NULL, 'G1319W');
+        INSERT INTO variants VALUES (3, 'SCN5A', NULL, 'G1319del');
+        INSERT INTO variants VALUES (4, 'SCN5A', NULL, 'M1319A');
+        INSERT INTO variant_papers VALUES (1, '1'), (2, '1'), (3, '1'), (4, '1');
+        """
+    )
+    con.commit()
+    con.close()
+
+    old_argv = sys.argv
+    sys.argv = [
+        "enrich_from_variantfeatures.py",
+        "--gene",
+        "SCN5A",
+        "--db",
+        str(run_db),
+        "--vf",
+        str(vf),
+    ]
+    try:
+        assert enrich.main() == 0
+    finally:
+        sys.argv = old_argv
+
+    con = sqlite3.connect(run_db)
+    identities = dict(con.execute("SELECT variant_id, protein_notation FROM variants"))
+    rows = {
+        row[0]: row[1:]
+        for row in con.execute(
+            "SELECT variant_id, matched, match_method, canonical_aa_key, fp_class "
+            "FROM vf_enrichment ORDER BY variant_id"
+        )
+    }
+    con.close()
+
+    assert identities == {1: "G1319V", 2: "G1319W", 3: "G1319del", 4: "M1319A"}
+    # Exact shifted variant: canonical VF identity is attached, but the source
+    # identity is not rewritten. The other-gene G1319 match cannot preempt the
+    # biologically proven same-gene coordinate bridge.
+    assert rows[1] == (1, "protein_known_isoform_offset", "G1318V", None)
+    # A novel alternate is trusted by the proven reference coordinate without
+    # pretending it existed in the warehouse alt catalog.
+    assert rows[2] == (
+        0,
+        "protein_known_isoform_offset",
+        None,
+        "known_isoform_offset",
+    )
+    # Structural calls remain in the generic held class; an exact current-
+    # coordinate reference remains an ordinary novel in-range allele.
+    assert rows[3][3] == "residue_offset_suspect"
+    assert rows[4][3] == "novel_in_range"
