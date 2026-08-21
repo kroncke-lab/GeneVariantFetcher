@@ -226,6 +226,48 @@ def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):
     ).resolve()
 
 
+def test_gold_free_run_never_discovers_or_passes_gold_to_layers(
+    tmp_path: Path, monkeypatch
+):
+    captured: dict = {}
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "_find_gold",
+        lambda gene: pytest.fail("gold discovery ran during --gold-free-run"),
+    )
+
+    def fake_layers(**kwargs):
+        captured["layer_gold"] = kwargs["gold"]
+        return None
+
+    monkeypatch.setattr(gvf_run, "step_layers", fake_layers)
+
+    gvf_run.run_gvf_pipeline(
+        gene="KCNH2",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        corpus_sync=False,
+        gold_free_run=True,
+        skip=[
+            "source-qc",
+            "count-repair",
+            "phenotype-count-guard",
+            "claim-verification",
+            "count-recovery",
+            "vf-enrich",
+            "trust-gate",
+            "paper-final-check",
+            "paper-final-check-gate",
+            "metadata-backfill",
+        ],
+    )
+
+    assert captured["layer_gold"] is None
+
+
 def test_count_recovery_runs_only_when_enabled_and_records_partial_failures(
     tmp_path: Path, monkeypatch
 ):

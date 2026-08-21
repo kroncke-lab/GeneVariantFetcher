@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- A `gvf-run --gold-free-run` boundary for extraction-blinded evaluation. It
+  disables automatic gold discovery in recovery and reporting and refuses the
+  gold-dependent v12 merge.
 - A fail-closed collaborator-readiness audit covering exact PMID manifests,
   extraction payloads, source integrity, active-run identity, nonempty verified
   traces, species scope, VariantFeatures coverage, and publishable identities.

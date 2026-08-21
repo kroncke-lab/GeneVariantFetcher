@@ -69,6 +69,8 @@ files plus two executable phases inside the run directory:
 
 1. `run_extraction.sh` runs the current production `gvf-run` route without gold,
    source recovery, corpus mutation, full-coverage add-ons, or publication.
+   It passes `--gold-free-run`, which disables `gvf-run`'s otherwise automatic
+   per-layer gold discovery and scoring until the prediction lock is complete.
 2. `lock_and_score.sh` rebinds the exact run-local sources, projects the final
    production databases through the maintained `db_to_predictions.py`, locks
    predictions and trace manifests, and only then opens gold for scoring.

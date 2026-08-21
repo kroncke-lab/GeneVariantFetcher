@@ -207,6 +207,7 @@ def make_extraction_script(
                 f'{gene} --email "$EMAIL" --output "$RUN_DIR/production_runs" '
                 f'--pmid-file "$RUN_DIR/pmids/{gene}.txt" '
                 "--no-source-recovery --no-corpus-sync --no-publish-review "
+                "--gold-free-run "
                 f'2>&1 | tee "$RUN_DIR/operator_logs/{gene}.log"',
                 ") &",
                 "pids+=($!)",
@@ -461,6 +462,7 @@ def check_run(run_dir: Path) -> None:
         "--no-source-recovery",
         "--no-corpus-sync",
         "--no-publish-review",
+        "--gold-free-run",
     )
     if any(token not in extraction for token in required):
         raise SetupError("extraction script is missing a calibrated-run safeguard")

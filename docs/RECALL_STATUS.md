@@ -67,6 +67,13 @@ The previous 2026-08-13 collaborator staging dataset and its historical
 adjudications remain auditable but are not evidence that the new extraction is
 publication-ready. Public annotations remain unchanged.
 
+The first 2026-08-21 current-code cardiac attempt is also not evidence. It was
+terminated before lock when the operator observed that `gvf-run` had
+auto-discovered the local KCNH2 gold CSV for intermediate recovery-layer
+scoring. No `RUN_STATUS.json`, prediction lock, or score was accepted. The
+replacement harness disables gold discovery for the entire production run via
+`--gold-free-run`; it must start from a new clean scaffold.
+
 Historical view: the published dashboard at
 <https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/> is the archived
 2026-07-08 pre-correction snapshot. It does **not** render the current table

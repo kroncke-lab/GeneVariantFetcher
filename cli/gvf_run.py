@@ -1959,6 +1959,7 @@ def run_gvf_pipeline(
     max_pmids: int = 1500,
     resume_dir: Optional[Path] = None,
     include_v12: bool = False,
+    gold_free_run: bool = False,
     skip: Optional[list[str]] = None,
     source_recovery: bool = True,
     source_recovery_timeout_s: int = 120,
@@ -2002,6 +2003,7 @@ def run_gvf_pipeline(
             max_pmids=max_pmids,
             resume_dir=resume_dir,
             include_v12=include_v12,
+            gold_free_run=gold_free_run,
             skip=skip,
             source_recovery=source_recovery,
             source_recovery_timeout_s=source_recovery_timeout_s,
@@ -2046,6 +2048,7 @@ def _run_gvf_pipeline(
     max_pmids: int = 1500,
     resume_dir: Optional[Path] = None,
     include_v12: bool = False,
+    gold_free_run: bool = False,
     skip: Optional[list[str]] = None,
     source_recovery: bool = True,
     source_recovery_timeout_s: int = 120,
@@ -2071,6 +2074,10 @@ def _run_gvf_pipeline(
     require_vf_enrich: bool = False,
 ) -> int:
     initialize_runtime()
+
+    if gold_free_run and include_v12:
+        logger.error("--gold-free-run is incompatible with --with-v12")
+        return EXIT_STAGE_WARNINGS
 
     skip = {s.lower() for s in (skip or [])}
     started = time.time()
@@ -2286,7 +2293,13 @@ def _run_gvf_pipeline(
     elif full_coverage and "walk" in skip:
         logger.info("⏭️  Step 2.5: full-coverage walk — SKIPPED")
 
-    gold = _find_gold(gene)
+    if gold_free_run:
+        logger.info(
+            "🔒 Gold access disabled for this run; recovery and reporting remain gold-free"
+        )
+        gold = None
+    else:
+        gold = _find_gold(gene)
     source_qc_summary: Optional[Path] = None
     source_qc_attempted = False
     source_recovery_result: Optional[SourceRecoveryResult] = None

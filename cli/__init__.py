@@ -587,6 +587,17 @@ def gvf_run_command(
             ),
         ),
     ] = False,
+    gold_free_run: Annotated[
+        bool,
+        typer.Option(
+            "--gold-free-run/--allow-gold-metrics",
+            help=(
+                "Disable automatic gold discovery for the entire gvf-run, including "
+                "recovery-layer scoring and source-recovery diagnostics. Required "
+                "for extraction-blinded evaluations; incompatible with --with-v12."
+            ),
+        ),
+    ] = False,
     publish_review: Annotated[
         bool,
         typer.Option(
@@ -703,6 +714,7 @@ def gvf_run_command(
         max_pmids=max_pmids,
         resume_dir=resume_dir,
         include_v12=with_v12,
+        gold_free_run=gold_free_run,
         skip=list(skip) if skip else None,
         source_recovery=source_recovery,
         source_recovery_timeout_s=source_recovery_timeout_s,

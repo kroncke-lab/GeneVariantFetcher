@@ -69,6 +69,7 @@ def test_generated_extraction_is_calibrated_blinded_and_nonpublishing(tmp_path: 
     assert script.count("--no-source-recovery") == 4
     assert script.count("--no-corpus-sync") == 4
     assert script.count("--no-publish-review") == 4
+    assert script.count("--gold-free-run") == 4
     assert script.count(") &") == 4
     assert script.count("pids+=($!)") == 4
     assert 'for pid in "${pids[@]}"' in script

@@ -44,10 +44,13 @@ run retained all 42 PMID 26746457 classification identities with null counts
 and recorded circuit-breaker empties rather than silently dropping them.
 
 That run predates the current fail-closed source-identifier, active-DB,
-trace-presence, trusted-count, and trusted-identity projection changes. A fresh
-119-attempt scaffold must be created from a clean commit and run before these
-changes are accepted; `20260821_current_changes_gold119` is only a stale
-pre-extraction scaffold, not evidence of a completed test.
+trace-presence, trusted-count, and trusted-identity projection changes. The
+first current-code 119-attempt attempt was stopped and invalidated before lock:
+`gvf-run` auto-discovered a local KCNH2 gold CSV and its recovery subprocess
+created three per-layer score directories. The outputs were moved to Trash and
+must not be reused. The harness now passes `--gold-free-run`, which disables
+gold discovery for the entire production run; a fresh scaffold from that clean
+commit is still required before these changes are accepted.
 
 The run used 554 calls / 2.464M tokens. All four production traces are
 write-time verified and bound into the prediction lock. The approved BMPR2 50 /
