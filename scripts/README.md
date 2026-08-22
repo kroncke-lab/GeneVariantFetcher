@@ -32,11 +32,8 @@ Use these for full-text, supplement, figure, and corpus maintenance.
 | `fulltext_acquisition_pass.py` | Source-acquisition-only pass without extraction. |
 | `build_source_corpus.py` | Build or update the local ignored source corpus. |
 | `corpus_to_harvest.py` | Copy corpus source back into harvest-shaped run folders. |
-| `stage_corpus_figures.py` | Stage corpus figure artifacts for extraction/review. |
 | `extract_figure_variants.py` | Extract variant evidence from figures. |
-| `fetch_gold_figures.py` | Fetch figures for gold-standard audit papers. |
 | `fetch_reference_sequences.py` | Fetch reference protein sequences used by validation code. |
-| `gold_source_worklist.py` | Build source recovery worklists from gold inputs. |
 | `ezproxy_relogin.py` | Bootstrap or refresh the persistent EZproxy session used by authenticated recovery. |
 
 ## Recovery Layers
@@ -54,7 +51,6 @@ calling workflow already does it.
 | `apply_somatic_germline_qc.py` | Flag somatic/germline ambiguity. |
 | `backfill_paper_metadata.py` | Backfill paper metadata columns. |
 | `backfill_source_layers.py` | Backfill source-layer provenance. |
-| `dedup_db.py` | Deduplicate DB rows. |
 | `quarantine_fp.py` | Quarantine known false-positive rows. |
 
 ## Review And Curation

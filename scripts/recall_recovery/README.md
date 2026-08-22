@@ -7,22 +7,18 @@ signals and score each layer against a gold standard.
 
 After the main extraction pipeline produces a base SQLite DB, layer in:
 
-1. **`recover_paywall_oa.py`** — Explicit-batch source acquisition helper for
-   Unpaywall + Europe PMC fallback. It writes recovered `*_FULL_CONTEXT.md`
-   files but is not a default recall layer.
-
-2. **`ingest_clinvar.py`** — Query ClinVar via E-Utils for variants citing
+1. **`ingest_clinvar.py`** — Query ClinVar via E-Utils for variants citing
    PMIDs already present in the extraction DB. Use `--pmid-source gold` only
    for explicitly labeled diagnostics.
 
-3. **`ingest_pubtator.py`** — NCBI PubTator3 variant-annotation API for
+2. **`ingest_pubtator.py`** — NCBI PubTator3 variant-annotation API for
    text-mined mutations from DB-observed PMIDs.
 
-4. **`../extract_figure_variants.py`** — Vision-LLM figure reader. Pulls
+3. **`../extract_figure_variants.py`** — Vision-LLM figure reader. Pulls
    variant tables and mutation maps out of image-only figures the HTML
    stripper dropped. Wires through `harvesting/figure_variant_reader.py`.
 
-5. **`merge_v12_db.py`** — KCNH2-only historical rescue from an older,
+4. **`merge_v12_db.py`** — KCNH2-only historical rescue from an older,
    hand-curated DB. This is opt-in only and should not be counted as
    cold-start capability.
 

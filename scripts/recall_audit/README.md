@@ -12,12 +12,9 @@ An explicit run directory must contain `dbs/{GENE}.db` and `recall_score/`.
 ## Examples
 
 ```bash
-.venv/bin/python scripts/recall_audit/pmid_side_by_side.py --gene KCNH2 --pmid 19160088
-.venv/bin/python scripts/recall_audit/failure_taxonomy_report.py --gene KCNH2 --out /tmp/kcnh2_taxonomy.csv
-.venv/bin/python scripts/recall_audit/gene_filter_audit.py --gene RYR2 --out /tmp/ryr2_gene_filter.csv
-.venv/bin/python scripts/recall_audit/study_wide_n_detector.py --gene RYR2
-.venv/bin/python scripts/recall_audit/multicohort_collapse_detector.py --gene KCNH2 --pmid 19160088
-.venv/bin/python scripts/recall_audit/acquisition_status_per_pmid.py --gene SCN5A --summary
+.venv/bin/python scripts/recall_audit/paper_disagreement_report.py --run-dir /path/to/scored_run
+.venv/bin/python scripts/recall_audit/source_stratified_metrics.py --genes RYR2
+.venv/bin/python scripts/recall_audit/build_acquisition_worklist.py --gene SCN5A
 ```
 
 Claim-verification pilots compare against adjudicated `gold_v2_*` columns when
@@ -32,17 +29,9 @@ high-risk trusted-consensus cases are queued even when debate agrees:
   --run-dir /path/to/scored_run \
   --out-dir /tmp/claim_verify_azure \
   --model azure_ai/gpt-5.4
-.venv/bin/python scripts/recall_audit/rescore_claim_verification_records.py \
-  --records-jsonl /path/to/claim_verification_records.jsonl \
-  --out-dir /tmp/claim_verify_rescore_v2 \
-  --gold-value-set v2
 .venv/bin/python scripts/recall_audit/run_claim_debate_pilot.py \
   --baseline-records /tmp/claim_verify_rescore_v2/claim_verification_records.jsonl \
   --out-dir /tmp/claim_debate_azure
-.venv/bin/python scripts/recall_audit/rescore_claim_debate_records.py \
-  --records-jsonl /path/to/claim_debate_records.jsonl \
-  --out-dir /tmp/claim_debate_rescore_v2 \
-  --gold-value-set v2
 .venv/bin/python scripts/recall_audit/build_claim_debate_escalation_queue.py \
   --debate-records /path/to/claim_debate_records.jsonl \
   --verification-records /path/to/claim_verification_records.jsonl \
