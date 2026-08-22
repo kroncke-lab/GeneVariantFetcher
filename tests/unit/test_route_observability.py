@@ -361,7 +361,9 @@ class TestTableRoutingLinkage:
 
 def _png(tmp_path: Path, name: str = "fig1.png") -> Path:
     path = tmp_path / name
-    path.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 32)
+    # Name-dependent bytes: the variant reader now skips byte-identical
+    # duplicates per paper, and these tests are about trace linkage, not dedup.
+    path.write_bytes(b"\x89PNG\r\n\x1a\n" + name.encode() + b"0" * 32)
     return path
 
 

@@ -19,6 +19,7 @@ from typing import Dict, List, Optional
 import requests
 
 from config.settings import get_settings
+from harvesting.figure_text_extractor import normalize_responses_usage
 from utils.llm_trace import (
     OUTCOME_DISCARDED,
     OUTCOME_ERROR,
@@ -119,11 +120,14 @@ def _call_azure_responses_api_vision(
                 f"Responses API returned {response.status_code}: {response.text[:300]}"
             )
         try:
-            return response.json()
+            payload = response.json()
         except json.JSONDecodeError as exc:
             raise RuntimeError(
                 f"Responses API returned invalid JSON: {response.text[:300]}"
             ) from exc
+        # Aliased before capture so the trace's usage carries the counter
+        # names cost tooling sums (input_tokens alone summed as zero).
+        return normalize_responses_usage(payload)
 
     try:
         data, _trace = capture_llm_call(

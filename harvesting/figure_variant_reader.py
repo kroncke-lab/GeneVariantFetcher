@@ -32,6 +32,7 @@ Wire-up notes:
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import logging
 import os
@@ -40,16 +41,15 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import requests
-
 from config.settings import get_settings
+from harvesting.figure_text_extractor import call_responses_api_vision
+from utils.env_utils import get_env_bool
 from utils.llm_trace import (
     OUTCOME_DISCARDED,
     OUTCOME_ERROR,
     OUTCOME_PARSE_FAILED,
     OUTCOME_PARSED,
     attempt_link_summary,
-    capture_llm_call,
     last_llm_trace,
     llm_attempt_ledger,
     llm_trace_scope,
@@ -58,11 +58,8 @@ from utils.llm_trace import (
     record_trace_event,
 )
 from utils.llm_utils import (
-    azure_responses_api_url,
     build_reasoning_effort_kwargs,
-    build_responses_reasoning_param,
     litellm_completion,
-    normalize_azure_ai_api_base,
 )
 
 logger = logging.getLogger(__name__)
@@ -73,6 +70,64 @@ _IMAGE_SUFFIXES = frozenset(
 )
 
 _RESPONSES_API_PREFIXES = ("gpt-5", "azure_ai/gpt-5")
+
+#: Off-switch for the caption triage gate (default ON). Read live, not at
+#: import, so one process can score runs under both policies — the same
+#: contract as GVF_FIGURE_VARIANT_GATE in scripts/extract_figure_variants.py.
+FIGURE_TRIAGE_ENV = "GVF_FIGURE_TRIAGE"
+
+# Caption triage lexicon, verbatim from the retired scripts/fetch_gold_figures.py
+# (the à-la-carte gold-figure fetcher): pedigrees and clinical panels carry
+# patient counts; functional/structural panels do not. " generation" keeps its
+# leading space so "degeneration" cannot match.
+PEDIGREE_CAPTION_KEYWORDS = (
+    "pedigree",
+    "family tree",
+    "kindred",
+    "proband",
+    "segregat",
+    " generation",
+)
+CLINICAL_CAPTION_KEYWORDS = (
+    "ecg",
+    "electrocardiogram",
+    "qtc",
+    "holter",
+    "phenotyp",
+    "carrier",
+    "affected",
+    "unaffected",
+    "clinical features",
+    "patient",
+)
+FUNCTIONAL_CAPTION_KEYWORDS = (
+    "current trace",
+    "tail current",
+    "boltzmann",
+    "voltage clamp",
+    "voltage-clamp",
+    "conductance",
+    "kinetic",
+    "confocal",
+    "immunoblot",
+    "western",
+    "topology",
+    "schematic",
+    "alignment",
+    "construct",
+    "fluoresc",
+    "crystal",
+    "simulation",
+    "representative current",
+    "patch clamp",
+    "patch-clamp",
+)
+
+# FULL_CONTEXT figure blocks: a '#### Figure N' heading, caption lines, and
+# one or more '_image_:' lines (same shapes the retired fetch_gold_figures.py
+# parsed).
+_FIG_HEADING_RE = re.compile(r"^#{2,4}\s*(Figure|Fig\.?)\s*([0-9]+[A-Za-z]?)\b", re.I)
+_IMG_LINE_RE = re.compile(r"^_image_:\s*(\S+)")
 
 
 _VARIANT_PROMPT = """\
@@ -115,6 +170,10 @@ class FigureReadResult:
     image_path: str
     variants: List[Dict[str, Any]] = field(default_factory=list)
     error: Optional[str] = None
+    #: Set when no vision call was made: ``duplicate_image:<first filename>``
+    #: or ``caption_triage:<matched keyword>``. Distinct from ``error`` — a
+    #: skip is a deliberate cost decision, not a failure.
+    skipped: Optional[str] = None
 
     @property
     def ok(self) -> bool:
@@ -175,6 +234,140 @@ def find_pmid_figures(pmc_fulltext_dir: Path, pmid: str) -> List[Path]:
     return imgs
 
 
+def parse_full_context_captions(text: str) -> Dict[str, str]:
+    """Map lowercased image basenames to captions from FULL_CONTEXT figure blocks.
+
+    One caption block can advertise the same figure under several ``_image_:``
+    URLs, so every basename in the block maps to the block's caption — a
+    duplicate URL must not dodge triage. Basenames are the *publisher's*
+    filenames; whether they match anything on disk is the caller's problem.
+    """
+    captions: Dict[str, str] = {}
+    caption_lines: List[str] = []
+    image_names: List[str] = []
+    in_block = False
+
+    def _flush() -> None:
+        nonlocal caption_lines, image_names, in_block
+        caption = " ".join(part for part in caption_lines if part).strip()
+        if caption:
+            for name in image_names:
+                captions.setdefault(name, caption)
+        caption_lines, image_names, in_block = [], [], False
+
+    for raw_line in text.replace("\r\n", "\n").split("\n"):
+        line = raw_line.strip()
+        if _FIG_HEADING_RE.match(line):
+            _flush()
+            in_block = True
+            continue
+        if not in_block:
+            continue
+        img = _IMG_LINE_RE.match(line)
+        if img:
+            base = (
+                img.group(1).split("?")[0].split("#")[0].rstrip("/").rsplit("/", 1)[-1]
+            )
+            if base:
+                image_names.append(base[:120].lower())
+            continue
+        if line.startswith("#"):
+            _flush()
+            continue
+        caption_lines.append(line)
+    _flush()
+    return captions
+
+
+def _load_captions_sidecar(fig_dir: Path) -> Dict[str, str]:
+    """Read the harvester's ``captions.json`` (on-disk filename -> caption).
+
+    The PMC harvest path names images ``fig_pmc_N.jpg`` — nothing like the
+    publisher basename a FULL_CONTEXT ``_image_:`` line carries — and writes
+    this sidecar keyed by the filename it actually saved. For those images it
+    is the only trustworthy caption binding.
+    """
+    path = fig_dir / "captions.json"
+    if not path.is_file():
+        return {}
+    try:
+        entries = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(entries, list):
+        return {}
+    captions: Dict[str, str] = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        filename = str(entry.get("filename") or "").strip().lower()
+        caption = " ".join(
+            str(entry.get(key) or "").strip() for key in ("title", "text")
+        ).strip()
+        if filename and caption:
+            captions.setdefault(filename, caption)
+    return captions
+
+
+def load_figure_captions(pmc_fulltext_dir: Path, pmid: str) -> Dict[str, str]:
+    """Best-effort lowercased-basename -> caption map for one paper's figures.
+
+    Only confident bindings are returned: the ``captions.json`` sidecar keys
+    files by their on-disk names, and FULL_CONTEXT ``_image_:`` basenames only
+    match files that kept the publisher's filename. An image absent from the
+    map has an UNKNOWN caption, not "no data" — triage fails open and reads it.
+    """
+    captions: Dict[str, str] = {}
+    for fig_dir in (
+        pmc_fulltext_dir / f"{pmid}_figures",
+        pmc_fulltext_dir / pmid / f"{pmid}_figures",
+    ):
+        if fig_dir.is_dir():
+            for name, caption in _load_captions_sidecar(fig_dir).items():
+                captions.setdefault(name, caption)
+    for context_path in (
+        pmc_fulltext_dir / f"{pmid}_FULL_CONTEXT.md",
+        pmc_fulltext_dir / pmid / f"{pmid}_FULL_CONTEXT.md",
+    ):
+        if not context_path.is_file():
+            continue
+        try:
+            text = context_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for name, caption in parse_full_context_captions(text).items():
+            captions.setdefault(name, caption)
+    return captions
+
+
+def triage_figure_caption(caption: Optional[str]) -> tuple[bool, str]:
+    """``(read, reason)`` for one figure image's caption.
+
+    Fail-open is the load-bearing rule: novel identities live in chromatograms
+    whose captions are a bare "Fig. 2", and many images have no confidently
+    bound caption at all. Only a caption that names functional/structural
+    content AND nothing pedigree/clinical may skip the vision read — never
+    absence of evidence.
+    """
+    if not caption or not caption.strip():
+        return True, "no_caption"
+    low = caption.lower()
+    for keyword in PEDIGREE_CAPTION_KEYWORDS:
+        if keyword in low:
+            return True, f"pedigree:{keyword.strip()}"
+    for keyword in CLINICAL_CAPTION_KEYWORDS:
+        if keyword in low:
+            return True, f"clinical:{keyword}"
+    for keyword in FUNCTIONAL_CAPTION_KEYWORDS:
+        if keyword in low:
+            return False, f"functional:{keyword}"
+    return True, "no_keyword_match"
+
+
+def _figure_triage_enabled() -> bool:
+    return get_env_bool(FIGURE_TRIAGE_ENV, True)
+
+
 def read_figures_for_pmid(
     pmid: str,
     gene: str,
@@ -187,7 +380,13 @@ def read_figures_for_pmid(
     images = find_pmid_figures(pmc_fulltext_dir, pmid)
     if max_images is not None:
         images = images[:max_images]
-    return read_images(images, gene, pmid=pmid, model=model)
+    return read_images(
+        images,
+        gene,
+        pmid=pmid,
+        model=model,
+        captions=load_figure_captions(pmc_fulltext_dir, pmid),
+    )
 
 
 def read_images(
@@ -196,17 +395,105 @@ def read_images(
     *,
     pmid: str = "",
     model: Optional[str] = None,
+    captions: Optional[Dict[str, str]] = None,
 ) -> PMIDFigureReport:
-    """Run the reader over an arbitrary list of image paths."""
+    """Run the reader over an arbitrary list of image paths.
+
+    ``captions`` maps lowercased image basenames to caption text (see
+    :func:`load_figure_captions`). Two vision reads are skipped as measured
+    waste, each recorded as a ``figure_vision_skip`` trace event: an image
+    byte-identical to one already read for this paper (every audited
+    duplicate's first read returned the same identities), and — unless
+    ``GVF_FIGURE_TRIAGE=off`` — an image whose caption is functional-only.
+    """
     model = model or _default_vision_model()
     report = PMIDFigureReport(pmid=pmid, gene=gene)
+    triage_on = _figure_triage_enabled()
+    seen_digests: Dict[str, str] = {}
     for img in image_paths:
+        keep, reason = triage_figure_caption((captions or {}).get(img.name.lower()))
+        if triage_on and not keep:
+            logger.info(
+                "Skipping vision read of %s: caption matched %s", img.name, reason
+            )
+            _record_figure_skip(
+                img,
+                gene,
+                pmid,
+                skip="caption_triage",
+                matched_keyword=reason,
+            )
+            report.per_figure.append(
+                FigureReadResult(
+                    image_path=str(img), skipped=f"caption_triage:{reason}"
+                )
+            )
+            continue
+        try:
+            digest = hashlib.sha256(img.read_bytes()).hexdigest()
+        except Exception as exc:
+            report.per_figure.append(
+                FigureReadResult(image_path=str(img), error=f"read_image: {exc}")
+            )
+            continue
+        first_name = seen_digests.get(digest)
+        if first_name is not None:
+            logger.info(
+                "Skipping duplicate figure image %s (byte-identical to %s)",
+                img.name,
+                first_name,
+            )
+            _record_figure_skip(
+                img,
+                gene,
+                pmid,
+                skip="duplicate_image",
+                duplicate_of=first_name,
+                sha256=digest,
+            )
+            report.per_figure.append(
+                FigureReadResult(
+                    image_path=str(img), skipped=f"duplicate_image:{first_name}"
+                )
+            )
+            continue
+        seen_digests[digest] = img.name
         # PMID is in hand here and must be forwarded: _trace_parent needs BOTH
         # gene and pmid, so dropping it collapsed every figure read for every
         # paper into a single gene-level group.
         result = _read_one(img, gene, model, pmid=pmid)
         report.per_figure.append(result)
     return report
+
+
+def _record_figure_skip(
+    image_path: Path,
+    gene: str,
+    pmid: str,
+    *,
+    skip: str,
+    **details: Any,
+) -> None:
+    record_trace_event(
+        "figure_vision_skip",
+        {
+            "image": image_path.name,
+            "image_path": str(image_path),
+            "skip": skip,
+            **details,
+            "selection_policy": (
+                "Skip one vision read the trace evidence says is redundant: a "
+                "byte-identical duplicate already read for this paper, or a "
+                "caption naming functional/structural content with no "
+                "pedigree/clinical signal. An image with no confidently bound "
+                "caption is always read."
+            ),
+        },
+        gene=gene,
+        pmid=pmid or None,
+        stage="figure_variant_read",
+        component="figure_variant_reader",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -226,12 +513,6 @@ def _default_vision_model() -> str:
 def _uses_responses_api(model: str) -> bool:
     name = (model or "").lower()
     return any(name.startswith(prefix) for prefix in _RESPONSES_API_PREFIXES)
-
-
-def _strip_provider_prefix(model: str) -> str:
-    if model.startswith("azure_ai/"):
-        return model[len("azure_ai/") :]
-    return model
 
 
 def _image_to_data_url(image_path: Path) -> str:
@@ -431,60 +712,8 @@ def _call_chat_completions(data_url: str, model: str, prompt: str) -> str:
 
 
 def _call_responses_api(data_url: str, model: str, prompt: str) -> str:
-    base = normalize_azure_ai_api_base()
-    key = os.environ.get("AZURE_AI_API_KEY", "")
-    if not base or not key:
-        raise RuntimeError(
-            "Responses API requires AZURE_AI_API_BASE and AZURE_AI_API_KEY"
-        )
-
-    url = azure_responses_api_url(base)
-    body = {
-        "model": _strip_provider_prefix(model),
-        "input": [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "input_text", "text": prompt},
-                    {"type": "input_image", "image_url": data_url},
-                ],
-            }
-        ],
-        "max_output_tokens": 4096,
-        **build_responses_reasoning_param(
-            model, get_settings().vision_reasoning_effort
-        ),
-    }
-
-    def send_request() -> dict:
-        response = requests.post(
-            url,
-            headers={"api-key": key, "Content-Type": "application/json"},
-            json=body,
-            timeout=120,
-        )
-        if response.status_code != 200:
-            raise RuntimeError(
-                f"Responses API returned {response.status_code}: {response.text[:300]}"
-            )
-        try:
-            return response.json()
-        except json.JSONDecodeError as exc:
-            raise RuntimeError(
-                f"Responses API returned invalid JSON: {response.text[:300]}"
-            ) from exc
-
-    data, _trace = capture_llm_call(
-        provider="azure_openai_responses_http",
-        requested_model=model,
-        resolved_model=_strip_provider_prefix(model),
-        request={"endpoint": url, "body": body},
-        call=send_request,
+    # Shared with the OCR module: usage-counter aliasing for cost visibility
+    # and the token-cap retry-at-low-effort live in one place.
+    return call_responses_api_vision(
+        prompt, data_url, model, attempt_role="figure_variant_read"
     )
-    for item in data.get("output", []) or []:
-        if item.get("type") != "message":
-            continue
-        for content in item.get("content", []) or []:
-            if content.get("type") == "output_text":
-                return (content.get("text") or "").strip()
-    return ""
