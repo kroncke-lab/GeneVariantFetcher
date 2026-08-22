@@ -19,79 +19,6 @@ Execute the acceptance gates in order. Do not publish a new headline, update the
 dashboard, enable a default-off recovery stage, or advance to a larger cohort
 until the preceding gate passes and its artifact is recorded.
 
-## 0. In-flight 2026-08-22 improvement batch (cruft → fixes → paid proof)
-
-Owner-authorized sequence: remove cruft, fix evidenced defects, then spend up
-to $100 proving the improvement, then stage the 50/50/50 BRCA1/BRCA2/BMPR2
-candidates into the login-gated Variant Browser reviewer surface. Evidence and
-ranking authority for the whole batch:
-`docs/evidence/strategy_consult_20260822.md` (three-source consult: Sol xhigh +
-Grok 4.6 xhigh + five locked-trace/disk audits).
-
-Landed on main (each with its `docs/PROTOCOL_CHANGELOG.md` row):
-
-- Cruft sweep: 16 verified-unreferenced files deleted (dead failure logger,
-  superseded one-off scripts, rejected debate-rescore pilots); catalogs updated.
-  `run_claim_debate_pilot.py` stays — it has live tests. One agent worktree
-  remains (`.claude/worktrees/vu-vpn-ezproxy-setup-*`, zero unique commits);
-  not pruned because it may belong to a concurrent session — remove after
-  confirming it is idle.
-- Prompt-caching split (system/user) for both extraction modes, continuation,
-  and claim-verify + the verifier reasoning-effort mis-wire fix
-  (`pipeline/extraction.py:7583` inherited the extractor's effort).
-- Figure-vision cost controls: SHA image dedup, fail-open caption triage
-  (`GVF_FIGURE_TRIAGE`), token-cap retry-then-accept-empty, usage-key aliasing
-  so vision cost is finally visible in traces.
-- Acquisition fail-opens: table-preserving `.doc` conversion (24667783: 0→92
-  pipe rows on the real corpus file), zero-byte FULL_CONTEXT demotion at three
-  selector sites (27114410), reference-section scoping + fail-closed PDF
-  supplement identity gate (31520628's mis-bound CDC PDFs).
-
-- [ ] **Land the notation/scanner FN fixes** (in flight): eight diagnosed
-      gold-120 FN classes, all generic — merge-attribution fixes (affirmative
-      target assignment beats the `nearby_generic_gene` veto; table-row lane),
-      prose indel events, zero-separator gene attachment, footnote-marker
-      tolerance in `_valid_table_cdna_identity`, dup-with-residues
-      normalization, Δ-notation scanner branch, en-dash/bracket cDNA
-      tolerance, exons-first structural phrasing. Diagnosis (with replays) in
-      the evidence doc; the 28798025 six-variant miss is deterministic and
-      recurs until this lands.
-- [ ] **Sol + Grok adversarial review of the full diff**, fix findings.
-- [ ] **Paid proof run**: `setup_production_eval.py create --run-id
-      20260822_postfix_gold118` (manifest already excludes 14642689 → 118
-      attempts), `run_extraction.sh`, then `lock_and_score.sh`. Compare to the
-      2026-08-21 candidate-local lock (546/633, 98.03% counted-extra, carrier
-      MAE 0.255, ~$9.77) on recall, counted-extra precision, MAE, and $ (usage
-      capture now includes vision). Budget ceiling $100; this run ~$6–10.
-- [ ] **Stage 50/50/50 into the VB reviewer surface (login-gated, NOT public
-      publish)** only after the proof run holds or improves the cardiac
-      metrics. Contamination pre-audit already clean on all three candidate
-      DBs (canine PMID absent everywhere, zero wrong-gene rows, 50 papers
-      each, residue QC with the fixed fail-open code: 0 off-target BRCA2/BMPR2,
-      1 curator-visible BRCA1 boundary flag — p.Asp1864Tyrfs, the stop-codon
-      position). Re-run that audit against whichever DB is imported, and
-      decide BRCA2 final5 vs the staged 3-PMID refresh rebuild explicitly.
-
-Deferred from this batch, deliberately (do not silently drop):
-
-- Deterministic count/phenotype column binder incl. regex-sweep cell binding
-  (§7 below) — highest count-coverage lever, but needs the router's mapping
-  machinery to be Gate-2-safe; do not bundle with an unrelated proof run.
-- `carrier_guard` companion-field nulling and the N=1 `figure_copied_phenotype`
-  clear — unmeasured; measure destroyed/killed first (break-evens: carriers
-  5.19, affected 3.64, unaffected 2.08; unaffected guard already sits at 1.67).
-- `figure_count_unverified` promote-on-corroboration (fills measured 90/91
-  exact are projected away) — design the corroboration path first.
-- Claim-verify changed-vs-CORRECT join ($0, from stored
-  `claim_verification_field_changes` vs gold-matched exactness) — do before
-  any verify-threshold or verifier-model change.
-- Targeted acquisition for the 44 never-acquired FN rows in 7 papers (routes
-  named in the evidence doc §A2); Wiley TDM + Elsevier + AHA/EZproxy.
-- VB publish-path findings: bare-legacy merging into a genuine HGVS identity;
-  one blocked label aborting a whole publish run.
-- Migration repair gaps: whitespace-proof `REPLACE(TRIM(...))` and LIMIT-1
-  duplicate repair in `harvesting/migrate_to_sqlite.py`.
-
 ## 1. Re-establish the scientific baseline
 
 The paired live cardiac rescore and Gate 1 review were recorded on 2026-08-13.
@@ -129,6 +56,28 @@ the lock or underlying gold snapshot. New Gate 2 runs therefore use 118
 attempts, while this immutable run remains the accepted evidence for the code
 change.
 
+- [ ] **Prove the 2026-08-22 improvement batch, then stage the reviewer
+      surface.** The batch itself (cruft sweep, prompt-caching split +
+      verifier-effort fix, figure-vision cost controls, acquisition
+      fail-open closures, eight generic notation/scanner FN fixes) is
+      recorded in `docs/PROTOCOL_CHANGELOG.md` 2026-08-22 rows with
+      evidence in `docs/evidence/strategy_consult_20260822.md`. Remaining,
+      in order: (1) Sol + Grok adversarial review of the full diff, fix
+      findings, commit; (2) paid blind proof run
+      (`setup_production_eval.py create --run-id 20260822_postfix_gold118`,
+      118 attempts — the manifest already excludes 14642689 — then
+      `run_extraction.sh` and `lock_and_score.sh`), compared to the
+      2026-08-21 candidate-local lock (546/633, 98.03% counted-extra,
+      carrier MAE 0.255, ~$9.77) on recall, counted-extra precision, MAE,
+      and $ (vision usage is now captured); budget ceiling $100, expected
+      ~$6-10; (3) only if the cardiac metrics hold or improve, stage the
+      50/50/50 BRCA1/BRCA2/BMPR2 candidates into the login-gated Variant
+      Browser reviewer surface (NOT public publish), re-running the
+      contamination audit (canine PMID, wrong-gene rows, paper membership,
+      fixed-code residue QC; the 2026-08-22 pre-audit found only one
+      curator-visible BRCA1 boundary flag, p.Asp1864Tyrfs at the stop
+      position) against the exact DB imported, and deciding BRCA2 final5
+      vs the staged 3-PMID refresh rebuild explicitly.
 - [ ] Finish Gate 3, `reviewer_545`: 545 attempts across 506
       unique PMIDs in the 11 populated reviewer workspaces. The first approved
       experimental strata remain BMPR2 50, BRCA1 50, and corrected BRCA2 50;
@@ -332,6 +281,13 @@ remain specialized or historical evidence, not extra gates.
 
 ## 2. Recover missing source before adding inference
 
+- [ ] Fetch the 44 never-acquired gold-120 FN rows concentrated in 7 papers
+      (routes per paper in `docs/evidence/strategy_consult_20260822.md` §A2:
+      JACC/Elsevier online tables for 29650123, Elsevier AJOG supplements for
+      31520628 after the mis-bound CDC PDFs were gated, Wiley TDM for
+      14678125, AHA/EZproxy for 27114410 and 15466642, Karger/EZproxy for
+      17971661, Table 2 body for 19926015), then targeted
+      `scripts/refresh_run_db.py` on those PMIDs — not a full re-extract.
 - [ ] Complete the one-time EZproxy profile bootstrap with
       `.venv/bin/python scripts/ezproxy_relogin.py --bootstrap`, then rerun
       paywall recovery and `refresh_run_db.py` for the BMPR2 stub backlog.
@@ -352,6 +308,10 @@ missing paper or table with speculative count arithmetic.
 
 ## 3. Measure count semantics and recovery
 
+- [ ] Join `claim_verification_field_changes` on the locked runs to
+      gold-matched exactness ($0): the verify layer changed 80.4% of its
+      decisions' emitted values, but changed-vs-CORRECT is unmeasured.
+      Required before any verifier threshold, batching, or model change.
 - [ ] Move compact count-semantics verification after all extraction and
       recovery layers so it evaluates the final winning observation rather than
       only the early `ExpertExtractor` result.
@@ -388,6 +348,14 @@ missing paper or table with speculative count arithmetic.
       hide a weak stratum.
 - [ ] Fail closed for unknown-gene position validation, expand BRCA notation by
       class, and build a BRCA silver standard before claiming generalization.
+- [ ] Design a corroboration path that promotes `figure_count_unverified`
+      fills in the trusted projection: the masked fills measured 90/91 exact
+      (`pipeline/count_repair.py`), far above every destroyed/killed
+      break-even. Measure before changing the mask.
+- [ ] Variant Browser publish path: one blocked label currently aborts the
+      whole publish run with no unblock/skip-and-continue path, and a bare
+      legacy label can still merge into a genuine HGVS identity via the
+      historical alias keys when both exist. Fix both fail-closed.
 - [ ] Fold destructive legacy guards into the trust record so raw values remain
       recoverable, then define and schedule a self-hosted nightly regression
       gate with per-stratum acceptance metrics.
@@ -475,6 +443,10 @@ source is unaffected.
 
 ## 5. Engineering handoff follow-ups
 
+- [ ] `harvesting/migrate_to_sqlite.py` repair gaps: the fabricated-c repair
+      proof strips only spaces (`REPLACE(TRIM(...),' ','')`, missing
+      tabs/newlines) and repairs only the first matching row (`LIMIT 1`),
+      leaving later duplicates as distinct fabricated identities.
 - [ ] Enable run-scoped LLM tracing for standalone extraction, discovery,
       targeted landing, figure extraction, and recall-audit entry points.
 - [ ] Give `scripts/smoke_azure_models.py` a normalized, scoped connectivity
