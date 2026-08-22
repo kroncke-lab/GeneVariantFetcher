@@ -49,3 +49,24 @@ def test_select_scout_source_prefers_cleaned_for_oversized_context(tmp_path):
     selected = select_scout_source_path(full_context, prefer_cleaned_above_chars=5)
 
     assert selected == cleaned
+
+
+def test_select_scout_source_demotes_zero_byte_full_context(tmp_path):
+    """A 0-byte FULL_CONTEXT must never win over a populated CLEANED sibling.
+
+    KCNQ1 27114410: the corpus FULL_CONTEXT is 0 bytes while the CLEANED holds
+    17.7 KB; the small-file fast path used to return the empty file untouched.
+    """
+
+    full_context = tmp_path / "27114410_FULL_CONTEXT.md"
+    cleaned = tmp_path / "27114410_CLEANED.md"
+    full_context.write_text("", encoding="utf-8")
+    cleaned.write_text(
+        "# MAIN TEXT\n\nKCNQ1 cohort table.\n"
+        + ("methods results discussion variants. " * 80),
+        encoding="utf-8",
+    )
+
+    selected = select_scout_source_path(full_context)
+
+    assert selected == cleaned

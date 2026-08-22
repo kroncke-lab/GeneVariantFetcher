@@ -1401,6 +1401,42 @@ class SupplementScraper:
         r"(?:electronic[-_ ]?)?(?:copyright|disclosure)[-_ ]?form.*\.pdf$",
     ]
 
+    # Markup tokens publishers use for the bibliography container. Matched
+    # against ancestor tag names and id/class/role attribute tokens — this is
+    # structural scoping (where the link lives in the article DOM), never a
+    # URL or domain list.
+    _REFERENCE_SECTION_TOKEN_RE = re.compile(
+        r"(?:^|[^a-z0-9])(?:references?|ref-?list|bibliography|bibliographies|"
+        r"citation-?list|cited-?references|literature-?cited)(?:[^a-z0-9]|$)"
+    )
+    _REFERENCE_SECTION_ATTRS = ("id", "class", "role", "data-title", "aria-label")
+
+    def _in_reference_section(self, link) -> bool:
+        """True when a link sits inside the article's bibliography markup.
+
+        Cited references routinely point at file-shaped URLs — KCNQ1
+        31520628's AJOG page cites two CDC vital-statistics PDFs — and the
+        extension prong of the generic matcher would otherwise capture them
+        as supplements. Only containers the publisher already labels as a
+        reference list count, so an undistinguished page keeps the current
+        (permissive) behavior.
+        """
+        for parent in link.parents:
+            name = (getattr(parent, "name", "") or "").lower()
+            if not name:
+                continue
+            if self._REFERENCE_SECTION_TOKEN_RE.search(name):
+                return True
+            for attr in self._REFERENCE_SECTION_ATTRS:
+                value = parent.get(attr)
+                if isinstance(value, (list, tuple)):
+                    value = " ".join(str(v) for v in value)
+                if value and self._REFERENCE_SECTION_TOKEN_RE.search(
+                    str(value).lower()
+                ):
+                    return True
+        return False
+
     def _is_supplement_url(self, href: str) -> bool:
         """Check if a URL contains patterns indicating a supplement file."""
         href_lower = href.lower()
@@ -1476,6 +1512,12 @@ class SupplementScraper:
             is_file_link = self._has_file_extension(href_lower)
 
             if not (is_supplement_link or is_pattern_match or is_file_link):
+                continue
+
+            # A cited reference is not supplementary material. Links inside a
+            # labeled bibliography container only stay eligible when the href
+            # itself carries a supplement URL pattern (e.g. /doi/suppl/).
+            if not is_pattern_match and self._in_reference_section(link):
                 continue
 
             try:

@@ -298,6 +298,10 @@ def test_doc_to_markdown_uses_textutil_before_antiword_for_word_tables(
         if cmd[0] == "soffice":
             raise FileNotFoundError
         if cmd[0] == "textutil":
+            # The HTML leg fails here so the plain-text leg (the behavior this
+            # test pins) is what produces the output.
+            if "html" in cmd:
+                return subprocess.CompletedProcess(cmd, 1, stdout="", stderr="")
             return subprocess.CompletedProcess(cmd, 0, stdout=textutil_text, stderr="")
         raise AssertionError(f"unexpected converter command: {cmd}")
 
@@ -307,6 +311,69 @@ def test_doc_to_markdown_uses_textutil_before_antiword_for_word_tables(
     assert "| Patient # | Gene | Aa change (p.) | Bases pair change (c.) |" in md
     assert "| 13 | SCN5A | Asn406Ser | 1217 A>G |" in md
     assert "| 19 | SCN5A | Glu1784Lys | 5350 G>A |" in md
+
+
+def test_doc_to_markdown_prefers_textutil_html_for_table_cells(
+    converter, tmp_path: Path
+):
+    """The HTML route must be attempted first and yield pipe-delimited cells.
+
+    ``textutil -convert txt`` flattened KCNQ1 24667783's mutation table into
+    delimiter-less runs ("…C>TMissensehetCM990761…"); ``-convert html``
+    preserves <table> markup, so each cell survives as its own column.
+    """
+    doc_path = tmp_path / "supp.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    textutil_html = textwrap.dedent("""\
+        <html><body>
+          <p>Supplementary Table 1. KCNQ1 mutations.</p>
+          <table>
+            <tr><td>Nucleotide</td><td>Effect</td><td>Zygosity</td><td>HGMD</td></tr>
+            <tr><td>477+5G>A</td><td>Splice</td><td>het</td><td>CS990751</td></tr>
+            <tr><td>1032G>A</td><td>Missense</td><td>het</td><td>CM990761</td></tr>
+          </table>
+        </body></html>
+        """)
+    textutil_calls = []
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            textutil_calls.append(list(cmd))
+            if "html" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd, 0, stdout=textutil_html, stderr=""
+                )
+            raise AssertionError("plain-text textutil leg must not run")
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert textutil_calls[0][:3] == ["textutil", "-convert", "html"]
+    assert "| Nucleotide | Effect | Zygosity | HGMD |" in md
+    assert "| 477+5G>A | Splice | het | CS990751 |" in md
+    assert "| 1032G>A | Missense | het | CM990761 |" in md
+    # Non-table prose survives alongside the tables.
+    assert "Supplementary Table 1. KCNQ1 mutations." in md
+    # No flattened delimiter-less cell runs.
+    assert "1032G>AMissensehet" not in md.replace(" ", "")  # sanity on join
+
+
+def test_doc_html_route_does_not_touch_pdf_or_excel_paths(converter, tmp_path: Path):
+    """Guard: the HTML-first conversion applies to .doc only."""
+    pdf = tmp_path / "not_a_pdf.pdf"
+    pdf.write_text("not a pdf", encoding="utf-8")
+
+    def fail_run(cmd, **kwargs):
+        raise AssertionError(f"pdf/xlsx conversion must not shell out: {cmd}")
+
+    with patch("subprocess.run", side_effect=fail_run):
+        md = converter.pdf_to_markdown(pdf)
+    assert "[Invalid PDF file: not_a_pdf.pdf]" in md
 
 
 def test_xml_supplement_to_markdown_strips_tags(converter, tmp_path: Path):
@@ -456,3 +523,90 @@ def test_pdf_to_markdown_with_images_creates_nested_output_dir(
         assert deep_dir.exists() or (deep_dir / "figures").exists()
     except ImportError:
         pytest.skip("PyMuPDF not installed")
+
+
+def test_doc_to_markdown_prefers_antiword_when_textutil_flattens_tables(
+    converter, tmp_path: Path
+):
+    """KCNQ1 24667783's real shape: textutil flattens the mutation table in
+    EVERY output format (HTML keeps only a one-cell stub row), while
+    ``antiword -t`` preserves the cells. A textutil rendering without table
+    structure must not shadow an antiword rendering that has it.
+    """
+    doc_path = tmp_path / "supp.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    flattened_html = textwrap.dedent("""\
+        <html><body>
+          <table><tr><td></td><td>Clinical data</td></tr></table>
+          <p>Gly306Arg916 G&gt;AMissensehetCM960900rs120074181N/ADELDEL</p>
+        </body></html>
+        """)
+    antiword_tsv = (
+        "SUPPLEMENTAL MATERIAL\n"
+        "Patient\tGene\tAa change\tBases pair change\n"
+        "37\tKCNQ1\tGly306Arg\t916 G>A\n"
+        "41\tKCNQ1\tArg366Trp\t1096 C>T\n"
+    )
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            if "html" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd, 0, stdout=flattened_html, stderr=""
+                )
+            # -convert txt: the flattened delimiter-less rendering.
+            return subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout="Gly306Arg916 G>AMissensehetCM960900rs120074181N/ADELDEL",
+                stderr="",
+            )
+        if cmd[0] == "antiword":
+            return subprocess.CompletedProcess(cmd, 0, stdout=antiword_tsv, stderr="")
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert "| 37 | KCNQ1 | Gly306Arg | 916 G>A |" in md
+    assert "| 41 | KCNQ1 | Arg366Trp | 1096 C>T |" in md
+
+
+def test_doc_to_markdown_keeps_textutil_text_when_no_route_has_tables(
+    converter, tmp_path: Path
+):
+    """A table-less .doc must keep the (richer) textutil rendering, not fall
+    through to antiword's plain output."""
+    doc_path = tmp_path / "notes.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            if "html" in cmd:
+                return subprocess.CompletedProcess(
+                    cmd,
+                    0,
+                    stdout="<html><body><p>Supplementary methods prose only.</p></body></html>",
+                    stderr="",
+                )
+            return subprocess.CompletedProcess(
+                cmd, 0, stdout="Supplementary methods prose only.", stderr=""
+            )
+        if cmd[0] == "antiword":
+            return subprocess.CompletedProcess(
+                cmd, 0, stdout="antiword prose rendering", stderr=""
+            )
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert "Supplementary methods prose only." in md
+    assert "antiword prose rendering" not in md

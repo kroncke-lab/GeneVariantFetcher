@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Optional
 
 from config.constants import SCOUT_CLINICAL_KEYWORDS, SCOUT_PREFER_CLEANED_ABOVE_CHARS
+from pipeline.source_quality import demote_empty_full_context
 from utils.scout_models import DataZone, DataZoneReport
 
 logger = logging.getLogger(__name__)
@@ -33,6 +34,10 @@ def select_scout_source_path(
     scout stage can safely use an existing CLEANED sibling when the raw file is
     very large. Preprocessing is deterministic and non-destructive.
     """
+
+    # An empty/truncated FULL_CONTEXT would trivially pass the size check below
+    # and scout nothing while a populated CLEANED sits beside it.
+    full_context_path = demote_empty_full_context(full_context_path)
 
     if full_context_path.stat().st_size <= prefer_cleaned_above_chars:
         return full_context_path

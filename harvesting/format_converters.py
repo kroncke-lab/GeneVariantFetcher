@@ -277,6 +277,47 @@ class FormatConverter:
                 rows.append(row)
         return self._table_lines_to_markdown(rows)
 
+    def _doc_html_to_markdown(self, html: str) -> str:
+        """Convert an HTML rendering of a legacy ``.doc`` to markdown.
+
+        Used for the ``textutil -convert html`` route: tables survive there as
+        real ``<table>`` markup, so every cell comes out as a pipe-delimited
+        column instead of the delimiter-less runs the plain-text conversion
+        produces (KCNQ1 24667783's mutation table flattened to
+        ``…C>TMissensehetCM990761…`` under ``-convert txt``).
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        table_parts: List[str] = []
+        for table in soup.find_all("table"):
+            md = self._html_table_to_markdown(table)
+            if md.strip():
+                table_parts.append(md)
+        for table in soup.find_all("table"):
+            table.decompose()
+        body_text = soup.get_text(separator="\n", strip=True)
+        parts = [p for p in [body_text, *table_parts] if p and p.strip()]
+        return "\n\n".join(parts)
+
+    @staticmethod
+    def _count_markdown_table_rows(text: str) -> int:
+        """Count pipe-table rows that carry at least two populated cells.
+
+        Used to judge whether a ``.doc`` conversion route actually recovered
+        table structure. Separator rows and near-empty stub rows (a Word
+        importer sometimes emits a one-cell header fragment while flattening
+        the rest of the table) deliberately do not count.
+        """
+        rows = 0
+        for line in text.splitlines():
+            line = line.strip()
+            if not (line.startswith("|") and line.endswith("|")):
+                continue
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            populated = [c for c in cells if c and set(c) != {"-"}]
+            if len(populated) >= 2:
+                rows += 1
+        return rows
+
     def xml_to_markdown(self, xml_content: str) -> str:
         """
         Convert PubMed Central XML to markdown.
@@ -678,7 +719,44 @@ class FormatConverter:
             )
 
         # Try macOS textutil before antiword. Some publisher .doc supplements
-        # preserve Word table cells here that antiword drops entirely.
+        # preserve Word table cells here that antiword drops entirely — but the
+        # reverse also happens: textutil's Word importer flattened KCNQ1
+        # 24667783's mutation table into delimiter-less cell runs
+        # ("…C>TMissensehetCM990761…") in EVERY output format, while
+        # ``antiword -t`` kept every cell. So a textutil rendering only wins
+        # outright when it actually shows table structure; otherwise it is held
+        # as a candidate and antiword gets a chance to do better. HTML first:
+        # ``-convert html`` keeps <table> markup (turned into pipe tables by
+        # _doc_html_to_markdown) on files where ``-convert txt`` loses the
+        # cell boundaries.
+        held_candidate: Optional[str] = None
+        try:
+            import subprocess
+
+            result = subprocess.run(
+                ["textutil", "-convert", "html", "-stdout", str(file_path)],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                text = self._doc_html_to_markdown(result.stdout)
+                if text.strip():
+                    if self._count_markdown_table_rows(text) >= 2:
+                        print(
+                            f"    ✓ Extracted text via textutil HTML "
+                            f"({len(text)} chars)"
+                        )
+                        return text + "\n\n"
+                    held_candidate = text
+        except FileNotFoundError:
+            pass  # textutil is macOS-only
+        except Exception as e:
+            print(
+                f"    Warning: textutil HTML conversion failed for "
+                f"{file_path.name}: {e}"
+            )
+
         try:
             import subprocess
 
@@ -692,15 +770,18 @@ class FormatConverter:
                 text = self._normalize_textutil_doc_text(result.stdout)
                 text = self._convert_tsv_to_markdown_tables(text)
                 if text.strip():
-                    print(f"    ✓ Extracted text via textutil ({len(text)} chars)")
-                    return text + "\n\n"
+                    if self._count_markdown_table_rows(text) >= 2:
+                        print(f"    ✓ Extracted text via textutil ({len(text)} chars)")
+                        return text + "\n\n"
+                    if held_candidate is None:
+                        held_candidate = text
         except FileNotFoundError:
             pass  # textutil is macOS-only
         except Exception as e:
             print(f"    Warning: textutil fallback failed for {file_path.name}: {e}")
 
-        # Try antiword as fallback (if installed)
-        # First try with -t flag for tab-delimited output (better for tables)
+        # Try antiword (if installed): it wins over a held table-less textutil
+        # rendering only when its tab-delimited output shows real table rows.
         try:
             import subprocess
 
@@ -715,22 +796,38 @@ class FormatConverter:
                 text = result.stdout
                 # Convert tab-delimited tables to markdown format for better LLM extraction
                 text = self._convert_tsv_to_markdown_tables(text)
-                print(
-                    f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)"
-                )
-                return text + "\n\n"
+                if held_candidate is None or self._count_markdown_table_rows(text) >= 2:
+                    print(
+                        f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)"
+                    )
+                    return text + "\n\n"
 
-            # If -t flag fails or produces empty output, try standard output
-            result = subprocess.run(
-                ["antiword", str(file_path)], capture_output=True, text=True, timeout=60
-            )
-            if result.returncode == 0 and result.stdout.strip():
-                print(f"    ✓ Extracted text via antiword ({len(result.stdout)} chars)")
-                return result.stdout + "\n\n"
+            if held_candidate is None:
+                # If -t flag fails or produces empty output, try standard output
+                result = subprocess.run(
+                    ["antiword", str(file_path)],
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    print(
+                        f"    ✓ Extracted text via antiword ({len(result.stdout)} chars)"
+                    )
+                    return result.stdout + "\n\n"
         except FileNotFoundError:
             pass  # antiword not installed
         except Exception as e:
             print(f"    Warning: antiword fallback failed for {file_path.name}: {e}")
+
+        if held_candidate is not None:
+            # No route produced table structure; the textutil rendering is the
+            # most complete plain-text form available.
+            print(
+                f"    ✓ Extracted text via textutil ({len(held_candidate)} chars, "
+                f"no table structure found)"
+            )
+            return held_candidate + "\n\n"
 
         # Try catdoc as another fallback (if installed)
         try:

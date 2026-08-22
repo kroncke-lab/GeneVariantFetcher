@@ -586,3 +586,66 @@ class TestHelperMethods:
     def test_has_file_extension_negative(self, scraper):
         assert not scraper._has_file_extension("/articles/PMC123")
         assert not scraper._has_file_extension("/downloadSupplement?file=x")
+
+
+class TestReferenceSectionScoping:
+    """Links inside the bibliography markup are citations, not supplements.
+
+    KCNQ1 31520628's AJOG page cites two CDC vital-statistics PDFs; the
+    extension prong used to capture them as supplements.
+    """
+
+    def test_file_links_in_references_section_are_skipped(self, scraper):
+        html = """
+        <html><body>
+          <div class="supplementary-material">
+            <a href="/files/mmc1.xlsx">Supplementary Table 1</a>
+          </div>
+          <section class="references">
+            <ol>
+              <li><a href="https://stats.example.gov/nvsr60_07.pdf">
+                Deaths: preliminary statistics</a></li>
+            </ol>
+          </section>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        names = [f["name"] for f in result]
+        assert names == ["mmc1.xlsx"]
+
+    def test_jats_style_ref_list_container_is_skipped(self, scraper):
+        html = """
+        <html><body>
+          <section id="Bib1" class="c-article-references">
+            <a href="/refs/report_2011.pdf">Cited government report</a>
+          </section>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert result == []
+
+    def test_supplement_url_pattern_survives_inside_references(self, scraper):
+        """A href minted as supplementary material stays eligible anywhere."""
+        html = """
+        <html><body>
+          <section class="references">
+            <a href="/doi/suppl/10.1056/NEJMoa042786/suppl_file/appendix.pdf">
+              Supplementary appendix</a>
+          </section>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert [f["name"] for f in result] == ["appendix.pdf"]
+
+    def test_file_links_outside_references_keep_current_behavior(self, scraper):
+        html = _make_html([("/files/extra_data.pdf", "Download")])
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert [f["name"] for f in result] == ["extra_data.pdf"]

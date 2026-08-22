@@ -22,9 +22,14 @@ from __future__ import annotations
 
 import argparse
 import shutil
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from pipeline.source_quality import demote_empty_full_context  # noqa: E402
 
 
 def build(gene: str, corpus: Path, out: Path, pmids: set[str]) -> tuple[int, int]:
@@ -42,7 +47,12 @@ def build(gene: str, corpus: Path, out: Path, pmids: set[str]) -> tuple[int, int
         fc = pdir / f"{pmid}_FULL_CONTEXT.md"
         if not fc.is_file():
             continue
-        shutil.copy2(fc, out / f"{pmid}_FULL_CONTEXT.md")
+        # An empty corpus FULL_CONTEXT (KCNQ1 27114410 is 0 bytes next to a
+        # 17.7 KB CLEANED) must not become the bridge's only rendering; copy
+        # the populated sibling's bytes into the FULL_CONTEXT slot instead.
+        # The corpus files themselves are never modified.
+        src = demote_empty_full_context(fc)
+        shutil.copy2(src, out / f"{pmid}_FULL_CONTEXT.md")
         n_papers += 1
         for sub in (f"{pmid}_supplements", f"{pmid}_figures"):
             src = pdir / sub

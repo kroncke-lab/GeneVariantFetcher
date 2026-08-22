@@ -1306,6 +1306,7 @@ class PMCHarvester:
             figures_dir=figures_dir,
             logger=logger,
             sleep_seconds=0.5,
+            doi=doi,
         )
 
         if result.total_figures_extracted > 0:
@@ -1919,6 +1920,7 @@ class PMCHarvester:
                 figures_dir=figures_dir,
                 logger=logger,
                 sleep_seconds=0.5,
+                doi=doi,
             )
             supplement_markdown = supp_result.supplement_markdown
             downloaded_count = supp_result.downloaded_count
@@ -2142,6 +2144,7 @@ class PMCHarvester:
             figures_dir=figures_dir,
             logger=logger,
             sleep_seconds=0.5,
+            doi=doi,
         )
 
         if free_text_supp_result.total_figures_extracted > 0:

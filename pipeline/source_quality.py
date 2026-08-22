@@ -2,13 +2,25 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from config.constants import MIN_EXTRACTION_INPUT_SIZE
 
+logger = logging.getLogger(__name__)
+
 
 SUPPLEMENT_SURFACE_STATUS_MARKER = "GVF_SUPPLEMENT_SURFACE_STATUS:"
 INCOMPLETE_SUPPLEMENT_SURFACE_STATUSES = frozenset({"unavailable", "scrape_error"})
+
+# A FULL_CONTEXT below this floor is an empty/truncated write, not a paper.
+# Deliberately far below MIN_EXTRACTION_INPUT_SIZE: this floor only marks files
+# that are outright empty shells so a populated sibling rendering can be
+# preferred; it does not change what counts as usable full text.
+EMPTY_FULL_CONTEXT_FLOOR_BYTES = 64
+
+# Sibling renderings that can stand in for an empty FULL_CONTEXT, best first.
+_FULL_CONTEXT_SIBLING_SUFFIXES = ("_CLEANED.md", "_DATA_ZONES.md")
 
 
 def is_abstract_only_fallback_text(text: str) -> bool:
@@ -45,6 +57,44 @@ def has_incomplete_supplement_surface(text: str) -> bool:
         status = status.strip(" -!><\t\r\n").casefold()
         return status in INCOMPLETE_SUPPLEMENT_SURFACE_STATUSES
     return False
+
+
+def demote_empty_full_context(
+    full_context_path: Path,
+    *,
+    floor_bytes: int = EMPTY_FULL_CONTEXT_FLOOR_BYTES,
+) -> Path:
+    """Never let an empty FULL_CONTEXT win over a populated sibling rendering.
+
+    corpus/KCNQ1/27114410 carries a 0-byte ``27114410_FULL_CONTEXT.md`` next to
+    a 17.7 KB ``27114410_CLEANED.md``; any selector that prefers FULL_CONTEXT by
+    name fed extraction nothing. When ``full_context_path`` is missing or below
+    ``floor_bytes``, return the first usable sibling (``_CLEANED.md``, then
+    ``_DATA_ZONES.md``) and log a warning naming both files; otherwise return
+    ``full_context_path`` unchanged. Neither file is ever modified.
+    """
+    name = full_context_path.name
+    if not name.endswith("_FULL_CONTEXT.md"):
+        return full_context_path
+    try:
+        size = full_context_path.stat().st_size
+    except OSError:
+        size = -1
+    if size >= floor_bytes:
+        return full_context_path
+    for suffix in _FULL_CONTEXT_SIBLING_SUFFIXES:
+        sibling = full_context_path.with_name(name.replace("_FULL_CONTEXT.md", suffix))
+        if is_usable_fulltext_source(sibling):
+            logger.warning(
+                "empty FULL_CONTEXT demoted: %s is %d bytes; using sibling %s "
+                "(%d bytes) instead",
+                full_context_path,
+                max(size, 0),
+                sibling,
+                sibling.stat().st_size,
+            )
+            return sibling
+    return full_context_path
 
 
 def is_reusable_fulltext_source(path: Path) -> bool:

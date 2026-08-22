@@ -437,3 +437,128 @@ def test_cli_rejects_missing_pmids_file(tmp_path, monkeypatch, capsys):
     with pytest.raises(SystemExit, match="2"):
         main()
     assert f"--pmids-file does not exist: {missing}" in capsys.readouterr().err
+
+
+# ---------------------------------------------------------------------------
+# PDF identity gate at fold time (KCNQ1 31520628: cited CDC vital-statistics
+# PDFs were captured as supplements and folded into FULL_CONTEXT)
+# ---------------------------------------------------------------------------
+
+_UNRELATED_PDF_TEXT = (
+    "National Vital Statistics Reports Volume 60, Number 7. "
+    "Deaths: preliminary statistics for 2011. Division of Vital Statistics."
+)
+
+
+def _convert_pdfs_as(text):
+    """A _convert_supplement stand-in that renders every .pdf as ``text``."""
+    from harvesting import supplement_fold
+
+    real_convert = supplement_fold._convert_supplement
+
+    def fake(**kwargs):
+        if kwargs["file_path"].suffix == ".pdf":
+            return text, 0, []
+        return real_convert(**kwargs)
+
+    return fake
+
+
+def test_fold_excludes_identity_unverified_pdf(tmp_path, monkeypatch, caplog):
+    import logging
+
+    from harvesting import supplement_fold
+
+    pmid = "31520628"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "nvsr60_07.pdf", "raw pdf bytes stand-in")
+    _write_supp(supp_dir, "tableS2.csv", "variant,carriers\nc.1A>G,3\n")
+
+    monkeypatch.setattr(
+        supplement_fold, "_convert_supplement", _convert_pdfs_as(_UNRELATED_PDF_TEXT)
+    )
+
+    with caplog.at_level(logging.WARNING, logger="harvesting.supplement_fold"):
+        out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "c.1A>G" in folded  # the real supplement still folds
+    assert "National Vital Statistics" not in folded
+    assert "nvsr60_07.pdf" not in folded
+    assert any(
+        "supplement_identity_unverified" in record.getMessage()
+        for record in caplog.records
+    )
+    # Never delete downloaded source.
+    assert (supp_dir / "nvsr60_07.pdf").exists()
+
+
+def test_fold_keeps_pdf_verified_by_manifest_doi(tmp_path, monkeypatch):
+    import json
+
+    from harvesting import supplement_fold
+
+    pmid = "31520628"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "cohort_tables.pdf", "raw pdf bytes stand-in")
+    (harvest / f"{pmid}_artifacts.json").write_text(
+        json.dumps({"pmid": pmid, "doi": "10.1016/j.ajog.2019.09.004"}),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        supplement_fold,
+        "_convert_supplement",
+        _convert_pdfs_as("Cohort tables. doi:10.1016/j.ajog.2019.09.004"),
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "cohort_tables.pdf" in folded
+    assert "10.1016/j.ajog.2019.09.004" in folded
+
+
+def test_refold_strips_previously_folded_misbound_pdf(tmp_path, monkeypatch):
+    """A stale fold whose only content is now-quarantined must be rebuilt.
+
+    31520628's supplements dir holds nothing but the two mis-bound CDC PDFs,
+    so the refold produces no markdown — the old block must still go.
+    """
+    from harvesting import supplement_fold
+
+    pmid = "31520628"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    stale = (
+        "# MAIN\n\nbody\n"
+        f"\n{FOLD_BEGIN}\n\n"
+        "# FOLDED SUPPLEMENTS (re-extraction aid)\n"
+        "\n\n# SUPPLEMENTAL FILE 1: nvsr60_07.pdf\n\n"
+        f"{_UNRELATED_PDF_TEXT}\n"
+        f"\n{FOLD_END}\n"
+    )
+    fc.write_text(stale, encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "nvsr60_07.pdf", "raw pdf bytes stand-in")
+
+    monkeypatch.setattr(
+        supplement_fold, "_convert_supplement", _convert_pdfs_as(_UNRELATED_PDF_TEXT)
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    rebuilt = fc.read_text(encoding="utf-8")
+    assert FOLD_BEGIN not in rebuilt
+    assert "National Vital Statistics" not in rebuilt
+    assert "# MAIN" in rebuilt
+    # Non-destructive: the pre-fold backup preserves what was overwritten.
+    assert (harvest / f"{pmid}_FULL_CONTEXT.md.pre_fold_bak").exists()

@@ -23,6 +23,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from config.constants import DEFAULT_MAX_WORKERS
 from pipeline.source_quality import (
+    demote_empty_full_context,
     is_reusable_fulltext_source,
     is_usable_fulltext_source,
 )
@@ -1120,7 +1121,27 @@ def _consolidate_from_corpus(
             continue
         src_ft = gene_dir / pmid / f"{pmid}_FULL_CONTEXT.md"
         if not src_ft.is_file() or not is_reusable_fulltext_source(src_ft):
-            continue  # absent or stub/compromised -> let the harvester try
+            # Absent or stub/compromised -> let the harvester try. But when
+            # the cached FULL_CONTEXT is an empty shell next to a populated
+            # CLEANED (KCNQ1 27114410), stage that sibling as an extraction
+            # floor: preprocessing regenerates CLEANED whenever a fresh
+            # FULL_CONTEXT does land, so this only matters if the re-fetch
+            # fails again — in which case extraction now still has the paper.
+            if src_ft.is_file():
+                sibling = demote_empty_full_context(src_ft)
+                if sibling != src_ft:
+                    try:
+                        shutil.copy2(
+                            str(sibling), str(harvest_dir / f"{pmid}_CLEANED.md")
+                        )
+                    except Exception as e:  # noqa: BLE001 - best-effort salvage
+                        logger.warning(
+                            "corpus cache: failed to stage CLEANED sibling for "
+                            "PMID %s: %s",
+                            pmid,
+                            e,
+                        )
+            continue
         try:
             shutil.copy2(str(src_ft), str(harvest_dir / f"{pmid}_FULL_CONTEXT.md"))
             for extra in (f"{pmid}_CLEANED.md", f"{pmid}_artifacts.json"):

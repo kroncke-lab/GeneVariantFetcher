@@ -85,6 +85,34 @@ def test_corpus_cache_reuses_usable_skips_stub_and_missing(tmp_path: Path):
     assert not (harvest / "555_FULL_CONTEXT.md").exists()
 
 
+def test_corpus_cache_stages_cleaned_sibling_of_empty_full_context(tmp_path: Path):
+    """KCNQ1 27114410: 0-byte cached FULL_CONTEXT beside a 17.7 KB CLEANED.
+
+    The stub is still not reused (the harvester must re-attempt the fetch),
+    but the populated CLEANED sibling is staged so extraction keeps the paper
+    when that re-fetch fails again.
+    """
+    corpus = tmp_path / "corpus"
+    harvest = tmp_path / "run" / "pmc_fulltext"
+    harvest.mkdir(parents=True)
+
+    _make_corpus_paper(corpus, "KCNQ1", "27114410", body="")
+    cleaned_body = "# MAIN TEXT\n" + "body text. " * 200
+    (corpus / "KCNQ1" / "27114410" / "27114410_CLEANED.md").write_text(
+        cleaned_body, encoding="utf-8"
+    )
+
+    recovered = steps._consolidate_from_corpus(["27114410"], harvest, "KCNQ1", corpus)
+
+    assert recovered == set(), "the empty stub itself must not count as reused"
+    assert not (harvest / "27114410_FULL_CONTEXT.md").exists()
+    staged = harvest / "27114410_CLEANED.md"
+    assert staged.read_text(encoding="utf-8") == cleaned_body
+    # The corpus copy is untouched.
+    corpus_fc = corpus / "KCNQ1" / "27114410" / "27114410_FULL_CONTEXT.md"
+    assert corpus_fc.stat().st_size == 0
+
+
 def test_prior_run_cache_retries_body_only_source(tmp_path: Path):
     output_base = tmp_path / "results"
     prior = output_base / "KCNH2" / "old" / "pmc_fulltext"

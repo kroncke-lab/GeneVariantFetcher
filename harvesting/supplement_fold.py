@@ -29,12 +29,17 @@ time.
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 from pathlib import Path
 from typing import Any, Optional
 
-from harvesting.supplement_processing_service import _convert_supplement
+from harvesting.supplement_processing_service import (
+    SUPPLEMENT_IDENTITY_UNVERIFIED,
+    _convert_supplement,
+    pdf_supplement_identity,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -160,16 +165,47 @@ def _is_conversion_placeholder(markdown: str) -> bool:
     return bool(_CONVERSION_PLACEHOLDER_RE.match(str(markdown or "").strip()))
 
 
+def _paper_identity_context(pmid: str, harvest_dir: Path) -> dict[str, Any]:
+    """Best-effort article identity for the PDF supplement gate.
+
+    Reads the ``{pmid}_artifacts.json`` sidecar when present for the DOI and
+    the per-filename source URLs the harvester recorded. Everything is
+    optional — the gate can still verify via the PMID or supplement-family
+    markers when the manifest is missing or predates these fields.
+    """
+    identity: dict[str, Any] = {"pmid": str(pmid), "doi": None, "urls": {}}
+    manifest_path = harvest_dir / f"{pmid}_artifacts.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return identity
+    if isinstance(manifest, dict):
+        identity["doi"] = manifest.get("doi") or None
+        for entry in manifest.get("supplements") or []:
+            if not isinstance(entry, dict):
+                continue
+            filename = str(entry.get("filename") or "").strip()
+            url = str(entry.get("url") or "").strip()
+            if filename and url:
+                identity["urls"][filename.casefold()] = url
+    return identity
+
+
 def _build_supplement_markdown_result(
     supplements_dir: Path,
     *,
     converter: Any = None,
     logger_obj: Any = None,
+    identity: Optional[dict[str, Any]] = None,
 ) -> tuple[str, int, int, set[str]]:
     """Convert every convertible file in ``supplements_dir`` to combined markdown.
 
     Returns ``(markdown, files_converted, conversion_failures,
-    placeholder_labels)``. ``converter``
+    omitted_labels)`` where ``omitted_labels`` are file labels that are safe to
+    drop from an existing fold block: conversion placeholders plus, when an
+    ``identity`` context is supplied, PDFs quarantined by
+    :func:`~harvesting.supplement_processing_service.pdf_supplement_identity`
+    (kept on disk, never folded). ``converter``
     defaults to a fresh
     :class:`~harvesting.format_converters.FormatConverter` (only constructed when
     a file needs it; plain ``.csv``/``.txt`` are read directly).
@@ -192,7 +228,7 @@ def _build_supplement_markdown_result(
     parts: list[str] = []
     converted = 0
     failures = 0
-    placeholder_labels: set[str] = set()
+    omitted_labels: set[str] = set()
     for idx, file_path in enumerate(files, 1):
         # Label by path relative to the supplements dir: a top-level file shows
         # just its name; a file extracted from a zip shows ``subdir/name`` so the
@@ -213,12 +249,32 @@ def _build_supplement_markdown_result(
         if _is_conversion_placeholder(md):
             logger.warning("supplement convert produced placeholder for %s", rel)
             failures += 1
-            placeholder_labels.add(Path(rel).name.casefold())
+            omitted_labels.add(Path(rel).name.casefold())
             continue
+        if file_path.suffix.lower() == ".pdf" and identity is not None:
+            identity_ok, identity_reason = pdf_supplement_identity(
+                text_head=md,
+                filename=file_path.name,
+                source_url=str(
+                    (identity.get("urls") or {}).get(file_path.name.casefold(), "")
+                ),
+                pmid=str(identity.get("pmid") or ""),
+                doi=identity.get("doi"),
+                title=identity.get("title"),
+            )
+            if not identity_ok:
+                logger.warning(
+                    "%s: excluding %s from fold (%s); file kept on disk",
+                    SUPPLEMENT_IDENTITY_UNVERIFIED,
+                    rel,
+                    identity_reason,
+                )
+                omitted_labels.add(Path(rel).name.casefold())
+                continue
         if md and md.strip():
             parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1
-    return "".join(parts).strip(), converted, failures, placeholder_labels
+    return "".join(parts).strip(), converted, failures, omitted_labels
 
 
 def build_supplement_markdown(
@@ -228,12 +284,10 @@ def build_supplement_markdown(
     logger_obj: Any = None,
 ) -> tuple[str, int]:
     """Convert available supplement text, preserving the public two-value API."""
-    markdown, converted, _failures, _placeholder_labels = (
-        _build_supplement_markdown_result(
-            supplements_dir,
-            converter=converter,
-            logger_obj=logger_obj,
-        )
+    markdown, converted, _failures, _omitted_labels = _build_supplement_markdown_result(
+        supplements_dir,
+        converter=converter,
+        logger_obj=logger_obj,
     )
     return markdown, converted
 
@@ -254,11 +308,20 @@ def fold_supplements_into_full_context(
     if not full_context.is_file():
         return None
     supp_dir = supplements_dir or (harvest_dir / f"{pmid}_supplements")
-    md, converted, failures, placeholder_labels = _build_supplement_markdown_result(
-        supp_dir, converter=converter
+    md, converted, failures, omitted_labels = _build_supplement_markdown_result(
+        supp_dir,
+        converter=converter,
+        identity=_paper_identity_context(pmid, harvest_dir),
     )
+    original = full_context.read_text(encoding="utf-8", errors="replace")
     if converted == 0 or not md:
-        return None
+        # No foldable text. Still rebuild when a prior fold carries text from
+        # files the identity gate has since quarantined (KCNQ1 31520628's only
+        # on-disk supplements are the two mis-bound CDC reports), so that
+        # content does not survive a refresh; otherwise leave the file alone.
+        if not omitted_labels or not (_supplement_labels(original) & omitted_labels):
+            return None
+        md = ""
     if failures:
         logger.warning(
             "PMID %s had %d supplement conversion failure(s); proceeding with "
@@ -267,7 +330,6 @@ def fold_supplements_into_full_context(
             failures,
         )
 
-    original = full_context.read_text(encoding="utf-8", errors="replace")
     replacement_labels = _supplement_labels(md)
     begin = original.find(FOLD_BEGIN)
     if begin != -1:
@@ -275,11 +337,13 @@ def fold_supplements_into_full_context(
         old_block = (
             original[begin:] if end == -1 else original[begin : end + len(FOLD_END)]
         )
-        # A prior pipeline version folded converter error markers as if they
-        # were source. Those labels are safe to discard; otherwise they can
-        # permanently block a newly recovered valid supplement from refolding.
+        # A prior pipeline version folded converter error markers — and, before
+        # the identity gate, mis-bound PDFs (KCNQ1 31520628's CDC reports) — as
+        # if they were source. Those labels are safe to discard; otherwise they
+        # can permanently block a newly recovered valid supplement from
+        # refolding.
         missing_old_labels = (
-            _supplement_labels(old_block) - replacement_labels - placeholder_labels
+            _supplement_labels(old_block) - replacement_labels - omitted_labels
         )
         if missing_old_labels:
             logger.warning(
