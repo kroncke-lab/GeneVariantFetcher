@@ -132,7 +132,9 @@ def test_table_regex_skips_off_target_gene_column_rows():
     proteins = {v.get("protein_notation") for v in variants}
     cdnas = {v.get("cdna_notation") for v in variants}
     assert "R18Q" in proteins
-    assert "P.GLN1507_PRO1509DEL" in proteins
+    # The fall-through normalization strips the presentation-only p. prefix so
+    # the range-del stays comparable to matcher forms.
+    assert "GLN1507_PRO1509DEL" in proteins
     assert "c.53G>A" in cdnas
     assert "c.4519_4527delCAGAAGCCC" in cdnas
     assert "G1036D" not in proteins
@@ -2720,3 +2722,34 @@ def test_secondary_study_gate_keeps_primary_registry_and_cohort_tables():
     ]
     for caption in secondary:
         assert reason(caption) == "secondary_study_table", caption
+
+
+def test_table_cdna_identity_strips_trailing_footnote_markers():
+    """A footnote marker rode into cDNA identity and rejected the whole cell.
+
+    No valid cDNA ends in a footnote glyph, so strip it before validation the
+    way `_valid_table_protein` already does.
+    """
+    extractor = ExpertExtractor(models=["gpt-4"])
+
+    for marker in ("*", "†", "‡", "§", "¶"):
+        assert extractor._valid_table_cdna_identity(
+            f"c.1032_1117dup{marker}", "KCNQ1"
+        ) == ("c.1032_1117dup", None, None)
+
+    assert extractor._valid_table_cdna_identity("c.526C>T†", "KCNQ1") == (
+        "c.526C>T",
+        None,
+        None,
+    )
+
+
+def test_table_cdna_identity_keeps_trailing_digits_as_coordinate():
+    """Digits are coordinate, never footnote markers, in a cDNA cell."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+
+    assert extractor._valid_table_cdna_identity("c.1032_1117del", "KCNQ1") == (
+        "c.1032_1117del",
+        None,
+        None,
+    )

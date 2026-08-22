@@ -3740,6 +3740,13 @@ class ExpertExtractor(BaseLLMCaller):
         source_notation = self._clean_table_cell(value)
         if not source_notation:
             return None, None, None
+        # Trailing footnote markers ride on table cDNA cells exactly as they
+        # do on protein cells ("c.1032_1117dup*"); no valid cDNA ends with
+        # one, so strip before identity checks, mirroring _valid_table_protein.
+        # Digit footnotes are left alone: a trailing digit is coordinate.
+        source_notation = source_notation.rstrip("*⁎†‡§¶")
+        if not source_notation:
+            return None, None, None
         if gene_supports_legacy_notation(
             gene_symbol
         ) and not source_notation.lower().startswith("c."):

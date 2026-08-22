@@ -316,13 +316,16 @@ class VariantScanner:
         re.IGNORECASE,
     )
 
-    # Duplication variants
+    # Duplication variants. Literature sometimes restates the duplicated run
+    # after "dup" ("p.R360_Q361dupQKQR"); allow the trailing residue run so
+    # the token still matches (normalize_duplication drops the redundant run).
     DUPLICATION_PATTERNS = re.compile(
         r"\b(?:p\.)?"
         r"([A-Z][a-z]{2}|[A-Z])?"
         r"(\d{2,4})"
         r"(?:_([A-Z][a-z]{2}|[A-Z])?(\d{2,4}))?"
         r"dup"
+        r"(?:(?:[A-Z][a-z]{2})+|[ACDEFGHIKLMNPQRSTVWY]+)?"
         r"\b",
         re.IGNORECASE,
     )
@@ -425,17 +428,38 @@ class VariantScanner:
         re.IGNORECASE,
     )
 
-    # Exon-level deletion/duplication: deletion of exons 3-5, del exons 3–5
-    EXON_EVENT = re.compile(
-        r"\b(?:(?:large\s+)?(?:deletion|duplication)\s+of\s+)?"
-        r"(?:del(?:etion)?|dup(?:lication)?)\s*"
-        r"(?:of\s+)?"
-        r"exons?\s*"
-        r"(\d{1,3})"
-        r"(?:\s*[-–—to]+\s*(\d{1,3}))?"
-        r"\b",
+    # Exon-level deletion/duplication is matched with the shared
+    # utils.structural_alleles.EXON_EVENT_RE, which supports operation-first
+    # ("deletion of exons 3-5") and exons-first ("RyR2 exon 3 deletion")
+    # phrasing alike; see _scan_structural_variants.
+
+    # Spelled-out nucleotide events: "insertion of a guanine at position
+    # 3108", "deletion of 4 bp at nucleotide position 1261". Older papers
+    # narrate single-base events instead of printing HGVS.
+    PROSE_NT_INDEL = re.compile(
+        r"\b(?P<op>insertion|deletion|duplication)\s+of\s+"
+        r"(?:(?:a|an|one|single)\s+)*"
+        r"(?:(?P<base>adenine|guanine|cytosine|thymine)|"
+        r"(?P<bp>\d{1,4})\s*(?:bp|base\s*pairs?|nucleotides?|bases?))\s+"
+        r"at\s+(?:nucleotide\s+)?position\s+(?P<pos>\d{1,6})\b",
         re.IGNORECASE,
     )
+
+    # Companion clause naming the protein-level consequence of the event
+    # above ("... truncation of the protein at amino acid position 1036");
+    # anchors a residue-less frameshift at that codon.
+    PROSE_TRUNCATION = re.compile(
+        r"\btruncat(?:ed|es|ion|ing)\b[^.;!?]{0,160}?"
+        r"\bat\s+(?:amino[\s-]*acid\s+)?position\s+(?P<aa>\d{1,5})\b",
+        re.IGNORECASE,
+    )
+
+    PROSE_BASE_LETTERS = {
+        "adenine": "A",
+        "guanine": "G",
+        "cytosine": "C",
+        "thymine": "T",
+    }
 
     # Whole-gene / large CNV phrasing (require gene-ish context nearby is handled later)
     WHOLE_GENE_DEL = re.compile(
@@ -541,6 +565,7 @@ class VariantScanner:
         splice_variants = self._scan_splice_variants(text)
         narrative_variants = self._scan_narrative_variants(text)
         structural_variants = self._scan_structural_variants(text)
+        prose_indel_variants = self._scan_prose_indel_events(text)
 
         # Combine all findings
         all_candidates = (
@@ -549,6 +574,7 @@ class VariantScanner:
             + splice_variants
             + narrative_variants
             + structural_variants
+            + prose_indel_variants
         )
 
         # Filter and deduplicate
@@ -679,6 +705,25 @@ class VariantScanner:
                 pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
                 for match in re.finditer(pattern, context, re.IGNORECASE):
                     mentions.append((gene.upper(), match.start(), match.end()))
+
+        # A gene token joined to the variant with at most one punctuation
+        # character and no whitespace ("Q2958R-RyR2", "KCNE1/G38S",
+        # "R14C(KCNQ1)") labels that specific mention; it outranks any
+        # detached clause-mate in either direction. The nearest-preceding
+        # preference below stays as the tiebreak for detached mentions only.
+        attached: List[tuple[int, str]] = []
+        for gene, start, end in mentions:
+            if end <= variant_start:
+                separator = context[end:variant_start]
+            elif start >= variant_end:
+                separator = context[variant_end:start]
+            else:
+                continue
+            if len(separator) <= 1 and not re.search(r"[\w\s]", separator):
+                attached.append((len(separator), gene))
+        if attached:
+            attached.sort(key=lambda item: (item[0], item[1]))
+            return attached[0][1]
 
         def same_clause_or_row(separator: str, *, has_table: bool) -> bool:
             if len(separator) > 180:
@@ -1233,10 +1278,17 @@ class VariantScanner:
         return context
 
     def _scan_structural_variants(self, text: str) -> List[ScannedVariant]:
-        """Scan for exon-level, large del/dup, and prefixless BIC-style indels."""
+        """Scan for exon-level, large del/dup, delta-peptide, and prefixless
+        BIC-style indels."""
         variants: List[ScannedVariant] = []
 
         from utils.legacy_notation import gene_supports_legacy_notation
+        from utils.structural_alleles import (
+            DELTA_RE,
+            EXON_EVENT_RE,
+            parse_delta_peptide,
+            parse_exon_event,
+        )
 
         for m in self.BIC_PREFIXLESS_INDEL.finditer(text):
             pos, op, payload = m.group(1), m.group(2).lower(), m.group(3).upper()
@@ -1281,32 +1333,60 @@ class VariantScanner:
                 )
             )
 
-        for m in self.EXON_EVENT.finditer(text):
+        for m in EXON_EVENT_RE.finditer(text):
+            event = parse_exon_event(m.group(0))
+            if not event:
+                continue
             context = self._positive_structural_context(text, m.start(), m.end())
             if context is None:
                 continue
-            exon1, exon2 = m.group(1), m.group(2)
-            raw = m.group(0)
-            op = "deletion" if re.search(r"del", raw, re.I) else "duplication"
-            if exon2:
-                desc = f"{op} of exons {exon1}-{exon2}"
-                key = f"{'del' if op == 'deletion' else 'dup'}:exon{exon1}-{exon2}"
+            op_key, first, last = event
+            op = "deletion" if op_key == "del" else "duplication"
+            if last != first:
+                desc = f"{op} of exons {first}-{last}"
+                key = f"{op_key}:exon{first}-{last}"
             else:
-                desc = f"{op} of exon {exon1}"
-                key = f"{'del' if op == 'deletion' else 'dup'}:exon{exon1}"
-            vclass = "exon_deletion" if op == "deletion" else "exon_duplication"
+                desc = f"{op} of exon {first}"
+                key = f"{op_key}:exon{first}"
+            vclass = "exon_deletion" if op_key == "del" else "exon_duplication"
             variants.append(
                 ScannedVariant(
-                    raw_text=raw,
+                    raw_text=m.group(0),
                     normalized=key,
                     variant_type=op,
                     notation_type="structural",
-                    position=int(exon1),
+                    position=first,
                     context=context,
                     confidence=0.85,
                     source="exon_event",
                     variant_class=vclass,
                     structural_description=desc,
+                )
+            )
+
+        # Delta-peptide alleles ("ΔKPQ", "delta KPQ"): record only the raw
+        # token; expand_structural_keys resolves it to the protein range
+        # downstream, so no residue arithmetic belongs here.
+        for m in DELTA_RE.finditer(text):
+            peptide = parse_delta_peptide(m.group(0))
+            if not peptide:
+                continue
+            context = self._positive_structural_context(text, m.start(), m.end())
+            if context is None:
+                continue
+            raw = m.group(0)
+            variants.append(
+                ScannedVariant(
+                    raw_text=raw,
+                    normalized=f"DELTA{peptide}",
+                    variant_type="deletion",
+                    notation_type="structural",
+                    position=None,
+                    context=context,
+                    confidence=0.85,
+                    source="delta_notation",
+                    variant_class="inframe_indel",
+                    structural_description=raw,
                 )
             )
 
@@ -1329,6 +1409,60 @@ class VariantScanner:
                     structural_description="whole-gene deletion",
                 )
             )
+
+        return variants
+
+    def _scan_prose_indel_events(self, text: str) -> List[ScannedVariant]:
+        """Scan spelled-out nucleotide indels and their truncation clauses."""
+        variants: List[ScannedVariant] = []
+
+        for m in self.PROSE_NT_INDEL.finditer(text):
+            op = m.group("op").lower()[:3]
+            pos = int(m.group("pos"))
+            base = m.group("base")
+            if base:
+                normalized = f"c.{pos}{op}{self.PROSE_BASE_LETTERS[base.lower()]}"
+            else:
+                length = int(m.group("bp"))
+                # An insertion length names no reference span; a fabricated
+                # range would assert an allele the paper never printed.
+                if op == "ins":
+                    continue
+                if length <= 1:
+                    normalized = f"c.{pos}{op}"
+                else:
+                    normalized = f"c.{pos}_{pos + length - 1}{op}"
+            variants.append(
+                ScannedVariant(
+                    raw_text=m.group(0),
+                    normalized=normalized,
+                    variant_type=op,
+                    notation_type="cdna",
+                    position=pos,
+                    context=self._get_context(text, m.start(), m.end(), window=100),
+                    confidence=0.70,
+                    source="prose_nt_indel",
+                )
+            )
+
+            # A same-sentence truncation clause anchors the protein-level
+            # consequence at a codon even without a reference residue.
+            statement = self._structural_statement_context(text, m.start(), m.end())
+            truncation = self.PROSE_TRUNCATION.search(statement)
+            if truncation:
+                aa_pos = int(truncation.group("aa"))
+                variants.append(
+                    ScannedVariant(
+                        raw_text=truncation.group(0),
+                        normalized=f"{aa_pos}fs",
+                        variant_type="frameshift",
+                        notation_type="protein",
+                        position=aa_pos,
+                        context=statement[:300],
+                        confidence=0.60,
+                        source="prose_truncation",
+                    )
+                )
 
         return variants
 
@@ -1600,6 +1734,16 @@ def merge_scanner_results(
         r"\bfalse[- ]positive\b",
         re.IGNORECASE,
     )
+    # External-evidence signals inside a table row: a citation ("Smith et al.
+    # 2010", a bare year, an rs id) or a population/clinical repository name
+    # marks the row as a compilation of other studies' findings, never a
+    # current-study observation.
+    row_external_signal_re = re.compile(
+        r"\bet\s+al\b|\b(?:19|20)\d{2}\b|\brs\d{3,}\b|"
+        r"\b(?:gnomad|exac|clinvar|dbsnp|hgmd|topmed|bravo|esp6500|"
+        r"1000\s*genomes|uk\s*biobank)\b",
+        re.IGNORECASE,
+    )
 
     document_genes = {
         gene
@@ -1665,8 +1809,10 @@ def merge_scanner_results(
             contexts.append((sv.context, sv.context))
         return contexts
 
-    def nearby_generic_gene(window: str, raw_text: str) -> Optional[str]:
-        """Nearest gene-like symbol when it is absent from built-in metadata.
+    def nearby_generic_gene(
+        window: str, raw_text: str
+    ) -> Optional[Tuple[str, int, int]]:
+        """Nearest gene-like symbol (with span) absent from built-in metadata.
 
         This is an abstention aid, not a new attribution oracle. A nearby
         all-caps biomedical symbol such as PALB2 may veto a BRCA2 merge; it can
@@ -1675,7 +1821,7 @@ def merge_scanner_results(
         raw_match = re.search(re.escape(raw_text), window, re.IGNORECASE)
         if not raw_match:
             return None
-        candidates: List[Tuple[int, str]] = []
+        candidates: List[Tuple[int, str, int, int]] = []
         for match in re.finditer(
             r"(?<![A-Za-z0-9])[A-Z][A-Z0-9-]{1,11}(?![A-Za-z0-9])", window
         ):
@@ -1694,11 +1840,48 @@ def merge_scanner_results(
                 abs(match.start() - raw_match.end()),
             )
             if distance <= 100:
-                candidates.append((distance, label))
+                candidates.append((distance, label, match.start(), match.end()))
         if not candidates:
             return None
         candidates.sort(key=lambda item: item[0])
-        return candidates[0][1]
+        return candidates[0][1], candidates[0][2], candidates[0][3]
+
+    def generic_intercepts_target(
+        window: str, raw_text: str, generic_span: Tuple[int, int]
+    ) -> bool:
+        """True when the unknown symbol sits between the nearest target-gene
+        mention and the variant token.
+
+        An affirmative target assignment outranks an unknown-symbol hunch (a
+        phenotype cell such as "Yes, VT"), but an unknown symbol that
+        intercepts the assignment path is the label that actually owns the
+        token -- compilation rows list several genes' variants on one line.
+        Fail closed: no locatable variant or target mention keeps the veto.
+        """
+        raw_match = re.search(re.escape(raw_text), window, re.IGNORECASE)
+        if not raw_match:
+            return True
+        nearest: Optional[Tuple[int, int, int]] = None
+        for term in scanner._gene_context_terms(target_gene):
+            pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
+            for match in re.finditer(pattern, window, re.IGNORECASE):
+                distance = min(
+                    abs(raw_match.start() - match.end()),
+                    abs(match.start() - raw_match.end()),
+                )
+                if nearest is None or distance < nearest[0]:
+                    nearest = (distance, match.start(), match.end())
+        if nearest is None:
+            return True
+        _, target_start, target_end = nearest
+        if target_end <= raw_match.start():
+            region = (target_end, raw_match.start())
+        elif raw_match.end() <= target_start:
+            region = (raw_match.end(), target_start)
+        else:
+            return False
+        generic_start, generic_end = generic_span
+        return generic_start < region[1] and generic_end > region[0]
 
     def is_table_like(line: str) -> bool:
         token_count = len(variant_token_re.findall(line))
@@ -1721,6 +1904,18 @@ def merge_scanner_results(
             or bool(re.search(r"-{4,}\d+-{1,}", line))
         )
 
+    def is_row_shaped(line: str, window: str) -> bool:
+        """Table rows never contain study prose; recognize them structurally."""
+        if is_table_like(line):
+            return True
+        # Wrapped/converted rows keep cell shape without pipes: no sentence
+        # punctuation and several short delimited fields.
+        if re.search(r"[.;!?](?:\s|$)", window):
+            return False
+        cells = [cell.strip() for cell in re.split(r"\||\t|\s{2,}", window)]
+        cells = [cell for cell in cells if cell]
+        return len(cells) >= 3 and all(len(cell) <= 40 for cell in cells)
+
     def attribution_decision(sv: ScannedVariant) -> Tuple[bool, str, str]:
         """Fail-closed decision; any independently supported mention may pass."""
         saw_table = False
@@ -1730,12 +1925,45 @@ def merge_scanner_results(
         saw_gene_support = False
         best_quote = sv.context or sv.raw_text
 
+        # A wrong-gene prefix embedded in the token itself ("KCNH2_R176W")
+        # dooms every mention; no window can overrule it.
+        embedded_gene = re.match(
+            r"^([A-Z][A-Z0-9]{1,11})[_-]", sv.raw_text, re.IGNORECASE
+        )
+        if embedded_gene and embedded_gene.group(1).upper() not in target_terms:
+            return False, "wrong_gene", " ".join(best_quote.split())[:240]
+
         for line, window in mention_contexts(sv):
             quote = " ".join(window.split())[:240]
             best_quote = quote or best_quote
-            if is_table_like(line):
+            if is_row_shaped(line, window):
                 saw_table = True
-                continue
+                # Table rows by construction never contain study prose, so
+                # the prose lane below can never admit them. A row is
+                # attributable on its own when it affirms the target gene and
+                # carries no external-evidence signal marking it as a
+                # compilation of other studies' or repositories' findings.
+                if (
+                    row_external_signal_re.search(window)
+                    or reference_re.search(window)
+                    or negative_finding_re.search(window)
+                    or background_re.search(window)
+                ):
+                    continue
+                assigned_gene = scanner._gene_assigned_to_variant(window, sv.raw_text)
+                if assigned_gene != target_gene:
+                    if assigned_gene:
+                        saw_wrong_gene = True
+                    continue
+                generic = nearby_generic_gene(window, sv.raw_text)
+                if (
+                    generic
+                    and generic[0] not in target_terms
+                    and generic_intercepts_target(window, sv.raw_text, generic[1:])
+                ):
+                    saw_wrong_gene = True
+                    continue
+                return True, "table_row_target_gene", quote
             if reference_re.search(window):
                 saw_reference = True
                 continue
@@ -1756,20 +1984,16 @@ def merge_scanner_results(
                 saw_background = True
                 continue
 
-            embedded_gene = re.match(
-                r"^([A-Z][A-Z0-9]{1,11})[_-]", sv.raw_text, re.IGNORECASE
-            )
-            if embedded_gene:
-                embedded = embedded_gene.group(1).upper()
-                if embedded not in target_terms:
+            assigned_gene = scanner._gene_assigned_to_variant(window, sv.raw_text)
+            generic = nearby_generic_gene(window, sv.raw_text)
+            if generic and generic[0] not in target_terms:
+                # An affirmative target assignment outranks an unknown-symbol
+                # hunch unless the symbol intercepts the assignment path.
+                if assigned_gene != target_gene or generic_intercepts_target(
+                    window, sv.raw_text, generic[1:]
+                ):
                     saw_wrong_gene = True
                     continue
-
-            assigned_gene = scanner._gene_assigned_to_variant(window, sv.raw_text)
-            generic_gene = nearby_generic_gene(window, sv.raw_text)
-            if generic_gene and generic_gene not in target_terms:
-                saw_wrong_gene = True
-                continue
             window_genes = {
                 gene
                 for gene in scanner._known_context_genes()

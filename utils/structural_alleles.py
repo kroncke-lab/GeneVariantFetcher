@@ -54,6 +54,10 @@ _DELTA_RE = re.compile(
     r"(?:Δ|delta)\s*-?\s*([A-Z]{2,}|[A-Z][a-z]{2}(?:[A-Z][a-z]{2})+)",
     re.IGNORECASE,
 )
+# Public aliases: the variant scanner must iterate matches over free text; the
+# parse_* helpers only classify an already-isolated token.
+EXON_EVENT_RE = _EXON_EVENT_RE
+DELTA_RE = _DELTA_RE
 _RANGE_DEL_RE = re.compile(
     r"(?:p\.)?(?:(?P<r1>[A-Z][a-z]{2})|(?P<s1>[A-Z]))(?P<p1>\d+)"
     r"[_-](?:(?P<r2>[A-Z][a-z]{2})|(?P<s2>[A-Z]))(?P<p2>\d+)del",

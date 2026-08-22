@@ -138,6 +138,46 @@ def test_normalize_duplication(raw, expected):
     assert normalize_duplication(raw) == expected
 
 
+@pytest.mark.parametrize(
+    "raw",
+    ["p.R360_Q361dupQKQR", "R360_Q361dupQKQR", "p.Arg360_Gln361dupGlnLysGlnArg"],
+    ids=["single_letter_prefixed", "single_letter_bare", "three_letter"],
+)
+def test_range_duplication_drops_the_redundant_residue_suffix(raw):
+    """The restated run is redundant with the range, so both spellings must
+    converge or the verbatim one stays disjoint from every matcher form."""
+
+    assert normalize_duplication(raw) == "R360_Q361dup"
+    assert normalize_variant(raw, "KCNQ1") == normalize_variant("R360_Q361dup", "KCNQ1")
+
+
+def test_unparsed_protein_fall_through_drops_the_presentation_prefix():
+    assert normalize_variant("p.Gln1507_Pro1509del", "SCN5A") == "GLN1507_PRO1509DEL"
+
+
+# ---------------------------------------------------------------------------
+# cDNA character tolerance
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "c.[999–424_1338 + 81del]",
+        "c.999−424_1338+81del",
+        "c.[999-424_1338+81del]+[=]",
+    ],
+    ids=["bracketed_en_dash_spaces", "minus_sign", "bracket_plus_reference_allele"],
+)
+def test_cdna_typography_is_normalized_before_grammar(raw):
+    assert VariantNormalizer("SCN5A").normalize_cdna(raw) == "c.999-424_1338+81del"
+
+
+def test_multi_allele_brackets_are_left_alone():
+    """``c.[X];[Y]`` carries real two-allele semantics; do not unwrap it."""
+    raw = "c.[1234A>G];[2000C>T]"
+
+    assert VariantNormalizer("SCN5A").normalize_cdna(raw) == raw
+
+
 # ---------------------------------------------------------------------------
 # Fuzzy matching
 # ---------------------------------------------------------------------------

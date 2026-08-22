@@ -350,6 +350,32 @@ CDNA_PATTERNS = [
     re.compile(r"^c\.(\d+[\+\-]\d+)(del|dup|ins)([ACGT]*)$", re.IGNORECASE),
 ]
 
+# Typographic dashes that publishers substitute for the HGVS minus sign.
+_CDNA_DASH_RE = re.compile(r"[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]")
+# Single-allele HGVS brackets, optionally with a reference second allele:
+# "c.[X]" or "c.[X]+[=]". Multi-allele "c.[X];[Y]" carries real semantics and
+# must not match ([^\[\];] excludes it).
+_CDNA_SINGLE_ALLELE_BRACKET_RE = re.compile(
+    r"^(c\.)\[([^\[\];]+)\](?:\+\[=\])?$", re.IGNORECASE
+)
+
+
+def _preprocess_cdna_token(variant: str) -> str:
+    """Character-level cleanup before any cDNA grammar sees the token.
+
+    Publisher text substitutes typographic dashes for the HGVS minus, lets
+    whitespace leak inside the token, and wraps single alleles in brackets.
+    All three are presentation, not identity ("c.[999–424_1338 + 81del]" is
+    "c.999-424_1338+81del"). Multi-allele "c.[X];[Y]" is left unchanged.
+    """
+    cleaned = _CDNA_DASH_RE.sub("-", variant)
+    cleaned = re.sub(r"\s+", "", cleaned)
+    bracket = _CDNA_SINGLE_ALLELE_BRACKET_RE.match(cleaned)
+    if bracket:
+        cleaned = f"{bracket.group(1)}{bracket.group(2)}"
+    return cleaned
+
+
 # IVS (splice) patterns - legacy notation.
 # Gene-agnostic IVS↔IVS matching is preferred in to_canonical_form / matchers.
 # KCNH2_IVS_MAP remains an optional IVS→cDNA bridge for that gene only; full
@@ -601,7 +627,7 @@ class VariantNormalizer:
         if not variant:
             return None
 
-        variant = variant.strip()
+        variant = _preprocess_cdna_token(variant.strip())
 
         # A strict prefixless BIC-style indel is useful source notation, but it
         # is not HGVS without a transcript/coordinate declaration.  Never
@@ -1057,9 +1083,12 @@ def normalize_duplication(variant: str) -> Optional[str]:
     if m:
         return f"?{m.group(1)}dup"  # Mark as ambiguous
 
-    # Pattern 4: Range duplication
+    # Pattern 4: Range duplication. Literature sometimes restates the
+    # duplicated run after "dup" ("p.R360_Q361dupQKQR"); the run is redundant
+    # with the range, so it is dropped rather than kept as identity.
     m = re.match(
-        r"^([A-Za-z]|[A-Z][a-z]{2})(\d+)_([A-Za-z]|[A-Z][a-z]{2})(\d+)dup$",
+        r"^([A-Za-z]|[A-Z][a-z]{2})(\d+)_([A-Za-z]|[A-Z][a-z]{2})(\d+)dup"
+        r"(?:(?:[A-Z][a-z]{2})+|[ACDEFGHIKLMNPQRSTVWY]+)?$",
         v,
         re.IGNORECASE,
     )
@@ -1629,7 +1658,18 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
         if m:
             return f"{m.group(1).upper()}{m.group(2)}{m.group(3).lower()}{m.group(4).upper()}"
 
-    # Unknown format - return uppercase
+    # Range duplication, including a restated residue run ("R360_Q361dupQKQR").
+    # The run is redundant with the range, so both spellings must converge here
+    # or the verbatim one stays disjoint from every matcher form.
+    range_dup = normalize_duplication(variant)
+    if range_dup and "_" in range_dup:
+        return range_dup
+
+    # Unknown format - return uppercase. A leading p./P. is presentation, not
+    # identity: every matcher form is prefix-free, so keeping it would leave a
+    # verbatim emission disjoint from all of them.
+    if v_lower.startswith("p."):
+        variant = variant[2:]
     return variant.upper()
 
 

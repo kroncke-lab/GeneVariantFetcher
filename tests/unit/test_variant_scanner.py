@@ -949,6 +949,283 @@ class TestMergeScannerResults:
 
 
 # =============================================================================
+# TestTableRowAttribution
+# =============================================================================
+
+
+class TestTableRowAttribution:
+    """A table row can never satisfy the study-prose lane.
+
+    ``positive_study_re`` demands prose such as "we identified", which table
+    rows by construction never contain, so every row-shaped mention used to
+    fail closed as ``table_like`` no matter which gene the row named.
+    """
+
+    ROW_TEXT = "\n".join(
+        [
+            "Supplementary Table 2. Variants identified in the cohort.",
+            "| Patient | Gene | Exon | Variant | Exercise test |",
+            "| 3 | RYR2 | 60 | Q2958R | Yes, VT |",
+        ]
+    )
+
+    def test_target_gene_row_is_attributable_without_study_prose(self):
+        scan_result = scan_document_for_variants(self.ROW_TEXT, "RYR2")
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_result,
+            "RYR2",
+            document_text=self.ROW_TEXT,
+        )
+
+        assert {v["protein_notation"] for v in merged["variants"]} == {"Q2958R"}
+
+    def test_phenotype_acronym_does_not_veto_an_affirmed_target_row(self):
+        """The "Yes, VT" cell reads as an unknown gene symbol to the veto."""
+        scanner = VariantScanner("RYR2")
+        row = "| 3 | RYR2 | 60 | Q2958R | Yes, VT |"
+
+        assert scanner._gene_assigned_to_variant(row, "Q2958R") == "RYR2"
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(row, "RYR2"),
+            "RYR2",
+            document_text=row,
+        )
+        assert {v["protein_notation"] for v in merged["variants"]} == {"Q2958R"}
+
+    def test_row_naming_another_gene_is_still_rejected(self):
+        text = "\n".join(
+            [
+                "| Patient | Gene | Exon | Variant | Exercise test |",
+                "| 7 | KCNQ1 | 6 | Q2958R | Yes, VT |",
+            ]
+        )
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
+    def test_row_carrying_a_citation_signal_is_still_rejected(self):
+        """The row lane must not reopen the compilation/secondary-study hole."""
+        text = "\n".join(
+            [
+                "| Reference | Gene | Variant | Phenotype |",
+                "| Author et al. 2010 | RYR2 | Q2958R | CPVT |",
+            ]
+        )
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+        assert {
+            item["reason"]
+            for item in merged["extraction_metadata"]["scanner_merge"]["skipped"]
+        } <= {"table_like", "reference_list", "background_mention"}
+
+    def test_row_carrying_an_external_repository_signal_is_still_rejected(self):
+        text = "\n".join(
+            [
+                "| Source | Gene | Variant | Frequency |",
+                "| gnomAD | RYR2 | G3946S | 0.00001 |",
+            ]
+        )
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
+    def test_prose_mention_still_requires_study_prose(self):
+        text = "The RYR2 Q2958R substitution alters the channel gating domain."
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+        assert (
+            merged["extraction_metadata"]["scanner_merge"]["skipped"][0]["reason"]
+            == "study_unattributed"
+        )
+
+
+# =============================================================================
+# TestProseIndelEvents
+# =============================================================================
+
+
+class TestProseIndelEvents:
+    """Older papers narrate single-base events instead of printing HGVS."""
+
+    SENTENCE = (
+        "Sequencing of KCNH2 revealed an insertion of a guanine at position "
+        "3108, which is predicted to cause truncation of the protein at amino "
+        "acid position 1036."
+    )
+
+    def test_prose_insertion_emits_cdna_indel_candidate(self, scanner):
+        result = scanner.scan(self.SENTENCE)
+        norms = {v.normalized for v in result.variants}
+
+        assert "c.3108insG" in norms
+        indel = next(v for v in result.variants if v.normalized == "c.3108insG")
+        assert indel.notation_type == "cdna"
+        assert indel.confidence < 0.9
+
+    def test_same_sentence_truncation_anchors_a_frameshift(self, scanner):
+        result = scanner.scan(self.SENTENCE)
+        norms = {v.normalized for v in result.variants}
+
+        assert "1036fs" in norms
+        frameshift = next(v for v in result.variants if v.normalized == "1036fs")
+        assert frameshift.variant_type == "frameshift"
+        assert frameshift.position == 1036
+
+    def test_multi_base_deletion_spans_the_stated_length(self):
+        result = VariantScanner("SCN5A").scan(
+            "We found a deletion of 4 bp at nucleotide position 1261 in SCN5A."
+        )
+
+        assert "c.1261_1264del" in {v.normalized for v in result.variants}
+
+    def test_insertion_length_without_bases_is_not_fabricated(self):
+        result = VariantScanner("SCN5A").scan(
+            "An insertion of 4 bp at nucleotide position 1261 was seen in SCN5A."
+        )
+
+        assert not any(v.source == "prose_nt_indel" for v in result.variants)
+
+
+# =============================================================================
+# TestZeroSeparatorGeneAttachment
+# =============================================================================
+
+
+class TestZeroSeparatorGeneAttachment:
+    """A gene glued to a variant labels that mention, whichever side it is on."""
+
+    LIST_TEXT = (
+        "Mutation analysis identified G38S-KCNE1, and Q2958R-RyR2 in the "
+        "affected probands."
+    )
+
+    def test_attached_suffix_keeps_only_the_target_genes_allele(self):
+        norms = {
+            v.normalized
+            for v in scan_document_for_variants(self.LIST_TEXT, "RYR2").variants
+        }
+
+        assert "Q2958R" in norms
+        assert "G38S" not in norms
+
+    def test_attached_suffix_assigns_the_other_gene_its_own_allele(self):
+        norms = {
+            v.normalized
+            for v in scan_document_for_variants(self.LIST_TEXT, "KCNE1").variants
+        }
+
+        assert "G38S" in norms
+        assert "Q2958R" not in norms
+
+    @pytest.mark.parametrize(
+        "context, raw_text, expected",
+        [
+            ("KCNE1/G38S was also screened", "G38S", "KCNE1"),
+            ("the R14C(KCNQ1) allele was screened", "R14C", "KCNQ1"),
+            ("Q2958R-RyR2 in the proband", "Q2958R", "RYR2"),
+        ],
+        ids=["prefix_slash", "parenthetical", "suffix_dash"],
+    )
+    def test_attached_gene_outranks_clause_mates(self, context, raw_text, expected):
+        scanner = VariantScanner(expected)
+
+        assert scanner._gene_assigned_to_variant(context, raw_text) == expected
+
+    def test_off_roster_attached_gene_still_vetoes_the_merge(self):
+        """``_gene_assigned_to_variant`` only knows roster genes; the
+        unknown-symbol veto covers panel genes such as MYH7."""
+        text = "In our cohort we identified R14C(MYH7) in two probands."
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "KCNQ1"),
+            "KCNQ1",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
+
+# =============================================================================
+# TestScannerStructuralPhrasing
+# =============================================================================
+
+
+class TestScannerStructuralPhrasing:
+    """Delta peptides and exons-first exon events are real structural hints."""
+
+    def test_delta_notation_emits_structural_candidate(self):
+        result = VariantScanner("SCN5A").scan(
+            "The SCN5A ΔKPQ deletion was identified in three LQT3 families."
+        )
+        delta = [v for v in result.variants if v.source == "delta_notation"]
+
+        assert delta
+        assert delta[0].structural_description == "ΔKPQ"
+        assert delta[0].notation_type == "structural"
+
+    def test_delta_candidate_resolves_downstream_to_the_protein_range(self):
+        from utils.structural_alleles import expand_structural_keys
+
+        result = VariantScanner("SCN5A").scan(
+            "We identified the SCN5A ΔKPQ deletion in the proband."
+        )
+        delta = next(v for v in result.variants if v.source == "delta_notation")
+
+        assert "K1505_Q1507del" in expand_structural_keys(
+            delta.structural_description, "SCN5A"
+        )
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "RyR2 exon 3 deletions were identified in two unrelated probands.",
+            "We identified a 1.1 kb RyR2 exon 3 deletion in the proband.",
+            "A RYR2 deletion of exon 3 was identified in the proband.",
+        ],
+        ids=["noun_after_plural", "size_prefixed", "operation_first"],
+    )
+    def test_exon_event_accepts_either_word_order(self, text):
+        result = VariantScanner("RYR2").scan(text)
+
+        assert "del:exon3" in {
+            v.normalized for v in result.variants if v.source == "exon_event"
+        }
+
+    def test_negated_exons_first_event_is_still_suppressed(self):
+        result = VariantScanner("RYR2").scan(
+            "A RyR2 exon 3 deletion was not detected by MLPA."
+        )
+
+        assert not any(v.source == "exon_event" for v in result.variants)
+
+
+# =============================================================================
 # TestScanDocumentConvenience
 # =============================================================================
 
