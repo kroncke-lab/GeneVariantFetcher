@@ -10,6 +10,15 @@ by both prompts -- the previous per-prompt copies drifted apart and had to be
 re-synced by hand (that is why ``TABLE_ATTRIBUTION_GUIDANCE`` exists as a separate
 constant at all).
 
+Each mode is split into a byte-stable SYSTEM prompt (rules + output schema, no
+per-paper interpolation) and a small USER template (gene/PMID/title/full text +
+a short task recap AFTER the text). The split exists for provider prompt
+caching: a static system prefix above the 1,024-token floor is cacheable across
+papers, while the old single-template shape interleaved per-paper values before
+the rules and could never cache. Do not move per-paper values into the system
+strings, and keep the user recap after the text (document-early/question-late
+ordering is deliberate).
+
 The authoritative statement of what extraction must capture and must refuse is
 ``docs/EXTRACTION_CONTRACT.md``. Edit that first, then mirror it here. The schema
 fragments are load-bearing -- downstream parsers, the count classifier, and the
@@ -158,32 +167,30 @@ Return a JSON object with this structure:
 }}
 """
 
-COMPACT_EXTRACTION_PROMPT = (
-    """You are an expert medical geneticist extracting {gene_symbol} variants from a
-paper that contains MANY variants (estimated {estimated_variants}+). Extract ALL of
-them in the COMPACT format below: completeness beats detail, so skip
-individual_records, functional_data, key_quotes, and age_dependent_penetrance
-rather than dropping variants. Do NOT stop early.
+# System prompts are plain strings (real braces, never str.format-ed). They must
+# stay free of per-paper values: pmid/title/gene live in the user turn, and the
+# schema tells the model to copy them from there.
+COMPACT_EXTRACTION_SYSTEM_PROMPT = (
+    """You are an expert medical geneticist extracting variants of one target gene
+from a paper that contains MANY variants. Extract ALL of them in the COMPACT
+format below: completeness beats detail, so skip individual_records,
+functional_data, key_quotes, and age_dependent_penetrance rather than dropping
+variants. Do NOT stop early.
 
 A wrong number is worse than a missing one. When support is not explicit, use null.
-
-TARGET GENE: {gene_symbol} - ignore variants in every other gene.
-Paper Title: {title}
-
-Full Text:
-{full_text}
 
 """
     + _CORE_RULES
     + """
 
 OUTPUT - JSON only:
-{{
-    "paper_metadata": {{"pmid": "{pmid}", "title": "{title}",
-        "extraction_summary": "Compact extraction of {gene_symbol} variants"}},
+{
+    "paper_metadata": {"pmid": "string (the PMID given above the paper text)",
+        "title": "string (the paper title as given)",
+        "extraction_summary": "string"},
     "variants": [
-        {{
-            "gene_symbol": "{gene_symbol}",
+        {
+            "gene_symbol": "string (the target gene)",
             "cdna_notation": "c.XXX or IVS... or null",
             "protein_notation": "p.XXX or null",
             "legacy_notation": "BRCA1/2-only strict bare BIC indel such as 4321delAC or 4184del4, or null",
@@ -191,30 +198,30 @@ OUTPUT - JSON only:
             "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
             "structural_description": "e.g. 'deletion of exons 3-5' or null",
             "clinical_significance": "pathogenic|likely_pathogenic|VUS|likely_benign|benign",
-            "patients": {{"count": N, "phenotype": "brief",
+            "patients": {"count": N, "phenotype": "brief",
                 "source_container": "main|supplement|null", "source_kind": "table|figure|text|abstract|null",
                 "source_ref": "Table X or null", "page_label": null, "pdf_page": null,
                 "row_label": null, "row_ordinal": null, "column_ref": null,
-                "figure_panel": null, "locator_extra": {{}}}},
-            "penetrance_data": {{"total_carriers_observed": N or null,
-                "affected_count": N or null, "unaffected_count": N or null}},
-            "count_provenance": {{
+                "figure_panel": null, "locator_extra": {}},
+            "penetrance_data": {"total_carriers_observed": N or null,
+                "affected_count": N or null, "unaffected_count": N or null},
+            "count_provenance": {
                 "carriers_column_label": "string or null",
                 "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
                 "affected_column_label": "string or null", "affected_count_type": "(same enum)",
-                "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"}},
+                "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"},
             "source_location": "Table X or Results",
             "fact_provenance": [
-                {{"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
+                {"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
                   "fact_value": "value", "individual_id": "string or null",
                   "source_location": "string", "source_table": "string or null",
                   "source_row": "string or null", "source_column": "string or null",
                   "source_section": "string or null", "source_paragraph": "string or null",
-                  "evidence_quote": "short exact quote"}}
+                  "evidence_quote": "short exact quote"}
             ]
-        }}
+        }
     ],
-    "extraction_metadata": {{
+    "extraction_metadata": {
         "total_variants_found": integer,
         "extraction_confidence": "high|medium|low",
         "study_type": "clinical|functional|mixed (REQUIRED)",
@@ -222,15 +229,28 @@ OUTPUT - JSON only:
         "study_summary": "1-3 sentences on what this study is",
         "compact_mode": true,
         "notes": "string"
-    }}
-}}
+    }
+}
 
 Structural events (exon deletions, large del/dup, CNVs) may omit point-form
 notation when variant_class + structural_description are set.
 """
 )
 
-EXTRACTION_PROMPT = (
+COMPACT_EXTRACTION_USER_PROMPT = """TARGET GENE: {gene_symbol} - ignore variants in every other gene.
+PMID: {pmid}
+Paper Title: {title}
+This paper is estimated to contain {estimated_variants}+ variants.
+
+Full Text:
+{full_text}
+
+Extract ALL {gene_symbol} variants now, following every rule in the system
+message. Return ONLY the compact JSON object with the exact schema given there.
+Do NOT stop early.
+"""
+
+EXTRACTION_SYSTEM_PROMPT = (
     """You are an expert medical geneticist extracting genetic variants from a
 scientific paper, with emphasis on penetrance (affected vs unaffected carriers).
 
@@ -239,13 +259,6 @@ many variants, keep minimal fields each rather than dropping any; above ~50
 variants, at most one individual_records entry per variant.
 
 A wrong number is worse than a missing one. When support is not explicit, use null.
-
-TARGET GENE: {gene_symbol} - only this gene. If the paper mentions it but reports
-no variants, return an empty variants list.
-Paper Title: {title}
-
-Full Text (including tables):
-{full_text}
 
 """
     + _CORE_RULES
@@ -270,11 +283,12 @@ implicit-count and abstain rules; set extraction_confidence low or medium and no
 it. Do not skip extraction just because the information is thin.
 
 OUTPUT - JSON only:
-{{
-    "paper_metadata": {{"pmid": "{pmid}", "title": "{title}",
-        "extraction_summary": "brief summary of what was extracted"}},
+{
+    "paper_metadata": {"pmid": "string (the PMID given above the paper text)",
+        "title": "string (the paper title as given)",
+        "extraction_summary": "brief summary of what was extracted"},
     "variants": [
-        {{
+        {
             "gene_symbol": "string",
             "cdna_notation": "string or null (c. or IVS notation)",
             "protein_notation": "string or null",
@@ -284,32 +298,32 @@ OUTPUT - JSON only:
             "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
             "structural_description": "e.g. 'deletion of exons 3-5' or null",
             "clinical_significance": "string",
-            "patients": {{"count": integer, "demographics": "string", "phenotype": "string",
+            "patients": {"count": integer, "demographics": "string", "phenotype": "string",
                 "source_container": "main|supplement|null", "source_kind": "table|figure|text|abstract|null",
                 "source_ref": "Table X or Figure Y or Results or null",
                 "page_label": "string or null", "pdf_page": "integer or null",
                 "row_label": "string or null", "row_ordinal": "integer or null",
                 "column_ref": "string or null", "figure_panel": "string or null",
-                "locator_extra": {{}}}},
-            "penetrance_data": {{
+                "locator_extra": {}},
+            "penetrance_data": {
                 "total_carriers_observed": "integer or null",
                 "affected_count": "integer or null",
                 "unaffected_count": "integer or null",
                 "uncertain_count": "integer or null (unclear status or too young)",
                 "penetrance_percentage": "float or null; ONLY when the paper explicitly states a variant-specific percentage; never calculate it from counts",
                 "age_dependent_penetrance": [
-                    {{"age_range": "e.g. '40-50 years'", "penetrance_percentage": "float",
+                    {"age_range": "e.g. '40-50 years'", "penetrance_percentage": "float",
                       "carriers_in_range": "integer", "affected_in_range": "integer",
                       "evidence_quote": "exact source quote containing the stated percentage",
-                      "source_location": "table/figure/section or null"}}
-                ]}},
-            "count_provenance": {{
+                      "source_location": "table/figure/section or null"}
+                ]},
+            "count_provenance": {
                 "carriers_column_label": "string or null (raw column header the count came from)",
                 "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
                 "affected_column_label": "string or null", "affected_count_type": "(same enum)",
-                "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"}},
+                "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"},
             "individual_records": [
-                {{"individual_id": "e.g. 'II-1', 'P1', 'Case_2'",
+                {"individual_id": "e.g. 'II-1', 'P1', 'Case_2'",
                   "age_at_evaluation": "integer or null", "age_at_onset": "integer or null",
                   "age_at_diagnosis": "integer or null", "sex": "male|female|other|null",
                   "affected_status": "affected|unaffected|uncertain",
@@ -320,9 +334,9 @@ OUTPUT - JSON only:
                   "source_ref": "string or null", "page_label": "string or null",
                   "pdf_page": "integer or null", "row_label": "string or null",
                   "row_ordinal": "integer or null", "column_ref": "string or null",
-                  "figure_panel": "string or null", "locator_extra": {{}}}}
+                  "figure_panel": "string or null", "locator_extra": {}}
             ],
-            "functional_data": {{"summary": "string", "assays": ["list of assays"]}},
+            "functional_data": {"summary": "string", "assays": ["list of assays"]},
             "segregation_data": "string or null",
             "population_frequency": "string or null",
             "evidence_level": "strong|moderate|weak|supporting",
@@ -330,20 +344,20 @@ OUTPUT - JSON only:
             "additional_notes": "string",
             "key_quotes": ["relevant quotes from paper"],
             "fact_provenance": [
-                {{"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|penetrance_percentage|individual_affected_status",
+                {"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|penetrance_percentage|individual_affected_status",
                   "fact_value": "value", "individual_id": "string or null",
                   "source_location": "string", "source_table": "string or null",
                   "source_row": "string or null", "source_column": "string or null",
                   "source_section": "string or null", "source_paragraph": "string or null",
-                  "evidence_quote": "short exact quote"}}
+                  "evidence_quote": "short exact quote"}
             ]
-        }}
+        }
     ],
     "tables_processed": [
-        {{"table_name": "e.g. 'Table 1', 'Supplementary Table 3'",
-          "table_caption": "string", "variants_extracted": integer}}
+        {"table_name": "e.g. 'Table 1', 'Supplementary Table 3'",
+          "table_caption": "string", "variants_extracted": integer}
     ],
-    "extraction_metadata": {{
+    "extraction_metadata": {
         "total_variants_found": integer,
         "extraction_confidence": "high|medium|low",
         "study_type": "clinical|functional|mixed (REQUIRED)",
@@ -354,9 +368,21 @@ OUTPUT - JSON only:
         "study_summary": "1-3 sentences on what this study is",
         "challenges": ["any issues during extraction"],
         "notes": "string"
-    }}
-}}
+    }
+}
 
 Preserve the paper's exact nomenclature. Do not invent data that is not there.
 """
 )
+
+EXTRACTION_USER_PROMPT = """TARGET GENE: {gene_symbol} - only this gene. If the paper mentions it but reports
+no variants, return an empty variants list.
+PMID: {pmid}
+Paper Title: {title}
+
+Full Text (including tables):
+{full_text}
+
+Extract ALL {gene_symbol} variants now, following every rule in the system
+message. Return ONLY the JSON object with the exact schema given there.
+"""

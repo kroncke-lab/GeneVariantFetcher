@@ -2,6 +2,7 @@
 
 from pipeline.claim_verifier import (
     VariantClaimCard,
+    CLAIM_VERIFICATION_SYSTEM_PROMPT,
     VariantClaimVerifier,
     apply_verification_to_variant,
     build_claim_card,
@@ -369,7 +370,7 @@ def test_risk_flags_count_bearing_regex_table_rows():
 
 
 def test_low_risk_extraction_skips_adjudicator(monkeypatch):
-    def fail_if_called(self, prompt):
+    def fail_if_called(self, prompt, **_kw):
         raise AssertionError("adjudicator should not run for low-risk extraction")
 
     monkeypatch.setattr(ExpertExtractor, "call_llm_json", fail_if_called)
@@ -425,9 +426,13 @@ def test_claim_prompt_distinguishes_disease_affected_from_symptomatic_subset():
 
     prompt = build_claim_verification_prompt(card)
 
-    assert "affected/unaffected split is null" in prompt
-    assert "not automatically\n  unaffected" in prompt
+    # Rules moved to the byte-stable system prompt (cacheable prefix); the
+    # per-card user prompt carries only the card and the task recap.
+    assert "affected/unaffected split is null" in CLAIM_VERIFICATION_SYSTEM_PROMPT
+    assert "not automatically\n  unaffected" in CLAIM_VERIFICATION_SYSTEM_PROMPT
     assert "Long QT syndrome" in prompt
+    for field in ("{gene", "{pmid", "{card"):
+        assert field not in CLAIM_VERIFICATION_SYSTEM_PROMPT
 
 
 def test_claim_verification_guard_clears_ambiguous_symptom_partition():

@@ -1983,7 +1983,7 @@ Nucleotide Change              Coding Effect            Authors, year
     monkeypatch.setattr(
         extractor,
         "call_llm_json_with_status",
-        lambda _prompt: (
+        lambda _prompt, **_kw: (
             {"variants": [], "extraction_metadata": {"total_variants_found": 0}},
             False,
             "{}",
@@ -2427,7 +2427,7 @@ def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     monkeypatch.setattr(
         extractor,
         "call_llm_json_with_status",
-        lambda _prompt: (
+        lambda _prompt, **_kw: (
             {
                 "variants": [
                     {
@@ -2502,7 +2502,7 @@ def test_large_scanner_result_keeps_bounded_hints_but_skips_merge(monkeypatch):
     monkeypatch.setattr(
         extractor,
         "call_llm_json_with_status",
-        lambda _prompt: (
+        lambda _prompt, **_kw: (
             {
                 "variants": [
                     {

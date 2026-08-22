@@ -320,8 +320,10 @@ def build_claim_card(
     )
 
 
-def build_claim_verification_prompt(card: VariantClaimCard) -> str:
-    return f"""You are verifying one biomedical variant/count claim.
+# Byte-stable across cards: rules and the output schema live in the system
+# turn so the provider can cache the prefix, and the schema now precedes the
+# card instead of trailing it. Only the card itself varies per call.
+CLAIM_VERIFICATION_SYSTEM_PROMPT = """You are verifying one biomedical variant/count claim.
 
 Do not do broad extraction from the paper. Verify and, when the local evidence
 clearly supports it, correct this one claim. Field verdict labels refer to the
@@ -369,26 +371,32 @@ Important rules:
 - Return null for corrected count values unless the evidence supports a concrete integer.
 - The variant can be supported even when total/affected/unaffected are unsupported.
 
-Claim card:
-{card.to_prompt_json()}
-
 Return strict JSON only:
-{{
+{
   "verdict": "directly_supported|inferred_supported|ambiguous|unsupported|source_missing",
-  "field_verdicts": {{
+  "field_verdicts": {
     "variant": "directly_supported|inferred_supported|ambiguous|unsupported|source_missing",
     "total_carriers": "directly_supported|inferred_supported|ambiguous|unsupported|source_missing",
     "affected": "directly_supported|inferred_supported|ambiguous|unsupported|source_missing",
     "unaffected": "directly_supported|inferred_supported|ambiguous|unsupported|source_missing"
-  }},
-  "corrected_values": {{
+  },
+  "corrected_values": {
     "total_carriers": "integer or null",
     "affected": "integer or null",
     "unaffected": "integer or null"
-  }},
+  },
   "reason": "brief evidence-based explanation",
   "evidence_quote": "short quote or line reference supporting the verdict"
-}}
+}
+"""
+
+
+def build_claim_verification_prompt(card: VariantClaimCard) -> str:
+    return f"""Claim card:
+{card.to_prompt_json()}
+
+Verify this one claim now. Return ONLY the strict JSON object specified in the
+system message.
 """
 
 
@@ -433,7 +441,10 @@ class VariantClaimVerifier(BaseLLMCaller):
             ),
             llm_attempt_ledger(),
         ):
-            raw = self.call_llm_json(build_claim_verification_prompt(card))
+            raw = self.call_llm_json(
+                build_claim_verification_prompt(card),
+                system_message=CLAIM_VERIFICATION_SYSTEM_PROMPT,
+            )
             normalized = normalize_verification(raw, card=card)
             self.record_llm_decision(
                 "variant_claim_verification_decision",

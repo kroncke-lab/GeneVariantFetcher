@@ -1346,7 +1346,7 @@ def _stub_full_text_extraction(monkeypatch, extractor):
     monkeypatch.setattr(
         extractor,
         "call_llm_json_with_status",
-        lambda _prompt: (
+        lambda _prompt, **_kw: (
             {
                 "variants": [
                     {"gene_symbol": "KCNH2", "protein_notation": "p.Arg176Trp"}

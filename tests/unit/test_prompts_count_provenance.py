@@ -8,12 +8,41 @@ than silently regressing the LLM's output shape.
 
 import re
 
-from pipeline.prompts import COMPACT_EXTRACTION_PROMPT, EXTRACTION_PROMPT
+from pipeline.prompts import (
+    COMPACT_EXTRACTION_SYSTEM_PROMPT,
+    COMPACT_EXTRACTION_USER_PROMPT,
+    EXTRACTION_SYSTEM_PROMPT,
+    EXTRACTION_USER_PROMPT,
+)
 
+# The contract is over the full instruction payload the model sees, so each
+# mode is checked as system + user combined; the split itself is pinned by
+# test_system_prompts_are_byte_stable below.
 PROMPTS = {
-    "COMPACT_EXTRACTION_PROMPT": COMPACT_EXTRACTION_PROMPT,
-    "EXTRACTION_PROMPT": EXTRACTION_PROMPT,
+    "COMPACT_EXTRACTION_PROMPT": (
+        COMPACT_EXTRACTION_SYSTEM_PROMPT + COMPACT_EXTRACTION_USER_PROMPT
+    ),
+    "EXTRACTION_PROMPT": EXTRACTION_SYSTEM_PROMPT + EXTRACTION_USER_PROMPT,
 }
+
+
+def test_system_prompts_are_byte_stable():
+    """Provider prompt caching requires the system block to be identical
+    across papers: no per-paper str.format field may appear in it, and the
+    user template must still carry all of them."""
+    for name, system in (
+        ("COMPACT_EXTRACTION_SYSTEM_PROMPT", COMPACT_EXTRACTION_SYSTEM_PROMPT),
+        ("EXTRACTION_SYSTEM_PROMPT", EXTRACTION_SYSTEM_PROMPT),
+    ):
+        for field in ("{gene_symbol}", "{title}", "{full_text}", "{pmid}"):
+            assert field not in system, f"{name} must not vary per paper ({field})"
+    for name, user in (
+        ("COMPACT_EXTRACTION_USER_PROMPT", COMPACT_EXTRACTION_USER_PROMPT),
+        ("EXTRACTION_USER_PROMPT", EXTRACTION_USER_PROMPT),
+    ):
+        for field in ("{gene_symbol}", "{title}", "{full_text}", "{pmid}"):
+            assert field in user, f"{name} lost required field {field}"
+
 
 REQUIRED_COUNT_TYPES = {
     "per_variant_carrier",
