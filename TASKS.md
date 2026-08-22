@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-21.
+Last reviewed: 2026-08-22.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -18,6 +18,79 @@ Dated reports and benchmark run directories are evidence, not competing plans.
 Execute the acceptance gates in order. Do not publish a new headline, update the
 dashboard, enable a default-off recovery stage, or advance to a larger cohort
 until the preceding gate passes and its artifact is recorded.
+
+## 0. In-flight 2026-08-22 improvement batch (cruft → fixes → paid proof)
+
+Owner-authorized sequence: remove cruft, fix evidenced defects, then spend up
+to $100 proving the improvement, then stage the 50/50/50 BRCA1/BRCA2/BMPR2
+candidates into the login-gated Variant Browser reviewer surface. Evidence and
+ranking authority for the whole batch:
+`docs/evidence/strategy_consult_20260822.md` (three-source consult: Sol xhigh +
+Grok 4.6 xhigh + five locked-trace/disk audits).
+
+Landed on main (each with its `docs/PROTOCOL_CHANGELOG.md` row):
+
+- Cruft sweep: 16 verified-unreferenced files deleted (dead failure logger,
+  superseded one-off scripts, rejected debate-rescore pilots); catalogs updated.
+  `run_claim_debate_pilot.py` stays — it has live tests. One agent worktree
+  remains (`.claude/worktrees/vu-vpn-ezproxy-setup-*`, zero unique commits);
+  not pruned because it may belong to a concurrent session — remove after
+  confirming it is idle.
+- Prompt-caching split (system/user) for both extraction modes, continuation,
+  and claim-verify + the verifier reasoning-effort mis-wire fix
+  (`pipeline/extraction.py:7583` inherited the extractor's effort).
+- Figure-vision cost controls: SHA image dedup, fail-open caption triage
+  (`GVF_FIGURE_TRIAGE`), token-cap retry-then-accept-empty, usage-key aliasing
+  so vision cost is finally visible in traces.
+- Acquisition fail-opens: table-preserving `.doc` conversion (24667783: 0→92
+  pipe rows on the real corpus file), zero-byte FULL_CONTEXT demotion at three
+  selector sites (27114410), reference-section scoping + fail-closed PDF
+  supplement identity gate (31520628's mis-bound CDC PDFs).
+
+- [ ] **Land the notation/scanner FN fixes** (in flight): eight diagnosed
+      gold-120 FN classes, all generic — merge-attribution fixes (affirmative
+      target assignment beats the `nearby_generic_gene` veto; table-row lane),
+      prose indel events, zero-separator gene attachment, footnote-marker
+      tolerance in `_valid_table_cdna_identity`, dup-with-residues
+      normalization, Δ-notation scanner branch, en-dash/bracket cDNA
+      tolerance, exons-first structural phrasing. Diagnosis (with replays) in
+      the evidence doc; the 28798025 six-variant miss is deterministic and
+      recurs until this lands.
+- [ ] **Sol + Grok adversarial review of the full diff**, fix findings.
+- [ ] **Paid proof run**: `setup_production_eval.py create --run-id
+      20260822_postfix_gold118` (manifest already excludes 14642689 → 118
+      attempts), `run_extraction.sh`, then `lock_and_score.sh`. Compare to the
+      2026-08-21 candidate-local lock (546/633, 98.03% counted-extra, carrier
+      MAE 0.255, ~$9.77) on recall, counted-extra precision, MAE, and $ (usage
+      capture now includes vision). Budget ceiling $100; this run ~$6–10.
+- [ ] **Stage 50/50/50 into the VB reviewer surface (login-gated, NOT public
+      publish)** only after the proof run holds or improves the cardiac
+      metrics. Contamination pre-audit already clean on all three candidate
+      DBs (canine PMID absent everywhere, zero wrong-gene rows, 50 papers
+      each, residue QC with the fixed fail-open code: 0 off-target BRCA2/BMPR2,
+      1 curator-visible BRCA1 boundary flag — p.Asp1864Tyrfs, the stop-codon
+      position). Re-run that audit against whichever DB is imported, and
+      decide BRCA2 final5 vs the staged 3-PMID refresh rebuild explicitly.
+
+Deferred from this batch, deliberately (do not silently drop):
+
+- Deterministic count/phenotype column binder incl. regex-sweep cell binding
+  (§7 below) — highest count-coverage lever, but needs the router's mapping
+  machinery to be Gate-2-safe; do not bundle with an unrelated proof run.
+- `carrier_guard` companion-field nulling and the N=1 `figure_copied_phenotype`
+  clear — unmeasured; measure destroyed/killed first (break-evens: carriers
+  5.19, affected 3.64, unaffected 2.08; unaffected guard already sits at 1.67).
+- `figure_count_unverified` promote-on-corroboration (fills measured 90/91
+  exact are projected away) — design the corroboration path first.
+- Claim-verify changed-vs-CORRECT join ($0, from stored
+  `claim_verification_field_changes` vs gold-matched exactness) — do before
+  any verify-threshold or verifier-model change.
+- Targeted acquisition for the 44 never-acquired FN rows in 7 papers (routes
+  named in the evidence doc §A2); Wiley TDM + Elsevier + AHA/EZproxy.
+- VB publish-path findings: bare-legacy merging into a genuine HGVS identity;
+  one blocked label aborting a whole publish run.
+- Migration repair gaps: whitespace-proof `REPLACE(TRIM(...))` and LIMIT-1
+  duplicate repair in `harvesting/migrate_to_sqlite.py`.
 
 ## 1. Re-establish the scientific baseline
 
@@ -138,9 +211,12 @@ change.
          `cli/compare_variants.py`. Structural alleles already match via
          `utils/structural_alleles.py`; the rescore added 0 structural TPs
          (those identities were not extracted). No per-variant aliases.
-      4. $0 Sol audit: which of the 244 locked figure-vision calls added an
-         identity the text extract already had (72% of the $9.774 mix is Sol;
-         244/393 Sol calls are vision).
+      4. **DONE 2026-08-22:** $0 Sol audit of the 244 locked figure-vision
+         calls: 229 (93.9%) added no identity the text extract already had
+         (replicated 92.2% on the 08-21 lock); 47 were byte-identical
+         re-reads. Redundant-call cost ≈ $2.34/pass. Countermeasures shipped
+         (SHA dedup + fail-open caption triage + cap-retry); see
+         `docs/evidence/strategy_consult_20260822.md` §A1.
       5. **DONE 2026-08-21:** paid blind re-extract over the then-live
          119-attempt tier. The candidate-local lock records 546/633 recall and
          98.03% counted-extra precision. The unrelated 14642689 paper was
