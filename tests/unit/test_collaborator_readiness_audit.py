@@ -184,6 +184,20 @@ def test_audit_fails_manifest_drift_and_exposed_bad_rows(tmp_path):
     assert "unquarantined" in failures
 
 
+def test_audit_fails_placeholder_paper_title(tmp_path):
+    run_dir, manifest = _build_run(tmp_path)
+    con = sqlite3.connect(run_dir / "BRCA1.db")
+    con.execute("UPDATE papers SET title='Unknown Title' WHERE pmid='111'")
+    con.commit()
+    con.close()
+
+    result = audit_gene("BRCA1", run_dir, manifest)
+
+    assert result["structural_gate_passed"] is False
+    assert result["variants"]["placeholder_paper_titles"] == 1
+    assert "placeholder bibliography" in " ".join(result["structural_gate_failures"])
+
+
 def test_audit_fails_when_species_scoped_gene_paper_retains_links(tmp_path):
     run_dir, manifest = _build_run(tmp_path)
     abstract_dir = run_dir / "abstract_json"
@@ -248,6 +262,28 @@ def test_audit_fails_empty_or_unbound_extraction_claims(tmp_path):
     failures = " ".join(result["structural_gate_failures"])
     assert "empty extraction payload" in failures
     assert "papers table PMID set" in failures
+
+
+def test_audit_fails_source_gene_column_relabeling(tmp_path):
+    run_dir, manifest = _build_run(tmp_path, gene="BMPR2")
+    path = run_dir / "extractions" / "BMPR2_PMID_111.json"
+    payload = json.loads(path.read_text())
+    payload["variants"] = [
+        {
+            "gene_symbol": "BMPR2",
+            "cdna_notation": "c.350T>C",
+            "source_table_headers": ["Patient", "Gene", "cDNA"],
+            "evidence_quote": "| PAH 2 | SOX17 | c.350T>C |",
+        }
+    ]
+    path.write_text(json.dumps(payload))
+
+    result = audit_gene("BMPR2", run_dir, manifest)
+
+    assert result["structural_gate_passed"] is False
+    assert result["cohort"]["invalid_extractions"] == [
+        "PMID 111 variant 0: source Gene column names 'SOX17', not BMPR2"
+    ]
 
 
 def test_audit_fails_unverified_empty_trace_and_unmatched_live_variant(tmp_path):

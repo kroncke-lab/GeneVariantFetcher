@@ -1220,8 +1220,9 @@ def step_corpus_sync(
     Scoped to ``run_dir`` so it is fast; the builder is idempotent and only
     adds new (gene, PMID) papers or upgrades compromised categories, so a
     rerun never re-fetches what the corpus already holds. ``gene`` is passed
-    as ``--assume-gene``: a run-dir root has no gene path component below it,
-    so without the hint a NEW gene's papers are silently skipped.
+    as both the inference hint and the corpus scope: a run-dir root has no gene
+    path component below it, while an incremental run must not scan/hash the
+    unrelated external corpus.
     """
     builder = REPO_ROOT / "scripts" / "build_source_corpus.py"
     if not builder.exists():
@@ -1232,7 +1233,7 @@ def step_corpus_sync(
     if corpus_override:
         cmd += ["--out", corpus_override]
     if gene:
-        cmd += ["--assume-gene", gene]
+        cmd += ["--assume-gene", gene, "--gene", gene]
     try:
         result = subprocess.run(
             cmd,

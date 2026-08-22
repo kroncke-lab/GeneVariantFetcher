@@ -22,7 +22,10 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from config.constants import DEFAULT_MAX_WORKERS
-from pipeline.source_quality import is_usable_fulltext_source
+from pipeline.source_quality import (
+    is_reusable_fulltext_source,
+    is_usable_fulltext_source,
+)
 from utils.env_utils import local_data_discovery_disabled
 
 logger = logging.getLogger(__name__)
@@ -1101,8 +1104,6 @@ def _consolidate_from_corpus(
     """
     import shutil
 
-    from pipeline.source_quality import is_usable_fulltext_source
-
     recovered: set = set()
     if not corpus_dir:
         return recovered
@@ -1118,7 +1119,7 @@ def _consolidate_from_corpus(
         if pmid in already_present:
             continue
         src_ft = gene_dir / pmid / f"{pmid}_FULL_CONTEXT.md"
-        if not src_ft.is_file() or not is_usable_fulltext_source(src_ft):
+        if not src_ft.is_file() or not is_reusable_fulltext_source(src_ft):
             continue  # absent or stub/compromised -> let the harvester try
         try:
             shutil.copy2(str(src_ft), str(harvest_dir / f"{pmid}_FULL_CONTEXT.md"))
@@ -1211,6 +1212,8 @@ def _consolidate_prior_downloads(
                 pmid = f.replace("_FULL_CONTEXT.md", "")
                 if pmid in needed:
                     full_path = Path(root) / f
+                    if not is_reusable_fulltext_source(full_path):
+                        continue
                     size = full_path.stat().st_size
                     # Keep the largest version (most complete)
                     if pmid not in prior_files or size > prior_files[pmid][1]:

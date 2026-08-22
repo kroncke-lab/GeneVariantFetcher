@@ -206,7 +206,12 @@ def _provenance_column(variant: dict[str, Any], field_name: str) -> Optional[str
 
 
 def _variant_identifier(variant: dict[str, Any]) -> str:
-    for k in ("protein_notation", "cdna_notation", "genomic_position"):
+    for k in (
+        "protein_notation",
+        "cdna_notation",
+        "legacy_notation",
+        "genomic_position",
+    ):
         v = variant.get(k)
         if isinstance(v, str) and v.strip():
             return v

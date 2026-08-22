@@ -94,6 +94,7 @@ def _variant_notations(variant: dict[str, Any]) -> list[str]:
     for key in (
         "cdna_notation",
         "protein_notation",
+        "legacy_notation",
         "genomic_position",
         "variant",
         "hgvs",

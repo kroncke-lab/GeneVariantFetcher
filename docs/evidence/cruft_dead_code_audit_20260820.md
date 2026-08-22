@@ -57,7 +57,8 @@ Grok's independent challenge is recorded in
 ## Verification after execution
 
 - Full offline unit suite with project deprecations promoted to errors:
-  **2,183 passed** after the 2026-08-21 identity/provenance follow-up.
+  **2,329 passed** after the 2026-08-21 blind-replay, table-identity, and
+  migration follow-up.
 - Bounded offline end-to-end harness: **6 passed**.
 - Curated negative precision guards: **3 passed**.
 - Integration default behavior: **4 passed / 43 network tests skipped**; the
@@ -73,16 +74,27 @@ Grok's independent challenge is recorded in
   **119-paper** gold-value-blind acceptance test: count-eligible variant recall
   **548/633 (86.57%)**, counted-gold PMID precision **97.51%**, and carrier MAE
   **0.425**. Cleanup did not change thresholds or model routing.
-- Post-execution cohort/source/trace membership is exact for BRCA1 **50/50**,
-  BRCA2 **45/45** after removing the canine PMID, and BMPR2 **50/50**. A later
-  fail-closed audit correctly marks all three raw DBs **FAIL** because 346 / 129
-  / 56 ambiguous live identities remain outside the allowed classes. The
-  Variant Browser trusted projection now holds those rows out of private
-  staging; public publication remains **HOLD** pending source-grounded
-  adjudication and disjoint validation.
+- The original registered queues remained BRCA1 **50/50**, BRCA2 **45/45**
+  after removing the canine PMID, and BMPR2 **50/50**. The later collaborator
+  candidate completed a separate exact **50/50/50** blind extraction and
+  source-evidence replay. Its final trusted candidates have 3,582 / 722 / 260
+  live variants after mandatory VariantFeatures enrichment and quarantine.
+  Public publication remains **HOLD** pending source-grounded adjudication and
+  disjoint validation.
 
 ## 2026-08-21 follow-up labels
 
+- **REMOVE — DONE:** repository-wide Ruff identified two genuinely unused
+  test-only bindings; both were removed. No production surface was deleted to
+  satisfy a speculative static-analysis claim.
+- **ADJUST — DONE:** the table router now fingerprints complete normalized
+  table matrices and collapses byte-for-byte-equivalent archive aliases before
+  parsing or count aggregation. This removes duplicate routed evidence without
+  merging distinct tables that happen to mention the same variant.
+- **KEEP:** the bounded Claude/Grok review and repository-wide Ruff pass found
+  no additional production code with sufficient evidence for deletion. Dynamic
+  entry points, manual scientific tools, compatibility surfaces, and immutable
+  benchmark evidence remain intentionally retained.
 - **REMOVE — DONE:** superseded `raw/` and `trusted/` intermediate SCN5A
   diagnostic summaries were moved to recoverable Trash after the final
   projections were frozen. Nested diagnostic `production_runs/` are now ignored
@@ -100,6 +112,21 @@ Grok's independent challenge is recorded in
 - **KEEP:** every new SCN5A helper and `known_isoform_offset` class has a runtime
   caller plus direct and end-to-end tests; none is an unused static-analysis
   candidate.
+- **KEEP:** the final 2026-08-21 bounded pass retained within-paper repeated
+  variant observations when their table/row provenance differs. SQLite folds
+  them under one variant identity and suppresses exact duplicate penetrance
+  tuples; deleting them as generic “duplicates” would discard legitimate
+  case/control or main-table/supplement evidence.
+- **VERIFY:** the final post-change suites are **2,329 passed** in
+  GeneVariantFetcher and **595 passed** in Variant Browser. Repository-wide GVF
+  Ruff and both `git diff --check` passes are clean. Variant Browser's modified
+  Python surface is Ruff-clean; establishing a repository-wide formatter
+  baseline remains the separate ADJUST item above.
+- **KEEP:** the apparent protein-only/cDNA-rich duplicates left by the new
+  migration contract are deliberate fail-closed identities. Streaming
+  uniqueness depends on insertion order and can become false when another cDNA
+  later shares the protein; only exact same-cDNA or ref+position+alt
+  frameshift aliases are eligible to fold.
 
 ## Labels
 

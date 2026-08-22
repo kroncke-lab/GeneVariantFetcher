@@ -108,6 +108,515 @@ def test_migration_keeps_valid_variant_notation(tmp_path):
     conn.close()
 
 
+def test_migration_folds_sparse_cdna_alias_into_richer_identity_and_count(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    extraction_data = {
+        "paper_metadata": {"pmid": "27767231", "title": "BRCA1 tables"},
+        "variants": [],
+    }
+    insert_paper_metadata(cursor, extraction_data)
+
+    sparse_id = insert_variant_data(
+        cursor,
+        "27767231",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.121del",
+            "penetrance_data": {"total_carriers_observed": 1},
+            "source_table": "Supplementary validation table",
+        },
+    )
+    rich_id = insert_variant_data(
+        cursor,
+        "27767231",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.121del",
+            "protein_notation": "p.His41fs",
+            "penetrance_data": {
+                "total_carriers_observed": 1,
+                "affected_count": 1,
+            },
+            "source_table": "Table 2",
+        },
+    )
+    conn.commit()
+
+    assert rich_id == sparse_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    assert cursor.execute(
+        "SELECT cdna_notation, protein_notation FROM variants"
+    ).fetchone() == ("c.121del", "p.His41fs")
+    assert cursor.execute(
+        """
+        SELECT total_carriers_observed, affected_count, unaffected_count
+        FROM penetrance_data
+        """
+    ).fetchall() == [(1, 1, None)]
+    conn.close()
+
+
+def test_migration_folds_sparse_alias_after_richer_identity(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "29470806", "title": "BRCA1 tables"}},
+    )
+
+    rich_id = insert_variant_data(
+        cursor,
+        "29470806",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1002delC",
+            "protein_notation": "p.Ser335AlafsTer6",
+        },
+    )
+    sparse_id = insert_variant_data(
+        cursor,
+        "29470806",
+        {"gene_symbol": "BRCA1", "cdna_notation": "c.1002delC"},
+    )
+    conn.commit()
+
+    assert sparse_id == rich_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    conn.close()
+
+
+def test_migration_keeps_conflicting_protein_annotations_for_same_cdna(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Conflicting annotations"}},
+    )
+
+    first_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "p.Arg34Trp",
+        },
+    )
+    second_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "p.Arg34Gln",
+        },
+    )
+    conn.commit()
+
+    assert second_id != first_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 2
+    conn.close()
+
+
+def test_migration_folds_truncated_substitution_into_matching_frameshift(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "BRCA1 frameshift table"}},
+    )
+
+    short_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "V340G",
+        },
+    )
+    frameshift_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "p.Val340Glyfs*6",
+        },
+    )
+    conn.commit()
+
+    assert frameshift_id == short_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    assert cursor.execute("SELECT protein_notation FROM variants").fetchone()[0] == (
+        "p.Val340Glyfs*6"
+    )
+    conn.close()
+
+
+def test_migration_folds_matching_frameshift_alias_in_reverse_order(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "BRCA1 frameshift table"}},
+    )
+
+    frameshift_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "p.Val340Glyfs*6",
+        },
+    )
+    short_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "V340G",
+        },
+    )
+    conn.commit()
+
+    assert short_id == frameshift_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    assert cursor.execute("SELECT protein_notation FROM variants").fetchone()[0] == (
+        "p.Val340Glyfs*6"
+    )
+    conn.close()
+
+
+def test_migration_does_not_fold_unproven_frameshift_aliases(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Conflicting annotations"}},
+    )
+
+    ids = []
+    for cdna, proteins in (
+        ("c.100dupA", ("V34G", "p.Val34Alafs*6")),
+        ("c.101dupA", ("V34G", "p.Val34fs*6")),
+    ):
+        for protein in proteins:
+            ids.append(
+                insert_variant_data(
+                    cursor,
+                    "1",
+                    {
+                        "gene_symbol": "BRCA1",
+                        "cdna_notation": cdna,
+                        "protein_notation": protein,
+                    },
+                )
+            )
+    conn.commit()
+
+    assert len(set(ids)) == 4
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 4
+    conn.close()
+
+
+def test_migration_keeps_protein_only_then_rich_identity_separate(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Protein-only alias"}},
+    )
+
+    sparse_id = insert_variant_data(
+        cursor,
+        "1",
+        {"gene_symbol": "BRCA1", "protein_notation": "p.Arg34Trp"},
+    )
+    rich_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "R34W",
+        },
+    )
+    conn.commit()
+
+    assert rich_id != sparse_id
+    assert cursor.execute(
+        "SELECT cdna_notation, protein_notation FROM variants ORDER BY variant_id"
+    ).fetchall() == [(None, "p.Arg34Trp"), ("c.100C>T", "R34W")]
+    conn.close()
+
+
+def test_migration_keeps_rich_then_protein_only_identity_separate(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Protein-only alias"}},
+    )
+
+    rich_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "R34W",
+        },
+    )
+    sparse_id = insert_variant_data(
+        cursor,
+        "1",
+        {"gene_symbol": "BRCA1", "protein_notation": "p.Arg34Trp"},
+    )
+    conn.commit()
+
+    assert sparse_id != rich_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 2
+    conn.close()
+
+
+def test_migration_unwraps_predicted_frameshift_parentheses(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Predicted frameshift"}},
+    )
+
+    variant_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "p.(Val340Glyfs*6)",
+        },
+    )
+    conn.commit()
+
+    assert variant_id is not None
+    assert cursor.execute("SELECT protein_notation FROM variants").fetchone()[0] == (
+        "p.Val340Glyfs*6"
+    )
+    conn.close()
+
+
+def test_migration_folds_equivalent_protein_spellings_for_same_cdna(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Equivalent annotations"}},
+    )
+
+    first_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.220C>T",
+            "protein_notation": "p.Gln74*",
+        },
+    )
+    second_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.220C>T",
+            "protein_notation": "p.Gln74Ter",
+        },
+    )
+    conn.commit()
+
+    assert second_id == first_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    conn.close()
+
+
+def test_migration_keeps_distinct_cdna_variants_with_same_protein(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Codon variants"}},
+    )
+
+    first_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "p.Arg34Trp",
+        },
+    )
+    second_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.101G>A",
+            "protein_notation": "p.Arg34Trp",
+        },
+    )
+    conn.commit()
+
+    assert second_id != first_id
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 2
+    conn.close()
+
+
+def test_migration_keeps_conflicting_count_strata_on_folded_alias(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Distinct cohorts"}},
+    )
+
+    rich_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "p.Arg34Trp",
+            "penetrance_data": {"total_carriers_observed": 2},
+        },
+    )
+    sparse_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "penetrance_data": {"total_carriers_observed": 3},
+        },
+    )
+    conn.commit()
+
+    assert sparse_id == rich_id
+    assert cursor.execute(
+        "SELECT total_carriers_observed FROM penetrance_data ORDER BY penetrance_id"
+    ).fetchall() == [(2,), (3,)]
+    conn.close()
+
+
+def test_migration_does_not_merge_arithmetically_impossible_partial_strata(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+    insert_paper_metadata(
+        cursor,
+        {"paper_metadata": {"pmid": "1", "title": "Distinct count strata"}},
+    )
+
+    first_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "penetrance_data": {"total_carriers_observed": 2},
+        },
+    )
+    second_id = insert_variant_data(
+        cursor,
+        "1",
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.100C>T",
+            "protein_notation": "p.Arg34Trp",
+            "penetrance_data": {
+                "total_carriers_observed": 2,
+                "affected_count": 50,
+            },
+        },
+    )
+    conn.commit()
+
+    assert second_id == first_id
+    assert cursor.execute(
+        "SELECT total_carriers_observed, affected_count FROM penetrance_data "
+        "ORDER BY penetrance_id"
+    ).fetchall() == [(2, None), (2, 50)]
+    conn.close()
+
+
+def test_migration_keeps_intronic_range_cdna_indel(tmp_path):
+    """A range endpoint may itself carry an intronic offset."""
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+
+    extraction_data = {
+        "paper_metadata": {"pmid": "19949876", "title": "BRCA2 table"},
+        "variants": [{"gene_symbol": "BRCA2"}],
+    }
+    insert_paper_metadata(cursor, extraction_data)
+
+    variant_id = insert_variant_data(
+        cursor,
+        "19949876",
+        {
+            "gene_symbol": "BRCA2",
+            "cdna_notation": "c.7436_7437-2delAGAT",
+        },
+    )
+    conn.commit()
+
+    assert variant_id is not None
+    assert (
+        cursor.execute(
+            "SELECT cdna_notation FROM variants WHERE variant_id = ?", (variant_id,)
+        ).fetchone()[0]
+        == "c.7436_7437-2delAGAT"
+    )
+    conn.close()
+
+
+def test_validation_accepts_structural_variant_identity_without_notation():
+    payload = {
+        "paper_metadata": {"pmid": "16429403", "title": "BMPR2 deletions"},
+        "variants": [
+            {
+                "gene_symbol": "BMPR2",
+                "variant_class": "exon_deletion",
+                "structural_description": "deletion of exons 5-7",
+            }
+        ],
+    }
+
+    valid, errors, warnings = validate_extraction_data(
+        payload, "BMPR2_PMID_16429403.json"
+    )
+
+    assert valid
+    assert errors == []
+    assert not any("identity" in warning for warning in warnings)
+
+
 def test_migration_keeps_uncertain_start_loss_notation(tmp_path):
     db_path = tmp_path / "variants.db"
     conn = create_database_schema(str(db_path))

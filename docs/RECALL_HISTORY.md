@@ -45,6 +45,26 @@ RYR2 **83.7%**.
 
 ## Timeline (newest first)
 
+### 2026-08-21 — Exact BRCA1/BRCA2/BMPR2 50-paper candidates completed under a blind source gate
+
+Claude's completed staging was preserved rather than repeated. The exact pinned
+manifests, 50 staged payloads, and 50 final SQLite papers agree for BRCA1,
+BRCA2, and BMPR2; canine BRCA2 PMID 19944633 is absent from all three. Mandatory
+VariantFeatures enrichment and quarantine leave 3,582, 722, and 260 live
+variants respectively. A new independent replay gate accepts only unique,
+source-compatible identities and restores the backup for missing, ambiguous, or
+conflicting untyped evidence. Family observations stay typed raw evidence and
+do not become individual-carrier totals.
+
+The supporting clean gold-free cardiac lock is
+`20260821_candidate_local_gold119`: 546/633 variant recall (86.26%), 98.03%
+counted-extra precision, 94.44% count-bearing-only precision, and 0.255 carrier
+MAE. That validates the generalized code path, not the empirical precision of
+the three new gene datasets. They remain local candidates pending a
+source-adjudicated sample and disjoint validation; public annotations were not
+changed. Full evidence is in
+`docs/evidence/brca_bmpr2_full150_audit_20260821.md`.
+
 ### 2026-08-21 — Current-code gold-119 lock exposed and constrained an SCN5A isoform mismatch
 
 The clean `--gold-free-run` replacement completed all 119 attempts and locked

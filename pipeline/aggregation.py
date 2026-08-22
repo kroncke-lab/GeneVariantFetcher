@@ -427,6 +427,7 @@ class DataAggregator:
                 "gene_symbol": representative_variant.get("gene_symbol", gene_symbol),
                 "cdna_notation": representative_variant.get("cdna_notation"),
                 "protein_notation": representative_variant.get("protein_notation"),
+                "legacy_notation": representative_variant.get("legacy_notation"),
                 "genomic_position": representative_variant.get("genomic_position"),
                 "clinical_significance": representative_variant.get(
                     "clinical_significance"

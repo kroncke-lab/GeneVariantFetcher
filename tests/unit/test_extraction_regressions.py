@@ -1,10 +1,93 @@
 import json
 
 import pipeline.extraction as extraction_module
-from pipeline.extraction import ExpertExtractor
+from pipeline.extraction import ExpertExtractor, _normalize_llm_extraction_shape
 from pipeline.steps import _write_dense_table_overflow_report, extract_variants
 from harvesting.supplement_fold import FOLD_BEGIN, FOLD_END
 from utils.models import ExtractionResult
+
+
+def test_llm_shape_guard_quarantines_malformed_nested_containers():
+    guarded = _normalize_llm_extraction_shape(
+        {
+            "variants": [
+                {
+                    "gene_symbol": "BMPR2",
+                    "cdna_notation": "c.1459G>A",
+                    "patients": "one affected carrier",
+                    "penetrance_data": "not reported",
+                    "individual_records": "none",
+                    "functional_data": {"assays": "not performed"},
+                    "fact_provenance": {"fact_type": "variant_identity"},
+                    "key_quotes": "BMPR2 c.1459G>A was identified",
+                },
+                "not a variant object",
+            ],
+            "extraction_metadata": "high confidence",
+        }
+    )
+
+    assert len(guarded["variants"]) == 1
+    variant = guarded["variants"][0]
+    assert variant["patients"] == {}
+    assert variant["penetrance_data"] == {"age_dependent_penetrance": []}
+    assert variant["individual_records"] == []
+    assert variant["functional_data"]["assays"] == []
+    assert variant["fact_provenance"] == [{"fact_type": "variant_identity"}]
+    assert variant["key_quotes"] == ["BMPR2 c.1459G>A was identified"]
+    paths = {
+        item["path"]
+        for item in guarded["extraction_metadata"]["schema_shape_guard_flags"]
+    }
+    assert "variants[0].patients" in paths
+    assert "variants[0].penetrance_data" in paths
+    assert "variants[1]" in paths
+
+
+def test_llm_shape_guard_always_materializes_metadata_containers():
+    guarded = _normalize_llm_extraction_shape({"variants": []})
+
+    assert guarded["paper_metadata"] == {}
+    assert guarded["extraction_metadata"] == {}
+
+
+def test_artifact_filter_keeps_intronic_range_indel_and_normalizes_unicode_dash():
+    extractor = ExpertExtractor(models=["unused"])
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "BMPR2",
+                "cdna_notation": "c.1277–10_1277–9insGGG",
+                "source_notation": "c.1277–10_1277–9insGGG splicing",
+            }
+        ],
+        "extraction_metadata": {},
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "BMPR2")
+
+    assert len(filtered["variants"]) == 1
+    assert filtered["variants"][0]["cdna_notation"] == "c.1277-10_1277-9insGGG"
+
+
+def test_artifact_filter_normalizes_source_style_arrow_and_protein_parentheses():
+    extractor = ExpertExtractor(models=["unused"])
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "BMPR2",
+                "cdna_notation": "c.1459G→A",
+                "protein_notation": "p.(Asp487Asn)",
+            }
+        ],
+        "extraction_metadata": {},
+    }
+
+    filtered = extractor._filter_extraction_artifacts(data, "BMPR2")
+
+    assert len(filtered["variants"]) == 1
+    assert filtered["variants"][0]["cdna_notation"] == "c.1459G>A"
+    assert filtered["variants"][0]["protein_notation"] == "p.Asp487Asn"
 
 
 def test_extract_variants_ignores_stale_abstract_cache_when_fulltext_exists(

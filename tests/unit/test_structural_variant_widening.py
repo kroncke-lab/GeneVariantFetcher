@@ -153,14 +153,40 @@ def test_scanner_bic_prefixless_requires_gene_context():
     assert any(v.source == "bic_prefixless" for v in with_gene.variants)
 
 
-def test_scanner_bic_ignores_lowercase_delta_word():
-    """'120delta' (del + lowercase 'ta') must not match as c.120delTA; uppercase
-    BIC bases like 185delAG still do."""
+def test_scanner_prefixless_indel_ignores_lowercase_delta_word():
+    """'120delta' must not match, while a real omitted-c. indel still does."""
     scanner = VariantScanner(gene_symbol="SCN5A")
     delta = scanner.scan("The SCN5A ECG showed a 120delta wave morphology.")
-    assert not any(v.source == "bic_prefixless" for v in delta.variants)
+    assert not any(
+        v.source in {"bic_prefixless", "prefixless_cdna_indel"} for v in delta.variants
+    )
     real = scanner.scan("SCN5A 185delAG segregated in the family.")
-    assert any(v.source == "bic_prefixless" for v in real.variants)
+    assert any(
+        v.source == "prefixless_cdna_indel" and v.normalized == "c.185delAG"
+        for v in real.variants
+    )
+
+
+def test_scanner_digit_payload_bic_is_not_fabricated_for_non_brca_gene():
+    bmpr2 = VariantScanner(gene_symbol="BMPR2").scan(
+        "We identified BMPR2 mutation 4184del4 in two patients."
+    )
+    brca2 = VariantScanner(gene_symbol="BRCA2").scan(
+        "We identified BRCA2 mutation 4184del4 in two patients."
+    )
+
+    assert not any(v.normalized == "c.4184del4" for v in bmpr2.variants)
+    assert any(
+        v.notation_type == "legacy" and v.normalized == "4184del4"
+        for v in brca2.variants
+    )
+
+
+def test_scanner_bic_does_not_duplicate_explicit_hgvs_cdna():
+    scanner = VariantScanner(gene_symbol="BRCA1")
+    result = scanner.scan("BRCA1 c.4321delAC was identified in the participant.")
+    assert not any(v.source == "bic_prefixless" for v in result.variants)
+    assert any(v.notation_type == "cdna" for v in result.variants)
 
 
 def test_scanner_skips_negated_structural_events():

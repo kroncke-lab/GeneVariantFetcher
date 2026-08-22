@@ -40,19 +40,20 @@ def test_setup_preserves_virtual_environment_interpreter_path(
     assert setup.runtime_python() != environment_python.resolve()
 
 
-def test_live_gold120_contract_is_the_corrected_119_attempt_cohort():
+def test_live_gold120_contract_is_the_corrected_118_attempt_cohort():
     contract = setup.cohort_contract(setup.DEFAULT_MANIFEST, setup.DEFAULT_REGISTRY)
 
     assert contract["id"] == "gold_120"
-    assert contract["attempt_count"] == 119
-    assert contract["unique_pmid_count"] == 115
+    assert contract["attempt_count"] == 118
+    assert contract["unique_pmid_count"] == 114
     assert contract["gene_attempt_counts"] == {
-        "KCNH2": 29,
+        "KCNH2": 28,
         "KCNQ1": 30,
         "RYR2": 30,
         "SCN5A": 30,
     }
     assert ("KCNH2", "10086972") not in contract["rows"]
+    assert ("KCNH2", "14642689") not in contract["rows"]
 
 
 def test_generated_extraction_is_calibrated_blinded_and_nonpublishing(tmp_path: Path):

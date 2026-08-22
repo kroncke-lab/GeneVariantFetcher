@@ -6,6 +6,7 @@ import scripts.refresh_run_db as refresh_run_db
 from scripts.refresh_run_db import (
     ReplayCandidate,
     _is_variant_explosion,
+    normalize_staged_extraction_metadata,
     replay_candidates,
     select_replay_candidates,
 )
@@ -14,6 +15,98 @@ from utils.models import ExtractionResult
 
 def _long_fulltext(body: str) -> str:
     return body + "\n" + ("methods results cohort variant table. " * 40)
+
+
+def test_normalize_staged_extraction_metadata_persists_safe_repairs(tmp_path):
+    extraction_dir = tmp_path / "staged_extractions"
+    extraction_dir.mkdir()
+    path = extraction_dir / "BRCA2_PMID_19949876.json"
+    path.write_text(
+        json.dumps(
+            {
+                "variants": [],
+                "extraction_metadata": {"total_variants_found": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    stats = normalize_staged_extraction_metadata(extraction_dir, "BRCA2")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    assert stats == {"files": 1, "repaired_files": 1, "repairs": 4, "invalid_json": 0}
+    assert payload["paper_metadata"] == {
+        "pmid": "19949876",
+        "title": "Paper 19949876",
+        "gene_symbol": "BRCA2",
+    }
+    assert payload["extraction_metadata"]["staged_metadata_repairs"] == [
+        "created_paper_metadata",
+        "set_pmid_from_filename",
+        "set_default_title",
+        "set_gene_symbol",
+    ]
+
+
+def test_normalize_staged_extraction_metadata_repairs_placeholder_bibliography(
+    tmp_path,
+):
+    extraction_dir = tmp_path / "staged_extractions"
+    abstract_dir = tmp_path / "abstract_json"
+    extraction_dir.mkdir()
+    abstract_dir.mkdir()
+    path = extraction_dir / "BMPR2_PMID_31727138.json"
+    path.write_text(
+        json.dumps(
+            {
+                "paper_metadata": {
+                    "pmid": "31727138",
+                    "title": "Unknown Title",
+                    "gene_symbol": "BMPR2",
+                },
+                "variants": [],
+                "extraction_metadata": {"staged_metadata_repairs": ["set_gene_symbol"]},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (abstract_dir / "31727138.json").write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "title": "Novel risk genes and mechanisms",
+                    "authors": ["Zhu N", "Pauciulo MW"],
+                    "journal": "Genome Medicine",
+                    "year": "2019",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    stats = normalize_staged_extraction_metadata(
+        extraction_dir,
+        "BMPR2",
+        abstract_metadata_dir=abstract_dir,
+    )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    assert stats == {"files": 1, "repaired_files": 1, "repairs": 4, "invalid_json": 0}
+    assert payload["paper_metadata"] == {
+        "pmid": "31727138",
+        "title": "Novel risk genes and mechanisms",
+        "gene_symbol": "BMPR2",
+        "first_author": "Zhu N",
+        "journal": "Genome Medicine",
+        "publication_date": "2019",
+    }
+    assert payload["extraction_metadata"]["staged_metadata_repairs"] == [
+        "set_gene_symbol",
+        "set_title_from_abstract_metadata",
+        "set_first_author_from_abstract_metadata",
+        "set_journal_from_abstract_metadata",
+        "set_publication_date_from_abstract_metadata",
+    ]
 
 
 def test_selects_stale_abstract_only_when_fulltext_exists(tmp_path):
@@ -673,6 +766,269 @@ def test_replay_gates_per_pmid_regression(tmp_path, monkeypatch):
     assert len(payload["variants"]) == 10
     # Backup must still be present.
     assert (setup["backup_dir"] / setup["output_file"].name).exists()
+
+
+def _counted_variant(
+    cdna: str,
+    count: int | None,
+    *,
+    role: str = "family_count",
+    protein: str | None = None,
+) -> dict:
+    return {
+        "cdna_notation": cdna,
+        "protein_notation": protein,
+        "patients": {
+            "count": count,
+            "source_ref": "Table 2",
+            "row_ordinal": 1,
+            "column_ref": "Number of families",
+        },
+        "penetrance_data": {"total_carriers_observed": count},
+        "count_provenance": {
+            "carriers_column_label": "Number of families",
+            "carriers_count_type": role,
+        },
+    }
+
+
+def test_source_count_observation_matches_sparse_and_rich_identity():
+    prior = {"variants": [_counted_variant("c.121del", 1)]}
+    richer = {
+        "variants": [_counted_variant("c.121del", 1, protein="p.His41GlnfsTer17")]
+    }
+
+    assert refresh_run_db.lost_source_count_observations(prior, richer, "BRCA1") == []
+
+
+def test_source_count_observation_does_not_alias_brca_legacy_to_cdna():
+    prior = {"variants": [_counted_variant("c.4091delTAA", 1)]}
+    repaired = _counted_variant("", 1)
+    repaired.update(
+        {
+            "legacy_notation": "4091delTAA",
+            "source_notation": "4091delTAA",
+        }
+    )
+
+    lost = refresh_run_db.lost_source_count_observations(
+        prior, {"variants": [repaired]}, "BRCA2"
+    )
+    assert len(lost) == 1
+
+
+def test_unknown_count_is_not_protected_as_source_evidence():
+    prior = {"variants": [_counted_variant("c.121del", 1, role="unknown")]}
+
+    assert (
+        refresh_run_db.lost_source_count_observations(prior, {"variants": []}, "BRCA1")
+        == []
+    )
+
+
+def test_implicit_and_unlabeled_per_variant_counts_are_not_protected():
+    implicit = _counted_variant("c.121del", 1, role="per_variant_carrier")
+    implicit["count_provenance"]["carriers_column_label"] = (
+        "implicit one carrier per clinical row"
+    )
+    unlabeled = _counted_variant("c.929del", 1, role="per_variant_carrier")
+    unlabeled["count_provenance"]["carriers_column_label"] = None
+
+    assert (
+        refresh_run_db.source_count_observations(
+            {"variants": [implicit, unlabeled]}, "BRCA1"
+        )
+        == []
+    )
+
+
+def test_new_source_backed_conflict_wins_without_transplant():
+    prior = {"variants": [_counted_variant("c.121del", 11)]}
+    new = {"variants": [_counted_variant("c.121del", 6)]}
+
+    report = refresh_run_db.reconcile_source_count_observations(prior, new, "BRCA1")
+
+    assert report["unmatched"] == []
+    assert report["merged_fields"] == []
+    assert len(report["conflicts"]) == 1
+    assert new["variants"][0]["patients"]["count"] == 6
+
+
+def test_replay_multi_hit_stays_fail_closed_when_one_hit_is_source_backed():
+    prior = {"variants": [_counted_variant("", 11, protein="p.Arg34Trp")]}
+    new = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.100C>T",
+                "protein_notation": "p.Arg34Trp",
+            },
+            _counted_variant("c.101G>A", 6, protein="p.Arg34Trp"),
+        ]
+    }
+
+    report = refresh_run_db.reconcile_source_count_observations(prior, new, "BRCA1")
+
+    assert len(report["unmatched"]) == 1
+    assert report["unmatched"][0]["match_count"] == 2
+    assert new["variants"][1]["patients"]["count"] == 6
+
+
+def test_replay_matches_truncated_protein_alias_to_explicit_frameshift():
+    prior = {"variants": [_counted_variant("c.1016dupA", 3, protein="V340G")]}
+    new = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.1016dupA",
+                "protein_notation": "p.Val340Glyfs*6",
+            }
+        ]
+    }
+
+    report = refresh_run_db.reconcile_source_count_observations(prior, new, "BRCA1")
+
+    assert report["unmatched"] == []
+    assert new["variants"][0]["patients"]["count"] == 3
+
+
+def test_replay_does_not_overwrite_nonnull_untyped_count():
+    prior = {"variants": [_counted_variant("c.121del", 11)]}
+    new = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.121del",
+                "patients": {"count": 6},
+                "penetrance_data": {"total_carriers_observed": 6},
+            }
+        ]
+    }
+
+    report = refresh_run_db.reconcile_source_count_observations(prior, new, "BRCA1")
+
+    assert len(report["unmatched"]) == 1
+    assert report["unmatched"][0]["reason"] == "new_untyped_count_conflict"
+    assert new["variants"][0]["patients"]["count"] == 6
+    assert new["variants"][0]["penetrance_data"]["total_carriers_observed"] == 6
+    assert "count_provenance" not in new["variants"][0]
+
+
+def test_replay_fill_merges_source_count_when_variant_count_grows(
+    tmp_path, monkeypatch
+):
+    """A larger replay keeps identities and fills lost typed source facts."""
+
+    setup = _make_replay_setup(tmp_path, prior_variant_count=1, new_variant_count=2)
+    prior_payload = {
+        "variants": [_counted_variant("c.2722G>T", 4)],
+        "extraction_metadata": {"total_variants_found": 1},
+    }
+    setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
+    setup["extraction_result"].extracted_data = {
+        "variants": [
+            {"cdna_notation": "c.2722G>T"},
+            {"cdna_notation": "c.2989_2990insAA"},
+        ],
+        "extraction_metadata": {"total_variants_found": 2},
+    }
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    payload = json.loads(setup["output_file"].read_text())
+    retained = payload["variants"][0]
+    assert retained["patients"]["count"] == 4
+    assert retained["penetrance_data"]["total_carriers_observed"] == 4
+    assert retained["count_provenance"] == {
+        "carriers_count_type": "family_count",
+        "carriers_column_label": "Number of families",
+    }
+    assert len(stats["source_evidence_merges"][0]["merged_fields"]) == 1
+
+
+def test_source_evidence_gate_has_separate_explicit_override(tmp_path, monkeypatch):
+    setup = _make_replay_setup(tmp_path, prior_variant_count=1, new_variant_count=2)
+    setup["output_file"].write_text(
+        json.dumps(
+            {
+                "variants": [_counted_variant("c.2722G>T", 4)],
+                "extraction_metadata": {"total_variants_found": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    setup["extraction_result"].extracted_data = {
+        "variants": [
+            {"cdna_notation": "c.2722G>T"},
+            {"cdna_notation": "c.2989_2990insAA"},
+        ],
+        "extraction_metadata": {"total_variants_found": 2},
+    }
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+        gate_source_evidence_regressions=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    payload = json.loads(setup["output_file"].read_text())
+    assert payload["variants"][0]["patients"]["count"] == 4
+    assert (
+        payload["variants"][0]["count_provenance"]["carriers_count_type"]
+        == "family_count"
+    )
+
+
+def test_replay_gates_absent_source_count_variant(tmp_path, monkeypatch):
+    """No identity match means restore the backup instead of transplanting."""
+
+    setup = _make_replay_setup(tmp_path, prior_variant_count=1, new_variant_count=1)
+    prior_variant = _counted_variant("c.0_80del", 2)
+    setup["output_file"].write_text(
+        json.dumps(
+            {
+                "variants": [prior_variant],
+                "extraction_metadata": {"total_variants_found": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    setup["extraction_result"].extracted_data = {
+        "variants": [{"cdna_notation": "c.100A>G"}],
+        "extraction_metadata": {"total_variants_found": 1},
+    }
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 0
+    assert stats["gated"] == 1
+    assert stats["gated_source_evidence_regressions"][0]["lost_observation_count"] == 1
+    assert json.loads(setup["output_file"].read_text())["variants"] == [prior_variant]
 
 
 def test_replay_accepts_fewer_but_paired_over_cdna_only_prior(tmp_path, monkeypatch):

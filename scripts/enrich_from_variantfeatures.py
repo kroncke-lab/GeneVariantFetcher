@@ -308,11 +308,16 @@ def classify_unmatched(
     max_pos: int,
     residues: Optional[dict] = None,
     other_gene_residues: Optional[dict] = None,
+    legacy: str = "",
 ) -> str:
     """High-confidence FP signal from variantFeatures non-coverage."""
     p = (protein or "").strip()
     c = (cdna or "").strip()
     if not p:
+        from utils.legacy_notation import normalize_legacy_notation
+
+        if normalize_legacy_notation(legacy):
+            return "legacy_source_notation"
         return "cdna_only_unmatched" if "c." in c else "no_notation_suspect"
     bare = p.replace("p.", "")
     m = _RES_RE.search(bare)
@@ -416,9 +421,18 @@ def main() -> int:
     # as extraction emitted it, with no case normalization, so the fold is
     # load-bearing. It costs nothing to leave -- the run DB holds one gene's
     # variants (thousands of rows, not millions).
+    variant_columns = {
+        row[1] for row in cur.execute("PRAGMA table_info(variants)").fetchall()
+    }
+    legacy_select = (
+        "legacy_notation"
+        if "legacy_notation" in variant_columns
+        else "NULL AS legacy_notation"
+    )
     rows = list(
         cur.execute(
-            "SELECT variant_id, protein_notation, cdna_notation FROM variants WHERE upper(gene_symbol)=?",
+            "SELECT variant_id, protein_notation, cdna_notation, "
+            f"{legacy_select} FROM variants WHERE upper(gene_symbol)=?",
             (args.gene.upper(),),
         )
     )
@@ -470,6 +484,7 @@ def main() -> int:
                     max_pos,
                     residues,
                     other_residues,
+                    legacy=r["legacy_notation"],
                 )
             fp_class_counts[cls] += 1
             out.append(

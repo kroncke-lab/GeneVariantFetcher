@@ -66,7 +66,7 @@ class ScannedVariant:
     raw_text: str  # Original matched text
     normalized: str  # Normalized form (e.g., A561V)
     variant_type: str  # missense, frameshift, nonsense, etc.
-    notation_type: str  # protein, cdna, splice, structural
+    notation_type: str  # protein, cdna, splice, legacy, structural
     position: Optional[int]  # Amino acid or nucleotide position
     context: str  # Surrounding text (for debugging)
     confidence: float  # 0.0-1.0 based on pattern quality
@@ -154,6 +154,9 @@ class ScanResult:
                 "cdna_notation": v.normalized
                 if v.notation_type in {"cdna", "splice"}
                 else None,
+                "legacy_notation": v.normalized
+                if v.notation_type == "legacy"
+                else None,
                 "variant_class": v.variant_class,
                 "structural_description": v.structural_description,
                 "clinical_significance": "unknown",
@@ -168,6 +171,8 @@ class ScanResult:
                 "_scanner_confidence": v.confidence,
                 "_scanner_raw": v.raw_text,
             }
+            if v.notation_type == "legacy":
+                variant_dict["source_notation"] = v.raw_text
             if (
                 v.notation_type == "structural"
                 and not variant_dict["structural_description"]
@@ -376,12 +381,14 @@ class VariantScanner:
     # STRUCTURAL / EXON-LEVEL / PREFIXLESS BIC PATTERNS (tightly gated)
     # ==========================================================================
 
-    # Prefixless BIC-style indel: 185delAG, 5382insC (need digit length ≥ 3 + bases).
-    # Bases must be UPPERCASE (BIC convention); the (?-i:) scope keeps [ACGT]
-    # case-sensitive even under the global IGNORECASE, so "120delta" (del + "ta")
-    # no longer matches as c.120delTA. del/dup/ins stays case-insensitive.
+    # Prefixless simple indel: BRCA BIC labels such as 185delAG/4184del4, or
+    # omitted-c. HGVS in other gene literature. Bases must be UPPERCASE (BIC
+    # convention); the (?-i:) scope keeps [ACGT] case-sensitive even under the
+    # global IGNORECASE, so "120delta" (del + "ta") no longer matches.
     BIC_PREFIXLESS_INDEL = re.compile(
-        r"\b(\d{3,5})(del|dup|ins)((?-i:[ACGT]{1,20}))\b", re.IGNORECASE
+        r"(?<![A-Za-z0-9_.])(\d{3,5})(del|dup|ins)"
+        r"((?-i:[ACGT]{1,20})|\d{1,3})\b",
+        re.IGNORECASE,
     )
 
     # Negation preceding a free-text structural event ("no deletion of exon 5",
@@ -521,6 +528,12 @@ class VariantScanner:
 
         # Track what we've found to avoid duplicates
         seen_normalized: Set[str] = set()
+        # Dense tables can repeat the same literal notation thousands of times.
+        # Document attribution scans the full source for every occurrence, so
+        # recomputing it for each candidate creates an avoidable
+        # candidates-times-document-length pass. Attribution depends only on
+        # this document, target gene, and literal token; cache it for this scan.
+        document_attribution_cache: dict[str, set[str]] = {}
 
         # Run all pattern matchers
         protein_variants = self._scan_protein_variants(text)
@@ -541,6 +554,16 @@ class VariantScanner:
         # Filter and deduplicate
         filtered_count = 0
         for v in all_candidates:
+            # Once one representation of a normalized identity has survived
+            # every guard, later representations cannot change the emitted
+            # result. Put this before even the local gene-context work: dense
+            # tables can repeat an accepted identity thousands of times. If
+            # the first representation is rejected it is never added to
+            # ``seen_normalized``, so a later target-gene occurrence still gets
+            # the full evaluation.
+            if v.normalized in seen_normalized:
+                continue
+
             # Skip false positives
             if self._is_false_positive(v.raw_text):
                 filtered_count += 1
@@ -554,14 +577,17 @@ class VariantScanner:
                 )
                 continue
 
-            if self._document_assigns_variant_elsewhere(text, v.raw_text):
+            attribution_key = v.raw_text.casefold()
+            assigned_genes = document_attribution_cache.get(attribution_key)
+            if assigned_genes is None:
+                assigned_genes = self._document_gene_attribution(text, v.raw_text)
+                document_attribution_cache[attribution_key] = assigned_genes
+            if assigned_genes and self.gene_symbol.upper() not in assigned_genes:
                 filtered_count += 1
                 logger.debug(
                     "Scanner: filtered %s; document attributes it to %s",
                     v.raw_text,
-                    ", ".join(
-                        sorted(self._document_gene_attribution(text, v.raw_text))
-                    ),
+                    ", ".join(sorted(assigned_genes)),
                 )
                 continue
 
@@ -583,10 +609,6 @@ class VariantScanner:
                 logger.debug(
                     f"Scanner: filtered invalid position {v.raw_text} (pos={v.position})"
                 )
-                continue
-
-            # Skip duplicates
-            if v.normalized in seen_normalized:
                 continue
 
             # Matchers already know these offsets but the original scanner object
@@ -1214,8 +1236,10 @@ class VariantScanner:
         """Scan for exon-level, large del/dup, and prefixless BIC-style indels."""
         variants: List[ScannedVariant] = []
 
+        from utils.legacy_notation import gene_supports_legacy_notation
+
         for m in self.BIC_PREFIXLESS_INDEL.finditer(text):
-            pos, op, bases = m.group(1), m.group(2).lower(), m.group(3).upper()
+            pos, op, payload = m.group(1), m.group(2).lower(), m.group(3).upper()
             ctx = self._get_context(text, m.start(), m.end(), window=80)
             if self.gene_symbol and self.gene_symbol.upper() not in ctx.upper():
                 aliases: set[str] = set()
@@ -1231,17 +1255,26 @@ class VariantScanner:
                     aliases = set()
                 if not any(a in ctx.upper() for a in aliases):
                     continue
-            normalized = f"c.{pos}{op}{bases}"
+            source_notation = f"{pos}{op}{payload}"
+            is_legacy = gene_supports_legacy_notation(self.gene_symbol)
+            # A numeric payload (for example BRCA2 BIC ``4184del4``) reports
+            # the number of affected bases, not literal HGVS sequence. Outside
+            # genes with this known legacy system, prefixing it with ``c.``
+            # fabricates an allele. Base payloads such as ``185delAG`` remain a
+            # valid omitted-prefix cDNA hint for other genes.
+            if payload.isdigit() and not is_legacy:
+                continue
+            normalized = source_notation if is_legacy else f"c.{source_notation}"
             variants.append(
                 ScannedVariant(
                     raw_text=m.group(0),
                     normalized=normalized,
                     variant_type=op,
-                    notation_type="cdna",
+                    notation_type="legacy" if is_legacy else "cdna",
                     position=int(pos),
                     context=ctx,
                     confidence=0.75,
-                    source="bic_prefixless",
+                    source="bic_prefixless" if is_legacy else "prefixless_cdna_indel",
                     variant_class=(
                         "frameshift" if op in {"del", "ins"} else "inframe_indel"
                     ),
@@ -1517,6 +1550,11 @@ def merge_scanner_results(
         Updated extracted_data with merged variants
     """
     existing_variants = extracted_data.get("variants", [])
+    from utils.legacy_notation import preserve_source_only_legacy_identity
+
+    for variant in existing_variants:
+        if isinstance(variant, dict):
+            preserve_source_only_legacy_identity(variant, gene_symbol)
     target_gene = gene_symbol.upper()
     scanner = VariantScanner(target_gene)
     source_text = document_text or "\n".join(
@@ -1599,6 +1637,11 @@ def merge_scanner_results(
                 sv.structural_description or sv.normalized
             )
             return f"STRUCT:{structural}"
+        if sv.notation_type == "legacy":
+            from utils.legacy_notation import normalize_legacy_notation
+
+            legacy = normalize_legacy_notation(sv.normalized or sv.raw_text)
+            return f"LEGACY:{legacy or sv.raw_text}".upper()
         normalized = normalize_variant(sv.normalized or sv.raw_text, target_gene)
         return (normalized or sv.normalized or sv.raw_text).upper()
 
@@ -1761,6 +1804,8 @@ def merge_scanner_results(
             reason = "gene_unattributed"
         return False, reason, " ".join(best_quote.split())[:240]
 
+    from utils.legacy_notation import normalize_legacy_notation
+
     # Build set of existing variant keys (normalized). Structural-only rows need
     # their description in this identity set; otherwise every scanner replay
     # appends a duplicate because both point-notation fields are empty.
@@ -1775,6 +1820,23 @@ def merge_scanner_results(
         structural = structural_variant_identity(v.get("structural_description"))
         if structural:
             existing_keys.add(f"STRUCT:{structural}")
+        legacy = str(v.get("legacy_notation") or "").strip()
+        if legacy:
+            existing_keys.add(f"LEGACY:{legacy}".upper())
+        # Deterministic table lanes still prefix a bare legacy label with "c."
+        # when they cannot see the verbatim cell. Such a row and a scanner
+        # legacy identity are the same mutation, so register the legacy form of
+        # any cDNA that is exactly "c." + a strict legacy label. Without this
+        # the two lanes emit a duplicate pair: the table row carries the counts
+        # and the legacy row carries none.
+        if cdna:
+            bare = normalize_legacy_notation(
+                cdna[2:] if cdna[:2].upper() == "C." else ""
+            )
+            from utils.legacy_notation import gene_supports_legacy_notation
+
+            if bare and gene_supports_legacy_notation(gene_symbol):
+                existing_keys.add(f"LEGACY:{bare}".upper())
 
     # Add scanner variants not already present
     added_count = 0
@@ -1825,6 +1887,7 @@ def merge_scanner_results(
             "cdna_notation": sv.normalized
             if sv.notation_type in ("cdna", "splice")
             else None,
+            "legacy_notation": sv.normalized if sv.notation_type == "legacy" else None,
             "variant_class": getattr(sv, "variant_class", None),
             "structural_description": getattr(sv, "structural_description", None),
             "clinical_significance": "unknown",
@@ -1837,6 +1900,8 @@ def merge_scanner_results(
             "functional_data": {"summary": "", "assays": []},
             "key_quotes": [context_quote] if context_quote else [],
         }
+        if sv.notation_type == "legacy":
+            new_variant["source_notation"] = sv.raw_text
         if sv.notation_type == "structural" and sv.normalized:
             # structural key lives in structural_description; keep class
             if not new_variant["structural_description"]:

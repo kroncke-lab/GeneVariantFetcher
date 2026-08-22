@@ -44,6 +44,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 # Configure logging using centralized utility
 from utils.logging_utils import get_logger, setup_logging
+from utils.legacy_notation import preserve_source_only_legacy_identity
 from utils.pmid_utils import (
     extract_gene_from_filename,
     extract_pmid_from_filename,
@@ -58,17 +59,22 @@ from utils.source_layers import (
     normalize_source_layer,
 )
 from utils.protein_notation import PROTEIN_NOTATION_RE
-from utils.variant_normalizer import structural_variant_identity
+from utils.variant_normalizer import (
+    normalize_variant,
+    preferred_alias_protein,
+    protein_substitution_frameshift_alias,
+    structural_variant_identity,
+)
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
+CDNA_COORDINATE = r"\d+(?:[+-]\d+)?"
 CDNA_NOTATION_RE = re.compile(
-    r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
-    r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
-    r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
-    r"|^c\.\d+(?:[+-]\d+)?del[ACGT]*ins[ACGT]+$"
+    rf"^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?[ACGT]>[ACGT]$"
+    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?(?:del|dup)[ACGT]*$"
+    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?ins[ACGT]+$"
+    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?del[ACGT]*ins[ACGT]+$"
     r"|^IVS\d+[+-]\d+[ACGT]>[ACGT]$"
     r"|^IVS\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
@@ -165,8 +171,14 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     Structural events with a valid ``variant_class`` + ``structural_description``
     are kept even without point-form protein/cDNA notation.
     """
+    preserve_source_only_legacy_identity(variant_data)
     protein = (variant_data.get("protein_notation") or "").strip().replace(" ", "")
+    predicted = re.fullmatch(r"p\.\((.+)\)", protein, re.IGNORECASE)
+    if predicted:
+        protein = f"p.{predicted.group(1)}"
+        variant_data["protein_notation"] = protein
     cdna = (variant_data.get("cdna_notation") or "").strip().replace(" ", "")
+    legacy = (variant_data.get("legacy_notation") or "").strip()
     genomic = (variant_data.get("genomic_position") or "").strip()
     vclass = (variant_data.get("variant_class") or "").strip().lower()
     structural = (variant_data.get("structural_description") or "").strip()
@@ -183,7 +195,7 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
         vclass = ""
 
     has_structural = bool(vclass in STRUCTURAL_ONLY_VARIANT_CLASS_VALUES and structural)
-    return bool(protein or cdna or genomic or has_structural)
+    return bool(protein or cdna or legacy or genomic or has_structural)
 
 
 def infer_source_layer(variant_data: Dict[str, Any]) -> str:
@@ -421,11 +433,20 @@ def validate_extraction_data(
                 [
                     variant.get("cdna_notation"),
                     variant.get("protein_notation"),
+                    variant.get("legacy_notation"),
                     variant.get("genomic_position"),
+                    (
+                        variant.get("structural_description")
+                        if (variant.get("variant_class") or "").strip().lower()
+                        in STRUCTURAL_ONLY_VARIANT_CLASS_VALUES
+                        else None
+                    ),
                 ]
             )
             if not has_notation:
-                warnings.append(f"Variant {i}: no notation (cdna/protein/genomic)")
+                warnings.append(
+                    f"Variant {i}: no usable molecular or structural identity"
+                )
 
             # Check individuals for penetrance data
             individuals = variant.get("individuals", [])
@@ -612,6 +633,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             gene_symbol TEXT NOT NULL,
             cdna_notation TEXT,
             protein_notation TEXT,
+            legacy_notation TEXT,  -- strict source-only legacy label; never HGVS
             genomic_position TEXT,
             clinical_significance TEXT,
             evidence_level TEXT,
@@ -633,7 +655,6 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         CREATE INDEX IF NOT EXISTS idx_variants_protein
         ON variants(protein_notation)
     """)
-
     # ========================================================================
     # Variant-Paper association: Many-to-many relationship
     # ========================================================================
@@ -790,6 +811,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("extraction_metadata", "paper_scope_exclusion_reason", "TEXT"),
         ("variants", "variant_class", "TEXT"),
         ("variants", "structural_description", "TEXT"),
+        ("variants", "legacy_notation", "TEXT"),
         *(
             ("individual_records", col, decl)
             for col, decl in OBSERVATION_PROVENANCE_COLUMNS
@@ -805,6 +827,15 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         existing = {r[1] for r in cursor.execute(f"PRAGMA table_info({table})")}
         if col not in existing:
             cursor.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
+
+    cursor.execute("""
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_variants_source_only_legacy
+        ON variants(gene_symbol, legacy_notation)
+        WHERE legacy_notation IS NOT NULL
+          AND cdna_notation IS NULL
+          AND protein_notation IS NULL
+          AND genomic_position IS NULL
+    """)
 
     # Preserve legacy comma-joined witness sets before new writers normalize
     # source_layer to one primary enum. Historical rows are otherwise left
@@ -998,6 +1029,65 @@ def upgrade_database_schema(conn: sqlite3.Connection) -> None:
 # ============================================================================
 
 
+def _point_alias_candidate(
+    cursor: sqlite3.Cursor,
+    *,
+    gene_symbol: str,
+    cdna: Optional[str],
+    protein: Optional[str],
+    genomic: Optional[str],
+) -> Optional[Tuple[int, Optional[str], Optional[str], Optional[str]]]:
+    """Return one unambiguous sparse/rich point-identity alias.
+
+    Table recovery can observe the same allele once as cDNA-only and once as
+    cDNA+protein. Those are complementary representations, not two biological
+    variants. Protein-only rows never acquire a cDNA here: a later row can
+    reveal that several nucleotide alleles share the same consequence, making
+    streaming "currently unique" matching order-dependent. Conflicting fully
+    specified identities and ambiguous representations remain separate.
+    """
+    candidates: Dict[int, Tuple[int, Optional[str], Optional[str], Optional[str]]] = {}
+    genomic_compatible = """
+        AND (
+            genomic_position = ?
+            OR genomic_position IS NULL
+            OR ? IS NULL
+        )
+    """
+
+    if cdna:
+        rows = cursor.execute(
+            f"""
+            SELECT variant_id, cdna_notation, protein_notation, genomic_position
+            FROM variants
+            WHERE gene_symbol = ?
+              AND cdna_notation = ?
+              {genomic_compatible}
+            ORDER BY variant_id
+            """,
+            (gene_symbol, cdna, genomic, genomic),
+        ).fetchall()
+        for row in rows:
+            stored_protein = row[2]
+            if (
+                protein
+                and stored_protein
+                and normalize_variant(protein, gene_symbol)
+                != normalize_variant(stored_protein, gene_symbol)
+                and not protein_substitution_frameshift_alias(protein, stored_protein)
+            ):
+                # Same cDNA but genuinely different fully specified protein
+                # consequences can represent transcript or source conflicts.
+                # Keep them separate; only notation-equivalent or sparse/rich
+                # representations are safe to fold blindly.
+                continue
+            candidates[row[0]] = row
+
+    if len(candidates) != 1:
+        return None
+    return next(iter(candidates.values()))
+
+
 def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) -> int:
     """
     Get existing variant ID or create new variant entry.
@@ -1013,10 +1103,12 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
     cdna = variant_data.get("cdna_notation")
     protein = variant_data.get("protein_notation")
     genomic = variant_data.get("genomic_position")
+    legacy = variant_data.get("legacy_notation")
     vclass = (variant_data.get("variant_class") or "").strip().lower() or None
     if vclass and vclass not in VARIANT_CLASS_VALUES:
         vclass = None
     structural = (variant_data.get("structural_description") or "").strip() or None
+    result = None
 
     # Point-form identity first; structural-only events key on description.
     if cdna or protein or genomic:
@@ -1030,6 +1122,65 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
         """,
             (gene_symbol, cdna, cdna, protein, protein, genomic, genomic),
         )
+    elif legacy:
+        cursor.execute(
+            """
+            SELECT variant_id FROM variants
+            WHERE gene_symbol = ?
+              AND legacy_notation = ?
+              AND cdna_notation IS NULL
+              AND protein_notation IS NULL
+              AND genomic_position IS NULL
+            """,
+            (gene_symbol, legacy),
+        )
+        result = cursor.fetchone()
+        if not result:
+            # Reuse and repair rows written by the former prefix-invention
+            # path, but only when paper provenance proves the source token was
+            # bare. An explicit source ``c.`` row is legitimate HGVS and must
+            # remain a distinct identity.
+            cursor.execute(
+                """
+                SELECT v.variant_id
+                FROM variants v
+                WHERE v.gene_symbol = ?
+                  AND v.cdna_notation = ?
+                  AND v.legacy_notation IS NULL
+                  AND v.protein_notation IS NULL
+                  AND v.genomic_position IS NULL
+                  AND EXISTS (
+                      SELECT 1 FROM variant_papers vp
+                      WHERE vp.variant_id = v.variant_id
+                        AND REPLACE(
+                            REPLACE(
+                                REPLACE(
+                                    REPLACE(
+                                        TRIM(COALESCE(vp.source_notation, '')),
+                                        ' ', ''
+                                    ),
+                                    char(9), ''
+                                ),
+                                char(10), ''
+                            ),
+                            char(13), ''
+                        ) = ?
+                  )
+                ORDER BY v.variant_id
+                LIMIT 1
+                """,
+                (gene_symbol, f"c.{legacy}", legacy),
+            )
+            result = cursor.fetchone()
+            if result:
+                cursor.execute(
+                    """
+                    UPDATE variants
+                    SET cdna_notation = NULL, legacy_notation = ?
+                    WHERE variant_id = ?
+                    """,
+                    (legacy, result[0]),
+                )
     elif structural:
         # Free-text descriptions can differ only in case, Unicode dashes, or
         # wording ("deletion" vs ``del:``). Compare their stable structural
@@ -1058,8 +1209,34 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
     else:
         cursor.execute("SELECT variant_id FROM variants WHERE 0")
 
-    if not structural or cdna or protein or genomic:
+    if (not structural or cdna or protein or genomic or legacy) and result is None:
         result = cursor.fetchone()
+    if result is None and (cdna or protein):
+        alias = _point_alias_candidate(
+            cursor,
+            gene_symbol=gene_symbol,
+            cdna=cdna,
+            protein=protein,
+            genomic=genomic,
+        )
+        if alias is not None:
+            variant_id, stored_cdna, stored_protein, stored_genomic = alias
+            cursor.execute(
+                """
+                UPDATE variants
+                SET cdna_notation = ?,
+                    protein_notation = ?,
+                    genomic_position = ?
+                WHERE variant_id = ?
+                """,
+                (
+                    stored_cdna or cdna,
+                    preferred_alias_protein(stored_protein, protein),
+                    stored_genomic or genomic,
+                    variant_id,
+                ),
+            )
+            result = (variant_id,)
     if result:
         vid = result[0]
         if vclass or structural:
@@ -1078,14 +1255,15 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
         """
         INSERT INTO variants (
             gene_symbol, cdna_notation, protein_notation,
-            genomic_position, clinical_significance, evidence_level,
+            legacy_notation, genomic_position, clinical_significance, evidence_level,
             variant_class, structural_description
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """,
         (
             gene_symbol,
             cdna,
             protein,
+            legacy,
             genomic,
             variant_data.get("clinical_significance"),
             variant_data.get("evidence_level"),
@@ -1558,6 +1736,7 @@ def _observation_provenance_values(
     source_notation = (
         variant_data.get("protein_notation")
         or variant_data.get("cdna_notation")
+        or variant_data.get("legacy_notation")
         or variant_data.get("genomic_position")
     )
     return {
@@ -1768,6 +1947,7 @@ def _insert_standard_fact_provenance(
     for notation_key in (
         "protein_notation",
         "cdna_notation",
+        "legacy_notation",
         "genomic_position",
         "structural_description",
     ):
@@ -1876,6 +2056,36 @@ def _insert_standard_fact_provenance(
             )
 
 
+def _compatible_penetrance_merge(
+    stored_values: Tuple[Any, ...], incoming_values: Tuple[Any, ...]
+) -> Optional[Tuple[Any, ...]]:
+    """Return a safe complementary count merge, or ``None`` to keep strata split."""
+    shared = [
+        (stored, incoming)
+        for stored, incoming in zip(stored_values, incoming_values)
+        if stored is not None and incoming is not None
+    ]
+    if not shared or any(stored != incoming for stored, incoming in shared):
+        return None
+    merged = tuple(
+        incoming if stored is None and incoming is not None else stored
+        for stored, incoming in zip(stored_values, incoming_values)
+    )
+    total, affected, unaffected, uncertain, percentage = merged
+    counts = (total, affected, unaffected, uncertain)
+    if any(value is not None and value < 0 for value in counts):
+        return None
+    if total is not None:
+        parts = [
+            value for value in (affected, unaffected, uncertain) if value is not None
+        ]
+        if any(value > total for value in parts) or sum(parts) > total:
+            return None
+    if percentage is not None and not 0 <= percentage <= 100:
+        return None
+    return merged
+
+
 def insert_variant_data(
     cursor: sqlite3.Cursor,
     pmid: str,
@@ -1908,6 +2118,7 @@ def insert_variant_data(
         variant=(
             variant_data.get("protein_notation")
             or variant_data.get("cdna_notation")
+            or variant_data.get("legacy_notation")
             or variant_data.get("genomic_position")
         ),
         gene_symbol=variant_data.get("gene_symbol"),
@@ -1928,6 +2139,7 @@ def insert_variant_data(
     original_notation = {
         "protein_notation": variant_data.get("protein_notation"),
         "cdna_notation": variant_data.get("cdna_notation"),
+        "legacy_notation": variant_data.get("legacy_notation"),
         "genomic_position": variant_data.get("genomic_position"),
         "structural_description": variant_data.get("structural_description"),
     }
@@ -1959,6 +2171,7 @@ def insert_variant_data(
         _clean_optional_text(variant_data.get("source_notation"))
         or _clean_optional_text(original_notation.get("protein_notation"))
         or _clean_optional_text(original_notation.get("cdna_notation"))
+        or _clean_optional_text(original_notation.get("legacy_notation"))
         or _clean_optional_text(original_notation.get("genomic_position"))
         or _clean_optional_text(original_notation.get("structural_description"))
     )
@@ -2071,6 +2284,29 @@ def insert_variant_data(
                 (variant_id, pmid),
             ).fetchone()
 
+        compatible_penetrance = None
+        if not preserve_existing_evidence and not is_exact_penetrance_dup:
+            incoming_values = penetrance_values[2:]
+            compatible_rows = []
+            for row in cursor.execute(
+                """
+                SELECT penetrance_id, total_carriers_observed, affected_count,
+                       unaffected_count, uncertain_count, penetrance_percentage
+                FROM penetrance_data
+                WHERE variant_id = ? AND pmid = ?
+                ORDER BY penetrance_id
+                """,
+                (variant_id, pmid),
+            ).fetchall():
+                stored_values = row[1:]
+                if (
+                    _compatible_penetrance_merge(stored_values, incoming_values)
+                    is not None
+                ):
+                    compatible_rows.append(row)
+            if len(compatible_rows) == 1:
+                compatible_penetrance = compatible_rows[0]
+
         if is_exact_penetrance_dup:
             # Identical parent already stored. Still merge any unique
             # age-stratified children carried by this duplicate representation.
@@ -2082,6 +2318,32 @@ def insert_variant_data(
         elif existing_penetrance:
             penetrance_id = existing_penetrance[0]
             current_values = existing_penetrance[1:]
+            incoming_values = penetrance_values[2:]
+            merged_values = (
+                _compatible_penetrance_merge(current_values, incoming_values)
+                or current_values
+            )
+            if merged_values != current_values:
+                cursor.execute(
+                    """
+                    UPDATE penetrance_data
+                    SET total_carriers_observed = ?,
+                        affected_count = ?,
+                        unaffected_count = ?,
+                        uncertain_count = ?,
+                        penetrance_percentage = ?
+                    WHERE penetrance_id = ?
+                    """,
+                    (*merged_values, penetrance_id),
+                )
+            _insert_age_dependent_penetrance(
+                cursor,
+                penetrance_id,
+                penetrance.get("age_dependent_penetrance", []),
+            )
+        elif compatible_penetrance:
+            penetrance_id = compatible_penetrance[0]
+            current_values = compatible_penetrance[1:]
             incoming_values = penetrance_values[2:]
             merged_values = tuple(
                 incoming if current is None and incoming is not None else current

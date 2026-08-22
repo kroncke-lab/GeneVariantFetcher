@@ -207,6 +207,62 @@ class FormatConverter:
             return ""
         return "\n\n".join(parts) + "\n\n"
 
+    def _xml_text_excluding_blocks(
+        self, element: ET.Element, excluded: set[str]
+    ) -> str:
+        """Collect inline text without flattening nested JATS block content."""
+
+        parts: List[str] = [element.text or ""]
+        for child in list(element):
+            if self._xml_local_name(child.tag) not in excluded:
+                parts.append(self._xml_text_excluding_blocks(child, excluded))
+            parts.append(child.tail or "")
+        return self._clean_cell_text(" ".join(parts))
+
+    def _jats_paragraph_to_markdown(self, paragraph: ET.Element) -> str:
+        """Render a paragraph plus block tables embedded by older JATS."""
+
+        parts: List[str] = []
+        text = self._xml_text_excluding_blocks(paragraph, {"table-wrap", "fig"})
+        if text:
+            parts.append(text)
+        for element in paragraph.iter():
+            if self._xml_local_name(element.tag) != "table-wrap":
+                continue
+            table_md = self._jats_table_wrap_to_markdown(element)
+            if table_md:
+                parts.append(table_md.strip())
+        return "\n\n".join(parts) + ("\n\n" if parts else "")
+
+    def _jats_main_article(self, root: ET.Element) -> ET.Element | None:
+        """Return the deposited article, never a nested decision/sub-article."""
+
+        if self._xml_local_name(root.tag) == "article":
+            return root
+        pending = list(root)
+        while pending:
+            element = pending.pop(0)
+            tag = self._xml_local_name(element.tag)
+            if tag == "sub-article":
+                continue
+            if tag == "article":
+                return element
+            pending[0:0] = list(element)
+        return None
+
+    def _xml_first_local(
+        self, element: ET.Element, name: str, *, direct: bool = False
+    ) -> ET.Element | None:
+        candidates = list(element) if direct else element.iter()
+        return next(
+            (
+                candidate
+                for candidate in candidates
+                if self._xml_local_name(candidate.tag) == name
+            ),
+            None,
+        )
+
     def _html_table_to_markdown(self, table) -> str:
         """Convert a BeautifulSoup ``<table>`` node to markdown."""
         rows: List[List[str]] = []
@@ -236,12 +292,16 @@ class FormatConverter:
 
             markdown = "# MAIN TEXT\n\n"
 
-            title_elem = root.find(".//article-title")
+            article = self._jats_main_article(root)
+            if article is None:
+                return markdown
+
+            title_elem = self._xml_first_local(article, "article-title")
             if title_elem is not None:
                 title = "".join(title_elem.itertext()).strip()
                 markdown += f"## {title}\n\n"
 
-            abstract_elem = root.find(".//abstract")
+            abstract_elem = self._xml_first_local(article, "abstract")
             if abstract_elem is not None:
                 markdown += "### Abstract\n\n"
                 abstract_text = "".join(abstract_elem.itertext()).strip()
@@ -251,7 +311,7 @@ class FormatConverter:
                 """Recursively process <sec> elements preserving hierarchy."""
                 nonlocal markdown
 
-                title_elem = sec.find("title")
+                title_elem = self._xml_first_local(sec, "title", direct=True)
                 if title_elem is not None:
                     sec_title = "".join(title_elem.itertext()).strip()
                     markdown += f"{'#' * level} {sec_title}\n\n"
@@ -259,9 +319,7 @@ class FormatConverter:
                 for child in sec:
                     tag = self._xml_local_name(child.tag)
                     if tag == "p":
-                        para_text = "".join(child.itertext()).strip()
-                        if para_text:
-                            markdown += f"{para_text}\n\n"
+                        markdown += self._jats_paragraph_to_markdown(child)
                     elif tag == "table-wrap":
                         table_md = self._jats_table_wrap_to_markdown(child)
                         if table_md:
@@ -269,9 +327,13 @@ class FormatConverter:
                     elif tag == "sec":
                         process_section(child, min(level + 1, 6))
 
-            body_elem = root.find(".//body")
+            body_elem = self._xml_first_local(article, "body", direct=True)
             if body_elem is not None:
-                sections = body_elem.findall("./sec")
+                sections = [
+                    child
+                    for child in list(body_elem)
+                    if self._xml_local_name(child.tag) == "sec"
+                ]
 
                 if sections:
                     for sec in sections:
@@ -281,9 +343,7 @@ class FormatConverter:
                     for child in list(body_elem):
                         tag = self._xml_local_name(child.tag)
                         if tag == "p":
-                            para_text = "".join(child.itertext()).strip()
-                            if para_text:
-                                markdown += f"{para_text}\n\n"
+                            markdown += self._jats_paragraph_to_markdown(child)
                         elif tag == "table-wrap":
                             table_md = self._jats_table_wrap_to_markdown(child)
                             if table_md:
@@ -294,9 +354,15 @@ class FormatConverter:
                                     continue
                                 elem_tag = self._xml_local_name(elem.tag)
                                 if elem_tag == "p":
-                                    para_text = "".join(elem.itertext()).strip()
-                                    if para_text:
-                                        markdown += f"{para_text}\n\n"
+                                    # The descendant walk will render nested
+                                    # table-wrap blocks separately.  Emit only
+                                    # the paragraph's inline text here so an
+                                    # embedded table is not duplicated.
+                                    paragraph_text = self._xml_text_excluding_blocks(
+                                        elem, {"table-wrap", "fig"}
+                                    )
+                                    if paragraph_text:
+                                        markdown += f"{paragraph_text}\n\n"
                                 elif elem_tag == "table-wrap":
                                     table_md = self._jats_table_wrap_to_markdown(elem)
                                     if table_md:
@@ -306,7 +372,7 @@ class FormatConverter:
             # tables in <back> rather than inline in <body>. Keep those rows in
             # the canonical text; caption-only extraction is not enough for
             # variant compendia tables.
-            back_elem = root.find(".//back")
+            back_elem = self._xml_first_local(article, "back", direct=True)
             if back_elem is not None:
                 emitted_table_ids = set()
                 for table_wrap in back_elem.iter():

@@ -85,7 +85,7 @@ COUNTS
 
 IDENTITY - required, and load-bearing
 Emit a variant only when at least one of cdna_notation, protein_notation,
-genomic_position, or variant_class + structural_description is real. Return zero
+genomic_position, legacy_notation, or variant_class + structural_description is real. Return zero
 entries rather than a placeholder for: mutation classes ("34 patients with
 pore-region mutations"), single nucleotide or amino-acid letters, gene symbols,
 nan/NA/NaN, and clinical-significance strings in a notation field. Valid
@@ -94,6 +94,12 @@ digit; valid genomic_position has a chromosome and a coordinate. Convert 1-lette
 to 3-letter amino acids; "X" or "*" at a position is a stop codon. A trailing
 asterisk AFTER a name ("D16A*") marks a NOVEL variant, not a stop - say so in
 additional_notes. Record source_notation verbatim as the paper wrote it.
+For BRCA1/BRCA2 only, a strict legacy/BIC indel label shaped like 3-5 digits +
+del/dup/ins + either 1-20 uppercase A/C/G/T bases or a 1-3 digit affected-base
+count belongs in legacy_notation and source_notation. It is source notation, not
+HGVS: NEVER invent a "c." prefix. For other genes, do not call this BIC; an
+indel printed without c. in a cDNA/nucleotide-change column is omitted-prefix
+cDNA, while ambiguous prose remains source_notation only.
 
 PROVENANCE - required whenever any count is populated
 count_provenance records WHY a count was assigned:
@@ -180,6 +186,7 @@ OUTPUT - JSON only:
             "gene_symbol": "{gene_symbol}",
             "cdna_notation": "c.XXX or IVS... or null",
             "protein_notation": "p.XXX or null",
+            "legacy_notation": "BRCA1/2-only strict bare BIC indel such as 4321delAC or 4184del4, or null",
             "source_notation": "verbatim as printed, or null",
             "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",
             "structural_description": "e.g. 'deletion of exons 3-5' or null",
@@ -271,6 +278,7 @@ OUTPUT - JSON only:
             "gene_symbol": "string",
             "cdna_notation": "string or null (c. or IVS notation)",
             "protein_notation": "string or null",
+            "legacy_notation": "BRCA1/2-only strict bare BIC indel (not HGVS) or null",
             "source_notation": "the variant EXACTLY as written in this paper, verbatim, before normalization (e.g. 'IVS3+2T>G', 'R1443X', '5382insC', 'del exon 13'), or null",
             "genomic_position": "string or null",
             "variant_class": "missense|nonsense|frameshift|inframe_indel|splice|deep_intronic|large_deletion|large_duplication|cnv|exon_deletion|exon_duplication|complex|other or null",

@@ -34,6 +34,10 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
+from utils.legacy_notation import (
+    gene_supports_legacy_notation,
+    normalize_legacy_notation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -838,6 +842,14 @@ def _infer_column_mapping_from_headers(
     mapping: Dict[str, int] = {}
     normalized_headers = [_normalize_header(c) for c in table.header_cells]
 
+    # A labeled cDNA/nucleotide column is stronger than a value-shaped guess in
+    # an earlier Sample/ID column. This matters for BRCA tables whose sample IDs
+    # can themselves resemble BIC indels (for example ``4184del4``).
+    for idx, header in enumerate(normalized_headers):
+        if any(kw in header for kw in _HEADER_FIELD_KEYWORDS["cdna"]):
+            mapping["cdna"] = idx
+            break
+
     # Avoid obvious GWAS/assay tables unless their data columns contain actual
     # HGVS-like variant notation. This keeps "AA/n" allele-frequency tables out.
     has_assay_or_gwas_cue = any(h in _GWAS_OR_ASSAY_HEADERS for h in normalized_headers)
@@ -845,7 +857,7 @@ def _infer_column_mapping_from_headers(
     for idx, header in enumerate(normalized_headers):
         values = _column_values(table, idx)
         protein_by_data = any(_normalize_protein(v) for v in values)
-        cdna_by_data = any(_normalize_cdna(v) for v in values)
+        cdna_by_data = any(_looks_like_cdna_or_legacy(v, target_gene) for v in values)
         non_variant_count_header = _is_non_variant_count_header(
             header, normalized_headers
         )
@@ -945,7 +957,9 @@ def _infer_column_mapping_from_headers(
         if "cdna" in mapping and "protein" in mapping:
             break
         values = _column_values(table, idx)
-        if "cdna" not in mapping and any(_normalize_cdna(v) for v in values):
+        if "cdna" not in mapping and any(
+            _looks_like_cdna_or_legacy(v, target_gene) for v in values
+        ):
             mapping["cdna"] = idx
         if "protein" not in mapping and any(_normalize_protein(v) for v in values):
             mapping["protein"] = idx
@@ -959,7 +973,7 @@ def _infer_column_mapping_from_headers(
         return None
     if has_assay_or_gwas_cue and not any(
         any(
-            _normalize_cdna(v) or _normalize_protein(v)
+            _looks_like_cdna_or_legacy(v, target_gene) or _normalize_protein(v)
             for v in _column_values(table, i)
         )
         for i in range(len(table.header_cells))
@@ -1434,15 +1448,30 @@ _CDNA_VARIANT_RE = re.compile(
 )
 
 
-def _normalize_cdna(value: str) -> Optional[str]:
+def _normalize_cdna(value: str, gene_symbol: Optional[str] = None) -> Optional[str]:
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
         return None
     if not s.lower().startswith("c."):
+        # BIC/source-coordinate indels are not HGVS. They remain useful, but
+        # prefixing them with ``c.`` invents a coordinate system the paper did
+        # not supply and can merge a different allele downstream.
+        if gene_supports_legacy_notation(gene_symbol) and normalize_legacy_notation(s):
+            return None
         s = "c." + s
     if not _CDNA_VARIANT_RE.match(s):
         return None
     return s
+
+
+def _looks_like_cdna_or_legacy(value: str, gene_symbol: Optional[str] = None) -> bool:
+    return bool(
+        _normalize_cdna(value, gene_symbol)
+        or (
+            gene_supports_legacy_notation(gene_symbol)
+            and normalize_legacy_notation(value)
+        )
+    )
 
 
 def _normalize_protein(value: str) -> Optional[str]:
@@ -1469,12 +1498,31 @@ def _split_variant_cell(value: Optional[str]) -> List[str]:
     ]
 
 
-def _normalize_cdna_values(value: Optional[str]) -> List[str]:
-    return [
-        normalized
-        for part in _split_variant_cell(value)
-        if (normalized := _normalize_cdna(part))
-    ]
+def _normalize_cdna_identities(
+    value: Optional[str], gene_symbol: Optional[str] = None
+) -> List[Dict[str, Optional[str]]]:
+    """Preserve bare BIC labels as legacy identities, never fabricated cDNA."""
+
+    identities: List[Dict[str, Optional[str]]] = []
+    for part in _split_variant_cell(value):
+        legacy = None
+        if gene_supports_legacy_notation(
+            gene_symbol
+        ) and not part.strip().lower().startswith("c."):
+            legacy = normalize_legacy_notation(part)
+        if legacy:
+            identities.append(
+                {
+                    "cdna": None,
+                    "legacy": legacy,
+                    "source_notation": part.strip(),
+                }
+            )
+            continue
+        cdna = _normalize_cdna(part, gene_symbol)
+        if cdna:
+            identities.append({"cdna": cdna, "legacy": None, "source_notation": None})
+    return identities
 
 
 def _normalize_protein_values(value: Optional[str]) -> List[str]:
@@ -1765,7 +1813,7 @@ def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
         if (
             re.match(r"^[A-Z]\d", token)
             or _GENE_TOKEN_PROTEIN_LIKE_RE.match(token)
-            or _normalize_cdna(token)
+            or _looks_like_cdna_or_legacy(token)
         ):
             continue
         if _GENE_SYMBOL_CELL_RE.match(token) and sum(ch.isalpha() for ch in token) >= 2:
@@ -2164,18 +2212,47 @@ def extract_via_router(
         pmid=pmid,
     )
     variants: List[Dict[str, Any]] = []
+    seen_table_content: set[tuple[tuple[str, ...], tuple[str, ...]]] = set()
+    duplicate_routed_table_ids: list[str] = []
     for routed in result.routed_tables:
         if routed.table is None:
             continue
-        variants.extend(
-            parse_routed_table(routed.table, routed.column_mapping, gene_symbol)
+        # A converted supplement/archive can expose the same table twice under
+        # different enumerated IDs. Parsing both doubles every variant and count
+        # while looking like two independent evidence sources. Deduplicate the
+        # complete normalized cell matrix here, before any count aggregation;
+        # genuinely different tables that happen to mention the same variant
+        # remain separate observations.
+        content_key = (
+            tuple(_normalize_header(cell) for cell in routed.table.header_cells),
+            tuple(
+                "|".join(
+                    " ".join(cell.split()).casefold() for cell in _split_pipe_row(line)
+                )
+                for line in routed.table.data_lines
+            ),
         )
+        parsed_variants = parse_routed_table(
+            routed.table, routed.column_mapping, gene_symbol
+        )
+        # An off-target caption or unusable mapping can make one archive alias
+        # unparseable while a later alias with the same matrix is correctly
+        # target-scoped. Only a copy that actually yielded target-gene evidence
+        # may claim the content key.
+        if not parsed_variants:
+            continue
+        if content_key in seen_table_content:
+            duplicate_routed_table_ids.append(routed.table.table_id)
+            continue
+        seen_table_content.add(content_key)
+        variants.extend(parsed_variants)
     return {
         "routed": result.routed_tables,
         "variants": variants,
         "used_fallback": result.used_fallback or not result.routed_tables,
         "error": result.error,
         "enumerated_table_ids": result.enumerated_table_ids,
+        "duplicate_routed_table_ids": duplicate_routed_table_ids,
     }
 
 
@@ -2285,6 +2362,7 @@ def _router_fact_rows(
     row_number: int,
     row_text: str,
     cdna: Optional[str],
+    legacy: Optional[str],
     protein: Optional[str],
     total: Optional[int],
     affected: Optional[int],
@@ -2305,7 +2383,7 @@ def _router_fact_rows(
         "evidence_quote": row_text.strip(),
         "source_layer": "llm_table",
     }
-    for value in (protein, cdna):
+    for value in (protein, cdna, legacy):
         if value:
             rows.append(
                 {
@@ -2599,10 +2677,10 @@ def parse_routed_table(
             ):
                 continue
 
-        cdna_values = _normalize_cdna_values(cell(cdna_idx))
+        cdna_identities = _normalize_cdna_identities(cell(cdna_idx), gene_symbol)
         protein_values = _normalize_protein_values(cell(protein_idx))
 
-        if not cdna_values and not protein_values:
+        if not cdna_identities and not protein_values:
             continue
 
         infer_one_carrier = count_idx == _INFER_ROW_PATIENT_COUNT
@@ -2633,14 +2711,19 @@ def parse_routed_table(
             if total == 0:
                 total = None
 
-        n_variants = max(len(cdna_values), len(protein_values), 1)
+        n_variants = max(len(cdna_identities), len(protein_values), 1)
         for variant_idx in range(n_variants):
-            cdna = (
-                cdna_values[variant_idx]
-                if variant_idx < len(cdna_values)
-                else cdna_values[0]
-                if len(cdna_values) == 1
+            cdna_identity = (
+                cdna_identities[variant_idx]
+                if variant_idx < len(cdna_identities)
+                else cdna_identities[0]
+                if len(cdna_identities) == 1
                 else None
+            )
+            cdna = cdna_identity.get("cdna") if cdna_identity else None
+            legacy = cdna_identity.get("legacy") if cdna_identity else None
+            source_notation = (
+                cdna_identity.get("source_notation") if cdna_identity else None
             )
             protein = (
                 protein_values[variant_idx]
@@ -2650,7 +2733,7 @@ def parse_routed_table(
                 else None
             )
 
-            if not cdna and not protein:
+            if not cdna and not legacy and not protein:
                 continue
 
             source_table = table.caption or f"Table {table.table_id}"
@@ -2663,6 +2746,7 @@ def parse_routed_table(
                 row_number=row_number,
                 row_text=row,
                 cdna=cdna,
+                legacy=legacy,
                 protein=protein,
                 total=total,
                 affected=affected,
@@ -2674,7 +2758,11 @@ def parse_routed_table(
                 unc_idx=unc_idx,
                 source_location=source_location,
             )
-            dedup_key = ((cdna or "").lower(), (protein or "").lower())
+            dedup_key = (
+                (cdna or "").lower(),
+                (legacy or "").lower(),
+                (protein or "").lower(),
+            )
             if dedup_key in by_key:
                 existing = by_key[dedup_key]
                 existing.setdefault("fact_provenance", []).extend(fact_rows)
@@ -2699,6 +2787,8 @@ def parse_routed_table(
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": cdna,
+                "legacy_notation": legacy,
+                "source_notation": source_notation,
                 "protein_notation": protein,
                 "clinical_significance": (clinical or "pathogenic").strip().lower()
                 if clinical

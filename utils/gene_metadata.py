@@ -274,7 +274,11 @@ def get_gene_metadata(
     base = BUILTIN_GENE_METADATA.get(
         gene, GeneMetadata(symbol=gene, aliases=(gene,), query_aliases=(gene,))
     )
-    vf = _load_variantfeatures_metadata(gene, variantfeatures_db)
+    vf = _load_variantfeatures_metadata(
+        gene,
+        variantfeatures_db,
+        known_protein_length=base.protein_length,
+    )
     if not vf:
         return base
 
@@ -309,6 +313,7 @@ def clear_gene_metadata_cache() -> None:
     get_gene_metadata.cache_clear()
     gene_alias_regex.cache_clear()
     lookup_variantfeatures_residue.cache_clear()
+    _variantfeatures_gene_residue_index.cache_clear()
     _stored_gene_spellings.cache_clear()
 
 
@@ -329,10 +334,13 @@ def known_gene_aliases(
 ) -> dict[str, tuple[str, ...]]:
     """Return built-in aliases for caption/scope detection."""
 
-    return {
-        gene: get_gene_aliases(gene, include_query_aliases=include_query_aliases)
-        for gene in BUILTIN_GENE_METADATA
-    }
+    aliases: dict[str, tuple[str, ...]] = {}
+    for gene, metadata in BUILTIN_GENE_METADATA.items():
+        values = metadata.aliases
+        if include_query_aliases:
+            values = _dedupe([*values, *metadata.query_aliases])
+        aliases[gene] = values or (gene,)
+    return aliases
 
 
 @lru_cache(maxsize=256)
@@ -342,11 +350,18 @@ def gene_alias_regex(
     include_query_aliases: bool = False,
     variantfeatures_db: str | None = None,
 ) -> re.Pattern[str]:
-    aliases = get_gene_aliases(
-        gene_symbol,
-        include_query_aliases=include_query_aliases,
-        variantfeatures_db=variantfeatures_db,
-    )
+    gene = normalize_gene_symbol(gene_symbol)
+    builtin = BUILTIN_GENE_METADATA.get(gene) if variantfeatures_db is None else None
+    if builtin:
+        aliases = builtin.aliases
+        if include_query_aliases:
+            aliases = _dedupe([*aliases, *builtin.query_aliases])
+    else:
+        aliases = get_gene_aliases(
+            gene,
+            include_query_aliases=include_query_aliases,
+            variantfeatures_db=variantfeatures_db,
+        )
     parts = [re.escape(alias).replace(r"\ ", r"\s+") for alias in aliases if alias]
     if not parts:
         parts = [re.escape(normalize_gene_symbol(gene_symbol))]
@@ -381,32 +396,51 @@ def lookup_variantfeatures_residue(
     if not db_path:
         return None
     try:
-        with _connect_readonly(db_path) as conn:
-            if not _has_table(conn, "variant_consequences"):
-                return _lookup_legacy_variantfeatures_residue(
+        gene_index = _variantfeatures_gene_residue_index(str(db_path), gene)
+    except sqlite3.Error:
+        # Do not let a transient failure poison the memoized map with an
+        # "this gene has no residues" answer, which reads downstream as
+        # QC support rather than as missing evidence.
+        return None
+    if gene_index is _RESIDUE_INDEX_TOO_LARGE:
+        # A gene too large to materialize still gets a real answer: one point
+        # query per position is slow, never silent.
+        try:
+            with _connect_readonly(db_path) as conn:
+                rows = _gene_rows(
+                    conn,
+                    """
+                    SELECT transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt
+                    FROM variant_consequences
+                    WHERE {gene_predicate} AND aa_pos = ?
+                    LIMIT 500
+                    """,
+                    "variant_consequences",
+                    "gene_symbol",
+                    gene,
+                    (position,),
+                )
+        except sqlite3.Error:
+            return None
+        if not rows:
+            return None
+    elif gene_index is not None:
+        rows = gene_index.get(position, ())
+        if not rows:
+            return None
+    else:
+        try:
+            with _connect_readonly(db_path) as conn:
+                rows = _lookup_legacy_variantfeatures_residue(
                     conn,
                     gene,
                     position=position,
                     protein_notation=protein_notation,
                     cdna_notation=cdna_notation,
                 )
-            rows = _gene_rows(
-                conn,
-                """
-                SELECT transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt
-                FROM variant_consequences
-                WHERE {gene_predicate} AND aa_pos = ?
-                LIMIT 500
-                """,
-                "variant_consequences",
-                "gene_symbol",
-                gene,
-                (position,),
-            )
-    except sqlite3.Error:
-        return None
-    if not rows:
-        return None
+        except sqlite3.Error:
+            return None
+        return rows
 
     protein_norm = _normalize_notation(protein_notation)
     cdna_norm = _normalize_notation(cdna_notation)
@@ -428,6 +462,82 @@ def lookup_variantfeatures_residue(
         transcripts=transcripts,
         matched_hgvs_p=matched_hgvs_p,
         matched_hgvs_c=matched_hgvs_c,
+    )
+
+
+# Sentinel for a gene whose residue set is too large to materialize in memory.
+# Distinct from an empty map ("no residues") so the caller falls back to
+# per-position queries instead of reading absence as QC support.
+_RESIDUE_INDEX_TOO_LARGE: Mapping[int, tuple[tuple, ...]] = MappingProxyType({})
+_RESIDUE_INDEX_MAX_ROWS = 200_000
+
+
+@lru_cache(maxsize=4)
+def _variantfeatures_gene_residue_index(
+    db_path: str, gene: str
+) -> Optional[Mapping[int, tuple[tuple, ...]]]:
+    """Load one gene's residues once, keyed by protein position.
+
+    The production VariantFeatures slice indexes ``gene_symbol`` but not
+    ``(gene_symbol, aa_pos)``. Issuing one point query per distinct paper
+    position therefore re-walked the complete gene range thousands of times.
+    One gene-scoped read amortizes that across every position in a paper, and
+    it uses only the ``gene_symbol`` index that production actually has.
+
+    ``None`` means the legacy schema (no ``variant_consequences``), which the
+    caller answers with its own query. An empty map means the modern schema
+    genuinely holds no residues for this gene. Read failures propagate rather
+    than memoizing either answer: an absent residue reads downstream as
+    "nothing contradicts this variant", so it must never stand in for an
+    unreadable database. A gene whose residue set is too large to materialize
+    returns :data:`_RESIDUE_INDEX_TOO_LARGE`, which sends the caller back to
+    per-position queries — slower, but never silent.
+    """
+
+    with _connect_readonly(Path(db_path)) as conn:
+        if not _has_table(conn, "variant_consequences"):
+            return None
+        count_rows = _gene_rows(
+            conn,
+            """
+            SELECT COUNT(*)
+            FROM variant_consequences
+            WHERE {gene_predicate} AND aa_pos IS NOT NULL
+            """,
+            "variant_consequences",
+            "gene_symbol",
+            gene,
+        )
+        if count_rows and int(count_rows[0][0]) > _RESIDUE_INDEX_MAX_ROWS:
+            logger.info(
+                "VariantFeatures residues for %s exceed the prefetch bound "
+                "(%s rows); using per-position lookups",
+                gene,
+                count_rows[0][0],
+            )
+            return _RESIDUE_INDEX_TOO_LARGE
+        rows = _gene_rows(
+            conn,
+            """
+            SELECT aa_pos, transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt
+            FROM variant_consequences
+            WHERE {gene_predicate} AND aa_pos IS NOT NULL
+            """,
+            "variant_consequences",
+            "gene_symbol",
+            gene,
+        )
+
+    by_position: dict[int, list[tuple]] = {}
+    for aa_pos, transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt in rows:
+        position_rows = by_position.setdefault(int(aa_pos), [])
+        if len(position_rows) < 500:
+            position_rows.append((transcript_id, hgvs_p, hgvs_c, aa_ref, aa_alt))
+    return MappingProxyType(
+        {
+            position: tuple(position_rows)
+            for position, position_rows in by_position.items()
+        }
     )
 
 
@@ -499,14 +609,22 @@ def _dedupe_exact(values: Iterable[str]) -> tuple[str, ...]:
 
 
 def _load_variantfeatures_metadata(
-    gene: str, variantfeatures_db: str | None = None
+    gene: str,
+    variantfeatures_db: str | None = None,
+    *,
+    known_protein_length: int | None = None,
 ) -> Optional[GeneMetadata]:
     db_path = _resolve_variantfeatures_db(variantfeatures_db)
     if not db_path:
         return None
     try:
         with _connect_readonly(db_path) as conn:
-            return _read_variantfeatures_metadata(conn, gene, db_path)
+            return _read_variantfeatures_metadata(
+                conn,
+                gene,
+                db_path,
+                known_protein_length=known_protein_length,
+            )
     except sqlite3.Error:
         return None
 
@@ -523,7 +641,11 @@ def _connect_readonly(path: Path) -> sqlite3.Connection:
 
 
 def _read_variantfeatures_metadata(
-    conn: sqlite3.Connection, gene: str, db_path: Path
+    conn: sqlite3.Connection,
+    gene: str,
+    db_path: Path,
+    *,
+    known_protein_length: int | None = None,
 ) -> Optional[GeneMetadata]:
     aliases: list[str] = [gene]
     refseq_transcripts: list[str] = []
@@ -531,7 +653,7 @@ def _read_variantfeatures_metadata(
     canonical_transcript: str | None = None
     ensembl_id: str | None = None
     ncbi_id: str | None = None
-    protein_length: int | None = None
+    protein_length: int | None = known_protein_length
 
     if _has_table(conn, "genes"):
         row = _first_gene_row(
@@ -573,35 +695,37 @@ def _read_variantfeatures_metadata(
                 protein_length = derived
 
     if _has_table(conn, "variant_consequences"):
-        row = _first_gene_row(
-            conn,
-            """
-            SELECT MAX(aa_pos)
-            FROM variant_consequences
-            WHERE {gene_predicate}
-            """,
-            "variant_consequences",
-            "gene_symbol",
-            gene,
-        )
-        if row and row[0]:
-            # Saturation tables include the stop codon as the final aa_pos.
-            protein_length = max(int(row[0]) - 1, 1)
-        rows = _gene_rows(
-            conn,
-            """
-            SELECT DISTINCT transcript_id
-            FROM variant_consequences
-            WHERE {gene_predicate} AND transcript_id IS NOT NULL
-            LIMIT 20
-            """,
-            "variant_consequences",
-            "gene_symbol",
-            gene,
-        )
-        for (transcript_id,) in rows:
-            if transcript_id and not canonical_transcript:
-                canonical_transcript = str(transcript_id)
+        if known_protein_length is None:
+            row = _first_gene_row(
+                conn,
+                """
+                SELECT MAX(aa_pos)
+                FROM variant_consequences
+                WHERE {gene_predicate}
+                """,
+                "variant_consequences",
+                "gene_symbol",
+                gene,
+            )
+            if row and row[0]:
+                # Saturation tables include the stop codon as the final aa_pos.
+                protein_length = max(int(row[0]) - 1, 1)
+        if not canonical_transcript:
+            rows = _gene_rows(
+                conn,
+                """
+                SELECT DISTINCT transcript_id
+                FROM variant_consequences
+                WHERE {gene_predicate} AND transcript_id IS NOT NULL
+                LIMIT 20
+                """,
+                "variant_consequences",
+                "gene_symbol",
+                gene,
+            )
+            for (transcript_id,) in rows:
+                if transcript_id and not canonical_transcript:
+                    canonical_transcript = str(transcript_id)
 
     elif _has_table(conn, "variants"):
         row = _first_gene_row(
@@ -898,6 +1022,14 @@ def _has_leading_index(conn: sqlite3.Connection, table: str, column: str) -> boo
     would silently fall back to a full scan per step.
     """
 
+    return _has_index_prefix(conn, table, (column,))
+
+
+def _has_index_prefix(
+    conn: sqlite3.Connection, table: str, columns: tuple[str, ...]
+) -> bool:
+    """True when a complete index begins with all requested columns."""
+
     try:
         indexes = conn.execute(f"PRAGMA index_list({table})").fetchall()
     except sqlite3.Error:
@@ -908,7 +1040,8 @@ def _has_leading_index(conn: sqlite3.Connection, table: str, column: str) -> boo
         if partial:
             continue
         info = conn.execute(f"PRAGMA index_info({name})").fetchall()
-        if info and info[0][2] == column:
+        indexed_columns = tuple(row[2] for row in info[: len(columns)])
+        if indexed_columns == columns:
             return True
     return False
 

@@ -58,41 +58,43 @@ change.
 
 - [ ] Finish Gate 3, `reviewer_545`: 545 attempts across 506
       unique PMIDs in the 11 populated reviewer workspaces. The first approved
-      experimental strata are the existing BMPR2 50-, BRCA1 50-, and corrected
-      BRCA2 50-paper queues; do not expand those to 100 papers per gene. Start
-      with those three queues after the patched gold-120 revalidation. The prior
-      accepted structural set is exact manifests 50/50 BRCA1, 45/45 BRCA2, and 50/50
-      BMPR2, with full-text source integrity 50/50, 44/45, and 45/50. All three
-      have write-time-verified extraction traces, mandatory VariantFeatures
-      enrichment/quarantine, and no live variant lacking a VariantFeatures audit
-      row. The hardened collaborator audit reports 5,348 / 1,917 / 554 final
-      variants, zero nameless rows, zero species-scope links, and 324 / 137 / 32
-      VariantFeatures quarantines. It now correctly **fails** all three raw DBs:
-      BRCA1 retains 346 ambiguous live identities, BRCA2 129, and BMPR2 56
-      outside the defensible unmatched classes `novel_in_range` and
-      `cdna_only_unmatched`. The trusted Variant Browser projection now holds
-      these out of the private staging database. Exact 50/45/50 manifest order,
-      titles, source locations, and source-run metadata were verified at the
-      database boundary; the authenticated browser UI could not be visually
-      exercised from the available app session. The rejected
-      46-paper BRCA2 DB remains evidence of the original failure and must never
-      be imported. The corrected 45-paper DB contains no PMID 19944633 row or
-      downstream evidence in any PMID-bearing table. During its source-recovery
-      attempt a second fail-open defect was caught before replay: Scholar had
-      returned a 2021 Frontiers paper that merely cited target PMID 26824983.
-      The foreign source was moved to a recoverable quarantine, never entered
-      the DB/shared corpus, and source acceptance now requires matching stable
-      identity in the candidate URL plus the paper header. A later Grok 4.6
-      `xhigh` pass found DOI-prefix and PMID-digit-concatenation bypasses plus
-      readiness/publish fail-open paths; regression tests now pin those fixes.
-      Staging uncovered one more fail-open bug: detached adjudications did not
-      invalidate current gold. Variant Browser now disputes those revisions;
-      the BRCA2 replay has zero canine evidence, zero current canine gold, and
-      zero current gold for all 111 detached/re-review subjects. Grok 4.6 xhigh
-      returned **GO for merge/trusted staging and HOLD for public publication**.
-      Next: source-ground the collaborator precision sample, re-review the 111
-      BRCA2 subjects, and run a disjoint pre-registered cardiac/SCN5A validation
-      before any public promotion. Public annotations were not changed.
+      experimental strata remain BMPR2 50, BRCA1 50, and corrected BRCA2 50;
+      do not expand them to 100 papers per gene. **The complete blind extraction
+      and replay process is now staged for exactly 50/50/50 papers.** Pinned
+      manifest membership, staged JSON membership, and final DB paper membership
+      agree exactly for every gene. PMID 19944633 (the canine BRCA2 paper) is
+      absent from all three surfaces. The final local candidate DBs are BRCA1
+      `BRCA1.final6_20260821.db`, BRCA2 `BRCA2.final5_20260821.db`, and BMPR2
+      `BMPR2.final5_20260821.db`; they contain 3,582 / 722 / 260 live variants
+      after mandatory VariantFeatures enrichment and high-confidence
+      out-of-range/wrong-gene quarantine. Structural audit: zero placeholder
+      titles, wrong-gene live rows, nameless identities, negative counts,
+      impossible unquarantined partitions, or duplicate penetrance strata.
+      Typed family-count evidence remains raw: 168 / 154 / 3 links carry family
+      provenance, and 147 / 142 / 3 of those links carry a raw value. The trust
+      gate masks those values from carrier-facing totals where the role is
+      `family_count`.
+
+      The refresh path now has an independent, default-on source-evidence gate:
+      selection and matching use source identity/provenance only, never gold.
+      It fills only a unique identity with a null or identical untyped value,
+      restores the backup on absent/ambiguous/conflicting untyped evidence, never
+      aliases BIC digits to cDNA, and never matches by codon position. A shared
+      ref+position+alt rule folds a truncated `V340G` representation into
+      `p.Val340Glyfs*6` across regex/table merge, replay, and same-cDNA SQLite
+      migration; protein-only-to-cDNA matching stays fail-closed because
+      streaming uniqueness is order-dependent. Grok 4.6 `xhigh` found and then
+      cleared the prior P0 replay/migration blockers; its final live-path finding
+      (regex had retained the rich frameshift only in `source_notation`) is now a
+      regression test. Details and remaining explicit conflicting-protein groups:
+      `docs/evidence/brca_bmpr2_full150_audit_20260821.md`.
+
+      **Still HOLD for public publication.** Source-ground the collaborator
+      precision sample, re-review the 111 detached BRCA2 subjects, and run a
+      disjoint pre-registered cardiac/SCN5A validation before public promotion.
+      The trusted Variant Browser import/publish path is fail-closed, but no
+      public annotations were changed. The requested Claude desktop adversarial
+      pass remains blocked because macOS is locked; Grok CLI review is complete.
 - [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived

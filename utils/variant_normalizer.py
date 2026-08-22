@@ -69,6 +69,71 @@ AA_MAP_REVERSE["Ter"] = "*"
 AA_MAP_REVERSE["Stop"] = "*"
 AA_MAP_REVERSE["Xaa"] = "X"  # Unknown amino acid
 
+_PROTEIN_SUBSTITUTION_RE = re.compile(
+    r"^(?:p\.)?([A-Za-z]{1,3})(\d+)([A-Za-z]{1,3})$", re.IGNORECASE
+)
+_PROTEIN_FRAMESHIFT_WITH_ALT_RE = re.compile(
+    r"^(?:p\.)?([A-Za-z]{1,3})(\d+)([A-Za-z]{1,3})"
+    r"fs(?:Ter|X|\*)?\d*$",
+    re.IGNORECASE,
+)
+
+
+def _protein_notation_body(value: str) -> str:
+    """Remove HGVS predicted-consequence parentheses without changing identity."""
+    cleaned = str(value or "").strip()
+    match = re.fullmatch(r"p\.\((.+)\)", cleaned, re.IGNORECASE)
+    return f"p.{match.group(1)}" if match else cleaned.strip("()")
+
+
+def _amino_acid_letter(token: str) -> Optional[str]:
+    cleaned = token.strip()
+    if len(cleaned) == 1:
+        upper = cleaned.upper()
+        return upper if upper in AA_MAP else None
+    return AA_MAP_REVERSE.get(cleaned.title())
+
+
+def _protein_alias_parts(
+    pattern: re.Pattern[str], value: str
+) -> Optional[Tuple[str, str, str]]:
+    match = pattern.fullmatch(_protein_notation_body(value))
+    if not match:
+        return None
+    ref = _amino_acid_letter(match.group(1))
+    alt = _amino_acid_letter(match.group(3))
+    return (ref, match.group(2), alt) if ref and alt else None
+
+
+def protein_substitution_frameshift_alias(first: str, second: str) -> bool:
+    """True for ``V340G`` and explicit ``p.Val340Glyfs*6`` spellings.
+
+    The match deliberately requires reference residue, position, and new
+    residue. It never aliases by codon alone and never treats an alt-less
+    frameshift as proof that a short substitution names the same event.
+    """
+
+    first_substitution = _protein_alias_parts(_PROTEIN_SUBSTITUTION_RE, first)
+    second_substitution = _protein_alias_parts(_PROTEIN_SUBSTITUTION_RE, second)
+    first_frameshift = _protein_alias_parts(_PROTEIN_FRAMESHIFT_WITH_ALT_RE, first)
+    second_frameshift = _protein_alias_parts(_PROTEIN_FRAMESHIFT_WITH_ALT_RE, second)
+    return bool(
+        (first_substitution and first_substitution == second_frameshift)
+        or (second_substitution and second_substitution == first_frameshift)
+    )
+
+
+def preferred_alias_protein(
+    stored: Optional[str], incoming: Optional[str]
+) -> Optional[str]:
+    """Prefer the explicit frameshift when a proven short alias is folded."""
+    if not stored or not incoming:
+        return stored or incoming
+    if protein_substitution_frameshift_alias(stored, incoming):
+        return incoming if re.search(r"fs", incoming, re.IGNORECASE) else stored
+    return stored
+
+
 # Protein lengths for common cardiac genes
 PROTEIN_LENGTHS = {
     "APOE": 317,
@@ -434,6 +499,17 @@ class VariantNormalizer:
         v = re.sub(r"/[\+\-]$", "", v)  # /+, /-
         v = v.strip()
 
+        # HGVS synonymous notation: p.Asn961= and N961= both mean N961N.
+        m = re.match(r"^([A-Za-z])(\d+)=$", v, re.IGNORECASE)
+        if m:
+            ref = m.group(1).upper()
+            return f"{ref}{m.group(2)}{ref}"
+        m = re.match(r"^([A-Z][a-z]{2})(\d+)=$", v, re.IGNORECASE)
+        if m:
+            ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+            if ref:
+                return f"{ref}{m.group(2)}{ref}"
+
         # Single-letter format (handles both lowercase and uppercase): A561V, a561v, R864*, R864X
         m = re.match(r"^([A-Za-z])(\d+)([A-Za-z\*X])$", v, re.IGNORECASE)
         if m:
@@ -472,8 +548,13 @@ class VariantNormalizer:
             if ref:
                 return f"{ref}{m.group(2)}fsX"
 
-        # Pattern 2: Single-letter with frameshift: A193fsX, A193fs*46, A193fs
-        m = re.match(r"^([A-Za-z])(\d+)fs[\*X]?\d*$", v, re.IGNORECASE)
+        # Pattern 2: Single-letter with frameshift, with or without the new AA:
+        # A193fsX, A193fs*46, M815Wfs*10, S1722YfsTer4.
+        m = re.match(
+            r"^([A-Za-z])(\d+)(?:[A-Za-z])?fs(?:[\*X]\d*|Ter\d*)?$",
+            v,
+            re.IGNORECASE,
+        )
         if m:
             return f"{m.group(1).upper()}{m.group(2)}fsX"
 
@@ -521,6 +602,19 @@ class VariantNormalizer:
             return None
 
         variant = variant.strip()
+
+        # A strict prefixless BIC-style indel is useful source notation, but it
+        # is not HGVS without a transcript/coordinate declaration.  Never
+        # fabricate that declaration by prepending ``c.``.
+        from utils.legacy_notation import (
+            gene_supports_legacy_notation,
+            normalize_legacy_notation,
+        )
+
+        if gene_supports_legacy_notation(
+            self.gene_symbol
+        ) and normalize_legacy_notation(variant):
+            return None
 
         # Already has c. prefix - check if valid pattern
         if variant.startswith("c."):
@@ -713,12 +807,15 @@ class VariantNormalizer:
 
     def _create_canonical_key(self, variant: Dict[str, Any]) -> str:
         """Create a canonical key for variant deduplication."""
+        from utils.legacy_notation import normalize_legacy_notation
+
         gene = self.gene_symbol
-        protein = variant.get("protein_notation", "")
-        cdna = variant.get("cdna_notation", "")
+        protein = variant.get("protein_notation") or ""
+        cdna = variant.get("cdna_notation") or ""
         structural = structural_variant_identity(
-            variant.get("structural_description", "")
+            variant.get("structural_description") or ""
         )
+        legacy = normalize_legacy_notation(variant.get("legacy_notation"))
 
         # Prefer protein notation for key
         if protein:
@@ -727,6 +824,9 @@ class VariantNormalizer:
             return f"{gene}:{cdna}"
         elif structural:
             return f"{gene}:{structural}"
+        elif legacy:
+            # Distinct legacy labels must not collapse onto a shared "unknown".
+            return f"{gene}:legacy:{legacy}"
         else:
             return f"{gene}:unknown"
 
@@ -757,7 +857,11 @@ def normalize_frameshift(variant: str) -> Optional[str]:
 
     # Pattern 1: Single letter + position + fs variants
     # L987fs, L987fsX, L987fsX10, L987fs*10, L987fs*
-    m = re.match(r"^([A-Za-z])(\d+)fs[\*X]?\d*$", v, re.IGNORECASE)
+    m = re.match(
+        r"^([A-Za-z])(\d+)(?:[A-Za-z])?fs(?:[\*X]\d*|Ter\d*)?$",
+        v,
+        re.IGNORECASE,
+    )
     if m:
         return f"{m.group(1).upper()}{m.group(2)}fsX"
 
@@ -1479,6 +1583,7 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
         v_lower.startswith("p.")
         or re.match(r"^[A-Z][a-z]{2}\d+", variant, re.IGNORECASE)
         or re.match(r"^[A-Za-z]\d+[A-Za-z\*X]$", variant, re.IGNORECASE)
+        or re.match(r"^[A-Za-z]\d+=$", variant, re.IGNORECASE)
         or re.match(r"^[A-Za-z]\d+fs", variant, re.IGNORECASE)
         or re.match(r"^[A-Za-z]\d+(stop|sp|ter)$", variant, re.IGNORECASE)
     )
@@ -1678,5 +1783,19 @@ def create_variant_key(variant: Dict[str, Any], gene_symbol: str = "KCNH2") -> s
     genomic = variant.get("genomic_position")
     if genomic:
         return f"{gene_symbol}:{genomic.strip()}"
+
+    # A strict source-only legacy label is a real identity. Without this,
+    # every legacy-only variant in a paper shares "unknown_variant" and the
+    # aggregator pools distinct mutations into one group with one
+    # representative and summed counts.
+    from utils.legacy_notation import normalize_legacy_notation
+
+    legacy = normalize_legacy_notation(variant.get("legacy_notation"))
+    if legacy:
+        return f"{gene_symbol}:legacy:{legacy}"
+
+    structural = structural_variant_identity(variant.get("structural_description"))
+    if structural:
+        return f"{gene_symbol}:{structural}"
 
     return f"{gene_symbol}:unknown_variant"

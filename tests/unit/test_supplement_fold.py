@@ -70,6 +70,24 @@ def test_build_supplement_markdown_empty_or_missing(tmp_path):
     assert build_supplement_markdown(empty, converter=_DUMMY) == ("", 0)
 
 
+def test_converter_error_placeholder_is_not_counted_as_source(tmp_path):
+    class InvalidPdfConverter:
+        @staticmethod
+        def pdf_to_markdown(_path):
+            return "[Invalid PDF file: supplement.pdf]\n\n"
+
+    supp = tmp_path / "12345678_supplements"
+    supp.mkdir()
+    (supp / "supplement.pdf").write_bytes(b"<html>sign-in page</html>")
+
+    markdown, converted = build_supplement_markdown(
+        supp, converter=InvalidPdfConverter()
+    )
+
+    assert markdown == ""
+    assert converted == 0
+
+
 def test_fold_is_idempotent_and_nondestructive(tmp_path):
     pmid = "12345678"
     harvest = tmp_path / "pmc_fulltext"
@@ -126,6 +144,61 @@ def test_fold_migrates_covered_legacy_inline_block_without_duplication(tmp_path)
 
     assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
     assert fc.read_text(encoding="utf-8") == folded
+
+
+def test_fold_does_not_duplicate_members_already_expanded_from_archive(tmp_path):
+    pmid = "45454545"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    original = (
+        "# MAIN\n\nbody\n\n"
+        "# SUPPLEMENTAL FILE 1: archive.zip\n\n"
+        "##### Nested file: table_s1.csv\n\n"
+        "variant,carriers\nc.2A>G,4\n"
+    )
+    fc.write_text(original, encoding="utf-8")
+    _write_supp(
+        harvest / f"{pmid}_supplements" / "archive",
+        "table_s1.csv",
+        "variant,carriers\nc.2A>G,4\n",
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
+    assert fc.read_text(encoding="utf-8") == original
+    assert fc.read_text(encoding="utf-8").count("c.2A>G,4") == 1
+
+
+def test_refold_removes_redundant_member_block_after_archive_expansion(tmp_path):
+    pmid = "46464646"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    base = (
+        "# MAIN\n\nbody\n\n"
+        "# SUPPLEMENTAL FILE 1: archive.zip\n\n"
+        "##### Nested file: table_s1.csv\n\n"
+        "variant,carriers\nc.2A>G,4\n"
+    )
+    fc.write_text(
+        base.rstrip()
+        + f"\n\n{FOLD_BEGIN}\n\n# FOLDED SUPPLEMENTS (re-extraction aid)\n"
+        "# SUPPLEMENTAL FILE 1: archive/table_s1.csv\n\n"
+        "variant,carriers\nc.2A>G,4\n\n"
+        f"{FOLD_END}\n",
+        encoding="utf-8",
+    )
+    _write_supp(
+        harvest / f"{pmid}_supplements" / "archive",
+        "table_s1.csv",
+        "variant,carriers\nc.2A>G,4\n",
+    )
+
+    assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) == fc
+    cleaned = fc.read_text(encoding="utf-8")
+    assert cleaned == base
+    assert cleaned.count("c.2A>G,4") == 1
+    assert FOLD_BEGIN not in cleaned
 
 
 def test_fold_retains_legacy_content_missing_from_disk(tmp_path):
@@ -208,6 +281,41 @@ def test_refold_conversion_failure_preserves_previous_block(tmp_path, monkeypatc
 
     assert fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY) is None
     assert fc.read_text(encoding="utf-8") == folded
+
+
+def test_refold_drops_old_placeholder_and_adds_new_valid_supplement(tmp_path):
+    class InvalidPdfConverter:
+        @staticmethod
+        def pdf_to_markdown(_path):
+            return "[Invalid PDF file: bad.pdf]\n\n"
+
+    pmid = "68686868"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text(
+        "# MAIN\n\nbody\n\n"
+        f"{FOLD_BEGIN}\n\n# FOLDED SUPPLEMENTS (re-extraction aid)\n"
+        "# SUPPLEMENTAL FILE 1: bad.pdf\n\n"
+        "[Invalid PDF file: bad.pdf]\n\n"
+        f"{FOLD_END}\n",
+        encoding="utf-8",
+    )
+    supp_dir = harvest / f"{pmid}_supplements"
+    supp_dir.mkdir()
+    (supp_dir / "bad.pdf").write_bytes(b"not a real PDF")
+    _write_supp(supp_dir, "table_s1.csv", "variant,carriers\nc.2A>G,4\n")
+
+    assert (
+        fold_supplements_into_full_context(
+            pmid, harvest, converter=InvalidPdfConverter()
+        )
+        == fc
+    )
+    refolded = fc.read_text(encoding="utf-8")
+    assert "c.2A>G,4" in refolded
+    assert "[Invalid PDF file" not in refolded
+    assert refolded.count(FOLD_BEGIN) == 1
 
 
 def test_fold_keeps_good_tables_when_another_file_converts_empty(tmp_path, monkeypatch):

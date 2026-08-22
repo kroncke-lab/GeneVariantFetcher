@@ -137,6 +137,86 @@ def test_xml_to_markdown_preserves_jats_table_wrap_rows(converter):
     assert "p.Asn629Ser" in md
 
 
+def test_xml_to_markdown_preserves_table_wrap_nested_inside_paragraph(converter):
+    xml = textwrap.dedent("""\
+        <article>
+          <body>
+            <sec>
+              <title>Results</title>
+              <p>Before the table.
+                <table-wrap id="t2">
+                  <label>Table 2</label>
+                  <caption><title>Variants screened by gene</title></caption>
+                  <table>
+                    <thead><tr><th>Gene</th><th>Variant</th><th>Method</th></tr></thead>
+                    <tbody>
+                      <tr><td>BRCA1</td><td>c.5503C&gt;T</td><td>DHPLC</td></tr>
+                      <tr><td>BRCA2</td><td>c.9117G&gt;A</td><td>DHPLC</td></tr>
+                    </tbody>
+                  </table>
+                </table-wrap>
+                After the table.
+              </p>
+            </sec>
+          </body>
+        </article>
+        """)
+
+    md = converter.xml_to_markdown(xml)
+
+    assert "Before the table. After the table." in md
+    assert "| Gene | Variant | Method |" in md
+    assert "| BRCA1 | c.5503C>T | DHPLC |" in md
+    assert "| BRCA2 | c.9117G>A | DHPLC |" in md
+    assert md.count("### Table 2") == 1
+
+
+def test_xml_to_markdown_does_not_duplicate_nested_table_in_body_container(converter):
+    xml = textwrap.dedent("""\
+        <article>
+          <body>
+            <statement>
+              <p>Nested body container.
+                <table-wrap id="t3">
+                  <label>Table 3</label>
+                  <table>
+                    <tr><th>Gene</th><th>Variant</th></tr>
+                    <tr><td>BMPR2</td><td>c.2695C&gt;T</td></tr>
+                  </table>
+                </table-wrap>
+              </p>
+            </statement>
+          </body>
+        </article>
+        """)
+
+    md = converter.xml_to_markdown(xml)
+
+    assert md.count("### Table 3") == 1
+    assert md.count("| BMPR2 | c.2695C>T |") == 1
+
+
+def test_xml_to_markdown_uses_namespaced_main_body_not_subarticle(converter):
+    xml = textwrap.dedent("""\
+        <article xmlns="http://jats.nlm.nih.gov">
+          <front><article-meta><title-group><article-title>Main cohort</article-title>
+          </title-group></article-meta></front>
+          <sub-article article-type="decision-letter">
+            <body><sec><p>Reviewer decision text must not become source.</p></sec></body>
+          </sub-article>
+          <body><sec><title>Results</title>
+            <p>BMPR2 c.2695C&gt;T was identified in the study cohort.</p>
+          </sec></body>
+        </article>
+        """)
+
+    md = converter.xml_to_markdown(xml)
+
+    assert "Main cohort" in md
+    assert "BMPR2 c.2695C>T was identified" in md
+    assert "Reviewer decision text" not in md
+
+
 def test_xml_to_markdown_preserves_back_matter_table_wrap_rows(converter):
     xml = textwrap.dedent("""\
         <article>

@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pipeline.steps as steps
 from harvesting.supplement_fold import FOLD_BEGIN
+from pipeline.source_quality import SUPPLEMENT_SURFACE_STATUS_MARKER
 
 
 def _make_corpus_paper(
@@ -54,9 +55,20 @@ def test_corpus_cache_reuses_usable_skips_stub_and_missing(tmp_path: Path):
     _make_corpus_paper(
         corpus, "KCNH2", "333", body="# Abstract-only fallback\n" + "x " * 500
     )
+    # A recovered main body with an uninspected supplement surface is useful for
+    # the current extraction but must be re-fetched on a future run.
+    _make_corpus_paper(
+        corpus,
+        "KCNH2",
+        "555",
+        body=(
+            f"<!-- {SUPPLEMENT_SURFACE_STATUS_MARKER} unavailable -->\n\n"
+            + "body text. " * 200
+        ),
+    )
 
     recovered = steps._consolidate_from_corpus(
-        ["111", "222", "333", "444"], harvest, "KCNH2", corpus
+        ["111", "222", "333", "444", "555"], harvest, "KCNH2", corpus
     )
 
     assert recovered == {"111"}, "only the usable cached paper should be reused"
@@ -70,6 +82,25 @@ def test_corpus_cache_reuses_usable_skips_stub_and_missing(tmp_path: Path):
     assert not (harvest / "222_FULL_CONTEXT.md").exists()
     assert not (harvest / "333_FULL_CONTEXT.md").exists()
     assert not (harvest / "444_FULL_CONTEXT.md").exists()
+    assert not (harvest / "555_FULL_CONTEXT.md").exists()
+
+
+def test_prior_run_cache_retries_body_only_source(tmp_path: Path):
+    output_base = tmp_path / "results"
+    prior = output_base / "KCNH2" / "old" / "pmc_fulltext"
+    prior.mkdir(parents=True)
+    (prior / "555_FULL_CONTEXT.md").write_text(
+        f"<!-- {SUPPLEMENT_SURFACE_STATUS_MARKER} scrape_error -->\n\n"
+        + "body text. " * 1000,
+        encoding="utf-8",
+    )
+    harvest = output_base / "KCNH2" / "new" / "pmc_fulltext"
+    harvest.mkdir(parents=True)
+
+    recovered = steps._consolidate_prior_downloads(["555"], harvest, output_base)
+
+    assert recovered == set()
+    assert not (harvest / "555_FULL_CONTEXT.md").exists()
 
 
 def test_corpus_cache_no_corpus_dir_is_noop(tmp_path: Path):

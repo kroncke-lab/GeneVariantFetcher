@@ -1076,3 +1076,40 @@ class TestDocumentGeneAttribution:
         scanner = VariantScanner("KCNH2")
         assert "KCNH2" in scanner._document_gene_attribution(text, "A561V")
         assert not scanner._document_assigns_variant_elsewhere(text, "A561V")
+
+    def test_scan_caches_document_attribution_for_repeated_literal(self, monkeypatch):
+        scanner = VariantScanner("KCNH2")
+        calls = 0
+
+        def attributed_elsewhere(_text: str, raw_text: str) -> set[str]:
+            nonlocal calls
+            calls += 1
+            assert raw_text == "L187P"
+            return {"KCNQ1"}
+
+        monkeypatch.setattr(scanner, "_document_gene_attribution", attributed_elsewhere)
+        result = scanner.scan("L187P was found. Later L187P was confirmed.")
+
+        assert calls == 1
+        assert "L187P" not in {variant.normalized for variant in result.variants}
+
+    def test_scan_skips_document_attribution_for_accepted_normalized_duplicate(
+        self, monkeypatch
+    ):
+        scanner = VariantScanner("KCNH2")
+        calls = 0
+
+        def target_or_unassigned(_text: str, _raw_text: str) -> set[str]:
+            nonlocal calls
+            calls += 1
+            return set()
+
+        monkeypatch.setattr(scanner, "_document_gene_attribution", target_or_unassigned)
+        result = scanner.scan("p.Arg534Cys was confirmed as R534C.")
+
+        assert calls == 1
+        assert [
+            variant.normalized
+            for variant in result.variants
+            if variant.normalized == "R534C"
+        ] == ["R534C"]

@@ -139,6 +139,376 @@ def test_table_regex_skips_off_target_gene_column_rows():
     assert "c.3107G>A" not in cdnas
 
 
+def test_table_regex_gene_column_is_open_vocabulary():
+    """Unknown panel genes must not be relabeled as the requested gene."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Patient | Gene | Protein | cDNA |
+|---|---|---|---|
+| PAH 2 | BMPR2 | p.(Val231Serfs*25) | c.690dup |
+| PAH 16 | EIF2AK4 | p.(Leu409Pro) | c.1226T>C |
+| PAH 2 | SOX17 | p.(Phe117Ser) | c.350T>C |
+| PAH 19 | TBX4 | p.(Pro48Argfs*40) | c.143del |
+| PAH 10 | ATP13A3 | p.(Glu92Val) | c.275A>T |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "BMPR2")
+
+    assert {
+        variant.get("cdna_notation")
+        for variant in variants
+        if variant.get("cdna_notation")
+    } == {"c.690dup"}
+    assert {
+        variant.get("protein_notation")
+        for variant in variants
+        if variant.get("protein_notation")
+    } == {"V231fsX"}
+    assert all(variant["gene_symbol"] == "BMPR2" for variant in variants)
+
+
+def test_table_regex_protein_alias_does_not_duplicate_existing_cdna_row():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Patient | Gene | Protein | cDNA |
+|---|---|---|---|
+| PAH 2 | BMPR2 | p.(Val231Serfs*25) (V231S) | c.690dup |
+"""
+    candidates = extractor._extract_variants_from_tables(text, "BMPR2")
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BMPR2",
+                "cdna_notation": "c.690dup",
+                "protein_notation": "p.Val231Serfs*25",
+                "patients": {"count": 1},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+
+    merged = extractor._merge_table_variants(extracted, candidates)
+
+    assert len(merged["variants"]) == 1
+    assert merged["variants"][0]["cdna_notation"] == "c.690dup"
+
+
+def test_table_merge_folds_short_protein_alias_into_llm_frameshift():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.1016dupA",
+                "protein_notation": "p.Val340Glyfs*6",
+                "patients": {},
+                "penetrance_data": {},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    table_rows = [
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "V340G",
+            "patients": {"count": 3},
+            "penetrance_data": {"total_carriers_observed": 3},
+        }
+    ]
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    assert len(merged["variants"]) == 1
+    assert merged["variants"][0]["protein_notation"] == "p.Val340Glyfs*6"
+    assert merged["variants"][0]["patients"]["count"] == 3
+
+
+def test_table_merge_promotes_llm_short_alias_to_explicit_table_frameshift():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.1016dupA",
+                "protein_notation": "V340G",
+                "patients": {},
+                "penetrance_data": {},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    table_rows = [
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.1016dupA",
+            "protein_notation": "p.Val340Glyfs*6",
+        }
+    ]
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    assert len(merged["variants"]) == 1
+    assert merged["variants"][0]["protein_notation"] == "p.Val340Glyfs*6"
+
+
+def test_table_regex_source_notation_repairs_llm_short_frameshift_alias():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Gene | Protein | cDNA |
+|---|---|---|
+| BRCA1 | p.(Val340Glyfs*6) (V340G) | c.1016dupA |
+"""
+    table_rows = extractor._extract_variants_from_tables(text, "BRCA1")
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.1016dupA",
+                "protein_notation": "V340G",
+                "patients": {},
+                "penetrance_data": {},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    assert len(merged["variants"]) == 1
+    assert merged["variants"][0]["protein_notation"] == "p.Val340Glyfs*6"
+
+
+def test_table_regex_keeps_same_codon_short_protein_when_alt_does_not_match():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Gene | Protein | cDNA |
+|---|---|---|
+| BRCA1 | p.(Val340Glyfs*6) (V340A) | c.1016dupA |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "BRCA1")
+
+    assert {
+        v.get("protein_notation") for v in variants if v.get("protein_notation")
+    } == {
+        "V340fsX",
+        "V340A",
+    }
+
+
+def test_table_merge_uses_cdna_when_two_variants_share_protein():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.100A>G",
+                "protein_notation": "p.Arg34Trp",
+                "patients": {},
+                "penetrance_data": {},
+            },
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.101G>A",
+                "protein_notation": "p.Arg34Trp",
+                "patients": {},
+                "penetrance_data": {},
+            },
+        ],
+        "extraction_metadata": {},
+    }
+    table_rows = [
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.101G>A",
+            "protein_notation": "p.Arg34Trp",
+            "patients": {"count": 4},
+            "penetrance_data": {"total_carriers_observed": 4},
+            "count_provenance": {
+                "carriers_column_label": "Families",
+                "carriers_count_type": "family_count",
+            },
+        }
+    ]
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    assert merged["variants"][0]["patients"] == {}
+    assert merged["variants"][1]["patients"]["count"] == 4
+
+
+def test_table_merge_does_not_transplant_protein_only_count_when_ambiguous():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.100A>G",
+                "protein_notation": "p.Arg34Trp",
+                "patients": {},
+                "penetrance_data": {},
+            },
+            {
+                "gene_symbol": "BRCA1",
+                "cdna_notation": "c.101G>A",
+                "protein_notation": "p.Arg34Trp",
+                "patients": {},
+                "penetrance_data": {},
+            },
+        ],
+        "extraction_metadata": {},
+    }
+    table_rows = [
+        {
+            "gene_symbol": "BRCA1",
+            "protein_notation": "p.Arg34Trp",
+            "patients": {"count": 4},
+            "penetrance_data": {"total_carriers_observed": 4},
+            "count_provenance": {
+                "carriers_column_label": "Families",
+                "carriers_count_type": "family_count",
+            },
+        }
+    ]
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    assert len(merged["variants"]) == 3
+    assert merged["variants"][0]["patients"] == {}
+    assert merged["variants"][1]["patients"] == {}
+    assert merged["variants"][2]["patients"]["count"] == 4
+
+
+def test_table_regex_binds_grouped_gene_headers_to_variant_columns():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+Genetic variants identified
+
+| BRCA1 |  |  | BRCA2 |  |  |
+|---|---|---|---|---|---|
+| Exon | Nucleotide change | Number of families | Exon | Nucleotide change | Number of families |
+| 11 | c.2193_2197del5 | 5 | 11 | c.5213_5216del4 | 1 |
+| 2 | c.68_69delAG | 2 | 3 | c.115delG | 1 |
+| 24 | c.5503C>T | 1 | 23 | c.9117G>A | 2 |
+|  |  |  | 15 | c.7436_7437-2delAGAT | 1 |
+|  |  |  | 16 | c.7734_7740del6ins9 | 2 |
+|  |  |  | 19 | c.8374_8384del11ins3 | 1 |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "BRCA2")
+
+    assert {variant.get("cdna_notation") for variant in variants} == {
+        "c.5213_5216del4",
+        "c.115delG",
+        "c.9117G>A",
+        "c.7436_7437-2delAGAT",
+        "c.7734_7740del6ins9",
+        "c.8374_8384del11ins3",
+    }
+    assert all(variant["gene_symbol"] == "BRCA2" for variant in variants)
+
+
+def test_markdown_parser_binds_grouped_gene_headers_and_counts():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+Genetic variants identified
+
+| BRCA1 |  |  | BRCA2 |  |  |
+|---|---|---|---|---|---|
+| Exon | Nucleotide change | Number of families | Exon | Nucleotide change | Number of families |
+| 11 | c.2193_2197del5 | 5 | 11 | c.5213_5216del4 | 1 |
+| 2 | c.68_69delAG | 2 | 3 | c.115delG | 1 |
+| 24 | c.5503C>T | 1 | 23 | c.9117G>A | 2 |
+|  |  |  | 15 | c.7436_7437-2delAGAT | 1 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "BRCA2")
+    by_identity = {
+        variant.get("cdna_notation") or variant.get("legacy_notation"): variant
+        for variant in variants
+    }
+
+    assert set(by_identity) == {
+        "5213_5216del4",
+        "c.115delG",
+        "c.9117G>A",
+        "c.7436_7437-2delAGAT",
+    }
+    assert (
+        by_identity["5213_5216del4"]["penetrance_data"]["total_carriers_observed"] == 1
+    )
+    assert by_identity["c.9117G>A"]["penetrance_data"]["total_carriers_observed"] == 2
+
+
+def test_grouped_gene_columns_do_not_confuse_suffix_colliding_notations():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+| BRCA1 |  | BRCA2 |  |
+|---|---|---|---|
+| Exon | Nucleotide change | Exon | Nucleotide change |
+| 11 | c.2115delG | 3 | c.115delG |
+"""
+
+    brca1 = extractor._extract_variants_from_tables(text, "BRCA1")
+    brca2 = extractor._extract_variants_from_tables(text, "BRCA2")
+
+    assert {row.get("cdna_notation") for row in brca1} == {"c.2115delG"}
+    assert {row.get("cdna_notation") for row in brca2} == {"c.115delG"}
+
+
+def test_source_attribution_filters_grouped_header_sibling_gene_columns():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+Genetic variants identified
+
+| BRCA1 |  |  | BRCA2 |  |  |
+|---|---|---|---|---|---|
+| Exon | Nucleotide change | Number of families | Exon | Nucleotide change | Number of families |
+| 2 | c.68_69delAG | 2 | 3 | c.115delG | 1 |
+| 11 | c.2193_2197del5 | 5 | 11 | c.5213_5216del4 | 1 |
+"""
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.68_69delAG",
+                "source_table": "Table 2",
+            },
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.115delG",
+                "source_table": "Table 2",
+            },
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.2193_2197del",
+                "source_table": "Table 2",
+            },
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.5213_5216del",
+                "source_table": "Table 2",
+            },
+        ]
+    }
+
+    filtered = extractor._filter_by_gene(extracted, "BRCA2", text)
+
+    assert [variant["cdna_notation"] for variant in filtered["variants"]] == [
+        "c.115delG",
+        "c.5213_5216del",
+    ]
+
+
 def test_table_regex_candidates_exclude_secondary_study_summary_before_merge():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
@@ -171,7 +541,10 @@ Summary of Brazilian BRCA1 and/or BRCA2 studies
         variant.get("cdna_notation") or variant.get("protein_notation")
         for variant in eligible
     }
-    assert eligible_names == {"c.181T>G", "C61G"}
+    assert eligible_names == {"c.181T>G"}
+    assert {
+        v.get("protein_notation") for v in eligible if v.get("protein_notation")
+    } == {"C61G"}
     assert {item["reason"] for item in skipped} == {"secondary_study_table"}
     assert {item["variant"] for item in skipped} == {
         "c.68_69delAG",
@@ -186,6 +559,191 @@ Summary of Brazilian BRCA1 and/or BRCA2 studies
         "cDNA",
         "Protein",
         "Reference",
+    ]
+
+
+def test_linked_supplement_description_rejects_external_database_compilation():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S4 BRCA1 variants identified in the current enrolled cohort**
+_link_: cohort_variants.xlsx
+
+**Table S6 Total BRCA1 variants in public variant databases and registries**
+This workbook contains the database export used for comparison.
+_link_: database_catalog.xlsx
+
+**Table S7 Chinese BRCA1 variants shared with worldwide populations**
+_link_: population_comparison.xlsx
+"""
+    candidates = [
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.123A>G",
+            "source_table": "Nested file: cohort_variants.xlsx",
+            "evidence_quote": "Target row: | BRCA1 | c.123A>G |",
+        },
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.456C>T",
+            "source_table": "Nested file: database_catalog.xlsx",
+            "evidence_quote": "Target row: | BRCA1 | c.456C>T |",
+        },
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.789G>A",
+            "source_table": "Nested file: population_comparison.xlsx",
+            "evidence_quote": "Target row: | BRCA1 | c.789G>A | - |",
+        },
+        {
+            "gene_symbol": "BRCA1",
+            "cdna_notation": "c.999A>G",
+            "source_table": "Nested file: prefix_database_catalog.xlsx",
+            "evidence_quote": "Target row: | BRCA1 | c.999A>G |",
+        },
+    ]
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="BRCA1",
+        document_text=document,
+    )
+
+    assert [row["cdna_notation"] for row in eligible] == ["c.123A>G", "c.999A>G"]
+    assert [(row["variant"], row["reason"]) for row in skipped] == [
+        ("c.456C>T", "secondary_study_table"),
+        ("c.789G>A", "secondary_study_table"),
+    ]
+
+
+def test_supplement_description_join_normalizes_encoded_query_and_path_names():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S2 Total BRCA2 variants compiled from public databases**
+_link_: https://publisher.example/files/Table%20S2.xlsx?download=1
+"""
+    candidate = {
+        "gene_symbol": "BRCA2",
+        "cdna_notation": "c.9117G>A",
+        "source_file": "recovered/cohort/Table S2.xlsx",
+        "evidence_quote": "Target row: | BRCA2 | c.9117G>A |",
+    }
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        [candidate], target_gene="BRCA2", document_text=document
+    )
+
+    assert eligible == []
+    assert [(item["variant"], item["reason"]) for item in skipped] == [
+        ("c.9117G>A", "secondary_study_table")
+    ]
+
+
+def test_supplement_basename_collision_combines_descriptions_fail_closed():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S1 Total variants compiled from public databases**
+_link_: comparison/variants.xlsx
+
+**Table S2 Variants identified in our enrolled cohort**
+_link_: cohort/variants.xlsx
+"""
+    descriptions = extractor._linked_supplement_descriptions(document)
+    assert descriptions["variants.xlsx"] == {
+        "Table S1 Total variants compiled from public databases",
+        "Table S2 Variants identified in our enrolled cohort",
+    }
+    candidate = {
+        "gene_symbol": "BRCA2",
+        "cdna_notation": "c.5946delT",
+        "source_file": "cohort/variants.xlsx",
+        "evidence_quote": "Target row: | BRCA2 | c.5946delT |",
+    }
+
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        [candidate], target_gene="BRCA2", document_text=document
+    )
+
+    assert eligible == []
+    assert skipped[0]["reason"] == "secondary_study_table"
+
+
+def test_supplement_description_join_stops_at_new_bold_description():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S1 Total variants compiled from public databases**
+The S1 link was unavailable in this legacy conversion.
+
+**Table S2 Variants identified in our enrolled cohort**
+_link_: cohort variants.xlsx
+"""
+
+    descriptions = extractor._linked_supplement_descriptions(document)
+
+    assert descriptions == {
+        "cohort variants.xlsx": {"Table S2 Variants identified in our enrolled cohort"}
+    }
+
+
+def test_folded_table_parser_carries_nested_filename_into_supplement_filter():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S4 BRCA1 variants identified in the current enrolled cohort**
+_link_: cohort_variants.xlsx
+
+**Table S6 Total BRCA1 variants in public variant databases and registries**
+_link_: database_catalog.xlsx
+
+##### Nested file: cohort_variants.xlsx
+| Gene | cDNA |
+|---|---|
+| BRCA1 | c.123A>G |
+
+##### Nested file: database_catalog.xlsx
+| Gene | cDNA |
+|---|---|
+| BRCA1 | c.456C>T |
+"""
+
+    candidates = extractor._extract_variants_from_tables(document, "BRCA1")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="BRCA1",
+        document_text=document,
+    )
+
+    assert [(row["cdna_notation"], row["source_file"]) for row in eligible] == [
+        ("c.123A>G", "cohort_variants.xlsx")
+    ]
+    assert [(row["variant"], row["reason"]) for row in skipped] == [
+        ("c.456C>T", "secondary_study_table")
+    ]
+
+
+def test_folded_table_parser_preserves_spaced_nested_filename():
+    extractor = ExpertExtractor(models=["test-model"])
+    document = """
+**Table S6 Total BRCA1 variants compiled from public databases**
+_link_: database%20catalog.xlsx?download=1
+
+##### Nested file: recovered/database catalog.xlsx | Sheet 1
+| Gene | cDNA |
+|---|---|
+| BRCA1 | c.456C>T |
+"""
+
+    candidates = extractor._extract_variants_from_tables(document, "BRCA1")
+    eligible, skipped = extractor._filter_table_candidates_for_current_study(
+        candidates,
+        target_gene="BRCA1",
+        document_text=document,
+    )
+
+    assert eligible == []
+    assert {candidate["source_file"] for candidate in candidates} == {
+        "database catalog.xlsx"
+    }
+    assert [(row["variant"], row["reason"]) for row in skipped] == [
+        ("c.456C>T", "secondary_study_table")
     ]
 
 
@@ -213,11 +771,9 @@ Summary of prior BRCA1 studies
         document_text=text,
     )
 
-    names = {
-        variant.get("cdna_notation") or variant.get("protein_notation")
-        for variant in merged["variants"]
-    }
-    assert names == {"c.181T>G", "C61G"}
+    assert len(merged["variants"]) == 1
+    assert merged["variants"][0]["cdna_notation"] == "c.181T>G"
+    assert merged["variants"][0]["protein_notation"] == "C61G"
     metadata = merged["extraction_metadata"]
     assert metadata["table_merge_candidate_count"] == 3
     assert metadata["table_merge_eligible_count"] == 2
@@ -229,6 +785,54 @@ Summary of prior BRCA1 studies
             "quote": "| BRCA1 c.4034delA | Schayek, 2015 |",
         }
     ]
+
+
+def test_table_merge_enriches_missing_count_without_overwriting_llm_count():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extracted = {
+        "variants": [
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.5645C>G",
+                "patients": {},
+                "penetrance_data": {},
+            },
+            {
+                "gene_symbol": "BRCA2",
+                "cdna_notation": "c.469_470delAA",
+                "patients": {"count": 2},
+                "penetrance_data": {"total_carriers_observed": 2},
+            },
+        ],
+        "extraction_metadata": {},
+    }
+    table_rows = [
+        {
+            "gene_symbol": "BRCA2",
+            "cdna_notation": "c.5645C>G",
+            "patients": {"count": 1},
+            "penetrance_data": {"total_carriers_observed": 1},
+            "count_provenance": {"carriers_count_type": "family_count"},
+            "source_table": "Table 2",
+        },
+        {
+            "gene_symbol": "BRCA2",
+            "cdna_notation": "c.469_470delAA",
+            "patients": {"count": 99},
+            "penetrance_data": {"total_carriers_observed": 99},
+        },
+    ]
+
+    merged = extractor._merge_table_variants(extracted, table_rows)
+
+    first, second = merged["variants"]
+    assert first["patients"]["count"] == 1
+    assert first["penetrance_data"]["total_carriers_observed"] == 1
+    assert first["count_provenance"]["carriers_count_type"] == "family_count"
+    assert first["source_table"] == "Table 2"
+    assert second["patients"]["count"] == 2
+    assert second["penetrance_data"]["total_carriers_observed"] == 2
+    assert merged["extraction_metadata"]["table_merge_enriched"] == 1
 
 
 def test_table_merge_abstains_when_one_cell_mix_cannot_bind_variant_to_gene():
@@ -647,10 +1251,12 @@ Family characteristics and pathological characteristics of breast cancers of ind
 
     variants = extractor._parse_markdown_table_variants(text, "BRCA2")
 
-    assert [v["cdna_notation"] for v in variants] == [
-        "c.490delCT",
-        "c.1184insA",
+    assert [v["cdna_notation"] for v in variants] == [None, None]
+    assert [v["legacy_notation"] for v in variants] == [
+        "490delCT",
+        "1184insA",
     ]
+    assert [v["source_notation"] for v in variants] == ["490 delCT", "1184 insA"]
     assert all(v["patients"]["count"] == 1 for v in variants)
     assert all(v["penetrance_data"].get("affected_count") is None for v in variants)
     assert all(v["source_ref"] == "Table 5" for v in variants)
@@ -689,7 +1295,8 @@ Family characteristics of individuals with deleterious BRCA mutations
     parsed = extractor._parse_markdown_table_variants(text, "BRCA2")
     deduped = extractor._dedupe_table_variants(parsed)
 
-    assert [v["cdna_notation"] for v in deduped] == ["c.490delCT"]
+    assert [v["cdna_notation"] for v in deduped] == [None]
+    assert [v["legacy_notation"] for v in deduped] == ["490delCT"]
     variant = deduped[0]
     assert variant["patients"]["count"] == 2
     assert variant["penetrance_data"]["affected_count"] is None
@@ -2069,3 +2676,47 @@ def test_table_regex_without_caption_still_locates_row_and_column():
     assert v["source_column"] == "Mutation"
     assert v["evidence_quote"] == "| KCNH2 | p.Gly628Ser | 5 |"
     assert "block 1" in v["source_location"]
+
+
+def test_secondary_study_gate_keeps_primary_registry_and_cohort_tables():
+    """Registries and databases are not by themselves secondary-study signals.
+
+    Disease cohorts in this literature are routinely *named* registries, and
+    primary variant tables commonly carry an external-frequency annotation
+    column. Rejecting on a bare "registry"/"database" token deleted whole
+    primary cohorts — worst for BMPR2/PAH, where the registry naming is the
+    norm. Both directions are pinned here: a gate tested only on its reject
+    direction silently over-rejects.
+    """
+
+    extractor = ExpertExtractor(models=["gpt-4"])
+
+    def reason(caption):
+        return extractor._secondary_study_table_reason(
+            {"source_table_caption": caption, "evidence_quote": "| c.123A>G | 4 |"}
+        )
+
+    primary = [
+        "Table S2: All BMPR2 variants identified in the French PAH registry",
+        "Table 1: All variants detected in our patient registry",
+        "Table 2: All variants identified in the national registry of LQTS patients",
+        "Table 6: Total number of BRCA2 variants detected in our patient database",
+        "Table 7: Catalogue of mutations found in the present study and their "
+        "frequencies in public databases",
+        "Table 8: Variants identified in probands and matched to gnomAD populations",
+        "Table 9: Mutations identified in this study and previously reported",
+        "Table S3: All variants observed in our center 1998-2020",
+    ]
+    for caption in primary:
+        assert reason(caption) is None, caption
+
+    secondary = [
+        "Table 3: Variants reported in previous studies",
+        "Table 4: Summary of variants from published literature reports",
+        "Table 10: All variants compiled from public databases",
+        "Table 11: Catalogue of all mutations listed in ClinVar and HGMD",
+        "Table 12: Variants shared with gnomAD populations",
+        "Table 14: Overview of BRCA2 mutations described in the literature",
+    ]
+    for caption in secondary:
+        assert reason(caption) == "secondary_study_table", caption

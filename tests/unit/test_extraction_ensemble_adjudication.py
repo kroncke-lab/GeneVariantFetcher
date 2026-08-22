@@ -3,6 +3,7 @@
 from pipeline.claim_verifier import (
     VariantClaimCard,
     VariantClaimVerifier,
+    apply_verification_to_variant,
     build_claim_card,
     build_claim_verification_prompt,
     normalize_verification,
@@ -55,6 +56,85 @@ def test_non_gpt56_xhigh_claim_verifier_keeps_compact_budget():
     )
 
     assert verifier.max_tokens == 2_500
+
+
+def test_claim_verification_preserves_typed_family_count_observation():
+    variant = {
+        "gene_symbol": "BRCA2",
+        "cdna_notation": "c.1813insA",
+        "patients": {"count": 1},
+        "penetrance_data": {"total_carriers_observed": 1},
+        "count_provenance": {
+            "carriers_column_label": "Number of families",
+            "carriers_count_type": "family_count",
+        },
+    }
+    verification = {
+        "verdict": "unsupported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "unsupported",
+            "affected": "unsupported",
+            "unaffected": "unsupported",
+        },
+        "corrected_values": {
+            "total_carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        "reason": "One family is not necessarily one carrier.",
+        "evidence_quote": "c.1813insA | 1",
+    }
+
+    updated, changes = apply_verification_to_variant(variant, verification)
+
+    assert updated["patients"]["count"] == 1
+    assert updated["penetrance_data"]["total_carriers_observed"] == 1
+    assert updated["claim_verification"] == verification
+    assert changes == {}
+
+
+def test_claim_verification_clears_typed_case_identifier_from_affected_count():
+    variant = {
+        "gene_symbol": "BRCA2",
+        "cdna_notation": "c.3031G>A",
+        "patients": {"count": 1},
+        "penetrance_data": {
+            "total_carriers_observed": 1,
+            "affected_count": 6497,
+            "unaffected_count": 1,
+        },
+        "count_provenance": {
+            "carriers_count_type": "per_variant_carrier",
+            "affected_count_type": "case",
+            "unaffected_count_type": "per_variant_carrier",
+        },
+    }
+    verification = {
+        "verdict": "inferred_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "ambiguous",
+            "unaffected": "directly_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 1,
+            "affected": None,
+            "unaffected": 1,
+        },
+        "reason": "6497 is the case identifier, not an affected count.",
+        "evidence_quote": "case 6497 was a healthy sister",
+    }
+
+    updated, changes = apply_verification_to_variant(variant, verification)
+
+    assert updated["penetrance_data"]["affected_count"] is None
+    assert changes["affected"] == {
+        "old": 6497,
+        "new": None,
+        "verdict": "ambiguous",
+    }
 
 
 def test_risk_flags_repeated_large_non_deterministic_counts():

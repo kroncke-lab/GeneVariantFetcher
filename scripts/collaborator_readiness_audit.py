@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 from pipeline.filters import names_nonhuman_ortholog
+from utils.gene_metadata import gene_alias_regex
 
 # A VariantFeatures miss can still be a defensible paper identity: truly novel
 # protein alleles and transcript-bound cDNA variants are expected not to exist
@@ -25,7 +26,12 @@ from pipeline.filters import names_nonhuman_ortholog
 # adjudication; high-confidence wrong-residue/out-of-range calls must live only
 # in ``quarantined_variants``.
 _ALLOWED_UNMATCHED_VF_CLASSES = frozenset(
-    {"novel_in_range", "cdna_only_unmatched", "known_isoform_offset"}
+    {
+        "novel_in_range",
+        "cdna_only_unmatched",
+        "known_isoform_offset",
+        "legacy_source_notation",
+    }
 )
 
 
@@ -92,6 +98,33 @@ def _extraction_json_issues(gene: str, run_dir: Path, expected: list[str]) -> li
             issues.append(f"PMID {pmid}: extraction_metadata is missing")
         if not isinstance(variants, list):
             issues.append(f"PMID {pmid}: variants must be a list")
+            continue
+        for index, variant in enumerate(variants):
+            if not isinstance(variant, dict):
+                continue
+            headers = variant.get("source_table_headers")
+            quote = str(variant.get("evidence_quote") or "").strip()
+            if not isinstance(headers, list) or not quote.startswith("|"):
+                continue
+            gene_columns = [
+                column
+                for column, header in enumerate(headers)
+                if re.sub(r"[^a-z0-9]+", " ", str(header).lower()).strip()
+                in {"gene", "gene symbol", "gene name"}
+            ]
+            cells = [cell.strip() for cell in quote.strip("|").split("|")]
+            for column in gene_columns:
+                if column >= len(cells):
+                    continue
+                source_gene = cells[column]
+                if source_gene and not gene_alias_regex(
+                    gene, include_query_aliases=False
+                ).search(source_gene):
+                    issues.append(
+                        f"PMID {pmid} variant {index}: source Gene column "
+                        f"names {source_gene!r}, not {gene}"
+                    )
+                    break
     return issues
 
 
@@ -201,17 +234,31 @@ def audit_gene(gene: str, run_dir: Path, manifest_path: Path) -> dict[str, Any]:
     db_path = run_dir / f"{gene}.db"
     con = sqlite3.connect(db_path)
     try:
+        variant_columns = {row[1] for row in con.execute("PRAGMA table_info(variants)")}
+        legacy_identity_sql = (
+            "AND NULLIF(TRIM(COALESCE(legacy_notation, '')), '') IS NULL"
+            if "legacy_notation" in variant_columns
+            else ""
+        )
         variants = {
             "variants": _scalar(con, "SELECT COUNT(*) FROM variants"),
             "paper_variant_links": _scalar(con, "SELECT COUNT(*) FROM variant_papers"),
             "papers_in_db": _scalar(con, "SELECT COUNT(*) FROM papers"),
+            "placeholder_paper_titles": _scalar(
+                con,
+                """SELECT COUNT(*) FROM papers
+                   WHERE NULLIF(TRIM(COALESCE(title, '')), '') IS NULL
+                      OR LOWER(TRIM(title)) IN ('unknown', 'unknown title')
+                      OR LOWER(TRIM(title)) = 'paper ' || LOWER(TRIM(pmid))""",
+            ),
             "nameless": _scalar(
                 con,
-                """SELECT COUNT(*) FROM variants
+                f"""SELECT COUNT(*) FROM variants
                    WHERE NULLIF(TRIM(COALESCE(cdna_notation, '')), '') IS NULL
                      AND NULLIF(TRIM(COALESCE(protein_notation, '')), '') IS NULL
                      AND NULLIF(TRIM(COALESCE(genomic_position, '')), '') IS NULL
-                     AND NULLIF(TRIM(COALESCE(structural_description, '')), '') IS NULL""",
+                     AND NULLIF(TRIM(COALESCE(structural_description, '')), '') IS NULL
+                     {legacy_identity_sql}""",
             ),
             "wrong_gene_symbol": _scalar(
                 con,
@@ -390,6 +437,8 @@ def audit_gene(gene: str, run_dir: Path, manifest_path: Path) -> dict[str, Any]:
         failures.append("nameless variant rows remain")
     if variants["wrong_gene_symbol"]:
         failures.append("variant rows carry a conflicting gene symbol")
+    if variants["placeholder_paper_titles"]:
+        failures.append("papers retain missing or placeholder bibliography titles")
     if counts["negative_rows"]:
         failures.append("negative patient counts remain")
     if counts["impossible_partitions_unquarantined"]:

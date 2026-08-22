@@ -23,8 +23,8 @@ def _write_case_fixture_db(db_path):
     them the uppercase form, which is the only shape that forces the stored
     spellings to be unioned.
 
-    The indexes mirror the real slice (``idx_consequences_gene``,
-    ``idx_transcripts_gene``, ``genes.symbol UNIQUE``). Without them the
+    The indexes include the composite residue key required by production
+    lookups, plus ``idx_transcripts_gene`` and ``genes.symbol UNIQUE``. Without them the
     stored-spelling census takes its unindexed ``SELECT DISTINCT`` branch, so the
     loose index scan that production actually uses would run in zero tests.
     """
@@ -56,7 +56,8 @@ def _write_case_fixture_db(db_path):
             is_canonical INTEGER,
             is_mane_select INTEGER
         );
-        CREATE INDEX idx_consequences_gene ON variant_consequences(gene_symbol);
+        CREATE INDEX idx_consequences_gene_pos
+            ON variant_consequences(gene_symbol, aa_pos);
         CREATE INDEX idx_transcripts_gene ON transcripts(gene_symbol);
         INSERT INTO genes VALUES
             ('Xorf1', 'ENST000LOWER', '999', 'ENSG000LOWER'),
@@ -200,6 +201,8 @@ def test_variantfeatures_metadata_and_residue_lookup(tmp_path, monkeypatch):
             aa_ref TEXT,
             aa_alt TEXT
         );
+        CREATE INDEX idx_consequences_gene_pos
+            ON variant_consequences(gene_symbol, aa_pos);
         INSERT INTO genes VALUES ('TEST1', 'ENST000TEST', '1234', 'ENSG000TEST');
         INSERT INTO variant_consequences VALUES
             ('TEST1', 'ENST000TEST', 'ENSP000TEST:p.Cys10Arg', 'ENST000TEST:c.28T>C', 10, 'C', 'R'),
@@ -298,6 +301,40 @@ def test_exact_case_match_wins_over_upper_fallback(tmp_path, monkeypatch):
     clear_gene_metadata_cache()
 
 
+def test_builtin_length_and_transcript_avoid_consequence_table_scan(
+    tmp_path, monkeypatch
+):
+    db_path = tmp_path / "variants.db"
+    _write_case_fixture_db(db_path)
+    conn = sqlite3.connect(db_path)
+    conn.execute(
+        "INSERT INTO genes VALUES ('BRCA2', 'NM_000059.4', '675', 'ENSG00000139618')"
+    )
+    conn.execute(
+        "INSERT INTO transcripts VALUES "
+        "('NM_000059.4', 'BRCA2', 'NM_000059.4', 'NP_000050.3', 10257, 1, 1)"
+    )
+    conn.execute(
+        "INSERT INTO variant_consequences VALUES "
+        "('BRCA2', 'NM_000059.4', 'NP_000050.3:p.Ter3419Ter', NULL, 3419, '*', '*')"
+    )
+    conn.commit()
+    conn.close()
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    statements = _trace_statements(monkeypatch)
+
+    clear_gene_metadata_cache()
+    metadata = get_gene_metadata("BRCA2")
+
+    assert metadata.protein_length == 3418
+    assert metadata.canonical_transcript == "NM_000059.4"
+    assert not any(
+        "SELECT MAX(aa_pos)" in sql or "SELECT DISTINCT transcript_id" in sql
+        for sql in statements
+    )
+    clear_gene_metadata_cache()
+
+
 def test_exact_case_lookup_does_not_emit_an_upper_scan(tmp_path, monkeypatch):
     """Pin the performance property, not just the result.
 
@@ -336,7 +373,9 @@ def test_exact_case_lookup_does_not_emit_an_upper_scan(tmp_path, monkeypatch):
     residue = lookup_variantfeatures_residue("COLL1", position=20)
     assert residue is not None
     assert residue.reference_residues == ("A",)
-    assert emitted("variant_consequences", "gene_symbol = 'COLL1' AND aa_pos = 20")
+    assert emitted(
+        "variant_consequences", "gene_symbol = 'COLL1' AND aa_pos IS NOT NULL"
+    )
     assert not any("UPPER(" in sql for sql in statements)
     assert _census_statements(statements, "variant_consequences", "gene_symbol") == []
 
@@ -445,11 +484,12 @@ def test_every_stored_casing_is_unioned_when_the_exact_spelling_has_no_payload(
     clear_gene_metadata_cache()
 
 
-def test_residue_lookup_is_memoized_per_gene_and_position(tmp_path, monkeypatch):
+def test_residue_lookup_is_memoized_per_gene_range(tmp_path, monkeypatch):
     """``target_gene_specificity`` calls this once per parsed protein position.
 
-    Positions recur across a paper's variants and tables, so without memoization
-    each repeat reopens the database and re-queries it.
+    Distinct positions recur across a paper's variants and tables. The database
+    has no ``(gene_symbol, aa_pos)`` index, so the first lookup loads the gene's
+    indexed range and later positions must resolve without another query.
     """
 
     db_path = tmp_path / "variants.db"
@@ -466,10 +506,10 @@ def test_residue_lookup_is_memoized_per_gene_and_position(tmp_path, monkeypatch)
     assert lookup_variantfeatures_residue("COLL1", position=20) is first
     assert statements == []
 
-    # A different position is a distinct key and must still query.
+    # A different position is a distinct result key but shares the gene range.
     statements.clear()
     lookup_variantfeatures_residue("COLL1", position=900)
-    assert statements
+    assert statements == []
 
     # Misses are cached too — an absent gene is the hot path this protects.
     statements.clear()
@@ -805,3 +845,106 @@ def test_discover_synonyms_keeps_builtin_aliases_when_ncbi_fails(monkeypatch):
     assert result.success is False
     assert "cMyBP-C" in result.data["synonyms"]
     assert "cardiac myosin-binding protein C" in result.data["synonyms"]
+
+
+def test_residue_support_survives_a_missing_composite_index(tmp_path, monkeypatch):
+    """A gene-only index must still yield residue evidence, not silent absence.
+
+    The production VariantFeatures slice indexes ``gene_symbol`` alone. Gating
+    residue support on a ``(gene_symbol, aa_pos)`` index disabled the lookup in
+    exactly that configuration, and an absent residue reads downstream as
+    "nothing contradicts this variant" — turning a wrong-residue quarantine
+    signal into silent support.
+    """
+
+    db_path = tmp_path / "gene_only_index.db"
+    conn = sqlite3.connect(db_path)
+    conn.executescript(
+        """
+        CREATE TABLE variant_consequences (
+            gene_symbol TEXT,
+            transcript_id TEXT,
+            hgvs_p TEXT,
+            hgvs_c TEXT,
+            aa_pos INTEGER,
+            aa_ref TEXT,
+            aa_alt TEXT
+        );
+        CREATE INDEX idx_vc_gene ON variant_consequences(gene_symbol);
+        INSERT INTO variant_consequences VALUES
+            ('TESTGENE', 'ENST1', 'ENSP1:p.Gly10Val', 'ENST1:c.29G>T', 10, 'G', 'V');
+        """
+    )
+    conn.close()
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    clear_gene_metadata_cache()
+
+    residue = lookup_variantfeatures_residue("TESTGENE", position=10)
+    assert residue is not None, "gene-only index must not disable residue support"
+    assert residue.reference_residues == ("G",)
+
+    clear_gene_metadata_cache()
+
+
+def test_unreadable_variantfeatures_is_not_memoized_as_absent(tmp_path, monkeypatch):
+    """A read failure must not be cached as "this gene has no residues"."""
+
+    db_path = tmp_path / "residues.db"
+    _write_case_fixture_db(db_path)
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    clear_gene_metadata_cache()
+
+    real_connect = gene_metadata._connect_readonly
+    calls = {"n": 0}
+
+    def failing_connect(path):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise sqlite3.OperationalError("disk I/O error")
+        return real_connect(path)
+
+    monkeypatch.setattr(gene_metadata, "_connect_readonly", failing_connect)
+    assert lookup_variantfeatures_residue("COLL1", position=20) is None
+
+    # The failure must not have poisoned the per-gene map: a later healthy
+    # read has to reach the database again and produce the real residue.
+    monkeypatch.setattr(gene_metadata, "_connect_readonly", real_connect)
+    clear_gene_metadata_cache()
+    assert lookup_variantfeatures_residue("COLL1", position=20) is not None
+
+    clear_gene_metadata_cache()
+
+
+def test_oversized_gene_falls_back_to_point_lookups_not_silence(tmp_path, monkeypatch):
+    """Too large to prefetch must mean slower, never "no residue evidence"."""
+
+    db_path = tmp_path / "big.db"
+    conn = sqlite3.connect(db_path)
+    conn.executescript(
+        """
+        CREATE TABLE variant_consequences (
+            gene_symbol TEXT,
+            transcript_id TEXT,
+            hgvs_p TEXT,
+            hgvs_c TEXT,
+            aa_pos INTEGER,
+            aa_ref TEXT,
+            aa_alt TEXT
+        );
+        CREATE INDEX idx_vc_gene ON variant_consequences(gene_symbol);
+        INSERT INTO variant_consequences VALUES
+            ('BIGGENE', 'ENST1', 'ENSP1:p.Gly10Val', 'ENST1:c.29G>T', 10, 'G', 'V');
+        """
+    )
+    conn.close()
+    monkeypatch.setenv("VARIANTFEATURES_DB", str(db_path))
+    # Force the oversized branch without materializing a huge fixture.
+    monkeypatch.setattr(gene_metadata, "_RESIDUE_INDEX_MAX_ROWS", 0)
+    clear_gene_metadata_cache()
+
+    residue = lookup_variantfeatures_residue("BIGGENE", position=10)
+    assert residue is not None, "oversized genes must still resolve residues"
+    assert residue.reference_residues == ("G",)
+    assert lookup_variantfeatures_residue("BIGGENE", position=9999) is None
+
+    clear_gene_metadata_cache()

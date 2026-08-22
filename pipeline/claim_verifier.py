@@ -76,7 +76,13 @@ def coerce_int(value: Any) -> int | None:
 
 
 def variant_display(variant: dict[str, Any]) -> str:
-    for key in ("protein_notation", "cdna_notation", "genomic_position", "variant"):
+    for key in (
+        "protein_notation",
+        "cdna_notation",
+        "legacy_notation",
+        "genomic_position",
+        "variant",
+    ):
         value = variant.get(key)
         if value is not None and str(value).strip():
             return str(value).strip()
@@ -564,7 +570,14 @@ def normalize_verification(
 def apply_verification_to_variant(
     variant: dict[str, Any], verification: dict[str, Any]
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Return a copy with unsupported count fields nulled/corrected."""
+    """Return a copy with unsupported carrier fields nulled/corrected.
+
+    A typed non-carrier observation (for example, ``family_count``) is not a
+    claim about variant-positive individuals. Preserve that source value and
+    let the trust gate mask it from carrier-facing consumers. Otherwise claim
+    verification can erase an exact table cell merely because it correctly
+    rejects the cell as an individual carrier count.
+    """
     updated = dict(variant)
     patients = dict(updated.get("patients") or {})
     pdata = dict(updated.get("penetrance_data") or {})
@@ -577,11 +590,26 @@ def apply_verification_to_variant(
         "affected": ("affected_count", None),
         "unaffected": ("unaffected_count", None),
     }
+    provenance = updated.get("count_provenance")
+    provenance = provenance if isinstance(provenance, dict) else {}
+    provenance_keys = {
+        "total_carriers": "carriers_count_type",
+        "affected": "affected_count_type",
+        "unaffected": "unaffected_count_type",
+    }
     for field, (pdata_key, patient_key) in field_map.items():
         verdict = field_verdicts.get(field, "ambiguous")
         old = coerce_int(
             pdata.get(pdata_key, patients.get(patient_key) if patient_key else None)
         )
+        count_type = str(provenance.get(provenance_keys[field]) or "").strip().lower()
+        # Trust Gate tg5 has one deliberate raw-observation exception: a
+        # source-reported number of families remains auditable in the carrier
+        # slot and is field-masked from trusted carrier consumers. Other typed
+        # values are not covered by that exception; verification must still
+        # clear a case ID, cohort denominator, or mis-typed phenotype count.
+        if field == "total_carriers" and count_type == "family_count":
+            continue
         if verdict in SUPPORTED_VERDICTS:
             new = corrected.get(field)
             if new is not None and new != old:

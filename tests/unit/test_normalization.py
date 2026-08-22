@@ -19,6 +19,8 @@ from utils.variant_normalizer import (
     normalize_frameshift,
     normalize_nonsense,
     normalize_variant,
+    preferred_alias_protein,
+    protein_substitution_frameshift_alias,
     variants_match,
 )
 
@@ -36,12 +38,55 @@ from utils.variant_normalizer import (
         ("p.Leu987fs", "L987fsX"),
         ("p.Leu987fsTer10", "L987fsX"),
         ("p.Leu987Profs*10", "L987fsX"),
+        ("p.M815Wfs*10", "M815fsX"),
+        ("p.S1722YfsTer4", "S1722fsX"),
         ("987fs", "?987fsX"),
         ("fs987", "?987fsX"),
     ],
 )
 def test_normalize_frameshift(raw, expected):
     assert normalize_frameshift(raw) == expected
+
+
+def test_normalize_variant_unifies_one_and_three_letter_frameshifts():
+    assert normalize_variant("p.M815Wfs*10", "BRCA2") == normalize_variant(
+        "p.Met815Trpfs*10", "BRCA2"
+    )
+
+
+def test_normalize_variant_unifies_synonymous_equals_and_repeated_residue():
+    assert normalize_variant("p.Asn961=", "BRCA1") == "N961N"
+    assert normalize_variant("N961=", "BRCA1") == "N961N"
+    assert normalize_variant("p.Asn961Asn", "BRCA1") == "N961N"
+
+
+@pytest.mark.parametrize(
+    "short, frameshift",
+    [
+        ("V340G", "p.Val340Glyfs*6"),
+        ("P.LYS339F", "p.Lys339PhefsTer8"),
+        ("V340G", "p.(Val340Glyfs*6)"),
+    ],
+)
+def test_explicit_frameshift_alias_requires_matching_ref_position_and_alt(
+    short, frameshift
+):
+    assert protein_substitution_frameshift_alias(short, frameshift)
+    assert protein_substitution_frameshift_alias(frameshift, short)
+    assert preferred_alias_protein(short, frameshift) == frameshift
+    assert preferred_alias_protein(frameshift, short) == frameshift
+
+
+@pytest.mark.parametrize(
+    "left, right",
+    [
+        ("V340A", "p.Val340Glyfs*6"),
+        ("V341G", "p.Val340Glyfs*6"),
+        ("V340G", "p.Val340fs*6"),
+    ],
+)
+def test_frameshift_alias_never_matches_alt_mismatch_or_codon_only(left, right):
+    assert not protein_substitution_frameshift_alias(left, right)
 
 
 # ---------------------------------------------------------------------------

@@ -347,6 +347,13 @@ def test_residue_mismatch_splits_wrong_gene_from_numbering_and_unknown():
     assert enrich.classify_unmatched("p.P871L", "", 3418, {}) == "novel_in_range"
 
 
+def test_classify_unmatched_preserves_strict_source_only_legacy_identity():
+    assert (
+        enrich.classify_unmatched("", "", 3418, {}, {}, legacy="4321delAC")
+        == "legacy_source_notation"
+    )
+
+
 @pytest.mark.parametrize(
     ("source", "expected"),
     [

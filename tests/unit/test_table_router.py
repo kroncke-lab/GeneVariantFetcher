@@ -492,6 +492,86 @@ def test_extract_via_router_infers_one_carrier_per_clinical_row_without_count():
     assert unaffected["unaffected_count"] == 1
 
 
+def test_extract_via_router_deduplicates_repeated_complete_table():
+    def stub(**_):
+        raise AssertionError("LLM router should not run for clinical tables")
+
+    paper = """Table 1. BMPR2 variants in patients
+
+| Gene | cDNA | Number of patients |
+|---|---|---|
+| BMPR2 | c.76+1G>T | 2 |
+
+Table 2. Duplicate archive rendering
+
+| Gene | cDNA | Number of patients |
+|---|---|---|
+| BMPR2 | c.76+1G>T | 2 |
+"""
+
+    result = extract_via_router(
+        paper, "BMPR2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert len(result["variants"]) == 1
+    assert result["variants"][0]["cdna_notation"] == "c.76+1G>T"
+    assert result["variants"][0]["patients"]["count"] == 2
+    assert result["duplicate_routed_table_ids"] == ["T2"]
+
+
+def test_extract_via_router_dedup_does_not_let_off_target_caption_win():
+    def stub(**_):
+        raise AssertionError("LLM router should not run for deterministic tables")
+
+    paper = """Table 1. BRCA1 variants in patients
+
+| cDNA | Number of patients |
+|---|---|
+| c.68_69del | 2 |
+
+Table 2. BRCA2 variants in patients
+
+| cDNA | Number of patients |
+|---|---|
+| c.68_69del | 2 |
+"""
+
+    result = extract_via_router(
+        paper, "BRCA2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert [v["cdna_notation"] for v in result["variants"]] == ["c.68_69del"]
+    assert result["variants"][0]["source_ref"] == "Table 2. BRCA2 variants in patients"
+    assert result["duplicate_routed_table_ids"] == []
+
+
+def test_extract_via_router_keeps_distinct_tables_sharing_one_variant():
+    def stub(**_):
+        raise AssertionError("LLM router should not run for deterministic tables")
+
+    paper = """Table 1. BMPR2 variants in patients
+
+| Gene | cDNA | Number of patients |
+|---|---|---|
+| BMPR2 | c.76+1G>T | 2 |
+
+Table 2. BMPR2 variants in replication patients
+
+| Gene | cDNA | Number of patients |
+|---|---|---|
+| BMPR2 | c.76+1G>T | 3 |
+| BMPR2 | c.350G>A | 1 |
+"""
+
+    result = extract_via_router(
+        paper, "BMPR2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert len(result["variants"]) == 3
+    assert [v["patients"]["count"] for v in result["variants"]] == [2, 3, 1]
+    assert result["duplicate_routed_table_ids"] == []
+
+
 def test_row_level_inference_requires_clinical_context():
     def stub(**_):
         return _stub_response(json.dumps({"variant_tables": []}))
@@ -849,16 +929,65 @@ def test_router_infers_blank_gene_group_and_ignores_family_history_case_counts()
     assert mapping["patient_count"] == -1
     assert "affected" not in mapping
     variants = parse_routed_table(table, mapping, "BRCA2")
-    assert [v["cdna_notation"] for v in variants] == [
-        "c.490delCT",
-        "c.1184insA",
+    assert [v["cdna_notation"] for v in variants] == [None, None]
+    assert [v["legacy_notation"] for v in variants] == [
+        "490delCT",
+        "1184insA",
     ]
+    assert [v["source_notation"] for v in variants] == ["490 delCT", "1184 insA"]
     assert all(v["patients"]["count"] == 1 for v in variants)
     assert all(
         v["count_provenance"]["carriers_column_label"]
         == "implicit one carrier per clinical row"
         for v in variants
     )
+
+
+def test_router_never_invents_cdna_prefix_for_bic_deleted_base_count():
+    table = MarkdownTable(
+        table_id="T6",
+        caption="Table 6. BRCA2 variants identified in study probands",
+        header_line="| Nucleotide change | Proband count |",
+        header_cells=["Nucleotide change", "Proband count"],
+        data_lines=["| 4184del4 | 7 |", "| c.9117G>A | 2 |"],
+        char_start=0,
+        char_end=120,
+    )
+    mapping = {"cdna": 0, "patient_count": 1}
+
+    variants = parse_routed_table(table, mapping, "BRCA2")
+
+    assert len(variants) == 2
+    legacy = next(row for row in variants if row["legacy_notation"])
+    assert legacy["cdna_notation"] is None
+    assert legacy["legacy_notation"] == "4184del4"
+    assert legacy["source_notation"] == "4184del4"
+    assert legacy["patients"]["count"] == 7
+    assert any(
+        fact["fact_type"] == "variant_identity" and fact["fact_value"] == "4184del4"
+        for fact in legacy["fact_provenance"]
+    )
+
+    explicit = next(row for row in variants if row["cdna_notation"])
+    assert explicit["cdna_notation"] == "c.9117G>A"
+    assert explicit["legacy_notation"] is None
+
+
+def test_router_treats_non_brca_prefixless_indel_as_omitted_prefix_cdna():
+    table = MarkdownTable(
+        table_id="T7",
+        caption="BMPR2 variants identified in PAH probands",
+        header_line="| Nucleotide change | Proband count |",
+        header_cells=["Nucleotide change", "Proband count"],
+        data_lines=["| 1234delA | 3 |"],
+        char_start=0,
+        char_end=80,
+    )
+
+    (variant,) = parse_routed_table(table, {"cdna": 0, "patient_count": 1}, "BMPR2")
+
+    assert variant["cdna_notation"] == "c.1234delA"
+    assert variant["legacy_notation"] is None
 
 
 @pytest.mark.parametrize(
@@ -1683,6 +1812,22 @@ def test_real_gene_column_is_still_detected():
     )
     table = enumerate_markdown_tables(paper)[0]
     assert "gene" in (_infer_column_mapping_from_headers(table) or {})
+
+
+def test_bic_shaped_sample_id_does_not_steal_bmpr2_cdna_column():
+    paper = (
+        "# P\n\nTable 1. BMPR2 mutation carriers\n\n"
+        "| Sample | cDNA | Number of patients |\n|---|---|---|\n"
+        "| 4184del4 | c.1459G>A | 2 |\n"
+    )
+    table = enumerate_markdown_tables(paper)[0]
+
+    mapping = _infer_column_mapping_from_headers(table, target_gene="BMPR2")
+    variants = parse_routed_table(table, mapping or {}, "BMPR2")
+
+    assert mapping is not None
+    assert mapping["cdna"] == 1
+    assert [variant["cdna_notation"] for variant in variants] == ["c.1459G>A"]
 
 
 def test_borderless_table_captures_heading_caption():

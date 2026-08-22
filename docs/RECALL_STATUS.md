@@ -44,27 +44,33 @@ variant recall is 86.57%. Carrier coverage is 30.49%, but conditional carrier
 MAE regressed to 0.425 from 0.308 on the accepted 2026-08-13 run. Affected and
 unaffected coverage fell to 7.58% and 5.06% because unsupported partitions are
 now deliberately null. This is an identity recall/precision improvement, not a
-new penetrance or affected/unaffected baseline. The experimental BMPR2, BRCA1,
-and active BRCA2 queues are 50, 50, and 45 papers. The corrected no-publish set
-completed exact manifests 50/50, 50/50, and 45/45 respectively, with no stage
-failures or warnings, complete live-row VariantFeatures audit coverage, and
-write-time-verified extraction traces. The strengthened readiness gate now
-fails the raw databases because they retain ambiguous live identities outside
-the defensible `novel_in_range` and `cdna_only_unmatched` classes: 346 BRCA1,
-129 BRCA2, and 56 BMPR2. The trusted Variant Browser projection has now held
-those identities out of the live private staging database. Database-level
-verification confirmed exact manifest order, no missing/extra papers, usable
-titles and source locations, and trusted source-run provenance. The
-fresh BRCA2 DB has 1,917 final variants, 137 VariantFeatures quarantines, zero
-nameless variants, zero species-scope links, and no PMID 19944633 row or evidence
-in any PMID-bearing table. The earlier 46-paper BRCA2 DB remains a rejected
-historical artifact: it contains the four PubTator links from the explicitly
-canine paper that exposed the harness defect. The active manifest removes that
-paper, and a persistent paper-scope exclusion is honored by replay and every
-recovery layer. A second source-identity defect found during the corrected run
-was stopped before DB replay. DOI-prefix and PMID digit-concatenation bypasses
-in the first URL check are now covered by exact-token regression tests. None of
-the three has a new source-adjudicated precision estimate.
+new penetrance or affected/unaffected baseline. The registered Tier-3 queues
+remain BMPR2 50, BRCA1 50, and BRCA2 45; a separate no-publish collaborator
+candidate now completes the requested full process for exactly **50 BRCA1 + 50
+BRCA2 + 50 BMPR2 papers**. For every gene, pinned manifest membership, staged
+JSON membership, and final SQLite paper membership agree exactly. PMID 19944633
+(the canine BRCA2 paper that exposed the prior harness defect) is absent from
+all three. Mandatory VariantFeatures enrichment and high-confidence
+wrong-gene/out-of-range quarantine leave 3,582 BRCA1, 722 BRCA2, and 260 BMPR2
+live variants. The final DBs contain zero placeholder titles, wrong-gene live
+rows, nameless identities, negative counts, impossible unquarantined
+partitions, or duplicate penetrance strata. Typed family observations remain
+as raw evidence and the trust gate masks them from carrier-facing totals.
+
+The source-evidence replay gate is gold-free and independent of the ordinary
+row-count gate. It requires a unique compatible identity, never aliases BIC
+digits to cDNA, never matches by codon position, fills only null or identical
+untyped values, and restores the backup on absent, ambiguous, or conflicting
+untyped evidence. A shared ref+position+alt rule folds abbreviated
+substitution-looking frameshift labels only when the explicit frameshift proves
+the relationship. Protein-only evidence remains separate from cDNA-rich rows
+because a later cDNA can make streaming uniqueness false. Grok 4.6 `xhigh`
+adversarial review found the ambiguity waiver, insertion-order split, and a
+live regex/source-notation gap; all are now pinned by regression tests. Full
+evidence and residual conflicting-protein groups are recorded in
+`docs/evidence/brca_bmpr2_full150_audit_20260821.md`. None of these three genes
+has a new source-adjudicated precision estimate, so public publication remains
+on hold.
 Staging also exposed and closed a Variant Browser fail-open path: a reviewed
 subject whose evidence vanished was detached but its gold revision could remain
 current. The importer now disputes that revision and a regression test pins the

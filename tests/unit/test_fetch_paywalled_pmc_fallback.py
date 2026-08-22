@@ -53,7 +53,11 @@ def converter_stub() -> MagicMock:
     return c
 
 
-def _make_session(html: str, supp_bytes: bytes = b"PK\x03\x04xlsx-bytes"):
+def _make_session(
+    html: str,
+    supp_bytes: bytes = b"PK\x03\x04xlsx-bytes",
+    jats_xml: str | None = None,
+):
     """Build a fake requests session covering Europe PMC + PMC HTML + supp."""
 
     class _Resp:
@@ -85,6 +89,10 @@ def _make_session(html: str, supp_bytes: bytes = b"PK\x03\x04xlsx-bytes"):
 
     def get(url: str, **kwargs: Any):
         calls.append(url)
+        if url.endswith("/fullTextXML"):
+            if jats_xml is None:
+                return _Resp(b"", status_code=404)
+            return _Resp(jats_xml.encode("utf-8"), text=jats_xml)
         if "ebi.ac.uk/europepmc" in url or "europepmc.org" in url:
             return _Resp(
                 b"",
@@ -97,6 +105,130 @@ def _make_session(html: str, supp_bytes: bytes = b"PK\x03\x04xlsx-bytes"):
         return _Resp(b"", status_code=404)
 
     return SimpleNamespace(get=get, _calls=calls)
+
+
+def test_pmc_fallback_prefers_jats_body_with_complete_table_rows(
+    tmp_path: Path, converter_stub: MagicMock
+):
+    jats = (
+        "<article><body><sec><title>Results</title><p>Full cohort results.</p>"
+        "<table-wrap><label>Table 2</label><caption><p>Genetic variants "
+        "identified</p></caption><table><tbody><tr><td>BRCA2</td>"
+        "<td>c.4321A&gt;G</td></tr></tbody></table></table-wrap>"
+        f"<p>{'Detailed clinical and segregation context. ' * 100}</p>"
+        "</sec></body></article>"
+    )
+    jats_markdown = (
+        "# MAIN TEXT\n\n## Results\n\n"
+        + "Detailed clinical and segregation context. " * 220
+        + "\n\n#### Table 2. Genetic variants identified\n\n"
+        "| Gene | Variant |\n|---|---|\n| BRCA2 | c.4321A>G |\n"
+    )
+    converter_stub.xml_to_markdown.return_value = jats_markdown
+    session = _make_session(_PMC_HTML, jats_xml=jats)
+
+    row = fp.try_pmc_fallback(
+        pmid="99999999",
+        output_dir=tmp_path,
+        session=session,
+        converter=converter_stub,
+    )
+
+    assert row is not None
+    assert row["body_source_url"].endswith("PMC123/fullTextXML")
+    full_context = Path(row["path"]).read_text(encoding="utf-8")
+    assert "| BRCA2 | c.4321A>G |" in full_context
+    converter_stub.xml_to_markdown.assert_called_once_with(jats)
+
+
+def test_pmc_fallback_rejects_abstract_only_jats_even_if_converter_would_pass(
+    tmp_path: Path, converter_stub: MagicMock
+):
+    abstract_only = (
+        "<article><front><article-meta><abstract><p>"
+        + "Long abstract with KCNH2 p.Arg176Trp. " * 200
+        + "</p></abstract></article-meta></front></article>"
+    )
+    converter_stub.xml_to_markdown.return_value = (
+        "# Abstract\n\n" + "Long abstract with KCNH2 p.Arg176Trp. " * 200
+    )
+    session = _make_session(_PMC_HTML, jats_xml=abstract_only)
+
+    row = fp.try_pmc_fallback(
+        pmid="99999999",
+        output_dir=tmp_path,
+        session=session,
+        converter=converter_stub,
+    )
+
+    assert row is not None
+    assert row["body_source_url"].endswith("/PMC123/")
+    converter_stub.xml_to_markdown.assert_not_called()
+
+
+def test_pmc_fallback_rejects_nested_subarticle_body(
+    tmp_path: Path, converter_stub: MagicMock
+):
+    nested_only = (
+        "<article><front><abstract><p>Main article abstract.</p></abstract></front>"
+        "<sub-article article-type='decision-letter'><body><sec><p>"
+        + "Reviewer decision letter text. " * 300
+        + "</p></sec></body></sub-article></article>"
+    )
+    converter_stub.xml_to_markdown.return_value = (
+        "# MAIN TEXT\n\n" + "Reviewer decision letter text. " * 300
+    )
+    session = _make_session(_PMC_HTML, jats_xml=nested_only)
+
+    row = fp.try_pmc_fallback(
+        pmid="99999999",
+        output_dir=tmp_path,
+        session=session,
+        converter=converter_stub,
+    )
+
+    assert row is not None
+    assert row["body_source_url"].endswith("/PMC123/")
+    assert "NIH-deposited paper" in Path(row["path"]).read_text()
+    converter_stub.xml_to_markdown.assert_not_called()
+
+
+def test_namespaced_jats_main_body_passes_structural_gate():
+    jats = (
+        '<article xmlns="http://jats.nlm.nih.gov"><body><sec><p>'
+        + "Main cohort methods and clinical results. " * 100
+        + "</p></sec></body></article>"
+    )
+
+    assert fp._jats_has_substantive_body(jats) is True
+
+
+def test_pmc_jats_body_without_html_marks_supplement_surface_incomplete(
+    tmp_path: Path, converter_stub: MagicMock
+):
+    jats = (
+        "<article><body><sec><p>"
+        + "Main cohort methods and clinical results. " * 100
+        + "</p></sec></body></article>"
+    )
+    converter_stub.xml_to_markdown.return_value = (
+        "# MAIN TEXT\n\n" + "Main cohort methods and clinical results. " * 200
+    )
+    session = _make_session("", jats_xml=jats)
+
+    row = fp.try_pmc_fallback(
+        pmid="99999999",
+        output_dir=tmp_path,
+        session=session,
+        converter=converter_stub,
+    )
+
+    assert row is not None
+    assert row["outcome"] == "success_body_only"
+    assert row["supplement_surface_status"] == "unavailable"
+    assert "success_body_only" not in fp.FETCH_SUCCESS_OUTCOMES
+    assert Path(row["path"]).is_file()
+    assert "GVF_SUPPLEMENT_SURFACE_STATUS: unavailable" in Path(row["path"]).read_text()
 
 
 def test_pmc_fallback_pulls_supplements_and_returns_counts(

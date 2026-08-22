@@ -79,8 +79,14 @@ For the target gene ONLY, extract every variant this study itself observed, with
 per-variant carrier evidence and exact provenance.
 
 PER VARIANT
-- Identity (>=1 required): cdna_notation, protein_notation, genomic_position, or
-  variant_class + structural_description. Plus source_notation = verbatim as printed.
+- Identity (>=1 required): cdna_notation, protein_notation, genomic_position,
+  strict source-only legacy_notation, or variant_class + structural_description.
+  Plus source_notation = verbatim as printed.
+- `legacy_notation` is reserved for BRCA1/BRCA2 strict prefixless BIC indels
+  (3-5 digits, `del|dup|ins`, then 1-20 uppercase A/C/G/T bases or a 1-3 digit
+  affected-base count). It is explicitly not HGVS; retain the same bare text in
+  `source_notation` and never fabricate a `c.` prefix. In other genes, the same
+  shape in an explicit cDNA/nucleotide-change column is omitted-prefix cDNA, not BIC.
 - Counts: total_carriers_observed, affected, unaffected, uncertain.
 - Individuals: id, age at onset/diagnosis/evaluation, sex, affected status, phenotype,
   ancestry, geographic origin, verbatim evidence sentence.

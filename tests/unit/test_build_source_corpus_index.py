@@ -31,6 +31,8 @@ USABLE_MD = (
     "| p.Arg491Trp | 4 | 3 |\n| c.994C>T | 2 | 1 |\n\n"
 ) + ("Segregation and clinical detail. " * 20)
 
+BODY_ONLY_MARKER = "<!-- GVF_SUPPLEMENT_SURFACE_STATUS: unavailable -->\n\n"
+
 
 def run_builder(*argv: str) -> subprocess.CompletedProcess:
     return subprocess.run(
@@ -61,6 +63,48 @@ def test_out_dir_outside_repo_indexes_with_corpus_interface_paths(tmp_path):
     assert entry["fulltext"] == "corpus/BMPR2/12345678/12345678_FULL_CONTEXT.md"
     assert entry["chosen_from"] == str(src)
     assert (out / "BMPR2" / "12345678" / "12345678_FULL_CONTEXT.md").exists()
+
+
+def test_body_only_source_is_indexed_incomplete_and_complete_copy_wins(tmp_path):
+    roots = tmp_path / "runs" / "BMPR2"
+    body_only = roots / "old" / "pmc_fulltext"
+    complete = roots / "new" / "pmc_fulltext"
+    body_only.mkdir(parents=True)
+    complete.mkdir(parents=True)
+    (body_only / "12345678_FULL_CONTEXT.md").write_text(
+        BODY_ONLY_MARKER + USABLE_MD + ("larger body. " * 300),
+        encoding="utf-8",
+    )
+    (complete / "12345678_FULL_CONTEXT.md").write_text(USABLE_MD, encoding="utf-8")
+    out = tmp_path / "external_corpus"
+
+    result = run_builder(
+        "--apply", "--roots", str(roots), "--out", str(out), "--assume-gene", "BMPR2"
+    )
+
+    assert result.returncode == 0, result.stderr
+    (entry,) = read_index(out)
+    assert entry["full_text_status"] == "ok"
+    stored = out / "BMPR2" / "12345678" / "12345678_FULL_CONTEXT.md"
+    assert stored.read_text(encoding="utf-8") == USABLE_MD
+
+
+def test_body_only_source_status_is_not_ok(tmp_path):
+    source = tmp_path / "runs" / "BMPR2" / "12345679"
+    source.mkdir(parents=True)
+    (source / "12345679_FULL_CONTEXT.md").write_text(
+        BODY_ONLY_MARKER + USABLE_MD,
+        encoding="utf-8",
+    )
+    out = tmp_path / "external_corpus"
+
+    result = run_builder(
+        "--apply", "--roots", str(source.parent.parent), "--out", str(out)
+    )
+
+    assert result.returncode == 0, result.stderr
+    (entry,) = read_index(out)
+    assert entry["full_text_status"] == "body_only"
 
 
 def test_assume_gene_files_run_dir_candidates_for_a_new_gene(tmp_path):
@@ -133,3 +177,205 @@ def test_existing_corpus_only_entry_indexes_without_crashing(tmp_path):
     (entry,) = read_index(out)
     assert entry["fulltext"] == "corpus/APOE/10025785/10025785_FULL_CONTEXT.md"
     assert entry["chosen_from"] == "corpus"
+
+
+def test_scoped_noop_preserves_unrelated_index_manifest_and_does_not_bless_mutation(
+    tmp_path,
+):
+    roots = tmp_path / "runs"
+    for gene, pmid in (("BRCA1", "11111111"), ("BMPR2", "22222222")):
+        source = roots / gene / pmid
+        source.mkdir(parents=True)
+        (source / f"{pmid}_FULL_CONTEXT.md").write_text(
+            USABLE_MD.replace("BMPR2", gene),
+            encoding="utf-8",
+        )
+    out = tmp_path / "external_corpus"
+    seeded = run_builder("--apply", "--roots", str(roots), "--out", str(out))
+    assert seeded.returncode == 0, seeded.stderr
+
+    index_path = out / "INDEX.json"
+    manifest_path = out / "MANIFEST.sha256"
+    before_mtimes = (index_path.stat().st_mtime_ns, manifest_path.stat().st_mtime_ns)
+
+    # Corrupt an unrelated corpus payload, then perform a BMPR2-only no-op sync.
+    # The scoped operation must neither inspect/re-hash nor bless BRCA1.
+    unrelated = out / "BRCA1" / "11111111" / "11111111_FULL_CONTEXT.md"
+    unrelated.write_text(unrelated.read_text() + "\nunreviewed mutation\n")
+    scoped = run_builder(
+        "--apply",
+        "--roots",
+        str(roots / "BMPR2"),
+        "--out",
+        str(out),
+        "--assume-gene",
+        "BMPR2",
+        "--gene",
+        "BMPR2",
+    )
+    assert scoped.returncode == 0, scoped.stderr
+    assert "upgrade=0 noop=1" in scoped.stdout
+    assert before_mtimes == (
+        index_path.stat().st_mtime_ns,
+        manifest_path.stat().st_mtime_ns,
+    )
+
+    data = json.loads(index_path.read_text())
+    assert set(data["genes"]) == {"BMPR2", "BRCA1"}
+    verified = run_builder("--verify", "--out", str(out))
+    assert verified.returncode == 1
+    assert "VERIFY FAILED" in verified.stdout
+
+
+def test_scoped_upgrade_merges_index_and_incrementally_updates_manifest(tmp_path):
+    roots = tmp_path / "runs"
+    for gene, pmid in (("BRCA1", "33333333"), ("BMPR2", "44444444")):
+        source = roots / gene / pmid
+        source.mkdir(parents=True)
+        (source / f"{pmid}_FULL_CONTEXT.md").write_text(
+            USABLE_MD.replace("BMPR2", gene),
+            encoding="utf-8",
+        )
+    out = tmp_path / "external_corpus"
+    seeded = run_builder("--apply", "--roots", str(roots), "--out", str(out))
+    assert seeded.returncode == 0, seeded.stderr
+
+    bmpr2_source = roots / "BMPR2" / "44444444" / "44444444_FULL_CONTEXT.md"
+    bmpr2_source.write_text(
+        bmpr2_source.read_text() + ("\nAdditional cohort table detail. " * 100)
+    )
+    upgraded = run_builder(
+        "--apply",
+        "--roots",
+        str(roots / "BMPR2"),
+        "--out",
+        str(out),
+        "--assume-gene",
+        "BMPR2",
+        "--gene",
+        "BMPR2",
+    )
+
+    assert upgraded.returncode == 0, upgraded.stderr
+    assert "upgrade=1" in upgraded.stdout
+    data = json.loads((out / "INDEX.json").read_text())
+    assert set(data["genes"]) == {"BMPR2", "BRCA1"}
+    verified = run_builder("--verify", "--out", str(out))
+    assert verified.returncode == 0, verified.stdout
+
+
+def test_scoped_apply_refuses_corrupt_index_before_touching_payload(tmp_path):
+    roots = tmp_path / "runs"
+    source = roots / "BMPR2" / "55555555"
+    source.mkdir(parents=True)
+    source_file = source / "55555555_FULL_CONTEXT.md"
+    source_file.write_text(USABLE_MD, encoding="utf-8")
+    out = tmp_path / "external_corpus"
+    seeded = run_builder("--apply", "--roots", str(roots), "--out", str(out))
+    assert seeded.returncode == 0, seeded.stderr
+    payload = out / "BMPR2" / "55555555" / "55555555_FULL_CONTEXT.md"
+    before = payload.read_bytes()
+    (out / "INDEX.json").write_text("{broken", encoding="utf-8")
+    source_file.write_text(USABLE_MD + "\nnew source content\n", encoding="utf-8")
+
+    scoped = run_builder(
+        "--apply",
+        "--gene",
+        "BMPR2",
+        "--assume-gene",
+        "BMPR2",
+        "--roots",
+        str(roots / "BMPR2"),
+        "--out",
+        str(out),
+    )
+
+    assert scoped.returncode == 2
+    assert "cannot safely load existing corpus index" in scoped.stderr
+    assert payload.read_bytes() == before
+
+
+def test_scoped_apply_refuses_incomplete_index_row_before_touching_payload(tmp_path):
+    roots = tmp_path / "runs"
+    source = roots / "BMPR2" / "55555556"
+    source.mkdir(parents=True)
+    source_file = source / "55555556_FULL_CONTEXT.md"
+    source_file.write_text(USABLE_MD, encoding="utf-8")
+    out = tmp_path / "external_corpus"
+    seeded = run_builder("--apply", "--roots", str(roots), "--out", str(out))
+    assert seeded.returncode == 0, seeded.stderr
+    payload = out / "BMPR2" / "55555556" / "55555556_FULL_CONTEXT.md"
+    before = payload.read_bytes()
+
+    index_path = out / "INDEX.json"
+    index = json.loads(index_path.read_text())
+    del index["genes"]["BMPR2"]["55555556"]["chosen_from"]
+    index_path.write_text(json.dumps(index), encoding="utf-8")
+    source_file.write_text(USABLE_MD + "\nnew source content\n", encoding="utf-8")
+
+    scoped = run_builder(
+        "--apply",
+        "--gene",
+        "BMPR2",
+        "--roots",
+        str(roots / "BMPR2"),
+        "--out",
+        str(out),
+    )
+
+    assert scoped.returncode == 2
+    assert "cannot safely load existing corpus index row" in scoped.stderr
+    assert payload.read_bytes() == before
+
+
+def test_scoped_apply_refuses_malformed_manifest_before_touching_payload(tmp_path):
+    roots = tmp_path / "runs"
+    source = roots / "BMPR2" / "55555557"
+    source.mkdir(parents=True)
+    source_file = source / "55555557_FULL_CONTEXT.md"
+    source_file.write_text(USABLE_MD, encoding="utf-8")
+    out = tmp_path / "external_corpus"
+    seeded = run_builder("--apply", "--roots", str(roots), "--out", str(out))
+    assert seeded.returncode == 0, seeded.stderr
+    payload = out / "BMPR2" / "55555557" / "55555557_FULL_CONTEXT.md"
+    before = payload.read_bytes()
+
+    (out / "MANIFEST.sha256").write_text(
+        "# total_files not-an-integer\n# total_bytes 10\n", encoding="utf-8"
+    )
+    source_file.write_text(USABLE_MD + "\nnew source content\n", encoding="utf-8")
+
+    scoped = run_builder(
+        "--apply",
+        "--gene",
+        "BMPR2",
+        "--roots",
+        str(roots / "BMPR2"),
+        "--out",
+        str(out),
+    )
+
+    assert scoped.returncode == 2
+    assert "cannot safely load existing corpus manifest" in scoped.stderr
+    assert payload.read_bytes() == before
+
+
+def test_scoped_rebuild_is_rejected_without_deleting_other_gene(tmp_path):
+    out = tmp_path / "external_corpus"
+    unrelated = out / "BRCA1" / "66666666"
+    unrelated.mkdir(parents=True)
+    payload = unrelated / "66666666_FULL_CONTEXT.md"
+    payload.write_text(USABLE_MD.replace("BMPR2", "BRCA1"), encoding="utf-8")
+
+    result = run_builder(
+        "--apply",
+        "--rebuild",
+        "--gene",
+        "BMPR2",
+        "--out",
+        str(out),
+    )
+
+    assert result.returncode == 2
+    assert "--rebuild cannot be combined with --gene" in result.stderr
+    assert payload.exists()

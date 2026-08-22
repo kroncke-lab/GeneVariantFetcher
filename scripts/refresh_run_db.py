@@ -17,6 +17,7 @@ The script is gene-agnostic and does not use gold standards to choose PMIDs.
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import hashlib
 import json
@@ -41,12 +42,37 @@ from harvesting.migrate_to_sqlite import (  # noqa: E402
 )
 from pipeline.extraction import ExpertExtractor  # noqa: E402
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
+from utils.legacy_notation import (  # noqa: E402
+    normalize_legacy_notation,
+    preserve_source_only_legacy_identity,
+)
 from utils.models import Paper  # noqa: E402
 from utils.paper_scope import metadata_paper_scope_exclusion_reason  # noqa: E402
+from utils.variant_normalizer import (  # noqa: E402
+    normalize_variant,
+    protein_substitution_frameshift_alias,
+    structural_variant_identity,
+)
 
 logger = logging.getLogger("refresh_run_db")
 
 DETERMINISTIC_ABSOLUTE_LIFT_OVERRIDE = 50
+
+# These roles describe a variant-bound source observation worth preserving as
+# raw evidence even when a downstream trust rule masks it from carrier-facing
+# totals. Aggregate denominators and unknown roles are intentionally excluded:
+# retaining those would entrench the exact count-attribution errors the refresh
+# path is meant to repair.
+_PRESERVABLE_COUNT_TYPES = frozenset(
+    {
+        "per_variant_carrier",
+        "family_count",
+        "proband_count",
+        "case",
+        "control",
+        "unaffected_control",
+    }
+)
 
 
 @dataclass
@@ -712,6 +738,397 @@ def _is_variant_explosion(
     )
 
 
+def _count_int(value: Any) -> int | None:
+    """Return a non-negative integral count without accepting booleans."""
+
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        return None
+    if number < 0 or str(value).strip() not in {str(number), f"{number}.0"}:
+        return None
+    return number
+
+
+def _identity_parts(variant: dict[str, Any], gene: str) -> dict[str, str | None]:
+    """Normalized identity classes shared by replay's conservative matcher."""
+
+    shaped = dict(variant)
+    preserve_source_only_legacy_identity(shaped, gene)
+    cdna_raw = str(shaped.get("cdna_notation") or "").strip()
+    protein_raw = str(shaped.get("protein_notation") or "").strip()
+    genomic = re.sub(r"\s+", "", str(shaped.get("genomic_position") or "")).casefold()
+    legacy = normalize_legacy_notation(shaped.get("legacy_notation"))
+    structural = structural_variant_identity(shaped.get("structural_description"))
+    return {
+        "cdna": normalize_variant(cdna_raw, gene) if cdna_raw else None,
+        "protein": normalize_variant(protein_raw, gene) if protein_raw else None,
+        "genomic": genomic or None,
+        "legacy": legacy,
+        "structural": structural or None,
+    }
+
+
+def _identity_summary(variant: dict[str, Any], gene: str) -> list[str]:
+    return [
+        f"{field}:{value}"
+        for field, value in _identity_parts(variant, gene).items()
+        if value
+    ]
+
+
+def _genomic_compatible(left: str | None, right: str | None) -> bool:
+    return not left or not right or left == right
+
+
+def _identity_matches(
+    prior: dict[str, Any], candidate: dict[str, Any], gene: str
+) -> bool:
+    """Migrate-style complementary alias matching; never position-only."""
+
+    prior_gene = str(prior.get("gene_symbol") or gene).strip().upper()
+    candidate_gene = str(candidate.get("gene_symbol") or gene).strip().upper()
+    if prior_gene != gene.upper() or candidate_gene != gene.upper():
+        return False
+    left = _identity_parts(prior, gene)
+    right = _identity_parts(candidate, gene)
+
+    left_point = any(left[key] for key in ("cdna", "protein", "genomic"))
+    right_point = any(right[key] for key in ("cdna", "protein", "genomic"))
+    if left_point and right_point:
+        if all(left[key] == right[key] for key in ("cdna", "protein", "genomic")):
+            return True
+        if left["cdna"] and left["cdna"] == right["cdna"]:
+            proteins_compatible = (
+                not left["protein"]
+                or not right["protein"]
+                or left["protein"] == right["protein"]
+                or protein_substitution_frameshift_alias(
+                    str(prior.get("protein_notation") or ""),
+                    str(candidate.get("protein_notation") or ""),
+                )
+            )
+            return proteins_compatible and _genomic_compatible(
+                left["genomic"], right["genomic"]
+            )
+        if left["protein"] and (
+            left["protein"] == right["protein"]
+            or protein_substitution_frameshift_alias(
+                str(prior.get("protein_notation") or ""),
+                str(candidate.get("protein_notation") or ""),
+            )
+        ):
+            # Protein aliases are safe only when one side is protein-only. The
+            # caller still requires a unique hit, so two cDNAs sharing a
+            # consequence remain ambiguous and fail closed.
+            one_side_cdna_missing = not left["cdna"] or not right["cdna"]
+            return one_side_cdna_missing and _genomic_compatible(
+                left["genomic"], right["genomic"]
+            )
+        return False
+    if left["legacy"] or right["legacy"]:
+        return bool(left["legacy"] and left["legacy"] == right["legacy"])
+    if left_point or right_point:
+        return False
+    return bool(left["structural"] and left["structural"] == right["structural"])
+
+
+def _identity_match_indices(
+    prior: dict[str, Any], new_variants: list[dict[str, Any]], gene: str
+) -> list[int]:
+    return [
+        index
+        for index, candidate in enumerate(new_variants)
+        if _identity_matches(prior, candidate, gene)
+    ]
+
+
+_COUNT_FIELD_SPECS = (
+    (
+        "total_carriers",
+        "carriers_count_type",
+        "carriers_column_label",
+        "total_carriers_observed",
+        "count",
+    ),
+    (
+        "affected",
+        "affected_count_type",
+        "affected_column_label",
+        "affected_count",
+        None,
+    ),
+    (
+        "unaffected",
+        "unaffected_count_type",
+        "unaffected_column_label",
+        "unaffected_count",
+        None,
+    ),
+)
+
+
+def _field_spec(field_name: str) -> tuple[str, str, str, str | None]:
+    for spec_field, role_key, column_key, data_key, patient_key in _COUNT_FIELD_SPECS:
+        if spec_field == field_name:
+            return role_key, column_key, data_key, patient_key
+    raise KeyError(field_name)
+
+
+def source_count_observations(
+    payload: dict[str, Any], gene: str
+) -> list[dict[str, Any]]:
+    """Return identity-bound, typed, source-anchored raw count observations."""
+
+    observations: list[dict[str, Any]] = []
+    for variant_index, variant in enumerate(payload.get("variants") or []):
+        if not isinstance(variant, dict):
+            continue
+        identity = _identity_summary(variant, gene)
+        if not identity:
+            continue
+        provenance = variant.get("count_provenance")
+        provenance = provenance if isinstance(provenance, dict) else {}
+        penetrance = variant.get("penetrance_data")
+        penetrance = penetrance if isinstance(penetrance, dict) else {}
+        patients = variant.get("patients")
+        patients = patients if isinstance(patients, dict) else {}
+        verification = variant.get("claim_verification")
+        field_verdicts = (
+            verification.get("field_verdicts")
+            if isinstance(verification, dict)
+            and isinstance(verification.get("field_verdicts"), dict)
+            else {}
+        )
+        for (
+            field_name,
+            role_key,
+            column_key,
+            data_key,
+            patient_key,
+        ) in _COUNT_FIELD_SPECS:
+            role = str(provenance.get(role_key) or "").strip().lower()
+            if role not in _PRESERVABLE_COUNT_TYPES:
+                continue
+            column_label = str(provenance.get(column_key) or "").strip()
+            if not column_label:
+                continue
+            if (
+                role == "per_variant_carrier"
+                and column_label.casefold() == "implicit one carrier per clinical row"
+            ):
+                continue
+            source_key = role_key.replace("count_type", "source")
+            if (
+                str(provenance.get(source_key) or "").strip().lower()
+                == "count_recovery"
+            ):
+                continue
+            verdict = str(field_verdicts.get(field_name) or "").strip().lower()
+            if not (
+                field_name == "total_carriers" and role == "family_count"
+            ) and verdict in {"unsupported", "ambiguous", "source_missing"}:
+                continue
+            raw_value = penetrance.get(data_key)
+            if raw_value is None and patient_key:
+                raw_value = patients.get(patient_key)
+            value = _count_int(raw_value)
+            if value is None:
+                continue
+            observations.append(
+                {
+                    "variant_index": variant_index,
+                    "field": field_name,
+                    "role": role,
+                    "column_label": column_label,
+                    "value": value,
+                    "identity": identity,
+                }
+            )
+    return observations
+
+
+def lost_source_count_observations(
+    prior_payload: dict[str, Any], new_payload: dict[str, Any], gene: str
+) -> list[dict[str, Any]]:
+    """Source-anchored observations present before replay but absent after it."""
+
+    trial = copy.deepcopy(new_payload)
+    return reconcile_source_count_observations(prior_payload, trial, gene)["unmatched"]
+
+
+def _write_source_count_observation(
+    target: dict[str, Any], prior_variant: dict[str, Any], observation: dict[str, Any]
+) -> None:
+    field_name = str(observation["field"])
+    role_key, column_key, data_key, patient_key = _field_spec(field_name)
+    penetrance = target.setdefault("penetrance_data", {})
+    if not isinstance(penetrance, dict):
+        penetrance = {}
+        target["penetrance_data"] = penetrance
+    patients = target.setdefault("patients", {})
+    if not isinstance(patients, dict):
+        patients = {}
+        target["patients"] = patients
+    penetrance[data_key] = observation["value"]
+    if patient_key:
+        patients[patient_key] = observation["value"]
+    provenance = target.setdefault("count_provenance", {})
+    if not isinstance(provenance, dict):
+        provenance = {}
+        target["count_provenance"] = provenance
+    provenance[role_key] = observation["role"]
+    provenance[column_key] = observation["column_label"]
+
+    prior_patients = prior_variant.get("patients")
+    if isinstance(prior_patients, dict):
+        for key in (
+            "source_container",
+            "source_kind",
+            "source_ref",
+            "page_label",
+            "pdf_page",
+            "row_label",
+            "row_ordinal",
+            "column_ref",
+            "figure_panel",
+            "locator_extra",
+        ):
+            if patients.get(key) in (None, "", {}):
+                patients[key] = copy.deepcopy(prior_patients.get(key))
+
+
+def _raw_count_field(
+    target: dict[str, Any], field_name: str
+) -> tuple[bool, int | None]:
+    """Return whether a target field is populated and its validated integer."""
+    _role_key, _column_key, data_key, patient_key = _field_spec(field_name)
+    penetrance = target.get("penetrance_data")
+    penetrance = penetrance if isinstance(penetrance, dict) else {}
+    patients = target.get("patients")
+    patients = patients if isinstance(patients, dict) else {}
+    raw_value = penetrance.get(data_key)
+    if raw_value is None and patient_key:
+        raw_value = patients.get(patient_key)
+    return raw_value is not None, _count_int(raw_value)
+
+
+def reconcile_source_count_observations(
+    prior_payload: dict[str, Any], new_payload: dict[str, Any], gene: str
+) -> dict[str, Any]:
+    """Fill unique compatible null/unsourced fields; report unsafe losses."""
+
+    prior_variants = list(prior_payload.get("variants") or [])
+    new_variants = [
+        row for row in new_payload.get("variants") or [] if isinstance(row, dict)
+    ]
+    new_payload["variants"] = new_variants
+    prior_observations = source_count_observations(prior_payload, gene)
+    new_by_variant_field = {
+        (obs["variant_index"], obs["field"]): obs
+        for obs in source_count_observations(new_payload, gene)
+    }
+    unmatched: list[dict[str, Any]] = []
+    conflicts: list[dict[str, Any]] = []
+    merged: list[dict[str, Any]] = []
+    droppable = 0
+    groups: dict[tuple[int, str], list[dict[str, Any]]] = {}
+
+    for observation in prior_observations:
+        prior_variant = prior_variants[observation["variant_index"]]
+        prior_gene = str(prior_variant.get("gene_symbol") or gene).strip().upper()
+        if prior_gene != gene.upper():
+            droppable += 1
+            continue
+        hits = _identity_match_indices(prior_variant, new_variants, gene)
+        if len(hits) != 1:
+            # A source-backed fact still cannot choose among several identity
+            # hits. Treat every non-unique match as a regression so a protein
+            # consequence shared by two cDNAs never waives fail-closed.
+            unmatched.append({**observation, "match_count": len(hits)})
+            continue
+        groups.setdefault((hits[0], observation["field"]), []).append(observation)
+
+    for (new_index, field_name), observations in groups.items():
+        new_observation = new_by_variant_field.get((new_index, field_name))
+        signatures = {
+            (obs["value"], obs["role"], obs["column_label"]) for obs in observations
+        }
+        if new_observation is not None:
+            for observation in observations:
+                if (
+                    new_observation["value"],
+                    new_observation["role"],
+                    new_observation["column_label"],
+                ) != (
+                    observation["value"],
+                    observation["role"],
+                    observation["column_label"],
+                ):
+                    conflicts.append(
+                        {
+                            "prior": observation,
+                            "new": new_observation,
+                            "policy": "new_source_backed_value_kept",
+                        }
+                    )
+            continue
+        if len(signatures) != 1:
+            unmatched.extend(
+                {**observation, "match_count": 1, "reason": "prior_conflict"}
+                for observation in observations
+            )
+            continue
+        observation = observations[0]
+        prior_variant = prior_variants[observation["variant_index"]]
+        populated, raw_value = _raw_count_field(new_variants[new_index], field_name)
+        if populated and raw_value != observation["value"]:
+            unmatched.extend(
+                {
+                    **prior_observation,
+                    "match_count": 1,
+                    "reason": "new_untyped_count_conflict",
+                    "new_untyped_value": raw_value,
+                }
+                for prior_observation in observations
+            )
+            continue
+        _write_source_count_observation(
+            new_variants[new_index], prior_variant, observation
+        )
+        merged.append(
+            {
+                "new_variant_index": new_index,
+                "field": field_name,
+                "role": observation["role"],
+                "value": observation["value"],
+                "identity": observation["identity"],
+            }
+        )
+
+    def public(row: dict[str, Any]) -> dict[str, Any]:
+        return {
+            key: value for key, value in row.items() if key not in {"variant_index"}
+        }
+
+    return {
+        "protected_prior": len(prior_observations),
+        "merged_fields": [public(row) for row in merged],
+        "conflicts": [
+            {
+                "prior": public(row["prior"]),
+                "new": public(row["new"]),
+                "policy": row["policy"],
+            }
+            for row in conflicts
+        ],
+        "unmatched": [public(row) for row in unmatched],
+        "droppable_off_target": droppable,
+    }
+
+
 def replay_candidates(
     *,
     candidates: list[ReplayCandidate],
@@ -721,6 +1138,7 @@ def replay_candidates(
     tier_threshold: int,
     dry_run: bool,
     gate_regressions: bool = True,
+    gate_source_evidence_regressions: bool = True,
     gate_explosions: bool = True,
     explosion_ratio: float = 10.0,
     explosion_min_new: int = 400,
@@ -738,7 +1156,9 @@ def replay_candidates(
             "failed_pmids": [],
             "gated_pmids": [],
             "gated_regressions": [],
+            "gated_source_evidence_regressions": [],
             "gated_explosions": [],
+            "source_evidence_merges": [],
             "errors": [],
             "replay_models": replay_models or [],
         }
@@ -755,7 +1175,9 @@ def replay_candidates(
     successful_pmids: list[str] = []
     failed_pmids: list[str] = []
     gated_regressions: list[dict[str, Any]] = []
+    gated_source_evidence_regressions: list[dict[str, Any]] = []
     gated_explosions: list[dict[str, Any]] = []
+    source_evidence_merges: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
 
     for candidate in candidates:
@@ -774,9 +1196,44 @@ def replay_candidates(
             )
             if not result.success or not result.extracted_data:
                 raise RuntimeError(result.error or "empty extraction result")
+            prior_payload = _json_load(backup_file)
+            source_evidence_reconciliation = {
+                "protected_prior": 0,
+                "merged_fields": [],
+                "conflicts": [],
+                "unmatched": [],
+                "droppable_off_target": 0,
+            }
+            source_evidence_reconciliation = reconcile_source_count_observations(
+                prior_payload, result.extracted_data, gene
+            )
             new_variants = result.extracted_data.get("variants", []) or []
             new_variant_count = len(new_variants)
             prior_variant_count = _backup_variant_count(backup_file)
+            lost_source_counts = source_evidence_reconciliation["unmatched"]
+            if gate_source_evidence_regressions and lost_source_counts:
+                gated += 1
+                failed_pmids.append(candidate.pmid)
+                gated_source_evidence_regressions.append(
+                    {
+                        "pmid": candidate.pmid,
+                        "prior_variant_count": prior_variant_count,
+                        "new_variant_count": new_variant_count,
+                        "lost_observation_count": len(lost_source_counts),
+                        "lost_observations": lost_source_counts,
+                    }
+                )
+                logger.warning(
+                    "PMID %s replay gated: lost %d typed source count "
+                    "observations (prior=%s new=%d; kept backup)",
+                    candidate.pmid,
+                    len(lost_source_counts),
+                    prior_variant_count,
+                    new_variant_count,
+                )
+                if backup_file.exists():
+                    shutil.copy2(backup_file, candidate.output_file)
+                continue
             # Quality-aware regression gate: a re-extraction with fewer total
             # rows is NOT a regression when it carries more gold-matchable
             # (paired cDNA+protein) content. This stops a stale over-counted
@@ -869,6 +1326,18 @@ def replay_candidates(
             metadata = result.extracted_data.setdefault("extraction_metadata", {})
             metadata.update(_source_metadata(candidate.source_file))
             metadata["model_used"] = result.model_used
+            if source_evidence_reconciliation["protected_prior"]:
+                metadata["replay_source_evidence_reconciliation"] = {
+                    "policy": "fill_only_unique_identity_else_fail_closed",
+                    **source_evidence_reconciliation,
+                }
+            if source_evidence_reconciliation["merged_fields"]:
+                source_evidence_merges.append(
+                    {
+                        "pmid": candidate.pmid,
+                        **source_evidence_reconciliation,
+                    }
+                )
             candidate.output_file.write_text(
                 json.dumps(result.extracted_data, indent=2),
                 encoding="utf-8",
@@ -899,12 +1368,18 @@ def replay_candidates(
         "gated_pmids": sorted(
             {
                 row["pmid"]
-                for row in [*gated_regressions, *gated_explosions]
+                for row in [
+                    *gated_regressions,
+                    *gated_source_evidence_regressions,
+                    *gated_explosions,
+                ]
                 if row.get("pmid")
             }
         ),
         "gated_regressions": gated_regressions,
+        "gated_source_evidence_regressions": gated_source_evidence_regressions,
         "gated_explosions": gated_explosions,
+        "source_evidence_merges": source_evidence_merges,
         "errors": errors,
         "backup_dir": str(backup_dir),
         "replay_models": replay_models or [],
@@ -960,6 +1435,130 @@ def rebuild_db(
     finally:
         conn.close()
     stats["output_db"] = str(output_db)
+    return stats
+
+
+def normalize_staged_extraction_metadata(
+    extraction_dir: Path,
+    gene: str,
+    *,
+    abstract_metadata_dir: Path | None = None,
+    dry_run: bool = False,
+) -> dict[str, int]:
+    """Persist safe filename-derived metadata repairs in staged JSON copies.
+
+    SQLite migration repairs missing paper metadata in memory. Without this
+    staged refresh artifacts remain structurally invalid even when their DB is
+    usable. Fill absent containers/fields only; a conflicting valid PMID stays
+    visible for adjudication instead of being silently overwritten.
+    """
+
+    stats = {"files": 0, "repaired_files": 0, "repairs": 0, "invalid_json": 0}
+    for path in sorted(extraction_dir.glob(f"{gene}_PMID_*.json")):
+        stats["files"] += 1
+        match = re.search(r"_PMID_(\d+)\.json$", path.name)
+        if not match:
+            continue
+        pmid = match.group(1)
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            stats["invalid_json"] += 1
+            continue
+        if not isinstance(payload, dict):
+            stats["invalid_json"] += 1
+            continue
+
+        repairs: list[str] = []
+        paper_metadata = payload.get("paper_metadata")
+        if not isinstance(paper_metadata, dict):
+            paper_metadata = {
+                key: payload[key]
+                for key in ("pmid", "title", "extraction_summary")
+                if payload.get(key) is not None
+            }
+            payload["paper_metadata"] = paper_metadata
+            repairs.append("created_paper_metadata")
+        if not str(paper_metadata.get("pmid") or "").strip().isdigit():
+            paper_metadata["pmid"] = pmid
+            repairs.append("set_pmid_from_filename")
+        abstract_metadata: dict[str, Any] = {}
+        if abstract_metadata_dir is not None:
+            abstract_path = abstract_metadata_dir / f"{pmid}.json"
+            try:
+                abstract_payload = json.loads(abstract_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                abstract_payload = {}
+            if isinstance(abstract_payload, dict):
+                candidate_metadata = abstract_payload.get("metadata")
+                if isinstance(candidate_metadata, dict):
+                    abstract_metadata = candidate_metadata
+
+        title = str(paper_metadata.get("title") or "").strip()
+        placeholder_titles = {
+            "unknown",
+            "unknown title",
+            f"paper {pmid}".lower(),
+        }
+        abstract_title = str(abstract_metadata.get("title") or "").strip()
+        if title.lower() in placeholder_titles and abstract_title:
+            paper_metadata["title"] = abstract_title
+            repairs.append("set_title_from_abstract_metadata")
+        elif not title:
+            paper_metadata["title"] = f"Paper {pmid}"
+            repairs.append("set_default_title")
+
+        authors = abstract_metadata.get("authors")
+        if (
+            not str(paper_metadata.get("first_author") or "").strip()
+            and isinstance(authors, list)
+            and authors
+            and str(authors[0]).strip()
+        ):
+            paper_metadata["first_author"] = str(authors[0]).strip()
+            repairs.append("set_first_author_from_abstract_metadata")
+        for metadata_field, source_field in (
+            ("journal", "journal"),
+            ("publication_date", "year"),
+        ):
+            source_value = str(abstract_metadata.get(source_field) or "").strip()
+            if (
+                not str(paper_metadata.get(metadata_field) or "").strip()
+                and source_value
+            ):
+                paper_metadata[metadata_field] = source_value
+                repairs.append(f"set_{metadata_field}_from_abstract_metadata")
+        if not str(paper_metadata.get("gene_symbol") or "").strip():
+            paper_metadata["gene_symbol"] = gene
+            repairs.append("set_gene_symbol")
+
+        extraction_metadata = payload.get("extraction_metadata")
+        if not isinstance(extraction_metadata, dict):
+            extraction_metadata = {}
+            payload["extraction_metadata"] = extraction_metadata
+            repairs.append("created_extraction_metadata")
+
+        if not repairs:
+            continue
+        stats["repaired_files"] += 1
+        stats["repairs"] += len(repairs)
+        prior_repairs = extraction_metadata.get("staged_metadata_repairs")
+        repair_history = (
+            [str(value) for value in prior_repairs]
+            if isinstance(prior_repairs, list)
+            else []
+        )
+        extraction_metadata["staged_metadata_repairs"] = list(
+            dict.fromkeys(repair_history + repairs)
+        )
+        if dry_run:
+            continue
+        temporary = path.with_suffix(path.suffix + ".metadata_tmp")
+        temporary.write_text(
+            json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(path)
     return stats
 
 
@@ -1179,6 +1778,17 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     p.add_argument(
+        "--no-gate-source-evidence-regressions",
+        action="store_true",
+        help=(
+            "Disable the independent typed source-count evidence gate. By "
+            "default, a replay that drops an identity-bound, source-anchored "
+            "count observation restores the backup even when the new payload "
+            "contains more variants. Unknown/cohort/screening counts are not "
+            "protected. Use only after source-level adjudication."
+        ),
+    )
+    p.add_argument(
         "--no-gate-explosions",
         action="store_true",
         help=(
@@ -1324,12 +1934,22 @@ def main() -> int:
         tier_threshold=args.tier_threshold,
         dry_run=args.dry_run,
         gate_regressions=not args.no_gate_regressions,
+        gate_source_evidence_regressions=(not args.no_gate_source_evidence_regressions),
         gate_explosions=not args.no_gate_explosions,
         explosion_ratio=args.explosion_ratio,
         explosion_min_new=args.explosion_min_new,
         explosion_min_delta=args.explosion_min_delta,
         replay_models=replay_models or None,
     )
+
+    staged_metadata_repairs = None
+    if args.stage_extractions:
+        staged_metadata_repairs = normalize_staged_extraction_metadata(
+            extraction_dir,
+            gene,
+            abstract_metadata_dir=run_dir / "abstract_json",
+            dry_run=args.dry_run,
+        )
 
     output_db = args.output_db
     if output_db is None:
@@ -1374,6 +1994,7 @@ def main() -> int:
         "replay_models": replay_models,
         "candidates_csv": str(candidates_csv),
         "replay": replay_stats,
+        "staged_metadata_repairs": staged_metadata_repairs,
         "db_rebuild": db_stats,
         "recovery": recovery_summary,
         "replace": replace_info,

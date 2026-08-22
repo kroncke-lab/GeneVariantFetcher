@@ -49,6 +49,9 @@ _LEGACY_FOLD_BEGIN_RE = re.compile(r"(?m)^# SUPPLEMENTAL FILE 1:\s*.*$")
 _SUPPLEMENT_HEADING_RE = re.compile(
     r"(?m)^# SUPPLEMENTAL FILE \d+:\s*(?P<label>.+?)\s*$"
 )
+_NESTED_FILE_HEADING_RE = re.compile(
+    r"(?mi)^#{1,6}\s+Nested file:\s*(?P<label>.+?)\s*$"
+)
 
 # Supplement extensions we re-fold. ``.zip`` is deliberately excluded (see the
 # module docstring); image/binary types are skipped (no usable markdown).
@@ -88,6 +91,30 @@ def _supplement_labels(text: str) -> set[str]:
     }
 
 
+def _archive_nested_labels(text: str) -> set[str]:
+    """Basenames already expanded inside a harvest-time archive block."""
+    return {
+        Path(match.group("label").strip()).name.casefold()
+        for match in _NESTED_FILE_HEADING_RE.finditer(text)
+    }
+
+
+def _exclude_supplement_blocks(markdown: str, labels: set[str]) -> str:
+    """Remove converted-file blocks already present via an expanded archive."""
+    if not labels:
+        return markdown
+    matches = list(_SUPPLEMENT_HEADING_RE.finditer(markdown))
+    if not matches:
+        return markdown
+    kept: list[str] = []
+    for idx, match in enumerate(matches):
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(markdown)
+        label = Path(match.group("label").strip()).name.casefold()
+        if label not in labels:
+            kept.append(markdown[match.start() : end].strip())
+    return "\n\n".join(kept).strip()
+
+
 def _strip_existing_supplement_blocks(text: str, replacement_markdown: str) -> str:
     """Remove replaceable folds while retaining richer legacy-only content."""
     base = _strip_folded_block(text)
@@ -120,21 +147,35 @@ def _convertible_files(supplements_dir: Path) -> list[Path]:
     )
 
 
+_CONVERSION_PLACEHOLDER_RE = re.compile(
+    r"^\[(?:Invalid|Error (?:reading|converting)|PDF file available|"
+    r"Legacy \.doc file available)",
+    re.IGNORECASE,
+)
+
+
+def _is_conversion_placeholder(markdown: str) -> bool:
+    """Return true when a converter emitted an error marker, not source text."""
+
+    return bool(_CONVERSION_PLACEHOLDER_RE.match(str(markdown or "").strip()))
+
+
 def _build_supplement_markdown_result(
     supplements_dir: Path,
     *,
     converter: Any = None,
     logger_obj: Any = None,
-) -> tuple[str, int, int]:
+) -> tuple[str, int, int, set[str]]:
     """Convert every convertible file in ``supplements_dir`` to combined markdown.
 
-    Returns ``(markdown, files_converted, conversion_failures)``. ``converter``
+    Returns ``(markdown, files_converted, conversion_failures,
+    placeholder_labels)``. ``converter``
     defaults to a fresh
     :class:`~harvesting.format_converters.FormatConverter` (only constructed when
     a file needs it; plain ``.csv``/``.txt`` are read directly).
     """
     if not supplements_dir.is_dir():
-        return "", 0, 0
+        return "", 0, 0, set()
     # Recursive walk (not top-level iterdir): convertible files extracted from a
     # ``.zip`` supplement land in a subdirectory and would otherwise be missed.
     # The ``.zip`` itself stays excluded (not a convertible suffix), so we fold
@@ -142,7 +183,7 @@ def _build_supplement_markdown_result(
     # idempotent. Skip macOS zip cruft and hidden/AppleDouble files.
     files = _convertible_files(supplements_dir)
     if not files:
-        return "", 0, 0
+        return "", 0, 0, set()
     if converter is None:
         from harvesting.format_converters import FormatConverter
 
@@ -151,6 +192,7 @@ def _build_supplement_markdown_result(
     parts: list[str] = []
     converted = 0
     failures = 0
+    placeholder_labels: set[str] = set()
     for idx, file_path in enumerate(files, 1):
         # Label by path relative to the supplements dir: a top-level file shows
         # just its name; a file extracted from a zip shows ``subdir/name`` so the
@@ -168,10 +210,15 @@ def _build_supplement_markdown_result(
             logger.warning("supplement convert failed for %s: %s", rel, exc)
             failures += 1
             continue
+        if _is_conversion_placeholder(md):
+            logger.warning("supplement convert produced placeholder for %s", rel)
+            failures += 1
+            placeholder_labels.add(Path(rel).name.casefold())
+            continue
         if md and md.strip():
             parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1
-    return "".join(parts).strip(), converted, failures
+    return "".join(parts).strip(), converted, failures, placeholder_labels
 
 
 def build_supplement_markdown(
@@ -181,10 +228,12 @@ def build_supplement_markdown(
     logger_obj: Any = None,
 ) -> tuple[str, int]:
     """Convert available supplement text, preserving the public two-value API."""
-    markdown, converted, _failures = _build_supplement_markdown_result(
-        supplements_dir,
-        converter=converter,
-        logger_obj=logger_obj,
+    markdown, converted, _failures, _placeholder_labels = (
+        _build_supplement_markdown_result(
+            supplements_dir,
+            converter=converter,
+            logger_obj=logger_obj,
+        )
     )
     return markdown, converted
 
@@ -205,7 +254,7 @@ def fold_supplements_into_full_context(
     if not full_context.is_file():
         return None
     supp_dir = supplements_dir or (harvest_dir / f"{pmid}_supplements")
-    md, converted, failures = _build_supplement_markdown_result(
+    md, converted, failures, placeholder_labels = _build_supplement_markdown_result(
         supp_dir, converter=converter
     )
     if converted == 0 or not md:
@@ -226,7 +275,12 @@ def fold_supplements_into_full_context(
         old_block = (
             original[begin:] if end == -1 else original[begin : end + len(FOLD_END)]
         )
-        missing_old_labels = _supplement_labels(old_block) - replacement_labels
+        # A prior pipeline version folded converter error markers as if they
+        # were source. Those labels are safe to discard; otherwise they can
+        # permanently block a newly recovered valid supplement from refolding.
+        missing_old_labels = (
+            _supplement_labels(old_block) - replacement_labels - placeholder_labels
+        )
         if missing_old_labels:
             logger.warning(
                 "refusing supplement re-fold for PMID %s: replacement omits %s",
@@ -235,14 +289,25 @@ def fold_supplements_into_full_context(
             )
             return None
     base = _strip_existing_supplement_blocks(original, md)
+    # A harvest-time ZIP conversion writes each member under a ``Nested file``
+    # heading inside the archive's SUPPLEMENTAL FILE block. The on-disk fold
+    # later sees those extracted members as ordinary files. Appending them again
+    # doubled large tables (and, for PMID 30702160, expanded a 2.8 MB source to
+    # 43 MB). Keep only members not already represented in the archive block.
+    md = _exclude_supplement_blocks(md, _archive_nested_labels(base))
 
-    folded = (
-        base.rstrip()
-        + f"\n\n{FOLD_BEGIN}\n\n"
-        + "# FOLDED SUPPLEMENTS (re-extraction aid)\n"
-        + md
-        + f"\n\n{FOLD_END}\n"
-    )
+    if md:
+        folded = (
+            base.rstrip()
+            + f"\n\n{FOLD_BEGIN}\n\n"
+            + "# FOLDED SUPPLEMENTS (re-extraction aid)\n"
+            + md
+            + f"\n\n{FOLD_END}\n"
+        )
+    else:
+        # This can intentionally remove a redundant sentinel block written by
+        # an older fold. The harvest-time archive copy remains in ``base``.
+        folded = base.rstrip() + "\n"
     if folded == original:
         return None
     backup = full_context.parent / (full_context.name + ".pre_fold_bak")
@@ -251,7 +316,7 @@ def fold_supplements_into_full_context(
     full_context.write_text(folded, encoding="utf-8")
     logger.info(
         "folded %d supplement file(s) into %s (+%d chars over base)",
-        converted,
+        len(_supplement_labels(md)),
         full_context.name,
         len(folded) - len(base),
     )

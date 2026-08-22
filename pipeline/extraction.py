@@ -11,6 +11,7 @@ import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import unquote, urlsplit
 
 from config.constants import (
     ADAPTIVE_TABLE_THRESHOLD,
@@ -66,6 +67,163 @@ TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = get_env_int(
     "GVF_TABLE_OVERFLOW_MERGE_MAX_VARIANTS", 2000
 )
 TABLE_REGEX_OVERFLOW_CHUNK_SIZE = get_env_int("GVF_TABLE_OVERFLOW_CHUNK_SIZE", 250)
+
+
+def _normalize_llm_extraction_shape(extracted_data: Any) -> Dict[str, Any]:
+    """Enforce the container types required by extraction post-processing.
+
+    JSON mode guarantees valid JSON, not the requested nested schema. A model
+    can still return e.g. ``"patients": "one affected carrier"``; allowing that
+    value to reach the count guards turns one malformed paper into a failed
+    extraction when they call ``patients.get(...)``. Normalize only container
+    shape here. Ambiguous strings are never promoted to structured facts, and
+    every repair is recorded for curator review.
+    """
+    if not isinstance(extracted_data, dict):
+        raise ValueError(
+            f"LLM extraction must be a JSON object, got {type(extracted_data).__name__}"
+        )
+
+    normalized = copy.deepcopy(extracted_data)
+    flags: list[dict[str, str]] = []
+
+    def flag(path: str, value: Any, action: str) -> None:
+        flags.append(
+            {
+                "path": path,
+                "received_type": type(value).__name__,
+                "action": action,
+            }
+        )
+
+    for field in ("paper_metadata", "extraction_metadata"):
+        value = normalized.get(field)
+        if not isinstance(value, dict):
+            if value is not None:
+                flag(field, value, "replaced_with_object")
+            normalized[field] = {}
+
+    raw_variants = normalized.get("variants")
+    if isinstance(raw_variants, dict):
+        flag("variants", raw_variants, "wrapped_single_object_in_list")
+        raw_variants = [raw_variants]
+    elif not isinstance(raw_variants, list):
+        if raw_variants is not None:
+            flag("variants", raw_variants, "replaced_with_list")
+        raw_variants = []
+
+    variants: list[dict[str, Any]] = []
+    dict_fields = (
+        "patients",
+        "penetrance_data",
+        "count_provenance",
+        "functional_data",
+    )
+    list_fields = ("individual_records", "fact_provenance")
+    for idx, raw_variant in enumerate(raw_variants):
+        if not isinstance(raw_variant, dict):
+            flag(f"variants[{idx}]", raw_variant, "dropped_non_object_variant")
+            continue
+        variant = raw_variant
+        for field in dict_fields:
+            value = variant.get(field)
+            if not isinstance(value, dict):
+                if value is not None:
+                    flag(
+                        f"variants[{idx}].{field}",
+                        value,
+                        "replaced_with_object",
+                    )
+                variant[field] = {}
+
+        for field in list_fields:
+            value = variant.get(field)
+            if isinstance(value, dict):
+                flag(
+                    f"variants[{idx}].{field}",
+                    value,
+                    "wrapped_single_object_in_list",
+                )
+                value = [value]
+            elif not isinstance(value, list):
+                if value is not None:
+                    flag(
+                        f"variants[{idx}].{field}",
+                        value,
+                        "replaced_with_list",
+                    )
+                value = []
+            kept = [item for item in value if isinstance(item, dict)]
+            if len(kept) != len(value):
+                flag(
+                    f"variants[{idx}].{field}[]",
+                    value,
+                    "dropped_non_object_items",
+                )
+            variant[field] = kept
+
+        quotes = variant.get("key_quotes")
+        if isinstance(quotes, str):
+            flag(
+                f"variants[{idx}].key_quotes",
+                quotes,
+                "wrapped_string_in_list",
+            )
+            quotes = [quotes]
+        elif not isinstance(quotes, list):
+            if quotes is not None:
+                flag(
+                    f"variants[{idx}].key_quotes",
+                    quotes,
+                    "replaced_with_list",
+                )
+            quotes = []
+        variant["key_quotes"] = [quote for quote in quotes if isinstance(quote, str)]
+
+        penetrance = variant["penetrance_data"]
+        age_points = penetrance.get("age_dependent_penetrance")
+        if not isinstance(age_points, list):
+            if age_points is not None:
+                flag(
+                    f"variants[{idx}].penetrance_data.age_dependent_penetrance",
+                    age_points,
+                    "replaced_with_list",
+                )
+            age_points = []
+        penetrance["age_dependent_penetrance"] = [
+            point for point in age_points if isinstance(point, dict)
+        ]
+
+        assays = variant["functional_data"].get("assays")
+        if not isinstance(assays, list):
+            if assays is not None:
+                flag(
+                    f"variants[{idx}].functional_data.assays",
+                    assays,
+                    "replaced_with_list",
+                )
+            variant["functional_data"]["assays"] = []
+        variants.append(variant)
+
+    normalized["variants"] = variants
+
+    tables = normalized.get("tables_processed")
+    if tables is not None:
+        if isinstance(tables, dict):
+            flag("tables_processed", tables, "wrapped_single_object_in_list")
+            tables = [tables]
+        elif not isinstance(tables, list):
+            flag("tables_processed", tables, "replaced_with_list")
+            tables = []
+        normalized["tables_processed"] = [
+            table for table in tables if isinstance(table, dict)
+        ]
+
+    if flags:
+        normalized["extraction_metadata"].setdefault(
+            "schema_shape_guard_flags", []
+        ).extend(flags)
+    return normalized
 
 
 def _deterministic_study_summary(
@@ -151,7 +309,12 @@ def _quote_is_source_verbatim(quote: str, source_text: str) -> bool:
 def _quote_names_variant(quote: str, variant: Dict[str, Any]) -> bool:
     """Require the percentage quote to identify the variant it is attached to."""
     quote_key = re.sub(r"\s+", "", quote or "").casefold()
-    for field in ("source_notation", "cdna_notation", "protein_notation"):
+    for field in (
+        "source_notation",
+        "legacy_notation",
+        "cdna_notation",
+        "protein_notation",
+    ):
         notation = re.sub(r"\s+", "", str(variant.get(field) or "")).casefold()
         if notation and notation in quote_key:
             return True
@@ -329,6 +492,35 @@ def _table_label_key(text: Optional[str]) -> Optional[str]:
     if not match:
         return None
     return re.sub(r"\s+", " ", match.group(1)).strip().lower()
+
+
+# An EXTERNAL variant repository: a named public resource, or a repository the
+# caption explicitly marks as public/external/published. A bare "registry" or
+# "database" is deliberately absent — disease cohorts in this literature are
+# routinely named registries ("the French PAH registry", "the national LQTS
+# registry"), and those tables are the study's own primary data.
+_EXTERNAL_REPOSITORY = (
+    r"(?:\b(?:gnomad|clinvar|hgmd|lovd|dbsnp|exac|bic|umd|"
+    r"1000\s*genomes|ensembl|cosmic|leiden)\b"
+    r"|\b(?:public|external|published|reference|online|literature)\b"
+    r"\s+\S{0,20}\s*\b(?:databases?|registr(?:y|ies)|repositories|resources?)\b)"
+)
+
+# The study's own cohort, stated in the caption. When a caption says the table
+# is this study's, no repository phrasing elsewhere in it should delete the
+# rows: "catalogue of mutations found in the present study and their frequency
+# in public databases" is a primary table with an annotation column.
+_PRESENT_STUDY_CAPTION = (
+    r"\b(?:present|current|this)\s+(?:study|cohort|series|report|work)\b"
+    r"|\bour\s+(?:study|cohort|series|patients?|probands?|centre|center|"
+    r"institution|registry|database)\b"
+    r"|\b(?:identified|detected|found|observed|carried|screened)\s+in\s+"
+    r"(?:our|the\s+present|this|"
+    # "variants identified in probands" is by construction an observation this
+    # study made, whatever annotation columns sit beside it.
+    r"(?:the\s+|\d+\s+)?(?:probands?|patients?|cases?|carriers?|subjects?|"
+    r"participants?|individuals?|famil(?:y|ies)|index\s+cases?))\b"
+)
 
 
 def _anchored_table_caption(candidates: list) -> str:
@@ -1076,7 +1268,11 @@ class ExpertExtractor(BaseLLMCaller):
         to filter out non-target gene variants (TP53, KRAS, BRAF hotspots etc.) and
         validates position against gene-specific protein length.
         """
-        from utils.variant_normalizer import VariantNormalizer, normalize_variant
+        from utils.variant_normalizer import (
+            VariantNormalizer,
+            normalize_variant,
+            protein_substitution_frameshift_alias,
+        )
 
         if not gene_symbol:
             return []
@@ -1105,7 +1301,7 @@ class ExpertExtractor(BaseLLMCaller):
             r"(?:[A-Z][a-z]{2}|[A-Z])\d{1,4}"
             r"(?:_(?:[A-Z][a-z]{2}|[A-Z])\d{1,4})?"
             r"(?:"
-            r"[A-Z][a-z]{2}|[A-Z*]|"
+            r"(?:[A-Z][a-z]{2}|[A-Z*])(?:fs(?:Ter|X|\*)?\d*)?|"
             r"fs(?:Ter|X|\*)?\d*|"
             r"del|dup|ins(?:[A-Z][a-z]{2}|[A-Z])*"
             r")"
@@ -1113,7 +1309,16 @@ class ExpertExtractor(BaseLLMCaller):
             re.IGNORECASE,
         )
         cdna_pattern = re.compile(
-            r"c\.(\d+[+-]?\d*[ACGT]>[ACGT]|\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*|\d+[ACGT]>[ACGT])",
+            r"c\.\s*("
+            r"\d+\s*(?:[+-]\s*\d+)?"
+            r"(?:\s*[_-]\s*\d+\s*(?:[+-]\s*\d+)?)?"
+            r"(?:\s*[ACGT]\s*>\s*[ACGT]"
+            r"|\s*(?:"
+            r"del(?:\s*(?:[ACGT]+|\d+))?(?:\s*ins\s*(?:[ACGT]+|\d+))?"
+            r"|dup(?:\s*(?:[ACGT]+|\d+))?"
+            r"|ins\s*(?:[ACGT]+|\d+)"
+            r"))"
+            r")",
             re.IGNORECASE,
         )
         short_protein_pattern = re.compile(r"\b([A-Z]\d{2,4}(?:[A-Z*]|fs|del|dup))\b")
@@ -1142,6 +1347,35 @@ class ExpertExtractor(BaseLLMCaller):
                         genes.add(explicit_gene)
             return genes
 
+        def grouped_header_gene_scopes(cells: list[str]) -> list[set[str]]:
+            """Bind grouped multi-gene headers to their descendant columns.
+
+            JATS commonly renders a two-level header as ``BRCA1 | | | BRCA2
+            | |`` followed by repeated ``Exon | Nucleotide | Count`` labels.
+            Row-level gene scope is ambiguous in that layout; the nearest gene
+            heading to the left is the only safe attribution for each column.
+            Require at least two distinct header genes before carrying a scope
+            across blank cells so ordinary single-gene headers are unaffected.
+            """
+
+            anchors: list[set[str]] = []
+            distinct: set[str] = set()
+            for cell in cells:
+                found = genes_mentioned_in_cells([cell])
+                anchor = found if len(found) == 1 else set()
+                anchors.append(anchor)
+                distinct.update(anchor)
+            if len(distinct) < 2:
+                return []
+
+            scopes: list[set[str]] = []
+            current: set[str] = set()
+            for anchor in anchors:
+                if anchor:
+                    current = set(anchor)
+                scopes.append(set(current))
+            return scopes
+
         active_table_genes: set[str] = set()
 
         # Table/row provenance bookkeeping. The scanner already walks each markdown
@@ -1154,8 +1388,12 @@ class ExpertExtractor(BaseLLMCaller):
         row_ordinal = 0
         in_table = False
         header_cells: List[str] = []
+        header_gene_scopes: List[set[str]] = []
+        header_gene_indices: List[int] = []
+        carried_gene_cells: Dict[int, str] = {}
         current_table_label: Optional[str] = None
         current_table_caption = ""
+        current_source_file: Optional[str] = None
         caption_candidates: List[str] = []
         table_label_re = re.compile(
             r"((?:Supplementary\s+|Supplemental\s+|Supp\.?\s+)?(?:e|S)?"
@@ -1177,11 +1415,34 @@ class ExpertExtractor(BaseLLMCaller):
             needle: str,
         ) -> Optional[str]:
             for idx, cell in enumerate(row_cells):
-                if needle and needle in cell:
+                if _cell_contains_notation(cell, needle):
                     if not header_row and idx < len(head_cells) and head_cells[idx]:
                         return head_cells[idx][:80]
                     return f"column {idx + 1}"
             return None
+
+        def _column_gene_scope(row_cells: List[str], needle: str) -> set[str]:
+            if not header_gene_scopes:
+                return set()
+            for idx, cell in enumerate(row_cells):
+                if _cell_contains_notation(cell, needle) and idx < len(
+                    header_gene_scopes
+                ):
+                    return header_gene_scopes[idx]
+            return set()
+
+        def _cell_contains_notation(cell: str, needle: str) -> bool:
+            """Match a notation token without suffix collisions across columns."""
+
+            if not needle:
+                return False
+            return bool(
+                re.search(
+                    rf"(?<![A-Za-z0-9]){re.escape(needle)}(?![A-Za-z0-9])",
+                    cell,
+                    re.IGNORECASE,
+                )
+            )
 
         def _table_variant(
             notation_key: str,
@@ -1207,6 +1468,19 @@ class ExpertExtractor(BaseLLMCaller):
             # notation for traceability (persisted to variant_papers.source_notation).
             if source_notation:
                 variant["source_notation"] = source_notation
+            if notation_key == "protein_notation" and evidence_quote:
+                # A regex pass emits cDNA and protein hits independently. When
+                # one clinical row contains exactly one cDNA identity, bind it
+                # to the protein hit so the later identity merge can recognize
+                # both as the same source variant. Without this, aliases such
+                # as V231S beside c.690dup became extra variants even though the
+                # LLM had already extracted c.690dup/p.Val231Serfs*25.
+                row_cdnas = {
+                    re.sub(r"\s+", "", f"c.{match.group(1)}")
+                    for match in cdna_pattern.finditer(evidence_quote)
+                }
+                if len(row_cdnas) == 1:
+                    variant["cdna_notation"] = next(iter(row_cdnas))
             if source_table:
                 variant["source_table"] = source_table
             if current_table_caption:
@@ -1221,6 +1495,8 @@ class ExpertExtractor(BaseLLMCaller):
                 variant["source_column"] = source_column
             if evidence_quote:
                 variant["evidence_quote"] = evidence_quote
+            if current_source_file:
+                variant["source_file"] = current_source_file
             return variant
 
         # Find all markdown table rows
@@ -1230,6 +1506,16 @@ class ExpertExtractor(BaseLLMCaller):
                 active_table_genes = set()
                 in_table = False
                 if line:
+                    nested_file = re.match(
+                        r"^#{1,6}\s+Nested\s+file:\s*(?P<filename>.+?)"
+                        r"(?:\s*\|\s*Sheet\b.*)?$",
+                        line,
+                        re.IGNORECASE,
+                    )
+                    if nested_file:
+                        current_source_file = Path(
+                            nested_file.group("filename").strip()
+                        ).name
                     caption_candidates.append(line)
                     del caption_candidates[:-3]  # keep only the last 3 lines
                 continue
@@ -1244,6 +1530,17 @@ class ExpertExtractor(BaseLLMCaller):
                 table_ordinal += 1
                 row_ordinal = 0
                 header_cells = cells
+                header_gene_scopes = grouped_header_gene_scopes(cells)
+                header_gene_indices = [
+                    idx
+                    for idx, cell in enumerate(cells)
+                    if re.search(
+                        r"\bgene(?:\s+(?:symbol|name))?s?\b",
+                        re.sub(r"[*_`\\]", " ", cell),
+                        re.IGNORECASE,
+                    )
+                ]
+                carried_gene_cells = {}
                 current_table_label = _table_label(caption_candidates)
                 current_table_caption = _anchored_table_caption(caption_candidates)
                 # Seed the table's gene scope from its CAPTION, not just its
@@ -1271,6 +1568,33 @@ class ExpertExtractor(BaseLLMCaller):
             else:
                 is_header_row = False
                 row_ordinal += 1
+
+            # A named Gene column is open-vocabulary row attribution. Do not
+            # depend on the small built-in metadata roster here: panel papers
+            # routinely contain genes that GVF has never processed before.
+            # Forward-fill blank cells for markdown rowspan-style tables, then
+            # reject any explicitly non-target row before regex hits are stamped
+            # with the requested gene. PMID 42001268 exposed the failure mode:
+            # SOX17/ATP13A3/TBX4/EIF2AK4 rows were otherwise relabeled BMPR2.
+            if not is_header_row and header_gene_indices:
+                row_gene_cells: list[str] = []
+                for idx in header_gene_indices:
+                    raw_gene_cell = cells[idx].strip() if idx < len(cells) else ""
+                    if raw_gene_cell and re.search(r"[A-Za-z0-9]", raw_gene_cell):
+                        carried_gene_cells[idx] = raw_gene_cell
+                    else:
+                        raw_gene_cell = carried_gene_cells.get(idx, "")
+                    if raw_gene_cell:
+                        row_gene_cells.append(raw_gene_cell)
+                if row_gene_cells and not any(
+                    gene_alias_regex(target_gene, include_query_aliases=False).search(
+                        cell
+                    )
+                    for cell in row_gene_cells
+                ):
+                    row_gene_filtered_count += 1
+                    continue
+
             mentioned_genes = genes_mentioned_in_cells(cells)
             if mentioned_genes:
                 active_table_genes = mentioned_genes
@@ -1306,8 +1630,16 @@ class ExpertExtractor(BaseLLMCaller):
 
             # Extract variants from this row
             # Look for protein notation
+            row_long_proteins = [
+                f"p.{protein_match.group(1)}"
+                for protein_match in protein_pattern.finditer(line)
+            ]
             for match in protein_pattern.finditer(line):
                 notation = f"p.{match.group(1)}"
+                column_scope = _column_gene_scope(cells, match.group(1))
+                if column_scope and target_gene not in column_scope:
+                    filtered_count += 1
+                    continue
                 normalized = normalize_variant(notation, gene_symbol)
 
                 # Validate: skip non-target gene variants
@@ -1337,7 +1669,12 @@ class ExpertExtractor(BaseLLMCaller):
 
             # Look for cDNA notation
             for match in cdna_pattern.finditer(line):
-                notation = f"c.{match.group(1)}"
+                source_notation = f"c.{match.group(1)}"
+                notation = re.sub(r"\s+", "", source_notation)
+                column_scope = _column_gene_scope(cells, match.group(1))
+                if column_scope and target_gene not in column_scope:
+                    filtered_count += 1
+                    continue
                 if notation not in seen_variants:
                     seen_variants.add(notation)
                     variants.append(
@@ -1352,7 +1689,7 @@ class ExpertExtractor(BaseLLMCaller):
                                 cells, header_cells, is_header_row, match.group(1)
                             ),
                             evidence_quote=row_quote,
-                            source_notation=notation,
+                            source_notation=source_notation,
                         )
                     )
 
@@ -1363,7 +1700,21 @@ class ExpertExtractor(BaseLLMCaller):
                 if len(notation) < 4:
                     continue
 
+                column_scope = _column_gene_scope(cells, match.group(1))
+                if column_scope and target_gene not in column_scope:
+                    filtered_count += 1
+                    continue
+
                 normalized = normalize_variant(notation, gene_symbol)
+                if any(
+                    protein_substitution_frameshift_alias(notation, long_protein)
+                    for long_protein in row_long_proteins
+                ):
+                    # A compact token in the same row/cell is commonly the
+                    # parenthetical alias of a richer p.HGVS frameshift. Keep
+                    # the richer identity only when ref, position, and alt all
+                    # match; codon-only suppression can delete a real event.
+                    continue
 
                 # Validate: skip non-target gene variants
                 is_non_target, reason = normalizer.is_non_target_variant(normalized)
@@ -1469,6 +1820,7 @@ class ExpertExtractor(BaseLLMCaller):
                 "source_table_caption",
                 "source_location",
                 "source_table",
+                "_linked_supplement_description",
             )
         )
         evidence = str(variant.get("evidence_quote") or "")
@@ -1482,6 +1834,17 @@ class ExpertExtractor(BaseLLMCaller):
             # bounded evidence packet rather than a dedicated metadata field.
             headers = evidence
 
+        if variant.get("_linked_supplement_description_collision") and re.search(
+            r"\b(?:compil(?:ation|ed)?|previous|previously|prior|literature|"
+            r"public|external|gnomad|clinvar|hgmd|lovd|dbsnp|exac|bic)\b",
+            caption,
+            re.IGNORECASE,
+        ):
+            # Two distinct supplement paths collapsed to the same on-disk
+            # basename. If either description identifies a secondary source,
+            # the candidate cannot be safely bound to the cohort workbook.
+            return "secondary_study_table"
+
         # A summary table can include a final row for the paper itself.  That row
         # is current-study evidence and is safe even though its table is otherwise
         # historical.  Inspect only the candidate row: a neighboring row saying
@@ -1493,10 +1856,53 @@ class ExpertExtractor(BaseLLMCaller):
         ):
             return None
 
+        # A caption that claims the table for this study is not a compilation,
+        # even when it also mentions a repository. Only the repository-shaped
+        # rules below defer to this: an explicit "previously reported" or
+        # "Author, year" table stays rejected regardless of the phrasing, since
+        # those describe the rows themselves rather than an annotation column.
+        present_study_caption = bool(
+            re.search(_PRESENT_STUDY_CAPTION, caption, re.IGNORECASE)
+        )
+
         if re.search(
             r"\b(?:summary|overview|review|comparison|characteristics)\b"
             r".{0,100}\b(?:studies|literature|publications|reports)\b",
             caption,
+            re.IGNORECASE,
+        ):
+            return "secondary_study_table"
+        if not present_study_caption and re.search(
+            r"\b(?:variants?|mutations?)\b.{0,100}"
+            r"\b(?:shared\s+with|matched\s+(?:in|to)|overlap(?:ping)?\s+with)\b"
+            r".{0,100}\b(?:populations?|cohorts?|gnomad|databases?)\b",
+            caption,
+            re.IGNORECASE,
+        ):
+            # Comparative workbooks commonly place an external-population
+            # variant column beside the study-population column.  The regex
+            # scanner cannot bind an identity to one side of that comparison,
+            # so the whole table must stay out of additive deterministic rows.
+            return "secondary_study_table"
+        if not present_study_caption and re.search(
+            r"\b(?:total|all|catalog(?:ue|ed)?|compil(?:ation|ed))\b"
+            r".{0,120}\b(?:variants?|mutations?)\b.{0,120}"
+            rf"{_EXTERNAL_REPOSITORY}",
+            f"{caption} {headers}",
+            re.IGNORECASE,
+        ):
+            # The repository must be an EXTERNAL one. A bare "registry" or
+            # "database" is not a secondary-study signal in this literature:
+            # disease cohorts are routinely named registries ("all BMPR2
+            # variants identified in the French PAH registry"), and that table
+            # is the study's own primary data. Requiring a named public
+            # resource, or an explicit public/external/published qualifier,
+            # keeps the guard on compilations without deleting primary cohorts.
+            return "secondary_study_table"
+        if not present_study_caption and re.search(
+            r"\b(?:variants?|mutations?)\b.{0,100}\b(?:in|from)\b"
+            r".{0,60}\b(?:public|external)\b.{0,40}\bdatabases?\b",
+            f"{caption} {headers}",
             re.IGNORECASE,
         ):
             return "secondary_study_table"
@@ -1516,6 +1922,57 @@ class ExpertExtractor(BaseLLMCaller):
             return "secondary_study_table"
         return None
 
+    @staticmethod
+    def _supplement_basename(value: Any) -> str:
+        """Normalize href, relative-path, and on-disk supplement names for joins."""
+
+        raw = str(value or "").strip().strip("<>'\"")
+        if not raw:
+            return ""
+        try:
+            path = urlsplit(raw).path or raw
+        except ValueError:
+            path = raw.split("?", 1)[0].split("#", 1)[0]
+        encoded_basename = path.replace("\\", "/").rsplit("/", 1)[-1]
+        # Decode after taking the basename so an encoded slash stays part of
+        # the filename rather than changing which path is addressed. Disk
+        # writers sanitize separators to underscores, so mirror that here.
+        return (
+            unquote(encoded_basename)
+            .replace("/", "_")
+            .replace("\\", "_")
+            .strip()
+            .casefold()
+        )
+
+    @classmethod
+    def _linked_supplement_descriptions(
+        cls, document_text: Optional[str]
+    ) -> dict[str, set[str]]:
+        """Map linked supplement filenames to their source descriptions.
+
+        PMC deposits often list the semantic title near ``_link_: file.xlsx``
+        but later fold the workbook under only ``Nested file: file.xlsx``.  The
+        filename is the stable join that lets attribution see that a workbook
+        is an external-database compilation instead of the present cohort.
+        """
+
+        descriptions: dict[str, set[str]] = {}
+        text = str(document_text or "")
+        pattern = re.compile(
+            r"\*\*(?P<description>[^*\n]{4,500})\*\*"
+            r"(?:(?!^#{1,6}\s|\*\*).){0,2000}?"
+            r"^\s*_link_:\s*(?P<filename>\S.*?)[ \t]*$",
+            re.IGNORECASE | re.MULTILINE | re.DOTALL,
+        )
+        for match in pattern.finditer(text):
+            filename = cls._supplement_basename(match.group("filename"))
+            if filename:
+                descriptions.setdefault(filename, set()).add(
+                    " ".join(match.group("description").split())
+                )
+        return descriptions
+
     def _table_variant_source_genes(self, variant: dict, attribution: dict) -> set[str]:
         """Return source-grounded genes for one table candidate, when known."""
         table_key = _table_label_key(
@@ -1524,7 +1981,12 @@ class ExpertExtractor(BaseLLMCaller):
         source_genes: set[str] = set()
         tokens = {
             re.sub(r"\s+", "", str(variant.get(key) or "")).upper()
-            for key in ("protein_notation", "cdna_notation", "source_notation")
+            for key in (
+                "protein_notation",
+                "cdna_notation",
+                "legacy_notation",
+                "source_notation",
+            )
             if variant.get(key)
         }
         tokens |= {token[2:] for token in tokens if token.startswith(("P.", "C."))}
@@ -1553,9 +2015,51 @@ class ExpertExtractor(BaseLLMCaller):
             else {}
         )
         target = str(target_gene or "").upper()
+        supplement_descriptions = self._linked_supplement_descriptions(document_text)
         accepted: List[dict] = []
         skipped: List[dict] = []
         for variant in table_variants:
+            if supplement_descriptions:
+                provenance_values = [
+                    str(variant.get(key) or "")
+                    for key in (
+                        "source_table",
+                        "source_location",
+                        "source_table_caption",
+                        "source_file",
+                    )
+                ]
+                candidate_files = {
+                    self._supplement_basename(value)
+                    for value in provenance_values
+                    if self._supplement_basename(value)
+                }
+                for value in provenance_values:
+                    candidate_files.update(
+                        self._supplement_basename(match.group(1))
+                        for match in re.finditer(
+                            r"\bNested\s+file:\s*(.+?)"
+                            r"(?:\s*\|\s*Sheet\b|\)|$)",
+                            value,
+                            re.IGNORECASE,
+                        )
+                    )
+                for filename, descriptions in supplement_descriptions.items():
+                    if filename in candidate_files:
+                        variant = {
+                            **variant,
+                            # Preserve every description on basename collision.
+                            # If one is a compilation and another is the study
+                            # cohort, combining them intentionally fails closed
+                            # instead of letting dict insertion order decide.
+                            "_linked_supplement_description": " | ".join(
+                                sorted(descriptions)
+                            ),
+                            "_linked_supplement_description_collision": (
+                                len(descriptions) > 1
+                            ),
+                        }
+                        break
             reason = self._secondary_study_table_reason(variant)
             source_genes = (
                 self._table_variant_source_genes(variant, attribution)
@@ -1611,21 +2115,61 @@ class ExpertExtractor(BaseLLMCaller):
         """
         from utils.variant_normalizer import (
             normalize_variant,
+            preferred_alias_protein,
+            protein_substitution_frameshift_alias,
             structural_variant_identity,
+        )
+        from utils.legacy_notation import (
+            normalize_legacy_notation,
+            preserve_source_only_legacy_identity,
         )
 
         existing_variants = extracted_data.get("variants", [])
+        for variant in existing_variants:
+            if isinstance(variant, dict):
+                preserve_source_only_legacy_identity(variant)
+        for variant in table_variants:
+            if isinstance(variant, dict):
+                preserve_source_only_legacy_identity(variant)
 
-        # Build set of existing variant keys
-        existing_keys = set()
-        existing_structural_keys = set()
+        # Build independent identity keys. Table parsers often recover only a
+        # cDNA value while the LLM row carries cDNA + protein, so combined tuple
+        # keys would miss the same variant and create a duplicate.
+        existing_keys: set[str] = set()
+        existing_by_key: dict[str, list[dict]] = {}
+        existing_structural_keys: set[str] = set()
+        existing_by_structural_key: dict[str, list[dict]] = {}
+
+        def normalized(v: dict, field: str) -> str | None:
+            value = v.get(field, "") or ""
+            gene = str(v.get("gene_symbol") or "").strip()
+            return normalize_variant(value, gene) if value else None
+
+        def protein_source_notations(v: dict) -> list[str]:
+            """Return rich verbatim protein evidence before canonical notation."""
+            values: list[str] = []
+            for field in ("source_notation", "protein_notation"):
+                value = str(v.get(field) or "").strip()
+                if value and value not in values:
+                    values.append(value)
+            return values
+
+        def proteins_are_aliases(left: dict, right: dict) -> bool:
+            return any(
+                protein_substitution_frameshift_alias(left_value, right_value)
+                for left_value in protein_source_notations(left)
+                for right_value in protein_source_notations(right)
+            )
+
         for v in existing_variants:
-            protein = normalize_variant(v.get("protein_notation", "") or "")
-            cdna = normalize_variant(v.get("cdna_notation", "") or "")
+            protein = normalized(v, "protein_notation")
+            cdna = normalized(v, "cdna_notation")
             if protein:
                 existing_keys.add(protein)
+                existing_by_key.setdefault(protein, []).append(v)
             if cdna:
                 existing_keys.add(cdna)
+                existing_by_key.setdefault(cdna, []).append(v)
             structural = (
                 structural_variant_identity(v.get("structural_description"))
                 if not (protein or cdna)
@@ -1633,24 +2177,130 @@ class ExpertExtractor(BaseLLMCaller):
             )
             if structural:
                 existing_structural_keys.add(structural)
+                existing_by_structural_key.setdefault(structural, []).append(v)
+            legacy = normalize_legacy_notation(v.get("legacy_notation"))
+            if legacy:
+                legacy_key = f"LEGACY:{legacy}"
+                existing_keys.add(legacy_key)
+                existing_by_key.setdefault(legacy_key, []).append(v)
+
+        def enrich_missing_table_evidence(existing: dict, table: dict) -> bool:
+            """Fill only absent count/provenance fields from a parsed source row."""
+
+            changed = False
+            for container, fields in (
+                ("patients", ("count",)),
+                (
+                    "penetrance_data",
+                    (
+                        "total_carriers_observed",
+                        "affected_count",
+                        "unaffected_count",
+                        "uncertain_count",
+                    ),
+                ),
+            ):
+                source = table.get(container)
+                if not isinstance(source, dict):
+                    continue
+                target = existing.get(container)
+                if not isinstance(target, dict):
+                    target = {}
+                    existing[container] = target
+                for field in fields:
+                    if target.get(field) is None and source.get(field) is not None:
+                        target[field] = source[field]
+                        changed = True
+
+            source_count_provenance = table.get("count_provenance")
+            if isinstance(source_count_provenance, dict):
+                target_count_provenance = existing.get("count_provenance")
+                if not isinstance(target_count_provenance, dict):
+                    target_count_provenance = {}
+                    existing["count_provenance"] = target_count_provenance
+                for field, value in source_count_provenance.items():
+                    if target_count_provenance.get(field) is None and value is not None:
+                        target_count_provenance[field] = value
+                        changed = True
+
+            for field in (
+                "source_table",
+                "source_row",
+                "row_ordinal",
+                "source_column",
+                "evidence_quote",
+            ):
+                if existing.get(field) in (None, "") and table.get(field) not in (
+                    None,
+                    "",
+                ):
+                    existing[field] = table[field]
+                    changed = True
+            return changed
 
         # Add new variants not already present
         added_count = 0
+        enriched_count = 0
+        ambiguous_count = 0
         for tv in table_variants:
-            protein = normalize_variant(tv.get("protein_notation", "") or "")
-            cdna = normalize_variant(tv.get("cdna_notation", "") or "")
+            protein = normalized(tv, "protein_notation")
+            cdna = normalized(tv, "cdna_notation")
             structural = (
                 structural_variant_identity(tv.get("structural_description"))
                 if not (protein or cdna)
                 else ""
             )
+            legacy = normalize_legacy_notation(tv.get("legacy_notation"))
 
-            # Check if already exists
-            if protein and protein in existing_keys:
-                continue
-            if cdna and cdna in existing_keys:
-                continue
-            if structural and structural in existing_structural_keys:
+            matching_existing = None
+            if cdna:
+                cdna_candidates = existing_by_key.get(cdna, [])
+                compatible = [
+                    row
+                    for row in cdna_candidates
+                    if not protein
+                    or not normalized(row, "protein_notation")
+                    or normalized(row, "protein_notation") == protein
+                    or proteins_are_aliases(row, tv)
+                ]
+                if len(compatible) == 1:
+                    matching_existing = compatible[0]
+                elif not protein and len(cdna_candidates) > 1:
+                    # A count-only cDNA row cannot choose among conflicting
+                    # protein consequences. Do not append a third identity.
+                    ambiguous_count += 1
+                    continue
+            elif protein:
+                protein_candidates = existing_by_key.get(protein, [])
+                if len(protein_candidates) == 1:
+                    matching_existing = protein_candidates[0]
+            elif legacy:
+                legacy_candidates = existing_by_key.get(f"LEGACY:{legacy}", [])
+                if len(legacy_candidates) == 1:
+                    matching_existing = legacy_candidates[0]
+            elif structural:
+                structural_candidates = existing_by_structural_key.get(structural, [])
+                if len(structural_candidates) == 1:
+                    matching_existing = structural_candidates[0]
+            if matching_existing is not None:
+                prior_protein = matching_existing.get("protein_notation")
+                preferred_protein = prior_protein
+                for table_notation in protein_source_notations(tv):
+                    preferred_protein = preferred_alias_protein(
+                        preferred_protein, table_notation
+                    )
+                matching_existing["protein_notation"] = preferred_protein
+                if preferred_protein and preferred_protein != prior_protein:
+                    preferred_key = normalize_variant(
+                        preferred_protein,
+                        str(matching_existing.get("gene_symbol") or ""),
+                    )
+                    if preferred_key:
+                        rows = existing_by_key.setdefault(preferred_key, [])
+                        if matching_existing not in rows:
+                            rows.append(matching_existing)
+                if enrich_missing_table_evidence(matching_existing, tv):
+                    enriched_count += 1
                 continue
 
             # Add to existing variants. Router-produced table variants already
@@ -1685,10 +2335,19 @@ class ExpertExtractor(BaseLLMCaller):
             # Update keys
             if protein:
                 existing_keys.add(protein)
+                existing_by_key.setdefault(protein, []).append(new_variant)
             if cdna:
                 existing_keys.add(cdna)
+                existing_by_key.setdefault(cdna, []).append(new_variant)
             if structural:
                 existing_structural_keys.add(structural)
+                existing_by_structural_key.setdefault(structural, []).append(
+                    new_variant
+                )
+            if legacy:
+                legacy_key = f"LEGACY:{legacy}"
+                existing_keys.add(legacy_key)
+                existing_by_key.setdefault(legacy_key, []).append(new_variant)
 
         if added_count > 0:
             logger.info(
@@ -1701,23 +2360,44 @@ class ExpertExtractor(BaseLLMCaller):
                 )
                 extracted_data["extraction_metadata"]["table_regex_added"] = added_count
 
+        if enriched_count > 0:
+            logger.info(
+                "Enriched %d existing variants from deterministic table evidence",
+                enriched_count,
+            )
+            metadata = extracted_data.setdefault("extraction_metadata", {})
+            metadata["table_merge_enriched"] = (
+                int(metadata.get("table_merge_enriched") or 0) + enriched_count
+            )
+
+        if ambiguous_count > 0:
+            metadata = extracted_data.setdefault("extraction_metadata", {})
+            metadata["table_merge_ambiguous_identity_skipped"] = (
+                int(metadata.get("table_merge_ambiguous_identity_skipped") or 0)
+                + ambiguous_count
+            )
+
         extracted_data["variants"] = existing_variants
         return extracted_data
 
-    def _table_variant_key(self, variant: dict) -> tuple[str, str, str]:
+    def _table_variant_key(self, variant: dict) -> tuple[str, str, str, str]:
         """Return a normalized dedupe key for a table-derived variant."""
         from utils.variant_normalizer import (
             normalize_variant,
             structural_variant_identity,
         )
+        from utils.legacy_notation import normalize_legacy_notation
 
-        protein = normalize_variant(variant.get("protein_notation", "") or "")
-        cdna = normalize_variant(variant.get("cdna_notation", "") or "")
+        gene = str(variant.get("gene_symbol") or "").strip()
+        protein = normalize_variant(variant.get("protein_notation", "") or "", gene)
+        cdna = normalize_variant(variant.get("cdna_notation", "") or "", gene)
         structural = structural_variant_identity(variant.get("structural_description"))
+        legacy = normalize_legacy_notation(variant.get("legacy_notation")) or ""
         return (
             cdna.lower(),
             protein.lower(),
             structural if not (cdna or protein) else "",
+            legacy if not (cdna or protein or structural) else "",
         )
 
     def _is_structured_table_variant(self, variant: dict) -> bool:
@@ -1737,7 +2417,7 @@ class ExpertExtractor(BaseLLMCaller):
     def _dedupe_table_variants(self, table_variants: List[dict]) -> List[dict]:
         """Dedupe table candidates while preferring richer row-level variants."""
         selected: List[dict] = []
-        index_by_key: dict[tuple[str, str, str], int] = {}
+        index_by_key: dict[tuple[str, str, str, str], int] = {}
         for variant in table_variants:
             key = self._table_variant_key(variant)
             if not any(key):
@@ -1925,7 +2605,33 @@ class ExpertExtractor(BaseLLMCaller):
         section_scope: set = set()
         carried_row_scope: set = set()
         gene_column_idx: Optional[int] = None
+        grouped_header_scopes: list[set[str]] = []
         in_table = False
+
+        def grouped_gene_scopes(cells: list[str]) -> list[set[str]]:
+            """Return left-carried scopes for a grouped multi-gene header."""
+
+            anchors: list[set[str]] = []
+            distinct: set[str] = set()
+            for cell in cells:
+                found = {
+                    gene
+                    for gene in known_gene_aliases(include_query_aliases=False)
+                    if gene_alias_regex(gene, include_query_aliases=False).search(cell)
+                }
+                anchor = found if len(found) == 1 else set()
+                anchors.append(anchor)
+                distinct.update(anchor)
+            if len(distinct) < 2:
+                return []
+
+            scopes: list[set[str]] = []
+            current: set[str] = set()
+            for anchor in anchors:
+                if anchor:
+                    current = set(anchor)
+                scopes.append(set(current))
+            return scopes
 
         notation_re = re.compile(
             r"(?:p\.\s*)?([A-Z][a-z]{2}\d+[A-Za-z*]{0,3}|[A-Z]\d+[A-Za-z*]{0,3})"
@@ -1948,6 +2654,27 @@ class ExpertExtractor(BaseLLMCaller):
             r"|(\d+(?:[+-]\d+)?\s*[ACGT]+\s*>\s*[ACGT]+)"
         )
 
+        def source_notation_aliases(token: str) -> set[str]:
+            """Add only lossless aliases for source length-form deletions."""
+
+            aliases = {token}
+            match = re.fullmatch(
+                r"C\.(?P<start>\d+)(?P<sep>[_-])(?P<end>\d+)DEL(?P<n>\d+)",
+                token,
+                re.IGNORECASE,
+            )
+            if match:
+                start = int(match.group("start"))
+                end = int(match.group("end"))
+                deleted_count = int(match.group("n"))
+                if end - start + 1 == deleted_count:
+                    aliases.add(
+                        "C."
+                        f"{match.group('start')}{match.group('sep')}"
+                        f"{match.group('end')}DEL"
+                    )
+            return aliases
+
         lines = full_text.splitlines()
         for line_idx, line in enumerate(lines):
             stripped = line.strip()
@@ -1957,6 +2684,7 @@ class ExpertExtractor(BaseLLMCaller):
                 section_scope = set()
                 carried_row_scope = set()
                 gene_column_idx = None
+                grouped_header_scopes = []
                 current_label = None
                 if stripped:
                     caption_candidates.append(stripped)
@@ -1973,6 +2701,7 @@ class ExpertExtractor(BaseLLMCaller):
                 current_label = _table_label_key(caption)
                 section_scope = set()
                 carried_row_scope = set()
+                grouped_header_scopes = grouped_gene_scopes(cells)
                 gene_column_idx = next(
                     (
                         idx
@@ -2067,6 +2796,8 @@ class ExpertExtractor(BaseLLMCaller):
                     scope = own
                 elif own:
                     continue  # this cell names several genes — ambiguous
+                elif idx < len(grouped_header_scopes) and grouped_header_scopes[idx]:
+                    scope = grouped_header_scopes[idx]
                 elif gene_column_scope:
                     scope = gene_column_scope
                 elif len(row_genes) == 1:
@@ -2095,11 +2826,12 @@ class ExpertExtractor(BaseLLMCaller):
                         continue
                     if token.upper() in {g.upper() for g in own}:
                         continue
-                    attribution.setdefault(token.upper(), set()).update(scope)
-                    if current_label:
-                        attribution.setdefault(
-                            (current_label, token.upper()), set()
-                        ).update(scope)
+                    for alias in source_notation_aliases(token.upper()):
+                        attribution.setdefault(alias, set()).update(scope)
+                        if current_label:
+                            attribution.setdefault(
+                                (current_label, alias), set()
+                            ).update(scope)
 
         return attribution
 
@@ -2175,7 +2907,7 @@ class ExpertExtractor(BaseLLMCaller):
                 v.get("source_table") or v.get("source_location")
             )
             source_genes: set = set()
-            for key in ("protein_notation", "cdna_notation"):
+            for key in ("protein_notation", "cdna_notation", "legacy_notation"):
                 token = (v.get(key) or "").replace("p.", "").strip().upper()
                 token = re.sub(r"\s+", "", token)
                 if not token:
@@ -2272,6 +3004,7 @@ class ExpertExtractor(BaseLLMCaller):
     CDNA_NOTATION_RE = re.compile(
         r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
         r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
+        r"|^c\.\d+(?:[+-]\d+)?_\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
         r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
         r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
         r"|^c\.\d+(?:[+-]\d+)?del[ACGT]*ins[ACGT]+$"
@@ -2310,9 +3043,18 @@ class ExpertExtractor(BaseLLMCaller):
         Returns:
             Updated extracted_data with artifacts removed
         """
+        from utils.legacy_notation import preserve_source_only_legacy_identity
         from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
 
         variants = extracted_data.get("variants", [])
+
+        # Preserve a narrow source-only legacy identity before the generic
+        # nameless-row guard. This also reverses an upstream ``c.`` prefix when
+        # source_notation proves that the paper supplied only the bare legacy
+        # label.
+        for variant in variants:
+            if isinstance(variant, dict):
+                preserve_source_only_legacy_identity(variant, target_gene)
 
         # A variant with no identifier is not a variant. These reach the public
         # browser as nameless rows: 30 BMPR2, 14 BRCA1 and 9 BRCA2 in the
@@ -2323,6 +3065,7 @@ class ExpertExtractor(BaseLLMCaller):
             for v in variants
             if (v.get("cdna_notation") or "").strip()
             or (v.get("protein_notation") or "").strip()
+            or (v.get("legacy_notation") or "").strip()
             # A structural event is legitimately notation-free ("duplication of
             # exons 8-10"), so it must survive on the same predicate the
             # malformed-notation guard below already uses.
@@ -2362,6 +3105,7 @@ class ExpertExtractor(BaseLLMCaller):
             protein = v.get("protein_notation", "") or ""
             cdna = v.get("cdna_notation", "") or ""
             genomic = (v.get("genomic_position") or "").strip()
+            legacy = (v.get("legacy_notation") or "").strip()
 
             # Check for artifact patterns
             is_artifact = False
@@ -2382,8 +3126,19 @@ class ExpertExtractor(BaseLLMCaller):
             # position; cDNA entries need HGVS-like c. / IVS notation. Structural
             # events with a valid variant_class + structural_description are kept
             # even without point-form notation.
-            protein_clean = protein.strip().replace(" ", "")
-            cdna_clean = cdna.strip().replace(" ", "")
+            protein_clean = protein.strip().replace(" ", "").replace("∗", "*")
+            parenthesized_protein = re.fullmatch(r"p\.\((.+)\)", protein_clean)
+            if parenthesized_protein:
+                protein_clean = f"p.{parenthesized_protein.group(1)}"
+            if protein_clean and protein_clean != protein:
+                v["protein_notation"] = protein_clean
+            cdna_clean = re.sub(
+                r"[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]",
+                "-",
+                cdna.strip().replace(" ", ""),
+            ).replace("→", ">")
+            if cdna_clean and cdna_clean != cdna:
+                v["cdna_notation"] = cdna_clean
             vclass = (v.get("variant_class") or "").strip().lower()
             structural = (v.get("structural_description") or "").strip()
             has_structural_identity = bool(
@@ -2410,7 +3165,13 @@ class ExpertExtractor(BaseLLMCaller):
             # another usable identity remains.  This matches the migration
             # backstop and prevents a bad protein string from erasing a valid
             # cDNA/genomic/structural variant.
-            if not (protein_clean or cdna_clean or genomic or has_structural_identity):
+            if not (
+                protein_clean
+                or cdna_clean
+                or genomic
+                or legacy
+                or has_structural_identity
+            ):
                 malformed_count += 1
                 if protein_valid and cdna_valid and len(malformed_examples) < 5:
                     malformed_examples.append("<missing variant identity>")
@@ -2735,10 +3496,11 @@ class ExpertExtractor(BaseLLMCaller):
         re.IGNORECASE,
     )
     CDNA_TABLE_VALUE_RE = re.compile(
-        r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
-        r"|^c\.\d+(?:_\d+)?del[ACGT]+ins[ACGT]+$"
-        r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+        r"^c\.\d+(?:[+-]\d+)?(?:_\d+(?:[+-]\d+)?)?[ACGT]>[ACGT]$"
+        r"|^c\.\d+(?:[+-]\d+)?(?:_\d+(?:[+-]\d+)?)?"
+        r"del[ACGT]*ins[ACGT]+$"
+        r"|^c\.\d+(?:[+-]\d+)?(?:_\d+(?:[+-]\d+)?)?"
+        r"(?:del|dup|ins)[ACGT]*$",
         re.IGNORECASE,
     )
 
@@ -2930,11 +3692,22 @@ class ExpertExtractor(BaseLLMCaller):
             return cleaned
         return None
 
-    def _valid_table_cdna(self, value: Optional[str]) -> Optional[str]:
+    def _valid_table_cdna(
+        self, value: Optional[str], gene_symbol: Optional[str] = None
+    ) -> Optional[str]:
         cleaned = self._clean_table_cell(value)
         if not cleaned:
             return None
         if not cleaned.lower().startswith("c."):
+            from utils.legacy_notation import (
+                gene_supports_legacy_notation,
+                normalize_legacy_notation,
+            )
+
+            if gene_supports_legacy_notation(gene_symbol) and normalize_legacy_notation(
+                cleaned
+            ):
+                return None
             if cleaned.lower().startswith("c"):
                 cleaned = "c." + cleaned[1:]
             else:
@@ -2949,6 +3722,38 @@ class ExpertExtractor(BaseLLMCaller):
         if self.CDNA_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
+
+    def _valid_table_cdna_identity(
+        self, value: Optional[str], gene_symbol: Optional[str] = None
+    ) -> tuple[Optional[str], Optional[str], Optional[str]]:
+        """Return honest table identity without upgrading BIC text to HGVS."""
+
+        from utils.legacy_notation import (
+            gene_supports_legacy_notation,
+            normalize_legacy_notation,
+            preserve_source_only_legacy_identity,
+        )
+
+        verbatim = str(value or "").strip()
+        source_notation = self._clean_table_cell(value)
+        if not source_notation:
+            return None, None, None
+        if gene_supports_legacy_notation(
+            gene_symbol
+        ) and not source_notation.lower().startswith("c."):
+            legacy = normalize_legacy_notation(source_notation)
+            if legacy:
+                return None, legacy, verbatim
+        if gene_supports_legacy_notation(gene_symbol):
+            candidate = {
+                "gene_symbol": gene_symbol,
+                "cdna_notation": source_notation,
+                "source_notation": verbatim,
+            }
+            legacy = preserve_source_only_legacy_identity(candidate, gene_symbol)
+            if legacy:
+                return None, legacy, verbatim
+        return self._valid_table_cdna(source_notation, gene_symbol), None, None
 
     @staticmethod
     def _normalize_count_label(label: Optional[str]) -> str:
@@ -3310,7 +4115,7 @@ class ExpertExtractor(BaseLLMCaller):
                 .replace(" ", "")
                 .replace("\u3000", "")
             )
-            cdna = self._valid_table_cdna(cdna_raw)
+            cdna = self._valid_table_cdna(cdna_raw, gene_symbol)
 
         protein = None
         protein_match = re.search(r"\bp\.\s*", stripped, re.IGNORECASE)
@@ -4350,16 +5155,44 @@ class ExpertExtractor(BaseLLMCaller):
         normalized_active_headers = []
         active_row_gene_cell = ""
         previous_table_data_line = ""
+        active_section_gene: Optional[str] = None
+        seen_section_gene_divider = False
+        pending_grouped_gene_scopes: list[set[str]] = []
+        pending_grouped_gene_header_line: Optional[int] = None
 
         from pipeline.table_router import (
             _cell_mentions_target_gene,
             _gene_symbol_tokens,
+            _gene_section_divider,
             _infer_unnamed_gene_column,
             _is_non_variant_count_header,
             _normalize_header,
             _split_pipe_row,
             _target_gene_tokens,
         )
+
+        target_gene_tokens = _target_gene_tokens(gene_symbol)
+
+        def grouped_gene_header_scopes(parts: list[str]) -> list[set[str]]:
+            """Carry open-vocabulary gene headings across repeated subcolumns."""
+
+            anchors: list[set[str]] = []
+            distinct: set[str] = set()
+            for cell in parts:
+                tokens = _gene_symbol_tokens(cell)
+                anchor = tokens if len(tokens) == 1 else set()
+                anchors.append(anchor)
+                distinct.update(anchor)
+            if len(distinct) < 2:
+                return []
+
+            scopes: list[set[str]] = []
+            current: set[str] = set()
+            for anchor in anchors:
+                if anchor:
+                    current = set(anchor)
+                scopes.append(set(current))
+            return scopes
 
         def count_type_for_header(label: Optional[str]) -> Optional[str]:
             if not label:
@@ -4425,6 +5258,19 @@ class ExpertExtractor(BaseLLMCaller):
             if not table_started:
                 update_table_label(stripped_line, line_number)
 
+                if (
+                    stripped_line.startswith("|")
+                    and not (set(stripped_line) <= {"|", "-", " ", ":"})
+                    and not self._is_variant_table_header(line)
+                ):
+                    candidate_scopes = grouped_gene_header_scopes(_split_pipe_row(line))
+                    if candidate_scopes:
+                        pending_grouped_gene_scopes = candidate_scopes
+                        pending_grouped_gene_header_line = line_number
+                elif stripped_line and not stripped_line.startswith("|"):
+                    pending_grouped_gene_scopes = []
+                    pending_grouped_gene_header_line = None
+
                 # Detect header row using broadened patterns
                 if self._is_variant_table_header(line):
                     parts = _split_pipe_row(line)
@@ -4459,7 +5305,22 @@ class ExpertExtractor(BaseLLMCaller):
                     table_row_ordinal = 0
                     active_row_gene_cell = ""
                     previous_table_data_line = ""
+                    active_section_gene = None
+                    seen_section_gene_divider = False
+                    grouped_scopes = (
+                        pending_grouped_gene_scopes
+                        if pending_grouped_gene_header_line is not None
+                        and line_number - pending_grouped_gene_header_line <= 3
+                        and len(pending_grouped_gene_scopes) == len(parts)
+                        else []
+                    )
+                    pending_grouped_gene_scopes = []
+                    pending_grouped_gene_header_line = None
                     for idx, name in enumerate(parts):
+                        if grouped_scopes and not (
+                            grouped_scopes[idx] & target_gene_tokens
+                        ):
+                            continue
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
 
@@ -4522,6 +5383,8 @@ class ExpertExtractor(BaseLLMCaller):
                 active_header_line = ""
                 active_row_gene_cell = ""
                 previous_table_data_line = ""
+                active_section_gene = None
+                seen_section_gene_divider = False
                 update_table_label(stripped_line, line_number)
                 continue
 
@@ -4531,6 +5394,21 @@ class ExpertExtractor(BaseLLMCaller):
 
             cells = _split_pipe_row(line)
             if len(cells) < 2:  # Relaxed from 3 to 2 for simpler tables
+                continue
+
+            divider_gene = _gene_section_divider(
+                cells,
+                target_gene=gene_symbol,
+                allow_unknown=seen_section_gene_divider,
+            )
+            if divider_gene is not None:
+                active_section_gene = divider_gene
+                seen_section_gene_divider = True
+                continue
+            if (
+                active_section_gene is not None
+                and active_section_gene.upper() != gene_symbol.strip().upper()
+            ):
                 continue
             table_row_ordinal += 1
             prior_table_data_line = previous_table_data_line
@@ -4628,10 +5506,12 @@ class ExpertExtractor(BaseLLMCaller):
             # Validate actual cell values. Header cues alone are not enough:
             # GWAS tables use AA=alternate allele and n=participants, which
             # previously produced fake variants like A/G/T/C with huge counts.
-            cdna = self._valid_table_cdna(cdna)
+            cdna, legacy, source_notation = self._valid_table_cdna_identity(
+                cdna, gene_symbol
+            )
             protein = self._valid_table_protein(protein)
 
-            if not cdna and not protein:
+            if not cdna and not legacy and not protein:
                 continue
 
             def parse_count(value: Optional[str]) -> Optional[int]:
@@ -4769,9 +5649,9 @@ class ExpertExtractor(BaseLLMCaller):
             }
             variant = {
                 "gene_symbol": gene_symbol,
-                "cdna_notation": f"c.{cdna}"
-                if cdna and not cdna.startswith("c.")
-                else cdna,
+                "cdna_notation": cdna,
+                "legacy_notation": legacy,
+                "source_notation": source_notation,
                 "protein_notation": protein,
                 "clinical_significance": "benign" if row_control_like else "pathogenic",
                 "patients": {
@@ -4843,7 +5723,7 @@ class ExpertExtractor(BaseLLMCaller):
             return []
 
         variants: List[dict] = []
-        by_key: dict[tuple[str, str], dict] = {}
+        by_key: dict[tuple[str, str, str], dict] = {}
         current_table_label = ""
         current_table_context: list[str] = []
         current_table_has_patient_rows: Optional[bool] = None
@@ -4880,12 +5760,18 @@ class ExpertExtractor(BaseLLMCaller):
 
         def add_variant(
             cdna: Optional[str],
+            legacy: Optional[str],
+            source_notation: Optional[str],
             protein: Optional[str],
             *,
             one_carrier_per_row: bool,
         ) -> None:
-            key = ((cdna or "").lower(), (protein or "").lower())
-            if not key[0] and not key[1]:
+            key = (
+                (cdna or "").lower(),
+                (legacy or "").lower(),
+                (protein or "").lower(),
+            )
+            if not any(key):
                 return
             if key in by_key:
                 if not one_carrier_per_row:
@@ -4904,6 +5790,8 @@ class ExpertExtractor(BaseLLMCaller):
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": cdna,
+                "legacy_notation": legacy,
+                "source_notation": source_notation,
                 "protein_notation": protein,
                 # A bare supplement variant catalogue carries no pathogenicity
                 # evidence per row; do not assert "pathogenic" for every listed
@@ -4945,7 +5833,9 @@ class ExpertExtractor(BaseLLMCaller):
                     unaffected_label=None,
                     carriers_count_type="per_variant_carrier",
                     affected_count_type="per_variant_carrier",
-                    row_label=f"{target_gene} {cdna or ''} {protein or ''}".strip(),
+                    row_label=(
+                        f"{target_gene} {cdna or legacy or ''} {protein or ''}".strip()
+                    ),
                 )
             by_key[key] = variant
             variants.append(variant)
@@ -4988,6 +5878,8 @@ class ExpertExtractor(BaseLLMCaller):
                     break
 
             cdna = None
+            legacy = None
+            source_notation = None
             protein = None
             for value in window:
                 # Cells sometimes contain parallel nucleotide changes separated
@@ -4998,16 +5890,20 @@ class ExpertExtractor(BaseLLMCaller):
                     part for part in re.split(r"\s*[,;]\s*", value) if part
                 ]
                 for piece in pieces:
-                    if cdna is None:
-                        cdna = self._valid_table_cdna(piece)
+                    if cdna is None and legacy is None:
+                        cdna, legacy, source_notation = self._valid_table_cdna_identity(
+                            piece, gene_symbol
+                        )
                     if protein is None:
                         protein = self._valid_table_protein(piece)
-                if cdna and protein:
+                if (cdna or legacy) and protein:
                     break
 
-            if cdna or protein:
+            if cdna or legacy or protein:
                 add_variant(
                     cdna,
+                    legacy,
+                    source_notation,
                     protein,
                     one_carrier_per_row=bool(current_table_has_patient_rows),
                 )
@@ -5272,17 +6168,21 @@ class ExpertExtractor(BaseLLMCaller):
                         if count_match
                         else match.group("count") or "1"
                     )
-                    cdna = (
-                        f"c.{cdna_raw}"
-                        if not cdna_raw.upper().startswith("IVS")
-                        else cdna_raw
-                    )
-                    if not cdna.upper().startswith("IVS"):
-                        cdna = self._valid_table_cdna(cdna)
+                    legacy = None
+                    source_notation = None
+                    if cdna_raw.upper().startswith("IVS"):
+                        cdna = cdna_raw
+                    else:
+                        cdna, legacy, source_notation = self._valid_table_cdna_identity(
+                            cdna_raw, gene_symbol
+                        )
                     protein = self._valid_table_protein(protein_raw)
-                    if not cdna and not protein:
+                    if not cdna and not legacy and not protein:
                         continue
-                    key = (cdna or "", protein or "")
+                    key = (
+                        cdna or (f"LEGACY:{legacy}" if legacy else ""),
+                        protein or "",
+                    )
                     if key in seen:
                         continue
                     seen.add(key)
@@ -5291,6 +6191,8 @@ class ExpertExtractor(BaseLLMCaller):
                             {
                                 "gene_symbol": gene_symbol,
                                 "cdna_notation": cdna,
+                                "legacy_notation": legacy,
+                                "source_notation": source_notation,
                                 "protein_notation": protein,
                                 "clinical_significance": "pathogenic",
                                 "patients": {
@@ -5338,7 +6240,7 @@ class ExpertExtractor(BaseLLMCaller):
                     protein = self._valid_table_protein(protein_raw)
                     if not protein:
                         continue
-                    cdna = self._valid_table_cdna(f"{pos}{change}")
+                    cdna = self._valid_table_cdna(f"{pos}{change}", gene_symbol)
                     affected_count = int(brs) + int(lqt)
                     unaffected_count = int(control)
                     patient_count = affected_count + unaffected_count
@@ -5500,12 +6402,17 @@ class ExpertExtractor(BaseLLMCaller):
                 protein_raw = (
                     tokens[cdna_idx + 1] if cdna_idx + 1 < len(tokens) else None
                 )
-                cdna = self._valid_table_cdna(cdna_raw)
+                cdna, legacy, source_notation = self._valid_table_cdna_identity(
+                    cdna_raw, gene_symbol
+                )
                 protein = self._valid_table_protein(protein_raw)
-                if not cdna and not protein:
+                if not cdna and not legacy and not protein:
                     continue
 
-                key = (cdna or "", protein or "")
+                key = (
+                    cdna or (f"LEGACY:{legacy}" if legacy else ""),
+                    protein or "",
+                )
                 if key in seen:
                     continue
                 seen.add(key)
@@ -5514,6 +6421,8 @@ class ExpertExtractor(BaseLLMCaller):
                         {
                             "gene_symbol": gene_symbol,
                             "cdna_notation": cdna,
+                            "legacy_notation": legacy,
+                            "source_notation": source_notation,
                             "protein_notation": protein,
                             "clinical_significance": "unknown",
                             "patients": {
@@ -5570,7 +6479,9 @@ class ExpertExtractor(BaseLLMCaller):
                     break
 
             protein_raw = middle[0] if middle else None
-            cdna = self._valid_table_cdna(cdna_raw) or self._valid_table_cdna(tokens[0])
+            cdna = self._valid_table_cdna(
+                cdna_raw, gene_symbol
+            ) or self._valid_table_cdna(tokens[0], gene_symbol)
             protein = self._valid_table_protein(protein_raw)
             if not cdna and not protein:
                 continue
@@ -5638,8 +6549,9 @@ class ExpertExtractor(BaseLLMCaller):
         for v in variants:
             cdna = v.get("cdna_notation", "") or ""
             protein = v.get("protein_notation", "") or ""
+            legacy = v.get("legacy_notation", "") or ""
             structural = v.get("structural_description", "") or ""
-            summaries.append(f"- {cdna} / {protein} / {structural}")
+            summaries.append(f"- {cdna} / {protein} / {legacy} / {structural}")
         return "\n".join(summaries)
 
     def _merge_continuation_results(
@@ -5654,26 +6566,31 @@ class ExpertExtractor(BaseLLMCaller):
         # description must participate in continuation deduplication.
         from utils.variant_normalizer import structural_variant_identity
 
-        existing_keys = set()
-        for v in base_variants:
-            key = (
-                v.get("cdna_notation", ""),
-                v.get("protein_notation", ""),
+        # ``or ""`` on every component: producers may materialize an explicit
+        # ``None`` (e.g. ``legacy_notation`` set by
+        # preserve_source_only_legacy_identity) while other rows lack the key
+        # entirely, and a None/"" mismatch would defeat tuple equality.
+        def _continuation_key(v: dict) -> tuple:
+            return (
+                v.get("cdna_notation") or "",
+                v.get("protein_notation") or "",
+                v.get("legacy_notation") or "",
                 structural_variant_identity(v.get("structural_description"))
-                if not (v.get("cdna_notation") or v.get("protein_notation"))
+                if not (
+                    v.get("cdna_notation")
+                    or v.get("protein_notation")
+                    or v.get("legacy_notation")
+                )
                 else "",
             )
-            existing_keys.add(key)
+
+        existing_keys = set()
+        for v in base_variants:
+            existing_keys.add(_continuation_key(v))
 
         new_variants = []
         for v in continuation_variants:
-            key = (
-                v.get("cdna_notation", ""),
-                v.get("protein_notation", ""),
-                structural_variant_identity(v.get("structural_description"))
-                if not (v.get("cdna_notation") or v.get("protein_notation"))
-                else "",
-            )
+            key = _continuation_key(v)
             if key not in existing_keys:
                 new_variants.append(v)
                 existing_keys.add(key)
@@ -5737,6 +6654,7 @@ class ExpertExtractor(BaseLLMCaller):
                 component=f"{self.__class__.__name__}.continuation",
             ):
                 continuation_data = self.call_llm_json(prompt)
+            continuation_data = _normalize_llm_extraction_shape(continuation_data)
             merged = self._merge_continuation_results(base_data, continuation_data)
             logger.info(
                 f"PMID {paper.pmid} - Continuation successful. Total variants now: {len(merged.get('variants', []))}"
@@ -6055,6 +6973,7 @@ class ExpertExtractor(BaseLLMCaller):
             "gene_symbol": variant.get("gene_symbol"),
             "cdna_notation": variant.get("cdna_notation"),
             "protein_notation": variant.get("protein_notation"),
+            "legacy_notation": variant.get("legacy_notation"),
             "genomic_position": variant.get("genomic_position"),
             "clinical_significance": variant.get("clinical_significance"),
             "patients": variant.get("patients"),
@@ -6438,7 +7357,12 @@ class ExpertExtractor(BaseLLMCaller):
     ) -> str:
         variant_terms = set()
         for variant in variants:
-            for key in ("protein_notation", "cdna_notation", "genomic_position"):
+            for key in (
+                "protein_notation",
+                "cdna_notation",
+                "legacy_notation",
+                "genomic_position",
+            ):
                 value = str(variant.get(key) or "").strip()
                 if value:
                     variant_terms.add(value)
@@ -6597,7 +7521,7 @@ Return strict JSON with this schema:
                 component=f"{self.__class__.__name__}.adjudicator",
                 adjudicator_model=model,
             ):
-                return self.call_llm_json(prompt)
+                return _normalize_llm_extraction_shape(self.call_llm_json(prompt))
         finally:
             self.model = saved_model
             self.max_tokens = saved_max_tokens
@@ -7771,6 +8695,13 @@ Return strict JSON with this schema:
             extracted_data, was_truncated, raw_text = self.call_llm_json_with_status(
                 prompt
             )
+            extracted_data = _normalize_llm_extraction_shape(extracted_data)
+            paper_metadata = extracted_data["paper_metadata"]
+            paper_metadata.setdefault("pmid", paper.pmid)
+            if paper.title:
+                paper_metadata.setdefault("title", paper.title)
+            if paper.gene_symbol:
+                paper_metadata.setdefault("gene_symbol", paper.gene_symbol)
 
             if table_candidate_skips:
                 extracted_data.setdefault("extraction_metadata", {})[

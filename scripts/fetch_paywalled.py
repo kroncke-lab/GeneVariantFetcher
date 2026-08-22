@@ -38,6 +38,7 @@ import json
 import logging
 import os
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -77,6 +78,7 @@ from harvesting.scholar_pdf_fallback import (  # noqa: E402
 from harvesting.springer_api import SpringerAPIClient  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
 from harvesting.wiley_api import WileyAPIClient  # noqa: E402
+from pipeline.source_quality import SUPPLEMENT_SURFACE_STATUS_MARKER  # noqa: E402
 from utils.pubmed_utils import get_doi_from_pmid  # noqa: E402
 
 
@@ -92,6 +94,49 @@ _PMC_BODY_SELECTORS = (
     "div.article-page",
     "body",
 )
+
+
+def _jats_has_substantive_body(xml_text: str) -> bool:
+    """Require an actual JATS body before it can replace PMC HTML."""
+
+    try:
+        root = ET.fromstring(xml_text)
+    except ET.ParseError:
+        return False
+
+    def local_name(element: ET.Element) -> str:
+        return element.tag.rsplit("}", 1)[-1].casefold()
+
+    if local_name(root) == "article":
+        article = root
+    else:
+        article = None
+        pending = list(root)
+        while pending:
+            element = pending.pop(0)
+            tag = local_name(element)
+            if tag == "sub-article":
+                continue
+            if tag == "article":
+                article = element
+                break
+            pending[0:0] = list(element)
+    if article is None:
+        return False
+    body = next((child for child in list(article) if local_name(child) == "body"), None)
+    if body is None:
+        return False
+
+    def body_text(element: ET.Element) -> str:
+        parts = [element.text or ""]
+        for child in list(element):
+            if local_name(child) != "sub-article":
+                parts.append(body_text(child))
+            parts.append(child.tail or "")
+        return " ".join(parts)
+
+    return len(" ".join(body_text(body).split())) >= 500
+
 
 FETCH_SUCCESS_OUTCOMES = {
     "success",
@@ -159,13 +204,12 @@ def try_pmc_fallback(
     converter: Optional[FormatConverter] = None,
     scraper: Optional[SupplementScraper] = None,
 ) -> Optional[Dict]:
-    """Attempt to recover a stub via the PMC HTML deposit.
+    """Attempt to recover a stub via the PMC deposit.
 
     Many subscription papers (especially NIH-funded ones) have a PMC version
-    that's free to read after the embargo. We look up the PMCID via Europe
-    PMC, fetch the PMC HTML, run our DOM extractor on it, and pull supplement
-    links from the same HTML so captions AND downloadable supplements both
-    land in the rescued FULL_CONTEXT.md.
+    that's free to read after the embargo. Europe PMC JATS is preferred for the
+    article body because it preserves table rows that PMC's rendered HTML can
+    omit; PMC HTML remains the supplement/caption discovery surface.
 
     Returns a result row dict on success, or None if no PMC version exists
     or the extraction failed quality gates. On success the row's ``path``
@@ -175,7 +219,32 @@ def try_pmc_fallback(
     if not pmcid:
         return None
 
+    converter = converter or FormatConverter()
+    jats_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+    jats_markdown = ""
+    jats_reason = ""
+    try:
+        jats_response = session.get(jats_url, timeout=30)
+        if (
+            jats_response.ok
+            and len(jats_response.content) >= 1000
+            and _jats_has_substantive_body(jats_response.text)
+        ):
+            candidate = converter.xml_to_markdown(jats_response.text)
+            jats_ok, jats_reason = validate_article_content(candidate)
+            if jats_ok:
+                jats_markdown = candidate
+            else:
+                LOG.info(
+                    "Europe PMC JATS for %s failed content gate: %s",
+                    pmid,
+                    jats_reason,
+                )
+    except Exception as exc:
+        LOG.info("Europe PMC JATS fetch failed for PMID %s: %s", pmid, exc)
+
     pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+    html = ""
     try:
         r = session.get(
             pmc_url,
@@ -190,28 +259,34 @@ def try_pmc_fallback(
         )
     except Exception as e:
         LOG.warning("PMC fallback fetch failed for PMID %s: %s", pmid, e)
-        return None
-    if not r.ok or len(r.content) < 5000:
-        return None
+        r = None
+    if r is not None and r.ok and len(r.content) >= 5000:
+        html = r.text
 
-    html = r.text
-    markdown = extract_body_markdown(html, _PMC_BODY_SELECTORS)
+    html_markdown = extract_body_markdown(html, _PMC_BODY_SELECTORS) if html else ""
+    html_ok, html_reason = (
+        validate_article_content(html_markdown)
+        if html_markdown
+        else (False, "PMC HTML unavailable or empty")
+    )
+    markdown = jats_markdown or (html_markdown if html_ok else "")
+    reason = jats_reason if jats_markdown else html_reason
     if not markdown:
-        return None
-
-    ok, reason = validate_article_content(markdown)
-    if not ok:
-        # PMC content didn't pass the gate either — could be an abstract-
-        # only PMC record. Don't overwrite the stub from Tier 3.5.
-        LOG.info("PMC fallback for %s extracted but failed gate: %s", pmid, reason)
+        LOG.info("PMC fallback for %s failed content gates: %s", pmid, reason)
         return None
 
     # Write a PMC FULL_CONTEXT.md and source marker.
     pmid_dir = output_dir / pmid
     pmid_dir.mkdir(parents=True, exist_ok=True)
-    (pmid_dir / "page.html").write_text(html, encoding="utf-8")
+    if html:
+        (pmid_dir / "page.html").write_text(html, encoding="utf-8")
     (pmid_dir / "source.txt").write_text(
-        f"Recovered via PMC fallback: {pmc_url}\n", encoding="utf-8"
+        (
+            f"Recovered via Europe PMC JATS: {jats_url}\n"
+            if jats_markdown
+            else f"Recovered via PMC fallback: {pmc_url}\n"
+        ),
+        encoding="utf-8",
     )
 
     # Scrape supplement links directly from the PMC HTML so the enricher can
@@ -220,11 +295,22 @@ def try_pmc_fallback(
     # this; in fallback mode we replicate it here rather than ship a body-
     # only context that silently drops supplement variants.
     scraper = scraper or SupplementScraper()
-    try:
-        supp_files = scraper.scrape_generic_supplements(html, pmc_url) or []
-    except Exception as exc:
-        LOG.info("PMC supplement scrape failed for %s: %s", pmid, exc)
+    supplement_surface_status = "available"
+    supplement_surface_reason = ""
+    if html:
+        try:
+            supp_files = scraper.scrape_generic_supplements(html, pmc_url) or []
+        except Exception as exc:
+            LOG.info("PMC supplement scrape failed for %s: %s", pmid, exc)
+            supp_files = []
+            supplement_surface_status = "scrape_error"
+            supplement_surface_reason = str(exc)
+    else:
         supp_files = []
+        supplement_surface_status = "unavailable"
+        supplement_surface_reason = (
+            "PMC HTML unavailable; supplement links not inspected"
+        )
 
     enrichment = enrich_paywall_full_context(
         body_markdown=markdown,
@@ -232,12 +318,20 @@ def try_pmc_fallback(
         supp_files=supp_files,
         pmid=pmid,
         output_dir=output_dir,
-        converter=converter or FormatConverter(),
+        converter=converter,
         session=session,
         download_supplements=True,
         source_url=pmc_url,
     )
     unified = enrichment.unified_markdown or markdown
+    if supplement_surface_status != "available":
+        # Keep the recovered body extractable now, but make incompleteness travel
+        # with every copy. Corpus/prior-run reuse reads this marker and retries
+        # acquisition instead of freezing an uninspected supplement surface.
+        unified = (
+            f"<!-- {SUPPLEMENT_SURFACE_STATUS_MARKER} "
+            f"{supplement_surface_status} -->\n\n{unified}"
+        )
     per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
     per_pmid_full_ctx.write_text(unified, encoding="utf-8")
     canonical_path = write_canonical_mirror(output_dir, pmid, unified)
@@ -245,11 +339,20 @@ def try_pmc_fallback(
     return {
         "pmid": pmid,
         "strategy": "pmc_fallback",
-        "outcome": "success",
-        "reason": reason,
+        "outcome": (
+            "success"
+            if supplement_surface_status == "available"
+            else "success_body_only"
+        ),
+        "reason": (
+            reason
+            if supplement_surface_status == "available"
+            else f"{reason}; {supplement_surface_reason}"
+        ),
         "chars": len(unified),
         "supp_files": len(supp_files),
         "final_url": pmc_url,
+        "body_source_url": jats_url if jats_markdown else pmc_url,
         "path": str(canonical_path),
         "canonical_path": str(canonical_path),
         "per_pmid_path": str(per_pmid_full_ctx),
@@ -257,6 +360,8 @@ def try_pmc_fallback(
         "figure_captions": enrichment.figure_caption_count,
         "table_captions": enrichment.table_caption_count,
         "supplements_downloaded": enrichment.supplement_count,
+        "supplement_surface_status": supplement_surface_status,
+        "supplement_surface_reason": supplement_surface_reason,
     }
 
 
@@ -1132,10 +1237,23 @@ def fetch_one(
         return scholar_row
 
     def promote_pmc_fallback(pmc_row: Dict) -> None:
-        print(
-            f"  PMC fallback succeeded: {pmc_row['pmcid']} -> {pmc_row['chars']} chars"
+        supplement_surface_status = pmc_row.get(
+            "supplement_surface_status", "available"
         )
-        row["outcome"] = "success_via_pmc"
+        completion_label = (
+            "succeeded"
+            if supplement_surface_status == "available"
+            else "recovered body only; supplements remain uninspected"
+        )
+        print(
+            f"  PMC fallback {completion_label}: {pmc_row['pmcid']} "
+            f"-> {pmc_row['chars']} chars"
+        )
+        row["outcome"] = (
+            "success_via_pmc"
+            if supplement_surface_status == "available"
+            else "success_via_pmc_body_only"
+        )
         row["strategy"] = f"{row['strategy']}+pmc_fallback"
         row["reason"] = f"PMC fallback ({pmc_row['pmcid']}): {pmc_row['reason']}"
         row["chars"] = pmc_row["chars"]
@@ -1148,6 +1266,8 @@ def fetch_one(
         row["figure_captions"] = pmc_row.get("figure_captions", 0)
         row["table_captions"] = pmc_row.get("table_captions", 0)
         row["supplements_downloaded"] = pmc_row.get("supplements_downloaded", 0)
+        row["supplement_surface_status"] = supplement_surface_status
+        row["supplement_surface_reason"] = pmc_row.get("supplement_surface_reason", "")
 
     def promote_publisher_api_fallback(api_row: Dict) -> None:
         label = api_row.get("api_label") or "Publisher API"
