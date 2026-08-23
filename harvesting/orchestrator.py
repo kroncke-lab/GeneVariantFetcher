@@ -67,6 +67,24 @@ logger = get_logger(__name__)
 _DOI_RE = re.compile(r"10\.\d{4,9}/[^\s\"'<>]+", re.IGNORECASE)
 
 
+def _normalized_image_url(value: str, base_url: str = "") -> str:
+    """Return a comparable form of a figure image URL.
+
+    Caption extraction resolves hrefs against the page while a raw ``<img
+    src>`` may be protocol-relative or carry a CDN resize query, so the two
+    sides of a caption↔image join have to be normalized before comparison.
+    """
+
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    if base_url:
+        raw = urljoin(base_url, raw)
+    parsed = urlparse(raw)
+    host = (parsed.netloc or "").lower()
+    return f"{host}{parsed.path}" if host else parsed.path
+
+
 def _clean_doi(value: str) -> str:
     doi = str(value or "").strip()
     doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
@@ -530,11 +548,15 @@ class PMCHarvester:
             logger.warning(f"Caption extraction failed for {pmcid}: {e}")
             captions_result = CaptionExtractionResult()
 
-        # Map image_url -> caption (best effort) for filename pairing below.
+        # Map image_url -> caption for filename pairing below. Both sides are
+        # normalized (absolute, query/fragment stripped) because the caption
+        # extractor resolves hrefs against the page while the raw <img src> may
+        # stay protocol-relative or carry a CDN resize query — an exact string
+        # match missed those and silently fell through to positional pairing.
         caption_by_url: Dict[str, Any] = {}
         for fig in captions_result.figures:
             if fig.image_url:
-                caption_by_url[fig.image_url] = fig
+                caption_by_url[_normalized_image_url(fig.image_url, pmc_url)] = fig
 
         try:
             soup = BeautifulSoup(html_text, "html.parser")
@@ -545,7 +567,13 @@ class PMCHarvester:
                 if src and "cdn.ncbi.nlm.nih.gov/pmc" in src:
                     if "logo" in src.lower() or "icon" in src.lower():
                         continue
-                    if src.endswith((".jpg", ".jpeg", ".png", ".gif")):
+                    # Match on the path, not the raw src: a CDN resize query
+                    # ("image.jpg?w=600") is still a figure image.
+                    if (
+                        urlparse(src)
+                        .path.lower()
+                        .endswith((".jpg", ".jpeg", ".png", ".gif"))
+                    ):
                         figure_urls.append(src)
 
             if not figure_urls:
@@ -593,10 +621,17 @@ class PMCHarvester:
                     )
 
                     # Attach caption: prefer URL-keyed match; otherwise
-                    # use the i-th caption as a positional fallback.
-                    cap = caption_by_url.get(url)
+                    # use the i-th caption as a positional fallback. The two
+                    # are recorded distinctly — positional pairing walks every
+                    # matching <img>, not just semantic figures, so one banner
+                    # or equation shifts the sequence and hands a pedigree the
+                    # next figure's caption. Consumers that act on a caption
+                    # (vision triage) must use url-bound entries only.
+                    cap = caption_by_url.get(_normalized_image_url(url, pmc_url))
+                    cap_binding = "url" if cap is not None else None
                     if cap is None and i - 1 < len(ordered_captions):
                         cap = ordered_captions[i - 1]
+                        cap_binding = "positional"
                     cap_label = cap.label if cap else None
                     cap_title = cap.title if cap else None
                     cap_text = cap.text if cap else None
@@ -610,6 +645,7 @@ class PMCHarvester:
                             "text": cap_text,
                             "figure_id": fig_id,
                             "source_url": url,
+                            "binding": cap_binding,
                         }
                     )
 

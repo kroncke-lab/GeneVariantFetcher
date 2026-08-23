@@ -139,14 +139,48 @@ the paper gives only aggregate counts, emit one grouped variant record carrying 
 aggregate locator. The SQLite writer computes source_record_id; do not hash it."""
 )
 
+# The continuation call asks a different question ("what is left") than the
+# primary call ("extract everything"), so it gets its own byte-stable system
+# prompt. Reusing the primary one put "Extract ALL / Do NOT stop early" and the
+# primary output schema in the highest-priority turn while the user turn asked
+# for remaining variants only — providers that favour the system message could
+# restart the extraction or emit the wrong object, on exactly the truncated
+# high-variant papers where recall is already fragile.
+CONTINUATION_SYSTEM_PROMPT = (
+    """You are continuing a variant extraction from a scientific paper that was
+cut off by an output limit. The user turn lists the variants already extracted.
+
+Return ONLY the variants that are still missing. Do not repeat any variant from
+that list, do not restate the paper's metadata, and do not stop early: the point
+of this call is to finish the catalogue. Each variant object uses the same
+fields as the extraction being continued; keep them minimal rather than dropping
+variants.
+
+A wrong number is worse than a missing one. When support is not explicit, use null.
+
+"""
+    + _CORE_RULES
+    + """
+
+OUTPUT - JSON only:
+{
+    "continuation": true,
+    "variants": [
+        ... remaining variants only, same object shape as the extraction so far ...
+    ],
+    "extraction_metadata": {
+        "continuation_variants_found": integer,
+        "notes": "any notes about this continuation"
+    }
+}
+"""
+)
+
 CONTINUATION_PROMPT = """You previously extracted variants from this paper but the response was truncated.
 You extracted {extracted_count} variants so far. The paper contains approximately {expected_count} variants total.
 
 Previously extracted variants (DO NOT re-extract these):
 {extracted_variants_list}
-
-Please continue extracting the REMAINING variants starting AFTER the last one listed above.
-Return ONLY the variants you haven't extracted yet in the same JSON format.
 
 TARGET GENE: {gene_symbol}
 Paper Title: {title}
@@ -154,17 +188,8 @@ Paper Title: {title}
 Full Text:
 {full_text}
 
-Return a JSON object with this structure:
-{{
-    "continuation": true,
-    "variants": [
-        ... remaining variants only ...
-    ],
-    "extraction_metadata": {{
-        "continuation_variants_found": integer,
-        "notes": "any notes about this continuation"
-    }}
-}}
+Continue from after the last variant listed above and return ONLY the remaining
+variants, in the JSON object specified in the system message.
 """
 
 # System prompts are plain strings (real braces, never str.format-ed). They must

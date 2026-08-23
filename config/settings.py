@@ -364,6 +364,21 @@ class Settings(BaseSettings):
         validation_alias="TIER3_MAX_VERIFIER_CARDS",
         description="Maximum per-variant evidence cards to verify in one extraction.",
     )
+    tier3_verifier_reasoning_effort: Optional[str] = Field(
+        default=None,
+        validation_alias="TIER3_VERIFIER_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for claim-verification calls "
+            "(none|minimal|low|medium|high|xhigh; 'max' aliases to xhigh). None "
+            "inherits TIER3_ADJUDICATOR_REASONING_EFFORT, since the verifier "
+            "runs the adjudicator's model. This knob exists because claim "
+            "verification is per-card and high volume while adjudication is "
+            "per-paper: at xhigh the verifier also takes a much larger output "
+            "budget (hidden reasoning precedes its small JSON verdict), so "
+            "raising adjudicator effort would otherwise multiply verification "
+            "cost as a side effect."
+        ),
+    )
     count_guard_policy: str = Field(
         default="off",
         validation_alias="COUNT_GUARD_POLICY",
@@ -818,6 +833,7 @@ class Settings(BaseSettings):
         "tier2_reasoning_effort",
         "tier3_reasoning_effort",
         "tier3_adjudicator_reasoning_effort",
+        "tier3_verifier_reasoning_effort",
         "table_router_reasoning_effort",
         "vision_reasoning_effort",
         "final_adjudicator_reasoning_effort",

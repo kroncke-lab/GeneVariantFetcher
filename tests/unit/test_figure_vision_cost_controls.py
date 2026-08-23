@@ -96,6 +96,51 @@ class TestImageDedup:
         assert skip["image"] == "fig1_via_other_url.png"
         assert skip["duplicate_of"] == "fig1.png"
 
+    def test_failed_first_read_leaves_the_duplicate_readable(
+        self, tmp_path: Path, monkeypatch
+    ):
+        """Claiming the digest before the read meant one transient provider
+        failure suppressed every byte-identical copy, where the pre-dedup
+        behaviour still had a second chance at the same image."""
+        calls: list[str] = []
+
+        def flaky_read_one(img, gene, model, *, pmid=""):
+            calls.append(img.name)
+            if len(calls) == 1:
+                return fvr.FigureReadResult(image_path=str(img), error="provider: 503")
+            return fvr.FigureReadResult(
+                image_path=str(img), variants=[{"protein": "R176W"}]
+            )
+
+        monkeypatch.setattr(fvr, "_read_one", flaky_read_one)
+        first = _png(tmp_path, "fig1.png")
+        duplicate = _png(tmp_path, "fig1_copy.png")
+
+        report = fvr.read_images(
+            [first, duplicate], "KCNH2", pmid="1", model="anthropic/x"
+        )
+
+        assert calls == ["fig1.png", "fig1_copy.png"]
+        assert report.distinct_variants == [{"protein": "R176W"}]
+
+    def test_empty_but_successful_read_still_claims_the_digest(
+        self, tmp_path: Path, monkeypatch
+    ):
+        """An empty variant list is a real answer, not a failure."""
+        calls: list[str] = []
+
+        def empty_read_one(img, gene, model, *, pmid=""):
+            calls.append(img.name)
+            return fvr.FigureReadResult(image_path=str(img), variants=[])
+
+        monkeypatch.setattr(fvr, "_read_one", empty_read_one)
+        first = _png(tmp_path, "fig1.png")
+        duplicate = _png(tmp_path, "fig1_copy.png")
+
+        fvr.read_images([first, duplicate], "KCNH2", pmid="1", model="anthropic/x")
+
+        assert calls == ["fig1.png"]
+
     def test_distinct_images_are_both_read(self, tmp_path: Path, monkeypatch):
         calls = _patched_read_one(monkeypatch)
         a = _png(tmp_path, "a.png", payload=b"bytes-a")
@@ -140,6 +185,42 @@ class TestCaptionTriage:
         )
 
         assert calls == ["fig2.png"]
+
+    def test_reads_mutation_map_captioned_as_topology(self):
+        """The variant prompt tells the model to read every labeled residue off
+        a topology/mutation map, so those words cannot be skip signals."""
+        for caption in (
+            "Topology of KCNH2 showing locations of identified mutations.",
+            "Schematic and sequencing chromatograms of the novel variant.",
+        ):
+            keep, reason = fvr.triage_figure_caption(caption)
+            assert keep is True, caption
+            assert reason.startswith("identity:"), (caption, reason)
+        # No identity word at all, but "alignment" alone is no longer a skip
+        # signal either, so the read still happens.
+        keep, reason = fvr.triage_figure_caption(
+            "Alignment of the mutated residues across species."
+        )
+        assert keep is True
+        assert reason == "no_keyword_match"
+
+    def test_reads_multi_panel_caption_despite_functional_words(self):
+        """A composite caption describes several panels; a functional phrase
+        covers only one of them and must not discard the pedigree panel."""
+        keep, reason = fvr.triage_figure_caption(
+            "Figure 1. Characterization of R176W. (A) Inheritance in the index "
+            "family. (B) Representative current traces. (C) Boltzmann fit."
+        )
+        assert keep is True
+        assert reason.startswith("mixed_panels:")
+
+    def test_single_panel_functional_caption_still_skips(self):
+        keep, reason = fvr.triage_figure_caption(
+            "Representative current traces from transfected CHO cells."
+        )
+        assert keep is False
+        # First lexicon hit wins; "current trace" precedes the longer phrase.
+        assert reason == "functional:current trace"
 
     def test_skips_functional_only_caption(self, tmp_path: Path, monkeypatch):
         trace_root = configure_llm_tracing(tmp_path / "traces", run_id="triage")
@@ -235,6 +316,38 @@ class TestCaptionLookup:
         assert captions["fig1_small.jpg"] == captions["fig1_large.jpg"]
         assert "current traces" in captions["mmc2.png"]
 
+    def test_caption_stops_at_the_image_group(self):
+        """Body prose following the image lines is not part of the caption:
+        sweeping it in can flip an identity-bearing figure to functional."""
+        text = (
+            "#### Figure 3\n"
+            "Pedigree of family A.\n"
+            "_image_: fig3.jpg\n"
+            "Representative current traces were recorded by voltage clamp in\n"
+            "transfected cells as described in Methods.\n"
+        )
+
+        captions = fvr.parse_full_context_captions(text)
+
+        assert captions["fig3.jpg"] == "Pedigree of family A."
+        assert fvr.triage_figure_caption(captions["fig3.jpg"])[0] is True
+
+    def test_dedicated_caption_section_outranks_body_text_block(self):
+        text = (
+            "#### Figure 4\n"
+            "Western blot of the construct.\n"
+            "_image_: fig4.jpg\n"
+            "\n"
+            "## FIGURE CAPTIONS\n"
+            "### Figure 4.\n"
+            "Pedigree of the affected kindred.\n"
+            "_image_: fig4.jpg\n"
+        )
+
+        captions = fvr.parse_full_context_captions(text)
+
+        assert "pedigree" in captions["fig4.jpg"].lower()
+
     def test_lookup_prefers_the_on_disk_sidecar_binding(self, tmp_path: Path):
         # fig_pmc_1.jpg exists only in captions.json — the FULL_CONTEXT
         # _image_ basename never matches PMC-renamed files on disk.
@@ -248,6 +361,7 @@ class TestCaptionLookup:
                         "label": "Figure 1",
                         "title": "Pedigree of the family.",
                         "text": "Filled symbols denote affected carriers.",
+                        "binding": "url",
                     }
                 ]
             )
@@ -259,6 +373,32 @@ class TestCaptionLookup:
         assert "pedigree" in captions["fig_pmc_1.jpg"].lower()
         assert "mmc2.png" in captions  # FULL_CONTEXT names still contribute
         assert "fig1_small.jpg" in captions
+
+    def test_positional_sidecar_binding_is_not_used_for_triage(self, tmp_path: Path):
+        """Positional pairing walks every matching <img>, so one banner shifts
+        the sequence and a pedigree inherits the next figure's caption. Such an
+        entry must read as no caption at all rather than authorize a skip."""
+        fig_dir = tmp_path / "998_figures"
+        fig_dir.mkdir()
+        (fig_dir / "captions.json").write_text(
+            json.dumps(
+                [
+                    {
+                        "filename": "fig_pmc_1.jpg",
+                        "title": "Representative current traces.",
+                        "text": "Voltage clamp of the mutant channel.",
+                        "binding": "positional",
+                    }
+                ]
+            )
+        )
+
+        captions = fvr.load_figure_captions(tmp_path, "998")
+
+        assert "fig_pmc_1.jpg" not in captions
+        keep, reason = fvr.triage_figure_caption(captions.get("fig_pmc_1.jpg"))
+        assert keep is True
+        assert reason == "no_caption"
 
 
 # ---------------------------------------------------------------------------

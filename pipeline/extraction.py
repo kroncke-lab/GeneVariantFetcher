@@ -33,6 +33,7 @@ from pipeline.prompts import (
     COMPACT_EXTRACTION_SYSTEM_PROMPT,
     COMPACT_EXTRACTION_USER_PROMPT,
     CONTINUATION_PROMPT,
+    CONTINUATION_SYSTEM_PROMPT,
     EXTRACTION_SYSTEM_PROMPT,
     EXTRACTION_USER_PROMPT,
     HIGH_VARIANT_THRESHOLD,
@@ -606,6 +607,11 @@ class ExpertExtractor(BaseLLMCaller):
             settings.tier3_adjudicator_reasoning_effort
             if settings.tier3_adjudicator_reasoning_effort is not None
             else settings.tier3_reasoning_effort
+        )
+        self.verifier_reasoning_effort = (
+            settings.tier3_verifier_reasoning_effort
+            if settings.tier3_verifier_reasoning_effort is not None
+            else self.adjudicator_reasoning_effort
         )
         self.max_verifier_cards = settings.tier3_max_verifier_cards
         # Table-router decision for the extraction attempt in flight; folded into
@@ -6653,14 +6659,6 @@ class ExpertExtractor(BaseLLMCaller):
                 full_text, gene_symbol=paper.gene_symbol
             ),
         )
-        # Reuse the primary call's system prompt so the continuation shares its
-        # cached prefix; the mode is read from the extraction itself because the
-        # compact decision is not otherwise visible here.
-        system_prompt = (
-            COMPACT_EXTRACTION_SYSTEM_PROMPT
-            if (base_data.get("extraction_metadata") or {}).get("compact_mode")
-            else EXTRACTION_SYSTEM_PROMPT
-        )
 
         try:
             # Its own stage: a continuation call asks a different question of the
@@ -6671,7 +6669,7 @@ class ExpertExtractor(BaseLLMCaller):
                 component=f"{self.__class__.__name__}.continuation",
             ):
                 continuation_data = self.call_llm_json(
-                    prompt, system_message=system_prompt
+                    prompt, system_message=CONTINUATION_SYSTEM_PROMPT
                 )
             continuation_data = _normalize_llm_extraction_shape(continuation_data)
             merged = self._merge_continuation_results(base_data, continuation_data)
@@ -7602,11 +7600,13 @@ Return strict JSON with this schema:
         verifier = VariantClaimVerifier(
             model=verifier_model,
             max_tokens=min(self.adjudication_max_tokens, 2500),
-            # The verifier runs the adjudicator model, so it takes the
-            # adjudicator's effort; inheriting the primary extractor's effort
-            # was the same silent cross-model mismatch the adjudication path
-            # already corrects (TIER3_ADJUDICATOR_REASONING_EFFORT).
-            reasoning_effort=self.adjudicator_reasoning_effort,
+            # The verifier runs the adjudicator model, so it takes an
+            # adjudicator-appropriate effort rather than the primary
+            # extractor's — the same silent cross-model mismatch the
+            # adjudication path already corrects. It keeps its own knob
+            # because verification is per-card and high volume: raising
+            # adjudicator effort must not multiply verification cost.
+            reasoning_effort=self.verifier_reasoning_effort,
         )
         updated_variants: list[dict] = list(variants)
         verification_results: list[dict[str, Any]] = []
@@ -8721,11 +8721,19 @@ Return strict JSON with this schema:
                 prompt, system_message=system_prompt
             )
             extracted_data = _normalize_llm_extraction_shape(extracted_data)
+            # Record the mode the pipeline actually used. A continuation has to
+            # reuse the same system prompt, and trusting the model to echo
+            # ``compact_mode`` back is exactly the field a truncated response
+            # drops — which is when continuation runs.
+            extracted_data.setdefault("extraction_metadata", {})["compact_mode"] = (
+                use_compact
+            )
             paper_metadata = extracted_data["paper_metadata"]
             # The pipeline's PMID is authoritative. The schema no longer
             # interpolates it (the system prompt is byte-stable for caching),
             # so a model echo of the schema placeholder must never survive.
-            paper_metadata["pmid"] = paper.pmid
+            if paper.pmid:
+                paper_metadata["pmid"] = paper.pmid
             if paper.title:
                 paper_metadata.setdefault("title", paper.title)
             if paper.gene_symbol:

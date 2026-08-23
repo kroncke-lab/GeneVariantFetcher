@@ -76,10 +76,10 @@ _RESPONSES_API_PREFIXES = ("gpt-5", "azure_ai/gpt-5")
 #: contract as GVF_FIGURE_VARIANT_GATE in scripts/extract_figure_variants.py.
 FIGURE_TRIAGE_ENV = "GVF_FIGURE_TRIAGE"
 
-# Caption triage lexicon, verbatim from the retired scripts/fetch_gold_figures.py
-# (the à-la-carte gold-figure fetcher): pedigrees and clinical panels carry
-# patient counts; functional/structural panels do not. " generation" keeps its
-# leading space so "degeneration" cannot match.
+# Caption triage lexicon, from the retired scripts/fetch_gold_figures.py (the
+# à-la-carte gold-figure fetcher): pedigrees and clinical panels carry patient
+# counts; functional panels do not. " generation" keeps its leading space so
+# "degeneration" cannot match.
 PEDIGREE_CAPTION_KEYWORDS = (
     "pedigree",
     "family tree",
@@ -100,6 +100,10 @@ CLINICAL_CAPTION_KEYWORDS = (
     "clinical features",
     "patient",
 )
+# The fetcher's list minus "topology", "schematic" and "alignment": those three
+# are exactly what a mutation map is captioned as, and the variant prompt
+# instructs the model to treat every labeled residue on a topology diagram as a
+# variant. Skipping them discarded the identity-densest figure class.
 FUNCTIONAL_CAPTION_KEYWORDS = (
     "current trace",
     "tail current",
@@ -111,9 +115,6 @@ FUNCTIONAL_CAPTION_KEYWORDS = (
     "confocal",
     "immunoblot",
     "western",
-    "topology",
-    "schematic",
-    "alignment",
     "construct",
     "fluoresc",
     "crystal",
@@ -122,6 +123,25 @@ FUNCTIONAL_CAPTION_KEYWORDS = (
     "patch clamp",
     "patch-clamp",
 )
+
+#: A caption naming variant identities is read no matter what else it names.
+#: "sequenc" covers sequence/sequencing; "locations of" catches the mutation-map
+#: phrasing ("topology ... showing locations of identified mutations").
+IDENTITY_CAPTION_KEYWORDS = (
+    "mutation",
+    "variant",
+    "sequenc",
+    "chromatogram",
+    "genotype",
+    "locations of",
+)
+
+#: Panel markers in a composite caption. Two or more distinct panels means the
+#: figure mixes content types, so a functional keyword describes only part of
+#: it — "(A) Inheritance in the index family. (B) Representative current
+#: traces." must not lose the pedigree panel.
+_PANEL_MARKER_RE = re.compile(r"\(([A-H])\)")
+_MIN_MIXED_PANELS = 2
 
 # FULL_CONTEXT figure blocks: a '#### Figure N' heading, caption lines, and
 # one or more '_image_:' lines (same shapes the retired fetch_gold_figures.py
@@ -243,23 +263,34 @@ def parse_full_context_captions(text: str) -> Dict[str, str]:
     filenames; whether they match anything on disk is the caller's problem.
     """
     captions: Dict[str, str] = {}
+    dedicated: Dict[str, str] = {}
     caption_lines: List[str] = []
     image_names: List[str] = []
     in_block = False
+    saw_image = False
+    in_caption_section = False
 
     def _flush() -> None:
-        nonlocal caption_lines, image_names, in_block
+        nonlocal caption_lines, image_names, in_block, saw_image
         caption = " ".join(part for part in caption_lines if part).strip()
         if caption:
+            target = dedicated if in_caption_section else captions
             for name in image_names:
-                captions.setdefault(name, caption)
-        caption_lines, image_names, in_block = [], [], False
+                target.setdefault(name, caption)
+        caption_lines, image_names, in_block, saw_image = [], [], False, False
 
     for raw_line in text.replace("\r\n", "\n").split("\n"):
         line = raw_line.strip()
         if _FIG_HEADING_RE.match(line):
             _flush()
             in_block = True
+            continue
+        if line.startswith("#"):
+            _flush()
+            # A dedicated caption section is authored from the publisher's own
+            # figure list, so it outranks a block harvested out of linearized
+            # body text where prose and images interleave.
+            in_caption_section = "figure caption" in line.lower()
             continue
         if not in_block:
             continue
@@ -270,13 +301,19 @@ def parse_full_context_captions(text: str) -> Dict[str, str]:
             )
             if base:
                 image_names.append(base[:120].lower())
+            saw_image = True
             continue
-        if line.startswith("#"):
+        if saw_image:
+            # The caption is the text that introduces the image group. Running
+            # on past it swept following body prose into the caption, which can
+            # flip an identity-bearing figure to functional-only.
             _flush()
             continue
         caption_lines.append(line)
     _flush()
-    return captions
+    merged = dict(captions)
+    merged.update(dedicated)
+    return merged
 
 
 def _load_captions_sidecar(fig_dir: Path) -> Dict[str, str]:
@@ -299,6 +336,13 @@ def _load_captions_sidecar(fig_dir: Path) -> Dict[str, str]:
     captions: Dict[str, str] = {}
     for entry in entries:
         if not isinstance(entry, dict):
+            continue
+        # Positional entries pair the i-th caption with the i-th downloaded
+        # image across every matching <img>, so one banner or equation shifts
+        # the sequence and a pedigree inherits the next figure's caption. A
+        # caption that can skip a vision read has to be url-bound; anything
+        # else is treated as no caption at all, which fails open to a read.
+        if str(entry.get("binding") or "").strip().lower() != "url":
             continue
         filename = str(entry.get("filename") or "").strip().lower()
         caption = " ".join(
@@ -352,6 +396,12 @@ def triage_figure_caption(caption: Optional[str]) -> tuple[bool, str]:
     if not caption or not caption.strip():
         return True, "no_caption"
     low = caption.lower()
+    for keyword in IDENTITY_CAPTION_KEYWORDS:
+        if keyword in low:
+            return True, f"identity:{keyword}"
+    panels = {match.group(1) for match in _PANEL_MARKER_RE.finditer(caption)}
+    if len(panels) >= _MIN_MIXED_PANELS:
+        return True, f"mixed_panels:{len(panels)}"
     for keyword in PEDIGREE_CAPTION_KEYWORDS:
         if keyword in low:
             return True, f"pedigree:{keyword.strip()}"
@@ -457,11 +507,17 @@ def read_images(
                 )
             )
             continue
-        seen_digests[digest] = img.name
         # PMID is in hand here and must be forwarded: _trace_parent needs BOTH
         # gene and pmid, so dropping it collapsed every figure read for every
         # paper into a single gene-level group.
         result = _read_one(img, gene, model, pmid=pmid)
+        if not result.error:
+            # Claim the digest only once a read actually succeeded. Recording it
+            # first meant one transient provider failure suppressed every
+            # byte-identical copy, where the pre-dedup behaviour still had a
+            # second chance at the same image. An empty variant list is a
+            # successful read; only an error leaves the digest unclaimed.
+            seen_digests[digest] = img.name
         report.per_figure.append(result)
     return report
 

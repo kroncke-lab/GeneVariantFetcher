@@ -140,15 +140,30 @@ def test_normalize_duplication(raw, expected):
 
 @pytest.mark.parametrize(
     "raw",
-    ["p.R360_Q361dupQKQR", "R360_Q361dupQKQR", "p.Arg360_Gln361dupGlnLysGlnArg"],
+    ["p.R360_Q361dupRQ", "R360_Q361dupRQ", "p.Arg360_Gln361dupArgGln"],
     ids=["single_letter_prefixed", "single_letter_bare", "three_letter"],
 )
-def test_range_duplication_drops_the_redundant_residue_suffix(raw):
-    """The restated run is redundant with the range, so both spellings must
-    converge or the verbatim one stays disjoint from every matcher form."""
+def test_range_duplication_drops_a_run_that_restates_the_range(raw):
+    """A run whose length equals the coordinate span only restates it, so the
+    spellings must converge or the verbatim one stays disjoint from every
+    matcher form."""
 
     assert normalize_duplication(raw) == "R360_Q361dup"
     assert normalize_variant(raw, "KCNQ1") == normalize_variant("R360_Q361dup", "KCNQ1")
+
+
+@pytest.mark.parametrize(
+    "raw",
+    ["p.R360_Q361dupQKQR", "R360_Q361dupQKQR", "R360_Q361DUPQKQR"],
+    ids=["prefixed", "bare", "gold_spelling"],
+)
+def test_range_duplication_keeps_a_run_longer_than_the_range(raw):
+    """QKQR is four residues across a two-residue range: a distinct insertion
+    allele, not a restatement. Collapsing it pooled separate identities, their
+    carrier counts and their dedup keys under one key."""
+
+    assert normalize_duplication(raw) == "R360_Q361dupQKQR"
+    assert normalize_variant(raw, "KCNQ1") != normalize_variant("R360_Q361dup", "KCNQ1")
 
 
 def test_unparsed_protein_fall_through_drops_the_presentation_prefix():

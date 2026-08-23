@@ -1084,16 +1084,19 @@ def normalize_duplication(variant: str) -> Optional[str]:
         return f"?{m.group(1)}dup"  # Mark as ambiguous
 
     # Pattern 4: Range duplication. Literature sometimes restates the
-    # duplicated run after "dup" ("p.R360_Q361dupQKQR"); the run is redundant
-    # with the range, so it is dropped rather than kept as identity.
+    # duplicated run after "dup" ("p.R360_Q361dupRQ"). The run is dropped ONLY
+    # when its residue count matches the coordinate span: a longer run names a
+    # different allele (p.R360_Q361dupQKQR is a four-residue insertion across a
+    # two-residue range), and collapsing it would pool distinct identities,
+    # their carrier counts, and their dedup keys under one key.
     m = re.match(
         r"^([A-Za-z]|[A-Z][a-z]{2})(\d+)_([A-Za-z]|[A-Z][a-z]{2})(\d+)dup"
-        r"(?:(?:[A-Z][a-z]{2})+|[ACDEFGHIKLMNPQRSTVWY]+)?$",
+        r"((?:[A-Z][a-z]{2})+|[ACDEFGHIKLMNPQRSTVWY]+)?$",
         v,
         re.IGNORECASE,
     )
     if m:
-        ref1_raw, pos1, ref2_raw, pos2 = m.groups()
+        ref1_raw, pos1, ref2_raw, pos2, run_raw = m.groups()
         if len(ref1_raw) == 1:
             ref1 = ref1_raw.upper()
         else:
@@ -1102,6 +1105,15 @@ def normalize_duplication(variant: str) -> Optional[str]:
             ref2 = ref2_raw.upper()
         else:
             ref2 = AA_MAP_REVERSE.get(ref2_raw.capitalize(), ref2_raw[0].upper())
+        span = abs(int(pos2) - int(pos1)) + 1
+        run = run_raw or ""
+        run_length = (
+            len(run) // 3 if re.fullmatch(r"(?:[A-Z][a-z]{2})+", run) else len(run)
+        )
+        if run and run_length != span:
+            # Keep the source identity intact; only the presentation prefix was
+            # stripped above.
+            return f"{ref1}{pos1}_{ref2}{pos2}dup{run.upper()}"
         return f"{ref1}{pos1}_{ref2}{pos2}dup"
 
     return None
