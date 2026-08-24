@@ -1,0 +1,59 @@
+gene	action	pmid	reason
+BRCA1	remove	16014699	Variant-classification method/aggregate; no primary current-study carrier cohort.
+BRCA1	remove	19941162	Resequencing-array validation on previously characterized DNA; not a primary carrier study.
+BRCA1	remove	25136594	Diagnostic-platform validation with no source-grounded carrier counts in the current run.
+BRCA1	remove	27767231	Tumor-assay development focused on mixed somatic/germline detection rather than germline carrier evidence.
+BRCA1	remove	29580235	In-silico classifier benchmark over previously classified variants; no primary carrier cohort.
+BRCA1	remove	29936257	Ovarian tumor-tissue assay validation with mixed somatic/germline variants.
+BRCA1	remove	30283497	Yeast functional assay and non-BRCA somatic screening; not a clinical BRCA1 carrier study.
+BRCA1	remove	31757951	PALB2 functional-variant paper; BRCA1 is an interaction partner, not the assayed target gene.
+BRCA1	remove	32019284	Somatic homologous-recombination tumor study rather than a germline BRCA1 carrier cohort.
+BRCA1	remove	32068069	Cohort was explicitly pre-screened negative for germline BRCA1/2 variants.
+BRCA1	remove	32566972	Retrospective compilation of 109 publications; not current-study carrier observations.
+BRCA1	remove	32766142	Somatic TP53 study in BRCA-associated tumors; BRCA1 variants only define the background cohort.
+BRCA1	add	29088781	Primary human Chilean hereditary-breast-cancer cohort with recurrent/founder BRCA1/2 mutations.
+BRCA1	add	31771539	Primary human Navarra HBOC testing cohort with molecular and clinical characterization.
+BRCA1	add	32879886	Primary human multi-cancer case/control study with directly screened BRCA1/2 variants.
+BRCA1	add	32846166	Primary human breast-cancer cohort with BRCA1/2 sequencing and novel variants.
+BRCA1	add	30675319	Primary human high-risk Lebanese BRCA1/2 testing cohort.
+BRCA1	add	30040829	Primary human Polish BRCA1/2 founder and full-sequencing cohort.
+BRCA1	add	33403015	Primary human 531-patient breast-cancer cohort with germline BRCA1/2 variants.
+BRCA1	add	30606148	Primary human Brazilian ovarian-carcinoma germline BRCA1/2 cohort.
+BRCA1	add	28179634	Primary human BRCA1/2 germline sequencing cohort with patient-level carrier observations.
+BRCA1	add	31341521	Primary human Colombian familial-breast-cancer BRCA1/2 cohort.
+BRCA1	add	12872263	Primary human Malay breast-cancer cohort reporting a recurrent BRCA1 founder mutation.
+BRCA1	add	28664449	Primary human unselected Chinese breast-cancer BRCA1/2 sequencing cohort.
+BRCA2	remove	18779604	Mutation-prediction-model performance study; not a per-variant BRCA2 carrier source.
+BRCA2	remove	19476645	Negative linkage study reporting no pathogenic BRCA2 mutations in the target pedigrees.
+BRCA2	remove	20807450	Common-SNP/haplotype comparison between carriers and non-carriers, not discovery of the causal BRCA2 variants.
+BRCA2	remove	22144684	UMD database description/aggregation rather than current-study carrier observations.
+BRCA2	remove	23519070	Systematic review of African BRCA studies; secondary evidence.
+BRCA2	remove	25859162	Fixed-tumor-tissue sequencing method validation with mixed somatic/germline evidence.
+BRCA2	remove	26109977	Systematic review of Iranian BRCA studies; secondary evidence.
+BRCA2	remove	14559878	Abstract-only Fanconi-anemia family report; replaced by a full-text primary BRCA2 cohort.
+BRCA2	add	22977638	Primary human Sri Lankan breast-cancer cohort with directly sequenced BRCA2 variants.
+BRCA2	add	16826315	Primary human Portuguese breast/ovarian-cancer family cohort with germline BRCA1/2 variants.
+BRCA2	add	14517958	Primary human early-onset Spanish breast-cancer cohort with germline BRCA1/2 variants.
+BRCA2	add	12552570	Primary human Cypriot familial breast/ovarian-cancer cohort with germline BRCA2 variants.
+BRCA2	add	12204006	Primary human Korean breast/ovarian-cancer family cohort with germline BRCA1/2 variants.
+BRCA2	add	12655567	Primary human Spanish breast-cancer cohort with directly sequenced BRCA2 variants.
+BRCA2	add	26271414	Primary human familial-breast-cancer cohort assessing BRCA1/2 long-range rearrangements.
+BRCA2	add	24372583	Full-text primary Tunisian familial/early-onset breast/ovarian-cancer BRCA1/2 cohort.
+BMPR2	remove	27077124	COPD common-variant association study; wrong disease and not a PAH carrier cohort.
+BMPR2	remove	34678164	PPHN association signal was EPAS1; the BMPR2 row is non-significant and quarantined.
+BMPR2	remove	39367156	Moyamoya modifier study; BMPR2 is an exploratory off-disease modifier.
+BMPR2	remove	39848555	Cell-model lncRNA study using one BMPR2-mutant line; not a clinical carrier study.
+BMPR2	remove	25543221	Abstract-only HHT/portal-hypertension case; lower-value source than an available full-text PAH cohort.
+BMPR2	remove	37278169	Abstract-only case report/literature review; lower-value source than an available full-text PAH cohort.
+BMPR2	remove	15059534	Abstract-only single-family report; lower-value source than an available full-text PAH cohort.
+BMPR2	remove	23139147	Abstract-only single-variant report; lower-value source than an available full-text PAH cohort.
+BMPR2	remove	35229499	Abstract-only pediatric PVOD case report; lower-value source than an available full-text PAH cohort.
+BMPR2	add	21801371	Primary human hereditary-PAH cohort describing clinical onset in BMPR2 mutation carriers.
+BMPR2	add	18503968	Large primary pediatric/adult PAH cohort with BMPR2 mutation status.
+BMPR2	add	22632830	Primary childhood-PAH outcome cohort with BMPR2/ALK1 mutation carriers.
+BMPR2	add	35811711	Primary human heritable/idiopathic PAH exome-sequencing cohort.
+BMPR2	add	32966279	Full-text primary Korean idiopathic-PAH cohort reporting BMPR2 mutation prevalence and phenotype.
+BMPR2	add	32502478	Full-text primary pediatric-PAH genetic epidemiology cohort with BMPR2 observations.
+BMPR2	add	37063688	Full-text primary pediatric hereditary-PAH referral cohort.
+BMPR2	add	15358693	Full-text primary congenital-heart-disease PAH cohort with BMPR2 mutations.
+BMPR2	add	38473983	Full-text primary PAH cohort with clinical/hemodynamic profiles for BMPR2 variants.
