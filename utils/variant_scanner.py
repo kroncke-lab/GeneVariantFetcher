@@ -454,6 +454,34 @@ class VariantScanner:
         re.IGNORECASE,
     )
 
+    #: Explicitly non-coding context. "position 1261" inside a promoter,
+    #: genomic or vector statement is not a cDNA coordinate, and emitting
+    #: ``c.`` there asserts a coding allele the paper never stated.
+    PROSE_NONCODING_CONTEXT = re.compile(
+        r"\bpromoter\b|\bgenomic\s+(?:dna|sequence|position|coordinate)|"
+        r"\bg\.\d|\bchr(?:omosome)?\s*\d|\b(?:5|3)['\u2032]\s*UTR\b|"
+        r"\bconstruct\b|\bvector\b|\bplasmid\b|\bcloning\s+site\b|"
+        r"\bprimer\b",
+        re.IGNORECASE,
+    )
+
+    #: A bare length ("4 bp at position 1261") names no sequence, so the
+    #: coordinate system has to be stated somewhere in the sentence. A named
+    #: base ("a guanine at position 3108") is nucleotide-level by
+    #: construction and needs no further witness.
+    PROSE_CDNA_CONTEXT = re.compile(
+        r"\bc\.\d|\bcDNA\b|\bcoding\s+(?:sequence|region|dna)\b|"
+        r"\bnucleotide\b|\bexon\s+\d|\btranscript\b|\bNM_\d",
+        re.IGNORECASE,
+    )
+
+    #: A negated or merely predicted consequence is not an observation.
+    PROSE_NEGATION = re.compile(
+        r"\b(?:no|not|never|without|absence\s+of|failed\s+to|neither|"
+        r"did\s+not|does\s+not|was\s+not|were\s+not)\b",
+        re.IGNORECASE,
+    )
+
     PROSE_BASE_LETTERS = {
         "adenine": "A",
         "guanine": "G",
@@ -1417,9 +1445,19 @@ class VariantScanner:
         variants: List[ScannedVariant] = []
 
         for m in self.PROSE_NT_INDEL.finditer(text):
+            statement = self._structural_statement_context(text, m.start(), m.end())
+            if self.PROSE_NONCODING_CONTEXT.search(statement):
+                continue
+            phrase_at = statement.find(m.group(0))
+            preamble = statement[:phrase_at] if phrase_at > 0 else statement
+            if self.PROSE_NEGATION.search(preamble):
+                continue
             op = m.group("op").lower()[:3]
             pos = int(m.group("pos"))
             base = m.group("base")
+            if not base and not self.PROSE_CDNA_CONTEXT.search(statement):
+                # Bare-length form with no stated coordinate system.
+                continue
             if base:
                 normalized = f"c.{pos}{op}{self.PROSE_BASE_LETTERS[base.lower()]}"
             else:
@@ -1447,9 +1485,10 @@ class VariantScanner:
 
             # A same-sentence truncation clause anchors the protein-level
             # consequence at a codon even without a reference residue.
-            statement = self._structural_statement_context(text, m.start(), m.end())
             truncation = self.PROSE_TRUNCATION.search(statement)
-            if truncation:
+            if truncation and not self.PROSE_NEGATION.search(
+                statement[: truncation.start()]
+            ):
                 aa_pos = int(truncation.group("aa"))
                 variants.append(
                     ScannedVariant(
@@ -1735,13 +1774,29 @@ def merge_scanner_results(
         re.IGNORECASE,
     )
     # External-evidence signals inside a table row: a citation ("Smith et al.
-    # 2010", a bare year, an rs id) or a population/clinical repository name
-    # marks the row as a compilation of other studies' findings, never a
-    # current-study observation.
+    # 2010"), an rs id, or a population/clinical repository name marks the row
+    # as a compilation of other studies' findings, never a current-study
+    # observation. A BARE year is deliberately not a signal here: clinical
+    # rows carry years of diagnosis, onset and follow-up, so vetoing on one
+    # discards exactly the current-study rows this lane exists to admit. A
+    # year only counts when it sits in a citation shape.
     row_external_signal_re = re.compile(
-        r"\bet\s+al\b|\b(?:19|20)\d{2}\b|\brs\d{3,}\b|"
-        r"\b(?:gnomad|exac|clinvar|dbsnp|hgmd|topmed|bravo|esp6500|"
+        r"\bet\s+al\b|\brs\d{3,}\b|"
+        r"\((?:[^()]{0,40}?\b(?:19|20)\d{2}[a-z]?)\)|"
+        r"\b(?:gnomad|exac|clinvar|dbsnp|hgmd|topmed|bravo|esp6500|lovd|bic|"
         r"1000\s*genomes|uk\s*biobank)\b",
+        re.IGNORECASE,
+    )
+    # A caption or heading that scopes its table to previously published or
+    # database-sourced variants. Applied to the nearest preceding caption
+    # because a physical row cannot show it.
+    compilation_scope_re = re.compile(
+        r"\b(?:previously|prior(?:ly)?|already)\s+(?:reported|published|"
+        r"described|identified)\b|"
+        r"\b(?:catalog(?:ue)?|compilation|compendium|summary|review|list(?:ing)?)"
+        r"\s+of\b|"
+        r"\breported\s+(?:in\s+the\s+)?literature\b|"
+        r"\bliterature[- ]reported\b|\bpublished\s+(?:variants?|mutations?)\b",
         re.IGNORECASE,
     )
 
@@ -1789,13 +1844,38 @@ def merge_scanner_results(
         normalized = normalize_variant(sv.normalized or sv.raw_text, target_gene)
         return (normalized or sv.normalized or sv.raw_text).upper()
 
-    def mention_contexts(sv: ScannedVariant) -> List[Tuple[str, str]]:
-        """Return (physical line, centered evidence window) for every mention."""
+    def preceding_scope(line_start: int) -> str:
+        """Nearest caption/heading above a row, or "" when none is close.
+
+        A row's own text cannot show that its table is a catalogue of prior
+        publications; the caption above it can. Bounded to a few lines so an
+        unrelated paragraph far above never scopes a table.
+        """
+
+        if line_start <= 0:
+            return ""
+        head = source_text[:line_start].rsplit("\n", 9)[:-1]
+        for candidate in reversed(head):
+            text = candidate.strip()
+            if not text:
+                continue
+            if re.match(
+                r"^[#*_>\s]*(?:e?table|figure|fig\.?|supplement(?:al|ary)?)\b",
+                text,
+                re.IGNORECASE,
+            ):
+                return text[:400]
+            if text.startswith("#"):
+                return text[:400]
+        return ""
+
+    def mention_contexts(sv: ScannedVariant) -> List[Tuple[str, str, str]]:
+        """Return (physical line, evidence window, table scope) per mention."""
         if not source_text or not sv.raw_text:
             context = sv.context or ""
-            return [(context, context)] if context else []
+            return [(context, context, "")] if context else []
         pattern = re.compile(re.escape(sv.raw_text), re.IGNORECASE)
-        contexts: List[Tuple[str, str]] = []
+        contexts: List[Tuple[str, str, str]] = []
         for match in list(pattern.finditer(source_text))[:100]:
             line_start = source_text.rfind("\n", 0, match.start()) + 1
             line_end = source_text.find("\n", match.end())
@@ -1804,9 +1884,15 @@ def merge_scanner_results(
             line = source_text[line_start:line_end]
             window_start = max(line_start, match.start() - 320)
             window_end = min(line_end, match.end() + 320)
-            contexts.append((line, source_text[window_start:window_end]))
+            contexts.append(
+                (
+                    line,
+                    source_text[window_start:window_end],
+                    preceding_scope(line_start),
+                )
+            )
         if not contexts and sv.context:
-            contexts.append((sv.context, sv.context))
+            contexts.append((sv.context, sv.context, ""))
         return contexts
 
     def nearby_generic_gene(
@@ -1905,8 +1991,17 @@ def merge_scanner_results(
         )
 
     def is_row_shaped(line: str, window: str) -> bool:
-        """Table rows never contain study prose; recognize them structurally."""
-        if is_table_like(line):
+        """Table rows never contain study prose; recognize them structurally.
+
+        Deliberately stricter than ``is_table_like``, which also treats bare
+        variant-token density as table-ish. That is right for flagging a
+        mention as table-adjacent, but it is not evidence of a row: a prose
+        sentence listing three variants ("mutations R176W, G584S and N470D
+        have been reported") would otherwise enter the row lane and skip the
+        study-prose requirement entirely.
+        """
+
+        if line.count("|") >= 2 or re.search(r"-{4,}\d+-{1,}", line):
             return True
         # Wrapped/converted rows keep cell shape without pipes: no sentence
         # punctuation and several short delimited fields.
@@ -1933,11 +2028,21 @@ def merge_scanner_results(
         if embedded_gene and embedded_gene.group(1).upper() not in target_terms:
             return False, "wrong_gene", " ".join(best_quote.split())[:240]
 
-        for line, window in mention_contexts(sv):
+        for line, window, scope in mention_contexts(sv):
             quote = " ".join(window.split())[:240]
             best_quote = quote or best_quote
             if is_row_shaped(line, window):
                 saw_table = True
+                # The caption scopes the whole table; a compilation caption
+                # disqualifies every row under it even though no row can
+                # carry that wording itself.
+                if scope and (
+                    compilation_scope_re.search(scope)
+                    or reference_re.search(scope)
+                    or background_re.search(scope)
+                ):
+                    saw_reference = True
+                    continue
                 # Table rows by construction never contain study prose, so
                 # the prose lane below can never admit them. A row is
                 # attributable on its own when it affirms the target gene and

@@ -1433,6 +1433,49 @@ class TestRecoveryProvenanceAndDurability:
 
 
 class TestPaperDerivedOnly:
+    def test_scanner_only_row_is_not_a_recoverable_gap(self, tmp_path):
+        """A regex-scanner hit is a bare notation match, not a parsed cell.
+
+        Nothing about it shows the paper's own cohort carried the variant, so
+        asking a model for "its" count invites the attributed-to-another-study
+        count the trust gate exists to refuse.
+        """
+        db = _make_db(tmp_path, [(1, "p.Leu552Ser", None, "111", None, None, None)])
+        con = sqlite3.connect(db)
+        try:
+            con.execute("ALTER TABLE variants ADD COLUMN evidence_level TEXT")
+            con.execute(
+                "UPDATE variants SET evidence_level='scanner' WHERE variant_id=1"
+            )
+            con.execute(
+                "UPDATE variant_papers SET source_layer='regex_text' WHERE variant_id=1"
+            )
+            con.commit()
+        finally:
+            con.close()
+
+        assert find_count_gaps(db, "KCNH2") == []
+
+    def test_scanner_row_seen_by_a_parsed_layer_is_still_a_gap(self, tmp_path):
+        """Corroboration by a real parse restores eligibility."""
+        db = _make_db(tmp_path, [(1, "p.Leu552Ser", None, "111", None, None, None)])
+        con = sqlite3.connect(db)
+        try:
+            con.execute("ALTER TABLE variants ADD COLUMN evidence_level TEXT")
+            con.execute(
+                "UPDATE variants SET evidence_level='scanner' WHERE variant_id=1"
+            )
+            con.execute(
+                "UPDATE variant_papers SET source_layer='regex_text,regex_table' "
+                "WHERE variant_id=1"
+            )
+            con.commit()
+        finally:
+            con.close()
+
+        (paper,) = find_count_gaps(db, "KCNH2")
+        assert [v.notation for v in paper.variants] == ["p.Leu552Ser"]
+
     def test_include_linkage_rows_is_reachable(self, tmp_path):
         """`paper_derived_only` was never plumbed, so the documented mode was dead."""
         db = _make_db(tmp_path, [(1, "p.Leu552Ser", None, "111", None, None, None)])

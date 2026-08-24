@@ -382,12 +382,17 @@ def find_count_gaps(
             if "observed_source_layers" in variant_paper_columns
             else "vp.source_layer"
         )
+        variant_columns = {row[1] for row in con.execute("PRAGMA table_info(variants)")}
+        evidence_level_expr = (
+            "v.evidence_level" if "evidence_level" in variant_columns else "NULL"
+        )
         rows = con.execute(
             f"""
             SELECT vp.pmid AS pmid, vp.variant_id AS variant_id,
                    vp.source_layer AS source_layer,
                    {observed_layer_expr} AS observed_source_layers,
                    v.protein_notation AS protein, v.cdna_notation AS cdna,
+                   {evidence_level_expr} AS evidence_level,
                    pd.total_carriers_observed AS carriers,
                    pd.affected_count AS affected,
                    pd.unaffected_count AS unaffected
@@ -418,6 +423,19 @@ def find_count_gaps(
             continue  # nothing to name the variant by; cannot ask about it
         layers = source_layer_tokens(r["observed_source_layers"])
         is_paper_derived = bool(layers & PAPER_DERIVED_LAYERS)
+        # A regex-scanner row is a bare notation match, not a parsed table
+        # cell, so nothing about it establishes that the paper's own cohort
+        # carried the variant -- a compilation row and an observation row look
+        # identical once reduced to a notation. Asking a model to find "its"
+        # count would invite exactly the attributed-to-another-study count the
+        # trust gate exists to refuse, so a scanner-only row is not a gap
+        # unless some parsed layer also saw it.
+        if (
+            is_paper_derived
+            and str(r["evidence_level"] or "").strip().lower() == "scanner"
+            and not (layers - {"regex_text"})
+        ):
+            is_paper_derived = False
         missing = [f for f in fields if r[f] is None]
         # A variant can appear on several joined rows (multiple source layers,
         # multiple penetrance rows). A field is only a gap when it is NULL on

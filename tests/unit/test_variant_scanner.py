@@ -996,6 +996,64 @@ class TestTableRowAttribution:
         )
         assert {v["protein_notation"] for v in merged["variants"]} == {"Q2958R"}
 
+    def test_prose_listing_variants_is_not_a_table_row(self):
+        """Bare variant-token density is not structure. A prose sentence must
+        still satisfy the study-prose lane, or a review's list of previously
+        reported alleles enters as current-study observations."""
+        text = (
+            "RYR2 mutations Q2958R, R2401H and A4556P have been reported in "
+            "patients with catecholaminergic polymorphic ventricular "
+            "tachycardia."
+        )
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
+    def test_row_carrying_a_diagnosis_year_is_still_attributable(self):
+        """A calendar year in a clinical row is a date of diagnosis, not a
+        citation; vetoing on it discarded real current-study rows."""
+        text = "\n".join(
+            [
+                "Table 1. Clinical characteristics of the study cohort.",
+                "| Patient | Gene | Variant | Year of diagnosis |",
+                "| 3 | RYR2 | Q2958R | 2012 |",
+            ]
+        )
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert {v["protein_notation"] for v in merged["variants"]} == {"Q2958R"}
+
+    def test_compilation_caption_disqualifies_every_row_beneath_it(self):
+        """The row cannot show its own table's scope; the caption can."""
+        text = "\n".join(
+            [
+                "Table 3. Catalogue of previously reported RYR2 variants.",
+                "| Gene | Variant | Carriers |",
+                "| RYR2 | Q2958R | 5 |",
+            ]
+        )
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
     def test_row_naming_another_gene_is_still_rejected(self):
         text = "\n".join(
             [
@@ -1096,6 +1154,38 @@ class TestProseIndelEvents:
         frameshift = next(v for v in result.variants if v.normalized == "1036fs")
         assert frameshift.variant_type == "frameshift"
         assert frameshift.position == 1036
+
+    def test_promoter_context_does_not_mint_a_coding_allele(self, scanner):
+        """A stated non-coding context makes "position N" not a c. coordinate."""
+        result = scanner.scan(
+            "A deletion of 4 bp at position 1261 was introduced into the "
+            "KCNH2 promoter construct."
+        )
+        assert not [v for v in result.variants if str(v.normalized).startswith("c.")]
+
+    def test_bare_length_without_a_coordinate_system_is_refused(self, scanner):
+        result = scanner.scan(
+            "KCNH2 screening showed a deletion of 4 bp at position 1261."
+        )
+        assert not [v for v in result.variants if str(v.normalized).startswith("c.")]
+
+    def test_bare_length_emits_once_the_sentence_names_nucleotides(self, scanner):
+        result = scanner.scan(
+            "KCNH2 sequencing showed a deletion of 4 nucleotides at "
+            "nucleotide position 1261."
+        )
+        norms = {v.normalized for v in result.variants}
+        assert "c.1261_1264del" in norms
+
+    def test_negated_truncation_is_not_emitted(self, scanner):
+        result = scanner.scan(
+            "Sequencing of KCNH2 revealed an insertion of a guanine at "
+            "position 3108, which is not predicted to cause truncation of "
+            "the protein at amino acid position 1036."
+        )
+        norms = {v.normalized for v in result.variants}
+        assert "c.3108insG" in norms
+        assert "1036fs" not in norms
 
     def test_multi_base_deletion_spans_the_stated_length(self):
         result = VariantScanner("SCN5A").scan(

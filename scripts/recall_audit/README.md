@@ -66,10 +66,10 @@ and Anthropic exception queues are separately configurable:
 - Optional hard-case escalation: `FINAL_ARBITER_MODEL`, defaulting to
   `anthropic/claude-opus-4-8`
 
-`end_to_end_pmid_replay.py` makes a real LLM call and should be used only for a
-targeted PMID after a prompt/parser change:
+For a targeted single-PMID replay after a prompt/parser change, use the
+production path rather than a bespoke script — it is the one that stays in
+sync with the pipeline, and it re-uses already-acquired source:
 
 ```bash
-.venv/bin/python scripts/recall_audit/end_to_end_pmid_replay.py \
-  --gene KCNH2 --pmid 24973560 --out /tmp/replay_24973560
+.venv/bin/python scripts/refresh_run_db.py --gene KCNH2 --pmids 24973560 --dry-run
 ```
