@@ -98,9 +98,11 @@ def _make_session(
                 b"",
                 text='{"resultList":{"result":[{"pmcid":"PMC123"}]}}',
             )
-        if "ncbi.nlm.nih.gov/pmc/articles/PMC123" in url and not url.endswith(".xlsx"):
+        if "ncbi.nlm.nih.gov/pmc/articles/PMC123" in url and not url.endswith(
+            (".xlsx", ".pdf")
+        ):
             return _Resp(html.encode("utf-8"), text=html)
-        if url.endswith(".xlsx"):
+        if url.endswith((".xlsx", ".pdf")):
             return _Resp(supp_bytes)
         return _Resp(b"", status_code=404)
 
@@ -612,3 +614,60 @@ def test_hydrate_session_with_browser_cookies_skips_unusable_records():
         requests.Request("GET", "https://www.example.org/supplement.pdf")
     )
     assert "ok=" in prepared.headers["Cookie"]
+
+
+def test_pmc_fallback_forwards_article_doi_and_title_to_pdf_identity_gate(
+    tmp_path: Path, converter_stub: MagicMock, monkeypatch: pytest.MonkeyPatch
+):
+    """The PMC recovery path must give the PDF identity gate the same witnesses
+    the main orchestrator path gets.
+
+    Judged on filename/URL and 'supplement'-family wording alone, a rescued PDF
+    has strictly less identity evidence than a harvested one.
+    """
+    from harvesting import supplement_processing_service as sps
+
+    converter_stub.pdf_to_markdown_with_images.return_value = (
+        "Table 2. Genotype and carrier counts\n\nJ Med Genet 10.1136/jmg.2011.089631\n",
+        [],
+    )
+    seen: Dict[str, Any] = {}
+    real_verdict = sps.pdf_supplement_verdict
+
+    def spy(**kwargs: Any):
+        seen.update(kwargs)
+        outcome = real_verdict(**kwargs)
+        seen["verdict"] = outcome[0]
+        return outcome
+
+    monkeypatch.setattr(sps, "pdf_supplement_verdict", spy)
+
+    # Bypass the scraper so the supplement's provenance can't verify identity on
+    # its own — the DOI/title must be what reaches the gate.
+    scraper = SimpleNamespace(
+        scrape_generic_supplements=lambda _html, _url: [
+            {"url": "https://example.org/files/download.pdf", "name": "download.pdf"}
+        ]
+    )
+    session = _make_session(_PMC_HTML, supp_bytes=b"%PDF-1.4 marker-free supplement")
+
+    row = fp.try_pmc_fallback(
+        pmid="99999999",
+        output_dir=tmp_path,
+        session=session,
+        converter=converter_stub,
+        scraper=scraper,
+        doi="10.1136/jmg.2011.089631",
+        title="Long-QT syndrome family screening",
+    )
+
+    assert row is not None
+    assert seen["doi"] == "10.1136/jmg.2011.089631"
+    assert seen["title"] == "Long-QT syndrome family screening"
+    # The DOI is what the gate verified on — without it this marker-free PDF
+    # falls through to UNKNOWN and folds flagged ``identity_unverified``.
+    assert seen["verdict"] == sps.SUPPLEMENT_IDENTITY_VERIFIED
+    assert row["supplements_downloaded"] == 1
+    assert "Genotype and carrier counts" in Path(row["path"]).read_text(
+        encoding="utf-8"
+    )

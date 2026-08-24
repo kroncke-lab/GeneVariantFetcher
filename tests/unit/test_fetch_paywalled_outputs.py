@@ -407,7 +407,9 @@ def test_main_wires_persistent_profile_and_auth_url(monkeypatch, tmp_path):
         fetch_paywalled, "hydrate_session_with_browser_cookies", lambda *_args: 0
     )
     monkeypatch.setattr(
-        fetch_paywalled, "pubmed_resolve_doi", lambda *_args: "10.1002/example"
+        fetch_paywalled,
+        "pubmed_resolve_doi_and_title",
+        lambda *_args: ("10.1002/example", "An example cohort study"),
     )
     monkeypatch.setattr(
         fetch_paywalled,
@@ -542,3 +544,153 @@ def test_fetch_one_preserves_failed_publisher_supplements_for_pmc_fallback(
     assert row["outcome"] == "success_via_elsevier_api"
     assert row["supp_files"] == 1
     assert pmc_calls == [True]
+
+
+# ---------------------------------------------------------------------------
+# Article identity reaching the PDF supplement gate
+# ---------------------------------------------------------------------------
+
+# A marker-free PDF supplement: nothing in the filename, the URL, or the
+# converted text is 'supplement'-family wording, and the link carries no
+# supplementary-container provenance. The article DOI printed in the front
+# matter is therefore the *only* witness ``pdf_supplement_verdict`` can use, so
+# the file flips to ``identity_unverified`` the moment the DOI stops being
+# wired through from the caller.
+_ARTICLE_DOI = "10.1136/jmg.2011.089631"
+_MARKER_FREE_PDF_URL = "https://example.org/files/download.pdf"
+_MARKER_FREE_PDF_TEXT = (
+    "Table 2. Genotype and carrier counts\n\n"
+    f"J Med Genet {_ARTICLE_DOI}\n\n"
+    "| Variant | Carriers |\n|---|---|\n| p.Arg176Trp | 4 |\n"
+)
+
+
+def _marker_free_pdf_converter():
+    converter = SimpleNamespace()
+    converter.pdf_to_markdown_with_images = lambda _path, output_dir=None: (
+        _MARKER_FREE_PDF_TEXT,
+        [],
+    )
+    converter.pdf_to_markdown = lambda _path: _MARKER_FREE_PDF_TEXT
+    return converter
+
+
+def _marker_free_pdf_session():
+    class _Resp:
+        status_code = 200
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc):
+            return False
+
+        def iter_content(self, chunk_size: int = 1024):
+            yield b"%PDF-1.4 marker-free supplement"
+
+    return SimpleNamespace(get=lambda _url, stream=False, timeout=60: _Resp())
+
+
+@pytest.mark.parametrize(
+    ("doi", "expect_unverified"),
+    [(_ARTICLE_DOI, False), (None, True)],
+)
+def test_write_outputs_forwards_article_doi_to_pdf_identity_gate(
+    tmp_path, doi, expect_unverified
+):
+    """``write_outputs`` must hand the article DOI to the PDF identity gate.
+
+    Runs the real enricher and the real gate — the assertion is the verdict the
+    gate reached, not just that a keyword was forwarded.
+    """
+    result = SimpleNamespace(
+        main_markdown="# MAIN TEXT\n\n" + "Cohort and segregation results. " * 60,
+        main_html="<html><body><p>body</p></body></html>",
+        supp_files=[{"url": _MARKER_FREE_PDF_URL, "name": "download.pdf"}],
+        figure_paths=[],
+        notes=[],
+        error=None,
+        publisher="generic",
+        final_url="https://example.org/article",
+    )
+
+    _canonical, _per_pmid, _body, enrichment = fetch_paywalled.write_outputs(
+        "99999999",
+        result,
+        tmp_path,
+        converter=_marker_free_pdf_converter(),
+        session=_marker_free_pdf_session(),
+        doi=doi,
+    )
+
+    assert enrichment is not None
+    (supplement,) = enrichment.supplement_results
+    assert supplement.downloaded is True
+    assert supplement.identity_unverified is expect_unverified
+
+
+def test_fetch_one_hands_article_identity_to_both_enrichment_paths(
+    tmp_path, monkeypatch
+):
+    """Both paywall-recovery enrichment paths get the DOI and title in hand."""
+    canonical = tmp_path / "12345_FULL_CONTEXT.md"
+    per_pmid = tmp_path / "12345" / "FULL_CONTEXT.md"
+    per_pmid.parent.mkdir()
+    canonical.write_text("# MAIN TEXT\n\nstub\n", encoding="utf-8")
+    per_pmid.write_text(canonical.read_text(encoding="utf-8"), encoding="utf-8")
+
+    result = SimpleNamespace(
+        main_markdown="stub",
+        main_html="<html></html>",
+        supp_files=[],
+        figure_paths=[],
+        notes=[],
+        error=None,
+        publisher="generic",
+        final_url="https://publisher.example/article",
+    )
+    fetcher = SimpleNamespace(
+        fetch=lambda **_kwargs: result,
+        converter=object(),
+        scraper=object(),
+        session=object(),
+    )
+    seen = {}
+
+    def fake_write_outputs(*_args, **kwargs):
+        seen["write_outputs"] = (kwargs.get("doi"), kwargs.get("title"))
+        return canonical, per_pmid, "stub", None
+
+    def fake_pmc(*_args, **kwargs):
+        seen["pmc_fallback"] = (kwargs.get("doi"), kwargs.get("title"))
+        return None
+
+    monkeypatch.setattr(
+        fetch_paywalled, "find_strategy", lambda **_kwargs: SimpleNamespace(NAME="test")
+    )
+    monkeypatch.setattr(fetch_paywalled, "write_outputs", fake_write_outputs)
+    monkeypatch.setattr(fetch_paywalled, "try_pmc_fallback", fake_pmc)
+    monkeypatch.setattr(
+        fetch_paywalled,
+        "validate_article_content",
+        lambda _body: (False, "stub body"),
+    )
+    monkeypatch.setattr(
+        fetch_paywalled, "try_publisher_api_fallback", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(
+        fetch_paywalled, "try_scholar_pdf_fallback", lambda *_args, **_kwargs: None
+    )
+
+    fetch_paywalled.fetch_one(
+        fetcher,
+        "12345",
+        _ARTICLE_DOI,
+        tmp_path,
+        pmc_session=object(),
+        title="Long-QT syndrome family screening",
+    )
+
+    expected = (_ARTICLE_DOI, "Long-QT syndrome family screening")
+    assert seen["write_outputs"] == expected
+    assert seen["pmc_fallback"] == expected

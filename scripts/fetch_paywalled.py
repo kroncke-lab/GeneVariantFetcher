@@ -203,6 +203,8 @@ def try_pmc_fallback(
     session: requests.Session,
     converter: Optional[FormatConverter] = None,
     scraper: Optional[SupplementScraper] = None,
+    doi: Optional[str] = None,
+    title: Optional[str] = None,
 ) -> Optional[Dict]:
     """Attempt to recover a stub via the PMC deposit.
 
@@ -210,6 +212,11 @@ def try_pmc_fallback(
     that's free to read after the embargo. Europe PMC JATS is preferred for the
     article body because it preserves table rows that PMC's rendered HTML can
     omit; PMC HTML remains the supplement/caption discovery surface.
+
+    ``doi``/``title`` are the article's own identifiers, forwarded to the PDF
+    supplement identity gate. Without them a PMC-rescued PDF is judged on
+    filename/URL and 'supplement'-family wording alone — strictly less evidence
+    than the main orchestrator path, which passes the DOI.
 
     Returns a result row dict on success, or None if no PMC version exists
     or the extraction failed quality gates. On success the row's ``path``
@@ -322,6 +329,8 @@ def try_pmc_fallback(
         session=session,
         download_supplements=True,
         source_url=pmc_url,
+        doi=doi,
+        title=title,
     )
     unified = enrichment.unified_markdown or markdown
     if supplement_surface_status != "available":
@@ -694,14 +703,19 @@ def _ncbi_email() -> str:
     return email
 
 
-def pubmed_resolve_doi(
+def pubmed_resolve_doi_and_title(
     pmid: str, session: requests.Session, max_attempts: int = 4
-) -> Optional[str]:
-    """Resolve a PMID to its DOI via NCBI esummary.
+) -> Tuple[Optional[str], Optional[str]]:
+    """Resolve a PMID to its ``(doi, title)`` via NCBI esummary.
+
+    The title comes out of the same record that carries the DOI, so it costs no
+    extra request. It matters downstream: the PDF supplement identity gate
+    accepts the article title as a witness, and a scanned mutation table named
+    ``download.pdf`` often carries nothing else.
 
     NCBI E-utilities rate-limits unauthenticated callers to 3 req/s; we retry
-    with exponential backoff on 429. Returns None when no DOI is registered
-    or the API repeatedly fails.
+    with exponential backoff on 429. Either element is None when the record
+    doesn't carry it or the API repeatedly fails.
     """
     import time
 
@@ -719,17 +733,18 @@ def pubmed_resolve_doi(
                 continue
             r.raise_for_status()
             item = r.json().get("result", {}).get(str(pmid), {})
+            title = (item.get("title") or "").strip() or None
             for artid in item.get("articleids", []) or []:
                 if (artid.get("idtype") or "").lower() == "doi":
-                    return artid.get("value")
-            return None
+                    return artid.get("value"), title
+            return None, title
         except Exception as e:
             if attempt == max_attempts:
                 LOG.warning("DOI resolution failed for PMID %s: %s", pmid, e)
-                return None
+                return None, None
             time.sleep(delay)
             delay *= 2
-    return None
+    return None, None
 
 
 def prime_authenticated_browser(
@@ -1117,6 +1132,8 @@ def write_outputs(
     supplement_download_fallback: Optional[
         Callable[[str, Path, str, str, Dict[str, Any]], bool]
     ] = None,
+    doi: Optional[str] = None,
+    title: Optional[str] = None,
 ) -> Tuple[Path, Path, Optional[str], Optional[EnrichmentResult]]:
     """Write FULL_CONTEXT.md (per-PMID dir + flat canonical mirror) + raw HTML.
 
@@ -1129,6 +1146,11 @@ def write_outputs(
     what the quality validator should judge. Captions and supplements are
     appended afterward, so the gate's verdict isn't polluted by figure
     legends or supplement padding.
+
+    ``doi``/``title`` are the article's own identifiers, forwarded to the PDF
+    supplement identity gate. Without them a rescued PDF is judged on
+    filename/URL and 'supplement'-family wording alone — strictly less evidence
+    than the main orchestrator path, which passes the DOI.
     """
     pmid_dir = output_dir / pmid
     pmid_dir.mkdir(parents=True, exist_ok=True)
@@ -1157,6 +1179,8 @@ def write_outputs(
                 session=session,
                 source_url=result.final_url,
                 supplement_download_fallback=supplement_download_fallback,
+                doi=doi,
+                title=title,
             )
         except Exception as exc:
             LOG.warning("Enrichment failed for PMID %s: %s", pmid, exc)
@@ -1201,12 +1225,18 @@ def fetch_one(
     doi: Optional[str],
     output_dir: Path,
     pmc_session: Optional[requests.Session] = None,
+    title: Optional[str] = None,
 ) -> Dict:
     """Run Tier 3.5 for a single PMID; return a result row.
 
     On stub/empty outcomes from Tier 3.5, attempt the PMC fallback (Europe
     PMC PMCID lookup + PMC HTML fetch) so subscription papers with NIH PMC
     deposits are recovered automatically.
+
+    ``title`` is the PubMed article title when the caller resolved one (see
+    :func:`pubmed_resolve_doi_and_title`); together with ``doi`` it is handed to
+    every enrichment pass so the PDF supplement identity gate has the same
+    witnesses the main orchestrator path gets.
     """
     row: Dict = {
         "pmid": pmid,
@@ -1351,6 +1381,8 @@ def fetch_one(
         output_dir,
         session=pmc_session,
         supplement_download_fallback=supplement_download_fallback,
+        doi=doi,
+        title=title,
     )
     # The gate validates only the body, but the chars we report should
     # reflect what actually landed in FULL_CONTEXT.md so downstream
@@ -1448,6 +1480,8 @@ def fetch_one(
             recovery_session,
             converter=fetcher.converter,
             scraper=fetcher.scraper,
+            doi=doi,
+            title=title,
         )
         if pmc_row is not None:
             pmc_supplements = int(pmc_row.get("supplements_downloaded") or 0)
@@ -1761,13 +1795,18 @@ def main() -> int:
 
     print("Resolving DOIs…")
     doi_map: Dict[str, Optional[str]] = {}
+    # Titles ride along on the same esummary record — a free extra witness for
+    # the PDF supplement identity gate. An overridden DOI skips esummary, so
+    # those PMIDs simply carry no title.
+    title_map: Dict[str, Optional[str]] = {}
     for pmid in pmids:
         if pmid in overrides:
             doi_map[pmid] = overrides[pmid]
             print(f"  {pmid}  (override) -> {doi_map[pmid]}")
             continue
-        doi = pubmed_resolve_doi(pmid, session)
+        doi, title = pubmed_resolve_doi_and_title(pmid, session)
         doi_map[pmid] = doi
+        title_map[pmid] = title
         print(f"  {pmid}  -> {doi or '(no DOI)'}")
         _time.sleep(0.4)  # NCBI E-utilities: 3 req/s cap without API key.
     print()
@@ -1805,7 +1844,14 @@ def main() -> int:
         if wait_for > 0 and last_domain_at:
             print(f"  pacing: sleeping {wait_for:.1f}s before {dom}")
             _t.sleep(wait_for)
-        r = fetch_one(fetcher, pmid, doi_map[pmid], output_dir, pmc_session=session)
+        r = fetch_one(
+            fetcher,
+            pmid,
+            doi_map[pmid],
+            output_dir,
+            pmc_session=session,
+            title=title_map.get(pmid),
+        )
         last_domain_at[dom] = _t.time()
         return r
 
