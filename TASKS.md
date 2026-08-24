@@ -56,8 +56,26 @@ the lock or underlying gold snapshot. New Gate 2 runs therefore use 118
 attempts, while this immutable run remains the accepted evidence for the code
 change.
 
-- [ ] **Prove the 2026-08-22 improvement batch, then stage the reviewer
-      surface.** The batch itself (cruft sweep, prompt-caching split +
+- [ ] **Act on the 2026-08-24 blind proof result, then stage the reviewer
+      surface.** The proof run is DONE and locked at
+      `benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` (118
+      attempts, clean tree `e4910d9`, 42 min, $11.32 list-price proxy).
+      Identity is flat versus the 2026-08-21 lock (TP 546 = 546, FP 290→284,
+      recall 86.26%→86.39%); count coverage rose (count-bearing rows
+      187→208) and matched-row MAE rose with it. Full comparison and the
+      source-mix control are in `docs/RECALL_HISTORY.md` 2026-08-24.
+      Decisions this leaves open:
+      (a) adjudicate the two single affected values off by 7 (KCNH2
+      22338672, KCNH2 16029385) — they carry 14 of the +17 error units,
+      while RYR2 30403697 and KCNQ1 26496715 each gained 5 exact values;
+      (b) decide whether the coverage/accuracy tradeoff is accepted as
+      shipped, or whether extraction should emit fewer marginal counts;
+      (c) claim verification grew 188→232 calls because more rows carry
+      counts, absorbing the vision lane's −22% saving — batching a paper's
+      cards into one call is the standing lever if cost needs to fall.
+      Only then stage the reviewer surface.
+- [ ] **(superseded, kept for the staging half) Stage the 50/50/50 review
+      set.** The batch itself (cruft sweep, prompt-caching split +
       verifier-effort fix, figure-vision cost controls, acquisition
       fail-open closures, eight generic notation/scanner FN fixes) is
       recorded in `docs/PROTOCOL_CHANGELOG.md` 2026-08-22 rows with

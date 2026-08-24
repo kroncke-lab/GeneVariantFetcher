@@ -15,6 +15,57 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-08-24 — post-fix blind gold-118 (locked)
+
+`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118`. Gold-blind
+extraction on a clean tree at `e4910d9`, predictions hash-locked before any
+gold value was read, scored on the trusted count/identity projection. 118
+attempts / 114 unique PMIDs; four genes concurrent; 42 min wall. Compared
+like-for-like against the 2026-08-21 candidate-local lock, whose source-file
+mix is effectively identical (CLEANED 76/77, FULL_CONTEXT 33/31, JSON 10/10),
+so the deltas below are attributable to code rather than to inputs.
+
+| Metric | 2026-08-21 | 2026-08-24 |
+| --- | ---: | ---: |
+| TP / FP / FN | 546 / 290 / 87 | 546 / 284 / 86 |
+| Variant recall | 86.26% | **86.39%** |
+| Raw precision | 65.31% | **65.78%** |
+| Counted-extra precision | 98.03% | 97.50% |
+| Count-bearing-only precision | 94.44% | 93.69% |
+| Count-bearing matched rows | 187 | **208** |
+| carriers predicted / MAE | 184 / 0.255 | **206** / 0.330 |
+| affected predicted / MAE | 41 / 0.244 | **49** / 0.551 |
+| Cost proxy (same method) | $11.489 | $11.320 |
+
+**Identity is flat.** The TP count is identical and FP/FN each fall by a
+handful; this run neither gained nor lost recall. Counted-extra precision
+remains far above the 77.3% rollout floor.
+
+**Count coverage rose and matched-row MAE rose with it**, which is the
+tradeoff `RECALL_STATUS` warns must never be reported one-sided. The
+aggregate is misleading here: the entire +17 units of affected error come
+from five papers, and 14 of those units are **two single values, each off by
+7** (KCNH2 22338672 and 16029385). The two papers that gained the most
+values — RYR2 30403697 (+5) and KCNQ1 26496715 (+5) — added **zero** error,
+i.e. every newly emitted affected count on them is exact. Those are the
+per-row roster and borderless-table classes. Carrier additions are
+off-by-about-one on average (+22 values, +21 units of error).
+
+**Cost is flat at list price, and the vision lane behaved as designed:**
+243 → 197 calls and $3.408 → $2.651 (−22%) from SHA dedup plus caption
+triage. Claim verification rose 188 → 232 calls (+$0.604) because more rows
+now carry counts to verify, absorbing almost exactly the vision saving. The
+verifier's verdict mix is unchanged (directly_supported 46.8% → 45.4%,
+unsupported 34.4% → 36.4%), so the extra counts originate in extraction, not
+in a laxer verifier. Prompt-cache discounts cannot appear in a list-price
+proxy — cached tokens are still reported as input tokens — so this run says
+nothing either way about the caching work.
+
+Open from this run: adjudicate the two off-by-7 affected values, and decide
+whether the coverage/accuracy tradeoff is accepted as shipped.
+
+---
+
 ## Headline benchmark trajectory (four-gene aggregate)
 
 | Date | Milestone | Unique-variant recall | Variant-row recall | carriers MAE |
