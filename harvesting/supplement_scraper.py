@@ -169,6 +169,11 @@ from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
+from .supplement_processing_service import (
+    SUPPLEMENT_PROVENANCE_REFERENCE_SECTION,
+    SUPPLEMENT_PROVENANCE_SUPPLEMENT_CONTAINER,
+)
+
 
 class SupplementScraper:
     """Scrapes supplemental files from various publisher websites."""
@@ -1401,15 +1406,105 @@ class SupplementScraper:
         r"(?:electronic[-_ ]?)?(?:copyright|disclosure)[-_ ]?form.*\.pdf$",
     ]
 
-    # Markup tokens publishers use for the bibliography container. Matched
-    # against ancestor tag names and id/class/role attribute tokens — this is
-    # structural scoping (where the link lives in the article DOM), never a
-    # URL or domain list.
-    _REFERENCE_SECTION_TOKEN_RE = re.compile(
-        r"(?:^|[^a-z0-9])(?:references?|ref-?list|bibliography|bibliographies|"
-        r"citation-?list|cited-?references|literature-?cited)(?:[^a-z0-9]|$)"
+    # Markup labels publishers use for the bibliography container. Matched
+    # against an ancestor's tag name and its id/class/role/data-title/
+    # aria-label tokens — structural scoping (where the link lives in the
+    # article DOM), never a URL or domain list. Matched one
+    # hyphen/underscore-delimited part at a time, e.g. the "references" of
+    # Springer's ``c-article-references``: "reference" as a substring also
+    # matches combined containers (article-references-and-supplements) and
+    # unrelated hooks (data-reference), and real Wiley/AHA pages put the
+    # supplement block inside the same container as the bibliography. Singular
+    # "reference" is deliberately absent for the same reason.
+    _REFERENCE_LABEL_PARTS = frozenset(
+        {
+            "references",
+            "reflist",
+            "bibliography",
+            "bibliographies",
+            "citations",
+        }
     )
+    # Adjacent parts that name a bibliography only together (``ref-list``).
+    _REFERENCE_LABEL_PART_PAIRS = frozenset(
+        {
+            ("ref", "list"),
+            ("reference", "list"),
+            ("references", "list"),
+            ("citation", "list"),
+            ("cited", "reference"),
+            ("cited", "references"),
+            ("literature", "cited"),
+        }
+    )
+    # Supplement-family labels on the same containers. A container carrying
+    # both families is a co-located block, not a bibliography.
+    _SUPPLEMENT_SECTION_LABEL_RE = re.compile(
+        r"suppl|supporting|appendix|additional[-_]?files?|extended[-_]?data|"
+        r"moesm|(?:^|[-_])esm(?:[-_]|$)"
+    )
+    # Loose reference wording, used only to demote a co-located container from
+    # a positive supplement witness to "unlabeled" — never to skip a link.
+    _REFERENCE_MENTION_RE = re.compile(r"reference|bibliograph|citation|cited")
     _REFERENCE_SECTION_ATTRS = ("id", "class", "role", "data-title", "aria-label")
+
+    # Visible link text that names supplementary material. A link that says
+    # what it is stays eligible even inside a bibliography container.
+    _SUPPLEMENT_LINK_TEXT_RE = re.compile(
+        r"(?:supplement(?:al|ary)?|supporting)\s+"
+        r"(?:information|materials?|data|tables?|figures?|files?|appendix|"
+        r"methods|videos?|movies?)|additional\s+files?|extended\s+data"
+    )
+
+    def _names_reference_list(self, token: str) -> bool:
+        """True when one markup label names a bibliography, part by part."""
+        parts = [p for p in re.split(r"[-_]+", token) if p]
+        if any(part in self._REFERENCE_LABEL_PARTS for part in parts):
+            return True
+        return any(
+            pair in self._REFERENCE_LABEL_PART_PAIRS for pair in zip(parts, parts[1:])
+        )
+
+    def _container_label_kind(self, element) -> str:
+        """Label one tag ``references`` / ``supplements`` / ``mixed`` / ``""``."""
+        tokens = [(getattr(element, "name", "") or "").lower()]
+        for attr in self._REFERENCE_SECTION_ATTRS:
+            value = element.get(attr)
+            if isinstance(value, (list, tuple)):
+                value = " ".join(str(v) for v in value)
+            if value:
+                tokens.extend(str(value).lower().split())
+        tokens = [t for t in tokens if t]
+        if any(self._SUPPLEMENT_SECTION_LABEL_RE.search(t) for t in tokens):
+            if any(self._REFERENCE_MENTION_RE.search(t) for t in tokens):
+                return "mixed"
+            return "supplements"
+        if any(self._names_reference_list(t) for t in tokens):
+            return "references"
+        return ""
+
+    def _link_container_kind(self, link) -> str:
+        """Label the NEAREST ancestor that names itself in the markup.
+
+        Returns ``"references"`` (a bibliography), ``"supplements"`` (a
+        supplementary-material container), ``"mixed"`` (one container holding
+        both), or ``""`` when nothing on the path names itself. Only the
+        nearest labeled container decides: a substring sweep over every
+        ancestor drops real supplement links out of combined containers, which
+        is how ``article-references-and-supplements`` loses a Wiley/AHA
+        supplement block.
+        """
+        for parent in link.parents:
+            if not getattr(parent, "name", ""):
+                continue
+            kind = self._container_label_kind(parent)
+            if kind:
+                return kind
+        return ""
+
+    def _names_supplementary_material(self, link_text: str) -> bool:
+        """True when the link's own visible text names supplementary material."""
+        return bool(self._SUPPLEMENT_LINK_TEXT_RE.search((link_text or "").lower()))
 
     def _in_reference_section(self, link) -> bool:
         """True when a link sits inside the article's bibliography markup.
@@ -1421,21 +1516,7 @@ class SupplementScraper:
         reference list count, so an undistinguished page keeps the current
         (permissive) behavior.
         """
-        for parent in link.parents:
-            name = (getattr(parent, "name", "") or "").lower()
-            if not name:
-                continue
-            if self._REFERENCE_SECTION_TOKEN_RE.search(name):
-                return True
-            for attr in self._REFERENCE_SECTION_ATTRS:
-                value = parent.get(attr)
-                if isinstance(value, (list, tuple)):
-                    value = " ".join(str(v) for v in value)
-                if value and self._REFERENCE_SECTION_TOKEN_RE.search(
-                    str(value).lower()
-                ):
-                    return True
-        return False
+        return self._link_container_kind(link) == "references"
 
     def _is_supplement_url(self, href: str) -> bool:
         """Check if a URL contains patterns indicating a supplement file."""
@@ -1516,8 +1597,15 @@ class SupplementScraper:
 
             # A cited reference is not supplementary material. Links inside a
             # labeled bibliography container only stay eligible when the href
-            # itself carries a supplement URL pattern (e.g. /doi/suppl/).
-            if not is_pattern_match and self._in_reference_section(link):
+            # itself carries a supplement URL pattern (e.g. /doi/suppl/) or the
+            # link text names supplementary material.
+            container_kind = self._link_container_kind(link)
+            names_supplement = self._names_supplementary_material(link_text)
+            if (
+                container_kind == "references"
+                and not is_pattern_match
+                and not names_supplement
+            ):
                 continue
 
             try:
@@ -1568,6 +1656,13 @@ class SupplementScraper:
                         continue
 
                 file_info = {}
+                # Carry where the link sat: bibliography markup contradicts a
+                # PDF's supplement identity downstream, a supplementary-material
+                # container confirms it.
+                if container_kind == "references":
+                    file_info["source"] = SUPPLEMENT_PROVENANCE_REFERENCE_SECTION
+                elif container_kind == "supplements":
+                    file_info["source"] = SUPPLEMENT_PROVENANCE_SUPPLEMENT_CONTAINER
                 # Store original URL and base URL for PMC pages to enable URL variant generation
                 if is_pmc_page:
                     file_info["original_url"] = original_url

@@ -649,3 +649,72 @@ class TestReferenceSectionScoping:
             html, "https://journal.example.org/article"
         )
         assert [f["name"] for f in result] == ["extra_data.pdf"]
+
+
+class TestCombinedReferenceAndSupplementContainers:
+    """Only the NEAREST labeled container decides, on whole-token labels.
+
+    Wiley/AHA pages co-locate the supplement block with the bibliography, so a
+    substring sweep over every ancestor ("reference" anywhere) drops real
+    supplement links.
+    """
+
+    def test_combined_container_keeps_supplement_link(self, scraper):
+        html = """
+        <html><body>
+          <div class="article-references-and-supplements">
+            <a href="/files/download.pdf">Data set</a>
+          </div>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert [f["name"] for f in result] == ["download.pdf"]
+
+    def test_data_reference_hook_is_not_a_bibliography(self, scraper):
+        html = """
+        <html><body>
+          <div class="data-reference">
+            <a href="/files/extra_table.pdf">Download</a>
+          </div>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert [f["name"] for f in result] == ["extra_table.pdf"]
+
+    def test_supplementary_named_link_survives_inside_references(self, scraper):
+        html = """
+        <html><body>
+          <section class="references">
+            <a href="/files/table1.pdf">Supplementary Table 1</a>
+            <a href="/refs/report_2011.pdf">Deaths: preliminary statistics</a>
+          </section>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        assert [f["name"] for f in result] == ["table1.pdf"]
+
+    def test_kept_links_carry_container_provenance(self, scraper):
+        html = """
+        <html><body>
+          <div class="supplementary-material">
+            <a href="/files/download.pdf">Download</a>
+          </div>
+          <section class="references">
+            <a href="/files/appendix_s1.pdf">Supporting Information</a>
+          </section>
+        </body></html>
+        """
+        result = scraper.scrape_generic_supplements(
+            html, "https://journal.example.org/article"
+        )
+        provenance = {f["name"]: f.get("source", "") for f in result}
+        assert provenance == {
+            "download.pdf": "scraper_supplementary_container",
+            "appendix_s1.pdf": "scraper_reference_section",
+        }

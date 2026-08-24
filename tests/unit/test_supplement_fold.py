@@ -1,5 +1,6 @@
 """Unit tests for the on-disk supplement fold (C2)."""
 
+import json
 import pytest
 
 from harvesting.supplement_fold import (
@@ -444,8 +445,13 @@ def test_cli_rejects_missing_pmids_file(tmp_path, monkeypatch, capsys):
 # PDFs were captured as supplements and folded into FULL_CONTEXT)
 # ---------------------------------------------------------------------------
 
+#: A cited foreign report prints its OWN doi, which contradicts the parent
+#: article's. That contradiction is what condemns it — a numbered-serial
+#: masthead alone only annotates, because a paper's own article PDF opens the
+#: same way (LMNA 17334235).
 _UNRELATED_PDF_TEXT = (
     "National Vital Statistics Reports Volume 60, Number 7. "
+    "doi:10.15620/cdc.nvsr6007. "
     "Deaths: preliminary statistics for 2011. Division of Vital Statistics."
 )
 
@@ -477,6 +483,11 @@ def test_fold_excludes_identity_unverified_pdf(tmp_path, monkeypatch, caplog):
     supp_dir = harvest / f"{pmid}_supplements"
     _write_supp(supp_dir, "nvsr60_07.pdf", "raw pdf bytes stand-in")
     _write_supp(supp_dir, "tableS2.csv", "variant,carriers\nc.1A>G,3\n")
+    # The gate needs the parent DOI to recognize the report's own DOI as a
+    # contradiction; without one, a foreign document is merely unidentified.
+    (harvest / f"{pmid}_artifacts.json").write_text(
+        json.dumps({"doi": "10.1016/j.ajog.2019.09.004"}), encoding="utf-8"
+    )
 
     monkeypatch.setattr(
         supplement_fold, "_convert_supplement", _convert_pdfs_as(_UNRELATED_PDF_TEXT)
@@ -550,6 +561,9 @@ def test_refold_strips_previously_folded_misbound_pdf(tmp_path, monkeypatch):
     fc.write_text(stale, encoding="utf-8")
     supp_dir = harvest / f"{pmid}_supplements"
     _write_supp(supp_dir, "nvsr60_07.pdf", "raw pdf bytes stand-in")
+    (harvest / f"{pmid}_artifacts.json").write_text(
+        json.dumps({"doi": "10.1016/j.ajog.2019.09.004"}), encoding="utf-8"
+    )
 
     monkeypatch.setattr(
         supplement_fold, "_convert_supplement", _convert_pdfs_as(_UNRELATED_PDF_TEXT)
@@ -562,3 +576,84 @@ def test_refold_strips_previously_folded_misbound_pdf(tmp_path, monkeypatch):
     assert "# MAIN" in rebuilt
     # Non-destructive: the pre-fold backup preserves what was overwritten.
     assert (harvest / f"{pmid}_FULL_CONTEXT.md.pre_fold_bak").exists()
+
+
+def test_fold_includes_unverified_pdf_and_says_so(tmp_path, monkeypatch, caplog):
+    """Absence of a marker is not evidence of a foreign document.
+
+    A scanned supplement named ``download.pdf`` has no filename marker, no
+    DOI, and no 'supplement' wording — the fail-closed gate dropped exactly
+    this shape. It must fold, with the flag recorded in the log.
+    """
+    import logging
+
+    from harvesting import supplement_fold
+
+    pmid = "27114410"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "download.pdf", "raw pdf bytes stand-in")
+
+    monkeypatch.setattr(
+        supplement_fold,
+        "_convert_supplement",
+        _convert_pdfs_as("Table 1\n\nKCNQ1 c.1A>G 3 carriers\n"),
+    )
+
+    with caplog.at_level(logging.WARNING, logger="harvesting.supplement_fold"):
+        out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "KCNQ1 c.1A>G 3 carriers" in folded
+    assert "download.pdf" in folded
+    assert any(
+        "folding download.pdf unverified" in record.getMessage()
+        for record in caplog.records
+    )
+
+
+def test_fold_excludes_pdf_harvested_from_reference_markup(tmp_path, monkeypatch):
+    """Provenance recorded at scrape time is read back from the artifacts file."""
+    import json
+
+    from harvesting import supplement_fold
+
+    pmid = "31520628"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN\n\nbody\n", encoding="utf-8")
+    supp_dir = harvest / f"{pmid}_supplements"
+    _write_supp(supp_dir, "report_2011.pdf", "raw pdf bytes stand-in")
+    (harvest / f"{pmid}_artifacts.json").write_text(
+        json.dumps(
+            {
+                "pmid": pmid,
+                "doi": "10.1016/j.ajog.2019.09.004",
+                "supplements": [
+                    {
+                        "filename": "report_2011.pdf",
+                        "url": "https://stats.example.gov/report_2011.pdf",
+                        "source": "scraper_reference_section",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        supplement_fold,
+        "_convert_supplement",
+        _convert_pdfs_as("Deaths: preliminary statistics. " + "text " * 200),
+    )
+
+    out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out is None  # nothing foldable, nothing to rewrite
+    assert "report_2011.pdf" not in fc.read_text(encoding="utf-8")
+    assert (supp_dir / "report_2011.pdf").exists()

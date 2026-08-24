@@ -12,7 +12,7 @@ import logging
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -317,6 +317,45 @@ class FormatConverter:
             if len(populated) >= 2:
                 rows += 1
         return rows
+
+    # A ``.doc`` route wins on table structure only when its lead is real. A
+    # Word HTML export routinely emits a two-row author/affiliation layout
+    # <table> while the actual mutation table stays flattened in body text, and
+    # a two-row antiword junk table must not cost a substantially richer
+    # narrative rendering. Below both bars the most complete text wins instead.
+    _DOC_ROUTE_DECISIVE_TABLE_ROWS = 5
+    _DOC_ROUTE_TABLE_ROW_MARGIN = 3
+
+    @classmethod
+    def _select_doc_conversion(
+        cls, candidates: Sequence[Tuple[str, str]]
+    ) -> Optional[Tuple[str, str, int]]:
+        """Choose one ``.doc`` rendering across every route that produced text.
+
+        ``candidates`` are ``(label, text)`` in route-preference order; ties
+        resolve to the earlier entry. Returns ``(label, text, table_rows)``, or
+        ``None`` when no route produced usable text. Routes are scored, never
+        short-circuited: whichever route runs first must not win on a thin
+        table lead alone.
+        """
+        scored = [
+            (label, text, cls._count_markdown_table_rows(text))
+            for label, text in candidates
+            if text and text.strip()
+        ]
+        if not scored:
+            return None
+        best = max(scored, key=lambda candidate: candidate[2])
+        runner_up_rows = max(
+            (candidate[2] for candidate in scored if candidate is not best),
+            default=0,
+        )
+        if (
+            best[2] >= cls._DOC_ROUTE_DECISIVE_TABLE_ROWS
+            or best[2] - runner_up_rows >= cls._DOC_ROUTE_TABLE_ROW_MARGIN
+        ):
+            return best
+        return max(scored, key=lambda candidate: len(candidate[1].strip()))
 
     def xml_to_markdown(self, xml_content: str) -> str:
         """
@@ -718,18 +757,14 @@ class FormatConverter:
                 f"    Warning: LibreOffice conversion failed for {file_path.name}: {e}"
             )
 
-        # Try macOS textutil before antiword. Some publisher .doc supplements
-        # preserve Word table cells here that antiword drops entirely — but the
-        # reverse also happens: textutil's Word importer flattened KCNQ1
-        # 24667783's mutation table into delimiter-less cell runs
-        # ("…C>TMissensehetCM990761…") in EVERY output format, while
-        # ``antiword -t`` kept every cell. So a textutil rendering only wins
-        # outright when it actually shows table structure; otherwise it is held
-        # as a candidate and antiword gets a chance to do better. HTML first:
-        # ``-convert html`` keeps <table> markup (turned into pipe tables by
-        # _doc_html_to_markdown) on files where ``-convert txt`` loses the
-        # cell boundaries.
-        held_candidate: Optional[str] = None
+        # macOS textutil and antiword each recover cells the other drops:
+        # textutil's Word importer flattened KCNQ1 24667783's mutation table
+        # into delimiter-less cell runs ("…C>TMissensehetCM990761…") under
+        # ``-convert html``, while ``-convert txt`` (BEL-delimited cells) kept
+        # all 92 rows; other publisher .doc files invert that. So every route
+        # runs and _select_doc_conversion scores them together — no route wins
+        # by ordering, and none wins on a two-row layout table alone.
+        doc_candidates: List[Tuple[str, str]] = []
         try:
             import subprocess
 
@@ -740,15 +775,9 @@ class FormatConverter:
                 timeout=120,
             )
             if result.returncode == 0 and result.stdout.strip():
-                text = self._doc_html_to_markdown(result.stdout)
-                if text.strip():
-                    if self._count_markdown_table_rows(text) >= 2:
-                        print(
-                            f"    ✓ Extracted text via textutil HTML "
-                            f"({len(text)} chars)"
-                        )
-                        return text + "\n\n"
-                    held_candidate = text
+                doc_candidates.append(
+                    ("textutil HTML", self._doc_html_to_markdown(result.stdout))
+                )
         except FileNotFoundError:
             pass  # textutil is macOS-only
         except Exception as e:
@@ -768,24 +797,19 @@ class FormatConverter:
             )
             if result.returncode == 0 and result.stdout.strip():
                 text = self._normalize_textutil_doc_text(result.stdout)
-                text = self._convert_tsv_to_markdown_tables(text)
-                if text.strip():
-                    if self._count_markdown_table_rows(text) >= 2:
-                        print(f"    ✓ Extracted text via textutil ({len(text)} chars)")
-                        return text + "\n\n"
-                    if held_candidate is None:
-                        held_candidate = text
+                doc_candidates.append(
+                    ("textutil", self._convert_tsv_to_markdown_tables(text))
+                )
         except FileNotFoundError:
             pass  # textutil is macOS-only
         except Exception as e:
             print(f"    Warning: textutil fallback failed for {file_path.name}: {e}")
 
-        # Try antiword (if installed): it wins over a held table-less textutil
-        # rendering only when its tab-delimited output shows real table rows.
         try:
             import subprocess
 
-            # Try tab-delimited output first (better for tables)
+            # Tab-delimited output first (better for tables); plain output is
+            # the same binary's fallback, so it only runs when -t gave nothing.
             result = subprocess.run(
                 ["antiword", "-t", str(file_path)],
                 capture_output=True,
@@ -793,17 +817,13 @@ class FormatConverter:
                 timeout=60,
             )
             if result.returncode == 0 and result.stdout.strip():
-                text = result.stdout
-                # Convert tab-delimited tables to markdown format for better LLM extraction
-                text = self._convert_tsv_to_markdown_tables(text)
-                if held_candidate is None or self._count_markdown_table_rows(text) >= 2:
-                    print(
-                        f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)"
+                doc_candidates.append(
+                    (
+                        "antiword (tab-delimited)",
+                        self._convert_tsv_to_markdown_tables(result.stdout),
                     )
-                    return text + "\n\n"
-
-            if held_candidate is None:
-                # If -t flag fails or produces empty output, try standard output
+                )
+            else:
                 result = subprocess.run(
                     ["antiword", str(file_path)],
                     capture_output=True,
@@ -811,23 +831,20 @@ class FormatConverter:
                     timeout=60,
                 )
                 if result.returncode == 0 and result.stdout.strip():
-                    print(
-                        f"    ✓ Extracted text via antiword ({len(result.stdout)} chars)"
-                    )
-                    return result.stdout + "\n\n"
+                    doc_candidates.append(("antiword", result.stdout))
         except FileNotFoundError:
             pass  # antiword not installed
         except Exception as e:
             print(f"    Warning: antiword fallback failed for {file_path.name}: {e}")
 
-        if held_candidate is not None:
-            # No route produced table structure; the textutil rendering is the
-            # most complete plain-text form available.
+        selected = self._select_doc_conversion(doc_candidates)
+        if selected is not None:
+            label, text, rows = selected
             print(
-                f"    ✓ Extracted text via textutil ({len(held_candidate)} chars, "
-                f"no table structure found)"
+                f"    ✓ Extracted text via {label} ({len(text)} chars, "
+                f"{rows} table rows)"
             )
-            return held_candidate + "\n\n"
+            return text + "\n\n"
 
         # Try catdoc as another fallback (if installed)
         try:

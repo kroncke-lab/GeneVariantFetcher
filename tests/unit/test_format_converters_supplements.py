@@ -347,7 +347,11 @@ def test_doc_to_markdown_prefers_textutil_html_for_table_cells(
                 return subprocess.CompletedProcess(
                     cmd, 0, stdout=textutil_html, stderr=""
                 )
-            raise AssertionError("plain-text textutil leg must not run")
+            # Every route is scored, so the plain-text leg still runs; here it
+            # recovers nothing, leaving the HTML rendering the only candidate.
+            return subprocess.CompletedProcess(cmd, 1, stdout="", stderr="")
+        if cmd[0] == "antiword":
+            return subprocess.CompletedProcess(cmd, 1, stdout="", stderr="")
         raise AssertionError(f"unexpected converter command: {cmd}")
 
     with patch("subprocess.run", side_effect=fake_run):
@@ -574,6 +578,88 @@ def test_doc_to_markdown_prefers_antiword_when_textutil_flattens_tables(
 
     assert "| 37 | KCNQ1 | Gly306Arg | 916 G>A |" in md
     assert "| 41 | KCNQ1 | Arg366Trp | 1096 C>T |" in md
+
+
+def test_doc_to_markdown_ignores_two_row_html_layout_table(converter, tmp_path: Path):
+    """A Word HTML export's author/affiliation layout table is not a win.
+
+    Two populated rows are what a title block looks like; the mutation table
+    stays flattened in body text. Scoring must hand the file to the antiword
+    rendering that carries the real rows instead of stopping at the first
+    route that shows any table structure.
+    """
+    doc_path = tmp_path / "supp.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    layout_html = textwrap.dedent("""\
+        <html><body>
+          <table>
+            <tr><td>Corresponding author</td><td>J. Doe, MD</td></tr>
+            <tr><td>Affiliation</td><td>Dept. of Cardiology</td></tr>
+          </table>
+          <p>Supplementary Table 1. KCNQ1 variants.</p>
+          <p>Gly306Arg916 G&gt;AMissensehetCM960900</p>
+        </body></html>
+        """)
+    antiword_tsv = "Patient\tGene\tAa change\tBases pair change\n" + "".join(
+        f"{n}\tKCNQ1\tArg{n}Trp\t{n}00 C>T\n" for n in range(1, 40)
+    )
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            if "html" in cmd:
+                return subprocess.CompletedProcess(cmd, 0, stdout=layout_html)
+            return subprocess.CompletedProcess(cmd, 1, stdout="")
+        if cmd[0] == "antiword":
+            return subprocess.CompletedProcess(cmd, 0, stdout=antiword_tsv)
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert "| 39 | KCNQ1 | Arg39Trp | 3900 C>T |" in md
+    assert "Corresponding author" not in md
+
+
+def test_doc_to_markdown_keeps_narrative_over_two_row_antiword_table(
+    converter, tmp_path: Path
+):
+    """A two-row antiword junk table must not cost the richer narrative.
+
+    The inverse of the layout-table case: a thin table lead over a rendering
+    with no tables at all is not decisive, so the longest usable text wins.
+    """
+    doc_path = tmp_path / "supp.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    narrative = (
+        "Supplementary methods. Genomic DNA was extracted from peripheral "
+        "blood leukocytes and all KCNQ1 exons were amplified. Carriers of "
+        "Gly306Arg and Arg366Trp were genotyped in 42 relatives. " * 6
+    )
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            if "html" in cmd:
+                return subprocess.CompletedProcess(cmd, 1, stdout="")
+            return subprocess.CompletedProcess(cmd, 0, stdout=narrative)
+        if cmd[0] == "antiword":
+            return subprocess.CompletedProcess(
+                cmd, 0, stdout="Page\tof\n1\t7\n", stderr=""
+            )
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert "Carriers of Gly306Arg and Arg366Trp were genotyped" in md
+    assert "| 1 | 7 |" not in md
 
 
 def test_doc_to_markdown_keeps_textutil_text_when_no_route_has_tables(

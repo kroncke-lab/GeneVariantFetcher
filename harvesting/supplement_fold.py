@@ -36,9 +36,11 @@ from pathlib import Path
 from typing import Any, Optional
 
 from harvesting.supplement_processing_service import (
+    SUPPLEMENT_IDENTITY_QUARANTINE,
+    SUPPLEMENT_IDENTITY_UNKNOWN,
     SUPPLEMENT_IDENTITY_UNVERIFIED,
     _convert_supplement,
-    pdf_supplement_identity,
+    pdf_supplement_verdict,
 )
 
 logger = logging.getLogger(__name__)
@@ -168,12 +170,19 @@ def _is_conversion_placeholder(markdown: str) -> bool:
 def _paper_identity_context(pmid: str, harvest_dir: Path) -> dict[str, Any]:
     """Best-effort article identity for the PDF supplement gate.
 
-    Reads the ``{pmid}_artifacts.json`` sidecar when present for the DOI and
-    the per-filename source URLs the harvester recorded. Everything is
-    optional — the gate can still verify via the PMID or supplement-family
-    markers when the manifest is missing or predates these fields.
+    Reads the ``{pmid}_artifacts.json`` sidecar when present for the DOI, the
+    title, and the per-filename source URLs and provenance labels the
+    harvester recorded. Everything is optional — the gate can still verify via
+    the PMID or supplement-family markers when the manifest is missing or
+    predates these fields.
     """
-    identity: dict[str, Any] = {"pmid": str(pmid), "doi": None, "urls": {}}
+    identity: dict[str, Any] = {
+        "pmid": str(pmid),
+        "doi": None,
+        "title": None,
+        "urls": {},
+        "provenance": {},
+    }
     manifest_path = harvest_dir / f"{pmid}_artifacts.json"
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -181,13 +190,22 @@ def _paper_identity_context(pmid: str, harvest_dir: Path) -> dict[str, Any]:
         return identity
     if isinstance(manifest, dict):
         identity["doi"] = manifest.get("doi") or None
+        identity["title"] = manifest.get("title") or None
         for entry in manifest.get("supplements") or []:
             if not isinstance(entry, dict):
                 continue
             filename = str(entry.get("filename") or "").strip()
+            if not filename:
+                continue
             url = str(entry.get("url") or "").strip()
-            if filename and url:
+            if url:
                 identity["urls"][filename.casefold()] = url
+            # The acquisition-path label doubles as link provenance: the
+            # scraper records reference-section vs supplementary-container
+            # context there.
+            source = str(entry.get("source") or "").strip()
+            if source:
+                identity["provenance"][filename.casefold()] = source
     return identity
 
 
@@ -204,7 +222,7 @@ def _build_supplement_markdown_result(
     omitted_labels)`` where ``omitted_labels`` are file labels that are safe to
     drop from an existing fold block: conversion placeholders plus, when an
     ``identity`` context is supplied, PDFs quarantined by
-    :func:`~harvesting.supplement_processing_service.pdf_supplement_identity`
+    :func:`~harvesting.supplement_processing_service.pdf_supplement_verdict`
     (kept on disk, never folded). ``converter``
     defaults to a fresh
     :class:`~harvesting.format_converters.FormatConverter` (only constructed when
@@ -252,17 +270,17 @@ def _build_supplement_markdown_result(
             omitted_labels.add(Path(rel).name.casefold())
             continue
         if file_path.suffix.lower() == ".pdf" and identity is not None:
-            identity_ok, identity_reason = pdf_supplement_identity(
+            key = file_path.name.casefold()
+            verdict, identity_reason = pdf_supplement_verdict(
                 text_head=md,
                 filename=file_path.name,
-                source_url=str(
-                    (identity.get("urls") or {}).get(file_path.name.casefold(), "")
-                ),
+                source_url=str((identity.get("urls") or {}).get(key, "")),
                 pmid=str(identity.get("pmid") or ""),
                 doi=identity.get("doi"),
                 title=identity.get("title"),
+                provenance=str((identity.get("provenance") or {}).get(key, "")),
             )
-            if not identity_ok:
+            if verdict == SUPPLEMENT_IDENTITY_QUARANTINE:
                 logger.warning(
                     "%s: excluding %s from fold (%s); file kept on disk",
                     SUPPLEMENT_IDENTITY_UNVERIFIED,
@@ -271,6 +289,15 @@ def _build_supplement_markdown_result(
                 )
                 omitted_labels.add(Path(rel).name.casefold())
                 continue
+            if verdict == SUPPLEMENT_IDENTITY_UNKNOWN:
+                # Absence of a marker is not evidence of a foreign document:
+                # fold it and say so rather than dropping a real supplement.
+                logger.warning(
+                    "%s: folding %s unverified (%s)",
+                    SUPPLEMENT_IDENTITY_UNVERIFIED,
+                    rel,
+                    identity_reason,
+                )
         if md and md.strip():
             parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1

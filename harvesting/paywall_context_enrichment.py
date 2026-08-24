@@ -302,6 +302,8 @@ def enrich_paywall_full_context(
     supplement_download_fallback: Optional[
         Callable[[str, Path, str, str, Dict[str, Any]], bool]
     ] = None,
+    doi: Optional[str] = None,
+    title: Optional[str] = None,
 ) -> EnrichmentResult:
     """Append caption block and supplement markdown to a rescued body.
 
@@ -339,6 +341,13 @@ def enrich_paywall_full_context(
             normal requests-based supplement download fails. This lets callers
             try an authenticated browser context without changing the default
             fast path.
+        doi: Article DOI, and
+        title: Article title — both optional, both fed to the PDF supplement
+            identity gate (see
+            :func:`harvesting.supplement_processing_service.pdf_supplement_verdict`).
+            Without them a rescued paper's PDF supplements are judged on
+            filename/URL and 'supplement'-family wording alone, so a recovery
+            run has strictly less identity evidence than the main harvest.
 
     Returns:
         :class:`EnrichmentResult` with the assembled markdown and audit
@@ -438,6 +447,8 @@ def enrich_paywall_full_context(
                     figures_dir=output_dir / f"{pmid}_figures",
                     logger=logger,
                     sleep_seconds=0.0,
+                    doi=doi,
+                    title=title,
                 )
                 supplement_markdown = result.supplement_markdown
                 supplement_results = result.file_results

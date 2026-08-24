@@ -97,7 +97,13 @@ def test_corpus_cache_stages_cleaned_sibling_of_empty_full_context(tmp_path: Pat
     harvest.mkdir(parents=True)
 
     _make_corpus_paper(corpus, "KCNQ1", "27114410", body="")
-    cleaned_body = "# MAIN TEXT\n" + "body text. " * 200
+    # Article-shaped: staging runs the harvest-time content-quality validator,
+    # so a sibling that only clears the size floor is not staged.
+    cleaned_body = (
+        "# MAIN TEXT\n\n## Methods\n\n"
+        + ("Sanger sequencing of KCNQ1 identified p.Ala561Val carriers. " * 40)
+        + "\n\n## Results\n\nCarriers were genotyped in 42 relatives.\n"
+    )
     (corpus / "KCNQ1" / "27114410" / "27114410_CLEANED.md").write_text(
         cleaned_body, encoding="utf-8"
     )

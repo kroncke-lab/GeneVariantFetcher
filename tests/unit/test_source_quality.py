@@ -98,3 +98,54 @@ def test_demote_empty_full_context_falls_back_to_data_zones(tmp_path):
     zones.write_text(_REAL_BODY, encoding="utf-8")
 
     assert demote_empty_full_context(fc) == zones
+
+
+_ACCESS_DENIED_BODY = (
+    "# 403 Forbidden\n\nAccess denied. Your institution does not have a "
+    "subscription to this journal. " * 12
+)
+
+
+def test_demote_empty_full_context_skips_junk_sibling(tmp_path, caplog):
+    """Above the floor is not the same as usable: an access-denied page is junk.
+
+    The floor plus the abstract-only marker both pass here; the harvest-time
+    content-quality validator is what refuses to stage it.
+    """
+    fc = tmp_path / "444_FULL_CONTEXT.md"
+    fc.write_text("", encoding="utf-8")
+    cleaned = tmp_path / "444_CLEANED.md"
+    cleaned.write_text(_ACCESS_DENIED_BODY, encoding="utf-8")
+
+    with caplog.at_level(logging.WARNING, logger="pipeline.source_quality"):
+        selected = demote_empty_full_context(fc)
+
+    assert selected == fc
+    joined = " ".join(record.getMessage() for record in caplog.records)
+    assert "not staged" in joined
+    assert "444_CLEANED.md" in joined
+
+
+def test_demote_empty_full_context_stages_article_shaped_sibling(tmp_path):
+    fc = tmp_path / "555_FULL_CONTEXT.md"
+    fc.write_text("", encoding="utf-8")
+    cleaned = tmp_path / "555_CLEANED.md"
+    cleaned.write_text(
+        "# Abstract\n\nWe screened 212 probands.\n\n## Methods\n\n"
+        + ("Sanger sequencing of KCNQ1 exons identified p.Ala561Val. " * 40)
+        + "\n\n## Results\n\nCarriers were genotyped.\n\n## Discussion\n\ntext\n",
+        encoding="utf-8",
+    )
+
+    assert demote_empty_full_context(fc) == cleaned
+
+
+def test_demote_empty_full_context_skips_junk_then_takes_data_zones(tmp_path):
+    """A failing CLEANED must not shadow a usable DATA_ZONES rendering."""
+    fc = tmp_path / "666_FULL_CONTEXT.md"
+    fc.write_text("", encoding="utf-8")
+    (tmp_path / "666_CLEANED.md").write_text(_ACCESS_DENIED_BODY, encoding="utf-8")
+    zones = tmp_path / "666_DATA_ZONES.md"
+    zones.write_text(_REAL_BODY, encoding="utf-8")
+
+    assert demote_empty_full_context(fc) == zones
