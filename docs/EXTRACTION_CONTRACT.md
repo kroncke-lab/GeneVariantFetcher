@@ -130,6 +130,16 @@ ABSTAIN (do not guess)
 - Provenance ambiguous: say so, emit no count.
 - Same variant in several tables: SUM if cohorts are independent, take the LARGER if
   they overlap.
+- A frequency column that names its own within-study denominator ("Carrier frequency
+  in 7,051 cases") IS a carrier count: emit round(freq x N), and read the role from
+  the noun — cases/patients/probands to affected, controls to unaffected. This is
+  the one frequency that converts. A population/reference allele frequency
+  (gnomAD, ExAC, TopMed, 1000 Genomes, MAF) never converts, and neither does an
+  *allele* frequency stated against a cohort, whose denominator is 2N chromosomes,
+  not N people. Refuse a sub-cohort qualifier ("in 500 cases with a family
+  history") and a cohort that never says which side of the phenotype split it is
+  ("in 300 individuals"). If the printed precision does not pin a single integer,
+  abstain — emit null, never 0.
 
 REJECT AS NON-VARIANTS
 Class-only cohorts ("34 patients with pore-region mutations"); single nucleotide or
