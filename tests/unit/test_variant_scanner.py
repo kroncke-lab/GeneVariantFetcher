@@ -981,6 +981,42 @@ class TestTableRowAttribution:
 
         assert {v["protein_notation"] for v in merged["variants"]} == {"Q2958R"}
 
+    def test_flattened_single_space_genotype_row_is_attributable(self):
+        text = "52 LVHT No 0 RYR2 No 1 237617756 G C 0.000792 p.S453T P No"
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert {v["protein_notation"] for v in merged["variants"]} == {"S453T"}
+
+    def test_flattened_single_space_row_still_rejects_wrong_gene(self):
+        text = "52 LVHT No 0 KCNQ1 No 1 237617756 G C 0.000792 p.S453T P No"
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
+    def test_numbered_ngs_prose_is_not_a_flattened_row(self):
+        text = "3 patients had RYR2 mutations at 12345 G C 0.5 p.S453T in this cohort."
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "RYR2"),
+            "RYR2",
+            document_text=text,
+        )
+
+        assert merged["variants"] == []
+
     def test_phenotype_acronym_does_not_veto_an_affirmed_target_row(self):
         """The "Yes, VT" cell reads as an unknown gene symbol to the veto."""
         scanner = VariantScanner("RYR2")
@@ -1200,6 +1236,36 @@ class TestProseIndelEvents:
         )
 
         assert not any(v.source == "prose_nt_indel" for v in result.variants)
+
+    def test_position_base_deletion_becomes_source_backed_cdna(self):
+        text = (
+            "We identified mutations in four patients with congenital LQTS "
+            "including KCNH2 2768Cdel."
+        )
+
+        merged = merge_scanner_results(
+            {"variants": [], "extraction_metadata": {}},
+            scan_document_for_variants(text, "KCNH2"),
+            "KCNH2",
+            document_text=text,
+        )
+
+        assert {v["cdna_notation"] for v in merged["variants"]} == {"c.2768delC"}
+
+    def test_position_base_deletion_requires_positive_target_gene_finding(self):
+        no_gene = scan_document_for_variants(
+            "We identified 2768Cdel in one patient.", "KCNH2"
+        )
+        negated = scan_document_for_variants(
+            "No KCNH2 2768Cdel was found in any patient.", "KCNH2"
+        )
+        background = scan_document_for_variants(
+            "KCNH2 2768Cdel has been previously reported.", "KCNH2"
+        )
+
+        assert "c.2768delC" not in no_gene.unique_normalized
+        assert "c.2768delC" not in negated.unique_normalized
+        assert "c.2768delC" not in background.unique_normalized
 
 
 # =============================================================================

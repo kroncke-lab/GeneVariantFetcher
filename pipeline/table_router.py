@@ -1424,18 +1424,23 @@ def _coerce_int(value: Any) -> Optional[int]:
 
 _AA_TOKEN = r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
 _PROTEIN_VARIANT_RE = re.compile(
-    r"^(?:p\.)?(?:"
+    r"^(?:"
+    r"(?:p\.)?"
     rf"{_AA_TOKEN}\d{{1,4}}"
     rf"(?:_{_AA_TOKEN}\d{{1,4}})?"
     r"(?:"
-    rf"(?:{_AA_TOKEN}|[ACDEFGHIKLMNPQRSTVWY])?fs(?:X|\*)?\d*"
+    rf"(?:{_AA_TOKEN}|[ACDEFGHIKLMNPQRSTVWY])?"
+    r"fs(?:\d+(?:X|\*)|(?:X|\*)?\d*)"
     rf"|{_AA_TOKEN}"
     r"|[ACDEFGHIKLMNPQRSTVWY*X?]"
     r"|del\d*"
     r"|dup"
     rf"|ins(?:{_AA_TOKEN}|[ACDEFGHIKLMNPQRSTVWY]+)?"
     r")"
-    r"|\d{1,4}_\d{1,4}ins(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]+)"
+    r"|(?:p\.)?\d{1,4}_\d{1,4}"
+    r"ins(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]+)"
+    r"|p\.\d{1,4}_\d{1,4}"
+    r"dup(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]+)"
     r")$",
     re.IGNORECASE,
 )
@@ -1452,6 +1457,17 @@ def _normalize_cdna(value: str, gene_symbol: Optional[str] = None) -> Optional[s
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
         return None
+    # Clinical mutation tables commonly suffix novel alleles with a footnote
+    # glyph (``c.1149insT*``). Strip only a terminal marker and only when the
+    # remaining token validates as a coding-DNA identity.
+    for marker in ("*", "†", "‡", "§", "¶"):
+        if not s.endswith(marker):
+            continue
+        candidate = s[: -len(marker)]
+        prefixed = candidate if candidate.lower().startswith("c.") else "c." + candidate
+        if _CDNA_VARIANT_RE.match(prefixed):
+            s = candidate
+            break
     if not s.lower().startswith("c."):
         # BIC/source-coordinate indels are not HGVS. They remain useful, but
         # prefixing them with ``c.`` invents a coordinate system the paper did
@@ -1478,11 +1494,24 @@ def _normalize_protein(value: str) -> Optional[str]:
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
         return None
-    if s.endswith("*"):
-        without_footnote = s[:-1]
+    for marker in ("*", "†", "‡", "§", "¶"):
+        if not s.endswith(marker):
+            continue
+        without_footnote = s[: -len(marker)]
         if without_footnote and _PROTEIN_VARIANT_RE.match(without_footnote):
             s = without_footnote
+            break
     if not _PROTEIN_VARIANT_RE.match(s):
+        return None
+    # A ref-less protein range must not be a cDNA sequence accidentally routed
+    # through the protein column. Long A/C/G/T-only payloads are nucleotides,
+    # not duplicated amino-acid runs.
+    ref_less_dup = re.fullmatch(r"p\.\d{1,4}_\d{1,4}dup([A-Z]+)", s, re.IGNORECASE)
+    if (
+        ref_less_dup
+        and len(ref_less_dup.group(1)) >= 3
+        and set(ref_less_dup.group(1).upper()) <= set("ACGT")
+    ):
         return None
     return s
 

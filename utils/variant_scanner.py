@@ -394,6 +394,16 @@ class VariantScanner:
         re.IGNORECASE,
     )
 
+    # Older cardiac literature also places the affected base before the
+    # operation (``2768Cdel``). This is a source-coordinate allele, not a
+    # protein call. It is admitted only from a positive, non-negated target-gene
+    # finding and later must still pass current-study attribution in
+    # ``merge_scanner_results``.
+    PREFIXLESS_POSITION_BASE_INDEL = re.compile(
+        r"(?<![A-Za-z0-9_.])(\d{3,6})([ACGT])(del|dup)\b",
+        re.IGNORECASE,
+    )
+
     # Negation preceding a free-text structural event ("no deletion of exon 5",
     # "ruled out a whole-gene deletion"). Sentence-break aware so it only looks
     # within the current clause.
@@ -1361,6 +1371,35 @@ class VariantScanner:
                 )
             )
 
+        for m in self.PREFIXLESS_POSITION_BASE_INDEL.finditer(text):
+            pos, base, op = m.group(1), m.group(2).upper(), m.group(3).lower()
+            ctx = self._positive_structural_context(text, m.start(), m.end())
+            if ctx is None:
+                continue
+            # ``reported`` is part of the general positive-finding vocabulary,
+            # but a prior-literature statement must not become a HIGH prompt
+            # hint before the downstream merge has a chance to reject it.
+            if re.search(
+                r"\b(?:previously|prior(?:ly)?|earlier)\s+(?:been\s+)?"
+                r"(?:reported|described|published|identified|found|observed)\b",
+                ctx,
+                re.IGNORECASE,
+            ):
+                continue
+            variants.append(
+                ScannedVariant(
+                    raw_text=m.group(0),
+                    normalized=f"c.{pos}{op}{base}",
+                    variant_type=op,
+                    notation_type="cdna",
+                    position=int(pos),
+                    context=ctx,
+                    confidence=0.80,
+                    source="prefixless_position_base_indel",
+                    variant_class="frameshift",
+                )
+            )
+
         for m in EXON_EVENT_RE.finditer(text):
             event = parse_exon_event(m.group(0))
             if not event:
@@ -2002,6 +2041,35 @@ def merge_scanner_results(
         """
 
         if line.count("|") >= 2 or re.search(r"-{4,}\d+-{1,}", line):
+            return True
+        # PDF/Word extraction can flatten a genotype table to one space per
+        # cell. Require the full row fingerprint: numeric row id, a known gene,
+        # a genomic coordinate, ref/alt base cells, frequency, and an HGVS
+        # protein token. This is deliberately much narrower than merely seeing
+        # several variants or numbers in prose.
+        single_space_genotype_row = bool(
+            re.match(r"^\s*\d+\*?(?:\s+[A-Z])?\s+", line)
+            and len(line.split()) >= 11
+            and any(
+                scanner._context_mentions_gene(line, gene)
+                for gene in scanner._known_context_genes()
+            )
+            and re.search(r"\b\d{5,}\b", line)
+            and re.search(
+                r"\s[ACGT-]+\s+[ACGT-]+\s+"
+                r"(?:0(?:\.\d+)?|1(?:\.0+)?)\s+p\.",
+                line,
+                re.IGNORECASE,
+            )
+            and not re.search(
+                r"\b(?:we|patients?|probands?|subjects?|participants?|cohort|study|"
+                r"mutations?|variants?|identified|detected|found|observed|reported|"
+                r"had|was|were)\b",
+                line,
+                re.IGNORECASE,
+            )
+        )
+        if single_space_genotype_row:
             return True
         # Wrapped/converted rows keep cell shape without pipes: no sentence
         # punctuation and several short delimited fields.

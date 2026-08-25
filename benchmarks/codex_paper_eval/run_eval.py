@@ -1427,11 +1427,22 @@ def variant_candidates(value: str, gene: str) -> list[str]:
             flags=re.I,
         )
     )
+    # Reference-less protein-range duplications occur in older mutation tables
+    # (``p.360_361dupKQ``). Keep this spelling narrow: a comma-form token such
+    # as ``p.QKQR360,361dup`` is not the same grammar and must not become a
+    # source-grounding alias for linked database rows.
+    candidates.extend(
+        re.findall(
+            r"(?<![A-Za-z0-9])p\.(\d{1,5}_\d{1,5}dup[A-Z]+)\b",
+            value,
+            flags=re.I,
+        )
+    )
     candidates.extend(
         f"c.{token}"
         for token in re.findall(
             (
-                r"(?<![A-Za-z.])([0-9*?+-]+(?:_[0-9*?+-]+)?"
+                r"(?<![A-Za-z0-9._])([0-9*?+-]+(?:_[0-9*?+-]+)?"
                 r"(?:delins[ACGT]+|del[ACGT]*|dup[ACGT]*|ins[ACGT]+))"
             ),
             value,

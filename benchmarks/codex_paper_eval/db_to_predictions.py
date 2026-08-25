@@ -228,6 +228,11 @@ STRUCTURAL_ONLY_VARIANT_CLASSES = frozenset(
     }
 )
 TRUSTED_STRUCTURAL_VF_CLASSES = frozenset({"no_notation_suspect"})
+CONCRETE_CDNA_RE = re.compile(
+    r"c\.\d+(?:[+-]\d+)?(?:_[0-9+-]+)?(?:"
+    r"[ACGT]>[ACGT]|del(?:ins)?[ACGT]*|dup[ACGT]*|ins[ACGT]+)",
+    re.IGNORECASE,
+)
 
 
 def canonical_structural_identity(description: str | None) -> str:
@@ -425,10 +430,21 @@ def rows_for_gene(
                 and str(r["vf_class"] or "") in TRUSTED_STRUCTURAL_VF_CLASSES
                 and canonical_structural_identity(r["structural_description"])
             )
+            # A possible protein-numbering offset is not an identity failure
+            # when the same extracted row carries a concrete coding-DNA allele.
+            # Keep protein-only offset guesses held: those are the ambiguous
+            # rows this projection was designed to exclude.
+            offset_has_cdna = bool(
+                str(r["vf_class"] or "") == "residue_offset_suspect"
+                and CONCRETE_CDNA_RE.fullmatch(
+                    re.sub(r"\s+", "", str(r["cdna_notation"] or ""))
+                )
+            )
             if (
                 not bool(r["vf_matched"])
                 and str(r["vf_class"] or "") not in TRUSTED_UNMATCHED_VF_CLASSES
                 and not structural_is_trusted
+                and not offset_has_cdna
             ):
                 dropped[pmid] += 1
                 continue

@@ -11,6 +11,7 @@ from pipeline.table_router import (
     _gene_symbol_tokens,
     _infer_column_mapping_from_headers,
     _normalize_header,
+    _normalize_protein,
     _row_has_off_target_gene_without_target,
     enumerate_markdown_tables,
     extract_via_router,
@@ -165,6 +166,45 @@ def test_parse_routed_table_extracts_variants():
     assert pen["total_carriers_observed"] == 14
     assert pen["affected_count"] == 4
     assert pen["unaffected_count"] == 10
+
+
+def test_parse_routed_table_keeps_footnoted_legacy_indels():
+    """A terminal star is a table footnote, not part of either allele."""
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. KCNQ1 mutations identified in patients",
+        header_line="| cDNA | Protein | No. of patients |",
+        header_cells=["cDNA", "Protein", "No. of patients"],
+        data_lines=[
+            "| c.1071_1076dupGAAGCA* | p.360_361dupKQ* | 1 |",
+            "| c.1149insT* | p.A384fs79X* | 1 |",
+        ],
+        char_start=0,
+        char_end=160,
+    )
+
+    variants = parse_routed_table(
+        table, {"cdna": 0, "protein": 1, "patient_count": 2}, "KCNQ1"
+    )
+
+    assert [
+        (
+            v["cdna_notation"],
+            v["protein_notation"],
+            v["penetrance_data"]["total_carriers_observed"],
+        )
+        for v in variants
+    ] == [
+        ("c.1071_1076dupGAAGCA", "p.360_361dupKQ", 1),
+        ("c.1149insT", "p.A384fs79X", 1),
+    ]
+
+
+def test_reference_less_protein_dup_rejects_cdna_shaped_payload():
+    assert _normalize_protein("p.360_361dupKQ†") == "p.360_361dupKQ"
+    assert _normalize_protein("360_361dupKQ") is None
+    assert _normalize_protein("p.1071_1076dupGAAGCA") is None
+    assert _normalize_protein("1071_1076dupGAAGCA") is None
 
 
 def test_parse_routed_table_filters_multigene_and_derives_total():

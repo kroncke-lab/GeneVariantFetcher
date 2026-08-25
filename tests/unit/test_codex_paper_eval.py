@@ -1113,18 +1113,30 @@ def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
         INSERT INTO variants VALUES (2, 'p.Ala2Val', 'c.2C>T');
         INSERT INTO variants VALUES (3, 'p.Ala3Val', 'c.3C>T');
         INSERT INTO variants VALUES (4, 'p.Ala4Val', 'c.4C>T');
+        INSERT INTO variants VALUES (5, 'p.Ser227del', 'c.828_830del');
+        INSERT INTO variants VALUES (6, 'p.Ala6Val', NULL);
+        INSERT INTO variants VALUES (7, 'p.Ala7Val', 'c.?');
         INSERT INTO variant_papers VALUES (1, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO variant_papers VALUES (2, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO variant_papers VALUES (3, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO variant_papers VALUES (4, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO variant_papers VALUES (5, '99', 'Results', '[]', 'llm_text');
+        INSERT INTO variant_papers VALUES (6, '99', 'Table 1', '[]', 'llm_table');
+        INSERT INTO variant_papers VALUES (7, '99', 'Table 1', '[]', 'llm_table');
         INSERT INTO penetrance_data VALUES (1, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO penetrance_data VALUES (2, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO penetrance_data VALUES (3, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO penetrance_data VALUES (4, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (5, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (6, '99', 1, 1, 0, 'trusted', '{}');
+        INSERT INTO penetrance_data VALUES (7, '99', 1, 1, 0, 'trusted', '{}');
         INSERT INTO vf_enrichment VALUES (1, 1, NULL);
         INSERT INTO vf_enrichment VALUES (2, 0, 'novel_in_range');
         INSERT INTO vf_enrichment VALUES (3, 0, 'residue_unverified');
         INSERT INTO vf_enrichment VALUES (4, 0, 'known_isoform_offset');
+        INSERT INTO vf_enrichment VALUES (5, 0, 'residue_offset_suspect');
+        INSERT INTO vf_enrichment VALUES (6, 0, 'residue_offset_suspect');
+        INSERT INTO vf_enrichment VALUES (7, 0, 'residue_offset_suspect');
         """
     )
     con.commit()
@@ -1142,8 +1154,9 @@ def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
         "p.Ala1Val c.1C>T",
         "p.Ala2Val c.2C>T",
         "p.Ala4Val c.4C>T",
+        "p.Ser227del c.828_830del",
     ]
-    assert dict(dropped) == {"99": 1}
+    assert dict(dropped) == {"99": 3}
 
 
 def test_production_projection_keeps_valid_structural_only_identity(tmp_path: Path):
@@ -1421,6 +1434,24 @@ def test_matches_legacy_stop_star_and_frameshift_notations():
     # Distinct missense at the same codon must never match.
     assert not matches("D609N", "D609G", "KCNH2")
     assert not matches("p.Asp609Asn c.1825G>A", "D609G", "KCNH2")
+
+
+def test_matches_reference_less_protein_range_duplication():
+    """Legacy tables can omit residues while preserving an exact range/op."""
+    assert matches(
+        "p.360_361dupKQ c.1071_1076dupGAAGCA",
+        "360_361DUPKQ",
+        "KCNQ1",
+    )
+    assert not matches(
+        "c.1071_1076dupGAAGCA",
+        "360_361DUPKQ",
+        "KCNQ1",
+    )
+    assert not any(
+        candidate.lower().startswith("c.")
+        for candidate in run_eval_module.variant_candidates("p.360_361dupKQ", "KCNQ1")
+    )
 
 
 def test_matches_normalizes_legacy_arrow_spellings():
