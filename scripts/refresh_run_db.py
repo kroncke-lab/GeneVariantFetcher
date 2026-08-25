@@ -46,6 +46,13 @@ from utils.legacy_notation import (  # noqa: E402
     normalize_legacy_notation,
     preserve_source_only_legacy_identity,
 )
+from utils.llm_trace import (  # noqa: E402
+    build_trace_manifest,
+    configure_llm_tracing,
+    exported_trace_identity,
+    reset_llm_tracing,
+    validate_trace_manifest,
+)
 from utils.models import Paper  # noqa: E402
 from utils.paper_scope import metadata_paper_scope_exclusion_reason  # noqa: E402
 from utils.variant_normalizer import (  # noqa: E402
@@ -88,6 +95,84 @@ class ReplayCandidate:
     # against (covering them = faithful; under-covering = a lossy under-extraction).
     # Empty when the selector found no deterministic table (e.g. prose-only papers).
     deterministic_positions: frozenset[int] = frozenset()
+
+
+def summarize_trace_usage(trace_root: Path) -> dict[str, Any]:
+    """Aggregate paid-call telemetry from immutable LLM trace records."""
+
+    def empty_usage() -> dict[str, Any]:
+        return {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "provider_seconds": 0.0,
+            "llm_calls": 0,
+            "successful_calls": 0,
+        }
+
+    total = empty_usage()
+    models: dict[str, dict[str, Any]] = {}
+    for path in sorted(trace_root.rglob("*.json")):
+        if path.name == "trace_manifest.json":
+            continue
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if record.get("record_type") != "llm_call":
+            continue
+        response = record.get("response") or {}
+        usage = response.get("usage") or {}
+        input_tokens = int(usage.get("prompt_tokens") or usage.get("input_tokens") or 0)
+        total_tokens = int(usage.get("total_tokens") or 0)
+        output_tokens = max(total_tokens - input_tokens, 0)
+        model = str((record.get("context") or {}).get("model") or "unknown")
+        model_usage = models.setdefault(model, empty_usage())
+        for target in (total, model_usage):
+            target["input_tokens"] += input_tokens
+            target["output_tokens"] += output_tokens
+            target["total_tokens"] += total_tokens
+            target["provider_seconds"] += float(response.get("duration_seconds") or 0)
+            target["llm_calls"] += 1
+            target["successful_calls"] += int(bool(response.get("success")))
+    total["models"] = models
+    return total
+
+
+def finalize_refresh_trace(
+    *,
+    trace_root: Path,
+    trace_run_id: str,
+    replay_attempts: int,
+    dry_run: bool,
+) -> dict[str, Any]:
+    """Seal refresh traces and reject an apparently unmetered paid replay."""
+    manifest_path = trace_root / "trace_manifest.json"
+    manifest = build_trace_manifest(
+        trace_root,
+        output_path=manifest_path,
+        run_id=trace_run_id,
+    )
+    integrity_errors = validate_trace_manifest(trace_root, manifest)
+    if integrity_errors:
+        raise RuntimeError(
+            "Refresh LLM trace integrity failed: " + "; ".join(integrity_errors)
+        )
+    if replay_attempts and not dry_run and not manifest.get("llm_call_count"):
+        raise RuntimeError(
+            "Refresh attempted paper re-extraction but recorded no LLM calls; "
+            "refusing to publish an unmetered refresh summary."
+        )
+    return {
+        "run_id": trace_run_id,
+        "trace_root": str(trace_root),
+        "manifest": str(manifest_path),
+        "trace_count": int(manifest.get("trace_count") or 0),
+        "llm_call_count": int(manifest.get("llm_call_count") or 0),
+        "decision_event_count": int(manifest.get("decision_event_count") or 0),
+        "integrity_errors": [],
+        "usage": summarize_trace_usage(trace_root),
+    }
 
 
 def _json_load(path: Path) -> dict[str, Any]:
@@ -1890,6 +1975,12 @@ def main() -> int:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     refresh_dir = run_dir / f"refresh_{timestamp}"
     refresh_dir.mkdir(parents=True, exist_ok=True)
+    trace_run_id = f"refresh-{gene}-{timestamp}"
+    trace_root = configure_llm_tracing(
+        refresh_dir / "llm_traces",
+        run_id=trace_run_id,
+        enabled=True,
+    )
     original_extraction_dir = extraction_dir
     if args.stage_extractions:
         staged_extraction_dir = refresh_dir / "staged_extractions"
@@ -1926,49 +2017,64 @@ def main() -> int:
     logger.info("Selected %d replay candidates → %s", len(candidates), candidates_csv)
     replay_models = _split_model_args(args.replay_model)
 
-    replay_stats = replay_candidates(
-        candidates=candidates,
-        gene=gene,
-        harvest_dir=harvest_dir,
-        backup_dir=refresh_dir / "extraction_json_backup",
-        tier_threshold=args.tier_threshold,
+    try:
+        with exported_trace_identity(trace_root, trace_run_id):
+            replay_stats = replay_candidates(
+                candidates=candidates,
+                gene=gene,
+                harvest_dir=harvest_dir,
+                backup_dir=refresh_dir / "extraction_json_backup",
+                tier_threshold=args.tier_threshold,
+                dry_run=args.dry_run,
+                gate_regressions=not args.no_gate_regressions,
+                gate_source_evidence_regressions=(
+                    not args.no_gate_source_evidence_regressions
+                ),
+                gate_explosions=not args.no_gate_explosions,
+                explosion_ratio=args.explosion_ratio,
+                explosion_min_new=args.explosion_min_new,
+                explosion_min_delta=args.explosion_min_delta,
+                replay_models=replay_models or None,
+            )
+
+            staged_metadata_repairs = None
+            if args.stage_extractions:
+                staged_metadata_repairs = normalize_staged_extraction_metadata(
+                    extraction_dir,
+                    gene,
+                    abstract_metadata_dir=run_dir / "abstract_json",
+                    dry_run=args.dry_run,
+                )
+
+            output_db = args.output_db
+            if output_db is None:
+                output_db = run_dir / f"{gene}.refresh_{timestamp}.db"
+            output_db = output_db.expanduser()
+            db_stats = rebuild_db(extraction_dir, output_db, dry_run=args.dry_run)
+
+            recovery_summary = None
+            if not args.skip_recovery:
+                layers_outdir = (
+                    args.layers_outdir or refresh_dir / "layers"
+                ).expanduser()
+                recovery_summary = run_recovery_layers(
+                    gene=gene,
+                    db=output_db,
+                    run_dir=run_dir,
+                    gold=gold,
+                    outdir=layers_outdir,
+                    skip_layers=args.skip_layer,
+                    dry_run=args.dry_run,
+                )
+    finally:
+        reset_llm_tracing()
+
+    trace_summary = finalize_refresh_trace(
+        trace_root=trace_root,
+        trace_run_id=trace_run_id,
+        replay_attempts=int(replay_stats.get("attempted") or 0),
         dry_run=args.dry_run,
-        gate_regressions=not args.no_gate_regressions,
-        gate_source_evidence_regressions=(not args.no_gate_source_evidence_regressions),
-        gate_explosions=not args.no_gate_explosions,
-        explosion_ratio=args.explosion_ratio,
-        explosion_min_new=args.explosion_min_new,
-        explosion_min_delta=args.explosion_min_delta,
-        replay_models=replay_models or None,
     )
-
-    staged_metadata_repairs = None
-    if args.stage_extractions:
-        staged_metadata_repairs = normalize_staged_extraction_metadata(
-            extraction_dir,
-            gene,
-            abstract_metadata_dir=run_dir / "abstract_json",
-            dry_run=args.dry_run,
-        )
-
-    output_db = args.output_db
-    if output_db is None:
-        output_db = run_dir / f"{gene}.refresh_{timestamp}.db"
-    output_db = output_db.expanduser()
-    db_stats = rebuild_db(extraction_dir, output_db, dry_run=args.dry_run)
-
-    recovery_summary = None
-    if not args.skip_recovery:
-        layers_outdir = (args.layers_outdir or refresh_dir / "layers").expanduser()
-        recovery_summary = run_recovery_layers(
-            gene=gene,
-            db=output_db,
-            run_dir=run_dir,
-            gold=gold,
-            outdir=layers_outdir,
-            skip_layers=args.skip_layer,
-            dry_run=args.dry_run,
-        )
 
     replace_info = None
     active_db = output_db
@@ -1994,6 +2100,7 @@ def main() -> int:
         "replay_models": replay_models,
         "candidates_csv": str(candidates_csv),
         "replay": replay_stats,
+        "llm_trace": trace_summary,
         "staged_metadata_repairs": staged_metadata_repairs,
         "db_rebuild": db_stats,
         "recovery": recovery_summary,

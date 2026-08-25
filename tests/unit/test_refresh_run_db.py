@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 
 import pytest
 
@@ -6,15 +7,69 @@ import scripts.refresh_run_db as refresh_run_db
 from scripts.refresh_run_db import (
     ReplayCandidate,
     _is_variant_explosion,
+    finalize_refresh_trace,
     normalize_staged_extraction_metadata,
     replay_candidates,
     select_replay_candidates,
+)
+from utils.llm_trace import (
+    capture_llm_call,
+    configure_llm_tracing,
+    llm_trace_scope,
+    reset_llm_tracing,
 )
 from utils.models import ExtractionResult
 
 
 def _long_fulltext(body: str) -> str:
     return body + "\n" + ("methods results cohort variant table. " * 40)
+
+
+def test_finalize_refresh_trace_seals_and_summarizes_paid_calls(tmp_path):
+    trace_root = configure_llm_tracing(tmp_path / "traces", run_id="refresh-KCNH2-1")
+    response = SimpleNamespace(
+        id="response-1",
+        output_text='{"variants": []}',
+        usage=SimpleNamespace(input_tokens=12, output_tokens=5, total_tokens=17),
+    )
+    try:
+        with llm_trace_scope(model="azure_ai/grok-4.3", pmid="12345678"):
+            capture_llm_call(
+                provider="fixture",
+                requested_model="grok-4.3",
+                resolved_model="azure_ai/grok-4.3",
+                request={"input": "fixture"},
+                call=lambda: response,
+            )
+    finally:
+        reset_llm_tracing()
+
+    summary = finalize_refresh_trace(
+        trace_root=trace_root,
+        trace_run_id="refresh-KCNH2-1",
+        replay_attempts=1,
+        dry_run=False,
+    )
+
+    assert summary["llm_call_count"] == 1
+    assert summary["integrity_errors"] == []
+    assert summary["usage"]["input_tokens"] == 12
+    assert summary["usage"]["output_tokens"] == 5
+    assert summary["usage"]["total_tokens"] == 17
+    assert summary["usage"]["models"]["azure_ai/grok-4.3"]["llm_calls"] == 1
+
+
+def test_finalize_refresh_trace_rejects_unmetered_replay(tmp_path):
+    trace_root = tmp_path / "traces"
+    trace_root.mkdir()
+
+    with pytest.raises(RuntimeError, match="recorded no LLM calls"):
+        finalize_refresh_trace(
+            trace_root=trace_root,
+            trace_run_id="refresh-SCN5A-1",
+            replay_attempts=1,
+            dry_run=False,
+        )
 
 
 def test_normalize_staged_extraction_metadata_persists_safe_repairs(tmp_path):
@@ -1535,6 +1590,10 @@ def test_stage_extractions_uses_copy_and_leaves_active_json(tmp_path, monkeypatc
     assert summary["staged_extractions"] is True
     assert summary["original_extraction_dir"] == str(extraction_dir)
     assert summary["extraction_dir"] == str(staged_dir)
+    assert summary["llm_trace"]["run_id"].startswith("refresh-KCNH2-")
+    assert summary["llm_trace"]["llm_call_count"] == 0
+    assert summary["llm_trace"]["integrity_errors"] == []
+    assert (refresh_dirs[0] / "llm_traces" / "trace_manifest.json").is_file()
     assert (staged_dir / active_json.name).read_text(encoding="utf-8") == (
         active_json.read_text(encoding="utf-8")
     )
