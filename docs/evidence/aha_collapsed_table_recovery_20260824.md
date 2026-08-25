@@ -6,6 +6,15 @@ SHIP the scoped acquisition/parser fix and spend one final sealed gold-118
 validation. This evidence authorizes the validation; it does not promote the
 candidate or replace the accepted `20260824_postfix_gold118` headline.
 
+## Sealed follow-through
+
+The authorized validation subsequently completed and passed every promotion
+gate. The promoted lock is
+`benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118`; its
+554/283/78 result, count metrics, integrity hashes, and final budget are recorded
+in `docs/evidence/gold118_aha_table_lock_20260824.md`. The remainder of this file
+preserves the pre-lock authorization evidence.
+
 ## Root cause and general fix
 
 AHA's current full-text DOM wraps cohort tables in

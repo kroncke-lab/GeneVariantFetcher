@@ -15,37 +15,37 @@ file, this file is authoritative.
 ## Authoritative current headline
 
 The accepted headline is the immutable, gold-blind
-`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` lock. It covers 118
+`benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118` lock.
+It covers 118
 gene-paper attempts / 114 unique PMIDs over KCNH2, KCNQ1, RYR2, and SCN5A and
 was prediction-locked before the 632-row human cardiac gold values were read.
 
 | TP / FP / FN | Recall | Raw precision | F1 | Counted-extra P | Count-bearing-only P |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 546 / 284 / 86 | **86.392%** | **65.783%** | **74.692%** | **97.500%** | **93.694%** |
+| 554 / 283 / 78 | **87.658%** | **66.189%** | **75.425%** | **97.880%** | **94.595%** |
 
 | Count | Supplied / gold | Coverage | Conditional MAE | RMSE |
 | --- | ---: | ---: | ---: | ---: |
-| Carrier | 206 / 632 | 32.595% | **0.330** | 1.207 |
-| Affected | 49 / 632 | 7.753% | **0.551** | 1.558 |
-| Unaffected | 18 / 631 | 2.853% | **0.500** | 0.972 |
+| Carrier | 207 / 632 | 32.753% | **0.193** | 0.742 |
+| Affected | 56 / 632 | 8.861% | **0.321** | 1.102 |
+| Unaffected | 28 / 631 | 4.437% | **0.321** | 0.779 |
 
-Two later clean blind locks are retained as failed validations, not candidate
-headlines. `20260824_grouped_structural_gold118` improved raw/count precision
+The grouped/structural and source-recovery clean locks are retained as failed
+validations, not candidate headlines.
+`20260824_grouped_structural_gold118` improved raw/count precision
 and all count errors but lost four TP (542/278/90, 85.759% recall).
 `20260824_source_recovery_gold118` restored 546 TP and improved carrier MAE to
 0.198, but carrier coverage fell 206→197 and count-bearing-only precision fell
-93.694%→93.396%. No best-replicate selection is allowed. Full per-gene metrics,
-source blockers, and the active `$100` ledger are in
-`docs/evidence/gold118_source_recovery_lock_20260824.md`.
+93.694%→93.396%. No best-replicate selection is allowed.
 
-A frozen post-lock candidate now repairs a separately verified AHA acquisition
-gap. PMID 15466642's complete publisher DOM contains a collapsed patient table
-that the prior renderer discarded; the normal production micro replay recovered
-exactly its eight RYR2 gold identities, no off-gene identities, and no counts.
-The held-fixed diagnostic would be 554/284/78 (87.658% recall, 66.110% raw
-precision), but those are not headline numbers. One sealed gold-118 validation
-is authorized. Evidence and the updated budget ledger are in
-`docs/evidence/aha_collapsed_table_recovery_20260824.md`.
+The promoted lock repairs a separately verified AHA acquisition gap. PMID
+15466642's complete publisher DOM contains a collapsed patient table that the
+prior renderer discarded. Its source-bound production result is 8 TP / 0 FP /
+0 FN, and the full fresh lock improves TP, FP, FN, raw/count precision, all
+three count coverages, and all three conditional MAEs versus the postfix lock.
+Full per-gene metrics, integrity hashes, reviewer disposition, and the active
+`$100` ledger are in
+`docs/evidence/gold118_aha_table_lock_20260824.md`.
 
 The exact BRCA1 50 + BRCA2 50 + BMPR2 50 extraction remains a staged candidate,
 not a metric cohort: only 3/150 papers overlap approved human gold and BMPR2 has
@@ -230,8 +230,16 @@ The subsequent source-recovery lock is 546 TP / 285 FP / 86 FN (86.39% recall,
 65.70% raw precision), with 97.50% counted-extra precision, 93.40%
 count-bearing-only precision, and carrier MAE 0.198 over 197 rows. It failed the
 accepted count-bearing precision and carrier-coverage floors, so it also was
-not promoted. The accepted postfix lock remains the headline; selecting a
-different stochastic run for each metric is prohibited.
+not promoted. Selecting a different stochastic run for each metric is
+prohibited.
+
+The later source-bound AHA lock supersedes the postfix headline after a fresh
+gold-free extraction and post-prediction lock: 554 TP / 283 FP / 78 FN (87.66%
+recall, 66.19% raw precision), 97.88% counted-extra precision, 94.59%
+count-bearing-only precision, and carrier MAE 0.193 over 207 rows. Affected and
+unaffected coverage also rise to 56 and 28 while both MAEs fall to 0.321. It
+passes every preregistered floor and is the authoritative result at the top of
+this file.
 
 KCNH2 PMID 29650123 alone contributes 20 remaining FNs. Live publisher
 inspection found only the already-acquired `mmc1.docx`, containing cohort and

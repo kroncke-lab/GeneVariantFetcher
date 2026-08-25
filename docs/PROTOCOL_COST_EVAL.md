@@ -8,13 +8,14 @@ Use `config/settings.py` and `docs/ARCHITECTURE.md` for current defaults and
 ## Current measured costs and $100 improvement budget (2026-08-24)
 
 The accepted immutable gold-118 baseline is
-`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118`: 574 calls (572
-successful), 1,978,238 input tokens, 2,760,247 total-minus-input-inclusive
-tokens, and a **$11.320 public-list-price proxy** ($0.0959 per attempt). By
-role, the proxy is $0.272 Kimi routing, $2.305 Grok 4.3 extraction, and $8.743
-GPT-5.6 Sol vision/verification. Because the provider's visible output and
-reasoning accounting differ for Grok, the conservative alternate total is
-about $11.94. The four gene jobs completed concurrently in about 42 minutes;
+`benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118`: 579
+calls (569 successful), 1,951,910 input tokens, 2,730,460
+total-minus-input-inclusive tokens, and a **$11.241 public-list-price proxy**
+($0.0953 per attempt). By role, the proxy is $0.236 Kimi routing, $2.296 Grok
+4.3 extraction, and $8.708 GPT-5.6 Sol vision/verification. Because the
+provider's visible output and reasoning accounting differ for Grok, the
+conservative alternate total is about $11.85. The four gene jobs completed
+concurrently in 43.4 minutes;
 summed provider duration is not wall time.
 
 The active improvement envelope excludes that pre-existing baseline and charges
@@ -25,11 +26,15 @@ the following attributable work:
 | Targeted exploration with incomplete refresh telemetry | — | — | $10.00000000 |
 | `20260824_grouped_structural_gold118` | 580 (557) | 2,692,803 | $11.86999755 |
 | `20260824_source_recovery_gold118` | 547 (537) | 2,626,745 | $11.19883675 |
-| **Used** |  |  | **$33.06883430** |
-| **Remaining from $100** |  |  | **$66.93116570** |
+| AHA PMID 15466642 production micro replay | 9 (9) | 35,887 | $0.20972125 |
+| `20260824_aha_table_sourcebound_gold118` | 579 (569) | 2,730,460 | $11.24050705 |
+| **Used** |  |  | **$44.51906260** |
+| **Remaining from $100** |  |  | **$55.48093740** |
 
 The source-recovery split was Kimi K2.6 26/26 calls and $0.26288925,
 GPT-5.6 Sol 400/396 and $8.12796000, and Grok 4.3 121/115 and $2.80798750.
+The promoted AHA lock split was Kimi 25/25 and $0.23640455, GPT-5.6 Sol
+432/429 and $8.70826500, and Grok 4.3 122/115 and $2.29583750.
 Packet generation, scoring, source inspection, and tests were deterministic and
 made no model calls. Grok/AGY consultation CLIs exposed no billing telemetry;
 their account cost is excluded, not asserted to be zero.
@@ -42,18 +47,19 @@ an immutable cost manifest, and the cohort has no exhaustive gold standard;
 therefore it is a workload/cost measurement, not a quality/cost benchmark.
 
 The first new blind lock improved count error but regressed recall. The second
-restored accepted recall and lowered carrier MAE 0.330→0.198, but carrier
-coverage fell 206→197 and count-bearing-only precision fell 93.694%→93.396%.
-Both remain failed validations; selecting the best metric from each would be
-best-replicate selection.
+restored accepted recall and lowered carrier MAE, but failed carrier coverage
+and count-bearing precision floors. A separately source-backed AHA repair then
+received one authorized final lock and passed every gate: 554/283/78, 87.66%
+recall, 66.19% raw precision, carrier coverage 207, and carrier MAE 0.193.
 
-No immediate third gold-118 run is authorized. The highest-leverage FN source,
-KCNH2 PMID 29650123, has no mutation roster in its only publisher supplement,
-and another stochastic pass cannot repair that. The next $0-model-call step is
-human curation of the preregistered 90-paper BRCA1/BRCA2/BMPR2 calibration set.
-After calibration changes freeze, release the 60-paper holdout and score it
-once. Spend the remaining $66.93 only on a source-backed, pre-frozen candidate
-or on one holdout extraction if the frozen existing DB is not the candidate.
+No further gold-118 best-replicate run is authorized. The highest-leverage
+remaining FN source, KCNH2 PMID 29650123, has no mutation roster in its only
+publisher supplement, and another stochastic pass cannot repair that. The next
+$0-model-call step is human curation of the preregistered 90-paper
+BRCA1/BRCA2/BMPR2 calibration set. After calibration changes freeze, release
+the 60-paper holdout and score it once. Spend the remaining $55.48 only on a
+calibration-informed, pre-frozen candidate or on one holdout extraction if the
+frozen existing DB is not the candidate.
 
 ## Canonical rollout sizes (updated 2026-08-13)
 

@@ -15,6 +15,35 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-08-24 — AHA source-bound gold-118 promoted
+
+`benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118` is a
+fresh gold-free production extraction from the repaired, SHA-bound AHA source.
+All 118 paper predictions were exported and locked before the scorer opened the
+632-row human cardiac gold. The run records 554 TP / 283 FP / 78 FN: 87.658%
+recall, 66.189% raw precision, 75.425% F1, 97.880% counted-extra precision, and
+94.595% count-bearing-only precision.
+
+Every preregistered promotion gate improves over the postfix lock: +8 TP, -1
+FP, -8 FN; carrier coverage 206→207 with MAE 0.330→0.193; affected coverage
+49→56 with MAE 0.551→0.321; unaffected coverage 18→28 with MAE 0.500→0.321.
+The target AHA paper, RYR2 PMID 15466642, contributes 8 TP / 0 FP / 0 FN. This
+is therefore a promotion, not selection of favorable metrics from different
+stochastic runs.
+
+The four gene jobs completed concurrently, with the slowest at 43.4 minutes.
+Trace manifests bind 579 calls (569 successful) and 2,730,460 tokens. The
+public-list proxy is $11.24050705; including the prior locks, exploration
+reserve, and production micro replay, attributable spend is $44.51906260 of the
+$100 envelope, leaving $55.48093740. Full hashes, per-model cost, gates, and
+review evidence are in
+`docs/evidence/gold118_aha_table_lock_20260824.md`.
+
+Exact-150 BRCA1/BRCA2/BMPR2 metrics remain undefined pending the preregistered
+human calibration and holdout answer keys.
+
+---
+
 ## 2026-08-24 — source-backed candidate received two blind locks; promotion blocked
 
 A subsequent source audit found a concrete new candidate without changing either

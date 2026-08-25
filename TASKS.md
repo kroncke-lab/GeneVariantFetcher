@@ -24,12 +24,17 @@ until the preceding gate passes and its artifact is recorded.
 - [x] Consolidate every worthwhile local branch/worktree change onto `main`;
       preserve the stale pre-merge stash as historical recovery material.
 - [x] Freeze the accepted 118-attempt headline and run two new gold-blind,
-      pre-lock validations. Neither passed all promotion gates; keep
-      `20260824_postfix_gold118` authoritative and do not select the best metric
-      from different stochastic runs.
+      pre-lock validations. Neither passed all promotion gates; do not select
+      the best metric from different stochastic runs.
 - [x] Merge the source-backed scanner/table/structural fixes and targeted-refresh
       usage telemetry. Full result:
       `docs/evidence/gold118_source_recovery_lock_20260824.md`.
+- [x] Repair AHA collapsed cohort tables, bind the upgraded PMID 15466642 source,
+      and complete one final sealed validation. The source-bound lock passed
+      every promotion gate and is now authoritative: 554 TP / 283 FP / 78 FN,
+      87.66% recall, 66.19% raw precision, 94.59% count-bearing-only precision,
+      and carrier MAE 0.193 over 207 supplied rows. Full result:
+      `docs/evidence/gold118_aha_table_lock_20260824.md`.
 - [x] Preregister the exact BRCA1/BRCA2/BMPR2 150-paper evaluation as 30
       calibration + 20 holdout papers per gene, with frozen source hashes,
       exhaustive-paper precision, explicit `NONE`, and family-count exclusion.
@@ -43,13 +48,12 @@ until the preceding gate passes and its artifact is recorded.
       other provenance-valid source. The publisher's only supplement has no
       roster; never infer its 20 missing singleton identities from gold.
 
-Budget: **$33.27855555 used / $66.72144445 remaining**. A final gold-118 run is
-now authorized for the frozen AHA collapsed-table candidate: the normal
-production micro replay recovered exactly eight independently source-listed
-RYR2 identities with no off-gene rows, and both requested maximum-effort
-reviewers returned SHIP after the picker was scoped to AHA and nested tables
-were ownership-filtered. This is a validation authorization, not promotion.
-Evidence: `docs/evidence/aha_collapsed_table_recovery_20260824.md`.
+Budget: **$44.51906260 used / $55.48093740 remaining**. The final AHA
+source-bound lock cost $11.24050705 by the established public-price proxy and
+is promoted. No further paid gold-118 best-replicate run is authorized. The
+remaining envelope is reserved for a calibration-informed exact-150 candidate
+or one post-freeze holdout extraction if the existing frozen DB cannot serve as
+the candidate.
 
 ## 1. Re-establish the scientific baseline
 
@@ -128,6 +132,13 @@ change.
       correctly detects those files as drifted. Restore the exact selection-
       hashed snapshots from archival storage, or create a clean scaffold, before
       treating this run directory as a source-valid parent for another lock.
+
+      **Final source-bound follow-through:** the clean replacement scaffold
+      bound the repaired AHA source and completed 118/118 gold-free extractions
+      before lock. Its 554/283/78 result passes every identity, precision,
+      coverage, and MAE floor and supersedes the postfix headline. The final
+      ledger is $44.51906260 used / $55.48093740 remaining; do not spend it on
+      another gold-118 replicate. Continue with human exact-150 calibration.
 - [ ] **(superseded, kept for the staging half) Stage the 50/50/50 review
       set.** The batch itself (cruft sweep, prompt-caching split +
       verifier-effort fix, figure-vision cost controls, acquisition
