@@ -30,7 +30,8 @@ import json
 import logging
 import re
 from functools import lru_cache
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
+from decimal import Decimal, InvalidOperation
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
@@ -70,6 +71,12 @@ class MarkdownTable:
     char_start: int
     char_end: int
     section: Optional[str] = None
+    # Title row lifted off a pandas-rendered spreadsheet by
+    # `_promote_spreadsheet_title_header`. Kept apart from `caption` on purpose:
+    # a title may AFFIRM that a table is scoped to the extraction target (which
+    # disables a destructive row-level gene guard), but it must never be able to
+    # whole-table-reject, because it is not an anchored "Table N." caption.
+    sheet_title: Optional[str] = None
 
     def header_preview(self, max_chars: int = 240) -> str:
         # Render parsed cells with `|` separators and per-cell trimming so the
@@ -742,6 +749,161 @@ def _is_variant_annotation_header(header: str) -> bool:
     )
 
 
+# --- Clinical frequency columns that state their own denominator -------------
+#
+# "Carrier frequency in 7,051 cases" is a carrier COUNT expressed as a fraction:
+# count = round(freq x 7051). That is categorically different from a population
+# allele frequency (gnomAD/ExAC/MAF), which has no within-study denominator and
+# must keep being rejected. Two guards would otherwise kill it —
+# `_is_population_frequency_header` (bare token "frequency") and
+# `_is_denominator_header_when_carrier_present` (the header holds both "carrier"
+# and "cases") — so this is checked FIRST, and only for an anchored shape.
+_CLINICAL_FREQUENCY_DENOMINATOR_RE = re.compile(
+    r"\b(?:freq(?:uency|uencies)?|proportion|percent(?:age)?|rate)\b"
+    r"[^|]{0,40}?"
+    r"\bin\s+(?P<n>\d[\d,]{0,8})\s+"
+    r"(?P<noun>cases?|controls?|patients?|probands?|individuals?|subjects?"
+    r"|women|men|participants?|carriers?)"
+    r"(?P<tail>\b.*)?$",
+    re.IGNORECASE,
+)
+# Anything naming an external reference population: no within-study denominator.
+_POPULATION_SOURCE_RE = re.compile(
+    r"gnomad|exac|topmed|1000\s*genomes|\besp\b|\bhgvd\b|\btommo\b|"
+    r"\bmaf\b|minor\s*allele|reference\s*population|public\s*database",
+    re.IGNORECASE,
+)
+# An ALLELE frequency is per-chromosome: its denominator is 2N, not N. Reading
+# it against the stated cohort size mints exactly half the true carrier count —
+# an integer, so it would slip past every rounding check.
+_PER_ALLELE_RE = re.compile(
+    r"\ballele\s*(?:freq|frequency|frequencies)\b", re.IGNORECASE
+)
+# A qualifier after the cohort noun means a SUB-cohort ("in 500 cases with a
+# family history"), whose denominator is not the column's population.
+_SUBCOHORT_TAIL_RE = re.compile(
+    r"^\s*(?:with|who|having|aged|under|over|younger|older|carrying|diagnosed|from|<|>)",
+    re.IGNORECASE,
+)
+_CONTROL_NOUN_RE = re.compile(r"controls?|unaffected|healthy|normal", re.IGNORECASE)
+_CASE_NOUN_RE = re.compile(r"cases?|patients?|probands?|affected", re.IGNORECASE)
+
+
+def _clinical_frequency_denominator(header: str) -> Optional[tuple[str, int, bool]]:
+    """Return (role, denominator, header_says_percent) for a self-describing
+    within-study frequency column, else None.
+
+    Deliberately conservative: a false positive here mints a fabricated carrier
+    count for every row of a table, which is far worse than declining to convert.
+    """
+    if not header:
+        return None
+    text = " ".join(str(header).split())
+    if _POPULATION_SOURCE_RE.search(text) or _PER_ALLELE_RE.search(text):
+        return None
+    match = _CLINICAL_FREQUENCY_DENOMINATOR_RE.search(text)
+    if not match:
+        return None
+    if _SUBCOHORT_TAIL_RE.match(match.group("tail") or ""):
+        return None
+    try:
+        denominator = int(match.group("n").replace(",", ""))
+    except ValueError:
+        return None
+    if denominator <= 0:
+        return None
+    noun = match.group("noun")
+    if _CONTROL_NOUN_RE.search(noun):
+        role = "unaffected"
+    elif _CASE_NOUN_RE.search(noun):
+        role = "affected"
+    else:
+        # "individuals"/"subjects"/"participants"/"carriers" name a cohort
+        # without saying which side of the phenotype split it is.
+        return None
+    says_percent = "%" in text or bool(re.search(r"percent", text, re.IGNORECASE))
+    return role, denominator, says_percent
+
+
+def _frequency_column_is_percent(
+    values: List[str], header_says_percent: bool
+) -> Optional[bool]:
+    """Decide whether a frequency column is a percentage or a fraction.
+
+    Returns None when the two signals disagree — a 0-1 column labelled "%" is
+    ambiguous (0.8 could be 0.8% or 80%), and guessing either way is a silent
+    order-of-magnitude error.
+    """
+    numeric: List[float] = []
+    for value in values:
+        try:
+            numeric.append(float(str(value).strip().rstrip("%")))
+        except (TypeError, ValueError):
+            continue
+    if not numeric:
+        return None
+    data_says_percent = max(numeric) > 1.0
+    if data_says_percent and max(numeric) > 100.0:
+        return None
+    if header_says_percent and not data_says_percent:
+        return None
+    return data_says_percent or header_says_percent
+
+
+def _count_from_frequency(
+    value: Optional[str], denominator: int, is_percent: bool
+) -> tuple[Optional[int], str]:
+    """Convert a frequency cell to a carrier count, or abstain with a reason.
+
+    The abstention rule is precision-aware. A frequency printed to D decimals
+    carries an uncertainty of half an ulp, so the count it pins is only unique
+    when `denominator x half_ulp < 0.5`. Beyond that the string simply does not
+    determine an integer. A residual larger than the ulp window means the true
+    per-variant denominator differed from the stated cohort size (genotyping
+    call rate), which is tolerated up to `_FREQUENCY_APPROX_TOLERANCE` and
+    recorded as approximate.
+
+    NEVER returns 0 on an abstention: a fabricated `unaffected=0` in a
+    case-control design is an unsupported 100%-penetrance claim (see
+    trust_gate.UNAFFECTED_EXPECTED_DESIGNS).
+    """
+    if value is None:
+        return None, "missing"
+    text = str(value).strip().rstrip("%").replace(",", "")
+    if not text or text.lower() in {"-", "na", "n/a", "none", "nan", "."}:
+        return None, "missing"
+    try:
+        parsed = Decimal(text)
+    except (InvalidOperation, ValueError):
+        return None, "unparsable"
+    fraction = float(parsed) / 100.0 if is_percent else float(parsed)
+    if not 0.0 <= fraction <= 1.0:
+        return None, "out_of_range"
+    # An exact zero is a stated observation, not a rounding artifact: the column
+    # prints 0.00014 for a single carrier, so a bare 0 means none were seen.
+    # This is a SOURCED zero (a real cell in a real control column), which is
+    # what trust_gate's unaffected-expected rule wants — unlike a zero inferred
+    # from the absence of a column.
+    if fraction == 0.0:
+        return 0, "ok"
+    half_ulp = float(Decimal(1).scaleb(parsed.as_tuple().exponent)) / 2.0
+    if is_percent:
+        half_ulp /= 100.0
+    window = half_ulp * denominator
+    if window >= 0.5:
+        return None, "precision_too_coarse"
+    exact = fraction * denominator
+    residual = abs(exact - round(exact))
+    if residual > _FREQUENCY_APPROX_TOLERANCE:
+        return None, "ambiguous_rounding"
+    return int(round(exact)), ("ok" if residual <= window else "approximate")
+
+
+# Residual above which the stated denominator cannot be reconciled with any
+# nearby integer, so no count is emitted.
+_FREQUENCY_APPROX_TOLERANCE = 0.25
+
+
 def _is_denominator_header_when_carrier_present(
     header: str, normalized_headers: List[str]
 ) -> bool:
@@ -750,8 +912,24 @@ def _is_denominator_header_when_carrier_present(
     return any(token in header for token in _DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT)
 
 
-def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> bool:
-    """Reject numeric columns that are visibly not per-variant carrier counts."""
+def _is_non_variant_count_header(
+    header: str,
+    normalized_headers: List[str],
+    *,
+    raw_header: Optional[str] = None,
+) -> bool:
+    """Reject numeric columns that are visibly not per-variant carrier counts.
+
+    `raw_header` is the un-normalized label. It is needed because
+    `_normalize_header` strips the digits' commas and all whitespace, which
+    destroys the "in 7,051 cases" phrase this exception keys on.
+    """
+    # A within-study frequency column that names its own denominator is a
+    # carrier count in disguise. Checked first: it would otherwise be rejected
+    # twice over, by the bare "frequency" token and — when the same header says
+    # "carrier" and "cases" — by the carrier-present denominator rule.
+    if raw_header and _clinical_frequency_denominator(raw_header):
+        return False
     row_identifier = _is_row_identifier_header(header)
     # ``Family (No.)`` is usually an identifier, but mutation-list tables can
     # also use it as a family count when a separate serial-number column is the
@@ -964,6 +1142,26 @@ def _infer_column_mapping_from_headers(
         if "protein" not in mapping and any(_normalize_protein(v) for v in values):
             mapping["protein"] = idx
 
+    # Within-study frequency columns that state their own denominator. Run AFTER
+    # the loop above so an EXPLICIT integer count column always wins: a derived
+    # count carries the paper's rounding, so letting it shadow a stated integer
+    # would trade exact numbers for approximate ones.
+    for idx, raw_header in enumerate(table.header_cells):
+        resolved = _clinical_frequency_denominator(raw_header)
+        if not resolved:
+            continue
+        role, _denominator, says_percent = resolved
+        if role in mapping:
+            continue
+        if (
+            _frequency_column_is_percent(_column_values(table, idx), says_percent)
+            is None
+        ):
+            # Percent-vs-fraction could not be resolved; converting would risk a
+            # 100x error, so leave the column unmapped.
+            continue
+        mapping[role] = idx
+
     if _looks_like_row_level_clinical_list(table, mapping, has_assay_or_gwas_cue):
         mapping["patient_count"] = _INFER_ROW_PATIENT_COUNT
 
@@ -987,6 +1185,115 @@ def _infer_column_mapping_from_headers(
 # supplements (.doc/.docx) converted to text emit pipe-delimited rows with no
 # `|---|` separator at all, so requiring one made every such table invisible.
 _MIN_BORDERLESS_ROWS = 3
+
+
+# --- Spreadsheet title rows -------------------------------------------------
+#
+# pandas renders an xlsx sheet whose first row is a merged title as
+#
+#     | Supplementary Data 1: ... | Unnamed: 1 | Unnamed: 2 | ... |
+#     |:--------------------------|:-----------|:-----------| ... |
+#     | Chr | Pos | ... | Carrier frequency | Carrier frequency | ... |
+#     |     |     | ... | in 7,051 cases    | in 11,241 controls| ... |
+#     | 8   | ... |
+#
+# so the markdown header is the TITLE and the real column names are data row 0,
+# with any wrapped header fragment on data row 1. `_join_wrapped_header` cannot
+# reach them because the `|:---|` separator sits in between.
+_UNNAMED_COLUMN_RE = re.compile(r"^unnamed:?\s*\d+$", re.IGNORECASE)
+
+# A sheet title reads like a caption. A *spanned group label* ("Cases",
+# "Controls") also renders its continuation cells as "Unnamed: N", and
+# promoting under one of those would destroy the group distinction the header
+# encodes — so require the first cell to actually look like a title.
+_SHEET_TITLE_HINT_RE = re.compile(
+    r"\b(?:table|supplement\w*|data|dataset|list|appendix|file|sheet)\b",
+    re.IGNORECASE,
+)
+_MIN_SHEET_TITLE_CHARS = 25
+# The promoted row has to look like a header, not like data. Require at least
+# this many cells that a field matcher recognizes.
+_MIN_PROMOTED_FIELD_HITS = 2
+
+
+def _is_spreadsheet_title_header(header_cells: List[str]) -> bool:
+    """Is this markdown header a spreadsheet title row rather than column names?"""
+    if len(header_cells) < 4:
+        return False
+    first = header_cells[0].strip()
+    rest = [c.strip() for c in header_cells[1:]]
+    # EVERY non-first cell must be a pandas placeholder (or blank). A real
+    # hierarchical header keeps at least one named group in the tail
+    # ("| Cases | Unnamed: 1 | Controls | Unnamed: 3 |"), which fails here.
+    if not all(not c or _UNNAMED_COLUMN_RE.match(c) for c in rest):
+        return False
+    if not any(_UNNAMED_COLUMN_RE.match(c) for c in rest):
+        return False
+    return len(first) >= _MIN_SHEET_TITLE_CHARS and bool(
+        _SHEET_TITLE_HINT_RE.search(first)
+    )
+
+
+def _promoted_field_hits(cells: List[str]) -> int:
+    """How many cells read as a recognizable column name?"""
+    hits = 0
+    for cell in cells:
+        normalized = _normalize_header(cell)
+        if not normalized:
+            continue
+        if any(
+            any(kw in normalized for kw in keywords)
+            for keywords in _HEADER_FIELD_KEYWORDS.values()
+        ):
+            hits += 1
+    return hits
+
+
+def _promote_spreadsheet_title_header(table: MarkdownTable) -> MarkdownTable:
+    """Promote the real header out from under a spreadsheet title row.
+
+    Returns `table` unchanged when the shape does not apply. The discarded
+    title becomes the caption when the table had none, so caption-scoped gene
+    guards keep working.
+    """
+    if not table.data_lines or not _is_spreadsheet_title_header(table.header_cells):
+        return table
+
+    promoted = [c.strip() for c in _split_pipe_row(table.data_lines[0])]
+    if _promoted_field_hits(promoted) < _MIN_PROMOTED_FIELD_HITS:
+        # Row 0 is data, not a header. Leave the table alone.
+        return table
+
+    idx = 1
+    while idx < len(table.data_lines):
+        fragment = [c.strip() for c in _split_pipe_row(table.data_lines[idx])]
+        if not fragment or not _is_header_continuation(fragment):
+            break
+        for col, piece in enumerate(fragment):
+            if piece and col < len(promoted):
+                promoted[col] = (promoted[col] + " " + piece).strip()
+        idx += 1
+
+    # The discarded title is worth keeping as a caption, but only when it names
+    # no gene. `parse_routed_table` whole-table-rejects a captioned table whose
+    # caption scopes to a gene other than the target, so a sheet title such as
+    # "...11 breast cancer genes..." would newly trigger that on any promoted
+    # table that did not also gain a gene column. Enumeration does not know the
+    # target gene, so the safe rule is target-agnostic: adopt the title only
+    # when it introduces no gene scope at all.
+    title = table.header_cells[0].strip()
+    caption = table.caption
+    if caption is None and not _caption_gene_scope(title):
+        caption = title
+
+    return replace(
+        table,
+        header_line=table.data_lines[0],
+        header_cells=promoted,
+        data_lines=table.data_lines[idx:],
+        caption=caption,
+        sheet_title=title,
+    )
 
 
 def _is_header_continuation(cells: List[str]) -> bool:
@@ -1221,6 +1528,11 @@ def enumerate_markdown_tables(
             i = j
             continue
         i += 1
+
+    # Applied to BOTH construction branches above (bordered and borderless) and
+    # BEFORE the variant-like filter, so a promoted table is judged on its real
+    # column names rather than on "Unnamed: 3".
+    tables = [_promote_spreadsheet_title_header(t) for t in tables]
 
     if only_variant_like:
         tables = [t for t in tables if _looks_like_variant_table(t)]
@@ -2302,7 +2614,11 @@ def _usable_count_index(
         return idx
     if idx < 0 or idx >= len(normalized_headers):
         return None
-    if _is_non_variant_count_header(normalized_headers[idx], normalized_headers):
+    if _is_non_variant_count_header(
+        normalized_headers[idx],
+        normalized_headers,
+        raw_header=_header_label(table, idx),
+    ):
         logger.debug(
             "table_router: ignoring non-carrier count column %r in %s",
             _header_label(table, idx),
@@ -2530,6 +2846,27 @@ def _router_observation_provenance(
     }
 
 
+def _read_count_cell(
+    table: MarkdownTable, idx: Optional[int], cell: Any
+) -> Optional[int]:
+    """Read one count cell, converting a self-describing frequency to a count.
+
+    Falls back to the plain integer coercion for every ordinary column, so this
+    is a no-op on tables that carry stated integers.
+    """
+    if idx is None or idx == _INFER_ROW_PATIENT_COUNT:
+        return _coerce_int(cell(idx)) if idx is not None else None
+    resolved = _clinical_frequency_denominator(_header_label(table, idx) or "")
+    if not resolved:
+        return _coerce_int(cell(idx))
+    _role, denominator, says_percent = resolved
+    is_percent = _frequency_column_is_percent(_column_values(table, idx), says_percent)
+    if is_percent is None:
+        return None
+    value, _reason = _count_from_frequency(cell(idx), denominator, is_percent)
+    return value
+
+
 def parse_routed_table(
     table: MarkdownTable, mapping: Dict[str, int], gene_symbol: str
 ) -> List[Dict[str, Any]]:
@@ -2634,9 +2971,17 @@ def parse_routed_table(
     # PMID 27767231 (a BRCA1 review-queue paper whose gene lives in a
     # "Germline mutation" column that `_infer_column_mapping_from_headers`
     # maps to `protein`, not `gene`, so there is no gene-column guard either).
+    #
+    # A promoted sheet title affirms scope the same way an anchored caption
+    # does. It is deliberately consulted HERE and not in the reject above: a
+    # title naming another gene must not delete a whole table, but a title
+    # naming THIS gene is exactly the evidence that makes the row guard
+    # redundant — and running that guard anyway costs every row of a table with
+    # no gene column (PMID 26848529 Supplementary table 4 lost all 160).
+    title_scope = _caption_gene_scope(table.sheet_title)
     caption_scopes_to_target = (
         len(caption_scope) == 1 and gene_symbol.strip().upper() in caption_scope
-    )
+    ) or (len(title_scope) == 1 and gene_symbol.strip().upper() in title_scope)
     # Markdown rowspan: a blank Gene cell inherits the gene from the row above
     # (gene-grouped tables list the gene once, then leave continuation rows
     # blank). Forward-fill so the gene-filter below sees the true gene of every
@@ -2713,10 +3058,10 @@ def parse_routed_table(
             continue
 
         infer_one_carrier = count_idx == _INFER_ROW_PATIENT_COUNT
-        total = 1 if infer_one_carrier else _coerce_int(cell(count_idx))
-        affected = _coerce_int(cell(aff_idx))
-        unaffected = _coerce_int(cell(unaff_idx))
-        uncertain = _coerce_int(cell(unc_idx))
+        total = 1 if infer_one_carrier else _read_count_cell(table, count_idx, cell)
+        affected = _read_count_cell(table, aff_idx, cell)
+        unaffected = _read_count_cell(table, unaff_idx, cell)
+        uncertain = _read_count_cell(table, unc_idx, cell)
         phenotype = cell(pheno_idx)
         clinical = cell(clin_idx)
 

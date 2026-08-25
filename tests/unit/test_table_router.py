@@ -7,6 +7,8 @@ import pytest
 
 from pipeline.table_router import (
     MarkdownTable,
+    _clinical_frequency_denominator,
+    _count_from_frequency,
     _field_header_match,
     _gene_symbol_tokens,
     _infer_column_mapping_from_headers,
@@ -1883,3 +1885,232 @@ def test_borderless_table_captures_heading_caption():
     tables = enumerate_markdown_tables(paper)
     assert tables
     assert _caption_gene_scope(tables[0].caption) == {"BRCA1"}
+
+
+# --- Spreadsheet title-row promotion + self-describing frequency columns -----
+
+
+def _sheet_table(title, header, continuation, *rows):
+    """Render a pandas-style xlsx sheet: merged title row, then the real header."""
+    width = len(header)
+    cells = [title] + [f"Unnamed: {i}" for i in range(1, width)]
+    lines = [
+        "| " + " | ".join(cells) + " |",
+        "|" + "|".join([":---"] * width) + "|",
+        "| " + " | ".join(header) + " |",
+    ]
+    if continuation:
+        lines.append("| " + " | ".join(continuation) + " |")
+    for row in rows:
+        lines.append("| " + " | ".join(row) + " |")
+    return "\n".join(lines)
+
+
+SHEET_TITLE = (
+    "Supplementary Data 1: A list of all 1,781 variants and their significance"
+)
+SHEET_HEADER = [
+    "Chr",
+    "Pos",
+    "Gene",
+    "HGVS.c",
+    "HGVS.p",
+    "Carrier frequency",
+    "Carrier frequency",
+    "Final clinical significance",
+]
+SHEET_CONTINUATION = ["", "", "", "", "", "in 7,051 cases", "in 11,241 controls", ""]
+
+
+def test_spreadsheet_title_row_is_promoted_to_header():
+    text = _sheet_table(
+        SHEET_TITLE,
+        SHEET_HEADER,
+        SHEET_CONTINUATION,
+        [
+            "17",
+            "41197708",
+            "BRCA1",
+            "c.5266dupC",
+            "p.Gln1756fs",
+            "0.00028",
+            "0",
+            "Pathogenic",
+        ],
+        [
+            "17",
+            "41197712",
+            "BRCA1",
+            "c.5262G>A",
+            "p.Ser1754Ser",
+            "0.00014",
+            "0.00018",
+            "Benign",
+        ],
+    )
+    tables = enumerate_markdown_tables(text)
+    assert len(tables) == 1
+    table = tables[0]
+    assert table.header_cells[:5] == ["Chr", "Pos", "Gene", "HGVS.c", "HGVS.p"]
+    # the wrapped continuation is folded into the header it belongs to
+    assert table.header_cells[5] == "Carrier frequency in 7,051 cases"
+    assert table.header_cells[6] == "Carrier frequency in 11,241 controls"
+    # the discarded title becomes the caption, so caption gene-scoping still works
+    assert table.caption == SHEET_TITLE
+    # continuation row is consumed, not left as a data row
+    assert len(table.data_lines) == 2
+
+
+def test_promoted_sheet_maps_frequency_columns_to_affected_and_unaffected():
+    text = _sheet_table(
+        SHEET_TITLE,
+        SHEET_HEADER,
+        SHEET_CONTINUATION,
+        [
+            "17",
+            "41197708",
+            "BRCA1",
+            "c.5266dupC",
+            "p.Gln1756fs",
+            "0.00028",
+            "0",
+            "Pathogenic",
+        ],
+        [
+            "17",
+            "41197712",
+            "BRCA1",
+            "c.5262G>A",
+            "p.Ser1754Ser",
+            "0.00014",
+            "0.00018",
+            "Benign",
+        ],
+    )
+    table = enumerate_markdown_tables(text)[0]
+    mapping = _infer_column_mapping_from_headers(table, target_gene="BRCA1")
+    assert mapping["gene"] == 2
+    assert mapping["cdna"] == 3
+    assert mapping["protein"] == 4
+    assert mapping["affected"] == 5
+    assert mapping["unaffected"] == 6
+    # the one-carrier-per-row fallback must NOT fire once real counts exist
+    assert "patient_count" not in mapping
+
+    variants = parse_routed_table(table, mapping, "BRCA1")
+    by_cdna = {v["cdna_notation"]: v for v in variants}
+    first = by_cdna["c.5266dupC"]["penetrance_data"]
+    assert first["affected_count"] == 2  # round(0.00028 * 7051)
+    assert first["unaffected_count"] == 0  # a sourced zero, not an inferred one
+    second = by_cdna["c.5262G>A"]["penetrance_data"]
+    assert second["affected_count"] == 1  # round(0.00014 * 7051)
+    assert second["unaffected_count"] == 2  # round(0.00018 * 11241)
+
+
+def test_hierarchical_group_header_is_not_promoted():
+    """A spanned group label also renders continuation cells as "Unnamed: N".
+
+    Promoting under one would destroy the case/control grouping, so the first
+    cell must actually read like a sheet title.
+    """
+    text = "\n".join(
+        [
+            "| Cases | Unnamed: 1 | Controls | Unnamed: 3 |",
+            "|:---|:---|:---|:---|",
+            "| Variant | n | Variant | n |",
+            "| c.100A>G | 4 | c.100A>G | 1 |",
+            "| c.200C>T | 2 | c.200C>T | 0 |",
+        ]
+    )
+    tables = enumerate_markdown_tables(text, only_variant_like=False)
+    assert tables[0].header_cells[0] == "Cases"
+
+
+def test_population_frequency_headers_are_never_treated_as_counts():
+    for header in (
+        "Allele frequency in 7,051 cases",  # per-chromosome: denominator is 2N
+        "gnomAD frequency in 125,748 individuals",
+        "ExAC carrier frequency",
+        "Minor allele frequency",
+        "MAF",
+        "Allele frequency",
+        "Frequency in 500 cases with a family history",  # sub-cohort
+        "Carrier frequency in 300 individuals",  # side of the split unstated
+    ):
+        assert _clinical_frequency_denominator(header) is None, header
+
+
+def test_clinical_frequency_headers_resolve_role_and_denominator():
+    assert _clinical_frequency_denominator("Carrier frequency in 7,051 cases") == (
+        "affected",
+        7051,
+        False,
+    )
+    assert _clinical_frequency_denominator("Carrier frequency in 11,241 controls") == (
+        "unaffected",
+        11241,
+        False,
+    )
+    assert _clinical_frequency_denominator("Frequency in 1,000 patients (%)") == (
+        "affected",
+        1000,
+        True,
+    )
+
+
+def test_frequency_conversion_abstains_rather_than_fabricating():
+    # exact: 0.00667 * 7051 = 47.03, well inside the 5-decimal ulp window
+    assert _count_from_frequency("0.00667", 7051, False) == (47, "ok")
+    # a stated zero is an observation, not an abstention
+    assert _count_from_frequency("0", 11241, False) == (0, "ok")
+    # 0.48596 * 7051 = 3426.5 -> no integer is pinned; must NOT return 0
+    value, reason = _count_from_frequency("0.48596", 7051, False)
+    assert value is None and reason == "ambiguous_rounding"
+    # 4 decimals against a 5-figure denominator cannot pin an integer at all
+    assert _count_from_frequency("0.5653", 11241, False) == (
+        None,
+        "precision_too_coarse",
+    )
+    # a fraction outside [0, 1] is not a frequency
+    assert _count_from_frequency("1.5", 100, False) == (None, "out_of_range")
+
+
+def test_explicit_count_column_wins_over_a_derived_frequency():
+    """A stated integer must never be shadowed by a rounded frequency."""
+    header = ["Gene", "HGVS.c", "No. of carriers", "Carrier frequency"]
+    continuation = ["", "", "", "in 1,000 cases"]
+    text = _sheet_table(
+        "Supplementary Table 2: variants and carrier counts in the cohort",
+        header,
+        continuation,
+        ["BRCA1", "c.5266dupC", "7", "0.00650"],
+    )
+    table = enumerate_markdown_tables(text)[0]
+    mapping = _infer_column_mapping_from_headers(table, target_gene="BRCA1")
+    assert mapping["patient_count"] == 2
+    variants = parse_routed_table(table, mapping, "BRCA1")
+    # 0.00650 * 1000 would round to 6; the stated 7 must win
+    assert variants[0]["patients"]["count"] == 7
+
+
+def test_external_population_frequency_with_a_cohort_size_is_still_rejected():
+    """A stated denominator does not make a reference population a cohort."""
+    for header in (
+        "Frequency in 60,706 ExAC controls",
+        "Frequency in 125,748 gnomAD controls",
+        "Frequency in 2,504 1000 Genomes controls",
+    ):
+        assert _clinical_frequency_denominator(header) is None, header
+
+
+def test_promoted_sheet_title_naming_a_gene_is_not_adopted_as_caption():
+    """A caption scoping to another gene whole-table-rejects downstream."""
+    text = _sheet_table(
+        "Supplementary Data 2: BRCA2 variants observed across the cohort",
+        ["Gene", "HGVS.c", "HGVS.p", "No. of carriers"],
+        None,
+        ["KCNQ1", "c.1032G>A", "p.Ala344Ala", "3"],
+    )
+    table = enumerate_markdown_tables(text)[0]
+    assert table.header_cells[0] == "Gene"  # promotion still happened
+    assert table.caption is None  # but the gene-naming title is not adopted
