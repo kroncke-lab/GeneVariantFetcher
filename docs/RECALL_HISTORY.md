@@ -15,6 +15,42 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-08-24 — source-backed candidate received two blind locks; promotion blocked
+
+The grouped/structural implementation was first evaluated in immutable lock
+`20260824_grouped_structural_gold118`: 542 TP / 278 FP / 90 FN, 85.759%
+recall, 66.098% raw precision, 98.188% counted-extra precision, 95.413%
+count-bearing-only precision, and carrier MAE 0.222 over 207 supplied rows. It
+improved precision and all count-error measures but lost four TP, so it failed
+identity/recall non-regression.
+
+General source-backed omission fixes then received a second clean lock at
+`20260824_source_recovery_gold118`: 546 / 285 / 86, 86.392% recall, 65.704%
+raw precision, 97.500% counted-extra precision, 93.396% count-bearing-only
+precision, and carrier MAE 0.198 over 197 rows. It restored accepted recall and
+improved every conditional MAE, but failed the accepted count-bearing precision
+(93.694%) and carrier coverage (206) floors. Neither run was promoted; the
+postfix lock below stays authoritative to avoid best-replicate selection.
+
+Publisher inspection established that KCNH2 PMID 29650123's only supplement
+contains cohort/drug tables and outcome figures but no mutation roster. Its 20
+missing identities are a source/provenance blocker and account for 20/86 of the
+remaining FNs; they were not inferred from the gold key.
+
+The exact 50-paper BRCA1, BRCA2, and BMPR2 rosters were separately
+preregistered as 30 calibration + 20 separately sequestered holdout papers per gene. Because
+only 3/150 papers overlap approved human gold and BMPR2 has zero, their P/R/MAE
+remain undefined pending exhaustive human curation. The scorer now retains
+explicit NONE papers in paper-exhaustive precision and excludes family counts
+from person-level MAE.
+
+Attributable spend is $33.06883430 of the $100 envelope, leaving $66.93116570.
+Full metrics, per-gene results, source evidence, model split, and review
+disposition are in
+`docs/evidence/gold118_source_recovery_lock_20260824.md`.
+
+---
+
 ## 2026-08-24 — post-fix blind gold-118 (locked)
 
 `benchmarks/codex_paper_eval/runs/20260824_postfix_gold118`. Gold-blind

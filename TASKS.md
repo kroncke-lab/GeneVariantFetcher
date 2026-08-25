@@ -19,6 +19,34 @@ Execute the acceptance gates in order. Do not publish a new headline, update the
 dashboard, enable a default-off recovery stage, or advance to a larger cohort
 until the preceding gate passes and its artifact is recorded.
 
+## Active $100 improvement goal
+
+- [x] Consolidate every worthwhile local branch/worktree change onto `main`;
+      preserve the stale pre-merge stash as historical recovery material.
+- [x] Freeze the accepted 118-attempt headline and run two new gold-blind,
+      pre-lock validations. Neither passed all promotion gates; keep
+      `20260824_postfix_gold118` authoritative and do not select the best metric
+      from different stochastic runs.
+- [x] Merge the source-backed scanner/table/structural fixes and targeted-refresh
+      usage telemetry. Full result:
+      `docs/evidence/gold118_source_recovery_lock_20260824.md`.
+- [x] Preregister the exact BRCA1/BRCA2/BMPR2 150-paper evaluation as 30
+      calibration + 20 holdout papers per gene, with frozen source hashes,
+      exhaustive-paper precision, explicit `NONE`, and family-count exclusion.
+- [ ] Obtain exhaustive, source-grounded human answer keys for the 90
+      calibration papers. LLM predictions may locate evidence but may not
+      create, approve, or edit the key.
+- [ ] Freeze one calibration-informed candidate, release the 60 holdout papers,
+      and score holdout exactly once. Until then, exact-150 P/R/F-score/MAE are
+      undefined.
+- [ ] Obtain the missing KCNH2 PMID 29650123 mutation roster from an author or
+      other provenance-valid source. The publisher's only supplement has no
+      roster; never infer its 20 missing singleton identities from gold.
+
+Budget: **$33.06883430 used / $66.93116570 remaining**. No immediate third
+gold-118 run is authorized; another stochastic replicate does not address the
+known source or human-gold blockers.
+
 ## 1. Re-establish the scientific baseline
 
 The paired live cardiac rescore and Gate 1 review were recorded on 2026-08-13.
@@ -56,7 +84,7 @@ the lock or underlying gold snapshot. New Gate 2 runs therefore use 118
 attempts, while this immutable run remains the accepted evidence for the code
 change.
 
-- [ ] **Act on the 2026-08-24 blind proof result, then stage the reviewer
+- [x] **Act on the 2026-08-24 blind proof result, then stage the reviewer
       surface.** The proof run is DONE and locked at
       `benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` (118
       attempts, clean tree `e4910d9`, 42 min, $11.32 list-price proxy).
@@ -84,10 +112,12 @@ change.
       was instead replayed on SCN5A PMID 29709101; together with structural-only
       projection it yields the source-backed diagnostic in `RECALL_STATUS.md`
       (548/632 recall matches; carrier MAE 0.226) without mutating the lock.
-      Remaining acceptance work is one fresh gold-free lock/post-lock score.
-      Paid experiment accounting is conservatively reserved at $10 of the $100
-      ceiling because `refresh_run_db.py` does not yet emit token traces; do not
-      make further paid calls until that telemetry defect is fixed.
+      The fresh grouped/structural and source-recovery locks are now complete.
+      The latter restored accepted recall and lowered carrier MAE to 0.198, but
+      failed carrier coverage (197 < 206) and count-bearing-only precision
+      (93.396% < 93.694%), so neither lock was promoted. Targeted refresh usage
+      telemetry is fixed. The attributable ledger is $33.0688 used / $66.9312
+      remaining; do not spend it on another best-replicate attempt.
       Post-lock acquisition diagnostics also re-folded four run-local source
       files (RYR2 19216760/22222782/34661651 and SCN5A 29544605); the immutable
       predictions/report hashes are unchanged, but the source-binding check now

@@ -12,11 +12,46 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
-Audit note: the scorer now preserves explicit adjudicated zero counts instead
-of conflating them with null. The tables below remain the last published
-pre-correction baseline and must be re-scored before any changed headline is
-claimed. Source-reachable strata are secondary reader diagnostics; ALL GOLD
-remains the primary turnkey acceptance denominator.
+## Authoritative current headline
+
+The accepted headline is the immutable, gold-blind
+`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` lock. It covers 118
+gene-paper attempts / 114 unique PMIDs over KCNH2, KCNQ1, RYR2, and SCN5A and
+was prediction-locked before the 632-row human cardiac gold values were read.
+
+| TP / FP / FN | Recall | Raw precision | F1 | Counted-extra P | Count-bearing-only P |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 546 / 284 / 86 | **86.392%** | **65.783%** | **74.692%** | **97.500%** | **93.694%** |
+
+| Count | Supplied / gold | Coverage | Conditional MAE | RMSE |
+| --- | ---: | ---: | ---: | ---: |
+| Carrier | 206 / 632 | 32.595% | **0.330** | 1.207 |
+| Affected | 49 / 632 | 7.753% | **0.551** | 1.558 |
+| Unaffected | 18 / 631 | 2.853% | **0.500** | 0.972 |
+
+Two later clean blind locks are retained as failed validations, not candidate
+headlines. `20260824_grouped_structural_gold118` improved raw/count precision
+and all count errors but lost four TP (542/278/90, 85.759% recall).
+`20260824_source_recovery_gold118` restored 546 TP and improved carrier MAE to
+0.198, but carrier coverage fell 206→197 and count-bearing-only precision fell
+93.694%→93.396%. No best-replicate selection is allowed. Full per-gene metrics,
+source blockers, and the active `$100` ledger are in
+`docs/evidence/gold118_source_recovery_lock_20260824.md`.
+
+The exact BRCA1 50 + BRCA2 50 + BMPR2 50 extraction remains a staged candidate,
+not a metric cohort: only 3/150 papers overlap approved human gold and BMPR2 has
+zero. Its precision, recall, and MAE are **undefined**, not zero. A frozen 30
+calibration / 20 holdout split per gene now lives under
+`benchmarks/curated_extraction_eval/gold150_preregistered_20260824/`; scoring is
+blocked on exhaustive human curation.
+
+## Historical audit context
+
+The following material preserves older gates and all-paper baselines for audit;
+it does not override the authoritative lock above. The scorer now preserves
+explicit adjudicated zero counts instead of conflating them with null.
+Source-reachable strata are secondary reader diagnostics; ALL GOLD remains the
+primary turnkey acceptance denominator.
 
 The deterministic parsers also now leave affected/unaffected null when the
 source supplied only a carrier total; explicit phenotype/control cells still
@@ -143,9 +178,9 @@ evaluation/review scope, not the authoritative four-gene headline cohort below. 
 50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 45
 rather than expanding the experimental genes.
 
-## 2026-08-24 gold-118 lock and source-backed improvement candidate
+## 2026-08-24 gold-118 locks and source-backed validation
 
-The newest accepted blind result is the immutable
+The accepted blind result is the immutable
 `benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` lock: 546 TP,
 284 FP, and 86 FN over 632 gold rows (86.39% recall, 65.78% raw precision,
 74.69% F1). Counted-extra precision is 97.50% and count-bearing-only precision
@@ -154,7 +189,8 @@ is 93.69%. Conditional count results are 68/206 carrier absolute-error units
 headline current measurement; its trace-derived public-list-price proxy is
 $11.32 for 574 calls and 2.760M tokens.
 
-Two general repairs are now staged but are **not a new blind headline**. First,
+Two general repairs were initially staged and were **not a blind headline**.
+First,
 the trusted DB projection retains source-grounded structural-only identities,
 and migration preserves exact structural cDNA breakpoints rather than
 collapsing them into a broad exon label. Second, the deterministic table parser
@@ -164,7 +200,7 @@ The latter was replayed from source for SCN5A PMID 29709101 in a staged DB and
 recovered all 12 table totals exactly; no accepted extraction or score lock was
 mutated.
 
-Applied as a source-backed candidate projection to the frozen gold-118 data,
+Applied as a source-backed candidate projection before the fresh locks,
 the repairs give 548 TP / 284 FP / 84 FN (86.71% recall, 65.87% raw precision,
 74.86% F1), while carrier MAE falls to 47/208 = 0.226, affected MAE to 27/59 =
 0.458, and unaffected MAE to 9/28 = 0.321. Counted-extra precision remains
@@ -176,12 +212,29 @@ selection, overlay, and four gold-file SHA-256 digests. The exact evidence,
 reproduction command, and budget accounting are in
 `docs/evidence/gold118_grouped_header_candidate_20260824.md`.
 
+Two fresh runs tested those repairs. The immutable grouped/structural lock is
+542 TP / 278 FP / 90 FN (85.76% recall, 66.10% raw precision), with 98.19%
+counted-extra precision, 95.41% count-bearing-only precision, and carrier MAE
+0.222 over 207 supplied rows. It failed recall/identity non-regression.
+
+The subsequent source-recovery lock is 546 TP / 285 FP / 86 FN (86.39% recall,
+65.70% raw precision), with 97.50% counted-extra precision, 93.40%
+count-bearing-only precision, and carrier MAE 0.198 over 197 rows. It failed the
+accepted count-bearing precision and carrier-coverage floors, so it also was
+not promoted. The accepted postfix lock remains the headline; selecting a
+different stochastic run for each metric is prohibited.
+
+KCNH2 PMID 29650123 alone contributes 20 remaining FNs. Live publisher
+inspection found only the already-acquired `mmc1.docx`, containing cohort and
+beta-blocker tables plus outcome figures but no mutation roster. This is a
+source/provenance blocker, not permission to infer twenty singleton variants.
+
 The exact 50 BRCA1 + 50 BRCA2 + 50 BMPR2 candidate remains a structural review
 set, not a metric cohort. Only three of its 150 papers overlap an approved
 curated fixture and BMPR2 has none. Precision, recall, and MAE for that set are
-therefore undefined until a human, source-adjudicated gold sample and holdout
-are sealed; they must never be reported as zero or inferred from the structural
-audit.
+therefore undefined until the preregistered 90-paper calibration and 60-paper
+holdout receive exhaustive human answer keys; they must never be reported as
+zero or inferred from the structural audit.
 
 ## Current-code blind candidate-local lock
 
@@ -308,7 +361,7 @@ Reproducible metrics and locked digests live in
 `benchmarks/count_semantics_eval/runs/20260810_luna_xhigh_56/`; the publication-
 oriented design record is `benchmarks/count_semantics_eval/METHODS_20260810.md`.
 
-## Current Canonical Baseline
+## Historical all-paper baseline (pre-lock; not current headline)
 
 Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
 the 2026-07-12 four-gene supplement reconciliation, fold-gap closure, and the

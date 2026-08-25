@@ -89,6 +89,19 @@ BRCA2 has 111 historical adjudications. They remain preserved, but none is
 linked to the fresh snapshot and all 111 are marked for re-review because the
 evidence fingerprints changed. BRCA1 and BMPR2 have no prior adjudications.
 
+## Metric status and preregistered gold
+
+Only three of the 150 papers overlap an approved human-curated fixture, and
+BMPR2 has no approved gold rows. Precision, recall, F-score, and MAE are
+therefore undefined for this cohort; reviewer readiness is not a quality score.
+
+The exact 50-paper rosters are now frozen into separate 30-paper calibration and
+20-paper holdout packets per gene at
+`benchmarks/curated_extraction_eval/gold150_preregistered_20260824/`. Source
+hashes, exhaustive `NONE` semantics, family-versus-individual count roles, and
+the one-score holdout contract are pinned. Human source curation is the next
+step; the extraction output may not construct or approve the answer key.
+
 ## Reproducibility
 
 The three run directories are under
