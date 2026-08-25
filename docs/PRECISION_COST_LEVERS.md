@@ -1,6 +1,6 @@
 # Precision and cost levers (agent briefing)
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
 
 Current-facing ranking of how to raise gold-120 **precision** and cut
 **extraction cost**. This is not a second checklist and not a live metrics
@@ -10,6 +10,18 @@ below.
 
 If another note says “improve precision” without naming a denominator, ignore
 it and use §1 here.
+
+**Numbers below are the immutable `20260824_aha_table_sourcebound_gold118`
+lock** (554 TP / 283 FP / 78 FN). Earlier revisions of this file quoted the
+2026-08-15 diagnostic over the `20260813_gold120_verticalfix` predictions
+(545/1334, 98.55%, 88 FNs, 584/789). Those are superseded — do not cite them.
+
+**Before optimising any of this, read
+[`evidence/generalization_consult_20260825.md`](evidence/generalization_consult_20260825.md).**
+Two independent maximum-effort reviews concluded gold-118 is now a
+**calibration set, not an unbiased estimate**: treat 554/283/78 as a frozen
+non-regression lock. A rule motivated only by the 23 remaining FN papers will
+read as general and still be a test-set fit.
 
 ## Read with
 
@@ -31,15 +43,42 @@ The locked parent `report.json` was not rewritten and is not a new Gate 2 lock.
 
 There are two identity-precision numbers on that diagnostic:
 
-- **Counted-extra (Gate 2):** 545/(545+8) = **98.55%** after the 2026-08-16
-  rules (was 545/(545+10) = 98.20%). This is the
+- **Counted-extra (Gate 2):** 554/(554+12) = **97.880%**. This is the
   repo-intended precision question: did we attach a patient number to a
   variant gold does not have? An extra counts against this number only if
   any of `carriers`, `affected`, `unaffected` is non-null. Matched identities
   with blank counts still help. Wrong counts on a *matched* row do not move
   this number (that is MAE).
-- **Raw identity:** 545/1334 = **40.85%**. Every unmatched prediction is an
-  FP, including count-null catalogue rows.
+
+  **It is not a conventional precision** and should not be reported as one:
+  the numerator is every matched row, the denominator only count-bearing
+  extras. State it transparently as **2.17 counted extras per 100 matched
+  rows**. The conventional count-bearing precision is 210/(210+12) =
+  **94.595%** — same 12 extras, honest numerator.
+- **Raw identity:** 554/(554+283) = **66.189%**. Every unmatched prediction is
+  an FP, including count-null catalogue rows. Because some gold rows are
+  themselves out of scope (editorials, orthologs, refuted artifacts — see
+  `evidence/generalization_consult_20260825.md` §5), this is not even a clean
+  lower bound. Call it “precision against the incomplete fixture under
+  unmatched=false”, never production precision.
+
+### 1a. Which *lane* — the headline mixes two tasks
+
+The locked projection contains paper readings **and** ClinVar/PubTator linkage
+rows. Splitting them (locked-DB replay, 2026-08-25):
+
+| Lane | TP / FP / FN | Precision | Recall | F1 |
+| --- | --- | ---: | ---: | ---: |
+| Linkage-assisted (current headline) | 554 / 283 / 78 | 66.189% | 87.658% | 75.425% |
+| Paper-derived only | 512 / 125 / 120 | **80.38%** | 81.01% | 80.69% |
+
+Linkage FPs by gene: KCNQ1 79, SCN5A 72, KCNH2 7, **RYR2 0**. That is why RYR2
+looks clean — not because CPVT literature is tidier. It also means “the top-5 FP
+papers are just gold-incomplete” is too strong: 95 of those 162 extras are
+linkage rows, including **all 63** on KCNQ1 19632626.
+
+Report both lanes, paper-source primary for the extraction task. **Do not delete
+linkage rows** to make a number move.
 
 Do not collapse them. Dropping gold-incomplete extras raises raw precision
 and hides true extractions; it leaves Gate 2 unchanged. The locked Gate 2
@@ -70,17 +109,24 @@ unaffected integers is a third denominator — see
   23 carriers on 30758498 — so a blanket synonymous drop is wrong), four
   identity TPs against gold `0/0/0`, and the documented
   `GOLD_GAP_REAL_VARIANT` items. Full list in `PRECISION_AND_COST.md` §2a.
-- **789 raw FPs.** Exclusive split: 70 other-gene gold (the scanner pass
-  above is aimed at exactly this class, and lands on the next extraction), 34 on KCNH2 26746457
-  eTable (24 already called correct, all count-null), 10 synonymous-shape, 1
-  unmerged twin, 9 counted extras not in those rows, **667 remainder**.
-- **584 of 789 extras sit on papers that already matched every gold row.**
-  Largest: 19632626 (67), 32533946 (52), 29350269 (49), 33536282 (44),
-  26746457 (34). Do not delete these to “fix” 40.82%.
-- **88 FNs** on 22 papers (`remaining_fn.tsv`). Classes: 13 gold-side
-  (editorial / wrong PMID / compound), 20 TIFF tables (29650123), 17
-  caption-stub, 11 already recovered on KCNQ1 21956039 in the 4-paper check
-  but not in the lock, 27 residual extraction.
+- **283 raw FPs** on the current lock. **237 of them (83.7%) sit on papers that
+  already matched every gold row.** Largest: KCNQ1 19632626 (63), SCN5A 32533946
+  (44), KCNH2 26746457 (32), SCN5A 20539757 (13), RYR2 33536282 (10) — all with
+  `fn == 0`. Do not delete these to “fix” raw precision. But see §1a: 95 of the
+  162 extras on those five are ClinVar linkage rows, not paper extractions, so
+  “gold incompleteness” is only part of the story.
+- **78 FNs on 23 papers**, and they are concentrated: KCNH2 29650123 (20,
+  acquisition-blocked — the roster was never acquired and must not be inferred),
+  SCN5A 15898185 (10), RYR2 27114410 (9). Those top three are half the total.
+
+  **Several are scope errors, not extraction failures** (verified against locked
+  source, 2026-08-25): 15898185 and 22966897 are *editorials* citing prior
+  studies; RYR2 K4481R was reported by its own source as an unconfirmable FFPE
+  artifact; KCNQ1 A340E is the **mouse** ortholog (the paper states the human
+  residue is A341E). SCN5A `p.F1617del` is, by contrast, a genuine recoverable
+  miss. Do not “fix” the pipeline toward a gold row the source does not support,
+  and never correct gold by deleting only the misses — editorials carry matched
+  and extra rows too.
 
 ## 3. Cost mix (do not shop models)
 
@@ -105,8 +151,8 @@ measured reasons.
 
 ### $0 — do not spend the ~$10 re-extract for these
 
-1. Curate the **10 counted extras** (only list that can still move 98.20%).
-2. Do **not** delete the 780 identity-only extras to raise raw precision.
+1. Curate the **12 counted extras** (the only list that can still move 97.880%).
+2. Do **not** delete the 271 identity-only extras to raise raw precision.
 3. If raw precision is the target, **expand gold** on gold-exhausted
    catalogues, starting with 26746457 (24 source-confirmed).
 4. Scorer only, generic: `c.693delCA` ↔ `c.692_693delCA`; RYR2

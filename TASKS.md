@@ -1,14 +1,14 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-24.
+Last reviewed: 2026-08-25.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
 lives in [`docs/RECALL_HISTORY.md`](docs/RECALL_HISTORY.md); protocol changes
 are append-only in
 [`docs/PROTOCOL_CHANGELOG.md`](docs/PROTOCOL_CHANGELOG.md). How to raise
-gold-120 **identity** precision and cut cost (which denominator, the 10 counted
-extras, Sol/Grok/Kimi shares, $0 vs paid) lives in
+gold-120 **identity** precision and cut cost (which denominator, which *lane*,
+the 12 counted extras, Sol/Grok/Kimi shares, $0 vs paid) lives in
 [`docs/PRECISION_COST_LEVERS.md`](docs/PRECISION_COST_LEVERS.md). How to raise
 **affected/unaffected value** exact-match precision (not Gate 2; no one-off
 aliases) lives in
@@ -256,12 +256,17 @@ change.
       constraints: [`docs/PRECISION_COST_LEVERS.md`](docs/PRECISION_COST_LEVERS.md).
       Paper-level evidence:
       `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/`
-      (`PRECISION_AND_COST.md`, `NOTES.md`, `remaining_fn.tsv`). Diagnostic
-      rescore (locked predictions, live gold + current matcher, not a new
-      lock): recall 545/633 (86.10%), raw precision 40.85%, **counted-extra
-      98.55% (the Gate 2 / intended precision number)**, carrier MAE 0.292.
-      Was 98.20% before the 2026-08-16 deletion-span bridge and the
-      document-level gene-attribution pass closed two of the ten extras.
+      (`PRECISION_AND_COST.md`, `NOTES.md`, `remaining_fn.tsv`) — that
+      2026-08-15 diagnostic (545/633, raw 40.85%, counted-extra 98.55%, carrier
+      MAE 0.292) is **superseded** and must not be quoted as current. The
+      authoritative lock is `20260824_aha_table_sourcebound_gold118`: **554 TP /
+      283 FP / 78 FN**, recall 87.658%, raw precision 66.189%, counted-extra
+      **97.880% (12 counted extras)**, conventional count-bearing 94.595%,
+      carrier MAE 0.193. Read
+      [`docs/evidence/generalization_consult_20260825.md`](docs/evidence/generalization_consult_20260825.md)
+      before proposing any change here: gold-118 is now a calibration set, and
+      the headline mixes paper extraction with ClinVar/PubTator linkage
+      (paper-only lane is 512/125/120, P 80.38%).
       Remaining, in this order — **do not start the paid 119-paper re-extract
       to chase counted-extra precision**:
       1. Curate the **8 remaining counted extras** (only Gate 2 FP surface
@@ -278,8 +283,10 @@ change.
          restoration, adjudicate 11 editorial rows, and resolve compound
          `W248F + L347R`. Do **not**
          collapse the 19216760/24394973 exon-3 family pairs (two families).
-         Do **not** delete the 780 identity-only extras to raise raw 40.82% —
-         584 sit on papers that already matched every gold row. If raw
+         Do **not** delete the identity-only extras to raise raw precision —
+         on the current lock **237 of the 283 extras (83.7%)** sit on papers
+         that already matched every gold row, and 95 of the 162 on the five
+         largest are ClinVar linkage rows rather than paper extractions. If raw
          precision is the target, expand gold (26746457 first; 24
          source-confirmed).
       3. Scorer-only generic bridges. `c.693delCA` ↔ `c.692_693delCA` is

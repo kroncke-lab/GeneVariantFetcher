@@ -1,6 +1,16 @@
 # Affected / unaffected value precision (agent briefing)
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
+
+> **The identity numbers in §2 are from the 2026-08-15 diagnostic rescore over
+> the `20260813_gold120_verticalfix` predictions and are superseded.** The
+> authoritative lock is `20260824_aha_table_sourcebound_gold118`: 554 TP / 283
+> FP / 78 FN, recall 87.658%, raw precision 66.189%, counted-extra 97.880% (12
+> counted extras), carrier MAE 0.193. See
+> [`RECALL_STATUS.md`](RECALL_STATUS.md). The affected/unaffected guard
+> measurements below remain valid for what they measured — a paired guarded /
+> unguarded comparison on one fixed prediction set — and that comparison is the
+> point of this document. Do not quote its identity row as a current metric.
 
 Current-facing ranking of how to raise **exact-match precision of emitted
 affected and unaffected integers** on gold-120. This is not Gate 2
@@ -64,8 +74,10 @@ scripts/phenotype_value_precision.py \
 | carriers | 135/161 — 83.85%, MAE 0.292 | 135/161 — 83.85%, MAE 0.292 |
 
 Identity on the same rescore: TP 545, FN 88, recall 86.10%, raw precision
-40.85%, counted-extra precision **98.55%** (8 counted extras). The guard itself
+40.85%, counted-extra precision 98.55% (8 counted extras). The guard itself
 removes one counted extra by nulling the counts that made it counted.
+**These identity figures are historical** — they describe the 2026-08-15
+diagnostic, not the current lock (see the banner at the top of this file).
 
 Locked parent `report.json` was not rewritten. This is not a new Gate 2 lock.
 

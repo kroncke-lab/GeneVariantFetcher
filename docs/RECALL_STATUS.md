@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-24.
+Last updated: 2026-08-25.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -30,6 +30,58 @@ was prediction-locked before the 632-row human cardiac gold values were read.
 | Affected | 56 / 632 | 8.861% | **0.321** | 1.102 |
 | Unaffected | 28 / 631 | 4.437% | **0.321** | 0.779 |
 
+### How to report these numbers (2026-08-25)
+
+Two independent maximum-effort reviews (Grok 4.6 `xhigh`, GPT-5.6 Sol `max`)
+audited the headline. Full writeup:
+`docs/evidence/generalization_consult_20260825.md`. Three corrections bind here.
+
+**1. Counted-extra 97.880% is not a conventional precision.** It is
+`554/(554+12)`: every matched row in the numerator, only count-bearing extras in
+the denominator. Report it as the Gate-2 score, or transparently as **2.17
+counted extras per 100 matched rows**. The conventional count-bearing precision
+is `210/(210+12)` = **94.595%**. Raw 66.189% is precision against an incomplete
+fixture under unmatched=false; because some gold rows are themselves out of
+scope, it is not a clean lower bound either. Never report 97.9% to a reader who
+will hear "the system is 98% precise".
+
+**2. The headline mixes paper extraction with database linkage.** The locked
+projection includes ClinVar/PubTator rows. Locked-DB replay:
+
+| Lane | TP / FP / FN | Precision | Recall | F1 |
+| --- | --- | ---: | ---: | ---: |
+| Linkage-assisted (the table above) | 554 / 283 / 78 | 66.189% | 87.658% | 75.425% |
+| Paper-derived only | 512 / 125 / 120 | 80.38% | 81.01% | 80.69% |
+
+Linkage FPs: KCNQ1 79, SCN5A 72, KCNH2 7, **RYR2 0** — the reason RYR2's
+per-gene row looks clean. Do not delete linkage rows; report the lanes
+separately, paper-source primary for the extraction task.
+
+**3. Conditional MAE is not the decision metric.** It is computed only over rows
+the pipeline chose to answer, so abstaining improves it. End-to-end error
+(already implemented at `cli/compare_variants.py:2828`) tells the other half:
+
+| Field | Conditional MAE | End-to-end MAE |
+| --- | ---: | ---: |
+| carriers | 0.193 | **1.541** |
+| affected | 0.321 | **1.528** |
+| unaffected | 0.321 | **0.512** |
+
+Never quote one without the other, and never quote either without coverage.
+Carrier MAE 0.193 comes from only 23 errors across 207 rows and is near its
+practical floor; the real deficit is coverage. The real non-zero carrier
+coverage gap is **268 rows**, not the 425 implied by pooled coverage — SCN5A
+32533946 alone contributes 83 gold assertions that are all explicit zeros, which
+is the gold-zero/NULL convention gap rather than an attribution miss.
+
+**Standing caveat on gene-generality.** `gvf_data/kcnh2_variant_aliases.json`
+declares `"source": "Gold standard Excel + generated forms"` and is read at
+runtime, so KCNH2 normalizes with access to the answer key. Re-matching all 554
+locked pairs with the lookup stubbed gives 554/554 — no score-time result
+depends on it — but extraction-time influence is unrecoverable. Do not cite
+KCNH2 as evidence of gene-general behaviour until the map is rebuilt from public
+resources.
+
 The grouped/structural and source-recovery clean locks are retained as failed
 validations, not candidate headlines.
 `20260824_grouped_structural_gold118` improved raw/count precision
@@ -49,10 +101,22 @@ Full per-gene metrics, integrity hashes, reviewer disposition, and the active
 
 The exact BRCA1 50 + BRCA2 50 + BMPR2 50 extraction remains a staged candidate,
 not a metric cohort: only 3/150 papers overlap approved human gold and BMPR2 has
-zero. Its precision, recall, and MAE are **undefined**, not zero. A frozen 30
-calibration / 20 holdout split per gene now lives under
-`benchmarks/curated_extraction_eval/gold150_preregistered_20260824/`; scoring is
-blocked on exhaustive human curation.
+zero. Its precision, recall, and MAE are **undefined**, not zero.
+
+**Its human curation was descoped by Brett on 2026-08-25** — the cardiac
+gold-120 is the human-curated standard being worked against. Exact-150 metrics
+therefore stay undefined indefinitely, and no human curation time should be
+spent there without Brett reopening it.
+
+The packets are parked, not deleted. Note that the original
+`gold150_preregistered_20260824/` split is **defective** and marked superseded:
+because assignment ranked `sha256("<seed>|<GENE>|<PMID>")`, six PMIDs were
+calibration for one gene and holdout for another, putting five of the twenty
+BRCA1 holdout papers into BRCA2 calibration, and seven of the eight cross-gene
+PMIDs were bound to different source bytes per gene. If that cohort is ever
+reopened, use `gold150_preregistered_20260825_amended/`, whose firewall is
+verified by `scripts/audit_split_firewall.py`. Run that audit on any future
+multi-gene packet tree.
 
 ## Historical audit context
 

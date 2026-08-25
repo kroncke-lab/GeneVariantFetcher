@@ -49,6 +49,16 @@ authority links to them for a specific step.
 The published dashboard is also historical until `RECALL_STATUS.md` says it was
 regenerated from an accepted rescore.
 
+One dated evidence file is an exception worth naming, because it constrains how
+the current numbers may be reported rather than only recording a past
+measurement:
+[`evidence/generalization_consult_20260825.md`](evidence/generalization_consult_20260825.md).
+It records the two-model generality audit of the 2026-08-24 lock — the
+paper-versus-linkage lane split, the counted-extra naming correction, the
+gold-derived alias map in the runtime path, and seven hypotheses that were
+falsified on measurement. `RECALL_STATUS.md` and `PRECISION_COST_LEVERS.md` both
+carry its conclusions; read it before proposing a precision or MAE change.
+
 ## Maintenance rule
 
 Keep one live checklist and one live metrics file. New current-facing Markdown

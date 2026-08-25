@@ -622,6 +622,12 @@ intentionally minimal:
   `utils/gene_metadata.py`, and optionally add a variant alias map at
   `gvf_data/{gene_lower}_variant_aliases.json`. The cardiac-synonyms JSON is a
   historical cold-start benchmark input, not the runtime registry.
+  `{gene_lower}_variant_aliases.json`, by contrast, **is** runtime: `_lookup_alias`
+  reads it inside `normalize_variant` for every gene. Never build one from a gold
+  standard or evaluation fixture. The existing `kcnh2_variant_aliases.json`
+  violates this — it declares `"source": "Gold standard Excel + generated forms"`
+  and is scheduled for rebuild; see `gvf_data/README.md` and
+  `docs/evidence/generalization_consult_20260825.md` §1.
 
 See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.
 

@@ -15,6 +15,58 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-08-25 — generality audit of the promoted lock; no headline change
+
+Two independent maximum-effort reviews (Grok 4.6 `xhigh`, GPT-5.6 Sol `max`
+with read-only repo access) audited
+`20260824_aha_table_sourcebound_gold118`. **The headline is unchanged at
+554 / 283 / 78.** What changed is how it must be reported and what may be
+inferred from it. Full writeup:
+[`evidence/generalization_consult_20260825.md`](evidence/generalization_consult_20260825.md).
+
+- **Provenance lanes.** The locked projection mixes paper readings with
+  ClinVar/PubTator linkage. Locked-DB replay: paper-derived only is
+  **512 / 125 / 120** (P 80.38%, R 81.01%, F1 80.69%) against the
+  linkage-assisted 554 / 283 / 78 (P 66.189%, R 87.658%). Linkage FPs are
+  KCNQ1 79, SCN5A 72, KCNH2 7, **RYR2 0** — the actual reason RYR2's per-gene
+  row looks clean. 95 of the 162 extras on the five largest FP papers are
+  linkage rows, including all 63 on KCNQ1 19632626, so "those papers are just
+  gold-incomplete" is only part of the story.
+- **Metric naming.** Counted-extra 97.880% is `554/(554+12)` — matched rows in
+  the numerator, count-bearing extras in the denominator. Conventional
+  count-bearing precision is `210/(210+12)` = **94.595%**. End-to-end count
+  error, already implemented at `cli/compare_variants.py:2828`: carriers
+  **1.541**, affected **1.528**, unaffected **0.512**, against conditional
+  0.193 / 0.321 / 0.321.
+- **Coverage.** The real non-zero carrier coverage gap is **268 rows**, not the
+  425 implied by pooled coverage: SCN5A 32533946 contributes 83 gold carrier
+  assertions that are all explicit zeros (the gold-zero/NULL convention gap).
+  Carrier MAE 0.193 rests on 23 errors across 207 rows and is near its floor.
+- **Scope errors inside the FN list.** SCN5A 15898185 (10 FN) and 22966897 are
+  editorials citing prior studies; RYR2 K4481R is reported by its own source as
+  an unconfirmable FFPE artifact; KCNQ1 A340E is the mouse ortholog. SCN5A
+  `p.F1617del` is a genuine recoverable miss.
+- **Contamination.** `gvf_data/kcnh2_variant_aliases.json` declares
+  `"source": "Gold standard Excel + generated forms"` and is read at runtime for
+  every gene. Re-matching all 554 locked pairs with the lookup stubbed gives
+  **554/554**, so no score-time result depends on it; extraction-time influence
+  cannot be recovered from normalized predictions.
+- **Falsified on measurement** (do not re-propose): "no quote captured" means
+  fabricated (no-quote rows are 72% of carrier rows but 43.5% of errors —
+  ~3x *less* error-prone); `carriers=1` is a fabricated default (128/218 rows,
+  6 errors); a blanket "+1 for the proband"; merging adjacent-codon twins
+  (`p.Ile1660Val c.4978A>G` ~ `p.Ile1659Val c.4975A>G`); and
+  `*Figure: Table` placeholders explaining the count gap (31 rows / 2 papers).
+- **Shipped.** Hyphen indel range separator treated as presentation
+  (`c.2550-2551insTG` == `c.2550_2551insTG`, adjacent coordinates only, fails
+  closed on intronic offsets). $0 diagnostic on the lock: 554/554 pairs still
+  match, 0 gold rows lost, 0 FN/FP pairs newly matched, one twin merges →
+  **554 / 282 / 78**, raw P 66.189% → 66.268%. Not a new lock.
+
+Both reviewers declined to authorize another paid gold-118 extraction, and both
+concluded gold-118 should now be treated as a **calibration set** rather than an
+unbiased estimate.
+
 ## 2026-08-24 — AHA source-bound gold-118 promoted
 
 `benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118` is a

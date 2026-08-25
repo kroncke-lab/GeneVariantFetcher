@@ -99,9 +99,17 @@ gold-120 runs still contain the historical attempts.
 
 ## 8. Counted extras on the 2026-08-15 diagnostic (Gate 2 FP surface)
 
+> **Historical list.** The table below is the counted-extra surface of the
+> 2026-08-15 diagnostic over the `20260813_gold120_verticalfix` predictions.
+> On the current authoritative lock
+> (`20260824_aha_table_sourcebound_gold118`) the counted-extra surface is
+> **12 rows** against 554 matched, i.e. counted-extra precision 97.880%. Use
+> [`RECALL_STATUS.md`](RECALL_STATUS.md) for the current budget and regenerate
+> the per-row list from that lock before curating.
+
 The diagnostic rescore left **10 counted extras** (extras that assert
-carriers/affected/unaffected). That is the entire remaining Gate 2
-false-positive budget. Paper-level write-up:
+carriers/affected/unaffected). That was the entire remaining Gate 2
+false-positive budget *on that run*. Paper-level write-up:
 `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/PRECISION_AND_COST.md`.
 Do not treat the 780 identity-only extras as this list.
 
