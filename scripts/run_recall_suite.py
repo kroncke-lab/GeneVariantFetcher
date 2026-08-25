@@ -102,6 +102,37 @@ def parse_db_overrides(items: list[str] | None) -> dict[str, Path]:
     return overrides
 
 
+def parse_gold_pmid_overrides(items: list[str] | None) -> dict[str, Path]:
+    """Parse repeated ``--gold-pmids GENE=/path/to/pmids.txt`` arguments."""
+    overrides: dict[str, Path] = {}
+    for item in items or []:
+        if "=" not in item:
+            raise ValueError(f"--gold-pmids must be GENE=/path/to/file, got {item!r}")
+        gene, raw_path = item.split("=", 1)
+        gene = gene.strip().upper()
+        if not gene:
+            raise ValueError(f"--gold-pmids must include a gene name, got {item!r}")
+        overrides[gene] = Path(raw_path).expanduser()
+    return overrides
+
+
+def load_pmid_scope(path: Path) -> set[str]:
+    """Read a newline-delimited exhaustive PMID scope, ignoring comments."""
+    if not path.exists():
+        raise FileNotFoundError(f"gold PMID scope does not exist: {path}")
+    pmids: set[str] = set()
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        value = raw_line.split("#", 1)[0].strip()
+        if not value:
+            continue
+        if not value.isdigit():
+            raise ValueError(f"invalid PMID {value!r} in {path}")
+        pmids.add(value)
+    if not pmids:
+        raise ValueError(f"gold PMID scope is empty: {path}")
+    return pmids
+
+
 def _db_sort_key(path: Path) -> tuple[float, int, str]:
     """Prefer newest DB, and within a run prefer the highest vN suffix."""
     mtime = path.stat().st_mtime
@@ -169,6 +200,8 @@ def run_gene_compare(
     adjudication_db: Path | None = None,
     adjudication_tier: str = "cardiac",
     trust_tier: str = "trusted",
+    curated_pmids: set[str] | None = None,
+    paper_exhaustive: bool = False,
 ) -> dict[str, Any]:
     """Compare one gene's normalized gold input against one extraction DB."""
     gene_outdir = outdir / gene
@@ -193,7 +226,14 @@ def run_gene_compare(
         rows,
         _maybe_adjudication_overlay(gene, adjudication_db, adjudication_tier),
     )
-    summary = generate_outputs(rows, gene_outdir, gold_path, db_path)
+    summary = generate_outputs(
+        rows,
+        gene_outdir,
+        gold_path,
+        db_path,
+        curated_pmids=curated_pmids,
+        paper_exhaustive=paper_exhaustive,
+    )
     return {
         "gene": gene,
         "status": "scored",
@@ -282,20 +322,26 @@ def combine_count_error_end_to_end(scored: list[dict[str, Any]]) -> dict[str, An
 
 
 def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
-    """Aggregate the gold-PMID-restricted precision metric across genes.
+    """Aggregate the curated-PMID-restricted precision metric across genes.
 
     Sums the per-gene numerator (matched DB rows) and denominator components
     (matched DB rows + extra DB rows on gold PMIDs), then recomputes the
-    ratio. This is an extra-rows-relative-to-gold rate / false-positive upper
-    bound, NOT clean precision; see ``compute_precision_summary`` for the
-    caveat. Genes whose summaries predate this metric contribute nothing.
+    ratio. It is clean precision only when every contributing block is marked
+    paper-exhaustive; otherwise it remains an extra-rows-relative-to-gold rate
+    / false-positive upper bound. Genes whose summaries predate this metric
+    contribute nothing.
     """
     matched_db = 0
     extra_on_gold_pmids = 0
     counted_extra_on_gold_pmids = 0
+    curated_pmids = 0
     by_layer: dict[str, dict[str, int]] = {}
+    precision_blocks: list[dict[str, Any]] = []
     for item in scored:
         block = item.get("summary", {}).get("precision", {})
+        if block:
+            precision_blocks.append(block)
+        curated_pmids += int(block.get("curated_pmids") or 0)
         matched_db += int(block.get("matched_db") or 0)
         extra_on_gold_pmids += int(block.get("extra_on_gold_pmids") or 0)
         counted_extra_on_gold_pmids += int(
@@ -338,7 +384,12 @@ def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
                 else None
             ),
         }
+    paper_exhaustive = bool(precision_blocks) and all(
+        block.get("paper_exhaustive") is True for block in precision_blocks
+    )
     return {
+        "curated_pmids": curated_pmids,
+        "paper_exhaustive": paper_exhaustive,
         "matched_db": matched_db,
         "extra_on_gold_pmids": extra_on_gold_pmids,
         "counted_extra_on_gold_pmids": counted_extra_on_gold_pmids,
@@ -348,12 +399,28 @@ def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
         ),
         "by_source_layer": layer_out,
         "note": (
-            "Upper bound on false-positive rate, restricted to gold-curated "
-            "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
-            "so 'extra' DB rows on gold PMIDs may still be true positives the "
-            "curator omitted. counted_extra_on_gold_pmids restricts that "
-            "denominator to extra rows carrying extracted counts. These are "
-            "extra-rows-relative-to-gold rates, NOT clean precision."
+            (
+                "Paper-exhaustive precision restricted to the explicit curated "
+                "PMID sets. Every unmatched DB row on those papers is an extra, "
+                "including rows on papers curated as NONE. "
+            )
+            if paper_exhaustive
+            else (
+                "Upper bound on false-positive rate, restricted to gold-curated "
+                "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
+                "so 'extra' DB rows on gold PMIDs may still be true positives the "
+                "curator omitted. "
+            )
+        )
+        + (
+            "counted_extra_on_gold_pmids is a secondary view restricted to extra "
+            "rows carrying extracted counts."
+            if paper_exhaustive
+            else (
+                "counted_extra_on_gold_pmids restricts that denominator to extra "
+                "rows carrying extracted counts. These are extra-rows-relative-to-"
+                "gold rates, NOT clean precision."
+            )
         ),
     }
 
@@ -370,9 +437,10 @@ def combine_fbeta(
     A flat recall target invites Goodhart's Law — a pipeline can hit it by
     over-extracting and tanking precision. Pairing recall with precision via an
     F-beta (beta=2 weights recall 2x precision) is the more defensible
-    north-star. Precision here is the gold-PMID-restricted proxy, which is a
-    LOWER bound on true precision (some "extra" rows are real positives the
-    curator omitted), so ``fbeta_vs_gold_pmids`` is a CONSERVATIVE lower bound.
+    north-star. Precision here is either paper-exhaustive or the
+    gold-PMID-restricted proxy. In proxy mode it is a LOWER bound on true
+    precision (some "extra" rows are real positives the curator omitted), so
+    ``fbeta_vs_gold_pmids`` is a CONSERVATIVE lower bound.
     Returns ``{}`` when either input is unavailable.
     """
     recall_block = (aggregate_recall or {}).get(metric) or {}
@@ -389,11 +457,19 @@ def combine_fbeta(
         "recall": recall,
         "precision_vs_gold_pmids": precision,
         "fbeta_vs_gold_pmids": fbeta,
+        "paper_exhaustive": bool((aggregate_precision or {}).get("paper_exhaustive")),
         "note": (
-            "F-beta (beta=2 weights recall 2x precision) on the headline metric. "
-            "Precision is the gold-PMID-restricted proxy — a LOWER bound on true "
-            "precision — so this F-beta is a CONSERVATIVE lower bound. Pairs the "
-            "recall north-star with a false-positive guard (anti-Goodhart)."
+            f"F-beta (beta={beta:g}) on the headline metric. "
+            + (
+                "Precision is paper-exhaustive."
+                if (aggregate_precision or {}).get("paper_exhaustive")
+                else (
+                    "Precision is the gold-PMID-restricted proxy — a LOWER bound "
+                    "on true precision — so this F-beta is a CONSERVATIVE lower "
+                    "bound."
+                )
+            )
+            + " Pairs recall with a false-positive guard (anti-Goodhart)."
         ),
     }
 
@@ -415,6 +491,7 @@ def build_run_summary(
     aggregate_mae: dict[str, Any] | None = None,
     aggregate_count_error_end_to_end: dict[str, Any] | None = None,
     aggregate_precision: dict[str, Any] | None = None,
+    aggregate_f1: dict[str, Any] | None = None,
     aggregate_fbeta: dict[str, Any] | None = None,
     manifest: dict[str, Any],
     target: float,
@@ -430,6 +507,7 @@ def build_run_summary(
         "aggregate_mae": aggregate_mae or {},
         "aggregate_count_error_end_to_end": aggregate_count_error_end_to_end or {},
         "aggregate_precision": aggregate_precision or {},
+        "aggregate_f1": aggregate_f1 or {},
         "aggregate_fbeta": aggregate_fbeta or {},
         "gene_results": gene_results,
         "gold_manifest_generated_at_utc": manifest.get("generated_at_utc"),
@@ -562,14 +640,34 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
         lines.extend(
             [
                 "",
-                "## Aggregate Precision (counted extras vs gold PMIDs)",
+                (
+                    "## Aggregate Paper-Exhaustive Precision"
+                    if precision.get("paper_exhaustive")
+                    else "## Aggregate Precision (counted extras vs gold PMIDs)"
+                ),
                 "",
-                "Extra-rows-relative-to-gold rate, restricted to gold-curated "
-                "PMIDs. Headline precision uses only count-bearing extra rows; "
-                "the raw gold-PMID rate is a loose false-positive upper bound "
-                "dominated by zero-count variant mentions.",
+                (
+                    "Raw paper-exhaustive precision over every explicitly curated "
+                    "PMID is the headline. Counted-extra precision is a secondary "
+                    "count-bearing view."
+                    if precision.get("paper_exhaustive")
+                    else (
+                        "Extra-rows-relative-to-gold rate, restricted to gold-curated "
+                        "PMIDs. Headline precision uses only count-bearing extra rows; "
+                        "the raw gold-PMID rate is a loose false-positive upper bound "
+                        "dominated by zero-count variant mentions."
+                    )
+                ),
                 "",
-                "| Matched DB rows | Counted extra rows | precision_vs_counted_gold_pmids | Extra DB rows on gold PMIDs | loose precision_vs_gold_pmids |",
+                (
+                    "| Matched DB rows | Counted extra rows | "
+                    "precision_vs_counted_gold_pmids | Extra DB rows on gold PMIDs | "
+                    + (
+                        "paper-exhaustive precision_vs_gold_pmids |"
+                        if precision.get("paper_exhaustive")
+                        else "loose precision_vs_gold_pmids |"
+                    )
+                ),
                 "|-----------------|--------------------|--------------------------------|-----------------------------|-------------------------------|",
                 f"| {precision.get('matched_db', 0)} | "
                 f"{precision.get('counted_extra_on_gold_pmids', 0)} | "
@@ -594,6 +692,21 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
                     f"{_format_pct(block.get('precision_vs_gold_pmids'))} | "
                     f"{_format_pct(block.get('precision_vs_counted_gold_pmids'))} |"
                 )
+
+    f1 = summary.get("aggregate_f1") or {}
+    f2 = summary.get("aggregate_fbeta") or {}
+    if f1 or f2:
+        lines.extend(
+            [
+                "",
+                "## Aggregate F-Scores",
+                "",
+                "| Metric | Value |",
+                "|--------|-------|",
+                f"| F1 | {_format_pct(f1.get('fbeta_vs_gold_pmids'))} |",
+                f"| F2 | {_format_pct(f2.get('fbeta_vs_gold_pmids'))} |",
+            ]
+        )
 
     lines.extend(["", "## Genes", ""])
     for item in summary.get("gene_results", []):
@@ -667,6 +780,13 @@ def print_scorecard(summary: dict[str, Any]) -> None:
             f"{_format_pct(metric.get('recall')):>7} "
             f"gap_to_target={gap_text}"
         )
+    f1 = summary.get("aggregate_f1") or {}
+    f2 = summary.get("aggregate_fbeta") or {}
+    if f1 or f2:
+        print(
+            f"  F1={_format_pct(f1.get('fbeta_vs_gold_pmids'))} "
+            f"F2={_format_pct(f2.get('fbeta_vs_gold_pmids'))}"
+        )
 
     mae = summary.get("aggregate_mae") or {}
     if any(block.get("n_matched") for block in mae.values()):
@@ -686,7 +806,11 @@ def print_scorecard(summary: dict[str, Any]) -> None:
     precision = summary.get("aggregate_precision") or {}
     if precision.get("matched_db") or precision.get("extra_on_gold_pmids"):
         print()
-        print("Precision (counted extras headline; raw gold-PMID rate is loose)")
+        print(
+            "Precision (raw paper-exhaustive headline; counted-extra secondary)"
+            if precision.get("paper_exhaustive")
+            else "Precision (counted extras headline; raw gold-PMID rate is loose)"
+        )
         print(
             f"  matched_db={precision.get('matched_db', 0):>5}  "
             f"counted_extra_on_gold_pmids="
@@ -765,9 +889,12 @@ def build_gene_results(
     adjudication_db: Path | None = None,
     adjudication_tier: str = "cardiac",
     trust_tier: str = "trusted",
+    gold_pmid_overrides: dict[str, Path] | None = None,
+    paper_exhaustive: bool = False,
 ) -> list[dict[str, Any]]:
     gene_results: list[dict[str, Any]] = []
     manifest_genes = manifest.get("genes") or {}
+    gold_pmid_overrides = gold_pmid_overrides or {}
 
     for gene in genes:
         gold_path = gold_inputs.get(gene)
@@ -813,6 +940,12 @@ def build_gene_results(
                     adjudication_db=adjudication_db,
                     adjudication_tier=adjudication_tier,
                     trust_tier=trust_tier,
+                    curated_pmids=(
+                        load_pmid_scope(gold_pmid_overrides[gene])
+                        if gene in gold_pmid_overrides
+                        else None
+                    ),
+                    paper_exhaustive=paper_exhaustive,
                 )
             )
         except Exception as exc:  # noqa: BLE001
@@ -858,6 +991,23 @@ def main() -> int:
         "--db",
         action="append",
         help="Override a gene DB path, e.g. --db KCNQ1=/path/KCNQ1.db",
+    )
+    parser.add_argument(
+        "--gold-pmids",
+        action="append",
+        help=(
+            "Explicit curated PMID scope, e.g. --gold-pmids "
+            "BRCA2=/path/BRCA2_pmids.txt. Required to keep NONE papers in the "
+            "precision denominator."
+        ),
+    )
+    parser.add_argument(
+        "--gold-paper-exhaustive",
+        action="store_true",
+        help=(
+            "Declare that every target variant was curated on each PMID in "
+            "--gold-pmids, so the raw gold-PMID rate is clean precision."
+        ),
     )
     parser.add_argument(
         "--variant-match-mode",
@@ -947,8 +1097,11 @@ def main() -> int:
 
     try:
         db_overrides = parse_db_overrides(args.db)
+        gold_pmid_overrides = parse_gold_pmid_overrides(args.gold_pmids)
     except ValueError as exc:
         parser.error(str(exc))
+    if args.gold_paper_exhaustive and not gold_pmid_overrides:
+        parser.error("--gold-paper-exhaustive requires at least one --gold-pmids")
 
     gold_dir = args.gold_dir.expanduser()
     results_dir = args.results_dir.expanduser()
@@ -1053,6 +1206,8 @@ def main() -> int:
         adjudication_db=adjudication_db,
         adjudication_tier=tier_definition["name"],
         trust_tier=args.trust_tier,
+        gold_pmid_overrides=gold_pmid_overrides,
+        paper_exhaustive=args.gold_paper_exhaustive,
     )
     scored = [item for item in gene_results if item.get("status") == "scored"]
     aggregate_recall = combine_recall(scored)
@@ -1063,12 +1218,17 @@ def main() -> int:
         aggregate_mae=combine_mae(scored),
         aggregate_count_error_end_to_end=combine_count_error_end_to_end(scored),
         aggregate_precision=aggregate_precision,
+        aggregate_f1=combine_fbeta(aggregate_recall, aggregate_precision, beta=1.0),
         aggregate_fbeta=combine_fbeta(aggregate_recall, aggregate_precision),
         manifest=manifest,
         target=args.target,
     )
     summary["review_gold_sync"] = review_gold_sync
     summary["trust_tier"] = args.trust_tier
+    summary["gold_paper_exhaustive"] = args.gold_paper_exhaustive
+    summary["gold_pmid_scopes"] = {
+        gene: str(path) for gene, path in sorted(gold_pmid_overrides.items())
+    }
     if args.skip_disagreement_artifacts:
         summary["disagreement_artifacts_skipped"] = True
     else:

@@ -14,6 +14,9 @@ from scripts.run_recall_suite import (
     combine_precision,
     combine_recall,
     discover_gold_inputs,
+    load_pmid_scope,
+    parse_gold_pmid_overrides,
+    run_gene_compare,
 )
 
 
@@ -86,6 +89,21 @@ def test_discover_gold_inputs(tmp_path):
     assert discovered == {"KCNQ1": gold_dir / "normalized" / "KCNQ1_recall_input.csv"}
 
 
+def test_parse_and_load_gold_pmid_scope(tmp_path):
+    scope = tmp_path / "pmids.txt"
+    scope.write_text("111\n# none paper\n222\n", encoding="utf-8")
+    parsed = parse_gold_pmid_overrides([f"BRCA2={scope}"])
+    assert parsed == {"BRCA2": scope}
+    assert load_pmid_scope(scope) == {"111", "222"}
+
+
+def test_load_gold_pmid_scope_rejects_invalid_values(tmp_path):
+    scope = tmp_path / "pmids.txt"
+    scope.write_text("111\nnot-a-pmid\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="invalid PMID"):
+        load_pmid_scope(scope)
+
+
 def test_build_gene_results_scores_available_and_marks_missing(tmp_path):
     gold_dir = tmp_path / "gold"
     results_dir = tmp_path / "results"
@@ -120,6 +138,30 @@ def test_build_gene_results_scores_available_and_marks_missing(tmp_path):
     aggregate = combine_recall([by_gene["KCNQ1"]])
     assert aggregate["variant_rows"]["recall"] == 0.5
     assert aggregate["affected"]["recall"] == 0.5
+
+
+def test_explicit_none_only_gold_scores_database_rows_as_extras(tmp_path):
+    gold_path = tmp_path / "gold" / "normalized" / "KCNQ1_recall_input.csv"
+    gold_path.parent.mkdir(parents=True)
+    gold_path.write_text(
+        "variant,pmid,carriers,affected,unaffected\n", encoding="utf-8"
+    )
+    db_path = tmp_path / "db" / "KCNQ1.db"
+    _write_gvf_db(db_path)
+
+    result = run_gene_compare(
+        gene="KCNQ1",
+        gold_path=gold_path,
+        db_path=db_path,
+        outdir=tmp_path / "out",
+        curated_pmids={"111"},
+        paper_exhaustive=True,
+    )
+
+    precision = result["summary"]["precision"]
+    assert precision["matched_db"] == 0
+    assert precision["extra_on_gold_pmids"] == 1
+    assert precision["precision_vs_gold_pmids"] == 0.0
 
 
 def test_combine_mae_aggregates_across_genes():
@@ -239,6 +281,38 @@ def test_combine_precision_handles_missing_blocks_safely():
     assert agg["precision_vs_gold_pmids"] == 0.75
 
 
+def test_combine_precision_propagates_exhaustive_scope():
+    scored = [
+        {
+            "summary": {
+                "precision": {
+                    "curated_pmids": 2,
+                    "paper_exhaustive": True,
+                    "matched_db": 1,
+                    "extra_on_gold_pmids": 1,
+                }
+            }
+        },
+        {
+            "summary": {
+                "precision": {
+                    "curated_pmids": 3,
+                    "paper_exhaustive": True,
+                    "matched_db": 2,
+                    "extra_on_gold_pmids": 0,
+                }
+            }
+        },
+    ]
+
+    agg = combine_precision(scored)
+
+    assert agg["curated_pmids"] == 5
+    assert agg["paper_exhaustive"] is True
+    assert agg["precision_vs_gold_pmids"] == 0.75
+    assert "Paper-exhaustive precision" in agg["note"]
+
+
 def test_combine_precision_none_when_no_denominator():
     """Empty / zero inputs yield a None ratio rather than dividing by zero."""
     assert combine_precision([])["precision_vs_gold_pmids"] is None
@@ -287,3 +361,5 @@ def test_help_exposes_hermetic_metric_only_rescore():
 
     assert "--skip-disagreement-artifacts" in completed.stdout
     assert "hermetic metric-only rescore" in completed.stdout
+    assert "--gold-pmids" in completed.stdout
+    assert "--gold-paper-exhaustive" in completed.stdout

@@ -131,6 +131,13 @@ benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs/
 benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs
 benchmarks/codex_paper_eval/runs/*/driver.log
 
+# Human gold packets commit their protocol, roster hashes, manifests, and blank
+# templates. Full-text paper copies and handoff ZIPs are source artifacts and
+# stay local/custodial, especially for the never-tuned holdout split.
+benchmarks/curated_extraction_eval/gold150_preregistered_*/**/papers/
+benchmarks/curated_extraction_eval/gold150_preregistered_*/*.zip
+benchmarks/curated_extraction_eval/gold150_preregistered_*/**/*.zip
+
 # Consolidated source corpus (deduplicated full text + supplements + figures,
 # multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit).
 # Slashless and anchored on purpose: locally `corpus` is an absolute symlink to

@@ -1066,6 +1066,34 @@ class TestComparison:
         assert precision["precision_vs_counted_gold_pmids"] == 1.0
         assert "note" in precision and "NOT clean precision" in precision["note"]
 
+    def test_paper_exhaustive_scope_keeps_explicit_none_paper_in_precision(self):
+        """A curated NONE paper has no gold row but its DB extras must count."""
+        results = [
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="222", matched=False, missing_in_excel=True),
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+        ]
+
+        precision = compute_precision_summary(
+            results,
+            curated_pmids={"111", "222"},
+            paper_exhaustive=True,
+        )
+
+        assert precision["curated_pmids"] == 2
+        assert precision["paper_exhaustive"] is True
+        assert precision["extra_on_gold_pmids"] == 1
+        assert precision["precision_vs_gold_pmids"] == 0.5
+        assert "Paper-exhaustive precision" in precision["note"]
+
+    def test_explicit_scope_refuses_to_omit_a_gold_row_pmid(self):
+        with pytest.raises(ValueError, match="omits gold-row PMIDs"):
+            compute_precision_summary(
+                [_make_row(pmid="111", matched=True)],
+                curated_pmids={"222"},
+                paper_exhaustive=True,
+            )
+
     def test_precision_summary_decomposes_counted_extras_by_source_layer(self):
         """Zero-count linker rows and counted extraction rows stay separable."""
         results = [
@@ -1190,6 +1218,24 @@ class TestComparison:
 
         report = (tmp_path / "report.md").read_text(encoding="utf-8")
         assert "## Precision (counted extras vs gold PMIDs)" in report
+
+    def test_exhaustive_report_labels_raw_precision_as_headline(self, tmp_path):
+        results = [
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="222", matched=False, missing_in_excel=True),
+        ]
+
+        generate_outputs(
+            results,
+            tmp_path,
+            Path("gold.xlsx"),
+            Path("gvf.db"),
+            curated_pmids={"111", "222"},
+            paper_exhaustive=True,
+        )
+
+        report = (tmp_path / "report.md").read_text(encoding="utf-8")
+        assert "## Paper-Exhaustive Precision" in report
 
 
 # =============================================================================

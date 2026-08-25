@@ -2891,23 +2891,24 @@ def compute_end_to_end_count_error(results: List[ComparisonRow]) -> Dict[str, An
     return out
 
 
-def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
-    """Compute a gold-PMID-restricted, extra-rows-relative-to-gold rate.
+def compute_precision_summary(
+    results: List[ComparisonRow],
+    *,
+    curated_pmids: Optional[set[str]] = None,
+    paper_exhaustive: bool = False,
+) -> Dict[str, Any]:
+    """Compute precision within an explicit or inferred curated-paper scope.
 
-    This is NOT clean precision. The gold standard is a curator-selected
-    subset, not a paper-exhaustive enumeration of every variant in a paper, so
-    a DB row that has no gold match might still be a true positive the curator
-    simply did not record. To keep the denominator judgeable, we restrict to
-    PMIDs the gold standard actually curated: an unmatched DB row on a PMID
-    that gold never touched cannot be adjudicated and is excluded (in one
-    sample, ~81% of unmatched DB rows were on non-gold PMIDs). The same
-    gold-PMID-restriction is applied in
-    ``scripts/recall_audit/paper_disagreement_report.py``.
+    When ``paper_exhaustive`` is false, this is NOT clean precision: the gold
+    standard is a curator-selected subset, so an unmatched DB row might be a
+    true variant the curator omitted. When ``paper_exhaustive`` is true, the
+    caller asserts that every in-scope variant on every explicit
+    ``curated_pmids`` paper was adjudicated, including papers with no variants;
+    the raw rate is then paper-exhaustive precision.
 
-    Interpret the result as a false-positive UPPER BOUND on gold-curated
-    papers, not as precision: even within gold PMIDs, an "extra" DB row may be
-    a real variant the curator omitted. Hence the key name
-    ``precision_vs_gold_pmids`` and the ``note`` caveat.
+    In both modes, unmatched rows outside the curated PMID scope are excluded
+    because the gold cannot adjudicate them. The same restriction is applied
+    in ``scripts/recall_audit/paper_disagreement_report.py``.
 
     Computation:
         matched_db          = gold rows that matched a DB row
@@ -2925,7 +2926,17 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
     matched_rows = [
         r for r in gold_rows if not r.missing_in_sqlite and r.match_type != "none"
     ]
-    gold_pmids = {r.pmid for r in gold_rows if r.pmid}
+    row_gold_pmids = {r.pmid for r in gold_rows if r.pmid}
+    if curated_pmids is None:
+        gold_pmids = row_gold_pmids
+    else:
+        gold_pmids = {str(pmid).strip() for pmid in curated_pmids if str(pmid).strip()}
+        missing_scope = row_gold_pmids - gold_pmids
+        if missing_scope:
+            raise ValueError(
+                "curated PMID scope omits gold-row PMIDs: "
+                + ", ".join(sorted(missing_scope))
+            )
 
     matched_db = len(matched_rows)
     extras_on_gold = [r for r in results if r.missing_in_excel and r.pmid in gold_pmids]
@@ -2985,6 +2996,8 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
         }
 
     return {
+        "curated_pmids": len(gold_pmids),
+        "paper_exhaustive": bool(paper_exhaustive),
         "matched_db": matched_db,
         "extra_on_gold_pmids": extra_on_gold_pmids,
         "counted_extra_on_gold_pmids": counted_extra_on_gold_pmids,
@@ -2994,12 +3007,28 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
         ),
         "by_source_layer": by_layer,
         "note": (
-            "Upper bound on false-positive rate, restricted to gold-curated "
-            "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
-            "so 'extra' DB rows on gold PMIDs may still be true positives the "
-            "curator omitted. counted_extra_on_gold_pmids restricts that "
-            "denominator to extra rows carrying extracted counts. These are "
-            "extra-rows-relative-to-gold rates, NOT clean precision."
+            (
+                "Paper-exhaustive precision restricted to the explicit curated "
+                "PMID set. Every unmatched DB row on those papers is an extra, "
+                "including rows on papers curated as NONE. "
+            )
+            if paper_exhaustive
+            else (
+                "Upper bound on false-positive rate, restricted to gold-curated "
+                "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
+                "so 'extra' DB rows on gold PMIDs may still be true positives the "
+                "curator omitted. "
+            )
+        )
+        + (
+            "counted_extra_on_gold_pmids restricts the denominator to extra rows "
+            "carrying extracted counts."
+            if paper_exhaustive
+            else (
+                "counted_extra_on_gold_pmids restricts that denominator to extra "
+                "rows carrying extracted counts. These are extra-rows-relative-to-"
+                "gold rates, NOT clean precision."
+            )
         ),
     }
 
@@ -3010,7 +3039,13 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
 
 
 def generate_outputs(
-    results: List[ComparisonRow], outdir: Path, excel_path: Path, sqlite_path: Path
+    results: List[ComparisonRow],
+    outdir: Path,
+    excel_path: Path,
+    sqlite_path: Path,
+    *,
+    curated_pmids: Optional[set[str]] = None,
+    paper_exhaustive: bool = False,
 ) -> Dict[str, Any]:
     """
     Generate all output files.
@@ -3046,7 +3081,11 @@ def generate_outputs(
         "recall": compute_recall_summary(results),
         "mae": compute_rows_mae(results),
         "count_error_end_to_end": compute_end_to_end_count_error(results),
-        "precision": compute_precision_summary(results),
+        "precision": compute_precision_summary(
+            results,
+            curated_pmids=curated_pmids,
+            paper_exhaustive=paper_exhaustive,
+        ),
         "top_mismatches": [],
     }
 
@@ -3081,7 +3120,11 @@ def generate_outputs(
         # Write the gold-PMID-restricted subset of unmatched DB rows for
         # manual adjudication. These are the rows that feed the
         # precision_vs_gold_pmids denominator (extra rows on gold PMIDs).
-        gold_pmids = {r.pmid for r in results if not r.missing_in_excel and r.pmid}
+        gold_pmids = (
+            {str(pmid).strip() for pmid in curated_pmids if str(pmid).strip()}
+            if curated_pmids is not None
+            else {r.pmid for r in results if not r.missing_in_excel and r.pmid}
+        )
         extra_on_gold = missing_excel[missing_excel["pmid"].isin(gold_pmids)]
         if len(extra_on_gold) > 0:
             extra_on_gold.to_csv(
@@ -3194,20 +3237,34 @@ def write_markdown_report(
         pcg_text = "n/a" if pcg is None else f"{pcg:.1%}"
         lines.extend(
             [
-                "## Precision (counted extras vs gold PMIDs)",
+                (
+                    "## Paper-Exhaustive Precision"
+                    if precision.get("paper_exhaustive")
+                    else "## Precision (counted extras vs gold PMIDs)"
+                ),
                 "",
-                "Headline precision uses only count-bearing extra rows on "
-                "gold-curated PMIDs. The raw gold-PMID rate is a loose "
-                "false-positive upper bound dominated by zero-count variant "
-                "mentions.",
+                (
+                    "The raw gold-PMID rate is paper-exhaustive precision; explicit "
+                    "NONE papers remain in its denominator. Counted-extra precision "
+                    "is retained as a secondary count-bearing view."
+                    if precision.get("paper_exhaustive")
+                    else (
+                        "Headline precision uses only count-bearing extra rows on "
+                        "gold-curated PMIDs. The raw gold-PMID rate is a loose "
+                        "false-positive upper bound dominated by zero-count variant "
+                        "mentions."
+                    )
+                ),
                 "",
                 f"- Matched DB rows: {precision.get('matched_db', 0)}",
                 f"- Counted extra DB rows on gold PMIDs: "
                 f"{precision.get('counted_extra_on_gold_pmids', 0)}",
                 f"- precision_vs_counted_gold_pmids: {pcg_text}",
-                f"- Loose extra DB rows on gold PMIDs: "
+                f"- {'Extra' if precision.get('paper_exhaustive') else 'Loose extra'} "
+                f"DB rows on gold PMIDs: "
                 f"{precision.get('extra_on_gold_pmids', 0)}",
-                f"- loose precision_vs_gold_pmids: {pvg_text}",
+                f"- {'paper-exhaustive' if precision.get('paper_exhaustive') else 'loose'} "
+                f"precision_vs_gold_pmids: {pvg_text}",
                 "",
             ]
         )
