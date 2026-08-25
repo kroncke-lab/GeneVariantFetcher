@@ -7,6 +7,10 @@ the expected supplement URLs.
 
 from __future__ import annotations
 
+from harvesting.browser_html.dom_extract import (
+    extract_body_markdown,
+    pick_better_markdown,
+)
 from harvesting.browser_html.strategies.aha import AHAStrategy
 
 
@@ -139,3 +143,80 @@ def test_readable_html_fallback_preserves_article_tables():
     assert "Summary of HERG mutations" in markdown
     assert "| Variant | Carriers |" in markdown
     assert "| R176W | 12 |" in markdown
+
+
+def test_dom_extractor_preserves_collapsed_table_wrapped_in_figure():
+    html = """
+    <html><body>
+      <section id="bodymatter">
+        <div role="paragraph">
+          This clinical cohort reports patient-level variants in a table.
+          The article body contains enough methodological and clinical context
+          for the body selector to qualify as a substantive source. The table
+          remains the authoritative patient-level result and must survive even
+          when the publisher initially hides most rows behind an expand control.
+          Preserving those hidden rows is necessary for complete extraction.
+        </div>
+        <figure class="table">
+          <figcaption>Patient Data</figcaption>
+          <div class="collapsible-wrapper collapsed">
+            <table>
+              <thead><tr><th>Case</th><th>Gene</th><th>Variant</th></tr></thead>
+              <tbody>
+                <tr><td>31</td><td>RYR2</td><td>P164S</td></tr>
+                <tr hidden><td>32</td><td>RYR2</td><td>R414L</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+      </section>
+    </body></html>
+    """
+
+    markdown = extract_body_markdown(html, ["#bodymatter"])
+
+    assert markdown is not None
+    assert "*Figure: Patient Data*" in markdown
+    assert "| Case | Gene | Variant |" in markdown
+    assert "| 31 | RYR2 | P164S |" in markdown
+    assert "| 32 | RYR2 | R414L |" in markdown
+
+
+def test_dom_extractor_does_not_duplicate_nested_table_rows():
+    html = """
+    <html><body><section id="bodymatter">
+      <p>This article has sufficient body text to qualify for extraction. The
+      clinical cohort details remain in the table below, with a nested layout
+      table in one cell that must not become a second top-level result table.</p>
+      <figure class="table"><figcaption>Patient Data</figcaption>
+        <table>
+          <tr><th>Case</th><th>Variant</th><th>Note</th></tr>
+          <tr><td>1</td><td>P164S</td><td>
+            <table><tr><td>nested layout note</td></tr></table>
+          </td></tr>
+        </table>
+      </figure>
+    </section></body></html>
+    """
+
+    markdown = extract_body_markdown(html, ["#bodymatter"])
+
+    assert markdown is not None
+    assert markdown.count("nested layout note") == 1
+    assert markdown.count("| Case | Variant | Note |") == 1
+
+
+def test_markdown_picker_prefers_complete_table_over_slightly_longer_prose():
+    primary = "# MAIN TEXT\n\n" + ("Clinical prose without the cohort table. " * 80)
+    dom = (
+        "# MAIN TEXT\n\n"
+        + ("Clinical prose. " * 130)
+        + "\n\n| Case | Gene | Variant |\n"
+        + "| --- | --- | --- |\n"
+        + "| 31 | RYR2 | P164S |\n"
+        + "| 32 | RYR2 | R414L |\n"
+    )
+
+    assert len(dom) < len(primary)
+    assert pick_better_markdown(primary, dom, prefer_more_tables=True) == dom
+    assert pick_better_markdown(primary, dom) == primary

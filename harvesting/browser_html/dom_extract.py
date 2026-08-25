@@ -78,7 +78,11 @@ def _table_to_markdown(table: Tag) -> str:
     """Quick markdown rendering of a <table>. Falls back to flat text on weird DOMs."""
     rows: list[list[str]] = []
     for tr in table.find_all("tr"):
-        cells = [_text_of(c) for c in tr.find_all(["th", "td"])]
+        # A layout table can contain a nested data table.  Keep rows and cells
+        # owned by this table only so the inner table is not emitted twice.
+        if tr.find_parent("table") is not table:
+            continue
+        cells = [_text_of(c) for c in tr.find_all(["th", "td"], recursive=False)]
         if cells:
             rows.append(cells)
     if not rows:
@@ -123,6 +127,18 @@ def _render(el: Tag, depth: int = 0) -> str:
             cap = child.find("figcaption")
             if cap:
                 parts.append("\n\n*Figure: " + _text_of(cap) + "*\n")
+            # Some publishers (notably AHA) wrap article tables in
+            # ``<figure class="table">``.  Treating every figure as a
+            # caption-only image silently discarded the table body,
+            # including rows hidden behind a collapsed-table control.
+            # Render descendant tables explicitly; the normal recursive
+            # walk intentionally stops at the figure branch.
+            for table in child.find_all("table"):
+                if table.find_parent("table") is not None:
+                    continue
+                table_md = _table_to_markdown(table)
+                if table_md:
+                    parts.append("\n\n" + table_md + "\n")
         elif name == "section" or name == "div" or name == "article":
             parts.append(_render(child, depth + 1))
         elif name == "br":
@@ -189,6 +205,8 @@ def pick_better_markdown(
     primary: Optional[str],
     dom: Optional[str],
     threshold: float = 0.80,
+    *,
+    prefer_more_tables: bool = False,
 ) -> Optional[str]:
     """Choose between two markdown extractions of the same page.
 
@@ -208,6 +226,21 @@ def pick_better_markdown(
         return dom
     if not dom:
         return primary
+
+    if prefer_more_tables:
+        # Length alone is a poor completeness signal for clinical papers.  A
+        # publisher-aware extractor can preserve every paragraph while dropping
+        # a compact, high-value cohort table.  Prefer the DOM rendering when it
+        # retains materially more table rows and still contains at least half of
+        # the primary text; this guards against choosing a tiny navigation table.
+        # This policy is opt-in because publisher DOM quality varies; AHA enables
+        # it for its known collapsed, figure-wrapped cohort tables.
+        table_row = re.compile(r"(?m)^\s*\|.*\|\s*$")
+        primary_table_rows = len(table_row.findall(primary))
+        dom_table_rows = len(table_row.findall(dom))
+        if dom_table_rows >= primary_table_rows + 2 and len(dom) >= 0.5 * len(primary):
+            return dom
+
     if len(primary) < threshold * len(dom):
         return dom
     return primary

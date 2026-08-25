@@ -80,11 +80,12 @@ def test_runtime_sources_do_not_reference_retired_claude_35_haiku():
     assert offenders == []
 
 
-def test_tasks_is_the_single_forward_checklist_without_completed_history():
+def test_tasks_is_the_single_forward_checklist_with_active_goal_progress():
     tasks = (REPO / "TASKS.md").read_text(encoding="utf-8")
     headings = re.findall(r"^## (.+)$", tasks, flags=re.MULTILINE)
 
     assert headings == [
+        "Active $100 improvement goal",
         "1. Re-establish the scientific baseline",
         "2. Recover missing source before adding inference",
         "3. Measure count semantics and recovery",
@@ -94,7 +95,8 @@ def test_tasks_is_the_single_forward_checklist_without_completed_history():
         "5. Engineering handoff follow-ups",
         "Deliberate decisions and non-goals",
     ]
-    assert "- [x]" not in tasks.lower()
+    assert "- [x]" in tasks.lower()
+    assert "- [ ]" in tasks.lower()
     assert "START HERE" not in tasks
     assert "## Completed" not in tasks
     assert "## Active Tasks" not in tasks

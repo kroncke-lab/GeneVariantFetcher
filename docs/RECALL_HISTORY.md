@@ -17,6 +17,17 @@ Elsevier insttoken.
 
 ## 2026-08-24 — source-backed candidate received two blind locks; promotion blocked
 
+A subsequent source audit found a concrete new candidate without changing either
+lock: AHA's full-text DOM for RYR2 PMID 15466642 contains a collapsed patient
+table that the caption-only figure renderer discarded. A scoped parser repair
+recovered exactly the paper's eight frozen gold identities and no off-gene
+rows in a normal production micro replay. The held-fixed diagnostic would be
+554/284/78 (87.658% recall, 66.110% raw precision), with count coverage and MAE
+unchanged because the no-family-inference contract leaves its counts null. The
+diagnostic cost $0.20972125; attributable spend is now $33.27855555. This is
+candidate evidence only; a final sealed gold-118 validation is authorized and
+must be recorded separately before any headline changes.
+
 The grouped/structural implementation was first evaluated in immutable lock
 `20260824_grouped_structural_gold118`: 542 TP / 278 FP / 90 FN, 85.759%
 recall, 66.098% raw precision, 98.188% counted-extra precision, 95.413%

@@ -149,7 +149,11 @@ class AHAStrategy(PublisherStrategy):
             html, final_url, ctx, selectors=list(self.BODY_SELECTORS)
         )
         dom_md = extract_body_markdown(html, self.BODY_SELECTORS)
-        result.main_markdown = pick_better_markdown(primary_md, dom_md)
+        result.main_markdown = pick_better_markdown(
+            primary_md,
+            dom_md,
+            prefer_more_tables=True,
+        )
 
         result.supp_files = self._scrape_aha_supplements(html, final_url)
 

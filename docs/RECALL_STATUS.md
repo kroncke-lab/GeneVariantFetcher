@@ -38,6 +38,15 @@ and all count errors but lost four TP (542/278/90, 85.759% recall).
 source blockers, and the active `$100` ledger are in
 `docs/evidence/gold118_source_recovery_lock_20260824.md`.
 
+A frozen post-lock candidate now repairs a separately verified AHA acquisition
+gap. PMID 15466642's complete publisher DOM contains a collapsed patient table
+that the prior renderer discarded; the normal production micro replay recovered
+exactly its eight RYR2 gold identities, no off-gene identities, and no counts.
+The held-fixed diagnostic would be 554/284/78 (87.658% recall, 66.110% raw
+precision), but those are not headline numbers. One sealed gold-118 validation
+is authorized. Evidence and the updated budget ledger are in
+`docs/evidence/aha_collapsed_table_recovery_20260824.md`.
+
 The exact BRCA1 50 + BRCA2 50 + BMPR2 50 extraction remains a staged candidate,
 not a metric cohort: only 3/150 papers overlap approved human gold and BMPR2 has
 zero. Its precision, recall, and MAE are **undefined**, not zero. A frozen 30

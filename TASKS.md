@@ -43,9 +43,13 @@ until the preceding gate passes and its artifact is recorded.
       other provenance-valid source. The publisher's only supplement has no
       roster; never infer its 20 missing singleton identities from gold.
 
-Budget: **$33.06883430 used / $66.93116570 remaining**. No immediate third
-gold-118 run is authorized; another stochastic replicate does not address the
-known source or human-gold blockers.
+Budget: **$33.27855555 used / $66.72144445 remaining**. A final gold-118 run is
+now authorized for the frozen AHA collapsed-table candidate: the normal
+production micro replay recovered exactly eight independently source-listed
+RYR2 identities with no off-gene rows, and both requested maximum-effort
+reviewers returned SHIP after the picker was scoped to AHA and nested tables
+were ownership-filtered. This is a validation authorization, not promotion.
+Evidence: `docs/evidence/aha_collapsed_table_recovery_20260824.md`.
 
 ## 1. Re-establish the scientific baseline
 
