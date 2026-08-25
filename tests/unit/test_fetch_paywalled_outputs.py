@@ -550,6 +550,23 @@ def test_fetch_one_preserves_failed_publisher_supplements_for_pmc_fallback(
 # Article identity reaching the PDF supplement gate
 # ---------------------------------------------------------------------------
 
+
+def test_pubmed_resolve_doi_compatibility_wrapper(monkeypatch):
+    monkeypatch.setattr(
+        fetch_paywalled,
+        "pubmed_resolve_doi_and_title",
+        lambda pmid, session, max_attempts: (
+            "10.1002/example",
+            "An example cohort study",
+        ),
+    )
+
+    assert (
+        fetch_paywalled.pubmed_resolve_doi("12345", object(), max_attempts=2)
+        == "10.1002/example"
+    )
+
+
 # A marker-free PDF supplement: nothing in the filename, the URL, or the
 # converted text is 'supplement'-family wording, and the link carries no
 # supplementary-container provenance. The article DOI printed in the front

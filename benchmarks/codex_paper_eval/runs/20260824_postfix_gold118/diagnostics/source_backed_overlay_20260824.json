@@ -1,0 +1,21 @@
+{
+  "baseline_predictions_sha256": "e22915095b1a17242e4715c612ea13e22470ffcc007ab8a273ef022f395dfb56",
+  "description": "Post-lock source diagnostic: exact grouped SCN5A table counts plus structural-only rows already present in the RYR2 production DB.",
+  "operations": [
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "c.611+1G>A", "carriers": 9, "affected": 8, "unaffected": 1, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Asp349Asn c.1045G>A", "carriers": 3, "affected": 3, "unaffected": 0, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Arg367His c.1100G>A", "carriers": 1, "affected": 1, "unaffected": 0, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Arg376His c.1127G>A", "carriers": 12, "affected": 6, "unaffected": 6, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Met438Leu c.1312A>T", "carriers": 1, "affected": 1, "unaffected": 0, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Phe756Leufs*8 c.2268_2271del", "carriers": 4, "affected": 1, "unaffected": 3, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "W822X", "carriers": 6, "affected": 4, "unaffected": 2, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.His886Gln c.2658T>A", "carriers": 7, "affected": 4, "unaffected": 3, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "c.4437+5G>A", "carriers": 2, "affected": 0, "unaffected": 2, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "c.4813+3_4813+6dup", "carriers": 24, "affected": 13, "unaffected": 11, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Arg1632His c.4895G>A", "carriers": 8, "affected": 2, "unaffected": 6, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "set_counts", "gene": "SCN5A", "pmid": "29709101", "variant": "p.Ile1660Val c.4978A>G", "carriers": 2, "affected": 1, "unaffected": 1, "source": "PMID 29709101 Table 2 grouped BrS+/BrS- header"},
+    {"operation": "add_variant", "gene": "RYR2", "pmid": "19216760", "variant": "deletion of exon 3 resulting in p.Asn57-Gly91del", "carriers": 2, "affected": null, "unaffected": null, "evidence": "structural_description in locked production DB", "source_location": "Results", "source": "RYR2 production DB structural-only trusted projection"},
+    {"operation": "add_variant", "gene": "RYR2", "pmid": "19926015", "variant": "deletion of exon 3 resulting in p.Asn57-Gly91del", "carriers": 3, "affected": null, "unaffected": null, "evidence": "structural_description in locked production DB", "source_location": "Results", "source": "RYR2 production DB structural-only trusted projection"}
+  ],
+  "schema_version": 1
+}

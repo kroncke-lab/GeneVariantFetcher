@@ -2114,7 +2114,12 @@ class ExpertExtractor(BaseLLMCaller):
         return accepted, skipped
 
     def _merge_table_variants(
-        self, extracted_data: dict, table_variants: List[dict]
+        self,
+        extracted_data: dict,
+        table_variants: List[dict],
+        *,
+        allow_new_variants: bool = True,
+        repair_grouped_counts: bool = False,
     ) -> dict:
         """
         Merge variants found via table regex extraction with LLM-extracted variants.
@@ -2192,10 +2197,55 @@ class ExpertExtractor(BaseLLMCaller):
                 existing_keys.add(legacy_key)
                 existing_by_key.setdefault(legacy_key, []).append(v)
 
+        def valid_grouped_count_repair(table: dict) -> bool:
+            """Require a complete, internally consistent grouped source row."""
+
+            if not repair_grouped_counts or not bool(
+                (table.get("locator_extra") or {}).get("grouped_count_subheaders")
+            ):
+                return False
+            penetrance = table.get("penetrance_data") or {}
+            total = penetrance.get("total_carriers_observed")
+            affected = penetrance.get("affected_count")
+            unaffected = penetrance.get("unaffected_count")
+            if not all(
+                isinstance(value, int) and not isinstance(value, bool) and value >= 0
+                for value in (total, affected, unaffected)
+            ):
+                return False
+            if total != affected + unaffected:
+                return False
+            patient_count = (table.get("patients") or {}).get("count")
+            if patient_count not in (None, total):
+                return False
+            provenance = table.get("count_provenance") or {}
+            affected_label = str(provenance.get("affected_column_label") or "")
+            unaffected_label = str(provenance.get("unaffected_column_label") or "")
+            return bool(
+                re.search(
+                    r"(?:brs|lqt|phenotype|disease)\s*[+＋]\s*$", affected_label, re.I
+                )
+                and re.search(
+                    r"(?:brs|lqt|phenotype|disease)\s*[-−–]\s*$",
+                    unaffected_label,
+                    re.I,
+                )
+            )
+
         def enrich_missing_table_evidence(existing: dict, table: dict) -> bool:
-            """Fill only absent count/provenance fields from a parsed source row."""
+            """Fill absent fields, or repair one validated grouped-count row."""
 
             changed = False
+            grouped_count_marked = bool(
+                (table.get("locator_extra") or {}).get("grouped_count_subheaders")
+            )
+            grouped_count_repair = valid_grouped_count_repair(table)
+            if (
+                repair_grouped_counts
+                and grouped_count_marked
+                and not grouped_count_repair
+            ):
+                return False
             for container, fields in (
                 ("patients", ("count",)),
                 (
@@ -2216,7 +2266,11 @@ class ExpertExtractor(BaseLLMCaller):
                     target = {}
                     existing[container] = target
                 for field in fields:
-                    if target.get(field) is None and source.get(field) is not None:
+                    if field not in source or source.get(field) is None:
+                        continue
+                    if grouped_count_repair or target.get(field) is None:
+                        if target.get(field) == source.get(field):
+                            continue
                         target[field] = source[field]
                         changed = True
 
@@ -2227,7 +2281,12 @@ class ExpertExtractor(BaseLLMCaller):
                     target_count_provenance = {}
                     existing["count_provenance"] = target_count_provenance
                 for field, value in source_count_provenance.items():
-                    if target_count_provenance.get(field) is None and value is not None:
+                    if value is not None and (
+                        grouped_count_repair
+                        or target_count_provenance.get(field) is None
+                    ):
+                        if target_count_provenance.get(field) == value:
+                            continue
                         target_count_provenance[field] = value
                         changed = True
 
@@ -2238,11 +2297,35 @@ class ExpertExtractor(BaseLLMCaller):
                 "source_column",
                 "evidence_quote",
             ):
-                if existing.get(field) in (None, "") and table.get(field) not in (
+                if table.get(field) not in (None, "") and existing.get(field) in (
                     None,
                     "",
                 ):
+                    if existing.get(field) == table.get(field):
+                        continue
                     existing[field] = table[field]
+                    changed = True
+
+            if grouped_count_repair:
+                penetrance = table.get("penetrance_data") or {}
+                deterministic_repair = {
+                    "fields": {
+                        "total_carriers": penetrance.get("total_carriers_observed"),
+                        "affected": penetrance.get("affected_count"),
+                        "unaffected": penetrance.get("unaffected_count"),
+                    },
+                    "reason": (
+                        "Deterministic grouped-header repair: the parent count "
+                        "header spans explicit affected/unaffected subcolumns; "
+                        "the carrier total is their sum."
+                    ),
+                    "evidence_quote": str(table.get("evidence_quote") or "")[:2000],
+                    "source": "deterministic_grouped_header",
+                }
+                if existing.get("deterministic_count_repair") != deterministic_repair:
+                    # Preserve the model/verifier decision. This separate audit
+                    # record describes only the three source-supplied counts.
+                    existing["deterministic_count_repair"] = deterministic_repair
                     changed = True
             return changed
 
@@ -2309,6 +2392,10 @@ class ExpertExtractor(BaseLLMCaller):
                             rows.append(matching_existing)
                 if enrich_missing_table_evidence(matching_existing, tv):
                     enriched_count += 1
+                continue
+
+            if not allow_new_variants:
+                ambiguous_count += 1
                 continue
 
             # Add to existing variants. Router-produced table variants already
@@ -5172,6 +5259,7 @@ class ExpertExtractor(BaseLLMCaller):
         previous_table_data_line = ""
         active_section_gene: Optional[str] = None
         seen_section_gene_divider = False
+        active_grouped_count_subheaders = False
         pending_grouped_gene_scopes: list[set[str]] = []
         pending_grouped_gene_header_line: Optional[int] = None
 
@@ -5322,6 +5410,7 @@ class ExpertExtractor(BaseLLMCaller):
                     previous_table_data_line = ""
                     active_section_gene = None
                     seen_section_gene_divider = False
+                    active_grouped_count_subheaders = False
                     grouped_scopes = (
                         pending_grouped_gene_scopes
                         if pending_grouped_gene_header_line is not None
@@ -5400,6 +5489,7 @@ class ExpertExtractor(BaseLLMCaller):
                 previous_table_data_line = ""
                 active_section_gene = None
                 seen_section_gene_divider = False
+                active_grouped_count_subheaders = False
                 update_table_label(stripped_line, line_number)
                 continue
 
@@ -5409,6 +5499,59 @@ class ExpertExtractor(BaseLLMCaller):
 
             cells = _split_pipe_row(line)
             if len(cells) < 2:  # Relaxed from 3 to 2 for simpler tables
+                continue
+
+            # HTML-to-markdown can flatten a colspan header into two rows while
+            # left-aligning the child labels. For example, a parent ``Number of
+            # patients`` at column 4 followed by ``BrS+ | BrS-`` actually means
+            # columns 4/5 are affected/unaffected subgroups. Recover that exact
+            # structural relationship before treating the child row as data.
+            # The guard is intentionally narrow: exactly one parent count
+            # column, exactly two non-empty child cells, opposite +/- phenotype
+            # labels, and no variant identity on the child row.
+            nonempty_child_headers = [cell.strip() for cell in cells if cell.strip()]
+            count_parents = list(dict.fromkeys(header_multi.get("count", [])))
+
+            def phenotype_subheader_role(label: str) -> Optional[str]:
+                compact = re.sub(r"\s+", "", label).casefold()
+                if re.search(r"(?:brs|lqt|phenotype|disease)[+＋]$", compact):
+                    return "affected"
+                if re.search(r"(?:brs|lqt|phenotype|disease)[\-−–]$", compact):
+                    return "unaffected"
+                return None
+
+            child_roles = [
+                phenotype_subheader_role(label) for label in nonempty_child_headers
+            ]
+            if (
+                table_row_ordinal == 0
+                and len(count_parents) == 1
+                and len(nonempty_child_headers) == 2
+                and set(child_roles) == {"affected", "unaffected"}
+                and count_parents[0] + 1 < len(active_headers)
+            ):
+                parent_idx = count_parents[0]
+                role_to_label = dict(zip(child_roles, nonempty_child_headers))
+                parent_label = active_headers[parent_idx].strip() or "count"
+                affected_idx = parent_idx + child_roles.index("affected")
+                unaffected_idx = parent_idx + child_roles.index("unaffected")
+                header_multi["count"] = [parent_idx, parent_idx + 1]
+                header_multi["affected"] = [affected_idx]
+                header_multi["unaffected"] = [unaffected_idx]
+                header_mapping["count"] = parent_idx
+                header_mapping["affected"] = affected_idx
+                header_mapping["unaffected"] = unaffected_idx
+                active_headers[affected_idx] = (
+                    f"{parent_label} / {role_to_label['affected']}"
+                )
+                active_headers[unaffected_idx] = (
+                    f"{parent_label} / {role_to_label['unaffected']}"
+                )
+                normalized_active_headers = [
+                    _normalize_header(header) for header in active_headers
+                ]
+                active_header_line = f"{active_header_line}\nSubheaders: {line.strip()}"
+                active_grouped_count_subheaders = True
                 continue
 
             divider_gene = _gene_section_divider(
@@ -5533,8 +5676,14 @@ class ExpertExtractor(BaseLLMCaller):
                 if not value:
                     return None
                 cleaned = value.strip().replace(",", "")
-                if cleaned.isdigit():
-                    return int(cleaned)
+                suffix = (
+                    r"(?:\s*[a-z]|\s*[*⁎†‡§¶])?"
+                    if active_grouped_count_subheaders
+                    else ""
+                )
+                match = re.fullmatch(rf"(?P<count>\d+){suffix}", cleaned, re.IGNORECASE)
+                if match:
+                    return int(match.group("count"))
                 return None
 
             def parse_count_sum(values: List[str]) -> Optional[int]:
@@ -5660,6 +5809,7 @@ class ExpertExtractor(BaseLLMCaller):
                 "locator_extra": {
                     "parser": "markdown_table",
                     "line_number": line_number,
+                    "grouped_count_subheaders": active_grouped_count_subheaders,
                 },
             }
             variant = {
@@ -8424,6 +8574,27 @@ Return strict JSON with this schema:
                     model_used="deterministic-table-parser",
                 )
 
+        grouped_count_repair_rows: List[dict] = []
+        if not markdown_table_variants and re.search(
+            r"number\s+of\s+(?:patients|carriers).{0,500}"
+            r"(?:brs|lqt|phenotype|disease)\s*[+＋].{0,100}"
+            r"(?:brs|lqt|phenotype|disease)\s*[-−–]",
+            scanner_text,
+            re.IGNORECASE | re.DOTALL,
+        ):
+            # Moderate tables are parsed only for the narrowly recognizable
+            # grouped-count repair. Their identities are never additive.
+            parsed_moderate_rows = self._dedupe_table_variants(
+                self._parse_markdown_table_variants(scanner_text, paper.gene_symbol)
+            )
+            grouped_count_repair_rows = [
+                variant
+                for variant in parsed_moderate_rows
+                if bool(
+                    (variant.get("locator_extra") or {}).get("grouped_count_subheaders")
+                )
+            ]
+
         fixed_width_min_variants = (
             1
             if self.tier_threshold <= 0
@@ -8630,6 +8801,15 @@ Return strict JSON with this schema:
                 document_text=scanner_text,
             )
         )
+        grouped_count_repair_rows, grouped_repair_skips = (
+            self._filter_table_candidates_for_current_study(
+                grouped_count_repair_rows,
+                target_gene=paper.gene_symbol,
+                document_text=scanner_text,
+            )
+        )
+        if grouped_repair_skips:
+            table_candidate_skips.extend(grouped_repair_skips)
         if table_candidate_skips:
             logger.warning(
                 "PMID %s - Excluded %d/%d table candidates from hints and "
@@ -8828,6 +9008,24 @@ Return strict JSON with this schema:
                 scanner_variant_count=scanner_variant_count,
                 paper_census=paper_census,
             )
+            grouped_count_rows = grouped_count_repair_rows + [
+                variant
+                for variant in table_hint_variants
+                if bool(
+                    (variant.get("locator_extra") or {}).get("grouped_count_subheaders")
+                )
+            ]
+            if grouped_count_rows:
+                # The model verifier can repeat the same colspan-flattening
+                # mistake that deterministic parsing repaired. Repair only a
+                # uniquely matching surviving identity; never add a row after
+                # gene/artifact filters or replace the verifier decision.
+                extracted_data = self._merge_table_variants(
+                    extracted_data,
+                    self._dedupe_table_variants(grouped_count_rows),
+                    allow_new_variants=False,
+                    repair_grouped_counts=True,
+                )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(
                 extracted_data

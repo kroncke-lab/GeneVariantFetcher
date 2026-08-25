@@ -70,11 +70,13 @@ setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
 CDNA_COORDINATE = r"\d+(?:[+-]\d+)?"
+CDNA_RANGE = rf"{CDNA_COORDINATE}(?:_(?:c\.)?{CDNA_COORDINATE})?"
+CDNA_INDEL_PAYLOAD = r"(?:[ACGT]*|\d{1,6})"
 CDNA_NOTATION_RE = re.compile(
-    rf"^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?[ACGT]>[ACGT]$"
-    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?(?:del|dup)[ACGT]*$"
-    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?ins[ACGT]+$"
-    rf"|^c\.{CDNA_COORDINATE}(?:_{CDNA_COORDINATE})?del[ACGT]*ins[ACGT]+$"
+    rf"^c\.{CDNA_RANGE}[ACGT]>[ACGT]$"
+    rf"|^c\.{CDNA_RANGE}(?:del|dup){CDNA_INDEL_PAYLOAD}$"
+    rf"|^c\.{CDNA_RANGE}ins[ACGT]+$"
+    rf"|^c\.{CDNA_RANGE}del[ACGT]*ins[ACGT]+$"
     r"|^IVS\d+[+-]\d+[ACGT]>[ACGT]$"
     r"|^IVS\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
@@ -183,12 +185,31 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     vclass = (variant_data.get("variant_class") or "").strip().lower()
     structural = (variant_data.get("structural_description") or "").strip()
 
+    source_notation = re.sub(
+        r"\s+", "", str(variant_data.get("source_notation") or "").strip()
+    )
+
     if protein and not PROTEIN_NOTATION_RE.fullmatch(protein):
         variant_data["protein_notation"] = None
         protein = ""
-    if cdna and not CDNA_NOTATION_RE.match(cdna):
+    if cdna and not CDNA_NOTATION_RE.fullmatch(cdna):
         variant_data["cdna_notation"] = None
         cdna = ""
+
+    # Structural papers sometimes keep an exact breakpoint only in the
+    # verbatim source field while the model also supplies the broader event
+    # description. Promote it after clearing invalid model notation so junk in
+    # that field cannot hide a valid source-asserted breakpoint.
+    if (
+        not cdna
+        and not protein
+        and not genomic
+        and vclass in STRUCTURAL_ONLY_VARIANT_CLASS_VALUES
+        and source_notation
+        and CDNA_NOTATION_RE.fullmatch(source_notation)
+    ):
+        variant_data["cdna_notation"] = source_notation
+        cdna = source_notation
 
     if vclass and vclass not in VARIANT_CLASS_VALUES:
         variant_data["variant_class"] = None

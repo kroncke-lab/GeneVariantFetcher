@@ -1116,6 +1116,169 @@ Table 1. KCNH2 affected and unaffected carriers
     assert pen["unaffected_count"] == 10
 
 
+def test_deterministic_parser_recovers_grouped_phenotype_subheaders():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. SCN5A mutations in this cohort
+
+| Exon | DNA change | Protein change | Number of patients | Novel | Comment |
+| --- | --- | --- | --- | --- | --- |
+| BrS+ | BrS− |  |  |  |  |
+| 9 | c.1127G>A | p.(Arg376His) | 6 | 6 a | primary | Yes |
+| 15 | c.2268_2271del | p.(Phe756Leufs*8) | 1 | 3 b | primary | Yes |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "SCN5A")
+    by_cdna = {variant["cdna_notation"]: variant for variant in variants}
+
+    assert by_cdna["c.1127G>A"]["penetrance_data"] == {
+        "total_carriers_observed": 12,
+        "affected_count": 6,
+        "unaffected_count": 6,
+    }
+    assert by_cdna["c.2268_2271del"]["penetrance_data"] == {
+        "total_carriers_observed": 4,
+        "affected_count": 1,
+        "unaffected_count": 3,
+    }
+    repaired = by_cdna["c.1127G>A"]
+    assert repaired["locator_extra"]["grouped_count_subheaders"] is True
+    assert repaired["count_provenance"]["affected_column_label"].endswith("BrS+")
+    assert repaired["count_provenance"]["unaffected_column_label"].endswith("BrS−")
+
+    # A source-structural grouped row overrides a model/verifier's flattened
+    # first-column interpretation when the deterministic row is merged again.
+    existing = {
+        "variants": [
+            {
+                "gene_symbol": "SCN5A",
+                "cdna_notation": "c.1127G>A",
+                "protein_notation": "p.Arg376His",
+                "patients": {"count": 6},
+                "penetrance_data": {
+                    "total_carriers_observed": 6,
+                    "affected_count": None,
+                    "unaffected_count": None,
+                },
+                "claim_verification": {"verdict": "directly_supported"},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    original_verification = existing["variants"][0]["claim_verification"]
+    merged = extractor._merge_table_variants(
+        existing,
+        [by_cdna["c.1127G>A"]],
+        allow_new_variants=False,
+        repair_grouped_counts=True,
+    )
+    row = merged["variants"][0]
+    assert row["penetrance_data"] == {
+        "total_carriers_observed": 12,
+        "affected_count": 6,
+        "unaffected_count": 6,
+    }
+    assert row["claim_verification"] is original_verification
+    assert row["deterministic_count_repair"]["source"] == (
+        "deterministic_grouped_header"
+    )
+
+    # Post-filter repair is existing-only: a deterministic row cannot re-add a
+    # variant removed by gene/artifact/adjudication gates.
+    absent = extractor._merge_table_variants(
+        {"variants": [], "extraction_metadata": {}},
+        [by_cdna["c.2268_2271del"]],
+        allow_new_variants=False,
+        repair_grouped_counts=True,
+    )
+    assert absent["variants"] == []
+
+
+def test_grouped_count_repair_requires_complete_consistent_source_partitions():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    existing = {
+        "variants": [
+            {
+                "gene_symbol": "SCN5A",
+                "cdna_notation": "c.1127G>A",
+                "patients": {"count": 6},
+                "penetrance_data": {
+                    "total_carriers_observed": 6,
+                    "affected_count": None,
+                    "unaffected_count": None,
+                },
+                "claim_verification": {"verdict": "directly_supported"},
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    inconsistent = {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": "c.1127G>A",
+        "patients": {"count": 12},
+        "penetrance_data": {
+            "total_carriers_observed": 12,
+            "affected_count": 6,
+            "unaffected_count": 5,
+        },
+        "locator_extra": {"grouped_count_subheaders": True},
+        "count_provenance": {
+            "affected_column_label": "Number of patients / BrS+",
+            "unaffected_column_label": "Number of patients / BrS-",
+        },
+    }
+
+    repaired = extractor._merge_table_variants(
+        existing,
+        [inconsistent],
+        allow_new_variants=False,
+        repair_grouped_counts=True,
+    )
+
+    assert repaired["variants"][0]["penetrance_data"] == {
+        "total_carriers_observed": 6,
+        "affected_count": None,
+        "unaffected_count": None,
+    }
+    assert "deterministic_count_repair" not in repaired["variants"][0]
+
+
+def test_markdown_parser_does_not_accept_letter_suffix_outside_grouped_header():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    variants = extractor._parse_markdown_table_variants(
+        """
+Table 1. KCNH2 observations
+
+| protein | carriers |
+| --- | --- |
+| p.Lys897Thr | 12q |
+""",
+        "KCNH2",
+    )
+
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] is None
+
+
+def test_markdown_parser_does_not_treat_variant_cell_as_grouped_subheader():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    variants = extractor._parse_markdown_table_variants(
+        """
+Table 1. SCN5A observations
+
+| DNA change | Number of patients | Comment |
+| --- | --- | --- |
+| BrS+ | p.Arg376His | BrS- |
+| c.1127G>A | 6 | primary |
+""",
+        "SCN5A",
+    )
+
+    assert not any(
+        (variant.get("locator_extra") or {}).get("grouped_count_subheaders")
+        for variant in variants
+    )
+
+
 def test_deterministic_parser_preserves_zero_in_a_later_mapped_column():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

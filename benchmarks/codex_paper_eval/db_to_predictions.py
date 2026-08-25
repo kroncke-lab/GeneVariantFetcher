@@ -5,7 +5,8 @@ The eval harness scores `papers[].variants[]` with {variant, carriers, affected,
 unaffected}. Production stores the same facts across three tables, so this is a
 straight projection -- no re-interpretation:
 
-  variants.protein_notation + variants.cdna_notation  -> variants[].variant
+  variants protein/cDNA notation, or a structural-only description
+                                              -> variants[].variant
   penetrance_data.total_carriers_observed             -> carriers
   penetrance_data.affected_count                      -> affected
   penetrance_data.unaffected_count                    -> unaffected
@@ -41,6 +42,7 @@ from benchmarks.codex_paper_eval.production_run import (  # noqa: E402
     ProductionRunError,
     resolve_active_gene_run,
 )
+from utils.variant_normalizer import structural_variant_identity  # noqa: E402
 
 TOOL_RATIONALE = (
     "Production gvf-run calibrated-manifest strategy using the current "
@@ -143,11 +145,47 @@ def merge_same_variant(rows: list[dict], gene: str) -> list[dict]:
     """
     from benchmarks.codex_paper_eval.run_eval import twin_identical
 
+    def explicit_cdna_tokens(value: str) -> set[str]:
+        return {
+            match.group(0).casefold()
+            for match in re.finditer(
+                r"\bc\.\d+(?:[+-]\d+)?(?:_(?:c\.)?\d+(?:[+-]\d+)?)?"
+                r"(?:del|dup|ins)[A-Za-z0-9]*",
+                value,
+                re.IGNORECASE,
+            )
+        }
+
+    def broad_structural_alias(value: str) -> bool:
+        return bool(
+            re.search(
+                r"\b(?:deletion|duplication|del|dup)\s+of\s+exons?\s*\d+"
+                r"|\bexons?\s*\d+\s*(?:deletion|duplication|del|dup)\b",
+                value,
+                re.IGNORECASE,
+            )
+        )
+
     kept: list[dict] = []
     for row in sorted(
         rows, key=lambda r: (layer_rank(r["source_layer"]), r["variant"])
     ):
         for existing in kept:
+            row_cdna = explicit_cdna_tokens(row["variant"])
+            existing_cdna = explicit_cdna_tokens(existing["variant"])
+            if row_cdna and existing_cdna and row_cdna.isdisjoint(existing_cdna):
+                # Two exact breakpoints remain distinct even when they share a
+                # broad structural alias such as "exon 3 deletion".
+                continue
+            if (
+                bool(row_cdna) != bool(existing_cdna)
+                and broad_structural_alias(row["variant"])
+                and broad_structural_alias(existing["variant"])
+            ):
+                # A generic exon event cannot stand in for one exact
+                # breakpoint. Preserve both until source adjudication proves
+                # that they are the same allele.
+                continue
             if twin_identical(row["variant"], existing["variant"], gene):
                 for field in ("carriers", "affected", "unaffected"):
                     if existing[field] is None and row[field] is not None:
@@ -161,8 +199,18 @@ def merge_same_variant(rows: list[dict], gene: str) -> list[dict]:
     return kept
 
 
-def notation(protein: str | None, cdna: str | None) -> str:
+def notation(
+    protein: str | None,
+    cdna: str | None,
+    structural_description: str | None = None,
+    variant_class: str | None = None,
+) -> str:
     parts = [p.strip() for p in (protein, cdna) if p and p.strip()]
+    structural = (structural_description or "").strip()
+    if structural and (variant_class or "").strip().lower() in (
+        STRUCTURAL_ONLY_VARIANT_CLASSES
+    ):
+        parts.append(structural)
     return " ".join(dict.fromkeys(parts))
 
 
@@ -170,6 +218,25 @@ LINKAGE_LAYERS = {"clinvar", "pubtator"}
 TRUSTED_UNMATCHED_VF_CLASSES = frozenset(
     {"novel_in_range", "cdna_only_unmatched", "known_isoform_offset"}
 )
+STRUCTURAL_ONLY_VARIANT_CLASSES = frozenset(
+    {
+        "large_deletion",
+        "large_duplication",
+        "cnv",
+        "exon_deletion",
+        "exon_duplication",
+    }
+)
+TRUSTED_STRUCTURAL_VF_CLASSES = frozenset({"no_notation_suspect"})
+
+
+def canonical_structural_identity(description: str | None) -> str:
+    """Return only structural identities with a canonical exon/gene key."""
+
+    identity = structural_variant_identity(description)
+    if re.fullmatch(r"(?:del|dup):(?:exon\d+(?:-\d+)?|wholegene)", identity):
+        return identity
+    return ""
 
 
 def origin_layer(source_layer: str | None) -> str:
@@ -285,6 +352,9 @@ def rows_for_gene(
     penetrance_columns = {
         str(row[1]) for row in con.execute("PRAGMA table_info(penetrance_data)")
     }
+    variant_columns = {
+        str(row[1]) for row in con.execute("PRAGMA table_info(variants)")
+    }
     trust_tier_expr = "pd.trust_tier" if "trust_tier" in penetrance_columns else "NULL"
     field_trust_expr = (
         "pd.field_trust" if "field_trust" in penetrance_columns else "NULL"
@@ -308,6 +378,14 @@ def rows_for_gene(
     vf_join = (
         "LEFT JOIN vf_enrichment vfe ON vfe.variant_id = v.variant_id" if has_vf else ""
     )
+    variant_class_expr = (
+        "v.variant_class" if "variant_class" in variant_columns else "NULL"
+    )
+    structural_expr = (
+        "v.structural_description"
+        if "structural_description" in variant_columns
+        else "NULL"
+    )
     q = f"""
         SELECT vp.pmid              AS pmid,
                vp.variant_id        AS variant_id,
@@ -316,6 +394,8 @@ def rows_for_gene(
                vp.source_layer      AS source_layer,
                v.protein_notation   AS protein_notation,
                v.cdna_notation      AS cdna_notation,
+               {variant_class_expr} AS variant_class,
+               {structural_expr}    AS structural_description,
                pd.total_carriers_observed AS carriers,
                pd.affected_count    AS affected,
                pd.unaffected_count  AS unaffected,
@@ -339,8 +419,16 @@ def rows_for_gene(
                 raise ValueError(
                     f"{db}: variant {r['variant_id']} lacks VariantFeatures clearance"
                 )
-            if not bool(r["vf_matched"]) and str(r["vf_class"] or "") not in (
-                TRUSTED_UNMATCHED_VF_CLASSES
+            structural_is_trusted = bool(
+                str(r["variant_class"] or "").strip().lower()
+                in STRUCTURAL_ONLY_VARIANT_CLASSES
+                and str(r["vf_class"] or "") in TRUSTED_STRUCTURAL_VF_CLASSES
+                and canonical_structural_identity(r["structural_description"])
+            )
+            if (
+                not bool(r["vf_matched"])
+                and str(r["vf_class"] or "") not in TRUSTED_UNMATCHED_VF_CLASSES
+                and not structural_is_trusted
             ):
                 dropped[pmid] += 1
                 continue
@@ -348,7 +436,12 @@ def rows_for_gene(
         if exclude_layers and layers and layers <= exclude_layers:
             dropped[pmid] += 1
             continue
-        var = notation(r["protein_notation"], r["cdna_notation"])
+        var = notation(
+            r["protein_notation"],
+            r["cdna_notation"],
+            r["structural_description"],
+            r["variant_class"],
+        )
         if not var:
             dropped[pmid] += 1
             continue

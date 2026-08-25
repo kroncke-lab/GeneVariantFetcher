@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-21.
+Last updated: 2026-08-24.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -142,6 +142,46 @@ full reviewer-backlog attempts (506 unique PMIDs). These tiers govern
 evaluation/review scope, not the authoritative four-gene headline cohort below. The full tier includes BMPR2 and ranked
 50-paper LMNA/TTN subsets; it keeps BMPR2 and BRCA1 at 50 papers and BRCA2 at 45
 rather than expanding the experimental genes.
+
+## 2026-08-24 gold-118 lock and source-backed improvement candidate
+
+The newest accepted blind result is the immutable
+`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118` lock: 546 TP,
+284 FP, and 86 FN over 632 gold rows (86.39% recall, 65.78% raw precision,
+74.69% F1). Counted-extra precision is 97.50% and count-bearing-only precision
+is 93.69%. Conditional count results are 68/206 carrier absolute-error units
+(MAE 0.330), 27/49 affected (0.551), and 9/18 unaffected (0.500). This is the
+headline current measurement; its trace-derived public-list-price proxy is
+$11.32 for 574 calls and 2.760M tokens.
+
+Two general repairs are now staged but are **not a new blind headline**. First,
+the trusted DB projection retains source-grounded structural-only identities,
+and migration preserves exact structural cDNA breakpoints rather than
+collapsing them into a broad exon label. Second, the deterministic table parser
+recognizes a parent count header split into opposing phenotype subcolumns and
+sets carrier total to their sum while preserving the two supplied partitions.
+The latter was replayed from source for SCN5A PMID 29709101 in a staged DB and
+recovered all 12 table totals exactly; no accepted extraction or score lock was
+mutated.
+
+Applied as a source-backed candidate projection to the frozen gold-118 data,
+the repairs give 548 TP / 284 FP / 84 FN (86.71% recall, 65.87% raw precision,
+74.86% F1), while carrier MAE falls to 47/208 = 0.226, affected MAE to 27/59 =
+0.458, and unaffected MAE to 9/28 = 0.321. Counted-extra precision remains
+97.51% and count-bearing-only precision is 93.75%. These numbers are diagnostic:
+promotion requires a fresh gold-free extraction, hash lock, and post-lock score.
+The exact unblinded overlay and machine-scored report are stored under the
+lock's `diagnostics/` directory and are bound to the baseline predictions,
+selection, overlay, and four gold-file SHA-256 digests. The exact evidence,
+reproduction command, and budget accounting are in
+`docs/evidence/gold118_grouped_header_candidate_20260824.md`.
+
+The exact 50 BRCA1 + 50 BRCA2 + 50 BMPR2 candidate remains a structural review
+set, not a metric cohort. Only three of its 150 papers overlap an approved
+curated fixture and BMPR2 has none. Precision, recall, and MAE for that set are
+therefore undefined until a human, source-adjudicated gold sample and holdout
+are sealed; they must never be reported as zero or inferred from the structural
+audit.
 
 ## Current-code blind candidate-local lock
 

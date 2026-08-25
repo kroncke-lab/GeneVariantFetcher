@@ -5,6 +5,45 @@ are those used by each named run; they are not current configuration guidance.
 Use `config/settings.py` and `docs/ARCHITECTURE.md` for current defaults and
 `TASKS.md` for the next acceptance gate.
 
+## Current measured costs and $100 improvement budget (2026-08-24)
+
+The newest immutable gold-118 run is
+`benchmarks/codex_paper_eval/runs/20260824_postfix_gold118`: 574 calls (572
+successful), 1,978,238 input tokens, 2,760,247 total-minus-input-inclusive
+tokens, and a **$11.320 public-list-price proxy** ($0.0959 per attempt). By
+role, the proxy is $0.272 Kimi routing, $2.305 Grok 4.3 extraction, and $8.743
+GPT-5.6 Sol vision/verification. Because the provider's visible output and
+reasoning accounting differ for Grok, the conservative alternate total is
+about $11.94. The four gene jobs completed concurrently in about 42 minutes;
+summed provider duration is not wall time.
+
+The completed historical 146-paper BRCA/BMPR2 run cost $23.664 by the same
+method. Reconstructing the exact later 50/50/50 candidate from its available
+traces gives an **audit estimate** of 1,026 calls, about 5.08M provider tokens,
+and **$25.62** ($4.10 BMPR2, $10.28 BRCA1, $11.24 BRCA2). That estimate is not
+an immutable cost manifest, and the cohort has no exhaustive gold standard;
+therefore it is a workload/cost measurement, not a quality/cost benchmark.
+
+The 2026-08-24 improvement work made three targeted SCN5A PMID 29709101
+replays. The comparable locked per-paper trace costs $0.456 at public list
+price, so three normal-effort equivalents are $1.37. Two replays used higher
+reasoning, but `scripts/refresh_run_db.py` currently omits locked token traces;
+their exact cost is unknowable. The budget ledger therefore charges a
+conservative **$10 reserve used / $90 uncommitted** and stops paid work until
+refresh tracing is fixed. Source probes, scoring, migration, and tests made no
+provider calls. The Grok and AGY CLI review surfaces did not expose billing
+telemetry; their subscription/account cost is therefore not folded into the API
+list-price proxy and no zero-cost claim is made for them.
+
+The next spend order is: fix refresh telemetry ($0); acquire/bind blocked
+sources ($0 LLM); run a disjoint pre-registered cardiac sample (cap $6); run
+one final blind gold-118 lock only after repairs are frozen (cap $15); prepare
+human review cards for a sealed per-gene 150 calibration/holdout (cap $10); and
+rerun the exact 150 only after gold exists (cap $30). Keep $29 for retries and
+reserve. Stop if counted-extra precision falls below 97.50%, count-bearing-only
+precision below 93.69%, carrier coverage below 206 rows, or MAE fails to beat
+the immutable lock.
+
 ## Canonical rollout sizes (updated 2026-08-13)
 
 The only active progression is 50 gold-scored gene–paper attempts, then 120

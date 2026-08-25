@@ -1146,6 +1146,170 @@ def test_production_projection_holds_ambiguous_identity_classes(tmp_path: Path):
     assert dict(dropped) == {"99": 1}
 
 
+def test_production_projection_keeps_valid_structural_only_identity(tmp_path: Path):
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_structural", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+    db = tmp_path / "RYR2.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """
+        CREATE TABLE variants (
+          variant_id INTEGER PRIMARY KEY, protein_notation TEXT, cdna_notation TEXT,
+          variant_class TEXT, structural_description TEXT
+        );
+        CREATE TABLE variant_papers (
+          variant_id INTEGER, pmid TEXT, source_location TEXT, key_quotes TEXT,
+          source_layer TEXT
+        );
+        CREATE TABLE penetrance_data (
+          variant_id INTEGER, pmid TEXT, total_carriers_observed INTEGER,
+          affected_count INTEGER, unaffected_count INTEGER, trust_tier TEXT,
+          field_trust TEXT
+        );
+        CREATE TABLE vf_enrichment (
+          variant_id INTEGER PRIMARY KEY, matched INTEGER, fp_class TEXT
+        );
+        INSERT INTO variants VALUES (
+          1, NULL, NULL, 'exon_deletion',
+          'deletion of exon 3 resulting in p.Asn57-Gly91del'
+        );
+        INSERT INTO variants VALUES (
+          2, NULL, NULL, 'exon_deletion', 'deletion of exon 4'
+        );
+        INSERT INTO variants VALUES (
+          3, NULL, NULL, 'exon_deletion', 'large event near the N terminus'
+        );
+        INSERT INTO variant_papers VALUES (
+          1, '19216760', 'Results', '[]', 'llm_text'
+        );
+        INSERT INTO variant_papers VALUES (
+          2, '19216760', 'Results', '[]', 'llm_text'
+        );
+        INSERT INTO variant_papers VALUES (
+          3, '19216760', 'Results', '[]', 'llm_text'
+        );
+        INSERT INTO penetrance_data VALUES (
+          1, '19216760', 4, NULL, NULL, 'trusted', '{}'
+        );
+        INSERT INTO penetrance_data VALUES (
+          2, '19216760', 1, NULL, NULL, 'trusted', '{}'
+        );
+        INSERT INTO penetrance_data VALUES (
+          3, '19216760', 1, NULL, NULL, 'trusted', '{}'
+        );
+        INSERT INTO vf_enrichment VALUES (1, 0, 'no_notation_suspect');
+        INSERT INTO vf_enrichment VALUES (2, 0, 'wrong_gene_residue_mismatch');
+        INSERT INTO vf_enrichment VALUES (3, 0, 'no_notation_suspect');
+        """
+    )
+    con.commit()
+    con.close()
+
+    rows, dropped = converter.rows_for_gene(
+        db,
+        {"19216760"},
+        set(),
+        trust_mode="trusted",
+        identity_mode="trusted",
+    )
+
+    assert rows["19216760"] == [
+        {
+            "variant": "deletion of exon 3 resulting in p.Asn57-Gly91del",
+            "carriers": 4,
+            "affected": None,
+            "unaffected": None,
+            "evidence": "no quote captured; source_layer=llm_text",
+            "source_location": "Results",
+            "source_layer": "llm_text",
+        }
+    ]
+    assert dict(dropped) == {"19216760": 2}
+
+
+def test_production_projection_does_not_merge_distinct_structural_breakpoints():
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_structural_twins", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+    rows = [
+        {
+            "variant": (
+                "c.168-301_c.273+722del1128 deletion of exon 3 resulting in "
+                "p.Asn57-Gly91del"
+            ),
+            "carriers": 4,
+            "affected": None,
+            "unaffected": None,
+            "source_layer": "llm_text",
+        },
+        {
+            "variant": (
+                "c.168-228_c.273+793del1126 deletion of exon 3 resulting in "
+                "p.Asn57-Gly91del"
+            ),
+            "carriers": 2,
+            "affected": None,
+            "unaffected": None,
+            "source_layer": "llm_text",
+        },
+    ]
+
+    merged = converter.merge_same_variant(rows, "RYR2")
+    assert len(merged) == 2
+    assert {row["variant"] for row in merged} == {row["variant"] for row in rows}
+
+
+def test_production_projection_keeps_exact_and_generic_structural_rows_distinct():
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_structural_generic", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+    rows = [
+        {
+            "variant": "c.168-301_c.273+722del1128 deletion of exon 3",
+            "carriers": 4,
+            "affected": None,
+            "unaffected": None,
+            "source_layer": "llm_text",
+        },
+        {
+            "variant": "deletion of exon 3",
+            "carriers": 3,
+            "affected": None,
+            "unaffected": None,
+            "source_layer": "llm_text",
+        },
+    ]
+
+    merged = converter.merge_same_variant(rows, "RYR2")
+    assert len(merged) == 2
+    assert {row["variant"] for row in merged} == {row["variant"] for row in rows}
+
+
 def test_production_projection_binds_and_revalidates_external_trace_manifest(
     tmp_path: Path,
 ):

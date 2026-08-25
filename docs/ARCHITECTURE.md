@@ -67,6 +67,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
 │   • Cheap paper census estimates variant/count ranges for escalation only         │
 │   • Kimi routes candidate tables; deterministic parser extracts table rows         │
+│     - Split parent count headers preserve phenotype children and sum the total      │
 │   • Grok 4.3 runs primary full-text extraction when table parsing is insufficient  │
 │   • GPT-5.4 / DeepSeek / Kimi verify compact claim cards for high-risk outputs    │
 │   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
@@ -88,6 +89,7 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │ STEP 5: SQLite Migration                                                         │
 │   • Normalized relational schema                                                 │
+│   • Exact structural cDNA breakpoints remain distinct behind broad exon aliases  │
 │   • Indexed for efficient querying                                               │
 │   OUTPUT: {gene}.db                                                              │
 └──────────────────────────────────────────────────────────────────────────────────┘
@@ -110,6 +112,12 @@ requires both enrichment and quarantine. Publication also requires the exact
 pinned PMID manifest and is refused after any failed stage. The older
 `python -m cli.automated_workflow` entry point remains a lower-level
 compatibility path; it is not registered as a `gvf` subcommand.
+
+Trusted evaluation projection includes a source-grounded structural description
+when a structural class has no protein/cDNA display notation. Structural rows
+must still have a canonical structural identity; this prevents generic prose
+from entering the trusted surface while ensuring exact deletions and exon-level
+events are not silently dropped at export.
 
 Explicit PMID manifests bypass recall-oriented Tier 1/Tier 2 filtering, but not
 the deterministic paper-scope gate. A title that explicitly names a non-human

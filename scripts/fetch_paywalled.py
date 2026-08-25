@@ -747,6 +747,14 @@ def pubmed_resolve_doi_and_title(
     return None, None
 
 
+def pubmed_resolve_doi(
+    pmid: str, session: requests.Session, max_attempts: int = 4
+) -> Optional[str]:
+    """Backward-compatible DOI-only wrapper for external script importers."""
+    doi, _title = pubmed_resolve_doi_and_title(pmid, session, max_attempts)
+    return doi
+
+
 def prime_authenticated_browser(
     pool: AuthenticatedBrowserPool,
     auth_urls: List[str],

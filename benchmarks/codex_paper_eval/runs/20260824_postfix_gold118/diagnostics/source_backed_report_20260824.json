@@ -1,0 +1,79 @@
+{
+  "baseline_predictions_sha256": "e22915095b1a17242e4715c612ea13e22470ffcc007ab8a273ef022f395dfb56",
+  "blinded": false,
+  "gold_sha256": {
+    "KCNH2": "1e1ea47caab96b89812f49208202143514b8596ee43dd64b9f1d738aa0cc81ad",
+    "KCNQ1": "72472a17d8fe6e4330a663612dfdbd3fa3eee2dc33737d91e07155ce1700cab7",
+    "RYR2": "b1a1e4eb69c73b448e15f8ea108f898c3319ba451e8c0b58fae328f50347ff0e",
+    "SCN5A": "71b3510406f02af6d9bf733a4e2cca666cf5ffe271924540351b639d54e00988"
+  },
+  "gold_used_only_after_overlay": true,
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 632,
+        "gold_asserted_nonzero": 406,
+        "gold_asserted_zero": 226,
+        "mae": 0.4576271186440678,
+        "predicted": 59,
+        "predicted_on_nonzero_gold": 51,
+        "predicted_on_zero_gold": 8,
+        "recall": 0.09335443037974683,
+        "recall_nonzero_gold": 0.12561576354679804,
+        "recall_zero_gold": 0.035398230088495575,
+        "rmse": 1.420193350407744
+      },
+      "carriers": {
+        "gold_asserted": 632,
+        "gold_asserted_nonzero": 472,
+        "gold_asserted_zero": 160,
+        "mae": 0.22596153846153846,
+        "predicted": 208,
+        "predicted_on_nonzero_gold": 205,
+        "predicted_on_zero_gold": 3,
+        "recall": 0.3291139240506329,
+        "recall_nonzero_gold": 0.4343220338983051,
+        "recall_zero_gold": 0.01875,
+        "rmse": 0.7875228934401258
+      },
+      "unaffected": {
+        "gold_asserted": 631,
+        "gold_asserted_nonzero": 82,
+        "gold_asserted_zero": 549,
+        "mae": 0.32142857142857145,
+        "predicted": 28,
+        "predicted_on_nonzero_gold": 19,
+        "predicted_on_zero_gold": 9,
+        "recall": 0.044374009508716325,
+        "recall_nonzero_gold": 0.23170731707317074,
+        "recall_zero_gold": 0.01639344262295082,
+        "rmse": 0.7791937224739796
+      }
+    },
+    "counted_precision": {
+      "count_bearing_matched_rows": 210,
+      "counted_extra_rows": 14,
+      "matched_rows": 548,
+      "precision_among_count_bearing_predictions": 0.9375,
+      "precision_vs_counted_gold_pmids": 0.9750889679715302
+    },
+    "elapsed_seconds": 7963.488568000001,
+    "f1": 0.7486338797814208,
+    "fn": 84,
+    "fp": 284,
+    "merged_notation_twin_rows": 0,
+    "papers": 118,
+    "precision": 0.6586538461538461,
+    "recall": 0.8670886075949367,
+    "token_usage": {
+      "input_tokens": 1978238,
+      "output_tokens": 782009,
+      "total_tokens": 2760247
+    },
+    "tp": 548
+  },
+  "overlay_sha256": "ad63c482de63b7f2e98c5e5bdea04c21d6ee6ce1d48f664100d05a1c8e6197b7",
+  "schema_version": 1,
+  "selection_sha256": "2502888f36f2c2126c37cbe2c5518720d35de37c915aeb6a82103bb79ec28721",
+  "status": "post_lock_source_backed_diagnostic"
+}

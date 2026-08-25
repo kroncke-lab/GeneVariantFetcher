@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-22.
+Last reviewed: 2026-08-24.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -74,6 +74,26 @@ change.
       counts, absorbing the vision lane's −22% saving — batching a paper's
       cards into one call is the standing lever if cost needs to fall.
       Only then stage the reviewer surface.
+
+      **2026-08-24 follow-through:** source adjudication did not support masking
+      either dominant KCNH2 value to improve the benchmark: PMID 16029385
+      supports the extracted 16-person clinical group while the fixture says 9,
+      and PMID 22338672 supports seven K897T torsades carriers while the fixture
+      says zero. Preserve both as answer-key review items and score any corrected
+      gold as a separately versioned snapshot. A generic grouped-header repair
+      was instead replayed on SCN5A PMID 29709101; together with structural-only
+      projection it yields the source-backed diagnostic in `RECALL_STATUS.md`
+      (548/632 recall matches; carrier MAE 0.226) without mutating the lock.
+      Remaining acceptance work is one fresh gold-free lock/post-lock score.
+      Paid experiment accounting is conservatively reserved at $10 of the $100
+      ceiling because `refresh_run_db.py` does not yet emit token traces; do not
+      make further paid calls until that telemetry defect is fixed.
+      Post-lock acquisition diagnostics also re-folded four run-local source
+      files (RYR2 19216760/22222782/34661651 and SCN5A 29544605); the immutable
+      predictions/report hashes are unchanged, but the source-binding check now
+      correctly detects those files as drifted. Restore the exact selection-
+      hashed snapshots from archival storage, or create a clean scaffold, before
+      treating this run directory as a source-valid parent for another lock.
 - [ ] **(superseded, kept for the staging half) Stage the 50/50/50 review
       set.** The batch itself (cruft sweep, prompt-caching split +
       verifier-effort fix, figure-vision cost controls, acquisition
@@ -135,6 +155,13 @@ change.
       The trusted Variant Browser import/publish path is fail-closed, but no
       public annotations were changed. The requested Claude desktop adversarial
       pass remains blocked because macOS is locked; Grok CLI review is complete.
+
+      The set is not a complete gold standard: only 3/150 papers overlap the
+      approved curated fixture and BMPR2 contributes zero. Before any claim of
+      150-paper precision, recall, or MAE, seal a human source-adjudicated
+      calibration/holdout design (recommended 60/40 within gene), report each
+      gene separately, and retain a never-tuned holdout. LLM review may prepare
+      evidence cards but may not define the answer key.
 - [ ] After an accepted rescore, update `docs/RECALL_STATUS.md`, append
       `docs/RECALL_HISTORY.md` and `docs/PROTOCOL_CHANGELOG.md`, and regenerate
       the dashboard. Until then, the public dashboard remains an archived

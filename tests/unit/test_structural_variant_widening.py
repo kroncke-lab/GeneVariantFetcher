@@ -291,6 +291,33 @@ def test_scanner_variant_dict_preserves_structural_and_splice_identity():
     assert splice["cdna_notation"] == "IVS9+1G>A"
 
 
+def test_migration_promotes_exact_structural_breakpoint_from_source_notation():
+    variant = {
+        "gene_symbol": "RYR2",
+        "cdna_notation": None,
+        "protein_notation": None,
+        "source_notation": "c.168-301_c.273+722del1128",
+        "variant_class": "exon_deletion",
+        "structural_description": "deletion of exon 3",
+    }
+
+    assert sanitize_variant_notation(variant) is True
+    assert variant["cdna_notation"] == "c.168-301_c.273+722del1128"
+
+
+def test_migration_replaces_invalid_cdna_with_exact_structural_source_breakpoint():
+    variant = {
+        "gene_symbol": "RYR2",
+        "cdna_notation": "c.168-301_c.273+722del1128 trailing-junk",
+        "source_notation": "c.168-301_c.273+722del1128",
+        "variant_class": "exon_deletion",
+        "structural_description": "deletion of exon 3",
+    }
+
+    assert sanitize_variant_notation(variant) is True
+    assert variant["cdna_notation"] == "c.168-301_c.273+722del1128"
+
+
 def test_structural_identity_is_stable_in_normalizer_and_sqlite(tmp_path):
     normalizer = VariantNormalizer("BRCA1")
     canonical = normalizer.get_canonical_form(
