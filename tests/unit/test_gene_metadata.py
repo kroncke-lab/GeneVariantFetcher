@@ -948,3 +948,24 @@ def test_oversized_gene_falls_back_to_point_lookups_not_silence(tmp_path, monkey
     assert lookup_variantfeatures_residue("BIGGENE", position=9999) is None
 
     clear_gene_metadata_cache()
+
+
+def test_brca2_has_a_registered_protein_length():
+    """BRCA2 was the gene with no bound at all.
+
+    ``variant_scanner`` falls back to ``PROTEIN_LENGTHS.get(gene, 9999)``, so an
+    unregistered BRCA2 accepted every parsed position -- including ones carried
+    in from a co-tabulated BRCA1 column. That made BRCA2 look cleaner than BRCA1
+    in held-identity audits when it was only unmeasured. 3418 is NP_000050.3,
+    the protein of MANE Select NM_000059.4.
+    """
+
+    from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
+
+    assert PROTEIN_LENGTHS["BRCA2"] == 3418
+
+    normalizer = VariantNormalizer("BRCA2")
+    assert normalizer.validate_position(3418) is True
+    assert normalizer.validate_position(3419) is False
+    # RYR2's 4,967 residues are the shape a multi-gene panel table leaks in.
+    assert normalizer.validate_position(4967) is False

@@ -138,6 +138,11 @@ def preferred_alias_protein(
 PROTEIN_LENGTHS = {
     "APOE": 317,
     "BRCA1": 1863,
+    # BRCA2 was the one cardiac-adjacent gene never registered here, so
+    # ``variant_scanner`` fell back to its 9999 default and gave BRCA2 no
+    # protein-position bound at all. That made BRCA2 look cleaner than BRCA1 in
+    # held-identity audits when it was only unmeasured.
+    "BRCA2": 3418,
     "MYBPC3": 1274,
     "KCNH2": 1159,
     "KCNQ1": 676,

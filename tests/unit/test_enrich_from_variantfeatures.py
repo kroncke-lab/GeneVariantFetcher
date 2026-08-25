@@ -529,3 +529,88 @@ def test_scn5a_q1077_enrichment_preserves_identity_and_other_gene_precedence(
     # coordinate reference remains an ordinary novel in-range allele.
     assert rows[3][3] == "residue_offset_suspect"
     assert rows[4][3] == "novel_in_range"
+
+
+# --- cDNA coding-range bound ------------------------------------------------
+#
+# The protein branch of ``classify_unmatched`` has always bounded residues
+# against the gene's length, but the cDNA-only branch returned
+# ``cdna_only_unmatched`` with no bound -- and that class is on the Variant
+# Browser trusted importer's admit-list. A BRCA2 allele written only in c.
+# notation therefore walked straight into a BRCA1 collaborator queue: 152 of
+# them were live on 2026-08-25, across 13 of the 50 BRCA1 papers, every one a
+# combined BRCA1/BRCA2 study.
+
+BRCA1_MAX_AA = 1863  # -> c. ceiling 5592
+BRCA2_MAX_AA = 3418  # -> c. ceiling 10257
+
+
+def test_cdna_coding_ceiling_is_three_bases_plus_the_stop_codon():
+    assert enrich.cdna_coding_ceiling(BRCA1_MAX_AA) == 5592
+    assert enrich.cdna_coding_ceiling(BRCA2_MAX_AA) == 10257
+    # An unknown gene has no ceiling and must not be bounded into quarantine.
+    assert enrich.cdna_coding_ceiling(0) == 0
+
+
+@pytest.mark.parametrize(
+    "cdna",
+    [
+        "c.5946delT",  # BRCA2 Ashkenazi founder allele
+        "c.6275_6276delTT",  # BRCA2 founder allele
+        "c.9485-1G>A",  # BRCA2 splice acceptor
+        "c.5722_5723delCT",
+    ],
+)
+def test_brca2_cdna_in_a_brca1_run_is_quarantined_not_admitted(cdna):
+    assert enrich.cdna_out_of_range(cdna, BRCA1_MAX_AA) is True
+    assert (
+        enrich.classify_unmatched("", cdna, BRCA1_MAX_AA, {}, {}) == "cdna_out_of_range"
+    )
+    # ...and the same allele is unremarkable in its own gene.
+    assert enrich.cdna_out_of_range(cdna, BRCA2_MAX_AA) is False
+    assert (
+        enrich.classify_unmatched("", cdna, BRCA2_MAX_AA, {}, {})
+        == "cdna_only_unmatched"
+    )
+
+
+@pytest.mark.parametrize(
+    "cdna",
+    [
+        "c.5592A>G",  # the last coding base
+        "c.5592+34G>T",  # intronic offset from an in-range base
+        "c.181T>G",
+        "c.-19G>A",  # 5' UTR: legitimately outside the CDS
+        "c.*103A>C",  # 3' UTR: likewise
+    ],
+)
+def test_in_range_and_utr_cdna_stays_admissible_for_brca1(cdna):
+    assert enrich.cdna_out_of_range(cdna, BRCA1_MAX_AA) is False
+    assert (
+        enrich.classify_unmatched("", cdna, BRCA1_MAX_AA, {}, {})
+        == "cdna_only_unmatched"
+    )
+
+
+def test_cdna_bound_never_fires_without_a_known_protein_length():
+    """A gene variantFeatures does not cover must keep its prior behaviour."""
+    assert enrich.cdna_out_of_range("c.99999A>G", 0) is False
+    assert (
+        enrich.classify_unmatched("", "c.99999A>G", 0, {}, {}) == "cdna_only_unmatched"
+    )
+
+
+def test_source_only_legacy_identity_still_outranks_the_cdna_bound():
+    """Legacy notation is resolved before the range check, as it always was."""
+    assert (
+        enrich.classify_unmatched(
+            "", "c.9485-1G>A", BRCA1_MAX_AA, {}, {}, legacy="4321delAC"
+        )
+        == "legacy_source_notation"
+    )
+
+
+def test_a_row_with_no_notation_is_unaffected_by_the_cdna_bound():
+    assert (
+        enrich.classify_unmatched("", "", BRCA1_MAX_AA, {}, {}) == "no_notation_suspect"
+    )

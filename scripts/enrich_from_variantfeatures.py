@@ -208,6 +208,42 @@ _PROT_CALL_RE = re.compile(
     r"^([ACDEFGHIKLMNPQRSTVWY])(\d{1,5})(?![0-9])", re.IGNORECASE
 )
 
+# A coding-sequence position, taken from the first coordinate in a c. call.
+# UTR coordinates (``c.-19``, ``c.*103``) legitimately sit outside the CDS and
+# carry a sign prefix, so they are excluded rather than measured.
+_CDNA_POS_RE = re.compile(r"c\.\s*(\d+)")
+_CDNA_UTR_RE = re.compile(r"c\.\s*[-*]")
+
+
+def cdna_coding_ceiling(max_pos: int) -> int:
+    """Highest c. coordinate this gene's CDS can hold, from its protein length.
+
+    Derived from the same variantFeatures-observed ``max_pos`` the protein guard
+    uses, so a new gene needs no registration: three bases per residue plus the
+    stop codon.  BRCA1's 1,863 residues give 5,592; BRCA2's 3,418 give 10,257.
+    """
+    return 3 * int(max_pos) + 3 if max_pos else 0
+
+
+def cdna_out_of_range(cdna: str, max_pos: int) -> bool:
+    """Whether a c. coordinate cannot exist in this gene at any position.
+
+    The protein branch of :func:`classify_unmatched` has always bounded residues
+    against ``max_pos``; the cDNA-only branch had no bound at all, so a BRCA2
+    allele written only in c. notation entered a BRCA1 run unchallenged.  152 of
+    them reached the BRCA1 collaborator queue that way, including the BRCA2
+    founder alleles ``c.5946delT`` and ``c.6275_6276delTT``.
+    """
+    ceiling = cdna_coding_ceiling(max_pos)
+    if not ceiling:
+        return False
+    text = (cdna or "").strip()
+    if _CDNA_UTR_RE.search(text):
+        return False
+    match = _CDNA_POS_RE.search(text)
+    return bool(match) and int(match.group(1)) > ceiling
+
+
 # The local MANE SCN5A slice is the prevalent 2,015-aa Q1077del isoform, while
 # a large body of clinical literature numbers the 2,016-aa Q1077-containing
 # isoform.  After residue 1077, a literature protein position N therefore maps
@@ -318,7 +354,17 @@ def classify_unmatched(
 
         if normalize_legacy_notation(legacy):
             return "legacy_source_notation"
-        return "cdna_only_unmatched" if "c." in c else "no_notation_suspect"
+        if "c." not in c:
+            return "no_notation_suspect"
+        # Same bound the protein branch applies below, in coding coordinates.
+        # Legacy BIC numbering can push a genuine call a little past the stop
+        # (BRCA1 BIC is RefSeq+119), so a handful of real rows are held here
+        # too. That is the intended trade for a reviewer queue whose contract
+        # is to withhold ambiguous identities rather than present them as
+        # reliable: 152 wrong-gene rows leave, ~9 ambiguous ones go with them.
+        if cdna_out_of_range(c, max_pos):
+            return "cdna_out_of_range"
+        return "cdna_only_unmatched"
     bare = p.replace("p.", "")
     m = _RES_RE.search(bare)
     if not m:
