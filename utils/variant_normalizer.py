@@ -360,20 +360,46 @@ _CDNA_SINGLE_ALLELE_BRACKET_RE = re.compile(
 )
 
 
+# Hyphen used as an HGVS *range* separator on an indel: "c.2550-2551insTG" is
+# the literature spelling of "c.2550_2551insTG". Restricted to strictly
+# adjacent coordinates so it can never reinterpret an intronic offset: an
+# insertion is by definition between two flanking adjacent nucleotides, whereas
+# an acceptor offset ("c.1234-1del", "c.2550-2A>G") has a right operand that is
+# a small offset, not the neighbouring coordinate. Anything with a "+"/"-"
+# operand of its own, or a wider span, is left alone and fails closed.
+_CDNA_HYPHEN_RANGE_RE = re.compile(
+    r"^(c\.)(\d+)-(\d+)(del|dup|ins)([ACGT]*)$", re.IGNORECASE
+)
+
+
+def _repair_hyphen_range(cleaned: str) -> str:
+    """Rewrite ``c.N-<N+1><op>`` to ``c.N_<N+1><op>``; otherwise return as-is."""
+    match = _CDNA_HYPHEN_RANGE_RE.match(cleaned)
+    if not match:
+        return cleaned
+    prefix, start, end, op, bases = match.groups()
+    if int(end) != int(start) + 1:
+        # Not adjacent: cannot distinguish a range from an intronic offset.
+        return cleaned
+    return f"{prefix}{start}_{end}{op}{bases}"
+
+
 def _preprocess_cdna_token(variant: str) -> str:
     """Character-level cleanup before any cDNA grammar sees the token.
 
     Publisher text substitutes typographic dashes for the HGVS minus, lets
-    whitespace leak inside the token, and wraps single alleles in brackets.
-    All three are presentation, not identity ("c.[999–424_1338 + 81del]" is
-    "c.999-424_1338+81del"). Multi-allele "c.[X];[Y]" is left unchanged.
+    whitespace leak inside the token, wraps single alleles in brackets, and
+    writes an indel range with a hyphen instead of the HGVS underscore. All
+    four are presentation, not identity ("c.[999–424_1338 + 81del]" is
+    "c.999-424_1338+81del"; "c.2550-2551insTG" is "c.2550_2551insTG").
+    Multi-allele "c.[X];[Y]" is left unchanged.
     """
     cleaned = _CDNA_DASH_RE.sub("-", variant)
     cleaned = re.sub(r"\s+", "", cleaned)
     bracket = _CDNA_SINGLE_ALLELE_BRACKET_RE.match(cleaned)
     if bracket:
         cleaned = f"{bracket.group(1)}{bracket.group(2)}"
-    return cleaned
+    return _repair_hyphen_range(cleaned)
 
 
 # IVS (splice) patterns - legacy notation.

@@ -12,6 +12,7 @@ import pytest
 
 from utils.variant_normalizer import (
     VariantNormalizer,
+    _preprocess_cdna_token,
     match_variants_fuzzy,
     match_variants_to_baseline,
     normalize_deletion,
@@ -184,6 +185,50 @@ def test_unparsed_protein_fall_through_drops_the_presentation_prefix():
 )
 def test_cdna_typography_is_normalized_before_grammar(raw):
     assert VariantNormalizer("SCN5A").normalize_cdna(raw) == "c.999-424_1338+81del"
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        # Literature writes the indel range separator as a hyphen. Adjacent
+        # coordinates are unambiguous: an insertion sits between two flanking
+        # neighbouring nucleotides, so this is presentation, not identity.
+        ("c.2550-2551insTG", "c.2550_2551insTG"),
+        ("c.2550-2551del", "c.2550_2551del"),
+        ("c.2550-2551dup", "c.2550_2551dup"),
+        # Intronic acceptor offsets keep the minus: the right operand is an
+        # offset, not the neighbouring coordinate.
+        ("c.1234-1del", "c.1234-1del"),
+        ("c.1234-12dup", "c.1234-12dup"),
+        # A wider span cannot be told apart from an offset, so it fails closed.
+        ("c.100-200del", "c.100-200del"),
+        # Operands carrying their own sign are never touched.
+        ("c.999-424_1338+81del", "c.999-424_1338+81del"),
+    ],
+    ids=[
+        "adjacent_ins_is_a_range",
+        "adjacent_del_is_a_range",
+        "adjacent_dup_is_a_range",
+        "acceptor_offset_del_kept",
+        "acceptor_offset_dup_kept",
+        "wide_span_fails_closed",
+        "offset_range_untouched",
+    ],
+)
+def test_hyphen_indel_range_separator(raw, expected):
+    assert _preprocess_cdna_token(raw) == expected
+
+
+def test_hyphen_range_repair_does_not_touch_substitutions():
+    """``c.2550-2A>G`` is a splice-acceptor substitution, not a range."""
+    assert _preprocess_cdna_token("c.2550-2A>G") == "c.2550-2A>G"
+    assert _preprocess_cdna_token("c.2550-2551A>G") == "c.2550-2551A>G"
+
+
+def test_hyphen_range_repair_makes_the_two_spellings_one_variant():
+    """The whole point: the two spellings must resolve to one identity."""
+    assert variants_match("c.2550-2551insTG", "c.2550_2551insTG", "SCN5A")
+    assert not variants_match("c.1234-1del", "c.1234_1235del", "SCN5A")
 
 
 def test_multi_allele_brackets_are_left_alone():
