@@ -97,21 +97,107 @@ def _read_pmids(path: Path) -> list[str]:
     return pmids
 
 
-def _split_for_pmid(
-    pmid: str,
+def _read_split_lock(path: Path) -> dict[str, str]:
+    """Read a cross-gene ``pmid,evaluation_split`` pin table.
+
+    A PMID that appears under more than one gene must land in the same split for
+    every one of them. Ranking is per gene, so without this table the same paper
+    can be calibration for one gene and holdout for another, and tuning on the
+    first gene's calibration silently burns the second gene's holdout.
+    """
+    pinned: dict[str, str] = {}
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.split("#", 1)[0].strip()
+        if not line or line.lower().startswith("pmid,"):
+            continue
+        parts = [part.strip() for part in line.split(",")]
+        if len(parts) != 2:
+            raise ValueError(f"invalid split-lock row {raw_line!r} in {path}")
+        pmid, split = parts
+        if not pmid.isdigit():
+            raise ValueError(f"invalid PMID {pmid!r} in {path}")
+        if split not in {"calibration", "holdout"}:
+            raise ValueError(f"invalid split {split!r} for PMID {pmid} in {path}")
+        if pinned.get(pmid, split) != split:
+            raise ValueError(f"conflicting split-lock entries for PMID {pmid}")
+        pinned[pmid] = split
+    return pinned
+
+
+def _read_canonical_sources(path: Path) -> dict[str, Path]:
+    """Read a ``pmid,source_path`` table binding one document per PMID.
+
+    A PMID shared by two genes is harvested once per gene, so the two packets
+    can bind different bytes for the same paper. Curators then adjudicate
+    different documents under one PMID and the frozen SHA-256 is a per-packet
+    guarantee rather than a per-paper one. This table pins the single document
+    every gene must use.
+    """
+    canonical: dict[str, Path] = {}
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.split("#", 1)[0].strip()
+        if not line or line.lower().startswith("pmid,"):
+            continue
+        pmid, _, source = line.partition(",")
+        pmid, source = pmid.strip(), source.strip()
+        if not pmid.isdigit() or not source:
+            raise ValueError(f"invalid canonical-source row {raw_line!r} in {path}")
+        resolved = Path(source).expanduser().resolve()
+        if not resolved.is_file():
+            raise ValueError(f"canonical source for PMID {pmid} is missing: {resolved}")
+        if canonical.get(pmid, resolved) != resolved:
+            raise ValueError(f"conflicting canonical sources for PMID {pmid}")
+        canonical[pmid] = resolved
+    return canonical
+
+
+def _split_assignments(
     gene: str,
     seed: int,
     calibration_n: int,
     all_pmids: list[str],
-) -> str:
-    """Stable hash-ranked calibration/holdout assignment."""
+    pinned: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """Stable hash-ranked calibration/holdout assignment, honouring pins.
+
+    Pinned PMIDs take their locked split first; the remaining calibration slots
+    are filled from the unpinned PMIDs in hash order. Per-gene calibration size
+    is preserved exactly, so pinning shifts which papers move rather than how
+    many.
+    """
+    pinned = pinned or {}
+    relevant = {pmid: pinned[pmid] for pmid in all_pmids if pmid in pinned}
+    forced_calibration = [
+        pmid for pmid in all_pmids if relevant.get(pmid) == "calibration"
+    ]
+    if len(forced_calibration) > calibration_n:
+        raise ValueError(
+            f"{gene}: split lock pins {len(forced_calibration)} calibration PMIDs, "
+            f"more than --calibration-n {calibration_n}"
+        )
     ranked = sorted(
         all_pmids,
         key=lambda value: hashlib.sha256(
             f"{seed}|{gene}|{value}".encode("utf-8")
         ).hexdigest(),
     )
-    return "calibration" if pmid in set(ranked[:calibration_n]) else "holdout"
+    calibration = list(forced_calibration)
+    chosen = set(calibration)
+    for pmid in ranked:
+        if len(calibration) >= calibration_n:
+            break
+        if pmid in chosen or relevant.get(pmid) == "holdout":
+            continue
+        calibration.append(pmid)
+        chosen.add(pmid)
+    if len(calibration) < calibration_n:
+        raise ValueError(
+            f"{gene}: split lock leaves only {len(calibration)} calibration PMIDs, "
+            f"fewer than --calibration-n {calibration_n}"
+        )
+    return {
+        pmid: ("calibration" if pmid in chosen else "holdout") for pmid in all_pmids
+    }
 
 
 def _protocol_md(
@@ -217,6 +303,25 @@ def main() -> int:
         help="Calibration papers in the exact roster; the remainder is holdout.",
     )
     ap.add_argument(
+        "--split-lock",
+        type=Path,
+        help=(
+            "Cross-gene 'pmid,evaluation_split' pin table. Required whenever a "
+            "cohort shares PMIDs across genes: ranking is per gene, so an "
+            "unpinned shared paper can be calibration for one gene and holdout "
+            "for another, which burns the holdout firewall."
+        ),
+    )
+    ap.add_argument(
+        "--canonical-source",
+        type=Path,
+        help=(
+            "Cross-gene 'pmid,source_path' table pinning one document per PMID. "
+            "Without it, a paper harvested under two genes can be bound to "
+            "different bytes in each packet."
+        ),
+    )
+    ap.add_argument(
         "--phenotype-label",
         default="the study phenotype",
         help="Human-readable phenotype definition used in the protocol.",
@@ -234,6 +339,19 @@ def main() -> int:
     gene = args.gene.upper()
     pool = _full_text_papers(run_dir, args.min_fulltext_bytes)
     pool_by_pmid = {pmid: (path, size) for pmid, path, size in pool}
+    if args.canonical_source:
+        try:
+            canonical = _read_canonical_sources(
+                args.canonical_source.expanduser().resolve()
+            )
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+        # Only rebind PMIDs this gene actually harvested; the table is shared
+        # across genes and names papers outside this roster.
+        for pmid, source in canonical.items():
+            if pmid in pool_by_pmid:
+                pool_by_pmid[pmid] = (source, source.stat().st_size)
     if args.pmids_file:
         exact_pmids = _read_pmids(args.pmids_file.expanduser().resolve())
         missing = [pmid for pmid in exact_pmids if pmid not in pool_by_pmid]
@@ -247,12 +365,18 @@ def main() -> int:
         if not 0 <= args.calibration_n <= len(exact_pmids):
             print("error: --calibration-n is outside the exact roster", file=sys.stderr)
             return 2
-        split_by_pmid = {
-            pmid: _split_for_pmid(
-                pmid, gene, args.seed, args.calibration_n, exact_pmids
+        try:
+            pinned = (
+                _read_split_lock(args.split_lock.expanduser().resolve())
+                if args.split_lock
+                else {}
             )
-            for pmid in exact_pmids
-        }
+            split_by_pmid = _split_assignments(
+                gene, args.seed, args.calibration_n, exact_pmids, pinned
+            )
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
         selected_pmids = [
             pmid
             for pmid in exact_pmids
@@ -263,7 +387,11 @@ def main() -> int:
             (pmid, pool_by_pmid[pmid][0], pool_by_pmid[pmid][1])
             for pmid in selected_pmids
         ]
-        selection_method = "exact_roster_sha256_ranked_split_v1"
+        selection_method = (
+            "exact_roster_sha256_ranked_split_v2_locked"
+            if pinned
+            else "exact_roster_sha256_ranked_split_v2"
+        )
     else:
         if args.evaluation_split != "all":
             print("error: split packets require --pmids-file", file=sys.stderr)
@@ -363,6 +491,22 @@ def main() -> int:
             args.pmids_file.expanduser().resolve().read_bytes()
         ).hexdigest()
         if args.pmids_file
+        else None,
+        "split_lock": str(args.split_lock.expanduser().resolve())
+        if args.split_lock
+        else None,
+        "split_lock_sha256": hashlib.sha256(
+            args.split_lock.expanduser().resolve().read_bytes()
+        ).hexdigest()
+        if args.split_lock
+        else None,
+        "canonical_source": str(args.canonical_source.expanduser().resolve())
+        if args.canonical_source
+        else None,
+        "canonical_source_sha256": hashlib.sha256(
+            args.canonical_source.expanduser().resolve().read_bytes()
+        ).hexdigest()
+        if args.canonical_source
         else None,
     }
     (out / "packet_meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")

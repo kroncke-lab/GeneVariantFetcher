@@ -1,0 +1,11 @@
+pmid,source_path
+# One document per shared PMID. Largest capture wins: per-run
+# FULL_CONTEXT differs because supplement folding mutates it.
+18627636,results/vb_curated150_20260824/BRCA1/20260824_181400/pmc_fulltext/18627636_FULL_CONTEXT.md
+19949876,results/vb_curated150_20260824/BRCA2/20260824_181400/pmc_fulltext/19949876_FULL_CONTEXT.md
+21232165,results/vb_curated150_20260824/BRCA2/20260824_181400/pmc_fulltext/21232165_FULL_CONTEXT.md
+22713736,results/vb_curated150_20260824/BRCA1/20260824_181400/pmc_fulltext/22713736_FULL_CONTEXT.md
+22970155,results/vb_curated150_20260824/BRCA2/20260824_181400/pmc_fulltext/22970155_FULL_CONTEXT.md
+23683081,results/vb_curated150_20260824/BRCA1/20260824_181400/pmc_fulltext/23683081_FULL_CONTEXT.md
+25948282,results/vb_curated150_20260824/BRCA1/20260824_181400/pmc_fulltext/25948282_FULL_CONTEXT.md
+26848529,results/vb_curated150_20260824/BRCA1/20260824_181400/pmc_fulltext/26848529_FULL_CONTEXT.md

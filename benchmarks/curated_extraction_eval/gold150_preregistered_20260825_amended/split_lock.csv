@@ -1,0 +1,12 @@
+pmid,evaluation_split
+# Cross-gene firewall pins. A PMID under >1 gene must take one
+# global split. Conflicts resolve to holdout so a shared paper is
+# never tuned on via another gene's calibration.
+18627636,holdout
+19949876,holdout
+21232165,holdout
+22713736,holdout
+22970155,holdout
+23683081,holdout
+25948282,holdout
+26848529,calibration

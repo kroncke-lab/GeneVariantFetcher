@@ -1,3 +1,15 @@
+> **SUPERSEDED 2026-08-25 — do not curate from this tree.**
+>
+> This split has a cross-gene firewall breach: six PMIDs are calibration for one
+> gene and holdout for another, so five of the twenty BRCA1 holdout papers are
+> BRCA2 calibration papers. Seven of the eight cross-gene PMIDs are also bound to
+> different source bytes per gene. Both defects, the cause, and the fix are
+> documented in `../gold150_preregistered_20260825_amended/README.md`.
+>
+> This directory is preserved unchanged as the original preregistration. Use
+> `../gold150_preregistered_20260825_amended/` for all curation and scoring.
+> `EVALUATION_PLAN.md` and `SCORE_RUNBOOK.md` here remain in force for both.
+
 # Gold-150 preregistered human evaluation
 
 This directory freezes the evaluation design for the 150 source-screened papers

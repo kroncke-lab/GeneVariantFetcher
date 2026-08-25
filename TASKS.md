@@ -38,15 +38,56 @@ until the preceding gate passes and its artifact is recorded.
 - [x] Preregister the exact BRCA1/BRCA2/BMPR2 150-paper evaluation as 30
       calibration + 20 holdout papers per gene, with frozen source hashes,
       exhaustive-paper precision, explicit `NONE`, and family-count exclusion.
-- [ ] Obtain exhaustive, source-grounded human answer keys for the 90
-      calibration papers. LLM predictions may locate evidence but may not
-      create, approve, or edit the key.
-- [ ] Freeze one calibration-informed candidate, release the 60 holdout papers,
-      and score holdout exactly once. Until then, exact-150 P/R/F-score/MAE are
-      undefined.
+- [x] **Close the gold-150 cross-gene holdout firewall (2026-08-25).** The
+      original split ranked `sha256("<seed>|<GENE>|<PMID>")`, so a PMID shared by
+      two genes was ranked independently under each. Six PMIDs were calibration
+      for one gene and holdout for another, putting **5 of the 20 BRCA1 holdout
+      papers into BRCA2 calibration**; seven of the eight cross-gene PMIDs were
+      also bound to different source bytes per gene. Fixed before any answer key
+      existed. **Curate from
+      `benchmarks/curated_extraction_eval/gold150_preregistered_20260825_amended/`**;
+      the 20260824 tree is preserved and marked superseded. Verify with
+      `scripts/audit_split_firewall.py` before curation and again before holdout
+      release. Known residual: the holdout roster is tracked in git, so this
+      cohort is answer-key blind, not roster-sequestered.
+- [~] **DESCOPED 2026-08-25 (Brett): do not curate the BRCA1/BRCA2/BMPR2 150.**
+      The 90-calibration + 60-holdout human curation effort is not being run.
+      The cardiac **gold-120** set is the human-curated standard to work
+      against. The amended packets and the firewall audit remain on disk as
+      correct, parked artifacts; the split-lock/canonical-source support in
+      `build_curation_packet.py` and `scripts/audit_split_firewall.py` are kept
+      because they are general packet infrastructure, not 150-specific. Do not
+      spend human curation time here without Brett reopening it.
+      Exact-150 P/R/F-score/MAE stay **undefined**, not zero.
 - [ ] Obtain the missing KCNH2 PMID 29650123 mutation roster from an author or
       other provenance-valid source. The publisher's only supplement has no
       roster; never infer its 20 missing singleton identities from gold.
+- [ ] **Remove gold-derived data from the runtime path.**
+      `gvf_data/kcnh2_variant_aliases.json` declares
+      `"source": "Gold standard Excel + generated forms"` (856 variants / 4,766
+      aliases) and is loaded at runtime by `_lookup_alias`
+      (`utils/variant_normalizer.py:1588`) for every gene. KCNH2 is a gold-120
+      gene, so KCNH2 normalization has access to the answer key. Re-matching all
+      554 locked pairs with the lookup stubbed out gives 554/554, so the current
+      score is **not** manufactured by score-time lookup — but extraction-time
+      influence cannot be recovered from normalized predictions. Rebuild the map
+      from public notation resources, or gate it out of production and keep it as
+      a benchmark-only input. Details:
+      `docs/evidence/generalization_consult_20260825.md` §1.
+- [ ] **Report the two provenance lanes separately.** The headline mixes paper
+      extraction with ClinVar/PubTator linkage. Locked-DB replay: paper-derived
+      only is 512/125/120 (P 80.38%, R 81.01%) versus 554/283/78 (P 66.19%,
+      R 87.66%) linkage-assisted. Linkage FPs are KCNQ1 79, SCN5A 72, KCNH2 7,
+      RYR2 0 — which is why RYR2 looks clean, and why "the top five FP papers are
+      just gold-incomplete" is too strong (95 of those 162 extras are linkage
+      rows, including all 63 on KCNQ1 19632626). Do not delete linkage rows.
+- [ ] **Ship the ranked $0 generality fixes** in
+      `docs/evidence/generalization_consult_20260825.md` §8, in order: HGVS
+      range-separator repair (`c.2550-2551insTG` vs `c.2550_2551insTG` currently
+      does not match), malformed-protein-range refusal, reference-backed 3'
+      shift (predicted 555/279/77), the provenance-lane scorecard, and end-to-end
+      count loss in place of conditional MAE as the decision metric. Neither
+      external reviewer authorized another paid gold-118 extraction.
 
 Budget: **$44.51906260 used / $55.48093740 remaining**. The final AHA
 source-bound lock cost $11.24050705 by the established public-price proxy and

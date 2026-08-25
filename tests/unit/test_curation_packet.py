@@ -5,11 +5,13 @@ import json
 
 import pytest
 
+from scripts import audit_split_firewall
 from scripts.build_curation_packet import (
     _full_text_papers,
     _protocol_md,
     _read_pmids,
-    _split_for_pmid,
+    _read_split_lock,
+    _split_assignments,
     _title,
 )
 from scripts.score_curation_packet import (
@@ -58,16 +60,62 @@ def test_exact_roster_reader_and_split_are_stable(tmp_path):
     roster = tmp_path / "pmids.txt"
     roster.write_text("333\n111 # retained\n222\n", encoding="utf-8")
     assert _read_pmids(roster) == ["333", "111", "222"]
-    first = {
-        pmid: _split_for_pmid(pmid, "BRCA2", 42, 2, _read_pmids(roster))
-        for pmid in _read_pmids(roster)
-    }
-    second = {
-        pmid: _split_for_pmid(pmid, "BRCA2", 42, 2, _read_pmids(roster))
-        for pmid in reversed(_read_pmids(roster))
-    }
+    first = _split_assignments("BRCA2", 42, 2, _read_pmids(roster))
+    second = _split_assignments("BRCA2", 42, 2, list(reversed(_read_pmids(roster))))
     assert first == second
     assert list(first.values()).count("calibration") == 2
+
+
+def test_split_lock_keeps_a_shared_pmid_on_one_side_of_the_firewall():
+    """A shared PMID must not be calibration for one gene and holdout for another.
+
+    Ranking is per gene, so without the lock the same paper can land on both
+    sides and tuning on the first gene's calibration burns the second gene's
+    holdout while every per-gene manifest still looks self-consistent.
+    """
+    roster = [str(pmid) for pmid in range(100, 110)]
+    unlocked = {
+        gene: _split_assignments(gene, 42, 6, roster) for gene in ("BRCA1", "BRCA2")
+    }
+    conflicted = [
+        pmid for pmid in roster if unlocked["BRCA1"][pmid] != unlocked["BRCA2"][pmid]
+    ]
+    assert conflicted, "fixture must contain a cross-gene disagreement to pin"
+
+    pinned = {pmid: unlocked["BRCA1"][pmid] for pmid in conflicted}
+    locked = {
+        gene: _split_assignments(gene, 42, 6, roster, pinned)
+        for gene in ("BRCA1", "BRCA2")
+    }
+    for pmid in conflicted:
+        assert locked["BRCA1"][pmid] == locked["BRCA2"][pmid] == pinned[pmid]
+    for gene in ("BRCA1", "BRCA2"):
+        assert list(locked[gene].values()).count("calibration") == 6
+
+
+def test_split_lock_rejects_overfull_and_conflicting_pins(tmp_path):
+    roster = [str(pmid) for pmid in range(100, 106)]
+    with pytest.raises(ValueError, match="more than --calibration-n"):
+        _split_assignments(
+            "BRCA1", 42, 2, roster, {pmid: "calibration" for pmid in roster[:3]}
+        )
+    with pytest.raises(ValueError, match="fewer than --calibration-n"):
+        _split_assignments(
+            "BRCA1", 42, 5, roster, {pmid: "holdout" for pmid in roster[:3]}
+        )
+    lock = tmp_path / "lock.csv"
+    lock.write_text("pmid,evaluation_split\n111,calibration\n111,holdout\n")
+    with pytest.raises(ValueError, match="conflicting split-lock"):
+        _read_split_lock(lock)
+
+
+def test_read_split_lock_parses_comments_and_header(tmp_path):
+    lock = tmp_path / "lock.csv"
+    lock.write_text(
+        "pmid,evaluation_split\n# shared with BRCA2\n111,holdout\n222,calibration\n",
+        encoding="utf-8",
+    )
+    assert _read_split_lock(lock) == {"111": "holdout", "222": "calibration"}
 
 
 def test_exact_roster_reader_rejects_duplicates(tmp_path):
@@ -243,3 +291,41 @@ def test_family_count_is_not_scored_as_individual_mae(tmp_path):
 def test_write_pmid_scope_keeps_none_papers(tmp_path):
     path = write_pmid_scope({"333", "111"}, "BRCA2", tmp_path)
     assert path.read_text(encoding="utf-8") == "111\n333\n"
+
+
+# --- cross-gene split firewall audit ----------------------------------------
+
+
+def _packet(root, gene, split, rows):
+    d = root / gene / split
+    d.mkdir(parents=True)
+    with (d / "manifest.csv").open("w", newline="", encoding="utf-8") as handle:
+        w = csv.writer(handle)
+        w.writerow(["pmid", "evaluation_split", "n_bytes", "source_sha256"])
+        for pmid, nbytes, sha in rows:
+            w.writerow([pmid, split, nbytes, sha])
+
+
+def test_split_firewall_audit_flags_conflicting_split_and_source(tmp_path):
+    _packet(tmp_path, "BRCA1", "calibration", [("111", 10, "aa")])
+    _packet(tmp_path, "BRCA1", "holdout", [("222", 20, "bb")])
+    # 222 is holdout for BRCA1 but calibration for BRCA2, and its bound source
+    # bytes differ, so both defect classes must be reported.
+    _packet(tmp_path, "BRCA2", "calibration", [("222", 99, "cc")])
+    _packet(tmp_path, "BRCA2", "holdout", [("333", 30, "dd")])
+
+    splits, sources, total, shared = audit_split_firewall.audit(tmp_path)
+    assert total == 3 and shared == 1
+    assert splits == ["222: BRCA1=holdout, BRCA2=calibration"]
+    assert sources and sources[0].startswith("222: ")
+
+
+def test_split_firewall_audit_passes_a_consistent_tree(tmp_path):
+    _packet(tmp_path, "BRCA1", "calibration", [("111", 10, "aa")])
+    _packet(tmp_path, "BRCA1", "holdout", [("222", 20, "bb")])
+    _packet(tmp_path, "BRCA2", "calibration", [("444", 40, "ee")])
+    _packet(tmp_path, "BRCA2", "holdout", [("222", 20, "bb")])
+
+    splits, sources, total, shared = audit_split_firewall.audit(tmp_path)
+    assert shared == 1
+    assert splits == [] and sources == []
