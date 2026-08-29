@@ -62,6 +62,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   blanket warning suppression.
 - Removed obsolete embedded demo/command runners while retaining their tested
   importable implementations.
+- Documentation drift audit: current-facing docs no longer copy retired cohort
+  counts (`README.md`, `benchmarks/curated_extraction_eval/README.md` now defer
+  to `benchmarks/evaluation_tiers/registry.json` as the count authority);
+  `OUTPUT_FORMAT.md` publishes the real four-column variant `UNIQUE` key;
+  `ARCHITECTURE.md` extension points name the live publisher-client attributes
+  and `EXTRACTION_SYSTEM_PROMPT`/`EXTRACTION_USER_PROMPT` instead of a
+  nonexistent `self.publishers` list and `EXTRACTION_PROMPT`; `CONTRIBUTING.md`
+  brings a new gene up with `gvf-run` rather than the debug `extract` command;
+  `manifest-schema.md` includes the `refetch` stage. Dated records that still
+  read as current are now scoped in place rather than moved: the descoped
+  150-paper curation step and the 2026-08-13 rollout sizes in
+  `PROTOCOL_COST_EVAL.md`, the stale baseline DBs behind `TESTING.md`, and the
+  schema/`*.db`-in-git advice in `SQLITE_MIGRATION_GUIDE.md`. Also dropped a
+  `ruff.toml` exclude for a directory that does not exist and catalogued
+  `scripts/audit_split_firewall.py`.
 
 ## Historical development snapshot — 2026-07-10
 

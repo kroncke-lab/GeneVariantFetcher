@@ -76,8 +76,10 @@ The gate must report, by stratum:
 - cardiac, BRCA, and at least one cold-gene result separately.
 
 Variant Browser should receive quarantine diffs and calibration samples rather
-than every paper. The canonical three-stage rollout is defined in
-`benchmarks/evaluation_tiers/`; larger cohorts run only after smaller gates pass.
+than every paper. The canonical rollout tiers are defined in
+`benchmarks/evaluation_tiers/` (its `README.md` and `registry.json` are the
+authority for how many there are); larger cohorts run only after smaller gates
+pass.
 
 ## Generalization boundary
 

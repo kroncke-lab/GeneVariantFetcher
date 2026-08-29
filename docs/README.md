@@ -1,6 +1,6 @@
 # GVF Documentation Map
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-25.
 
 Use this page to distinguish current operating instructions from dated evidence.
 When two documents disagree, use the authority order below rather than choosing
@@ -20,7 +20,11 @@ the newest-looking filename.
 | How do I run a new gene or move to another machine? | [`NEW_GENE_RUNBOOK.md`](NEW_GENE_RUNBOOK.md) and [`END_TO_END_RECALL_RUN.md`](END_TO_END_RECALL_RUN.md) |
 | What files and schema are produced? | [`OUTPUT_FORMAT.md`](OUTPUT_FORMAT.md); executable schema in `harvesting/migrate_to_sqlite.py` |
 | How does review-gold exchange work? | [`VARIANT_BROWSER_INTEGRATION.md`](VARIANT_BROWSER_INTEGRATION.md) |
-| Which evaluation cohorts are active? | [`../benchmarks/evaluation_tiers/README.md`](../benchmarks/evaluation_tiers/README.md) |
+| Which evaluation cohorts are active? | [`../benchmarks/evaluation_tiers/README.md`](../benchmarks/evaluation_tiers/README.md) — its `registry.json` is the count authority |
+| Which credentials do I need, and what works without them? | [`API_KEYS.md`](API_KEYS.md) |
+| How are per-call prompts, responses, and decisions traced? | [`LLM_TRACING.md`](LLM_TRACING.md) |
+| What is the stage-manifest JSON contract? | [`manifest-schema.md`](manifest-schema.md) — executable authority is `utils/manifest.py` |
+| How do I smoke-test a fresh checkout? | [`TESTING.md`](TESTING.md) — a paste-prompt, not a metric authority |
 
 `CLAUDE.md` is the canonical agent handoff. `AGENTS.md` and `CODEX.md` are
 pointer files only. The handoff may summarize stable operating constraints, but

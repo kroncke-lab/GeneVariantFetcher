@@ -1,5 +1,6 @@
-"""Integrity checks for the three canonical paper-evaluation tiers."""
+"""Integrity checks for the four canonical paper-evaluation tiers."""
 
+import csv
 import hashlib
 import json
 from collections import Counter
@@ -37,7 +38,7 @@ def _pmids(path):
     ]
 
 
-def test_registry_names_exactly_three_ordered_active_tiers():
+def test_registry_names_exactly_four_ordered_active_tiers():
     registry = json.loads((TIERS / "registry.json").read_text())
     tiers = registry["tiers"]
 
@@ -46,8 +47,9 @@ def test_registry_names_exactly_three_ordered_active_tiers():
         "gold_50",
         "gold_120",
         "reviewer_545",
+        "gold_120b",
     ]
-    assert [tier["order"] for tier in tiers] == [1, 2, 3]
+    assert [tier["order"] for tier in tiers] == [1, 2, 3, 4]
 
 
 def test_tier_manifests_match_registry_counts_and_valid_pmids():
@@ -143,6 +145,76 @@ def test_gold_expansion_is_separate_from_the_full_reviewer_backlog():
     assert ("BRCA2", "19944633") not in tier3
 
     assert not tier2 <= tier3
+
+
+def test_tier4_is_a_seeded_replication_tranche_of_the_same_gold_rule():
+    registry = json.loads((TIERS / "registry.json").read_text())
+    tier = next(t for t in registry["tiers"] if t["id"] == "gold_120b")
+    actual = _rows(TIERS / tier["manifest"])
+
+    assert tier["selection_seed"] == 2026082501
+    assert tier["role"] == "scored_gold_replication"
+    assert Counter(gene for gene, _ in actual) == Counter(
+        {"BRCA2": 5, "KCNH2": 30, "KCNQ1": 30, "RYR2": 30, "SCN5A": 30}
+    )
+    # Same eligibility helper as tier 2, so the two tranches stay comparable.
+    for gene in ("KCNH2", "KCNQ1", "RYR2", "SCN5A", "BRCA2"):
+        eligible = gold_count_eligible_pmids(DEFAULT_GOLD, gene)
+        assert {pmid for row_gene, pmid in actual if row_gene == gene} <= eligible
+    for quarantined in (
+        ("KCNH2", "10086972"),
+        ("KCNH2", "14642689"),
+        ("BRCA2", "19944633"),
+    ):
+        assert quarantined not in actual
+
+
+def test_tier4_shares_no_article_with_any_prior_scored_or_staged_surface():
+    """Replication only means something on text nothing has been tuned against.
+
+    Attempt-level disjointness is not enough: a multi-gene paper already scored
+    under KCNQ1 has had its tables and supplements optimized against, and
+    BRCA1/BRCA2 output that differs only in the gene column is a recorded
+    failure here. So the check is at PMID level, across every prior surface.
+    """
+    tier4 = {pmid for _, pmid in _rows(TIERS / "tier4_gold_120b.tsv")}
+
+    prior = set()
+    for manifest in (
+        "tier1_gold_50.tsv",
+        "tier2_gold_120.tsv",
+        "tier3_reviewer_545.tsv",
+    ):
+        prior.update(pmid for _, pmid in _rows(TIERS / manifest))
+    gold150 = REVIEW / "gold150_preregistered_20260824"
+    for template in gold150.glob("*/*/curation_template.csv"):
+        with template.open(newline="", encoding="utf-8-sig") as handle:
+            prior.update(
+                (row.get("pmid") or "").strip()
+                for row in csv.DictReader(handle)
+                if (row.get("pmid") or "").strip()
+            )
+
+    assert tier4 & prior == set()
+
+
+def test_tier4_answer_key_is_frozen_and_covers_every_drawn_paper():
+    provenance = json.loads((TIERS / "tier4_gold_120b_selection.json").read_text())
+    rows = _rows(TIERS / "tier4_gold_120b.tsv")
+
+    assert provenance["gold_value_blinded"] is True
+    assert provenance["exclusion_level"] == "pmid"
+    assert {(p["gene"], p["pmid"]) for p in provenance["papers"]} == set(rows)
+    # Every drawn paper is bound to the exact source bytes it was drawn on.
+    assert all(len(p["source_sha256"]) == 64 for p in provenance["papers"])
+
+    key_root = TIERS / "gold_120b_answer_key"
+    for entry in provenance["answer_key"]:
+        key = key_root / entry["file"]
+        assert hashlib.sha256(key.read_bytes()).hexdigest() == entry["sha256"]
+        with key.open(newline="", encoding="utf-8-sig") as handle:
+            key_pmids = {(r.get("pmid") or "").strip() for r in csv.DictReader(handle)}
+        assert key_pmids == {pmid for gene, pmid in rows if gene == entry["gene"]}
 
 
 def test_corrected_brca2_50_extends_the_safe_45_without_restoring_exclusions():

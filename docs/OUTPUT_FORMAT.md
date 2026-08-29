@@ -94,7 +94,7 @@ CREATE TABLE variants (
     protein_notation TEXT,
     genomic_position TEXT,
     clinical_significance TEXT,
-    UNIQUE(gene_symbol, protein_notation)
+    UNIQUE(gene_symbol, cdna_notation, protein_notation, genomic_position)
 );
 ```
 

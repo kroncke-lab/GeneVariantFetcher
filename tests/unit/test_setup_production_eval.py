@@ -56,6 +56,36 @@ def test_live_gold120_contract_is_the_corrected_118_attempt_cohort():
     assert ("KCNH2", "14642689") not in contract["rows"]
 
 
+def test_gold120b_replication_tranche_resolves_as_its_own_scored_tier():
+    """A second scored tranche must be runnable without editing the guard.
+
+    The tier check used to hardcode ``gold_120``, so a registered and pinned
+    replication tranche could never reach extraction. It is now an explicit
+    ``--tier-id`` opt-in, which keeps the guard's real job: refusing a manifest
+    nobody deliberately named.
+    """
+    manifest = setup.TIERS / "tier4_gold_120b.tsv"
+    contract = setup.cohort_contract(manifest, setup.DEFAULT_REGISTRY)
+
+    assert contract["id"] == "gold_120b"
+    assert contract["selection_seed"] == 2026082501
+    assert contract["attempt_count"] == 125
+    assert contract["gene_attempt_counts"] == {
+        "BRCA2": 5,
+        "KCNH2": 30,
+        "KCNQ1": 30,
+        "RYR2": 30,
+        "SCN5A": 30,
+    }
+    # The default stays gold_120, so an unflagged run cannot silently pick it up.
+    assert (
+        setup.parser()
+        .parse_args(["create", "--run-id", "r", "--email", "e@example.com"])
+        .tier_id
+        == "gold_120"
+    )
+
+
 def test_generated_extraction_is_calibrated_blinded_and_nonpublishing(tmp_path: Path):
     script = setup.make_extraction_script(
         run_dir=tmp_path / "run",

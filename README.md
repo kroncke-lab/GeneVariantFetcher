@@ -121,10 +121,11 @@ exclusions with `scripts/manage_review_gold.py`. Release scoring uses
 `scripts/run_recall_suite.py --review-gold-sync required`; see
 [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md).
 
-For protocol rollout, use only the three manifests in
-[`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md): 50
-gold-scored attempts, 120 manually curated cardiac-gold attempts, then the 546-attempt full
-reviewer backlog. The strategy-diverse
+For protocol rollout, use only the manifests in
+[`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md). That
+README and its `registry.json` are the authority for which tiers are active and
+for their exact attempt counts; do not copy those counts into other documents.
+The strategy-diverse
 [`curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md)
 remains a specialized regression fixture, not a fourth rollout cohort. Confirm
 headline changes with the full recall scorer before claiming a metric.

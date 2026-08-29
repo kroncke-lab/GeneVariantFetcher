@@ -61,13 +61,24 @@ the 60-paper holdout and score it once. Spend the remaining $55.48 only on a
 calibration-informed, pre-frozen candidate or on one holdout extraction if the
 frozen existing DB is not the candidate.
 
-## Canonical rollout sizes (updated 2026-08-13)
+> **Superseded as a next step on 2026-08-25.** `TASKS.md` descoped the
+> BRCA1/BRCA2/BMPR2 150-paper curation: it is not being run, the cardiac
+> **gold-120** set is the human-curated standard, and exact-150 metrics stay
+> undefined. The dollar envelope above is still current; the paragraph's
+> *next-step assignment* is not. `TASKS.md` owns the next gate.
 
-The only active progression is 50 gold-scored gene–paper attempts, then 120
-manually curated cardiac-gold attempts (116 unique PMIDs), then the 546-attempt
-full reviewer backlog (507 unique PMIDs). Cross-gene papers are intentionally processed once
-per gene–disease workspace, so provider cost scales with attempts, not unique
-PMIDs.
+## Canonical rollout sizes (as measured 2026-08-13)
+
+> These are the 2026-08-13 tier sizes, retained because the cost figures in this
+> document are derived from them. They are **not** the current tier list —
+> `benchmarks/evaluation_tiers/README.md` and its `registry.json` are the count
+> authority, and the counts have since changed.
+
+The active progression at that date was 50 gold-scored gene–paper attempts, then
+120 manually curated cardiac-gold attempts (116 unique PMIDs), then the
+546-attempt full reviewer backlog (507 unique PMIDs). Cross-gene papers are
+intentionally processed once per gene–disease workspace, so provider cost scales
+with attempts, not unique PMIDs.
 
 The patched gold-120 revalidation supplies the current exact trace-derived
 measurement. The 120 attempts used 527 calls, 2,351,247 tokens, and 7,903.6

@@ -33,17 +33,21 @@ Install pre-commit hooks after the project environment is active:
    ```
    Format: JSON mapping alias → canonical variant (see `gvf_data/kcnh2_variant_aliases.json` for example)
 
-3. **Run discovery** to find papers:
+3. **Run the gene** with the turnkey entry point. `gvf-run` is the production
+   path; it runs doctor checks, extraction, source QC and recovery, scoring
+   handoff, and corpus sync:
    ```bash
-   gvf extract GENE --email "$NCBI_EMAIL" --output ./results \
-     --max-pmids 500 --max-downloads 0
+   gvf gvf-run GENE --email "$NCBI_EMAIL" --output ./results
    ```
 
-4. **Test extraction** on a few papers before full run:
+4. **Bound the first pass** while you sanity-check a new gene:
    ```bash
-   gvf extract GENE --email "$NCBI_EMAIL" --output ./results \
-     --max-pmids 50 --max-downloads 10 --scout-first
+   gvf gvf-run GENE --email "$NCBI_EMAIL" --output ./results --max-pmids 50
    ```
+
+   The lower-level `gvf extract` command still exists for debugging individual
+   stages, but it is not the way to bring up a new gene. Cold-start flow for a
+   gene with no gold standard: [`docs/NEW_GENE_RUNBOOK.md`](docs/NEW_GENE_RUNBOOK.md).
 
 ## Extending Extractors
 

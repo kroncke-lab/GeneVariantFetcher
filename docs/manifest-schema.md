@@ -42,7 +42,7 @@ Manifests are stored alongside processed data:
     },
     "stage": {
       "type": "string",
-      "enum": ["download", "scout", "extract", "migrate"],
+      "enum": ["download", "scout", "extract", "migrate", "refetch"],
       "description": "Pipeline stage that produced this manifest"
     },
     "gene": {

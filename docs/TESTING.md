@@ -1,5 +1,15 @@
 # GVF Thorough Test Prompt
 
+> **This is a paste-prompt, not an authority.** It is a smoke harness for "does
+> a fresh checkout still work end to end", and it is deliberately not wired into
+> CI. Two cautions before you trust its output:
+> - Step 7 scores the local `validation_runs/canonical_baseline/` DBs, which are
+>   gitignored operator data from June 2026. They will **not** reproduce the
+>   accepted lock reported in [`RECALL_STATUS.md`](RECALL_STATUS.md). Treat step
+>   7 as "the scorer runs", not as a headline metric.
+> - The per-paper expectations below (for example the figure-variant count in
+>   step 6) are from an older run and may drift without anything being broken.
+
 Paste this into any agent (Claude Code, codex, etc.) standing in front of a
 fresh checkout of GeneVariantFetcher. It exercises every layer of the
 pipeline and the post-extraction recovery stack, then scores against the

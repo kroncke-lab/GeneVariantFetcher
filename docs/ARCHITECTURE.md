@@ -601,15 +601,16 @@ Checkpoints are stored in `~/.gvf_jobs/{job_id}/checkpoint.json` with atomic wri
            pass
    ```
 
-2. Register in `harvesting/orchestrator.py`:
+2. Register in `harvesting/orchestrator.py`. Publisher clients are named
+   attributes constructed in `__init__`, not a list:
    ```python
-   self.publishers = [
-       ElsevierAPI(),
-       SpringerAPI(),
-       WileyAPI(),
-       YourNewPublisherAPI(),  # Add here
-   ]
-   ```
+   self.elsevier_api = ElsevierAPIClient(...)
+   self.wiley_api = WileyAPIClient(...)
+   self.springer_api = SpringerAPIClient(...)
+   self.your_new_api = YourNewPublisherClient(...)  # add here, then call it
+   ```                                              # from the download path
+   Authenticated browser strategies are a separate, dynamically discovered
+   plugin system under `harvesting/browser_html/strategies/`.
 
 ### Adding a New Gene
 
@@ -633,12 +634,13 @@ See `docs/NEW_GENE_RUNBOOK.md` for the full add-a-gene flow.
 
 ### Customizing Extraction Prompts
 
-Modify `pipeline/prompts.py`:
+Edit [`EXTRACTION_CONTRACT.md`](EXTRACTION_CONTRACT.md) first, then mirror the
+change in `pipeline/prompts.py`. The live names are `EXTRACTION_SYSTEM_PROMPT`
+and `EXTRACTION_USER_PROMPT` (each with a compact twin) — there is no single
+`EXTRACTION_PROMPT`:
 ```python
-EXTRACTION_PROMPT = """
-Your custom extraction instructions here.
-Focus on specific data types relevant to your use case.
-"""
+EXTRACTION_SYSTEM_PROMPT = (...)   # role, refusals, output contract
+EXTRACTION_USER_PROMPT = """TARGET GENE: {gene_symbol} ..."""
 ```
 
 ### Adding New Output Formats

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-08-21",
+  "as_of": "2026-08-25",
   "count_unit": "gene_paper_attempt",
   "tiers": [
     {
@@ -73,7 +73,28 @@
         }
       },
       "role": "full_reviewer_backlog"
+    },
+    {
+      "id": "gold_120b",
+      "order": 4,
+      "manifest": "tier4_gold_120b.tsv",
+      "sha256": "5265761e59a637f38130962dab2c9ff138029da9f075d4dc84e33eb76203a913",
+      "attempt_count": 125,
+      "unique_pmid_count": 124,
+      "gene_attempt_counts": {
+        "BRCA2": 5,
+        "KCNH2": 30,
+        "KCNQ1": 30,
+        "RYR2": 30,
+        "SCN5A": 30
+      },
+      "selection_seed": 2026082501,
+      "role": "scored_gold_replication"
     }
   ],
-  "empty_legacy_workspaces": ["ALPL", "N4BP2L1", "TTR"]
+  "empty_legacy_workspaces": [
+    "ALPL",
+    "N4BP2L1",
+    "TTR"
+  ]
 }

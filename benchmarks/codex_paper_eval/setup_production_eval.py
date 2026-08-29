@@ -308,9 +308,14 @@ def create(args: argparse.Namespace) -> Path:
     manifest = args.paper_manifest.resolve()
     registry = args.registry.resolve()
     contract = cohort_contract(manifest, registry)
-    if contract.get("id") != "gold_120":
+    # Fail closed on the tier, but let a caller name a different scored one.
+    # Hardcoding gold_120 meant a second scored tranche could be registered and
+    # pinned yet never run; requiring --tier-id to opt in keeps the guard's real
+    # job, which is refusing a manifest nobody deliberately chose.
+    if contract.get("id") != args.tier_id:
         raise SetupError(
-            f"production setup expects registry tier gold_120, got {contract.get('id')}"
+            f"production setup expects registry tier {args.tier_id}, "
+            f"got {contract.get('id')}"
         )
     if int(contract.get("selection_seed")) != args.seed:
         raise SetupError(
@@ -475,6 +480,15 @@ def parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--run-id", required=True)
     create_parser.add_argument("--email", required=True)
     create_parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    create_parser.add_argument(
+        "--tier-id",
+        default="gold_120",
+        help=(
+            "Registry tier the manifest must resolve to. Pair it with that "
+            "tier's --paper-manifest and --seed (e.g. --tier-id gold_120b "
+            "--paper-manifest tier4_gold_120b.tsv --seed 2026082501)."
+        ),
+    )
     create_parser.add_argument("--minimum-chars", type=int, default=2000)
     create_parser.add_argument("--paper-manifest", type=Path, default=DEFAULT_MANIFEST)
     create_parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)

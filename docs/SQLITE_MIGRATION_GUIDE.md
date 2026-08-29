@@ -1,6 +1,18 @@
 # SQLite Migration Guide
 
-This guide explains how to migrate your Gene Variant Fetcher data from file-based storage to a SQLite database.
+> **Scope note.** SQLite is no longer an optional migration target — it is the
+> primary run output, produced automatically by `gvf-run`. Read this document as
+> the **rebuild/replay CLI reference and query cookbook** for
+> `python -m harvesting.migrate_to_sqlite`, which is still the live path used by
+> `pipeline/steps.py` and `scripts/refresh_run_db.py`.
+> It is **not** the schema authority: `create_schema()` in
+> `harvesting/migrate_to_sqlite.py` is executable truth and
+> [`OUTPUT_FORMAT.md`](OUTPUT_FORMAT.md) is the documented reference. The
+> abridged DDL below omits later columns (`legacy_notation`, `variant_class`,
+> `field_trust`).
+
+This guide explains how to migrate Gene Variant Fetcher extraction JSON into a
+SQLite database, and how to rebuild or replay an existing run's database.
 
 ## Overview
 
@@ -224,7 +236,9 @@ After migration:
 
 1. **Backup database**: `cp variants.db variants.db.backup`
 2. **Keep archived files**: Don't delete `pmc_fulltext.zip`
-3. **Version control**: Consider adding to git (if < 100MB)
+3. **Version control**: Do **not** commit databases. `.gitignore` ignores
+   `*.db` deliberately — run DBs are regenerable operator data, and the
+   external corpus plus extraction JSON are the durable inputs.
 
 ## Troubleshooting
 
@@ -317,7 +331,6 @@ Potential improvements:
 - **Web interface**: Flask/Django app for browsing
 - **Export functions**: Export to CSV, Excel, or JSON
 - **Incremental updates**: Add new extractions without re-migration
-- **Multi-database**: Separate databases per gene
 - **Full-text search**: SQLite FTS5 for text search
 
 ## Support

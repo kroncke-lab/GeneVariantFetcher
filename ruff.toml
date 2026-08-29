@@ -18,6 +18,5 @@ exclude = [
     ".git",
     "__pycache__",
     "*.egg-info",
-    "docs/examples/*",    # Example scripts may have issues
     "tests/*",            # Test files have pre-existing issues
 ]

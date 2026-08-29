@@ -61,6 +61,7 @@ Use these when preparing human review packets or Variant Browser round trips.
 | --- | --- |
 | `ingest_review_adjudications.py` | Import Variant Browser adjudication exports. |
 | `build_curation_packet.py` | Build cold-start manual-curation packets. |
+| `audit_split_firewall.py` | Audit a calibration/holdout split for cross-arm article leakage before curation and before holdout release. |
 | `score_curation_packet.py` | Convert reviewed packets into recall inputs and score them. |
 | `build_adjudication_sheet.py` | Build reviewer spreadsheet inputs. |
 | `build_adjudication_html.py` | Build static reviewer HTML from adjudication data. |

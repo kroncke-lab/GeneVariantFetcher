@@ -190,7 +190,7 @@ into GVF's local gold SQLite cache, see
 After completion, you'll find:
 
 ```
-./results/KCNH2/20260210_143022/
+./results/KCNH2/<RUN_TIMESTAMP>/
 ├── KCNH2.db                        # ← SQLite database (query this!)
 ├── KCNH2_pmids.txt                 # Discovered PMIDs
 ├── KCNH2_penetrance_summary.json   # Aggregated penetrance data
@@ -218,7 +218,7 @@ Papers with extractions: 72
 Total variants found: 234
 Success rate: 32%
 
-SQLite database: ./results/KCNH2/20260210_143022/KCNH2.db
+SQLite database: ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
 ================================================================================
 ```
 
@@ -226,7 +226,7 @@ SQLite database: ./results/KCNH2/20260210_143022/KCNH2.db
 
 ```bash
 # Open the database
-sqlite3 ./results/KCNH2/20260210_143022/KCNH2.db
+sqlite3 ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
 
 # Count variants
 sqlite> SELECT COUNT(*) FROM variants;

@@ -3,8 +3,10 @@
 
 The Elsevier full-text API returns body markdown only; a paper recovered via
 that route lands without its ``mmc`` supplement files (where the mutation tables
-usually live). This is the single largest supplement-recall bucket
-(~31% of the gold-missing-variant gap; see docs/SUPPLEMENT_ACQUISITION_PLAN.md).
+usually live). As measured in June 2026 this was the single largest
+supplement-recall bucket, ~31% of the then gold-missing-variant gap; see the
+historical summary in docs/SUPPLEMENT_ACQUISITION_PLAN.md and docs/RECALL_STATUS.md
+for current numbers.
 
 For each target paper this script: reads the DOI from the corpus
 ``{pmid}_artifacts.json``, fetches the authenticated full-text XML
