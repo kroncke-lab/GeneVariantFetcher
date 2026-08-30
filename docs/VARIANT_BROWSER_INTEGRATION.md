@@ -122,6 +122,40 @@ the reversible legacy-identity reconciliation are recorded in
 `benchmarks/codex_paper_eval/runs/20260813_experimental_146/VARIANT_BROWSER_PUBLICATION.md`.
 This was a staging-only refresh; `publish_annotations` was not run.
 
+### Reviewer-queue refresh, remaining eight genes (2026-08-29)
+
+The eight reviewer workspaces still carrying May--July extractions (APOE,
+KCNH2, KCNQ1, LMNA, MYBPC3, RYR2, SCN5A, TTN) were re-extracted on the current
+protocol (git `7a484f9`, gold-free, `--no-source-recovery`, corpus-fed) against
+their pinned `tier3_reviewer_545.tsv` rosters (ranked
+`reviewer_pmids_50_20260811` order for LMNA/TTN) and imported under dataset
+label `collaborator_reviewer50_20260829`. Runs live in
+`results/vb_reviewer8_20260829/`. Every import preflighted 50 -> 50 papers
+(add 0, remove 0) and disturbed no adjudications. `publish_annotations` was
+again deliberately not run.
+
+| Gene | Papers | Live evidence | Individuals | Exact fact sources |
+| --- | ---: | ---: | ---: | ---: |
+| APOE | 50 | 71 | 48 | 254 |
+| KCNH2 | 50 | 13,115 | 12,416 | 83,285 |
+| KCNQ1 | 50 | 2,242 | 1,127 | 6,604 |
+| LMNA | 50 | 287 | 141 | 750 |
+| MYBPC3 | 50 | 1,758 | 858 | 7,653 |
+| RYR2 | 50 | 2,836 | 1,193 | 9,635 |
+| SCN5A | 50 | 4,169 | 2,784 | 15,391 |
+| TTN | 50 | 2,334 | 126 | 625 |
+
+Evidence volumes moved in both directions by design: KCNH2 rose 5,167 ->
+13,115 while SCN5A (10,268 -> 4,169) and RYR2 (26,130 -> 2,836) shrank because
+the current trusted projection and per-fact trust gate refuse unverified
+identities and inferred counts the May-era imports still carried. APOE fell
+374 -> 71: its literature reports e2/e3/e4 genotype frequencies, which the
+no-inference contract will not convert into carrier counts, and 23 of its old
+variants were provably wrong-gene. One RYR2 paper (PMID 32508047, a WES study
+with a ~20 MB genome-wide folded supplement) wedged the data-zone scanner; its
+run-local context was restored to the paper-only pre-fold text and the corpus
+copy left untouched.
+
 For the fixed curated benchmark, publish the benchmark DBs only to the
 Variant_Browser staging/review surface, not the public site:
 
