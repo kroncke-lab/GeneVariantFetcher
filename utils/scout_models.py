@@ -91,6 +91,16 @@ class DataZoneReport(BaseModel):
     zones: list[DataZone] = Field(
         default_factory=list, description="List of all identified data zones"
     )
+    scan_truncated: bool = Field(
+        default=False,
+        description=(
+            "True when the scan hit its wall-clock budget and returned no "
+            "zones. Callers must not write a DATA_ZONES file from a "
+            "truncated report; extraction should fall back to the "
+            "un-condensed source instead of silently losing the unscanned "
+            "tail."
+        ),
+    )
 
     @property
     def kept_zones(self) -> list[DataZone]:

@@ -1602,6 +1602,16 @@ def run_data_scout(
             pmid = md_file.name.replace("_FULL_CONTEXT.md", "")
             report = scout.scan(content, pmid=pmid)
 
+            if report.scan_truncated:
+                # Budget exhausted: writing a partial DATA_ZONES would
+                # silently hide the unscanned tail from extraction.
+                logger.warning(
+                    f"Scout budget exhausted for {md_file.name}; "
+                    "no DATA_ZONES written (extraction uses the full source)"
+                )
+                errors += 1
+                continue
+
             if report.zones_kept > 0:
                 condensed = scout.format_markdown(report, content)
                 output_file = md_file.with_name(

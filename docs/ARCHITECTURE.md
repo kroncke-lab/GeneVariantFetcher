@@ -58,6 +58,8 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │ STEP 2.5: Data Scout (optional)                                                  │
 │   • Identifies high-value data zones (tables, methods sections)                  │
 │   • Creates condensed context for LLM extraction                                 │
+│   • Wall-clock budget (SCOUT_SCAN_BUDGET_SECONDS, default 300): an exhausted     │
+│     scan writes NO DATA_ZONES so extraction falls back to the full source        │
 │   OUTPUT: pmc_fulltext/{PMID}_DATA_ZONES.md                                      │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │

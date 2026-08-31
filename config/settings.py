@@ -717,6 +717,17 @@ class Settings(BaseSettings):
         validation_alias="SCOUT_USE_CONDENSED",
         description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction",
     )
+    scout_scan_budget_seconds: float = Field(
+        default=300.0,
+        validation_alias="SCOUT_SCAN_BUDGET_SECONDS",
+        description=(
+            "Wall-clock budget for a single Data Scout scan; 0 disables. On "
+            "exhaustion the scan returns no zones (scan_truncated=True) and "
+            "no DATA_ZONES file is written, so extraction falls back to the "
+            "un-condensed source instead of one pathological file wedging "
+            "the run (RYR2 PMID 32508047 sat 2h45m+ in the pre-budget scan)"
+        ),
+    )
 
     # Extraction Tuning
     extraction_max_chars: int = Field(

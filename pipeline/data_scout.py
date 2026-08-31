@@ -13,6 +13,7 @@ Task: Analyze text (or supplement chunk). Identify ANY section that contains spe
 import json
 import logging
 import re
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -22,6 +23,37 @@ from pipeline.source_quality import demote_empty_full_context
 from utils.scout_models import DataZone, DataZoneReport
 
 logger = logging.getLogger(__name__)
+
+# Hard bounds so a single pathological file cannot wedge a whole run (RYR2
+# PMID 32508047: a 14.5 MB binary-garbage supplement fold produced ~18K fake
+# pipe tables and the per-candidate bookkeeping went quadratic — 2h45m+ at
+# 100% CPU). Every regex call gets bounded input, every per-candidate lookup
+# gets a bounded window, and scan() enforces a wall-clock budget between them.
+#
+# Longest regex input taken from one physical line. Real table rows top out
+# around a few KB; anything longer is a converter artifact, and one match in
+# the first 20K chars is enough to classify the line.
+_MAX_LINE_SCAN_CHARS = 20_000
+# Longest regex input for signal *counting* (paragraph triggers, zone
+# scoring). Zones keep their full extent; only the heuristic counts are
+# computed on a bounded prefix.
+_MAX_SIGNAL_SCAN_CHARS = 200_000
+# _find_parent_section only accepts a header ending within 10_000 chars of
+# the zone, so searching a slightly larger window is semantics-preserving
+# (the slack covers the header match's own length).
+_PARENT_SECTION_DISTANCE_CHARS = 10_000
+_PARENT_SECTION_WINDOW_CHARS = _PARENT_SECTION_DISTANCE_CHARS + 100
+# Caption/header walk-backs above a detected table. Real captions sit within
+# a few lines; without a cap, adjacent pipe-line runs make each separator row
+# re-walk the whole region above it (quadratic).
+_CAPTION_LOOKBACK_LINES = 200
+_PSEUDO_HEADER_LOOKBACK_LINES = 50
+# How often the line loops poll the scan deadline.
+_DEADLINE_CHECK_EVERY_LINES = 256
+
+
+class ScanBudgetExceeded(Exception):
+    """Raised internally when a scan exceeds its wall-clock budget."""
 
 
 def select_scout_source_path(
@@ -87,18 +119,28 @@ class GeneticDataScout:
     """
 
     # Patterns for detecting individual-level data (keep=True signals)
+    #
+    # Repeat-bounding rule for every pattern class below: a repeat whose
+    # failure forces the engine to re-count at each start position (an
+    # unbounded token repeat followed by a required literal, or chained
+    # `\s*`/optional-group runs) must carry an explicit upper bound. On
+    # normal text the bounds are far above anything real; on pathological
+    # content (multi-MB uppercase/digit runs, huge whitespace pads from
+    # converter output) they turn quadratic scans into linear ones.
     INDIVIDUAL_PATTERNS = [
         r"\bpatient[- ]?\d+",  # Patient 1, Patient-1, Patient1
         r"\bcase[- ]?\d+",  # Case 1, Case-62, Case1
         r"\bproband\b",  # proband
         r"\bindex\s*case\b",  # index case
-        r"\b[IVX]+-\d+\b",  # Pedigree notation: II-1, III-2, IV-1
+        r"\b[IVX]{1,7}-\d{1,4}\b",  # Pedigree notation: II-1, III-2, IV-1
         r"\b[Pp]\d+\b",  # P1, P2 (patient IDs)
         r"\bsubject\s*\d+",  # Subject 1
         r"\bfamily\s*[A-Z]\b",  # Family A, Family B
         r"\bindividual\s*\d+",  # Individual 1
         r"\d+-year-old\s*(male|female|man|woman|boy|girl)",  # Age/sex pattern
-        r"\bage\s*(at\s*)?(onset|diagnosis|evaluation)\s*[:=]?\s*\d+",  # Age at onset: 45
+        # Age at onset: 45 (bounded gaps: three chained \s* around optionals
+        # backtrack quadratically over long whitespace pads)
+        r"\bage\s{0,10}(at\s{0,10})?(onset|diagnosis|evaluation)\s{0,10}[:=]?\s{0,10}\d+",
         r"\bpresented\s+with\b",  # "presented with"
         r"\bdiagnosed\s+with\b",  # "diagnosed with"
         r"\bcarrier\s+(status|of)\b",  # carrier status, carrier of
@@ -111,8 +153,8 @@ class GeneticDataScout:
         r"\b\d+%\s+of\s+(patients|carriers|individuals|cases)",  # 20% of patients
         r"\bon\s+average\b",  # on average
         r"\boverall\b",  # overall
-        r"\bmean\s*(age|value)?\s*[:=]?\s*\d+",  # mean age, mean value
-        r"\bmedian\s*(age|value)?\s*[:=]?\s*\d+",  # median age
+        r"\bmean\s{0,10}(age|value)?\s{0,10}[:=]?\s{0,10}\d+",  # mean age, mean value
+        r"\bmedian\s{0,10}(age|value)?\s{0,10}[:=]?\s{0,10}\d+",  # median age
         r"\bstatistical(ly)?\s*(analysis|significant)",  # statistical analysis
         r"\bp\s*[<>=]\s*0\.\d+",  # p-value notation
         r"\bpreviously\s+reported\b",  # previously reported
@@ -133,11 +175,16 @@ class GeneticDataScout:
         r"p\.\([A-Z][a-z]{2}\d+[A-Z][a-z]{2}\)",  # Protein with parens: p.(Arg412His)
         r"[A-Z]\d+[A-Z]",  # Single-letter: R412H, G628S
         r"[A-Z][a-z]{2}\d+[A-Z][a-z]{2}",  # Three-letter without p.: Arg412His
-        r"\d+\s*[ACGT]\s*>\s*[ACGT]",  # Nucleotide position: 1234 G>A
+        # Nucleotide position: 1234 G>A (bounded: unbounded \d+/\s* re-count
+        # long digit runs at every start position when no >[ACGT] follows)
+        r"\d{1,10}\s{0,5}[ACGT]\s{0,5}>\s{0,5}[ACGT]",
         r"del[A-Z]{2,}",  # Deletion: delAG, delCT
         r"ins[A-Z]{2,}",  # Insertion: insAG
         r"IVS\d+[+-]\d+[ACGT]>[ACGT]",  # Intronic legacy: IVS2+1G>A
-        r"[A-Z][A-Z0-9]{2,}-[A-Z]\d+[A-Z]",  # Gene-mutation: KCNH2-T895M, SCN5A-G1743R
+        # Gene-mutation: KCNH2-T895M, SCN5A-G1743R (bounded gene token: an
+        # unbounded [A-Z0-9]{2,} re-counts multi-MB uppercase/digit runs —
+        # DNA/protein sequence — at every start position, O(n^2))
+        r"[A-Z][A-Z0-9]{2,11}-[A-Z]\d{1,5}[A-Z]",
     ]
 
     # Clinical keywords for relevance scoring (from centralized constants)
@@ -164,7 +211,11 @@ class GeneticDataScout:
     ]
 
     def __init__(
-        self, gene_symbol: str, min_relevance_score: float = 0.1, max_zones: int = 30
+        self,
+        gene_symbol: str,
+        min_relevance_score: float = 0.1,
+        max_zones: int = 30,
+        scan_budget_seconds: Optional[float] = None,
     ):
         """
         Initialize the Genetic Data Scout.
@@ -173,8 +224,17 @@ class GeneticDataScout:
             gene_symbol: Target gene symbol to search for (e.g., "KCNQ1", "BRCA1")
             min_relevance_score: Minimum score (0.0-1.0) to include a zone
             max_zones: Maximum number of zones to return
+            scan_budget_seconds: Wall-clock budget for a single scan() call.
+                None resolves from settings (SCOUT_SCAN_BUDGET_SECONDS);
+                0 or negative disables the budget. When the budget runs out,
+                scan() returns an empty report with ``scan_truncated=True``
+                instead of wedging the run — callers must then fall back to
+                the un-condensed source rather than write a partial
+                DATA_ZONES file that silently hides the unscanned tail.
         """
         self.gene_symbol = gene_symbol.upper()
+        self.scan_budget_seconds = scan_budget_seconds
+        self._deadline: Optional[float] = None
         self.gene_pattern = re.compile(
             rf"\b{re.escape(self.gene_symbol)}\b", re.IGNORECASE
         )
@@ -213,25 +273,58 @@ class GeneticDataScout:
             f"Scanning for data zones in {len(text)} characters for gene {self.gene_symbol}"
         )
 
-        # Detect all candidate zones
-        candidates = []
-        candidates.extend(self._detect_tables(text))
-        candidates.extend(self._detect_clinical_text(text))
+        budget = self.scan_budget_seconds
+        if budget is None:
+            budget = self._settings_scan_budget_seconds()
+        started = time.monotonic()
+        self._deadline = started + budget if budget and budget > 0 else None
 
-        # Merge overlapping candidates
-        candidates = self._merge_overlapping(candidates)
+        try:
+            # Detect all candidate zones
+            candidates = []
+            candidates.extend(self._detect_tables(text))
+            candidates.extend(self._detect_clinical_text(text))
 
-        # Score and convert to DataZone objects
-        zones = []
-        for candidate in candidates:
-            zone = self._score_and_create_zone(candidate, text, len(zones))
-            # Always keep TABLE zones (they often contain variant data)
-            # For TEXT zones, apply relevance threshold
-            if (
-                candidate.zone_type == "TABLE"
-                or zone.relevance_score >= self.min_relevance_score
-            ):
-                zones.append(zone)
+            # Merge overlapping candidates
+            candidates = self._merge_overlapping(candidates)
+
+            # Score and convert to DataZone objects
+            zones = []
+            for candidate in candidates:
+                self._check_deadline()
+                zone = self._score_and_create_zone(candidate, text, len(zones))
+                # Always keep TABLE zones (they often contain variant data)
+                # For TEXT zones, apply relevance threshold
+                if (
+                    candidate.zone_type == "TABLE"
+                    or zone.relevance_score >= self.min_relevance_score
+                ):
+                    zones.append(zone)
+        except ScanBudgetExceeded:
+            elapsed = time.monotonic() - started
+            logger.warning(
+                "Data scout scan budget exhausted for PMID %s after %.1fs "
+                "(%d chars, budget %.0fs); returning no zones so extraction "
+                "falls back to the un-condensed source",
+                pmid,
+                elapsed,
+                len(text),
+                budget or 0.0,
+            )
+            return DataZoneReport(
+                pmid=pmid,
+                gene_symbol=self.gene_symbol,
+                total_zones_found=0,
+                zones_kept=0,
+                zones_discarded=0,
+                total_chars_original=len(text),
+                total_chars_condensed=0,
+                compression_ratio=0.0,
+                zones=[],
+                scan_truncated=True,
+            )
+        finally:
+            self._deadline = None
 
         # Sort by relevance score (descending) and limit
         zones.sort(key=lambda z: z.relevance_score, reverse=True)
@@ -263,6 +356,39 @@ class GeneticDataScout:
 
         return report
 
+    @staticmethod
+    def _settings_scan_budget_seconds() -> float:
+        """Resolve the default scan budget from settings (0 = unlimited)."""
+        try:
+            from config.settings import get_settings
+
+            settings = get_settings()
+            return float(settings.scout_scan_budget_seconds) if settings else 0.0
+        except Exception:  # noqa: BLE001 - budget is a guard, never a crash
+            return 0.0
+
+    def _check_deadline(self) -> None:
+        """Raise ScanBudgetExceeded once the scan's wall-clock budget is spent."""
+        if self._deadline is not None and time.monotonic() > self._deadline:
+            raise ScanBudgetExceeded
+
+    @staticmethod
+    def _line_offsets(lines: list[str]) -> list[int]:
+        """Prefix sums: offsets[i] is the char offset where line i starts.
+
+        Replaces the per-candidate ``sum(len(lines[j]) + 1 for j in range(k))``
+        bookkeeping, which re-walked every preceding line for every detected
+        table (quadratic once a pathological file yields thousands of them).
+        Matches that sum exactly, including the trailing +1 for the final
+        line's absent newline.
+        """
+        offsets = [0] * (len(lines) + 1)
+        total = 0
+        for i, line in enumerate(lines):
+            total += len(line) + 1
+            offsets[i + 1] = total
+        return offsets
+
     def _detect_tables(self, text: str) -> list[ZoneCandidate]:
         """
         Detect markdown tables and their surrounding context.
@@ -275,16 +401,19 @@ class GeneticDataScout:
         """
         candidates = []
         lines = text.split("\n")
+        offsets = self._line_offsets(lines)
 
         # First pass: detect markdown tables
-        candidates.extend(self._detect_markdown_tables(lines, text))
+        candidates.extend(self._detect_markdown_tables(lines, text, offsets))
 
         # Second pass: detect pseudo-tabular data (common in PDF extractions)
-        candidates.extend(self._detect_pseudo_tables(lines, text))
+        candidates.extend(self._detect_pseudo_tables(lines, text, offsets))
 
         return candidates
 
-    def _detect_pseudo_tables(self, lines: list[str], text: str) -> list[ZoneCandidate]:
+    def _detect_pseudo_tables(
+        self, lines: list[str], text: str, offsets: list[int]
+    ) -> list[ZoneCandidate]:
         """
         Detect pseudo-tabular data that isn't in markdown format.
 
@@ -297,7 +426,11 @@ class GeneticDataScout:
         i = 0
 
         while i < len(lines):
-            line = lines[i]
+            if i % _DEADLINE_CHECK_EVERY_LINES == 0:
+                self._check_deadline()
+            # Bounded regex input: one match in the head of an absurdly long
+            # "line" (a converter artifact, not a table row) is enough.
+            line = lines[i][:_MAX_LINE_SCAN_CHARS]
 
             # Check for lines with tab-separated or multi-column variant data
             has_tabs = "\t" in line
@@ -308,8 +441,10 @@ class GeneticDataScout:
             if (has_tabs or has_multiple_spaces) and variant_matches >= 1:
                 table_start = i
 
-                # Look backward for table header/caption
-                while table_start > 0:
+                # Look backward for table header/caption (bounded: without a
+                # cap, keyword-dense regions make every detection re-walk the
+                # whole region above it)
+                while table_start > max(0, i - _PSEUDO_HEADER_LOOKBACK_LINES):
                     prev_line = lines[table_start - 1].strip().lower()
                     if not prev_line:
                         break
@@ -333,7 +468,9 @@ class GeneticDataScout:
                 # Look forward for table end
                 table_end = i + 1
                 while table_end < len(lines):
-                    next_line = lines[table_end]
+                    if table_end % _DEADLINE_CHECK_EVERY_LINES == 0:
+                        self._check_deadline()
+                    next_line = lines[table_end][:_MAX_LINE_SCAN_CHARS]
                     next_has_structure = "\t" in next_line or "  " in next_line
                     next_variant_matches = sum(
                         1 for p in self._variant_patterns if p.search(next_line)
@@ -350,8 +487,8 @@ class GeneticDataScout:
 
                 # Only create zone if we found a substantial table (3+ rows)
                 if table_end - table_start >= 3:
-                    char_start = sum(len(lines[j]) + 1 for j in range(table_start))
-                    char_end = sum(len(lines[j]) + 1 for j in range(table_end))
+                    char_start = offsets[table_start]
+                    char_end = offsets[table_end]
                     raw_text = "\n".join(lines[table_start:table_end])
 
                     candidates.append(
@@ -375,32 +512,39 @@ class GeneticDataScout:
         return candidates
 
     def _detect_markdown_tables(
-        self, lines: list[str], text: str
+        self, lines: list[str], text: str, offsets: list[int]
     ) -> list[ZoneCandidate]:
         """Detect standard markdown tables with |---| separators."""
         candidates = []
 
         i = 0
         while i < len(lines):
-            line = lines[i]
+            if i % _DEADLINE_CHECK_EVERY_LINES == 0:
+                self._check_deadline()
+            line = lines[i][:_MAX_LINE_SCAN_CHARS]
 
             # Check for table separator row (|---|---|)
             if re.match(r"\s*\|[-:| ]+\|", line):
                 # Found a table - find its boundaries
                 table_start_line = i
 
-                # Look backward for table caption and header
+                # Look backward for table caption and header (bounded: in a
+                # pipe-dense region — e.g. binary garbage folded as text —
+                # every separator row would otherwise re-walk all the pipe
+                # lines above it, going quadratic)
                 caption = None
-                while table_start_line > 0:
+                while table_start_line > max(0, i - _CAPTION_LOOKBACK_LINES):
                     prev_line = lines[table_start_line - 1].strip()
                     if not prev_line:
                         break
                     if prev_line.startswith("|") or any(
-                        p.search(prev_line) for p in self._table_caption_patterns
+                        p.search(prev_line[:_MAX_LINE_SCAN_CHARS])
+                        for p in self._table_caption_patterns
                     ):
                         table_start_line -= 1
                         if any(
-                            p.search(prev_line) for p in self._table_caption_patterns
+                            p.search(prev_line[:_MAX_LINE_SCAN_CHARS])
+                            for p in self._table_caption_patterns
                         ):
                             caption = prev_line
                     else:
@@ -409,6 +553,8 @@ class GeneticDataScout:
                 # Look forward for table end
                 table_end_line = i + 1
                 while table_end_line < len(lines):
+                    if table_end_line % _DEADLINE_CHECK_EVERY_LINES == 0:
+                        self._check_deadline()
                     next_line = lines[table_end_line].strip()
                     if next_line.startswith("|"):
                         table_end_line += 1
@@ -426,8 +572,8 @@ class GeneticDataScout:
                         break
 
                 # Calculate character positions
-                char_start = sum(len(lines[j]) + 1 for j in range(table_start_line))
-                char_end = sum(len(lines[j]) + 1 for j in range(table_end_line))
+                char_start = offsets[table_start_line]
+                char_end = offsets[table_end_line]
 
                 raw_text = "\n".join(lines[table_start_line:table_end_line])
 
@@ -465,23 +611,30 @@ class GeneticDataScout:
 
         char_pos = 0
         for para in paragraphs:
+            self._check_deadline()
             if not para.strip():
                 char_pos += len(para)
                 continue
 
+            # Bounded regex input: signals from the head of a giant paragraph
+            # (converter artifact) are representative enough to trigger a zone.
+            scan_para = para[:_MAX_SIGNAL_SCAN_CHARS]
+
             # Check if paragraph has individual-level data signals
             individual_matches = sum(
-                1 for p in self._individual_patterns if p.search(para)
+                1 for p in self._individual_patterns if p.search(scan_para)
             )
 
             # Also check for variant mentions
-            variant_matches = sum(1 for p in self._variant_patterns if p.search(para))
+            variant_matches = sum(
+                1 for p in self._variant_patterns if p.search(scan_para)
+            )
 
             # Check for gene mentions
-            gene_matches = len(self.gene_pattern.findall(para))
+            gene_matches = len(self.gene_pattern.findall(scan_para))
 
             # Check for clinical outcome keywords (penetrance, affected, carrier, etc.)
-            para_lower = para.lower()
+            para_lower = scan_para.lower()
             clinical_keyword_count = sum(
                 1 for kw in self.CLINICAL_KEYWORDS if kw in para_lower
             )
@@ -524,9 +677,11 @@ class GeneticDataScout:
                 )
 
             char_pos += len(para)
-            # Account for the delimiter we split on
+            # Account for the delimiter we split on (pattern.match with a pos
+            # argument — slicing text[char_pos:] here copied the remaining
+            # megabytes once per paragraph)
             if char_pos < len(text):
-                match = paragraph_pattern.match(text[char_pos:])
+                match = paragraph_pattern.match(text, char_pos)
                 if match:
                     char_pos += len(match.group(0))
 
@@ -579,14 +734,23 @@ class GeneticDataScout:
         """
         text = full_text[candidate.start : candidate.end]
 
-        # Count signals
-        gene_mentions = len(self.gene_pattern.findall(text))
-        variant_mentions = sum(len(p.findall(text)) for p in self._variant_patterns)
-        individual_signals = sum(
-            len(p.findall(text)) for p in self._individual_patterns
+        # Count signals on a bounded prefix: the zone keeps its full extent,
+        # but heuristic counting over a multi-megabyte merged zone re-scans
+        # it once per pattern (~35 passes) for scores that saturate anyway.
+        scan_text = text[:_MAX_SIGNAL_SCAN_CHARS]
+        gene_mentions = len(self.gene_pattern.findall(scan_text))
+        variant_mentions = sum(
+            len(p.findall(scan_text)) for p in self._variant_patterns
         )
-        aggregate_signals = sum(len(p.findall(text)) for p in self._aggregate_patterns)
-        clinical_keywords = sum(text.lower().count(kw) for kw in self.CLINICAL_KEYWORDS)
+        individual_signals = sum(
+            len(p.findall(scan_text)) for p in self._individual_patterns
+        )
+        aggregate_signals = sum(
+            len(p.findall(scan_text)) for p in self._aggregate_patterns
+        )
+        clinical_keywords = sum(
+            scan_text.lower().count(kw) for kw in self.CLINICAL_KEYWORDS
+        )
 
         # Calculate relevance score (0.0 to 1.0)
         score = 0.0
@@ -708,9 +872,16 @@ class GeneticDataScout:
         )
 
     def _find_parent_section(self, text: str, position: int) -> Optional[str]:
-        """Find the parent section header for a given position."""
-        # Look backward for the nearest section header
-        search_text = text[:position]
+        """Find the parent section header for a given position.
+
+        Only a header ending within ``_PARENT_SECTION_DISTANCE_CHARS`` of the
+        position counts, so searching just that window (plus slack for the
+        header match's own length) is semantics-preserving. Scanning the whole
+        ``text[:position]`` prefix here — 8 patterns, once per candidate —
+        was the dominant cost that wedged the scout on pathological folds.
+        """
+        window_start = max(0, position - _PARENT_SECTION_WINDOW_CHARS)
+        search_text = text[window_start:position]
 
         for section_name, pattern in self._section_patterns.items():
             matches = list(pattern.finditer(search_text))
@@ -718,7 +889,9 @@ class GeneticDataScout:
                 # Get the last (nearest) match
                 last_match = matches[-1]
                 # Only consider if it's within reasonable distance (10000 chars)
-                if position - last_match.end() < 10000:
+                if position - (window_start + last_match.end()) < (
+                    _PARENT_SECTION_DISTANCE_CHARS
+                ):
                     return section_name
 
         return None

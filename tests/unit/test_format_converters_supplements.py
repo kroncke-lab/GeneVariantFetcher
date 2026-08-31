@@ -696,3 +696,87 @@ def test_doc_to_markdown_keeps_textutil_text_when_no_route_has_tables(
 
     assert "Supplementary methods prose only." in md
     assert "antiword prose rendering" not in md
+
+
+# ---------------------------------------------------------------------------
+# Binary-garbage detection on .doc conversion routes (RYR2 PMID 32508047:
+# MarkItDown "converted" a 13.6 MB legacy .doc by decoding the raw OLE
+# container as text; textutil does the same on that file).
+# ---------------------------------------------------------------------------
+
+from harvesting.format_converters import looks_like_binary_garbage  # noqa: E402
+
+
+def _soup(n: int) -> str:
+    unit = "\x00\x01g\x00\x00\x0b|ˇˇ\x02\x03\x04 –œ\x11‡°±\x1a·"
+    return (unit * (n // len(unit) + 1))[:n]
+
+
+def test_binary_garbage_detector_flags_soup_and_spares_real_text():
+    assert looks_like_binary_garbage(_soup(50_000)) is True
+    # Heterogeneous leak: a text-like first chunk must not launder a
+    # binary-dense later chunk (the real soup's head 300 KB looked like text).
+    hetero = ("real words about RYR2 carriers. " * 40_000) + _soup(1_200_000)
+    assert looks_like_binary_garbage(hetero) is True
+
+    prose = (
+        "The proband carried RYR2 p.Arg420Trp. Family members were "
+        "genotyped and phenotyped for CPVT.\n"
+    ) * 100
+    assert looks_like_binary_garbage(prose) is False
+    pipe_table = "| c.1259G>A | 5 | 3 |\n|---|---|---|\n" * 200
+    assert looks_like_binary_garbage(pipe_table) is False
+    dna = "ACGTGGCTAAGCTTGACGTA" * 500
+    assert looks_like_binary_garbage(dna) is False
+    fixed_width = "R420W      12     3      0.87\n" * 200
+    assert looks_like_binary_garbage(fixed_width) is False
+    chinese = "基因变异与心律失常的相关性研究。患者携带罕见变异。" * 100
+    assert looks_like_binary_garbage(chinese) is False
+    # Sparse legitimate control chars (form feeds from PDF page breaks).
+    paged = ("page text " * 200 + "\x0c") * 20
+    assert looks_like_binary_garbage(paged) is False
+    # Too short for a ratio verdict.
+    assert looks_like_binary_garbage("\x00\x01\x02") is False
+    assert looks_like_binary_garbage("") is False
+
+
+def test_doc_to_markdown_rejects_markitdown_binary_leak(tmp_path, monkeypatch):
+    import types
+
+    # A junk .doc that no route can parse: markitdown "succeeds" with soup,
+    # every subprocess tool is absent, OLE parsing fails, and the heuristic
+    # byte scrape yields too little text — the chain must end at the
+    # placeholder rather than return the soup.
+    doc = tmp_path / "leaky.doc"
+    doc.write_bytes(b"\x00\x01\x02junk" * 20)
+
+    soup = _soup(20_000)
+    converter = FormatConverter()
+    converter.markitdown = types.SimpleNamespace(
+        convert=lambda path: types.SimpleNamespace(text_content=soup)
+    )
+
+    def _no_tools(*args, **kwargs):
+        raise FileNotFoundError("tool not installed")
+
+    monkeypatch.setattr(subprocess, "run", _no_tools)
+
+    md = converter.doc_to_markdown(doc)
+
+    assert "\x00" not in md
+    assert soup[:50] not in md
+    assert "text extraction failed" in md  # the honest placeholder
+
+
+def test_doc_to_markdown_keeps_good_markitdown_text(tmp_path):
+    import types
+
+    doc = tmp_path / "fine.doc"
+    doc.write_bytes(b"irrelevant")
+    good = "Table S5: RYR2 rare variants\n| c.1259G>A | 5 |\n" * 50
+    converter = FormatConverter()
+    converter.markitdown = types.SimpleNamespace(
+        convert=lambda path: types.SimpleNamespace(text_content=good)
+    )
+
+    assert converter.doc_to_markdown(doc) == good

@@ -35,6 +35,7 @@ import re
 from pathlib import Path
 from typing import Any, Optional
 
+from harvesting.format_converters import looks_like_binary_garbage
 from harvesting.supplement_processing_service import (
     SUPPLEMENT_IDENTITY_QUARANTINE,
     SUPPLEMENT_IDENTITY_UNKNOWN,
@@ -42,11 +43,25 @@ from harvesting.supplement_processing_service import (
     _convert_supplement,
     pdf_supplement_verdict,
 )
+from utils.env_utils import get_env_int
 
 logger = logging.getLogger(__name__)
 
 FOLD_BEGIN = "<!-- GVF_FOLDED_SUPPLEMENTS_BEGIN -->"
 FOLD_END = "<!-- GVF_FOLDED_SUPPLEMENTS_END -->"
+
+# Size caps for fold assembly, read at call time so tests and operators can
+# override per run (0 disables a cap). Defaults are far above any observed
+# legitimate converted supplement — they exist to stop pathological growth
+# (a leaked binary rendered as text, a runaway conversion) from building a
+# FULL_CONTEXT that every later stage must wade through. RYR2 PMID 32508047's
+# fold hit 19.99 MB this way and wedged the data scout for 2h45m+; genuinely
+# large genome-wide tables (that paper's real burden table is ~1.7 MB of
+# antiword text) stay well under these.
+FOLD_MAX_FILE_CHARS_ENV = "GVF_FOLD_MAX_FILE_CHARS"
+FOLD_MAX_FILE_CHARS_DEFAULT = 10_000_000
+FOLD_MAX_TOTAL_CHARS_ENV = "GVF_FOLD_MAX_TOTAL_CHARS"
+FOLD_MAX_TOTAL_CHARS_DEFAULT = 30_000_000
 
 # Harvest-time assembly predates the sentinel block and appended converted
 # supplements directly with this generated heading.  When a later supplement
@@ -243,9 +258,15 @@ def _build_supplement_markdown_result(
 
         converter = FormatConverter()
 
+    max_file_chars = get_env_int(FOLD_MAX_FILE_CHARS_ENV, FOLD_MAX_FILE_CHARS_DEFAULT)
+    max_total_chars = get_env_int(
+        FOLD_MAX_TOTAL_CHARS_ENV, FOLD_MAX_TOTAL_CHARS_DEFAULT
+    )
+
     parts: list[str] = []
     converted = 0
     failures = 0
+    total_chars = 0
     omitted_labels: set[str] = set()
     for idx, file_path in enumerate(files, 1):
         # Label by path relative to the supplements dir: a top-level file shows
@@ -267,6 +288,46 @@ def _build_supplement_markdown_result(
         if _is_conversion_placeholder(md):
             logger.warning("supplement convert produced placeholder for %s", rel)
             failures += 1
+            omitted_labels.add(Path(rel).name.casefold())
+            continue
+        # A converter that "succeeds" on a binary it cannot parse emits the
+        # raw container bytes as text. Folding that poisons FULL_CONTEXT for
+        # every downstream stage (the data scout wedged 2h45m+ on one such
+        # 14.5 MB block for RYR2 PMID 32508047), so treat it like a
+        # conversion failure; the file stays on disk for a future, better
+        # converter.
+        if md and looks_like_binary_garbage(md):
+            logger.warning(
+                "skipping %s: converted markdown looks like raw binary "
+                "(%d chars); file kept on disk, label dropped from fold",
+                rel,
+                len(md),
+            )
+            failures += 1
+            omitted_labels.add(Path(rel).name.casefold())
+            continue
+        if md and max_file_chars and len(md) > max_file_chars:
+            logger.warning(
+                "skipping oversized converted supplement %s (%d chars > "
+                "%s=%d); file kept on disk, label dropped from fold",
+                rel,
+                len(md),
+                FOLD_MAX_FILE_CHARS_ENV,
+                max_file_chars,
+            )
+            omitted_labels.add(Path(rel).name.casefold())
+            continue
+        if md and max_total_chars and total_chars + len(md) > max_total_chars:
+            # Skip just this file — a smaller later file may still fit.
+            logger.warning(
+                "fold size budget: skipping %s (%d chars would exceed "
+                "%s=%d; %d chars already folded)",
+                rel,
+                len(md),
+                FOLD_MAX_TOTAL_CHARS_ENV,
+                max_total_chars,
+                total_chars,
+            )
             omitted_labels.add(Path(rel).name.casefold())
             continue
         if file_path.suffix.lower() == ".pdf" and identity is not None:
@@ -301,6 +362,7 @@ def _build_supplement_markdown_result(
         if md and md.strip():
             parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1
+            total_chars += len(md)
     return "".join(parts).strip(), converted, failures, omitted_labels
 
 
