@@ -1,0 +1,5237 @@
+{
+  "schema_version": "patient_row_phenotype_protocol_audit_v1",
+  "generated_at": "2026-09-02T17:55:25.224257+00:00",
+  "mode": "read_only_replay_against_exact_locked_extraction_and_source_pairs",
+  "locked_run": "20260902_patient_row_phenotype_v2_gold118",
+  "locked_at": "2026-09-02T17:46:40.295350+00:00",
+  "protocol_version": "patient_row_phenotype_v2",
+  "implementation_sha256": {
+    "pipeline/extraction.py": "5dbe01917fa0cc3fbff654bf8220fe1859d361a23f8f9cbb6f48ba007068d6de",
+    "pipeline/patient_row_phenotype.py": "a6229ac3eac6be172966dabc6b6a1d8925a40e67c30af718504d09ebd4eb2c86",
+    "pipeline/prompts.py": "a0f712fb5c00fc298a724090f0892f68ad2bd2d5f08c3b6ee59c640152039282"
+  },
+  "summary": {
+    "paper_records": 118,
+    "original_protocol_metadata": {
+      "present": 115,
+      "missing": 3
+    },
+    "final_protocol_attempts": 118,
+    "paper_states": {
+      "abstained": 114,
+      "applied": 4
+    },
+    "variant_outcomes": {
+      "no_eligible_complete_patient_table": 538,
+      "phenotype_already_populated": 122,
+      "already_derived": 2,
+      "applied": 2
+    },
+    "replay_changed_phenotype_count_records": [],
+    "all_input_extractions_match_lock_binding": true
+  },
+  "interpretation": "The final common-success-boundary implementation was replayed without mutating the locked run. Three fast-path records lacked protocol metadata in the fresh run; all three abstained under v2 and none changed phenotype counts. The locked score therefore remains numerically unchanged, while this audit proves final-code protocol coverage for all 118 exact paper inputs.",
+  "records": [
+    {
+      "gene": "KCNH2",
+      "pmid": "10086971",
+      "input_extraction_sha256": "e6f9debdb53d0514cb41e9769acebefe6b36d17c811f705b62ceb2561144e1e4",
+      "selection_bound_extraction_sha256": "e6f9debdb53d0514cb41e9769acebefe6b36d17c811f705b62ceb2561144e1e4",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 4,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "S818L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V822 M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "insertion of a guanine at position 3108",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "2592+1G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "15500450",
+      "input_extraction_sha256": "ba5e183e5ad2cd12ecf2225323f2be6935110d89b93eadfacf20c310b428aff0",
+      "selection_bound_extraction_sha256": "ba5e183e5ad2cd12ecf2225323f2be6935110d89b93eadfacf20c310b428aff0",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Asp609>Gly (D609G)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "D611Y",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "16029385",
+      "input_extraction_sha256": "8a01e3307d6e131ba818105b82c979e9414aabe0daa58f44ed1857c5e9f791f5",
+      "selection_bound_extraction_sha256": "8a01e3307d6e131ba818105b82c979e9414aabe0daa58f44ed1857c5e9f791f5",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "M124R",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "16155735",
+      "input_extraction_sha256": "f74ba32c7f0cac12a648ae35408bbc54e08812ca3e8641871009b38d4f3695d0",
+      "selection_bound_extraction_sha256": "f74ba32c7f0cac12a648ae35408bbc54e08812ca3e8641871009b38d4f3695d0",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "N633D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "2768Cdel",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "18675227",
+      "input_extraction_sha256": "18c53d61e21a666f1ecd401428d4f531dc9d2e17fc9d739f44da09c34d7f849d",
+      "selection_bound_extraction_sha256": "18c53d61e21a666f1ecd401428d4f531dc9d2e17fc9d739f44da09c34d7f849d",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R954C",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "L955V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1036D",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "18808722",
+      "input_extraction_sha256": "47a02161f7ce45e886880419926e64d08a7b8e1cfe81b74ad6af407cc5487ba0",
+      "selection_bound_extraction_sha256": "47a02161f7ce45e886880419926e64d08a7b8e1cfe81b74ad6af407cc5487ba0",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 9,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "K897T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A490T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "2020insAG",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A561T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D609N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A614V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "N629S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R366X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A490P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "19034806",
+      "input_extraction_sha256": "c1924cbe35a082e0bb76e98e6c3c9c794634eefcfc21859dc79111c9a5402a11",
+      "selection_bound_extraction_sha256": "c1924cbe35a082e0bb76e98e6c3c9c794634eefcfc21859dc79111c9a5402a11",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Y652X",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "19065538",
+      "input_extraction_sha256": "1bccc1a13a4165f1569b0204535d82ed2b17b9efab5ddc0634c2897324be7a7f",
+      "selection_bound_extraction_sha256": "1bccc1a13a4165f1569b0204535d82ed2b17b9efab5ddc0634c2897324be7a7f",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "F463L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "19184172",
+      "input_extraction_sha256": "b6571ad39a7cee9dafd13782bc9b29405db8550ed0e720105478206cb4c6ab8c",
+      "selection_bound_extraction_sha256": "b6571ad39a7cee9dafd13782bc9b29405db8550ed0e720105478206cb4c6ab8c",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.3208 C > T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "20181576",
+      "input_extraction_sha256": "b90d487802cc76a3fbf0b4e1691c8c207a6df403d138dc635b2ffde9d1504c9f",
+      "selection_bound_extraction_sha256": "b90d487802cc76a3fbf0b4e1691c8c207a6df403d138dc635b2ffde9d1504c9f",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "P926AfsX14",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "K897T",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "21308345",
+      "input_extraction_sha256": "eb966a68f09a9d3456aa8204fc78594a16085b607d480339e00f35ef2fc58fac",
+      "selection_bound_extraction_sha256": "eb966a68f09a9d3456aa8204fc78594a16085b607d480339e00f35ef2fc58fac",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G1714A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "C1600T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "21779290",
+      "input_extraction_sha256": "93f1ff9978a0c87475f017c431b0cc4fb3f72b0da6709934b3ec3aa25c157311",
+      "selection_bound_extraction_sha256": "93f1ff9978a0c87475f017c431b0cc4fb3f72b0da6709934b3ec3aa25c157311",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "K897T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "L564L",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Y652Y",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "22052944",
+      "input_extraction_sha256": "53d62c1a8e54818db7ac6813e0d25fcbd8d6246f0e1b87fb3ff86e4a9717a5e7",
+      "selection_bound_extraction_sha256": "53d62c1a8e54818db7ac6813e0d25fcbd8d6246f0e1b87fb3ff86e4a9717a5e7",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R176W, hERG-FinB",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "22067087",
+      "input_extraction_sha256": "59d5beb7f3e3056cd90459441ff2ebcb35989282f593c1b211ba0cb43f94076a",
+      "selection_bound_extraction_sha256": "59d5beb7f3e3056cd90459441ff2ebcb35989282f593c1b211ba0cb43f94076a",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R176W",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "22314138",
+      "input_extraction_sha256": "7bc9f7ecec1c5df83b23268610150a16f06e4f52c305e109bb320a72aa8bf8a1",
+      "selection_bound_extraction_sha256": "7bc9f7ecec1c5df83b23268610150a16f06e4f52c305e109bb320a72aa8bf8a1",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R744P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "22338672",
+      "input_extraction_sha256": "8dc970927c3d209f0fdbd819c6767fcda8f56e31fbb320a3d54defc94fac98cd",
+      "selection_bound_extraction_sha256": "8dc970927c3d209f0fdbd819c6767fcda8f56e31fbb320a3d54defc94fac98cd",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R744X",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "K897T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "A1116V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "22764740",
+      "input_extraction_sha256": "1d8a6b7ffcfa02bf7628ef1be16f54da2d714cd17a551820dfd15067a98cddd4",
+      "selection_bound_extraction_sha256": "1d8a6b7ffcfa02bf7628ef1be16f54da2d714cd17a551820dfd15067a98cddd4",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G1459C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "23917959",
+      "input_extraction_sha256": "6dc91d4b7ad0bd5941ca60ddca1babc35c53e2b8a549b21c06f8100b8bc13169",
+      "selection_bound_extraction_sha256": "6dc91d4b7ad0bd5941ca60ddca1babc35c53e2b8a549b21c06f8100b8bc13169",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G603D (G1808A)",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "23936059",
+      "input_extraction_sha256": "5236bf05e4da1ebb2cc0d442263f6a1704b3808a052e23f92b4d4a1ebd4b72ca",
+      "selection_bound_extraction_sha256": "5236bf05e4da1ebb2cc0d442263f6a1704b3808a052e23f92b4d4a1ebd4b72ca",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.3140G>T heterozygous p.Arg1047Leu, rs36210421",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2738C>T heterozygous p.Ala913Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "25819988",
+      "input_extraction_sha256": "de7f36876bf32b8e4ecd224a24ff6b783e6185fdff4f6db13e692365d0778f3c",
+      "selection_bound_extraction_sha256": "de7f36876bf32b8e4ecd224a24ff6b783e6185fdff4f6db13e692365d0778f3c",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNH2-H562R",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "26118593",
+      "input_extraction_sha256": "6c427598ef65cf7a62a6d4c03ac937136e5b7d17c3d7349ad6b89bf8a8a70d33",
+      "selection_bound_extraction_sha256": "6c427598ef65cf7a62a6d4c03ac937136e5b7d17c3d7349ad6b89bf8a8a70d33",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 4,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.2229_2230delC (p.R744fs)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1467C > T (p.I489I)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1539C > T (p.F513F)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.1692A > G (p.L564L)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "26746457",
+      "input_extraction_sha256": "54726ecdbfcefd714608795dd773e28fc5c21dcd433f239e9991cdf0304921ff",
+      "selection_bound_extraction_sha256": "54726ecdbfcefd714608795dd773e28fc5c21dcd433f239e9991cdf0304921ff",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": false,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 42,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "A9V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D119H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R148W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A175D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R181Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A188V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A190T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G238S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R252W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "M291R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V325M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R326H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R328C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P347S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R394H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y403C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G487S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D591N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I711V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R744Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G745A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G873S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R883W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R885C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R894H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K897T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G903R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R912W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A913V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G924W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "W927L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R948S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P967L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S981G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D982N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T983I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P1018A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P1030L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1035Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1047L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V1063L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L1105S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "29016797",
+      "input_extraction_sha256": "bde8297574f1ce647b6e0be33316f07a5f7b885d87b93e4579379a7d1d388d79",
+      "selection_bound_extraction_sha256": "bde8297574f1ce647b6e0be33316f07a5f7b885d87b93e4579379a7d1d388d79",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNH2 c.1764C>G p.Asn588Lys",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "KCNH2 c.1891T>G p.Ser631Ala",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "29121719",
+      "input_extraction_sha256": "ec4eeb602565b0d426f4557d5a47d6db826a4ff40f0a60157c598f297e2d0f45",
+      "selection_bound_extraction_sha256": "ec4eeb602565b0d426f4557d5a47d6db826a4ff40f0a60157c598f297e2d0f45",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 6,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R92C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "M645R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K897T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H558R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R659W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1023C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "29214556",
+      "input_extraction_sha256": "60521d7b4075e91832f5f6b12847e6097412d0097f06013eb958a1740304e5ba",
+      "selection_bound_extraction_sha256": "60521d7b4075e91832f5f6b12847e6097412d0097f06013eb958a1740304e5ba",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "E876X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K897T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "29650123",
+      "input_extraction_sha256": "8429998b3fb944ebb73642fe75022a1471dffd69895b26e537dc9a8a5f5f4436",
+      "selection_bound_extraction_sha256": "8429998b3fb944ebb73642fe75022a1471dffd69895b26e537dc9a8a5f5f4436",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G628S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "30036649",
+      "input_extraction_sha256": "08f71a5c8dd9abd9ab82d650cdbc14828aabb93d55bc8cdc8ba47e418298eced",
+      "selection_bound_extraction_sha256": "08f71a5c8dd9abd9ab82d650cdbc14828aabb93d55bc8cdc8ba47e418298eced",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 5,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.2086C > T (p.Arg696Cys)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2453C > G (p.Ser818Trp)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1882-1884 del (p.Gly628del)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2327 T > C (p.Leu776Pro)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1838C > T (p.Thr613Met)",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNH2",
+      "pmid": "30246897",
+      "input_extraction_sha256": "a288a471a0efc36b3485ad5320c26903bfbf92690fb2b6f2d4ecd0e3739ef395",
+      "selection_bound_extraction_sha256": "a288a471a0efc36b3485ad5320c26903bfbf92690fb2b6f2d4ecd0e3739ef395",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.934C > T, p.R312C",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1696T > C, p.Cys566Arg",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1682C > T, p.Ala561Val",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "11351021",
+      "input_extraction_sha256": "ecf59722b119bcc4cde39a5b989ba1d76bd651df516057695ed3cbf8837bc088",
+      "selection_bound_extraction_sha256": "ecf59722b119bcc4cde39a5b989ba1d76bd651df516057695ed3cbf8837bc088",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G306R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "14678125",
+      "input_extraction_sha256": "97d492b4bf45e6339995879530d431fd3873d85ba625bbe1f297bf2a0d9427ae",
+      "selection_bound_extraction_sha256": "97d492b4bf45e6339995879530d431fd3873d85ba625bbe1f297bf2a0d9427ae",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 0,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": []
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "16155735",
+      "input_extraction_sha256": "11690e9adabf4182f5270af6673511ee9e5cde3f06b3476a52633b8af444261d",
+      "selection_bound_extraction_sha256": "11690e9adabf4182f5270af6673511ee9e5cde3f06b3476a52633b8af444261d",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNQ1 A341V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "18567635",
+      "input_extraction_sha256": "848bd48da8236eeeb4371378e9d06cf4ef6808e56ddf7449fbd6a343d502bb4d",
+      "selection_bound_extraction_sha256": "848bd48da8236eeeb4371378e9d06cf4ef6808e56ddf7449fbd6a343d502bb4d",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "F340W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "18580685",
+      "input_extraction_sha256": "f83e8a5041f779ade0d2256360653736ad4c3a817c6c2bb0487fafec110d221b",
+      "selection_bound_extraction_sha256": "f83e8a5041f779ade0d2256360653736ad4c3a817c6c2bb0487fafec110d221b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "V205M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "18808722",
+      "input_extraction_sha256": "71b52cf9b524ff294d8571e6269eda72f3cdfd9b69cd6c4664b6f1ffbddc282e",
+      "selection_bound_extraction_sha256": "71b52cf9b524ff294d8571e6269eda72f3cdfd9b69cd6c4664b6f1ffbddc282e",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "L187P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.2020insAG",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "19056345",
+      "input_extraction_sha256": "e09170de4dec18abb343fac2c74ba3690d4cba0dc0fc035d3f6feee6385e1640",
+      "selection_bound_extraction_sha256": "e09170de4dec18abb343fac2c74ba3690d4cba0dc0fc035d3f6feee6385e1640",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 4,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "I313K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I313E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I313V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I313G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "19114714",
+      "input_extraction_sha256": "ad152f19ad447fcd3a6cb70d0746891b06d2b32a8b01192385c7fba9107ba59e",
+      "selection_bound_extraction_sha256": "ad152f19ad447fcd3a6cb70d0746891b06d2b32a8b01192385c7fba9107ba59e",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Y111C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L114P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P117L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "19632626",
+      "input_extraction_sha256": "75035dee18c0ddbb211086368090a9285c2625343fcd5fe758d6fa5cec505833",
+      "selection_bound_extraction_sha256": "75035dee18c0ddbb211086368090a9285c2625343fcd5fe758d6fa5cec505833",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "S209P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "19687231",
+      "input_extraction_sha256": "5814bc52c4eae1b50c46538c71b21786df920c4fcfe2e91508c0eaceb346ba45",
+      "selection_bound_extraction_sha256": "5814bc52c4eae1b50c46538c71b21786df920c4fcfe2e91508c0eaceb346ba45",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "I328L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "20348026",
+      "input_extraction_sha256": "9a8918a207a6f0922b0207826f46c81f967c74872ff9c2776f7ed4b50aedb155",
+      "selection_bound_extraction_sha256": "9a8918a207a6f0922b0207826f46c81f967c74872ff9c2776f7ed4b50aedb155",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNQ1T587M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "20368164",
+      "input_extraction_sha256": "25c5e9c2514ee7013f4af941b7644f21aa432a1c5c48ca70ec8a68036179e580",
+      "selection_bound_extraction_sha256": "25c5e9c2514ee7013f4af941b7644f21aa432a1c5c48ca70ec8a68036179e580",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "T311I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "20959120",
+      "input_extraction_sha256": "759f9b3da8bcfec8f7d1c942a54f65879f1e47f68eddfedd309f1497df212315",
+      "selection_bound_extraction_sha256": "759f9b3da8bcfec8f7d1c942a54f65879f1e47f68eddfedd309f1497df212315",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KvLQT1-Y315S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "21070882",
+      "input_extraction_sha256": "5ff61c3bdcf7b924f0deaf7ad048a2150d3e92ef9df34f21ac3d96cc5815cf44",
+      "selection_bound_extraction_sha256": "5ff61c3bdcf7b924f0deaf7ad048a2150d3e92ef9df34f21ac3d96cc5815cf44",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "T96R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "21129503",
+      "input_extraction_sha256": "5b6e51b6f61d735768492f8df59653de450ab305319fc637928239ce3848cb80",
+      "selection_bound_extraction_sha256": "5b6e51b6f61d735768492f8df59653de450ab305319fc637928239ce3848cb80",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Y111C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "21956039",
+      "input_extraction_sha256": "71a196b16d94b5842e69bbe9d83b9e78a221716000ca87f69b769bcc6ae29bee",
+      "selection_bound_extraction_sha256": "71a196b16d94b5842e69bbe9d83b9e78a221716000ca87f69b769bcc6ae29bee",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 16,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Ile 235 Asn",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gly 168 Arg",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ala 46 Thr",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg 174 Leu",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Val 280 Glu",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Thr 322 Met",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ala 344 Ala",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ser 349 Ter",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gly 325 Glu",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "P400 fs/62X",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg 594 Gln",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ser 546 Leu",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg 360 Met",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gln 530 Ter",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gly 635 Arg",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gln 359 Ter (X)",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "22613981",
+      "input_extraction_sha256": "b3d1adcc9332ffe8c476670761a6b48d605e4392385f52b476191943e19393e2",
+      "selection_bound_extraction_sha256": "b3d1adcc9332ffe8c476670761a6b48d605e4392385f52b476191943e19393e2",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R231C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "24667783",
+      "input_extraction_sha256": "a9f5abd732d37ea4dc4e2eca83fc3392d232f9cdaaccaddeeec0705622bc9373",
+      "selection_bound_extraction_sha256": "a9f5abd732d37ea4dc4e2eca83fc3392d232f9cdaaccaddeeec0705622bc9373",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 12,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Val254Met / 760 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ala300Thr / 898 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gly168Arg / 502 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Ser349* / 1046 C>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Gly306Arg / 916 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg366Trp / 1096 C>T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg555His / 1664 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Phe339Ser / 1016 T>C",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Pro67Argfs*214 / 200_210delCGGCCGCGCCC",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Arg366Gln / 1097 G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Tyr111Cys / 332 A>G",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Pro73Thr / 217C>A",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "25471708",
+      "input_extraction_sha256": "abb6575fb797c0f1499b0405e1c7d6a70a4c7302cdef839fb3d0cad0f1044f49",
+      "selection_bound_extraction_sha256": "abb6575fb797c0f1499b0405e1c7d6a70a4c7302cdef839fb3d0cad0f1044f49",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 8,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.R518X [c.1522C > T]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.Y111C [c.332A > G]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.R192Cfs91X [c.572_576del]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.M159 splice error [c.477 + 1G> A]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.Q530X [c.1588C > T]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.R190W [c.568C > T]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.S349W [c.1046C > G]",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.S227del [c.828_830del]",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "26496715",
+      "input_extraction_sha256": "44f690a2877657e6301ec5cccb14164fc6661da53a80ada3dd31aa832a2b4ff6",
+      "selection_bound_extraction_sha256": "44f690a2877657e6301ec5cccb14164fc6661da53a80ada3dd31aa832a2b4ff6",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": false,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 72,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.Met1Thr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.His105ThrfsX133",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser140Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.477+5G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly168Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Tyr184Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg190Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg192Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.605-2G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser225Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg243Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu251Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val254Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg259Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly272Asp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser277Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala302Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Trp305Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly306Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.921+1G>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly314Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Pro320Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr322Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly325Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Phe340Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala341Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.1032G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly345Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly345Ala",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu347Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.360_361dupKQ",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg366Trp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser373TrpfsX10",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg380Gly",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg380Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.A384fs79X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.1251+2T>C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.His403Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val440AlafsX26",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg518X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg519His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Arg562Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg583His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr587Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly589Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg594Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Met1Thr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser140Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Tyr184Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg190Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg192Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser225Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg243Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu251Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val254Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg259Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly272Asp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser277Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala302Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Trp305Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly306Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly314Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Pro320Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly325Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Phe340Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala341Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.1032G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly345Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly345Ala",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu347Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg380Gly",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg380Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "27114410",
+      "input_extraction_sha256": "3420519e42fa32ca4cb4e5989022763149cd69c29099985010d381945b3f13b6",
+      "selection_bound_extraction_sha256": "3420519e42fa32ca4cb4e5989022763149cd69c29099985010d381945b3f13b6",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 0,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": []
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "28491547",
+      "input_extraction_sha256": "87f168047c7113581be0f683fcadb1f51c87aaaadae87fc2939181b686fb2e55",
+      "selection_bound_extraction_sha256": "87f168047c7113581be0f683fcadb1f51c87aaaadae87fc2939181b686fb2e55",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.V141M_KCNQ1",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "28739325",
+      "input_extraction_sha256": "bb4e04a100648e6dedd12cb6c1dec32403f7d705634f0aeb7c53c01c104ce05e",
+      "selection_bound_extraction_sha256": "bb4e04a100648e6dedd12cb6c1dec32403f7d705634f0aeb7c53c01c104ce05e",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "D242N (chr11:2572053G > A, c.724G > A)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "29677589",
+      "input_extraction_sha256": "af4739c0f780fb33d1579913bf2a1093142b69afa3312c3cf2fb8ad19b2c2077",
+      "selection_bound_extraction_sha256": "af4739c0f780fb33d1579913bf2a1093142b69afa3312c3cf2fb8ad19b2c2077",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.568 C>T p.R190W",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1781 G>A p.R594Q",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "29851656",
+      "input_extraction_sha256": "761c53e401c1907b8ddc816c69d5f2927541af1c69f7884d0c281b35731cf34b",
+      "selection_bound_extraction_sha256": "761c53e401c1907b8ddc816c69d5f2927541af1c69f7884d0c281b35731cf34b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c. 575G>T (p.R192L)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "29876285",
+      "input_extraction_sha256": "df623642546f19fb5d8345ef4689882682a1d76a5e44f589559881d1b14f9675",
+      "selection_bound_extraction_sha256": "df623642546f19fb5d8345ef4689882682a1d76a5e44f589559881d1b14f9675",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNQ1-A300S",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "31293497",
+      "input_extraction_sha256": "b96ca5e8b8988d6f10278318ab3b7c880d62ce0387af5f4d6bc792c752a9389b",
+      "selection_bound_extraction_sha256": "b96ca5e8b8988d6f10278318ab3b7c880d62ce0387af5f4d6bc792c752a9389b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "KCNQ1 dup12; p.R360_Q361dupQKQR, NM_000218.2, hg19",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.R360_Q361insQKQR",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "31520628",
+      "input_extraction_sha256": "50615ee4ab53c4881bdfc86cdcd40ac68b03f3bf1b423bf2e228c8b7156f5303",
+      "selection_bound_extraction_sha256": "50615ee4ab53c4881bdfc86cdcd40ac68b03f3bf1b423bf2e228c8b7156f5303",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "A341V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "32168391",
+      "input_extraction_sha256": "976f6f4df8b96b98d73953e36ed091f8cc0ae868a1369ecb674f5a9dd4083cec",
+      "selection_bound_extraction_sha256": "976f6f4df8b96b98d73953e36ed091f8cc0ae868a1369ecb674f5a9dd4083cec",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G314D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "pmid": "33082985",
+      "input_extraction_sha256": "d98d8f4d58665731b926b0b7fd778c4cfb260aeb1d0ad6b53bb61320721c6066",
+      "selection_bound_extraction_sha256": "d98d8f4d58665731b926b0b7fd778c4cfb260aeb1d0ad6b53bb61320721c6066",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Trp248Phe",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "Leu347Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "15466642",
+      "input_extraction_sha256": "5852bc39f3ee689b5827fefc6856b12f83f80fbf31be23bed9cfb73bd8e094e2",
+      "selection_bound_extraction_sha256": "5852bc39f3ee689b5827fefc6856b12f83f80fbf31be23bed9cfb73bd8e094e2",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 8,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "P164S",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "R414L",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "I419F",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "A2403T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "F4499C",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "A4510T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "G4671R",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "I4848V",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "16517285",
+      "input_extraction_sha256": "fb2cb8da4ee03428a6a1c47d3b797669f9f38aa84c21529383b337e945d82867",
+      "selection_bound_extraction_sha256": "fb2cb8da4ee03428a6a1c47d3b797669f9f38aa84c21529383b337e945d82867",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Arg169Gln",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "17161793",
+      "input_extraction_sha256": "ad212e9e64500cbd99d9779a080319c36b5918e70c3c86d82b7784268eddc0a5",
+      "selection_bound_extraction_sha256": "ad212e9e64500cbd99d9779a080319c36b5918e70c3c86d82b7784268eddc0a5",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Ser2246Leu",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "18285261",
+      "input_extraction_sha256": "c68de5e7c740805491a10d76153b4e3023dce566bd966e19f77409fe1a5af453",
+      "selection_bound_extraction_sha256": "c68de5e7c740805491a10d76153b4e3023dce566bd966e19f77409fe1a5af453",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 5,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "H469Y",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L2299F",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A3909T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A4070T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K4481R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "19216760",
+      "input_extraction_sha256": "bd69a1fe79afa41e7a05a705c18cff6a3c12904e8a5d8f238d0fd24a4d8a88b4",
+      "selection_bound_extraction_sha256": "bd69a1fe79afa41e7a05a705c18cff6a3c12904e8a5d8f238d0fd24a4d8a88b4",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 5,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R1051P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S616L",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "N3308S",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "exon 3 deletion (1.1 kb)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "exon 3 deletion (previously reported 1.1 kb)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "19398417",
+      "input_extraction_sha256": "4fa34139216458945a2169de4596dad01a050d4511f59bc9fd898a0f6964bd21",
+      "selection_bound_extraction_sha256": "4fa34139216458945a2169de4596dad01a050d4511f59bc9fd898a0f6964bd21",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "W4645R",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "19398665",
+      "input_extraction_sha256": "585ea7d9d91f6635c9640377d944ff6ad5a850ea9f94fb1dba2040e265ae2197",
+      "selection_bound_extraction_sha256": "585ea7d9d91f6635c9640377d944ff6ad5a850ea9f94fb1dba2040e265ae2197",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G4662S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H4762P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "19926015",
+      "input_extraction_sha256": "d756bc837f1ff84fe5fcce97a9251e46e303f8ba3bf83e4e7aafdaadf6c15cfc",
+      "selection_bound_extraction_sha256": "d756bc837f1ff84fe5fcce97a9251e46e303f8ba3bf83e4e7aafdaadf6c15cfc",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 40,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "E243K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y4149S",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "exon 3 deletion",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "F329L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R332W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G357S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V377M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T415R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R420Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V507I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A549V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R739H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1013Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T1107M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A1136V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E1837K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E2045G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y2156C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H2168Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E2183V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D2216V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E2296Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R2420W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "M3972I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D3973H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L3974Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K3997E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S4124G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4157Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q4159P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "N4178S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E4187Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G4315E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K4650E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4790Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K4805R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1886S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "M2389L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V4010M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A4282V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "20395638",
+      "input_extraction_sha256": "8853d0df6ed1e142eec36cbcd70b2836c408f2d0b43547489e4408af92a7c554",
+      "selection_bound_extraction_sha256": "8853d0df6ed1e142eec36cbcd70b2836c408f2d0b43547489e4408af92a7c554",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c. 14806G>A, p.Gly4936Arg",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "21652165",
+      "input_extraction_sha256": "8cbb684c867d3696449772356e9159a16a3947559032dc4f7725b56f9310ab90",
+      "selection_bound_extraction_sha256": "8cbb684c867d3696449772356e9159a16a3947559032dc4f7725b56f9310ab90",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "S4153R",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "22178870",
+      "input_extraction_sha256": "bb36316df50beec08a8bacc39ba442222f1d2a578c5fb5f6295465d25ee6818b",
+      "selection_bound_extraction_sha256": "bb36316df50beec08a8bacc39ba442222f1d2a578c5fb5f6295465d25ee6818b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.F2483I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "22222782",
+      "input_extraction_sha256": "7e4d8da1d5d4c99d541fe52164548ec10ac222c4b7efb26d49223ebab2b8ec80",
+      "selection_bound_extraction_sha256": "7e4d8da1d5d4c99d541fe52164548ec10ac222c4b7efb26d49223ebab2b8ec80",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 7,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.Q486H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.D1872N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.G2367R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.E4213D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.H4579Y",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.L4767L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.G4315E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "input_extraction_sha256": "b5e50113db15608198eba1b10d98f68e7bb9fff42fb3f875670b2378bd6e66ca",
+      "selection_bound_extraction_sha256": "b5e50113db15608198eba1b10d98f68e7bb9fff42fb3f875670b2378bd6e66ca",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 37,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "T1107M-RYR2",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I217V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H240R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T4158P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D400H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R407I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R420W",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2398+5G>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.6337G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.6680G>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.6737C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.6739C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.7175A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.7528A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.11636T>C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.11773C>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.11876C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.12290A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.12436G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.13610C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.13933T>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.14803G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1885E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1886S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V2113M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G2227V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S2246L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y2392C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T2510A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L3879P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q3925E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S3959L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "N4097S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E4146K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4497C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "W4645R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G4936R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25435091",
+      "input_extraction_sha256": "ccd9de3a2f2a0fa84d10ea4d72163656e2364455e3f3c9f1ee7576609925d151",
+      "selection_bound_extraction_sha256": "ccd9de3a2f2a0fa84d10ea4d72163656e2364455e3f3c9f1ee7576609925d151",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": true,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 1,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "C2277R",
+          "status": "already_derived"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25463374",
+      "input_extraction_sha256": "529ffbf15eaf6941b2f1439ff8bec9f3078d1f51bb65ad5181d6b21286e23fab",
+      "selection_bound_extraction_sha256": "529ffbf15eaf6941b2f1439ff8bec9f3078d1f51bb65ad5181d6b21286e23fab",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "RyR2-H29D (85 C>G)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "S4565R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R3570W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25500949",
+      "input_extraction_sha256": "ba5a0ac1c2ce24b1cdf21e0175f61880cbc89a7faf2c5f3b36d084cc13a2d2f8",
+      "selection_bound_extraction_sha256": "ba5a0ac1c2ce24b1cdf21e0175f61880cbc89a7faf2c5f3b36d084cc13a2d2f8",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "H4552R-RYR2",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25814417",
+      "input_extraction_sha256": "c6a8b9e803c93c8915934746973f9a5f4fc4625aa90161917afae143552e65bf",
+      "selection_bound_extraction_sha256": "c6a8b9e803c93c8915934746973f9a5f4fc4625aa90161917afae143552e65bf",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": true,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 1,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.G357S_RyR2",
+          "status": "applied",
+          "source_table": "Supplementary Table 3. Basal phenotypic features of living mutation positive subjects",
+          "table_total": 179,
+          "carrier_total": 185
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "27114410",
+      "input_extraction_sha256": "cd342a177a35b9e61b165f74a809e7d6d2776b6b5f86472e1b95efc02e134270",
+      "selection_bound_extraction_sha256": "cd342a177a35b9e61b165f74a809e7d6d2776b6b5f86472e1b95efc02e134270",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 0,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": []
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "27839804",
+      "input_extraction_sha256": "a1e9bac30c57170c8ec809c0a6847b5358a0bc9c31bef63a9ef96dc371a9e4a6",
+      "selection_bound_extraction_sha256": "a1e9bac30c57170c8ec809c0a6847b5358a0bc9c31bef63a9ef96dc371a9e4a6",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "M995V",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "H29D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "28798025",
+      "input_extraction_sha256": "e9c2e8d1620f8d9cd3c9f411068d35d4b31eb2d43547d8cac5bfdb9555daed93",
+      "selection_bound_extraction_sha256": "e9c2e8d1620f8d9cd3c9f411068d35d4b31eb2d43547d8cac5bfdb9555daed93",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 8,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.R2303G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.A4556P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.V3557A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.L3061V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Q1024X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.34930+2A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S453T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1885E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "29350269",
+      "input_extraction_sha256": "b35e37d4819e2dcc8394a05d90639d01275acc55ce1ed8617f4deed4c7b7d9cd",
+      "selection_bound_extraction_sha256": "b35e37d4819e2dcc8394a05d90639d01275acc55ce1ed8617f4deed4c7b7d9cd",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.12490C>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.3380A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.11441C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "input_extraction_sha256": "9c716af77059b93f2da57b906ae200e728ac795cee388f83a97a46561834c27f",
+      "selection_bound_extraction_sha256": "9c716af77059b93f2da57b906ae200e728ac795cee388f83a97a46561834c27f",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 28,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "RYR2 -p.R417L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2 -p.F3496L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.S3938R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.R485Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.I2075T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.K4594R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.R2028H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.Y4721C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.T1107M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.R2474K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.A1136V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.L4188P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.G1886S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.S2246L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.H2464D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.G1885E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.R2401H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.G4772S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- c.3599-9delT",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- c.14091-11dupT",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "RYR2- p.A2317E",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.V288I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S2774G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q584R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4954K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "C1274Y",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L714R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.R1458G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30546600",
+      "input_extraction_sha256": "f9978dae504fa62c47927ad17780f6364a4fa684cc2d421ec1c08fd2b434301b",
+      "selection_bound_extraction_sha256": "f9978dae504fa62c47927ad17780f6364a4fa684cc2d421ec1c08fd2b434301b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": true,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 1,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.1259G>A, p.(Arg420Gln)",
+          "status": "already_derived"
+        },
+        {
+          "variant": "R420Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30835254",
+      "input_extraction_sha256": "8c861a961e24c8993b9a87eb76995d3191a2960f8bc9465adaa8a91d5eec0067",
+      "selection_bound_extraction_sha256": "8c861a961e24c8993b9a87eb76995d3191a2960f8bc9465adaa8a91d5eec0067",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": false,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 0,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": []
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "32866913",
+      "input_extraction_sha256": "938f20a36ce95df83aa902133cb0f63ec4a8d6244c36d49eeaa9551f232900d2",
+      "selection_bound_extraction_sha256": "938f20a36ce95df83aa902133cb0f63ec4a8d6244c36d49eeaa9551f232900d2",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.Thr85Ile, c.254C>T [rs772005577]",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "33315912",
+      "input_extraction_sha256": "5bd00e302ac130952d94ee19750e1d93a105c05661d49ff37acdc6fd853c3bcd",
+      "selection_bound_extraction_sha256": "5bd00e302ac130952d94ee19750e1d93a105c05661d49ff37acdc6fd853c3bcd",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": true,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 1,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "RYR2 P2328S",
+          "status": "applied",
+          "source_table": "Sheet: Data",
+          "table_total": 59,
+          "carrier_total": 62
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "33536282",
+      "input_extraction_sha256": "205621cff1c7b8c4d36cc4bab9d062450ca25dba043729ab46527d4244d5de90",
+      "selection_bound_extraction_sha256": "205621cff1c7b8c4d36cc4bab9d062450ca25dba043729ab46527d4244d5de90",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 16,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Q3774L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I3995V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D4112N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T4196I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D4646A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q4879H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I4855M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A4860G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S4938F",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q4897H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D4122N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4496C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I2074T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "K4594R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R4594K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I2075T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "33640691",
+      "input_extraction_sha256": "16836cec972087c50b43b69685934f34d5635822ba912c30e27296949ff89a52",
+      "selection_bound_extraction_sha256": "16836cec972087c50b43b69685934f34d5635822ba912c30e27296949ff89a52",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.A2254V",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "34661651",
+      "input_extraction_sha256": "5f0dec8e4431e314692b3ec365c08deeff4360e1fb364ccc8de53a4c00fe752c",
+      "selection_bound_extraction_sha256": "5f0dec8e4431e314692b3ec365c08deeff4360e1fb364ccc8de53a4c00fe752c",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 4,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.12438g>c, p.E4146D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.12502t>c, p.S4168P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.K4594Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.14813c>t, p.S4938F",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "35663620",
+      "input_extraction_sha256": "64ca7d90932480648e0481974c53e6499c38213799b823d34b3768e5ae691fa7",
+      "selection_bound_extraction_sha256": "64ca7d90932480648e0481974c53e6499c38213799b823d34b3768e5ae691fa7",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "NM_001035(RYR2): c.1240C > T, p.(Arg414Cys)",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "15671429",
+      "input_extraction_sha256": "d6b169a03b69ce71a69feb94e79ea889bac7a82e85a92d34cbef284f380f2d10",
+      "selection_bound_extraction_sha256": "d6b169a03b69ce71a69feb94e79ea889bac7a82e85a92d34cbef284f380f2d10",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 5,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "D1275N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T220I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R814W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "2550-2551insTG",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D1595H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "15828879",
+      "input_extraction_sha256": "9efbcbfdeb67781f1cf72891a71dc2a7c7ea27986531aebe9378ac95abc6e061",
+      "selection_bound_extraction_sha256": "9efbcbfdeb67781f1cf72891a71dc2a7c7ea27986531aebe9378ac95abc6e061",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R282H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "15898185",
+      "input_extraction_sha256": "53002db915cec0ffd9a3fbdf4fb399e0abba3c3dd0335722d8a67188954f4283",
+      "selection_bound_extraction_sha256": "53002db915cec0ffd9a3fbdf4fb399e0abba3c3dd0335722d8a67188954f4283",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R1193Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "16301357",
+      "input_extraction_sha256": "bd236aa55ace192dd0ffd4f8f7f591a08f837eda3a5f7979fd845345404fa2fd",
+      "selection_bound_extraction_sha256": "bd236aa55ace192dd0ffd4f8f7f591a08f837eda3a5f7979fd845345404fa2fd",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "L1825P",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "16929919",
+      "input_extraction_sha256": "e65cae8ac2adcfbaca19bfefade4e93c7fd160ad8c1c2ca9f110466338e25ddf",
+      "selection_bound_extraction_sha256": "e65cae8ac2adcfbaca19bfefade4e93c7fd160ad8c1c2ca9f110466338e25ddf",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "Y1795C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "17675083",
+      "input_extraction_sha256": "5b3a8458b1d7d18bfeef5b664f0070e7f99144bc0cdc2c07bfb81f219457495f",
+      "selection_bound_extraction_sha256": "5b3a8458b1d7d18bfeef5b664f0070e7f99144bc0cdc2c07bfb81f219457495f",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "G400A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "H558R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R34C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "17971661",
+      "input_extraction_sha256": "1e48f37f97f48e86ade4c005293f2d9397a12e6f23d66ff9616ec74f02aab239",
+      "selection_bound_extraction_sha256": "1e48f37f97f48e86ade4c005293f2d9397a12e6f23d66ff9616ec74f02aab239",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 0,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": []
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "19305639",
+      "input_extraction_sha256": "0a43147e2340b0bf20c9ba9d99acf652b85e5b3209313feedc14ab2a8046476a",
+      "selection_bound_extraction_sha256": "0a43147e2340b0bf20c9ba9d99acf652b85e5b3209313feedc14ab2a8046476a",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "H558R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "19406494",
+      "input_extraction_sha256": "0bbd2d27971dbe699fe1d1ff1e14e191eb6f4e3f3cb8b677bff0a7508c089354",
+      "selection_bound_extraction_sha256": "0bbd2d27971dbe699fe1d1ff1e14e191eb6f4e3f3cb8b677bff0a7508c089354",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.903G>A, p.Trp301X",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.5845G>C, p.Ala1949Pro",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2422C>T, p.Arg808Cys",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "19549036",
+      "input_extraction_sha256": "9b260696a89ed2e232a3f06904befe013f443e1eb5e71969ed5b595173139869",
+      "selection_bound_extraction_sha256": "9b260696a89ed2e232a3f06904befe013f443e1eb5e71969ed5b595173139869",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "H558R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "20038812",
+      "input_extraction_sha256": "5c49396f9180eb0d3b6d644e29bc39a91957efa2606da253c93082e97435f3b3",
+      "selection_bound_extraction_sha256": "5c49396f9180eb0d3b6d644e29bc39a91957efa2606da253c93082e97435f3b3",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "F1486L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "20539757",
+      "input_extraction_sha256": "d45ce0e8f7c9d53e5bac0750ab7a045ed732a9cacf679f1b63f2834193373df7",
+      "selection_bound_extraction_sha256": "d45ce0e8f7c9d53e5bac0750ab7a045ed732a9cacf679f1b63f2834193373df7",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 17,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "L212P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P1298L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "DelF1617",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1632H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E161K",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "T220I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D1275N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T187I",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "R878C",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "G1408R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "W1421X",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "K1578fs/52",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1623X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T1620M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1632X",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H558R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "F1617del",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "21193062",
+      "input_extraction_sha256": "3a41d0c3afaeae365f369791e57fdd97b27598475696e32f7c62a9a1d8eaf32a",
+      "selection_bound_extraction_sha256": "3a41d0c3afaeae365f369791e57fdd97b27598475696e32f7c62a9a1d8eaf32a",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "V411M",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "21288276",
+      "input_extraction_sha256": "aa1e53f4fe48c0dae222138e2e2d3fa66b559bff2f7014c381fc5d7d1b71430b",
+      "selection_bound_extraction_sha256": "aa1e53f4fe48c0dae222138e2e2d3fa66b559bff2f7014c381fc5d7d1b71430b",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "SCN5A{NM_198056.1}:c.[999-424_1338 + 81del]+[=]",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "22101522",
+      "input_extraction_sha256": "734a36fefce1331c171ddf19a9e42e20ca72a0025578d91feb12a1c8efd023c0",
+      "selection_bound_extraction_sha256": "734a36fefce1331c171ddf19a9e42e20ca72a0025578d91feb12a1c8efd023c0",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "S1503A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "22677073",
+      "input_extraction_sha256": "f9471170696fcfe6be92466bd01fdf975469dbaa448b344742e821e5c5695153",
+      "selection_bound_extraction_sha256": "f9471170696fcfe6be92466bd01fdf975469dbaa448b344742e821e5c5695153",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 12,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "R104Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T220I",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "I267L b",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R680H",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "I3334V b",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "I1768V",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "S1103Y-SCN5A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "S216L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1193Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V1951L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "F2004L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P2006A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "22685113",
+      "input_extraction_sha256": "771e14864455de619e53fa7d507488c2c0e92ddfa56091d8e36af78af780d065",
+      "selection_bound_extraction_sha256": "771e14864455de619e53fa7d507488c2c0e92ddfa56091d8e36af78af780d065",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 10,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "T220I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R340Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T1304M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "F1596I",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1626H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D1819N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1897W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "V1951M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S216L",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "F2004L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "22882672",
+      "input_extraction_sha256": "9f7519df11e0e43c5dd60d58af670752e450a4866ed9340be6acd097772e53b9",
+      "selection_bound_extraction_sha256": "9f7519df11e0e43c5dd60d58af670752e450a4866ed9340be6acd097772e53b9",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "P1177L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "22966897",
+      "input_extraction_sha256": "1de0af63682bf191ffafe19086a773ea16f3ec6efca37ef4820cd268c981a1f0",
+      "selection_bound_extraction_sha256": "1de0af63682bf191ffafe19086a773ea16f3ec6efca37ef4820cd268c981a1f0",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 3,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "I1768V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S1103Y",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P2006A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "23538678",
+      "input_extraction_sha256": "0647439f3b8c6bd56212bd98289adb32561b89f846e7940b9460977469730468",
+      "selection_bound_extraction_sha256": "0647439f3b8c6bd56212bd98289adb32561b89f846e7940b9460977469730468",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "S231CfsX251 ( c.692-693delCA )",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "24573164",
+      "input_extraction_sha256": "b59771c8f4ffcba38c146c57a223c2c7433e6f480ccac5c1a4061d0b941e378f",
+      "selection_bound_extraction_sha256": "b59771c8f4ffcba38c146c57a223c2c7433e6f480ccac5c1a4061d0b941e378f",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 22,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "N70K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R223W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R225W",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E439K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R526H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G552R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E555K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L567Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R620C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "T632M",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A647D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "P701L",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R965H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1023H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E1053K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "A1113V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "S1140T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D1275N",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1319V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L1501V",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "G1502S",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E1938K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "24581105",
+      "input_extraction_sha256": "cfdad815c4e13d38489b73d1b4d954bcb6c2dd074f00c06e0c83e58b19ce039d",
+      "selection_bound_extraction_sha256": "cfdad815c4e13d38489b73d1b4d954bcb6c2dd074f00c06e0c83e58b19ce039d",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "D785N and a nucleotide change at 2353G-A",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "25171853",
+      "input_extraction_sha256": "e2f98af42662729b64f271297710f7f2f3881ec8699e87857bc0fc19c24f8177",
+      "selection_bound_extraction_sha256": "e2f98af42662729b64f271297710f7f2f3881ec8699e87857bc0fc19c24f8177",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 2,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "P1048SfsX97 (c.3142_3153del12ins11)",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "T220I (c.659 C>T)",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "25236808",
+      "input_extraction_sha256": "08e128d67a87d467d0a26f7112b0d632c72e0ae1dc68914982e2e190e417b318",
+      "selection_bound_extraction_sha256": "08e128d67a87d467d0a26f7112b0d632c72e0ae1dc68914982e2e190e417b318",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.F1617del",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "26820365",
+      "input_extraction_sha256": "1fc3ac6e3c4a2d124efb76cee81419850100621c00558956be3a21cfdddf86f8",
+      "selection_bound_extraction_sha256": "1fc3ac6e3c4a2d124efb76cee81419850100621c00558956be3a21cfdddf86f8",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 5,
+      "parsed_patient_table_count": 1,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.A572D",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R442C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "D561A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R892H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.I376T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "28087622",
+      "input_extraction_sha256": "6c77575c18e820f263aadd5c3ad87f9b8053a2f2518e1bad4d4efe824aa12002",
+      "selection_bound_extraction_sha256": "6c77575c18e820f263aadd5c3ad87f9b8053a2f2518e1bad4d4efe824aa12002",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 9,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "D1790G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y1795C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "E1901Q",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Q1909R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1913H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "L1917K",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "H1853R",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "R1918H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "Y1795H",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "28339995",
+      "input_extraction_sha256": "9ce34c306b5e07c957802211a7b89d1c469c0749e209899942e1fb66d0373c95",
+      "selection_bound_extraction_sha256": "9ce34c306b5e07c957802211a7b89d1c469c0749e209899942e1fb66d0373c95",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 1,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "D1790G",
+          "status": "phenotype_already_populated"
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "29544605",
+      "input_extraction_sha256": "bcaf8140b66833fcb4c238836615f214280d67a21d6a0d462cb220c32d5ea277",
+      "selection_bound_extraction_sha256": "bcaf8140b66833fcb4c238836615f214280d67a21d6a0d462cb220c32d5ea277",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 10,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.997G>C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.2251G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.4870G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.5359A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.3079C>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.2989G>T",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.997G>C",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.2251G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.4870G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.5359A>G",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "29709101",
+      "input_extraction_sha256": "6a03f41d44cf8a0566c026878cf10284e041714f0761fe6c1d34827fc0bf55ff",
+      "selection_bound_extraction_sha256": "6a03f41d44cf8a0566c026878cf10284e041714f0761fe6c1d34827fc0bf55ff",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 14,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "c.611+1G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1045G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1100G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1127G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.1312A>T",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2268_2271del",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2466G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.2658T>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.4437+5G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.4813+3_4813+6dup",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.4895G>A",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "c.4978A>G",
+          "status": "phenotype_already_populated"
+        },
+        {
+          "variant": "p.Trp822*",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "c.2465G>A",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "32533946",
+      "input_extraction_sha256": "70bf7591ba415089758599ad21a81958685d02463ca122d649da307c23423bad",
+      "selection_bound_extraction_sha256": "70bf7591ba415089758599ad21a81958685d02463ca122d649da307c23423bad",
+      "input_matches_lock_binding": true,
+      "original_protocol_metadata": true,
+      "protocol_version": "patient_row_phenotype_v2",
+      "attempted": true,
+      "applied": false,
+      "paper_variant_count": 103,
+      "parsed_patient_table_count": 0,
+      "applied_variant_count": 0,
+      "replay_changed_phenotype_counts": false,
+      "outcomes": [
+        {
+          "variant": "p.Gly9Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg121Trp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr220Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr353Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg620His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly752Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asn1325Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg1432Gly",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg1632His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu1784Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala166Thr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala286Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu299Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val714Ala",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly833Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val924Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1251Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1279Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp1370Gly",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala1746Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp84Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Phe93Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asn109Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu136Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Lys175Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala178Gly",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val223Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu276Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg282Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Cys335Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu346Asp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp349Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg367Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg367Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Met369Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly386Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val396Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Met734Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala735Glu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala735Thr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu746Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Met764Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp772Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Pro773Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp785Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg808Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg814Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu839Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Phe851Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Trp879Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Phe892Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu901Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asn927Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu928Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Pro1014Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu1225Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp1243Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1262Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1281Phe",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Trp1345Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu1346Pro",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1353Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asn1380Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser1382Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1405Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Val1405Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1406Glu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1420Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1420Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala1428Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Tyr1449Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr1461Ser",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Glu1574Lys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg1583Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1642Glu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1661Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser1672Tyr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ala1680Thr",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr1709Met",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asn1722Asp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Pro1730His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg1898Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg1958Ter",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg104Gln",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg104Trp",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Thr187Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg282His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp356Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu846Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg878Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg878His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Arg893His",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly897Glu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser910Leu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ser1218Ile",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1408Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Asp1430Asn",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Ile1660Val",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1712Cys",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1740Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1743Glu",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Gly1743Arg",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        },
+        {
+          "variant": "p.Leu839P",
+          "status": "no_eligible_complete_patient_table",
+          "eligible_table_count": 0
+        }
+      ]
+    }
+  ]
+}

@@ -30,6 +30,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional
 
+from pipeline.count_provenance import (
+    PATIENT_ROW_PHENOTYPE_SOURCE,
+    SOURCE_BOUND_PHENOTYPE_SOURCE,
+)
 from pipeline.count_outlier_guard import COUNT_FIELDS, _clear_field, _read_field
 from utils.source_layers import source_layer_tokens
 
@@ -139,6 +143,27 @@ def _column_label(provenance: dict[str, Any], field: str) -> str:
     return str(provenance.get(key) or "").strip()
 
 
+def _audited_patient_row_partition(variant: dict[str, Any]) -> bool:
+    provenance = _provenance(variant)
+    if any(
+        _count_type(provenance, field) != "derived_from_patient_rows"
+        or str(provenance.get(f"{field}_source") or "").strip().lower()
+        != PATIENT_ROW_PHENOTYPE_SOURCE
+        or not _column_label(provenance, field)
+        for field in ("affected", "unaffected")
+    ):
+        return False
+    counts = read_phenotype_counts(variant)
+    values = [
+        counts.get(field)
+        for field in ("carriers", "affected", "unaffected", "uncertain")
+    ]
+    if any(isinstance(value, bool) or not isinstance(value, int) for value in values):
+        return False
+    carriers, affected, unaffected, uncertain = values
+    return affected + unaffected + uncertain == carriers
+
+
 def _phenotype_is_sourced(variant: dict[str, Any], field: str) -> bool:
     """True only when a *phenotype* column, not the carrier total, was named."""
     provenance = _provenance(variant)
@@ -149,7 +174,25 @@ def _phenotype_is_sourced(variant: dict[str, Any], field: str) -> bool:
     )
     if label and label != carrier_label and _label_looks_like(label, markers):
         return True
+    verification = variant.get("claim_verification")
+    if isinstance(verification, dict):
+        verdict = (verification.get("field_verdicts") or {}).get(field)
+        if verdict in {"directly_supported", "inferred_supported"}:
+            return True
+    verified = variant.get("source_verified_claims")
+    if isinstance(verified, dict) and isinstance(verified.get(field), dict):
+        claim_value = _coerce_count(verified[field].get("value"))
+        current_value = read_phenotype_counts(variant).get(field)
+        if claim_value is not None and claim_value == current_value:
+            return True
     declared = _count_type(provenance, field)
+    if declared == "derived_from_patient_rows":
+        return _audited_patient_row_partition(variant)
+    if declared == "closed_variant_partition":
+        return (
+            str(provenance.get(f"{field}_source") or "").strip().lower()
+            == SOURCE_BOUND_PHENOTYPE_SOURCE
+        )
     if declared and declared not in _UNSOURCED_TYPES:
         if field == "affected" and declared in {"case", "proband_count"}:
             return True
@@ -161,21 +204,60 @@ def _phenotype_is_sourced(variant: dict[str, Any], field: str) -> bool:
     return False
 
 
+def _zero_has_closed_source(variant: dict[str, Any], field: str) -> bool:
+    """Require source structure, not only an LLM verdict, for an open-set zero."""
+    provenance = _provenance(variant)
+    label = _column_label(provenance, field)
+    carrier_label = _column_label(provenance, "carriers")
+    markers = (
+        _AFFECTED_LABEL_MARKERS if field == "affected" else _UNAFFECTED_LABEL_MARKERS
+    )
+    if label and label != carrier_label and _label_looks_like(label, markers):
+        return True
+    verified = variant.get("source_verified_claims")
+    if isinstance(verified, dict) and isinstance(verified.get(field), dict):
+        claim_value = _coerce_count(verified[field].get("value"))
+        if claim_value == 0:
+            return True
+    return _audited_patient_row_partition(variant)
+
+
 def read_phenotype_counts(variant: dict[str, Any]) -> dict[str, Optional[int]]:
     """Read carriers/affected/unaffected from nested or flat variant dicts."""
     if not isinstance(variant, dict):
-        return {"carriers": None, "affected": None, "unaffected": None}
+        return {
+            "carriers": None,
+            "affected": None,
+            "unaffected": None,
+            "uncertain": None,
+        }
 
     nested = {
         field: _read_field(variant, paths) for field, paths in COUNT_FIELDS.items()
     }
-    if any(value is not None for value in nested.values()):
+    pdata = variant.get("penetrance_data")
+    # ``patients.count`` is a legacy, ambiguously named mirror and can hold an
+    # affected subset even when the dedicated penetrance field correctly holds
+    # the carrier denominator (for example W4645R: 2 affected, 4 carriers).
+    # The explicit count field is authoritative for phenotype arithmetic.
+    if isinstance(pdata, dict):
+        explicit_carriers = _coerce_count(pdata.get("total_carriers_observed"))
+        if explicit_carriers is not None:
+            nested["carriers"] = explicit_carriers
+    uncertain = (
+        _coerce_count(pdata.get("uncertain_count"))
+        if isinstance(pdata, dict)
+        else _coerce_count(variant.get("uncertain"))
+    )
+    if any(value is not None for value in nested.values()) or uncertain is not None:
+        nested["uncertain"] = uncertain
         return nested
 
     return {
         "carriers": _coerce_count(variant.get("carriers")),
         "affected": _coerce_count(variant.get("affected")),
         "unaffected": _coerce_count(variant.get("unaffected")),
+        "uncertain": _coerce_count(variant.get("uncertain")),
     }
 
 
@@ -209,6 +291,7 @@ def phenotype_fields_to_clear(variant: dict[str, Any]) -> list[PhenotypeClear]:
     carriers = counts["carriers"]
     affected = counts["affected"]
     unaffected = counts["unaffected"]
+    uncertain = counts["uncertain"]
     copied = _is_copied_phenotype(carriers, affected, unaffected)
     figure = "figure" in _layer_tokens(variant)
     aff_sourced = _phenotype_is_sourced(variant, "affected")
@@ -226,20 +309,17 @@ def phenotype_fields_to_clear(variant: dict[str, Any]) -> list[PhenotypeClear]:
     # Family/cohort copy: N>=2 carriers dumped onto affected with no
     # split. The implied una=0 rides along; a lone-proband 1/1/0 case
     # report is not this pattern and is left alone.
-    if (
-        copied
-        and carriers is not None
-        and carriers >= COPIED_AFFECTED_MIN_CARRIERS
-        and not aff_sourced
-    ):
-        add("affected", affected, "copied_carriers_onto_affected")
+    if copied and carriers is not None and carriers >= COPIED_AFFECTED_MIN_CARRIERS:
+        if not aff_sourced:
+            add("affected", affected, "copied_carriers_onto_affected")
         if unaffected == 0 and not una_sourced:
             add("unaffected", unaffected, "implied_unaffected_zero")
 
     # Figure pedigrees: vision copies every symbol onto affected. Fail
     # closed on any N — a one-symbol pedigree still has no counted split.
-    if copied and figure and not aff_sourced:
-        add("affected", affected, "figure_copied_phenotype")
+    if copied and figure:
+        if not aff_sourced:
+            add("affected", affected, "figure_copied_phenotype")
         if unaffected == 0 and not una_sourced:
             add("unaffected", unaffected, "figure_copied_phenotype")
 
@@ -254,8 +334,9 @@ def phenotype_fields_to_clear(variant: dict[str, Any]) -> list[PhenotypeClear]:
     ):
         add("affected", affected, "figure_incomplete_phenotype")
 
-    # Partition that does not close. When all three integers are emitted for
-    # one cohort, ``affected + unaffected`` must equal ``carriers``; the
+    # Partition that does not close. When phenotype integers are emitted for
+    # one cohort, ``affected + unaffected + uncertain`` must equal ``carriers``;
+    # absent ``uncertain`` retains the legacy two-way check. The
     # extraction contract already asks the model to run this self-check. A
     # triple that fails it contains at least one wrong number, and on the
     # gold-120 lock the wrong one is ``affected`` every time (3/3), while the
@@ -263,24 +344,36 @@ def phenotype_fields_to_clear(variant: dict[str, Any]) -> list[PhenotypeClear]:
     # only ``affected`` -- nulling the pair destroys counted values that the
     # paper really did report.
     #
-    # Underfill is not the same defect as overflow, but both are refused here:
-    # ``carriers = affected + unaffected + unassessed`` has no ``unassessed``
-    # slot in this schema, so a short partition is indistinguishable from a
-    # miscount and must not be published as a phenotype split.
+    # Underfill is not the same defect as overflow, but both are refused here
+    # unless the extractor explicitly populated the uncertain slot.
     if (
         _is_count(carriers)
         and _is_count(affected)
         and _is_count(unaffected)
-        and affected + unaffected != carriers
+        and affected + unaffected + (uncertain or 0) != carriers
         and not aff_sourced
     ):
         add("affected", affected, "partition_does_not_close")
 
-    # A counted zero is a positive clinical claim ("this family is entirely
-    # non-penetrant"), not an abstention, so it needs a real phenotype column
-    # behind it. ``unaffected = 0`` is deliberately NOT refused here: it is the
-    # ordinary single-proband case-report shape and clearing it was measured
+    # A counted zero is a positive clinical claim, not an abstention.  An
+    # unaffected zero with no carrier denominator or no affected half is an
+    # open-set complement: the source never established a closed assessed
+    # population in which zero unaffected carriers could be counted.  Keep the
+    # ordinary closed singleton 1/1/0 shape; clearing all of those was measured
     # net-negative.
+    if (
+        unaffected == 0
+        and not _zero_has_closed_source(variant, "unaffected")
+        and (carriers is None or affected is None)
+    ):
+        add(
+            "unaffected",
+            unaffected,
+            "unsourced_zero_without_closed_cohort",
+        )
+
+    # The same rule has always applied to affected zero, regardless of whether
+    # the rest of the emitted tuple happens to close.
     if _is_count(affected) and affected == 0 and not aff_sourced:
         add("affected", affected, "unsourced_zero_affected")
 
@@ -313,6 +406,9 @@ def sanitize_copied_phenotype(variant: dict[str, Any]) -> list[PhenotypeClear]:
 
 def apply_phenotype_count_guard(
     variants: list[dict[str, Any]],
+    *,
+    source_text: str = "",
+    disease: str | None = None,
 ) -> GuardSummary:
     """Sanitize a paper's variants in place. Gold-free; always-on contract."""
     summary = GuardSummary()
@@ -321,6 +417,19 @@ def apply_phenotype_count_guard(
     for idx, variant in enumerate(variants):
         if not isinstance(variant, dict):
             continue
+        if source_text:
+            from pipeline.claim_verifier import (
+                promote_source_bound_phenotype_counts,
+                source_verified_claims,
+            )
+
+            promoted = promote_source_bound_phenotype_counts(
+                variant, source_text, disease
+            )
+            verified = source_verified_claims(variant, source_text, disease)
+            verified.update(promoted)
+            if verified:
+                variant["source_verified_claims"] = verified
         clears = sanitize_copied_phenotype(variant)
         if not clears:
             continue

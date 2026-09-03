@@ -10,6 +10,7 @@ Includes test cases migrated from test_tier2_fixes.py (root) covering:
 
 import pytest
 
+import utils.variant_normalizer as variant_normalizer_module
 from utils.variant_normalizer import (
     VariantNormalizer,
     _preprocess_cdna_token,
@@ -24,6 +25,19 @@ from utils.variant_normalizer import (
     protein_substitution_frameshift_alias,
     variants_match,
 )
+
+
+def test_gold_free_alias_policy_bypasses_even_a_warm_file_cache(tmp_path, monkeypatch):
+    (tmp_path / "kcnh2_variant_aliases.json").write_text(
+        '{"aliases": {"C.1A>G": "A1V"}}'
+    )
+    monkeypatch.setattr(variant_normalizer_module, "_DATA_DIR", tmp_path)
+    monkeypatch.setattr(variant_normalizer_module, "_alias_cache", {})
+    monkeypatch.delenv("GVF_DISABLE_GOLD_DERIVED_ALIASES", raising=False)
+
+    assert variant_normalizer_module._load_gene_aliases("KCNH2") == {"C.1A>G": "A1V"}
+    monkeypatch.setenv("GVF_DISABLE_GOLD_DERIVED_ALIASES", "1")
+    assert variant_normalizer_module._load_gene_aliases("KCNH2") == {}
 
 
 # ---------------------------------------------------------------------------

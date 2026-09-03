@@ -29,6 +29,7 @@ from config.constants import (
     TEXT_TRUNCATION_MAX_CHARS,
 )
 from config.settings import get_settings
+from pipeline.count_provenance import strip_model_code_owned_phenotype_sources
 from pipeline.prompts import (
     COMPACT_EXTRACTION_SYSTEM_PROMPT,
     COMPACT_EXTRACTION_USER_PROMPT,
@@ -56,6 +57,7 @@ from utils.protein_notation import (
     PROTEIN_NOTATION_RE as STRICT_PROTEIN_NOTATION_RE,
 )
 from utils.source_layers import infer_source_layer_from_text
+from utils.source_text import normalize_notation_token, normalize_source_text
 from utils.variant_scanner import (
     merge_scanner_results,
     scan_document_for_variants,
@@ -644,6 +646,18 @@ class ExpertExtractor(BaseLLMCaller):
     MIN_CONDENSED_SIZE = MIN_CONDENSED_SIZE
 
     def _prepare_full_text(self, paper: Paper) -> str:
+        """Canonicalize the extraction input through the shared text policy.
+
+        This is the single funnel for every byte handed to LLM extraction, the
+        table router and the regex scanner, so normalizing here means all four
+        routes see one spelling of the source. The substitutions are
+        presentational (see :mod:`utils.source_text`); prompts therefore change
+        only where a cell previously carried a no-break space, non-breaking
+        hyphen, zero-width joiner or fullwidth glyph.
+        """
+        return normalize_source_text(self._prepare_full_text_uncanonicalized(paper))
+
+    def _prepare_full_text_uncanonicalized(self, paper: Paper) -> str:
         """
         Prepare full text for extraction.
 
@@ -743,7 +757,9 @@ class ExpertExtractor(BaseLLMCaller):
         return [(s, e) for s, e in merged]
 
     _TABLE_CAPTION_START_RE = re.compile(
-        r"^\s*(?:supplemental|supplementary|online|e)?\s*table\s+[A-Z]?\d", re.I
+        r"^\s*(?:(?:\*{1,2}|#{1,6})\s*)?"
+        r"(?:supplemental|supplementary|online|e)?\s*table\s+[A-Z]?\d",
+        re.I,
     )
 
     def _gene_focused_truncation(
@@ -3670,22 +3686,16 @@ class ExpertExtractor(BaseLLMCaller):
         return has_row_subject or has_clinical_context
 
     def _clean_table_cell(self, value: Optional[str]) -> Optional[str]:
-        if value is None:
-            return None
-        cleaned = (
-            value.strip()
-            .replace(" ", "")
-            .replace("\u00a0", "")
-            .replace("\u2009", "")
-            .replace("\u200a", "")
-            .replace("→", ">")
-            .replace("–", "-")
-            .replace("−", "-")
-            .rstrip(",;")
-        )
-        if not cleaned or cleaned.lower() in {"nan", "na", "n/a", "none", "-", "."}:
-            return None
-        return cleaned
+        """Canonicalize one table cell through the shared character policy.
+
+        This used to carry its own partial substitution list (NBSP, thin/hair
+        space, en dash, minus, one arrow), a different subset than the router
+        and the normalizer handled, so the same cell became three different
+        identities depending on which route reached it first. The policy now
+        lives in :mod:`utils.source_text`; a cell holding two whitespace-
+        separated alleles is refused there rather than fused into a chimera.
+        """
+        return normalize_notation_token(value, strip_trailing_markers=False)
 
     def _valid_table_protein(self, value: Optional[str]) -> Optional[str]:
         cleaned = self._clean_table_cell(value)
@@ -8389,6 +8399,35 @@ Return strict JSON with this schema:
             )
             result = self._apply_table_router_metadata(result)
             if result.success:
+                # Apply the audited patient-row lane to every successful
+                # extraction shape, including non-human abstentions and the
+                # router/deterministic fast paths that return before the
+                # model-backed branch below.  Keeping this at the common
+                # success boundary makes protocol coverage itself auditable.
+                from pipeline.patient_row_phenotype import (
+                    derive_patient_row_phenotype_counts,
+                )
+
+                stripped_sources = strip_model_code_owned_phenotype_sources(
+                    result.extracted_data or {}
+                )
+                if stripped_sources:
+                    metadata = (result.extracted_data or {}).setdefault(
+                        "extraction_metadata", {}
+                    )
+                    metadata["model_code_owned_phenotype_sources_stripped"] = (
+                        int(
+                            metadata.get(
+                                "model_code_owned_phenotype_sources_stripped", 0
+                            )
+                        )
+                        + stripped_sources
+                    )
+                source_text = paper.full_text or prepared_full_text or ""
+                source_text = self._augment_pdf_linearized_tables(source_text)
+                result.extracted_data = derive_patient_row_phenotype_counts(
+                    result.extracted_data or {}, source_text
+                )
                 result.extracted_data = self._backfill_variant_notation_pairs(
                     result.extracted_data
                 )
@@ -8999,6 +9038,12 @@ Return strict JSON with this schema:
                     extracted_data, paper.gene_symbol
                 )
 
+            stripped_sources = strip_model_code_owned_phenotype_sources(extracted_data)
+            if stripped_sources:
+                extracted_data.setdefault("extraction_metadata", {})[
+                    "model_code_owned_phenotype_sources_stripped"
+                ] = stripped_sources
+
             extracted_data = self._maybe_adjudicate_extraction(
                 paper=paper,
                 primary_model=model,
@@ -9167,15 +9212,30 @@ Return strict JSON with this schema:
                 model_used=None,
             )
 
-        table_row_hint = self._estimate_table_rows(scanner_full_text)
+        table_row_count = self._estimate_table_rows(scanner_full_text)
+        # A large clinical table can enumerate patients rather than variants.
+        # Using every markdown row as a variant estimate forced those papers
+        # into compact catalogue mode and explicitly deprioritized the clinical
+        # detail the table exists to provide.  The deterministic parser already
+        # distinguishes variant-bearing rows, so use its deduplicated yield for
+        # model mode and fallback thresholds while retaining the raw row count
+        # only as an observability signal.
+        table_variant_hint = len(
+            self._dedupe_table_variants(
+                self._parse_markdown_table_variants(
+                    scanner_full_text, paper.gene_symbol
+                )
+            )
+        )
 
         # If we detect a large table, raise the bar so we try the next (stronger) model
         adaptive_threshold = self.tier_threshold
-        if table_row_hint >= ADAPTIVE_TABLE_THRESHOLD:
-            table_based_threshold = min(50, max(5, table_row_hint // 3))
+        if table_variant_hint >= ADAPTIVE_TABLE_THRESHOLD:
+            table_based_threshold = min(50, max(5, table_variant_hint // 3))
             adaptive_threshold = max(self.tier_threshold, table_based_threshold)
             logger.info(
-                f"PMID {paper.pmid} - Detected {table_row_hint} table-like rows; "
+                f"PMID {paper.pmid} - Detected {table_row_count} table-like rows "
+                f"including {table_variant_hint} parsed variant rows; "
                 f"using adaptive variant threshold {adaptive_threshold}"
             )
 
@@ -9184,7 +9244,7 @@ Return strict JSON with this schema:
                 paper,
                 model,
                 prepared_full_text=prepared_full_text,
-                estimated_variants=table_row_hint,
+                estimated_variants=table_variant_hint,
             )
 
             if not result.success:

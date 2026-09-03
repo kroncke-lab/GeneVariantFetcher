@@ -1,0 +1,52 @@
+{
+  "analysis_run": "20260824_aha_table_sourcebound_gold118",
+  "figure_contract": {
+    "axes": "shared linear count scale; -0.75 to 13.75 display domain",
+    "chart_family": "discrete bubble agreement plots plus coverage bars",
+    "fallback": "none; all plotted rows pass locked-run checks",
+    "question": "Among matched variant-paper rows where both sources supply an integer, how closely do affected and unaffected counts agree?",
+    "renderer": "editable SVG; vector PDF and 300-dpi PNG downstream"
+  },
+  "integrity": {
+    "predictions_sha256": "101076cee9cc5c97900180f352b5c21a1422a2397372c721101f49cba81f7e15",
+    "selection_sha256": "cacc9de133408a6d44d87dd6b3a9faa6fd302386bd5e801918983c0f2a613e86"
+  },
+  "locked_at": "2026-08-25T04:34:19.506766+00:00",
+  "metrics": {
+    "affected": {
+      "ai_max": 13,
+      "coverage": 0.08860759493670886,
+      "difference_equal_one": 6,
+      "exact": 47,
+      "exact_fraction": 0.8392857142857143,
+      "gold_asserted": 632,
+      "greater_than_one": 3,
+      "identity_miss": 78,
+      "mae": 0.32142857142857145,
+      "manual_max": 13,
+      "matched_ai_null": 498,
+      "median_absolute_difference": 0.0,
+      "paired": 56,
+      "within_one": 53
+    },
+    "unaffected": {
+      "ai_max": 11,
+      "coverage": 0.044374009508716325,
+      "difference_equal_one": 4,
+      "exact": 22,
+      "exact_fraction": 0.7857142857142857,
+      "gold_asserted": 631,
+      "greater_than_one": 2,
+      "identity_miss": 78,
+      "mae": 0.32142857142857145,
+      "manual_max": 11,
+      "matched_ai_null": 525,
+      "median_absolute_difference": 0.0,
+      "paired": 28,
+      "within_one": 26
+    }
+  },
+  "not_available": "explicit cohort and phenotype identifiers",
+  "paired_rows_in_both_measures": 21,
+  "row_grain": "matched variant-paper row and count measure"
+}

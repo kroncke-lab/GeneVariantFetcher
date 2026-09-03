@@ -151,6 +151,37 @@ OBSERVATION_PROVENANCE_KEYS: Tuple[str, ...] = tuple(
     col for col, _decl in OBSERVATION_PROVENANCE_COLUMNS
 )
 
+# --- Typed count roles on penetrance_data ------------------------------------
+# The LLM already declares what each number counts (per_variant_carrier,
+# family_count, proband_count, cohort_total, ...) in ``count_provenance``, and a
+# classifier and the trust gate consume it, but it was only ever stored as JSON
+# on ``variant_papers``. Downstream consumers -- report, publish, the scorer --
+# read the raw integers and cannot tell an individual count from a family
+# count, so 41 families and 41 patients are the same number to them.
+#
+# These columns make the role a first-class persisted axis. They are additive
+# and nullable, and existing rows backfill to ``unknown`` rather than being
+# reinterpreted: a stored 0 whose provenance was never recorded is neither
+# provably sourced nor provably defaulted, and rewriting it in either direction
+# would be a guess about the extractor rather than a fact about the paper.
+COUNT_ROLE_UNKNOWN = "unknown"
+COUNT_ROLE_COLUMNS: Tuple[Tuple[str, str], ...] = (
+    # What the carrier total counts (individuals, families, probands, ...).
+    ("carriers_role", f"TEXT DEFAULT '{COUNT_ROLE_UNKNOWN}'"),
+    ("affected_role", f"TEXT DEFAULT '{COUNT_ROLE_UNKNOWN}'"),
+    ("unaffected_role", f"TEXT DEFAULT '{COUNT_ROLE_UNKNOWN}'"),
+    # Whether an explicit 0 was read from the source, defaulted by a layer, or
+    # is of unknown origin. Only ``sourced`` may be reported as a claim.
+    ("carriers_zero_provenance", "TEXT"),
+    ("affected_zero_provenance", "TEXT"),
+    ("unaffected_zero_provenance", "TEXT"),
+    # Arithmetic reconciliation outcome, recorded not enforced.
+    ("count_reconciliation", "TEXT"),
+)
+
+ZERO_PROVENANCE_SOURCED = "sourced"
+ZERO_PROVENANCE_UNKNOWN = "unknown"
+
 # =============================================================================
 # INPUT VALIDATION
 # =============================================================================
@@ -821,6 +852,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("penetrance_data", "trust_rule_version", "TEXT"),
         ("penetrance_data", "field_trust", "TEXT"),
         ("penetrance_data", "trust_sources", "TEXT"),
+        *(("penetrance_data", col, decl) for col, decl in COUNT_ROLE_COLUMNS),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
         ("extraction_metadata", "study_type", "TEXT"),
@@ -1042,6 +1074,12 @@ def upgrade_database_schema(conn: sqlite3.Connection) -> None:
     for table in ("individual_records", "phenotypes"):
         for column, declaration in OBSERVATION_PROVENANCE_COLUMNS:
             ensure_column(table, column, declaration)
+    # Typed count roles. Additive and nullable: existing rows keep their stored
+    # integers untouched and read back as role ``unknown``. A historical 0 is
+    # never rewritten to NULL, because its provenance was not recorded and any
+    # rewrite would be a guess.
+    for column, declaration in COUNT_ROLE_COLUMNS:
+        ensure_column("penetrance_data", column, declaration)
     conn.commit()
 
 
@@ -1107,6 +1145,66 @@ def _point_alias_candidate(
     if len(candidates) != 1:
         return None
     return next(iter(candidates.values()))
+
+
+def _spelling_alias_candidate(
+    cursor: sqlite3.Cursor,
+    *,
+    gene_symbol: str,
+    cdna: Optional[str],
+    protein: Optional[str],
+    genomic: Optional[str],
+    legacy: Optional[str],
+    variant_class: Optional[str],
+) -> Optional[Tuple[int, Optional[str]]]:
+    """Return ``(variant_id, stored_protein)`` for this identity spelled differently.
+
+    Identity used to be keyed on the raw notation string, so ``p.Q403*`` and
+    ``p.Gln403Ter`` on the same cDNA became two ``variants`` rows even though
+    ``normalize_variant`` maps both to ``Q403X``. One 50-paper database carried
+    134 paper-groups where a single cDNA had more than one ``variant_id``.
+
+    Only a **spelling** difference in a fully specified identity folds here.
+    Every field must either agree on both sides or be absent from both, which
+    is what keeps a genuine contradiction (``c.1156G>A`` reported once as
+    ``p.Glu386Gln`` and once as ``p.Glu386Lys``) as two rows, and stops a row
+    with a missing field from bridging two rows that conflict with each other.
+    Sparse/rich completion stays with :func:`_point_alias_candidate`, whose
+    narrower rule is applied afterwards.
+    """
+    from pipeline.variant_identity import (
+        VariantIdentity,
+        candidate_rows_by_position,
+        fold_decision,
+    )
+
+    incoming = VariantIdentity(
+        gene_symbol=gene_symbol,
+        cdna_notation=cdna,
+        protein_notation=protein,
+        genomic_position=genomic,
+        legacy_notation=legacy,
+        variant_class=variant_class,
+    )
+    # Candidates share coordinate digits rather than a byte-identical field, so
+    # the predicate sees the spelling duplicates a raw-equality lookup hides
+    # (``p.Q403*`` beside ``p.Gln403Ter`` with no cDNA on either row). The scan
+    # stays bounded to rows at the same position, and the writer therefore
+    # implements the same relation the read-only detector reports.
+    matches: list[Tuple[int, Optional[str], Optional[str]]] = [
+        (
+            int(record["variant_id"]),
+            record["protein_notation"],
+            record["genomic_position"],
+        )
+        for record in candidate_rows_by_position(cursor, gene_symbol, incoming)
+        if fold_decision(VariantIdentity.from_row(record), incoming).folds
+    ]
+    # Ambiguity is a refusal: if two stored rows both claim to be this
+    # spelling, folding onto either one picks a winner arbitrarily.
+    if len({variant_id for variant_id, _, _ in matches}) != 1:
+        return None
+    return matches[0]
 
 
 def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) -> int:
@@ -1232,6 +1330,37 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
 
     if (not structural or cdna or protein or genomic or legacy) and result is None:
         result = cursor.fetchone()
+    if result is None and (cdna or protein):
+        spelling = _spelling_alias_candidate(
+            cursor,
+            gene_symbol=gene_symbol,
+            cdna=cdna,
+            protein=protein,
+            genomic=genomic,
+            legacy=legacy,
+            variant_class=vclass,
+        )
+        if spelling is not None:
+            variant_id, stored_protein, stored_genomic = spelling
+            # Two spellings of one identity still have a preferred form: an
+            # explicit frameshift outranks the truncated substitution-looking
+            # label it abbreviates. Folding without this would keep whichever
+            # spelling happened to be inserted first.
+            preferred = preferred_alias_protein(stored_protein, protein)
+            if preferred and preferred != stored_protein:
+                cursor.execute(
+                    "UPDATE variants SET protein_notation = ? WHERE variant_id = ?",
+                    (preferred, variant_id),
+                )
+            # A genomic coordinate is a derived annotation, not an identity
+            # axis, so folding two spellings keeps whichever side carries one
+            # instead of discarding it along with the duplicate row.
+            if genomic and not stored_genomic:
+                cursor.execute(
+                    "UPDATE variants SET genomic_position = ? WHERE variant_id = ?",
+                    (genomic, variant_id),
+                )
+            result = (variant_id,)
     if result is None and (cdna or protein):
         alias = _point_alias_candidate(
             cursor,
@@ -2077,6 +2206,89 @@ def _insert_standard_fact_provenance(
             )
 
 
+def _count_role_values(
+    variant_data: Dict[str, Any], penetrance: Dict[str, Any]
+) -> Tuple[Any, ...]:
+    """Derive the typed count roles, zero provenance, and reconciliation note.
+
+    Roles come from the extractor's own ``count_provenance`` declaration; an
+    absent or unrecognised declaration is ``unknown``, never a default of
+    ``per_variant_carrier``. Downstream must not read a NULL role as an
+    individual count.
+
+    Zero provenance marks an explicit 0 as ``sourced`` only when the
+    declaration names the column it was read from. Otherwise it is ``unknown``:
+    the value is preserved exactly as extracted and simply carries the fact
+    that its origin is not established.
+
+    Reconciliation is a *detector*. When the supplied partitions exceed the
+    carrier total the disagreement is recorded and the integers are left alone,
+    because making the arithmetic close would mean inventing or deleting a
+    count the paper did not state.
+    """
+    provenance = variant_data.get("count_provenance")
+    provenance = provenance if isinstance(provenance, dict) else {}
+
+    from pipeline.count_classifier import KNOWN_COUNT_TYPES
+
+    def declared_role(field: str) -> str:
+        """The declared count type, constrained to the closed vocabulary.
+
+        A free-text value the extractor invented is recorded as ``unknown``
+        rather than passed through: a consumer that switches on the known roles
+        would silently mis-handle an unrecognised string, and one that treats
+        any non-empty role as an individual count would mis-handle all of them.
+        """
+        declared = str(provenance.get(f"{field}_count_type") or "").strip()
+        canonical = declared.lower().replace(" ", "_").replace("-", "_")
+        for known in KNOWN_COUNT_TYPES:
+            if canonical == known.lower():
+                return known
+        return COUNT_ROLE_UNKNOWN
+
+    def zero_provenance_for(field: str, value: Any) -> Optional[str]:
+        # Compare numerically: a string "0" is the same observation as 0, and
+        # treating them differently made zero provenance depend on the JSON
+        # shape rather than the value.
+        coerced = _coerce_optional_int(value)
+        if coerced != 0:
+            return None
+        label = str(provenance.get(f"{field}_column_label") or "").strip()
+        role = declared_role(field)
+        # ``sourced`` is a claim that the paper printed this zero, so it needs
+        # a named column AND a recognised count type. A free-text type plus any
+        # non-empty label would otherwise certify a defaulted zero as evidence.
+        if label and role != COUNT_ROLE_UNKNOWN:
+            return ZERO_PROVENANCE_SOURCED
+        return ZERO_PROVENANCE_UNKNOWN
+
+    role_for = declared_role
+
+    carriers = penetrance.get("total_carriers_observed")
+    affected = penetrance.get("affected_count")
+    unaffected = penetrance.get("unaffected_count")
+    uncertain = penetrance.get("uncertain_count")
+
+    reconciliation = None
+    parts = [v for v in (affected, unaffected, uncertain) if isinstance(v, int)]
+    if isinstance(carriers, int) and parts and sum(parts) > carriers:
+        reconciliation = (
+            f"partitions_exceed_total: affected/unaffected/uncertain sum to "
+            f"{sum(parts)} against a carrier total of {carriers}; values "
+            "preserved as extracted"
+        )
+
+    return (
+        role_for("carriers"),
+        role_for("affected"),
+        role_for("unaffected"),
+        zero_provenance_for("carriers", carriers),
+        zero_provenance_for("affected", affected),
+        zero_provenance_for("unaffected", unaffected),
+        reconciliation,
+    )
+
+
 def _compatible_penetrance_merge(
     stored_values: Tuple[Any, ...], incoming_values: Tuple[Any, ...]
 ) -> Optional[Tuple[Any, ...]]:
@@ -2389,14 +2601,18 @@ def insert_variant_data(
                 penetrance.get("age_dependent_penetrance", []),
             )
         else:
+            roles = _count_role_values(variant_data, penetrance)
             cursor.execute(
                 """
                 INSERT INTO penetrance_data (
                     variant_id, pmid, total_carriers_observed, affected_count,
-                    unaffected_count, uncertain_count, penetrance_percentage
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    unaffected_count, uncertain_count, penetrance_percentage,
+                    carriers_role, affected_role, unaffected_role,
+                    carriers_zero_provenance, affected_zero_provenance,
+                    unaffected_zero_provenance, count_reconciliation
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-                penetrance_values,
+                (*penetrance_values, *roles),
             )
 
             penetrance_id = cursor.lastrowid

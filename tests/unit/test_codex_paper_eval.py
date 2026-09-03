@@ -27,24 +27,31 @@ from benchmarks.codex_paper_eval.run_eval import (
     EXTRACTION_INSTRUCTIONS,
     aggregate,
     choose_source,
+    compare_paired_reports,
     command_extract,
     command_lock,
     command_prepare,
     digest,
+    digest_gold_root,
     effective_effort,
     gold_count_eligible_pmids,
+    gold_variant_eligible_pmids,
     gold_csv_path,
     load_gold,
     matches,
     material_digest_errors,
+    production_run_status_lock_entries,
     production_trace_lock_entries,
     read_paper_manifest,
+    record_tranche_consumption,
     reasoning_params,
     score_one,
+    score_prediction_lane,
     looks_truncated_json,
     selection_metadata,
     supports_images,
     usable_sources,
+    validated_score_gold_root,
     validate_predictions,
     write_json,
     write_markdown_report,
@@ -148,6 +155,237 @@ def test_gold_count_eligibility_respects_v2_nulls_and_exclusions(tmp_path):
     )
 
     assert gold_count_eligible_pmids(tmp_path, "SCN5A") == {"3", "4"}
+    assert gold_variant_eligible_pmids(tmp_path, "SCN5A") == {"1", "3", "4"}
+
+
+def test_provenance_lanes_score_paper_discovery_separately_from_linkage(tmp_path):
+    (tmp_path / "KCNH2_recall_input.csv").write_text(
+        "variant,pmid,carriers,affected,unaffected\nA1V,1,1,1,0\nA2V,1,1,1,0\n"
+    )
+    selection = {"papers": [{"gene": "KCNH2", "pmid": "1"}]}
+    paper_row = {
+        "variant": "A1V",
+        "carriers": 1,
+        "affected": 1,
+        "unaffected": 0,
+    }
+    linkage_row = {
+        "variant": "A2V",
+        "carriers": None,
+        "affected": None,
+        "unaffected": None,
+    }
+    predictions = {
+        "primary_score_lane": "paper_derived",
+        "papers": [
+            {
+                "gene": "KCNH2",
+                "pmid": "1",
+                "variants": [paper_row],
+                "comparison_variants": {"linkage_assisted": [paper_row, linkage_row]},
+            }
+        ],
+    }
+
+    paper_scores, _, _ = score_prediction_lane(
+        selection, predictions, tmp_path, "paper_derived"
+    )
+    linkage_scores, _, _ = score_prediction_lane(
+        selection, predictions, tmp_path, "linkage_assisted"
+    )
+
+    assert aggregate(paper_scores)["recall"] == pytest.approx(0.5)
+    assert aggregate(linkage_scores)["recall"] == pytest.approx(1.0)
+
+
+def test_scoring_burn_ledger_is_append_only_and_idempotent(tmp_path: Path):
+    registry = tmp_path / "suite" / "registry.json"
+    registry.parent.mkdir()
+    registry.write_text("{}")
+    log = registry.parent / "consumption.jsonl"
+    log.write_text("")
+    write_json(
+        tmp_path / "setup.json",
+        {
+            "run_id": "baseline-run",
+            "cohort": {
+                "id": "mixed_01",
+                "registry": str(registry),
+                "registry_sha256": "registry-digest",
+                "comparison_arm": "baseline",
+                "consumption_log": {
+                    "path": log.name,
+                    "schema_version": 1,
+                },
+            },
+            "repository": {"runtime_source": {"sha256": "runtime"}},
+        },
+    )
+    lock = {"selection_sha256": "selection", "predictions_sha256": "prediction"}
+
+    first = record_tranche_consumption(tmp_path, lock)
+    second = record_tranche_consumption(tmp_path, lock)
+
+    assert first == second
+    assert first["registry_sha256"] == "registry-digest"
+    assert len(log.read_text().splitlines()) == 1
+    with pytest.raises(SystemExit, match="consumed arm"):
+        record_tranche_consumption(
+            tmp_path, {**lock, "predictions_sha256": "different"}
+        )
+
+
+def test_registered_score_requires_exact_pinned_composite_gold(tmp_path: Path):
+    gold = tmp_path / "answer_key"
+    gold.mkdir()
+    (gold / "KCNH2_recall_input.csv").write_text("pmid,variant\n1,A1V\n")
+    (gold / "provenance.tsv").write_text(
+        "gene\tpmid\tgold_provenance\nKCNH2\t1\ttest\n"
+    )
+    write_json(
+        tmp_path / "setup.json",
+        {
+            "cohort": {
+                "gold_root": str(gold),
+                "gold_root_sha256": digest_gold_root(gold),
+                "consumption_log": {"path": "consumption.jsonl"},
+            }
+        },
+    )
+
+    assert validated_score_gold_root(tmp_path, gold) == gold.resolve()
+    wrong = tmp_path / "wrong"
+    wrong.mkdir()
+    with pytest.raises(SystemExit, match="differs from the setup-pinned"):
+        validated_score_gold_root(tmp_path, wrong)
+
+    (gold / "KCNH2_recall_input.csv").write_text("pmid,variant\n1,A2V\n")
+    with pytest.raises(SystemExit, match="answer-key digest mismatch"):
+        validated_score_gold_root(tmp_path, gold)
+
+
+def test_registered_tranche_cannot_be_relocked_without_setup(tmp_path: Path):
+    suite = tmp_path / "suite"
+    suite.mkdir()
+    manifest = suite / "tranche.tsv"
+    manifest.write_text("KCNH2\t1\n")
+    write_json(
+        suite / "registry.json",
+        {
+            "consumption_log": {"path": "consumption.jsonl"},
+            "tiers": [{"id": "mixed_01", "manifest": manifest.name}],
+        },
+    )
+    write_json(
+        tmp_path / "selection.json",
+        {"paper_manifest": str(manifest), "papers": []},
+    )
+    write_json(tmp_path / "predictions.json", {"papers": []})
+
+    with pytest.raises(SystemExit, match="burn contract"):
+        command_lock(SimpleNamespace(run_dir=tmp_path))
+
+
+def test_production_run_status_is_digest_bound_and_gold_free(tmp_path: Path):
+    status_path = tmp_path / "RUN_STATUS.json"
+    write_json(
+        status_path,
+        {
+            "status": "completed",
+            "exit_code": 0,
+            "stage_failures": [],
+            "gold_access": {
+                "disabled": True,
+                "gold_derived_alias_files_disabled": True,
+            },
+        },
+    )
+    predictions = {
+        "strategy": "production_gvf_run",
+        "primary_score_lane": "paper_derived",
+        "papers": [{"gene": "KCNH2", "pmid": "1"}],
+        "production_run_statuses": [
+            {"gene": "KCNH2", "status": str(status_path), "sha256": digest(status_path)}
+        ],
+    }
+
+    locked, errors = production_run_status_lock_entries(predictions)
+    assert errors == []
+    assert locked == predictions["production_run_statuses"]
+
+    status_path.write_text("{}")
+    _, errors = production_run_status_lock_entries(predictions)
+    assert errors == ["production_run_statuses[0]: RUN_STATUS digest mismatch"]
+
+
+def test_paired_report_comparison_applies_registered_pmid_cluster_rule():
+    def report(arm: str, improved: bool) -> dict:
+        return {
+            "primary_score_lane": "paper_derived",
+            "tranche_consumption": {
+                "tier_id": "mixed_01",
+                "comparison_arm": arm,
+                "registry_sha256": "registry-digest",
+            },
+            "papers": [
+                {
+                    "gene": "KCNH2",
+                    "pmid": str(pmid),
+                    "tp": 2 if improved else 1,
+                    "fp": 0,
+                    "fn": 0 if improved else 1,
+                }
+                for pmid in (1, 2, 3)
+            ],
+        }
+
+    design = {
+        "decision_rule": {
+            "primary": {
+                "minimum_observed_delta": 0.01,
+                "noninferiority_margin": -0.01,
+                "one_sided_confidence_level": 0.95,
+            },
+            "precision_guardrail": {
+                "noninferiority_margin": -0.02,
+                "one_sided_confidence_level": 0.95,
+            },
+            "confidence_interval": {
+                "method": "paired_cluster_bootstrap_nearest_rank",
+                "cluster_unit": "PMID",
+                "resamples": 1000,
+                "seed": 7,
+            },
+        }
+    }
+
+    result = compare_paired_reports(
+        report("baseline", False),
+        report("candidate", True),
+        design,
+        tier_id="mixed_01",
+        phase="discovery",
+        registry_sha256="registry-digest",
+    )
+
+    assert result["cluster_count"] == 3
+    assert result["metrics"]["recall"]["delta_candidate_minus_baseline"] == 0.5
+    assert result["criteria"] == {
+        "recall_pass": True,
+        "precision_noninferiority_pass": True,
+    }
+    assert result["decision"] == "advance_to_confirmation"
+
+    unchanged = compare_paired_reports(
+        report("baseline", False),
+        report("candidate", False),
+        design,
+        tier_id="mixed_01",
+        phase="discovery",
+        registry_sha256="registry-digest",
+    )
+    assert unchanged["passed"] is False
+    assert unchanged["decision"] == "reject_or_revise_candidate"
 
 
 def _report_fixture() -> dict:
@@ -740,8 +978,11 @@ def test_successful_eval_has_four_hash_lockable_trace_stages(
         "paper_curation",
         "paper_curation_decision",
     ]
+    setup_path = tmp_path / "setup.json"
+    write_json(setup_path, {"cohort": {"comparison_arm": "baseline"}})
     command_lock(SimpleNamespace(run_dir=tmp_path))
     lock = json.loads((tmp_path / "LOCK.json").read_text())
+    assert lock["setup_sha256"] == digest(setup_path)
     assert lock["llm_trace_manifest_sha256"]
     assert lock["llm_trace_report_sha256"]
     manifest = json.loads((tmp_path / "llm_traces" / "trace_manifest.json").read_text())
@@ -751,6 +992,7 @@ def test_successful_eval_has_four_hash_lockable_trace_stages(
     assert report.is_file()
     assert "Sent to model" in report.read_text(encoding="utf-8")
     assert report.stat().st_mode & 0o222 == 0
+    assert setup_path.stat().st_mode & 0o222 == 0
 
 
 def test_table_route_is_not_offered_without_real_table_rows(
@@ -912,7 +1154,7 @@ def test_paper_manifest_accepts_brca2_and_rejects_unregistered_genes(tmp_path: P
     assert read_paper_manifest(good) == [("SCN5A", "123"), ("BRCA2", "26848529")]
 
     bad = tmp_path / "bad.tsv"
-    bad.write_text("APOE\t123\n")
+    bad.write_text("BMPR2\t123\n")
     with pytest.raises(SystemExit):
         read_paper_manifest(bad)
 
@@ -1644,6 +1886,85 @@ def test_linkage_codon_shadows_are_excluded_from_the_projection(tmp_path: Path):
         rows, "KCNQ1", str(tmp_path / "missing.md")
     )
     assert dropped_none == 0 and len(kept_all) == len(rows)
+
+
+def test_production_projection_classifies_origin_not_later_witnesses():
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_lanes", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    assert converter.provenance_lane("llm_table,clinvar") == "paper_derived"
+    assert converter.provenance_lane("mixed") == "unclassified"
+    assert converter.provenance_lane("manual_or_legacy") == "unclassified"
+    assert converter.provenance_lane("clinvar,pubtator") == "external_linkage"
+    assert converter.provenance_lane("pubtator") == "external_linkage"
+    assert converter.provenance_lane(None) == "unclassified"
+
+
+def test_production_projection_filters_strict_provenance_lanes(tmp_path: Path):
+    converter_path = (
+        Path(__file__).parents[2]
+        / "benchmarks/codex_paper_eval"
+        / "db_to_predictions.py"
+    )
+    spec = importlib.util.spec_from_file_location(
+        "db_to_predictions_lane_filter", converter_path
+    )
+    assert spec and spec.loader
+    converter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(converter)
+
+    db = tmp_path / "KCNH2.db"
+    con = sqlite3.connect(db)
+    con.executescript(
+        """
+        CREATE TABLE variants (
+          variant_id INTEGER PRIMARY KEY, protein_notation TEXT, cdna_notation TEXT
+        );
+        CREATE TABLE variant_papers (
+          variant_id INTEGER, pmid TEXT, source_location TEXT, key_quotes TEXT,
+          source_layer TEXT
+        );
+        CREATE TABLE penetrance_data (
+          variant_id INTEGER, pmid TEXT, total_carriers_observed INTEGER,
+          affected_count INTEGER, unaffected_count INTEGER
+        );
+        INSERT INTO variants VALUES (1, 'p.Ala1Val', NULL);
+        INSERT INTO variants VALUES (2, 'p.Ala2Val', NULL);
+        INSERT INTO variants VALUES (3, 'p.Ala3Val', NULL);
+        INSERT INTO variant_papers VALUES (1, '99', 'Table 1', 'paper', 'llm_table,clinvar');
+        INSERT INTO variant_papers VALUES (2, '99', 'ClinVar', 'link', 'clinvar');
+        INSERT INTO variant_papers VALUES (3, '99', 'legacy', 'unknown', 'mystery');
+        """
+    )
+    con.commit()
+    con.close()
+
+    kwargs = {"trust_mode": "all", "identity_mode": "all"}
+    paper, _ = converter.rows_for_gene(
+        db, {"99"}, set(), provenance="paper_derived", **kwargs
+    )
+    linkage, _ = converter.rows_for_gene(
+        db, {"99"}, set(), provenance="external_linkage", **kwargs
+    )
+    scored_union, _ = converter.rows_for_gene(
+        db, {"99"}, set(), provenance="scored_union", **kwargs
+    )
+
+    assert [row["variant"] for row in paper["99"]] == ["p.Ala1Val"]
+    assert [row["variant"] for row in linkage["99"]] == ["p.Ala2Val"]
+    assert {row["variant"] for row in scored_union["99"]} == {
+        "p.Ala1Val",
+        "p.Ala2Val",
+    }
 
 
 def test_twin_merge_never_fuses_distinct_splice_alleles():

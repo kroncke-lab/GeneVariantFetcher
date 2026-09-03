@@ -3,11 +3,13 @@
 from pipeline.claim_verifier import (
     VariantClaimCard,
     CLAIM_VERIFICATION_SYSTEM_PROMPT,
+    FIELD_NAMES,
     VariantClaimVerifier,
     apply_verification_to_variant,
     build_claim_card,
     build_claim_verification_prompt,
     normalize_verification,
+    source_verified_claims,
 )
 from pipeline.extraction import ExpertExtractor
 from utils.models import Paper
@@ -26,6 +28,63 @@ def _variant(name: str, total: int = 43, affected: int = 28, unaffected: int = 1
         "source_location": "Results",
         "additional_notes": "LLM extraction from cohort summary",
     }
+
+
+def _derived_row_card(*, table_unaffected: int = 62) -> VariantClaimCard:
+    return VariantClaimCard(
+        gene="RYR2",
+        disease="catecholaminergic polymorphic ventricular tachycardia",
+        pmid="25814417",
+        title="Founder mutation",
+        variant="p.Gly357Ser",
+        extracted={
+            "total_carriers": 185,
+            "affected": 97,
+            "unaffected": 62,
+            "uncertain": 26,
+        },
+        evidence=(
+            "The p.G357S variant was identified in 179 living carriers and "
+            "6 genotyped sudden-cardiac-death cases. Supplementary Table 3 "
+            "enumerates the living carriers."
+        ),
+        source_location="Supplementary Table 3 and Results",
+        derivation={
+            "count_provenance": {
+                "carriers_count_type": "per_variant_carrier",
+                "affected_column_label": "Previous symptoms OR VA in basal test",
+                "affected_count_type": "derived_from_patient_rows",
+                "affected_source": "patient_row_phenotype_v2",
+                "unaffected_column_label": "Previous symptoms AND VA in basal test",
+                "unaffected_count_type": "derived_from_patient_rows",
+                "unaffected_source": "patient_row_phenotype_v2",
+            },
+            "phenotype_derivation": {
+                "method": "derived_from_patient_rows",
+                "source_table": "Supplementary Table 3",
+                "operational_rule": (
+                    "affected = symptoms positive OR basal VA yes; unaffected = "
+                    "symptoms no AND basal VA no; otherwise uncertain"
+                ),
+                "complete_table": True,
+                "table_total": 179,
+                "table_affected": 91,
+                "table_unaffected": table_unaffected,
+                "table_uncertain": 26,
+                "additional_carriers": 6,
+                "additional_affected": 6,
+                "additional_unaffected": 0,
+                "additional_uncertain": 0,
+                "predicate_tallies": {
+                    "previous_symptoms_positive": 45,
+                    "basal_va_positive": 69,
+                    "positive_overlap": 23,
+                    "dual_negative": 62,
+                    "incomplete": 26,
+                },
+            },
+        },
+    )
 
 
 def test_luna_xhigh_claim_verifier_has_reasoning_headroom():
@@ -435,6 +494,201 @@ def test_claim_prompt_distinguishes_disease_affected_from_symptomatic_subset():
         assert field not in CLAIM_VERIFICATION_SYSTEM_PROMPT
 
 
+def test_claim_card_binds_paper_title_phenotype_before_gene_aliases():
+    source = """# MAIN TEXT
+
+## NOVEL SCN5A MUTATION ASSOCIATED WITH ARRHYTHMIC STORM DURING ISCHEMIA
+
+One G400A carrier developed an arrhythmic storm during acute ischemia.
+Challenge tests for Brugada and long QT syndromes were negative.
+"""
+    card = build_claim_card(
+        source_text=source,
+        gene="SCN5A",
+        disease="long QT syndrome, Brugada syndrome, cardiac rhythm disorder",
+        pmid="example",
+        title="Paper 123",
+        variant={
+            "protein_notation": "p.Gly400Ala",
+            "source_notation": "G400A",
+            "penetrance_data": {
+                "total_carriers_observed": 1,
+                "affected_count": 1,
+                "unaffected_count": 0,
+            },
+        },
+    )
+
+    assert card is not None
+    assert card.paper_title_scope == (
+        "NOVEL SCN5A MUTATION ASSOCIATED WITH ARRHYTHMIC STORM DURING ISCHEMIA"
+    )
+    assert card.paper_target_phenotypes == ["arrhythmic storm"]
+    prompt = build_claim_verification_prompt(card)
+    assert '"paper_target_phenotypes": [' in prompt
+    assert "negative test for syndrome A" in CLAIM_VERIFICATION_SYSTEM_PROMPT
+
+
+def test_paper_target_guard_rejects_off_target_negative_reversal():
+    source = """# MAIN TEXT
+
+## SCN5A MUTATION ASSOCIATED WITH ARRHYTHMIC STORM DURING ISCHEMIA
+
+The G400A mutation carrier developed an arrhythmic storm during acute ischemia.
+Challenge tests to unmask Brugada and long QT syndromes were negative.
+"""
+    card = build_claim_card(
+        source_text=source,
+        gene="SCN5A",
+        disease="long QT syndrome, Brugada syndrome, cardiac rhythm disorder",
+        pmid="example",
+        title="Paper 123",
+        variant={
+            "protein_notation": "p.Gly400Ala",
+            "source_notation": "G400A",
+            "penetrance_data": {
+                "total_carriers_observed": 1,
+                "affected_count": 1,
+                "unaffected_count": 0,
+            },
+        },
+    )
+    raw = {
+        "verdict": "directly_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "directly_supported",
+            "unaffected": "directly_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 1,
+            "affected": 0,
+            "unaffected": 1,
+        },
+        "reason": "Brugada and LQTS challenge tests were negative.",
+        "evidence_quote": "Challenge tests for Brugada and long QT were negative.",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["affected"] == 1
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["paper_target_scope_overrides"] == ["affected"]
+    assert normalized["paper_target_scope"]["phenotypes"] == ["arrhythmic storm"]
+
+
+def test_paper_target_guard_allows_negative_for_same_target():
+    card = VariantClaimCard(
+        gene="SCN5A",
+        disease="Brugada syndrome",
+        pmid="example",
+        title="Brugada syndrome challenge testing",
+        variant="p.Gly400Ala",
+        extracted={
+            "total_carriers": 1,
+            "affected": 1,
+            "unaffected": 0,
+        },
+        evidence=(
+            "The p.Gly400Ala carrier was evaluated for Brugada syndrome. "
+            "The Brugada syndrome challenge test was negative."
+        ),
+        paper_target_phenotypes=["Brugada syndrome"],
+        paper_title_scope="Brugada syndrome challenge testing",
+    )
+    raw = {
+        "verdict": "directly_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "directly_supported",
+            "unaffected": "directly_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 1,
+            "affected": 0,
+            "unaffected": 1,
+        },
+        "reason": "The Brugada syndrome challenge was negative.",
+        "evidence_quote": "The Brugada syndrome challenge test was negative.",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["affected"] == 0
+    assert normalized["corrected_values"]["unaffected"] == 1
+    assert "paper_target_scope_overrides" not in normalized
+
+
+def test_verifier_cannot_introduce_unaffected_zero_complement():
+    card = VariantClaimCard(
+        gene="KCNH2",
+        disease="Long QT syndrome",
+        pmid="example",
+        title="Variant-associated long QT syndrome",
+        variant="p.Arg176Trp",
+        extracted={"total_carriers": 1, "affected": 0, "unaffected": 1},
+        evidence="One carrier was diagnosed with latent LQTS.",
+    )
+    raw = {
+        "verdict": "directly_supported",
+        "field_verdicts": {
+            "total_carriers": "directly_supported",
+            "affected": "directly_supported",
+            "unaffected": "directly_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 1,
+            "affected": 1,
+            "unaffected": 0,
+        },
+        "reason": "The carrier was diagnosed with latent LQTS.",
+        "evidence_quote": "One carrier was diagnosed with latent LQTS.",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"] == {
+        "total_carriers": 1,
+        "affected": 1,
+        "unaffected": None,
+    }
+    assert normalized["field_verdicts"]["unaffected"] == "ambiguous"
+
+
+def test_verifier_cannot_support_zero_for_open_carrier_set():
+    card = VariantClaimCard(
+        gene="KCNH2",
+        disease="Long QT syndrome",
+        pmid="example",
+        title="Familial long QT syndrome",
+        variant="p.Gly572Ser",
+        extracted={"total_carriers": None, "affected": None, "unaffected": 0},
+        evidence="QT prolongation was observed in all mutation carriers.",
+    )
+    raw = {
+        "verdict": "directly_supported",
+        "field_verdicts": {
+            "total_carriers": "source_missing",
+            "affected": "source_missing",
+            "unaffected": "directly_supported",
+        },
+        "corrected_values": {
+            "total_carriers": None,
+            "affected": None,
+            "unaffected": 0,
+        },
+        "reason": "All carriers had QT prolongation.",
+        "evidence_quote": "QT prolongation was observed in all mutation carriers.",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["field_verdicts"]["unaffected"] == "ambiguous"
+
+
 def test_claim_verification_guard_clears_ambiguous_symptom_partition():
     card = VariantClaimCard(
         gene="KCNH2",
@@ -504,6 +758,118 @@ def test_claim_verification_does_not_promote_unsupported_partition_values():
     assert normalized["corrected_values"]["unaffected"] is None
     assert normalized["field_verdicts"]["affected"] == "unsupported"
     assert normalized["field_verdicts"]["unaffected"] == "unsupported"
+
+
+def test_claim_verification_accepts_audited_patient_row_derivation():
+    card = _derived_row_card()
+    raw = {
+        "verdict": "inferred_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "inferred_supported",
+            "unaffected": "inferred_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 185,
+            "affected": 97,
+            "unaffected": 62,
+        },
+        "reason": "The complete row audit reconciles with 26 uncertain carriers.",
+        "evidence_quote": "Supplementary Table 3",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"] == {
+        "total_carriers": 185,
+        "affected": 97,
+        "unaffected": 62,
+    }
+    assert normalized["field_verdicts"]["affected"] == "inferred_supported"
+    assert normalized["field_verdicts"]["unaffected"] == "inferred_supported"
+
+
+def test_claim_verification_rejects_mismatched_patient_row_derivation():
+    card = _derived_row_card(table_unaffected=63)
+    raw = {
+        "verdict": "inferred_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "inferred_supported",
+            "unaffected": "inferred_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 185,
+            "affected": 97,
+            "unaffected": 62,
+        },
+        "reason": "Claimed row derivation",
+        "evidence_quote": "Supplementary Table 3",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["field_verdicts"]["affected"] == "ambiguous"
+    assert normalized["field_verdicts"]["unaffected"] == "ambiguous"
+
+
+def test_claim_verification_rejects_model_declared_patient_row_type_without_stamps():
+    card = _derived_row_card()
+    provenance = card.derivation["count_provenance"]
+    provenance.pop("affected_source")
+    provenance.pop("unaffected_source")
+    raw = {
+        "verdict": "inferred_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "inferred_supported",
+            "unaffected": "inferred_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 185,
+            "affected": 97,
+            "unaffected": 62,
+        },
+        "reason": "Model-declared row derivation",
+        "evidence_quote": "Supplementary Table 3",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["corrected_values"]["unaffected"] is None
+    assert normalized["field_verdicts"]["affected"] == "ambiguous"
+    assert normalized["field_verdicts"]["unaffected"] == "ambiguous"
+
+
+def test_claim_verification_rejects_correction_that_breaks_valid_row_audit():
+    card = _derived_row_card()
+    raw = {
+        "verdict": "inferred_supported",
+        "field_verdicts": {
+            "variant": "directly_supported",
+            "total_carriers": "directly_supported",
+            "affected": "inferred_supported",
+            "unaffected": "inferred_supported",
+        },
+        "corrected_values": {
+            "total_carriers": 185,
+            "affected": 98,
+            "unaffected": 61,
+        },
+        "reason": "Changed without changing the row audit",
+        "evidence_quote": "Supplementary Table 3",
+    }
+
+    normalized = normalize_verification(raw, card=card)
+
+    assert normalized["corrected_values"]["affected"] is None
+    assert normalized["corrected_values"]["unaffected"] is None
 
 
 def test_claim_verification_does_not_complete_partition_arithmetically():
@@ -604,6 +970,40 @@ def test_claim_card_table_evidence_includes_header_context():
     assert "In silico functional analysis" in card.evidence
 
 
+def test_claim_card_carries_structured_patient_row_derivation():
+    card = build_claim_card(
+        source_text="The p.G357S variant had one complete patient table.",
+        gene="RYR2",
+        disease="CPVT",
+        pmid="25814417",
+        title="Founder mutation",
+        variant={
+            "protein_notation": "p.G357S",
+            "patients": {"count": 185},
+            "penetrance_data": {
+                "total_carriers_observed": 185,
+                "affected_count": 97,
+                "unaffected_count": 62,
+                "uncertain_count": 26,
+            },
+            "count_provenance": {
+                "affected_count_type": "derived_from_patient_rows",
+                "unaffected_count_type": "derived_from_patient_rows",
+            },
+            "phenotype_derivation": {"method": "derived_from_patient_rows"},
+        },
+    )
+
+    assert card is not None
+    assert card.extracted["uncertain"] == 26
+    assert card.derivation["count_provenance"]["affected_count_type"] == (
+        "derived_from_patient_rows"
+    )
+    assert card.derivation["phenotype_derivation"]["method"] == (
+        "derived_from_patient_rows"
+    )
+
+
 def test_claim_card_finds_one_letter_alias_for_three_letter_variant():
     text = "\n".join(
         [
@@ -640,3 +1040,143 @@ def test_claim_card_bridges_stop_codon_star_and_x_aliases():
 
     assert card is not None
     assert "SCN5A-R1193X" in card.evidence
+
+
+def test_source_verified_alias_partition_overrides_false_verifier_rejection():
+    source = (
+        "The index case carried p.R360_Q361dupQKQR.\n"
+        "Overall, 24 out of 29 KCNQ1 dup12 mutation carriers were affected "
+        "by an LQT syndrome, suggesting incomplete penetrance."
+    )
+    variant = {
+        "gene_symbol": "KCNQ1",
+        "protein_notation": "p.R360_Q361dupQKQR",
+        "source_notation": "KCNQ1 dup12; p.R360_Q361dupQKQR",
+        "patients": {"count": 29},
+        "penetrance_data": {
+            "total_carriers_observed": 29,
+            "affected_count": 24,
+            "unaffected_count": 5,
+        },
+        "fact_provenance": [
+            {
+                "fact_type": "affected_count",
+                "fact_value": "24",
+                "evidence_quote": (
+                    "24 out of 29 KCNQ1 dup12 mutation carriers were affected "
+                    "by an LQT syndrome"
+                ),
+            }
+        ],
+    }
+    card = build_claim_card(
+        source_text=source,
+        gene="KCNQ1",
+        disease="Long QT syndrome",
+        pmid="1",
+        title="Alias partition",
+        variant=variant,
+        max_evidence_chars=1000,
+    )
+    raw = {
+        "verdict": "unsupported",
+        "field_verdicts": {field: "unsupported" for field in FIELD_NAMES},
+        "corrected_values": {
+            "total_carriers": None,
+            "affected": None,
+            "unaffected": None,
+        },
+        "reason": "Canonical-token window missed the alias count line.",
+        "evidence_quote": "",
+    }
+
+    assert card is not None
+    assert "24 out of 29 KCNQ1 dup12" in card.evidence
+    normalized = normalize_verification(raw, card=card)
+    assert normalized["corrected_values"] == {
+        "total_carriers": 29,
+        "affected": 24,
+        "unaffected": 5,
+    }
+    assert normalized["source_verified_overrides"] == [
+        "total_carriers",
+        "affected",
+        "unaffected",
+    ]
+
+
+def test_source_verified_same_population_coreference_keeps_affected_count():
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation.\n"
+        "The study population consisted of 30 LQT3 patients."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "source_notation": "D1790G",
+        "patients": {"count": 30},
+        "penetrance_data": {
+            "total_carriers_observed": 30,
+            "affected_count": 30,
+            "unaffected_count": None,
+        },
+        "fact_provenance": [
+            {
+                "fact_type": "total_carriers_observed",
+                "fact_value": "30",
+                "evidence_quote": (
+                    "The current study population consisted of 30 carriers of "
+                    "the D1790G SCN5A mutation"
+                ),
+            },
+            {
+                "fact_type": "affected_count",
+                "fact_value": "30",
+                "evidence_quote": "The study population consisted of 30 LQT3 patients",
+            },
+        ],
+    }
+
+    claims = source_verified_claims(variant, source, "Long QT syndrome")
+
+    assert claims["affected"]["value"] == 30
+    assert claims["affected"]["method"] == (
+        "same_population_identity_disease_coreference"
+    )
+
+
+def test_disease_cohort_without_equal_identity_population_is_not_verified():
+    source = "We enrolled 30 LQT3 patients. The D1790G variant was identified in 4."
+    variant = {
+        "source_notation": "D1790G",
+        "patients": {"count": 4},
+        "penetrance_data": {
+            "total_carriers_observed": 4,
+            "affected_count": 30,
+            "unaffected_count": None,
+        },
+        "fact_provenance": [
+            {
+                "fact_type": "affected_count",
+                "fact_value": "30",
+                "evidence_quote": "We enrolled 30 LQT3 patients",
+            }
+        ],
+    }
+
+    assert "affected" not in source_verified_claims(variant, source, "Long QT syndrome")
+
+
+def test_symptom_subset_is_not_a_closed_disease_partition():
+    source = "24 out of 29 KCNQ1 dup12 mutation carriers had syncope."
+    variant = {
+        "source_notation": "KCNQ1 dup12",
+        "patients": {"count": 29},
+        "penetrance_data": {
+            "total_carriers_observed": 29,
+            "affected_count": 24,
+            "unaffected_count": 5,
+        },
+    }
+
+    assert source_verified_claims(variant, source, "Long QT syndrome") == {}

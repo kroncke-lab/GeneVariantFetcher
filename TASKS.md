@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-09-03.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -21,6 +21,18 @@ until the preceding gate passes and its artifact is recorded.
 
 ## Active $100 improvement goal
 
+- [x] **Close the repeated source-positive phenotype-count loss across all
+      stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
+      provenance is now non-forgeable, refresh preserves it, exact patient-row
+      and source-bound partitions survive verification/trust, and dedicated
+      carrier denominators outrank the legacy patient mirror. Fresh gold-blind
+      lock `20260902_false_zero_recovery_gold118` completed 118/118 attempts;
+      required cases survived as W4645R 4/2/2, C2277R 8/7/1, G357S
+      185/97/62, P2328S 62/17/42, and Y652X 6/6/NULL. The figure and its raw
+      CSV/JSON are generated automatically at score time. Full suite: 2,736
+      passed. The run validates the repair but is not promoted because the
+      fresh stochastic extraction has lower identity recall and carrier/affected
+      supply than the accepted headline.
 - [x] Consolidate every worthwhile local branch/worktree change onto `main`;
       preserve the stale pre-merge stash as historical recovery material.
 - [x] Freeze the accepted 118-attempt headline and run two new gold-blind,
@@ -74,13 +86,38 @@ until the preceding gate passes and its artifact is recorded.
       from public notation resources, or gate it out of production and keep it as
       a benchmark-only input. Details:
       `docs/evidence/generalization_consult_20260825.md` §1.
-- [ ] **Report the two provenance lanes separately.** The headline mixes paper
+      **Evaluation containment landed 2026-09-03:** `--gold-free-run` now disables
+      all file-backed alias maps (even a warm in-process cache), records that in
+      `RUN_STATUS.json`, and the paper-primary projector refuses a run without
+      that proof. Rebuilding/removing the map for ordinary production remains
+      open.
+- [x] **Report the provenance lanes separately.** New registry-created runs lock
+      paper-derived identities as the primary score, ClinVar/PubTator as an
+      external audit plus secondary linkage-assisted diagnostic, and ambiguous
+      `mixed`/legacy/unknown origins as an unscored attribution-quality lane.
+      The historical headline mixes paper
       extraction with ClinVar/PubTator linkage. Locked-DB replay: paper-derived
       only is 512/125/120 (P 80.38%, R 81.01%) versus 554/283/78 (P 66.19%,
       R 87.66%) linkage-assisted. Linkage FPs are KCNQ1 79, SCN5A 72, KCNH2 7,
       RYR2 0 — which is why RYR2 looks clean, and why "the top five FP papers are
       just gold-incomplete" is too strong (95 of those 162 extras are linkage
       rows, including all 63 on KCNQ1 19632626). Do not delete linkage rows.
+- [x] **Mix the complete named-variant gold inventory into protocol-regression
+      tranches.** `benchmarks/evaluation_tiers/mixed_gold/` inventories 1,534
+      gene-paper attempts: 1,422 source-available attempts appear exactly once
+      in 29 deterministic, article-atomic tranches; 111 unavailable and one
+      quarantined wrong-paper attempt remain explicit. Per-tranche one-arm cost
+      is $4.98–$5.30; paired baseline/candidate cost is $9.96–$10.61, or
+      $12.45–$13.26 with headroom. No paid extraction was run. Consume in
+      registry order; any inspected score burns that tranche for confirmation.
+      Setup/scoring enforce baseline-before-candidate, one score per arm, and
+      append-only consumption. The paired decision is preregistered and applied
+      by `run_eval.py compare`; scoring also verifies the exact setup-pinned
+      composite gold digest, locks observed gold-free RUN_STATUS evidence, and
+      refuses a registry-managed re-lock without its burn contract. Reviews and
+      dispositions: `docs/evidence/mixed_gold_grok_review_20260903.md` and
+      `docs/evidence/mixed_gold_claude_review_20260903.md`. Full unit suite:
+      **2,751 passed**.
 - [ ] **Ship the ranked $0 generality fixes** in
       `docs/evidence/generalization_consult_20260825.md` §8, in order: HGVS
       range-separator repair (`c.2550-2551insTG` vs `c.2550_2551insTG` currently
@@ -500,6 +537,105 @@ missing paper or table with speculative count arithmetic.
 - [ ] Create or import a source-reconciled KCNE1 per-PMID gold input before
       making KCNE1 recall claims.
 
+## 4a. Shared pipeline reliability (landed 2026-09-02)
+
+Seven shared, gene-agnostic defects found by auditing one 50-paper BMPR2 cohort.
+Full evidence, measurements, and three Grok 4.6 `xhigh` adversarial reviews:
+`docs/evidence/shared_pipeline_reliability_20260902.md`. The cardiac gold gate
+is bit-identical before and after. This work adds 157 tests; the current working
+tree passes all 2692 tests, including a concurrent change set.
+
+- [x] **One canonical source-text policy** (`utils/source_text.py`) used by the
+      table router, extraction, the scanner, the normalizer, and the LLM-input
+      funnel. Explicit closed substitution tables, deliberately not NFKC. Eight
+      real-source tokens went from dropped to parsed; corpus-wide over the eight
+      sentinels 711 → 712 router-parsed tokens with zero regressions.
+- [x] **Nested archive expansion** (`.zip` only, depth/size/cycle bounded,
+      zip-slip refused). Recovered a 14,012-char supplementary PDF holding a
+      per-patient variant table that had never reached any extraction route.
+      Verified live: that paper's run source grew 82,211 → 96,557 bytes with the
+      recovered tables present exactly once.
+- [x] **Cross-route identity as a detector plus a spelling-only fold**
+      (`pipeline/variant_identity.py`). Candidates are selected by shared
+      coordinate digits, so the writer and the read-only detector implement the
+      same relation. A field present on one side only is refused, so the
+      relation cannot bridge two conflicting rows through a missing value.
+      Every database-linkage ingest now uses the shared resolver instead of its
+      own raw-string helper.
+- [x] **Finalized-list denominators** (`pipeline/source_ledger.py`). Also fixed
+      the single-carrier predicate, which read two non-existent schema keys and
+      therefore flagged every paper in every run.
+- [x] **Typed count roles and zero provenance** persisted on `penetrance_data`,
+      additive and nullable. Historical zeros are not rewritten.
+- [x] **Protocol fingerprint** covering the text policy, identity rules, ledger
+      and archive budget.
+- [x] **Re-fold no longer trades real converted text for a converter
+      placeholder**, per label rather than all-or-nothing.
+
+A gold-free 50-paper BMPR2 validation run was completed on this protocol
+(`results/bmpr2_shared_fixes_20260902/BMPR2/20260902_074142`, fingerprint
+`f6787618`). Its own artifacts validate: source ledger 10/10 checks, 50/50 full
+text, zero unverified, zero class discrepancies, zero chimeric identities, zero
+cross-gene rows, 31/31 archives expanded, and the known source contradictions
+still held rather than merged. Foldable spelling duplicates over the same
+roster fell 87 → 5. Numbers and caveats: `docs/RECALL_STATUS.md`.
+
+- [x] **Make the count roles load-bearing.** The trust gate now reads the
+      persisted role column, falling back to the JSON provenance blob, so a
+      declared family count is masked from carrier-facing totals even when that
+      blob is missing. Previously the role reached the gate only through a LEFT
+      JOIN to `variant_papers`, and a missing or malformed blob silently made a
+      family count read as an individual count.
+- [x] **One canonical DOI path** (`utils/doi.py`). Four modules each carried the
+      same boundary-free pattern, so a DOI printed in rendered page text with
+      the next word glued on ("...25052734Submission") became an identifier that
+      cannot resolve; that failed the validation run's paywall-fetch stage. The
+      trim is structural (capitalised words glued onto a trailing digit), not an
+      allowlist, and 13 real DOIs across this corpus's publishers are unchanged.
+- [x] **Stop over-splitting on a derived coordinate.** `genomic_position` was
+      sparse-refusing in the fold predicate, so two rows with byte-identical
+      cDNA *and* protein stayed separate when only one carried a coordinate. It
+      is now conflict-only, and the fold carries the coordinate forward. This is
+      the class of all five residual foldable pairs in the validation run.
+
+Remaining, in order:
+
+- [ ] **Move the remaining count consumers onto the role columns.** The trust
+      gate now reads them, but report, publish, and the scorer still read the
+      raw integers, so a family count and an individual count remain
+      indistinguishable to a downstream reader.
+- [ ] **Re-run the 50-paper BMPR2 cohort under the current fingerprint** if a
+      zero-residual artifact is wanted. The coordinate and DOI fixes postdate
+      the validation run, so its database still contains the five characterized
+      foldable pairs. Extraction output is unaffected by either fix, so this is
+      a presentation choice rather than a correctness gate; do not splice a new
+      migration onto that run's extractions.
+      Command:
+      `gvf gvf-run BMPR2 --email <addr> --output ./results/<new> --pmid-file benchmarks/curated_extraction_eval/review_pmids_50_20260824_curated/BMPR2.txt --disease "pulmonary arterial hypertension" --gold-free-run`
+- [ ] **Close the mid-suffix DOI glue hole.** The trim is end-anchored, so
+      `...34Submissionreceived:6` would still pass through as a bad identifier.
+      Fetch-queue robustness only; it does not affect bound source.
+- [ ] **Run the nested-archive path on a second gene.** The recall gain is
+      measured on exactly one paper. Until a second gene exercises it, the
+      repair is correct-by-test but narrow-by-evidence.
+- [ ] **Route `scripts/extract_figure_variants.py` and
+      `scripts/recall_recovery/merge_v12_db.py` through the shared resolver.**
+      Both still raw-insert. The figure path has its own private-to-paper guard
+      and contributed 8 variants in the audited database; `merge_v12_db` is off
+      the live `gvf-run` path. Neither is urgent; both are identity writers that
+      have never seen `fold_decision`.
+- [ ] **Work the 51 identity conflicts** the detector surfaced on the audited
+      database. These are genuine source contradictions (a nucleotide change
+      reported with two different protein consequences, a consequence reported
+      against two different nucleotide changes). They need curator adjudication;
+      the pipeline must not choose.
+- [ ] Retire `_point_alias_candidate`'s sparse/rich completion, or prove it
+      safe. It is pre-existing and guarded, but it is the one remaining
+      order-dependent fold in migration.
+- [ ] Parse intronic `delins`; teach `split_glued_notation`'s callers to emit
+      two observations rather than refusing a two-allele cell. Both are yield
+      gaps, not correctness risks.
+
 ## 4b. Measurement-artifact integrity (opened 2026-08-17, all $0)
 
 These are defects in the *map*, not the pipeline. They matter because the whole
@@ -581,6 +717,13 @@ source is unaffected.
 
 ## 5. Engineering handoff follow-ups
 
+- [x] Make phenotype-zero claims source-closed and paper-target aware, then run
+      the complete 118-paper blinded cohort. `20260902_zero_claim_guard_gold118`
+      completed and locked; 2,726 tests pass. D1790G is 30/30/NULL and G400A is
+      1/1/NULL under the shared protocol. The automated recovery figure is
+      generated by `lock_and_score.sh`; its CSV preserves raw null separately
+      from evaluation-zero filling. The only stored-zero/positive-gold mismatch,
+      V141M PMID 28491547, is a documented legacy-gold definition conflict.
 - [ ] `harvesting/migrate_to_sqlite.py` repair gaps: the fabricated-c repair
       proof strips only spaces (`REPLACE(TRIM(...),' ','')`, missing
       tabs/newlines) and repairs only the first matching row (`LIMIT 1`),

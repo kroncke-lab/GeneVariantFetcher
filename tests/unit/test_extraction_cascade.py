@@ -97,3 +97,35 @@ def test_cascade_uses_fallback_after_primary_failure(monkeypatch):
     assert calls == ["primary", "fallback"]
     assert result.model_used == "fallback"
     assert len(result.extracted_data["variants"]) == 1
+
+
+def test_patient_table_rows_do_not_force_high_variant_mode(monkeypatch):
+    monkeypatch.setattr(
+        ExpertExtractor, "_prepare_full_text", lambda self, paper: paper.full_text
+    )
+    monkeypatch.setattr(
+        ExpertExtractor, "_assess_input_quality", lambda self, text, gene: (True, "ok")
+    )
+    monkeypatch.setattr(ExpertExtractor, "_estimate_table_rows", lambda self, text: 191)
+    monkeypatch.setattr(
+        ExpertExtractor,
+        "_parse_markdown_table_variants",
+        lambda self, text, gene: [
+            {"gene_symbol": gene, "protein_notation": "p.Gly357Ser"}
+        ],
+    )
+    seen = []
+
+    def fake_attempt(self, paper, model, prepared_full_text, estimated_variants):
+        seen.append(estimated_variants)
+        return _result(paper.pmid, model, 1)
+
+    monkeypatch.setattr(ExpertExtractor, "_attempt_extraction", fake_attempt)
+    extractor = ExpertExtractor(models=["primary"], tier_threshold=1)
+
+    result = extractor._extract_with_model_fallback(
+        Paper(pmid="25814417", full_text="patient table", gene_symbol="RYR2")
+    )
+
+    assert result.success
+    assert seen == [1]

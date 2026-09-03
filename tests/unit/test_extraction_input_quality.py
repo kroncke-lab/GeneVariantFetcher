@@ -434,3 +434,35 @@ class TestGeneLessMutationTableTruncation:
             combined, "KCNQ1", max_chars=len(combined) // 2
         )
         assert truncated.startswith("[GENE-FOCUSED")
+
+    def test_bold_complete_patient_table_reaches_the_prompt(self, extractor):
+        prose = [
+            (
+                "RYR2 founder-family clinical prose. "
+                if i % 35 == 0
+                else "Clinical prose. "
+            )
+            + "x" * 180
+            for i in range(350)
+        ]
+        table = [
+            "**Supplementary Table 3. Basal phenotypic features of living mutation positive subjects**",
+            "",
+            "| Patient | Previous symptoms | VA in basal test |",
+            "| --- | --- | --- |",
+        ]
+        table.extend(
+            f"| {i} | {'Syncope' if i % 3 == 0 else 'No'} | "
+            f"{'Yes' if i % 5 == 0 else 'No'} |"
+            for i in range(1, 180)
+        )
+        text = "\n".join(prose + [""] + table)
+
+        truncated = extractor._truncate_text_for_prompt(
+            text, "RYR2", max_chars=len(text) // 2
+        )
+
+        assert truncated.startswith("[GENE-FOCUSED")
+        assert "Basal phenotypic features" in truncated
+        assert "| 1 | No | No |" in truncated
+        assert "| 179 | No | No |" in truncated

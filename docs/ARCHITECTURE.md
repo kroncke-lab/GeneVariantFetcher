@@ -134,6 +134,23 @@ contains that exact percentage and names the variant. Aggregation never computes
 `affected / carriers`, and claim verification never completes an
 affected/unaffected partition from diagnosis, enrollment, or subtraction.
 
+One narrow deterministic exception derives phenotype counts from a complete,
+variant-scoped patient table (`pipeline/patient_row_phenotype.py`). It requires
+an unambiguous table-to-variant binding, an independently stated table population
+and carrier total, unique contiguous patient IDs in either order, and explicit
+symptom plus objective target-disease columns. Single-variant papers may bind a
+generic spreadsheet caption such as `Sheet: Data` through the paper title;
+multi-variant papers require the table caption itself to name the variant. A row
+is affected when any selected cell is positive,
+unaffected only when every selected cell is explicitly negative, and uncertain
+when a selected cell is missing or unmapped without another positive. Exact
+genotyped fatal cases reported outside an enumerated table may be added as
+affected; other exact carriers outside the table remain uncertain. Every
+extraction records a `patient_row_phenotype_v2` attempt outcome, including a
+reason when the gate abstains. The emitted `phenotype_derivation` audit must close
+the full partition; otherwise the exception abstains and the ordinary
+no-inference contract applies.
+
 Variant-paper provenance separates origin from corroboration:
 `variant_papers.source_layer` is one primary enum, while
 `observed_source_layers` is the ordered, de-duplicated set of every lane that
@@ -460,6 +477,29 @@ than silently dropping a row. A populated status makes all three `gold_v2_*`
 fields authoritative, including explicit nulls, and exclusion states remove the
 row consistently from the paper evaluator, general comparison scorer, and
 claim-verification pilot.
+
+### Evaluation identity provenance lanes
+
+Registry-created production evaluations lock three disjoint identity views
+before opening gold. The primary `papers[].variants` view admits only stable
+paper origins (`llm_text`, `llm_table`, `regex_text`, `regex_table`, `figure`).
+ClinVar/PubTator citation-linked identities remain locked separately as
+`external_linkage_variants`; only the secondary `linkage_assisted` diagnostic
+unions them with paper identities. Ambiguous `mixed`, `manual_or_legacy`, and
+unknown origins are retained as `unattributed_variants` but contribute to
+neither score. A database citation therefore cannot count as finding an
+identity in a paper, and origin-quality debt stays visible rather than silently
+lowering or raising recall.
+
+The mixed-gold regression registry covers every named-variant gold attempt in
+an explicit inventory and assigns each of the 1,422 source-available attempts
+once across 29 deterministic, article-atomic tranches. Protocol comparisons are
+paired on the same PMID clusters; gold provenance is reported separately, and a
+tranche becomes calibration as soon as its score informs a change. The registry
+preregisters candidate-minus-baseline recall and precision thresholds plus a
+deterministic, one-sided PMID-cluster bootstrap; `run_eval.py compare` applies
+that rule. Score refuses any answer-key path or digest other than the one pinned
+in setup, and the lock binds each production run's observed gold-free status.
 
 ### Additive count recovery (Step 3.55, default OFF)
 

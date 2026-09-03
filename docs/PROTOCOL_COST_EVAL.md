@@ -5,6 +5,50 @@ are those used by each named run; they are not current configuration guidance.
 Use `config/settings.py` and `docs/ARCHITECTURE.md` for current defaults and
 `TASKS.md` for the next acceptance gate.
 
+## Mixed all-gold tranche budget (2026-09-03; no extraction calls)
+
+The deterministic registry at
+`benchmarks/evaluation_tiers/mixed_gold/registry.json` assigns all **1,422
+source-available** gene-paper attempts from the 1,534-attempt named-variant
+inventory to 29 article-disjoint tranches. The remaining 111 source-unavailable
+attempts and one quarantined wrong-paper attempt stay explicit in
+`inventory.tsv`; they are not scored as misses.
+
+Observed per-gene token usage gives a **$4.98–$5.30 one-arm proxy per tranche**
+and **$9.96–$10.61 for a paired frozen-baseline/candidate comparison**. With 25%
+retry/variance headroom, budget **$12.45–$13.26 per paired tranche**. Running
+every tranche once would be $148.83 before headroom; paired execution of the
+entire suite would be $297.66, or **$372.08 with headroom**. These are planning
+proxies from the dated 2026-08-24 public price card, not invoices or tail bounds;
+source acquisition, human review, and consultation are excluded. Compare the
+first paid tranche's actual charge with the proxy before relying on it.
+
+The primary endpoint is paper-derived micro variant-identity recall, with
+paper-derived precision as a non-inferiority guardrail and gene/gold-provenance
+breakouts always reported. Attempts are clustered by PMID. ClinVar/PubTator are
+secondary linkage diagnostics; ambiguous origins are unscored. Inspecting a
+score burns that tranche for confirmation, so consume tranches in registry
+order and confirm changes on a still-unopened tranche. Setup and score enforce
+the paired arm/order contract through the append-only `consumption_log.jsonl`.
+
+The paired decision is preregistered before any arm is opened. Deltas are
+candidate minus baseline on the same tranche. Discovery passes only if observed
+paper-derived recall improves by at least 1 percentage point, its one-sided 95%
+PMID-cluster-bootstrap lower bound is at least -1 point, and the corresponding
+precision lower bound is at least -2 points. The bootstrap uses 10,000
+deterministic resamples. A discovery pass only advances to confirmation: the
+same rule must pass on the next unopened tranche before accepting the change.
+These are engineering regression thresholds, not clinical-effect thresholds.
+Use `run_eval.py compare`; do not choose a rule after viewing scores.
+
+Gold-row denominators vary from 110 to 593 per tranche, and rare non-cardiac
+provenance strata are sparse. The paired comparison remains valid within a
+tranche, but per-provenance results must show their sample size and remain
+diagnostic. Absolute pooled precision is not an exhaustive scientific estimate
+for non-exhaustive collaborator gold. Until the ledger supports an explicit
+abandonment event, do not open a baseline unless its candidate arm will be
+completed.
+
 ## Current measured costs and $100 improvement budget (2026-08-24)
 
 The accepted immutable gold-118 baseline is

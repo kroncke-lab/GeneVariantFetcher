@@ -1,8 +1,16 @@
 # Canonical evaluation tiers
 
-These are the only active paper cohorts for protocol rollout. Dated benchmark
-runs and older manifests remain reproducibility artifacts; they are not extra
-gates and must not be described as current.
+The four registry entries below preserve the staged rollout cohorts and their
+historical gates. For ongoing protocol-change testing, the canonical broad
+suite is now [`mixed_gold/`](mixed_gold/README.md): it inventories every named
+variant gold source, assigns every source-available gene-paper attempt exactly
+once across 29 heterogeneous tranches, makes paper-derived identity the primary
+score, and records an observed-usage cost estimate for every tranche.
+The estimate is recorded both per arm and for the paired frozen-baseline versus
+candidate comparison required for protocol changes.
+
+Dated benchmark runs and older manifests remain reproducibility artifacts; they
+are not extra gates and must not be described as current.
 
 | Order | Tier | Gene–paper attempts | Unique PMIDs | Use |
 |---:|---|---:|---:|---|

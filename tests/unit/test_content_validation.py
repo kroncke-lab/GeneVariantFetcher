@@ -1,6 +1,9 @@
 """Tests for harvesting content validation helpers."""
 
-from harvesting.content_validation import validate_content_quality
+from harvesting.content_validation import (
+    is_abstract_reference_shell,
+    validate_content_quality,
+)
 
 
 def test_rejects_empty_content():
@@ -33,3 +36,27 @@ def test_accepts_structured_paper_content():
     valid, reason = validate_content_quality(content)
     assert valid
     assert reason == "Valid content"
+
+
+def test_large_abstract_reference_shell_is_not_full_text():
+    content = (
+        "# Paper title\n\n## Abstract\n"
+        + "Methods and Results: aggregate cohort findings. " * 80
+        + "\n\n## References\n"
+        + "Reference citation with mutation keyword. " * 100
+    )
+
+    assert is_abstract_reference_shell(content) is True
+    valid, reason = validate_content_quality(content)
+    assert valid is False
+    assert "Abstract/reference shell" in reason
+
+
+def test_case_presentation_between_abstract_and_references_is_body():
+    content = (
+        "## Abstract\nA short summary.\n"
+        "## Case presentation\nA patient carrying p.Arg12Trp was evaluated.\n"
+        "## References\nA citation.\n"
+    )
+
+    assert is_abstract_reference_shell(content) is False

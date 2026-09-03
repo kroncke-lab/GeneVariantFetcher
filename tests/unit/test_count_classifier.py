@@ -63,6 +63,20 @@ def test_passes_through_per_variant_carrier():
     assert detect_misclassified_counts([variant]) == []
 
 
+def test_passes_through_audited_patient_row_derivation():
+    variant = _variant(
+        affected=97,
+        unaffected=62,
+        provenance={
+            "affected_column_label": "Previous symptoms OR VA in basal test",
+            "affected_count_type": "derived_from_patient_rows",
+            "unaffected_column_label": "Previous symptoms AND VA in basal test",
+            "unaffected_count_type": "derived_from_patient_rows",
+        },
+    )
+    assert detect_misclassified_counts([variant]) == []
+
+
 def test_flags_per_variant_carrier_with_row_identifier_label():
     variant = _variant(
         carriers=172,

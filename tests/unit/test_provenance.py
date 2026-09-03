@@ -116,8 +116,13 @@ def test_provenance_tracks_post_extraction_scientific_mutators():
         "pipeline/count_recovery.py",
         "pipeline/count_repair.py",
         "pipeline/trust_gate.py",
+        "pipeline/phenotype_count_guard.py",
+        "pipeline/patient_row_phenotype.py",
         "harvesting/migrate_to_sqlite.py",
+        "harvesting/orchestrator.py",
+        "harvesting/supplement_processing_service.py",
         "utils/llm_utils.py",
+        "utils/doi.py",
         "utils/source_layers.py",
     }
     assert required <= set(provenance.EXTRACTOR_CODE_FILES)

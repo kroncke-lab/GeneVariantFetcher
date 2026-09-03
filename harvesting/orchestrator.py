@@ -36,7 +36,7 @@ from .free_text_output_service import (
 )
 from .pmc_api import NON_ARTICLE_LINKOUT_DOMAINS, PMCAPIClient
 from .pmc_pow import attach_pmc_pow_cookie, is_pmc_pow_challenge
-from .content_validation import validate_content_quality
+from .content_validation import is_abstract_reference_shell, validate_content_quality
 from .persistence import (
     append_paywalled_entry,
     append_success_entry,
@@ -86,9 +86,15 @@ def _normalized_image_url(value: str, base_url: str = "") -> str:
 
 
 def _clean_doi(value: str) -> str:
-    doi = str(value or "").strip()
-    doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
-    return doi.strip().strip(".,;:)]}>")
+    """Delegate to the canonical cleaner (see :mod:`utils.doi`).
+
+    Harvest-time DOIs come from metadata fields and from rendered page bodies.
+    The latter can glue the next word onto the identifier with no delimiter,
+    which the shared cleaner trims at a digit-to-capitalised-word boundary.
+    """
+    from utils.doi import clean_doi
+
+    return clean_doi(value)
 
 
 def _doi_from_text(text: str) -> str:
@@ -230,6 +236,9 @@ def full_context_needs_retry(full_context_path: Path, output_dir: Path) -> bool:
         return True
 
     if any(marker in normalized for marker in PUBLISHER_SHELL_MARKERS):
+        return True
+
+    if is_abstract_reference_shell(head):
         return True
 
     if file_size >= THIN_FULL_CONTEXT_BYTES:

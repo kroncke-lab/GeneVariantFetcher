@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-08-25.
+Last updated: 2026-09-03.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -12,13 +12,17 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
-## Authoritative current headline
+## Accepted locked snapshot (legacy linkage-assisted headline)
 
 The accepted headline is the immutable, gold-blind
 `benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118` lock.
 It covers 118
 gene-paper attempts / 114 unique PMIDs over KCNH2, KCNQ1, RYR2, and SCN5A and
 was prediction-locked before the 632-row human cardiac gold values were read.
+This historical table is retained for audit, but it is not the extraction-task
+headline going forward: its 554 TP include ClinVar/PubTator citation linkage.
+The paper-derived replay below (512/125/120) is the primary interpretation of
+whether the protocol found variants in the papers.
 
 | TP / FP / FN | Recall | Raw precision | F1 | Counted-extra P | Count-bearing-only P |
 | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -29,6 +33,49 @@ was prediction-locked before the 632-row human cardiac gold values were read.
 | Carrier | 207 / 632 | 32.753% | **0.193** | 0.742 |
 | Affected | 56 / 632 | 8.861% | **0.321** | 1.102 |
 | Unaffected | 28 / 631 | 4.437% | **0.321** | 0.779 |
+
+### Latest phenotype-zero/provenance validation (not the headline)
+
+The fresh gold-blind lock
+`benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118` applies
+the same source-closed phenotype protocol to all 118 paper attempts. It closes
+the recurring cross-stage failure in which a deterministic recovery could be
+lost because later verification, trust, or refresh code did not recognize its
+provenance. Code-owned stamps are now scrubbed from model JSON and may be added
+only by the corresponding deterministic audit. The phenotype denominator also
+comes from dedicated penetrance data before the ambiguous legacy patient-count
+mirror.
+
+| TP / FP / FN | Recall | Raw precision | F1 | Counted-extra P | Count-bearing-only P |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 543 / 275 / 89 | **85.918%** | **66.381%** | **74.897%** | **98.192%** | **95.413%** |
+
+| Count | Supplied / gold | Coverage | Conditional MAE |
+| --- | ---: | ---: | ---: |
+| Carrier | 207 / 632 | 32.753% | **0.179** |
+| Affected | 120 / 632 | 18.987% | **0.508** |
+| Unaffected | 37 / 631 | 5.864% | **2.081** |
+
+This validates the repaired data path but does not replace the accepted
+headline: identity recall is 1.740 percentage points lower, and fresh stochastic
+extraction supplied fewer carrier and affected values overall. The acceptance
+cases all survive extraction, verification, trust, database migration, lock,
+and score: RYR2 W4645R **4/2/2**, C2277R **8/7/1**, G357S
+**185/97/62** (+26 uncertain), P2328S **62/17/42** (+3 uncertain), and KCNH2
+Y652X **6/6/NULL**. This is evidence for the protocol path, not evidence that
+the overall coverage problem is solved.
+
+The locked figure has 1,085 matched phenotype rows. Raw null is evaluated as
+zero only in that visualization: **423 affected and 505 unaffected** values are
+null, not literal model zeros. There are just **11** stored zeros (1 affected,
+10 unaffected). Eight agree with zero-valued gold. The three positive-gold
+disagreements are source-definition conflicts: KCNQ1 V141M PMID 28491547 is a
+three-child AF/SQTS series (**3/3/0**); KCNH2 C566R PMID 30246897 is one carrier
+with marked QT prolongation but no syncope/palpitations/arrest (**1/1/0** under
+the paper-target LQTS definition); and KCNH2 P926AfsX14 PMID 20181576 is a
+four-carrier family whose ECG and symptom subsets do not match the legacy gold
+partition. None is a source-positive count silently rewritten to zero. Grok 4.6
+`xhigh` independently audited these cases and the high-value null rows.
 
 ### How to report these numbers (2026-08-25)
 
@@ -228,6 +275,95 @@ on the dashboard**. Score them as explicitly labeled strata, but never fold them
 into the reported cardiac recall/precision/MAE. To reproduce the headline numbers,
 restrict scoring to the four cardiac genes, e.g.
 `run_benchmark.py --genes KCNH2,KCNQ1,SCN5A,RYR2`.
+
+## Shared reliability change set (2026-09-02) — headline unchanged
+
+A repo-wide parser/data-quality repair landed on 2026-09-02. **It does not move
+any number in this file.** The cardiac curated gold gate is *bit-identical*
+before and after (`diff` of the two reports is empty): pmids 72/73, variant rows
+2436/2714, unique variants 1585/1720, carriers MAE 0.393, affected 0.321,
+unaffected 0.377. It adds 157 tests and the offline suite passes with zero
+failures.
+
+A separate session was editing the phenotype-count and prompt path concurrently
+(`pipeline/count_classifier.py`, `phenotype_count_guard.py`, `claim_verifier.py`,
+`prompts.py`, `benchmarks/codex_paper_eval/run_eval.py` and their tests). That
+work is preserved and untouched here, but it means the working-tree suite total
+covers both change sets, and the fresh BMPR2 run below executed while those
+files were being edited. Python binds modules at process start, so the run used
+the code as of its own start time and is internally consistent; its recorded
+fingerprint should not be re-derived from the current tree.
+
+Seven shared, gene-agnostic defects were repaired: nested archives that reached
+no converter, four mutually inconsistent text normalizers, cross-route identity
+keyed on the raw notation string, denominators reported from step intent rather
+than the finalized paper list, unpersisted count roles and zero provenance,
+incomplete protocol provenance, and a re-fold that could replace real converted
+text with a converter placeholder. Full evidence, the measured before/after, and
+three adversarial reviews:
+[`evidence/shared_pipeline_reliability_20260902.md`](evidence/shared_pipeline_reliability_20260902.md).
+
+Three consequences bind how earlier artifacts may be read:
+
+1. **Source-completeness artifacts written before this date can be wrong about
+   which papers had full text.** The completeness report was written from the
+   download step's return value, so a run served from the corpus cache reported
+   every paper as abstract-only while its own per-paper records said full text.
+   One audited run shipped four artifacts disagreeing about the same 50 papers.
+   Re-derive that field with `pipeline/source_ledger.py` rather than quoting it.
+2. **`single_carrier_papers` in every pre-2026-09-02 artifact is meaningless.**
+   The predicate read two keys that do not exist in the extraction schema, so it
+   was constant and flagged every paper. On the audited run the true figure is
+   26, not the reported 50.
+3. **Duplicate identities in existing databases are largely a linkage artifact.**
+   The audited 50-paper database holds 81 pure-spelling duplicate pairs, and
+   database linkage contributed the largest share because each ingest carried
+   its own raw-string identity helper. 51 further pairs are genuine source
+   contradictions that need human adjudication, not merging.
+
+### Fresh 50-paper BMPR2 validation run (2026-09-02)
+
+A gold-free 50-paper BMPR2 run was completed on the repaired protocol
+(`results/bmpr2_shared_fixes_20260902/BMPR2/20260902_074142`, fingerprint
+`f6787618`, 85.8 min, 264 LLM calls, trace integrity `write_time_verified`).
+**No precision, recall, or MAE is defined for it** — BMPR2 has no gold standard,
+and nothing in this work was tuned to an answer key. What the run establishes is
+internal consistency, measured against the prior run of the same 50-paper
+roster:
+
+| Property | Prior run (2026-08-26) | Fresh run (2026-09-02) |
+| --- | ---: | ---: |
+| Source-ledger checks passed | n/a (artifact self-contradictory) | 10 / 10 |
+| Papers full text / abstract-only / unverified | 0 / 50 / — | 50 / 0 / 0 |
+| Source-class discrepancies | not reported | 0 |
+| Single-carrier papers | 50 (list of 30) | 25 (list of 25) |
+| Variants | 522 | 436 |
+| Foldable spelling duplicates | 87 | 5 |
+| Identity conflicts held for adjudication | 51 | 35 |
+| Sparse partials deliberately not completed | 167 | 91 |
+| Chimeric identities | not measured | 0 |
+| Cross-gene rows in `variants` | not measured | 0 |
+| Archives on disk expanded | nested never expanded | 31 / 31 |
+
+The five residual foldable pairs are one characterized class: a linkage row
+carrying a genomic coordinate beside a paper row without one, with byte-identical
+cDNA and protein. That was an over-applied sparse rule in the fold predicate,
+since a derived coordinate is an annotation rather than an identity axis. It is
+fixed and tested, so current code no longer creates them, but the fix postdates
+the run artifact. **Those five are not curation items.**
+
+One stage failure occurred: the paywall fetch exited 1 on the DOI
+`10.3390/ijms25052734Submission`, where a rendered landing page printed the
+identifier with the next word glued on and four separate DOI cleaners each
+lacked a word boundary. No data was affected — all 50 papers already had full
+text, the fetch queue held one row, and the override file was empty. Fixed with
+one canonical DOI path.
+
+One paper's nested supplement archive had never been read by any route. PMC
+lists it as that paper's only supplement (392.7 KB, byte-exact against the
+on-disk archive), so its entire declared supplementary material was previously
+invisible. Its four extracted variants match the published abstract, with no
+rows from the second gene's table inside the same file.
 
 ## Protocol context (landed 2026-07-20)
 

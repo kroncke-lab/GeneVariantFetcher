@@ -25,6 +25,43 @@ logger = logging.getLogger(__name__)
 # handing a PDF to MarkItDown.
 DENSE_PDF_PAGE_CHAR_LIMIT = 50_000
 
+# --- Nested-archive recursion budget ---------------------------------------
+# A publisher bundle routinely contains the journal's own supplement archive.
+# Descending is therefore required to read real per-patient tables, but an
+# unbounded descent is a denial-of-service surface (nested-archive bombs, an
+# archive that contains itself). Three independent limits bound it, and content
+# digests make each distinct member convert exactly once.
+
+#: How many archives deep to descend. 1 covers bundle-inside-bundle, which is
+#: the observed publisher pattern; deeper nesting is recorded and skipped.
+ARCHIVE_MAX_DEPTH = 3
+
+#: Declared uncompressed size ceiling for any single member.
+ARCHIVE_MAX_MEMBER_UNCOMPRESSED_BYTES = 256 * 1024 * 1024
+
+#: Declared uncompressed budget shared by one archive tree.
+ARCHIVE_MAX_TOTAL_UNCOMPRESSED_BYTES = 1024 * 1024 * 1024
+
+#: Archive suffixes handled by the recursive expander. Deliberately zip-only:
+#: the observed defect is zip-in-zip, and speculative tar/7z/rar support would
+#: add publisher-shaped guesswork with no measured miss behind it.
+ARCHIVE_SUFFIXES = frozenset({".zip"})
+
+
+def _file_sha256(path: Path) -> Optional[str]:
+    """Content digest of a file, or None when unreadable. Never raises."""
+    import hashlib
+
+    try:
+        hasher = hashlib.sha256()
+        with Path(path).open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                hasher.update(chunk)
+        return hasher.hexdigest()
+    except OSError:
+        return None
+
+
 try:
     from markitdown import MarkItDown
 
@@ -1382,6 +1419,10 @@ class FormatConverter:
         dest_dir: Path,
         figures_dir: Optional[Path] = None,
         extract_images: bool = False,
+        *,
+        _depth: int = 0,
+        _seen_digests: Optional[set] = None,
+        _budget: Optional[dict] = None,
     ) -> Tuple[List[Path], str]:
         """Extract a ZIP supplement and convert each contained file to markdown.
 
@@ -1409,11 +1450,29 @@ class FormatConverter:
         combined: List[str] = []
         nested_image_paths: List[Path] = []
 
+        # Recursion budget. A publisher bundle that itself contains a
+        # supplement archive is common (an EuropePMC bundle holding a
+        # journal's own "-s001.zip"), and the inner archive used to be written
+        # to disk and then skipped by every converter, so its contents were
+        # never read by any extraction route. Recursion is bounded on three
+        # independent axes so a hostile or accidentally recursive archive
+        # cannot exhaust the machine.
+        depth = int(_depth)
+        if depth > ARCHIVE_MAX_DEPTH:
+            logger.warning(
+                "archive depth limit %d reached at %s; not descending further",
+                ARCHIVE_MAX_DEPTH,
+                file_path.name,
+            )
+            return [], ""
+        seen_digests = _seen_digests if _seen_digests is not None else set()
+        budget = (
+            _budget
+            if _budget is not None
+            else {"bytes": ARCHIVE_MAX_TOTAL_UNCOMPRESSED_BYTES}
+        )
+
         try:
-            # parents=True so callers can hand us a path whose parent doesn't
-            # exist yet (e.g. a fresh <output>/<pmid>_supplements/bundle path
-            # when the run dir was just created). Without parents=True a
-            # missing intermediate dir crashes the entire enrichment pass.
             dest_dir.mkdir(parents=True, exist_ok=True)
             if figures_dir is not None and extract_images:
                 figures_dir.mkdir(parents=True, exist_ok=True)
@@ -1422,14 +1481,43 @@ class FormatConverter:
             # (e.g. /tmp on macOS, which is a symlink to /private/tmp).
             dest_dir = dest_dir.resolve()
             with zipfile.ZipFile(file_path, "r") as zf:
-                # Defensive: skip absolute / parent-traversal paths.
                 safe_members = []
                 for member in zf.namelist():
                     if member.endswith("/"):
                         continue
                     norm = Path(member).as_posix()
+                    # Zip-slip: absolute or parent-traversal paths must never
+                    # be written outside this paper's own directory.
                     if norm.startswith("/") or ".." in norm.split("/"):
+                        logger.warning(
+                            "refusing unsafe archive member %r in %s",
+                            member,
+                            file_path.name,
+                        )
                         continue
+                    if "__MACOSX" in norm.split("/") or Path(norm).name.startswith("."):
+                        continue
+                    info = zf.getinfo(member)
+                    # Declared-size guard: refuse a single member that claims
+                    # to expand beyond the per-file ceiling, and stop once the
+                    # whole tree has spent its uncompressed budget.
+                    if info.file_size > ARCHIVE_MAX_MEMBER_UNCOMPRESSED_BYTES:
+                        logger.warning(
+                            "skipping oversized archive member %s (%d bytes) in %s",
+                            member,
+                            info.file_size,
+                            file_path.name,
+                        )
+                        continue
+                    if info.file_size > budget["bytes"]:
+                        logger.warning(
+                            "archive uncompressed budget exhausted at %s in %s; "
+                            "remaining members skipped",
+                            member,
+                            file_path.name,
+                        )
+                        break
+                    budget["bytes"] -= info.file_size
                     safe_members.append(member)
                 for member in safe_members:
                     zf.extract(member, dest_dir)
@@ -1441,7 +1529,12 @@ class FormatConverter:
             logger.warning(f"ZIP extract failed for {file_path}: {exc}")
             return [], f"[ZIP extraction failed: {exc}]\n\n"
 
-        for nested in extracted:
+        # Snapshot: the nested-archive branch below appends the inner
+        # archive's members to ``extracted`` for the caller's manifest, and
+        # those members were already converted by the recursive call. Iterating
+        # the live list would convert them a second time and double every table
+        # they contain.
+        for nested in list(extracted):
             try:
                 if not nested.is_file():
                     continue
@@ -1492,6 +1585,28 @@ class FormatConverter:
                     md = self.html_supplement_to_markdown(nested)
                 elif ext in {".xml"}:
                     md = self.xml_supplement_to_markdown(nested)
+                elif ext == ".zip":
+                    # An archive inside an archive. This branch used to be a
+                    # bare `continue`, so a journal supplement bundled inside a
+                    # repository bundle was written to disk and then read by
+                    # nothing. Descend with the shared depth/size budget, and
+                    # key on content digest so a member that appears twice (or
+                    # an archive containing itself) is converted exactly once.
+                    digest = _file_sha256(nested)
+                    if digest is None or digest in seen_digests:
+                        continue
+                    seen_digests.add(digest)
+                    inner_paths, inner_md = self.extract_zip_supplement(
+                        nested,
+                        dest_dir=nested.parent / nested.stem,
+                        figures_dir=figures_dir,
+                        extract_images=extract_images,
+                        _depth=depth + 1,
+                        _seen_digests=seen_digests,
+                        _budget=budget,
+                    )
+                    extracted.extend(inner_paths)
+                    md = inner_md
                 else:
                     continue  # binary / unsupported nested file — skip
                 if md and md.strip():

@@ -90,6 +90,7 @@ def test_tasks_is_the_single_forward_checklist_with_active_goal_progress():
         "2. Recover missing source before adding inference",
         "3. Measure count semantics and recovery",
         "4. Finish the trust and fleet boundary",
+        "4a. Shared pipeline reliability (landed 2026-09-02)",
         "4b. Measurement-artifact integrity (opened 2026-08-17, all $0)",
         "4c. Cross-gene attribution: re-extract and republish (opened 2026-08-18)",
         "5. Engineering handoff follow-ups",

@@ -15,6 +15,33 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-02 — audited patient-row phenotype derivation; candidate not promoted
+
+Grok 4.6 `xhigh` reviewed a minimal exception to the no-inference count
+contract: a complete, single-variant carrier table may be partitioned only by a
+declared row predicate, with every row retained in affected, unaffected, or
+uncertain and an independently stated total closing the audit. PMID 25814417
+now yields 185 carriers / 97 affected / 62 unaffected / 26 uncertain: the 179
+living-carrier rows partition 91/62/26, and six separately genotyped fatal SCD
+cases add to affected. Missing phenotype cells remain uncertain.
+
+The full frozen `20260902_patient_row_phenotype_gold118_rerun` evaluated the
+same 118 attempts as the accepted lock. It finished at **555 / 278 / 77**
+(P 66.63%, R 87.82%, F1 75.77%). Affected count supply improved **56→77 / 632**
+(8.86%→12.18%; non-zero 49→69 / 406), but unaffected barely moved
+**28→29 / 631** and carriers regressed **207→182 / 632**. Conditional MAE was
+0.214 carriers, 0.597 affected, and 1.690 unaffected. PMID 25814417 alone is
+24/44 away from the current gold 73/106 because the gold partition uses a
+different, undocumented phenotype rule. The change is scientifically auditable
+but the mixed full-run result does not satisfy promotion discipline; the
+2026-08-24 source-bound lock remains the accepted headline.
+
+The first paid attempt is preserved as an invalid run because its protocol
+fingerprint changed during execution. The clean rerun held a stable fingerprint,
+locked predictions before scoring, and automatically generated the standalone
+phenotype-count agreement SVG/PDF/PNG plus inspectable CSV/JSON. Full offline
+unit suite: **2,638 passed**.
+
 ## 2026-08-25 — generality audit of the promoted lock; no headline change
 
 Two independent maximum-effort reviews (Grok 4.6 `xhigh`, GPT-5.6 Sol `max`

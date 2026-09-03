@@ -134,6 +134,52 @@ def test_population_study_strengthens_population_count():
     )
 
 
+def test_population_study_keeps_audited_closed_patient_row_partition():
+    provenance = {
+        "carriers_count_type": "per_variant_carrier",
+        "affected_count_type": "derived_from_patient_rows",
+        "unaffected_count_type": "derived_from_patient_rows",
+        "affected_source": "patient_row_phenotype_v2",
+        "unaffected_source": "patient_row_phenotype_v2",
+        "affected_column_label": "CPVT syncope | ACA",
+        "unaffected_column_label": "CPVT syncope | ACA",
+    }
+    counts = {"carriers": 62, "affected": 17, "unaffected": 42, "uncertain": 3}
+
+    assert (
+        evaluate_fact(
+            counts,
+            provenance=provenance,
+            study_context={"study_design": "cohort_population"},
+        )
+        == []
+    )
+
+    # A model-declared role without the code-owned audit stamps does not get
+    # the exemption.
+    provenance.pop("affected_source")
+    provenance.pop("unaffected_source")
+    assert "population_count" in evaluate_fact(
+        counts,
+        provenance=provenance,
+        study_context={"study_design": "cohort_population"},
+    )
+
+    # A one-sided stamp or an incomplete four-way partition also fails closed.
+    provenance["affected_source"] = "patient_row_phenotype_v2"
+    assert "population_count" in evaluate_fact(
+        counts,
+        provenance=provenance,
+        study_context={"study_design": "cohort_population"},
+    )
+    provenance["unaffected_source"] = "patient_row_phenotype_v2"
+    assert "population_count" in evaluate_fact(
+        {**counts, "uncertain": None},
+        provenance=provenance,
+        study_context={"study_design": "cohort_population"},
+    )
+
+
 def _seed(conn, pid, pmid, counts, count_provenance=None):
     conn.execute("INSERT OR IGNORE INTO papers (pmid) VALUES (?)", (pmid,))
     conn.execute(

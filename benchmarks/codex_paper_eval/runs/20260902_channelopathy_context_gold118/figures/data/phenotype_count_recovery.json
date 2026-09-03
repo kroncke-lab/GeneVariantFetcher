@@ -1,0 +1,148 @@
+{
+  "analysis_run": "20260902_channelopathy_context_gold118",
+  "figure_contract": {
+    "axes": "shared square-root count scale; 0 to 110 display domain",
+    "chart_family": "faceted square-root-scale bubble agreement plots with a single variant-identity context line",
+    "evaluation_missing_count": 0,
+    "fallback": "identity misses remain excluded; every identity-matched row with an authoritative count is plotted",
+    "labeled_variant_paper_pairs": [
+      {
+        "gene": "KCNH2",
+        "measure": "affected",
+        "pmid": "22338672",
+        "variant": "K897T"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "affected",
+        "pmid": "15466642",
+        "variant": "I4848V"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "affected",
+        "pmid": "25814417",
+        "variant": "G357S"
+      },
+      {
+        "gene": "KCNQ1",
+        "measure": "affected",
+        "pmid": "14678125",
+        "variant": "V254M"
+      },
+      {
+        "gene": "SCN5A",
+        "measure": "affected",
+        "pmid": "28339995",
+        "variant": "D1790G"
+      },
+      {
+        "gene": "KCNH2",
+        "measure": "unaffected",
+        "pmid": "25819988",
+        "variant": "H562R"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "unaffected",
+        "pmid": "25814417",
+        "variant": "G357S"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "unaffected",
+        "pmid": "33315912",
+        "variant": "P2328S"
+      },
+      {
+        "gene": "KCNQ1",
+        "measure": "unaffected",
+        "pmid": "18808722",
+        "variant": "L187P"
+      },
+      {
+        "gene": "KCNH2",
+        "measure": "unaffected",
+        "pmid": "22338672",
+        "variant": "R744X"
+      }
+    ],
+    "marker_radius": "min(28, 8 + 2*sqrt(variant-paper pairs))",
+    "marker_size_key_pairs": [
+      5,
+      10,
+      25
+    ],
+    "question": "Among identity-matched variant-paper rows, how closely do affected and unaffected counts agree when a missing automated count is evaluated as zero?",
+    "renderer": "editable SVG; vector PDF and 300-dpi PNG downstream",
+    "storage_missing_count": null
+  },
+  "integrity": {
+    "predictions_sha256": "38a620b015e8d86fa904830e72c335e1a9d9750b06815d5d9d01a7add0f784e4",
+    "selection_sha256": "337bf287a70ff9990c1a8084e618454ac42ba0fdb4fd744ff07fcdaa91265a42"
+  },
+  "locked_at": "2026-09-03T00:42:36.778699+00:00",
+  "metrics": {
+    "affected": {
+      "ai_max": 97,
+      "count_extracted": 97,
+      "count_extracted_fraction": 0.17830882352941177,
+      "difference_equal_one": 193,
+      "exact": 252,
+      "exact_fraction": 0.4632352941176471,
+      "gold_asserted": 632,
+      "gold_nonzero": 360,
+      "greater_than_one": 99,
+      "identity_coverage": 0.8607594936708861,
+      "identity_matched": 544,
+      "identity_miss": 88,
+      "increment_over_zero_baseline": 0.125,
+      "mae": 1.3455882352941178,
+      "manual_max": 73,
+      "median_absolute_difference": 1.0,
+      "nonzero_exact": 77,
+      "nonzero_exact_fraction": 0.21388888888888888,
+      "rmse": 4.323329327102925,
+      "within_one": 445,
+      "zero_baseline_exact": 184,
+      "zero_baseline_fraction": 0.3382352941176471,
+      "zero_filled": 447,
+      "zero_filled_fraction": 0.8216911764705882
+    },
+    "unaffected": {
+      "ai_max": 62,
+      "count_extracted": 37,
+      "count_extracted_fraction": 0.06813996316758748,
+      "difference_equal_one": 34,
+      "exact": 476,
+      "exact_fraction": 0.8766114180478821,
+      "gold_asserted": 631,
+      "gold_nonzero": 77,
+      "greater_than_one": 33,
+      "identity_coverage": 0.8605388272583201,
+      "identity_matched": 543,
+      "identity_miss": 88,
+      "increment_over_zero_baseline": 0.01841620626151013,
+      "mae": 0.39226519337016574,
+      "manual_max": 106,
+      "median_absolute_difference": 0,
+      "nonzero_exact": 13,
+      "nonzero_exact_fraction": 0.16883116883116883,
+      "rmse": 2.3233144546635565,
+      "within_one": 510,
+      "zero_baseline_exact": 466,
+      "zero_baseline_fraction": 0.858195211786372,
+      "zero_filled": 506,
+      "zero_filled_fraction": 0.9318600368324125
+    }
+  },
+  "not_available": "explicit cohort and phenotype identifiers",
+  "paired_rows_in_both_measures": 543,
+  "row_grain": "identity-matched variant-paper row and count measure",
+  "variant_identity": {
+    "coverage": 0.8607594936708861,
+    "gold_rows": 632,
+    "matched": 544,
+    "missed": 88
+  }
+}

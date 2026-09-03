@@ -826,14 +826,31 @@ def automated_variant_extraction_workflow(
     # =========================================================================
     logger.info("\n🔎 STEP 3.5: Generating source-completeness report...")
 
-    # --- Build completeness metrics ---
+    # --- Build completeness metrics from the FINALIZED extraction records ---
+    # The denominator is the list of papers extraction actually produced a
+    # record for, not what the download step intended to fetch. Reading step
+    # intent is what made a resume run report 0/50 full text while its own
+    # per-paper records said 50/50 (see pipeline/source_ledger.py).
+    from pipeline.source_ledger import build_source_ledger
+
+    ledger = build_source_ledger(
+        [ext.extracted_data for ext in extractions if ext.extracted_data],
+        requested_pmids=[str(p) for p in filtered_pmids],
+        search_dirs=[Path(harvest_dir)] if harvest_dir else [],
+    )
     completeness = {
         "total_pmids_discovered": workflow_stats.get("pmids_discovered", 0),
         "pmids_filtered_out": workflow_stats.get("pmids_filtered_out", 0),
         "pmids_passed_filters": workflow_stats.get("pmids_passed_filters", 0),
-        "papers_with_fulltext": len(downloaded_pmids),
-        "papers_abstract_only": len(abstract_only_pmids),
-        "abstract_only_pmids": abstract_only_pmids[:50],  # first 50 for reference
+    }
+    completeness.update(ledger.as_completeness_dict())
+
+    # Acquisition-step intent is retained beside the ledger, clearly labelled,
+    # because "the fetcher failed but the corpus cache served it" is useful
+    # operational signal. It is no longer the denominator.
+    completeness["acquisition_step"] = {
+        "downloaded_pmids": sorted(str(p) for p in downloaded_pmids),
+        "download_failed_pmids": sorted(str(p) for p in abstract_only_pmids),
     }
 
     # Count stub/empty files (FULL_CONTEXT < 500 bytes)
@@ -841,52 +858,14 @@ def automated_variant_extraction_workflow(
     if harvest_dir and Path(harvest_dir).exists():
         for fc_file in Path(harvest_dir).glob("*_FULL_CONTEXT.md"):
             if fc_file.stat().st_size < 500:
-                pmid_stub = fc_file.name.replace("_FULL_CONTEXT.md", "")
-                stub_pmids.append(pmid_stub)
+                stub_pmids.append(fc_file.name.replace("_FULL_CONTEXT.md", ""))
     completeness["stub_files_count"] = len(stub_pmids)
-    completeness["stub_pmids"] = stub_pmids
+    completeness["stub_pmids"] = sorted(stub_pmids)
 
-    # Count supplement coverage
     supp_dirs = list(Path(harvest_dir).glob("*_supplements")) if harvest_dir else []
     completeness["papers_with_supplements"] = len(supp_dirs)
 
-    # Identify zero-variant papers (passed Tier 2 but yielded 0 variants)
-    zero_variant_pmids = []
-    single_carrier_pmids = []
-    for ext in extractions:
-        if not ext.extracted_data:
-            continue
-        variants = ext.extracted_data.get("variants", [])
-        pmid = getattr(ext, "pmid", None) or ext.extracted_data.get(
-            "extraction_metadata", {}
-        ).get("pmid", "unknown")
-        if len(variants) == 0:
-            zero_variant_pmids.append(str(pmid))
-        else:
-            # Flag papers where every variant has carrier_count <= 1
-            # (likely missed cohort/screening table data)
-            all_single = all(
-                (v.get("carriers_total") or v.get("total_carriers") or 1) <= 1
-                for v in variants
-            )
-            if all_single and len(variants) >= 1:
-                single_carrier_pmids.append(str(pmid))
-
-    completeness["zero_variant_papers"] = len(zero_variant_pmids)
-    completeness["zero_variant_pmids"] = zero_variant_pmids
-    completeness["single_carrier_papers"] = len(single_carrier_pmids)
-    completeness["single_carrier_pmids"] = single_carrier_pmids[:30]
-
-    # Source coverage ratio
-    if completeness["pmids_passed_filters"] > 0:
-        completeness["fulltext_coverage_pct"] = round(
-            completeness["papers_with_fulltext"]
-            / completeness["pmids_passed_filters"]
-            * 100,
-            1,
-        )
-    else:
-        completeness["fulltext_coverage_pct"] = 0.0
+    zero_variant_pmids = completeness["zero_variant_pmids"]
 
     # Save completeness report
     completeness_file = output_path / "source_completeness.json"
@@ -896,11 +875,23 @@ def automated_variant_extraction_workflow(
     logger.info(f"✓ Source completeness report: {completeness_file}")
     logger.info(f"  Full-text coverage: {completeness['fulltext_coverage_pct']}%")
     logger.info(f"  Abstract-only: {completeness['papers_abstract_only']}")
+    logger.info(f"  Source unverified: {completeness['papers_source_unverified']}")
     logger.info(f"  Stub/empty files: {completeness['stub_files_count']}")
     logger.info(f"  Zero-variant papers: {completeness['zero_variant_papers']}")
     logger.info(
         f"  Single-carrier-only papers: {completeness['single_carrier_papers']}"
     )
+    if completeness["source_class_discrepancies"]:
+        logger.warning(
+            "⚠ %d paper(s) where the declared source class disagrees with the "
+            "recorded source bytes; see source_class_discrepancies",
+            len(completeness["source_class_discrepancies"]),
+        )
+    if completeness["missing_extraction_pmids"]:
+        logger.warning(
+            "⚠ %d requested paper(s) produced no extraction record",
+            len(completeness["missing_extraction_pmids"]),
+        )
 
     if zero_variant_pmids:
         logger.warning(

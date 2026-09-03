@@ -897,6 +897,101 @@ def test_implicit_and_unlabeled_per_variant_counts_are_not_protected():
     )
 
 
+def test_audited_patient_row_counts_override_stale_verifier_rejection():
+    variant = {
+        "cdna_notation": "c.6982C>T",
+        "protein_notation": "p.Pro2328Ser",
+        "patients": {"count": 62},
+        "penetrance_data": {
+            "total_carriers_observed": 62,
+            "affected_count": 17,
+            "unaffected_count": 42,
+            "uncertain_count": 3,
+        },
+        "count_provenance": {
+            "carriers_column_label": "62 mutation carriers",
+            "carriers_count_type": "per_variant_carrier",
+            "affected_column_label": "CPVT syncope | ACA",
+            "affected_count_type": "derived_from_patient_rows",
+            "affected_source": "patient_row_phenotype_v2",
+            "unaffected_column_label": "CPVT syncope | ACA",
+            "unaffected_count_type": "derived_from_patient_rows",
+            "unaffected_source": "patient_row_phenotype_v2",
+        },
+        # Verification ran before the deterministic patient-row derivation.
+        "claim_verification": {
+            "field_verdicts": {
+                "total_carriers": "directly_supported",
+                "affected": "unsupported",
+                "unaffected": "unsupported",
+            }
+        },
+    }
+
+    observations = refresh_run_db.source_count_observations(
+        {"variants": [variant]}, "RYR2"
+    )
+    assert {(row["field"], row["value"]) for row in observations} == {
+        ("total_carriers", 62),
+        ("affected", 17),
+        ("unaffected", 42),
+    }
+
+
+def test_unstamped_patient_row_role_does_not_override_stale_verifier():
+    variant = {
+        "cdna_notation": "c.6982C>T",
+        "penetrance_data": {"affected_count": 17, "unaffected_count": 42},
+        "count_provenance": {
+            "affected_column_label": "CPVT syncope | ACA",
+            "affected_count_type": "derived_from_patient_rows",
+            "unaffected_column_label": "CPVT syncope | ACA",
+            "unaffected_count_type": "derived_from_patient_rows",
+        },
+        "claim_verification": {
+            "field_verdicts": {
+                "affected": "unsupported",
+                "unaffected": "unsupported",
+            }
+        },
+    }
+
+    assert (
+        refresh_run_db.source_count_observations({"variants": [variant]}, "RYR2") == []
+    )
+
+
+def test_refresh_transplant_preserves_code_owned_count_source():
+    prior_variant = {
+        "cdna_notation": "c.6982C>T",
+        "penetrance_data": {"affected_count": 17},
+        "count_provenance": {
+            "affected_column_label": "CPVT syncope | ACA",
+            "affected_count_type": "derived_from_patient_rows",
+            "affected_source": "patient_row_phenotype_v2",
+        },
+        "claim_verification": {"field_verdicts": {"affected": "unsupported"}},
+    }
+    new = {"variants": [{"cdna_notation": "c.6982C>T"}]}
+
+    report = refresh_run_db.reconcile_source_count_observations(
+        {"variants": [prior_variant]}, new, "RYR2"
+    )
+
+    assert report["merged_fields"] == [
+        {
+            "new_variant_index": 0,
+            "field": "affected",
+            "value": 17,
+            "role": "derived_from_patient_rows",
+            "identity": ["cdna:c.6982C>T"],
+        }
+    ]
+    assert new["variants"][0]["count_provenance"]["affected_source"] == (
+        "patient_row_phenotype_v2"
+    )
+
+
 def test_new_source_backed_conflict_wins_without_transplant():
     prior = {"variants": [_counted_variant("c.121del", 11)]}
     new = {"variants": [_counted_variant("c.121del", 6)]}

@@ -223,6 +223,7 @@ def test_pipeline_completes_and_writes_report(tmp_path: Path, monkeypatch):
     assert status["active_db"] == "TESTGENE.db"
     assert status["gold_access"] == {
         "disabled": False,
+        "gold_derived_alias_files_disabled": False,
         "mode": "auto_discovery_allowed",
     }
     assert (status_path.parent / status["active_db"]).resolve() == (
@@ -271,7 +272,11 @@ def test_gold_free_run_never_discovers_or_passes_gold_to_layers(
 
     assert captured["layer_gold"] is None
     status = json.loads(next((tmp_path / "out").rglob("RUN_STATUS.json")).read_text())
-    assert status["gold_access"] == {"disabled": True, "mode": "disabled"}
+    assert status["gold_access"] == {
+        "disabled": True,
+        "gold_derived_alias_files_disabled": True,
+        "mode": "disabled",
+    }
 
 
 def test_count_recovery_runs_only_when_enabled_and_records_partial_failures(
@@ -1066,6 +1071,29 @@ def test_trace_env_identity_is_restored_after_a_run(tmp_path: Path, monkeypatch)
 
     assert os.environ["GVF_LLM_TRACE_DIR"] == str(base)
     assert "GVF_LLM_TRACE_RUN_ID" not in os.environ
+
+
+def test_gold_free_wrapper_disables_alias_files_and_restores_environment(monkeypatch):
+    observed = {}
+
+    def fake_pipeline(**kwargs):
+        observed["alias_policy"] = os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES")
+        return 0
+
+    monkeypatch.setattr(gvf_run, "_run_gvf_pipeline", fake_pipeline)
+    monkeypatch.setenv("GVF_DISABLE_GOLD_DERIVED_ALIASES", "prior-value")
+
+    assert (
+        gvf_run.run_gvf_pipeline(
+            gene="KCNH2",
+            email="x@example.com",
+            output=Path("unused"),
+            gold_free_run=True,
+        )
+        == 0
+    )
+    assert observed["alias_policy"] == "1"
+    assert os.environ["GVF_DISABLE_GOLD_DERIVED_ALIASES"] == "prior-value"
 
 
 def test_two_normal_runs_under_one_base_get_separate_trace_children(

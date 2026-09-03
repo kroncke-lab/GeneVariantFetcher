@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Create and validate a blinded production ``gold_120`` evaluation scaffold.
+"""Create and validate a blinded production paper-evaluation scaffold.
 
-The live cohort is 119 gene-paper attempts after the KCNH2 PMID erratum.  This
-tool verifies the registry-pinned manifest, runs the existing gold-value-blind
+The tool verifies a registry-pinned manifest, runs the gold-identity/value-blind
 ``prepare`` step, writes exact per-gene PMID inputs, and emits separate scripts
 for extraction and for the post-extraction lock/score boundary.
 """
@@ -60,6 +59,25 @@ def digest(path: Path) -> str:
     return value.hexdigest()
 
 
+def digest_gold_root(path: Path) -> str:
+    """Digest the exact per-gene answer-key files used by a registry."""
+
+    value = hashlib.sha256()
+    answer_keys = sorted(path.glob("*_recall_input.csv"))
+    files = [*answer_keys]
+    provenance = path / "provenance.tsv"
+    if provenance.is_file():
+        files.append(provenance)
+    if not answer_keys:
+        raise SetupError(f"no answer-key CSVs under {path}")
+    for file in files:
+        value.update(file.name.encode())
+        value.update(b"\0")
+        value.update(digest(file).encode())
+        value.update(b"\n")
+    return value.hexdigest()
+
+
 def read_manifest(path: Path) -> list[tuple[str, str]]:
     rows: list[tuple[str, str]] = []
     for line_number, raw in enumerate(path.read_text().splitlines(), 1):
@@ -105,9 +123,93 @@ def cohort_contract(manifest: Path, registry_path: Path) -> dict:
             f"gene counts {dict(actual_counts)} != registry "
             f"{tier.get('gene_attempt_counts')}"
         )
+    resolved_gold_root = None
+    if tier.get("gold_root"):
+        candidate = Path(str(tier["gold_root"]))
+        if not candidate.is_absolute():
+            candidate = registry_path.resolve().parent / candidate
+        resolved_gold_root = candidate.resolve()
+        if not resolved_gold_root.is_dir():
+            errors.append(f"gold root is missing: {resolved_gold_root}")
+        elif tier.get("gold_root_sha256") and digest_gold_root(
+            resolved_gold_root
+        ) != tier.get("gold_root_sha256"):
+            errors.append("gold root digest differs from registry")
     if errors:
         raise SetupError(f"cohort registry mismatch: {'; '.join(errors)}")
-    return {**tier, "rows": rows, "registry": str(registry_path.resolve())}
+    return {
+        **tier,
+        "evaluation_design": registry.get("evaluation_design"),
+        "consumption_log": registry.get("consumption_log"),
+        "rows": rows,
+        "registry": str(registry_path.resolve()),
+        "registry_sha256": digest(registry_path),
+        "resolved_gold_root": (
+            str(resolved_gold_root) if resolved_gold_root is not None else None
+        ),
+    }
+
+
+def consumption_entries(contract: dict) -> list[dict]:
+    spec = contract.get("consumption_log") or {}
+    relative = str(spec.get("path") or "").strip()
+    if not relative:
+        return []
+    path = Path(contract["registry"]).parent / relative
+    if not path.is_file():
+        raise SetupError(f"consumption log is missing: {path}")
+    entries = []
+    for line_number, raw in enumerate(path.read_text().splitlines(), 1):
+        if not raw.strip():
+            continue
+        try:
+            entry = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise SetupError(
+                f"invalid consumption log line {line_number}: {path}"
+            ) from exc
+        if not isinstance(entry, dict):
+            raise SetupError(f"invalid consumption log line {line_number}: {path}")
+        entries.append(entry)
+    return entries
+
+
+def validate_comparison_slot(contract: dict, comparison_arm: str) -> None:
+    design = contract.get("evaluation_design") or {}
+    if (
+        design.get("comparison")
+        != "paired_frozen_baseline_and_candidate_on_same_manifest"
+    ):
+        return
+    spec = contract.get("consumption_log") or {}
+    required = tuple(spec.get("required_arms") or ())
+    if comparison_arm not in required:
+        raise SetupError(
+            "paired mixed-gold tiers require --comparison-arm baseline or candidate"
+        )
+    entries = consumption_entries(contract)
+    used = defaultdict(set)
+    for entry in entries:
+        if entry.get("registry_sha256") != contract.get("registry_sha256"):
+            raise SetupError("consumption entry does not bind the active registry")
+        used[str(entry.get("tier_id"))].add(str(entry.get("comparison_arm")))
+    order = list(design.get("consume_order") or [])
+    current = next(
+        (tier_id for tier_id in order if not set(required) <= used[tier_id]), None
+    )
+    if current is None:
+        raise SetupError("every registered mixed-gold tranche has been consumed")
+    if contract.get("id") != current:
+        raise SetupError(
+            f"next unconsumed tranche is {current}, not {contract.get('id')}"
+        )
+    tier_used = used[str(contract.get("id"))]
+    if comparison_arm in tier_used:
+        raise SetupError(
+            f"{contract.get('id')} {comparison_arm} arm is already consumed"
+        )
+    if comparison_arm == "candidate" and "baseline" not in tier_used:
+        raise SetupError("score the baseline arm before creating the candidate arm")
 
 
 def runtime_source_files() -> list[Path]:
@@ -231,7 +333,9 @@ def make_extraction_script(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def make_finalize_script(*, run_dir: Path, python: Path) -> str:
+def make_finalize_script(
+    *, run_dir: Path, python: Path, gold_root: Path = DEFAULT_GOLD
+) -> str:
     setup = HERE / "setup_production_eval.py"
     rebind = HERE / "rebind_production_sources.py"
     converter = HERE / "db_to_predictions.py"
@@ -246,10 +350,11 @@ RUN_DIR={shell_quote(run_dir)}
   --run-dir "$RUN_DIR" --production-root "$RUN_DIR/production_runs"
 "$PYTHON" {shell_quote(converter)} \\
   --run-dir "$RUN_DIR" --production-root "$RUN_DIR/production_runs" \\
-  --trust-mode trusted --identity-mode trusted \\
+  --trust-mode trusted --identity-mode trusted --paper-primary \\
   --out "$RUN_DIR/predictions.json"
 "$PYTHON" {shell_quote(evaluator)} lock --run-dir "$RUN_DIR"
-"$PYTHON" {shell_quote(evaluator)} score --run-dir "$RUN_DIR"
+"$PYTHON" {shell_quote(evaluator)} score --run-dir "$RUN_DIR" \\
+  --gold-root {shell_quote(gold_root)}
 """
 
 
@@ -262,13 +367,11 @@ def write_runbook(run_dir: Path, contract: dict, genes: list[str]) -> None:
     counts = contract["gene_attempt_counts"]
     count_text = ", ".join(f"{gene} {counts[gene]}" for gene in genes)
     (run_dir / "RUNBOOK.md").write_text(
-        f"""# Current-code gold_120 production evaluation
+        f"""# Current-code {contract["id"]} production evaluation
 
 This scaffold is pinned to `{Path(contract["manifest"]).name}` at
 `{contract["sha256"]}`: **{contract["attempt_count"]} gene-paper attempts** /
-**{contract["unique_pmid_count"]} unique PMIDs** ({count_text}). The name remains
-`gold_120` for continuity; KCNH2 PMID 10086972 is intentionally absent after the
-erratum identified it as the wrong paper.
+**{contract["unique_pmid_count"]} unique PMIDs** ({count_text}).
 
 ## 1. Extract without opening gold values
 
@@ -276,11 +379,12 @@ erratum identified it as the wrong paper.
 {run_dir / "run_extraction.sh"}
 ```
 
-The four commands use production `gvf-run` with exact PMID files. Source
+The {len(genes)} commands use production `gvf-run` with exact PMID files. Source
 recovery and corpus sync are disabled so this is a calibrated comparison over
 the frozen source-available cohort; publication is explicitly disabled. The
-four gene processes run concurrently, matching the accepted 2026-08-20 test;
-each writes a separate `operator_logs/<GENE>.log`, and the launcher fails if any
+gold-free wrapper also disables file-based alias maps whose provenance includes
+benchmark gold. The gene processes run concurrently; each writes a separate
+`operator_logs/<GENE>.log`, and the launcher fails if any
 gene process fails.
 
 ## 2. Inspect production completion
@@ -296,10 +400,13 @@ write-time-verified trace manifest for every gene before proceeding.
 
 This second script binds the exact run-local source material and production
 trace manifests into `predictions.json`, applies the collaborator-facing trusted
-count and identity projection, locks predictions before any gold value is read,
-and only then invokes the scorer. A raw (`--trust-mode all --identity-mode all`)
-projection may be generated later only as a clearly labeled diagnostic; it must
-not replace the locked primary.
+count and identity projection, and makes **paper-derived rows the primary
+score**. ClinVar/PubTator citation-linkage rows stay in the same locked artifact
+as an `external_linkage_variants` audit lane and a secondary
+`linkage_assisted` comparison. Both views are locked before any gold value is
+read. A raw (`--trust-mode all --identity-mode all`) projection may be generated
+later only as a clearly labeled diagnostic; it must not replace the locked
+primary.
 """
     )
 
@@ -308,6 +415,8 @@ def create(args: argparse.Namespace) -> Path:
     manifest = args.paper_manifest.resolve()
     registry = args.registry.resolve()
     contract = cohort_contract(manifest, registry)
+    validate_comparison_slot(contract, args.comparison_arm)
+    gold_root = Path(contract.get("resolved_gold_root") or args.gold_root).resolve()
     # Fail closed on the tier, but let a caller name a different scored one.
     # Hardcoding gold_120 meant a second scored tranche could be registered and
     # pinned yet never run; requiring --tier-id to opt in keeps the guard's real
@@ -336,10 +445,11 @@ def create(args: argparse.Namespace) -> Path:
             per_gene=30,
             minimum_chars=args.minimum_chars,
             corpus_root=args.corpus_root.resolve(),
-            gold_root=args.gold_root.resolve(),
+            gold_root=gold_root,
             paper_manifest=manifest,
             runs_dir=args.runs_dir.resolve(),
             legacy_source_selection=False,
+            eligibility_mode=str(contract.get("eligibility_mode") or "count"),
             run_id=args.run_id,
         )
     )
@@ -384,9 +494,15 @@ def create(args: argparse.Namespace) -> Path:
                     "gene_attempt_counts",
                     "selection_seed",
                     "registry",
+                    "registry_sha256",
                 )
             },
             "manifest": str(manifest),
+            "gold_root": str(gold_root),
+            "gold_root_sha256": contract.get("gold_root_sha256"),
+            "comparison_arm": args.comparison_arm,
+            "consumption_log": contract.get("consumption_log"),
+            "evaluation_design": contract.get("evaluation_design"),
         },
         "route": {
             "driver": "python -m cli gvf-run",
@@ -395,11 +511,12 @@ def create(args: argparse.Namespace) -> Path:
             "corpus_sync": False,
             "publish_review": False,
             "full_coverage": False,
-            "parallel_gene_processes": 4,
-            "primary_projection": "trusted_count_and_identity",
+            "parallel_gene_processes": len(genes),
+            "primary_projection": "trusted_paper_derived_count_and_identity",
+            "secondary_projection": "trusted_linkage_assisted_diagnostic",
             "reason": (
-                "Apples-to-apples current-default recall arm against the accepted "
-                "20260820 gold119 production evaluation."
+                "Registry-pinned, source-frozen protocol-regression arm with "
+                "paper-derived identity as the primary score lane."
             ),
         },
         "blinding": selection["blinding"],
@@ -421,7 +538,7 @@ def create(args: argparse.Namespace) -> Path:
     )
     write_executable(
         run_dir / "lock_and_score.sh",
-        make_finalize_script(run_dir=run_dir, python=python),
+        make_finalize_script(run_dir=run_dir, python=python, gold_root=gold_root),
     )
     write_runbook(run_dir, {**contract, "manifest": str(manifest)}, genes)
     check_run(run_dir)
@@ -436,6 +553,12 @@ def check_run(run_dir: Path) -> None:
         raise SetupError(f"incomplete setup under {run_dir}")
     setup = json.loads(setup_path.read_text())
     cohort = setup["cohort"]
+    expected_registry_digest = str(cohort.get("registry_sha256") or "").strip()
+    if (
+        expected_registry_digest
+        and digest(Path(cohort["registry"])) != expected_registry_digest
+    ):
+        raise SetupError("cohort registry changed after setup")
     contract = cohort_contract(Path(cohort["manifest"]), Path(cohort["registry"]))
     selection = json.loads(selection_path.read_text())
     selected = [(paper["gene"], str(paper["pmid"])) for paper in selection["papers"]]
@@ -471,6 +594,30 @@ def check_run(run_dir: Path) -> None:
     )
     if any(token not in extraction for token in required):
         raise SetupError("extraction script is missing a calibrated-run safeguard")
+    finalize_path = run_dir / "lock_and_score.sh"
+    if not finalize_path.is_file():
+        raise SetupError(f"missing finalize script: {finalize_path}")
+    finalize = finalize_path.read_text()
+    expected_gold_root = Path(
+        cohort.get("gold_root") or contract.get("resolved_gold_root") or DEFAULT_GOLD
+    ).resolve()
+    finalize_required = (
+        "check --run-dir",
+        "db_to_predictions.py",
+        "--paper-primary",
+        "run_eval.py",
+        " lock --run-dir",
+        " score --run-dir",
+        f"--gold-root {shell_quote(expected_gold_root)}",
+    )
+    if any(token not in finalize for token in finalize_required):
+        raise SetupError("finalize script is missing a locked scoring safeguard")
+    if not (
+        finalize.index("db_to_predictions.py")
+        < finalize.index(" lock --run-dir")
+        < finalize.index(" score --run-dir")
+    ):
+        raise SetupError("finalize script does not project, lock, then score in order")
 
 
 def parser() -> argparse.ArgumentParser:
@@ -494,6 +641,15 @@ def parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     create_parser.add_argument("--corpus-root", type=Path, default=DEFAULT_CORPUS)
     create_parser.add_argument("--gold-root", type=Path, default=DEFAULT_GOLD)
+    create_parser.add_argument(
+        "--comparison-arm",
+        choices=("single", "baseline", "candidate"),
+        default="single",
+        help=(
+            "baseline or candidate for paired mixed-gold tiers; historical "
+            "single-arm registries use the default"
+        ),
+    )
     create_parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
     check_parser = sub.add_parser("check")
     check_parser.add_argument("--run-dir", type=Path, required=True)

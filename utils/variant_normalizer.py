@@ -29,6 +29,7 @@ Usage:
 """
 
 import logging
+import os
 import re
 from importlib.resources import files
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -249,6 +250,10 @@ def _load_gene_aliases(gene: str) -> dict[str, str]:
     """Load the per-gene alias map. Returns {} when the JSON is absent."""
     global _DATA_DIR
     gene_upper = gene.upper()
+    # Some shipped maps were derived from benchmark gold. A gold-free run must
+    # not consult them even if an earlier in-process call populated the cache.
+    if os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") == "1":
+        return {}
     if gene_upper in _alias_cache:
         return _alias_cache[gene_upper]
     try:
@@ -399,7 +404,19 @@ def _preprocess_cdna_token(variant: str) -> str:
     "c.999-424_1338+81del"; "c.2550-2551insTG" is "c.2550_2551insTG").
     Multi-allele "c.[X];[Y]" is left unchanged.
     """
-    cleaned = _CDNA_DASH_RE.sub("-", variant)
+    # Shared character policy first (spaces, zero-width, dash family,
+    # fullwidth, arrows); the local dash regex is kept as a defence in depth
+    # for callers that hand us an already-partially-cleaned token.
+    from utils.source_text import normalize_source_text, split_glued_notation
+
+    cleaned = _CDNA_DASH_RE.sub("-", normalize_source_text(variant))
+    # Collapsing whitespace joins a token the converter wrapped mid-allele, but
+    # it must not join two alleles that a zero-width joiner had glued: the
+    # shared policy turns that joiner into a space precisely so they separate,
+    # and deleting it here would undo the split and mint a token appearing in
+    # no source. Returning the value unjoined lets the grammar below refuse it.
+    if len(split_glued_notation(cleaned)) > 1:
+        return cleaned.strip()
     cleaned = re.sub(r"\s+", "", cleaned)
     bracket = _CDNA_SINGLE_ALLELE_BRACKET_RE.match(cleaned)
     if bracket:

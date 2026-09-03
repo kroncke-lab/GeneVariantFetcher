@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "currency": "USD",
+  "pricing_basis": "Dated public-list-price proxy used by docs/PROTOCOL_COST_EVAL.md; cached-input discounts, source acquisition, human review, and Grok/AGY consultation are excluded.",
+  "pricing_as_of": "2026-08-24",
+  "model_rates_per_million_tokens": {
+    "gpt-5.6-sol": {
+      "input": 5.0,
+      "output_or_reasoning": 30.0
+    },
+    "grok-4.3": {
+      "input": 1.25,
+      "output_or_reasoning": 2.5
+    },
+    "kimi-k2.6": {
+      "input": 0.95,
+      "output_or_reasoning": 4.0
+    }
+  },
+  "budget_headroom_multiplier": 1.25,
+  "calibrations": {
+    "KCNH2": {
+      "attempts": 28,
+      "source": "benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118/predictions.json",
+      "source_sha256": "101076cee9cc5c97900180f352b5c21a1422a2397372c721101f49cba81f7e15",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 80, "input_tokens": 125373, "output_tokens": 37410},
+        "azure_ai/grok-4.3": {"calls": 29, "input_tokens": 269788, "output_tokens": 131987},
+        "azure_ai/Kimi-K2.6-1": {"calls": 4, "input_tokens": 4084, "output_tokens": 6632}
+      }
+    },
+    "KCNQ1": {
+      "attempts": 30,
+      "source": "benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118/predictions.json",
+      "source_sha256": "101076cee9cc5c97900180f352b5c21a1422a2397372c721101f49cba81f7e15",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 130, "input_tokens": 169603, "output_tokens": 38600},
+        "azure_ai/grok-4.3": {"calls": 31, "input_tokens": 316057, "output_tokens": 110639},
+        "azure_ai/Kimi-K2.6-1": {"calls": 4, "input_tokens": 4705, "output_tokens": 3287}
+      }
+    },
+    "RYR2": {
+      "attempts": 30,
+      "source": "benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118/predictions.json",
+      "source_sha256": "101076cee9cc5c97900180f352b5c21a1422a2397372c721101f49cba81f7e15",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 120, "input_tokens": 224282, "output_tokens": 49589},
+        "azure_ai/grok-4.3": {"calls": 30, "input_tokens": 321871, "output_tokens": 145208},
+        "azure_ai/Kimi-K2.6-1": {"calls": 7, "input_tokens": 10614, "output_tokens": 14934}
+      }
+    },
+    "SCN5A": {
+      "attempts": 30,
+      "source": "benchmarks/codex_paper_eval/runs/20260824_aha_table_sourcebound_gold118/predictions.json",
+      "source_sha256": "101076cee9cc5c97900180f352b5c21a1422a2397372c721101f49cba81f7e15",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 102, "input_tokens": 170175, "output_tokens": 49771},
+        "azure_ai/grok-4.3": {"calls": 32, "input_tokens": 311792, "output_tokens": 166450},
+        "azure_ai/Kimi-K2.6-1": {"calls": 10, "input_tokens": 23566, "output_tokens": 24043}
+      }
+    },
+    "APOE": {
+      "attempts": 50,
+      "source": "results/vb_reviewer8_20260829/APOE/20260829_180915/llm_traces/trace_manifest.json",
+      "source_sha256": "29208592695f67b0f00ee299561bfe66b3b7588bb0eae5e2ccfb47329a5adb68",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 134, "input_tokens": 269960, "output_tokens": 93320},
+        "azure_ai/grok-4.3": {"calls": 49, "input_tokens": 544816, "output_tokens": 102466},
+        "azure_ai/Kimi-K2.6-1": {"calls": 27, "input_tokens": 29102, "output_tokens": 52715}
+      }
+    },
+    "BRCA1": {
+      "attempts": 50,
+      "source": "results/vb_curated150_20260824/BRCA1/20260824_181400/llm_traces/trace_manifest.json",
+      "source_sha256": "397eb7eacd1fc30324b406a62834fdf47f90201ed4500e317899710f0654c221",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 523, "input_tokens": 986959, "output_tokens": 252724},
+        "azure_ai/grok-4.3": {"calls": 42, "input_tokens": 607868, "output_tokens": 488993},
+        "azure_ai/Kimi-K2.6-1": {"calls": 33, "input_tokens": 55694, "output_tokens": 160826}
+      }
+    },
+    "BRCA2": {
+      "attempts": 50,
+      "source": "results/vb_curated150_20260824/BRCA2/20260824_181400/llm_traces/trace_manifest.json",
+      "source_sha256": "85623769fde1f7f749f17650edf32bbc24e66f6fe41fb5a840145d85e9300861",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 366, "input_tokens": 731675, "output_tokens": 197303},
+        "azure_ai/grok-4.3": {"calls": 50, "input_tokens": 609287, "output_tokens": 437613},
+        "azure_ai/Kimi-K2.6-1": {"calls": 23, "input_tokens": 31898, "output_tokens": 85907}
+      }
+    },
+    "MYBPC3": {
+      "attempts": 50,
+      "source": "results/vb_reviewer8_20260829/MYBPC3/20260829_183528/llm_traces/trace_manifest.json",
+      "source_sha256": "18c2b3fa4d1f995f554b132d11a794eee71db40ba0ceab0e0aaa713a5bdeb939",
+      "models": {
+        "azure_ai/gpt-5.6-sol": {"calls": 484, "input_tokens": 918989, "output_tokens": 175901},
+        "azure_ai/grok-4.3": {"calls": 40, "input_tokens": 649411, "output_tokens": 382713},
+        "azure_ai/Kimi-K2.6-1": {"calls": 38, "input_tokens": 49747, "output_tokens": 156415}
+      }
+    }
+  }
+}

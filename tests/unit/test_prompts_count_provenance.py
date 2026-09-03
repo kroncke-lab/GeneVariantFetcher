@@ -53,6 +53,8 @@ REQUIRED_COUNT_TYPES = {
     "case",
     "control",
     "unaffected_control",
+    "derived_from_patient_rows",
+    "closed_variant_partition",
     "unknown",
 }
 
@@ -117,3 +119,25 @@ def test_both_prompts_declare_fact_level_provenance_schema():
             "evidence_quote",
         ):
             assert label in prompt, f"{name} missing required key '{label}'"
+
+
+def test_both_prompts_gate_patient_row_phenotype_derivation():
+    for name, prompt in PROMPTS.items():
+        for phrase in (
+            "COMPLETE, variant-specific table",
+            "MUST populate affected, unaffected",
+            "require ALL selected cells to be explicitly negative",
+            "phenotype_derivation",
+            "derived_from_patient_rows",
+            "uncertain_count",
+            "unaffected = total - affected",
+            "predicate_tallies",
+            "patient_row_phenotype_v2",
+        ):
+            assert phrase in prompt, f"{name} missing derived-count guard {phrase!r}"
+
+
+def test_both_prompts_separate_diagnosis_from_asymptomatic_status():
+    for name, prompt in PROMPTS.items():
+        assert "can be affected while asymptomatic" in prompt, name
+        assert "closed_variant_partition" in prompt, name

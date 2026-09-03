@@ -73,9 +73,43 @@ COUNTS
 - Implicit counts are real: "a patient"/"a case"/"an individual"/"the proband" = 1
   carrier; "a healthy individual"/"an asymptomatic carrier" = 1 UNAFFECTED carrier;
   "an affected patient" = 1 AFFECTED carrier.
-- affected = has the phenotype/symptoms. unaffected = a carrier the paper
-  explicitly calls healthy, asymptomatic, clinically silent, or unaffected. NEVER
-  infer unaffected and never default it to 0.
+- affected = a carrier explicitly assigned the paper's target disease/phenotype.
+  Keep diagnosis and symptom severity separate: an explicitly diagnosed target-
+  disease patient can be affected while asymptomatic, and "without disease-
+  associated symptoms" does not by itself make that patient disease-unaffected.
+  Conversely, enrollment in a disease cohort does not prove a variant carrier is
+  affected unless the source binds that carrier or the exact same closed population
+  to the diagnosis. unaffected = a carrier explicitly called healthy, clinically
+  negative, or unaffected for the target phenotype. Never default it to 0.
+- A narrow prose partition is closed when one sentence states "X out of Y
+  <variant> carriers were affected by <target disease>" (or equivalent) and does
+  not mention unknown/unassessed carriers. Then carriers=Y, affected=X, and the
+  remainder may be unaffected; use closed_variant_partition for both phenotype
+  count types and retain the exact sentence. Do not use this rule for a symptom or
+  event subset, family size, screened cohort, mixed variants, or an open/partial
+  population. Outside this exact closed form, never derive unaffected by subtraction.
+- One narrow derived-count path applies to a COMPLETE, variant-specific table that
+  enumerates a closed carrier subset as rows and whose table population and full
+  carrier total are independently stated. A caption, introducing sentence, or
+  single-variant paper title may tie the whole table unambiguously to one variant;
+  a redundant variant cell in every row is not required. In multi-variant papers,
+  the table caption itself must identify the variant. Patient IDs may ascend or
+  descend but must be unique and contiguous. Exact carriers outside the table stay
+  uncertain unless separate genotype-linked fatal-case evidence makes them
+  affected. When these conditions hold, MUST populate affected, unaffected,
+  and uncertain rather than abstaining merely because the aggregate is not printed.
+  Set phenotype_derivation.protocol_version to "patient_row_phenotype_v2" so
+  this lane can be audited consistently across every paper in the run.
+  Declare a closed AND/OR rule over named, explicitly coded phenotype cells and
+  count rows deterministically. Use explicit target-disease symptoms or diagnostic
+  signs as positive; require ALL selected cells to be explicitly negative for
+  unaffected; if any selected cell is missing/unmappable, use uncertain unless
+  another selected cell is positive. Record the full audit in phenotype_derivation
+  and use derived_from_patient_rows for affected/unaffected count_type. For its
+  affected/unaffected column labels, join the exact input headers with " | "; do not
+  invent a summary label. Never use this path for example/partial tables,
+  mixed-variant tables, pedigrees without coded cells, or deriving
+  unaffected = total - affected.
 - Case report whose carrier's status is not described: count the carrier, leave the
   affected/unaffected split null - do not default to affected. "A novel mutation"
   with no described human patient is a variant, not a carrier.
@@ -117,7 +151,7 @@ count_provenance records WHY a count was assigned:
   carriers_count_type / affected_count_type / unaffected_count_type - exactly one
   of: per_variant_carrier (the count to actually use) | family_count |
   proband_count | cohort_total | screened_N | case | control | unaffected_control |
-  unknown.
+  derived_from_patient_rows | closed_variant_partition | unknown.
 Rule: when a count_type is cohort_total, screened_N, or unknown AND the value would
 be large (>10x the smallest carrier count in this paper), leave that count NULL and
 record the aggregate in additional_notes instead.
@@ -229,12 +263,21 @@ OUTPUT - JSON only:
                 "row_label": null, "row_ordinal": null, "column_ref": null,
                 "figure_panel": null, "locator_extra": {}},
             "penetrance_data": {"total_carriers_observed": N or null,
-                "affected_count": N or null, "unaffected_count": N or null},
+                "affected_count": N or null, "unaffected_count": N or null,
+                "uncertain_count": N or null},
             "count_provenance": {
                 "carriers_column_label": "string or null",
-                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
+                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|derived_from_patient_rows|closed_variant_partition|unknown",
                 "affected_column_label": "string or null", "affected_count_type": "(same enum)",
                 "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"},
+            "phenotype_derivation": null or {
+                "protocol_version": "patient_row_phenotype_v2",
+                "method": "derived_from_patient_rows", "source_table": "Table X",
+                "operational_rule": "closed rule over named columns", "complete_table": true,
+                "table_total": N, "table_affected": N, "table_unaffected": N,
+                "table_uncertain": N, "additional_carriers": N,
+                "additional_affected": N, "additional_unaffected": N,
+                "additional_uncertain": N, "predicate_tallies": {"named tally": N}},
             "source_location": "Table X or Results",
             "fact_provenance": [
                 {"fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
@@ -344,9 +387,18 @@ OUTPUT - JSON only:
                 ]},
             "count_provenance": {
                 "carriers_column_label": "string or null (raw column header the count came from)",
-                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
+                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|derived_from_patient_rows|closed_variant_partition|unknown",
                 "affected_column_label": "string or null", "affected_count_type": "(same enum)",
                 "unaffected_column_label": "string or null", "unaffected_count_type": "(same enum)"},
+            "phenotype_derivation": null or {
+                "protocol_version": "patient_row_phenotype_v2",
+                "method": "derived_from_patient_rows", "source_table": "Table X",
+                "operational_rule": "closed rule over named columns", "complete_table": true,
+                "table_total": "integer", "table_affected": "integer",
+                "table_unaffected": "integer", "table_uncertain": "integer",
+                "additional_carriers": "integer", "additional_affected": "integer",
+                "additional_unaffected": "integer", "additional_uncertain": "integer",
+                "predicate_tallies": {"named tally": "integer"}},
             "individual_records": [
                 {"individual_id": "e.g. 'II-1', 'P1', 'Case_2'",
                   "age_at_evaluation": "integer or null", "age_at_onset": "integer or null",

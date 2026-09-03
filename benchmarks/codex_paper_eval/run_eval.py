@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import base64
 import csv
+import fcntl
 import hashlib
 import json
 import math
@@ -58,7 +59,7 @@ CARDIAC_GENES = ("SCN5A", "KCNH2", "KCNQ1", "RYR2")
 # against the curated benchmark's adjudicated gold_overrides answer key (see
 # gold_csv_path) — adjudicated, but not the manual gold standard — so report
 # their results separately; never fold them into the cardiac headline.
-GENES = CARDIAC_GENES + ("BRCA2",)
+GENES = CARDIAC_GENES + ("APOE", "BRCA1", "BRCA2", "MYBPC3")
 COUNT_FIELDS = ("carriers", "affected", "unaffected")
 DEFAULT_CORPUS = REPO / "corpus"
 DEFAULT_GOLD = REPO / "gene_variant_fetcher_gold_standard" / "normalized"
@@ -99,6 +100,72 @@ def digest(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def digest_gold_root(path: Path) -> str:
+    """Digest the exact composite answer-key directory used for scoring."""
+
+    answer_keys = sorted(path.glob("*_recall_input.csv"))
+    if not answer_keys:
+        raise SystemExit(f"refusing to score: no answer-key CSVs under {path}")
+    files = list(answer_keys)
+    provenance = path / "provenance.tsv"
+    if provenance.is_file():
+        files.append(provenance)
+    value = hashlib.sha256()
+    for file in files:
+        value.update(file.name.encode())
+        value.update(b"\0")
+        value.update(digest(file).encode())
+        value.update(b"\n")
+    return value.hexdigest()
+
+
+def validated_score_gold_root(run_dir: Path, requested: Path) -> Path:
+    """Require a registered run to score against its setup-pinned answer key."""
+
+    actual = requested.resolve()
+    setup_path = run_dir / "setup.json"
+    if not setup_path.is_file():
+        return actual
+    cohort = read_json(setup_path).get("cohort") or {}
+    expected_text = str(cohort.get("gold_root") or "").strip()
+    if not expected_text:
+        return actual
+    expected = Path(expected_text).resolve()
+    if actual != expected:
+        raise SystemExit(
+            "refusing to score: --gold-root differs from the setup-pinned answer key "
+            f"({actual} != {expected})"
+        )
+    expected_digest = str(cohort.get("gold_root_sha256") or "").strip()
+    if cohort.get("consumption_log") and not expected_digest:
+        raise SystemExit(
+            "refusing to score: registered answer key lacks a pinned digest"
+        )
+    if expected_digest and digest_gold_root(actual) != expected_digest:
+        raise SystemExit("refusing to score: setup-pinned answer-key digest mismatch")
+    return actual
+
+
+def registered_selection_requires_setup(selection: dict) -> bool:
+    """Detect a manifest governed by a registry consumption ledger."""
+
+    raw_manifest = str(selection.get("paper_manifest") or "").strip()
+    if not raw_manifest:
+        return False
+    manifest = Path(raw_manifest).resolve()
+    registry_path = manifest.parent / "registry.json"
+    if not registry_path.is_file():
+        return False
+    try:
+        registry = read_json(registry_path)
+    except (OSError, json.JSONDecodeError):
+        return False
+    registered = any(
+        tier.get("manifest") == manifest.name for tier in registry.get("tiers", [])
+    )
+    return registered and bool((registry.get("consumption_log") or {}).get("path"))
 
 
 def read_json(path: Path):
@@ -196,6 +263,74 @@ def production_trace_lock_entries(
             f"traces={sorted(seen_genes)} predictions={sorted(prediction_genes)}"
         )
     return locked, roots, errors
+
+
+def production_run_status_lock_entries(
+    predictions: dict,
+) -> tuple[list[dict], list[str]]:
+    """Validate and normalize production RUN_STATUS evidence for the lock."""
+
+    supplied = predictions.get("production_run_statuses") or []
+    errors: list[str] = []
+    locked: list[dict] = []
+    if not supplied:
+        if (
+            predictions.get("strategy") == "production_gvf_run"
+            and predictions.get("primary_score_lane") == "paper_derived"
+        ):
+            errors.append(
+                "production_gvf_run predictions require production_run_statuses"
+            )
+        return locked, errors
+    if not isinstance(supplied, list):
+        return locked, ["production_run_statuses must be a list"]
+    seen_genes: set[str] = set()
+    for index, entry in enumerate(supplied):
+        label = f"production_run_statuses[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        gene = str(entry.get("gene") or "").upper()
+        raw_path = str(entry.get("status") or "")
+        expected_sha = str(entry.get("sha256") or "")
+        if not gene or not raw_path or not expected_sha:
+            errors.append(f"{label} requires gene, status, and sha256")
+            continue
+        if gene in seen_genes:
+            errors.append(f"duplicate production run status for {gene}")
+            continue
+        seen_genes.add(gene)
+        path = Path(raw_path)
+        if not path.is_absolute():
+            path = REPO / path
+        path = path.resolve()
+        if path.name != "RUN_STATUS.json" or not path.is_file():
+            errors.append(f"{label}: RUN_STATUS not found: {path}")
+            continue
+        actual_sha = digest(path)
+        if actual_sha != expected_sha:
+            errors.append(f"{label}: RUN_STATUS digest mismatch")
+            continue
+        status = read_json(path)
+        gold_access = status.get("gold_access") or {}
+        if (
+            status.get("status") != "completed"
+            or status.get("exit_code") != 0
+            or status.get("stage_failures")
+            or gold_access.get("disabled") is not True
+            or gold_access.get("gold_derived_alias_files_disabled") is not True
+        ):
+            errors.append(f"{label}: RUN_STATUS does not prove a clean gold-free run")
+        locked.append({"gene": gene, "status": raw_path, "sha256": actual_sha})
+    prediction_genes = {
+        str(p.get("gene") or "").upper() for p in predictions.get("papers", [])
+    }
+    if supplied and seen_genes != prediction_genes:
+        errors.append(
+            "production status genes do not match prediction genes: "
+            f"statuses={sorted(seen_genes)} predictions={sorted(prediction_genes)}"
+        )
+    return locked, errors
 
 
 def is_table_line(line: str) -> bool:
@@ -452,6 +587,48 @@ def gold_count_eligible_pmids(gold_root: Path, gene: str) -> set[str]:
     return {pmid for pmid, fields in coverage.items() if fields == set(COUNT_FIELDS)}
 
 
+def gold_variant_eligible_pmids(gold_root: Path, gene: str) -> set[str]:
+    """Return PMIDs with at least one named, non-excluded gold variant.
+
+    This is the correct pre-score eligibility boundary for an identity benchmark:
+    requiring all three count fields would silently discard valid variant-finding
+    gold.  Like the count-eligible helper, it reads membership only and exposes no
+    gold identity, value, or row count to extraction.
+    """
+
+    path = gold_csv_path(gold_root, gene)
+    eligible: set[str] = set()
+    with path.open(newline="") as fh:
+        for row in csv.DictReader(fh):
+            if gold_row_excluded(row):
+                continue
+            pmid = str(row.get("pmid", "")).strip()
+            if pmid.isdigit() and str(row.get("variant", "")).strip():
+                eligible.add(pmid)
+    return eligible
+
+
+def gold_provenance_manifest(gold_root: Path) -> dict[tuple[str, str], str]:
+    """Load optional per-attempt gold provenance beside a composite answer key."""
+
+    path = gold_root / "provenance.tsv"
+    if not path.is_file():
+        return {}
+    out: dict[tuple[str, str], str] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            gene = str(row.get("gene") or "").strip().upper()
+            pmid = str(row.get("pmid") or "").strip()
+            provenance = str(row.get("gold_provenance") or "").strip()
+            if not gene or not pmid.isdigit() or not provenance:
+                raise SystemExit(f"invalid gold provenance row in {path}: {row}")
+            key = (gene, pmid)
+            if key in out and out[key] != provenance:
+                raise SystemExit(f"conflicting gold provenance for {gene}:{pmid}")
+            out[key] = provenance
+    return out
+
+
 def read_paper_manifest(path: Path) -> list[tuple[str, str]]:
     papers: list[tuple[str, str]] = []
     with path.open() as fh:
@@ -471,12 +648,18 @@ def read_paper_manifest(path: Path) -> list[tuple[str, str]]:
 def selection_metadata(selection: dict) -> dict:
     paper_count = len(selection.get("papers", []))
     manifest = selection.get("paper_manifest")
+    eligibility_mode = str(selection.get("eligibility_mode") or "count")
+    eligibility_text = (
+        "named-variant-gold-eligible"
+        if eligibility_mode == "variant"
+        else "gold-count-eligible"
+    )
     if manifest:
         manifest_name = Path(manifest).name
         population = f"fixed manifest `{manifest_name}` ({paper_count} papers)"
         description = (
             f"Paper selection used the {population} from the downloaded-source, "
-            "gold-count-eligible pool. Routing, extraction, counts, evidence, and "
+            f"{eligibility_text} pool. Routing, extraction, counts, evidence, and "
             "source locations were gold-value-blind."
         )
         mode = "manifest"
@@ -489,7 +672,7 @@ def selection_metadata(selection: dict) -> dict:
         )
         description = (
             f"Paper selection used a {population} from the downloaded-source, "
-            "gold-count-eligible pool. Routing, extraction, counts, evidence, and "
+            f"{eligibility_text} pool. Routing, extraction, counts, evidence, and "
             "source locations were gold-value-blind."
         )
         mode = "random"
@@ -498,6 +681,7 @@ def selection_metadata(selection: dict) -> dict:
         "paper_manifest": manifest,
         "seed": selection.get("seed"),
         "per_gene": selection.get("per_gene"),
+        "eligibility_mode": eligibility_mode,
         "population": population,
         "description": description,
     }
@@ -524,8 +708,16 @@ def command_prepare(args) -> None:
         if requested is not None
         else CARDIAC_GENES
     )
+    eligibility_mode = getattr(args, "eligibility_mode", "count")
+    if eligibility_mode not in {"count", "variant"}:
+        raise SystemExit("eligibility mode must be 'count' or 'variant'")
+    eligibility_fn = (
+        gold_count_eligible_pmids
+        if eligibility_mode == "count"
+        else gold_variant_eligible_pmids
+    )
     for gene in run_genes:
-        eligible_pmids = gold_count_eligible_pmids(args.gold_root, gene)
+        eligible_pmids = eligibility_fn(args.gold_root, gene)
         source_pool = {
             paper["pmid"]: paper
             for paper in usable_sources(
@@ -545,7 +737,8 @@ def command_prepare(args) -> None:
         for gene, pmid in requested:
             if pmid not in pools[gene]:
                 raise SystemExit(
-                    f"{gene} {pmid}: missing usable source or complete gold count coverage"
+                    f"{gene} {pmid}: missing usable source or {eligibility_mode} "
+                    "gold eligibility"
                 )
             selected.append(pools[gene][pmid])
     else:
@@ -559,6 +752,17 @@ def command_prepare(args) -> None:
             selected.extend(rng.sample(pool, args.per_gene))
         rng.shuffle(selected)
 
+    provenance_by_attempt = gold_provenance_manifest(args.gold_root)
+    for paper in selected:
+        paper["gold_provenance"] = provenance_by_attempt.get(
+            (paper["gene"], paper["pmid"]),
+            (
+                "human_curated_cardiac"
+                if paper["gene"] in CARDIAC_GENES
+                else "curated_override"
+            ),
+        )
+
     now = datetime.now(timezone.utc).isoformat()
     selection = {
         "schema_version": 1,
@@ -566,6 +770,7 @@ def command_prepare(args) -> None:
         "seed": args.seed,
         "per_gene": args.per_gene,
         "minimum_source_chars": args.minimum_chars,
+        "eligibility_mode": eligibility_mode,
         "eligible_counts": eligible,
         # Which answer key each gene resolves to (manual cardiac gold vs the
         # adjudicated gold_overrides fallback) — recorded so scoring provenance
@@ -579,9 +784,14 @@ def command_prepare(args) -> None:
         "prepared_at": now,
         "papers": selected,
         "blinding": (
-            "Gold was used only to confirm PMID eligibility and the presence of "
-            "carrier/affected/unaffected assertions. No gold values or row counts "
-            "were written into this run or supplied to extraction."
+            "Gold was used only to confirm PMID eligibility and "
+            + (
+                "the presence of carrier/affected/unaffected assertions. "
+                if eligibility_mode == "count"
+                else "the presence of at least one named variant assertion. "
+            )
+            + "No gold identities, values, or row counts were written into this "
+            "run or supplied to extraction."
         ),
     }
     predictions = {
@@ -631,6 +841,15 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
         errors.append(
             f"paper set mismatch: missing={sorted(expected - actual)} extra={sorted(actual - expected)}"
         )
+    primary_lane = str(predictions.get("primary_score_lane") or "primary")
+    comparison_lanes = predictions.get("comparison_score_lanes") or []
+    if not isinstance(comparison_lanes, list) or any(
+        not isinstance(lane, str) or not lane.strip() for lane in comparison_lanes
+    ):
+        errors.append("comparison_score_lanes must be a list of non-empty names")
+        comparison_lanes = []
+    if primary_lane in comparison_lanes:
+        errors.append("primary_score_lane cannot also be a comparison lane")
     # Schema 1 is the external-import contract (e.g. a production gvf-run DB
     # projected by db_to_predictions.py): tool/rationale/variants are required,
     # but per-paper wall time and exact token telemetry don't exist there —
@@ -650,25 +869,56 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
             and not str(p.get("curation_rationale") or "").strip()
         ):
             errors.append(f"{label}: missing curation_rationale")
-        for i, row in enumerate(p.get("variants", [])):
-            if not (row.get("variant") or "").strip():
-                errors.append(f"{label} variant[{i}]: missing variant")
-            if not (row.get("evidence") or "").strip():
-                errors.append(f"{label} variant[{i}]: missing evidence")
-            if not (row.get("source_location") or "").strip():
-                errors.append(f"{label} variant[{i}]: missing source_location")
-            if int(predictions.get("schema_version") or 1) >= 2:
-                for rationale in ("inclusion_rationale", "count_rationale"):
-                    if not str(row.get(rationale) or "").strip():
-                        errors.append(f"{label} variant[{i}]: missing {rationale}")
-            for field in COUNT_FIELDS:
-                value = row.get(field)
-                if value is not None and (
-                    not isinstance(value, int) or isinstance(value, bool) or value < 0
-                ):
-                    errors.append(
-                        f"{label} {row.get('variant')}:{field} must be nonnegative int or null"
-                    )
+        row_sets = [
+            ("variants", p.get("variants", [])),
+            ("external_linkage_variants", p.get("external_linkage_variants", [])),
+            ("unattributed_variants", p.get("unattributed_variants", [])),
+        ]
+        comparisons = p.get("comparison_variants") or {}
+        if not isinstance(comparisons, dict):
+            errors.append(f"{label}: comparison_variants must be an object")
+            comparisons = {}
+        missing_comparisons = set(comparison_lanes) - set(comparisons)
+        extra_comparisons = set(comparisons) - set(comparison_lanes)
+        if missing_comparisons or extra_comparisons:
+            errors.append(
+                f"{label}: comparison lane mismatch "
+                f"missing={sorted(missing_comparisons)} "
+                f"extra={sorted(extra_comparisons)}"
+            )
+        row_sets.extend(
+            (f"comparison_variants.{lane}", rows) for lane, rows in comparisons.items()
+        )
+        for row_set, rows in row_sets:
+            if not isinstance(rows, list):
+                errors.append(f"{label}: {row_set} must be a list")
+                continue
+            for i, row in enumerate(rows):
+                row_label = f"{label} {row_set}[{i}]"
+                if not isinstance(row, dict):
+                    errors.append(f"{row_label}: must be an object")
+                    continue
+                if not (row.get("variant") or "").strip():
+                    errors.append(f"{row_label}: missing variant")
+                if not (row.get("evidence") or "").strip():
+                    errors.append(f"{row_label}: missing evidence")
+                if not (row.get("source_location") or "").strip():
+                    errors.append(f"{row_label}: missing source_location")
+                if int(predictions.get("schema_version") or 1) >= 2:
+                    for rationale in ("inclusion_rationale", "count_rationale"):
+                        if not str(row.get(rationale) or "").strip():
+                            errors.append(f"{row_label}: missing {rationale}")
+                for field in COUNT_FIELDS:
+                    value = row.get(field)
+                    if value is not None and (
+                        not isinstance(value, int)
+                        or isinstance(value, bool)
+                        or value < 0
+                    ):
+                        errors.append(
+                            f"{row_label} {row.get('variant')}:{field} must be "
+                            "nonnegative int or null"
+                        )
         if p.get("tool") not in {"text", "table", "pdf", "ocr"}:
             errors.append(f"{label}: invalid tool {p.get('tool')!r}")
         usage = p.get("token_usage") or {}
@@ -708,7 +958,12 @@ def command_lock(args) -> None:
         raise SystemExit(f"already locked: {lock_path}")
     selection_path = run_dir / "selection.json"
     prediction_path = run_dir / "predictions.json"
+    setup_path = run_dir / "setup.json"
     selection, predictions = read_json(selection_path), read_json(prediction_path)
+    if registered_selection_requires_setup(selection) and not setup_path.is_file():
+        raise SystemExit(
+            "registered tranche cannot be locked without its setup.json burn contract"
+        )
     trace_root = run_dir / "llm_traces"
     trace_manifest_path = trace_root / TRACE_MANIFEST_NAME
     trace_report_path = run_dir / TRACE_REPORT_NAME
@@ -716,6 +971,9 @@ def command_lock(args) -> None:
     trace_index_path = trace_root / TRACE_INDEX_NAME
     production_trace_locks, production_trace_roots, production_trace_errors = (
         production_trace_lock_entries(predictions)
+    )
+    production_status_locks, production_status_errors = (
+        production_run_status_lock_entries(predictions)
     )
     if int(predictions.get("schema_version") or 1) >= 2:
         # Rebuilding at lock time is deliberate — extraction may have appended
@@ -738,6 +996,7 @@ def command_lock(args) -> None:
     errors = validate_predictions(selection, predictions)
     errors.extend(selection_material_errors(selection))
     errors.extend(production_trace_errors)
+    errors.extend(production_status_errors)
     if trace_manifest is not None:
         errors.extend(validate_trace_manifest(trace_root, trace_manifest))
     if errors:
@@ -767,6 +1026,7 @@ def command_lock(args) -> None:
         "locked_at": datetime.now(timezone.utc).isoformat(),
         "selection_sha256": digest(selection_path),
         "predictions_sha256": digest(prediction_path),
+        "setup_sha256": digest(setup_path) if setup_path.is_file() else None,
         "llm_trace_manifest_sha256": (
             digest(trace_manifest_path) if trace_manifest is not None else None
         ),
@@ -787,10 +1047,13 @@ def command_lock(args) -> None:
             else None
         ),
         "production_trace_manifests": production_trace_locks,
+        "production_run_statuses": production_status_locks,
         "statement": lock_statement,
     }
     write_json(lock_path, lock)
     prediction_path.chmod(0o444)
+    if setup_path.is_file():
+        setup_path.chmod(0o444)
     if trace_manifest is not None:
         trace_manifest_path.chmod(0o444)
         trace_report_path.chmod(0o444)
@@ -2359,6 +2622,12 @@ def write_markdown_report(report: dict, path: Path) -> None:
         "population",
         f"recorded evaluation set ({overall['papers']} papers)",
     )
+    eligibility_mode = selection_info.get("eligibility_mode") or "count"
+    eligibility_summary = (
+        "at least one named, non-excluded gold variant"
+        if eligibility_mode == "variant"
+        else "gold assertions for carriers, affected, and unaffected"
+    )
     prelock_gold_usage = report.get("prelock_gold_usage") or {}
     if prelock_gold_usage.get("read_only_layer_scoring_possible"):
         blinding_line = (
@@ -2370,10 +2639,36 @@ def write_markdown_report(report: dict, path: Path) -> None:
         )
     else:
         blinding_line = (
-            "- Blinding: gold was used only for PMID eligibility and count-field "
-            "presence during selection; extraction exported no gold values or row "
-            "counts, and predictions were locked before `score` opened gold."
+            "- Blinding: gold was used only for PMID eligibility under the recorded "
+            f"`{eligibility_mode}` rule; extraction exported no gold identities, "
+            "values, or row counts, and predictions were locked before `score` "
+            "opened gold."
         )
+    lane_scores = report.get("provenance_lane_scores") or {}
+    lane_lines: list[str] = []
+    if len(lane_scores) > 1:
+        lane_lines = [
+            "",
+            "## Provenance-separated identity scores",
+            "",
+            (
+                "The paper-derived lane is primary. ClinVar/PubTator citation "
+                "linkage is retained as a secondary enrichment diagnostic and "
+                "does not count as finding a variant in the paper."
+            ),
+            "",
+            "| Lane | Role | TP | FP | FN | Precision | Recall | F1 |",
+            "|---|---|---:|---:|---:|---:|---:|---:|",
+        ]
+        for lane, payload in lane_scores.items():
+            metric = payload["overall"]
+            lane_lines.append(
+                f"| `{lane}` | {payload['role']} | {metric['tp']} | "
+                f"{metric['fp']} | {metric['fn']} | "
+                f"{format_rate(metric['precision'])} | "
+                f"{format_rate(metric['recall'])} | "
+                f"{format_rate(metric['f1'])} |"
+            )
     token_lines = (
         [
             (
@@ -2406,6 +2701,20 @@ def write_markdown_report(report: dict, path: Path) -> None:
             else []
         )
     )
+    phenotype_artifact = (report.get("artifacts") or {}).get("phenotype_count_recovery")
+    phenotype_artifact_lines = []
+    if phenotype_artifact and phenotype_artifact.get("status") == "generated":
+        files = phenotype_artifact.get("files") or {}
+        rendered = ", ".join(
+            f"`{files[key]}`"
+            for key in ("svg", "png", "pdf", "csv", "json")
+            if files.get(key)
+        )
+        phenotype_artifact_lines.append(
+            "- Phenotype-count recovery figure and inspectable source data: "
+            + rendered
+            + "."
+        )
     native_trace_evidence_lines = (
         [
             "- `llm_traces/<GENE>/<PMID>/`: exact textual requests, safe parameters, raw provider response envelopes, parse attempts, and explicit route/final-selection events for each model call.",
@@ -2433,7 +2742,7 @@ def write_markdown_report(report: dict, path: Path) -> None:
         (
             f"This hash-locked run evaluated **{overall['papers']} papers** "
             f"(**{per_gene_label}**) after selecting only PMIDs with downloaded "
-            f"source and gold assertions for carriers, affected, and unaffected. "
+            f"source and {eligibility_summary}. "
             f"Codex predictions were finalized before scoring."
         ),
         "",
@@ -2463,6 +2772,7 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "rows were left separate)."
         ),
         f"- Representation choices: {report['tools_used']}.",
+        *lane_lines,
         "",
         "## Blinding and scorer audit",
         "",
@@ -2657,6 +2967,7 @@ def write_markdown_report(report: dict, path: Path) -> None:
             "- `paper_metrics.csv`: exact per-paper metrics.",
             "- `LOCK.json`: SHA-256 digests proving prediction finalization before scoring.",
             "- `report.json`: complete machine-readable score, errors, timing, and token usage.",
+            *phenotype_artifact_lines,
             "- `matcher_adjudication.csv`: post-lock notation-equivalence audit; no extraction was edited.",
             "- `report_raw_matcher.json` and `report_raw_matcher.md`: preserved pre-adjudication score.",
             "- `validation_notes.md`: independent arithmetic, integrity checks, failure concentration, count outliers, and Claude comparison.",
@@ -2678,6 +2989,374 @@ def write_markdown_report(report: dict, path: Path) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def build_phenotype_count_recovery_artifacts(
+    run_dir: Path, gold_root: Path, report: dict[str, Any]
+) -> dict[str, Any]:
+    """Generate the progress/failure figure for every eligible scored run."""
+
+    count_metrics = (report.get("overall") or {}).get("count") or {}
+    missing_fields = [
+        field
+        for field in ("affected", "unaffected")
+        if int((count_metrics.get(field) or {}).get("gold_asserted") or 0) == 0
+    ]
+    if missing_fields:
+        return {
+            "status": "not_applicable",
+            "reason": "no authoritative gold assertions for "
+            + ", ".join(missing_fields),
+        }
+
+    figure_dir = run_dir / "figures"
+    data_dir = figure_dir / "data"
+    outputs = {
+        "svg": figure_dir / "phenotype_count_recovery.svg",
+        "png": figure_dir / "phenotype_count_recovery.png",
+        "pdf": figure_dir / "phenotype_count_recovery.pdf",
+        "csv": data_dir / "phenotype_count_recovery.csv",
+        "json": data_dir / "phenotype_count_recovery.json",
+    }
+    script = REPO / "scripts" / "build_phenotype_count_recovery.py"
+    command = [
+        sys.executable,
+        str(script),
+        "--run-dir",
+        str(run_dir),
+        "--gold-root",
+        str(gold_root),
+        "--svg-out",
+        str(outputs["svg"]),
+        "--png-out",
+        str(outputs["png"]),
+        "--pdf-out",
+        str(outputs["pdf"]),
+        "--csv-out",
+        str(outputs["csv"]),
+        "--json-out",
+        str(outputs["json"]),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout or "unknown renderer error")[-1200:]
+        raise SystemExit(
+            "phenotype-count recovery figure generation failed after scoring: " + detail
+        )
+    return {
+        "status": "generated",
+        "files": {
+            key: str(path.relative_to(run_dir))
+            for key, path in outputs.items()
+            if path.is_file()
+        },
+        "evaluation_missing_count": 0,
+        "storage_missing_count": None,
+        "renderer_output": result.stdout.strip().splitlines(),
+    }
+
+
+def score_prediction_lane(
+    selection: dict,
+    predictions: dict,
+    gold_root: Path,
+    lane: str,
+) -> tuple[list[dict], dict[str, dict], dict[str, dict]]:
+    """Score one locked provenance lane without changing prediction content."""
+
+    primary_lane = str(predictions.get("primary_score_lane") or "primary")
+    pred_map = {(p["gene"], str(p["pmid"])): p for p in predictions["papers"]}
+    scores = []
+    for paper in selection["papers"]:
+        key = (paper["gene"], str(paper["pmid"]))
+        predicted = pred_map[key]
+        if lane != primary_lane:
+            comparisons = predicted.get("comparison_variants") or {}
+            if lane not in comparisons:
+                raise SystemExit(
+                    f"refusing to score: {key[0]}:{key[1]} lacks locked {lane} "
+                    "comparison variants"
+                )
+            predicted = {**predicted, "variants": comparisons[lane]}
+        score = score_one(*key, predicted, load_gold(gold_root, *key))
+        score["gold_provenance"] = str(paper.get("gold_provenance") or "unspecified")
+        scores.append(score)
+
+    present_genes = [gene for gene in GENES if any(s["gene"] == gene for s in scores)]
+    by_gene = {
+        gene: aggregate([s for s in scores if s["gene"] == gene])
+        for gene in present_genes
+    }
+    provenance_names = sorted({s["gold_provenance"] for s in scores})
+    by_gold_provenance = {
+        provenance: aggregate([s for s in scores if s["gold_provenance"] == provenance])
+        for provenance in provenance_names
+    }
+    return scores, by_gene, by_gold_provenance
+
+
+def _identity_rate(counts: tuple[int, int, int], metric: str) -> float:
+    tp, fp, fn = counts
+    if metric == "recall":
+        return tp / (tp + fn) if tp + fn else 0.0
+    if metric == "precision":
+        return tp / (tp + fp) if tp + fp else (1.0 if not fn else 0.0)
+    raise SystemExit(f"unsupported paired metric: {metric}")
+
+
+def _lower_percentile(values: list[float], confidence: float) -> float:
+    if not values or not 0.0 < confidence < 1.0:
+        raise SystemExit("invalid paired-bootstrap confidence specification")
+    ordered = sorted(values)
+    rank = max(1, math.ceil((1.0 - confidence) * len(ordered)))
+    return ordered[rank - 1]
+
+
+def compare_paired_reports(
+    baseline: dict,
+    candidate: dict,
+    design: dict,
+    *,
+    tier_id: str,
+    phase: str,
+    registry_sha256: str,
+) -> dict:
+    """Apply the preregistered paired, PMID-clustered protocol decision rule."""
+
+    rule = design.get("decision_rule") or {}
+    primary_spec = rule.get("primary") or {}
+    precision_spec = rule.get("precision_guardrail") or {}
+    bootstrap_spec = rule.get("confidence_interval") or {}
+    if not primary_spec or not precision_spec or not bootstrap_spec:
+        raise SystemExit("registered paired comparison lacks a complete decision rule")
+    if bootstrap_spec.get("method") != "paired_cluster_bootstrap_nearest_rank":
+        raise SystemExit("unsupported registered confidence-interval method")
+    if bootstrap_spec.get("cluster_unit") != "PMID":
+        raise SystemExit("paired comparison must cluster attempts by PMID")
+
+    expected_arms = (("baseline", baseline), ("candidate", candidate))
+    for expected_arm, report in expected_arms:
+        consumption = report.get("tranche_consumption") or {}
+        if consumption.get("tier_id") != tier_id:
+            raise SystemExit(f"{expected_arm} report is not from tier {tier_id}")
+        if consumption.get("comparison_arm") != expected_arm:
+            raise SystemExit(f"expected a {expected_arm} report")
+        if consumption.get("registry_sha256") != registry_sha256:
+            raise SystemExit(f"{expected_arm} report does not bind the active registry")
+        if report.get("primary_score_lane") != "paper_derived":
+            raise SystemExit(f"{expected_arm} report is not paper-derived primary")
+
+    def paper_map(report: dict) -> dict[tuple[str, str], dict]:
+        papers = report.get("papers") or []
+        mapped = {
+            (str(paper.get("gene")), str(paper.get("pmid"))): paper for paper in papers
+        }
+        if len(mapped) != len(papers):
+            raise SystemExit("paired report contains duplicate gene/PMID attempts")
+        return mapped
+
+    baseline_map = paper_map(baseline)
+    candidate_map = paper_map(candidate)
+    if set(baseline_map) != set(candidate_map):
+        raise SystemExit("paired reports do not contain the same gene/PMID attempts")
+
+    clusters: dict[str, dict[str, list[int]]] = {}
+    totals = {"baseline": [0, 0, 0], "candidate": [0, 0, 0]}
+    for key in sorted(baseline_map):
+        baseline_paper = baseline_map[key]
+        candidate_paper = candidate_map[key]
+        baseline_gold = int(baseline_paper["tp"]) + int(baseline_paper["fn"])
+        candidate_gold = int(candidate_paper["tp"]) + int(candidate_paper["fn"])
+        if baseline_gold != candidate_gold:
+            raise SystemExit(
+                f"gold denominator differs between paired reports for {key}"
+            )
+        cluster = clusters.setdefault(
+            key[1], {"baseline": [0, 0, 0], "candidate": [0, 0, 0]}
+        )
+        for arm, paper in (
+            ("baseline", baseline_paper),
+            ("candidate", candidate_paper),
+        ):
+            for index, field in enumerate(("tp", "fp", "fn")):
+                value = int(paper[field])
+                cluster[arm][index] += value
+                totals[arm][index] += value
+
+    cluster_ids = sorted(clusters)
+    if not cluster_ids:
+        raise SystemExit("paired reports contain no PMID clusters")
+    metric_deltas: dict[str, dict[str, float]] = {}
+    bootstrap_deltas = {"recall": [], "precision": []}
+    for metric in bootstrap_deltas:
+        baseline_rate = _identity_rate(tuple(totals["baseline"]), metric)
+        candidate_rate = _identity_rate(tuple(totals["candidate"]), metric)
+        metric_deltas[metric] = {
+            "baseline": baseline_rate,
+            "candidate": candidate_rate,
+            "delta_candidate_minus_baseline": candidate_rate - baseline_rate,
+        }
+
+    resamples = int(bootstrap_spec.get("resamples") or 0)
+    seed = int(bootstrap_spec.get("seed"))
+    if resamples < 1000:
+        raise SystemExit("paired bootstrap must register at least 1,000 resamples")
+    rng = random.Random(seed)
+    for _ in range(resamples):
+        sampled = [rng.choice(cluster_ids) for _ in cluster_ids]
+        sampled_totals = {"baseline": [0, 0, 0], "candidate": [0, 0, 0]}
+        for cluster_id in sampled:
+            cluster = clusters[cluster_id]
+            for arm in sampled_totals:
+                for index, value in enumerate(cluster[arm]):
+                    sampled_totals[arm][index] += value
+        for metric in bootstrap_deltas:
+            bootstrap_deltas[metric].append(
+                _identity_rate(tuple(sampled_totals["candidate"]), metric)
+                - _identity_rate(tuple(sampled_totals["baseline"]), metric)
+            )
+
+    recall_confidence = float(primary_spec["one_sided_confidence_level"])
+    precision_confidence = float(precision_spec["one_sided_confidence_level"])
+    recall_lower = _lower_percentile(bootstrap_deltas["recall"], recall_confidence)
+    precision_lower = _lower_percentile(
+        bootstrap_deltas["precision"], precision_confidence
+    )
+    metric_deltas["recall"]["one_sided_lower_confidence_bound"] = recall_lower
+    metric_deltas["precision"]["one_sided_lower_confidence_bound"] = precision_lower
+
+    recall_pass = metric_deltas["recall"]["delta_candidate_minus_baseline"] >= float(
+        primary_spec["minimum_observed_delta"]
+    ) and recall_lower >= float(primary_spec["noninferiority_margin"])
+    precision_pass = precision_lower >= float(precision_spec["noninferiority_margin"])
+    passed = recall_pass and precision_pass
+    if passed:
+        decision = (
+            "advance_to_confirmation" if phase == "discovery" else "accept_candidate"
+        )
+    else:
+        decision = "reject_or_revise_candidate"
+    return {
+        "schema_version": 1,
+        "tier_id": tier_id,
+        "phase": phase,
+        "cluster_unit": "PMID",
+        "cluster_count": len(cluster_ids),
+        "attempt_count": len(baseline_map),
+        "registered_rule": rule,
+        "metrics": metric_deltas,
+        "criteria": {
+            "recall_pass": recall_pass,
+            "precision_noninferiority_pass": precision_pass,
+        },
+        "passed": passed,
+        "decision": decision,
+    }
+
+
+def command_compare(args) -> None:
+    registry_path = args.registry.resolve()
+    registry = read_json(registry_path)
+    registry_sha256 = digest(registry_path)
+    tiers = [
+        tier for tier in registry.get("tiers", []) if tier.get("id") == args.tier_id
+    ]
+    if len(tiers) != 1:
+        raise SystemExit(f"expected exactly one registered tier {args.tier_id}")
+    baseline_path = args.baseline_report.resolve()
+    candidate_path = args.candidate_report.resolve()
+    comparison = compare_paired_reports(
+        read_json(baseline_path),
+        read_json(candidate_path),
+        registry.get("evaluation_design") or {},
+        tier_id=args.tier_id,
+        phase=args.phase,
+        registry_sha256=registry_sha256,
+    )
+    comparison["integrity"] = {
+        "registry": str(registry_path),
+        "registry_sha256": registry_sha256,
+        "baseline_report": str(baseline_path),
+        "baseline_report_sha256": digest(baseline_path),
+        "candidate_report": str(candidate_path),
+        "candidate_report_sha256": digest(candidate_path),
+    }
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    write_json(args.out, comparison)
+    print(args.out)
+
+
+def record_tranche_consumption(run_dir: Path, lock: dict) -> dict | None:
+    """Append one scored paired arm to its registry's burn ledger.
+
+    Generic and historical runs have no registered consumption log and remain
+    unchanged. The append happens after the gold score is computed but before
+    the report is exposed, so even a later artifact-rendering failure still
+    burns the arm whose result was available to the process.
+    """
+
+    setup_path = run_dir / "setup.json"
+    if not setup_path.is_file():
+        return None
+    setup = read_json(setup_path)
+    cohort = setup.get("cohort") or {}
+    spec = cohort.get("consumption_log") or {}
+    relative = str(spec.get("path") or "").strip()
+    registry = str(cohort.get("registry") or "").strip()
+    arm = str(cohort.get("comparison_arm") or "").strip()
+    tier_id = str(cohort.get("id") or "").strip()
+    if not relative:
+        return None
+    if not registry or not arm or not tier_id:
+        raise SystemExit("registered consumption log lacks tier/arm metadata")
+    log_path = Path(registry).resolve().parent / relative
+    event = {
+        "schema_version": int(spec.get("schema_version") or 1),
+        "tier_id": tier_id,
+        "comparison_arm": arm,
+        "run_id": str(setup.get("run_id") or ""),
+        "scored_at": datetime.now(timezone.utc).isoformat(),
+        "selection_sha256": lock["selection_sha256"],
+        "predictions_sha256": lock["predictions_sha256"],
+        "runtime_source_sha256": str(
+            ((setup.get("repository") or {}).get("runtime_source") or {}).get("sha256")
+            or ""
+        ),
+        "registry_sha256": str(cohort.get("registry_sha256") or ""),
+    }
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("a+", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        handle.seek(0)
+        entries = []
+        for line_number, raw in enumerate(handle, 1):
+            if not raw.strip():
+                continue
+            try:
+                entry = json.loads(raw)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(
+                    f"invalid consumption log line {line_number}: {log_path}"
+                ) from exc
+            entries.append(entry)
+        same_arm = [
+            entry
+            for entry in entries
+            if entry.get("tier_id") == tier_id and entry.get("comparison_arm") == arm
+        ]
+        if same_arm:
+            prior = same_arm[0]
+            if (
+                prior.get("selection_sha256") == event["selection_sha256"]
+                and prior.get("predictions_sha256") == event["predictions_sha256"]
+            ):
+                return prior
+            raise SystemExit(f"refusing to rescore consumed arm {tier_id}:{arm}")
+        handle.seek(0, os.SEEK_END)
+        handle.write(json.dumps(event, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    return event
+
+
 def command_score(args) -> None:
     run_dir = args.run_dir
     selection_path, prediction_path, lock_path = (
@@ -2693,7 +3372,18 @@ def command_score(args) -> None:
         or digest(prediction_path) != lock["predictions_sha256"]
     ):
         raise SystemExit("refusing to score: locked input digest mismatch")
+    setup_digest = lock.get("setup_sha256")
+    setup_path = run_dir / "setup.json"
+    if setup_digest and (
+        not setup_path.is_file() or digest(setup_path) != setup_digest
+    ):
+        raise SystemExit("refusing to score: locked setup digest mismatch")
+    gold_root = validated_score_gold_root(run_dir, args.gold_root)
     selection, predictions = read_json(selection_path), read_json(prediction_path)
+    if registered_selection_requires_setup(selection) and not setup_path.is_file():
+        raise SystemExit(
+            "refusing to score: registered tranche lacks its setup.json burn contract"
+        )
     trace_manifest_digest = lock.get("llm_trace_manifest_sha256")
     if trace_manifest_digest:
         trace_root = run_dir / "llm_traces"
@@ -2730,16 +3420,42 @@ def command_score(args) -> None:
             "refusing to score: production LLM trace integrity failed:\n- "
             + "\n- ".join(production_trace_errors)
         )
-    pred_map = {(p["gene"], str(p["pmid"])): p for p in predictions["papers"]}
-    scores = []
-    for paper in selection["papers"]:
-        key = (paper["gene"], paper["pmid"])
-        scores.append(score_one(*key, pred_map[key], load_gold(args.gold_root, *key)))
-    present_genes = [gene for gene in GENES if any(s["gene"] == gene for s in scores)]
-    by_gene = {
-        gene: aggregate([s for s in scores if s["gene"] == gene])
-        for gene in present_genes
+    production_status_locks, production_status_errors = (
+        production_run_status_lock_entries(predictions)
+    )
+    if production_status_locks != (lock.get("production_run_statuses") or []):
+        production_status_errors.append(
+            "production RUN_STATUS lock entries differ from locked predictions"
+        )
+    if production_status_errors:
+        raise SystemExit(
+            "refusing to score: production RUN_STATUS integrity failed:\n- "
+            + "\n- ".join(production_status_errors)
+        )
+    primary_lane = str(predictions.get("primary_score_lane") or "primary")
+    scores, by_gene, by_gold_provenance = score_prediction_lane(
+        selection, predictions, gold_root, primary_lane
+    )
+    present_genes = list(by_gene)
+    lane_scores = {
+        primary_lane: {
+            "role": "primary",
+            "overall": aggregate(scores),
+            "by_gene": by_gene,
+            "by_gold_provenance": by_gold_provenance,
+        }
     }
+    for lane in predictions.get("comparison_score_lanes") or []:
+        comparison_scores, comparison_by_gene, comparison_by_provenance = (
+            score_prediction_lane(selection, predictions, gold_root, str(lane))
+        )
+        lane_scores[str(lane)] = {
+            "role": "secondary_diagnostic",
+            "overall": aggregate(comparison_scores),
+            "by_gene": comparison_by_gene,
+            "by_gold_provenance": comparison_by_provenance,
+            "papers": comparison_scores,
+        }
     report = {
         "run_id": selection["run_id"],
         "seed": selection["seed"],
@@ -2747,10 +3463,14 @@ def command_score(args) -> None:
         "scored_at": datetime.now(timezone.utc).isoformat(),
         "overall": aggregate(scores),
         "by_gene": by_gene,
+        "by_gold_provenance": by_gold_provenance,
+        "primary_score_lane": primary_lane,
+        "provenance_lane_scores": lane_scores,
+        "provenance_policy": predictions.get("provenance_policy"),
         "papers": scores,
         "selection": selection_metadata(selection),
         "gold_sources": {
-            gene: str(gold_csv_path(args.gold_root, gene)) for gene in present_genes
+            gene: str(gold_csv_path(gold_root, gene)) for gene in present_genes
         },
         "tools_used": dict(Counter(s.get("tool") or "unspecified" for s in scores)),
         "token_usage": predictions.get("token_usage"),
@@ -2765,9 +3485,11 @@ def command_score(args) -> None:
         "integrity": {
             "selection_sha256": lock["selection_sha256"],
             "predictions_sha256": lock["predictions_sha256"],
+            "setup_sha256": setup_digest,
             "llm_trace_manifest_sha256": trace_manifest_digest,
             "llm_trace_report_sha256": lock.get("llm_trace_report_sha256"),
             "production_trace_manifests": production_trace_locks,
+            "production_run_statuses": production_status_locks,
         },
         "blinding": selection.get("blinding"),
         "prelock_gold_usage": predictions.get("prelock_gold_usage")
@@ -2791,9 +3513,16 @@ def command_score(args) -> None:
             "recovered_equivalent_matches": adjudication_count,
             "predictions_changed": False,
         }
+    consumption = record_tranche_consumption(run_dir, lock)
+    if consumption is not None:
+        report["tranche_consumption"] = consumption
     write_json(run_dir / "report.json", report)
     write_evidence_csv(predictions, run_dir / "evidence.csv")
     write_paper_metrics_csv(scores, run_dir / "paper_metrics.csv")
+    report.setdefault("artifacts", {})["phenotype_count_recovery"] = (
+        build_phenotype_count_recovery_artifacts(run_dir, gold_root, report)
+    )
+    write_json(run_dir / "report.json", report)
     write_markdown_report(report, run_dir / "report.md")
     print(run_dir / "report.json")
 
@@ -2805,6 +3534,15 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, required=True)
     p.add_argument("--per-gene", type=int, default=5)
     p.add_argument("--minimum-chars", type=int, default=2000)
+    p.add_argument(
+        "--eligibility-mode",
+        choices=("count", "variant"),
+        default="count",
+        help=(
+            "count requires authoritative carrier/affected/unaffected assertions; "
+            "variant requires only a named, non-excluded gold variant"
+        ),
+    )
     p.add_argument("--corpus-root", type=Path, default=DEFAULT_CORPUS)
     p.add_argument("--gold-root", type=Path, default=DEFAULT_GOLD)
     p.add_argument(
@@ -2851,6 +3589,14 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--run-dir", type=Path, required=True)
     p.add_argument("--gold-root", type=Path, default=DEFAULT_GOLD)
     p.set_defaults(func=command_score)
+    p = sub.add_parser("compare")
+    p.add_argument("--tier-id", required=True)
+    p.add_argument("--registry", type=Path, required=True)
+    p.add_argument("--baseline-report", type=Path, required=True)
+    p.add_argument("--candidate-report", type=Path, required=True)
+    p.add_argument("--phase", choices=("discovery", "confirmation"), required=True)
+    p.add_argument("--out", type=Path, required=True)
+    p.set_defaults(func=command_compare)
     return ap
 
 

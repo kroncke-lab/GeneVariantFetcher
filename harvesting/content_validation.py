@@ -54,6 +54,40 @@ VARIANT_PATTERNS = [
     r"variant",
 ]
 
+_ABSTRACT_HEADING_RE = re.compile(r"(?im)^\s{0,3}(?:#{1,6}\s*)?abstract\s*$")
+_REFERENCES_HEADING_RE = re.compile(
+    r"(?im)^\s{0,3}(?:#{1,6}\s*)?(?:references|bibliography)\s*$"
+)
+_BODY_HEADING_RE = re.compile(
+    r"(?im)^\s{0,3}(?:#{1,6}\s*)?(?:"
+    r"introduction|background|methods?|materials(?:\s+and\s+methods)?|"
+    r"patients?(?:\s+and\s+methods)?|study\s+population|results?|findings|"
+    r"case(?:\s+presentation|\s+report)?|discussion|conclusions?|"
+    r"main\s+text|letter|correspondence"
+    r")\s*$"
+)
+
+
+def is_abstract_reference_shell(content: str) -> bool:
+    """Return True when a purported article is only abstract plus references.
+
+    Large reference lists made byte-size and generic paper-indicator checks
+    classify publisher metadata shells as full text.  Require a substantive
+    body heading between the Abstract and References headings.  Letters and
+    case reports are included in the accepted body vocabulary so this does not
+    impose an IMRAD-only article shape.
+    """
+    if not content:
+        return False
+    abstract = _ABSTRACT_HEADING_RE.search(content)
+    if abstract is None:
+        return False
+    references = _REFERENCES_HEADING_RE.search(content, abstract.end())
+    if references is None:
+        return False
+    between = content[abstract.end() : references.start()]
+    return _BODY_HEADING_RE.search(between) is None
+
 
 def _is_binary_content(content: str) -> tuple[bool, str]:
     """Check if content appears to be binary data rather than text.
@@ -106,6 +140,9 @@ def validate_content_quality(
         return False, binary_reason
 
     content_lower = content.lower()
+
+    if is_abstract_reference_shell(content):
+        return False, "Abstract/reference shell: no substantive article body"
 
     for pattern in JUNK_CONTENT_PATTERNS:
         if pattern in content_lower:

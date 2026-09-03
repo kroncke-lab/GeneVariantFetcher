@@ -10,6 +10,7 @@ from __future__ import annotations
 from pipeline.phenotype_count_guard import (
     apply_phenotype_count_guard,
     phenotype_fields_to_clear,
+    read_phenotype_counts,
     sanitize_copied_phenotype,
 )
 from pipeline.steps import _apply_phenotype_count_guard
@@ -181,8 +182,42 @@ def test_partition_underfill_is_also_refused():
     ]
 
 
+def test_explicit_carrier_denominator_beats_legacy_patient_subset_mirror():
+    variant = {
+        "patients": {"count": 2},
+        "penetrance_data": {
+            "total_carriers_observed": 4,
+            "affected_count": 2,
+            "unaffected_count": 2,
+            "uncertain_count": 0,
+        },
+    }
+
+    assert read_phenotype_counts(variant) == {
+        "carriers": 4,
+        "affected": 2,
+        "unaffected": 2,
+        "uncertain": 0,
+    }
+    assert phenotype_fields_to_clear(variant) == []
+
+
 def test_closed_partition_is_left_alone():
     variant = {"carriers": 4, "affected": 2, "unaffected": 2}
+    assert phenotype_fields_to_clear(variant) == []
+
+
+def test_closed_three_way_derived_partition_is_left_alone():
+    variant = {
+        "carriers": 185,
+        "affected": 97,
+        "unaffected": 62,
+        "uncertain": 26,
+        "count_provenance": {
+            "affected_count_type": "derived_from_patient_rows",
+            "unaffected_count_type": "derived_from_patient_rows",
+        },
+    }
     assert phenotype_fields_to_clear(variant) == []
 
 
@@ -234,3 +269,445 @@ def test_zero_unaffected_is_not_refused_by_the_zero_rule():
     """
     variant = {"carriers": 1, "affected": 1, "unaffected": 0}
     assert phenotype_fields_to_clear(variant) == []
+
+
+def test_unsourced_zero_unaffected_with_null_total_is_refused():
+    variant = {"carriers": None, "affected": None, "unaffected": 0}
+
+    assert [
+        (item.field, item.reason) for item in phenotype_fields_to_clear(variant)
+    ] == [("unaffected", "unsourced_zero_without_closed_cohort")]
+
+
+def test_unsourced_zero_unaffected_with_missing_affected_is_refused():
+    variant = {"carriers": 4, "affected": None, "unaffected": 0}
+
+    assert [
+        (item.field, item.reason) for item in phenotype_fields_to_clear(variant)
+    ] == [("unaffected", "unsourced_zero_without_closed_cohort")]
+
+
+def test_llm_verdict_alone_does_not_source_an_open_set_zero():
+    variant = {
+        "carriers": None,
+        "affected": None,
+        "unaffected": 0,
+        "claim_verification": {"field_verdicts": {"unaffected": "directly_supported"}},
+    }
+
+    assert [
+        (item.field, item.reason) for item in phenotype_fields_to_clear(variant)
+    ] == [("unaffected", "unsourced_zero_without_closed_cohort")]
+
+
+def test_guard_keeps_equal_affected_count_with_verified_same_population_source():
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation.\n"
+        "The study population consisted of 30 LQT3 patients."
+    )
+    variant = {
+        "source_notation": "D1790G",
+        "carriers": 30,
+        "affected": 30,
+        "unaffected": None,
+        "fact_provenance": [
+            {
+                "fact_type": "total_carriers_observed",
+                "fact_value": "30",
+                "evidence_quote": (
+                    "The current study population consisted of 30 carriers of "
+                    "the D1790G SCN5A mutation"
+                ),
+            },
+            {
+                "fact_type": "affected_count",
+                "fact_value": "30",
+                "evidence_quote": "The study population consisted of 30 LQT3 patients",
+            },
+        ],
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 0
+    assert variant["affected"] == 30
+    assert variant["source_verified_claims"]["affected"]["value"] == 30
+
+
+def test_guard_promotes_missing_affected_for_same_closed_carrier_population():
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation who were members of four families.\n"
+        "The study population consisted of 30 LQT3 patients. Prior to enrolment, "
+        "27 patients were asymptomatic and 3 patients were symptomatic.\n"
+        "The study population comprised 30 D1790G carriers who were treated "
+        "with flecainide and followed longitudinally."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "source_notation": "D1790G",
+        "patients": {"count": 30},
+        "penetrance_data": {
+            "total_carriers_observed": 30,
+            "affected_count": None,
+            "unaffected_count": None,
+            "uncertain_count": 0,
+        },
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 0
+    assert variant["penetrance_data"]["affected_count"] == 30
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert variant["source_bound_phenotype_promotion"]["fields_filled"] == ["affected"]
+    assert variant["source_verified_claims"]["affected"]["value"] == 30
+
+
+def test_guard_keeps_existing_equal_n_when_source_detector_validates_it():
+    """A detected closed cohort verifies a present value, not only a null.
+
+    This covers extraction records whose fact-provenance quote is not an exact
+    source substring even though the complete locked source independently
+    binds the same N carriers and N disease patients.
+    """
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation who were members of four families.\n"
+        "The study population consisted of 30 LQT3 patients. Prior to enrolment, "
+        "27 patients were asymptomatic and 3 patients were symptomatic."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "source_notation": "D1790G",
+        "patients": {"count": 30},
+        "penetrance_data": {
+            "total_carriers_observed": 30,
+            "affected_count": 30,
+            "unaffected_count": 0,
+            "uncertain_count": 0,
+        },
+        "count_provenance": {
+            "carriers_count_type": "per_variant_carrier",
+            "affected_count_type": "per_variant_carrier",
+            "unaffected_count_type": None,
+        },
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 1
+    assert variant["penetrance_data"]["affected_count"] == 30
+    # The source does not explicitly report a zero; it remains refused.
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert variant["source_verified_claims"]["affected"] == {
+        "value": 30,
+        "method": "identity_disease_coreference_equal_n",
+        "quote": (
+            "The current study population consisted of 30 carriers of the "
+            "D1790G SCN5A mutation who were members of four families. || The "
+            "study population consisted of 30 LQT3 patients."
+        ),
+        "promoted": False,
+    }
+    assert "source_bound_phenotype_promotion" not in variant
+
+
+def test_guard_replaces_closed_symptom_split_for_verified_disease_cohort():
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation who were members of four families.\n"
+        "The study population consisted of 30 LQT3 patients. Prior to enrolment, "
+        "27 patients were asymptomatic and 3 patients were symptomatic."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "source_notation": "D1790G",
+        "patients": {"count": 30},
+        "penetrance_data": {
+            "total_carriers_observed": 30,
+            "affected_count": 3,
+            "unaffected_count": 27,
+            "uncertain_count": 0,
+        },
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 0
+    assert variant["penetrance_data"]["affected_count"] == 30
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert variant["source_verified_claims"]["affected"] == {
+        "value": 30,
+        "method": "identity_disease_coreference_equal_n",
+        "quote": (
+            "The current study population consisted of 30 carriers of the "
+            "D1790G SCN5A mutation who were members of four families. || The "
+            "study population consisted of 30 LQT3 patients."
+        ),
+        "promoted": False,
+        "corrected": True,
+    }
+    assert variant["source_bound_phenotype_correction"]["fields_corrected"] == {
+        "affected": {"old": 3, "new": 30},
+        "unaffected": {"old": 27, "new": None},
+    }
+
+
+def test_guard_promotes_lqt3_when_disease_context_is_acronym_only():
+    source = (
+        "The current study population consisted of 30 carriers of the D1790G "
+        "SCN5A mutation.\n"
+        "The study population consisted of 30 LQT3 patients."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "penetrance_data": {
+            "total_carriers_observed": 30,
+            "affected_count": None,
+            "unaffected_count": None,
+            "uncertain_count": 0,
+        },
+    }
+
+    apply_phenotype_count_guard([variant], source_text=source, disease="LQTS")
+
+    assert variant["penetrance_data"]["affected_count"] == 30
+    assert variant["source_bound_phenotype_promotion"]["fields_filled"] == ["affected"]
+
+
+def test_guard_promotes_nonzero_remainder_from_explicit_closed_partition():
+    source = (
+        "Overall, 24 out of 29 KCNQ1 dup12 mutation carriers were affected "
+        "by an LQT syndrome, suggesting an incomplete penetrance of about 80%."
+    )
+    variant = {
+        "protein_notation": "p.R360_Q361dupQKQR",
+        "source_notation": "KCNQ1 dup12; p.R360_Q361dupQKQR",
+        "patients": {"count": 29},
+        "penetrance_data": {
+            "total_carriers_observed": 29,
+            "affected_count": 24,
+            "unaffected_count": None,
+            "uncertain_count": 0,
+        },
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 0
+    assert variant["penetrance_data"] == {
+        "total_carriers_observed": 29,
+        "affected_count": 24,
+        "unaffected_count": 5,
+        "uncertain_count": 0,
+    }
+    assert variant["source_bound_phenotype_promotion"]["fields_filled"] == [
+        "unaffected"
+    ]
+    assert variant["count_provenance"]["unaffected_count_type"] == (
+        "closed_variant_partition"
+    )
+    assert variant["count_provenance"]["unaffected_source"] == (
+        "source_bound_phenotype_v1"
+    )
+
+
+def test_guard_recovers_explicit_carrier_of_whom_partition():
+    source = (
+        "We found 8 carriers of the new RYR2 C2277R variant, 7 of whom "
+        "exhibited the CPVT phenotype according to EST results."
+    )
+    variant = {
+        "protein_notation": "p.Cys2277Arg",
+        "source_notation": "C2277R",
+        "penetrance_data": {
+            "total_carriers_observed": 8,
+            "affected_count": None,
+            "unaffected_count": None,
+            "uncertain_count": 0,
+        },
+    }
+
+    result = apply_phenotype_count_guard([variant], source_text=source, disease="CPVT")
+
+    assert result.cleared == 0
+    assert variant["penetrance_data"] == {
+        "total_carriers_observed": 8,
+        "affected_count": 7,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+    }
+    provenance = variant["count_provenance"]
+    assert provenance["affected_source"] == "source_bound_phenotype_v1"
+    assert provenance["unaffected_source"] == "source_bound_phenotype_v1"
+
+
+def test_guard_recovers_all_carriers_with_disease_defining_manifestation():
+    source = (
+        "The 6 Y652X carriers all manifested prolonged QTc intervals. "
+        "The penetrance in this family was therefore assumed to be 100%."
+    )
+    variant = {
+        "protein_notation": "p.Tyr652Ter",
+        "source_notation": "Y652X",
+        "penetrance_data": {
+            "total_carriers_observed": 6,
+            "affected_count": None,
+            "unaffected_count": None,
+            "uncertain_count": 0,
+        },
+    }
+
+    result = apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert result.cleared == 0
+    assert variant["penetrance_data"]["affected_count"] == 6
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    provenance = variant["count_provenance"]
+    assert provenance["affected_count_type"] == "closed_variant_partition"
+    assert provenance["affected_source"] == "source_bound_phenotype_v1"
+
+
+def test_model_declared_closed_partition_does_not_source_zero():
+    variant = {
+        "carriers": 6,
+        "affected": 0,
+        "unaffected": 6,
+        "count_provenance": {"affected_count_type": "closed_variant_partition"},
+    }
+
+    assert [
+        (item.field, item.reason) for item in phenotype_fields_to_clear(variant)
+    ] == [("affected", "unsourced_zero_affected")]
+
+
+def test_closed_partition_can_fill_all_missing_nonzero_counts():
+    source = "Seven out of 10 p.Arg12Trp carriers were affected by long QT syndrome."
+    variant = {
+        "protein_notation": "p.Arg12Trp",
+        "penetrance_data": {
+            "total_carriers_observed": None,
+            "affected_count": None,
+            "unaffected_count": None,
+            "uncertain_count": None,
+        },
+    }
+
+    # Word numerals are deliberately not parsed: exact integer provenance is
+    # required for a deterministic promotion.
+    apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+    assert variant["penetrance_data"]["total_carriers_observed"] is None
+
+    source = "7 out of 10 p.Arg12Trp carriers were affected by long QT syndrome."
+    apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+    assert variant["penetrance_data"]["total_carriers_observed"] == 10
+    assert variant["penetrance_data"]["affected_count"] == 7
+    assert variant["penetrance_data"]["unaffected_count"] == 3
+
+
+def test_closed_partition_does_not_turn_symptom_subset_into_disease_split():
+    source = (
+        "6 out of 20 p.Arg12Trp carriers had cardiac events after stopping "
+        "therapy; all were long QT syndrome patients."
+    )
+    variant = {
+        "protein_notation": "p.Arg12Trp",
+        "carriers": 20,
+        "affected": None,
+        "unaffected": None,
+    }
+
+    apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert variant["affected"] is None
+    assert variant["unaffected"] is None
+    assert "source_bound_phenotype_promotion" not in variant
+
+
+def test_closed_partition_refuses_assessed_subset_and_conflicting_integer():
+    source = (
+        "7 out of 10 evaluated p.Arg12Trp carriers were affected by long QT syndrome."
+    )
+    subset = {
+        "protein_notation": "p.Arg12Trp",
+        "carriers": None,
+        "affected": None,
+        "unaffected": None,
+    }
+    apply_phenotype_count_guard(
+        [subset], source_text=source, disease="Long QT syndrome"
+    )
+    assert subset["carriers"] is None
+
+    source = "7 out of 10 p.Arg12Trp carriers were affected by long QT syndrome."
+    conflict = {
+        "protein_notation": "p.Arg12Trp",
+        "carriers": 11,
+        "affected": None,
+        "unaffected": None,
+    }
+    apply_phenotype_count_guard(
+        [conflict], source_text=source, disease="Long QT syndrome"
+    )
+    assert conflict == {
+        "protein_notation": "p.Arg12Trp",
+        "carriers": 11,
+        "affected": None,
+        "unaffected": None,
+    }
+
+
+def test_closed_partition_never_manufactures_zero_remainder():
+    source = "10 out of 10 p.Arg12Trp carriers were affected by long QT syndrome."
+    variant = {
+        "protein_notation": "p.Arg12Trp",
+        "carriers": 10,
+        "affected": None,
+        "unaffected": None,
+    }
+
+    apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert variant["affected"] == 10
+    assert variant["unaffected"] is None
+
+
+def test_equal_n_across_unlinked_sentences_is_not_same_population():
+    source = (
+        "We enrolled 30 LQT3 patients from the referral clinic. "
+        "Separately, 30 carriers of p.Asp1790Gly were present in a registry."
+    )
+    variant = {
+        "protein_notation": "p.Asp1790Gly",
+        "carriers": 30,
+        "affected": None,
+        "unaffected": None,
+    }
+
+    apply_phenotype_count_guard(
+        [variant], source_text=source, disease="Long QT syndrome"
+    )
+
+    assert variant["affected"] is None

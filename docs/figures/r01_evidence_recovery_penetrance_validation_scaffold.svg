@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="7.2in" height="5.8in" viewBox="0 0 2160 1740" role="img" aria-labelledby="figure-title figure-desc">
+  <title id="figure-title">Two independent standards validate evidence recovery and penetrance calibration</title>
+  <desc id="figure-desc">Editable six-panel NIH R01 scientific-results scaffold. Panels A through D evaluate literature recovery against frozen manual adjudication. Panels E and F evaluate penetrance calibration against independent biobank carrier outcomes. No unverified numerical results are displayed.</desc>
+  <metadata>
+    Source: GeneVariantFetcher R01 figure scaffold
+    Analysis state: intentionally empty because no frozen verified values were supplied
+    Canvas: 7.2 by 5.8 inches; designed for 2160 by 1740 pixel 300-dpi export
+    Typeface: Avenir Next Condensed, an allowed Avenir Next fallback for Source Sans 3
+  </metadata>
+
+  <defs>
+    <style><![CDATA[
+      text { font-family: "Avenir Next Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #17324D; }
+      .title { font-size: 80px; font-weight: 500; letter-spacing: -0.8px; }
+      .subtitle { font-size: 46px; font-weight: 400; fill: #687584; }
+      .group { font-size: 36px; font-weight: 500; }
+      .question { font-size: 36px; font-weight: 400; fill: #687584; }
+      .panel-letter { font-size: 63px; font-weight: 600; }
+      .panel-title { font-size: 48px; font-weight: 500; }
+      .axis-label { font-size: 38px; font-weight: 500; }
+      .tick { font-size: 36px; font-weight: 400; fill: #687584; }
+      .row-label { font-size: 36px; font-weight: 400; }
+      .small { font-size: 36px; font-weight: 400; fill: #687584; }
+      .small-strong { font-size: 36px; font-weight: 500; }
+      .micro { font-size: 36px; font-weight: 400; fill: #687584; }
+      .annotation { font-size: 36px; font-weight: 400; fill: #17324D; }
+      .footer { font-size: 36px; font-weight: 500; }
+      .coral { fill: #C85A63; }
+      .panel { fill: #FFFFFF; stroke: #DCE3E8; stroke-width: 5; }
+      .axis { stroke: #17324D; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .grid { stroke: #DCE3E8; stroke-width: 3.5; fill: none; }
+      .guide { stroke: #D9DFE4; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .identity { stroke: #17324D; stroke-width: 5; fill: none; stroke-dasharray: 12 10; }
+      .divider { stroke: #DCE3E8; stroke-width: 5; }
+      .editable-result-slot { fill: #FFFFFF; stroke: #D9DFE4; stroke-width: 4; stroke-dasharray: 9 8; }
+    ]]></style>
+
+    <marker id="arrow-navy" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#17324D"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#3B78A8"/>
+    </marker>
+  </defs>
+
+  <!-- Canvas and title -->
+  <rect x="0" y="0" width="2160" height="1740" fill="#F8FAFC"/>
+  <text x="75" y="78" class="title">Two independent standards validate evidence recovery</text>
+  <text x="75" y="153" class="title">and penetrance calibration</text>
+  <text x="77" y="201" class="subtitle">Manual adjudication tests extraction; held-out biobank carriers test generalization</text>
+
+  <!-- Light group keys resolve the noncontiguous A–D / E–F grouping without a banner -->
+  <g id="group-keys">
+    <rect x="75" y="220" width="990" height="72" rx="18" fill="#E7F5F2"/>
+    <rect x="75" y="220" width="12" height="72" rx="6" fill="#2A9D8F"/>
+    <text x="108" y="253" class="group" textLength="900" lengthAdjust="spacingAndGlyphs">Gold standard 1 — Frozen manual literature adjudication</text>
+    <text x="108" y="284" class="question">Was the literature recovered correctly?</text>
+
+    <rect x="1095" y="220" width="990" height="72" rx="18" fill="#E3F1F3"/>
+    <rect x="1095" y="220" width="12" height="72" rx="6" fill="#147D8A"/>
+    <text x="1128" y="253" class="group" textLength="915" lengthAdjust="spacingAndGlyphs">Calibration standard 2 — Independent biobank carrier outcomes</text>
+    <text x="1128" y="284" class="question">Does the penetrance estimate generalize?</text>
+  </g>
+
+  <!-- Panel A -->
+  <g id="panel-a" aria-label="Panel A Evidence retained" transform="translate(0,45)">
+    <rect x="75" y="270" width="640" height="580" rx="18" class="panel"/>
+    <path d="M93 270 H697 Q715 270 715 288 V282 H75 V288 Q75 270 93 270 Z" fill="#2A9D8F"/>
+    <text x="101" y="340" class="panel-letter">A</text>
+    <text x="160" y="338" class="panel-title">Evidence retained</text>
+    <line x1="101" y1="362" x2="689" y2="362" class="divider"/>
+
+    <!-- Fixed-size modules show evaluation structure only; no height encodes a result. -->
+    <g aria-label="Evidence-retention stages">
+      <line x1="228" y1="434" x2="246" y2="434" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <line x1="374" y1="434" x2="392" y2="434" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <line x1="520" y1="434" x2="538" y2="434" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <path d="M606 490 V516 H167" fill="none" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <line x1="228" y1="573" x2="246" y2="573" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <line x1="374" y1="573" x2="392" y2="573" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+      <line x1="520" y1="573" x2="538" y2="573" stroke="#3B78A8" stroke-width="5" marker-end="url(#arrow-blue)"/>
+
+      <g transform="translate(102,386)">
+        <rect width="126" height="104" rx="13" fill="#E7F5F2" stroke="#2A9D8F" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">1</text><text x="63" y="64" text-anchor="middle" class="micro">Relevant</text><text x="63" y="96" text-anchor="middle" class="micro">papers</text>
+      </g>
+      <g transform="translate(248,386)">
+        <rect width="126" height="104" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">2</text><text x="63" y="77" text-anchor="middle" class="micro" textLength="105" lengthAdjust="spacingAndGlyphs">Discovered</text>
+      </g>
+      <g transform="translate(394,386)">
+        <rect width="126" height="104" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">3</text><text x="63" y="64" text-anchor="middle" class="micro">Passed</text><text x="63" y="96" text-anchor="middle" class="micro">triage</text>
+      </g>
+      <g transform="translate(540,386)">
+        <rect width="126" height="104" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">4</text><text x="63" y="64" text-anchor="middle" class="micro">Source</text><text x="63" y="96" text-anchor="middle" class="micro">acquired</text>
+      </g>
+      <g transform="translate(102,520)">
+        <rect width="126" height="112" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">5</text><text x="63" y="64" text-anchor="middle" class="micro">Variant</text><text x="63" y="96" text-anchor="middle" class="micro">link</text>
+      </g>
+      <g transform="translate(248,520)">
+        <rect width="126" height="112" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">6</text><text x="63" y="64" text-anchor="middle" class="micro">Carrier</text><text x="63" y="96" text-anchor="middle" class="micro">evidence</text>
+      </g>
+      <g transform="translate(394,520)">
+        <rect width="126" height="112" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">7</text><text x="63" y="64" text-anchor="middle" class="micro">Carrier</text><text x="63" y="96" text-anchor="middle" class="micro">counts</text>
+      </g>
+      <g transform="translate(540,520)">
+        <rect width="126" height="112" rx="13" fill="#E8F0F7" stroke="#3B78A8" stroke-width="5"/>
+        <text x="14" y="36" class="small-strong">8</text><text x="63" y="64" text-anchor="middle" class="micro">Provenance</text><text x="63" y="96" text-anchor="middle" class="micro">complete</text>
+      </g>
+    </g>
+
+    <g aria-label="Separately scored loss classes" fill="#C85A63">
+      <rect x="102" y="650" width="180" height="62" rx="11" fill="#F9E9EB"/>
+      <rect x="292" y="650" width="196" height="62" rx="11" fill="#F9E9EB"/>
+      <rect x="498" y="650" width="190" height="62" rx="11" fill="#F9E9EB"/>
+      <text x="192" y="674" text-anchor="middle" class="micro coral">Discovery</text><text x="192" y="706" text-anchor="middle" class="micro coral">miss</text>
+      <text x="390" y="674" text-anchor="middle" class="micro coral">Triage false</text><text x="390" y="706" text-anchor="middle" class="micro coral">negative</text>
+      <text x="593" y="674" text-anchor="middle" class="micro coral">Access</text><text x="593" y="706" text-anchor="middle" class="micro coral">failure</text>
+      <rect x="102" y="720" width="180" height="62" rx="11" fill="#F9E9EB"/>
+      <rect x="292" y="720" width="196" height="62" rx="11" fill="#F9E9EB"/>
+      <rect x="498" y="720" width="190" height="62" rx="11" fill="#F9E9EB"/>
+      <text x="192" y="744" text-anchor="middle" class="micro coral">Parsing</text><text x="192" y="776" text-anchor="middle" class="micro coral">failure</text>
+      <text x="390" y="744" text-anchor="middle" class="micro coral">Normalization</text><text x="390" y="776" text-anchor="middle" class="micro coral">failure</text>
+      <text x="593" y="744" text-anchor="middle" class="micro coral">Incomplete</text><text x="593" y="776" text-anchor="middle" class="micro coral">provenance</text>
+    </g>
+    <text x="102" y="810" class="annotation">Discovery and access failures are scored separately</text>
+    <text x="102" y="838" class="annotation">from extraction and provenance failures.</text>
+  </g>
+
+  <!-- Panel B -->
+  <g id="panel-b" aria-label="Panel B Extraction performance" transform="translate(0,45)">
+    <rect x="760" y="270" width="640" height="580" rx="18" class="panel"/>
+    <path d="M778 270 H1382 Q1400 270 1400 288 V282 H760 V288 Q760 270 778 270 Z" fill="#2A9D8F"/>
+    <text x="786" y="340" class="panel-letter">B</text>
+    <text x="845" y="338" class="panel-title">Extraction performance</text>
+    <line x1="786" y1="362" x2="1374" y2="362" class="divider"/>
+
+    <text x="786" y="405" class="annotation">Primary endpoint: carrier-level performance</text>
+    <g aria-label="Recall and precision key">
+      <circle cx="1132" cy="443" r="11" fill="#3B78A8"/>
+      <text x="1153" y="454" class="small">Recall</text>
+      <path d="M1266 432 L1277 443 L1266 454 L1255 443 Z" fill="#FFFFFF" stroke="#2A9D8F" stroke-width="5"/>
+      <text x="1289" y="454" class="small">Precision</text>
+    </g>
+
+    <rect x="786" y="551" width="588" height="42" rx="10" fill="#EEF4F9"/>
+    <g aria-label="Evaluation grains">
+      <text x="786" y="493" class="row-label">Relevant paper</text>
+      <text x="786" y="535" class="row-label" textLength="305" lengthAdjust="spacingAndGlyphs">Variant–paper observation</text>
+      <text x="786" y="577" class="row-label" font-weight="500">Carrier observation</text>
+      <text x="786" y="619" class="row-label">Affected carrier</text>
+      <text x="786" y="661" class="row-label">Unaffected carrier</text>
+      <text x="786" y="703" class="row-label">Phenotype mapping</text>
+      <text x="786" y="745" class="row-label">Variant normalization</text>
+      <text x="786" y="787" class="row-label" textLength="305" lengthAdjust="spacingAndGlyphs">Provenance-complete record</text>
+    </g>
+    <g aria-label="Empty dot-and-interval plotting scaffold">
+      <line x1="1110" y1="482" x2="1371" y2="482" class="grid"/>
+      <line x1="1110" y1="524" x2="1371" y2="524" class="grid"/>
+      <line x1="1110" y1="566" x2="1371" y2="566" class="grid"/>
+      <line x1="1110" y1="608" x2="1371" y2="608" class="grid"/>
+      <line x1="1110" y1="650" x2="1371" y2="650" class="grid"/>
+      <line x1="1110" y1="692" x2="1371" y2="692" class="grid"/>
+      <line x1="1110" y1="734" x2="1371" y2="734" class="grid"/>
+      <line x1="1110" y1="776" x2="1371" y2="776" class="grid"/>
+      <line x1="1110" y1="470" x2="1110" y2="790" class="axis"/>
+      <line x1="1241" y1="470" x2="1241" y2="790" class="grid"/>
+      <line x1="1371" y1="470" x2="1371" y2="790" class="grid"/>
+      <text x="1110" y="818" text-anchor="middle" class="tick">0.0</text>
+      <text x="1241" y="818" text-anchor="middle" class="tick">0.5</text>
+      <text x="1371" y="818" text-anchor="middle" class="tick">1.0</text>
+      <text x="1080" y="839" text-anchor="middle" class="axis-label">Performance versus manual gold standard</text>
+    </g>
+  </g>
+
+  <!-- Panel C -->
+  <g id="panel-c" aria-label="Panel C Carrier-count agreement" transform="translate(0,45)">
+    <rect x="1445" y="270" width="640" height="580" rx="18" class="panel"/>
+    <path d="M1463 270 H2067 Q2085 270 2085 288 V282 H1445 V288 Q1445 270 1463 270 Z" fill="#2A9D8F"/>
+    <text x="1471" y="340" class="panel-letter">C</text>
+    <text x="1530" y="338" class="panel-title">Carrier-count agreement</text>
+    <line x1="1471" y1="362" x2="2059" y2="362" class="divider"/>
+
+    <text x="1471" y="404" class="annotation">Scored at variant–cohort–phenotype level.</text>
+    <text x="1607" y="445" text-anchor="middle" class="small-strong">Affected carriers</text>
+    <text x="1908" y="445" text-anchor="middle" class="small-strong">Unaffected carriers</text>
+
+    <g aria-label="Affected carriers empty scatterplot">
+      <line x1="1512" y1="696" x2="1716" y2="696" class="axis" marker-end="url(#arrow-navy)"/>
+      <line x1="1512" y1="696" x2="1512" y2="481" class="axis" marker-end="url(#arrow-navy)"/>
+      <line x1="1518" y1="690" x2="1702" y2="495" class="identity"/>
+      <text x="1504" y="727" text-anchor="middle" class="tick">0</text>
+      <text x="1614" y="757" text-anchor="middle" class="axis-label">Manual count</text>
+      <text x="1481" y="589" text-anchor="middle" class="axis-label" transform="rotate(-90 1481 589)">AI-extracted count</text>
+      <text x="1681" y="500" text-anchor="end" class="micro">y = x</text>
+    </g>
+
+    <g aria-label="Unaffected carriers empty scatterplot">
+      <line x1="1814" y1="696" x2="2018" y2="696" class="axis" marker-end="url(#arrow-navy)"/>
+      <line x1="1814" y1="696" x2="1814" y2="481" class="axis" marker-end="url(#arrow-navy)"/>
+      <line x1="1820" y1="690" x2="2004" y2="495" class="identity"/>
+      <text x="1806" y="727" text-anchor="middle" class="tick">0</text>
+      <text x="1916" y="757" text-anchor="middle" class="axis-label">Manual count</text>
+      <text x="1783" y="589" text-anchor="middle" class="axis-label" transform="rotate(-90 1783 589)">AI-extracted count</text>
+      <text x="1983" y="500" text-anchor="end" class="micro">y = x</text>
+    </g>
+
+    <g aria-label="Required metric fields">
+      <rect x="1471" y="778" width="588" height="61" rx="11" fill="#F3F6F8"/>
+      <text x="1765" y="804" text-anchor="middle" class="micro">MAE  ·  Median absolute error</text>
+      <text x="1765" y="835" text-anchor="middle" class="micro">Exact match  ·  Within ±1 carrier</text>
+    </g>
+  </g>
+
+  <!-- Panel D -->
+  <g id="panel-d" aria-label="Panel D Failure modes">
+    <rect x="75" y="930" width="640" height="650" rx="18" class="panel"/>
+    <path d="M93 930 H697 Q715 930 715 948 V942 H75 V948 Q75 930 93 930 Z" fill="#2A9D8F"/>
+    <text x="101" y="1000" class="panel-letter">D</text>
+    <text x="160" y="998" class="panel-title">Failure modes</text>
+    <line x1="101" y1="1022" x2="689" y2="1022" class="divider"/>
+
+    <g aria-label="Adjudicated failure categories">
+      <circle cx="111" cy="1071" r="7" fill="#687584"/><text x="130" y="1082" class="row-label">Discovery miss</text>
+      <circle cx="111" cy="1117" r="7" fill="#687584"/><text x="130" y="1128" class="row-label">Triage false negative</text>
+      <circle cx="111" cy="1163" r="7" fill="#687584"/><text x="130" y="1174" class="row-label">Inaccessible full text</text>
+      <circle cx="111" cy="1209" r="7" fill="#3B78A8"/><text x="130" y="1220" class="row-label">Supplement/table parsing</text>
+      <circle cx="111" cy="1255" r="7" fill="#D99A2B"/><text x="130" y="1266" class="row-label">Phenotype mapping</text>
+      <circle cx="111" cy="1301" r="7" fill="#3B78A8"/><text x="130" y="1312" class="row-label">Variant normalization</text>
+      <circle cx="111" cy="1347" r="7" fill="#C85A63"/><text x="130" y="1358" class="row-label">Cohort-total leakage</text>
+      <circle cx="111" cy="1393" r="7" fill="#C85A63"/><text x="130" y="1404" class="row-label">Duplicate cohort</text>
+      <circle cx="111" cy="1439" r="7" fill="#D99A2B"/><text x="130" y="1450" class="row-label">Incomplete provenance</text>
+      <circle cx="111" cy="1485" r="7" fill="#687584"/><text x="130" y="1496" class="row-label">Other adjudicated error</text>
+    </g>
+
+    <g aria-label="Empty ranked bar chart scaffold">
+      <line x1="470" y1="1048" x2="470" y2="1504" class="axis"/>
+      <line x1="470" y1="1071" x2="682" y2="1071" class="guide"/>
+      <line x1="470" y1="1117" x2="682" y2="1117" class="guide"/>
+      <line x1="470" y1="1163" x2="682" y2="1163" class="guide"/>
+      <line x1="470" y1="1209" x2="682" y2="1209" class="guide"/>
+      <line x1="470" y1="1255" x2="682" y2="1255" class="guide"/>
+      <line x1="470" y1="1301" x2="682" y2="1301" class="guide"/>
+      <line x1="470" y1="1347" x2="682" y2="1347" class="guide"/>
+      <line x1="470" y1="1393" x2="682" y2="1393" class="guide"/>
+      <line x1="470" y1="1439" x2="682" y2="1439" class="guide"/>
+      <line x1="470" y1="1485" x2="682" y2="1485" class="guide"/>
+      <path d="M446 1335 L456 1354 L436 1354 Z" fill="#C85A63"/>
+      <path d="M446 1381 L456 1400 L436 1400 Z" fill="#C85A63"/>
+      <text x="576" y="1506" text-anchor="middle" class="axis-label">Adjudicated errors</text>
+    </g>
+    <text x="101" y="1540" class="annotation">High-impact errors trigger</text>
+    <text x="101" y="1570" class="annotation">mandatory human review.</text>
+  </g>
+
+  <!-- Panel E -->
+  <g id="panel-e" aria-label="Panel E External calibration">
+    <rect x="760" y="930" width="640" height="650" rx="18" class="panel"/>
+    <path d="M778 930 H1382 Q1400 930 1400 948 V942 H760 V948 Q760 930 778 930 Z" fill="#147D8A"/>
+    <text x="786" y="1000" class="panel-letter">E</text>
+    <text x="845" y="998" class="panel-title">External calibration</text>
+    <line x1="786" y1="1022" x2="1374" y2="1022" class="divider"/>
+
+    <!-- Small lock denotes pre-outcome freeze; not a software icon -->
+    <g transform="translate(790,1045)" aria-label="Literature model locked before evaluation">
+      <rect x="0" y="16" width="30" height="27" rx="5" fill="#E3F1F3" stroke="#147D8A" stroke-width="4"/>
+      <path d="M7 17 V11 A8 8 0 0 1 23 11 V17" fill="none" stroke="#147D8A" stroke-width="4"/>
+      <text x="43" y="32" class="small-strong">Literature model frozen before</text>
+      <text x="43" y="65" class="small-strong">outcome evaluation</text>
+    </g>
+
+    <g aria-label="Observed versus predicted calibration scaffold">
+      <line x1="868" y1="1460" x2="1322" y2="1460" class="axis"/>
+      <line x1="868" y1="1460" x2="868" y2="1122" class="axis"/>
+      <line x1="1095" y1="1122" x2="1095" y2="1460" class="grid"/>
+      <line x1="1322" y1="1122" x2="1322" y2="1460" class="grid"/>
+      <line x1="868" y1="1291" x2="1322" y2="1291" class="grid"/>
+      <line x1="868" y1="1122" x2="1322" y2="1122" class="grid"/>
+      <line x1="868" y1="1460" x2="1322" y2="1122" class="identity"/>
+      <text x="1288" y="1142" class="micro">y = x</text>
+      <text x="868" y="1495" text-anchor="middle" class="tick">0</text>
+      <text x="1095" y="1495" text-anchor="middle" class="tick">0.5</text>
+      <text x="1322" y="1495" text-anchor="middle" class="tick">1.0</text>
+      <text x="842" y="1470" text-anchor="end" class="tick">0</text>
+      <text x="842" y="1302" text-anchor="end" class="tick">0.5</text>
+      <text x="842" y="1133" text-anchor="end" class="tick">1.0</text>
+      <text x="1095" y="1534" text-anchor="middle" class="axis-label">Literature-derived penetrance</text>
+      <text x="794" y="1291" text-anchor="middle" class="axis-label" transform="rotate(-90 794 1291)">Observed biobank penetrance</text>
+    </g>
+
+    <g aria-label="Biological-resolution point-shape key">
+      <circle cx="863" cy="1562" r="9" fill="#6D5BA8" stroke="#147D8A" stroke-width="4"/>
+      <text x="880" y="1573" class="micro">Exact</text>
+      <rect x="980" y="1553" width="18" height="18" fill="#6D5BA8" stroke="#147D8A" stroke-width="4"/>
+      <text x="1007" y="1573" class="micro">Class</text>
+      <path d="M1103 1573 L1113 1553 L1123 1573 Z" fill="#6D5BA8" stroke="#147D8A" stroke-width="4"/>
+      <text x="1133" y="1573" class="micro">Domain</text>
+      <path d="M1259 1553 L1270 1562 L1259 1573 L1248 1562 Z" fill="#6D5BA8" stroke="#147D8A" stroke-width="4"/>
+      <text x="1280" y="1573" class="micro">Gene</text>
+    </g>
+  </g>
+
+  <!-- Panel F -->
+  <g id="panel-f" aria-label="Panel F Supported biological resolution">
+    <rect x="1445" y="930" width="640" height="650" rx="18" class="panel"/>
+    <path d="M1463 930 H2067 Q2085 930 2085 948 V942 H1445 V948 Q1445 930 1463 930 Z" fill="#147D8A"/>
+    <text x="1471" y="1000" class="panel-letter">F</text>
+    <text x="1530" y="998" class="panel-title">Supported biological resolution</text>
+    <line x1="1471" y1="1022" x2="2059" y2="1022" class="divider"/>
+
+    <g aria-label="Resolution scorecard headers">
+      <text x="1478" y="1073" class="small-strong">Resolution</text>
+      <text x="1726" y="1062" text-anchor="middle" class="small-strong">Cal. error</text>
+      <line x1="1698" y1="1085" x2="1666" y2="1085" stroke="#17324D" stroke-width="4" marker-end="url(#arrow-navy)"/>
+      <text x="1710" y="1096" class="micro">Better</text>
+      <text x="1880" y="1054" text-anchor="middle" class="small-strong">Interval</text>
+      <text x="1880" y="1083" text-anchor="middle" class="micro">coverage</text>
+      <text x="1880" y="1112" text-anchor="middle" class="micro">50 · 80 · 95%</text>
+      <text x="2010" y="1062" text-anchor="middle" class="small-strong">Estimate</text>
+      <text x="2010" y="1096" text-anchor="middle" class="micro">coverage</text>
+    </g>
+
+    <g aria-label="Five biological resolution rows">
+      <rect x="1471" y="1124" width="588" height="73" rx="10" fill="#FBFCFD"/>
+      <rect x="1471" y="1205" width="588" height="73" rx="10" fill="#FBFCFD"/>
+      <rect x="1471" y="1286" width="588" height="73" rx="10" fill="#FBFCFD"/>
+      <rect x="1471" y="1367" width="588" height="73" rx="10" fill="#FBFCFD"/>
+      <rect x="1471" y="1448" width="588" height="73" rx="10" fill="#FBFCFD"/>
+
+      <rect x="1480" y="1146" width="8" height="30" rx="4" fill="#D99A2B"/>
+      <text x="1500" y="1155" class="row-label">R0  Gene /</text><text x="1535" y="1184" class="row-label">mechanism</text>
+      <rect x="1480" y="1227" width="8" height="30" rx="4" fill="#D99A2B"/>
+      <text x="1500" y="1236" class="row-label">R1  Consequence</text><text x="1535" y="1265" class="row-label">class</text>
+      <rect x="1480" y="1308" width="8" height="30" rx="4" fill="#D99A2B"/>
+      <text x="1500" y="1317" class="row-label">R2  Domain /</text><text x="1535" y="1346" class="row-label">region</text>
+      <rect x="1480" y="1389" width="8" height="30" rx="4" fill="#D99A2B"/>
+      <text x="1500" y="1398" class="row-label">R3  Structure /</text><text x="1535" y="1427" class="row-label">dynamics</text>
+      <rect x="1480" y="1470" width="8" height="30" rx="4" fill="#D99A2B"/>
+      <text x="1500" y="1479" class="row-label">R4  Leakage-safe</text><text x="1535" y="1508" class="row-label">neighborhood</text>
+
+      <!-- Empty, aligned result guides: marks are added only from frozen held-out results -->
+      <line x1="1666" y1="1161" x2="1783" y2="1161" class="guide"/>
+      <line x1="1666" y1="1242" x2="1783" y2="1242" class="guide"/>
+      <line x1="1666" y1="1323" x2="1783" y2="1323" class="guide"/>
+      <line x1="1666" y1="1404" x2="1783" y2="1404" class="guide"/>
+      <line x1="1666" y1="1485" x2="1783" y2="1485" class="guide"/>
+
+      <g stroke="#D9DFE4" stroke-width="4">
+        <line x1="1827" y1="1141" x2="1827" y2="1181"/><line x1="1878" y1="1141" x2="1878" y2="1181"/><line x1="1929" y1="1141" x2="1929" y2="1181"/>
+        <line x1="1827" y1="1222" x2="1827" y2="1262"/><line x1="1878" y1="1222" x2="1878" y2="1262"/><line x1="1929" y1="1222" x2="1929" y2="1262"/>
+        <line x1="1827" y1="1303" x2="1827" y2="1343"/><line x1="1878" y1="1303" x2="1878" y2="1343"/><line x1="1929" y1="1303" x2="1929" y2="1343"/>
+        <line x1="1827" y1="1384" x2="1827" y2="1424"/><line x1="1878" y1="1384" x2="1878" y2="1424"/><line x1="1929" y1="1384" x2="1929" y2="1424"/>
+        <line x1="1827" y1="1465" x2="1827" y2="1505"/><line x1="1878" y1="1465" x2="1878" y2="1505"/><line x1="1929" y1="1465" x2="1929" y2="1505"/>
+      </g>
+
+      <rect x="1971" y="1148" width="78" height="26" rx="13" class="editable-result-slot"/>
+      <rect x="1971" y="1229" width="78" height="26" rx="13" class="editable-result-slot"/>
+      <rect x="1971" y="1310" width="78" height="26" rx="13" class="editable-result-slot"/>
+      <rect x="1971" y="1391" width="78" height="26" rx="13" class="editable-result-slot"/>
+      <rect x="1971" y="1472" width="78" height="26" rx="13" class="editable-result-slot"/>
+    </g>
+    <text x="1471" y="1548" class="annotation">Select resolution only after</text>
+    <text x="1471" y="1568" class="annotation">held-out calibration.</text>
+  </g>
+
+  <!-- Exact take-home message -->
+  <g id="footer-take-home">
+    <rect x="75" y="1620" width="2010" height="82" rx="18" fill="#EEF4F9"/>
+    <text x="1080" y="1673" text-anchor="middle" class="footer">Accurate evidence recovery is necessary; independent calibration determines whether the estimate generalizes.</text>
+    <line x1="477" y1="1684" x2="708" y2="1684" stroke="#2A9D8F" stroke-width="5" stroke-linecap="round"/>
+    <line x1="885" y1="1684" x2="1196" y2="1684" stroke="#147D8A" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

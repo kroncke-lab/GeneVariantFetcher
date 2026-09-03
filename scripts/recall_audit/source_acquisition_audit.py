@@ -126,9 +126,15 @@ DOI_RE = re.compile(r"10\.\d{4,9}/[^\s\"'<>]+", re.IGNORECASE)
 
 
 def _clean_doi(value: str) -> str:
-    doi = unquote(value.strip())
-    doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
-    return doi.strip().strip(".,;:)]}>")
+    """Delegate to the canonical cleaner (see :mod:`utils.doi`).
+
+    The local copy had no word boundary, so a DOI harvested from
+    rendered page text absorbed the next word ("...25052734Submission")
+    and the fetch stage failed against an identifier that cannot exist.
+    """
+    from utils.doi import clean_doi
+
+    return clean_doi(value)
 
 
 def _extract_doi(value: Any) -> str:

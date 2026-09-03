@@ -124,12 +124,65 @@ def test_finalize_projects_and_locks_before_opening_gold(tmp_path: Path):
     assert script.index("db_to_predictions.py") < script.index(" lock --run-dir")
     assert script.index(" lock --run-dir") < script.index(" score --run-dir")
     assert "--trust-mode trusted --identity-mode trusted" in script
+    assert "--paper-primary" in script
+
+
+def test_mixed_tranche_contract_pins_composite_gold_and_score_lanes():
+    root = setup.TIERS / "mixed_gold"
+    contract = setup.cohort_contract(root / "tranche_01.tsv", root / "registry.json")
+
+    assert contract["id"] == "mixed_gold_01"
+    assert contract["eligibility_mode"] == "variant"
+    assert contract["primary_score_lane"] == "paper_derived"
+    assert contract["comparison_score_lanes"] == ["linkage_assisted"]
+    assert contract["attempt_count"] == 49
+    assert Path(contract["resolved_gold_root"]) == (root / "answer_key").resolve()
+    assert contract["gold_root_sha256"] == setup.digest_gold_root(root / "answer_key")
+    assert contract["registry_sha256"] == setup.digest(root / "registry.json")
+
+    script = setup.make_finalize_script(
+        run_dir=Path("/tmp/mixed run"),
+        python=Path("/tmp/venv python"),
+        gold_root=Path(contract["resolved_gold_root"]),
+    )
+    assert f"--gold-root {setup.shell_quote(contract['resolved_gold_root'])}" in script
+
+
+def test_paired_consumption_slots_require_order_and_one_score_per_arm(tmp_path: Path):
+    log = tmp_path / "consumption.jsonl"
+    log.write_text("")
+    contract = {
+        "id": "mixed_01",
+        "registry": str(tmp_path / "registry.json"),
+        "consumption_log": {
+            "path": log.name,
+            "required_arms": ["baseline", "candidate"],
+        },
+        "evaluation_design": {
+            "comparison": "paired_frozen_baseline_and_candidate_on_same_manifest",
+            "consume_order": ["mixed_01", "mixed_02"],
+        },
+    }
+
+    setup.validate_comparison_slot(contract, "baseline")
+    with pytest.raises(setup.SetupError, match="baseline arm before"):
+        setup.validate_comparison_slot(contract, "candidate")
+
+    log.write_text(
+        json.dumps({"tier_id": "mixed_01", "comparison_arm": "baseline"}) + "\n"
+    )
+    setup.validate_comparison_slot(contract, "candidate")
+    with pytest.raises(setup.SetupError, match="already consumed"):
+        setup.validate_comparison_slot(contract, "baseline")
+    with pytest.raises(setup.SetupError, match="next unconsumed tranche"):
+        setup.validate_comparison_slot({**contract, "id": "mixed_02"}, "baseline")
 
 
 def test_runbook_labels_trusted_projection_as_primary(tmp_path: Path):
     run_dir = tmp_path / "run"
     run_dir.mkdir()
     contract = {
+        "id": "fixture",
         "manifest": str(tmp_path / "tier.tsv"),
         "sha256": "fixture",
         "attempt_count": 1,
@@ -178,9 +231,23 @@ def test_check_run_detects_pmid_drift_without_reading_gold(
         python=tmp_path / "python",
     )
     (run_dir / "run_extraction.sh").write_text(extraction)
+    (run_dir / "lock_and_score.sh").write_text(
+        setup.make_finalize_script(
+            run_dir=run_dir,
+            python=tmp_path / "python",
+            gold_root=setup.DEFAULT_GOLD,
+        )
+    )
     monkeypatch.setattr(setup, "runtime_fingerprint", lambda: fingerprint)
 
     setup.check_run(run_dir)
+
+    finalize_path = run_dir / "lock_and_score.sh"
+    finalize = finalize_path.read_text()
+    finalize_path.write_text(finalize.replace(" --paper-primary", ""))
+    with pytest.raises(setup.SetupError, match="finalize script"):
+        setup.check_run(run_dir)
+    finalize_path.write_text(finalize)
 
     kcnq1 = pmid_dir / "KCNQ1.txt"
     kcnq1.write_text(kcnq1.read_text().replace("\n", "\n99999999\n", 1))

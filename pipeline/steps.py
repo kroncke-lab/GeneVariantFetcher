@@ -368,6 +368,9 @@ def _apply_nonhuman_clinical_count_guard(
 
 def _apply_phenotype_count_guard(
     extracted_data: Optional[Dict[str, Any]],
+    *,
+    source_text: str = "",
+    disease: str | None = None,
 ) -> None:
     """Refuse copied affected/unaffected counts (always on; gold-free).
 
@@ -383,7 +386,9 @@ def _apply_phenotype_count_guard(
 
     from pipeline.phenotype_count_guard import apply_phenotype_count_guard
 
-    result = apply_phenotype_count_guard(variants)
+    result = apply_phenotype_count_guard(
+        variants, source_text=source_text, disease=disease
+    )
     if result.cleared:
         md = extracted_data.setdefault("extraction_metadata", {})
         md["phenotype_count_guard"] = result.as_dict()
@@ -2039,7 +2044,9 @@ def extract_variants(
                 _apply_nonhuman_clinical_count_guard(
                     result.extracted_data, source_text=content
                 )
-                _apply_phenotype_count_guard(result.extracted_data)
+                _apply_phenotype_count_guard(
+                    result.extracted_data, source_text=content, disease=disease
+                )
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)
                 with open(output_file, "w") as f:
@@ -2106,7 +2113,9 @@ def extract_variants(
                 _apply_nonhuman_clinical_count_guard(
                     result.extracted_data, source_text=abstract_text
                 )
-                _apply_phenotype_count_guard(result.extracted_data)
+                _apply_phenotype_count_guard(
+                    result.extracted_data, source_text=abstract_text, disease=disease
+                )
 
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)

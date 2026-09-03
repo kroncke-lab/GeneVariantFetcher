@@ -42,6 +42,19 @@ def test_source_quality_accepts_long_non_fallback_markdown(tmp_path):
     assert is_reusable_fulltext_source(source) is True
 
 
+def test_source_quality_rejects_large_abstract_reference_shell(tmp_path):
+    source = tmp_path / "123_FULL_CONTEXT.md"
+    source.write_text(
+        "## Abstract\n"
+        + ("cohort abstract text. " * 200)
+        + "\n## References\n"
+        + ("citation. " * 300),
+        encoding="utf-8",
+    )
+
+    assert is_usable_fulltext_source(source) is False
+
+
 def test_body_only_source_is_extractable_but_not_reusable(tmp_path):
     source = tmp_path / "123_FULL_CONTEXT.md"
     source.write_text(

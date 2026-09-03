@@ -543,3 +543,69 @@ def test_variant_with_no_identifier_is_dropped(extractor):
     ]
     assert any(v.get("variant_class") == "exon_duplication" for v in kept)
     assert not any(v.get("additional_notes") for v in kept)
+
+
+# --- Nested-archive-recovered supplements ----------------------------------
+#
+# A recovered supplement is a new source surface, and the one that motivated
+# archive recursion carries a table for the run's target gene alongside a table
+# for a completely different gene. Newly reachable bytes must not become newly
+# mis-attributed rows.
+
+RECOVERED_SUPPLEMENT = """# Paper
+
+<!-- GVF_FOLDED_SUPPLEMENTS_BEGIN -->
+# FOLDED SUPPLEMENTS (re-extraction aid)
+
+# SUPPLEMENTAL FILE 1: bundle/inner/supplementary.pdf
+
+### Table S1
+
+Details of genetic variants on SCN5A gene.
+
+| ID | Gender | Gene | cDNA change | Amino acid change | Variant type |
+|---|---|---|---|---|---|
+| A100540 | M | SCN5A | c.4218G>T | p.Gln1406His | Missense |
+| A100551 | F | SCN5A | c.4218G>T | p.Gln1406His | Missense |
+
+### Table S2
+
+Carriers of KCNQ1 variants and their presentation.
+
+| ID | Gender | Gene | cDNA change | Amino acid change | Variant type |
+|---|---|---|---|---|---|
+| B200110 | F | KCNQ1 | c.994C>T | p.Arg332Ter | Nonsense |
+
+<!-- GVF_FOLDED_SUPPLEMENTS_END -->
+"""
+
+
+def _recovered_attribution(extractor):
+    return ExpertExtractor._source_gene_attribution(extractor, RECOVERED_SUPPLEMENT)
+
+
+def test_recovered_supplement_does_not_relabel_another_genes_table(extractor):
+    """Off-target rows in a recovered supplement stay off-target.
+
+    Archive recursion made these bytes reachable for the first time, and the
+    supplement that motivated it carries a table for the target gene beside a
+    table for an unrelated gene. A row the source assigns elsewhere must not
+    inherit the run's target gene just because the run fetched the file. The
+    gene pair here is deliberately not the one the recursion was found on.
+    """
+    attribution = _recovered_attribution(extractor)
+    assert attribution["GLN1406HIS"] == {"SCN5A"}
+    assert attribution["C.4218G>T"] == {"SCN5A"}
+
+
+def test_recovered_supplement_keeps_the_target_genes_own_table(extractor):
+    """The guard must not throw away the reason the archive was expanded."""
+    attribution = _recovered_attribution(extractor)
+    assert attribution["ARG332TER"] == {"KCNQ1"}
+    assert attribution["C.994C>T"] == {"KCNQ1"}
+
+
+def test_recovered_supplement_attribution_is_per_table(extractor):
+    """The two tables in one recovered file do not bleed into each other."""
+    attribution = _recovered_attribution(extractor)
+    assert attribution["GLN1406HIS"] != attribution["ARG332TER"]

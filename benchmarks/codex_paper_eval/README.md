@@ -1,9 +1,9 @@
 # Extraction-blinded paper evaluation
 
 This harness compares paper-reading protocols on a fixed, gold-value-blinded
-paper set. `prepare` may use gold only to determine PMID eligibility and
-whether all three count fields have assertions. Extraction is finalized and
-locked before `score` reads any gold value or row count.
+paper set. `prepare` may use gold only to determine PMID eligibility under the
+recorded identity or count rule. Extraction is finalized and locked before
+`score` reads any gold identity, value, or row count.
 
 ## Fully traced run
 
@@ -32,6 +32,14 @@ open that file directly in a browser to review the run paper by paper. See
 [`../../docs/LLM_TRACING.md`](../../docs/LLM_TRACING.md) for the trace contract
 and adjudication workflow.
 
+Every eligible `score` invocation also creates a run-scoped phenotype-count
+recovery figure under `figures/`. The editable SVG is required; PNG and PDF
+copies are emitted when `rsvg-convert` or the workstation's built-in `sips`
+converter is available. The adjacent CSV and JSON preserve the plotted
+identity-matched variant–paper rows, the missing-count-as-zero evaluation rule,
+the marker-size mapping, and the labeled examples. This is an evaluation
+artifact only and never changes locked predictions or stored NULL values.
+
 Runs made before trace schema v2 cannot be treated as exact request/response
 audits. Their final predictions and rationales remain useful, but rerunning the
 fixed manifest is required to produce authentic raw call traces.
@@ -51,6 +59,27 @@ VariantFeatures identity classes are held out, matching the collaborator-facing
 projection. Raw `all` projections remain diagnostics and must not replace the
 locked primary after scoring.
 
+Production scaffolds also pass `--paper-primary`. `papers[].variants` therefore
+contains only rows whose stable origin is `llm_text`, `llm_table`,
+`regex_text`, `regex_table`, or `figure`. ClinVar/PubTator-origin rows remain
+inside the same hash-locked artifact under `external_linkage_variants`; their
+union with paper rows is scored only as the secondary `linkage_assisted`
+enrichment diagnostic. Ambiguous `mixed`, legacy, and unknown origins are
+locked under `unattributed_variants` and excluded from both scored lanes. A
+ClinVar citation can no longer raise the primary claim that the protocol found
+a variant in a paper.
+
+The complete cross-gene regression plan is the seeded 29-tranche
+[`../evaluation_tiers/mixed_gold/`](../evaluation_tiers/mixed_gold/README.md)
+suite. Its manifests use named-variant rather than complete-count eligibility,
+so papers with valid identity gold are not lost merely because phenotype counts
+are absent. Gold provenance remains stratified in every report. Protocol
+changes should be compared as a paired baseline/candidate run on one tranche;
+once its score is inspected, move confirmation to the next unopened tranche.
+The registry preregisters the delta thresholds and PMID-clustered confidence
+rule; apply it with `run_eval.py compare` rather than choosing a pass criterion
+after opening the reports.
+
 ## Current production gold_120 test
 
 Use the registry-aware setup command for a fresh test of the production pipeline:
@@ -61,16 +90,17 @@ Use the registry-aware setup command for a fresh test of the production pipeline
   --email brett.kroncke@gmail.com
 ```
 
-Despite its historical name, `gold_120` is now a pinned 119-attempt / 115-unique-
-PMID cohort: KCNH2 has 29 attempts after wrong-paper PMID 10086972 was removed;
-KCNQ1, RYR2, and SCN5A have 30 each. The setup refuses a manifest digest, count,
-seed, source-coverage, or code-fingerprint mismatch. It creates per-gene PMID
+Despite its historical name, `gold_120` is now a pinned 118-attempt / 114-unique-
+PMID cohort: KCNH2 has 28 attempts after wrong-paper PMIDs 10086972 and 14642689
+were removed; KCNQ1, RYR2, and SCN5A have 30 each. The setup refuses a manifest
+digest, count, seed, source-coverage, or code-fingerprint mismatch. It creates per-gene PMID
 files plus two executable phases inside the run directory:
 
 1. `run_extraction.sh` runs the current production `gvf-run` route without gold,
    source recovery, corpus mutation, full-coverage add-ons, or publication.
    It passes `--gold-free-run`, which disables `gvf-run`'s otherwise automatic
-   per-layer gold discovery and scoring until the prediction lock is complete.
+   per-layer gold discovery/scoring and all file-backed alias maps whose
+   provenance may include benchmark gold until the prediction lock is complete.
 2. `lock_and_score.sh` rebinds the exact run-local sources, projects the final
    production databases through the maintained `db_to_predictions.py`, locks
    predictions and trace manifests, and only then opens gold for scoring.

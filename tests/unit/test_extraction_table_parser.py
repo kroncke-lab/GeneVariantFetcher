@@ -1735,6 +1735,39 @@ def test_deterministic_short_circuit_refuses_when_census_saw_counts_but_rows_hav
     )
 
 
+def test_common_success_boundary_audits_nonhuman_abstention():
+    extractor = ExpertExtractor(models=["test-model"])
+    text = "Canine RYR2 ortholog variants in dogs."
+
+    result = extractor._attempt_extraction(
+        Paper(
+            pmid="30835254",
+            title="Canine RYR2 study",
+            gene_symbol="RYR2",
+            full_text=text,
+        ),
+        "test-model",
+        text,
+        estimated_variants=0,
+    )
+
+    assert result.success
+    assert result.extracted_data["variants"] == []
+    audit = result.extracted_data["extraction_metadata"][
+        "patient_row_phenotype_derivation"
+    ]
+    assert audit == {
+        "protocol_version": "patient_row_phenotype_v2",
+        "attempted": True,
+        "applied": False,
+        "paper_variant_count": 0,
+        "parsed_patient_table_count": 0,
+        "applied_variant_count": 0,
+        "newly_applied_variant_count": 0,
+        "outcomes": [],
+    }
+
+
 def test_pdf_linearized_table_updates_stale_estimate_for_deterministic_short_circuit():
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
     row_blocks = []
@@ -1791,6 +1824,12 @@ CA/VF
     assert result.success
     assert result.model_used == "deterministic-table-parser"
     assert len(result.extracted_data["variants"]) == 110
+    assert (
+        result.extracted_data["extraction_metadata"][
+            "patient_row_phenotype_derivation"
+        ]["protocol_version"]
+        == "patient_row_phenotype_v2"
+    )
     summary = result.extracted_data["extraction_metadata"]["study_summary"]
     assert summary.startswith('"LQT1 supplement" yielded 110 KCNQ1')
     assert "carrier or phenotype count" in summary

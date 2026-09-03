@@ -579,14 +579,21 @@ class VariantScanner:
         Returns:
             ScanResult with all found variants
         """
+        # Canonicalize through the shared character policy before any pattern
+        # runs. This route previously substituted only three arrow glyphs, so a
+        # no-break space, non-breaking hyphen, zero-width joiner or fullwidth
+        # ">" inside an allele made it invisible to the scanner while
+        # ``variant_normalizer`` accepted the same token. Zero-width characters
+        # become a space rather than nothing, so two alleles glued by one are
+        # scanned as two candidates instead of one fabricated chimera.
+        from utils.source_text import normalize_source_text
+
+        text = normalize_source_text(text).replace("\u2190", "<")
+
         result = ScanResult()
         result.stats["gene"] = self.gene_symbol
         result.stats["text_length"] = len(text)
         result.stats["source"] = source
-
-        # Pre-process: normalize Unicode arrows (→ to >) so cDNA patterns match
-        # Papers often use Unicode arrows: "1810G→A" instead of "1810G>A"
-        text = text.replace("\u2192", ">").replace("\u2190", "<").replace("\u21d2", ">")
 
         # Track what we've found to avoid duplicates
         seen_normalized: Set[str] = set()

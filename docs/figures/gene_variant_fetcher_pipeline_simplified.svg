@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="15in" height="9.375in" viewBox="0 0 2400 1500" role="img" aria-labelledby="title desc">
+  <title id="title">GeneVariantFetcher simplified pipeline</title>
+  <desc id="desc">A six-stage overview of the effective local gvf-run workflow, showing paper discovery, Luna-assisted triage, evidence acquisition, Kimi table routing, Grok extraction, Sol vision and risk-ranked verification, evidence assembly and trust gating, and final delivery.</desc>
+
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#16324F" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrowNavy" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L11,5.5 L0,11 z" fill="#47657F"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L11,5.5 L0,11 z" fill="#D55E00"/>
+    </marker>
+    <style>
+      .sans { font-family: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif; }
+      .navy { fill: #16324F; }
+      .muted { fill: #5F7182; }
+      .smallcaps { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+      .stage { font-size: 37px; font-weight: 700; letter-spacing: -0.6px; }
+      .body { font-size: 23px; font-weight: 500; }
+      .detail { font-size: 20px; font-weight: 500; }
+      .chip { font-size: 19px; font-weight: 700; }
+      .hairline { stroke: #D4DEE6; stroke-width: 2; }
+      .icon { fill: none; stroke: #16324F; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <!-- Background and title -->
+  <rect width="2400" height="1500" fill="#FFFFFF"/>
+  <path d="M0 0 H2400 V18 H0 Z" fill="#16324F"/>
+  <text x="110" y="116" class="sans navy" font-size="58" font-weight="750" letter-spacing="-1.5">From gene to trusted variant evidence</text>
+  <text x="112" y="170" class="sans muted" font-size="26" font-weight="500">The effective local <tspan font-weight="750" fill="#16324F">gvf-run</tspan> workflow, simplified for a biomedical audience</text>
+
+  <g transform="translate(1770 75)">
+    <rect width="520" height="74" rx="37" fill="#E8F4F8" stroke="#AFCEDB" stroke-width="2"/>
+    <circle cx="39" cy="37" r="10" fill="#2A9D8F"/>
+    <text x="65" y="45" class="sans navy smallcaps" font-size="18">EFFECTIVE LOCAL ROUTE · AZURE</text>
+  </g>
+
+  <line x1="110" y1="225" x2="2290" y2="225" stroke="#D8E2EA" stroke-width="2"/>
+
+  <!-- Main process connectors -->
+  <g fill="none" stroke="#47657F" stroke-width="5" stroke-linecap="round">
+    <path d="M408 635 H434"/><path d="M434 624 L451 635 L434 646 Z" fill="#47657F" stroke="none"/>
+    <path d="M783 635 H809"/><path d="M809 624 L826 635 L809 646 Z" fill="#47657F" stroke="none"/>
+    <path d="M1178 635 H1204"/><path d="M1204 624 L1221 635 L1204 646 Z" fill="#47657F" stroke="none"/>
+    <path d="M1663 635 H1689"/><path d="M1689 624 L1706 635 L1689 646 Z" fill="#47657F" stroke="none"/>
+    <path d="M2018 635 H2044"/><path d="M2044 624 L2061 635 L2044 646 Z" fill="#47657F" stroke="none"/>
+  </g>
+
+  <!-- Stage 1: Discover -->
+  <g transform="translate(100 300)" filter="url(#cardShadow)">
+    <rect width="300" height="670" rx="30" fill="#FFFFFF" stroke="#D5E0E8" stroke-width="2"/>
+    <path d="M30 0 H270 Q300 0 300 30 V38 H0 V30 Q0 0 30 0 Z" fill="#7B90A3"/>
+    <text x="28" y="88" class="sans muted smallcaps">01 · DISCOVER</text>
+
+    <g transform="translate(86 130)">
+      <circle cx="53" cy="55" r="40" class="icon"/>
+      <path d="M82 84 L120 122" class="icon"/>
+      <path d="M39 43 H67 M39 57 H61 M39 71 H55" class="icon" stroke-width="5"/>
+    </g>
+
+    <text x="28" y="305" class="sans navy stage">Find papers</text>
+    <text x="28" y="355" class="sans muted body">
+      <tspan x="28" dy="0">Gene</tspan>
+      <tspan fill="#93A3B0"> + optional disease</tspan>
+    </text>
+    <text x="28" y="405" class="sans muted body">
+      <tspan x="28" dy="0">Synonyms to PubMind</tspan>
+      <tspan x="28" dy="34">+ PubMed</tspan>
+    </text>
+
+    <line x1="28" y1="495" x2="272" y2="495" class="hairline"/>
+    <g transform="translate(28 525)">
+      <rect width="244" height="105" rx="17" fill="#F1F5F8"/>
+      <text x="18" y="30" class="sans muted" font-size="18" font-weight="750">Alternate start</text>
+      <text x="18" y="59" class="sans muted" font-size="18" font-weight="600">curated PMID list</text>
+      <text x="18" y="87" class="sans muted" font-size="18" font-weight="600">skips relevance triage</text>
+    </g>
+  </g>
+
+  <!-- Stage 2: Triage -->
+  <g transform="translate(455 300)" filter="url(#cardShadow)">
+    <rect width="320" height="670" rx="30" fill="#ECF7FC" stroke="#B8DBEA" stroke-width="2"/>
+    <path d="M30 0 H290 Q320 0 320 30 V38 H0 V30 Q0 0 30 0 Z" fill="#56B4E9"/>
+    <text x="28" y="88" class="sans navy smallcaps">02 · TRIAGE</text>
+
+    <g transform="translate(89 130)">
+      <path d="M18 20 H124 L99 63 L99 111 L45 126 L45 63 Z" class="icon"/>
+      <path d="M46 62 H98" class="icon" stroke-width="5"/>
+    </g>
+
+    <text x="28" y="305" class="sans navy stage">Triage papers</text>
+    <text x="28" y="355" class="sans muted body">
+      <tspan x="28" dy="0">Scope gate + keywords</tspan>
+      <tspan x="28" dy="34">first</tspan>
+    </text>
+    <text x="28" y="445" class="sans muted body">Clinical relevance next</text>
+
+    <g transform="translate(28 505)">
+      <rect width="264" height="58" rx="29" fill="#16324F"/>
+      <circle cx="29" cy="29" r="9" fill="#56B4E9"/>
+      <text x="50" y="36" class="sans chip" font-size="18" fill="#FFFFFF">GPT-5.6 Luna · xhigh</text>
+    </g>
+    <text x="28" y="615" class="sans muted detail">
+      <tspan x="28" dy="0">Deterministic checks reduce</tspan>
+      <tspan x="28" dy="29">model calls.</tspan>
+    </text>
+  </g>
+
+  <!-- Stage 3: Acquire -->
+  <g transform="translate(830 300)" filter="url(#cardShadow)">
+    <rect width="340" height="670" rx="30" fill="#FFFFFF" stroke="#D5E0E8" stroke-width="2"/>
+    <path d="M30 0 H310 Q340 0 340 30 V38 H0 V30 Q0 0 30 0 Z" fill="#2A9D8F"/>
+    <text x="28" y="88" class="sans muted smallcaps">03 · ACQUIRE</text>
+
+    <g transform="translate(94 125)">
+      <path d="M20 22 H111 L139 50 V130 H20 Z" class="icon"/>
+      <path d="M111 22 V51 H139 M45 75 H112 M45 94 H112 M45 113 H91" class="icon" stroke-width="5"/>
+    </g>
+
+    <text x="28" y="305" class="sans navy stage">Gather evidence</text>
+    <text x="28" y="355" class="sans muted body">
+      <tspan x="28" dy="0">Reuse trusted corpus</tspan>
+      <tspan x="28" dy="34">when available</tspan>
+    </text>
+
+    <g transform="translate(28 440)">
+      <line x1="15" y1="20" x2="15" y2="150" stroke="#AFC2CF" stroke-width="4"/>
+      <circle cx="15" cy="20" r="9" fill="#2A9D8F"/>
+      <circle cx="15" cy="83" r="9" fill="#2A9D8F"/>
+      <circle cx="15" cy="150" r="9" fill="#D55E00"/>
+      <text x="38" y="28" class="sans navy detail" font-weight="700">Full text + supplements</text>
+      <text x="38" y="91" class="sans navy detail" font-weight="700">Publisher / browser recovery</text>
+      <text x="38" y="158" class="sans" font-size="19" font-weight="700" fill="#B44D00">Abstract only · last resort</text>
+    </g>
+  </g>
+
+  <!-- Stage 4: Extract -->
+  <g transform="translate(1225 270)" filter="url(#cardShadow)">
+    <rect width="430" height="730" rx="32" fill="#EAF6FC" stroke="#9DCFE5" stroke-width="3"/>
+    <path d="M32 0 H398 Q430 0 430 32 V42 H0 V32 Q0 0 32 0 Z" fill="#2D91C4"/>
+    <text x="30" y="94" class="sans navy smallcaps">04 · EXTRACT</text>
+    <text x="30" y="150" class="sans navy" font-size="36" font-weight="750" letter-spacing="-0.6">Read variants + counts</text>
+    <text x="30" y="190" class="sans muted detail">Use the cheapest reliable route first</text>
+
+    <!-- Table route -->
+    <g transform="translate(18 230)">
+      <rect width="394" height="128" rx="20" fill="#FFFFFF" stroke="#B9DDEB" stroke-width="2"/>
+      <rect x="16" y="16" width="92" height="31" rx="15.5" fill="#DDEFF7"/>
+      <text x="30" y="38" class="sans navy" font-size="18" font-weight="800" letter-spacing="1.3">TABLES</text>
+      <text x="18" y="78" class="sans navy detail" font-weight="700">Kimi K2.6 routes</text>
+      <path d="M181 72 H207" fill="none" stroke="#47657F" stroke-width="3" stroke-linecap="round"/>
+      <path d="M207 64 L221 72 L207 80 Z" fill="#47657F"/>
+      <text x="376" y="78" text-anchor="end" class="sans navy detail" font-size="16" font-weight="700">Parser reads cells</text>
+      <text x="18" y="106" class="sans muted" font-size="18">Structured tables avoid a full-paper call.</text>
+    </g>
+
+    <g transform="translate(80 372)">
+      <rect width="270" height="46" rx="23" fill="#FFFFFF" stroke="#B9DDEB" stroke-width="2"/>
+      <text x="135" y="29" text-anchor="middle" class="sans muted" font-size="16" font-weight="800">IF TABLES UNDER-DELIVER</text>
+    </g>
+
+    <!-- Full-text route -->
+    <g transform="translate(28 435)">
+      <rect width="374" height="150" rx="20" fill="#16324F"/>
+      <rect x="16" y="16" width="118" height="31" rx="15.5" fill="#31536D"/>
+      <text x="30" y="38" class="sans" font-size="18" font-weight="800" letter-spacing="1.1" fill="#D9F2FC">FULL TEXT</text>
+      <text x="18" y="84" class="sans" font-size="27" font-weight="750" fill="#FFFFFF">Grok 4.3</text>
+      <text x="18" y="118" class="sans" font-size="19" font-weight="500" fill="#C9D9E5">Primary variant + count extraction</text>
+    </g>
+
+    <g transform="translate(28 603)">
+      <rect width="374" height="48" rx="24" fill="#F5FBFE" stroke="#2D91C4" stroke-width="2" stroke-dasharray="8 7"/>
+      <text x="187" y="31" text-anchor="middle" class="sans navy" font-size="16" font-weight="750">Figures + pedigrees: GPT-5.6 Sol</text>
+    </g>
+    <g transform="translate(28 662)">
+      <rect width="374" height="43" rx="21.5" fill="#F5FBFE" stroke="#2D91C4" stroke-width="2" stroke-dasharray="8 7"/>
+      <text x="187" y="28" text-anchor="middle" class="sans navy" font-size="16" font-weight="750">High-risk claims: GPT-5.6 Sol</text>
+    </g>
+  </g>
+
+  <!-- Stage 5: Assemble and trust -->
+  <g transform="translate(1710 300)" filter="url(#cardShadow)">
+    <rect width="300" height="670" rx="30" fill="#ECF7F4" stroke="#B9DBD4" stroke-width="2"/>
+    <path d="M30 0 H270 Q300 0 300 30 V38 H0 V30 Q0 0 30 0 Z" fill="#2A9D8F"/>
+    <text x="28" y="88" class="sans muted smallcaps">05 · TRUST</text>
+
+    <g transform="translate(84 130)">
+      <path d="M67 16 L124 38 V78 C124 111 102 133 67 146 C32 133 10 111 10 78 V38 Z" class="icon"/>
+      <path d="M39 78 L58 97 L97 56" class="icon"/>
+    </g>
+
+    <text x="28" y="315" class="sans navy" font-size="30" font-weight="700" letter-spacing="-0.4">Assemble + check</text>
+    <text x="28" y="365" class="sans muted body">
+      <tspan x="28" dy="0">Normalize to SQLite</tspan>
+      <tspan x="28" dy="36">Add recovery evidence</tspan>
+    </text>
+
+    <g transform="translate(18 455)">
+      <rect width="264" height="112" rx="18" fill="#FFFFFF" stroke="#B9DBD4" stroke-width="2"/>
+      <text x="18" y="35" class="sans navy detail" font-weight="750">Trust gate</text>
+      <text x="18" y="67" class="sans muted detail" font-size="15">Keep raw facts;</text>
+      <text x="18" y="94" class="sans muted detail" font-size="15">quarantine suspect counts</text>
+    </g>
+    <g transform="translate(24 593)">
+      <rect width="252" height="45" rx="22.5" fill="none" stroke="#2A9D8F" stroke-width="2" stroke-dasharray="7 6"/>
+      <text x="126" y="29" text-anchor="middle" class="sans" font-size="15" font-weight="700" fill="#187A70">VariantFeatures if available</text>
+    </g>
+  </g>
+
+  <!-- Stage 6: Deliver -->
+  <g transform="translate(2065 300)" filter="url(#cardShadow)">
+    <rect width="260" height="670" rx="30" fill="#FFFFFF" stroke="#D5E0E8" stroke-width="2"/>
+    <path d="M30 0 H230 Q260 0 260 30 V38 H0 V30 Q0 0 30 0 Z" fill="#16324F"/>
+    <text x="24" y="88" class="sans muted smallcaps">06 · DELIVER</text>
+
+    <g transform="translate(60 130)">
+      <ellipse cx="70" cy="27" rx="58" ry="19" class="icon"/>
+      <path d="M12 27 V113 C12 124 38 133 70 133 C102 133 128 124 128 113 V27" class="icon"/>
+      <path d="M12 70 C12 81 38 90 70 90 C102 90 128 81 128 70" class="icon" stroke-width="5"/>
+      <path d="M12 111 C12 122 38 131 70 131 C102 131 128 122 128 111" class="icon" stroke-width="5"/>
+    </g>
+
+    <text x="24" y="315" class="sans navy stage">Deliver</text>
+    <text x="24" y="365" class="sans navy" font-size="25" font-weight="750">Variant database</text>
+    <text x="24" y="414" class="sans muted body">
+      <tspan x="24" dy="0">Run report</tspan>
+      <tspan x="24" dy="34">+ LLM trace</tspan>
+    </text>
+
+    <line x1="24" y1="505" x2="236" y2="505" class="hairline"/>
+    <text x="24" y="548" class="sans muted detail">
+      <tspan x="24" dy="0">Recovered source is</tspan>
+      <tspan x="24" dy="28">cached for the next run.</tspan>
+    </text>
+    <g transform="translate(20 610)">
+      <rect width="220" height="42" rx="21" fill="#F1F5F8"/>
+      <text x="110" y="27" text-anchor="middle" class="sans muted" font-size="15" font-weight="700">Review publish · optional</text>
+    </g>
+  </g>
+
+  <!-- Recovery loop -->
+  <path d="M1860 970 V1075 Q1860 1110 1825 1110 H1035 Q1000 1110 1000 1075 V988" fill="none" stroke="#D55E00" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 10"/>
+  <path d="M990 988 L1000 970 L1010 988 Z" fill="#D55E00"/>
+  <g transform="translate(1190 1078)">
+    <rect width="490" height="72" rx="36" fill="#FFF7EC" stroke="#E7B27B" stroke-width="2"/>
+    <path d="M30 37 A15 15 0 1 1 45 52" fill="none" stroke="#D55E00" stroke-width="4"/>
+    <path d="M42 47 L48 53 L39 55 Z" fill="#D55E00"/>
+    <text x="75" y="43" class="sans" font-size="18" font-weight="750" fill="#A84400">Missing source: recover + re-extract</text>
+  </g>
+
+  <!-- Bottom interpretive band -->
+  <g transform="translate(100 1215)">
+    <rect width="2225" height="205" rx="28" fill="#FFFFFF" stroke="#D5E0E8" stroke-width="2"/>
+
+    <g transform="translate(32 32)">
+      <text x="0" y="22" class="sans navy smallcaps">HOW TO READ THIS FIGURE</text>
+      <line x1="0" y1="46" x2="640" y2="46" stroke="#E0E7EC" stroke-width="2"/>
+      <line x1="0" y1="87" x2="64" y2="87" stroke="#47657F" stroke-width="5"/>
+      <text x="82" y="94" class="sans muted detail">default path</text>
+      <line x1="240" y1="87" x2="304" y2="87" stroke="#D55E00" stroke-width="5" stroke-dasharray="10 8"/>
+      <text x="322" y="94" class="sans muted detail">only when needed</text>
+      <rect x="0" y="120" width="24" height="24" rx="6" fill="#56B4E9"/>
+      <text x="39" y="139" class="sans muted detail">model-assisted stage</text>
+    </g>
+
+    <line x1="760" y1="28" x2="760" y2="177" stroke="#E0E7EC" stroke-width="2"/>
+
+    <g transform="translate(800 32)">
+      <text x="0" y="22" class="sans navy smallcaps">EFFECTIVE MODEL ROUTE</text>
+      <text x="0" y="62" class="sans muted detail">
+        <tspan font-weight="750" fill="#16324F">Luna @ xhigh</tspan><tspan> triages · </tspan>
+        <tspan font-weight="750" fill="#16324F">Kimi K2.6</tspan><tspan> routes tables</tspan>
+      </text>
+      <text x="0" y="96" class="sans muted detail">
+        <tspan font-weight="750" fill="#16324F">Grok 4.3</tspan><tspan> extracts · </tspan>
+        <tspan font-weight="750" fill="#16324F">Sol</tspan><tspan> reads figures + checks risky claims</tspan>
+      </text>
+      <text x="0" y="139" class="sans" font-size="18" font-weight="600" fill="#728391">Resolved from the live local settings; per-stage overrides win.</text>
+    </g>
+
+    <line x1="1515" y1="28" x2="1515" y2="177" stroke="#E0E7EC" stroke-width="2"/>
+
+    <g transform="translate(1555 32)">
+      <text x="0" y="22" class="sans navy smallcaps">NOT IN EFFECTIVE GVF-RUN</text>
+      <text x="0" y="62" class="sans muted detail">
+        <tspan x="0" dy="0">Claude Sonnet 5 / Opus 5 are not wired</tspan>
+        <tspan x="0" dy="31">into the effective local production route.</tspan>
+        <tspan x="0" dy="31">Count recovery + final paper check: off.</tspan>
+      </text>
+      <text x="0" y="166" class="sans" font-size="18" font-weight="700" fill="#93A3B0">Source: live gvf-run orchestration + settings resolver</text>
+    </g>
+  </g>
+</svg>

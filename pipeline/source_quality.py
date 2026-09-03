@@ -60,7 +60,11 @@ def is_usable_fulltext_source(path: Path) -> bool:
             head = f.read(8192)
         if len(head) < MIN_EXTRACTION_INPUT_SIZE:
             return False
-        return not is_abstract_only_fallback_text(head)
+        if is_abstract_only_fallback_text(head):
+            return False
+        from harvesting.content_validation import is_abstract_reference_shell
+
+        return not is_abstract_reference_shell(head)
     except OSError:
         return False
 

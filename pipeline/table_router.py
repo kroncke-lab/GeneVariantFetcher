@@ -39,6 +39,7 @@ from utils.legacy_notation import (
     gene_supports_legacy_notation,
     normalize_legacy_notation,
 )
+from utils.source_text import normalize_header_text, normalize_notation_token
 
 logger = logging.getLogger(__name__)
 
@@ -587,8 +588,12 @@ def _looks_like_variant_table(table: "MarkdownTable") -> bool:
 
 
 def _normalize_header(value: str) -> str:
-    """Normalize a header cell for deterministic field matching."""
-    return re.sub(r"[^a-z0-9]+", "", (value or "").lower())
+    """Normalize a header cell for deterministic field matching.
+
+    Delegates the character policy to :mod:`utils.source_text` so a header that
+    differs from its twin only by a no-break space maps to the same key.
+    """
+    return normalize_header_text(value)
 
 
 def _column_values(table: MarkdownTable, idx: int, limit: int = 8) -> List[str]:
@@ -1760,14 +1765,28 @@ _PROTEIN_VARIANT_RE = re.compile(
 _CDNA_VARIANT_RE = re.compile(
     r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
     r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
-    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$"
+    # delins / indel: a deleted stretch replaced by an inserted one. Absent
+    # from this grammar until now, so every ``c.646_647delinsCA`` cell was
+    # dropped by the router while other routes accepted it. The inserted
+    # payload is mandatory, which is what keeps a bare ``del`` out.
+    r"|^c\.\d+(?:_\d+)?del[ACGT]*ins[ACGT]+$"
+    # Intronic range spanning two offset coordinates
+    # (``c.169-198_273+820del``). Both endpoints must carry their own explicit
+    # offset sign, so a plain range can never be reinterpreted as one.
+    r"|^c\.\d+[+-]\d+_\d+[+-]\d+(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
 )
 
 
 def _normalize_cdna(value: str, gene_symbol: Optional[str] = None) -> Optional[str]:
-    s = value.strip().replace(" ", "")
-    if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
+    # Shared character policy first: publisher cells carry no-break/thin
+    # spaces, non-breaking hyphens, zero-width joiners and fullwidth glyphs,
+    # and this route used to reject every one of them while other routes
+    # accepted them. ``normalize_notation_token`` also refuses to fuse a cell
+    # that holds two whitespace-separated alleles.
+    s = normalize_notation_token(value, strip_trailing_markers=False)
+    if s is None:
         return None
     # Clinical mutation tables commonly suffix novel alleles with a footnote
     # glyph (``c.1149insT*``). Strip only a terminal marker and only when the
@@ -1803,8 +1822,8 @@ def _looks_like_cdna_or_legacy(value: str, gene_symbol: Optional[str] = None) ->
 
 
 def _normalize_protein(value: str) -> Optional[str]:
-    s = value.strip().replace(" ", "")
-    if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
+    s = normalize_notation_token(value, strip_trailing_markers=False)
+    if s is None:
         return None
     for marker in ("*", "†", "‡", "§", "¶"):
         if not s.endswith(marker):

@@ -182,19 +182,18 @@ def parse_hgvs(hgvs: str) -> tuple[Optional[str], Optional[str]]:
 def ensure_variant(
     con: sqlite3.Connection, gene: str, cdna: Optional[str], protein: Optional[str]
 ) -> int:
-    row = con.execute(
-        """SELECT variant_id FROM variants
-           WHERE gene_symbol=? AND cdna_notation IS ?
-             AND protein_notation IS ? AND genomic_position IS NULL""",
-        (gene, cdna, protein),
-    ).fetchone()
-    if row:
-        return int(row[0])
-    cur = con.execute(
-        "INSERT INTO variants (gene_symbol, cdna_notation, protein_notation) VALUES (?, ?, ?)",
-        (gene, cdna, protein),
-    )
-    return int(cur.lastrowid)
+    """Resolve this observation through the shared cross-route identity gate.
+
+    This helper used to match on the raw notation string, so a linkage row
+    spelling a call ``p.Gln403Ter`` minted a second identity beside a paper
+    row's ``p.Q403*`` for the same allele. Identity resolution now lives in one
+    place for every route (see :mod:`pipeline.variant_identity`), which folds a
+    pure spelling difference and still refuses conflicts, ambiguity, and
+    completion of a partially specified row.
+    """
+    from pipeline.variant_identity import resolve_variant_identity
+
+    return resolve_variant_identity(con, gene, cdna, protein)
 
 
 def load_gold_pmids(gold_path: Path) -> set[str]:

@@ -12,9 +12,11 @@ repos:
       - id: trailing-whitespace
         # Locked benchmark artifacts must stay byte-identical to their
         # LOCK.json digests; predictions.json is also chmod read-only.
-        exclude: ^benchmarks/codex_paper_eval/runs/
+        # The mixed-gold inventory/manifests are SHA-256-pinned by
+        # registry.json (an empty trailing column is a trailing tab).
+        exclude: ^benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold)/
       - id: end-of-file-fixer
-        exclude: ^benchmarks/codex_paper_eval/runs/
+        exclude: ^benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold)/
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1200"]

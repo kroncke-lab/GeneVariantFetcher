@@ -106,6 +106,48 @@ def _archive_nested_labels(text: str) -> set[str]:
     }
 
 
+def _carry_forward_blocks(text: str, labels: list[str]) -> str:
+    """Return the existing generated blocks for ``labels``, verbatim.
+
+    Used when a supplement that converted in an earlier environment yields only
+    a placeholder now: its already-captured text is preserved rather than being
+    replaced by an error marker or blocking the rest of the re-fold.
+    """
+    wanted = {label.casefold() for label in labels}
+    matches = list(_SUPPLEMENT_HEADING_RE.finditer(text))
+    kept: list[str] = []
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        label = Path(match.group("label").strip()).name.casefold()
+        if label not in wanted:
+            continue
+        block = text[match.start() : end]
+        # Stop at the fold sentinel so the marker itself is not duplicated.
+        for sentinel in (FOLD_END, FOLD_BEGIN):
+            cut = block.find(sentinel)
+            if cut != -1:
+                block = block[:cut]
+        if block.strip():
+            kept.append(block.strip())
+    return "\n\n".join(kept)
+
+
+def _supplement_block_sizes(text: str) -> dict[str, int]:
+    """Content length per generated supplement heading, keyed by basename.
+
+    Used to refuse a re-fold that would replace real converted text with a
+    converter placeholder (see :func:`fold_supplements_into_full_context`).
+    """
+    matches = list(_SUPPLEMENT_HEADING_RE.finditer(text))
+    sizes: dict[str, int] = {}
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        label = Path(match.group("label").strip()).name.casefold()
+        body = text[match.end() : end].strip()
+        sizes[label] = max(sizes.get(label, 0), len(body))
+    return sizes
+
+
 def _exclude_supplement_blocks(markdown: str, labels: set[str]) -> str:
     """Remove converted-file blocks already present via an expanded archive."""
     if not labels:
@@ -136,6 +178,72 @@ def _strip_existing_supplement_blocks(text: str, replacement_markdown: str) -> s
     return base
 
 
+def _expand_pending_archives(
+    supplements_dir: Path, *, converter: Any = None
+) -> list[Path]:
+    """Expand on-disk archives whose contents were never written out.
+
+    ``.zip`` stays out of :data:`_CONVERTIBLE_SUFFIXES` on purpose: harvest
+    time expands an archive and folds its members under ``Nested file``
+    headings, and re-converting the archive here would double every table it
+    holds. That exclusion, however, also skipped archives harvest **never**
+    expanded — a bundle-inside-a-bundle whose inner archive was written to disk
+    and then read by nothing.
+
+    The discriminator is the extraction directory: an archive whose
+    ``<parent>/<stem>/`` sibling already exists was expanded by someone, so it
+    is left alone. Only an unexpanded archive is opened, and its members then
+    reach the caller through the ordinary recursive file walk. Overlap with an
+    existing harvest-time block is still removed by
+    :func:`_exclude_supplement_blocks`, which compares basenames, so a member
+    represented twice is folded once.
+    """
+    if not supplements_dir.is_dir():
+        return []
+    from harvesting.format_converters import ARCHIVE_SUFFIXES
+
+    expanded: list[Path] = []
+    archives = sorted(
+        (
+            path
+            for path in supplements_dir.rglob("*")
+            if path.is_file()
+            and path.suffix.lower() in ARCHIVE_SUFFIXES
+            and "__MACOSX" not in path.parts
+        ),
+        key=lambda path: path.as_posix(),
+    )
+    for archive in archives:
+        target = archive.parent / archive.stem
+        # "Already expanded" means a directory that actually holds files. An
+        # empty or partially written directory left by a failed extract would
+        # otherwise mark the archive done forever and its contents would stay
+        # unread.
+        if target.is_dir() and any(target.rglob("*")):
+            continue
+        if target.exists() and not target.is_dir():
+            continue
+        if converter is None:
+            from harvesting.format_converters import FormatConverter
+
+            converter = FormatConverter()
+        try:
+            paths, _markdown = converter.extract_zip_supplement(
+                archive, dest_dir=target
+            )
+        except Exception as exc:  # noqa: BLE001 - a bad archive must not abort
+            logger.warning("could not expand archive %s: %s", archive, exc)
+            continue
+        if paths:
+            logger.info(
+                "expanded previously unread archive %s (%d member(s))",
+                archive.name,
+                len(paths),
+            )
+            expanded.extend(paths)
+    return expanded
+
+
 def _convertible_files(supplements_dir: Path) -> list[Path]:
     if not supplements_dir.is_dir():
         return []
@@ -153,6 +261,10 @@ def _convertible_files(supplements_dir: Path) -> list[Path]:
         key=lambda p: p.relative_to(supplements_dir).as_posix(),
     )
 
+
+#: An existing per-label block longer than this is real converted text, not a
+#: previously folded placeholder, so replacing it with a placeholder is a loss.
+_PLACEHOLDER_REGRESSION_FLOOR_CHARS = 500
 
 _CONVERSION_PLACEHOLDER_RE = re.compile(
     r"^\[(?:Invalid|Error (?:reading|converting)|PDF file available|"
@@ -215,7 +327,7 @@ def _build_supplement_markdown_result(
     converter: Any = None,
     logger_obj: Any = None,
     identity: Optional[dict[str, Any]] = None,
-) -> tuple[str, int, int, set[str]]:
+) -> tuple[str, int, int, set[str], set[str]]:
     """Convert every convertible file in ``supplements_dir`` to combined markdown.
 
     Returns ``(markdown, files_converted, conversion_failures,
@@ -229,15 +341,16 @@ def _build_supplement_markdown_result(
     a file needs it; plain ``.csv``/``.txt`` are read directly).
     """
     if not supplements_dir.is_dir():
-        return "", 0, 0, set()
+        return "", 0, 0, set(), set()
     # Recursive walk (not top-level iterdir): convertible files extracted from a
     # ``.zip`` supplement land in a subdirectory and would otherwise be missed.
     # The ``.zip`` itself stays excluded (not a convertible suffix), so we fold
     # the extracted files exactly once; the sentinel-delimited rebuild keeps this
     # idempotent. Skip macOS zip cruft and hidden/AppleDouble files.
+    _expand_pending_archives(supplements_dir, converter=converter)
     files = _convertible_files(supplements_dir)
     if not files:
-        return "", 0, 0, set()
+        return "", 0, 0, set(), set()
     if converter is None:
         from harvesting.format_converters import FormatConverter
 
@@ -247,6 +360,7 @@ def _build_supplement_markdown_result(
     converted = 0
     failures = 0
     omitted_labels: set[str] = set()
+    placeholder_labels: set[str] = set()
     for idx, file_path in enumerate(files, 1):
         # Label by path relative to the supplements dir: a top-level file shows
         # just its name; a file extracted from a zip shows ``subdir/name`` so the
@@ -268,6 +382,7 @@ def _build_supplement_markdown_result(
             logger.warning("supplement convert produced placeholder for %s", rel)
             failures += 1
             omitted_labels.add(Path(rel).name.casefold())
+            placeholder_labels.add(Path(rel).name.casefold())
             continue
         if file_path.suffix.lower() == ".pdf" and identity is not None:
             key = file_path.name.casefold()
@@ -301,7 +416,13 @@ def _build_supplement_markdown_result(
         if md and md.strip():
             parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1
-    return "".join(parts).strip(), converted, failures, omitted_labels
+    return (
+        "".join(parts).strip(),
+        converted,
+        failures,
+        omitted_labels,
+        placeholder_labels,
+    )
 
 
 def build_supplement_markdown(
@@ -311,7 +432,7 @@ def build_supplement_markdown(
     logger_obj: Any = None,
 ) -> tuple[str, int]:
     """Convert available supplement text, preserving the public two-value API."""
-    markdown, converted, _failures, _omitted_labels = _build_supplement_markdown_result(
+    markdown, converted, *_rest = _build_supplement_markdown_result(
         supplements_dir,
         converter=converter,
         logger_obj=logger_obj,
@@ -335,12 +456,54 @@ def fold_supplements_into_full_context(
     if not full_context.is_file():
         return None
     supp_dir = supplements_dir or (harvest_dir / f"{pmid}_supplements")
-    md, converted, failures, omitted_labels = _build_supplement_markdown_result(
+    (
+        md,
+        converted,
+        failures,
+        omitted_labels,
+        placeholder_labels,
+    ) = _build_supplement_markdown_result(
         supp_dir,
         converter=converter,
         identity=_paper_identity_context(pmid, harvest_dir),
     )
     original = full_context.read_text(encoding="utf-8", errors="replace")
+
+    # Never trade real converted text for a converter placeholder. A supplement
+    # that converted cleanly in an earlier environment can fail to convert now
+    # (a PDF whose text layer this build's extractors cannot read). Because a
+    # placeholder label is treated as safely droppable -- so that a stale
+    # placeholder cannot block a newly recovered file -- a re-fold would
+    # otherwise silently delete the good text. Refuse the whole re-fold and
+    # keep the existing source instead; a real re-acquisition changes the file
+    # on disk and converts, which is the path that should replace it.
+    regressed: list[str] = []
+    if placeholder_labels:
+        existing_sizes = _supplement_block_sizes(original)
+        regressed = sorted(
+            label
+            for label in placeholder_labels
+            if existing_sizes.get(label, 0) > _PLACEHOLDER_REGRESSION_FLOOR_CHARS
+        )
+        if regressed:
+            # Carry the existing text forward for exactly the affected files
+            # instead of refusing the whole re-fold. An all-or-nothing veto
+            # would let one supplement this build can no longer convert block
+            # every other change to the paper -- including newly expanded
+            # nested-archive members, which is the one measured recall gain
+            # here. Per-label carry-forward keeps both.
+            carried = _carry_forward_blocks(original, regressed)
+            if carried:
+                md = (md + "\n\n" + carried).strip() if md else carried
+                converted += len(regressed)
+            omitted_labels -= set(regressed)
+            logger.warning(
+                "PMID %s: %s converted to a placeholder now; preserving the "
+                "existing converted text for it (%s) and folding the rest",
+                pmid,
+                ", ".join(regressed),
+                ", ".join(f"{label}={existing_sizes[label]}c" for label in regressed),
+            )
     if converted == 0 or not md:
         # No foldable text. Still rebuild when a prior fold carries text from
         # files the identity gate has since quarantined (KCNQ1 31520628's only

@@ -83,6 +83,25 @@ EXTRACTOR_CODE_FILES = [
 ] + [
     "config/constants.py",
     "utils/source_layers.py",
+    # The canonical source-text policy decides what every route reads, so a
+    # change to it changes extraction output as surely as a prompt edit.
+    "utils/source_text.py",
+    # Identity folding and the finalized-source denominator are likewise
+    # scientific behavior, not plumbing.
+    "pipeline/variant_identity.py",
+    "pipeline/source_ledger.py",
+    # These helpers are invoked from fingerprinted extraction modules but carry
+    # the scientific decisions themselves.  Hash their bodies too, otherwise a
+    # helper-only edit can change counts or source selection without moving the
+    # protocol fingerprint.
+    "pipeline/phenotype_count_guard.py",
+    "pipeline/patient_row_phenotype.py",
+    "utils/doi.py",
+    "harvesting/orchestrator.py",
+    "harvesting/supplement_processing_service.py",
+    # Nested-archive expansion decides which bytes exist to extract from.
+    "harvesting/format_converters.py",
+    "harvesting/supplement_fold.py",
 ]
 
 # Compatibility name for callers that inspect the active extractor file set.
@@ -161,6 +180,54 @@ EXTRACTOR_RUNTIME_CONSTANTS = {
     "SCANNER_MERGE_MIN_CONFIDENCE": SCANNER_MERGE_MIN_CONFIDENCE,
     "SCANNER_MAX_HINTS": SCANNER_MAX_HINTS,
 }
+
+
+def archive_expansion_limits() -> dict[str, Any]:
+    """Recursion budget that decides which supplement bytes exist to read.
+
+    Folded into the fingerprint because raising or lowering the archive depth
+    changes the corpus a run can see, and therefore its output, without
+    touching a prompt or a model route.
+    """
+    try:
+        from harvesting.format_converters import (
+            ARCHIVE_MAX_DEPTH,
+            ARCHIVE_MAX_MEMBER_UNCOMPRESSED_BYTES,
+            ARCHIVE_MAX_TOTAL_UNCOMPRESSED_BYTES,
+            ARCHIVE_SUFFIXES,
+        )
+    except Exception:  # noqa: BLE001 - provenance is always best-effort
+        return {}
+    return {
+        "archive_max_depth": ARCHIVE_MAX_DEPTH,
+        "archive_max_member_uncompressed_bytes": (
+            ARCHIVE_MAX_MEMBER_UNCOMPRESSED_BYTES
+        ),
+        "archive_max_total_uncompressed_bytes": ARCHIVE_MAX_TOTAL_UNCOMPRESSED_BYTES,
+        "archive_suffixes": sorted(ARCHIVE_SUFFIXES),
+    }
+
+
+def protocol_fingerprint(routing: Optional[dict[str, Any]] = None) -> Optional[str]:
+    """One digest naming the protocol a run executed under.
+
+    Combines the extractor code digest, the resolved runtime configuration, and
+    the archive-expansion budget. Two runs sharing this value read source the
+    same way and decide identities the same way; two runs that differ cannot
+    have their outputs spliced together and reported as one result.
+    """
+    code_hash = extractor_code_hash()
+    if code_hash is None:
+        return None
+    return hash_json(
+        {
+            "algorithm": EXTRACTOR_HASH_ALGORITHM,
+            "schema_version": PROVENANCE_SCHEMA_VERSION,
+            "code_sha256": code_hash,
+            "config_sha256": extractor_config_hash(routing),
+            "archive_limits": archive_expansion_limits(),
+        }
+    )
 
 
 def _run_git(args: list[str]) -> Optional[str]:
@@ -381,6 +448,8 @@ def collect_provenance() -> dict[str, Any]:
         ("prompt_extractor_sha256", lambda: prompt_extractor_hash(routing)),
         ("legacy_prompt_extractor_sha256", legacy_prompt_extractor_hash),
         ("dependency_lock_sha256", dependency_lock_hash),
+        ("protocol_fingerprint", lambda: protocol_fingerprint(routing)),
+        ("archive_limits", archive_expansion_limits),
     ):
         _capture(key, fn)
     try:

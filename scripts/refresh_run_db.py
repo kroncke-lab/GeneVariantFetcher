@@ -40,6 +40,10 @@ from harvesting.migrate_to_sqlite import (  # noqa: E402
     create_database_schema,
     migrate_extraction_directory,
 )
+from pipeline.count_provenance import (  # noqa: E402
+    PATIENT_ROW_PHENOTYPE_SOURCE,
+    SOURCE_BOUND_PHENOTYPE_SOURCE,
+)
 from pipeline.extraction import ExpertExtractor  # noqa: E402
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
 from utils.legacy_notation import (  # noqa: E402
@@ -78,6 +82,8 @@ _PRESERVABLE_COUNT_TYPES = frozenset(
         "case",
         "control",
         "unaffected_control",
+        "derived_from_patient_rows",
+        "closed_variant_partition",
     }
 )
 
@@ -1012,9 +1018,26 @@ def source_count_observations(
             ):
                 continue
             verdict = str(field_verdicts.get(field_name) or "").strip().lower()
-            if not (
-                field_name == "total_carriers" and role == "family_count"
-            ) and verdict in {"unsupported", "ambiguous", "source_missing"}:
+            audited_patient_row_count = (
+                role == "derived_from_patient_rows"
+                and str(provenance.get(source_key) or "").strip().lower()
+                == PATIENT_ROW_PHENOTYPE_SOURCE
+            )
+            audited_source_bound_count = (
+                role == "closed_variant_partition"
+                and str(provenance.get(source_key) or "").strip().lower()
+                == SOURCE_BOUND_PHENOTYPE_SOURCE
+            )
+            if (
+                not (field_name == "total_carriers" and role == "family_count")
+                and verdict
+                in {
+                    "unsupported",
+                    "ambiguous",
+                    "source_missing",
+                }
+                and not (audited_patient_row_count or audited_source_bound_count)
+            ):
                 continue
             raw_value = penetrance.get(data_key)
             if raw_value is None and patient_key:
@@ -1022,16 +1045,18 @@ def source_count_observations(
             value = _count_int(raw_value)
             if value is None:
                 continue
-            observations.append(
-                {
-                    "variant_index": variant_index,
-                    "field": field_name,
-                    "role": role,
-                    "column_label": column_label,
-                    "value": value,
-                    "identity": identity,
-                }
-            )
+            observation = {
+                "variant_index": variant_index,
+                "field": field_name,
+                "role": role,
+                "column_label": column_label,
+                "value": value,
+                "identity": identity,
+            }
+            source = str(provenance.get(source_key) or "").strip()
+            if source:
+                observation["source"] = source
+            observations.append(observation)
     return observations
 
 
@@ -1066,6 +1091,9 @@ def _write_source_count_observation(
         target["count_provenance"] = provenance
     provenance[role_key] = observation["role"]
     provenance[column_key] = observation["column_label"]
+    source = str(observation.get("source") or "").strip()
+    if source:
+        provenance[role_key.replace("count_type", "source")] = source
 
     prior_patients = prior_variant.get("patients")
     if isinstance(prior_patients, dict):

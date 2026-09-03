@@ -16,9 +16,10 @@ Both notations go into one prediction string because run_eval.matches() expands
 each side through variant_candidates(); handing it everything production stored
 is the neutral choice (it neither hides nor invents a notation).
 
---exclude-layers writes the paper-derived-only view (drops ClinVar/PubTator
-linkage rows, which are database lookups rather than readings of the paper) so
-the comparison against a read-the-paper protocol is legible.
+``--paper-primary`` makes the read-the-paper view the locked primary score and
+retains a linkage-assisted comparison plus the raw external-linkage rows in the
+same pre-gold artifact.  ClinVar/PubTator rows are database citation linkages,
+not evidence that the protocol found the identity in the paper.
 """
 
 from __future__ import annotations
@@ -42,6 +43,7 @@ from benchmarks.codex_paper_eval.production_run import (  # noqa: E402
     ProductionRunError,
     resolve_active_gene_run,
 )
+from utils.source_layers import normalize_source_layer  # noqa: E402
 from utils.variant_normalizer import structural_variant_identity  # noqa: E402
 
 TOOL_RATIONALE = (
@@ -52,6 +54,17 @@ TOOL_RATIONALE = (
     "Mapped to the harness 'text' route because no single harness route "
     "describes the multi-stage production pipeline."
 )
+
+PAPER_DERIVED_LAYERS = {
+    "llm_text",
+    "llm_table",
+    "regex_text",
+    "regex_table",
+    "figure",
+}
+AMBIGUOUS_LAYERS = {"manual_or_legacy", "mixed"}
+LINKAGE_LAYERS = {"clinvar", "pubtator"}
+PROVENANCE_LANES = {"paper_derived", "external_linkage", "scored_union", "all"}
 
 
 def file_digest(path: Path) -> str:
@@ -128,10 +141,30 @@ def find_db(root: Path, gene: str) -> Path:
 
 def layer_rank(source_layer: str | None) -> int:
     """Lower is more authoritative as the count-bearing record for a variant."""
-    layers = {t.strip() for t in (source_layer or "").split(",") if t.strip()}
-    if layers & {"llm_table", "llm_text", "regex_table", "regex_text", "figure"}:
+    if provenance_lane(source_layer) == "paper_derived":
         return 0  # read out of the paper
     return 1  # clinvar / pubtator database linkage
+
+
+def provenance_lane(source_layer: str | None) -> str:
+    """Classify a paper-variant link by its originating evidence source.
+
+    ``source_layer`` is the stable origin; later corroborating witnesses live in
+    ``observed_source_layers``.  Legacy composites retain their origin first, so
+    normalizing the first token avoids turning a ClinVar corroboration into a
+    claim that ClinVar discovered a paper-derived row (or the reverse).
+    """
+
+    raw_origin = re.split(r"[,;|]", str(source_layer or ""), maxsplit=1)[0]
+    raw_origin = raw_origin.strip().lower()
+    if raw_origin in AMBIGUOUS_LAYERS:
+        return "unclassified"
+    layer = normalize_source_layer(source_layer)
+    if layer in PAPER_DERIVED_LAYERS:
+        return "paper_derived"
+    if layer in LINKAGE_LAYERS:
+        return "external_linkage"
+    return "unclassified"
 
 
 def merge_same_variant(rows: list[dict], gene: str) -> list[dict]:
@@ -214,7 +247,6 @@ def notation(
     return " ".join(dict.fromkeys(parts))
 
 
-LINKAGE_LAYERS = {"clinvar", "pubtator"}
 TRUSTED_UNMATCHED_VF_CLASSES = frozenset(
     {"novel_in_range", "cdna_only_unmatched", "known_isoform_offset"}
 )
@@ -245,8 +277,7 @@ def canonical_structural_identity(description: str | None) -> str:
 
 
 def origin_layer(source_layer: str | None) -> str:
-    raw = (source_layer or "").strip().lower()
-    return raw.split(",")[0].strip() if raw else ""
+    return normalize_source_layer(source_layer) or ""
 
 
 def variant_codons(variant: str | None, gene: str) -> set[int]:
@@ -345,6 +376,7 @@ def rows_for_gene(
     *,
     trust_mode: str = "all",
     identity_mode: str = "all",
+    provenance: str = "all",
 ):
     con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
@@ -352,6 +384,10 @@ def rows_for_gene(
         raise ValueError("trust_mode must be 'all' or 'trusted'")
     if identity_mode not in {"all", "trusted"}:
         raise ValueError("identity_mode must be 'all' or 'trusted'")
+    if provenance not in PROVENANCE_LANES:
+        raise ValueError(
+            "provenance must be paper_derived, external_linkage, scored_union, or all"
+        )
     out: dict[str, list[dict]] = defaultdict(list)
     dropped = defaultdict(int)
     penetrance_columns = {
@@ -448,6 +484,16 @@ def rows_for_gene(
             ):
                 dropped[pmid] += 1
                 continue
+        row_lane = provenance_lane(r["source_layer"])
+        if provenance == "paper_derived" and row_lane != "paper_derived":
+            dropped[pmid] += 1
+            continue
+        if provenance == "external_linkage" and row_lane != "external_linkage":
+            dropped[pmid] += 1
+            continue
+        if provenance == "scored_union" and row_lane == "unclassified":
+            dropped[pmid] += 1
+            continue
         layers = {t.strip() for t in (r["source_layer"] or "").split(",") if t.strip()}
         if exclude_layers and layers and layers <= exclude_layers:
             dropped[pmid] += 1
@@ -534,6 +580,14 @@ def main() -> int:
             "scored projection; DB rows are never touched)"
         ),
     )
+    ap.add_argument(
+        "--paper-primary",
+        action="store_true",
+        help=(
+            "lock paper-derived rows as papers[].variants and retain a separate "
+            "linkage-assisted comparison plus external_linkage_variants"
+        ),
+    )
     args = ap.parse_args()
 
     selection = json.loads((args.run_dir / "selection.json").read_text())
@@ -547,13 +601,18 @@ def main() -> int:
     linkage_shadows_excluded = 0
 
     per_gene = {}
+    comparison_per_gene = {}
+    external_per_gene = {}
+    unattributed_per_gene = {}
     dbs = {}
     production_trace_manifests = []
+    production_run_statuses = []
     production_run_timing = []
     production_gold_access = []
     run_usage = empty_usage()
     usage_by_gene_pmid: dict[tuple[str, str], dict] = {}
     merged_away = 0
+    unattributed_rows_held = 0
     for gene, pmids in sorted(wanted.items()):
         db = find_db(args.production_root, gene)
         dbs[gene] = str(db.relative_to(REPO)) if db.is_relative_to(REPO) else str(db)
@@ -583,10 +642,32 @@ def main() -> int:
         gold_disabled = bool(
             isinstance(gold_access, dict) and gold_access.get("disabled") is True
         )
+        alias_files_disabled = bool(
+            isinstance(gold_access, dict)
+            and gold_access.get("gold_derived_alias_files_disabled") is True
+        )
+        if args.paper_primary and (not gold_disabled or not alias_files_disabled):
+            raise SystemExit(
+                f"{gene}: paper-primary projection requires RUN_STATUS proof "
+                "that gold access and gold-derived alias files were disabled "
+                "during extraction"
+            )
+        production_run_statuses.append(
+            {
+                "gene": gene,
+                "status": (
+                    str(run_status_path.relative_to(REPO))
+                    if run_status_path.is_relative_to(REPO)
+                    else str(run_status_path)
+                ),
+                "sha256": file_digest(run_status_path),
+            }
+        )
         production_gold_access.append(
             {
                 "gene": gene,
                 "disabled": gold_disabled,
+                "gold_derived_alias_files_disabled": alias_files_disabled,
                 "mode": (
                     gold_access.get("mode")
                     if isinstance(gold_access, dict)
@@ -679,29 +760,61 @@ def main() -> int:
         usage_by_gene_pmid.update(
             {(gene, pmid): usage for pmid, usage in by_pmid.items()}
         )
-        raw, _ = rows_for_gene(
+        raw, _projection_dropped = rows_for_gene(
             db,
             pmids,
             excl,
             trust_mode=args.trust_mode,
             identity_mode=args.identity_mode,
+            provenance="all",
         )
         collapsed = {}
+        paper_only = {}
+        external_linkage = {}
+        unattributed = {}
         for pmid, rows in raw.items():
-            kept = merge_same_variant(rows, gene)
-            merged_away += len(rows) - len(kept)
+            paper_rows = [
+                row
+                for row in rows
+                if provenance_lane(row.get("source_layer")) == "paper_derived"
+            ]
+            linkage_rows = [
+                row
+                for row in rows
+                if provenance_lane(row.get("source_layer")) == "external_linkage"
+            ]
+            unattributed_rows = [
+                row
+                for row in rows
+                if provenance_lane(row.get("source_layer")) == "unclassified"
+            ]
+            paper_only[pmid] = merge_same_variant(paper_rows, gene)
+            # Preserve every external identity in its audit lane.  The historical
+            # codon-shadow filter applies only to the linkage-assisted union.
+            external_linkage[pmid] = merge_same_variant(linkage_rows, gene)
+            unattributed[pmid] = merge_same_variant(unattributed_rows, gene)
+            unattributed_rows_held += len(unattributed[pmid])
+            scored_rows = paper_rows + linkage_rows if args.paper_primary else rows
+            kept = merge_same_variant(scored_rows, gene)
+            merged_away += len(scored_rows) - len(kept)
             if not args.keep_linkage_shadows:
                 kept, shadows = drop_linkage_shadows(
                     kept, gene, source_by_key.get((gene, pmid))
                 )
                 linkage_shadows_excluded += shadows
             collapsed[pmid] = kept
-        per_gene[gene] = collapsed
+        per_gene[gene] = paper_only if args.paper_primary else collapsed
+        comparison_per_gene[gene] = collapsed
+        external_per_gene[gene] = external_linkage
+        unattributed_per_gene[gene] = unattributed
 
     papers = []
     for p in selection["papers"]:
         gene, pmid = p["gene"], str(p["pmid"])
         variants = per_gene[gene].get(pmid, [])
+        comparison_variants = comparison_per_gene[gene].get(pmid, [])
+        external_variants = external_per_gene[gene].get(pmid, [])
+        unattributed_variants = unattributed_per_gene[gene].get(pmid, [])
         paper_usage = usage_by_gene_pmid.get((gene, pmid), empty_usage())
         papers.append(
             {
@@ -720,6 +833,17 @@ def main() -> int:
                     ),
                 },
                 "variants": variants,
+                **(
+                    {
+                        "comparison_variants": {
+                            "linkage_assisted": comparison_variants,
+                        },
+                        "external_linkage_variants": external_variants,
+                        "unattributed_variants": unattributed_variants,
+                    }
+                    if args.paper_primary
+                    else {}
+                ),
             }
         )
 
@@ -729,10 +853,24 @@ def main() -> int:
         "strategy": "production_gvf_run",
         "count_projection": args.trust_mode,
         "identity_projection": args.identity_mode,
+        "primary_score_lane": (
+            "paper_derived" if args.paper_primary else "linkage_assisted"
+        ),
+        "comparison_score_lanes": (["linkage_assisted"] if args.paper_primary else []),
+        "provenance_policy": {
+            "paper_derived_layers": sorted(PAPER_DERIVED_LAYERS),
+            "external_linkage_layers": sorted(LINKAGE_LAYERS),
+            "ambiguous_unattributed_layers": sorted(AMBIGUOUS_LAYERS),
+            "unclassified_rows_in_primary_score": not args.paper_primary,
+            "external_linkage_rows_in_primary_score": not args.paper_primary,
+            "external_linkage_is_paper_discovery": False,
+        },
         "excluded_source_layers": sorted(excl),
         "linkage_shadows_excluded": linkage_shadows_excluded,
+        "unattributed_rows_held_from_scores": unattributed_rows_held,
         "source_databases": dbs,
         "production_trace_manifests": production_trace_manifests,
+        "production_run_statuses": production_run_statuses,
         "production_run_timing": production_run_timing,
         "production_gold_access": production_gold_access,
         "prelock_gold_usage": {
@@ -776,7 +914,8 @@ def main() -> int:
     print(
         f"{args.out}: {len(papers)} papers, {total} predicted variants, {empty} empty, "
         f"{merged_away} duplicate-notation rows merged, "
-        f"{linkage_shadows_excluded} linkage codon-shadows excluded"
+        f"{linkage_shadows_excluded} linkage codon-shadows excluded, "
+        f"{unattributed_rows_held} unattributed rows held from scored lanes"
     )
     return 0
 

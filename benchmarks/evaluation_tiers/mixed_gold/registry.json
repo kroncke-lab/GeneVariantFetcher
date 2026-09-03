@@ -1,0 +1,1150 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-03",
+  "suite_id": "mixed_all_gold",
+  "count_unit": "gene_paper_attempt",
+  "selection_seed": 2026090301,
+  "target_tranche_size": 50,
+  "assignment": "article_atomic_gene_and_provenance_balanced_sha256_v1",
+  "gold_value_blinded": true,
+  "primary_score_lane": "paper_derived",
+  "comparison_score_lanes": [
+    "linkage_assisted"
+  ],
+  "consumption_log": {
+    "path": "consumption_log.jsonl",
+    "schema_version": 1,
+    "required_arms": [
+      "baseline",
+      "candidate"
+    ]
+  },
+  "evaluation_design": {
+    "comparison": "paired_frozen_baseline_and_candidate_on_same_manifest",
+    "primary_endpoint": "paper_derived_micro_variant_identity_recall",
+    "guardrails": [
+      "paper_derived_micro_variant_identity_precision_noninferiority",
+      "per_gene_results_reported",
+      "per_gold_provenance_results_reported_without_scientific_pooling"
+    ],
+    "consume_order": [
+      "mixed_gold_01",
+      "mixed_gold_02",
+      "mixed_gold_03",
+      "mixed_gold_04",
+      "mixed_gold_05",
+      "mixed_gold_06",
+      "mixed_gold_07",
+      "mixed_gold_08",
+      "mixed_gold_09",
+      "mixed_gold_10",
+      "mixed_gold_11",
+      "mixed_gold_12",
+      "mixed_gold_13",
+      "mixed_gold_14",
+      "mixed_gold_15",
+      "mixed_gold_16",
+      "mixed_gold_17",
+      "mixed_gold_18",
+      "mixed_gold_19",
+      "mixed_gold_20",
+      "mixed_gold_21",
+      "mixed_gold_22",
+      "mixed_gold_23",
+      "mixed_gold_24",
+      "mixed_gold_25",
+      "mixed_gold_26",
+      "mixed_gold_27",
+      "mixed_gold_28",
+      "mixed_gold_29"
+    ],
+    "burn_policy": "Any score inspected before a protocol decision burns that tranche for confirmation; confirm on the next still-unopened tranche.",
+    "cache_policy": "frozen_source_bytes_only_no_prior_prediction_or_db_reuse",
+    "cluster_unit": "PMID",
+    "decision_rule": {
+      "delta_definition": "candidate_minus_baseline_on_the_same_tranche",
+      "primary": {
+        "metric": "paper_derived_micro_variant_identity_recall",
+        "minimum_observed_delta": 0.01,
+        "noninferiority_margin": -0.01,
+        "one_sided_confidence_level": 0.95
+      },
+      "precision_guardrail": {
+        "metric": "paper_derived_micro_variant_identity_precision",
+        "noninferiority_margin": -0.02,
+        "one_sided_confidence_level": 0.95
+      },
+      "confidence_interval": {
+        "method": "paired_cluster_bootstrap_nearest_rank",
+        "cluster_unit": "PMID",
+        "resamples": 10000,
+        "seed": 2026090301
+      },
+      "pass_condition": "Observed recall delta >= +0.01 and its one-sided 95% lower bound >= -0.01, while the precision-delta one-sided 95% lower bound is >= -0.02.",
+      "confirmation": "A discovery pass advances only to the next unopened tranche; accept the candidate only if the same frozen rule passes there."
+    }
+  },
+  "inventory": {
+    "path": "inventory.tsv",
+    "sha256": "a9ddcfd96bd26cee854831a71a2caf47c6c8fde3a1445e5952b7ba57a4e051ca",
+    "gold_attempts": 1534,
+    "source_available_attempts": 1422,
+    "source_unavailable_attempts": 111,
+    "quarantined_attempts": 1,
+    "unique_source_available_pmids": 1306
+  },
+  "gold_inputs": [
+    {
+      "kind": "repo_gold",
+      "gene": "KCNH2",
+      "path": "gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv",
+      "sha256": "1e1ea47caab96b89812f49208202143514b8596ee43dd64b9f1d738aa0cc81ad",
+      "eligible_attempts_contributed": 261
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "KCNQ1",
+      "path": "gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv",
+      "sha256": "72472a17d8fe6e4330a663612dfdbd3fa3eee2dc33737d91e07155ce1700cab7",
+      "eligible_attempts_contributed": 305
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "RYR2",
+      "path": "gene_variant_fetcher_gold_standard/normalized/RYR2_recall_input.csv",
+      "sha256": "b1a1e4eb69c73b448e15f8ea108f898c3319ba451e8c0b58fae328f50347ff0e",
+      "eligible_attempts_contributed": 178
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "SCN5A",
+      "path": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv",
+      "sha256": "71b3510406f02af6d9bf733a4e2cca666cf5ffe271924540351b639d54e00988",
+      "eligible_attempts_contributed": 757
+    },
+    {
+      "kind": "curated_override",
+      "gene": "APOE",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/APOE_recall_input.csv",
+      "sha256": "686d869005f905e564c4f38d0dbbf079320c1b64e96c37325dd4d36c2f05a51a",
+      "eligible_attempts_contributed": 6
+    },
+    {
+      "kind": "curated_override",
+      "gene": "BRCA1",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/BRCA1_recall_input.csv",
+      "sha256": "ac4a16492d4d239117583790c96468f436133083646597a7608823c02ce42156",
+      "eligible_attempts_contributed": 10
+    },
+    {
+      "kind": "curated_override",
+      "gene": "BRCA2",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv",
+      "sha256": "29c65b1a57e7b4de61c9eb09086ce4f3337fe44f96c007091a215917d7870280",
+      "eligible_attempts_contributed": 8
+    },
+    {
+      "kind": "curated_override",
+      "gene": "KCNH2",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/KCNH2_recall_input.csv",
+      "sha256": "a57028e51a40d96808a17f87a2341d7fb7cf7f5f23b0fe8ea00a8b4412f6d6ed",
+      "eligible_attempts_contributed": 1
+    },
+    {
+      "kind": "curated_override",
+      "gene": "MYBPC3",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/MYBPC3_recall_input.csv",
+      "sha256": "a4786cb147a0da3365300b76f24d367e22803c0d41fbdea3ad8e00fa854440ec",
+      "eligible_attempts_contributed": 8
+    }
+  ],
+  "answer_key": {
+    "path": "answer_key",
+    "sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4"
+  },
+  "cost_model": {
+    "calibration": "benchmarks/evaluation_tiers/cost_calibration.json",
+    "calibration_sha256": "9484f3d0532a01ac717498f1e873eefda0986c0668e8a766231322f549977d17",
+    "method": "sum of observed per-gene production cost per gene-paper attempt",
+    "pricing_basis": "Dated public-list-price proxy used by docs/PROTOCOL_COST_EVAL.md; cached-input discounts, source acquisition, human review, and Grok/AGY consultation are excluded.",
+    "pricing_as_of": "2026-08-24",
+    "estimated_suite_cost_usd": 148.832,
+    "budget_with_headroom_usd": 186.04,
+    "paired_estimated_suite_cost_usd": 297.664,
+    "paired_budget_with_headroom_usd": 372.08,
+    "unit_cost_usd_by_gene": {
+      "APOE": 0.106502,
+      "BRCA1": 0.303901,
+      "BRCA2": 0.236141,
+      "KCNH2": 0.087385,
+      "KCNQ1": 0.089843,
+      "MYBPC3": 0.246269,
+      "RYR2": 0.114809,
+      "SCN5A": 0.108948
+    }
+  },
+  "tiers": [
+    {
+      "id": "mixed_gold_01",
+      "order": 1,
+      "manifest": "tranche_01.tsv",
+      "sha256": "ae290bbe1b6dfc960c46da2b0223cc9458c04188f5b7b5b8887e3bd93409f9ac",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1258,
+      "budget_with_headroom_usd": 6.4073,
+      "paired_estimated_cost_usd": 10.2516,
+      "paired_budget_with_headroom_usd": 12.8145
+    },
+    {
+      "id": "mixed_gold_02",
+      "order": 2,
+      "manifest": "tranche_02.tsv",
+      "sha256": "26f2368b19684ef79c38cb65de8ad243648b3a0b291f81f2de77a1b9f81f32ba",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 8,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.205,
+      "budget_with_headroom_usd": 6.5063,
+      "paired_estimated_cost_usd": 10.41,
+      "paired_budget_with_headroom_usd": 13.0125
+    },
+    {
+      "id": "mixed_gold_03",
+      "order": 3,
+      "manifest": "tranche_03.tsv",
+      "sha256": "b11194795d4294c3fee86a7e2352e65cf04191f284957f32dc65983d28f4a43c",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 8,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1474,
+      "budget_with_headroom_usd": 6.4342,
+      "paired_estimated_cost_usd": 10.2948,
+      "paired_budget_with_headroom_usd": 12.8684
+    },
+    {
+      "id": "mixed_gold_04",
+      "order": 4,
+      "manifest": "tranche_04.tsv",
+      "sha256": "4865046207fcb35cc9a0cf0fa5ef64fe7bb9959ef4a327273b8b8223955a5775",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 4.986,
+      "budget_with_headroom_usd": 6.2326,
+      "paired_estimated_cost_usd": 9.9721,
+      "paired_budget_with_headroom_usd": 12.4651
+    },
+    {
+      "id": "mixed_gold_05",
+      "order": 5,
+      "manifest": "tranche_05.tsv",
+      "sha256": "0a1e612271b22428b214fa877527529b9b4a60bf74fab46b674fb6a312c76b90",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1258,
+      "budget_with_headroom_usd": 6.4073,
+      "paired_estimated_cost_usd": 10.2516,
+      "paired_budget_with_headroom_usd": 12.8145
+    },
+    {
+      "id": "mixed_gold_06",
+      "order": 6,
+      "manifest": "tranche_06.tsv",
+      "sha256": "357217d7203730299c01b9913084abd5f52643baa899269270ac512715dadcee",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 8,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1474,
+      "budget_with_headroom_usd": 6.4342,
+      "paired_estimated_cost_usd": 10.2948,
+      "paired_budget_with_headroom_usd": 12.8684
+    },
+    {
+      "id": "mixed_gold_07",
+      "order": 7,
+      "manifest": "tranche_07.tsv",
+      "sha256": "4186728c204c392f75a3783cbf16bff39081e7a2320c0dbe2d52e66a1e4e0b7f",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA2": 1,
+        "KCNH2": 8,
+        "KCNQ1": 11,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1098,
+      "budget_with_headroom_usd": 6.3873,
+      "paired_estimated_cost_usd": 10.2197,
+      "paired_budget_with_headroom_usd": 12.7746
+    },
+    {
+      "id": "mixed_gold_08",
+      "order": 8,
+      "manifest": "tranche_08.tsv",
+      "sha256": "5f594b3a02b8679744d291f8ead463049f238f75074e2b06bc1e1674a5748ab2",
+      "attempt_count": 49,
+      "unique_pmid_count": 44,
+      "gene_attempt_counts": {
+        "BRCA2": 1,
+        "KCNH2": 8,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1372,
+      "budget_with_headroom_usd": 6.4216,
+      "paired_estimated_cost_usd": 10.2745,
+      "paired_budget_with_headroom_usd": 12.8431
+    },
+    {
+      "id": "mixed_gold_09",
+      "order": 9,
+      "manifest": "tranche_09.tsv",
+      "sha256": "9908146a428998902362146b9242c01cbb5706f098da6a2f96c3cadf3b45b591",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1157,
+      "budget_with_headroom_usd": 6.3946,
+      "paired_estimated_cost_usd": 10.2314,
+      "paired_budget_with_headroom_usd": 12.7892
+    },
+    {
+      "id": "mixed_gold_10",
+      "order": 10,
+      "manifest": "tranche_10.tsv",
+      "sha256": "847375c1a760a7711abf4830e16a52c7fd32d6c110d6764e105e44cddd85858d",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1157,
+      "budget_with_headroom_usd": 6.3946,
+      "paired_estimated_cost_usd": 10.2314,
+      "paired_budget_with_headroom_usd": 12.7892
+    },
+    {
+      "id": "mixed_gold_11",
+      "order": 11,
+      "manifest": "tranche_11.tsv",
+      "sha256": "8f61696ad1f0469bc4c127f7ecfa788e10ad9bd543a1f8c607d6557566af010d",
+      "attempt_count": 49,
+      "unique_pmid_count": 46,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 4.986,
+      "budget_with_headroom_usd": 6.2326,
+      "paired_estimated_cost_usd": 9.9721,
+      "paired_budget_with_headroom_usd": 12.4651
+    },
+    {
+      "id": "mixed_gold_12",
+      "order": 12,
+      "manifest": "tranche_12.tsv",
+      "sha256": "307e3d99e1566a7e83b7c589c5443852cb522440be883a543ef08562846e16ef",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1751,
+      "budget_with_headroom_usd": 6.4689,
+      "paired_estimated_cost_usd": 10.3503,
+      "paired_budget_with_headroom_usd": 12.9378
+    },
+    {
+      "id": "mixed_gold_13",
+      "order": 13,
+      "manifest": "tranche_13.tsv",
+      "sha256": "5f142834909e30d0b3be0c3320ee1f28052584aa09d6ff2bbfde8ee9c9fe49d3",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1834,
+      "budget_with_headroom_usd": 6.4793,
+      "paired_estimated_cost_usd": 10.3669,
+      "paired_budget_with_headroom_usd": 12.9586
+    },
+    {
+      "id": "mixed_gold_14",
+      "order": 14,
+      "manifest": "tranche_14.tsv",
+      "sha256": "19b549911f2fb41b6205bc281649e228fed7ae2a8c93e76f39265d0cbbf9f51a",
+      "attempt_count": 50,
+      "unique_pmid_count": 46,
+      "gene_attempt_counts": {
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 43,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.2246,
+      "budget_with_headroom_usd": 6.5308,
+      "paired_estimated_cost_usd": 10.4493,
+      "paired_budget_with_headroom_usd": 13.0616
+    },
+    {
+      "id": "mixed_gold_15",
+      "order": 15,
+      "manifest": "tranche_15.tsv",
+      "sha256": "a6afb0318bebe26d38cae5455912d674b960fb92829539348148d19f636705d0",
+      "attempt_count": 49,
+      "unique_pmid_count": 46,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "collaborator_approved_nonexhaustive": 1,
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.3048,
+      "budget_with_headroom_usd": 6.631,
+      "paired_estimated_cost_usd": 10.6096,
+      "paired_budget_with_headroom_usd": 13.2619
+    },
+    {
+      "id": "mixed_gold_16",
+      "order": 16,
+      "manifest": "tranche_16.tsv",
+      "sha256": "3f8c81cc8b277b5792758b80332c0594768e0bde96e0e831050e1fd3d3568610",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1258,
+      "budget_with_headroom_usd": 6.4073,
+      "paired_estimated_cost_usd": 10.2516,
+      "paired_budget_with_headroom_usd": 12.8145
+    },
+    {
+      "id": "mixed_gold_17",
+      "order": 17,
+      "manifest": "tranche_17.tsv",
+      "sha256": "cc477f6354a678b853b3dc6a5cd6dfb5bb66de9b851355aa3de0701642c6d405",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 11,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 43,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1585,
+      "budget_with_headroom_usd": 6.4481,
+      "paired_estimated_cost_usd": 10.317,
+      "paired_budget_with_headroom_usd": 12.8962
+    },
+    {
+      "id": "mixed_gold_18",
+      "order": 18,
+      "manifest": "tranche_18.tsv",
+      "sha256": "4aefcaa9a68248cdaa8e710cd5282ad506f391d72219a344e31df859c13ad05c",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1834,
+      "budget_with_headroom_usd": 6.4793,
+      "paired_estimated_cost_usd": 10.3669,
+      "paired_budget_with_headroom_usd": 12.9586
+    },
+    {
+      "id": "mixed_gold_19",
+      "order": 19,
+      "manifest": "tranche_19.tsv",
+      "sha256": "f720011d83a856f44b3fbbaa283cd59d712458935d7f117337bd98ff7dcc48cf",
+      "attempt_count": 49,
+      "unique_pmid_count": 44,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "collaborator_approved_nonexhaustive": 1,
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.3048,
+      "budget_with_headroom_usd": 6.631,
+      "paired_estimated_cost_usd": 10.6096,
+      "paired_budget_with_headroom_usd": 13.2619
+    },
+    {
+      "id": "mixed_gold_20",
+      "order": 20,
+      "manifest": "tranche_20.tsv",
+      "sha256": "0435704ce09d69267bce40c5f7e4a6bd18dc294b499024faeda02e608559d941",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1834,
+      "budget_with_headroom_usd": 6.4793,
+      "paired_estimated_cost_usd": 10.3669,
+      "paired_budget_with_headroom_usd": 12.9586
+    },
+    {
+      "id": "mixed_gold_21",
+      "order": 21,
+      "manifest": "tranche_21.tsv",
+      "sha256": "a5b2ba13dac5008b2cc5544ddf8c1dff7e567e5c1cd41da0123bee9d4223f5fd",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 5,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 43,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 4.9802,
+      "budget_with_headroom_usd": 6.2252,
+      "paired_estimated_cost_usd": 9.9604,
+      "paired_budget_with_headroom_usd": 12.4505
+    },
+    {
+      "id": "mixed_gold_22",
+      "order": 22,
+      "manifest": "tranche_22.tsv",
+      "sha256": "6b2911a0d912622b7b825bfebaa06f525de4b9e2b6d0d479a6583db57af3fb57",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1834,
+      "budget_with_headroom_usd": 6.4793,
+      "paired_estimated_cost_usd": 10.3669,
+      "paired_budget_with_headroom_usd": 12.9586
+    },
+    {
+      "id": "mixed_gold_23",
+      "order": 23,
+      "manifest": "tranche_23.tsv",
+      "sha256": "d0acec6663e814eaa64738c3573ca63439667d7906faf7593b81c25a30f5c364",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1258,
+      "budget_with_headroom_usd": 6.4073,
+      "paired_estimated_cost_usd": 10.2516,
+      "paired_budget_with_headroom_usd": 12.8145
+    },
+    {
+      "id": "mixed_gold_24",
+      "order": 24,
+      "manifest": "tranche_24.tsv",
+      "sha256": "cab6edfc5b77bc0251b12ed223bac9d0a0c2e7f88267b1da9e24f9f8fc2f2e33",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA2": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1157,
+      "budget_with_headroom_usd": 6.3946,
+      "paired_estimated_cost_usd": 10.2314,
+      "paired_budget_with_headroom_usd": 12.7892
+    },
+    {
+      "id": "mixed_gold_25",
+      "order": 25,
+      "manifest": "tranche_25.tsv",
+      "sha256": "e73fd6879026f9cb0e31e3325b560945ee5aac57b80e732cf68111f999729fd3",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 8,
+        "KCNQ1": 11,
+        "MYBPC3": 1,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1283,
+      "budget_with_headroom_usd": 6.4103,
+      "paired_estimated_cost_usd": 10.2565,
+      "paired_budget_with_headroom_usd": 12.8207
+    },
+    {
+      "id": "mixed_gold_26",
+      "order": 26,
+      "manifest": "tranche_26.tsv",
+      "sha256": "8f824969c507dd129b447d4489d2649081500643cce138835f5c5b832942c839",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 4.9885,
+      "budget_with_headroom_usd": 6.2356,
+      "paired_estimated_cost_usd": 9.977,
+      "paired_budget_with_headroom_usd": 12.4712
+    },
+    {
+      "id": "mixed_gold_27",
+      "order": 27,
+      "manifest": "tranche_27.tsv",
+      "sha256": "b51574591ea7918d6e5018655da6ca95d82632ddc496ab734017f7f670a745e5",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "RYR2": 6,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 42,
+        "human_curated_ryr2_pilot": 6
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 4.986,
+      "budget_with_headroom_usd": 6.2326,
+      "paired_estimated_cost_usd": 9.9721,
+      "paired_budget_with_headroom_usd": 12.4651
+    },
+    {
+      "id": "mixed_gold_28",
+      "order": 28,
+      "manifest": "tranche_28.tsv",
+      "sha256": "9b321e9edcd7831535abb602bda928ce26ff0644bc1923468ae38881cd640043",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "KCNH2": 9,
+        "KCNQ1": 10,
+        "MYBPC3": 1,
+        "RYR2": 5,
+        "SCN5A": 24
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 43,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.12,
+      "budget_with_headroom_usd": 6.3999,
+      "paired_estimated_cost_usd": 10.2399,
+      "paired_budget_with_headroom_usd": 12.7999
+    },
+    {
+      "id": "mixed_gold_29",
+      "order": 29,
+      "manifest": "tranche_29.tsv",
+      "sha256": "01a3215c5205d14bed095e0b35ba26a9b44e13323d9962f21bb58830167adb69",
+      "attempt_count": 49,
+      "unique_pmid_count": 45,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "KCNH2": 9,
+        "KCNQ1": 11,
+        "RYR2": 5,
+        "SCN5A": 23
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 1,
+        "human_curated_cardiac": 43,
+        "human_curated_ryr2_pilot": 5
+      },
+      "selection_seed": 2026090301,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 5.1585,
+      "budget_with_headroom_usd": 6.4481,
+      "paired_estimated_cost_usd": 10.317,
+      "paired_budget_with_headroom_usd": 12.8962
+    }
+  ]
+}

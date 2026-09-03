@@ -51,6 +51,8 @@ import statistics
 from pathlib import Path
 from typing import Any, Optional
 
+from pipeline.count_provenance import PATIENT_ROW_PHENOTYPE_SOURCE
+
 logger = logging.getLogger(__name__)
 
 # Count roles (from pipeline/prompts.py) that mean the number is a denominator /
@@ -184,6 +186,7 @@ def rule_version() -> str:
             "study_type_mismatch_designs": sorted(STUDY_TYPE_MISMATCH_DESIGNS),
             "population_study_designs": sorted(POPULATION_STUDY_DESIGNS),
             "population_study_carrier_floor": POPULATION_STUDY_CARRIER_FLOOR,
+            "patient_row_phenotype_source": PATIENT_ROW_PHENOTYPE_SOURCE,
             "unaffected_expected_designs": sorted(UNAFFECTED_EXPECTED_DESIGNS),
             "unaffected_expected_ascertainments": sorted(
                 UNAFFECTED_EXPECTED_ASCERTAINMENTS
@@ -321,11 +324,34 @@ def evaluate_fact(
     if carriers is not None and carriers > POPULATION_CARRIER_CEILING:
         reasons.add("population_count")
 
-    # Strengthen population_count when the paper is itself a population/biobank/GWAS study.
+    # Strengthen population_count when the paper is itself a
+    # population/biobank/GWAS study. Do not mask a genotype-confirmed carrier
+    # cohort after the deterministic patient-row lane has produced a complete,
+    # arithmetically closed phenotype partition. The explicit source stamp is
+    # essential: count_type alone can also be emitted by the model.
+    audited_patient_row_partition = (
+        carriers is not None
+        and affected is not None
+        and unaffected is not None
+        and uncertain is not None
+        and affected + unaffected + uncertain == carriers
+        and ctype == "per_variant_carrier"
+        and str(provenance.get("affected_count_type") or "").strip().lower()
+        == "derived_from_patient_rows"
+        and str(provenance.get("unaffected_count_type") or "").strip().lower()
+        == "derived_from_patient_rows"
+        and str(provenance.get("affected_source") or "").strip().lower()
+        == PATIENT_ROW_PHENOTYPE_SOURCE
+        and str(provenance.get("unaffected_source") or "").strip().lower()
+        == PATIENT_ROW_PHENOTYPE_SOURCE
+        and bool(str(provenance.get("affected_column_label") or "").strip())
+        and bool(str(provenance.get("unaffected_column_label") or "").strip())
+    )
     if (
         design in POPULATION_STUDY_DESIGNS
         and carriers is not None
         and carriers >= POPULATION_STUDY_CARRIER_FLOOR
+        and not audited_patient_row_partition
     ):
         reasons.add("population_count")
 
@@ -420,6 +446,19 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                 study_select.append(f"NULL AS {col}")
         study_sql = ",\n                       ".join(study_select)
 
+        # Typed count roles now live on the fact row itself. They are derived
+        # from the same declaration as the JSON below, so preferring them
+        # changes no decision where that JSON is present and parseable -- but
+        # the JSON hangs off a LEFT JOIN to variant_papers, so a missing or
+        # malformed blob silently dropped the role and a family count read as
+        # an individual count. Reading the persisted column recovers that.
+        role_select = []
+        for col in ("carriers_role", "affected_role", "unaffected_role"):
+            role_select.append(
+                f"pd.{col} AS {col}" if col in pd_cols else f"NULL AS {col}"
+            )
+        role_sql = ",\n                       ".join(role_select)
+
         rows = [
             dict(r)
             for r in conn.execute(
@@ -435,6 +474,7 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                        pd.trust_rule_version    AS existing_trust_rule_version,
                        pd.field_trust           AS existing_field_trust,
                        vp.count_provenance     AS count_provenance,
+                       {role_sql},
                        {study_sql}
                 FROM penetrance_data pd
                 LEFT JOIN variant_papers vp
@@ -466,6 +506,15 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                     provenance = json.loads(raw)
                 except (TypeError, ValueError, json.JSONDecodeError):
                     provenance = {}
+            if not isinstance(provenance, dict):
+                provenance = {}
+            # Fill only what the JSON did not supply, so the persisted column
+            # is a recovery path rather than an override.
+            for field in ("carriers", "affected", "unaffected"):
+                key = f"{field}_count_type"
+                persisted = str(r.get(f"{field}_role") or "").strip()
+                if not str(provenance.get(key) or "").strip() and persisted:
+                    provenance[key] = persisted
             study_context = {
                 "study_design": r.get("study_design"),
                 "ascertainment": r.get("ascertainment"),

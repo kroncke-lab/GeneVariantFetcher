@@ -30,6 +30,47 @@ SUPPORTIVE_CLASSIFICATIONS = {
 # Curated aliases for common user-facing disease phrases that do not map cleanly
 # to ClinGen's preferred disease labels.
 MANUAL_DISEASE_ALIASES: dict[str, dict[str, list[str]]] = {
+    # ClinGen periodically consolidates channelopathy labels (for example,
+    # SCN5A LQT3/Brugada/conduction disease into a broad cardiac-rhythm
+    # disorder).  Preserve the stable literature-facing names as defaults so
+    # a cold-start gene run does not silently lose the phenotype vocabulary
+    # used by the papers it is extracting.
+    "KCNH2": {
+        "DEFAULT": [
+            "long QT syndrome type 2",
+            "long QT syndrome",
+            "LQT2",
+            "LQTS",
+            "short QT syndrome",
+            "SQTS",
+        ],
+    },
+    "KCNQ1": {
+        "DEFAULT": [
+            "long QT syndrome type 1",
+            "long QT syndrome",
+            "LQT1",
+            "LQTS",
+            "Jervell and Lange-Nielsen syndrome",
+        ],
+    },
+    "RYR2": {
+        "DEFAULT": [
+            "catecholaminergic polymorphic ventricular tachycardia",
+            "CPVT",
+            "CPVT1",
+        ],
+    },
+    "SCN5A": {
+        "DEFAULT": [
+            "long QT syndrome type 3",
+            "long QT syndrome",
+            "LQT3",
+            "LQTS",
+            "Brugada syndrome",
+            "cardiac conduction disease",
+        ],
+    },
     "APOE": {
         "DEFAULT": [
             "Alzheimer disease",

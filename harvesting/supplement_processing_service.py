@@ -220,7 +220,16 @@ def pdf_supplement_verdict(
             "link harvested from reference/bibliography markup; no supplement "
             "marker, article DOI, PMID, or title",
         )
-    head_dois = [token for token in _DOI_TOKEN_RE.findall(head) if token]
+    from utils.doi import clean_doi
+
+    # Clean each candidate through the canonical path so a DOI glued to the
+    # following word does not read as a foreign identifier during the
+    # supplement identity check.
+    head_dois = [
+        cleaned
+        for cleaned in (clean_doi(t) for t in _DOI_TOKEN_RE.findall(head))
+        if cleaned
+    ]
     # A token that prefixes the article DOI (or is prefixed by it) is the same
     # identifier rendered short — KCNQ1 18174212's own PDF prints its DOI
     # across the head boundary as "10.1113/jphysi". Not a contradiction.

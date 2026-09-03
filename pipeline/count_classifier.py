@@ -7,8 +7,8 @@ catches them via the LLM's own self-reported attribution: each variant's
 :mod:`pipeline.prompts`) records which raw column the count came from and
 classifies it as one of a closed vocabulary of count types.
 
-Only ``per_variant_carrier`` should populate ``patients.count`` /
-``penetrance_data.*``. Any other count type (cohort total, screened N,
+Only ``per_variant_carrier`` or the audited ``derived_from_patient_rows`` path
+should populate ``patients.count`` / ``penetrance_data.*``. Any other count type (cohort total, screened N,
 proband-only, family count, case/control arm, etc.) is study-level, not
 per-variant, and assigning it to a single row is the dominant source of the
 MAE outliers documented in ``docs/RECALL_STATUS.md`` (KCNQ1 29622001 G589D
@@ -30,6 +30,9 @@ from typing import Any, Iterable, Optional
 from pipeline.count_outlier_guard import COUNT_FIELDS, _clear_field, _read_field
 
 ACCEPTED_COUNT_TYPE = "per_variant_carrier"
+ACCEPTED_COUNT_TYPES = frozenset(
+    {ACCEPTED_COUNT_TYPE, "derived_from_patient_rows", "closed_variant_partition"}
+)
 
 # Closed vocabulary from the prompt schema; mirrors pipeline/prompts.py.
 KNOWN_COUNT_TYPES = {
@@ -41,6 +44,8 @@ KNOWN_COUNT_TYPES = {
     "case",
     "control",
     "unaffected_control",
+    "derived_from_patient_rows",
+    "closed_variant_partition",
     "unknown",
 }
 
@@ -271,7 +276,7 @@ def detect_misclassified_counts(
             )
 
             provenance_bad = has_provenance and (
-                (declared is not None and declared != ACCEPTED_COUNT_TYPE)
+                (declared is not None and declared not in ACCEPTED_COUNT_TYPES)
                 or bool(suspicious_label)
             )
             if not provenance_bad and not study_reason:
@@ -291,7 +296,7 @@ def detect_misclassified_counts(
             else:
                 reason = (
                     f"declared count_type {declared!r} is not "
-                    f"{ACCEPTED_COUNT_TYPE!r}; value {current_value} "
+                    f"one of {sorted(ACCEPTED_COUNT_TYPES)!r}; value {current_value} "
                     f"would be a non-per-variant assignment"
                 )
                 declared_out = declared or "unknown"

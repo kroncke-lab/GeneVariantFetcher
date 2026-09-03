@@ -1941,6 +1941,12 @@ def _write_run_status(
             "gold_access": {
                 "disabled": bool(gold_free_run),
                 "mode": "disabled" if gold_free_run else "auto_discovery_allowed",
+                # Record the observed runtime gate, not merely the CLI intent.
+                # The gold-free wrapper sets this for the entire pipeline and
+                # restores the caller's environment only after status is written.
+                "gold_derived_alias_files_disabled": (
+                    os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") == "1"
+                ),
             },
         }
         if integrity is not None:
@@ -2000,6 +2006,9 @@ def run_gvf_pipeline(
     """
     previous_dir = os.environ.get("GVF_LLM_TRACE_DIR")
     previous_run = os.environ.get("GVF_LLM_TRACE_RUN_ID")
+    previous_alias_policy = os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES")
+    if gold_free_run:
+        os.environ["GVF_DISABLE_GOLD_DERIVED_ALIASES"] = "1"
     try:
         return _run_gvf_pipeline(
             gene=gene,
@@ -2038,6 +2047,7 @@ def run_gvf_pipeline(
         for key, value in (
             ("GVF_LLM_TRACE_DIR", previous_dir),
             ("GVF_LLM_TRACE_RUN_ID", previous_run),
+            ("GVF_DISABLE_GOLD_DERIVED_ALIASES", previous_alias_policy),
         ):
             if value is None:
                 os.environ.pop(key, None)
@@ -2716,6 +2726,51 @@ def _run_gvf_pipeline(
             "threshold": integ.threshold,
             "degraded": bool(integ.degraded and institutional_run),
         }
+        # Cross-check the on-disk scan against the authoritative finalized
+        # ledger (the papers extraction actually produced records for). These
+        # measure different things — files present versus bytes parsed — and a
+        # run once shipped 0/50 in one artifact and 50/50 in another with
+        # nothing recording that they disagreed. Record the comparison so a
+        # divergence is visible instead of being a matter of which file the
+        # reader happened to open.
+        try:
+            from pipeline.source_ledger import ledger_from_extraction_dir
+
+            ledger = ledger_from_extraction_dir(
+                run_dir / "extractions",
+                search_dirs=[run_dir / "pmc_fulltext", run_dir],
+            )
+            if ledger.rows:
+                # Unverified papers count against agreement: a ledger showing
+                # "0 abstract-only" alongside unverified rows must not read as
+                # a clean full-text run just because two buckets happen to line
+                # up. Any discrepancy is also a disagreement.
+                agrees = (
+                    len(ledger.fulltext_pmids) == integ.full_text
+                    and len(ledger.abstract_only_pmids) == integ.abstract_only
+                    and not ledger.unverified_pmids
+                    and not ledger.discrepancies
+                )
+                integrity_status["finalized_ledger"] = {
+                    "papers_finalized": len(ledger.rows),
+                    "full_text": len(ledger.fulltext_pmids),
+                    "abstract_only": len(ledger.abstract_only_pmids),
+                    "source_unverified": len(ledger.unverified_pmids),
+                    "agrees_with_disk_scan": agrees,
+                    "source_class_discrepancies": ledger.discrepancies,
+                }
+                if not agrees:
+                    msg = (
+                        "source accounting disagreement: on-disk scan says "
+                        f"{integ.full_text} full text / {integ.abstract_only} "
+                        "abstract-only, finalized extraction records say "
+                        f"{len(ledger.fulltext_pmids)} / "
+                        f"{len(ledger.abstract_only_pmids)}"
+                    )
+                    logger.warning("🧪 %s", msg)
+                    stage_warnings.append(msg)
+        except Exception as exc:  # noqa: BLE001 - accounting must not break a run
+            logger.warning("finalized source ledger unavailable: %s", exc)
         if integ.total and integrity_status["degraded"]:
             # Full-recovery run that came back near-empty of full text: escalate.
             logger.warning("🧪 %s", integ.message)

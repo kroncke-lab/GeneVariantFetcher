@@ -90,10 +90,15 @@ DOI_RE = re.compile(r"10\.\d{4,9}/[^\s\"'<>]+", re.IGNORECASE)
 
 
 def _clean_doi(value: str) -> str:
-    doi = unquote(value.strip())
-    doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
-    doi = doi.strip().strip(".,;:)]}>")
-    return doi
+    """Delegate to the canonical cleaner (see :mod:`utils.doi`).
+
+    The local copy had no word boundary, so a DOI harvested from rendered page
+    text absorbed the following word and produced an identifier that cannot
+    resolve.
+    """
+    from utils.doi import clean_doi
+
+    return clean_doi(value)
 
 
 def _extract_doi(value: Any) -> str:

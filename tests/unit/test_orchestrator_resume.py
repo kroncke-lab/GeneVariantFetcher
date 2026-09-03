@@ -61,6 +61,19 @@ def test_complete_full_context_is_not_retried(tmp_path):
     assert full_context_needs_retry(full_context, tmp_path) is False
 
 
+def test_large_abstract_reference_shell_is_retried(tmp_path):
+    full_context = tmp_path / "14678125_FULL_CONTEXT.md"
+    full_context.write_text(
+        "## Abstract\n"
+        + ("aggregate study abstract. " * 240)
+        + "\n## References\n"
+        + ("reference citation. " * 350),
+        encoding="utf-8",
+    )
+
+    assert full_context_needs_retry(full_context, tmp_path) is True
+
+
 def test_complete_full_context_wins_over_stale_abstract_status(tmp_path):
     status_dir = tmp_path / "pmid_status"
     status_dir.mkdir()

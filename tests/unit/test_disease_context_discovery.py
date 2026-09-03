@@ -63,6 +63,40 @@ def test_manual_context_adds_requested_gene_disease_aliases(monkeypatch):
     assert context.prompt_disease
 
 
+def test_gene_only_channelopathy_context_keeps_literature_disease_names(monkeypatch):
+    """A changing ClinGen umbrella label must not erase LQT3/Brugada terms."""
+    from gene_literature.disease_context import ClinGenDiseaseCuration
+
+    curations = [
+        ClinGenDiseaseCuration(
+            gene_symbol="SCN5A",
+            disease_label="SCN5A-related cardiac rhythm disorder",
+            disease_id="MONDO:1010181",
+            mode_of_inheritance="AD",
+            classification="Definitive",
+            classification_date="2025-10-08",
+            gcep="Hereditary Cardiovascular Disease",
+            online_report="https://example.test/scn5a",
+        )
+    ]
+    monkeypatch.setattr(
+        "gene_literature.disease_context.fetch_clinigen_gene_validity_curations",
+        lambda gene, timeout_s=30: curations,
+    )
+
+    context = build_gene_disease_context("SCN5A", None)
+
+    assert context.disease_terms[:4] == [
+        "long QT syndrome type 3",
+        "long QT syndrome",
+        "LQT3",
+        "LQTS",
+    ]
+    assert "Brugada syndrome" in context.disease_terms
+    assert "SCN5A-related cardiac rhythm disorder" in context.disease_terms
+    assert context.prompt_disease.startswith("long QT syndrome type 3")
+
+
 def test_gene_only_context_includes_all_clingen_phenotypes(monkeypatch):
     from gene_literature.disease_context import ClinGenDiseaseCuration
 
