@@ -1,0 +1,85 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-09-03T17:46:51.281531+00:00",
+  "predictions_sha256": "7d200d3877ed8742fe8209602e4d4e52ae6ad414c3b797212e7aaf2d4f8aaabf",
+  "production_run_statuses": [
+    {
+      "gene": "KCNH2",
+      "sha256": "d07dff7f17bab9a14e0b85751cb1fb1cb2083e97fddd868d53f31b7fda77e513",
+      "status": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/KCNH2/20260903_121820/RUN_STATUS.json"
+    },
+    {
+      "gene": "KCNQ1",
+      "sha256": "7b3cc76ddec8b32326dce65ff34084188b5f5a6f76512cd167b674b5a2ebfa83",
+      "status": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/KCNQ1/20260903_121820/RUN_STATUS.json"
+    },
+    {
+      "gene": "MYBPC3",
+      "sha256": "159c56d734d8f198b335d920e05e25180b7902a9e460b25f6dc66eb0cf08d23c",
+      "status": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/MYBPC3/20260903_121820/RUN_STATUS.json"
+    },
+    {
+      "gene": "RYR2",
+      "sha256": "3f0822676f9af2f6a91ee2e912f5d0ca397c2ca9157120eaab34d0efe59326bf",
+      "status": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/RYR2/20260903_121820/RUN_STATUS.json"
+    },
+    {
+      "gene": "SCN5A",
+      "sha256": "8b9289e92f63a1923965b0b650f781a474e3acd8cc4f704266015b82621a9e72",
+      "status": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/SCN5A/20260903_121820/RUN_STATUS.json"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 44,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 34,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/KCNH2/20260903_121820/llm_traces/trace_manifest.json",
+      "run_id": "13cdc93c-d7b4-42a4-8999-9f8e3c62092f",
+      "sha256": "99d8a5c063d3a642d6824906239f420e22a030d93d8abfd6840820104e0eec62"
+    },
+    {
+      "decision_event_count": 41,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 31,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/KCNQ1/20260903_121820/llm_traces/trace_manifest.json",
+      "run_id": "fc042a78-ea5b-4ffe-a562-8943a9d5aa55",
+      "sha256": "a88e0f7fbbaa8ca536c34bf20e617d8b4a496c4dfb3b9312133c1a3a01bbdb0d"
+    },
+    {
+      "decision_event_count": 6,
+      "gene": "MYBPC3",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 4,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/MYBPC3/20260903_121820/llm_traces/trace_manifest.json",
+      "run_id": "5ef7bd6b-f461-4ad5-8d03-f3174813d9ea",
+      "sha256": "fe90e89ec86703172c32d71157215d2c31122b31d27375e21eb8dcec83e08ead"
+    },
+    {
+      "decision_event_count": 49,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 42,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/RYR2/20260903_121820/llm_traces/trace_manifest.json",
+      "run_id": "45ad38ba-d00d-4b41-a28a-0a41fd480d1c",
+      "sha256": "f7b6552e62cba38591419d79183609aac0402a5a22791b1b5b8f00153fbc34ea"
+    },
+    {
+      "decision_event_count": 103,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 86,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/production_runs/SCN5A/20260903_121820/llm_traces/trace_manifest.json",
+      "run_id": "a470965f-129e-4fd3-9d3c-8de0fb4ab49f",
+      "sha256": "60813974a5ac1613ac2217a77c9fbec726e9054c600df5c41cc1d3b8a6f6aec5"
+    }
+  ],
+  "selection_sha256": "fe7c812e215c009753da0107fab9123a12b38a716673b501fdc30c43360d26c0",
+  "setup_sha256": "cf8557cc5cde063043dee12fee07507ba0702cf3bb5c90d118f3ebda4539a9c1",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}
