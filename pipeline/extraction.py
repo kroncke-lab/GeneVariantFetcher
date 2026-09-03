@@ -3154,7 +3154,10 @@ class ExpertExtractor(BaseLLMCaller):
         Returns:
             Updated extracted_data with artifacts removed
         """
-        from utils.legacy_notation import preserve_source_only_legacy_identity
+        from utils.legacy_notation import (
+            preserve_source_only_legacy_identity,
+            promote_source_only_protein_identity,
+        )
         from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
 
         variants = extracted_data.get("variants", [])
@@ -3162,10 +3165,13 @@ class ExpertExtractor(BaseLLMCaller):
         # Preserve a narrow source-only legacy identity before the generic
         # nameless-row guard. This also reverses an upstream ``c.`` prefix when
         # source_notation proves that the paper supplied only the bare legacy
-        # label.
+        # label. Then give a source-only legacy PROTEIN spelling (``L860fsX89``,
+        # ``1795insD``) an identity field, so a row the model reported only in
+        # the paper's own spelling is not thrown away as nameless.
         for variant in variants:
             if isinstance(variant, dict):
                 preserve_source_only_legacy_identity(variant, target_gene)
+                promote_source_only_protein_identity(variant, target_gene)
 
         # A variant with no identifier is not a variant. These reach the public
         # browser as nameless rows: 30 BMPR2, 14 BRCA1 and 9 BRCA2 in the
