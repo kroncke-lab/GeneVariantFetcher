@@ -40,7 +40,8 @@ until the preceding gate passes and its artifact is recorded.
       Tranche 01 cost by the public-price proxy: baseline $4.369 + candidate
       $4.206 = **$8.575** (registry estimate was $10.25 paired); ledger
       $44.519 + $8.575 = **$53.094 used / $46.906 remaining** before tranche
-      02. Tranche 02 = v2 discovery (baseline re-materialised from `506a949c`,
+      02; tranche 02 baseline $4.555 (1.124 M tokens) → **$57.649 used /
+      $42.351 remaining** before the tranche 02 candidate. Tranche 02 = v2 discovery (baseline re-materialised from `506a949c`,
       in flight; candidate = v1 + six hardenings incl. the scorer's
       conflicting-cDNA bridge guard; `docs/evidence/mixed_gold_tranche02_20260903.md`).
       Then tranche 03 = v2 confirmation if it passes; tranche 04 if budget.
