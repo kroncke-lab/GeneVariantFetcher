@@ -1,0 +1,61 @@
+{
+ "run_id": "20260903_protocol_mixed01_candidate",
+ "fn_total": 85,
+ "by_leaf": {
+  "acquisition": 70,
+  "unknown_notation": 12,
+  "condensing": 1,
+  "matcher": 2
+ },
+ "by_paper": {
+  "KCNQ1:14678125": {
+   "acquisition": 37,
+   "unknown_notation": 4
+  },
+  "KCNQ1:21131640": {
+   "acquisition": 8,
+   "unknown_notation": 1
+  },
+  "KCNH2:15176425": {
+   "acquisition": 7
+  },
+  "KCNQ1:15176425": {
+   "acquisition": 6
+  },
+  "SCN5A:15176425": {
+   "acquisition": 5
+  },
+  "SCN5A:12566525": {
+   "acquisition": 3,
+   "unknown_notation": 1
+  },
+  "SCN5A:27232914": {
+   "acquisition": 1,
+   "unknown_notation": 1
+  },
+  "SCN5A:16764707": {
+   "unknown_notation": 2
+  },
+  "RYR2:17556193": {
+   "matcher": 2
+  },
+  "SCN5A:11804990": {
+   "unknown_notation": 2
+  },
+  "SCN5A:28779003": {
+   "acquisition": 1
+  },
+  "SCN5A:17971661": {
+   "acquisition": 1
+  },
+  "KCNH2:16470702": {
+   "unknown_notation": 1
+  },
+  "SCN5A:12574983": {
+   "acquisition": 1
+  },
+  "MYBPC3:33673806": {
+   "condensing": 1
+  }
+ }
+}

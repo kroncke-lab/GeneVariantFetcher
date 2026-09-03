@@ -15,6 +15,31 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-03 — mixed-gold tranche 01: first paired measurement; acquisition ceiling measured
+
+The mixed-gold suite's first paired arms ran on tranche 01 (49 gene-paper
+attempts, 242 gold rows, paper-derived lane primary). Baseline (frozen
+`506a949c`): **155 / 61 / 87**, recall 64.05%, precision 71.76%; carriers
+supplied 48/242 (conditional MAE 0.812). Candidate `b56f469f` (six
+gene-agnostic fixes traced from the baseline's misses with the new
+`scripts/recall_audit/fn_root_cause.py`): **157 / 54 / 85**, recall 64.88%
+(+0.83 pp; one-sided 95% PMID-cluster lower bound 0.00), precision 74.41%
+(+2.65 pp), counted-extra precision 82.0% → 91.3%, carriers supplied 125/242
+with conditional MAE 0.104 and RMSE 3.96 → 0.48, affected supplied 101 → 81.
+`run_eval.py compare --phase discovery` returned `reject_or_revise_candidate`:
+precision non-inferiority passed, the +1.0 pp recall bar did not. The recall
+ceiling on this tranche was the reason: the new source-presence sweep
+(`docs/evidence/gold_source_presence_sweep_20260903.md`) shows 75 of its 242
+gold rows (31%) behind the hard acquisition ceiling and the root-cause tool
+found only 5 of 87 misses reachable by any reading change; suite-wide the hard
+ceiling is 15.8% of runnable gold rows (28.7% wide). Two regressions were
+traced for v2: the always-on phenotype guard cleared affected values that the
+new case-series carrier rule made equal to the carrier total (19 MYBPC3 rows),
+and the scorer paired a nonsense prediction at codon 1136 with the gold
+in-frame deletion of the same codon. Full detail:
+`docs/evidence/mixed_gold_tranche01_20260903.md`. No headline change; the
+accepted gold-118 lock is untouched.
+
 ## 2026-09-02 — audited patient-row phenotype derivation; candidate not promoted
 
 Grok 4.6 `xhigh` reviewed a minimal exception to the no-inference count

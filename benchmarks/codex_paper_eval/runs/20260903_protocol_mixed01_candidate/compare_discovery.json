@@ -1,0 +1,58 @@
+{
+  "attempt_count": 49,
+  "cluster_count": 45,
+  "cluster_unit": "PMID",
+  "criteria": {
+    "precision_noninferiority_pass": true,
+    "recall_pass": false
+  },
+  "decision": "reject_or_revise_candidate",
+  "integrity": {
+    "baseline_report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/report.json",
+    "baseline_report_sha256": "107a8a56233758ba47700709f8320cb23dad795c40c7e44e5d381fda09ea1e7e",
+    "candidate_report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/report.json",
+    "candidate_report_sha256": "a80fc5ec83e5c212cb18696c2b59563cbb6e538c2c9c7ed519ca70faf4d34a88",
+    "registry": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/registry.json",
+    "registry_sha256": "fb44d2fbe29466fa75fa14ea5e95ac7b181719da68f5d80c4db93e578207f0c6"
+  },
+  "metrics": {
+    "precision": {
+      "baseline": 0.7175925925925926,
+      "candidate": 0.7440758293838863,
+      "delta_candidate_minus_baseline": 0.02648323679129372,
+      "one_sided_lower_confidence_bound": 0.001558054464164793
+    },
+    "recall": {
+      "baseline": 0.640495867768595,
+      "candidate": 0.6487603305785123,
+      "delta_candidate_minus_baseline": 0.008264462809917328,
+      "one_sided_lower_confidence_bound": 0.0
+    }
+  },
+  "passed": false,
+  "phase": "discovery",
+  "registered_rule": {
+    "confidence_interval": {
+      "cluster_unit": "PMID",
+      "method": "paired_cluster_bootstrap_nearest_rank",
+      "resamples": 10000,
+      "seed": 2026090301
+    },
+    "confirmation": "A discovery pass advances only to the next unopened tranche; accept the candidate only if the same frozen rule passes there.",
+    "delta_definition": "candidate_minus_baseline_on_the_same_tranche",
+    "pass_condition": "Observed recall delta >= +0.01 and its one-sided 95% lower bound >= -0.01, while the precision-delta one-sided 95% lower bound is >= -0.02.",
+    "precision_guardrail": {
+      "metric": "paper_derived_micro_variant_identity_precision",
+      "noninferiority_margin": -0.02,
+      "one_sided_confidence_level": 0.95
+    },
+    "primary": {
+      "metric": "paper_derived_micro_variant_identity_recall",
+      "minimum_observed_delta": 0.01,
+      "noninferiority_margin": -0.01,
+      "one_sided_confidence_level": 0.95
+    }
+  },
+  "schema_version": 1,
+  "tier_id": "mixed_gold_01"
+}

@@ -73,3 +73,45 @@ sync with the pipeline, and it re-uses already-acquired source:
 ```bash
 .venv/bin/python scripts/refresh_run_db.py --gene KCNH2 --pmids 24973560 --dry-run
 ```
+
+## `gold_source_presence_sweep.py` — acquisition ceiling, blind to predictions
+
+Classifies every gold row of the mixed-gold inventory against everything on
+disk for its paper: the article body, every supplement after conversion
+(`.docx`/`.xlsx`/`.doc`/`.pptx`/`.zip` through the production
+`FormatConverter`, cached outside `corpus/`), and article PDFs. Classes:
+`present_in_body`, `present_in_supplement_only`, `present_in_pdf_only`,
+`source_absent`, `text_absent_stub_body`, `text_absent_garbled_body`,
+`text_absent_figures_present`, `text_absent_notation_inconclusive`,
+`text_absent_substitution`. The first four "absent" classes are the hard
+acquisition ceiling a recall denominator may exclude; the two unknown classes
+must stay penalized. Reads gold rows and source bytes only; never a
+prediction or score.
+
+```bash
+.venv/bin/python scripts/recall_audit/gold_source_presence_sweep.py \
+  --include-unavailable --cache-dir /path/outside/corpus --out-dir <dir>
+```
+
+Latest result and interpretation:
+`docs/evidence/gold_source_presence_sweep_20260903.md`.
+
+## `fn_root_cause.py` — where did each paper-derived miss disappear?
+
+For a scored `codex_paper_eval` production run, walks every gold row in
+`report.json` `missed_gold` through the stages the run left on disk: the
+sweep class (corpus), the run-local text, the LLM request (what the model
+saw), the LLM response, the extraction JSON, the DB row with its source
+layers, and the paper-derived / linkage lanes of `predictions.json`. The leaf
+names the owner: `acquisition`, `unknown_notation`, `source_selection`,
+`condensing`, `model_missed`, `parser_dropped`, `postprocess_dropped`,
+`paper_row_lost_to_linkage_origin`, `projection_dropped`, `matcher`.
+
+```bash
+.venv/bin/python scripts/recall_audit/fn_root_cause.py \
+  --run-dir benchmarks/codex_paper_eval/runs/<run_id>
+```
+
+Writes `diagnostics/fn_root_cause/{summary.md,summary.json,fn_root_cause.tsv}`
+inside the run directory. Run it only after the run is locked and scored; it
+reads gold via the report.

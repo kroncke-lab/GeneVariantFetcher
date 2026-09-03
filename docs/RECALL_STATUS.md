@@ -165,6 +165,28 @@ reopened, use `gold150_preregistered_20260825_amended/`, whose firewall is
 verified by `scripts/audit_split_firewall.py`. Run that audit on any future
 multi-gene packet tree.
 
+### Acquisition ceiling of the named-variant gold (2026-09-03)
+
+`scripts/recall_audit/gold_source_presence_sweep.py` classifies every gold row
+against everything on disk for its paper (body, converted binary supplements,
+article PDFs), blind to predictions. On the 1,422 runnable mixed-gold attempts
+(7,107 rows) **15.8% of gold rows sit behind a hard acquisition ceiling**
+(source absent, abstract-length stub, glyph-garbled PDF text, or a
+substitution absent from every searchable byte) and **28.7% behind the wide
+ceiling** (adds figure-only and non-searchable notation). Only 9 rows live in a
+binary supplement the body lacks. The rows are concentrated in table-body
+capture failures (KCNQ1 14678125 37/41, 17192539 51/57; SCN5A 21273195,
+24631775, 11901046). Report tranche recall on all gold first and the
+reachable-gold figure as a labeled diagnostic; never drop the two unknown
+classes from a denominator. Details and the acquisition worklist:
+`docs/evidence/gold_source_presence_sweep_20260903.md`.
+
+Mixed-gold tranche 01 (paper-derived, frozen `506a949c` baseline, 49
+attempts): **155 / 61 / 87**, recall 64.0%, precision 71.8%; 70 of the 87
+misses are acquisition, 12 notation-unknown, 5 reachable
+(`docs/evidence/mixed_gold_tranche01_20260903.md`). Tranche 01 is unusually
+acquisition-bound (31% hard ceiling vs 15.8% suite-wide).
+
 ## Historical audit context
 
 The following material preserves older gates and all-paper baselines for audit;

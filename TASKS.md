@@ -21,6 +21,21 @@ until the preceding gate passes and its artifact is recorded.
 
 ## Active $100 improvement goal
 
+- [ ] **Mixed-gold tranche campaign (started 2026-09-03; Brett's /goal: 3-4
+      tranches, recall up and MAE down, papers only, grok 4.6 + agy advice).**
+      Arm schedule (both reviewers agree): every tranche pairs baseline =
+      frozen `506a949c` vs candidate = cumulative fixes; confirmation is only
+      the *identical* candidate runtime on the next unopened tranche.
+      Acquisition ceiling measured first (`docs/evidence/
+      gold_source_presence_sweep_20260903.md`: 15.8% hard / 28.7% wide of
+      runnable gold rows; supplements are NOT where the missing gold is).
+      Tranche 01 baseline locked: paper-derived 155/61/87 (recall 64.0%,
+      precision 71.8%); 70/87 misses acquisition, 5 reachable
+      (`scripts/recall_audit/fn_root_cause.py`). Candidate `b56f469f` (six
+      gene-agnostic fixes, `docs/evidence/mixed_gold_tranche01_20260903.md`)
+      extracting. Next: score + `run_eval.py compare --phase discovery`; then
+      tranche 02 baseline (re-materialise the nine `506a949c` runtime files)
+      + identical candidate for confirmation; tranche 03 v2 discovery.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row
