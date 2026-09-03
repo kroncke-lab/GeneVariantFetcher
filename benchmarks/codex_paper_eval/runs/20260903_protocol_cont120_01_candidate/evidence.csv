@@ -1,0 +1,403 @@
+gene,pmid,tool,source_completeness,variant,carriers,affected,unaffected,evidence,source_location
+SCN5A,27684715,text,corpus_as_locked,duplication of exons 15-28,,,,"[""The CNV identified in SCN5A in a BrS patient consisted of a large rearrangement involving a duplication of exons 15 to 28 in a mosaic state""]",Text scan (exon_event)
+SCN5A,23810369,text,corpus_as_locked,p.V1281F c.3841G>T,2,,,"[""SCN5A gene analysis revealed a G to T mutation in position 3841 of the coding sequence (CCDS46799.1 nomenclature) leading to a valine to phenylalanine replacement in position 1281 of the protein (p.V1281F)."", ""Genetic analysis also found the SCN5A p.V1281F mutation in the mother. The p.V1281F mutation was not found in a set of 162 control alleles.""]","Results, First family; abstract"
+SCN5A,26131924,text,corpus_as_locked,F1344S,,,,"[""temperatures. In another thermosensitive-mutant, F1344S, the conductance is further destabilized at eleva""]",Text scan (protein_single_letter)
+SCN5A,26131924,text,corpus_as_locked,p.Arg1193Gln,,,,"[""Molecular genetic screening revealed that a heterozygous mutation... results in the R1193Q mutant"", ""WT NaV1.5 and R1193Q channels respond similarly to temperature changes.""]","Functional study - assay data only. Main text, Methods, Results, Figures 1-10, Table 1"
+SCN5A,26131924,text,corpus_as_locked,p.E1784K,,,,"[""A guanine to an adenine mutation in the 5349th position of SCN5A results in the E1784K mutant in the C-terminus of NaV1.5"", ""The E1784K mutant is more thermosensitive than either WT or R1193Q channels.""]","Functional study - assay data only. Main text, Methods, Results, Figures 1-10, Table 1, Table 11"
+KCNH2,18452873,text,corpus_as_locked,c.569_570insGCGCGGGCG,,,,no quote captured; source_layer=figure,"Table 2, lines 56 and 65; Figure caption, lines 146-148 and 154"
+KCNH2,19070294,text,corpus_as_locked,p.Ala614Val,9,,,"[""Nine family members, 6 males and 3 females, age (median and interquartile range) 26 years (13, 46), who were characterized by a unique T wave pattern were diagnosed as carrying the mutant gene."", ""The LQTS-causing gene was mapped to chromosome 7 with the A614V mutation."", ""All of the affected members in the family were correctly identified by electrocardiogram.""]","Abstract, Results"
+SCN5A,24096004,text,corpus_as_locked,M1875T,,,,"[""ents, we identified three mutations (10%): SCN5A -M1875T, KCNJ2 -M301K, and KCNQ1- G229D. Because KCNQ1 va""]",Text scan (protein_single_letter)
+RYR2,17875969,text,corpus_as_locked,"p.Asn57_Gly91del deletion of exon 3 (part of intron 2, exon 3, part of intron 3; Alu-mediated)",16,,,"[""segregated in all the affected family members (n=16) in these 2 unlinked families"", ""genomic deletion that involved RYR2 exon-3"", ""in-frame deletion of 35 amino acids p.Asn57_Gly91""]","Results, paragraphs on Genotype Analysis and Clinical Features"
+SCN5A,12068034,text,corpus_as_locked,F1760C,,,,no quote captured; source_layer=regex_table,Table 1 (regex extraction)
+SCN5A,12068034,text,corpus_as_locked,I1756C,,,,no quote captured; source_layer=regex_table,Table 1 (regex extraction)
+SCN5A,12068034,text,corpus_as_locked,Y1767C,,,,no quote captured; source_layer=regex_table,Table 1 (regex extraction)
+KCNQ1,9702906,text,corpus_as_locked,p.Phe339del,10,,,"[""Examination of the KVLQT1 gene revealed a novel 3-bp deletion resulting in an in-frame deltaF339 (phenylalanine) deletion in the proband. This deltaF339 mutation was confirmed in nine additional family members who shared both an assigned affected phenotype and the disease-associated linked haplotype.""]",Abstract
+SCN5A,24972929,text,corpus_as_locked,A180A c.540G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 2, row 3"
+SCN5A,24972929,text,corpus_as_locked,D331D c.993C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 4"
+SCN5A,24972929,text,corpus_as_locked,E1053K,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,24972929,text,corpus_as_locked,G1743R,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,24972929,text,corpus_as_locked,His558Arg c.38645420T>C,,,,no quote captured; source_layer=regex_table,Supplementary Table S1
+SCN5A,24972929,text,corpus_as_locked,L145L c.435C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 2, row 1"
+SCN5A,24972929,text,corpus_as_locked,PHE109DEL c.324_326del,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 8"
+SCN5A,24972929,text,corpus_as_locked,R1193Q,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,24972929,text,corpus_as_locked,S21G c.61A>G,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5"
+SCN5A,24972929,text,corpus_as_locked,T113T c.339C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 2"
+SCN5A,24972929,text,corpus_as_locked,T353I,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,24972929,text,corpus_as_locked,V1951L,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,24972929,text,corpus_as_locked,V245V c.735G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 3"
+SCN5A,24972929,text,corpus_as_locked,Y308C c.923A>G,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 7"
+SCN5A,24972929,text,corpus_as_locked,c.1-23G>C,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 10"
+SCN5A,24972929,text,corpus_as_locked,c.238-11C>G,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 9, row 1"
+SCN5A,24972929,text,corpus_as_locked,c.353-16C>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 9"
+SCN5A,24972929,text,corpus_as_locked,c.3963+1G>A,1,,,"[""we first identified in the SCN5A gene an unpublished, single nucleotide exchange in the essential donor splice site of intron 22 (c.3963+1G>A)"", ""A splice site mutation in the sodium channel gene SCN5A was identified in a patient with progressive and severe cardiac conduction disorder combined with IVF""]","Results, Candidate gene sequencing and WES; Case presentation"
+SCN5A,16155735,text,corpus_as_locked,p.Ala551Thr,1,1,,"[""We also identified the SCN5A A551T mutation in 1 of the 28 patients with Brugada syndrome.""]",Abstract
+SCN5A,22407026,text,corpus_as_locked,H558R,,,,"[""hERG p.K897T/SCN5A p.H558R""]",Abstract
+SCN5A,22407026,text,corpus_as_locked,p.Arg1193Gln,,1,,"[""hERG p.M645R/SCN5A p.R1193Q""]",Abstract
+SCN5A,22407026,text,corpus_as_locked,p.P1090L,,1,,"[""KVLQT1 p.G645S/SCN5A p.P1090L""]",Abstract
+KCNH2,22407026,text,corpus_as_locked,p.K897T,,,,"[""three had compound variants (hERG p.M645R/SCN5A p.R1193Q, hERG p.K897T/SCN5A p.H558R, and KVLQT1 p.G645S/SCN5A p.P1090L)""]",Abstract
+KCNH2,22407026,text,corpus_as_locked,p.M645R,,,,"[""Functional study of the novel variant (hERG gene p.M645R) from patients with life-threatening events revealed a dominant negative effect."", ""three had compound variants (hERG p.M645R/SCN5A p.R1193Q, hERG p.K897T/SCN5A p.H558R, and KVLQT1 p.G645S/SCN5A p.P1090L)""]","Abstract, Results"
+KCNQ1,22677073,text,corpus_as_locked,A302V,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,A341E,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,G269S,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,G584S,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,G643S,,,,"[""| 34 | M | 5 | W | RYR2 | 44 | 6737 C>T | S2246L | G643S-KCNQ1, D85N-KCNE1 | Exertion | SUD | Negative |""]",Text scan (protein_single_letter)
+KCNQ1,22677073,text,corpus_as_locked,I198V,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,L191FS,,,,"[""| 3 | M | 17 | W | KCNQ1 | 3 | del572_576 | L191FS/90 | | Sleep | SUD | Negative |""]",Text scan (protein_single_letter)
+KCNQ1,22677073,text,corpus_as_locked,T312I,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,T587M,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,W379R,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,Y111C,1,1,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,22677073,text,corpus_as_locked,p.L163fsX236,1,1,,no quote captured; source_layer=llm_table,"Table 2, row 2"
+SCN5A,25923670,text,corpus_as_locked,S1787N,,,,no quote captured; source_layer=figure,figure-reader
+APOE,23990795,text,corpus_as_locked,p.E37K,1,0,1,"[""APOE E37K ... Total #Hets 1 ... Total MAF 0.0005""]","Table 2, row for APOE E37K; Table 3 clinical status split"
+APOE,23990795,text,corpus_as_locked,p.L46P,6,,,"[""APOE L46P ... Total #Hets 6 ... Total MAF 0.003 ... Pathogenic nature unclear""]","Table 2, row for APOE L46P; Table 3 clinical status split"
+SCN5A,12454206,text,corpus_as_locked,H558R,,,,"[""The common polymorphism H558R was uniquely present in hH1b"", ""The double-mutation M1766L/H558R in the hH1a background restored normal trafficking and current including persistent late current""]",Abstract - Functional study - assay data only
+SCN5A,12454206,text,corpus_as_locked,M1766L,,,,"[""when the LQT3 mutation M1766L was introduced into the different clones, Na current was markedly reduced in the hH1 and hH1a backgrounds, whereas in hH1b the Na current was not reduced"", ""Immunocytochemistry experiments showed a trafficking defect for M1766L Na channels in hH1 and hH1a but not in hH1b""]",Abstract - Functional study - assay data only
+SCN5A,22129298,text,corpus_as_locked,p.Tyr1795Cys,1,1,,"[""we report a patient with congenital LQT3 (Y1795C mutation) presenting with implantable cardioverter defibrillator (ICD) storm""]",Abstract
+SCN5A,30218094,text,corpus_as_locked,R219H,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,30218094,text,corpus_as_locked,R222Q,,,,"[""ies of five novel Nav1.5 mutations (Nav1.5/R219H, R222Q, R225W, R225P, and R814W) in familial DCM patient""]",Text scan (protein_single_letter)
+SCN5A,30218094,text,corpus_as_locked,R225P,,,,"[""vel Nav1.5 mutations (Nav1.5/R219H, R222Q, R225W, R225P, and R814W) in familial DCM patients11,17. We pre""]",Text scan (protein_single_letter)
+SCN5A,30218094,text,corpus_as_locked,R225W,,,,"[""five novel Nav1.5 mutations (Nav1.5/R219H, R222Q, R225W, R225P, and R814W) in familial DCM patients11,17.""]",Text scan (protein_single_letter)
+SCN5A,30218094,text,corpus_as_locked,p.R814W,,,,"[""mutations (Nav1.5/R219H, R222Q, R225W, R225P, and R814W) in familial DCM patients11,17. We previously use""]",Text scan (protein_single_letter)
+RYR2,24978818,text,corpus_as_locked,p.D4631V c.13892A>T,1,1,,"[""p.D4631V de-novo variant must still be considered as possibly pathogenic"", ""The penetrance of this de-novo variant has to be considered high due to the early age of onset and the distinctive and severe clinical course""]","Table 1, Results Case #239, Discussion"
+RYR2,24978818,text,corpus_as_locked,p.T2504M c.7511C>T,1,1,,"[""The observed missense variant RYR2 p.T2504M (c7511C>T, Fig. 1 c) has been reported in context of ARVD2 (HGMD CM010424) previously""]","Table 2, Results Case #444"
+RYR2,24978818,text,corpus_as_locked,p.V1810L c.5428G>C,3,1,1,"[""novel rare variant (c5428G>C; p.V1810L) of uncertain significance in a patient with VT of idiopathic origin which we suggest represents a low-penetrance or susceptibility variant""]","Table 1, Results Case #271, Discussion"
+KCNQ1,31293497,text,corpus_as_locked,p.R360_Q361dupQKQR,29,24,5,"[""24 out of 29 KCNQ1 dup12 mutation carriers were affected by an LQT syndrome, suggesting an incomplete penetrance of about 80%"", ""all 14 genotyped family members affected by both LQT syndrome and epileptic seizures (LQTplus seizure trait)"", ""KCNQ1 dup12-expressing cells exhibited voltage-dependent, partially inactivating outward currents similar to currents observed from non-transfected control cells""]","Results, Mutation Screening; Strong Linkage; Linkage Evidence for 10p14; Electrophysiology"
+KCNQ1,31293497,text,corpus_as_locked,p.R360_Q361insQKQR,,,,no quote captured; source_layer=regex_table,Vertical gene table
+SCN5A,29514831,text,corpus_as_locked,Y1810A,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,29514831,text,corpus_as_locked,Y1888A,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,29514831,text,corpus_as_locked,Y1976A,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,29514831,text,corpus_as_locked,Y68A,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23503384,text,corpus_as_locked,p.E553*,1,,,"[""one non-sense-mutation p.E553X""]",Abstract
+SCN5A,23503384,text,corpus_as_locked,p.R893H,1,,,"[""three missense mutations (p,Y87C, p.R893H and p.S1787N)""]",Abstract
+SCN5A,23503384,text,corpus_as_locked,p.S1787N,1,,,"[""three missense mutations (p,Y87C, p.R893H and p.S1787N)""]",Abstract
+SCN5A,23503384,text,corpus_as_locked,p.Y87C,1,,,"[""three missense mutations (p,Y87C, p.R893H and p.S1787N)""]",Abstract
+KCNQ1,25444851,text,corpus_as_locked,p.D202H,,,,"[""D202H causes very rapid deactivation"", ""Po = 0.07 \u00b1 0.04 at 4 seconds""]","Functional study - assay data only; Results, Figures 1,3; Table 1"
+KCNQ1,25444851,text,corpus_as_locked,p.I204F,,,,"[""I204F had a Po 80% less than WT (0.04 \u00b1 0.01 at 4 seconds)"", ""median latency 2.39 \u00b1 0.09 seconds""]","Functional study - assay data only; Results, Figures 1,4; Table 1"
+KCNQ1,25444851,text,corpus_as_locked,p.S209F,,,,"[""overall Po of 0.4, twice that of WT"", ""O1 was 25.9 \u00b1 5.0 ms compared to 14.3 \u00b1 2.7 ms for WT""]","Functional study - assay data only; Results, Figures 1,7; Table 1"
+KCNQ1,25444851,text,corpus_as_locked,p.Val205Met,,,,"[""The Po for V205M at +60 mV was 63% of WT (0.12 \u00b1 0.05 at 4 seconds)"", ""V205M is present in high frequency, approximately 1 in 125 people in a Canadian First Nations community""]","Functional study - assay data only; Results, Figures 1,5,6; Table 1"
+KCNH2,12402336,text,corpus_as_locked,G1006fsX,,,,"[""been reported in LQTs [69]. For exam- ple, KCNH2 p.G1006fs*49 can cause a significant delay in the voltage-se""]",Text scan (protein_hgvs_short)
+KCNH2,12402336,text,corpus_as_locked,p.A188Gfs*143,1,1,,"[""A patient of LQTs carried a frameshift mutation of KCNH2 p.A188Gfs*143 (Clinic/ACMG = -/LP, No.13, TdP and VF, ICD therapy)""]","Results, Genotype-phenotype relationship"
+SCN5A,14500339,text,corpus_as_locked,H558R,,,,"[""Confirming prior work, the H558R polymorphism was present in approximately 30% of subjects."", ""Estimated population frequencies for the four common variants were 25% SCN5A, 10% [H558R], 45% [Q1077del], and 20% [H558R;Q1077del]""]",Abstract - Functional study - assay data only
+SCN5A,14500339,text,corpus_as_locked,p.Gln1077del,,,,"[""a shorter 2015 amino acid splice variant lacking glutamine at position 1077 (Q1077del) made up 65% of the transcript in every heart examined"", ""Estimated population frequencies for the four common variants were 25% SCN5A, 10% [H558R], 45% [Q1077del], and 20% [H558R;Q1077del]""]",Abstract - Functional study - assay data only
+KCNH2,21185499,text,corpus_as_locked,650 kb heterozygous deletion of exons 4-15 of KCNH2 including 19 other genes (including ABP1); delimited by probes A_16_P18164054 to A_16_P01835269,3,2,1,"[""The KCNH2 CNV was present in the 6 other affected family members (I:2, II:1, II:7, III:1, III:5, and III:6) but absent from 9 healthy members""]","Results, Family 1; Table 1"
+KCNQ1,15528464,text,corpus_as_locked,G589D,,,,"[""in (AKAP) yotiao.3 LQT1-associated mutation KCNQ1-G589D disrupted the signaling complex, preventing \u03b2-adr""]",Text scan (protein_single_letter)
+KCNQ1,22539601,text,corpus_as_locked,p.Arg518*,,,,"[""The mutation spectrum consisted of eight KCNQ1 mutations, whereof p.R518X in 12/24 alleles.""]",Abstract
+SCN5A,18452873,text,corpus_as_locked,p.A572D c.1715C>A,1,1,,"[""whereas A572D was wild type (data not shown). * = uncommon polymorphism; ^ = pathogenic mutation.""]","Table 2, patient 6; Results paragraph on patient 6"
+SCN5A,18452873,text,corpus_as_locked,p.E1784K c.5350G>A,1,1,,"[""The patient with type 3 long QT syndrome had a previously published, gain-of-function, missense mutation (E1784K) in the C-terminal region of the SCN5A protein (Figure 3).""]","Table 2, patient 7; Results; Figure 3"
+SCN5A,18452873,text,corpus_as_locked,p.N275K c.825C>A,1,1,,"[""Functionally, the pathogenic mutation in the sodium channel most likely is N275K-SCN5A rather than A572D. The former had a classic LQT3 molecular/cellular phenotype with accentuated late sodium current, whereas A572D was wild type (data not shown).""]","Table 2, patient 6; Results paragraph on patient 6"
+SCN5A,24581105,text,corpus_as_locked,p.Asp785Asn c.2353G>A,,,,"[""Gene analysis revealed a novel missense mutation in SCN5A gene with a genetic variation of D785N and a nucleotide change at 2353G-A"", ""His eldest son aged 39 years was mildly symptomatic with type III Brugada ECG, had the same mutation""]","Case report, Results section and Discussion"
+KCNQ1,19880070,text,corpus_as_locked,A341V,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,19632629,text,corpus_as_locked,H558R,,,,"[""hisms. For example, the common polymorphism SCN5A-H558R restores the trafficking defect of a BrS1 mutatio""]",Text scan (protein_single_letter)
+SCN5A,19632629,text,corpus_as_locked,R1195H,2,1,1,no quote captured; source_layer=figure,figure-reader
+SCN5A,19632629,text,corpus_as_locked,R34FS,,,,"[""ernally inherited N-terminal frameshift/deletion (R34fs/60) and a paternally inherited missense mutation,""]",Text scan (protein_single_letter)
+SCN5A,19632629,text,corpus_as_locked,W1421X,,,,"[""e effect conferred by the nonsense mutation SCN5A-W1421X 34. Interestingly, we observed in vitro that desp""]",Text scan (protein_single_letter)
+SCN5A,19632629,text,corpus_as_locked,p.Arg1193Gln,,,,"[""n a different allele33 and the polymorphism SCN5A-R1193Q mitigates the adverse effect conferred by the non""]",Text scan (protein_single_letter)
+KCNH2,14714110,text,corpus_as_locked,N861I,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,R176W c.526C>T,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,R56Q,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,R823W,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,R863X,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,S818P,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,V822M,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,14714110,text,corpus_as_locked,Y667X,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,23094885,text,corpus_as_locked,R420Q,10,,6,no quote captured; source_layer=figure,figure-reader
+SCN5A,17227473,text,corpus_as_locked,H558R,2,2,,"[""In patients Nos. 2 and 3, a common polymorphism (H558R) in exon 12 of SCN5A gene was found.""]","Table 2, patients 2 and 3"
+SCN5A,17227473,text,corpus_as_locked,deletion of exon 6,,,,"[""We found that the SCN5A mRNA expressed in lymphocytes from both the control and patients had a deletion of exon 6 (91 bp) and an insertion of part of intron 5 (87 bp), which were not detected in cardiac tissue""]",Text scan (exon_event)
+SCN5A,17227473,text,corpus_as_locked,p.Arg1192Gln,1,1,,"[""A nucleotide alteration (G3575A) leading to the codon polymorphism R1192Q in exon 20 was found in the samples from patient No. 6.""]","Table 2, patient 6"
+SCN5A,17227473,text,corpus_as_locked,p.Pro1089Leu,2,2,,"[""A heterozygous nucleotide substitution (C3266T) introducing the polymorphism of P1089L in Exon 18 was identified in the samples from patients Nos. 4 and 5.""]","Table 2, patients 4 and 5"
+KCNH2,27555138,text,corpus_as_locked,p.Ala614Val,1,1,,"[""Postoperative studies revealed a mutation (A614V) in the KCNH2 gene, indicating LQTS genotype 2 (LQT2)."", ""A 39-year-old woman diagnosed with c-LQTS was scheduled for an elective therapeutic abortion. Immediately after starting the operation, the patient developed TdP.""]","Case report, Results and Discussion sections"
+SCN5A,27816319,text,corpus_as_locked,p.Arg975Trp,,,,"[""p.Arg975Trp in SCN5A , were regarded as pathogenic""]","Results section, Table 1 reference"
+SCN5A,27816319,text,corpus_as_locked,p.Gly1935Ser,,,,"[""p.Gly1935Ser [23] in SCN5A was benign"", ""p.Gly1935Ser in SCN5A was controversial""]","Results section, Table 1 reference"
+SCN5A,26401487,text,corpus_as_locked,H558R,,,,"[""A1868G polymorphism leads to a missense substitution of histidine to arginine at the 558th codon (H558R)""]","Results, Exon 12 section and Tables 4-6"
+SCN5A,26401487,text,corpus_as_locked,p.Ala29Ala,,,,"[""Screening of SCN5A in South Indian cohort by PCR-SSCP analyses revealed five polymorphisms - A29A (exon-2), H558R (exon-12), E1061E and S1074R (exon-17) and IVS25 + 65G > A (exon-25)""]","Results, Exon 2 section and Tables 1-3"
+SCN5A,26401487,text,corpus_as_locked,p.Glu1061Glu,,,,"[""A transition A3378G - neutral substitution E1061E (rs7430407)""]","Results, Exon 17 section and Tables 7-9"
+SCN5A,26401487,text,corpus_as_locked,p.Ser1074Arg,,,,"[""A novel transversion of C3417A - missense substitution S1074R [submitted to dbSNP (ss770677264)]""]","Results, Exon 17 section and Tables 10-12"
+SCN5A,19719504,text,corpus_as_locked,L1393*,1,1,,"[""We have identified a nucleotide change of SCN5A (4178T>G) which results in a nonsense mutation, L1393X, in a 36 year-old Caucasian man who presented with intraventricular conduction delays and BrS type ECG change."", ""While WT-SCN5A showed significant currents (93.3 \u00b1 10.6 pA/pF; 1 \u03bcg plasmid), L1393X (5 \u03bcg) did not generate any significant currents in NIH-3T3 cells.""]","Abstract, Case report, Results"
+SCN5A,17016421,text,corpus_as_locked,H558R,,,,"[""a patient with a H558R polymorphism in the cardiac sodium channel gene SCN5A"", ""We report a 74-year-old man who was admitted after syncope. His electrocardiogram (ECG) showed a QT interval of 0.44 s (QTc 0.53 s).""]",Abstract
+RYR2,22677073,text,corpus_as_locked,D400H,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,E4146K,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,G1885E,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,G1886S,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,H240R,1,1,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,I217V,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,L3879P,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,N4097S,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,Q3925E,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,R407I,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,R420W,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,R4497C,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,S3959L,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,T1107M,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,T2510A,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,T4158P,1,1,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,V2113M,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,W4645R,1,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,Y2392C,,,,no quote captured; source_layer=regex_table,TABLE 2 (regex extraction)
+RYR2,22677073,text,corpus_as_locked,c.13610C>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 43 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.14803G>A,1,,,no quote captured; source_layer=regex_table,"TABLE 2, row 45 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.2398+5G>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 16 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.3321C>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 16 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.6680G>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 33 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.6737C>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 34 (router+deterministic)"
+RYR2,22677073,text,corpus_as_locked,c.6739C>T,,,,no quote captured; source_layer=regex_table,"TABLE 2, row 35 (router+deterministic)"
+SCN5A,23683917,text,corpus_as_locked,H558R,4,,,"[""H558R is a common SCN5A polymorphism present in 20% of the population""]",Table 2; Results section
+SCN5A,23683917,text,corpus_as_locked,p.D1741Y,2,1,,"[""One mutation in the SCN5A gene (D1741Y) was not found in the common databases or in the literature and therefore considered to be novel.""]","Table 2, Results paragraph on case 6"
+SCN5A,23683917,text,corpus_as_locked,p.I1768V,1,,,"[""The mutation I1768V, detected in the SCN5A gene (case 4) was reported in a patient with LQT3 and in a sudden death case.""]",Table 2; Results
+SCN5A,24951663,text,corpus_as_locked,H558R,,,,"[""The well-characterized nonsynonymous SNP (rs1805124, MAF 18.4%, H558R in the I-II loop of the SCN5A channel) was associated with shorter PR (beta= -2.44 ms; P=6.25\u00d710-4) and QRS (beta= -0.77ms; P=5.20\u00d710-3) intervals""]","Results, Common Variant Analysis; Table 3 and 4"
+SCN5A,24951663,text,corpus_as_locked,p.Ala29Ala,,,,"[""The second novel synonymous SNP (rs6599230, A29A, MAF 21.9%) was associated with PR shortening (beta= -2.40 ms, P=2.67\u00d710-5)""]","Results, Common Variant Analysis; Table 3"
+SCN5A,24951663,text,corpus_as_locked,p.Asp1818Asp,,,,"[""The strongest association was with rs1805126 (D1818D, MAF 33.6%), which was associated with both PR (beta=2.51 ms, P=3.35\u00d710-7) and QRS (beta=0.67 ms; P=2.69\u00d710-4) interval prolongation""]","Results, Common Variant Analysis; Table 3 and 4"
+SCN5A,24951663,text,corpus_as_locked,p.Ser1102Tyr,,,,"[""The missense variant rs7626962 S1102Y (MAF 5.1%) was associated with a 7.4 ms decrease in PR interval (P=2.8\u00d710-03) among African Americans.""]","Results, Common Variant Analysis; Table 6"
+KCNQ1,20167303,text,corpus_as_locked,p.Arg243Cys c.727C>T,2,1,1,"[""Screening of the Guthrie card revealed a missense mutation in the KCNQ1 (LQT1) gene, c.727C>T (p.R243C)""]","Results, Case 1"
+KCNQ1,20167303,text,corpus_as_locked,p.Glu146Lys c.436G>A,2,,,"[""revealing a missense mutation in the KCNQ1 (LQT1) gene, c.436G>A (p. E146K)""]","Results, Case 21"
+KCNQ1,20167303,text,corpus_as_locked,p.His455Tyr c.1363C>T,3,1,2,"[""full screening of the proband's Guthrie card revealed a novel mutation in the KCNQ1 (LQT1) gene, c.1363C>T (p.H455Y), for which in vitro testing has confirmed likely pathogenicity""]","Results, Case 6"
+KCNQ1,29876285,text,corpus_as_locked,A300S,4,,3,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,A2387T,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,A2394G,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,A2498V,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,A4091T,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,A4091V,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,C2402Y,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,D242V,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,D3977Y,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,E243K,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,E4076K,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,F4020L,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,F4851L,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,G3946D,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,G3946S,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,G4662S*,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,H2217Y,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,H4762P,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,L3778F,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,N4104I,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,N4178Y,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,P4902S,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,R2401H,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,R420W,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,S2246L,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,S3799P,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,S413T,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,V3990D,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,19398665,text,corpus_as_locked,V4771I,,,,no quote captured; source_layer=figure,figure-reader
+KCNH2,12442276,text,corpus_as_locked,G306V,,,,no quote captured; source_layer=regex_table,Table 1 (regex extraction)
+KCNH2,12442276,text,corpus_as_locked,I489I,,,,"[""Finally, in one of 42 LQTS patients we detected a C to T polymorphism at the nucleotide position of 1467 (1467C>T) in KCNH2 that does not result in any amino acid substitution (I489I) and appears to be a polymorphism ( http://pc4.fsm.it:81/cardmoc/ ).""]",Text scan (protein_single_letter)
+KCNH2,12442276,text,corpus_as_locked,V630L,,,,"[""identified in KCNQ1 (E261D, V310I) and in KCNH2 (V630L) ( http://www.serum.dk/en/forskning/lqtsdb ). Bot""]",Text scan (protein_single_letter)
+KCNH2,12442276,text,corpus_as_locked,p.E444D c.1332G>T,2,,,"[""Both patients with KCNH2 mutation E444D in kindred F3 developed syncope triggered by exercises and excitement""]","Table 2, Results section on KCNH2 mutations"
+KCNH2,12442276,text,corpus_as_locked,p.L413P c.1421T>C,2,1,1,"[""The proband in F21 developed syncope and torsade de pointes due to exercises and excitement""]","Table 2, Results section on KCNH2 mutations"
+KCNH2,12442276,text,corpus_as_locked,p.L559H c.1676T>A,2,1,1,"[""The proband in F20 also developed syncope due to exercises and excitement""]","Table 2, Results section on KCNH2 mutations"
+SCN5A,23805106,text,corpus_as_locked,G35S,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,G9V,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,K126E,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,R104Q,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,R18Q,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,R18W,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,R27H,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,V125L,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23805106,text,corpus_as_locked,V95I,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22675453,text,corpus_as_locked,C373F,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22675453,text,corpus_as_locked,R219H,,,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,18580685,text,corpus_as_locked,p.Val205Met,22,,,"[""we identified a novel missense mutation (valine substitution with methionine at position 205, V205M) in the S3 transmembrane region of KCNQ1"", ""Of the 22 individuals with mutations, eight were previously considered definitively affected by their physicians, four were considered \u201cborderline,\u201d and six were considered unlikely to have a mutation. Four had not been previously assessed."", ""The V205M mutation was present in 22 individuals in three separate kindreds""]","Results, paragraph 1; Discussion"
+SCN5A,17445919,text,corpus_as_locked,p.Asn406Ser,,,,"[""the N406S mutation associated with Brugada syndrome results in the accelerated intermediate inactivation"", ""Functional sodium channels were expressed transiently in HEK293 cells by transfecting equally the \u03b1- and \u03b2-subunit plasmids""]",Functional study - assay data only; Results and Figure legends
+SCN5A,20451667,text,corpus_as_locked,A572D,,,,"[""aluate one such rare, nonsynonymous polymorphism, A572D, in the cardiac sodium channel. This variant prev""]",Text scan (protein_single_letter)
+MYBPC3,21302287,text,corpus_as_locked,A522T c.1564G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 4"
+MYBPC3,21302287,text,corpus_as_locked,E1096E c.3288G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 7"
+MYBPC3,21302287,text,corpus_as_locked,F244F c.732C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 3, row 2"
+MYBPC3,21302287,text,corpus_as_locked,G164G c.492C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 5"
+MYBPC3,21302287,text,corpus_as_locked,K754E,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 12, row 1"
+MYBPC3,21302287,text,corpus_as_locked,K754EfsX78,2,2,,no quote captured; source_layer=figure,figure-reader
+MYBPC3,21302287,text,corpus_as_locked,L1084P,2,2,,no quote captured; source_layer=figure,figure-reader
+MYBPC3,21302287,text,corpus_as_locked,L517M c.1549C>A,1,1,,no quote captured; source_layer=regex_table,"Table 2. Variations Detected on MYH7* by DHPLC Followed by Direct Sequencing**, row 6 (router+deterministic)"
+MYBPC3,21302287,text,corpus_as_locked,M949IfsX100,1,,,no quote captured; source_layer=figure,figure-reader
+MYBPC3,21302287,text,corpus_as_locked,R326Q c.977G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 3"
+MYBPC3,21302287,text,corpus_as_locked,R493X c.2827C>T,1,1,,no quote captured; source_layer=regex_table,Table 3 (regex extraction)
+MYBPC3,21302287,text,corpus_as_locked,R668C,1,,,no quote captured; source_layer=figure,figure-reader
+MYBPC3,21302287,text,corpus_as_locked,R810Q,1,,,no quote captured; source_layer=figure,figure-reader
+MYBPC3,21302287,text,corpus_as_locked,V158M c.472G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 2"
+MYBPC3,21302287,text,corpus_as_locked,V849V c.2550C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 6"
+MYBPC3,21302287,text,corpus_as_locked,c.1223+29G>A,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 9"
+MYBPC3,21302287,text,corpus_as_locked,c.2309-2A>G,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,c.2340+18C>G,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 10"
+MYBPC3,21302287,text,corpus_as_locked,c.2737+12C>T,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 5, row 11"
+MYBPC3,21302287,text,corpus_as_locked,c.2905+1G>A,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.A364T c.1090G>A,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.D605H c.1813G>C,3,3,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.E542Q c.1624G>C,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.K1065QfsX11 c.3192-3193InsC,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.Q1012* c.3034C>T,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.Q1233* c.3697C>T,1,,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.Q969* c.2905C>T,1,,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.R458H c.1373G>A,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.T885M c.2654C>T,1,1,,no quote captured; source_layer=llm_table,Table 3
+MYBPC3,21302287,text,corpus_as_locked,p.V771M c.2311G>A,1,1,,no quote captured; source_layer=llm_table,Table 3
+KCNQ1,16155735,text,corpus_as_locked,p.Ala341Val,1,1,,"[""KCNQ1 A341V"", ""identified the mutation(s) in all four patients with congenital LQTS (KCNQ1 A341V, KCNH2 N633D, KCNH2 2768Cdel and KCNE1 K70 N Y81C double mutations)"", ""All the above-mentioned mutations were novel except KCNQ1 A341V""]",Abstract
+KCNH2,27816319,text,corpus_as_locked,p.Arg518*,,,,"[""two mutations leading to the premature stop codon, p.Glu1126Glyfs*144 and p.Arg518Ter in KCNH2""]","Results, Table 1"
+KCNH2,27816319,text,corpus_as_locked,p.Cys44Trp,,,,"[""p.Cys44Trp in KCNH2""]","Results, Table 1"
+KCNH2,27816319,text,corpus_as_locked,p.Glu1126Glyfs*144,,,,"[""p.Glu1126Glyfs*144 and p.Arg518Ter [19-21] in KCNH2""]","Results, Table 1"
+KCNH2,27816319,text,corpus_as_locked,p.His492Tyr,,,,"[""Heterozygous p.His492Tyr variant was identified in 10 LQTS families."", ""Four of the 10 probands were heterozygous carriers with p.His492Tyr alone and the remaining six carried another mutation."", ""The QTc interval of carriers with p.His492Tyr alone was 445\u00b110ms and significantly shorter than that in double mutation carriers (481\u00b140ms, p=0.041).""]","Results, Table 2, Fig. 3"
+SCN5A,21498565,text,corpus_as_locked,p.Ser1103Tyr,,,,"[""Genotyping revealed a Y1103 allele frequency of 0.09 with 92 patients homozygous for the S1103 allele (SS), 19 heterozygous (SY) and 1 homozygous for the Y1103 allele (YY)"", ""Chi-Square analyses using a dominant model (at least one copy of the Y1103 allele) revealed a significant over representation of the Y1103 allele in patients that received appropriate ICD therapy versus no appropriate ICD therapy, (8 of 23 [35%] vs. 12 of 89 [13%], p=0.03)"", ""carriers of the Y1103 allele had an age and gender adjusted hazard ratio of 3.50 (95% CI 1.38 - 8.85, p=<0.01) for ICD therapy compared to non-carriers""]","Results, genotyping and association analyses; supplemental Table 1"
+SCN5A,26776555,text,corpus_as_locked,L812Q,,,,"[""ough their functions remain unknown. 11 R811H and L812Q mutations, which have been independently identifi""]",Text scan (protein_single_letter)
+SCN5A,26776555,text,corpus_as_locked,R811H,,,,"[""BrS, although their functions remain unknown. 11 R811H and L812Q mutations, which have been independentl""]",Text scan (protein_single_letter)
+SCN5A,26776555,text,corpus_as_locked,R814Q,,,,"[""half = -8.4 and ~-20 mV, respectively). 14,28 The R814Q mutation found in another patient with BrS negati""]",Text scan (protein_single_letter)
+SCN5A,26776555,text,corpus_as_locked,p.Lys817Glu c.2449A>G,1,1,,"[""this showed a heterozygous a2449g substitution in exon 16 of SCN5A, resulting in a K817E amino acid substitution"", ""The K817E mutation reduced the Na+ current density by 39.0%-91.4% at membrane potentials from -55 to -5 mV. This reduction resulted from a ~24-mV positive shift in the voltage dependence of activation.""]","Results, Clinical and genetic background; Electrophysiological characterization"
+KCNQ1,19056345,text,corpus_as_locked,p.Ile313Glu,,,,"[""I313E ( n = 15 cells) showed a marked reduction of current compared to the wild type ( P < 0.01 for both""]","Functional study - assay data only; Results, Table 1, Figure 1, Figure 2"
+KCNQ1,19056345,text,corpus_as_locked,p.Ile313Gly,,,,"[""I313 G ( n = 17 cells) showed an approximately 20% reduction in peak current"", ""Co-transfection of I313 G with the wild type ( n = 16 cells) showed a 2-fold increase of the current""]","Functional study - assay data only; Results, Table 1, Figure 1, Figure 2, Figure 3"
+KCNQ1,19056345,text,corpus_as_locked,p.Ile313Lys,,,,"[""I313K ( n = 14 cells) produced almost no current"", ""Co-transfection of I313E with the wild type ( n = 15 cells) exhibited a similar current to that of cells co-transfected with I313 K and the wild type ( n = 14 cells) both showing >70% reduction of current amplitude""]","Functional study - assay data only; Results, Table 1, Figure 1, Figure 2"
+KCNQ1,19056345,text,corpus_as_locked,p.Ile313Val,,,,"[""I313V ( n = 15 cells) exhibited no significant change in the current compared to those of the wild type ( P = 1.00""]","Functional study - assay data only; Results, Table 1, Figure 1, Figure 2"
+KCNQ1,25825456,text,corpus_as_locked,p.Arg190Trp,4,,,"[""accompanied by the KCNQ1-R190W and TMEM70-I147T mutations"", ""Four KCNQ1-R190W carriers showed QTc intervals that were significantly more prolonged than those in non-R190W carriers (472.25 \u00b1 16.18 and 408.50 \u00b1 7.66 ms, respectively, P < 0.05)""]",Abstract
+KCNH2,10790218,text,corpus_as_locked,p.Tyr667*,,,,"[""We report a single base pair substitution, introducing a premature STOP codon at codon 667 of the gene in a healthy individual with an extended QTc interval (460 msec)."", ""In vitro expression of the codon Y667X variant in Xenopus oocyte suggests that the autosomal dominant variant does not function in a dominant/negative manner and cannot co-assemble to form a channel, resulting in a reduction of the KCNH2 current, and an extension of the QT interval.""]","Abstract, Results"
+SCN5A,28491738,text,corpus_as_locked,p.Ala735Val,3,1,2,"[""found 1 SCN5A mutation, 2205C>T (A735V), in the patient (proband) and his father and son. The SCN5A-A735V has already been reported as causing BrS"", ""Even though the proband\u2019s father and son have the same SCN5A mutation, their ECGs did not show BrS and they had no symptoms or ventricular arrhythmias""]","Case report, Genetic study section"
+SCN5A,20950709,text,corpus_as_locked,p.Ala1924Thr,2,2,,"[""Her genetic testing revealed a homozygous mutation in SCN5A previously reported in Brugada syndrome. Sequence analysis showed a substitution at the first position of codon 1924 of SCN5A, leading to substitution of an alanine by a threonine residue."", ""She underwent genetic testing as well, and was subsequently found to carry the same SCN5A mutation identified in her twin sister. Her baseline ECG also failed to have features suggestive of Brugada syndrome""]","Case report, Discussion"
+KCNH2,17531263,text,corpus_as_locked,p.Pro347Ser c.1039C>T,10,,,"[""Screening of ten family members of the Dutch proband led to the identification of eight additional heterozygous mutation carriers"", ""Nine out of eleven family members spanning two generations were heterozygous carriers of this p.Pro347Ser mutation"", ""the p.Pro347Ser mutation leads to an acquired LQTS phenotype with a subclinical congenital predisposition"", ""a modest reduction of the repolarizing power can give rise to a spectrum of phenotypes originating from one mutation""]","Results, Genetic analysis and Biophysical properties sections; Discussion"
+SCN5A,17675083,text,corpus_as_locked,G400A,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,17675083,text,corpus_as_locked,H558R,5,1,,"[""H558R polymorphism ... in 5 of the 19 patients""]","Results, Molecular Genetics"
+SCN5A,17675083,text,corpus_as_locked,p.Arg34Cys,1,,,"[""R34C polymorphism ... in one patient""]","Results, Molecular Genetics"
+RYR2,30296944,text,corpus_as_locked,p.Phe4174Ile c.12520T>A,1,1,,"[""revealing a new heterozygous point mutation in the gene for RyR2, c.12520T>A (p.F4174 l, exon 90, RyR2 gene)"", ""The heterozygous mutation c.12520T>A (p.F4174 l, exon 90, RyR2 gene) results in an exchange of phenylalanine to isoleucine at position 4174 of the RyR2 protein""]",Abstract and Case presentation
+RYR2,16843546,text,corpus_as_locked,p.Arg2359Gln,,,,"[""Direct sequences of the patients identified G to A transition at the position of 7076 and T to G transition at 14552 leading to amino acid change of R for Q 2359 (R2359Q) and F for C 4851 (F4851C).""]","Results, Family 3"
+RYR2,16843546,text,corpus_as_locked,p.Arg2401His,1,1,,"[""PCR-SSCP analysis of the proband revealed an abnormal band in exon 47 of RyR2 and DNA sequencing confirmed a G to A transition at the position of 7202 leading to amino acid change of histidine for arginine 2401; R2401H [3].""]","Results, Family 1"
+RYR2,16843546,text,corpus_as_locked,p.Phe4851Cys,1,,,"[""Direct sequences of the patients identified G to A transition at the position of 7076 and T to G transition at 14552 leading to amino acid change of R for Q 2359 (R2359Q) and F for C 4851 (F4851C).""]","Results, Family 3"
+RYR2,16843546,text,corpus_as_locked,p.Ser2246Leu,1,1,,"[""Direct sequences of these patients identified C to T transition at the position of 6737 leading to amino acid change of S for L 2359: S2246L. Since their parents do not have this mutation, de novo mutation was suggested.""]","Results, Family 2"
+KCNH2,16155735,text,corpus_as_locked,c.2768delC,1,1,,"[""KCNH2 2768Cdel""]",Abstract
+KCNH2,16155735,text,corpus_as_locked,p.Asn633Asp,1,,,"[""KCNH2 N633D""]",Abstract
+SCN5A,18599870,text,corpus_as_locked,p.Leu1308Phe,1,1,,"[""Ackerman et al9 identified L1308F as a polymorphism found mostly in Americans of African descent"", ""the second missense mutation was ... L1308F""]","Results, Mutational Analysis and Index Patient; Discussion"
+SCN5A,18599870,text,corpus_as_locked,p.Val232Ile,1,1,,"[""DNA analysis revealed a novel double mutation in SCN5A ... V232I ... L1308F"", ""The mutations were absent in over 400 references alleles from 200 ethnically matched controls""]","Results, Mutational Analysis and Index Patient; Figures 1-8"
+SCN5A,27243970,text,corpus_as_locked,A572D,3,,,"[""Exome sequencing of the four family members identified one genetic variant in the voltage-gated sodium channel shared by the three individuals with LA resistance but not present in the unaffected family member. Specifically, we noted the A572D mutation in the SCN5A gene encoding for Nav1.5.""]",Abstract
+SCN5A,27707468,text,corpus_as_locked,p.Ala1428Ser c.4282G>T,2,2,,"[""5/17 (29.4%) BrS patients hosted at least one rare variant in ... SCN5A""]","Table 4, Cases 4 and 11"
+SCN5A,27707468,text,corpus_as_locked,p.Arg1898Cys c.5692C>T,1,1,,"[""5/17 BrS patients hosted a rare variant in ... SCN5A""]","Table 4, Case 14"
+SCN5A,27707468,text,corpus_as_locked,p.D1275N c.3823G>A,1,1,,"[""3/17 BrS patients hosted a \u201cpathogenic\u201d or \u201clikely pathogenic\u201d variant (p.G400R-SCN5A, p.D1275N-SCN5A, T1893Pfs*29-SCN5A""]","Table 4, Case 3"
+SCN5A,27707468,text,corpus_as_locked,p.Gly400Arg c.1198G>A,1,1,,"[""5/17 BrS patients hosted a rare variant in ... SCN5A""]","Table 4, Case 2"
+SCN5A,27707468,text,corpus_as_locked,p.Thr1893Profs*29 c.5676delC,1,1,,"[""T1893Pfs*29-SCN5A""]","Table 4, Case 14"
+SCN5A,27707468,text,corpus_as_locked,p.Val1098Leu c.3292G>T,1,1,,"[""Only 2/44 SUNDS cases ... hosted a rare variant in ... SCN5A""]","Table 3, Case 40"
+SCN5A,27707468,text,corpus_as_locked,p.Val1340Ile c.4018G>A,1,1,,"[""12/44 SUNDS victims ... carried rare variants in primary arrhythmia-susceptibility genes""]","Table 3, Case 4"
+SCN5A,24439875,text,corpus_as_locked,p.E1784K c.5350G>A,,,,"[""The proband\u2019s mother carried a previously reported SCN5A mutation, E1784K, caused by a G5350A transition."", ""SCN5A-E1784K mutation reduced peak INa to 39% of WT (p<0.01), shifted steady-state inactivation by -18.0mV (p<0.01) and increased late INa from 0.14% to 2.01% of peak INa (p<0.01)""]","Results, sections 3.5 and 3.7; Abstract"
+SCN5A,24439875,text,corpus_as_locked,p.Gly1297Glyfs*22,,,,"[""Proband 6 also had a novel mutation in SCN5A due to an insertion of an adenine (A) at nucleotide position 3891, predicting a frameshift and a stop codon (G1297G FSX, Figure 2A)."", ""We did not conduct functional expression studies on SCN5A-G1297G FSX22, but the electrophysiological consequence of this mutation could be reasonably deduced, based on the predicted stop codon leading to truncation and a non-functional protein.""]","Results, section 3.2; Limitations"
+KCNH2,20167303,text,corpus_as_locked,deletion of exons 6-14,2,,,"[""subsequent gene dosage analysis using MLPA detected the presence of a large heterozygous deletion of exons 6-14 in the KCNH2 gene (KCNH2 ex6-14del)""]","Table 1 B, Case 20; Results text"
+KCNH2,20167303,text,corpus_as_locked,p.Q81H c.243G>C,2,1,1,"[""Full screening of the Guthrie card revealed a novel missense mutation in the KCNH2 (LQT2) gene, c.243G>C (p.Q81H).""]","Table 1, Case 3; Results text"
+KCNH2,20167303,text,corpus_as_locked,p.R1047L c.3140G>T,1,,,"[""Full screening of her Guthrie card revealed a missense variant in the KCNH2 (LQT2) gene, c.3140G>T (p.R1047L).""]","Table 1, Case 2; Results text"
+KCNH2,20167303,text,corpus_as_locked,p.S621R c.1861A>C,2,,,"[""A missense mutation was identified in the KCNH2 (LQT2) gene, c.1861A>C (p.S621R).""]","Table 1, Case 16; Results text"
+KCNQ1,30462975,text,corpus_as_locked,p.R16R c.47G>A,,,,"[""The gene test evidenced a polymorphism of KCNQ1 gene exon 13:47G\u279dA(R16R).""]","Abstract, Results"
+KCNQ1,21952006,text,corpus_as_locked,Q357R,,,,"[""missense mutation Q357R near the S6-C-terminal junction of Kv7.1 (Boulet et al8)"", ""Q357R was discovered in a 40-year-old female proband with a history of syncope, but with the corrected QT interval within the normal range (430 ms)""]","Results, Functional study - assay data only"
+KCNQ1,17224687,text,corpus_as_locked,S546S,,,,"[""To establish that RNA amplification detected both alleles, and that genotypes from RNA and DNA were concordant, we sought to detect common heterozygous single nucleotide polymorphisms (SNPs) from each of the genes tested in both RNA and DNA. The SNPs used for KCNQ1 were 1638G>A (S546S, rs1057128) and 1986C>T (Y662Y, rs11601907). For KCNH2, we used 1956T>C (Y652Y, rs10226664) and 2690A>C (K897T, rs1805123). For MYBPC3, a SNP with 2 common alleles in exon 31, 3288A>G (E1096D, rs1052373), was used.""]",Text scan (protein_single_letter)
+KCNQ1,17224687,text,corpus_as_locked,Y662Y,,,,"[""To establish that RNA amplification detected both alleles, and that genotypes from RNA and DNA were concordant, we sought to detect common heterozygous single nucleotide polymorphisms (SNPs) from each of the genes tested in both RNA and DNA. The SNPs used for KCNQ1 were 1638G>A (S546S, rs1057128) and 1986C>T (Y662Y, rs11601907). For KCNH2, we used 1956T>C (Y652Y, rs10226664) and 2690A>C (K897T, rs1805123). For MYBPC3, a SNP with 2 common alleles in exon 31, 3288A>G (E1096D, rs1052373), was used.""]",Text scan (protein_single_letter)
+KCNQ1,17224687,text,corpus_as_locked,p.Arg594Pro c.1781G>C,2,1,1,"[""1781G>C (R594P)""]","Results, Long QT syndrome (KCNQ1 and KCNH2)"
+KCNQ1,17224687,text,corpus_as_locked,p.Phe339Ser c.1016T>C,1,1,0,"[""One proband, a male newborn with bradycardia and a QTc of 570 milliseconds, had a novel missense mutation, 1016T>C (F339S).""]","Results, Long QT syndrome (KCNQ1 and KCNH2)"
+KCNQ1,17224687,text,corpus_as_locked,p.Thr144Ala c.430A>G,2,1,1,"[""The second proband, a 15-month-old male with a QTc of 490 milliseconds, had two mutations: 430A>G (T144A) and 1781G>C (R594P).""]","Results, Long QT syndrome (KCNQ1 and KCNH2)"
+KCNH2,15670565,text,corpus_as_locked,p.Lys101Glu c.301A>G,,,,"[""a novel missense mutation was identified in KCNH2, causing a lysine-to-glutamic acid amino acid substitution at position 101 (K101E)"", ""The mutation was an adenine-to-guanine transition in nucleotide position 301 in KCNH2... K101E"", ""In the family of the case of SIDS, the K101E mutation was now associated with LQTS as well as documented TdP""]","Main text, Results and Abstract"
+SCN5A,22677073,text,corpus_as_locked,F2004L,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,I1334V,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,I1768V,1,1,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,I267L,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,P2006A,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,R104Q,1,1,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,R1193Q,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,R680H,1,1,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,S1103Y,4,4,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,S216L,2,2,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,T220I,1,1,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,22677073,text,corpus_as_locked,V1951L,2,2,0,no quote captured; source_layer=figure,figure-reader
+KCNH2,18774102,text,corpus_as_locked,deletion of exons 6-14,2,,,"[""an ex6-14del of the KCNH2 gene in a 22-year-old woman misdiagnosed with epilepsy since age 9 years (QTc 560 ms) and a sibling with sudden death at age 13 years""]","Results, MLPA analysis and Clinical data; Figure 4b"
+KCNH2,18774102,text,corpus_as_locked,duplication of exons 9-14,2,,,"[""Exons 9 to 14 of the KCNH2 gene appeared to be duplicated in the remaining MLPA mutation-positive patient""]","Results, MLPA analysis and Clinical data; Figure 4c"
+RYR2,26018045,text,corpus_as_locked,L433P,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 1, row 6"
+RYR2,26018045,text,corpus_as_locked,R176Q,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 1, row 4"
+RYR2,26018045,text,corpus_as_locked,R420W,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 1, row 5"
+RYR2,26018045,text,corpus_as_locked,T2504M,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 1, row 7"
+RYR2,26018045,text,corpus_as_locked,deletion of exon 3,,,,"[""Recently, exon 3 deletion of RYR2 has been reported to be associated with left ventricular noncompaction""]",Text scan (exon_event)
+RYR2,26018045,text,corpus_as_locked,p.Ala77Val,,,,no quote captured; source_layer=regex_table,"Table T1, row 3 (router+deterministic)"
+SCN5A,19808432,text,corpus_as_locked,G1631D,2,2,0,no quote captured; source_layer=figure,figure-reader
+SCN5A,19808432,text,corpus_as_locked,p.R1623Q,,,,"[""tal loss due to inheritance of an SCN5A mutation (R1623Q) from a mother who was mosaic for this deleteriou""]",Text scan (protein_single_letter)
+SCN5A,29709244,text,corpus_as_locked,A1656P,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,D1243N,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,D501G,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,E161K,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,E19X,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,G1262S,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,G1319V,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,G1743E,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,H445D,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,I1643N,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,I1660V,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,L1346P,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,L1373X,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,L1582P,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,L618F,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,L842R,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,M1701T,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,N109K,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,N927S,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R1232Q,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R1306C,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R1629Q,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R1897W,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R367C,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R367H,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R808C,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,R811L,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,V1667I,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,W879R,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,p.Arg1193Gln,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,p.D1275N,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,p.R18Q,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,p.R893H,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+SCN5A,29709244,text,corpus_as_locked,p.T220I,,,,no quote captured; source_layer=regex_table,Supplementary Table 1 (regex extraction)
+KCNQ1,11021476,text,corpus_as_locked,p.Arg259Cys,1,1,,"[""We identified a novel missense mutation in the intracellular linker of S4-S5 domains of KCNQ1, resulting in an amino acid substitution of cysteine for arginine at position 259 (R259C)."", ""The novel KCNQ1 mutation R259C is the molecular basis for I(Ks) dysfunction underlying an apparently sporadic case of hypokalemia-induced LQTS, consistent with a mild mutation likely to disclose the clinical manifestation of LQTS in a context of severe hypokalemia.""]",Abstract
+KCNQ1,19160088,text,corpus_as_locked,G589D,8,,,"[""A total of 27 individuals were heterozygous carriers of one of the four Finnish founder mutations, KCNQ1 G589D (n=8), KCNQ1 IVS7-2A>G (n=1)"", ""One mutation carrier, a person with KCNQ1 G589D and a QTc of 520 ms, had previously been symptomatic.""]",Results
+KCNH2,19160088,text,corpus_as_locked,p.Arg176Trp,16,,,"[""A total of 16 study participants carried the minor KCNH2 R176W allele and showed a 22.2 ms (SE 4.7, 1.2 SD, P=2.15\u00d710-6) longer QT interval compared to mutation non-carriers.""]","Results section, genotyping and QT analysis paragraphs"
+KCNH2,19160088,text,corpus_as_locked,p.Leu552Ser,2,,,"[""KCNQ1 G589D (n=8), KCNQ1 IVS7-2A>G (n=1), KCNH2 L552S (n=2), or KCNH2 R176W (n=16)""]","Results section, genotyping results"
+SCN5A,23612926,text,corpus_as_locked,D1430N,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23612926,text,corpus_as_locked,p.Arg1414Cys c.4240C>T,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23612926,text,corpus_as_locked,p.Arg965Cys c.2893C>T,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,23612926,text,corpus_as_locked,p.Q1476*,,,,"[""The nonsense mutation Q1476X was leading to a premature stop codon and was not expressed.""]","Abstract, Results"
+SCN5A,29759671,text,corpus_as_locked,c.934+1G>A,1,1,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 3"
+SCN5A,29759671,text,corpus_as_locked,p.Arg1232Gln c.3695G>A,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 2"
+SCN5A,29759671,text,corpus_as_locked,p.Arg1362fs*12 c.4086delG,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 4"
+SCN5A,29759671,text,corpus_as_locked,p.Arg1897Trp c.5689C>T,1,1,,"[""a variant of unknown significance was identified in 3 additional cases""]","Table 2, Row 12"
+SCN5A,29759671,text,corpus_as_locked,p.Arg893His c.2678G>A,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 6"
+SCN5A,29759671,text,corpus_as_locked,p.Asn1380del c.4140_4142delCAA,1,,,"[""a variant of unknown significance was identified in 3 additional cases""]","Table 2, Row 10"
+SCN5A,29759671,text,corpus_as_locked,p.Asp501Gly c.1502A>G,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 5"
+SCN5A,29759671,text,corpus_as_locked,p.Gly1319Val c.3956G>T,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 8"
+SCN5A,29759671,text,corpus_as_locked,p.Ile1660Val c.4978A>G,1,1,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 1"
+SCN5A,29759671,text,corpus_as_locked,p.Phe861fs*90 c.2582_2583delTT,1,,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 7"
+SCN5A,29759671,text,corpus_as_locked,p.Trp879Arg c.2635T>C,1,1,,"[""A pathogenic (class 5) or likely pathogenic (class 4) mutation in SCN5A was identified in 9 of the 86 cases""]","Table 2, Row 9"
+KCNQ1,27810088,text,corpus_as_locked,V133I,,,,no quote captured; source_layer=figure,figure-reader
+RYR2,33640691,text,corpus_as_locked,p.Ala2254Val,,,,"[""one CPVT patient harboring a mutation in the amino acid residue p.A2254V ( Postma et al., 2005 )"", ""We confirmed the generated iPSC lines harbor the mutation as their original fibroblasts ( Supplementary Fig. 1 A)""]",Resource details (main text); confirmed in Supplementary Fig. 1A
+KCNQ1,20981542,text,corpus_as_locked,p.Gly316Glu,10,,,"[""all eight surviving members with prolonged QT have a heterozygous missense mutation resulting in a glycine-to-glutamate amino acid substitution at position 316"", ""Two members of the family died suddenly in their childhood"", ""exhibits a dominant trait of LQTS with complete penetrance""]",Abstract
+RYR2,17199967,text,corpus_as_locked,p.Gly3946Ser,1,1,,"[""a heterozygous missense mutation was found in exon 88 of her hRyR2gene in chromosome 1 which resulted in an amino acid change from glycine to serine at the 3946th position(G3946S)"", ""It was a de novo mutation as neither of her parents carried the same mutation""]","Case Report, Genetic study paragraph"
+KCNH2,26173150,text,corpus_as_locked,p.Thr613Ala c.1837A>G,,,,"[""Genetic screening revealed a missense mutation (c.A1837G) in exon 7 of the KCNH2 gene"", ""one sister and the father were found to be carriers"", ""T613A maximal steady state current was significantly smaller than WT, 0.7 \u00b1 0.1 \u03bcA, n = 9 versus 3.4 \u00b1 0.4 \u03bcA, n = 10""]","Results, Introduction, Figure 1, Figure 2"
+SCN5A,8917568,text,corpus_as_locked,N1325S,,,,"[""06, and Glu-1507, \u0394KPQ), and two point mutations, N1325S (Asp-1325 converted to serine) and R1644H (Arg-16""]",Text scan (protein_single_letter)
+SCN5A,8917568,text,corpus_as_locked,R1644H,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,15051636,text,corpus_as_locked,p.R1623Q,,,,"[""In K2800, the proband had severe arrhythmia and carried a de novo mutation in SCN5A (R1623Q, previously characterized by Makita et al10) and the D85N variant.""]","Results, paragraph describing K2800 and Figure 2B"
+SCN5A,15051636,text,corpus_as_locked,p.R1644H,,,,"[""In K2700, a child died of sudden death. His father and his brother (the proband) had mutations in SCN5A (R1644H) and KCNE1 (R32H)."", ""R1644H SCN5A channels were previously characterized11 and shown to have a sustained inward current typical of other LQTS-associated mutations in the cardiac Na channel.""]","Results, paragraph describing K2700 and Figure 2B"
+KCNQ1,29978770,text,corpus_as_locked,p.Arg190Trp,,,,"[""As previously reported, four missense mutations - MYH7-H1717Q, KCNQ1-R190W, MYLK2-K324E, and TMEM70-I147T - were identified in this family."", ""The KCNQ1-R190W carriers showed significantly prolonged QTc intervals"", ""KCNQ1-R190W and MYLK2-K324E mutations were correlated with electrocardiographic abnormalities reflected in long QT phenotype and inverted T-waves, respectively.""]",Abstract and main text (refers to prior report)
+KCNQ1,31484877,text,corpus_as_locked,p.Glu39* c.115G>T,,1,,"[""a heterozygous p.Glu39Ter mutation was found in her mother and sister (Figure 1D). Therefore, this proband was a compound heterozygote for the two KCNQ1 mutations and diagnosed with JLNS.""]","Case Report, Figure 1C"
+KCNQ1,31484877,text,corpus_as_locked,p.Gly168Arg c.502G>A,,,,"[""A genetic analysis of our patient identified two different mutations in the potassium voltage-gated channel subfamily Q member 1 gene (KCNQ1, NM_000218.2) as follows: c.502G>A (p.Gly168Arg) and c.115G>T (p.Glu 39Ter). Both mutations were previously reported as causative of JLNS.""]","Case Report, Figure 1B"
+KCNH2,19490267,text,corpus_as_locked,T474I,,,,"[""tivation when expressed in Xenopus oocytes (e.g., T474I, A614V, V630L) 33 but subsequently shown to have""]",Text scan (protein_single_letter)
+KCNH2,19490267,text,corpus_as_locked,V630L,,,,"[""expressed in Xenopus oocytes (e.g., T474I, A614V, V630L) 33 but subsequently shown to have a trafficking""]",Text scan (protein_single_letter)
+KCNH2,19490267,text,corpus_as_locked,p.Ala614Val,,,,"[""n when expressed in Xenopus oocytes (e.g., T474I, A614V, V630L) 33 but subsequently shown to have a traff""]",Text scan (protein_single_letter)
+KCNH2,19490267,text,corpus_as_locked,p.G572S,1,1,,"[""G572S-hERG subunits did not traffic to the plasma membrane but could coassemble with WT subunits and resulted in a dominant negative suppression of hERG current density."", ""the proband... QTc 570 ms... multiple documented cardiac arrests with documented torsade de pointes. The proband's brother... died suddenly while swimming at the age of 10.""]","Results, Clinical Features; Mutant Phenotype; Coassembly of HERG WT and G572S Mutant Subunits"
+KCNH2,19490267,text,corpus_as_locked,p.G584S,19,,,"[""G584S-hERG subunits traffic normally but have abnormal inactivation gating."", ""Consists of 19 gene-positive carriers with QTc 452 \u00b1 6 ms... Six of the 19 carriers have had 1 or more syncopal spells, 1 female was resuscitated at the age of 73... 1 male died during sleep at the age of 56 years.""]","Results, Clinical Features; Electrophysiological Phenotype of G584S; Modeling of Mutant Phenotypes"
+SCN5A,28018021,text,corpus_as_locked,R222Q,,,,"[""inward sodium. The mutations on SCN5A , p.R219H, p.R222Q, and p.R225W which express alternative pathways,""]",Text scan (protein_hgvs_short)
+SCN5A,28018021,text,corpus_as_locked,R225W,,,,"[""m. The mutations on SCN5A , p.R219H, p.R222Q, and p.R225W which express alternative pathways, through a cat""]",Text scan (protein_hgvs_short)
+SCN5A,28018021,text,corpus_as_locked,c.1292A>G,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 18, row 1"
+SCN5A,28018021,text,corpus_as_locked,c.335T>C,,,,no quote captured; source_layer=regex_table,"Table (regex extraction), block 22, row 1"
+SCN5A,28018021,text,corpus_as_locked,p.Arg34His c.101G>A,2,1,1,"[""Two nonsynonymous missense variants in the SCN5A gene in this study, c.101G>A and c.3832G>A (NM_000335), were likely to be present in a compound heterozygous fashion""]","Table 3, Results text, Figure 2"
+SCN5A,28018021,text,corpus_as_locked,p.R219H,,,,"[""ission of inward sodium. The mutations on SCN5A , p.R219H, p.R222Q, and p.R225W which express alternative p""]",Text scan (protein_hgvs_short)
+SCN5A,28018021,text,corpus_as_locked,p.Val1278Ile c.3832G>A,2,1,1,"[""heterozygous c.3832G>A was found in III-2 (index) and III-3 (brother)""]","Table 3, Results text, Figure 2"
+SCN5A,17905336,text,corpus_as_locked,p.Arg1193Gln,2,2,,"[""A SCN5A mutation in the DII-DIII linker (R1193Q) is represented in 2 Brugada cases"", ""2 were positive for R1193Q in SCN5A"", ""This mutation was considered a polymorphism in certain populations 22,23 ; however, functional analysis of R1193Q confirms a persistent sodium current that can explain QTc prolongation. 24""]","Results, paragraph discussing SCN5A mutations and R1193Q"
+SCN5A,23791817,text,corpus_as_locked,p.D1275N c.3823G>A,,,,"[""transgenic zebrafish expressing the SCN5A-D1275N mutation, but not wild-type SCN5A, exhibit bradycardia, conduction-system abnormalities and premature death"", ""Overall, around 20% of mutation carriers displayed an abnormal cardiac phenotype at a given point of examination, suggesting incomplete penetrance of the D1275N phenotype"", ""24% of SCN5A-D1275N fish remained phenotype-negative during the course of our study""]","Functional study - assay data only; Results sections on transgenic lines, phenotype analysis, morpholino rescue"
+SCN5A,28217227,text,corpus_as_locked,Q779X,4,,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,19348785,text,corpus_as_locked,p.Gly314Ser,,,,"[""Co-expression of G314S KCNQ1 and KCNE1 (n = 8) produced strongly reduced current amplitudes"", ""I ks currents were reduced by 71.08%"", ""G314S mutation suppressed I ks currents in a dominant-negative manner""]",Functional study - assay data only
+RYR2,24793461,text,corpus_as_locked,p.Q4159P c.12476A>C,1,1,,"[""A single nucleotide transversion n.A12476C was identified in the RyR2 gene leading to the amino acid substitution p.Q4159P identified in the proband\u2019s DNA. Both parents were negative; thus, the proband was labeled as genetically sporadic."", ""This variant was not present in a panel of 200 DNA samples from healthy controls.""]","Case report, Results section"
+SCN5A,10532948,text,corpus_as_locked,p.Arg1232Trp,,,,"[""Arg1232Trp did not produce these effects and is thought to be a rare polymorphism.""]",Functional study - assay data only; referenced from Chen et al.
+SCN5A,10532948,text,corpus_as_locked,p.Thr1620Met,,,,"[""the missense mutation Thr1620Met"", ""At 32\u00b0C, the activation and the decay of INa was faster for Thr1620Met""]",Functional study - assay data only
+SCN5A,15671429,text,corpus_as_locked,D1275N,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,15671429,text,corpus_as_locked,D1595H,,,,no quote captured; source_layer=figure,figure-reader
+SCN5A,15671429,text,corpus_as_locked,R814W,1,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,15671429,text,corpus_as_locked,T220I,2,1,,no quote captured; source_layer=figure,figure-reader
+SCN5A,15671429,text,corpus_as_locked,c.2550-2551insTG,3,,,"[""A 2-bp insertion in exon 17, 2550-2551insTG, caused a frameshift at codon 851, resulting in a premature stop codon and truncation""]","Results, Genotype-Phenotype Correlation; Figure 3"
+RYR2,30308486,text,corpus_as_locked,p.Leu2483Arg c.7448T>G,1,1,,"[""we identified an L2483R mutation in the ryanodine receptor type 2 (RyR2) in a 2-month-old male patient with VSD with HF"", ""Our sequencing work revealed that the established UiPSCs also retained the RyR2 mutation (Fig. 2)"", ""Sequencing analysis showed that the UiPSCs maintained the RyR2 mutation (c.7448T>G, p.L2483R)""]","Abstract, Results section describing patient and sequencing"
+KCNQ1,29488358,text,corpus_as_locked,G229D,,,,no quote captured; source_layer=figure,figure-reader
+KCNQ1,29488358,text,corpus_as_locked,p.Arg231His,,,,"[""Recent studies with other mutant variants, including R231H""]",Functional study - computational modeling data only
+KCNQ1,29488358,text,corpus_as_locked,p.Ser140Gly,,,,"[""First report by Chen et al in 2013 identified that gain-of-function of IKs in KCNQ1 (S140G)""]",Functional study - computational modeling data only
+KCNQ1,29488358,text,corpus_as_locked,p.Val241Phe,,,,"[""V241F""]",Functional study - computational modeling data only
+KCNQ1,29488358,text,corpus_as_locked,p.Val307Leu,,,,"[""Bellocq et al revealed that a noticeable shift of the half-activation potential ... V307L KCNQ1 mutation""]",Functional study - computational modeling data only
+SCN5A,19669871,text,corpus_as_locked,p.F1473C c.4418T>G,1,1,,"[""Genetic testing was initiated soon after birth, which confirmed the clinical suspicion of a de novo SCN5A (LQT3) 4418 T\u2265G nucleotide change resulting in a F1473C missense mutation. The mutation was in the DIII/DIV inter domain linker region [1]. Both parents were tested, and neither carried the SCN5A F1473C mutation.""]","Case report, paragraph on genetic testing"

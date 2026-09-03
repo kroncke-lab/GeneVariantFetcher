@@ -23,6 +23,12 @@ until the preceding gate passes and its artifact is recorded.
 
 - [ ] **Mixed-gold tranche campaign (started 2026-09-03; Brett's /goal: 3-4
       tranches, recall up and MAE down, papers only, grok 4.6 + agy advice).**
+      **Cohort-size correction 2026-09-03:** Brett specified that each tranche
+      should be approximately the 118-attempt Gate-2 size. The already-scored
+      49-attempt tranches 01–02 remain immutable calibration evidence; unopened
+      03–29 are abandoned in `mixed_gold/abandonment_log.jsonl`. The replacement
+      `mixed_gold_continuation_120/` excludes the 90 consumed PMIDs and partitions
+      the remaining 1,324 attempts into 11 article-atomic tranches of 120–121.
       Arm schedule (both reviewers agree): every tranche pairs baseline =
       frozen `506a949c` vs candidate = cumulative fixes; confirmation is only
       the *identical* candidate runtime on the next unopened tranche.
@@ -41,10 +47,36 @@ until the preceding gate passes and its artifact is recorded.
       $4.206 = **$8.575** (registry estimate was $10.25 paired); ledger
       $44.519 + $8.575 = **$53.094 used / $46.906 remaining** before tranche
       02; tranche 02 baseline $4.555 (1.124 M tokens) → **$57.649 used /
-      $42.351 remaining** before the tranche 02 candidate. Tranche 02 = v2 discovery (baseline re-materialised from `506a949c`,
-      in flight; candidate = v1 + six hardenings incl. the scorer's
-      conflicting-cDNA bridge guard; `docs/evidence/mixed_gold_tranche02_20260903.md`).
-      Then tranche 03 = v2 confirmation if it passes; tranche 04 if budget.
+      $42.351 remaining** before the tranche 02 candidate. Tranche 02 = v2 discovery: baseline 268/54/35
+      (recall 88.45%), candidate 267/55/36 (−0.33 pp;
+      `reject_or_revise_candidate`; secondary count rule also not passed).
+      **Every arm difference was model run-to-run variance** (protein
+      notation or carrier value present in one arm's extraction row and
+      absent in the other's, temperature 0) — a paired tranche with ~5
+      reachable rows cannot resolve a reading change from provider
+      nondeterminism (`docs/evidence/mixed_gold_tranche02_20260903.md`).
+      Tranche 01's secondary endpoint as a locked diagnostic only: e2e
+      carrier MAE 2.68 → 1.95, coverage 31% → 80%, all criteria held.
+      Ledger after tranche 02 (candidate $4.406): **$62.055 used / $37.945
+      remaining**. The 49-attempt tranche 03 was NOT opened: per the
+      cohort-size correction above, the campaign continues on
+      `mixed_gold_continuation_120/` tranche 01 (120 attempts, 384 gold rows,
+      hard ceiling 87 rows) as a v2 discovery under both rules; baseline arm
+      `runs/20260903_protocol_cont120_01_baseline` locked: **263/138/121**,
+      recall 68.49%, precision 65.59%, carriers 123/384 (MAE 0.236), $10.339
+      (2.70 M tokens, 68 min) → ledger **$72.394 used / $27.606 remaining**;
+      candidate arm (v2 runtime, commit 8cf78b39 after restoring the nine
+      files that a docs commit made while frozen had swept back to
+      `506a949c`): **261/141/123**, recall −0.52 pp, precision −0.66 pp
+      (guard fails at the bound), carriers 123→130, e2e carrier MAE
+      1.393→1.359 (UB +0.08); both rules reject. $11.641 → **final ledger
+      $84.035 used / $15.965 remaining**; no further arm fits. Campaign
+      summary and ranked next levers (acquisition worklist first; VF
+      false-positive gate and linkage row ownership; source-only
+      substitution promotion; prose exclusion lists; bare table cDNA;
+      replicate arms before scoring again):
+      `docs/evidence/mixed_gold_campaign_summary_20260903.md`.
+      `docs/evidence/mixed_gold_cont120_01_20260903.md`.
       **Secondary count endpoint preregistered 2026-09-03** (before the
       tranche 02 candidate lock; commits a47e3a5a + 8ef743a4;
       `docs/evidence/mixed_gold_count_endpoint_preregistration_20260903.md`):

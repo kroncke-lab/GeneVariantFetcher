@@ -34,7 +34,7 @@ which are an acquisition worklist, not extraction work.
 |---|---:|---|---|---|---|
 | 01 | 49 / 242 | 155/61/87, R 64.0%, P 71.8% | v1 `b56f469f`: 157/54/85, R 64.9% (+0.83 pp), P 74.4% | reject (bar +1.0 pp) | carriers supplied 48→125, cond. MAE 0.81→0.10, e2e MAE 2.68→1.95, counted-extra P 82→91% |
 | 02 | 49 / 303 | 268/54/35, R 88.4%, P 83.2% | v2 `32ec857c`: 267/55/36, R 88.1% (−0.33 pp) | reject | flat (carriers 232→227); all differences model variance |
-| cont120-01 | 120 / 384 | pending | v2 (identical runtime) | pending | pending |
+| cont120-01 | 120 / 384 | 263/138/121, R 68.5%, P 65.6% | v2 `8cf78b39`: 261/141/123, R 68.0% (−0.52 pp), P 64.9% | reject (precision LB −2.6 pp also fails) | carriers 123→130, e2e MAE 1.393→1.359 (UB +0.08, not passed); 3 papers show v2 effects, rest is model variance |
 
 Root cause of the misses (`scripts/recall_audit/fn_root_cause.py`, new): on
 tranche 01, 70 of 87 misses were acquisition, 12 notation the probe cannot
@@ -99,10 +99,50 @@ observed-recall ≥ 0 guard that was adopted.
 
 ## 6. Cost
 
-Public-price proxy: tranche 01 $8.575 (both arms), tranche 02 $8.961; ledger
-$62.055 used / $37.945 remaining before the continuation tranche, whose paired
-estimate is $25.11.
+Public-price proxy: tranche 01 $8.575 (both arms), tranche 02 $8.961,
+continuation tranche 01 $21.980 (baseline $10.339, candidate $11.641);
+**$39.516 for six arms today; ledger $84.035 used / $15.965 remaining** of
+the $100 envelope. The remaining amount does not fund another arm at the
+Gate-2 scale (≈ $10–12 each).
 
-## 7. Continuation tranche 01
+## 7. Continuation tranche 01 (120 attempts)
 
-Pending; see `mixed_gold_cont120_01_20260903.md`.
+The lead's Gate-2-sized suite. Baseline 263/138/121 (recall 68.5%, carriers
+123/384); candidate v2 261/141/123 (recall −0.52 pp, precision −0.66 pp,
+carriers 130/384, end-to-end carrier MAE 1.393 → 1.359). Both rules reject.
+Three papers show the intended v2 effects (a shell-plus-supplement paper
+recovered a frameshift; a 12-variant SCN5A table went from 5 to 11 correct
+carrier values; two extras vanished); every other difference is model
+variance, and one loss is a pre-existing VariantFeatures false-positive
+quarantine that removes a correct variant only when the model happens to
+emit its cDNA (`mixed_gold_cont120_01_20260903.md`).
+
+## 8. Where the next recall and count would come from
+
+In order of expected yield, all gene-agnostic, none requiring a new model:
+
+1. **Acquisition, not reading.** The hard ceiling is 15.8% of runnable gold
+   rows, concentrated in table-body capture failures on a few dozen papers;
+   the sweep's per-paper list is the worklist. This is where recall lives.
+2. **Row ownership when a paper row folds into a linkage row, and the
+   VariantFeatures false-positive gate.** Two continuation misses were
+   correct paper extractions removed downstream (`wrong_gene_residue_mismatch`
+   on a transcript disagreement; linkage-origin attribution). Paper discovery
+   should outrank a citation, and a residue mismatch against one canonical
+   transcript should not delete an in-range, gene-attributed variant.
+3. **Source-only spellings the model returns without identity fields**: the
+   v2 promotion covers frameshifts and amino-acid indels; a clean
+   single-letter substitution in `source_notation` (KCNQ1 26481773 `R594Q`)
+   should be promoted the same way.
+4. **Prose exclusion lists** (`A1136V-RyR2 [3 cases] … excluded from
+   Figure 1`): a `<variant>-<gene> [n cases]` shape the regex scanner can
+   own without asking the model.
+5. **Bare table cDNA** (`14803 G>A`) normalised to `c.14803G>A` so the
+   isoform-offset check can clear it.
+
+And one measurement change before any of that is scored again: **replicate
+arms**. With provider nondeterminism producing ±2 TP and ±5–7 count values
+per 49–120 attempts at temperature 0, a paired design needs either
+deterministic extraction (fixed seed where the provider supports it) or two
+replicates per arm so the within-arm variance is estimated rather than
+assumed away.

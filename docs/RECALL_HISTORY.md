@@ -15,6 +15,26 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-03 — continuation tranche 01 (120 attempts): v2 flat at Gate-2 scale; campaign closes
+
+After the lead asked for Gate-2-sized cohorts, the 49-attempt tranches 03–29
+were abandoned and `mixed_gold_continuation_120/` (11 tranches of 120–121)
+took over. Its first tranche (384 gold rows, hard ceiling 87) scored the
+frozen `506a949c` baseline at **263 / 138 / 121** (recall 68.49%, precision
+65.59%, carriers 123/384, conditional MAE 0.236) and the v2 candidate at
+**261 / 141 / 123** (recall −0.52 pp, LB −1.40; precision −0.66 pp, LB −2.60;
+carriers 130/384; end-to-end carrier MAE 1.393 → 1.359, UB +0.083).
+`reject_or_revise_candidate` under the primary rule with the precision guard
+failing at the bound; the secondary count rule met only its coverage
+criterion. Three papers show the intended v2 effects (KCNH2 16155735 +1 TP
+from a shell-plus-supplement source; SCN5A 22677073 carriers 5 → 11 supplied,
+10 exact; APOE 23990795 two extras gone); the remainder is model run-to-run
+variance, plus one pre-existing VariantFeatures false-positive quarantine that
+removes KCNQ1 G45S only when the model emits its cDNA. Campaign cost $39.516
+over six arms; ledger $84.035 used / $15.965 remaining. No headline change;
+the accepted gold-118 lock is untouched. Summary and next levers:
+`docs/evidence/mixed_gold_campaign_summary_20260903.md`.
+
 ## 2026-09-03 — mixed-gold tranche 02: v2 candidate flat; arm differences are model variance
 
 Tranche 02 (49 attempts, 303 gold rows) baseline on the frozen `506a949c`

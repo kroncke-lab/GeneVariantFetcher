@@ -1,0 +1,112 @@
+{
+ "run_id": "20260903_protocol_cont120_01_candidate",
+ "fn_total": 123,
+ "by_leaf": {
+  "unknown_notation": 40,
+  "acquisition": 72,
+  "model_missed": 5,
+  "parser_dropped": 3,
+  "projection_dropped": 2,
+  "paper_row_lost_to_linkage_origin": 1
+ },
+ "by_paper": {
+  "SCN5A:25163546": {
+   "acquisition": 20
+  },
+  "SCN5A:20031634": {
+   "acquisition": 13
+  },
+  "BRCA1:10528853": {
+   "unknown_notation": 13
+  },
+  "KCNH2:17905336": {
+   "acquisition": 6,
+   "unknown_notation": 4,
+   "parser_dropped": 1
+  },
+  "KCNH2:12402336": {
+   "model_missed": 1,
+   "acquisition": 5,
+   "unknown_notation": 3
+  },
+  "RYR2:29447731": {
+   "unknown_notation": 3,
+   "acquisition": 6
+  },
+  "KCNH2:24103226": {
+   "acquisition": 4,
+   "unknown_notation": 3
+  },
+  "KCNQ1:22539601": {
+   "acquisition": 6
+  },
+  "SCN5A:17905336": {
+   "acquisition": 4,
+   "unknown_notation": 1
+  },
+  "RYR2:22677073": {
+   "model_missed": 3,
+   "projection_dropped": 1
+  },
+  "SCN5A:17227473": {
+   "acquisition": 1,
+   "model_missed": 1,
+   "unknown_notation": 1
+  },
+  "MYBPC3:21302287": {
+   "unknown_notation": 3
+  },
+  "KCNH2:21185499": {
+   "unknown_notation": 2
+  },
+  "SCN5A:20451667": {
+   "acquisition": 2
+  },
+  "KCNH2:18774102": {
+   "paper_row_lost_to_linkage_origin": 1,
+   "projection_dropped": 1
+  },
+  "KCNH2:18452873": {
+   "unknown_notation": 1
+  },
+  "SCN5A:21677263": {
+   "acquisition": 1
+  },
+  "KCNQ1:22677073": {
+   "unknown_notation": 1
+  },
+  "KCNH2:16969682": {
+   "unknown_notation": 1
+  },
+  "KCNQ1:26481773": {
+   "parser_dropped": 1
+  },
+  "KCNQ1:20167303": {
+   "acquisition": 1
+  },
+  "KCNH2:10790218": {
+   "unknown_notation": 1
+  },
+  "RYR2:18463390": {
+   "acquisition": 1
+  },
+  "SCN5A:27401036": {
+   "parser_dropped": 1
+  },
+  "KCNQ1:30462975": {
+   "acquisition": 1
+  },
+  "KCNQ1:17224687": {
+   "unknown_notation": 1
+  },
+  "SCN5A:20219395": {
+   "acquisition": 1
+  },
+  "SCN5A:8917568": {
+   "unknown_notation": 1
+  },
+  "SCN5A:28018021": {
+   "unknown_notation": 1
+  }
+ }
+}
