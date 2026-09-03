@@ -68,7 +68,11 @@ does not infer, so a pooled rule would reward guessing zeros.
 
 A candidate **passes the count endpoint** on a tranche when all hold:
 
-- identity guard: recall LB ≥ −1 pp and precision LB ≥ −2 pp (as above);
+- identity guard: recall LB ≥ −1 pp and precision LB ≥ −2 pp (as above),
+  **and the observed paper-derived recall delta is ≥ 0** (added 2026-09-03
+  on Grok 4.6's review of this document, before the tranche 02 candidate was
+  locked; it tightens the guard so a count pass can never be bought by
+  dropping identities whose large errors would otherwise lower the MAE);
 - end-to-end carrier MAE: `candidate − baseline` observed **≤ −0.05
   carriers per gold row**, and its one-sided 95% PMID-cluster bootstrap
   **upper** bound **< 0**;
@@ -92,9 +96,14 @@ pass of the campaign's primary endpoint.
   pass is a **discovery**, not a confirmation.
 - Tranche 03: identical v2 runtime against a fresh frozen baseline is the
   confirmation for whichever rule(s) tranche 02 passed.
-- Implementation: `run_eval.py compare` gains a `secondary_count_endpoint`
-  block computed from `papers[].matched_variants`, `papers[].count`, and the
-  locked per-row values; the registry gains the rule text above under
-  `evaluation_design.secondary_endpoints`. The code change lands only after
+- Implementation: `run_eval.py compare --secondary-endpoints` gains a
+  `secondary_count_endpoint` block computed from `papers[].matched_variants`,
+  each arm's locked `predictions.json` carrier values, and the tranche answer
+  key (already open once both arms are scored). The rule parameters live in
+  `benchmarks/evaluation_tiers/mixed_gold/secondary_endpoints.json`, a sibling
+  of the registry, because every scored arm binds the registry digest and
+  `setup_production_eval.validate_comparison_slot` refuses a consumption row
+  whose digest differs from the live registry; the registry itself stays
+  byte-identical. The compare output records the sibling file's SHA-256. The code change lands only after
   the tranche 02 candidate is locked (the harness file is inside the runtime
   fingerprint) and before tranche 03's baseline is scaffolded.
