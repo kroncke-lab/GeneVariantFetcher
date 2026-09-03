@@ -15,6 +15,33 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-03 — mixed-gold tranche 02: v2 candidate flat; arm differences are model variance
+
+Tranche 02 (49 attempts, 303 gold rows) baseline on the frozen `506a949c`
+protocol: **268 / 54 / 35**, recall 88.45%, precision 83.23%, carriers
+supplied 232/303 (conditional MAE 0.026); one manuscript-PDF paper (SCN5A
+30059973, 185 gold rows in a dot-less fixed-width table) is handled by the
+existing fixed-width parser at 182/185. Candidate v2 (`32ec857c`: the
+tranche 01 fixes plus six hardenings and a scorer guard against same-codon
+bridges between conflicting cDNA alleles): **267 / 55 / 36**, recall −0.33 pp,
+precision −0.31 pp; `reject_or_revise_candidate` under the primary rule and
+not passed under the secondary count rule (identity guard). Every arm
+difference was traced to model run-to-run variance at temperature 0 — a
+protein notation or a carrier value present in one arm's extraction row and
+absent in the other's — not to v2 code, which the gold-blind pre-check had
+predicted inert on this tranche. The reachable identity pool on both opened
+tranches (5 and ≤5 rows) is smaller than that variance, so identity recall on
+these tranches is acquisition-capped for any reading change. A secondary
+count endpoint (end-to-end carrier MAE with miss/abstention as full error,
+coverage-on-matched non-decreasing, identity non-inferiority as a hard guard)
+was preregistered before the tranche 02 candidate lock; as a locked
+diagnostic only, tranche 01 would have passed it (2.68 → 1.95 carriers per
+gold row; coverage 31% → 80%). The lead then asked for Gate-2-sized cohorts;
+unopened 49-attempt tranches were abandoned and the campaign continues on
+`mixed_gold_continuation_120/`. No headline change. Details:
+`docs/evidence/mixed_gold_tranche02_20260903.md`,
+`docs/evidence/mixed_gold_count_endpoint_preregistration_20260903.md`.
+
 ## 2026-09-03 — mixed-gold tranche 01: first paired measurement; acquisition ceiling measured
 
 The mixed-gold suite's first paired arms ran on tranche 01 (49 gene-paper

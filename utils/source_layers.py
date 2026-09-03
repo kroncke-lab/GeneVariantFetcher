@@ -180,24 +180,14 @@ def infer_source_layer_from_text(
     if explicit:
         return explicit
 
-    # ClinVar/PubTator are ORIGINS only when the row was written by their
-    # ingest scripts, which stamp ``source_location`` ("ClinVar (PMID
-    # citation)", "PubTator3 (text-mined)"). A paper-extracted row whose notes
-    # say the variant "was evaluated as conflicting in ClinVar" is paper
-    # evidence; reading the notes here re-attributed such rows to the linkage
-    # lane and removed them from the paper-derived score (SCN5A 28469501
-    # p.Gly289Ser, tranche 01).
-    linkage_text = " ".join(
-        str(value or "") for value in (source_location, extraction_source)
-    ).lower()
-    if "clinvar" in linkage_text:
-        return "clinvar"
-    if "pubtator" in linkage_text:
-        return "pubtator"
     text = " ".join(
         str(value or "")
         for value in (source_location, additional_notes, extraction_source)
     ).lower()
+    if "clinvar" in text:
+        return "clinvar"
+    if "pubtator" in text:
+        return "pubtator"
     if "figure" in text:
         return "figure"
     if any(marker in text for marker in _REGEX_TABLE_MARKERS):

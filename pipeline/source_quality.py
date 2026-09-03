@@ -22,17 +22,6 @@ EMPTY_FULL_CONTEXT_FLOOR_BYTES = 64
 # Sibling renderings that can stand in for an empty FULL_CONTEXT, best first.
 _FULL_CONTEXT_SIBLING_SUFFIXES = ("_CLEANED.md", "_DATA_ZONES.md")
 
-# Upper bound on the bytes read when looking for folded supplement content in a
-# publisher shell. Real article markdown is tens to hundreds of KB; this only
-# guards a runaway file.
-SHELL_CHECK_MAX_BYTES = 4 * 1024 * 1024
-
-# A CLEANED sibling this much larger than its FULL_CONTEXT (and at least this
-# big) is a richer rendering of the same paper, not the same text plus an
-# injected abstract.
-RICHER_SIBLING_RATIO = 1.5
-RICHER_SIBLING_MIN_BYTES = 5_000
-
 
 def is_abstract_only_fallback_text(text: str) -> bool:
     """Return True for GVF's generated abstract-only fallback markdown."""
@@ -73,74 +62,11 @@ def is_usable_fulltext_source(path: Path) -> bool:
             return False
         if is_abstract_only_fallback_text(head):
             return False
-        from harvesting.content_validation import (
-            has_substantive_supplement_content,
-            is_abstract_reference_shell,
-        )
+        from harvesting.content_validation import is_abstract_reference_shell
 
-        if not is_abstract_reference_shell(head):
-            return True
-        # A paywalled publisher shell whose folded supplements carry the
-        # variant tables is a usable source: the tables are the paper's data.
-        with path.open("r", encoding="utf-8", errors="replace") as f:
-            content = f.read(SHELL_CHECK_MAX_BYTES)
-        return has_substantive_supplement_content(content)
+        return not is_abstract_reference_shell(head)
     except OSError:
         return False
-
-
-def prefer_richer_sibling(
-    full_context_path: Path,
-    *,
-    ratio: float = RICHER_SIBLING_RATIO,
-    min_bytes: int = RICHER_SIBLING_MIN_BYTES,
-) -> Path:
-    """Prefer a corpus ``_CLEANED.md`` that is much richer than its FULL_CONTEXT.
-
-    A corpus FULL_CONTEXT can be overwritten by a later, worse fetch (a Wiley
-    "reuse permission" page) while the CLEANED rendering from the earlier good
-    fetch survives beside it (KCNQ1 21131640: 8.8 KB vs 22.9 KB).  Any
-    selector that prefers FULL_CONTEXT by name then feeds extraction the worse
-    text.  Return the CLEANED sibling when it is at least ``min_bytes``, at
-    least ``ratio`` times the FULL_CONTEXT size, usable, and passes the
-    harvest-time content-quality validator; otherwise return the input path.
-    Neither file is modified.
-    """
-    name = full_context_path.name
-    if not name.endswith("_FULL_CONTEXT.md"):
-        return full_context_path
-    sibling = full_context_path.with_name(
-        name.replace("_FULL_CONTEXT.md", "_CLEANED.md")
-    )
-    try:
-        sibling_size = sibling.stat().st_size
-    except OSError:
-        return full_context_path
-    try:
-        full_size = full_context_path.stat().st_size
-    except OSError:
-        full_size = 0
-    if sibling_size < min_bytes or sibling_size < ratio * max(full_size, 1):
-        return full_context_path
-    if not is_usable_fulltext_source(sibling):
-        return full_context_path
-    article_shaped, quality_reason = _is_article_shaped_sibling(sibling)
-    if not article_shaped:
-        logger.warning(
-            "richer sibling %s not preferred over %s (%s)",
-            sibling,
-            full_context_path,
-            quality_reason,
-        )
-        return full_context_path
-    logger.warning(
-        "richer sibling preferred: %s is %d bytes; using %s (%d bytes) instead",
-        full_context_path,
-        full_size,
-        sibling,
-        sibling_size,
-    )
-    return sibling
 
 
 def has_incomplete_supplement_surface(text: str) -> bool:

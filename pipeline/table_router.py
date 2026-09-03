@@ -311,18 +311,7 @@ _GWAS_OR_ASSAY_HEADERS = {
 
 _HEADER_FIELD_KEYWORDS = {
     "gene": ("gene", "symbol"),
-    "cdna": (
-        "cdna",
-        "codingdna",
-        "nucleotide",
-        "dna",
-        "ntchange",
-        "cdnachange",
-        # Clinical-panel and ClinVar-style exports label the columns by HGVS
-        # level ("HGVSc" / "HGVSp"); nothing else in the header says "cDNA".
-        "hgvsc",
-        "hgvscoding",
-    ),
+    "cdna": ("cdna", "codingdna", "nucleotide", "dna", "ntchange", "cdnachange"),
     "protein": (
         "protein",
         "aminoacid",
@@ -330,8 +319,6 @@ _HEADER_FIELD_KEYWORDS = {
         "proteinchange",
         "mutation",
         "variant",
-        "hgvsp",
-        "hgvsprotein",
     ),
     "patient_count": (
         "carrier",
@@ -1834,21 +1821,10 @@ def _looks_like_cdna_or_legacy(value: str, gene_symbol: Optional[str] = None) ->
     )
 
 
-# ``p.(Glu101Lys)`` / ``p.(Arg943Ter)`` / ``p.(Y1136*)``; never ``p.(?)`` or
-# ``p.(=)``, which are HGVS for "unknown" and "no protein change".
-_PREDICTED_PROTEIN_PARENS_RE = re.compile(r"^p\.\(((?:[A-Z][a-z]{2}|[A-Z])\d.*)\)$")
-
-
 def _normalize_protein(value: str) -> Optional[str]:
     s = normalize_notation_token(value, strip_trailing_markers=False)
     if s is None:
         return None
-    # HGVS writes a protein change predicted from the cDNA as ``p.(Glu101Lys)``.
-    # Clinical-panel tables use that form for every row; a column of them must
-    # still be recognised as the protein column and each value kept.
-    predicted = _PREDICTED_PROTEIN_PARENS_RE.fullmatch(s)
-    if predicted:
-        s = f"p.{predicted.group(1)}"
     for marker in ("*", "†", "‡", "§", "¶"):
         if not s.endswith(marker):
             continue
@@ -2671,69 +2647,6 @@ def _usable_count_index(
     return idx
 
 
-# Header tokens that say a per-variant count column counts PEOPLE carrying the
-# variant (a case series), as opposed to alleles, families, or a cohort size.
-_CASE_SERIES_PEOPLE_TOKENS = (
-    "case",
-    "patient",
-    "proband",
-    "subject",
-    "individual",
-    "carrier",
-    "affected",
-    "person",
-    "people",
-)
-_CASE_SERIES_EXCLUDE_TOKENS = (
-    "family",
-    "families",
-    "kindred",
-    "control",
-    "unaffected",
-    "allele",
-    "total",
-    "cohort",
-    "screened",
-)
-
-
-# A people token alone is not enough: a case-control table's bare "Cases"
-# column is a cohort denominator, not a per-variant count. The header must say
-# it counts ("Case count", "No. of patients", "Probands (n)", "n patients") or
-# name carriers outright.
-_CASE_SERIES_COUNT_WORDS = ("count", "number", "noof", "numberof", "nof")
-_CASE_SERIES_N_RE = re.compile(r"(?:^|[^a-z])n(?:$|[^a-z])")
-
-
-def _is_case_series_people_header(label: Optional[str]) -> bool:
-    """True when an affected-mapped column header counts individual cases.
-
-    "Case count", "No. of patients", "Probands (n)" count people who carry the
-    variant and have the disease. When such a column is the ONLY count column
-    (no carrier column, no unaffected/control column), every counted case is an
-    observed carrier, so the carrier total is that same number: a direct
-    reading, not a partition completed by arithmetic. Family, cohort, allele,
-    and control headers are excluded because they count something else, and a
-    bare "Cases"/"Patients" header (no count word) is left alone because a
-    case-control cohort column looks exactly like that.
-    """
-    normalized = _normalize_header(label or "")
-    if not normalized:
-        return False
-    if _is_population_frequency_header(normalized):
-        return False
-    if any(token in normalized for token in _CASE_SERIES_EXCLUDE_TOKENS):
-        return False
-    if not any(token in normalized for token in _CASE_SERIES_PEOPLE_TOKENS):
-        return False
-    if "carrier" in normalized:
-        return True
-    raw = re.sub(r"[^a-z0-9()]+", "", (label or "").lower())
-    if any(word in normalized for word in _CASE_SERIES_COUNT_WORDS):
-        return True
-    return bool(_CASE_SERIES_N_RE.search(raw)) or "(n)" in raw or raw.startswith("n")
-
-
 def _router_count_type_for_label(label: Optional[str], role: str) -> Optional[str]:
     normalized = _normalize_header(label or "")
     if not normalized:
@@ -2787,8 +2700,6 @@ def _router_count_provenance(
     count_idx: Optional[int],
     aff_idx: Optional[int],
     unaff_idx: Optional[int],
-    *,
-    case_series: bool = False,
 ) -> Dict[str, Optional[str]]:
     carrier_label = (
         "implicit one carrier per clinical row"
@@ -2797,22 +2708,11 @@ def _router_count_provenance(
     )
     affected_label = _header_label(table, aff_idx)
     unaffected_label = _header_label(table, unaff_idx)
-    # In a closed case series the one count column counts cases carrying the
-    # variant, so it is both the carrier total and the affected count. Declare
-    # the affected type as ``case`` (the contract's closed-population rule);
-    # otherwise the phenotype guard sees affected == carriers under the same
-    # label and clears it as a copied total (19 of 74 MYBPC3 33673806 rows on
-    # the tranche 01 candidate).
-    affected_type = (
-        "case"
-        if case_series
-        else _router_count_type_for_label(affected_label, "affected")
-    )
     return {
         "carriers_column_label": carrier_label,
         "carriers_count_type": _router_count_type_for_label(carrier_label, "carriers"),
         "affected_column_label": affected_label,
-        "affected_count_type": affected_type,
+        "affected_count_type": _router_count_type_for_label(affected_label, "affected"),
         "unaffected_column_label": unaffected_label,
         "unaffected_count_type": _router_count_type_for_label(
             unaffected_label, "unaffected"
@@ -3199,29 +3099,10 @@ def parse_routed_table(
                 affected = total
 
         # If we have affected + unaffected but no total, derive it.
-        carrier_idx = count_idx
-        case_series = False
         if total is None and affected is not None and unaffected is not None:
             total = affected + unaffected + (uncertain or 0)
             if total == 0:
                 total = None
-        elif (
-            total is None
-            and affected is not None
-            and unaffected is None
-            and uncertain is None
-            and count_idx is None
-            and unaff_idx is None
-            and unc_idx is None
-            and _is_case_series_people_header(_header_label(table, aff_idx))
-        ):
-            # Closed case series: the only count column counts cases carrying
-            # the variant, so those cases are the observed carriers. MYBPC3
-            # 33673806 ("Case count") supplied 74 affected values and zero
-            # carrier values before this; carriers were the same integers.
-            total = affected
-            carrier_idx = aff_idx
-            case_series = True
 
         n_variants = max(len(cdna_identities), len(protein_values), 1)
         for variant_idx in range(n_variants):
@@ -3251,7 +3132,7 @@ def parse_routed_table(
             source_table = table.caption or f"Table {table.table_id}"
             source_location = f"{source_table}, row {row_number} (router+deterministic)"
             observation_provenance = _router_observation_provenance(
-                table, row_number, carrier_idx
+                table, row_number, count_idx
             )
             fact_rows = _router_fact_rows(
                 table=table,
@@ -3264,7 +3145,7 @@ def parse_routed_table(
                 affected=affected,
                 unaffected=unaffected,
                 uncertain=uncertain,
-                count_idx=carrier_idx,
+                count_idx=count_idx,
                 aff_idx=aff_idx,
                 unaff_idx=unaff_idx,
                 unc_idx=unc_idx,
@@ -3333,7 +3214,7 @@ def parse_routed_table(
                 ),
                 "key_quotes": [],
                 "count_provenance": _router_count_provenance(
-                    table, carrier_idx, aff_idx, unaff_idx, case_series=case_series
+                    table, count_idx, aff_idx, unaff_idx
                 ),
                 "fact_provenance": fact_rows,
             }

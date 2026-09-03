@@ -48,69 +48,6 @@ def normalize_legacy_notation(value: Any) -> str | None:
     )
 
 
-# Protein-level legacy spellings older channelopathy papers use for a variant
-# they never write in HGVS. ``L860fsX89`` / ``L860fsx89`` is a frameshift at
-# Leu860 with the stop 89 codons downstream; ``1795insD`` / ``1570insI`` is an
-# amino-acid insertion after residue 1795 / 1570. The scorer already bridges
-# both to gold (``matches("L860fsX", "L860fsx89")`` and
-# ``matches("P.Y1795_E1796INSD", "1795insD")`` are True), but the extraction
-# filter dropped them as nameless rows because the model left every identity
-# field null and kept only ``source_notation`` (tranche 01, SCN5A 16764707:
-# three gold rows lost this way).
-_PROTEIN_FRAMESHIFT_RE = re.compile(
-    r"^(?P<ref>[ACDEFGHIKLMNPQRSTVWY])(?P<pos>\d{1,5})fs(?:[xX*]\d{0,4})?$"
-)
-_PROTEIN_LEGACY_INDEL_RE = re.compile(
-    r"^(?P<pos>\d{1,5})(?P<op>(?i:ins|del))(?P<aa>[A-Z]{1,6})$"
-)
-# N is the universal nucleotide wildcard; a payload spelled only in these
-# letters is a nucleotide indel (or ambiguous), never a protein-level one.
-_NUCLEOTIDES = frozenset("ACGTN")
-
-
-def promote_source_only_protein_identity(
-    variant: MutableMapping[str, Any],
-    gene_symbol: Any = None,
-) -> str | None:
-    """Give a source-only legacy *protein* spelling an identity field.
-
-    Only fires when ``cdna_notation``, ``protein_notation``, and
-    ``legacy_notation`` are all empty and ``source_notation`` is one of two
-    narrow shapes:
-
-    * a single-letter frameshift ``<Ref><pos>fs[X<n>]`` → ``protein_notation``
-      is set to the canonical ``<Ref><pos>fsX`` the rest of the pipeline uses;
-    * a residue-position amino-acid indel ``<pos>(ins|del)<AA>`` whose payload
-      is not spelled only in A/C/G/T → ``legacy_notation`` keeps the verbatim
-      token (a payload of only A/C/G/T letters is ambiguous with a nucleotide
-      indel and is left to the cDNA rules).
-
-    Returns the identity written, or ``None`` when nothing changed. Never
-    invents coordinates or a transcript.
-    """
-
-    for key in ("cdna_notation", "protein_notation", "legacy_notation"):
-        if str(variant.get(key) or "").strip():
-            return None
-    token = re.sub(r"\s+", "", str(variant.get("source_notation") or "").strip())
-    if not token:
-        return None
-    fs = _PROTEIN_FRAMESHIFT_RE.fullmatch(token)
-    if fs:
-        identity = f"{fs.group('ref')}{fs.group('pos')}fsX"
-        variant["protein_notation"] = identity
-        return identity
-    indel = _PROTEIN_LEGACY_INDEL_RE.fullmatch(token)
-    if indel:
-        payload = indel.group("aa")
-        if set(payload.upper()) <= _NUCLEOTIDES:
-            return None
-        identity = f"{indel.group('pos')}{indel.group('op').lower()}{payload}"
-        variant["legacy_notation"] = identity
-        return identity
-    return None
-
-
 def gene_supports_legacy_notation(gene_symbol: Any) -> bool:
     """Return whether bare strict indels are a known legacy identity for a gene."""
 

@@ -66,11 +66,7 @@ DENOMINATOR_COUNT_TYPES = frozenset(
 # pipeline/count_classifier._SUSPICIOUS_LABEL_PATTERNS).
 POPULATION_LABEL_RE = re.compile(
     r"gnomad|exac|topmed|1000\s*genomes|allele\s*freq|allele\s*count|"
-    r"\bmaf\b|\ba[cn]\b|minor\s*allele|population\s*frequency|"
-    # "Genotype frequency" / "genotype counts (het/hom)" columns tabulate a
-    # population's genotypes (ESP/ExAC-style), not a clinical carrier series
-    # (SCN5A 23414114 emitted 21 counted extras from one such table).
-    r"genotype\s*(?:frequenc|count|distribution)|\bgenotypes\b",
+    r"\bmaf\b|\ba[cn]\b|minor\s*allele|population\s*frequency",
     re.IGNORECASE,
 )
 

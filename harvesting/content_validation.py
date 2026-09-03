@@ -89,53 +89,6 @@ def is_abstract_reference_shell(content: str) -> bool:
     return _BODY_HEADING_RE.search(between) is None
 
 
-# Folded-supplement evidence. ``harvesting/supplement_fold.py`` appends converted
-# supplement files to FULL_CONTEXT under these markers; a paywalled publisher
-# page (abstract + navigation + reference list) that carries them is not a
-# shell for extraction purposes: the supplement tables are the source.
-FOLDED_SUPPLEMENT_MARKERS = (
-    "<!-- GVF_FOLDED_SUPPLEMENTS_BEGIN -->",
-    "# SUPPLEMENTAL FILE",
-)
-SUPPLEMENT_CONTENT_MIN_CHARS = 1000
-SUPPLEMENT_CONTENT_MIN_TABLE_ROWS = 3
-SUPPLEMENT_CONTENT_MIN_VARIANT_TOKENS = 3
-_SUPPLEMENT_VARIANT_TOKEN_RE = re.compile(
-    r"\b(?:p\.)?[A-Z][a-z]{2}\d{1,4}(?:[A-Z][a-z]{2}|Ter|X|\*|fs)"
-    r"|\b[ACDEFGHIKLMNPQRSTVWY]\d{1,4}(?:[ACDEFGHIKLMNPQRSTVWY]|X|\*)\b"
-    r"|\bc\.\d+[+-]?\d*(?:_\d+)?(?:[ACGT]>[ACGT]|del|dup|ins)"
-)
-_PIPE_ROW_RE = re.compile(r"(?m)^\s{0,3}\|.*\|\s*$")
-
-
-def has_substantive_supplement_content(content: str) -> bool:
-    """Return True when folded supplement text large enough to extract from is present.
-
-    RYR2 22222782 is a Springer access shell (abstract, ``Access this article``,
-    ``Buy Now``, reference list) followed by two folded ``.doc`` supplements
-    holding 235 table rows and every gold variant. ``is_abstract_reference_shell``
-    is right that the article body is missing, but refusing the document sent
-    extraction a PubMed abstract instead of those tables. 22 of the 70 corpus
-    full texts the reuse gate refused on 2026-09-03 were this shape.
-    """
-    if not content:
-        return False
-    starts = [i for i in (content.find(m) for m in FOLDED_SUPPLEMENT_MARKERS) if i >= 0]
-    if not starts:
-        return False
-    tail = content[min(starts) :]
-    if len(tail) < SUPPLEMENT_CONTENT_MIN_CHARS:
-        return False
-    # Length alone is fold chrome plus leftover prose; require the fold to
-    # carry table rows or variant tokens before it can stand in for a body.
-    if len(_PIPE_ROW_RE.findall(tail)) >= SUPPLEMENT_CONTENT_MIN_TABLE_ROWS:
-        return True
-    return (
-        len(_SUPPLEMENT_VARIANT_TOKEN_RE.findall(tail))
-        >= SUPPLEMENT_CONTENT_MIN_VARIANT_TOKENS
-    )
-
-
 def _is_binary_content(content: str) -> tuple[bool, str]:
     """Check if content appears to be binary data rather than text.
 
@@ -188,9 +141,7 @@ def validate_content_quality(
 
     content_lower = content.lower()
 
-    if is_abstract_reference_shell(content) and not has_substantive_supplement_content(
-        content
-    ):
+    if is_abstract_reference_shell(content):
         return False, "Abstract/reference shell: no substantive article body"
 
     for pattern in JUNK_CONTENT_PATTERNS:

@@ -26,7 +26,6 @@ from pipeline.source_quality import (
     demote_empty_full_context,
     is_reusable_fulltext_source,
     is_usable_fulltext_source,
-    prefer_richer_sibling,
 )
 from utils.env_utils import local_data_discovery_disabled
 
@@ -1149,11 +1148,7 @@ def _consolidate_from_corpus(
                         )
             continue
         try:
-            # A corpus FULL_CONTEXT overwritten by a worse later fetch can sit
-            # next to the richer CLEANED rendering of the earlier good fetch;
-            # stage the richer text so preprocessing derives from it.
-            chosen = prefer_richer_sibling(src_ft)
-            shutil.copy2(str(chosen), str(harvest_dir / f"{pmid}_FULL_CONTEXT.md"))
+            shutil.copy2(str(src_ft), str(harvest_dir / f"{pmid}_FULL_CONTEXT.md"))
             for extra in (f"{pmid}_CLEANED.md", f"{pmid}_artifacts.json"):
                 s = gene_dir / pmid / extra
                 if s.is_file():
@@ -1445,32 +1440,6 @@ def download_fulltext(
 # =============================================================================
 
 
-def _existing_cleaned_is_richer(cleaned_path: Path, new_cleaned: str) -> bool:
-    """True when an existing CLEANED is a much richer, usable rendering.
-
-    Preprocessing regenerates ``_CLEANED.md`` from ``_FULL_CONTEXT.md`` on
-    every run. When the corpus cache staged a richer CLEANED sibling because
-    the FULL_CONTEXT was empty or a stub, and the harvester then wrote an
-    abstract-only FULL_CONTEXT, the regenerated file would be the abstract.
-    Keep the staged rendering when it is at least ``RICHER_SIBLING_RATIO``
-    times the rewrite, at least ``RICHER_SIBLING_MIN_BYTES``, and usable.
-    """
-    from pipeline.source_quality import (
-        RICHER_SIBLING_MIN_BYTES,
-        RICHER_SIBLING_RATIO,
-    )
-
-    try:
-        existing_size = cleaned_path.stat().st_size
-    except OSError:
-        return False
-    if existing_size < RICHER_SIBLING_MIN_BYTES:
-        return False
-    if existing_size < RICHER_SIBLING_RATIO * max(len(new_cleaned.encode("utf-8")), 1):
-        return False
-    return is_usable_fulltext_source(cleaned_path)
-
-
 def preprocess_papers(
     harvest_dir: Path,
     gene_symbol: str,
@@ -1545,21 +1514,6 @@ def preprocess_papers(
             cleaned_path = f.with_name(
                 f.name.replace("_FULL_CONTEXT.md", "_CLEANED.md")
             )
-            if _existing_cleaned_is_richer(cleaned_path, cleaned):
-                # The corpus cache staged a richer CLEANED rendering as an
-                # extraction floor (empty/stub FULL_CONTEXT beside a populated
-                # sibling). Rewriting it from an abstract-only FULL_CONTEXT
-                # would silently discard the paper again.
-                logger.warning(
-                    "preprocess: keeping existing %s (%d bytes) over a %d-byte "
-                    "rewrite from %s",
-                    cleaned_path.name,
-                    cleaned_path.stat().st_size,
-                    len(cleaned),
-                    f.name,
-                )
-                processed += 1
-                continue
             cleaned_path.write_text(cleaned, encoding="utf-8")
             written += 1
             processed += 1

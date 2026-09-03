@@ -237,7 +237,6 @@ def notation(
     cdna: str | None,
     structural_description: str | None = None,
     variant_class: str | None = None,
-    legacy: str | None = None,
 ) -> str:
     parts = [p.strip() for p in (protein, cdna) if p and p.strip()]
     structural = (structural_description or "").strip()
@@ -245,11 +244,6 @@ def notation(
         STRUCTURAL_ONLY_VARIANT_CLASSES
     ):
         parts.append(structural)
-    if not parts and legacy and legacy.strip():
-        # A strict source-only legacy label (``1795insD``, ``4321delAC``) is
-        # the paper's only spelling of a real variant. The scorer bridges it;
-        # dropping it here would hide a paper-found identity from the lane.
-        parts.append(legacy.strip())
     return " ".join(dict.fromkeys(parts))
 
 
@@ -433,9 +427,6 @@ def rows_for_gene(
         if "structural_description" in variant_columns
         else "NULL"
     )
-    legacy_expr = (
-        "v.legacy_notation" if "legacy_notation" in variant_columns else "NULL"
-    )
     q = f"""
         SELECT vp.pmid              AS pmid,
                vp.variant_id        AS variant_id,
@@ -444,7 +435,6 @@ def rows_for_gene(
                vp.source_layer      AS source_layer,
                v.protein_notation   AS protein_notation,
                v.cdna_notation      AS cdna_notation,
-               {legacy_expr}        AS legacy_notation,
                {variant_class_expr} AS variant_class,
                {structural_expr}    AS structural_description,
                pd.total_carriers_observed AS carriers,
@@ -513,7 +503,6 @@ def rows_for_gene(
             r["cdna_notation"],
             r["structural_description"],
             r["variant_class"],
-            legacy=r["legacy_notation"],
         )
         if not var:
             dropped[pmid] += 1
