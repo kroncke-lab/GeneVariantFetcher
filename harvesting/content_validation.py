@@ -99,6 +99,12 @@ FOLDED_SUPPLEMENT_MARKERS = (
 )
 SUPPLEMENT_CONTENT_MIN_CHARS = 1000
 SUPPLEMENT_CONTENT_MIN_TABLE_ROWS = 3
+SUPPLEMENT_CONTENT_MIN_VARIANT_TOKENS = 3
+_SUPPLEMENT_VARIANT_TOKEN_RE = re.compile(
+    r"\b(?:p\.)?[A-Z][a-z]{2}\d{1,4}(?:[A-Z][a-z]{2}|Ter|X|\*|fs)"
+    r"|\b[ACDEFGHIKLMNPQRSTVWY]\d{1,4}(?:[ACDEFGHIKLMNPQRSTVWY]|X|\*)\b"
+    r"|\bc\.\d+[+-]?\d*(?:_\d+)?(?:[ACGT]>[ACGT]|del|dup|ins)"
+)
 _PIPE_ROW_RE = re.compile(r"(?m)^\s{0,3}\|.*\|\s*$")
 
 
@@ -118,9 +124,16 @@ def has_substantive_supplement_content(content: str) -> bool:
     if not starts:
         return False
     tail = content[min(starts) :]
-    if len(tail) >= SUPPLEMENT_CONTENT_MIN_CHARS:
+    if len(tail) < SUPPLEMENT_CONTENT_MIN_CHARS:
+        return False
+    # Length alone is fold chrome plus leftover prose; require the fold to
+    # carry table rows or variant tokens before it can stand in for a body.
+    if len(_PIPE_ROW_RE.findall(tail)) >= SUPPLEMENT_CONTENT_MIN_TABLE_ROWS:
         return True
-    return len(_PIPE_ROW_RE.findall(tail)) >= SUPPLEMENT_CONTENT_MIN_TABLE_ROWS
+    return (
+        len(_SUPPLEMENT_VARIANT_TOKEN_RE.findall(tail))
+        >= SUPPLEMENT_CONTENT_MIN_VARIANT_TOKENS
+    )
 
 
 def _is_binary_content(content: str) -> tuple[bool, str]:

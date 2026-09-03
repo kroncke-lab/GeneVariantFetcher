@@ -1,0 +1,34 @@
+{
+ "run_id": "20260903_protocol_mixed02_baseline",
+ "fn_total": 35,
+ "by_leaf": {
+  "projection_dropped": 1,
+  "unknown_notation": 20,
+  "condensing": 1,
+  "acquisition": 13
+ },
+ "by_paper": {
+  "SCN5A:12106943": {
+   "unknown_notation": 16
+  },
+  "SCN5A:25650408": {
+   "acquisition": 12
+  },
+  "SCN5A:30059973": {
+   "unknown_notation": 2,
+   "condensing": 1
+  },
+  "BRCA1:18627636": {
+   "projection_dropped": 1
+  },
+  "KCNH2:26022375": {
+   "unknown_notation": 1
+  },
+  "KCNH2:14642688": {
+   "acquisition": 1
+  },
+  "SCN5A:21167004": {
+   "unknown_notation": 1
+  }
+ }
+}

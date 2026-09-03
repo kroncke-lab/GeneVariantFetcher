@@ -239,6 +239,13 @@ def test_hgvsp_header_maps_to_protein_and_case_count_yields_carriers():
     prov = row["count_provenance"]
     assert prov["carriers_column_label"] == "Case count"
     assert prov["carriers_count_type"] == "per_variant_carrier"
+    # The affected value is sourced by the case column itself; the phenotype
+    # guard must not clear it as a copied carrier total (19 of 74 MYBPC3 rows
+    # lost affected on the tranche 01 candidate before this).
+    assert prov["affected_count_type"] == "case"
+    from pipeline.phenotype_count_guard import phenotype_fields_to_clear
+
+    assert phenotype_fields_to_clear(row) == []
     assert row["patients"]["column_ref"] == "Case count"
     # Rows of other genes stay out of a MYBPC3 extraction.
     assert "p.Glu101Lys" not in by_protein

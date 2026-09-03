@@ -33,9 +33,17 @@ until the preceding gate passes and its artifact is recorded.
       precision 71.8%); 70/87 misses acquisition, 5 reachable
       (`scripts/recall_audit/fn_root_cause.py`). Candidate `b56f469f` (six
       gene-agnostic fixes, `docs/evidence/mixed_gold_tranche01_20260903.md`)
-      extracting. Next: score + `run_eval.py compare --phase discovery`; then
-      tranche 02 baseline (re-materialise the nine `506a949c` runtime files)
-      + identical candidate for confirmation; tranche 03 v2 discovery.
+      scored: 157/54/85, recall +0.83 pp (**below the +1.0 pp discovery
+      bar → `reject_or_revise_candidate`**), precision +2.65 pp,
+      counted-extra precision 82→91%, carriers supplied 48→125 (conditional
+      MAE 0.812→0.104), affected 101→81 (guard interaction, fixed in v2).
+      Tranche 01 cost by the public-price proxy: baseline $4.369 + candidate
+      $4.206 = **$8.575** (registry estimate was $10.25 paired); ledger
+      $44.519 + $8.575 = **$53.094 used / $46.906 remaining** before tranche
+      02. Tranche 02 = v2 discovery (baseline re-materialised from `506a949c`,
+      in flight; candidate = v1 + six hardenings incl. the scorer's
+      conflicting-cDNA bridge guard; `docs/evidence/mixed_gold_tranche02_20260903.md`).
+      Then tranche 03 = v2 confirmation if it passes; tranche 04 if budget.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row

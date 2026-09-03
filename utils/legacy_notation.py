@@ -63,7 +63,9 @@ _PROTEIN_FRAMESHIFT_RE = re.compile(
 _PROTEIN_LEGACY_INDEL_RE = re.compile(
     r"^(?P<pos>\d{1,5})(?P<op>(?i:ins|del))(?P<aa>[A-Z]{1,6})$"
 )
-_NUCLEOTIDES = frozenset("ACGT")
+# N is the universal nucleotide wildcard; a payload spelled only in these
+# letters is a nucleotide indel (or ambiguous), never a protein-level one.
+_NUCLEOTIDES = frozenset("ACGTN")
 
 
 def promote_source_only_protein_identity(

@@ -70,7 +70,7 @@ POPULATION_LABEL_RE = re.compile(
     # "Genotype frequency" / "genotype counts (het/hom)" columns tabulate a
     # population's genotypes (ESP/ExAC-style), not a clinical carrier series
     # (SCN5A 23414114 emitted 21 counted extras from one such table).
-    r"\bgenotypes?\b",
+    r"genotype\s*(?:frequenc|count|distribution)|\bgenotypes\b",
     re.IGNORECASE,
 )
 

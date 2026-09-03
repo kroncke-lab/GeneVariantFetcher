@@ -2032,6 +2032,34 @@ def cdna_deletion_endpoint_match(left: str, right: str) -> bool:
 _ARROW_RE = re.compile(r"\s*(?:-+>|→)\s*")
 
 
+_CONCRETE_CDNA_TOKEN_RE = re.compile(
+    r"\bc\.[0-9*?+-]+(?:_[0-9*?+-]+)?"
+    r"(?:delins[ACGT]+|del[ACGT]*|dup[ACGT]*|ins[ACGT]+|[ACGT]>[ACGT])",
+    re.IGNORECASE,
+)
+
+
+def _concrete_cdna_tokens(value: str) -> set[str]:
+    return {
+        re.sub(r"\s+", "", token.upper())
+        for token in _CONCRETE_CDNA_TOKEN_RE.findall(value or "")
+    }
+
+
+def _concrete_cdna_conflict(a: str, b: str) -> bool:
+    """Both strings name a coding-DNA allele and no pair of them is the same event."""
+    left, right = _concrete_cdna_tokens(a), _concrete_cdna_tokens(b)
+    if not left or not right:
+        return False
+    if left & right:
+        return False
+    for x in left:
+        for y in right:
+            if cdna_deletion_endpoint_match(x, y):
+                return False
+    return True
+
+
 def matches(a: str, b: str, gene: str) -> bool:
     from utils.variant_normalizer import normalize_variant, variants_match
 
@@ -2053,12 +2081,32 @@ def matches(a: str, b: str, gene: str) -> bool:
         and cdna_pattern.match(compact_right)
     ):
         return True
+    # When both strings carry a concrete cDNA allele and those alleles differ,
+    # they are different variants that happen to touch the same codon: the
+    # position-level bridges below (cDNA-indel codon, terminal/splice codon,
+    # deletion endpoint) must not pair them. Tranche 01: the prediction
+    # ``p.Tyr1136* c.3408C>A`` was paired with gold ``c.3407_3409delACT`` and
+    # the true gold ``c.3408C>A`` was left unmatched.
+    position_bridges_allowed = not _concrete_cdna_conflict(a, b)
     for left in variant_candidates(a, gene):
         for right in variant_candidates(b, gene):
             left_key = re.sub(r"^(?:P\.)|\s+", "", left.upper())
             right_key = re.sub(r"^(?:P\.)|\s+", "", right.upper())
             if left_key == right_key:
                 return True
+            if not position_bridges_allowed:
+                if cdna_protein_translation_consistent(left, right):
+                    return True
+                if cdna_protein_translation_consistent(right, left):
+                    return True
+                try:
+                    if normalize_variant(left, gene) == normalize_variant(right, gene):
+                        return True
+                    if variants_match(left, right, gene):
+                        return True
+                except Exception:
+                    pass
+                continue
             left_cdna, right_cdna = (
                 cdna_indel_position(left),
                 cdna_indel_position(right),
