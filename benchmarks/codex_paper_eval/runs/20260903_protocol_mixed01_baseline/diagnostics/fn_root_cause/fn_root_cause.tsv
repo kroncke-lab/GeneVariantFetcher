@@ -1,0 +1,88 @@
+gene	pmid	variant	sweep_class	leaf	db_layers	in_corpus	in_run_text	in_llm_request	in_llm_response	in_extraction	in_db	in_db_quarantined	in_paper_lane	in_linkage_lane
+SCN5A	27232914	R1629G	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	27232914	c.3391-1G>A	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	28779003	I1448N	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	28469501	G289S	present_in_body	paper_row_lost_to_linkage_origin	clinvar	True	True	True	True	True	True	False	False	True
+SCN5A	12566525	A1330T	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	12566525	I1768V	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	12566525	P.Y1795_E1796INSD	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12566525	Q692K	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	15176425	1685DELAG+1DELG	source_absent	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	15176425	277DELS	source_absent	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	15176425	D202H	source_absent	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	15176425	R231C	source_absent	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	15176425	S547L	source_absent	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	15176425	W248C	source_absent	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	17971661	E1784K	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	A178P	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	A300T	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	A341E	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	A341V	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	A344/SP	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	A344A/SPLICE	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	D317G	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	DELF340	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	E284K	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	G168R	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	G185S	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	G269D	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	G269S	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	G306R	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	G345R	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	I567S	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	K393N	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	L151	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	L266P	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	L273F	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	Q357H	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	Q530X	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R190Q	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R243C	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R366Q	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R366W	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R518X	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	14678125	R539W	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	R594Q	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	S225L	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	S349W	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	S566F	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	T144A	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	T311I	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	T312I	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	V172M	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	V254L	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	V254M	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	V524G	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	Y171X	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	14678125	Y315C	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	21131640	G168R	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	G316E	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	L266P	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	R243C	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	R360G	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	R518X	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+KCNQ1	21131640	S333CFS/129X	text_absent_notation_inconclusive	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	21131640	S546L	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNQ1	21131640	S566F	text_absent_substitution	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNH2	16470702	7Q34Q36.2DEL	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	16764707	L860fsX	present_in_body	parser_dropped		True	True	True	True	False	False	False	False	False
+SCN5A	16764707	P.1570_F1571INSI	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	16764707	P.Y1795_E1796INSD	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12574983	R1623Q	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+MYBPC3	33673806	p.Glu843_Arg845del	present_in_body	condensing		True	True	False	False	False	False	False	False	False
+SCN5A	15176425	A185T	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	15176425	A691T	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	15176425	I239V	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	15176425	R190G	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	15176425	R340Q	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNH2	15176425	C39X	text_absent_garbled_body	acquisition		False	False	False	False	False	False	False	False	False
+KCNH2	15176425	D460fsX	text_absent_garbled_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNH2	15176425	E1053fsX	text_absent_garbled_body	acquisition		False	False	False	False	False	False	False	False	False
+KCNH2	15176425	G572S	text_absent_garbled_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNH2	15176425	IVS13+1G>A	text_absent_garbled_body	acquisition		False	False	False	False	False	False	False	False	False
+KCNH2	15176425	R273X	text_absent_garbled_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+KCNH2	15176425	W497X	text_absent_garbled_body	acquisition		False	False	False	False	False	False	False	False	False
+RYR2	17556193	R2267H	present_in_body	matcher	figure,llm_table,pubtator	True	True	True	True	True	True	False	True	True
+RYR2	17556193	S4565R	present_in_body	matcher	figure,llm_table,pubtator	True	True	True	True	True	True	False	True	True
+SCN5A	11804990	D1595N	text_absent_figures_present	unknown_notation	pubtator	False	False	False	False	False	True	False	False	True
+SCN5A	11804990	G298S	text_absent_figures_present	unknown_notation	clinvar,pubtator	False	False	False	False	False	True	False	False	True
