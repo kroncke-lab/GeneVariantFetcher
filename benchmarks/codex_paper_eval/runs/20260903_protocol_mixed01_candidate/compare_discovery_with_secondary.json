@@ -1,0 +1,138 @@
+{
+  "attempt_count": 49,
+  "cluster_count": 45,
+  "cluster_unit": "PMID",
+  "criteria": {
+    "precision_noninferiority_pass": true,
+    "recall_pass": false
+  },
+  "decision": "reject_or_revise_candidate",
+  "integrity": {
+    "baseline_report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_baseline/report.json",
+    "baseline_report_sha256": "107a8a56233758ba47700709f8320cb23dad795c40c7e44e5d381fda09ea1e7e",
+    "candidate_report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/report.json",
+    "candidate_report_sha256": "a80fc5ec83e5c212cb18696c2b59563cbb6e538c2c9c7ed519ca70faf4d34a88",
+    "registry": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/registry.json",
+    "registry_sha256": "fb44d2fbe29466fa75fa14ea5e95ac7b181719da68f5d80c4db93e578207f0c6",
+    "secondary_endpoints": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/secondary_endpoints.json",
+    "secondary_endpoints_sha256": "5dfeba9d0d9e0eb311907057995339e194bceef5164796920e27190c56f01cef"
+  },
+  "metrics": {
+    "precision": {
+      "baseline": 0.7175925925925926,
+      "candidate": 0.7440758293838863,
+      "delta_candidate_minus_baseline": 0.02648323679129372,
+      "one_sided_lower_confidence_bound": 0.001558054464164793
+    },
+    "recall": {
+      "baseline": 0.640495867768595,
+      "candidate": 0.6487603305785123,
+      "delta_candidate_minus_baseline": 0.008264462809917328,
+      "one_sided_lower_confidence_bound": 0.0
+    }
+  },
+  "passed": false,
+  "phase": "discovery",
+  "registered_rule": {
+    "confidence_interval": {
+      "cluster_unit": "PMID",
+      "method": "paired_cluster_bootstrap_nearest_rank",
+      "resamples": 10000,
+      "seed": 2026090301
+    },
+    "confirmation": "A discovery pass advances only to the next unopened tranche; accept the candidate only if the same frozen rule passes there.",
+    "delta_definition": "candidate_minus_baseline_on_the_same_tranche",
+    "pass_condition": "Observed recall delta >= +0.01 and its one-sided 95% lower bound >= -0.01, while the precision-delta one-sided 95% lower bound is >= -0.02.",
+    "precision_guardrail": {
+      "metric": "paper_derived_micro_variant_identity_precision",
+      "noninferiority_margin": -0.02,
+      "one_sided_confidence_level": 0.95
+    },
+    "primary": {
+      "metric": "paper_derived_micro_variant_identity_recall",
+      "minimum_observed_delta": 0.01,
+      "noninferiority_margin": -0.01,
+      "one_sided_confidence_level": 0.95
+    }
+  },
+  "schema_version": 1,
+  "secondary_count_endpoint": {
+    "cluster_count": 45,
+    "cluster_unit": "PMID",
+    "count_field": "carriers",
+    "criteria": {
+      "coverage_pass": true,
+      "end_to_end_mae_pass": true,
+      "identity_guard_pass": true
+    },
+    "deltas": {
+      "coverage_on_matched": {
+        "delta_candidate_minus_baseline": 0.4865009245942059,
+        "one_sided_lower_confidence_bound": -0.017241379310344862
+      },
+      "end_to_end_mae": {
+        "delta_candidate_minus_baseline": -0.7314049586776858,
+        "one_sided_upper_confidence_bound": -0.016759776536312998
+      }
+    },
+    "endpoint": "paper_derived_end_to_end_carrier_mae",
+    "observed": {
+      "baseline": {
+        "asserted_rows": 242,
+        "coverage_on_matched": 0.3096774193548387,
+        "end_to_end_mae": 2.6818181818181817,
+        "matched_rows": 155,
+        "matched_supplied_rows": 48
+      },
+      "candidate": {
+        "asserted_rows": 242,
+        "coverage_on_matched": 0.7961783439490446,
+        "end_to_end_mae": 1.9504132231404958,
+        "matched_rows": 157,
+        "matched_supplied_rows": 125
+      }
+    },
+    "passed": true,
+    "registered_rule": {
+      "confidence_interval": {
+        "cluster_unit": "PMID",
+        "method": "paired_cluster_bootstrap_nearest_rank",
+        "resamples": 10000,
+        "seed": 2026090301
+      },
+      "confirmation": "A pass is a discovery; the identical candidate runtime must pass the same rule on the next unopened tranche.",
+      "count_field": "carriers",
+      "coverage_on_matched": {
+        "minimum_observed_delta": 0.0,
+        "noninferiority_margin": -0.05,
+        "note": "share of gold-matched rows whose prediction supplies a carrier value"
+      },
+      "definition": "For every gold row with an asserted carrier value: |gold - predicted|, where predicted is the paired paper-derived prediction's supplied carrier value, or 0 when the row was not paired or the prediction supplied no value (identity miss and abstention both count as the full error). Mean over the tranche's asserted rows; PMID-cluster paired bootstrap.",
+      "end_to_end_mae": {
+        "maximum_observed_delta": -0.05,
+        "note": "candidate minus baseline, carriers per asserted gold row",
+        "upper_bound_must_be_below": 0.0
+      },
+      "endpoint": "paper_derived_end_to_end_carrier_mae",
+      "identity_guard": {
+        "note": "Same one-sided 95% PMID-cluster lower bounds as the primary rule, plus observed recall delta >= 0 (Grok 4.6 review, added before the tranche 02 candidate lock); counts may not improve by dropping identities.",
+        "observed_recall_delta_minimum": 0.0,
+        "precision_noninferiority_margin": -0.02,
+        "recall_noninferiority_margin": -0.01
+      },
+      "one_sided_confidence_level": 0.95,
+      "preregistration": "docs/evidence/mixed_gold_count_endpoint_preregistration_20260903.md",
+      "registered_before": "tranche 02 candidate lock (runs/20260903_protocol_mixed02_candidate)",
+      "registered_on": "2026-09-03",
+      "reported_not_scored": [
+        "affected",
+        "unaffected",
+        "conditional_mae"
+      ],
+      "role": "secondary; the identity rule in registry.json stays primary and its verdicts stand",
+      "schema_version": 1
+    },
+    "role": "secondary_preregistered_2026-09-03"
+  },
+  "tier_id": "mixed_gold_01"
+}

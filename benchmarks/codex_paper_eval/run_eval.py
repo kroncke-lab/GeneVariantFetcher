@@ -3327,6 +3327,33 @@ def command_compare(args) -> None:
         "candidate_report": str(candidate_path),
         "candidate_report_sha256": digest(candidate_path),
     }
+    secondary_path = getattr(args, "secondary_endpoints", None)
+    if secondary_path is not None:
+        # Preregistered secondary count endpoint (2026-09-03). It reads the two
+        # locked prediction files and the tranche answer key, which are already
+        # open once both arms are scored, and never changes the primary decision.
+        from benchmarks.codex_paper_eval.secondary_count_endpoint import (
+            evaluate_secondary_count_endpoint,
+        )
+
+        for name in ("gold_root", "baseline_predictions", "candidate_predictions"):
+            if getattr(args, name, None) is None:
+                raise SystemExit(
+                    f"--secondary-endpoints requires --{name.replace('_', '-')}"
+                )
+        secondary_path = secondary_path.resolve()
+        rule = read_json(secondary_path)
+        comparison["secondary_count_endpoint"] = evaluate_secondary_count_endpoint(
+            baseline_report=read_json(baseline_path),
+            candidate_report=read_json(candidate_path),
+            baseline_predictions=read_json(args.baseline_predictions.resolve()),
+            candidate_predictions=read_json(args.candidate_predictions.resolve()),
+            gold_root=args.gold_root.resolve(),
+            rule=rule,
+            identity_metrics=comparison["metrics"],
+        )
+        comparison["integrity"]["secondary_endpoints"] = str(secondary_path)
+        comparison["integrity"]["secondary_endpoints_sha256"] = digest(secondary_path)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     write_json(args.out, comparison)
     print(args.out)
@@ -3644,6 +3671,15 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--candidate-report", type=Path, required=True)
     p.add_argument("--phase", choices=("discovery", "confirmation"), required=True)
     p.add_argument("--out", type=Path, required=True)
+    p.add_argument(
+        "--secondary-endpoints",
+        type=Path,
+        default=None,
+        help="preregistered secondary count rule JSON; adds a secondary_count_endpoint block",
+    )
+    p.add_argument("--gold-root", type=Path, default=None)
+    p.add_argument("--baseline-predictions", type=Path, default=None)
+    p.add_argument("--candidate-predictions", type=Path, default=None)
     p.set_defaults(func=command_compare)
     return ap
 

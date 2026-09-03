@@ -77,4 +77,48 @@ v1's six fixes plus:
 6. Scorer: when both strings carry concrete but different cDNA alleles, the
    codon-position bridges do not fire (tranche 01's MYBPC3 pairing error).
 
-Result: pending.
+### Result (`runs/20260903_protocol_mixed02_candidate`, locked 2026-09-03)
+
+| metric | baseline | candidate | delta |
+|---|---:|---:|---:|
+| paper-derived TP / FP / FN | 268 / 54 / 35 | 267 / 55 / 36 | −1 / +1 / +1 |
+| paper-derived recall | 88.45% | 88.12% | −0.33 pp (one-sided 95% LB −1.89 pp) |
+| paper-derived precision | 83.23% | 82.92% | −0.31 pp (LB −1.65 pp) |
+| counted-extra precision | 97.5% | 96.7% | |
+| carriers supplied / 303 | 232 | 227 | −5 |
+| end-to-end carrier MAE (secondary endpoint) | 0.620 | 0.597 | -0.023 (UB +0.077) |
+| carrier coverage on matched rows | 0.866 | 0.850 | -0.015 (LB -0.095) |
+
+Primary rule: **`reject_or_revise_candidate`** (precision guard passed, recall
+bar not met). Secondary count rule: **not passed** — the identity guard fails
+on the negative observed recall delta, and neither the MAE bound nor the
+coverage margin is met.
+
+Every difference between the arms is **model run-to-run variance, not v2
+code**. The one identity flip (KCNH2 15572050 `P1122fsX`) is a row the model
+returned with `protein_notation` in the baseline arm and without it in the
+candidate arm (same `source_notation` `3366insC`); the five lost carrier values
+are rows where the candidate-arm model omitted the count it had supplied in
+the baseline arm, or labelled the column `Allele Count`, which the pre-existing
+population-count rule quarantines in both arms. `temperature` is already 0.0
+in every traced request. None of the six v2 changes touched these rows; the
+gold-blind pre-check had predicted them inert on this tranche.
+
+Implication for the design: with reachable pools of ≈ 5 rows and a
+single stochastic extraction per arm, one paired tranche cannot resolve a
+reading-protocol effect of a few rows from provider nondeterminism of the same
+size. Identity recall on these tranches is acquisition-capped
+(`gold_source_presence_sweep_20260903.md`); the metric that moved by an order
+of magnitude on tranche 01 is count supply, which the preregistered secondary
+endpoint now scores.
+
+Secondary endpoint on tranche 01, computed after the fact as a **locked
+diagnostic only** (tranche 01 was burned before the endpoint existed, so this
+is not a pass): end-to-end carrier MAE 2.682 → 1.950
+(-0.731, UB -0.017), carrier coverage on matched rows
+0.310 → 0.796, identity guard satisfied. All three criteria would have held.
+
+Root cause of the 36 misses: 13 acquisition, 21 notation-unknown (16 of them
+the figure-only SCN5A 12106943), one legacy BIC identity (`180delA`) held out
+of the paper lane by the trusted-identity projection, one fixed-width row
+(`P.I1570DUP`) whose `dup` protein token the fixed-width parser does not emit.

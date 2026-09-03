@@ -45,6 +45,18 @@ until the preceding gate passes and its artifact is recorded.
       in flight; candidate = v1 + six hardenings incl. the scorer's
       conflicting-cDNA bridge guard; `docs/evidence/mixed_gold_tranche02_20260903.md`).
       Then tranche 03 = v2 confirmation if it passes; tranche 04 if budget.
+      **Secondary count endpoint preregistered 2026-09-03** (before the
+      tranche 02 candidate lock; commits a47e3a5a + 8ef743a4;
+      `docs/evidence/mixed_gold_count_endpoint_preregistration_20260903.md`):
+      end-to-end carrier MAE (miss/abstention = full error) with observed
+      delta ≤ −0.05 and bootstrap upper bound < 0, coverage-on-matched
+      non-decreasing, and a hard identity guard (recall LB ≥ −1 pp, precision
+      LB ≥ −2 pp, observed recall delta ≥ 0). Identity stays primary;
+      tranche 01/02 identity verdicts stand. Rule parameters go in
+      `mixed_gold/secondary_endpoints.json` (sibling of the registry, whose
+      digest every scored arm binds). Both reviewers (agy, grok) judged this
+      legitimate given the measured acquisition ceiling, provided it never
+      re-adjudicates burned tranches and never loosens the identity rule.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row

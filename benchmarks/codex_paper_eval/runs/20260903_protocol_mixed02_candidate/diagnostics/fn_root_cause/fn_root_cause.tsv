@@ -1,0 +1,37 @@
+gene	pmid	variant	sweep_class	leaf	db_layers	in_corpus	in_run_text	in_llm_request	in_llm_response	in_extraction	in_db	in_db_quarantined	in_paper_lane	in_linkage_lane
+BRCA1	18627636	180delA	present_in_body	projection_dropped	regex_table	True	True	True	True	True	True	False	False	False
+SCN5A	12106943	A1924T	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	D951X	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	E1225K	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	E161K	text_absent_figures_present	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	12106943	G1319V	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	G1406R	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	G1502S	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	G1743E	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	G752R	text_absent_figures_present	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	12106943	L867X	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	M369K	text_absent_figures_present	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	12106943	R1512W	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	R367C	text_absent_figures_present	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	12106943	R535X	text_absent_figures_present	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	12106943	S1382I	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	12106943	V1405L	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	30059973	P.G1015DFSX14	text_absent_notation_inconclusive	unknown_notation		False	False	False	False	False	False	False	False	False
+SCN5A	30059973	P.I1570DUP	present_in_body	condensing		True	True	False	False	False	False	False	False	False
+SCN5A	30059973	P.L1302VFS18	text_absent_notation_inconclusive	unknown_notation	regex_table	False	False	False	False	True	True	False	False	False
+KCNH2	15572050	P1122fsX	text_absent_notation_inconclusive	unknown_notation	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	A1416E	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	C335S	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	D1041N	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	E1780G	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	E312K	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	H445D	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	I1660S	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	I397V	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	M704T	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	M734V	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	25650408	R179X	text_absent_stub_body	acquisition	clinvar	False	False	False	False	False	True	False	False	True
+SCN5A	25650408	R475K	text_absent_stub_body	acquisition		False	False	False	False	False	False	False	False	False
+KCNH2	26022375	T1083fsX	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False
+KCNH2	14642688	E682X	text_absent_substitution	acquisition		False	False	False	False	False	False	False	False	False
+SCN5A	21167004	I1836T	text_absent_figures_present	unknown_notation		False	False	False	False	False	False	False	False	False

@@ -1,0 +1,127 @@
+{
+  "azure_base_present": true,
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "cohort": {
+    "attempt_count": 49,
+    "comparison_arm": "candidate",
+    "consumption_log": {
+      "path": "consumption_log.jsonl",
+      "required_arms": [
+        "baseline",
+        "candidate"
+      ],
+      "schema_version": 1
+    },
+    "evaluation_design": {
+      "burn_policy": "Any score inspected before a protocol decision burns that tranche for confirmation; confirm on the next still-unopened tranche.",
+      "cache_policy": "frozen_source_bytes_only_no_prior_prediction_or_db_reuse",
+      "cluster_unit": "PMID",
+      "comparison": "paired_frozen_baseline_and_candidate_on_same_manifest",
+      "consume_order": [
+        "mixed_gold_01",
+        "mixed_gold_02",
+        "mixed_gold_03",
+        "mixed_gold_04",
+        "mixed_gold_05",
+        "mixed_gold_06",
+        "mixed_gold_07",
+        "mixed_gold_08",
+        "mixed_gold_09",
+        "mixed_gold_10",
+        "mixed_gold_11",
+        "mixed_gold_12",
+        "mixed_gold_13",
+        "mixed_gold_14",
+        "mixed_gold_15",
+        "mixed_gold_16",
+        "mixed_gold_17",
+        "mixed_gold_18",
+        "mixed_gold_19",
+        "mixed_gold_20",
+        "mixed_gold_21",
+        "mixed_gold_22",
+        "mixed_gold_23",
+        "mixed_gold_24",
+        "mixed_gold_25",
+        "mixed_gold_26",
+        "mixed_gold_27",
+        "mixed_gold_28",
+        "mixed_gold_29"
+      ],
+      "decision_rule": {
+        "confidence_interval": {
+          "cluster_unit": "PMID",
+          "method": "paired_cluster_bootstrap_nearest_rank",
+          "resamples": 10000,
+          "seed": 2026090301
+        },
+        "confirmation": "A discovery pass advances only to the next unopened tranche; accept the candidate only if the same frozen rule passes there.",
+        "delta_definition": "candidate_minus_baseline_on_the_same_tranche",
+        "pass_condition": "Observed recall delta >= +0.01 and its one-sided 95% lower bound >= -0.01, while the precision-delta one-sided 95% lower bound is >= -0.02.",
+        "precision_guardrail": {
+          "metric": "paper_derived_micro_variant_identity_precision",
+          "noninferiority_margin": -0.02,
+          "one_sided_confidence_level": 0.95
+        },
+        "primary": {
+          "metric": "paper_derived_micro_variant_identity_recall",
+          "minimum_observed_delta": 0.01,
+          "noninferiority_margin": -0.01,
+          "one_sided_confidence_level": 0.95
+        }
+      },
+      "guardrails": [
+        "paper_derived_micro_variant_identity_precision_noninferiority",
+        "per_gene_results_reported",
+        "per_gold_provenance_results_reported_without_scientific_pooling"
+      ],
+      "primary_endpoint": "paper_derived_micro_variant_identity_recall"
+    },
+    "gene_attempt_counts": {
+      "BRCA1": 1,
+      "KCNH2": 8,
+      "KCNQ1": 10,
+      "RYR2": 6,
+      "SCN5A": 24
+    },
+    "gold_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/answer_key",
+    "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+    "id": "mixed_gold_02",
+    "manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/tranche_02.tsv",
+    "registry": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold/registry.json",
+    "registry_sha256": "fb44d2fbe29466fa75fa14ea5e95ac7b181719da68f5d80c4db93e578207f0c6",
+    "selection_seed": 2026090301,
+    "sha256": "26f2368b19684ef79c38cb65de8ad243648b3a0b291f81f2de77a1b9f81f32ba",
+    "unique_pmid_count": 45
+  },
+  "created_at": "2026-09-03T19:11:11.274149+00:00",
+  "provider_configuration_present": {
+    "ANTHROPIC_API_KEY": true,
+    "AZURE_AI_API_KEY": true,
+    "OPENAI_API_KEY": false
+  },
+  "python": "/Users/kronckbm/GitRepos/GeneVariantFetcher/.venv/bin/python",
+  "repository": {
+    "dirty": true,
+    "head": "32ec857c0c04db28d5e82704ca3e0a06768c4353",
+    "runtime_source": {
+      "file_count": 240,
+      "sha256": "0f1d6e6581506228e872b20183d698aa471e3e6cb3fcda7cb626ef96a3f56550"
+    },
+    "status_sha256": "6fa375fc15fabf5e6622492b51305976c8780f9b440b460be25cb61e0f7f0b1f"
+  },
+  "route": {
+    "calibrated_pmid_files": true,
+    "corpus_sync": false,
+    "driver": "python -m cli gvf-run",
+    "full_coverage": false,
+    "parallel_gene_processes": 5,
+    "primary_projection": "trusted_paper_derived_count_and_identity",
+    "publish_review": false,
+    "reason": "Registry-pinned, source-frozen protocol-regression arm with paper-derived identity as the primary score lane.",
+    "secondary_projection": "trusted_linkage_assisted_diagnostic",
+    "source_recovery": false
+  },
+  "run_id": "20260903_protocol_mixed02_candidate",
+  "schema_version": 1
+}

@@ -1,0 +1,39 @@
+{
+ "confidence_interval": {
+  "cluster_unit": "PMID",
+  "method": "paired_cluster_bootstrap_nearest_rank",
+  "resamples": 10000,
+  "seed": 2026090301
+ },
+ "confirmation": "A pass is a discovery; the identical candidate runtime must pass the same rule on the next unopened tranche.",
+ "count_field": "carriers",
+ "coverage_on_matched": {
+  "minimum_observed_delta": 0.0,
+  "noninferiority_margin": -0.05,
+  "note": "share of gold-matched rows whose prediction supplies a carrier value"
+ },
+ "definition": "For every gold row with an asserted carrier value: |gold - predicted|, where predicted is the paired paper-derived prediction's supplied carrier value, or 0 when the row was not paired or the prediction supplied no value (identity miss and abstention both count as the full error). Mean over the tranche's asserted rows; PMID-cluster paired bootstrap.",
+ "end_to_end_mae": {
+  "maximum_observed_delta": -0.05,
+  "note": "candidate minus baseline, carriers per asserted gold row",
+  "upper_bound_must_be_below": 0.0
+ },
+ "endpoint": "paper_derived_end_to_end_carrier_mae",
+ "identity_guard": {
+  "note": "Same one-sided 95% PMID-cluster lower bounds as the primary rule, plus observed recall delta >= 0 (Grok 4.6 review, added before the tranche 02 candidate lock); counts may not improve by dropping identities.",
+  "observed_recall_delta_minimum": 0.0,
+  "precision_noninferiority_margin": -0.02,
+  "recall_noninferiority_margin": -0.01
+ },
+ "one_sided_confidence_level": 0.95,
+ "preregistration": "docs/evidence/mixed_gold_count_endpoint_preregistration_20260903.md",
+ "registered_before": "tranche 02 candidate lock (runs/20260903_protocol_mixed02_candidate)",
+ "registered_on": "2026-09-03",
+ "reported_not_scored": [
+  "affected",
+  "unaffected",
+  "conditional_mae"
+ ],
+ "role": "secondary; the identity rule in registry.json stays primary and its verdicts stand",
+ "schema_version": 1
+}
