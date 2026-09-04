@@ -413,6 +413,13 @@ def run_data_scout(pmid: str, target_dir: Path, gene_symbol: str) -> Optional[st
         unified_content = full_context_file.read_text(encoding="utf-8")
         report = scout.scan(unified_content, pmid=pmid)
 
+        if report.scan_truncated:
+            logger.warning(
+                f"Scout budget exhausted for PMID {pmid}; no DATA_ZONES "
+                "written (extraction uses the full source)"
+            )
+            return None
+
         # Write zone metadata JSON
         zones_json_path = target_dir / f"{pmid}_DATA_ZONES.json"
         zones_json_path.write_text(scout.to_json(report))

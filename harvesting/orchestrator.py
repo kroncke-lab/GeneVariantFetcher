@@ -805,6 +805,16 @@ class PMCHarvester:
 
             report = scout.scan(unified_content, pmid=pmid)
 
+            if report.scan_truncated:
+                # Budget exhausted: skip the DATA_ZONES files so extraction
+                # falls back to FULL_CONTEXT instead of a silently partial
+                # condensation.
+                print(
+                    "  - Data scout budget exhausted; no DATA_ZONES written "
+                    "(extraction uses the full source)"
+                )
+                return False
+
             # Write zone metadata JSON
             zones_json_path = self.output_dir / f"{pmid}_DATA_ZONES.json"
             zones_json_path.write_text(scout.to_json(report))

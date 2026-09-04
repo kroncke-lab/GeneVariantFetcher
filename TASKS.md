@@ -545,6 +545,17 @@ remain specialized or historical evidence, not extra gates.
       real PDF through `harvesting/format_converters.py`.
 - [ ] Re-run the Karger and Sage/Liebert access probes only when credentials or
       publisher access change; the last recorded attempts remained blocked.
+- [ ] Decide a policy for the ~15 giant legitimate FULL_CONTEXT folds found by
+      the 2026-08-31 corpus audit (largest: APOE 10599054 and 15538542 at
+      4.28 GB each — identical sizes, likely the same runaway supplement —
+      then LMNA 39468056 505 MB, SCN5A 27063795 412 MB, LMNA 29970176 379 MB,
+      MYBPC3 33757590 325 MB; all >2 MB files were scanned and these are NOT
+      binary garbage, so `scripts/strip_binary_garbage_blocks.py` must not
+      touch them). They predate the new `GVF_FOLD_MAX_TOTAL_CHARS` cap, which
+      only prevents new ones. Options: re-fold under the cap (drops real rows
+      — needs a per-paper look at what the oversized supplement is), a
+      gene-scoped trim, or leave-and-rely-on-the-scout-budget. Do not delete
+      or blind-truncate hard-won source.
 
 Source acquisition is still the dominant recall opportunity. Do not replace a
 missing paper or table with speculative count arithmetic.

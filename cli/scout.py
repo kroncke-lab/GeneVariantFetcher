@@ -231,6 +231,16 @@ def process_file(
         # Run scout analysis
         report = scout.scan(text, pmid=pmid)
 
+        if report.scan_truncated:
+            return ManifestEntry(
+                pmid=pmid,
+                status=Status.FAILED,
+                error_message=(
+                    "scan budget exhausted; no DATA_ZONES written "
+                    "(extraction should use the full source)"
+                ),
+            )
+
         # Generate output files
         files_created = []
 

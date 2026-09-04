@@ -657,3 +657,108 @@ def test_fold_excludes_pdf_harvested_from_reference_markup(tmp_path, monkeypatch
     assert out is None  # nothing foldable, nothing to rewrite
     assert "report_2011.pdf" not in fc.read_text(encoding="utf-8")
     assert (supp_dir / "report_2011.pdf").exists()
+
+
+# ---------------------------------------------------------------------------
+# Fold size caps and the binary-garbage backstop (RYR2 PMID 32508047: a
+# 13.6 MB .doc whose conversion leaked 14.5 MB of raw OLE bytes into
+# FULL_CONTEXT and wedged the data scout for 2h45m+).
+# ---------------------------------------------------------------------------
+
+
+def test_fold_skips_binary_garbage_conversion(tmp_path, monkeypatch, caplog):
+    from harvesting import supplement_fold
+
+    pmid = "32508047"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN TEXT\n\nRYR2 body text\n", encoding="utf-8")
+    supp = harvest / f"{pmid}_supplements"
+    _write_supp(supp, "good.csv", "variant,carriers\nc.1A>G,3\n")
+    _write_supp(supp, "leaky.txt", "placeholder")
+
+    soup = ("\x00\x01g\x00\x00\x0b|ˇˇ\x02\x03\x04 " * 200)[:4000]
+    real_convert = supplement_fold._convert_supplement
+
+    def leak_one(*, file_path, **kwargs):
+        if file_path.name == "leaky.txt":
+            return soup, 0, []
+        return real_convert(file_path=file_path, **kwargs)
+
+    monkeypatch.setattr(supplement_fold, "_convert_supplement", leak_one)
+
+    with caplog.at_level("WARNING"):
+        out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "c.1A>G,3" in folded
+    assert "leaky.txt" not in folded
+    assert "\x00" not in folded
+    assert any("raw binary" in r.getMessage() for r in caplog.records)
+    assert (supp / "leaky.txt").exists()  # source file untouched
+
+
+def test_fold_skips_file_over_per_file_cap_and_can_shrink_old_fold(
+    tmp_path, monkeypatch, caplog
+):
+    pmid = "11112222"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    # Pre-existing fold block already carries the oversized file's label, the
+    # way 32508047's corpus FULL_CONTEXT carried the 14.5 MB soup block.
+    fc.write_text(
+        "# MAIN TEXT\n\nbody\n\n"
+        f"{FOLD_BEGIN}\n\n"
+        "# FOLDED SUPPLEMENTS (re-extraction aid)\n"
+        "\n\n# SUPPLEMENTAL FILE 1: huge.txt\n\nOLD GIANT CONTENT\n"
+        "\n\n# SUPPLEMENTAL FILE 2: small.txt\n\nsmall detail\n"
+        f"\n\n{FOLD_END}\n",
+        encoding="utf-8",
+    )
+    supp = harvest / f"{pmid}_supplements"
+    _write_supp(supp, "huge.txt", "x" * 500)
+    _write_supp(supp, "small.txt", "small detail\n")
+    monkeypatch.setenv("GVF_FOLD_MAX_FILE_CHARS", "100")
+
+    with caplog.at_level("WARNING"):
+        out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out == fc
+    folded = fc.read_text(encoding="utf-8")
+    # The oversized file is out of the fold (not a refold refusal), the
+    # small one is still there, and the on-disk file survives.
+    assert "OLD GIANT CONTENT" not in folded
+    assert "huge.txt" not in folded
+    assert "small detail" in folded
+    assert any(
+        "oversized converted supplement" in r.getMessage() for r in caplog.records
+    )
+    assert (supp / "huge.txt").exists()
+
+
+def test_fold_total_cap_skips_file_that_would_overflow(tmp_path, monkeypatch, caplog):
+    pmid = "33334444"
+    harvest = tmp_path / "pmc_fulltext"
+    harvest.mkdir()
+    fc = harvest / f"{pmid}_FULL_CONTEXT.md"
+    fc.write_text("# MAIN TEXT\n\nbody\n", encoding="utf-8")
+    supp = harvest / f"{pmid}_supplements"
+    # Alphabetical fold order: a.txt (60 chars) fits, b.txt (60 chars) would
+    # overflow the 100-char total budget and is skipped, c.txt (20) still fits.
+    _write_supp(supp, "a.txt", "A" * 60)
+    _write_supp(supp, "b.txt", "B" * 60)
+    _write_supp(supp, "c.txt", "C" * 20)
+    monkeypatch.setenv("GVF_FOLD_MAX_TOTAL_CHARS", "100")
+
+    with caplog.at_level("WARNING"):
+        out = fold_supplements_into_full_context(pmid, harvest, converter=_DUMMY)
+
+    assert out == fc
+    folded = fc.read_text(encoding="utf-8")
+    assert "A" * 60 in folded
+    assert "B" * 60 not in folded
+    assert "C" * 20 in folded
+    assert any("fold size budget" in r.getMessage() for r in caplog.records)

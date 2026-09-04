@@ -62,6 +62,45 @@ def _file_sha256(path: Path) -> Optional[str]:
         return None
 
 
+# Control characters that never appear in real converted text (C0 minus
+# \t\n\r, DEL, and the Unicode replacement char from lossy decodes). A
+# converter that "succeeds" on a binary it cannot actually parse — MarkItDown
+# and textutil both do this on some legacy .doc files — emits the raw
+# container bytes decoded as text, which is dense in exactly these.
+_BINARY_GARBAGE_CHARS = [chr(i) for i in range(0x20) if chr(i) not in "\t\n\r"] + [
+    "\x7f",
+    "�",
+]
+# Real conversions measure 0.0% garbage chars (English/Chinese prose, pipe and
+# fixed-width tables, sequence data all checked); leaked binary measures
+# 19-49% in at least one 1 MB chunk. 2% is far from both.
+_BINARY_GARBAGE_MAX_RATIO = 0.02
+_BINARY_GARBAGE_CHUNK_CHARS = 1_000_000
+_BINARY_GARBAGE_MIN_LEN = 1_000
+
+
+def looks_like_binary_garbage(text: str) -> bool:
+    """True when converted "text" is dominated by raw binary leakage.
+
+    Checked per 1 MB chunk, not just overall: a leaked Word/OLE container
+    often carries the document's real text run inside megabytes of structure
+    bytes (RYR2 PMID 32508047's CTM2-10-238-s016.doc rendered as 14.5 MB of
+    soup whose first 300 KB looked statistically like text), so any
+    binary-dense region disqualifies the whole conversion.
+    """
+    if not text or len(text) < _BINARY_GARBAGE_MIN_LEN:
+        return False
+    for start in range(0, len(text), _BINARY_GARBAGE_CHUNK_CHARS):
+        chunk = text[start : start + _BINARY_GARBAGE_CHUNK_CHARS]
+        if len(chunk) < _BINARY_GARBAGE_MIN_LEN:
+            # A short tail chunk has too little signal for a ratio test.
+            continue
+        garbage = sum(chunk.count(c) for c in _BINARY_GARBAGE_CHARS)
+        if garbage > len(chunk) * _BINARY_GARBAGE_MAX_RATIO:
+            return True
+    return False
+
+
 try:
     from markitdown import MarkItDown
 
@@ -678,7 +717,19 @@ class FormatConverter:
             try:
                 result = self.markitdown.convert(str(file_path))
                 if result and result.text_content:
-                    return result.text_content
+                    # MarkItDown "succeeds" on some legacy .doc binaries by
+                    # decoding the raw OLE container as text (RYR2 PMID
+                    # 32508047: 13.6 MB .doc became 14.5 MB of \x00-dense
+                    # soup that wedged the data scout downstream). Fall
+                    # through to converters that parse the format properly.
+                    if looks_like_binary_garbage(result.text_content):
+                        print(
+                            f"    Warning: markitdown output for "
+                            f"{file_path.name} looks like raw binary; trying "
+                            "other .doc converters"
+                        )
+                    else:
+                        return result.text_content
             except Exception as e:
                 print(
                     f"    Warning: markitdown failed for .doc file {file_path.name}: {e}"
@@ -750,7 +801,9 @@ class FormatConverter:
                             else:
                                 result_text = body_text
 
-                            if result_text.strip():
+                            if result_text.strip() and not looks_like_binary_garbage(
+                                result_text
+                            ):
                                 print(
                                     f"    ✓ Extracted via LibreOffice HTML ({len(result_text)} chars, {len(markdown_parts)} tables)"
                                 )
@@ -780,7 +833,7 @@ class FormatConverter:
                         txt_file = Path(tmpdir) / (file_path.stem + ".txt")
                         if txt_file.exists():
                             text = txt_file.read_text(encoding="utf-8", errors="ignore")
-                            if text.strip():
+                            if text.strip() and not looks_like_binary_garbage(text):
                                 print(
                                     f"    ✓ Extracted text via LibreOffice ({len(text)} chars)"
                                 )
@@ -874,7 +927,20 @@ class FormatConverter:
         except Exception as e:
             print(f"    Warning: antiword fallback failed for {file_path.name}: {e}")
 
-        selected = self._select_doc_conversion(doc_candidates)
+        # Drop routes that leaked raw binary (textutil does this on some
+        # legacy .doc files) so they cannot win the table-row score with
+        # pipe characters that are container bytes, not cells.
+        clean_candidates = []
+        for label, cand_text in doc_candidates:
+            if looks_like_binary_garbage(cand_text):
+                print(
+                    f"    Warning: {label} output for {file_path.name} looks "
+                    "like raw binary; discarding that route"
+                )
+            else:
+                clean_candidates.append((label, cand_text))
+
+        selected = self._select_doc_conversion(clean_candidates)
         if selected is not None:
             label, text, rows = selected
             print(
@@ -890,7 +956,11 @@ class FormatConverter:
             result = subprocess.run(
                 ["catdoc", str(file_path)], capture_output=True, text=True, timeout=60
             )
-            if result.returncode == 0 and result.stdout.strip():
+            if (
+                result.returncode == 0
+                and result.stdout.strip()
+                and not looks_like_binary_garbage(result.stdout)
+            ):
                 return result.stdout + "\n\n"
         except FileNotFoundError:
             pass  # catdoc not installed
