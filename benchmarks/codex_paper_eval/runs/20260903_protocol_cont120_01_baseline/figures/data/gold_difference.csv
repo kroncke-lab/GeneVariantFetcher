@@ -1,0 +1,1151 @@
+analysis_run,arm,gene,pmid,gold_row_index,gold_variant,predicted_variant,measure,gold_count,automated_count_raw,automated_count_evaluated,status,difference,absolute_difference,exact,gold_value_set,gold_v2_status,gold_provenance,prediction_source_layer,prediction_source_location
+20260903_protocol_cont120_01_baseline,run,SCN5A,27684715,0,EXON15_28DUP,duplication of exons 15-28,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,SCN5A,27684715,0,EXON15_28DUP,duplication of exons 15-28,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,SCN5A,27684715,0,EXON15_28DUP,duplication of exons 15-28,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,SCN5A,23810369,0,V1281F,p.V1281F c.3841G>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, First family paragraph"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23810369,0,V1281F,p.V1281F c.3841G>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Results, First family paragraph"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23810369,0,V1281F,p.V1281F c.3841G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, First family paragraph"
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,0,E1784K,p.Glu1784Lys,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,0,E1784K,p.Glu1784Lys,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,0,E1784K,p.Glu1784Lys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,1,R1193Q,p.Arg1193Gln,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,1,R1193Q,p.Arg1193Gln,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,26131924,1,R1193Q,p.Arg1193Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,KCNH2,18452873,0,G189ins,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18452873,0,G189ins,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18452873,0,G189ins,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,19070294,0,A614V,p.Ala614Val,carriers,9,9,9,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19070294,0,A614V,p.Ala614Val,affected,9,,0,abstained,-9,9,0,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19070294,0,A614V,p.Ala614Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24096004,0,M1875T,M1875T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,24096004,0,M1875T,M1875T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,24096004,0,M1875T,M1875T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,17875969,0,EXON 3 DELETION,p.Asn57_Gly91del deletion of exon 3 (part of intron 2 and part of intron 3; 1.1 kb deletion),carriers,13,16,16,supplied,3,3,0,baseline,,human_curated_ryr2_pilot,llm_text,Results; linkage analysis and mutational analysis sections
+20260903_protocol_cont120_01_baseline,run,RYR2,17875969,0,EXON 3 DELETION,p.Asn57_Gly91del deletion of exon 3 (part of intron 2 and part of intron 3; 1.1 kb deletion),affected,13,,0,abstained,-13,13,0,baseline,,human_curated_ryr2_pilot,llm_text,Results; linkage analysis and mutational analysis sections
+20260903_protocol_cont120_01_baseline,run,RYR2,17875969,0,EXON 3 DELETION,p.Asn57_Gly91del deletion of exon 3 (part of intron 2 and part of intron 3; 1.1 kb deletion),unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,Results; linkage analysis and mutational analysis sections
+20260903_protocol_cont120_01_baseline,run,SCN5A,12068034,0,F1760C,F1760C,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,12068034,0,F1760C,F1760C,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,12068034,0,F1760C,F1760C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,9702906,0,F339del,p.Phe339del,carriers,10,10,10,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,9702906,0,F339del,p.Phe339del,affected,10,,0,abstained,-10,10,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,9702906,0,F339del,p.Phe339del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,24972929,0,c.3963+1G>A,c.3963+1G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Candidate gene sequencing and WES; Fig 2A-C"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24972929,0,c.3963+1G>A,c.3963+1G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Candidate gene sequencing and WES; Fig 2A-C"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24972929,0,c.3963+1G>A,c.3963+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Candidate gene sequencing and WES; Fig 2A-C"
+20260903_protocol_cont120_01_baseline,run,SCN5A,16155735,0,A551T,p.Ala551Thr,carriers,3,1,1,supplied,-2,2,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,16155735,0,A551T,p.Ala551Thr,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,16155735,0,A551T,p.Ala551Thr,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,1,P1090L,p.P1090L,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,1,P1090L,p.P1090L,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,1,P1090L,p.P1090L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,2,R1193Q,p.Arg1193Gln,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,2,R1193Q,p.Arg1193Gln,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22407026,2,R1193Q,p.Arg1193Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,21677263,0,N1325S,,carriers,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,21677263,0,N1325S,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,21677263,0,N1325S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,0,K897T,p.K897T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,0,K897T,p.K897T,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,0,K897T,p.K897T,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,1,M645R,M645R,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,1,M645R,M645R,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,22407026,1,M645R,M645R,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,0,A302V,A302V,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,0,A302V,A302V,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,0,A302V,A302V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,1,A341E,A341E,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,1,A341E,A341E,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,1,A341E,A341E,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,2,G269S,G269S,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,2,G269S,G269S,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,2,G269S,G269S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,3,G584S,G584S*,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,3,G584S,G584S*,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,3,G584S,G584S*,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,4,I198V,I198V,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,4,I198V,I198V,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,4,I198V,I198V,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,5,L162fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,5,L162fsX,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,5,L162fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,6,L191fsX,L191FS,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,6,L191fsX,L191FS,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,6,L191fsX,L191FS,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,7,T312I,T312I,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,7,T312I,T312I,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,7,T312I,T312I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,8,T587M,T587M,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,8,T587M,T587M,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,8,T587M,T587M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,9,W379R,W379R,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,9,W379R,W379R,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,9,W379R,W379R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,10,Y111C,Y111C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,10,Y111C,Y111C,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22677073,10,Y111C,Y111C,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,25923670,0,S1787N,S1787N,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,25923670,0,S1787N,S1787N,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,25923670,0,S1787N,S1787N,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,0,p.E37K,p.E37K,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,0,p.E37K,p.E37K,affected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,0,p.E37K,p.E37K,unaffected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,1,p.L46P,p.L46P,carriers,6,6,6,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,1,p.L46P,p.L46P,affected,2,,0,abstained,-2,2,0,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,APOE,23990795,1,p.L46P,p.L46P,unaffected,4,,0,abstained,-4,4,0,baseline,,curated_override_mixed_provenance,llm_table,"Table 2, Results section on rare variants"
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,1,M1766L,p.Met1766Leu,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,1,M1766L,p.Met1766Leu,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,12454206,1,M1766L,p.Met1766Leu,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,0,E161K,,carriers,11,,0,identity_miss,-11,11,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,0,E161K,,affected,7,,0,identity_miss,-7,7,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,0,E161K,,unaffected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,1,G1408R,,carriers,13,,0,identity_miss,-13,13,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,1,G1408R,,affected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,1,G1408R,,unaffected,9,,0,identity_miss,-9,9,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,2,G752R,,carriers,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,2,G752R,,affected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,2,G752R,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,3,L839P,,carriers,5,,0,identity_miss,-5,5,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,3,L839P,,affected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,3,L839P,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,4,N1722D,,carriers,8,,0,identity_miss,-8,8,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,4,N1722D,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,4,N1722D,,unaffected,5,,0,identity_miss,-5,5,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,5,P.1570_F1571INSI,,carriers,10,,0,identity_miss,-10,10,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,5,P.1570_F1571INSI,,affected,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,5,P.1570_F1571INSI,,unaffected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,6,R225W,,carriers,10,,0,identity_miss,-10,10,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,6,R225W,,affected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,6,R225W,,unaffected,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,7,R535X,,carriers,9,,0,identity_miss,-9,9,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,7,R535X,,affected,5,,0,identity_miss,-5,5,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,7,R535X,,unaffected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,8,S1382I,,carriers,8,,0,identity_miss,-8,8,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,8,S1382I,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,8,S1382I,,unaffected,5,,0,identity_miss,-5,5,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,9,c.1983_1993dupGGCCCTCAGCG,,carriers,8,,0,identity_miss,-8,8,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,9,c.1983_1993dupGGCCCTCAGCG,,affected,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,9,c.1983_1993dupGGCCCTCAGCG,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,10,c.3667delG,,carriers,5,,0,identity_miss,-5,5,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,10,c.3667delG,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,10,c.3667delG,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,11,c.3963+2T>C,,carriers,9,,0,identity_miss,-9,9,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,11,c.3963+2T>C,,affected,8,,0,identity_miss,-8,8,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,11,c.3963+2T>C,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,12,c.612-2A>G,,carriers,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,12,c.612-2A>G,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20031634,12,c.612-2A>G,,unaffected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,22129298,0,Y1795C,p.Tyr1795Cys,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22129298,0,Y1795C,p.Tyr1795Cys,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,22129298,0,Y1795C,p.Tyr1795Cys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,16969682,0,G601S,,carriers,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,16969682,0,G601S,,affected,4,,0,identity_miss,-4,4,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,16969682,0,G601S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,30218094,0,R219H,R219H,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,30218094,0,R219H,R219H,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,30218094,0,R219H,R219H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,0,D4631V,p.D4631V c.13892A>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #239; Table 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,0,D4631V,p.D4631V c.13892A>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #239; Table 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,0,D4631V,p.D4631V c.13892A>T,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #239; Table 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,1,T2504M,p.T2504M c.7511C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #444; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,1,T2504M,p.T2504M c.7511C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #444; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,1,T2504M,p.T2504M c.7511C>T,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #444; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,2,V1810L,p.V1810L c.5428G>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #271; Discussion; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,2,V1810L,p.V1810L c.5428G>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #271; Discussion; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,24978818,2,V1810L,p.V1810L c.5428G>C,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Results, Case #271; Discussion; Table 1; Table 2"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31293497,0,R360_Q361DUPQKQR,p.R360_Q361dupQKQR,carriers,29,29,29,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutation Screening and Strong Linkage sections; Electrophysiology"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31293497,0,R360_Q361DUPQKQR,p.R360_Q361dupQKQR,affected,24,24,24,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutation Screening and Strong Linkage sections; Electrophysiology"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31293497,0,R360_Q361DUPQKQR,p.R360_Q361dupQKQR,unaffected,5,5,5,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutation Screening and Strong Linkage sections; Electrophysiology"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,0,Y1810A,Y1810A,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,0,Y1810A,Y1810A,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,0,Y1810A,Y1810A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,1,Y1888A,Y1888A,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,1,Y1888A,Y1888A,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,1,Y1888A,Y1888A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,2,Y1976A,Y1976A,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,2,Y1976A,Y1976A,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,2,Y1976A,Y1976A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,3,Y68A,Y68A,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,3,Y68A,Y68A,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29514831,3,Y68A,Y68A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,0,E553X,p.E553*,carriers,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,0,E553X,p.E553*,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,0,E553X,p.E553*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,1,R893H,p.R893H,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,1,R893H,p.R893H,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,1,R893H,p.R893H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,2,S1787N,p.S1787N,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,2,S1787N,p.S1787N,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,2,S1787N,p.S1787N,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,3,Y87C,p.Y87C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,3,Y87C,p.Y87C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,23503384,3,Y87C,p.Y87C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25444851,0,D202H,p.Asp202His,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results, Single-channel recordings from KCNQ1-S3 domain mutants; D202H section; Figures 3,1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25444851,0,D202H,p.Asp202His,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results, Single-channel recordings from KCNQ1-S3 domain mutants; D202H section; Figures 3,1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25444851,0,D202H,p.Asp202His,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results, Single-channel recordings from KCNQ1-S3 domain mutants; D202H section; Figures 3,1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,0,D501N,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,0,D501N,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,0,D501N,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,1,E698X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,1,E698X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,1,E698X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,2,G192fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,2,G192fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,2,G192fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,3,L87P,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,3,L87P,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,3,L87P,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,4,P347S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,4,P347S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,4,P347S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,5,P872fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,5,P872fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,5,P872fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,6,R823fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,6,R823fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,6,R823fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,7,Y447X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,7,Y447X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,7,Y447X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,8,Y99S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,8,Y99S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,12402336,8,Y99S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,14500339,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract [ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]
+20260903_protocol_cont120_01_baseline,run,SCN5A,14500339,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract [ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]
+20260903_protocol_cont120_01_baseline,run,SCN5A,14500339,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract [ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,0,EXON1-14DEL,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,0,EXON1-14DEL,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,0,EXON1-14DEL,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,1,EXON4-14DEL,,carriers,7,,0,identity_miss,-7,7,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,1,EXON4-14DEL,,affected,6,,0,identity_miss,-6,6,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,21185499,1,EXON4-14DEL,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,15528464,0,G589D,G589D,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,15528464,0,G589D,G589D,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,15528464,0,G589D,G589D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,0,Q530X,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,0,Q530X,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,0,Q530X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,1,R190W,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,1,R190W,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,1,R190W,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,2,R192CFS91X,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,2,R192CFS91X,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,2,R192CFS91X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,3,R518X,p.Arg518*,carriers,9,,0,abstained,-9,9,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,3,R518X,p.Arg518*,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,3,R518X,p.Arg518*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,4,S277del,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,4,S277del,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,4,S277del,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,5,S349W,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,5,S349W,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,5,S349W,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,6,Y111C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,6,Y111C,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,22539601,6,Y111C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,0,E1784K,p.E1784K c.5350G>A,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,figure,"Table 2, row 7; Results; Figure 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,0,E1784K,p.E1784K c.5350G>A,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,figure,"Table 2, row 7; Results; Figure 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,0,E1784K,p.E1784K c.5350G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Table 2, row 7; Results; Figure 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,1,N275K,p.N275K c.825C>A,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, row 6; Results paragraph on patient 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,1,N275K,p.N275K c.825C>A,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, row 6; Results paragraph on patient 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18452873,1,N275K,p.N275K c.825C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 6; Results paragraph on patient 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24581105,0,D785N,p.Asp785Asn c.2353G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, paragraph describing genetic testing"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24581105,0,D785N,p.Asp785Asn c.2353G>A,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Case report section, paragraph describing genetic testing"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24581105,0,D785N,p.Asp785Asn c.2353G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, paragraph describing genetic testing"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19880070,0,A341V,A341V,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19880070,0,A341V,A341V,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19880070,0,A341V,A341V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19632629,0,R1195H,R1195H,carriers,1,2,2,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19632629,0,R1195H,R1195H,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19632629,0,R1195H,R1195H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,14714110,0,R863X,R863X,carriers,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,14714110,0,R863X,R863X,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,14714110,0,R863X,R863X,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,26481773,0,R594Q,p.Arg594Gln,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; main text
+20260903_protocol_cont120_01_baseline,run,KCNQ1,26481773,0,R594Q,p.Arg594Gln,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; main text
+20260903_protocol_cont120_01_baseline,run,KCNQ1,26481773,0,R594Q,p.Arg594Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; main text
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,0,A57P,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,0,A57P,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,0,A57P,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,1,G53R,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,1,G53R,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,1,G53R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,2,G604S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,2,G604S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,2,G604S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,3,I571V,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,3,I571V,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,3,I571V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,4,IVS9+5G>T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,4,IVS9+5G>T,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,4,IVS9+5G>T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,5,P946fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,5,P946fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,5,P946fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,6,V1038fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,6,V1038fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,24103226,6,V1038fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,RYR2,23094885,0,R420Q,R420Q,carriers,10,10,10,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,23094885,0,R420Q,R420Q,affected,5,2,2,supplied,-3,3,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,23094885,0,R420Q,R420Q,unaffected,5,8,8,supplied,3,3,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,0,H558R,p.His558Arg,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Mutation of SCN5A in Genomic DNA; Table 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,0,H558R,p.His558Arg,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Mutation of SCN5A in Genomic DNA; Table 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Mutation of SCN5A in Genomic DNA; Table 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,1,P1090L,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,1,P1090L,,affected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,1,P1090L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,2,R1193Q,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,2,R1193Q,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,2,R1193Q,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,3,c.3840+1G>A,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,3,c.3840+1G>A,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17227473,3,c.3840+1G>A,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,27555138,0,A614V,p.Ala614Val,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, Results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27555138,0,A614V,p.Ala614Val,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, Results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27555138,0,A614V,p.Ala614Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, Results"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,0,G1935S,p.Gly1935Ser,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,0,G1935S,p.Gly1935Ser,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,0,G1935S,p.Gly1935Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,1,R975W,p.Arg975Trp,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,1,R975W,p.Arg975Trp,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27816319,1,R975W,p.Arg975Trp,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,1,S1074R,S1074R,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,1,S1074R,S1074R,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,26401487,1,S1074R,S1074R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,19719504,0,L1393X,p.Leu1393*,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Abstract, Results, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,19719504,0,L1393X,p.Leu1393*,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Abstract, Results, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,19719504,0,L1393X,p.Leu1393*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Abstract, Results, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,17016421,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,17016421,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,17016421,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,0,A1136V,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,0,A1136V,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,0,A1136V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,1,D400H,D400H,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,1,D400H,D400H,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,1,D400H,D400H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,2,E4146K,E4146K,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,2,E4146K,E4146K,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,2,E4146K,E4146K,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,3,G1885E,G1885E,carriers,5,,0,abstained,-5,5,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,3,G1885E,G1885E,affected,5,,0,abstained,-5,5,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,3,G1885E,G1885E,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,4,G1886S,G1886S,carriers,11,,0,abstained,-11,11,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,4,G1886S,G1886S,affected,11,,0,abstained,-11,11,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,4,G1886S,G1886S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,5,G2227V,c.6680G>T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,"TABLE 2, row 33 (router+deterministic)"
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,5,G2227V,c.6680G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,"TABLE 2, row 33 (router+deterministic)"
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,5,G2227V,c.6680G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,"TABLE 2, row 33 (router+deterministic)"
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,6,G4936R,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,6,G4936R,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,6,G4936R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,7,H240R,H240R,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,7,H240R,H240R,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,7,H240R,H240R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,8,I217V,I217V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,8,I217V,I217V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,8,I217V,I217V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,9,L3879P,L3879P,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,9,L3879P,L3879P,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,9,L3879P,L3879P,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,10,N4097S,N4097S,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,10,N4097S,N4097S,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,10,N4097S,N4097S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,11,Q2958R,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,11,Q2958R,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,11,Q2958R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,12,Q3925E,Q3925E,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,12,Q3925E,Q3925E,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,12,Q3925E,Q3925E,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,13,R4037C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,13,R4037C,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,13,R4037C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,14,R407I,R407I,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,14,R407I,R407I,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,14,R407I,R407I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,15,R420W,R420W,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,15,R420W,R420W,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,15,R420W,R420W,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,16,R4497C,R4497C,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,16,R4497C,R4497C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,16,R4497C,R4497C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,17,S2246L,S2246L,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,17,S2246L,S2246L,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,17,S2246L,S2246L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,18,S3959L,S3959L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,18,S3959L,S3959L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,18,S3959L,S3959L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,19,T1107M,T1107M,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,19,T1107M,T1107M,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,19,T1107M,T1107M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,20,T2510A,T2510A,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,20,T2510A,T2510A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,20,T2510A,T2510A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,21,T4158P,T4158P,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,21,T4158P,T4158P,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,21,T4158P,T4158P,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,22,V2113M,V2113M,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,22,V2113M,V2113M,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,22,V2113M,V2113M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,23,W4645R,W4645R,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,23,W4645R,W4645R,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,23,W4645R,W4645R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,24,Y2392C,Y2392C,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,24,Y2392C,Y2392C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,RYR2,22677073,24,Y2392C,Y2392C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_table,TABLE 2 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,0,D1741Y,p.Asp1741Tyr,carriers,1,2,2,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, Results paragraph on case 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,0,D1741Y,p.Asp1741Tyr,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results paragraph on case 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,0,D1741Y,p.Asp1741Tyr,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results paragraph on case 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,1,I1768V,p.Ile1768Val,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,Table 2; Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,1,I1768V,p.Ile1768Val,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,Table 2; Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,23683917,1,I1768V,p.Ile1768Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Table 2; Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,24951663,0,H558R,p.His558Arg,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Common Variant Analysis"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24951663,0,H558R,p.His558Arg,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Common Variant Analysis"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24951663,0,H558R,p.His558Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Common Variant Analysis"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,0,H445Y,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,0,H445Y,,affected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,0,H445Y,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,1,R243C,p.R243C c.727C>T,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,"Results, Case 1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,1,R243C,p.R243C c.727C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Case 1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20167303,1,R243C,p.R243C c.727C>T,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Case 1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29876285,0,A300S,A300S,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29876285,0,A300S,A300S,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29876285,0,A300S,A300S,unaffected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,0,A2387T,A2387T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,0,A2387T,A2387T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,0,A2387T,A2387T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,1,A2394G,A2394G,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,1,A2394G,A2394G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,1,A2394G,A2394G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,2,A2498V,A2498V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,2,A2498V,A2498V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,2,A2498V,A2498V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,3,A4091T,A4091T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,3,A4091T,A4091T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,3,A4091T,A4091T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,4,A4091V,A4091V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,4,A4091V,A4091V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,4,A4091V,A4091V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,5,C2402Y,C2402Y,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,5,C2402Y,C2402Y,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,5,C2402Y,C2402Y,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,6,D242V,D242V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,6,D242V,D242V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,6,D242V,D242V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,7,D3977Y,D3977Y,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,7,D3977Y,D3977Y,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,7,D3977Y,D3977Y,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,8,E243K,E243K,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,8,E243K,E243K,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,8,E243K,E243K,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,9,E4076K,E4076K,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,9,E4076K,E4076K,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,9,E4076K,E4076K,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,10,F4020L,F4020L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,10,F4020L,F4020L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,10,F4020L,F4020L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,11,F4851L,F4851L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,11,F4851L,F4851L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,11,F4851L,F4851L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,12,G3946D,G3946D,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,12,G3946D,G3946D,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,12,G3946D,G3946D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,13,G4662S,G4662S,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,13,G4662S,G4662S,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,13,G4662S,G4662S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,14,H2217Y,H2217Y,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,14,H2217Y,H2217Y,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,14,H2217Y,H2217Y,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,15,H4762P,H4762P,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,15,H4762P,H4762P,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,15,H4762P,H4762P,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,16,L3778F,L3778F,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,16,L3778F,L3778F,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,16,L3778F,L3778F,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,17,N4104I,N4104I,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,17,N4104I,N4104I,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,17,N4104I,N4104I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,18,N4178Y,N4178Y,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,18,N4178Y,N4178Y,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,18,N4178Y,N4178Y,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,19,P4902S,P4902S,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,19,P4902S,P4902S,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,19,P4902S,P4902S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,20,R2401H,R2401H,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,20,R2401H,R2401H,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,20,R2401H,R2401H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,21,R420W,R420W,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,21,R420W,R420W,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,21,R420W,R420W,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,22,S2246L,S2246L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,22,S2246L,S2246L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,22,S2246L,S2246L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,23,S3799P,S3799P,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,23,S3799P,S3799P,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,23,S3799P,S3799P,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,24,S413T,S413T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,24,S413T,S413T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,24,S413T,S413T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,25,V3990D,V3990D,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,25,V3990D,V3990D,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,25,V3990D,V3990D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,26,V4771I,V4771I,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,26,V4771I,V4771I,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,19398665,26,V4771I,V4771I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,0,E444D,p.Glu444Asp c.1332G>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,0,E444D,p.Glu444Asp c.1332G>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,0,E444D,p.Glu444Asp c.1332G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,1,L413P,p.Leu413Pro c.1421T>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,1,L413P,p.Leu413Pro c.1421T>C,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,1,L413P,p.Leu413Pro c.1421T>C,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,2,L559H,p.Leu559His c.1676T>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,2,L559H,p.Leu559His c.1676T>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,KCNH2,12442276,2,L559H,p.Leu559His c.1676T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Results section on KCNH2 mutations"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,0,G35S,G35S,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,0,G35S,G35S,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,0,G35S,G35S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,1,G9V,G9V,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,1,G9V,G9V,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,1,G9V,G9V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,2,K126E,K126E,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,2,K126E,K126E,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,2,K126E,K126E,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,3,R104Q,R104Q,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,3,R104Q,R104Q,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,3,R104Q,R104Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,4,R18Q,R18Q,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,4,R18Q,R18Q,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,4,R18Q,R18Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,5,R18W,R18W,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,5,R18W,R18W,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,5,R18W,R18W,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,6,R27H,R27H,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,6,R27H,R27H,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,6,R27H,R27H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,7,V125L,V125L,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,7,V125L,V125L,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,7,V125L,V125L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,8,V95I,V95I,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,8,V95I,V95I,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23805106,8,V95I,V95I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22675453,0,R219H,R219H,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22675453,0,R219H,R219H,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22675453,0,R219H,R219H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,18580685,0,V205M,p.V205M,carriers,22,22,22,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Results section (study population demographics and functional characterization)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,18580685,0,V205M,p.V205M,affected,8,,0,abstained,-8,8,0,baseline,,human_curated_cardiac,llm_text,Results section (study population demographics and functional characterization)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,18580685,0,V205M,p.V205M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Results section (study population demographics and functional characterization)
+20260903_protocol_cont120_01_baseline,run,SCN5A,17445919,0,N406S,p.Asn406Ser,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,Functional study - assay data only; Results and Figure legends (Figs 2-7)
+20260903_protocol_cont120_01_baseline,run,SCN5A,17445919,0,N406S,p.Asn406Ser,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,Functional study - assay data only; Results and Figure legends (Figs 2-7)
+20260903_protocol_cont120_01_baseline,run,SCN5A,17445919,0,N406S,p.Asn406Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,Functional study - assay data only; Results and Figure legends (Figs 2-7)
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,0,A572D,A572D,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,0,A572D,A572D,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,0,A572D,A572D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,1,H558R,,carriers,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,1,H558R,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,1,H558R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,2,S1103Y,,carriers,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,2,S1103Y,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20451667,2,S1103Y,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,0,c.1090G>A,p.Ala364Thr c.1090G>A,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,0,c.1090G>A,p.Ala364Thr c.1090G>A,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,0,c.1090G>A,p.Ala364Thr c.1090G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,1,c.1223+29G>A,c.1223+29G>A,carriers,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 9"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,1,c.1223+29G>A,c.1223+29G>A,affected,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 9"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,1,c.1223+29G>A,c.1223+29G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 9"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,2,c.1373G>A,p.Arg458His c.1373G>A,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,2,c.1373G>A,p.Arg458His c.1373G>A,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,2,c.1373G>A,p.Arg458His c.1373G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,3,c.1564G>A,A522T c.1564G>A,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 4"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,3,c.1564G>A,A522T c.1564G>A,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 4"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,3,c.1564G>A,A522T c.1564G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 4"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,4,c.1624G>C,p.Glu542Gln c.1624G>C,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,4,c.1624G>C,p.Glu542Gln c.1624G>C,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,4,c.1624G>C,p.Glu542Gln c.1624G>C,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,5,c.1813G>C,p.Asp605His c.1813G>C,carriers,3,3,3,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,5,c.1813G>C,p.Asp605His c.1813G>C,affected,3,3,3,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,5,c.1813G>C,p.Asp605His c.1813G>C,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,6,c.2002C>T,R668C,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,6,c.2002C>T,R668C,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,6,c.2002C>T,R668C,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,7,c.2258_2259insT,,carriers,2,,0,identity_miss,-2,2,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,7,c.2258_2259insT,,affected,2,,0,identity_miss,-2,2,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,7,c.2258_2259insT,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,8,c.2309-2A>G,c.2309-2A>G,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,8,c.2309-2A>G,c.2309-2A>G,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,8,c.2309-2A>G,c.2309-2A>G,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,9,c.2311G>A,p.Val771Met c.2311G>A,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,9,c.2311G>A,p.Val771Met c.2311G>A,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,9,c.2311G>A,p.Val771Met c.2311G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,10,c.2340+18C>G,c.2340+18C>G,carriers,4,,0,abstained,-4,4,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 10"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,10,c.2340+18C>G,c.2340+18C>G,affected,4,,0,abstained,-4,4,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 10"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,10,c.2340+18C>G,c.2340+18C>G,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 10"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,11,c.2429G>A,R810Q,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,11,c.2429G>A,R810Q,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,11,c.2429G>A,R810Q,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_text,Text scan (protein_single_letter)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,12,c.2550C>T,V849V c.2550C>T,carriers,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 6"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,12,c.2550C>T,V849V c.2550C>T,affected,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 6"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,12,c.2550C>T,V849V c.2550C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 6"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,13,c.2654C>T,p.Thr885Met c.2654C>T,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,13,c.2654C>T,p.Thr885Met c.2654C>T,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,13,c.2654C>T,p.Thr885Met c.2654C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,14,c.2737+12C>T,c.2737+12C>T,carriers,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 11"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,14,c.2737+12C>T,c.2737+12C>T,affected,3,,0,abstained,-3,3,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 11"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,14,c.2737+12C>T,c.2737+12C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 11"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,15,c.2827C>T,R493X c.2827C>T,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,Table 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,15,c.2827C>T,R493X c.2827C>T,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,Table 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,15,c.2827C>T,R493X c.2827C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,Table 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,16,c.2846_2847insT,p.Met949Ilefs*100 c.2846_2847insT,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,16,c.2846_2847insT,p.Met949Ilefs*100 c.2846_2847insT,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,16,c.2846_2847insT,p.Met949Ilefs*100 c.2846_2847insT,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,17,c.2905+1G>A,c.2905+1G>A,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,17,c.2905+1G>A,c.2905+1G>A,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,17,c.2905+1G>A,c.2905+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,18,c.2905C>T,p.Gln969* c.2905C>T,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,18,c.2905C>T,p.Gln969* c.2905C>T,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,18,c.2905C>T,p.Gln969* c.2905C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,19,c.3034C>T,p.Gln1012* c.3034C>T,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,19,c.3034C>T,p.Gln1012* c.3034C>T,affected,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,19,c.3034C>T,p.Gln1012* c.3034C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,20,c.3192_3193insC,p.Lys1065Glnfs*11 c.3192_3193insC,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,20,c.3192_3193insC,p.Lys1065Glnfs*11 c.3192_3193insC,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,20,c.3192_3193insC,p.Lys1065Glnfs*11 c.3192_3193insC,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,21,c.3251T>C,L1084P,carriers,2,2,2,supplied,0,0,1,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,21,c.3251T>C,L1084P,affected,2,,0,abstained,-2,2,0,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,21,c.3251T>C,L1084P,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,22,c.3288G>A,E1096E c.3288G>A,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 7"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,22,c.3288G>A,E1096E c.3288G>A,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 7"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,22,c.3288G>A,E1096E c.3288G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 7"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,23,c.3697C>T,p.Gln1233* c.3697C>T,carriers,1,1,1,supplied,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,23,c.3697C>T,p.Gln1233* c.3697C>T,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,23,c.3697C>T,p.Gln1233* c.3697C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,llm_table,Table 3
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,24,c.472G>A,V158M c.472G>A,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 2"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,24,c.472G>A,V158M c.472G>A,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 2"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,24,c.472G>A,V158M c.472G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 2"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,25,c.492C>T,G164G c.492C>T,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 5"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,25,c.492C>T,G164G c.492C>T,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 5"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,25,c.492C>T,G164G c.492C>T,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 5"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,26,c.506-12delC,,carriers,3,,0,identity_miss,-3,3,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,26,c.506-12delC,,affected,3,,0,identity_miss,-3,3,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,26,c.506-12delC,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,27,c.977G>A,R326Q c.977G>A,carriers,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 3"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,27,c.977G>A,R326Q c.977G>A,affected,1,,0,abstained,-1,1,0,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 3"
+20260903_protocol_cont120_01_baseline,run,MYBPC3,21302287,27,c.977G>A,R326Q c.977G>A,unaffected,0,,0,abstained,0,0,1,baseline,,curated_override_mixed_provenance,regex_table,"Table (regex extraction), block 5, row 3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,16155735,0,A341V,p.Ala341Val,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,16155735,0,A341V,p.Ala341Val,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,16155735,0,A341V,p.Ala341Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,0,C44W,p.Cys44Trp,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,0,C44W,p.Cys44Trp,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,0,C44W,p.Cys44Trp,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,1,E1126fsX,p.Glu1126Glyfs*144,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,1,E1126fsX,p.Glu1126Glyfs*144,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,1,E1126fsX,p.Glu1126Glyfs*144,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,2,H492Y,p.His492Tyr,carriers,14,14,14,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Table 2, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,2,H492Y,p.His492Tyr,affected,11,10,10,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 2, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,KCNH2,27816319,2,H492Y,p.His492Tyr,unaffected,3,2,2,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Table 2, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,21498565,0,S1103Y,p.Ser1103Tyr,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, genotyping and association analysis; supplemental Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,21498565,0,S1103Y,p.Ser1103Tyr,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, genotyping and association analysis; supplemental Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,21498565,0,S1103Y,p.Ser1103Tyr,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, genotyping and association analysis; supplemental Table 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,26776555,0,K817E,p.K817E c.2449A>G,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Clinical and genetic background; Electrophysiological characterization"
+20260903_protocol_cont120_01_baseline,run,SCN5A,26776555,0,K817E,p.K817E c.2449A>G,affected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Clinical and genetic background; Electrophysiological characterization"
+20260903_protocol_cont120_01_baseline,run,SCN5A,26776555,0,K817E,p.K817E c.2449A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Clinical and genetic background; Electrophysiological characterization"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,0,I313E,p.Ile313Glu,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,0,I313E,p.Ile313Glu,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,0,I313E,p.Ile313Glu,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,1,I313G,p.Ile313Gly,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,1,I313G,p.Ile313Gly,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,1,I313G,p.Ile313Gly,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,2,I313K,p.Ile313Lys,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,2,I313K,p.Ile313Lys,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,2,I313K,p.Ile313Lys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,3,I313V,p.Ile313Val,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,3,I313V,p.Ile313Val,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19056345,3,I313V,p.Ile313Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Functional study - assay data only; Results, Table 1, Fig. 1-3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25825456,0,R190W,p.Arg190Trp,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25825456,0,R190W,p.Arg190Trp,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,25825456,0,R190W,p.Arg190Trp,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Abstract, Results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,0,G189ins,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,0,G189ins,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,0,G189ins,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,1,Y667X,p.Tyr667*,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,1,Y667X,p.Tyr667*,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNH2,10790218,1,Y667X,p.Tyr667*,unaffected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,0,A572D,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,0,A572D,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,0,A572D,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,1,D1114N,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,1,D1114N,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,1,D1114N,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,2,F1596I,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,2,F1596I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,2,F1596I,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,3,F2004L,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,3,F2004L,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,3,F2004L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,4,G213D,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,4,G213D,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,4,G213D,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,5,I1448L,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,5,I1448L,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,5,I1448L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,6,L618F,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,6,L618F,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,6,L618F,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,7,N70K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,7,N70K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,7,N70K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,8,P2006A,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,8,P2006A,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,8,P2006A,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,9,Q573X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,9,Q573X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,9,Q573X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,10,R1898H,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,10,R1898H,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,10,R1898H,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,11,R18W,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,11,R18W,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,11,R18W,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,12,S216L,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,12,S216L,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,12,S216L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,13,T1620M,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,13,T1620M,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,13,T1620M,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,14,T220I,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,14,T220I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,14,T220I,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,15,T220N,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,15,T220N,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,15,T220N,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,16,V1340I,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,16,V1340I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,16,V1340I,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,17,V294M,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,17,V294M,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,17,V294M,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,18,Y205X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,18,Y205X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,18,Y205X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,19,c.704-2A>G,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,19,c.704-2A>G,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,25163546,19,c.704-2A>G,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,0,D774Y,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,0,D774Y,,affected,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,0,D774Y,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,1,F627fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,1,F627fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,1,F627fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,2,G1031fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,2,G1031fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,2,G1031fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,3,G572S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,3,G572S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,3,G572S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,4,I42N,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,4,I42N,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,4,I42N,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,5,L171ins,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,5,L171ins,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,5,L171ins,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,6,N629T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,6,N629T,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,6,N629T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,7,P1075L,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,7,P1075L,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,7,P1075L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,8,R328fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,8,R328fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,8,R328fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,9,R534C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,9,R534C,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,9,R534C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,10,W568C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,10,W568C,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,17905336,10,W568C,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,28491738,0,A735V,p.Ala735Val c.2205C>T,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report, Genetic study section"
+20260903_protocol_cont120_01_baseline,run,SCN5A,28491738,0,A735V,p.Ala735Val c.2205C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report, Genetic study section"
+20260903_protocol_cont120_01_baseline,run,SCN5A,28491738,0,A735V,p.Ala735Val c.2205C>T,unaffected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report, Genetic study section"
+20260903_protocol_cont120_01_baseline,run,SCN5A,20950709,0,A1924T,p.Ala1924Thr,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, main text"
+20260903_protocol_cont120_01_baseline,run,SCN5A,20950709,0,A1924T,p.Ala1924Thr,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, main text"
+20260903_protocol_cont120_01_baseline,run,SCN5A,20950709,0,A1924T,p.Ala1924Thr,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report section, main text"
+20260903_protocol_cont120_01_baseline,run,KCNH2,17531263,0,P347S,p.Pro347Ser c.1039C>T,carriers,9,10,10,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Genetic analysis; Biophysical properties (functional assay data only for kinetics/expression)"
+20260903_protocol_cont120_01_baseline,run,KCNH2,17531263,0,P347S,p.Pro347Ser c.1039C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,"Results, Genetic analysis; Biophysical properties (functional assay data only for kinetics/expression)"
+20260903_protocol_cont120_01_baseline,run,KCNH2,17531263,0,P347S,p.Pro347Ser c.1039C>T,unaffected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,llm_table,"Results, Genetic analysis; Biophysical properties (functional assay data only for kinetics/expression)"
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,0,G400A,G400A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,0,G400A,G400A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,0,G400A,G400A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,1,H558R,H558R,carriers,1,5,5,supplied,4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,1,H558R,H558R,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,17675083,1,H558R,H558R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,RYR2,30296944,0,F4174I,p.F4174I c.12520T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case presentation, paragraph describing genetic findings"
+20260903_protocol_cont120_01_baseline,run,RYR2,30296944,0,F4174I,p.F4174I c.12520T>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case presentation, paragraph describing genetic findings"
+20260903_protocol_cont120_01_baseline,run,RYR2,30296944,0,F4174I,p.F4174I c.12520T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case presentation, paragraph describing genetic findings"
+20260903_protocol_cont120_01_baseline,run,RYR2,18463390,0,P2404T,,carriers,8,,0,identity_miss,-8,8,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,18463390,0,P2404T,,affected,6,,0,identity_miss,-6,6,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,18463390,0,P2404T,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,27401036,0,F1760A,,carriers,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,27401036,0,F1760A,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,27401036,0,F1760A,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,0,F4851C,p.F4851C c.14552T>G,carriers,3,1,1,supplied,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,0,F4851C,p.F4851C c.14552T>G,affected,3,1,1,supplied,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,0,F4851C,p.F4851C c.14552T>G,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,1,R2359Q,p.R2359Q c.7076G>A,carriers,3,1,1,supplied,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,1,R2359Q,p.R2359Q c.7076G>A,affected,3,1,1,supplied,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,1,R2359Q,p.R2359Q c.7076G>A,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,2,R2401H,p.R2401H c.7202G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,2,R2401H,p.R2401H c.7202G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,2,R2401H,p.R2401H c.7202G>A,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 1"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,3,S2246L,p.S2246L c.6737C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,3,S2246L,p.S2246L c.6737C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 2"
+20260903_protocol_cont120_01_baseline,run,RYR2,16843546,3,S2246L,p.S2246L c.6737C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results, Family 2"
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,0,N633D,p.N633D,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE] Results paragraph describing LQTS mutations
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,0,N633D,p.N633D,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE] Results paragraph describing LQTS mutations
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,0,N633D,p.N633D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE] Results paragraph describing LQTS mutations
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,1,P923fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,1,P923fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,16155735,1,P923fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,0,L1308F,p.Leu1308Phe,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Biophysical Characteristics of Separately Mutated V232I and L1308F SCN5A Channels; Discussion"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,0,L1308F,p.Leu1308Phe,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Biophysical Characteristics of Separately Mutated V232I and L1308F SCN5A Channels; Discussion"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,0,L1308F,p.Leu1308Phe,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Biophysical Characteristics of Separately Mutated V232I and L1308F SCN5A Channels; Discussion"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,1,V232I,p.Val232Ile,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational Analysis and Biophysical Characteristics"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,1,V232I,p.Val232Ile,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational Analysis and Biophysical Characteristics"
+20260903_protocol_cont120_01_baseline,run,SCN5A,18599870,1,V232I,p.Val232Ile,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational Analysis and Biophysical Characteristics"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27243970,0,A572D,A572D,carriers,0,3,3,supplied,3,3,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,27243970,0,A572D,A572D,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,27243970,0,A572D,A572D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,0,A1428S,p.Ala1428Ser c.4282G>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Cases 4 and 11"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,0,A1428S,p.Ala1428Ser c.4282G>T,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Cases 4 and 11"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,0,A1428S,p.Ala1428Ser c.4282G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Cases 4 and 11"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,1,D1275N,p.D1275N c.3823G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,1,D1275N,p.D1275N c.3823G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,1,D1275N,p.D1275N c.3823G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,2,G400R,p.Gly400Arg c.1198G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,2,G400R,p.Gly400Arg c.1198G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,2,G400R,p.Gly400Arg c.1198G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,3,R1898C,p.Arg1898Cys c.5692C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,3,R1898C,p.Arg1898Cys c.5692C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,3,R1898C,p.Arg1898Cys c.5692C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,4,V1098L,p.Val1098Leu c.3292G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 40"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,4,V1098L,p.Val1098Leu c.3292G>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 40"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,4,V1098L,p.Val1098Leu c.3292G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 40"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,5,V1340I,p.Val1340Ile c.4018G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,5,V1340I,p.Val1340Ile c.4018G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,5,V1340I,p.Val1340Ile c.4018G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Case 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,6,c.5676delC,p.Thr1893Profs*29 c.5676delC,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,6,c.5676delC,p.Thr1893Profs*29 c.5676delC,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,27707468,6,c.5676delC,p.Thr1893Profs*29 c.5676delC,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 4, Case 14"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24439875,0,E1784K,p.E1784K c.5350G>A,carriers,4,2,2,supplied,-2,2,0,baseline,,human_curated_cardiac,figure,"Results sections 3.4, 3.5, 3.7; Figure 4, Figure 7, Figure 8"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24439875,0,E1784K,p.E1784K c.5350G>A,affected,4,2,2,supplied,-2,2,0,baseline,,human_curated_cardiac,figure,"Results sections 3.4, 3.5, 3.7; Figure 4, Figure 7, Figure 8"
+20260903_protocol_cont120_01_baseline,run,SCN5A,24439875,0,E1784K,p.E1784K c.5350G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results sections 3.4, 3.5, 3.7; Figure 4, Figure 7, Figure 8"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,0,EXON6-14DEL,deletion of exons 6-14,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 20; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,0,EXON6-14DEL,deletion of exons 6-14,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Case 20; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,0,EXON6-14DEL,deletion of exons 6-14,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 20; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,1,Q81H,p.Q81H c.243G>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 3; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,1,Q81H,p.Q81H c.243G>C,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Case 3; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,1,Q81H,p.Q81H c.243G>C,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 3; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,2,R1047L,p.R1047L c.3140G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 2; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,2,R1047L,p.R1047L c.3140G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Case 2; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,2,R1047L,p.R1047L c.3140G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 2; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,3,S621R,p.S621R c.1861A>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Results, Case 16; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,3,S621R,p.S621R c.1861A>C,affected,1,2,2,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Case 16; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNH2,20167303,3,S621R,p.S621R c.1861A>C,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Results, Case 16; Table 1"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,30462975,0,G45S,p.Gly45Ser,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,30462975,0,G45S,p.Gly45Ser,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,30462975,0,G45S,p.Gly45Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,21952006,0,Q357R,Q357R,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,21952006,0,Q357R,Q357R,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,21952006,0,Q357R,Q357R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,0,F339S,p.Phe339Ser c.1016T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,0,F339S,p.Phe339Ser c.1016T>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,0,F339S,p.Phe339Ser c.1016T>C,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,1,R59RP,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,1,R59RP,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,1,R59RP,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,2,T144A,p.Thr144Ala c.430A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,2,T144A,p.Thr144Ala c.430A>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,17224687,2,T144A,p.Thr144Ala c.430A>G,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Long QT syndrome (KCNQ1 and KCNH2) paragraph"
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,0,169-198_273+823DEL,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,0,169-198_273+823DEL,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,0,169-198_273+823DEL,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,1,1827+140_1961+426DEL,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,1,1827+140_1961+426DEL,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,1,1827+140_1961+426DEL,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,2,4299+1DELG,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,2,4299+1DELG,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,2,4299+1DELG,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,3,E4431K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,3,E4431K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,3,E4431K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,4,F4016Y,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,4,F4016Y,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,4,F4016Y,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,5,K2716I,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,5,K2716I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,5,K2716I,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,6,M3695T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,6,M3695T,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,6,M3695T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,7,R4114Q,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,7,R4114Q,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,7,R4114Q,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,8,R4608W,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,8,R4608W,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,RYR2,29447731,8,R4608W,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_ryr2_pilot,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,15670565,0,K101E,p.Lys101Glu,carriers,1,3,3,supplied,2,2,0,baseline,,human_curated_cardiac,llm_text,"Results, paragraph describing mutation identification and family reassessment"
+20260903_protocol_cont120_01_baseline,run,KCNH2,15670565,0,K101E,p.Lys101Glu,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, paragraph describing mutation identification and family reassessment"
+20260903_protocol_cont120_01_baseline,run,KCNH2,15670565,0,K101E,p.Lys101Glu,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, paragraph describing mutation identification and family reassessment"
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,0,F2004L,F2004L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,0,F2004L,F2004L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,0,F2004L,F2004L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,1,I1334V,I1334V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,1,I1334V,I1334V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,1,I1334V,I1334V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,2,I1768V,I1768V,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,2,I1768V,I1768V,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,2,I1768V,I1768V,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,3,I267L,I267L,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,3,I267L,I267L,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,3,I267L,I267L,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,4,P2006A,P2006A,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,4,P2006A,P2006A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,4,P2006A,P2006A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,5,R104Q,R104Q,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,5,R104Q,R104Q,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,5,R104Q,R104Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,6,R1193Q,R1193Q,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,6,R1193Q,R1193Q,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,6,R1193Q,R1193Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,7,R680H,R680H,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,7,R680H,R680H,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,7,R680H,R680H,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,8,S1103Y,S1103Y,carriers,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,8,S1103Y,S1103Y,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,8,S1103Y,S1103Y,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,9,S216L,S216L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,9,S216L,S216L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,9,S216L,S216L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,10,T220I,T220I,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,10,T220I,T220I,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,10,T220I,T220I,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,11,V1951L,V1951L,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,11,V1951L,V1951L,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,22677073,11,V1951L,V1951L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,TABLE 3 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,0,EX6-14DEL,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,0,EX6-14DEL,,affected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,0,EX6-14DEL,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,1,EX9-14DUP,,carriers,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,1,EX9-14DUP,,affected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,KCNH2,18774102,1,EX9-14DUP,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,RYR2,26018045,0,EXON 3 DELETION,deletion of exon 3,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,RYR2,26018045,0,EXON 3 DELETION,deletion of exon 3,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,RYR2,26018045,0,EXON 3 DELETION,deletion of exon 3,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,regex_text,Text scan (exon_event)
+20260903_protocol_cont120_01_baseline,run,SCN5A,19808432,0,G1631D,G1631D,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19808432,0,G1631D,G1631D,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19808432,0,G1631D,G1631D,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,29709244,0,I1660V,I1660V,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Supplementary Table 1 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,29709244,0,I1660V,I1660V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Supplementary Table 1 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,SCN5A,29709244,0,I1660V,I1660V,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Supplementary Table 1 (regex extraction)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,11021476,0,R259C,p.Arg259Cys,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,11021476,0,R259C,p.Arg259Cys,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,11021476,0,R259C,p.Arg259Cys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19160088,0,G589D,p.Gly589Asp,carriers,8,8,8,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Results paragraph describing genotyping results and QT analyses
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19160088,0,G589D,p.Gly589Asp,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Results paragraph describing genotyping results and QT analyses
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19160088,0,G589D,p.Gly589Asp,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Results paragraph describing genotyping results and QT analyses
+20260903_protocol_cont120_01_baseline,run,KCNH2,19160088,0,L552S,p.Leu552Ser,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, paragraph on genotyping results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19160088,0,L552S,p.Leu552Ser,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, paragraph on genotyping results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19160088,0,L552S,p.Leu552Ser,unaffected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Results, paragraph on genotyping results"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19160088,1,R176W,p.Arg176Trp,carriers,16,16,16,supplied,0,0,1,gold_v2,adjudicated_current_study_cohort,human_curated_cardiac,llm_text,"Results, paragraph on genotyping results and QT analyses"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,0,D1430N,D1430N,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,0,D1430N,D1430N,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,0,D1430N,D1430N,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,1,Q1476X,p.Gln1476*,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Abstract, Methods and results"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,1,Q1476X,p.Gln1476*,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Abstract, Methods and results"
+20260903_protocol_cont120_01_baseline,run,SCN5A,23612926,1,Q1476X,p.Gln1476*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Abstract, Methods and results"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,0,D501G,p.Asp501Gly c.1502A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 5"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,0,D501G,p.Asp501Gly c.1502A>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 5"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,0,D501G,p.Asp501Gly c.1502A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 5"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,1,G1319V,p.Gly1319Val c.3956G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 8"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,1,G1319V,p.Gly1319Val c.3956G>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 8"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,1,G1319V,p.Gly1319Val c.3956G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 8"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,2,I1660V,p.Ile1660Val c.4978A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,2,I1660V,p.Ile1660Val c.4978A>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,2,I1660V,p.Ile1660Val c.4978A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 1"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,3,P.N1380DEL,p.Asn1380del c.4140_4142delCAA,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 10"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,3,P.N1380DEL,p.Asn1380del c.4140_4142delCAA,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 10"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,3,P.N1380DEL,p.Asn1380del c.4140_4142delCAA,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 10"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,4,R1232Q,p.Arg1232Gln c.3695G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,4,R1232Q,p.Arg1232Gln c.3695G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,4,R1232Q,p.Arg1232Gln c.3695G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,5,R1897W,p.Arg1897Trp c.5689C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 12"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,5,R1897W,p.Arg1897Trp c.5689C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 12"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,5,R1897W,p.Arg1897Trp c.5689C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 12"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,6,R893H,p.Arg893His c.2678G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,6,R893H,p.Arg893His c.2678G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,6,R893H,p.Arg893His c.2678G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 6"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,7,W879R,p.Trp879Arg c.2635T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 9"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,7,W879R,p.Trp879Arg c.2635T>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 9"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,7,W879R,p.Trp879Arg c.2635T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 9"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,8,c.2582_2583delTT,p.Phe861fs*90 c.2582_2583delTT,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,8,c.2582_2583delTT,p.Phe861fs*90 c.2582_2583delTT,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,8,c.2582_2583delTT,p.Phe861fs*90 c.2582_2583delTT,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,9,c.4086delG,p.Arg1362fs*12 c.4086delG,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,9,c.4086delG,p.Arg1362fs*12 c.4086delG,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,9,c.4086delG,p.Arg1362fs*12 c.4086delG,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 4"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,10,c.934+1G>A,c.934+1G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,10,c.934+1G>A,c.934+1G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 3"
+20260903_protocol_cont120_01_baseline,run,SCN5A,29759671,10,c.934+1G>A,c.934+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Row 3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,27810088,0,V133I,V133I,carriers,20,,0,abstained,-20,20,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,27810088,0,V133I,V133I,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,27810088,0,V133I,V133I,unaffected,20,,0,abstained,-20,20,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,0,c.1186A>G,,carriers,5,,0,identity_miss,-5,5,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,0,c.1186A>G,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,0,c.1186A>G,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,1,c.172T>C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,1,c.172T>C,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,1,c.172T>C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,2,c.185delAG,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,2,c.185delAG,,affected,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,2,c.185delAG,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,3,c.2196G>A,,carriers,10,,0,identity_miss,-10,10,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,3,c.2196G>A,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,3,c.2196G>A,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,4,c.2201C>T,,carriers,8,,0,identity_miss,-8,8,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,4,c.2201C>T,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,4,c.2201C>T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,5,c.2430T>C,,carriers,15,,0,identity_miss,-15,15,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,5,c.2430T>C,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,5,c.2430T>C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,6,c.2434T>C,,carriers,2,,0,identity_miss,-2,2,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,6,c.2434T>C,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,6,c.2434T>C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,7,c.2731C>T,,carriers,6,,0,identity_miss,-6,6,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,7,c.2731C>T,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,7,c.2731C>T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,8,c.3107A>T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,8,c.3107A>T,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,8,c.3107A>T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,9,c.3232A>G,,carriers,4,,0,identity_miss,-4,4,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,9,c.3232A>G,,affected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,9,c.3232A>G,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,10,c.3827T>G,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,10,c.3827T>G,,affected,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,10,c.3827T>G,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,11,c.5382insC,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,11,c.5382insC,,affected,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,11,c.5382insC,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,12,c.546G>T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,12,c.546G>T,,affected,1,,0,identity_miss,-1,1,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,BRCA1,10528853,12,c.546G>T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20219395,0,R282H,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20219395,0,R282H,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,20219395,0,R282H,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,RYR2,33640691,0,A2254V,p.Ala2254Val,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_text,Functional study - assay data only; Results / Resource details paragraph
+20260903_protocol_cont120_01_baseline,run,RYR2,33640691,0,A2254V,p.Ala2254Val,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_text,Functional study - assay data only; Results / Resource details paragraph
+20260903_protocol_cont120_01_baseline,run,RYR2,33640691,0,A2254V,p.Ala2254Val,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,Functional study - assay data only; Results / Resource details paragraph
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20981542,0,G316E,p.G316E,carriers,8,,0,abstained,-8,8,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20981542,0,G316E,p.G316E,affected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,KCNQ1,20981542,0,G316E,p.G316E,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_cont120_01_baseline,run,RYR2,17199967,0,G3946S,p.Gly3946Ser,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Report, genetic study paragraph"
+20260903_protocol_cont120_01_baseline,run,RYR2,17199967,0,G3946S,p.Gly3946Ser,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Report, genetic study paragraph"
+20260903_protocol_cont120_01_baseline,run,RYR2,17199967,0,G3946S,p.Gly3946Ser,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Report, genetic study paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNH2,26173150,0,T613A,p.T613A,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,Results; family screening and functional characterization
+20260903_protocol_cont120_01_baseline,run,KCNH2,26173150,0,T613A,p.T613A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,Results; family screening and functional characterization
+20260903_protocol_cont120_01_baseline,run,KCNH2,26173150,0,T613A,p.T613A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Results; family screening and functional characterization
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,0,N1325S,N1325S,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,0,N1325S,N1325S,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,0,N1325S,N1325S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,1,P.K1505_Q1507DEL,,carriers,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,1,P.K1505_Q1507DEL,,affected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,1,P.K1505_Q1507DEL,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,2,R1644H,R1644H,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,2,R1644H,R1644H,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,8917568,2,R1644H,R1644H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,0,R1623Q,p.Arg1623Gln,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,0,R1623Q,p.Arg1623Gln,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,0,R1623Q,p.Arg1623Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,1,R1644H,p.Arg1644His,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,1,R1644H,p.Arg1644His,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15051636,1,R1644H,p.Arg1644His,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2B description"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29978770,0,R190W,p.Arg190Trp,carriers,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,llm_table,Abstract and main text (refers to previously reported mutations)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29978770,0,R190W,p.Arg190Trp,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,Abstract and main text (refers to previously reported mutations)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29978770,0,R190W,p.Arg190Trp,unaffected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,Abstract and main text (refers to previously reported mutations)
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,0,E39X,p.Glu39* c.115G>T,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,0,E39X,p.Glu39* c.115G>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,0,E39X,p.Glu39* c.115G>T,unaffected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,1,G168R,p.Gly168Arg c.502G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,1,G168R,p.Gly168Arg c.502G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,31484877,1,G168R,p.Gly168Arg c.502G>A,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, genetic analysis paragraph"
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,0,G572S,p.Gly572Ser,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,0,G572S,p.Gly572Ser,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,0,G572S,p.Gly572Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,1,G584S,p.Gly584Ser,carriers,19,,0,abstained,-19,19,0,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,1,G584S,p.Gly584Ser,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,KCNH2,19490267,1,G584S,p.Gly584Ser,unaffected,16,,0,abstained,-16,16,0,baseline,,human_curated_cardiac,figure,Functional study - assay data only; clinical from Results text and Figure 1
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,0,R34H,p.Arg34His c.101G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Table 3, Results paragraph on segregation analysis, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,0,R34H,p.Arg34His c.101G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Table 3, Results paragraph on segregation analysis, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,0,R34H,p.Arg34His c.101G>A,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Table 3, Results paragraph on segregation analysis, Figure 2"
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,1,V1279I,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,1,V1279I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,28018021,1,V1279I,,unaffected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,0,I1768V,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,0,I1768V,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,0,I1768V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,1,N1325S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,1,N1325S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,1,N1325S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,2,Q692K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,2,Q692K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,2,Q692K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,3,R1193Q,p.Arg1193Gln,carriers,3,2,2,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,3,R1193Q,p.Arg1193Gln,affected,3,2,2,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,3,R1193Q,p.Arg1193Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Results
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,4,R190Q,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,4,R190Q,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,4,R190Q,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,5,c.4299_4300insG,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,5,c.4299_4300insG,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,17905336,5,c.4299_4300insG,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_cont120_01_baseline,run,SCN5A,23791817,0,D1275N,p.D1275N c.3823G>A,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,23791817,0,D1275N,p.D1275N c.3823G>A,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,23791817,0,D1275N,p.D1275N c.3823G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only
+20260903_protocol_cont120_01_baseline,run,SCN5A,28217227,0,Q779X,Q779X,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,28217227,0,Q779X,Q779X,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,28217227,0,Q779X,Q779X,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19348785,0,G314S,p.Gly314Ser,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Functional study - assay data only. Results, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19348785,0,G314S,p.Gly314Ser,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Functional study - assay data only. Results, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,KCNQ1,19348785,0,G314S,p.Gly314Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Functional study - assay data only. Results, Fig. 3"
+20260903_protocol_cont120_01_baseline,run,RYR2,24793461,0,Q4159P,p.Q4159P,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case report section, genetic characterization paragraph"
+20260903_protocol_cont120_01_baseline,run,RYR2,24793461,0,Q4159P,p.Q4159P,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case report section, genetic characterization paragraph"
+20260903_protocol_cont120_01_baseline,run,RYR2,24793461,0,Q4159P,p.Q4159P,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case report section, genetic characterization paragraph"
+20260903_protocol_cont120_01_baseline,run,SCN5A,10532948,0,T1620M,p.Thr1620Met,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Functional study - assay data only; Results, Figures 1-7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,10532948,0,T1620M,p.Thr1620Met,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Functional study - assay data only; Results, Figures 1-7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,10532948,0,T1620M,p.Thr1620Met,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Functional study - assay data only; Results, Figures 1-7"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,0,D1275N,p.Asp1275Asn,carriers,22,,0,abstained,-22,22,0,gold_v2,confirmed_original_pedigree_derived,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,0,D1275N,p.Asp1275Asn,affected,7,,0,abstained,-7,7,0,gold_v2,confirmed_original_pedigree_derived,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,0,D1275N,p.Asp1275Asn,unaffected,15,,0,abstained,-15,15,0,gold_v2,confirmed_original_pedigree_derived,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,1,D1595H,D1595H,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,1,D1595H,D1595H,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,1,D1595H,D1595H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,2,R814W,p.R814W c.2440C>T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,2,R814W,p.R814W c.2440C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,2,R814W,p.R814W c.2440C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,3,T220I,p.T220I c.659C>T,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,3,T220I,p.T220I c.659C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,SCN5A,15671429,3,T220I,p.T220I c.659C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Genotype-Phenotype Correlation"
+20260903_protocol_cont120_01_baseline,run,RYR2,30308486,0,L2483R,p.Leu2483Arg c.7448T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,Abstract and Results sections describing patient identification and iPSC generation
+20260903_protocol_cont120_01_baseline,run,RYR2,30308486,0,L2483R,p.Leu2483Arg c.7448T>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,Abstract and Results sections describing patient identification and iPSC generation
+20260903_protocol_cont120_01_baseline,run,RYR2,30308486,0,L2483R,p.Leu2483Arg c.7448T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,Abstract and Results sections describing patient identification and iPSC generation
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29488358,0,G229D,G229D,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29488358,0,G229D,G229D,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,KCNQ1,29488358,0,G229D,G229D,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_cont120_01_baseline,run,SCN5A,19669871,0,F1473C,p.Phe1473Cys c.4418T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,1 Case report
+20260903_protocol_cont120_01_baseline,run,SCN5A,19669871,0,F1473C,p.Phe1473Cys c.4418T>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,1 Case report
+20260903_protocol_cont120_01_baseline,run,SCN5A,19669871,0,F1473C,p.Phe1473Cys c.4418T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,1 Case report

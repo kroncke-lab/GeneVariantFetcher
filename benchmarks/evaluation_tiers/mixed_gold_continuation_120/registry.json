@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-03",
+  "suite_id": "mixed_all_gold_continuation_120",
+  "count_unit": "gene_paper_attempt",
+  "selection_seed": 2026090302,
+  "target_tranche_size": 121,
+  "assignment": "article_atomic_gene_and_provenance_balanced_sha256_v1",
+  "gold_value_blinded": true,
+  "primary_score_lane": "paper_derived",
+  "comparison_score_lanes": [
+    "linkage_assisted"
+  ],
+  "consumption_log": {
+    "path": "consumption_log.jsonl",
+    "schema_version": 1,
+    "required_arms": [
+      "baseline",
+      "candidate"
+    ]
+  },
+  "evaluation_design": {
+    "comparison": "paired_frozen_baseline_and_candidate_on_same_manifest",
+    "primary_endpoint": "paper_derived_micro_variant_identity_recall",
+    "guardrails": [
+      "paper_derived_micro_variant_identity_precision_noninferiority",
+      "per_gene_results_reported",
+      "per_gold_provenance_results_reported_without_scientific_pooling"
+    ],
+    "consume_order": [
+      "mixed_gold_cont120_01",
+      "mixed_gold_cont120_02",
+      "mixed_gold_cont120_03",
+      "mixed_gold_cont120_04",
+      "mixed_gold_cont120_05",
+      "mixed_gold_cont120_06",
+      "mixed_gold_cont120_07",
+      "mixed_gold_cont120_08",
+      "mixed_gold_cont120_09",
+      "mixed_gold_cont120_10",
+      "mixed_gold_cont120_11"
+    ],
+    "burn_policy": "Any score inspected before a protocol decision burns that tranche for confirmation; confirm on the next still-unopened tranche.",
+    "cache_policy": "frozen_source_bytes_only_no_prior_prediction_or_db_reuse",
+    "cluster_unit": "PMID",
+    "decision_rule": {
+      "delta_definition": "candidate_minus_baseline_on_the_same_tranche",
+      "primary": {
+        "metric": "paper_derived_micro_variant_identity_recall",
+        "minimum_observed_delta": 0.01,
+        "noninferiority_margin": -0.01,
+        "one_sided_confidence_level": 0.95
+      },
+      "precision_guardrail": {
+        "metric": "paper_derived_micro_variant_identity_precision",
+        "noninferiority_margin": -0.02,
+        "one_sided_confidence_level": 0.95
+      },
+      "confidence_interval": {
+        "method": "paired_cluster_bootstrap_nearest_rank",
+        "cluster_unit": "PMID",
+        "resamples": 10000,
+        "seed": 2026090302
+      },
+      "pass_condition": "Observed recall delta >= +0.01 and its one-sided 95% lower bound >= -0.01, while the precision-delta one-sided 95% lower bound is >= -0.02.",
+      "confirmation": "A discovery pass advances only to the next unopened tranche; accept the candidate only if the same frozen rule passes there."
+    }
+  },
+  "inventory": {
+    "path": "inventory.tsv",
+    "sha256": "cae23f3b66526482362d420e055dc3ad5f1607b7ecbdd13ab9a2ce0d3f24f7f5",
+    "gold_attempts": 1534,
+    "source_available_attempts": 1324,
+    "all_source_available_attempts": 1422,
+    "previously_consumed_attempts": 98,
+    "previously_consumed_pmids": 90,
+    "source_unavailable_attempts": 111,
+    "quarantined_attempts": 1,
+    "unique_source_available_pmids": 1216
+  },
+  "exclusions": [
+    {
+      "path": "benchmarks/evaluation_tiers/mixed_gold/tranche_01.tsv",
+      "sha256": "ae290bbe1b6dfc960c46da2b0223cc9458c04188f5b7b5b8887e3bd93409f9ac"
+    },
+    {
+      "path": "benchmarks/evaluation_tiers/mixed_gold/tranche_02.tsv",
+      "sha256": "26f2368b19684ef79c38cb65de8ad243648b3a0b291f81f2de77a1b9f81f32ba"
+    }
+  ],
+  "gold_inputs": [
+    {
+      "kind": "repo_gold",
+      "gene": "KCNH2",
+      "path": "gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv",
+      "sha256": "1e1ea47caab96b89812f49208202143514b8596ee43dd64b9f1d738aa0cc81ad",
+      "eligible_attempts_contributed": 261
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "KCNQ1",
+      "path": "gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv",
+      "sha256": "72472a17d8fe6e4330a663612dfdbd3fa3eee2dc33737d91e07155ce1700cab7",
+      "eligible_attempts_contributed": 305
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "RYR2",
+      "path": "gene_variant_fetcher_gold_standard/normalized/RYR2_recall_input.csv",
+      "sha256": "b1a1e4eb69c73b448e15f8ea108f898c3319ba451e8c0b58fae328f50347ff0e",
+      "eligible_attempts_contributed": 178
+    },
+    {
+      "kind": "repo_gold",
+      "gene": "SCN5A",
+      "path": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv",
+      "sha256": "71b3510406f02af6d9bf733a4e2cca666cf5ffe271924540351b639d54e00988",
+      "eligible_attempts_contributed": 757
+    },
+    {
+      "kind": "curated_override",
+      "gene": "APOE",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/APOE_recall_input.csv",
+      "sha256": "686d869005f905e564c4f38d0dbbf079320c1b64e96c37325dd4d36c2f05a51a",
+      "eligible_attempts_contributed": 6
+    },
+    {
+      "kind": "curated_override",
+      "gene": "BRCA1",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/BRCA1_recall_input.csv",
+      "sha256": "ac4a16492d4d239117583790c96468f436133083646597a7608823c02ce42156",
+      "eligible_attempts_contributed": 10
+    },
+    {
+      "kind": "curated_override",
+      "gene": "BRCA2",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/BRCA2_recall_input.csv",
+      "sha256": "29c65b1a57e7b4de61c9eb09086ce4f3337fe44f96c007091a215917d7870280",
+      "eligible_attempts_contributed": 8
+    },
+    {
+      "kind": "curated_override",
+      "gene": "KCNH2",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/KCNH2_recall_input.csv",
+      "sha256": "a57028e51a40d96808a17f87a2341d7fb7cf7f5f23b0fe8ea00a8b4412f6d6ed",
+      "eligible_attempts_contributed": 1
+    },
+    {
+      "kind": "curated_override",
+      "gene": "MYBPC3",
+      "path": "benchmarks/curated_extraction_eval/gold_overrides/MYBPC3_recall_input.csv",
+      "sha256": "a4786cb147a0da3365300b76f24d367e22803c0d41fbdea3ad8e00fa854440ec",
+      "eligible_attempts_contributed": 8
+    }
+  ],
+  "answer_key": {
+    "path": "answer_key",
+    "sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4"
+  },
+  "cost_model": {
+    "calibration": "benchmarks/evaluation_tiers/cost_calibration.json",
+    "calibration_sha256": "9484f3d0532a01ac717498f1e873eefda0986c0668e8a766231322f549977d17",
+    "method": "sum of observed per-gene production cost per gene-paper attempt",
+    "pricing_basis": "Dated public-list-price proxy used by docs/PROTOCOL_COST_EVAL.md; cached-input discounts, source acquisition, human review, and Grok/AGY consultation are excluded.",
+    "pricing_as_of": "2026-08-24",
+    "estimated_suite_cost_usd": 138.5014,
+    "budget_with_headroom_usd": 173.1267,
+    "paired_estimated_suite_cost_usd": 277.0028,
+    "paired_budget_with_headroom_usd": 346.2535,
+    "unit_cost_usd_by_gene": {
+      "APOE": 0.106502,
+      "BRCA1": 0.303901,
+      "BRCA2": 0.236141,
+      "KCNH2": 0.087385,
+      "KCNQ1": 0.089843,
+      "MYBPC3": 0.246269,
+      "RYR2": 0.114809,
+      "SCN5A": 0.108948
+    }
+  },
+  "tiers": [
+    {
+      "id": "mixed_gold_cont120_01",
+      "order": 1,
+      "manifest": "tranche_01.tsv",
+      "sha256": "8eb431aa8e2e4ea5cc1723b8d98ba959a3fca8ba5f25d28051a82f3424f33119",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA1": 1,
+        "KCNH2": 21,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 103,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.5552,
+      "budget_with_headroom_usd": 15.694,
+      "paired_estimated_cost_usd": 25.1103,
+      "paired_budget_with_headroom_usd": 31.3879
+    },
+    {
+      "id": "mixed_gold_cont120_02",
+      "order": 2,
+      "manifest": "tranche_02.tsv",
+      "sha256": "4ad6bbc695acb1bfc3f073fc65ac67de106dbfa746da907e81df59b60ef2bb47",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA2": 1,
+        "KCNH2": 21,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "collaborator_approved_nonexhaustive": 1,
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 103,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.4874,
+      "budget_with_headroom_usd": 15.6093,
+      "paired_estimated_cost_usd": 24.9748,
+      "paired_budget_with_headroom_usd": 31.2185
+    },
+    {
+      "id": "mixed_gold_cont120_03",
+      "order": 3,
+      "manifest": "tranche_03.tsv",
+      "sha256": "c54851fe2ba61ce1354d9549a5b5267ce3d7dc55f0e38d3f2057e59f0f23fc3d",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 21,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 103,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.6848,
+      "budget_with_headroom_usd": 15.856,
+      "paired_estimated_cost_usd": 25.3696,
+      "paired_budget_with_headroom_usd": 31.712
+    },
+    {
+      "id": "mixed_gold_cont120_04",
+      "order": 4,
+      "manifest": "tranche_04.tsv",
+      "sha256": "d01a79df0fed29ad294b64593c10adc2d79b70c8956cdec5e9abc38a38baf3ba",
+      "attempt_count": 120,
+      "unique_pmid_count": 111,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA1": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.3963,
+      "budget_with_headroom_usd": 15.4954,
+      "paired_estimated_cost_usd": 24.7926,
+      "paired_budget_with_headroom_usd": 30.9907
+    },
+    {
+      "id": "mixed_gold_cont120_05",
+      "order": 5,
+      "manifest": "tranche_05.tsv",
+      "sha256": "79cbfc2c4a8d4aa72ddb033a4c464e7f101512998b5010aef7a453b7eda2738f",
+      "attempt_count": 121,
+      "unique_pmid_count": 112,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.7722,
+      "budget_with_headroom_usd": 15.9652,
+      "paired_estimated_cost_usd": 25.5444,
+      "paired_budget_with_headroom_usd": 31.9305
+    },
+    {
+      "id": "mixed_gold_cont120_06",
+      "order": 6,
+      "manifest": "tranche_06.tsv",
+      "sha256": "32dcfe67db8c07964898e54961286dd20906165dc4d4997b0c30273a6c5cceef",
+      "attempt_count": 121,
+      "unique_pmid_count": 111,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA1": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.6426,
+      "budget_with_headroom_usd": 15.8032,
+      "paired_estimated_cost_usd": 25.2851,
+      "paired_budget_with_headroom_usd": 31.6064
+    },
+    {
+      "id": "mixed_gold_cont120_07",
+      "order": 7,
+      "manifest": "tranche_07.tsv",
+      "sha256": "6d49d819277007ccef14dc57ad7a393b24dda0c3ada3702ab664926b043facdb",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 21,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 103,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.6848,
+      "budget_with_headroom_usd": 15.856,
+      "paired_estimated_cost_usd": 25.3696,
+      "paired_budget_with_headroom_usd": 31.712
+    },
+    {
+      "id": "mixed_gold_cont120_08",
+      "order": 8,
+      "manifest": "tranche_08.tsv",
+      "sha256": "b861285384773cb398af33383b5f639eadb6cbd93083d7cea64aa7e349098957",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.5259,
+      "budget_with_headroom_usd": 15.6574,
+      "paired_estimated_cost_usd": 25.0519,
+      "paired_budget_with_headroom_usd": 31.3148
+    },
+    {
+      "id": "mixed_gold_cont120_09",
+      "order": 9,
+      "manifest": "tranche_09.tsv",
+      "sha256": "e84d65025cb993c5eabd160a8164b1776d5560c89d52f6c1c5c41ac72e0bb4eb",
+      "attempt_count": 120,
+      "unique_pmid_count": 110,
+      "gene_attempt_counts": {
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "collaborator_approved_nonexhaustive": 1,
+        "curated_override_mixed_provenance": 2,
+        "human_curated_cardiac": 103,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.5259,
+      "budget_with_headroom_usd": 15.6574,
+      "paired_estimated_cost_usd": 25.0519,
+      "paired_budget_with_headroom_usd": 31.3148
+    },
+    {
+      "id": "mixed_gold_cont120_10",
+      "order": 10,
+      "manifest": "tranche_10.tsv",
+      "sha256": "f80e5cbfba05abdb9348537ed8d6dd75b22ef04feb05e8f822ae4c0acf814ead",
+      "attempt_count": 121,
+      "unique_pmid_count": 111,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA2": 1,
+        "KCNH2": 22,
+        "KCNQ1": 25,
+        "MYBPC3": 1,
+        "RYR2": 14,
+        "SCN5A": 57
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.5748,
+      "budget_with_headroom_usd": 15.7185,
+      "paired_estimated_cost_usd": 25.1496,
+      "paired_budget_with_headroom_usd": 31.437
+    },
+    {
+      "id": "mixed_gold_cont120_11",
+      "order": 11,
+      "manifest": "tranche_11.tsv",
+      "sha256": "724355ad659035b1e12c94ef07e86a94487abd08d30de51c2b6e85d264729ace",
+      "attempt_count": 121,
+      "unique_pmid_count": 111,
+      "gene_attempt_counts": {
+        "APOE": 1,
+        "BRCA1": 1,
+        "BRCA2": 1,
+        "KCNH2": 22,
+        "KCNQ1": 24,
+        "RYR2": 14,
+        "SCN5A": 58
+      },
+      "gold_provenance_attempt_counts": {
+        "curated_override_mixed_provenance": 3,
+        "human_curated_cardiac": 104,
+        "human_curated_ryr2_pilot": 14
+      },
+      "selection_seed": 2026090302,
+      "eligibility_mode": "variant",
+      "gold_root": "answer_key",
+      "gold_root_sha256": "bc194a81df6747b0982b137b6de10f9e49119d3201d4e99e8978489d3c0f9dc4",
+      "primary_score_lane": "paper_derived",
+      "comparison_score_lanes": [
+        "linkage_assisted"
+      ],
+      "role": "mixed_gold_protocol_regression",
+      "estimated_cost_usd": 12.6515,
+      "budget_with_headroom_usd": 15.8144,
+      "paired_estimated_cost_usd": 25.3031,
+      "paired_budget_with_headroom_usd": 31.6288
+    }
+  ]
+}

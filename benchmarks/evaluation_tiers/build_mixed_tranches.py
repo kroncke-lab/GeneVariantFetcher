@@ -48,6 +48,38 @@ class BuildError(RuntimeError):
     """The mixed suite cannot be built reproducibly from the current inputs."""
 
 
+def excluded_pmids(manifests: list[Path]) -> tuple[set[str], list[dict[str, str]]]:
+    """Read article-level exclusions without consulting any gold values."""
+
+    pmids: set[str] = set()
+    metadata: list[dict[str, str]] = []
+    for manifest in manifests:
+        path = manifest.resolve()
+        if not path.is_file():
+            raise BuildError(f"exclusion manifest is missing: {path}")
+        for line_number, raw in enumerate(path.read_text().splitlines(), 1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) != 2 or not parts[1].isdigit():
+                raise BuildError(
+                    f"invalid exclusion manifest row {line_number}: {path}"
+                )
+            pmids.add(parts[1])
+        metadata.append(
+            {
+                "path": (
+                    str(path.relative_to(REPO))
+                    if path.is_relative_to(REPO)
+                    else str(path)
+                ),
+                "sha256": sha256_file(path),
+            }
+        )
+    return pmids, metadata
+
+
 def sha256_file(path: Path) -> str:
     value = hashlib.sha256()
     with path.open("rb") as handle:
@@ -295,7 +327,9 @@ def digest_answer_key(root: Path) -> str:
 
 
 def build(args: argparse.Namespace) -> dict[str, Any]:
+    args.out = args.out.resolve()
     rows_by_gene, attempt_meta, input_meta = read_gold_inventory()
+    excluded, exclusion_meta = excluded_pmids(args.exclude_manifest)
     args.out.mkdir(parents=True, exist_ok=True)
     answer_key = args.out / "answer_key"
     write_answer_key(answer_key, rows_by_gene, attempt_meta)
@@ -311,6 +345,9 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         elif source is None:
             status = "source_unavailable"
             reason = f"no FULL_CONTEXT/CLEANED source >= {args.minimum_chars} bytes"
+        elif key[1] in excluded:
+            status = "previously_consumed"
+            reason = "PMID occurs in an excluded, already-consumed manifest"
         else:
             status = "included"
             reason = ""
@@ -335,7 +372,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     gold_root_digest = digest_answer_key(answer_key)
     tier_records = []
     for number, tranche in enumerate(tranches, 1):
-        tier_id = f"mixed_gold_{number:02d}"
+        tier_id = f"{args.tier_prefix}_{number:02d}"
         manifest = args.out / f"tranche_{number:02d}.tsv"
         lines = [
             f"# {tier_id}: mixed all-gold protocol tranche; seed {args.seed}.",
@@ -404,7 +441,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     registry = {
         "schema_version": 1,
         "as_of": "2026-09-03",
-        "suite_id": "mixed_all_gold",
+        "suite_id": args.suite_id,
         "count_unit": "gene_paper_attempt",
         "selection_seed": args.seed,
         "target_tranche_size": args.tranche_size,
@@ -467,6 +504,14 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             "sha256": sha256_file(inventory_path),
             "gold_attempts": len(attempt_meta),
             "source_available_attempts": len(included),
+            "all_source_available_attempts": sum(
+                row["status"] in {"included", "previously_consumed"}
+                for row in inventory
+            ),
+            "previously_consumed_attempts": sum(
+                row["status"] == "previously_consumed" for row in inventory
+            ),
+            "previously_consumed_pmids": len(excluded),
             "source_unavailable_attempts": sum(
                 row["status"] == "source_unavailable" for row in inventory
             ),
@@ -475,6 +520,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "unique_source_available_pmids": len({row["pmid"] for row in included}),
         },
+        "exclusions": exclusion_meta,
         "gold_inputs": input_meta,
         "answer_key": {
             "path": "answer_key",
@@ -506,7 +552,11 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         json.dumps(registry, indent=2) + "\n", encoding="utf-8"
     )
     readme_lines = [
-        "# Mixed all-gold protocol tranches",
+        (
+            "# Mixed all-gold protocol continuation"
+            if excluded
+            else "# Mixed all-gold protocol tranches"
+        ),
         "",
         (
             f"This seeded suite assigns all **{len(included):,} source-available** "
@@ -549,9 +599,9 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         "",
         "```bash",
         ".venv/bin/python benchmarks/codex_paper_eval/setup_production_eval.py create \\",
-        "  --tier-id mixed_gold_01 \\",
-        "  --paper-manifest benchmarks/evaluation_tiers/mixed_gold/tranche_01.tsv \\",
-        "  --registry benchmarks/evaluation_tiers/mixed_gold/registry.json \\",
+        f"  --tier-id {tier_records[0]['id']} \\",
+        f"  --paper-manifest {args.out.relative_to(REPO)}/tranche_01.tsv \\",
+        f"  --registry {args.out.relative_to(REPO)}/registry.json \\",
         f"  --seed {args.seed} --comparison-arm baseline \\",
         "  --run-id YYYYMMDD_protocol_mixed01_baseline \\",
         "  --email brett.kroncke@gmail.com",
@@ -611,6 +661,17 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         "| Tranche | Attempts | Genes | One arm | Paired A/B | Paired +25% |",
         "|---|---:|---|---:|---:|---:|",
     ]
+    if excluded:
+        readme_lines[4:4] = [
+            (
+                f"This continuation excludes **{registry['inventory']['previously_consumed_attempts']:,}** "
+                "gene-paper attempts across "
+                f"**{registry['inventory']['previously_consumed_pmids']:,}** PMIDs "
+                "listed in the consumed manifests bound in `registry.json`. The "
+                "prior locked runs remain immutable calibration evidence."
+            ),
+            "",
+        ]
     for tier in tier_records:
         genes = ", ".join(
             f"{gene} {count}" for gene, count in tier["gene_attempt_counts"].items()
@@ -638,6 +699,15 @@ def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--seed", type=int, default=2026090301)
     ap.add_argument("--tranche-size", type=int, default=50)
+    ap.add_argument("--suite-id", default="mixed_all_gold")
+    ap.add_argument("--tier-prefix", default="mixed_gold")
+    ap.add_argument(
+        "--exclude-manifest",
+        type=Path,
+        action="append",
+        default=[],
+        help="Exclude every PMID in this consumed manifest; repeat as needed",
+    )
     ap.add_argument("--minimum-chars", type=int, default=2000)
     ap.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
     ap.add_argument("--cost-calibration", type=Path, default=DEFAULT_COST)

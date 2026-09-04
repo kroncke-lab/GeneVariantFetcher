@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="8.00in" height="4.40in" viewBox="0 0 2400 1320" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Automated minus reference counts on the gold standard</title>
+<desc id="figure-desc">Difference plot of automated minus reference counts against the reference count for every gold row with an asserted value. Identity misses and matched rows without an automated count are evaluated as zero and drawn in their own styles.</desc>
+<metadata>
+Arm run: 20260824_aha_table_sourcebound_gold118, locked 2026-08-25T04:34:19.506766+00:00
+Evaluation rule: difference = automated count minus reference count for every gold row with an asserted value; an identity miss or a matched row without an automated count is evaluated as 0 (the full reference count is the error)
+Axes: reference 0..220 (square root); difference ±220 (signed square root)
+Marker radius is 8 + 2*sqrt(rows), capped at 28 viewBox units
+</metadata>
+<defs><style><![CDATA[
+text { font-family: "Avenir Next Condensed", "Source Sans 3", "Helvetica Neue", Arial, sans-serif; fill: #17324D; }
+.title { font-size: 56px; font-weight: 600; letter-spacing: -0.3px; }
+.subtitle { font-size: 30px; font-weight: 500; fill: #687584; }
+.arm-title { font-size: 36px; font-weight: 600; }
+.facet-title { font-size: 40px; font-weight: 600; }
+.tick { font-size: 27px; font-weight: 400; fill: #687584; }
+.axis-label { font-size: 30px; font-weight: 500; }
+.stats { font-size: 25px; font-weight: 500; }
+.stats-strong { font-size: 27px; font-weight: 600; }
+.legend { font-size: 27px; font-weight: 500; }
+.legend-value { font-size: 23px; font-weight: 600; fill: #687584; }
+.size-key { fill: #FFFFFF; stroke: #17324D; stroke-width: 2.5; }
+.ref-label { font-size: 22px; font-weight: 600; fill: #687584; }
+.ref-label-bias { font-size: 22px; font-weight: 600; fill: #C85A63; }
+.label-title { font-size: 26px; font-weight: 600; }
+.label-detail { font-size: 22px; font-weight: 500; fill: #687584; }
+.leader { stroke: #687584; stroke-width: 2.2; fill: none; }
+.grid { stroke: #DCE3E8; stroke-width: 2; }
+.divider { stroke: #DCE3E8; stroke-width: 3; }
+.axis { stroke: #17324D; stroke-width: 3.5; fill: none; }
+.zero-line { stroke: #17324D; stroke-width: 3.5; }
+.bias-line { stroke: #C85A63; stroke-width: 3.5; stroke-dasharray: 14 10; }
+.limit-line { stroke: #687584; stroke-width: 2.6; stroke-dasharray: 5 7; }
+.floor-line { stroke: #9AA6B2; stroke-width: 2.4; stroke-dasharray: 3 9; fill: none; }
+]]></style></defs>
+<rect width="2400" height="1320" fill="#F8FAFC"/>
+<text x="80.0" y="82.0" class="title">Automated minus reference counts on the gold standard</text>
+<text x="80.0" y="138.0" class="subtitle">misses and abstentions scored as 0 · square-root axes · every asserted gold row</text>
+<circle cx="94.0" cy="195.0" r="14" fill="#3B78A8" stroke="#17324D" stroke-width="2.5"/>
+<text x="118.0" y="204.0" class="legend">automated count supplied</text>
+<circle cx="502.0" cy="195.0" r="14" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0"/>
+<text x="526.0" y="204.0" class="legend">variant matched, no automated count (scored 0)</text>
+<circle cx="1207.0" cy="195.0" r="14" fill="#D9DFE4" stroke="#687584" stroke-width="3.0" stroke-dasharray="7 5"/>
+<text x="1231.0" y="204.0" class="legend">variant not found (scored 0)</text>
+<text x="80.0" y="252.0" class="legend">Marker area · gold rows at one coordinate (wedges split it by status):</text>
+<circle cx="1069.0" cy="243.0" r="10.0" class="size-key"/>
+<text x="1087.0" y="252.0" class="legend-value">1</text>
+<circle cx="1171.0" cy="243.0" r="12.5" class="size-key"/>
+<text x="1191.5" y="252.0" class="legend-value">5</text>
+<circle cx="1277.9" cy="243.0" r="18.0" class="size-key"/>
+<text x="1303.9" y="252.0" class="legend-value">25</text>
+<text x="80.0" y="318.0" class="arm-title">Run · 20260824_aha_table_sourcebound_gold118 · runtime d1b94f35 · locked 2026-08-25 · 118 gene–paper attempts</text>
+<text x="170.0" y="372.0" class="facet-title">Carriers</text>
+<defs><clipPath id="clip-0-carriers"><rect x="170.0" y="400.0" width="620.0" height="620.0"/></clipPath></defs>
+<rect x="170.0" y="400.0" width="620.0" height="620.0" fill="#FFFFFF"/>
+<line x1="216.0" y1="400.0" x2="216.0" y2="1020.0" class="grid"/>
+<text x="216.0" y="1057.0" class="tick" text-anchor="middle">0</text>
+<line x1="251.6" y1="400.0" x2="251.6" y2="1020.0" class="grid"/>
+<text x="251.6" y="1057.0" class="tick" text-anchor="middle">1</text>
+<line x1="266.3" y1="400.0" x2="266.3" y2="1020.0" class="grid"/>
+<line x1="295.6" y1="400.0" x2="295.6" y2="1020.0" class="grid"/>
+<text x="295.6" y="1057.0" class="tick" text-anchor="middle">5</text>
+<line x1="328.6" y1="400.0" x2="328.6" y2="1020.0" class="grid"/>
+<text x="328.6" y="1057.0" class="tick" text-anchor="middle">10</text>
+<line x1="375.2" y1="400.0" x2="375.2" y2="1020.0" class="grid"/>
+<text x="375.2" y="1057.0" class="tick" text-anchor="middle">20</text>
+<line x1="467.7" y1="400.0" x2="467.7" y2="1020.0" class="grid"/>
+<text x="467.7" y="1057.0" class="tick" text-anchor="middle">50</text>
+<line x1="572.0" y1="400.0" x2="572.0" y2="1020.0" class="grid"/>
+<text x="572.0" y="1057.0" class="tick" text-anchor="middle">100</text>
+<line x1="719.4" y1="400.0" x2="719.4" y2="1020.0" class="grid"/>
+<text x="719.4" y="1057.0" class="tick" text-anchor="middle">200</text>
+<line x1="170.0" y1="710.0" x2="790.0" y2="710.0" class="grid"/>
+<text x="152.0" y="720.0" class="tick" text-anchor="end">0</text>
+<line x1="170.0" y1="727.8" x2="790.0" y2="727.8" class="grid"/>
+<line x1="170.0" y1="692.2" x2="790.0" y2="692.2" class="grid"/>
+<line x1="170.0" y1="735.2" x2="790.0" y2="735.2" class="grid"/>
+<line x1="170.0" y1="684.8" x2="790.0" y2="684.8" class="grid"/>
+<line x1="170.0" y1="749.8" x2="790.0" y2="749.8" class="grid"/>
+<text x="152.0" y="759.8" class="tick" text-anchor="end">−5</text>
+<line x1="170.0" y1="670.2" x2="790.0" y2="670.2" class="grid"/>
+<text x="152.0" y="680.2" class="tick" text-anchor="end">+5</text>
+<line x1="170.0" y1="766.3" x2="790.0" y2="766.3" class="grid"/>
+<line x1="170.0" y1="653.7" x2="790.0" y2="653.7" class="grid"/>
+<line x1="170.0" y1="789.6" x2="790.0" y2="789.6" class="grid"/>
+<text x="152.0" y="799.6" class="tick" text-anchor="end">−20</text>
+<line x1="170.0" y1="630.4" x2="790.0" y2="630.4" class="grid"/>
+<text x="152.0" y="640.4" class="tick" text-anchor="end">+20</text>
+<line x1="170.0" y1="835.9" x2="790.0" y2="835.9" class="grid"/>
+<text x="152.0" y="845.9" class="tick" text-anchor="end">−50</text>
+<line x1="170.0" y1="584.1" x2="790.0" y2="584.1" class="grid"/>
+<text x="152.0" y="594.1" class="tick" text-anchor="end">+50</text>
+<line x1="170.0" y1="888.0" x2="790.0" y2="888.0" class="grid"/>
+<text x="152.0" y="898.0" class="tick" text-anchor="end">−100</text>
+<line x1="170.0" y1="532.0" x2="790.0" y2="532.0" class="grid"/>
+<text x="152.0" y="542.0" class="tick" text-anchor="end">+100</text>
+<line x1="170.0" y1="961.7" x2="790.0" y2="961.7" class="grid"/>
+<text x="152.0" y="971.7" class="tick" text-anchor="end">−200</text>
+<line x1="170.0" y1="458.3" x2="790.0" y2="458.3" class="grid"/>
+<text x="152.0" y="468.3" class="tick" text-anchor="end">+200</text>
+<polyline points="216.0,710.0 222.6,713.3 229.2,716.6 235.8,719.9 242.4,723.2 249.0,726.5 255.6,729.8 262.2,733.1 268.8,736.4 275.4,739.7 282.0,743.0 288.6,746.3 295.2,749.6 301.8,752.9 308.4,756.2 315.0,759.5 321.6,762.8 328.2,766.1 334.8,769.4 341.4,772.7 348.0,776.0 354.6,779.3 361.2,782.6 367.8,785.9 374.4,789.2 381.0,792.5 387.6,795.8 394.2,799.1 400.8,802.4 407.4,805.7 414.0,809.0 420.6,812.3 427.2,815.6 433.8,818.9 440.4,822.2 447.0,825.5 453.6,828.8 460.2,832.1 466.8,835.4 473.4,838.7 480.0,842.0 486.6,845.3 493.2,848.6 499.8,851.9 506.4,855.2 513.0,858.5 519.6,861.8 526.2,865.1 532.8,868.4 539.4,871.7 546.0,875.0 552.6,878.3 559.2,881.6 565.8,884.9 572.4,888.2 579.0,891.5 585.6,894.8 592.2,898.1 598.8,901.4 605.4,904.7 612.0,908.0 618.6,911.3 625.2,914.6 631.8,917.9 638.4,921.2 645.0,924.5 651.6,927.8 658.2,931.1 664.8,934.4 671.4,937.7 678.0,941.0 684.6,944.3 691.2,947.6 697.8,950.9 704.4,954.2 711.0,957.5 717.6,960.8 724.2,964.1 730.8,967.4 737.4,970.7 744.0,974.0" class="floor-line" clip-path="url(#clip-0-carriers)"/>
+<line x1="170.0" y1="710.0" x2="790.0" y2="710.0" class="zero-line"/>
+<line x1="170.0" y1="731.6" x2="790.0" y2="731.6" class="bias-line"/>
+<text x="780.0" y="723.6" class="ref-label-bias" text-anchor="end">bias −1.48</text>
+<line x1="170.0" y1="710.0" x2="790.0" y2="710.0" class="limit-line"/>
+<text x="780.0" y="676.0" class="ref-label" text-anchor="end">97.5%: 0</text>
+<line x1="170.0" y1="766.3" x2="790.0" y2="766.3" class="limit-line"/>
+<text x="780.0" y="758.3" class="ref-label" text-anchor="end">2.5%: −10</text>
+<g clip-path="url(#clip-0-carriers)">
+<g><title>reference 1, automated 0, difference -1; 177 row(s): 48 variant not found (scored 0), 129 variant matched, no automated count (scored 0): KCNH2 P923fsX PMID 16155735 (abstained); KCNH2 A561T PMID 18808722 (abstained); KCNH2 A614V PMID 18808722 (abstained); KCNH2 D609N PMID 18808722 (abstained); KCNH2 H674fsX PMID 18808722 (abstained); KCNH2 N629S PMID 18808722 (abstained); KCNH2 R366X PMID 18808722 (abstained); KCNH2 F463L PMID 19065538 (abstained); KCNH2 R744P PMID 22314138 (abstained); KCNH2 T983I PMID 26746457 (abstained); KCNH2 D119H PMID 26746457 (abstained); KCNH2 D591N PMID 26746457 (abstained); … 165 more</title><path d="M 251.6 727.8 L 251.6 699.8 A 28.0 28.0 0 0 1 279.4 731.5 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 251.6 727.8 L 279.4 731.5 A 28.0 28.0 0 1 1 251.6 699.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 0, automated 0, difference +0; 157 row(s): 16 variant not found (scored 0), 141 variant matched, no automated count (scored 0): KCNH2 K897T PMID 22338672 (abstained); KCNQ1 G306R PMID 11351021 (abstained); KCNQ1 F340W PMID 18567635 (abstained); KCNQ1 I313K PMID 19056345 (abstained); KCNQ1 I313E PMID 19056345 (abstained); KCNQ1 I313G PMID 19056345 (abstained); KCNQ1 I313V PMID 19056345 (abstained); KCNQ1 Y111C PMID 19114714 (abstained); KCNQ1 L114P PMID 19114714 (abstained); KCNQ1 P117L PMID 19114714 (abstained); KCNQ1 S338C PMID 19687231 (identity_miss); KCNQ1 F340C PMID 19687231 (identity_miss); … 145 more</title><path d="M 216.0 710.0 L 216.0 682.0 A 28.0 28.0 0 0 1 232.7 687.5 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 216.0 710.0 L 232.7 687.5 A 28.0 28.0 0 1 1 216.0 682.0 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="251.6" cy="710.0" r="28.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 1, difference +0; 116 row(s): 116 automated count supplied: KCNH2 D609G PMID 15500450 (supplied); KCNH2 N633D PMID 16155735 (supplied); KCNH2 K897T PMID 21779290 (supplied); KCNH2 R176W PMID 22067087 (supplied); KCNH2 A913V PMID 23936059 (supplied); KCNH2 R744fsX PMID 26118593 (supplied); KCNH2 G628del PMID 30036649 (supplied); KCNH2 L776P PMID 30036649 (supplied); KCNH2 R696C PMID 30036649 (supplied); KCNH2 S818W PMID 30036649 (supplied); KCNH2 T613M PMID 30036649 (supplied); KCNH2 A561V PMID 30246897 (supplied); … 104 more</title></circle>
+<g><title>reference 2, automated 0, difference -2; 34 row(s): 5 variant not found (scored 0), 29 variant matched, no automated count (scored 0): KCNH2 S818L PMID 10086971 (abstained); KCNH2 L955V PMID 18675227 (abstained); KCNH2 E788K PMID 19184172 (abstained); KCNH2 I782fsX PMID 19184172 (identity_miss); KCNH2 R537W PMID 19184172 (abstained); KCNH2 R176W PMID 22052944 (abstained); KCNH2 G603D PMID 23917959 (abstained); KCNH2 A913V PMID 26746457 (abstained); KCNQ1 L151 PMID 14678125 (identity_miss); KCNQ1 Y171X PMID 14678125 (abstained); KCNQ1 V172M PMID 14678125 (abstained); KCNQ1 S225L PMID 14678125 (abstained); … 22 more</title><path d="M 266.3 735.2 L 266.3 715.5 A 19.7 19.7 0 0 1 282.0 723.3 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 266.3 735.2 L 282.0 723.3 A 19.7 19.7 0 1 1 266.3 715.5 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="266.3" cy="710.0" r="17.6" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 2, difference +0; 23 row(s): 23 automated count supplied: KCNH2 R954C PMID 18675227 (supplied); KCNQ1 I235N PMID 21956039 (supplied); KCNQ1 A46T PMID 21956039 (supplied); KCNQ1 A300T PMID 24667783 (supplied); KCNQ1 G168R PMID 24667783 (supplied); KCNQ1 G168R PMID 26496715 (supplied); KCNQ1 R243C PMID 26496715 (supplied); KCNQ1 V254M PMID 26496715 (supplied); KCNQ1 G325R PMID 26496715 (supplied); KCNQ1 F340L PMID 26496715 (supplied); KCNQ1 S373fsX PMID 26496715 (supplied); KCNQ1 V440fsX PMID 26496715 (supplied); … 11 more</title></circle>
+<circle cx="277.7" cy="710.0" r="16.7" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 3, difference +0; 19 row(s): 19 automated count supplied: KCNH2 G1036D PMID 18675227 (supplied); KCNH2 K897T PMID 20181576 (supplied); KCNQ1 V254M PMID 24667783 (supplied); KCNQ1 F339S PMID 24667783 (supplied); KCNQ1 M1T PMID 26496715 (supplied); KCNQ1 R192C PMID 26496715 (supplied); KCNQ1 A302V PMID 26496715 (supplied); KCNQ1 G306V PMID 26496715 (supplied); KCNQ1 A341V PMID 26496715 (supplied); KCNQ1 R366W PMID 26496715 (supplied); KCNQ1 R518X PMID 26496715 (supplied); RYR2 I419F PMID 15466642 (supplied); … 7 more</title></circle>
+<g><title>reference 3, automated 0, difference -3; 12 row(s): 2 variant not found (scored 0), 10 variant matched, no automated count (scored 0): KCNH2 G487R PMID 22764740 (abstained); KCNQ1 A178P PMID 14678125 (abstained); KCNQ1 D317G PMID 14678125 (abstained); KCNQ1 Q357H PMID 14678125 (abstained); KCNQ1 R594Q PMID 14678125 (abstained); KCNQ1 T322M PMID 21956039 (abstained); KCNQ1 D454TFS*7 PMID 24667783 (abstained); KCNQ1 G589D PMID 31520628 (identity_miss); RYR2 V377M PMID 19926015 (abstained); RYR2 N4178S PMID 19926015 (abstained); RYR2 A1136V PMID 22677073 (identity_miss); RYR2 R2303G PMID 28798025 (abstained)</title><path d="M 277.7 740.8 L 277.7 725.9 A 14.9 14.9 0 0 1 290.6 733.4 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 277.7 740.8 L 290.6 733.4 A 14.9 14.9 0 1 1 277.7 725.9 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 4, automated 0, difference -4; 12 row(s): 3 variant not found (scored 0), 9 variant matched, no automated count (scored 0): KCNH2 C1117fsX PMID 10086971 (identity_miss); KCNH2 V822M PMID 10086971 (abstained); KCNH2 P926fsX PMID 20181576 (abstained); KCNH2 R534C PMID 21308345 (abstained); KCNH2 E876X PMID 29214556 (abstained); KCNQ1 R190Q PMID 14678125 (abstained); KCNQ1 L273F PMID 14678125 (abstained); KCNQ1 DELF340 PMID 14678125 (identity_miss); RYR2 N3308S PMID 19216760 (abstained); RYR2 H4579Y PMID 22222782 (abstained); RYR2 Q3774L PMID 33536282 (abstained); SCN5A P.F1617DEL PMID 25236808 (identity_miss)</title><path d="M 287.2 745.6 L 287.2 730.7 A 14.9 14.9 0 0 1 302.1 745.6 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 287.2 745.6 L 302.1 745.6 A 14.9 14.9 0 1 1 287.2 730.7 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 5, automated 0, difference -5; 8 row(s): 1 variant not found (scored 0), 7 variant matched, no automated count (scored 0): KCNH2 c.2592+1G-&gt;A PMID 10086971 (abstained); KCNH2 G572S PMID 21308345 (abstained); KCNH2 K897T PMID 29214556 (abstained); KCNQ1 R518X PMID 14678125 (identity_miss); KCNQ1 G168R PMID 21956039 (abstained); KCNQ1 S349X PMID 21956039 (abstained); RYR2 A1136V PMID 19926015 (abstained); RYR2 G1885E PMID 22677073 (abstained)</title><path d="M 295.6 749.8 L 295.6 736.1 A 13.7 13.7 0 0 1 305.3 740.1 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 295.6 749.8 L 305.3 740.1 A 13.7 13.7 0 1 1 295.6 736.1 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="251.6" cy="692.2" r="12.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 2, difference +1; 5 row(s): 5 automated count supplied: KCNQ1 W248F PMID 33082985 (supplied); KCNQ1 L347R PMID 33082985 (supplied); SCN5A S216L PMID 22677073 (supplied); SCN5A c.692_693delCA PMID 23538678 (supplied); SCN5A T220I PMID 25171853 (supplied)</title></circle>
+<circle cx="287.2" cy="710.0" r="12.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 4, difference +0; 5 row(s): 5 automated count supplied: KCNH2 R744X PMID 22338672 (supplied); KCNQ1 A300S PMID 29876285 (supplied); RYR2 W4645R PMID 19398417 (supplied); SCN5A S1103Y PMID 22677073 (supplied); SCN5A c.2268_2271del PMID 29709101 (supplied)</title></circle>
+<circle cx="295.6" cy="710.0" r="12.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 5, automated 5, difference +0; 4 row(s): 4 automated count supplied: KCNH2 R1047L PMID 23936059 (supplied); KCNQ1 G272D PMID 26496715 (supplied); KCNQ1 T322M PMID 26496715 (supplied); KCNQ1 A344A PMID 26496715 (supplied)</title></circle>
+<circle cx="266.3" cy="727.8" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 1, difference -1; 3 row(s): 3 automated count supplied: RYR2 D1872N PMID 22222782 (supplied); RYR2 c.14091-11dupT PMID 30403697 (supplied); RYR2 S4168P PMID 34661651 (supplied)</title></circle>
+<circle cx="303.2" cy="753.6" r="11.5" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 6, automated 0, difference -6; 3 row(s): 3 variant matched, no automated count (scored 0): KCNH2 Q1070X PMID 19184172 (abstained); KCNQ1 L266P PMID 14678125 (abstained); KCNQ1 A341V PMID 14678125 (abstained)</title></circle>
+<circle cx="303.2" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 6, automated 6, difference +0; 3 row(s): 3 automated count supplied: KCNH2 Y652X PMID 19034806 (supplied); KCNQ1 S225L PMID 26496715 (supplied); SCN5A W822X PMID 29709101 (supplied)</title></circle>
+<circle cx="310.2" cy="757.1" r="11.5" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 7, automated 0, difference -7; 3 row(s): 3 variant matched, no automated count (scored 0): KCNQ1 Y315C PMID 14678125 (abstained); KCNQ1 A341E PMID 14678125 (abstained); KCNQ1 Q530X PMID 14678125 (abstained)</title></circle>
+<circle cx="310.2" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 7, automated 7, difference +0; 3 row(s): 3 automated count supplied: KCNH2 K897T PMID 18808722 (supplied); KCNH2 A490T PMID 18808722 (supplied); SCN5A H886Q PMID 29709101 (supplied)</title></circle>
+<circle cx="277.7" cy="727.8" r="10.8" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 2, difference -1; 2 row(s): 2 automated count supplied: RYR2 R2028H PMID 30403697 (supplied); RYR2 Y4721C PMID 30403697 (supplied)</title></circle>
+<g><title>reference 8, automated 0, difference -8; 2 row(s): 1 variant not found (scored 0), 1 variant matched, no automated count (scored 0): KCNQ1 R231C PMID 22613981 (abstained); SCN5A E1784K PMID 17971661 (identity_miss)</title><path d="M 316.7 760.3 L 316.7 749.5 A 10.8 10.8 0 0 1 316.7 771.2 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 316.7 760.3 L 316.7 771.2 A 10.8 10.8 0 0 1 316.7 749.5 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="316.7" cy="710.0" r="10.8" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 8, automated 8, difference +0; 2 row(s): 2 automated count supplied: RYR2 C2277R PMID 25435091 (supplied); SCN5A R1632H PMID 29709101 (supplied)</title></circle>
+<circle cx="322.8" cy="710.0" r="10.8" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 9, automated 9, difference +0; 2 row(s): 2 automated count supplied: RYR2 R420Q PMID 30546600 (supplied); SCN5A c.611+1G&gt;A PMID 29709101 (supplied)</title></circle>
+<g><title>reference 10, automated 0, difference -10; 2 row(s): 1 variant not found (scored 0), 1 variant matched, no automated count (scored 0): KCNQ1 G185S PMID 14678125 (identity_miss); KCNQ1 S349W PMID 14678125 (abstained)</title><path d="M 328.6 766.3 L 328.6 755.5 A 10.8 10.8 0 0 1 328.6 777.1 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 328.6 766.3 L 328.6 777.1 A 10.8 10.8 0 0 1 328.6 755.5 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="334.1" cy="769.0" r="10.8" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 11, automated 0, difference -11; 2 row(s): 2 variant matched, no automated count (scored 0): KCNQ1 R518X PMID 25471708 (abstained); RYR2 G1886S PMID 22677073 (abstained)</title></circle>
+<g><title>reference 12, automated 0, difference -12; 2 row(s): 1 variant not found (scored 0), 1 variant matched, no automated count (scored 0): KCNQ1 A344A/SPLICE PMID 14678125 (identity_miss); KCNQ1 G345R PMID 14678125 (abstained)</title><path d="M 339.3 771.7 L 339.3 760.8 A 10.8 10.8 0 0 1 339.3 782.5 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 339.3 771.7 L 339.3 782.5 A 10.8 10.8 0 0 1 339.3 760.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="216.0" cy="692.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 1, difference +1; 1 row(s): 1 automated count supplied: KCNH2 N588K PMID 29016797 (supplied)</title></circle>
+<circle cx="216.0" cy="684.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 2, difference +2; 1 row(s): 1 automated count supplied: KCNQ1 D242N PMID 28739325 (supplied)</title></circle>
+<circle cx="216.0" cy="679.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 3, difference +3; 1 row(s): 1 automated count supplied: KCNH2 S631A PMID 29016797 (supplied)</title></circle>
+<circle cx="251.6" cy="674.4" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 5, difference +4; 1 row(s): 1 automated count supplied: SCN5A H558R PMID 17675083 (supplied)</title></circle>
+<circle cx="266.3" cy="692.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 3, difference +1; 1 row(s): 1 automated count supplied: RYR2 T85I PMID 32866913 (supplied)</title></circle>
+<circle cx="277.7" cy="735.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 1, difference -2; 1 row(s): 1 automated count supplied: KCNQ1 T96R PMID 21070882 (supplied)</title></circle>
+<circle cx="277.7" cy="692.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 4, difference +1; 1 row(s): 1 automated count supplied: SCN5A R808C PMID 19406494 (supplied)</title></circle>
+<circle cx="287.2" cy="735.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 2, difference -2; 1 row(s): 1 automated count supplied: RYR2 H29D PMID 25463374 (supplied)</title></circle>
+<circle cx="287.2" cy="727.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 3, difference -1; 1 row(s): 1 automated count supplied: RYR2 EXON 3 DELETION PMID 19216760 (supplied)</title></circle>
+<circle cx="287.2" cy="684.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 6, difference +2; 1 row(s): 1 automated count supplied: RYR2 I4848V PMID 15466642 (supplied)</title></circle>
+<circle cx="303.2" cy="740.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 6, automated 3, difference -3; 1 row(s): 1 automated count supplied: KCNQ1 V141M PMID 28491547 (supplied)</title></circle>
+<circle cx="303.2" cy="692.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 6, automated 7, difference +1; 1 row(s): 1 automated count supplied: KCNQ1 S209P PMID 19632626 (supplied)</title></circle>
+<circle cx="316.7" cy="757.1" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 8, automated 1, difference -7; 1 row(s): 1 automated count supplied: SCN5A P1177L PMID 22882672 (supplied)</title></circle>
+<circle cx="322.8" cy="763.4" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 9, automated 0, difference -9; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 V507I PMID 19926015 (abstained)</title></circle>
+<circle cx="339.3" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 12, automated 12, difference +0; 1 row(s): 1 automated count supplied: SCN5A R376H PMID 29709101 (supplied)</title></circle>
+<circle cx="344.3" cy="774.2" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 13, automated 0, difference -13; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 T312I PMID 14678125 (abstained)</title></circle>
+<circle cx="344.3" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 13, automated 13, difference +0; 1 row(s): 1 automated count supplied: KCNH2 H562R PMID 25819988 (supplied)</title></circle>
+<circle cx="358.4" cy="781.2" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 16, automated 0, difference -16; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G269D PMID 14678125 (abstained)</title></circle>
+<circle cx="358.4" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 16, automated 16, difference +0; 1 row(s): 1 automated count supplied: KCNH2 M124R PMID 16029385 (supplied)</title></circle>
+<circle cx="362.8" cy="783.4" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 17, automated 0, difference -17; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G306R PMID 14678125 (abstained)</title></circle>
+<circle cx="383.0" cy="793.5" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 22, automated 0, difference -22; 1 row(s): 1 variant matched, no automated count (scored 0): SCN5A D1275N PMID 15671429 (abstained)</title></circle>
+<circle cx="383.0" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 22, automated 22, difference +0; 1 row(s): 1 automated count supplied: KCNQ1 V205M PMID 18580685 (supplied)</title></circle>
+<circle cx="390.4" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 24, automated 24, difference +0; 1 row(s): 1 automated count supplied: SCN5A c.4813+3_4813+6dup PMID 29709101 (supplied)</title></circle>
+<circle cx="407.7" cy="805.8" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 29, automated 0, difference -29; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 R360_Q361DUPQKQR PMID 31293497 (abstained)</title></circle>
+<circle cx="411.0" cy="807.5" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 30, automated 0, difference -30; 1 row(s): 1 variant matched, no automated count (scored 0): SCN5A D1790G PMID 28339995 (abstained)</title></circle>
+<circle cx="414.2" cy="809.1" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 31, automated 0, difference -31; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 L187P PMID 18808722 (abstained)</title></circle>
+<circle cx="432.5" cy="818.3" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 37, automated 0, difference -37; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G168R PMID 14678125 (abstained)</title></circle>
+<circle cx="496.3" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 62, automated 62, difference +0; 1 row(s): 1 automated count supplied: RYR2 P2328S PMID 33315912 (supplied)</title></circle>
+<circle cx="513.8" cy="858.9" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 70, automated 0, difference -70; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 V254M PMID 14678125 (abstained)</title></circle>
+<circle cx="680.1" cy="942.1" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 170, automated 0, difference -170; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 Y111C PMID 21129503 (abstained)</title></circle>
+<circle cx="700.2" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 185, automated 185, difference +0; 1 row(s): 1 automated count supplied: RYR2 G357S PMID 25814417 (supplied)</title></circle>
+</g>
+<line x1="326.7" y1="757.1" x2="336.7" y2="573.1" class="leader"/>
+<text x="340.7" y="563.1" class="label-title" text-anchor="start">SCN5A P1177L</text>
+<text x="340.7" y="589.1" class="label-detail" text-anchor="start">PMID 22882672 · ref 8 · auto 1</text>
+<line x1="261.6" y1="674.4" x2="271.6" y2="490.4" class="leader"/>
+<text x="275.6" y="480.4" class="label-title" text-anchor="start">SCN5A H558R</text>
+<text x="275.6" y="506.4" class="label-detail" text-anchor="start">PMID 17675083 · ref 1 · auto 5</text>
+<line x1="226.0" y1="679.2" x2="236.0" y2="929.2" class="leader"/>
+<text x="240.0" y="919.2" class="label-title" text-anchor="start">KCNH2 S631A</text>
+<text x="240.0" y="945.2" class="label-detail" text-anchor="start">PMID 29016797 · ref 0 · auto 3</text>
+<line x1="670.1" y1="942.1" x2="660.1" y2="990.0" class="leader"/>
+<text x="656.1" y="980.0" class="label-title" text-anchor="end">KCNQ1 Y111C</text>
+<text x="656.1" y="1006.0" class="label-detail" text-anchor="end">PMID 21129503 · ref 170 · no automated count</text>
+<rect x="170.0" y="400.0" width="620.0" height="620.0" class="axis"/>
+<text x="480.0" y="1112.0" class="axis-label" text-anchor="middle">Reference (gold) count</text>
+<text x="170.0" y="1160.0" class="stats">632 gold rows · matched 87.7% · supplied 32.8%</text>
+<text x="170.0" y="1194.0" class="stats">exact 54.0% (zero-baseline 24.8%) · within ±1 84.3%</text>
+<text x="170.0" y="1228.0" class="stats">bias −1.48 · e2e MAE 1.541 · cond. MAE 0.193 (n 207)</text>
+<text x="170.0" y="1262.0" class="stats">empirical 95% limits −10 to 0 · RMSE 8.07</text>
+<text x="940.0" y="372.0" class="facet-title">Affected individuals</text>
+<defs><clipPath id="clip-0-affected"><rect x="940.0" y="400.0" width="620.0" height="620.0"/></clipPath></defs>
+<rect x="940.0" y="400.0" width="620.0" height="620.0" fill="#FFFFFF"/>
+<line x1="986.0" y1="400.0" x2="986.0" y2="1020.0" class="grid"/>
+<text x="986.0" y="1057.0" class="tick" text-anchor="middle">0</text>
+<line x1="1021.6" y1="400.0" x2="1021.6" y2="1020.0" class="grid"/>
+<text x="1021.6" y="1057.0" class="tick" text-anchor="middle">1</text>
+<line x1="1036.3" y1="400.0" x2="1036.3" y2="1020.0" class="grid"/>
+<line x1="1065.6" y1="400.0" x2="1065.6" y2="1020.0" class="grid"/>
+<text x="1065.6" y="1057.0" class="tick" text-anchor="middle">5</text>
+<line x1="1098.6" y1="400.0" x2="1098.6" y2="1020.0" class="grid"/>
+<text x="1098.6" y="1057.0" class="tick" text-anchor="middle">10</text>
+<line x1="1145.2" y1="400.0" x2="1145.2" y2="1020.0" class="grid"/>
+<text x="1145.2" y="1057.0" class="tick" text-anchor="middle">20</text>
+<line x1="1237.7" y1="400.0" x2="1237.7" y2="1020.0" class="grid"/>
+<text x="1237.7" y="1057.0" class="tick" text-anchor="middle">50</text>
+<line x1="1342.0" y1="400.0" x2="1342.0" y2="1020.0" class="grid"/>
+<text x="1342.0" y="1057.0" class="tick" text-anchor="middle">100</text>
+<line x1="1489.4" y1="400.0" x2="1489.4" y2="1020.0" class="grid"/>
+<text x="1489.4" y="1057.0" class="tick" text-anchor="middle">200</text>
+<line x1="940.0" y1="710.0" x2="1560.0" y2="710.0" class="grid"/>
+<line x1="940.0" y1="727.8" x2="1560.0" y2="727.8" class="grid"/>
+<line x1="940.0" y1="692.2" x2="1560.0" y2="692.2" class="grid"/>
+<line x1="940.0" y1="735.2" x2="1560.0" y2="735.2" class="grid"/>
+<line x1="940.0" y1="684.8" x2="1560.0" y2="684.8" class="grid"/>
+<line x1="940.0" y1="749.8" x2="1560.0" y2="749.8" class="grid"/>
+<line x1="940.0" y1="670.2" x2="1560.0" y2="670.2" class="grid"/>
+<line x1="940.0" y1="766.3" x2="1560.0" y2="766.3" class="grid"/>
+<line x1="940.0" y1="653.7" x2="1560.0" y2="653.7" class="grid"/>
+<line x1="940.0" y1="789.6" x2="1560.0" y2="789.6" class="grid"/>
+<line x1="940.0" y1="630.4" x2="1560.0" y2="630.4" class="grid"/>
+<line x1="940.0" y1="835.9" x2="1560.0" y2="835.9" class="grid"/>
+<line x1="940.0" y1="584.1" x2="1560.0" y2="584.1" class="grid"/>
+<line x1="940.0" y1="888.0" x2="1560.0" y2="888.0" class="grid"/>
+<line x1="940.0" y1="532.0" x2="1560.0" y2="532.0" class="grid"/>
+<line x1="940.0" y1="961.7" x2="1560.0" y2="961.7" class="grid"/>
+<line x1="940.0" y1="458.3" x2="1560.0" y2="458.3" class="grid"/>
+<polyline points="986.0,710.0 992.6,713.3 999.2,716.6 1005.8,719.9 1012.4,723.2 1019.0,726.5 1025.6,729.8 1032.2,733.1 1038.8,736.4 1045.4,739.7 1052.0,743.0 1058.6,746.3 1065.2,749.6 1071.8,752.9 1078.4,756.2 1085.0,759.5 1091.6,762.8 1098.2,766.1 1104.8,769.4 1111.4,772.7 1118.0,776.0 1124.6,779.3 1131.2,782.6 1137.8,785.9 1144.4,789.2 1151.0,792.5 1157.6,795.8 1164.2,799.1 1170.8,802.4 1177.4,805.7 1184.0,809.0 1190.6,812.3 1197.2,815.6 1203.8,818.9 1210.4,822.2 1217.0,825.5 1223.6,828.8 1230.2,832.1 1236.8,835.4 1243.4,838.7 1250.0,842.0 1256.6,845.3 1263.2,848.6 1269.8,851.9 1276.4,855.2 1283.0,858.5 1289.6,861.8 1296.2,865.1 1302.8,868.4 1309.4,871.7 1316.0,875.0 1322.6,878.3 1329.2,881.6 1335.8,884.9 1342.4,888.2 1349.0,891.5 1355.6,894.8 1362.2,898.1 1368.8,901.4 1375.4,904.7 1382.0,908.0 1388.6,911.3 1395.2,914.6 1401.8,917.9 1408.4,921.2 1415.0,924.5 1421.6,927.8 1428.2,931.1 1434.8,934.4 1441.4,937.7 1448.0,941.0 1454.6,944.3 1461.2,947.6 1467.8,950.9 1474.4,954.2 1481.0,957.5 1487.6,960.8 1494.2,964.1 1500.8,967.4 1507.4,970.7 1514.0,974.0" class="floor-line" clip-path="url(#clip-0-affected)"/>
+<line x1="940.0" y1="710.0" x2="1560.0" y2="710.0" class="zero-line"/>
+<line x1="940.0" y1="731.7" x2="1560.0" y2="731.7" class="bias-line"/>
+<text x="1550.0" y="723.7" class="ref-label-bias" text-anchor="end">bias −1.48</text>
+<line x1="940.0" y1="710.0" x2="1560.0" y2="710.0" class="limit-line"/>
+<text x="1550.0" y="676.0" class="ref-label" text-anchor="end">97.5%: 0</text>
+<line x1="940.0" y1="766.3" x2="1560.0" y2="766.3" class="limit-line"/>
+<text x="1550.0" y="758.3" class="ref-label" text-anchor="end">2.5%: −10</text>
+<g clip-path="url(#clip-0-affected)">
+<g><title>reference 1, automated 0, difference -1; 244 row(s): 30 variant not found (scored 0), 214 variant matched, no automated count (scored 0): KCNH2 P923fsX PMID 16155735 (abstained); KCNH2 N633D PMID 16155735 (abstained); KCNH2 G1036D PMID 18675227 (abstained); KCNH2 A561T PMID 18808722 (abstained); KCNH2 A614V PMID 18808722 (abstained); KCNH2 D609N PMID 18808722 (abstained); KCNH2 H674fsX PMID 18808722 (abstained); KCNH2 N629S PMID 18808722 (abstained); KCNH2 R366X PMID 18808722 (abstained); KCNH2 F463L PMID 19065538 (abstained); KCNH2 E788K PMID 19184172 (abstained); KCNH2 I782fsX PMID 19184172 (identity_miss); … 232 more</title><path d="M 1021.6 727.8 L 1021.6 699.8 A 28.0 28.0 0 0 1 1041.1 707.7 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1021.6 727.8 L 1041.1 707.7 A 28.0 28.0 0 1 1 1021.6 699.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 0, automated 0, difference +0; 220 row(s): 37 variant not found (scored 0), 182 variant matched, no automated count (scored 0), 1 automated count supplied: KCNH2 P926fsX PMID 20181576 (abstained); KCNH2 K897T PMID 20181576 (abstained); KCNH2 K897T PMID 21779290 (abstained); KCNH2 G487R PMID 22764740 (abstained); KCNH2 A913V PMID 23936059 (abstained); KCNH2 R1047L PMID 23936059 (abstained); KCNH2 T983I PMID 26746457 (abstained); KCNH2 A913V PMID 26746457 (abstained); KCNH2 D119H PMID 26746457 (abstained); KCNH2 D591N PMID 26746457 (abstained); KCNH2 G487S PMID 26746457 (abstained); KCNH2 G745A PMID 26746457 (abstained); … 208 more</title><path d="M 986.0 710.0 L 986.0 682.0 A 28.0 28.0 0 0 1 1010.4 696.2 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 986.0 710.0 L 1010.4 696.2 A 28.0 28.0 0 1 1 985.2 682.0 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/><path d="M 986.0 710.0 L 985.2 682.0 A 28.0 28.0 0 0 1 986.0 682.0 Z" fill="#3B78A8" stroke="#17324D" stroke-width="2.2" fill-opacity="0.9"/></g>
+<g><title>reference 2, automated 0, difference -2; 45 row(s): 4 variant not found (scored 0), 41 variant matched, no automated count (scored 0): KCNH2 C1117fsX PMID 10086971 (identity_miss); KCNH2 S818L PMID 10086971 (abstained); KCNH2 V822M PMID 10086971 (abstained); KCNH2 K897T PMID 18808722 (abstained); KCNH2 A490T PMID 18808722 (abstained); KCNH2 Q1070X PMID 19184172 (abstained); KCNQ1 L151 PMID 14678125 (identity_miss); KCNQ1 Y171X PMID 14678125 (abstained); KCNQ1 V172M PMID 14678125 (abstained); KCNQ1 S225L PMID 14678125 (abstained); KCNQ1 V254L PMID 14678125 (abstained); KCNQ1 G269S PMID 14678125 (abstained); … 33 more</title><path d="M 1036.3 735.2 L 1036.3 713.8 A 21.4 21.4 0 0 1 1047.7 717.0 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1036.3 735.2 L 1047.7 717.0 A 21.4 21.4 0 1 1 1036.3 713.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1021.6" cy="710.0" r="18.8" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 1, difference +0; 29 row(s): 29 automated count supplied: KCNH2 D609G PMID 15500450 (supplied); KCNH2 R744X PMID 22338672 (supplied); KCNH2 R744fsX PMID 26118593 (supplied); KCNH2 L776P PMID 30036649 (supplied); KCNH2 R696C PMID 30036649 (supplied); KCNH2 S818W PMID 30036649 (supplied); KCNH2 T613M PMID 30036649 (supplied); KCNH2 A561V PMID 30246897 (supplied); KCNH2 R312C PMID 30246897 (supplied); KCNQ1 R555H PMID 24667783 (supplied); RYR2 P164S PMID 15466642 (supplied); RYR2 R414L PMID 15466642 (supplied); … 17 more</title></circle>
+<g><title>reference 3, automated 0, difference -3; 24 row(s): 2 variant not found (scored 0), 22 variant matched, no automated count (scored 0): KCNQ1 A178P PMID 14678125 (abstained); KCNQ1 D317G PMID 14678125 (abstained); KCNQ1 Q357H PMID 14678125 (abstained); KCNQ1 R594Q PMID 14678125 (abstained); KCNQ1 T322M PMID 21956039 (abstained); KCNQ1 V254M PMID 24667783 (abstained); KCNQ1 F339S PMID 24667783 (abstained); KCNQ1 M1T PMID 26496715 (abstained); KCNQ1 R192C PMID 26496715 (abstained); KCNQ1 A302V PMID 26496715 (abstained); KCNQ1 G306V PMID 26496715 (abstained); KCNQ1 A341V PMID 26496715 (abstained); … 12 more</title><path d="M 1047.7 740.8 L 1047.7 723.0 A 17.8 17.8 0 0 1 1056.6 725.4 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1047.7 740.8 L 1056.6 725.4 A 17.8 17.8 0 1 1 1047.7 723.0 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 5, automated 0, difference -5; 9 row(s): 1 variant not found (scored 0), 8 variant matched, no automated count (scored 0): KCNQ1 R518X PMID 14678125 (identity_miss); KCNQ1 G168R PMID 21956039 (abstained); KCNQ1 S349X PMID 21956039 (abstained); KCNQ1 G272D PMID 26496715 (abstained); KCNQ1 T322M PMID 26496715 (abstained); KCNQ1 A344A PMID 26496715 (abstained); RYR2 V507I PMID 19926015 (abstained); RYR2 G1885E PMID 22677073 (abstained); RYR2 R420Q PMID 30546600 (abstained)</title><path d="M 1065.6 749.8 L 1065.6 735.8 A 14.0 14.0 0 0 1 1074.6 739.1 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1065.6 749.8 L 1074.6 739.1 A 14.0 14.0 0 1 1 1065.6 735.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 4, automated 0, difference -4; 8 row(s): 1 variant not found (scored 0), 7 variant matched, no automated count (scored 0): KCNH2 c.2592+1G-&gt;A PMID 10086971 (abstained); KCNH2 R534C PMID 21308345 (abstained); KCNH2 G572S PMID 21308345 (abstained); KCNQ1 R190Q PMID 14678125 (abstained); KCNQ1 L273F PMID 14678125 (abstained); KCNQ1 DELF340 PMID 14678125 (identity_miss); RYR2 N3308S PMID 19216760 (abstained); RYR2 EXON 3 DELETION PMID 19216760 (abstained)</title><path d="M 1057.2 745.6 L 1057.2 731.9 A 13.7 13.7 0 0 1 1066.9 735.9 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1057.2 745.6 L 1066.9 735.9 A 13.7 13.7 0 1 1 1057.2 731.9 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1036.3" cy="710.0" r="13.3" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 2, difference +0; 7 row(s): 7 automated count supplied: KCNQ1 G314D PMID 32168391 (supplied); RYR2 A2403T PMID 15466642 (supplied); RYR2 W4645R PMID 19398417 (supplied); RYR2 F3496L PMID 30403697 (supplied); RYR2 K4594R PMID 30403697 (supplied); SCN5A V1951L PMID 22677073 (supplied); SCN5A R1632H PMID 29709101 (supplied)</title></circle>
+<circle cx="986.0" cy="692.2" r="12.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 1, difference +1; 5 row(s): 5 automated count supplied: KCNH2 L955V PMID 18675227 (supplied); KCNH2 R954C PMID 18675227 (supplied); KCNH2 N588K PMID 29016797 (supplied); KCNH2 C566R PMID 30246897 (supplied); KCNQ1 W248F PMID 33082985 (supplied)</title></circle>
+<g><title>reference 7, automated 0, difference -7; 5 row(s): 1 variant not found (scored 0), 4 variant matched, no automated count (scored 0): KCNQ1 Y315C PMID 14678125 (abstained); KCNQ1 A341E PMID 14678125 (abstained); KCNQ1 Q530X PMID 14678125 (abstained); SCN5A D1275N PMID 15671429 (abstained); SCN5A E1784K PMID 17971661 (identity_miss)</title><path d="M 1080.2 757.1 L 1080.2 744.6 A 12.5 12.5 0 0 1 1092.0 753.2 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1080.2 757.1 L 1092.0 753.2 A 12.5 12.5 0 1 1 1080.2 744.6 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1073.2" cy="753.6" r="12.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 6, automated 0, difference -6; 4 row(s): 4 variant matched, no automated count (scored 0): KCNH2 Y652X PMID 19034806 (abstained); KCNQ1 L266P PMID 14678125 (abstained); KCNQ1 A341V PMID 14678125 (abstained); KCNQ1 S225L PMID 26496715 (abstained)</title></circle>
+<circle cx="1047.7" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 3, difference +0; 3 row(s): 3 automated count supplied: KCNQ1 V141M PMID 28491547 (supplied); RYR2 I419F PMID 15466642 (supplied); SCN5A D349N PMID 29709101 (supplied)</title></circle>
+<circle cx="1057.2" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 4, difference +0; 3 row(s): 3 automated count supplied: SCN5A S1103Y PMID 22677073 (supplied); SCN5A H886Q PMID 29709101 (supplied); SCN5A W822X PMID 29709101 (supplied)</title></circle>
+<g><title>reference 10, automated 0, difference -10; 2 row(s): 1 variant not found (scored 0), 1 variant matched, no automated count (scored 0): KCNQ1 G185S PMID 14678125 (identity_miss); KCNQ1 S349W PMID 14678125 (abstained)</title><path d="M 1098.6 766.3 L 1098.6 755.5 A 10.8 10.8 0 0 1 1098.6 777.1 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1098.6 766.3 L 1098.6 777.1 A 10.8 10.8 0 0 1 1098.6 755.5 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 12, automated 0, difference -12; 2 row(s): 1 variant not found (scored 0), 1 variant matched, no automated count (scored 0): KCNQ1 A344A/SPLICE PMID 14678125 (identity_miss); KCNQ1 G345R PMID 14678125 (abstained)</title><path d="M 1109.3 771.7 L 1109.3 760.8 A 10.8 10.8 0 0 1 1109.3 782.5 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1109.3 771.7 L 1109.3 782.5 A 10.8 10.8 0 0 1 1109.3 760.8 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1114.3" cy="774.2" r="10.8" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 13, automated 0, difference -13; 2 row(s): 2 variant matched, no automated count (scored 0): KCNQ1 T312I PMID 14678125 (abstained); KCNQ1 L187P PMID 18808722 (abstained)</title></circle>
+<circle cx="986.0" cy="662.9" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 7, difference +7; 1 row(s): 1 automated count supplied: KCNH2 K897T PMID 22338672 (supplied)</title></circle>
+<circle cx="1021.6" cy="692.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 2, difference +1; 1 row(s): 1 automated count supplied: RYR2 T85I PMID 32866913 (supplied)</title></circle>
+<circle cx="1057.2" cy="684.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 6, difference +2; 1 row(s): 1 automated count supplied: RYR2 I4848V PMID 15466642 (supplied)</title></circle>
+<circle cx="1073.2" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 6, automated 6, difference +0; 1 row(s): 1 automated count supplied: SCN5A R376H PMID 29709101 (supplied)</title></circle>
+<circle cx="1080.2" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 7, automated 7, difference +0; 1 row(s): 1 automated count supplied: RYR2 C2277R PMID 25435091 (supplied)</title></circle>
+<circle cx="1086.7" cy="760.3" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 8, automated 0, difference -8; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 V205M PMID 18580685 (abstained)</title></circle>
+<circle cx="1086.7" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 8, automated 8, difference +0; 1 row(s): 1 automated count supplied: SCN5A c.611+1G&gt;A PMID 29709101 (supplied)</title></circle>
+<circle cx="1092.8" cy="763.4" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 9, automated 0, difference -9; 1 row(s): 1 variant matched, no automated count (scored 0): KCNH2 M124R PMID 16029385 (abstained)</title></circle>
+<circle cx="1092.8" cy="740.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 9, automated 6, difference -3; 1 row(s): 1 automated count supplied: KCNH2 H562R PMID 25819988 (supplied)</title></circle>
+<circle cx="1104.1" cy="769.0" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 11, automated 0, difference -11; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 G1886S PMID 22677073 (abstained)</title></circle>
+<circle cx="1114.3" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 13, automated 13, difference +0; 1 row(s): 1 automated count supplied: SCN5A c.4813+3_4813+6dup PMID 29709101 (supplied)</title></circle>
+<circle cx="1123.9" cy="778.9" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 15, automated 0, difference -15; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 P2328S PMID 33315912 (abstained)</title></circle>
+<circle cx="1128.4" cy="781.2" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 16, automated 0, difference -16; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G269D PMID 14678125 (abstained)</title></circle>
+<circle cx="1132.8" cy="783.4" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 17, automated 0, difference -17; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G306R PMID 14678125 (abstained)</title></circle>
+<circle cx="1160.4" cy="797.2" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 24, automated 0, difference -24; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 R360_Q361DUPQKQR PMID 31293497 (abstained)</title></circle>
+<circle cx="1167.5" cy="800.8" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 26, automated 0, difference -26; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 Y111C PMID 21129503 (abstained)</title></circle>
+<circle cx="1181.0" cy="807.5" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 30, automated 0, difference -30; 1 row(s): 1 variant matched, no automated count (scored 0): SCN5A D1790G PMID 28339995 (abstained)</title></circle>
+<circle cx="1202.5" cy="818.3" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 37, automated 0, difference -37; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 G168R PMID 14678125 (abstained)</title></circle>
+<circle cx="1283.8" cy="858.9" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 70, automated 0, difference -70; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 V254M PMID 14678125 (abstained)</title></circle>
+<circle cx="1290.1" cy="862.1" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 73, automated 0, difference -73; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 G357S PMID 25814417 (abstained)</title></circle>
+</g>
+<line x1="996.0" y1="662.9" x2="1006.0" y2="602.9" class="leader"/>
+<text x="1010.0" y="592.9" class="label-title" text-anchor="start">KCNH2 K897T</text>
+<text x="1010.0" y="618.9" class="label-detail" text-anchor="start">PMID 22338672 · ref 0 · auto 7</text>
+<line x1="1102.8" y1="740.8" x2="1112.8" y2="928.8" class="leader"/>
+<text x="1116.8" y="918.8" class="label-title" text-anchor="start">KCNH2 H562R</text>
+<text x="1116.8" y="944.8" class="label-detail" text-anchor="start">PMID 25819988 · ref 9 · auto 6</text>
+<line x1="1067.2" y1="684.8" x2="1077.2" y2="500.8" class="leader"/>
+<text x="1081.2" y="490.8" class="label-title" text-anchor="start">RYR2 I4848V</text>
+<text x="1081.2" y="516.8" class="label-detail" text-anchor="start">PMID 15466642 · ref 4 · auto 6</text>
+<line x1="1280.1" y1="862.1" x2="1270.1" y2="988.1" class="leader"/>
+<text x="1266.1" y="978.1" class="label-title" text-anchor="end">RYR2 G357S</text>
+<text x="1266.1" y="1004.1" class="label-detail" text-anchor="end">PMID 25814417 · ref 73 · no automated count</text>
+<rect x="940.0" y="400.0" width="620.0" height="620.0" class="axis"/>
+<text x="1250.0" y="1112.0" class="axis-label" text-anchor="middle">Reference (gold) count</text>
+<text x="940.0" y="1160.0" class="stats">632 gold rows · matched 87.7% · supplied 8.9%</text>
+<text x="940.0" y="1194.0" class="stats">exact 42.1% (zero-baseline 34.7%) · within ±1 81.6%</text>
+<text x="940.0" y="1228.0" class="stats">bias −1.48 · e2e MAE 1.528 · cond. MAE 0.321 (n 56)</text>
+<text x="940.0" y="1262.0" class="stats">empirical 95% limits −10 to 0 · RMSE 5.20</text>
+<text x="1710.0" y="372.0" class="facet-title">Unaffected individuals</text>
+<defs><clipPath id="clip-0-unaffected"><rect x="1710.0" y="400.0" width="620.0" height="620.0"/></clipPath></defs>
+<rect x="1710.0" y="400.0" width="620.0" height="620.0" fill="#FFFFFF"/>
+<line x1="1756.0" y1="400.0" x2="1756.0" y2="1020.0" class="grid"/>
+<text x="1756.0" y="1057.0" class="tick" text-anchor="middle">0</text>
+<line x1="1791.6" y1="400.0" x2="1791.6" y2="1020.0" class="grid"/>
+<text x="1791.6" y="1057.0" class="tick" text-anchor="middle">1</text>
+<line x1="1806.3" y1="400.0" x2="1806.3" y2="1020.0" class="grid"/>
+<line x1="1835.6" y1="400.0" x2="1835.6" y2="1020.0" class="grid"/>
+<text x="1835.6" y="1057.0" class="tick" text-anchor="middle">5</text>
+<line x1="1868.6" y1="400.0" x2="1868.6" y2="1020.0" class="grid"/>
+<text x="1868.6" y="1057.0" class="tick" text-anchor="middle">10</text>
+<line x1="1915.2" y1="400.0" x2="1915.2" y2="1020.0" class="grid"/>
+<text x="1915.2" y="1057.0" class="tick" text-anchor="middle">20</text>
+<line x1="2007.7" y1="400.0" x2="2007.7" y2="1020.0" class="grid"/>
+<text x="2007.7" y="1057.0" class="tick" text-anchor="middle">50</text>
+<line x1="2112.0" y1="400.0" x2="2112.0" y2="1020.0" class="grid"/>
+<text x="2112.0" y="1057.0" class="tick" text-anchor="middle">100</text>
+<line x1="2259.4" y1="400.0" x2="2259.4" y2="1020.0" class="grid"/>
+<text x="2259.4" y="1057.0" class="tick" text-anchor="middle">200</text>
+<line x1="1710.0" y1="710.0" x2="2330.0" y2="710.0" class="grid"/>
+<line x1="1710.0" y1="727.8" x2="2330.0" y2="727.8" class="grid"/>
+<line x1="1710.0" y1="692.2" x2="2330.0" y2="692.2" class="grid"/>
+<line x1="1710.0" y1="735.2" x2="2330.0" y2="735.2" class="grid"/>
+<line x1="1710.0" y1="684.8" x2="2330.0" y2="684.8" class="grid"/>
+<line x1="1710.0" y1="749.8" x2="2330.0" y2="749.8" class="grid"/>
+<line x1="1710.0" y1="670.2" x2="2330.0" y2="670.2" class="grid"/>
+<line x1="1710.0" y1="766.3" x2="2330.0" y2="766.3" class="grid"/>
+<line x1="1710.0" y1="653.7" x2="2330.0" y2="653.7" class="grid"/>
+<line x1="1710.0" y1="789.6" x2="2330.0" y2="789.6" class="grid"/>
+<line x1="1710.0" y1="630.4" x2="2330.0" y2="630.4" class="grid"/>
+<line x1="1710.0" y1="835.9" x2="2330.0" y2="835.9" class="grid"/>
+<line x1="1710.0" y1="584.1" x2="2330.0" y2="584.1" class="grid"/>
+<line x1="1710.0" y1="888.0" x2="2330.0" y2="888.0" class="grid"/>
+<line x1="1710.0" y1="532.0" x2="2330.0" y2="532.0" class="grid"/>
+<line x1="1710.0" y1="961.7" x2="2330.0" y2="961.7" class="grid"/>
+<line x1="1710.0" y1="458.3" x2="2330.0" y2="458.3" class="grid"/>
+<polyline points="1756.0,710.0 1762.6,713.3 1769.2,716.6 1775.8,719.9 1782.4,723.2 1789.0,726.5 1795.6,729.8 1802.2,733.1 1808.8,736.4 1815.4,739.7 1822.0,743.0 1828.6,746.3 1835.2,749.6 1841.8,752.9 1848.4,756.2 1855.0,759.5 1861.6,762.8 1868.2,766.1 1874.8,769.4 1881.4,772.7 1888.0,776.0 1894.6,779.3 1901.2,782.6 1907.8,785.9 1914.4,789.2 1921.0,792.5 1927.6,795.8 1934.2,799.1 1940.8,802.4 1947.4,805.7 1954.0,809.0 1960.6,812.3 1967.2,815.6 1973.8,818.9 1980.4,822.2 1987.0,825.5 1993.6,828.8 2000.2,832.1 2006.8,835.4 2013.4,838.7 2020.0,842.0 2026.6,845.3 2033.2,848.6 2039.8,851.9 2046.4,855.2 2053.0,858.5 2059.6,861.8 2066.2,865.1 2072.8,868.4 2079.4,871.7 2086.0,875.0 2092.6,878.3 2099.2,881.6 2105.8,884.9 2112.4,888.2 2119.0,891.5 2125.6,894.8 2132.2,898.1 2138.8,901.4 2145.4,904.7 2152.0,908.0 2158.6,911.3 2165.2,914.6 2171.8,917.9 2178.4,921.2 2185.0,924.5 2191.6,927.8 2198.2,931.1 2204.8,934.4 2211.4,937.7 2218.0,941.0 2224.6,944.3 2231.2,947.6 2237.8,950.9 2244.4,954.2 2251.0,957.5 2257.6,960.8 2264.2,964.1 2270.8,967.4 2277.4,970.7 2284.0,974.0" class="floor-line" clip-path="url(#clip-0-unaffected)"/>
+<line x1="1710.0" y1="710.0" x2="2330.0" y2="710.0" class="zero-line"/>
+<line x1="1710.0" y1="722.5" x2="2330.0" y2="722.5" class="bias-line"/>
+<text x="2320.0" y="714.5" class="ref-label-bias" text-anchor="end">bias −0.49</text>
+<line x1="1710.0" y1="710.0" x2="2330.0" y2="710.0" class="limit-line"/>
+<text x="2320.0" y="676.0" class="ref-label" text-anchor="end">97.5%: 0</text>
+<line x1="1710.0" y1="745.6" x2="2330.0" y2="745.6" class="limit-line"/>
+<text x="2320.0" y="633.6" class="ref-label" text-anchor="end">2.5%: −4</text>
+<g clip-path="url(#clip-0-unaffected)">
+<g><title>reference 0, automated 0, difference +0; 546 row(s): 73 variant not found (scored 0), 467 variant matched, no automated count (scored 0), 6 automated count supplied: KCNH2 c.2592+1G-&gt;A PMID 10086971 (abstained); KCNH2 S818L PMID 10086971 (abstained); KCNH2 D609G PMID 15500450 (abstained); KCNH2 P923fsX PMID 16155735 (abstained); KCNH2 N633D PMID 16155735 (abstained); KCNH2 A561T PMID 18808722 (abstained); KCNH2 A614V PMID 18808722 (abstained); KCNH2 D609N PMID 18808722 (abstained); KCNH2 H674fsX PMID 18808722 (abstained); KCNH2 N629S PMID 18808722 (abstained); KCNH2 R366X PMID 18808722 (abstained); KCNH2 Y652X PMID 19034806 (abstained); … 534 more</title><path d="M 1756.0 710.0 L 1756.0 682.0 A 28.0 28.0 0 0 1 1776.9 691.3 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1756.0 710.0 L 1776.9 691.3 A 28.0 28.0 0 1 1 1754.1 682.1 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/><path d="M 1756.0 710.0 L 1754.1 682.1 A 28.0 28.0 0 0 1 1756.0 682.0 Z" fill="#3B78A8" stroke="#17324D" stroke-width="2.2" fill-opacity="0.9"/></g>
+<g><title>reference 1, automated 0, difference -1; 31 row(s): 3 variant not found (scored 0), 28 variant matched, no automated count (scored 0): KCNH2 E788K PMID 19184172 (abstained); KCNH2 I782fsX PMID 19184172 (identity_miss); KCNH2 R537W PMID 19184172 (abstained); KCNH2 G572S PMID 21308345 (abstained); KCNH2 K897T PMID 21779290 (abstained); KCNH2 R176W PMID 22052944 (abstained); KCNH2 G603D PMID 23917959 (abstained); KCNH2 T983I PMID 26746457 (abstained); KCNH2 D119H PMID 26746457 (abstained); KCNH2 D591N PMID 26746457 (abstained); KCNH2 G487S PMID 26746457 (abstained); KCNH2 G745A PMID 26746457 (abstained); … 19 more</title><path d="M 1791.6 727.8 L 1791.6 708.7 A 19.1 19.1 0 0 1 1802.5 712.1 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1791.6 727.8 L 1802.5 712.1 A 19.1 19.1 0 1 1 1791.6 708.7 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<g><title>reference 2, automated 0, difference -2; 11 row(s): 1 variant not found (scored 0), 10 variant matched, no automated count (scored 0): KCNH2 C1117fsX PMID 10086971 (identity_miss); KCNH2 V822M PMID 10086971 (abstained); KCNH2 G1036D PMID 18675227 (abstained); KCNH2 L955V PMID 18675227 (abstained); KCNH2 R954C PMID 18675227 (abstained); KCNH2 Q1070X PMID 19184172 (abstained); KCNH2 A913V PMID 26746457 (abstained); KCNQ1 T96R PMID 21070882 (abstained); KCNQ1 D454TFS*7 PMID 24667783 (abstained); RYR2 A1136V PMID 19926015 (abstained); RYR2 R2028H PMID 30403697 (abstained)</title><path d="M 1806.3 735.2 L 1806.3 720.5 A 14.6 14.6 0 0 1 1814.3 722.9 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1806.3 735.2 L 1814.3 722.9 A 14.6 14.6 0 1 1 1806.3 720.5 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1791.6" cy="710.0" r="12.9" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 1, automated 1, difference +0; 6 row(s): 6 automated count supplied: KCNQ1 W248F PMID 33082985 (supplied); RYR2 C2277R PMID 25435091 (supplied); RYR2 I2075T PMID 30403697 (supplied); RYR2 K4594R PMID 30403697 (supplied); RYR2 T85I PMID 32866913 (supplied); SCN5A c.611+1G&gt;A PMID 29709101 (supplied)</title></circle>
+<g><title>reference 3, automated 0, difference -3; 5 row(s): 1 variant not found (scored 0), 4 variant matched, no automated count (scored 0): KCNH2 G487R PMID 22764740 (abstained); KCNQ1 V141M PMID 28491547 (abstained); RYR2 V377M PMID 19926015 (abstained); RYR2 Q3774L PMID 33536282 (abstained); SCN5A P.F1617DEL PMID 25236808 (identity_miss)</title><path d="M 1817.7 740.8 L 1817.7 728.4 A 12.5 12.5 0 0 1 1829.5 737.0 Z" fill="#D9DFE4" stroke="#687584" stroke-width="2.2" fill-opacity="0.96" stroke-dasharray="7 5"/><path d="M 1817.7 740.8 L 1829.5 737.0 A 12.5 12.5 0 1 1 1817.7 728.4 Z" fill="#F7E3E6" stroke="#C85A63" stroke-width="2.2" fill-opacity="0.96"/></g>
+<circle cx="1835.6" cy="749.8" r="12.5" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 5, automated 0, difference -5; 5 row(s): 5 variant matched, no automated count (scored 0): KCNH2 K897T PMID 18808722 (abstained); KCNH2 A490T PMID 18808722 (abstained); KCNH2 K897T PMID 29214556 (abstained); KCNQ1 R360_Q361DUPQKQR PMID 31293497 (abstained); SCN5A P1177L PMID 22882672 (abstained)</title></circle>
+<circle cx="1827.2" cy="745.6" r="12.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 4, automated 0, difference -4; 4 row(s): 4 variant matched, no automated count (scored 0): KCNH2 P926fsX PMID 20181576 (abstained); KCNH2 E876X PMID 29214556 (abstained); KCNQ1 A300S PMID 29876285 (abstained); RYR2 V507I PMID 19926015 (abstained)</title></circle>
+<circle cx="1756.0" cy="692.2" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 0, automated 1, difference +1; 3 row(s): 3 automated count supplied: RYR2 Y4149S PMID 19926015 (supplied); SCN5A R808C PMID 19406494 (supplied); SCN5A T220I PMID 25171853 (supplied)</title></circle>
+<circle cx="1806.3" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 2, difference +0; 3 row(s): 3 automated count supplied: RYR2 W4645R PMID 19398417 (supplied); SCN5A c.4437+5G&gt;A PMID 29709101 (supplied); SCN5A W822X PMID 29709101 (supplied)</title></circle>
+<circle cx="1817.7" cy="710.0" r="11.5" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 3, difference +0; 3 row(s): 3 automated count supplied: KCNH2 R744X PMID 22338672 (supplied); SCN5A c.2268_2271del PMID 29709101 (supplied); SCN5A H886Q PMID 29709101 (supplied)</title></circle>
+<circle cx="1843.2" cy="753.6" r="10.8" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 6, automated 0, difference -6; 2 row(s): 2 variant matched, no automated count (scored 0): KCNQ1 S209P PMID 19632626 (abstained); KCNQ1 R231C PMID 22613981 (abstained)</title></circle>
+<circle cx="1843.2" cy="710.0" r="10.8" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 6, automated 6, difference +0; 2 row(s): 2 automated count supplied: SCN5A R1632H PMID 29709101 (supplied); SCN5A R376H PMID 29709101 (supplied)</title></circle>
+<circle cx="1806.3" cy="727.8" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 2, automated 1, difference -1; 1 row(s): 1 automated count supplied: RYR2 Y4721C PMID 30403697 (supplied)</title></circle>
+<circle cx="1817.7" cy="735.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 3, automated 1, difference -2; 1 row(s): 1 automated count supplied: KCNH2 K897T PMID 20181576 (supplied)</title></circle>
+<circle cx="1827.2" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 4, difference +0; 1 row(s): 1 automated count supplied: RYR2 R420Q PMID 30546600 (supplied)</title></circle>
+<circle cx="1827.2" cy="679.2" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 4, automated 7, difference +3; 1 row(s): 1 automated count supplied: KCNH2 H562R PMID 25819988 (supplied)</title></circle>
+<circle cx="1850.2" cy="757.1" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 7, automated 0, difference -7; 1 row(s): 1 variant matched, no automated count (scored 0): KCNH2 M124R PMID 16029385 (abstained)</title></circle>
+<circle cx="1874.1" cy="710.0" r="10.0" fill="#3B78A8" stroke="#17324D" stroke-width="2.5" fill-opacity="0.9"><title>reference 11, automated 11, difference +0; 1 row(s): 1 automated count supplied: SCN5A c.4813+3_4813+6dup PMID 29709101 (supplied)</title></circle>
+<circle cx="1893.9" cy="778.9" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 15, automated 0, difference -15; 1 row(s): 1 variant matched, no automated count (scored 0): SCN5A D1275N PMID 15671429 (abstained)</title></circle>
+<circle cx="1907.0" cy="785.5" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 18, automated 0, difference -18; 1 row(s): 1 variant matched, no automated count (scored 0): KCNQ1 L187P PMID 18808722 (abstained)</title></circle>
+<circle cx="2000.0" cy="832.0" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 47, automated 0, difference -47; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 P2328S PMID 33315912 (abstained)</title></circle>
+<circle cx="2122.5" cy="893.3" r="10.0" fill="#F7E3E6" stroke="#C85A63" stroke-width="3.0" fill-opacity="0.96"><title>reference 106, automated 0, difference -106; 1 row(s): 1 variant matched, no automated count (scored 0): RYR2 G357S PMID 25814417 (abstained)</title></circle>
+</g>
+<line x1="1837.2" y1="679.2" x2="1847.2" y2="619.2" class="leader"/>
+<text x="1851.2" y="609.2" class="label-title" text-anchor="start">KCNH2 H562R</text>
+<text x="1851.2" y="635.2" class="label-detail" text-anchor="start">PMID 25819988 · ref 4 · auto 7</text>
+<line x1="1827.7" y1="735.2" x2="1837.7" y2="675.2" class="leader"/>
+<text x="1841.7" y="665.2" class="label-title" text-anchor="start">KCNH2 K897T</text>
+<text x="1841.7" y="691.2" class="label-detail" text-anchor="start">PMID 20181576 · ref 3 · auto 1</text>
+<line x1="1767.5" y1="692.2" x2="1777.5" y2="508.2" class="leader"/>
+<text x="1781.5" y="498.2" class="label-title" text-anchor="start">RYR2 Y4149S</text>
+<text x="1781.5" y="524.2" class="label-detail" text-anchor="start">PMID 19926015 · ref 0 · auto 1</text>
+<text x="2098.5" y="885.3" class="label-title" text-anchor="end">RYR2 G357S</text>
+<text x="2098.5" y="911.3" class="label-detail" text-anchor="end">PMID 25814417 · ref 106 · no automated count</text>
+<rect x="1710.0" y="400.0" width="620.0" height="620.0" class="axis"/>
+<text x="2020.0" y="1112.0" class="axis-label" text-anchor="middle">Reference (gold) count</text>
+<text x="1710.0" y="1160.0" class="stats">631 gold rows · matched 87.6% · supplied 4.4%</text>
+<text x="1710.0" y="1194.0" class="stats">exact 89.1% (zero-baseline 85.6%) · within ±1 94.6%</text>
+<text x="1710.0" y="1228.0" class="stats">bias −0.49 · e2e MAE 0.512 · cond. MAE 0.321 (n 28)</text>
+<text x="1710.0" y="1262.0" class="stats">empirical 95% limits −4 to 0 · RMSE 4.78</text>
+<text x="60" y="710.0" class="axis-label" text-anchor="middle" transform="rotate(-90 60 710.0)">Automated − reference</text>
+</svg>

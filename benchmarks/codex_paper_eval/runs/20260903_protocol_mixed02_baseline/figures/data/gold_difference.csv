@@ -1,0 +1,910 @@
+analysis_run,arm,gene,pmid,gold_row_index,gold_variant,predicted_variant,measure,gold_count,automated_count_raw,automated_count_evaluated,status,difference,absolute_difference,exact,gold_value_set,gold_v2_status,gold_provenance,prediction_source_layer,prediction_source_location
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,0,R1638X,p.Arg1638*,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,0,R1638X,p.Arg1638*,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,0,R1638X,p.Arg1638*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,1,W156X,p.Trp156*,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,1,W156X,p.Trp156*,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,27784737,1,W156X,p.Trp156*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Functional study - assay data only; Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,22835975,0,H558R,H558R,carriers,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,"Main text, case description"
+20260903_protocol_mixed02_baseline,run,SCN5A,22835975,0,H558R,H558R,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Main text, case description"
+20260903_protocol_mixed02_baseline,run,SCN5A,22835975,0,H558R,H558R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Main text, case description"
+20260903_protocol_mixed02_baseline,run,BRCA1,18627636,0,180delA,,carriers,2,,0,identity_miss,-2,2,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_mixed02_baseline,run,BRCA1,18627636,0,180delA,,affected,2,,0,identity_miss,-2,2,0,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_mixed02_baseline,run,BRCA1,18627636,0,180delA,,unaffected,0,,0,identity_miss,0,0,1,baseline,,curated_override_mixed_provenance,,
+20260903_protocol_mixed02_baseline,run,KCNQ1,32508908,0,K581X,p.K581X,carriers,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,32508908,0,K581X,p.K581X,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,32508908,0,K581X,p.K581X,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,0,R620H,p.Arg620His,carriers,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,0,R620H,p.Arg620His,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,0,R620H,p.Arg620His,unaffected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,1,R811H,p.Arg811His,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,1,R811H,p.Arg811His,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,1,R811H,p.Arg811His,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,2,S1218I,p.Ser1218Ile,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,2,S1218I,p.Ser1218Ile,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,23424222,2,S1218I,p.Ser1218Ile,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with proband clinical mention
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,0,E473X,p.Glu473*,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,0,E473X,p.Glu473*,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,0,E473X,p.Glu473*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,1,G1740R,p.Gly1740Arg,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,1,G1740R,p.Gly1740Arg,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,SCN5A,15057319,1,G1740R,p.Gly1740Arg,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract - Functional study with clinical patient source
+20260903_protocol_mixed02_baseline,run,KCNH2,29330128,0,S55L,p.Ser55Leu,carriers,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2, Figure 3, Figure 4"
+20260903_protocol_mixed02_baseline,run,KCNH2,29330128,0,S55L,p.Ser55Leu,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,"Results, Figure 2, Figure 3, Figure 4"
+20260903_protocol_mixed02_baseline,run,KCNH2,29330128,0,S55L,p.Ser55Leu,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,"Results, Figure 2, Figure 3, Figure 4"
+20260903_protocol_mixed02_baseline,run,SCN5A,23168001,0,R1023C,p.Arg1023Cys,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,Results paragraph describing genetic testing and case presentation
+20260903_protocol_mixed02_baseline,run,SCN5A,23168001,0,R1023C,p.Arg1023Cys,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,Results paragraph describing genetic testing and case presentation
+20260903_protocol_mixed02_baseline,run,SCN5A,23168001,0,R1023C,p.Arg1023Cys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,Results paragraph describing genetic testing and case presentation
+20260903_protocol_mixed02_baseline,run,SCN5A,26129877,0,R986Q,p.Arg986Gln,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Table 3, Results section 'Clinical Characteristics and Functional Properties of SCN5A and SCN1B Variants'"
+20260903_protocol_mixed02_baseline,run,SCN5A,26129877,0,R986Q,p.Arg986Gln,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Table 3, Results section 'Clinical Characteristics and Functional Properties of SCN5A and SCN1B Variants'"
+20260903_protocol_mixed02_baseline,run,SCN5A,26129877,0,R986Q,p.Arg986Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, Table 3, Results section 'Clinical Characteristics and Functional Properties of SCN5A and SCN1B Variants'"
+20260903_protocol_mixed02_baseline,run,KCNQ1,33498651,0,P631fsX,P631fs*20,carriers,8,8,8,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,33498651,0,P631fsX,P631fs*20,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,33498651,0,P631fsX,P631fs*20,unaffected,7,7,7,supplied,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,0,E243K,p.Glu243Lys,carriers,17,17,17,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,0,E243K,p.Glu243Lys,affected,17,,0,abstained,-17,17,0,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,0,E243K,p.Glu243Lys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,1,L4115F,p.Leu4115Phe,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,1,L4115F,p.Leu4115Phe,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,1,L4115F,p.Leu4115Phe,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,2,P2328S,p.Pro2328Ser,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,2,P2328S,p.Pro2328Ser,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,2,P2328S,p.Pro2328Ser,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,3,Y2392C,p.Tyr2392Cys,carriers,5,5,5,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,3,Y2392C,p.Tyr2392Cys,affected,5,,0,abstained,-5,5,0,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,RYR2,21954897,3,Y2392C,p.Tyr2392Cys,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Methods, Patients section"
+20260903_protocol_mixed02_baseline,run,SCN5A,26803770,0,R1644H,p.R1644H c.4931G>A,carriers,15,,0,abstained,-15,15,0,baseline,,human_curated_cardiac,llm_text,"Results, Clinical history of a family with LQT3 syndrome and Electrophysiological phenotypes"
+20260903_protocol_mixed02_baseline,run,SCN5A,26803770,0,R1644H,p.R1644H c.4931G>A,affected,10,,0,abstained,-10,10,0,baseline,,human_curated_cardiac,llm_text,"Results, Clinical history of a family with LQT3 syndrome and Electrophysiological phenotypes"
+20260903_protocol_mixed02_baseline,run,SCN5A,26803770,0,R1644H,p.R1644H c.4931G>A,unaffected,5,,0,abstained,-5,5,0,baseline,,human_curated_cardiac,llm_text,"Results, Clinical history of a family with LQT3 syndrome and Electrophysiological phenotypes"
+20260903_protocol_mixed02_baseline,run,SCN5A,25341504,0,Q1695X,Q1695*,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,25341504,0,Q1695X,Q1695*,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,25341504,0,Q1695X,Q1695*,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,0,A1924T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,0,A1924T,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,0,A1924T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,1,D951X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,1,D951X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,1,D951X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,2,E1225K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,2,E1225K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,2,E1225K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,3,E161K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,3,E161K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,3,E161K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,4,G1319V,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,4,G1319V,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,4,G1319V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,5,G1406R,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,5,G1406R,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,5,G1406R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,6,G1502S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,6,G1502S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,6,G1502S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,7,G1743E,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,7,G1743E,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,7,G1743E,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,8,G752R,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,8,G752R,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,8,G752R,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,9,L867X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,9,L867X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,9,L867X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,10,M369K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,10,M369K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,10,M369K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,11,R1512W,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,11,R1512W,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,11,R1512W,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,12,R367C,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,12,R367C,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,12,R367C,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,13,R535X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,13,R535X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,13,R535X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,14,S1382I,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,14,S1382I,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,14,S1382I,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,15,V1405L,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,15,V1405L,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,12106943,15,V1405L,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,28815794,0,G1262S,p.Gly1262Ser c.3978C>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Results section"
+20260903_protocol_mixed02_baseline,run,SCN5A,28815794,0,G1262S,p.Gly1262Ser c.3978C>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Results section"
+20260903_protocol_mixed02_baseline,run,SCN5A,28815794,0,G1262S,p.Gly1262Ser c.3978C>G,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 3, Results section"
+20260903_protocol_mixed02_baseline,run,KCNH2,19215240,0,F463L,p.Phe463Leu,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only. Abstract describes detection in proband of Chinese LQTS family.
+20260903_protocol_mixed02_baseline,run,KCNH2,19215240,0,F463L,p.Phe463Leu,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only. Abstract describes detection in proband of Chinese LQTS family.
+20260903_protocol_mixed02_baseline,run,KCNH2,19215240,0,F463L,p.Phe463Leu,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_table,Functional study - assay data only. Abstract describes detection in proband of Chinese LQTS family.
+20260903_protocol_mixed02_baseline,run,RYR2,21652165,0,S4153R,p.S4153R,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Presentation, paragraph describing genetic testing"
+20260903_protocol_mixed02_baseline,run,RYR2,21652165,0,S4153R,p.S4153R,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Presentation, paragraph describing genetic testing"
+20260903_protocol_mixed02_baseline,run,RYR2,21652165,0,S4153R,p.S4153R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Case Presentation, paragraph describing genetic testing"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,0,A2164T,p.A2164T c.6490G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 29"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,0,A2164T,p.A2164T c.6490G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 29"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,0,A2164T,p.A2164T c.6490G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 29"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,1,A4542T,p.A4542T c.13624G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 35"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,1,A4542T,p.A4542T c.13624G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 35"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,1,A4542T,p.A4542T c.13624G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 35"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,2,F2649S,p.F2649S c.7946T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 31"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,2,F2649S,p.F2649S c.7946T>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 31"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,2,F2649S,p.F2649S c.7946T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 31"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,3,G1082E,p.G1082E c.3245G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 26"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,3,G1082E,p.G1082E c.3245G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 26"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,3,G1082E,p.G1082E c.3245G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 26"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,4,I4238S,p.I4238S c.12713T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 34"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,4,I4238S,p.I4238S c.12713T>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 34"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,4,I4238S,p.I4238S c.12713T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 34"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,5,M2084I,p.M2084I c.6252G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 28"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,5,M2084I,p.M2084I c.6252G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 28"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,5,M2084I,p.M2084I c.6252G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 28"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,6,M317T,p.M317T c.950T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 24"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,6,M317T,p.M317T c.950T>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 24"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,6,M317T,p.M317T c.950T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 24"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,7,P3209L,p.P3209L c.9626C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 32"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,7,P3209L,p.P3209L c.9626C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 32"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,7,P3209L,p.P3209L c.9626C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 32"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,8,P4231L,p.P4231L c.12692C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 33"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,8,P4231L,p.P4231L c.12692C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 33"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,8,P4231L,p.P4231L c.12692C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 33"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,9,P876T,p.P876T c.2626C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 25"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,9,P876T,p.P876T c.2626C>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 25"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,9,P876T,p.P876T c.2626C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 25"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,10,R2068Q,p.R2068Q c.6203G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 27"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,10,R2068Q,p.R2068Q c.6203G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 27"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,10,R2068Q,p.R2068Q c.6203G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 27"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,11,T2510A,p.T2510A c.7528A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 30"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,11,T2510A,p.T2510A c.7528A>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 30"
+20260903_protocol_mixed02_baseline,run,RYR2,29544605,11,T2510A,p.T2510A c.7528A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table 2, row 30"
+20260903_protocol_mixed02_baseline,run,KCNQ1,27868350,0,R259G,p.Arg259Gly c.775C>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, Discussion"
+20260903_protocol_mixed02_baseline,run,KCNQ1,27868350,0,R259G,p.Arg259Gly c.775C>G,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,"Case Report, Discussion"
+20260903_protocol_mixed02_baseline,run,KCNQ1,27868350,0,R259G,p.Arg259Gly c.775C>G,unaffected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case Report, Discussion"
+20260903_protocol_mixed02_baseline,run,SCN5A,24599044,0,L1786Q,p.Leu1786Gln,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Title and abstract-level description of novel mutation
+20260903_protocol_mixed02_baseline,run,SCN5A,24599044,0,L1786Q,p.Leu1786Gln,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Title and abstract-level description of novel mutation
+20260903_protocol_mixed02_baseline,run,SCN5A,24599044,0,L1786Q,p.Leu1786Gln,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Title and abstract-level description of novel mutation
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,0,R518Q,p.R518Q c.1553G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 16"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,0,R518Q,p.R518Q c.1553G>A,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, row 16"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,0,R518Q,p.R518Q c.1553G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 16"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,1,S77F,p.S77F c.230C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 15"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,1,S77F,p.S77F c.230C>T,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_table,"Table 2, row 15"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29544605,1,S77F,p.S77F c.230C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 15"
+20260903_protocol_mixed02_baseline,run,SCN5A,30116708,0,R222G,p.Arg222Gly c.664C>G,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Case report / Mutation in the SCN5A gene
+20260903_protocol_mixed02_baseline,run,SCN5A,30116708,0,R222G,p.Arg222Gly c.664C>G,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,llm_text,Case report / Mutation in the SCN5A gene
+20260903_protocol_mixed02_baseline,run,SCN5A,30116708,0,R222G,p.Arg222Gly c.664C>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Case report / Mutation in the SCN5A gene
+20260903_protocol_mixed02_baseline,run,SCN5A,11463728,0,V1777M,p.Val1777Met c.5329G>A,carriers,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,llm_text,"Results, Identification of the SCN5A Mutation and Functional Properties"
+20260903_protocol_mixed02_baseline,run,SCN5A,11463728,0,V1777M,p.Val1777Met c.5329G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Results, Identification of the SCN5A Mutation and Functional Properties"
+20260903_protocol_mixed02_baseline,run,SCN5A,11463728,0,V1777M,p.Val1777Met c.5329G>A,unaffected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,llm_text,"Results, Identification of the SCN5A Mutation and Functional Properties"
+20260903_protocol_mixed02_baseline,run,SCN5A,20025708,0,P1008S,P1008S,carriers,4,3,3,supplied,-1,1,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,20025708,0,P1008S,P1008S,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,20025708,0,P1008S,P1008S,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,0,A190T,A190T,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,0,A190T,A190T,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,0,A190T,A190T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,1,E90K,E90K,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,1,E90K,E90K,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,1,E90K,E90K,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,2,G294V,G294V,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,2,G294V,G294V,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,2,G294V,G294V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,3,P967L,P967L,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,3,P967L,P967L,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,3,P967L,P967L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,4,Q1068R,Q1068R,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,4,Q1068R,Q1068R,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,4,Q1068R,Q1068R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,5,R1005W,R1005W,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,5,R1005W,R1005W,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,5,R1005W,R1005W,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,6,R181Q,R181Q,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,6,R181Q,R181Q,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,6,R181Q,R181Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,7,R791W,R791W,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,7,R791W,R791W,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNH2,29752375,7,R791W,R791W,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,29922582,0,R518X,p.Arg518*,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Case report, main text and Figure 2"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29922582,0,R518X,p.Arg518*,affected,1,2,2,supplied,1,1,0,baseline,,human_curated_cardiac,figure,"Case report, main text and Figure 2"
+20260903_protocol_mixed02_baseline,run,KCNQ1,29922582,0,R518X,p.Arg518*,unaffected,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,figure,"Case report, main text and Figure 2"
+20260903_protocol_mixed02_baseline,run,KCNH2,26831020,0,K638del,K638del,carriers,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,"Table (regex extraction), block 1"
+20260903_protocol_mixed02_baseline,run,KCNH2,26831020,0,K638del,K638del,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,"Table (regex extraction), block 1"
+20260903_protocol_mixed02_baseline,run,KCNH2,26831020,0,K638del,K638del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,"Table (regex extraction), block 1"
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,0,A1186T,p.Ala1186Thr c.3556G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,0,A1186T,p.Ala1186Thr c.3556G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,0,A1186T,p.Ala1186Thr c.3556G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,1,A1221V,p.Ala1221Val c.3662C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,1,A1221V,p.Ala1221Val c.3662C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,1,A1221V,p.Ala1221Val c.3662C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,2,A1330D,p.Ala1330Asp c.3989C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,2,A1330D,p.Ala1330Asp c.3989C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,2,A1330D,p.Ala1330Asp c.3989C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,3,A1330T,p.Ala1330Thr c.3988G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,3,A1330T,p.Ala1330Thr c.3988G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,3,A1330T,p.Ala1330Thr c.3988G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,4,A1428S,p.Ala1428Ser c.4282G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,4,A1428S,p.Ala1428Ser c.4282G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,4,A1428S,p.Ala1428Ser c.4282G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,5,A1746T,p.Ala1746Thr c.5236G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,5,A1746T,p.Ala1746Thr c.5236G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,5,A1746T,p.Ala1746Thr c.5236G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,6,A242D,p.Ala242Asp c.725C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,6,A242D,p.Ala242Asp c.725C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,6,A242D,p.Ala242Asp c.725C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,7,A332T,p.Ala332Thr c.994G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,7,A332T,p.Ala332Thr c.994G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,7,A332T,p.Ala332Thr c.994G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,8,A413T,p.Ala413Thr c.1237G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,8,A413T,p.Ala413Thr c.1237G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,8,A413T,p.Ala413Thr c.1237G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,9,A425T,p.Ala425Thr c.1273G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,9,A425T,p.Ala425Thr c.1273G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,9,A425T,p.Ala425Thr c.1273G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,10,A735V,p.Ala735Val c.2204C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,10,A735V,p.Ala735Val c.2204C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,10,A735V,p.Ala735Val c.2204C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,11,C341Y,p.Cys341Tyr c.1022G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,11,C341Y,p.Cys341Tyr c.1022G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,11,C341Y,p.Cys341Tyr c.1022G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,12,C683R,p.Cys683Arg c.2047T>C,carriers,6,6,6,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,12,C683R,p.Cys683Arg c.2047T>C,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,12,C683R,p.Cys683Arg c.2047T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,13,D1275N,p.Asp1275Asn c.3823G>A,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,13,D1275N,p.Asp1275Asn c.3823G>A,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,13,D1275N,p.Asp1275Asn c.3823G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,14,D1595N,p.Asp1595Asn c.4783G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,14,D1595N,p.Asp1595Asn c.4783G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,14,D1595N,p.Asp1595Asn c.4783G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,15,D1790G,p.Asp1790Gly c.5369A>G,carriers,7,7,7,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,15,D1790G,p.Asp1790Gly c.5369A>G,affected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,15,D1790G,p.Asp1790Gly c.5369A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,16,D1790N,p.Asp1790Asn c.5368G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,16,D1790N,p.Asp1790Asn c.5368G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,16,D1790N,p.Asp1790Asn c.5368G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,17,D356N,p.Asp356Asn c.1066G>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,17,D356N,p.Asp356Asn c.1066G>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,17,D356N,p.Asp356Asn c.1066G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,18,E1053K,p.Glu1053Lys c.3157G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,18,E1053K,p.Glu1053Lys c.3157G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,18,E1053K,p.Glu1053Lys c.3157G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,19,E1105X,p.Glu1105* c.3313G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,19,E1105X,p.Glu1105* c.3313G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,19,E1105X,p.Glu1105* c.3313G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,20,E1107X,p.Glu1107* c.3319G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,20,E1107X,p.Glu1107* c.3319G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,20,E1107X,p.Glu1107* c.3319G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,21,E1225K,p.Glu1225Lys c.3673G>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,21,E1225K,p.Glu1225Lys c.3673G>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,21,E1225K,p.Glu1225Lys c.3673G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,22,E1240Q,p.Glu1240Gln c.3718G>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,22,E1240Q,p.Glu1240Gln c.3718G>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,22,E1240Q,p.Glu1240Gln c.3718G>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,23,E161K,p.Glu161Lys c.481G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,23,E161K,p.Glu161Lys c.481G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,23,E161K,p.Glu161Lys c.481G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,24,E1784K,p.Glu1784Lys c.5350G>A,carriers,69,,0,abstained,-69,69,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,24,E1784K,p.Glu1784Lys c.5350G>A,affected,69,,0,abstained,-69,69,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,24,E1784K,p.Glu1784Lys c.5350G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,25,E346X,p.Glu346* c.1036G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,25,E346X,p.Glu346* c.1036G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,25,E346X,p.Glu346* c.1036G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,26,E901K,p.Glu901Lys c.2701G>A,carriers,7,7,7,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,26,E901K,p.Glu901Lys c.2701G>A,affected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,26,E901K,p.Glu901Lys c.2701G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,27,F1210S,p.Phe1210Ser c.3629T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,27,F1210S,p.Phe1210Ser c.3629T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,27,F1210S,p.Phe1210Ser c.3629T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,28,F1460L,p.Phe1460Leu c.4380C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,28,F1460L,p.Phe1460Leu c.4380C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,28,F1460L,p.Phe1460Leu c.4380C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,29,F1486L,p.Phe1486Leu c.4458C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,29,F1486L,p.Phe1486Leu c.4458C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,29,F1486L,p.Phe1486Leu c.4458C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,30,F355I,p.Phe355Ile c.1063T>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,30,F355I,p.Phe355Ile c.1063T>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,30,F355I,p.Phe355Ile c.1063T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,31,F4V,p.Phe4Val c.10T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,31,F4V,p.Phe4Val c.10T>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,31,F4V,p.Phe4Val c.10T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,32,F892I,p.Phe892Ile c.2674T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,32,F892I,p.Phe892Ile c.2674T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,32,F892I,p.Phe892Ile c.2674T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,33,F93S,p.Phe93Ser c.278T>C,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,33,F93S,p.Phe93Ser c.278T>C,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,33,F93S,p.Phe93Ser c.278T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,34,G1031fsX,p.Gly1031fs*27 c.4299+1dup,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,34,G1031fsX,p.Gly1031fs*27 c.4299+1dup,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,34,G1031fsX,p.Gly1031fs*27 c.4299+1dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,35,G1262S,p.Gly1262Ser c.3784G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,35,G1262S,p.Gly1262Ser c.3784G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,35,G1262S,p.Gly1262Ser c.3784G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,36,G1319V,p.Gly1319Val c.3956G>T,carriers,8,8,8,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,36,G1319V,p.Gly1319Val c.3956G>T,affected,8,,0,abstained,-8,8,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,36,G1319V,p.Gly1319Val c.3956G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,37,G1369X,p.Gly1369* c.4105G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,37,G1369X,p.Gly1369* c.4105G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,37,G1369X,p.Gly1369* c.4105G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,38,G1406R,p.Gly1406Arg c.4216G>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,38,G1406R,p.Gly1406Arg c.4216G>C,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,38,G1406R,p.Gly1406Arg c.4216G>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,39,G1408R,p.Gly1408Arg c.4222G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,39,G1408R,p.Gly1408Arg c.4222G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,39,G1408R,p.Gly1408Arg c.4222G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,40,G1481E,p.Gly1481Glu c.4442G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,40,G1481E,p.Gly1481Glu c.4442G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,40,G1481E,p.Gly1481Glu c.4442G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,41,G1481R,p.Gly1481Arg c.4441G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,41,G1481R,p.Gly1481Arg c.4441G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,41,G1481R,p.Gly1481Arg c.4441G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,42,G1481V,p.Gly1481Val c.4442G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,42,G1481V,p.Gly1481Val c.4442G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,42,G1481V,p.Gly1481Val c.4442G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,43,G1631D,p.Gly1631Asp c.4892G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,43,G1631D,p.Gly1631Asp c.4892G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,43,G1631D,p.Gly1631Asp c.4892G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,44,G1743E,p.Gly1743Glu c.5228G>A,carriers,8,8,8,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,44,G1743E,p.Gly1743Glu c.5228G>A,affected,8,,0,abstained,-8,8,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,44,G1743E,p.Gly1743Glu c.5228G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,45,G1743R,p.Gly1743Arg c.5227G>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,45,G1743R,p.Gly1743Arg c.5227G>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,45,G1743R,p.Gly1743Arg c.5227G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,46,G514C,p.Gly514Cys c.1540G>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,46,G514C,p.Gly514Cys c.1540G>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,46,G514C,p.Gly514Cys c.1540G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,47,G897E,p.Gly897Glu c.2690G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,47,G897E,p.Gly897Glu c.2690G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,47,G897E,p.Gly897Glu c.2690G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,48,H1200Y,p.His1200Tyr c.3598C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,48,H1200Y,p.His1200Tyr c.3598C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,48,H1200Y,p.His1200Tyr c.3598C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,49,H1849R,p.His1849Arg c.5546A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,49,H1849R,p.His1849Arg c.5546A>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,49,H1849R,p.His1849Arg c.5546A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,50,I1334V,p.Ile1334Val c.4000A>G,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,50,I1334V,p.Ile1334Val c.4000A>G,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,50,I1334V,p.Ile1334Val c.4000A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,51,I1521K,p.Ile1521Lys c.4562T>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,51,I1521K,p.Ile1521Lys c.4562T>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,51,I1521K,p.Ile1521Lys c.4562T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,52,I1524T,p.Ile1524Thr c.4571T>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,52,I1524T,p.Ile1524Thr c.4571T>C,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,52,I1524T,p.Ile1524Thr c.4571T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,53,I1660V,p.Ile1660Val c.4978A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,53,I1660V,p.Ile1660Val c.4978A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,53,I1660V,p.Ile1660Val c.4978A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,54,I1749N,p.Ile1749Asn c.5246T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,54,I1749N,p.Ile1749Asn c.5246T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,54,I1749N,p.Ile1749Asn c.5246T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,55,I1768V,p.Ile1768Val c.5302A>G,carriers,9,9,9,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,55,I1768V,p.Ile1768Val c.5302A>G,affected,9,,0,abstained,-9,9,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,55,I1768V,p.Ile1768Val c.5302A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,56,K1504E,p.Lys1504Glu c.4510A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,56,K1504E,p.Lys1504Glu c.4510A>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,56,K1504E,p.Lys1504Glu c.4510A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,57,L1222R,p.Leu1222Arg c.3665T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,57,L1222R,p.Leu1222Arg c.3665T>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,57,L1222R,p.Leu1222Arg c.3665T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,58,L1346P,p.Leu1346Pro c.4037T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,58,L1346P,p.Leu1346Pro c.4037T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,58,L1346P,p.Leu1346Pro c.4037T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,59,L1373X,p.Leu1373* c.4118del,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,59,L1373X,p.Leu1373* c.4118del,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,59,L1373X,p.Leu1373* c.4118del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,60,L1501V,p.Leu1501Val c.4501C>G,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,60,L1501V,p.Leu1501Val c.4501C>G,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,60,L1501V,p.Leu1501Val c.4501C>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,61,L1634P,p.Leu1634Pro c.4901T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,61,L1634P,p.Leu1634Pro c.4901T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,61,L1634P,p.Leu1634Pro c.4901T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,62,L1786R,p.Leu1786Arg c.5357T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,62,L1786R,p.Leu1786Arg c.5357T>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,62,L1786R,p.Leu1786Arg c.5357T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,63,L212P,p.Leu212Pro c.635T>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,63,L212P,p.Leu212Pro c.635T>C,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,63,L212P,p.Leu212Pro c.635T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,64,L224F,p.Leu224Phe c.670C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,64,L224F,p.Leu224Phe c.670C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,64,L224F,p.Leu224Phe c.670C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,65,L227P,p.Leu227Pro c.680T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,65,L227P,p.Leu227Pro c.680T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,65,L227P,p.Leu227Pro c.680T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,66,L276P,p.Leu276Pro c.827T>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,66,L276P,p.Leu276Pro c.827T>C,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,66,L276P,p.Leu276Pro c.827T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,67,L736P,p.Leu736Pro c.2207T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,67,L736P,p.Leu736Pro c.2207T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,67,L736P,p.Leu736Pro c.2207T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,68,L839P,p.Leu839Pro c.2516T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,68,L839P,p.Leu839Pro c.2516T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,68,L839P,p.Leu839Pro c.2516T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,69,M1487L,p.Met1487Leu c.4459A>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,69,M1487L,p.Met1487Leu c.4459A>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,69,M1487L,p.Met1487Leu c.4459A>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,70,M1498T,p.Met1498Thr c.4493T>C,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,70,M1498T,p.Met1498Thr c.4493T>C,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,70,M1498T,p.Met1498Thr c.4493T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,71,M1766L,p.Met1766Leu c.5296A>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,71,M1766L,p.Met1766Leu c.5296A>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,71,M1766L,p.Met1766Leu c.5296A>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,72,M1793K,p.Met1793Lys c.5378T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,72,M1793K,p.Met1793Lys c.5378T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,72,M1793K,p.Met1793Lys c.5378T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,73,M369K,p.Met369Lys c.1106T>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,73,M369K,p.Met369Lys c.1106T>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,73,M369K,p.Met369Lys c.1106T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,74,N1325S,p.Asn1325Ser c.3974A>G,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,74,N1325S,p.Asn1325Ser c.3974A>G,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,74,N1325S,p.Asn1325Ser c.3974A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,75,N1380K,p.Asn1380Lys c.4140C>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,75,N1380K,p.Asn1380Lys c.4140C>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,75,N1380K,p.Asn1380Lys c.4140C>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,76,N1722D,p.Asn1722Asp c.5164A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,76,N1722D,p.Asn1722Asp c.5164A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,76,N1722D,p.Asn1722Asp c.5164A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,77,N1774D,p.Asn1774Asp c.5320A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,77,N1774D,p.Asn1774Asp c.5320A>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,77,N1774D,p.Asn1774Asp c.5320A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,78,N1774H,p.Asn1774His c.5320A>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,78,N1774H,p.Asn1774His c.5320A>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,78,N1774H,p.Asn1774His c.5320A>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,79,N406K,p.Asn406Lys c.1218C>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,79,N406K,p.Asn406Lys c.1218C>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,79,N406K,p.Asn406Lys c.1218C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,80,N927S,p.Asn927Ser c.2780A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,80,N927S,p.Asn927Ser c.2780A>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,80,N927S,p.Asn927Ser c.2780A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,81,P.E1071GFSX76,p.Glu1071Glyfs*76 c.3207_3211dup,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,81,P.E1071GFSX76,p.Glu1071Glyfs*76 c.3207_3211dup,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,81,P.E1071GFSX76,p.Glu1071Glyfs*76 c.3207_3211dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,82,P.E1107RFSX24,p.Glu1107Argfs*24 c.3318dup,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,82,P.E1107RFSX24,p.Glu1107Argfs*24 c.3318dup,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,82,P.E1107RFSX24,p.Glu1107Argfs*24 c.3318dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,83,P.E1165RFSX6,p.Glu1165Argfs*6 c.3491dup,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,83,P.E1165RFSX6,p.Glu1165Argfs*6 c.3491dup,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,83,P.E1165RFSX6,p.Glu1165Argfs*6 c.3491dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,84,P.F1486DEL,p.Phe1486del c.4456_4458del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,84,P.F1486DEL,p.Phe1486del c.4456_4458del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,84,P.F1486DEL,p.Phe1486del c.4456_4458del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,85,P.F1617DEL,p.Phe1617del c.4850_4852del,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,85,P.F1617DEL,p.Phe1617del c.4850_4852del,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,85,P.F1617DEL,p.Phe1617del c.4850_4852del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,86,P.F1775LFSX15,p.Phe1775Leufs*15 c.5321_5324dup,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,86,P.F1775LFSX15,p.Phe1775Leufs*15 c.5321_5324dup,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,86,P.F1775LFSX15,p.Phe1775Leufs*15 c.5321_5324dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,87,P.F851CFSX19,p.Phe851Cysfs*19,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,87,P.F851CFSX19,p.Phe851Cysfs*19,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,87,P.F851CFSX19,p.Phe851Cysfs*19,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,88,P.F861WFSX90,p.Phe861Trpfs*90 c.2582_2583del,carriers,6,6,6,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,88,P.F861WFSX90,p.Phe861Trpfs*90 c.2582_2583del,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,88,P.F861WFSX90,p.Phe861Trpfs*90 c.2582_2583del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,89,P.G1015DFSX14,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,89,P.G1015DFSX14,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,89,P.G1015DFSX14,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,90,P.G1748DEL,p.Gly1748del c.5242_5244del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,90,P.G1748DEL,p.Gly1748del c.5242_5244del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,90,P.G1748DEL,p.Gly1748del c.5242_5244del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,91,P.I1570DUP,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,91,P.I1570DUP,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,91,P.I1570DUP,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,92,P.I1758DEL,p.Ile1758del c.5272_5274del,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,92,P.I1758DEL,p.Ile1758del c.5272_5274del,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,92,P.I1758DEL,p.Ile1758del c.5272_5274del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,93,P.I759FFSX6,p.Ile759Phefs*6 c.2274delG,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,93,P.I759FFSX6,p.Ile759Phefs*6 c.2274delG,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,93,P.I759FFSX6,p.Ile759Phefs*6 c.2274delG,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,94,P.L1222LFSX7,p.Leu1222Leufs*7 c.3666+1del,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,94,P.L1222LFSX7,p.Leu1222Leufs*7 c.3666+1del,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,94,P.L1222LFSX7,p.Leu1222Leufs*7 c.3666+1del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,95,P.L1302VFS18,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,95,P.L1302VFS18,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,95,P.L1302VFS18,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,96,P.L1339DEL,p.Leu1339del c.4015_4017del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,96,P.L1339DEL,p.Leu1339del c.4015_4017del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,96,P.L1339DEL,p.Leu1339del c.4015_4017del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,97,P.L729DEL,p.Leu729del c.2184_2186del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,97,P.L729DEL,p.Leu729del c.2184_2186del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,97,P.L729DEL,p.Leu729del c.2184_2186del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,98,P.N1380DEL,p.Asn1380del c.4140_4142del,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,98,P.N1380DEL,p.Asn1380del c.4140_4142del,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,98,P.N1380DEL,p.Asn1380del c.4140_4142del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,99,P.N291TFSX52,p.Asn291Thrfs*52 c.870del,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,99,P.N291TFSX52,p.Asn291Thrfs*52 c.870del,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,99,P.N291TFSX52,p.Asn291Thrfs*52 c.870del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,100,P.N841TFSX2,p.Asn841Thrfs*2 c.2520del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,100,P.N841TFSX2,p.Asn841Thrfs*2 c.2520del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,100,P.N841TFSX2,p.Asn841Thrfs*2 c.2520del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,101,P.P2006LFSX32,p.Pro2006Leufs*32 c.6017del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,101,P.P2006LFSX32,p.Pro2006Leufs*32 c.6017del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,101,P.P2006LFSX32,p.Pro2006Leufs*32 c.6017del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,102,P.Q1475NFSX6,p.Gln1475Asnfs*6 c.4423del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,102,P.Q1475NFSX6,p.Gln1475Asnfs*6 c.4423del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,102,P.Q1475NFSX6,p.Gln1475Asnfs*6 c.4423del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,103,P.Q1507_P1509DEL,p.Gln1507_Pro1509del c.4519-4527del,carriers,9,9,9,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,103,P.Q1507_P1509DEL,p.Gln1507_Pro1509del c.4519-4527del,affected,9,,0,abstained,-9,9,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,103,P.Q1507_P1509DEL,p.Gln1507_Pro1509del c.4519-4527del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,104,P.Q646RFSX5,p.Gln646Argfs*5 c.1936del,carriers,7,7,7,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,104,P.Q646RFSX5,p.Gln646Argfs*5 c.1936del,affected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,104,P.Q646RFSX5,p.Gln646Argfs*5 c.1936del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,105,P.Q90WFSX14,p.Gln90Trpfs*14 c.268del,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,105,P.Q90WFSX14,p.Gln90Trpfs*14 c.268del,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,105,P.Q90WFSX14,p.Gln90Trpfs*14 c.268del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,106,P.T631VFSX101,p.Thr631Valfs*101 c.1890G>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,106,P.T631VFSX101,p.Thr631Valfs*101 c.1890G>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,106,P.T631VFSX101,p.Thr631Valfs*101 c.1890G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,107,P.Y1795_E1796INSD,p.Tyr1795_Glu1796insAsp c.5385_5387dup,carriers,7,7,7,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,107,P.Y1795_E1796INSD,p.Tyr1795_Glu1796insAsp c.5385_5387dup,affected,7,,0,abstained,-7,7,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,107,P.Y1795_E1796INSD,p.Tyr1795_Glu1796insAsp c.5385_5387dup,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,108,P.Y774TFSX28,p.Tyr774Thrfs*28 c.2320del,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,108,P.Y774TFSX28,p.Tyr774Thrfs*28 c.2320del,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,108,P.Y774TFSX28,p.Tyr774Thrfs*28 c.2320del,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,109,P1332L,p.Pro1332Leu c.3995C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,109,P1332L,p.Pro1332Leu c.3995C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,109,P1332L,p.Pro1332Leu c.3995C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,110,P1332Q,p.Pro1332Gln c.3995C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,110,P1332Q,p.Pro1332Gln c.3995C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,110,P1332Q,p.Pro1332Gln c.3995C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,111,P336L,p.Pro336Leu c.1007C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,111,P336L,p.Pro336Leu c.1007C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,111,P336L,p.Pro336Leu c.1007C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,112,P717L,p.Pro717Leu c.2150C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,112,P717L,p.Pro717Leu c.2150C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,112,P717L,p.Pro717Leu c.2150C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,113,Q1000X,p.Gln1000* c.2998C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,113,Q1000X,p.Gln1000* c.2998C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,113,Q1000X,p.Gln1000* c.2998C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,114,Q1059X,p.Gln1059* c.3175C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,114,Q1059X,p.Gln1059* c.3175C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,114,Q1059X,p.Gln1059* c.3175C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,115,Q1118X,p.Gln1118* c.3352C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,115,Q1118X,p.Gln1118* c.3352C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,115,Q1118X,p.Gln1118* c.3352C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,116,Q1475L,p.Gln1475Leu c.4424A>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,116,Q1475L,p.Gln1475Leu c.4424A>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,116,Q1475L,p.Gln1475Leu c.4424A>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,117,Q1491H,p.Gln1491His c.4473G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,117,Q1491H,p.Gln1491His c.4473G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,117,Q1491H,p.Gln1491His c.4473G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,118,Q1695X,p.Gln1695* c.5083C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,118,Q1695X,p.Gln1695* c.5083C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,118,Q1695X,p.Gln1695* c.5083C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,119,Q779K,p.Gln779Lys c.2335C>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,119,Q779K,p.Gln779Lys c.2335C>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,119,Q779K,p.Gln779Lys c.2335C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,120,Q779X,p.Gln779* c.2335C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,120,Q779X,p.Gln779* c.2335C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,120,Q779X,p.Gln779* c.2335C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,121,R1023C,p.Arg1023Cys c.3067C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,121,R1023C,p.Arg1023Cys c.3067C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,121,R1023C,p.Arg1023Cys c.3067C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,122,R121Q,p.Arg121Gln c.362G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,122,R121Q,p.Arg121Gln c.362G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,122,R121Q,p.Arg121Gln c.362G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,123,R1232W,p.Arg1232Trp c.3694C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,123,R1232W,p.Arg1232Trp c.3694C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,123,R1232W,p.Arg1232Trp c.3694C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,124,R1583H,p.Arg1583His c.4748G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,124,R1583H,p.Arg1583His c.4748G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,124,R1583H,p.Arg1583His c.4748G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,125,R1623Q,p.Arg1623Gln c.4868G>A,carriers,6,6,6,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,125,R1623Q,p.Arg1623Gln c.4868G>A,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,125,R1623Q,p.Arg1623Gln c.4868G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,126,R1623X,p.Arg1623* c.4867C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,126,R1623X,p.Arg1623* c.4867C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,126,R1623X,p.Arg1623* c.4867C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,127,R1626C,p.Arg1626Cys c.4876C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,127,R1626C,p.Arg1626Cys c.4876C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,127,R1626C,p.Arg1626Cys c.4876C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,128,R1632L,p.Arg1632Leu c.4895G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,128,R1632L,p.Arg1632Leu c.4895G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,128,R1632L,p.Arg1632Leu c.4895G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,129,R1644H,p.R1644H c.4931G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,129,R1644H,p.R1644H c.4931G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,129,R1644H,p.R1644H c.4931G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,130,R1897W,p.Arg1897Trp c.5689C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,130,R1897W,p.Arg1897Trp c.5689C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,130,R1897W,p.Arg1897Trp c.5689C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,131,R1944X,p.Arg1944* c.5830C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,131,R1944X,p.Arg1944* c.5830C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,131,R1944X,p.Arg1944* c.5830C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,132,R1991Q,p.Arg1991Gln c.5972G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,132,R1991Q,p.Arg1991Gln c.5972G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,132,R1991Q,p.Arg1991Gln c.5972G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,133,R222Q,p.Arg222Gln c.665G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,133,R222Q,p.Arg222Gln c.665G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,133,R222Q,p.Arg222Gln c.665G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,134,R225W,p.Arg225Trp c.673C>T,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,134,R225W,p.Arg225Trp c.673C>T,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,134,R225W,p.Arg225Trp c.673C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,135,R282C,p.Arg282Cys c.844C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,135,R282C,p.Arg282Cys c.844C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,135,R282C,p.Arg282Cys c.844C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,136,R340W,p.Arg340Trp c.1018C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,136,R340W,p.Arg340Trp c.1018C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,136,R340W,p.Arg340Trp c.1018C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,137,R367C,p.Arg367Cys c.1099C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,137,R367C,p.Arg367Cys c.1099C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,137,R367C,p.Arg367Cys c.1099C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,138,R367H,p.Arg367His c.1100G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,138,R367H,p.Arg367His c.1100G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,138,R367H,p.Arg367His c.1100G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,139,R376C,p.Arg376Cys c.1126C>T,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,139,R376C,p.Arg376Cys c.1126C>T,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,139,R376C,p.Arg376Cys c.1126C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,140,R43X,p.Arg43* c.127C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,140,R43X,p.Arg43* c.127C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,140,R43X,p.Arg43* c.127C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,141,R535X,p.Arg535* c.1603C>T,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,141,R535X,p.Arg535* c.1603C>T,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,141,R535X,p.Arg535* c.1603C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,142,R689C,p.Arg689Cys c.2065C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,142,R689C,p.Arg689Cys c.2065C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,142,R689C,p.Arg689Cys c.2065C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,143,R814Q,p.Arg814Gln c.2441G>A,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,143,R814Q,p.Arg814Gln c.2441G>A,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,143,R814Q,p.Arg814Gln c.2441G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,144,R878C,p.Arg878Cys c.2632C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,144,R878C,p.Arg878Cys c.2632C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,144,R878C,p.Arg878Cys c.2632C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,145,R893C,p.Arg893Cys c.2677C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,145,R893C,p.Arg893Cys c.2677C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,145,R893C,p.Arg893Cys c.2677C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,146,R965C,p.Arg965Cys c.2893C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,146,R965C,p.Arg965Cys c.2893C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,146,R965C,p.Arg965Cys c.2893C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,147,S1074G,p.Ser1074Gly c.3220A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,147,S1074G,p.Ser1074Gly c.3220A>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,147,S1074G,p.Ser1074Gly c.3220A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,148,S1079F,p.Ser1079Phe c.3236C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,148,S1079F,p.Ser1079Phe c.3236C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,148,S1079F,p.Ser1079Phe c.3236C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,149,S1079Y,p.Ser1079Tyr c.3236C>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,149,S1079Y,p.Ser1079Tyr c.3236C>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,149,S1079Y,p.Ser1079Tyr c.3236C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,150,S1672Y,p.Ser1672Tyr c.5015C>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,150,S1672Y,p.Ser1672Tyr c.5015C>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,150,S1672Y,p.Ser1672Tyr c.5015C>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,151,S1710L,p.Ser1710Leu c.5129C>T,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,151,S1710L,p.Ser1710Leu c.5129C>T,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,151,S1710L,p.Ser1710Leu c.5129C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,152,S401P,p.Ser401Pro c.1201T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,152,S401P,p.Ser401Pro c.1201T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,152,S401P,p.Ser401Pro c.1201T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,153,S941F,p.Ser941Phe c.2822C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,153,S941F,p.Ser941Phe c.2822C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,153,S941F,p.Ser941Phe c.2822C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,154,S941N,p.Ser941Asn c.2821T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,154,S941N,p.Ser941Asn c.2821T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,154,S941N,p.Ser941Asn c.2821T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,155,T1209R,p.Thr1209Arg c.3626C>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,155,T1209R,p.Thr1209Arg c.3626C>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,155,T1209R,p.Thr1209Arg c.3626C>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,156,T1304M,p.Thr1304Met c.3911C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,156,T1304M,p.Thr1304Met c.3911C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,156,T1304M,p.Thr1304Met c.3911C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,157,T370M,p.Thr370Met c.1109C>T,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,157,T370M,p.Thr370Met c.1109C>T,affected,4,,0,abstained,-4,4,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,157,T370M,p.Thr370Met c.1109C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,158,T630M,p.Thr630Met c.1889C>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,158,T630M,p.Thr630Met c.1889C>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,158,T630M,p.Thr630Met c.1889C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,159,V1747M,p.Val1747Met c.5239G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,159,V1747M,p.Val1747Met c.5239G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,159,V1747M,p.Val1747Met c.5239G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,160,V1763L,p.Val1763Leu c.5287G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,160,V1763L,p.Val1763Leu c.5287G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,160,V1763L,p.Val1763Leu c.5287G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,161,V1763M,p.Val1763Met c.5287G>A,carriers,6,6,6,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,161,V1763M,p.Val1763Met c.5287G>A,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,161,V1763M,p.Val1763Met c.5287G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,162,V1777L,p.Val1777Leu c.5329G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,162,V1777L,p.Val1777Leu c.5329G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,162,V1777L,p.Val1777Leu c.5329G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,163,V1777M,p.Val1777Met c.5329G>A,carriers,8,8,8,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,163,V1777M,p.Val1777Met c.5329G>A,affected,8,,0,abstained,-8,8,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,163,V1777M,p.Val1777Met c.5329G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,164,V240M,p.Val240Met c.718G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,164,V240M,p.Val240Met c.718G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,164,V240M,p.Val240Met c.718G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,165,V263I,p.Val263Ile c.787G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,165,V263I,p.Val263Ile c.787G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,165,V263I,p.Val263Ile c.787G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,166,V411M,p.Val411Met c.1231G>A,carriers,10,10,10,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,166,V411M,p.Val411Met c.1231G>A,affected,10,,0,abstained,-10,10,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,166,V411M,p.Val411Met c.1231G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,167,W1191X,p.Trp1191* c.3572G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,167,W1191X,p.Trp1191* c.3572G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,167,W1191X,p.Trp1191* c.3572G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,168,W1345C,p.Trp1345Cys c.4035G>T,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,168,W1345C,p.Trp1345Cys c.4035G>T,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,168,W1345C,p.Trp1345Cys c.4035G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,169,W156X,p.Trp156* c.468G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,169,W156X,p.Trp156* c.468G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,169,W156X,p.Trp156* c.468G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,170,W374G,p.Trp374Gly c.1120T>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,170,W374G,p.Trp374Gly c.1120T>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,170,W374G,p.Trp374Gly c.1120T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,171,Y1449C,p.Tyr1449Cys c.4346A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,171,Y1449C,p.Tyr1449Cys c.4346A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,171,Y1449C,p.Tyr1449Cys c.4346A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,172,Y1615X,p.Tyr1615* c.4845C>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,172,Y1615X,p.Tyr1615* c.4845C>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,172,Y1615X,p.Tyr1615* c.4845C>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,173,Y1767C,p.Tyr1767Cys c.5300A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,173,Y1767C,p.Tyr1767Cys c.5300A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,173,Y1767C,p.Tyr1767Cys c.5300A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,174,Y1795C,p.Tyr1795Cys c.5384A>G,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,174,Y1795C,p.Tyr1795Cys c.5384A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,174,Y1795C,p.Tyr1795Cys c.5384A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,175,Y1795N,p.Tyr1795Asn c.5383T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,175,Y1795N,p.Tyr1795Asn c.5383T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,175,Y1795N,p.Tyr1795Asn c.5383T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,176,Y1811N,p.Tyr1811Asn c.5431T>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,176,Y1811N,p.Tyr1811Asn c.5431T>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,176,Y1811N,p.Tyr1811Asn c.5431T>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,177,Y1811X,p.Tyr1811* c.5433T>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,177,Y1811X,p.Tyr1811* c.5433T>G,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,177,Y1811X,p.Tyr1811* c.5433T>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,178,c.3840+1G>A,c.3840+1G>A,carriers,5,5,5,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,178,c.3840+1G>A,c.3840+1G>A,affected,5,,0,abstained,-5,5,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,178,c.3840+1G>A,c.3840+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,179,c.393-1C>T,c.393-1C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,179,c.393-1C>T,c.393-1C>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,179,c.393-1C>T,c.393-1C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,180,c.4245+1G>T,c.4245+1G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,180,c.4245+1G>T,c.4245+1G>T,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,180,c.4245+1G>T,c.4245+1G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,181,c.4437+5G>A,c.4437+5G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,181,c.4437+5G>A,c.4437+5G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,181,c.4437+5G>A,c.4437+5G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,182,c.611+1G>A,c.611+1G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,182,c.611+1G>A,c.611+1G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,182,c.611+1G>A,c.611+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,183,c.703+1G>A,c.703+1G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,183,c.703+1G>A,c.703+1G>A,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,183,c.703+1G>A,c.703+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,184,c.934+1G>A,c.934+1G>A,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,184,c.934+1G>A,c.934+1G>A,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,30059973,184,c.934+1G>A,c.934+1G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Fixed-width table
+20260903_protocol_mixed02_baseline,run,SCN5A,22710484,0,R222Q,p.Arg222Gln c.665G>A,carriers,2,3,3,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genetic analysis; Abstract"
+20260903_protocol_mixed02_baseline,run,SCN5A,22710484,0,R222Q,p.Arg222Gln c.665G>A,affected,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Genetic analysis; Abstract"
+20260903_protocol_mixed02_baseline,run,SCN5A,22710484,0,R222Q,p.Arg222Gln c.665G>A,unaffected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,llm_text,"Results, Genetic analysis; Abstract"
+20260903_protocol_mixed02_baseline,run,KCNH2,15572050,0,P1122fsX,p.Pro1122fs c.3366insC,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Case presentation and functional sections"
+20260903_protocol_mixed02_baseline,run,KCNH2,15572050,0,P1122fsX,p.Pro1122fs c.3366insC,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Case presentation and functional sections"
+20260903_protocol_mixed02_baseline,run,KCNH2,15572050,0,P1122fsX,p.Pro1122fs c.3366insC,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Case presentation and functional sections"
+20260903_protocol_mixed02_baseline,run,RYR2,27491078,0,L3741P,L3741P c.T11342C,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,RYR2,27491078,0,L3741P,L3741P c.T11342C,affected,3,,0,abstained,-3,3,0,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,RYR2,27491078,0,L3741P,L3741P c.T11342C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,27281089,0,R1512W,p.R1512W c.4534C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational analysis; Electrophysiology; Discussion (Functional study with one clinical case)"
+20260903_protocol_mixed02_baseline,run,SCN5A,27281089,0,R1512W,p.R1512W c.4534C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational analysis; Electrophysiology; Discussion (Functional study with one clinical case)"
+20260903_protocol_mixed02_baseline,run,SCN5A,27281089,0,R1512W,p.R1512W c.4534C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Results, Mutational analysis; Electrophysiology; Discussion (Functional study with one clinical case)"
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,0,A1416E,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,0,A1416E,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,0,A1416E,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,1,C335S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,1,C335S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,1,C335S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,2,D1041N,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,2,D1041N,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,2,D1041N,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,3,E1780G,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,3,E1780G,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,3,E1780G,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,4,E312K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,4,E312K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,4,E312K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,5,H445D,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,5,H445D,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,5,H445D,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,6,I1660S,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,6,I1660S,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,6,I1660S,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,7,I397V,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,7,I397V,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,7,I397V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,8,M704T,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,8,M704T,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,8,M704T,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,9,M734V,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,9,M734V,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,9,M734V,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,10,R179X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,10,R179X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,10,R179X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,11,R475K,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,11,R475K,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,25650408,11,R475K,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNQ1,29330128,0,V162M,Val162Met,carriers,5,,0,abstained,-5,5,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,29330128,0,V162M,Val162Met,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,29330128,0,V162M,Val162Met,unaffected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,18242854,0,K343Q,K343Q,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,18242854,0,K343Q,K343Q,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,18242854,0,K343Q,K343Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,10200053,0,R1623Q,p.Arg1623Gln,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract text
+20260903_protocol_mixed02_baseline,run,SCN5A,10200053,0,R1623Q,p.Arg1623Gln,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract text
+20260903_protocol_mixed02_baseline,run,SCN5A,10200053,0,R1623Q,p.Arg1623Gln,unaffected,0,0,0,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract text
+20260903_protocol_mixed02_baseline,run,KCNH2,26022375,0,T1083fsX,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNH2,26022375,0,T1083fsX,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNH2,26022375,0,T1083fsX,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNH2,14642688,0,E682X,,carriers,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNH2,14642688,0,E682X,,affected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,KCNH2,14642688,0,E682X,,unaffected,0,,0,identity_miss,0,0,1,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,0,A997S,p.A997S c.2989G>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 53"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,0,A997S,p.A997S c.2989G>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 53"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,0,A997S,p.A997S c.2989G>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 53"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,1,G333A,p.G333A c.997G>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 38"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,1,G333A,p.G333A c.997G>C,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 38"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,1,G333A,p.G333A c.997G>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 38"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,2,R1027W,p.R1027W c.3079C>T,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 52"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,2,R1027W,p.R1027W c.3079C>T,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 52"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,2,R1027W,p.R1027W c.3079C>T,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 52"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,3,S1787G,p.S1787G c.5359A>G,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 41"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,3,S1787G,p.S1787G c.5359A>G,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 41"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,3,S1787G,p.S1787G c.5359A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 41"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,4,V1624I,p.V1624I c.4870G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 40"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,4,V1624I,p.V1624I c.4870G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 40"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,4,V1624I,p.V1624I c.4870G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 40"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,5,V751I,p.V751I c.2251G>A,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 39"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,5,V751I,p.V751I c.2251G>A,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 39"
+20260903_protocol_mixed02_baseline,run,SCN5A,29544605,5,V751I,p.V751I c.2251G>A,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_table,"Table 2, row 39"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,0,T436M,p.Thr436Met,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T436M, Figure II in Data Supplement"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,0,T436M,p.Thr436Met,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T436M, Figure II in Data Supplement"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,0,T436M,p.Thr436Met,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T436M, Figure II in Data Supplement"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,1,T895M,p.Thr895Met,carriers,3,3,3,supplied,0,0,1,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T895M, Figure 4"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,1,T895M,p.Thr895Met,affected,0,1,1,supplied,1,1,0,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T895M, Figure 4"
+20260903_protocol_mixed02_baseline,run,KCNH2,26129877,1,T895M,p.Thr895Met,unaffected,3,,0,abstained,-3,3,0,baseline,,human_curated_cardiac,figure,"Table 2, Table 3, Results section on KCNH2 T895M, Figure 4"
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,0,H558R,H558R,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Table 1 (regex extraction)
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,0,H558R,H558R,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Table 1 (regex extraction)
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,0,H558R,H558R,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,regex_table,Table 1 (regex extraction)
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,1,I1836T,,carriers,3,,0,identity_miss,-3,3,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,1,I1836T,,affected,2,,0,identity_miss,-2,2,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,1,I1836T,,unaffected,1,,0,identity_miss,-1,1,0,baseline,,human_curated_cardiac,,
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,2,R222Q,R222Q,carriers,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,2,R222Q,R222Q,affected,6,,0,abstained,-6,6,0,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,21167004,2,R222Q,R222Q,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,RYR2,27646203,0,I4855M,p.Ile4855Met,carriers,2,3,3,supplied,1,1,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results section, Clinical phenotypes and genetic testing; Structural and functional analysis"
+20260903_protocol_mixed02_baseline,run,RYR2,27646203,0,I4855M,p.Ile4855Met,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_text,"Results section, Clinical phenotypes and genetic testing; Structural and functional analysis"
+20260903_protocol_mixed02_baseline,run,RYR2,27646203,0,I4855M,p.Ile4855Met,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_text,"Results section, Clinical phenotypes and genetic testing; Structural and functional analysis"
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,0,D202H,D202H,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,0,D202H,D202H,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,0,D202H,D202H,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,1,D202N,D202N,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,1,D202N,D202N,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,1,D202N,D202N,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,2,I204F,I204F,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,2,I204F,I204F,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,2,I204F,I204F,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,3,I204M,I204M,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,3,I204M,I204M,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,3,I204M,I204M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,4,S209F,S209F,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,4,S209F,S209F,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,4,S209F,S209F,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,5,V205M,V205M,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,5,V205M,V205M,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,5,V205M,V205M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,6,V215M,V215M,carriers,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,6,V215M,V215M,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,KCNQ1,20421371,6,V215M,V215M,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,figure,figure-reader
+20260903_protocol_mixed02_baseline,run,SCN5A,20395683,0,R121W,p.Arg121Trp,carriers,2,2,2,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,20395683,0,R121W,p.Arg121Trp,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,20395683,0,R121W,p.Arg121Trp,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,0,G306V,G306V,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,0,G306V,G306V,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,0,G306V,G306V,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,1,S277L,S277L,carriers,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,1,S277L,S277L,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,14527360,1,S277L,S277L,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,15028074,0,R367H,p.Arg367His,carriers,11,,0,abstained,-11,11,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,15028074,0,R367H,p.Arg367His,affected,9,,0,abstained,-9,9,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,SCN5A,15028074,0,R367H,p.Arg367His,unaffected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,26168993,0,F279I,p.Phe279Ile,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,26168993,0,F279I,p.Phe279Ile,affected,1,1,1,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,KCNQ1,26168993,0,F279I,p.Phe279Ile,unaffected,1,,0,abstained,-1,1,0,baseline,,human_curated_cardiac,llm_text,Abstract
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,0,E4182A,p.E4182A c.12545A>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,0,E4182A,p.E4182A c.12545A>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,0,E4182A,p.E4182A c.12545A>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,1,M4107V,p.M4107V c.12643A>G,carriers,2,1,1,supplied,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,1,M4107V,p.M4107V c.12643A>G,affected,2,,0,abstained,-2,2,0,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,1,M4107V,p.M4107V c.12643A>G,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,2,S4122R,p.S4122R c.12364A>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,2,S4122R,p.S4122R c.12364A>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,2,S4122R,p.S4122R c.12364A>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,3,W4949R,p.W4949R c.15162T>C,carriers,1,1,1,supplied,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,3,W4949R,p.W4949R c.15162T>C,affected,1,,0,abstained,-1,1,0,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,RYR2,22519458,3,W4949R,p.W4949R c.15162T>C,unaffected,0,,0,abstained,0,0,1,baseline,,human_curated_ryr2_pilot,llm_table,"Table II; Results, Mutation Analysis Results"
+20260903_protocol_mixed02_baseline,run,KCNQ1,20138589,0,R190L,p.Arg190Leu,carriers,4,4,4,supplied,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report, Discussion"
+20260903_protocol_mixed02_baseline,run,KCNQ1,20138589,0,R190L,p.Arg190Leu,affected,0,,0,abstained,0,0,1,baseline,,human_curated_cardiac,llm_text,"Case report, Discussion"
+20260903_protocol_mixed02_baseline,run,KCNQ1,20138589,0,R190L,p.Arg190Leu,unaffected,2,,0,abstained,-2,2,0,baseline,,human_curated_cardiac,llm_text,"Case report, Discussion"

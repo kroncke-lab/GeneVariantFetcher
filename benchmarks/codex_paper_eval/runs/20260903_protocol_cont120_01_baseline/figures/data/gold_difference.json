@@ -1,0 +1,217 @@
+{
+  "arms": {
+    "run": {
+      "attempts": 120,
+      "comparison_arm": "baseline",
+      "gold_sources": {
+        "APOE": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/APOE_recall_input.csv",
+          "sha256": "ad371f5810464f4ed2791612e5cb72c375184795fe620461939f04b419de889d"
+        },
+        "BRCA1": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/BRCA1_recall_input.csv",
+          "sha256": "6af713cd741bb5e7e554ac40492e11ec6662fa172de43b3c3da8eb4998e667e3"
+        },
+        "KCNH2": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/KCNH2_recall_input.csv",
+          "sha256": "563a43f56f2be42667b9e941ee7bf7f98f3871ad3f29c187691d48400c2e47f4"
+        },
+        "KCNQ1": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/KCNQ1_recall_input.csv",
+          "sha256": "99070e9b9fa06aac6494d23bce3b5c21e77782bd797afe9a121384402257e70c"
+        },
+        "MYBPC3": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/MYBPC3_recall_input.csv",
+          "sha256": "640af8f8078f72f7ba5b97e2bee690ec64786b5d58ad9cd0dabb092ef71c81a2"
+        },
+        "RYR2": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/RYR2_recall_input.csv",
+          "sha256": "3e99bdcaa92a3626d71456cc417d1c8ef2ead3051ce03c62f77708cadbd555b4"
+        },
+        "SCN5A": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/SCN5A_recall_input.csv",
+          "sha256": "df0c7441e1cdcca684cc44dae9fd8f536cc25f8b09463eb354e5ea7738ee6ce5"
+        }
+      },
+      "identity": {
+        "fn": 121,
+        "fp": 138,
+        "precision": 0.655860349127182,
+        "primary_score_lane": "paper_derived",
+        "recall": 0.6848958333333334,
+        "tp": 263
+      },
+      "integrity": {
+        "predictions_sha256": "553e389170a2da680fdece9bb5c340891027166cfe65c95e22898317c9c8d4fe",
+        "selection_sha256": "775cb32a34742a1f0309e8878d3e7570ec5fbf8e85149b2d46b6d0e1e7e13c00"
+      },
+      "label": "run",
+      "locked_at": "2026-09-03T22:16:48.576127+00:00",
+      "metrics": {
+        "affected": {
+          "abstained": 174,
+          "bias": -1.0287206266318538,
+          "bland_altman": {
+            "lower": -4.345353893636465,
+            "mean": -1.0287206266318538,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 1.6921598301043932,
+            "upper": 2.287912640372757
+          },
+          "conditional_bias": -0.056818181818181816,
+          "conditional_mae": 0.32954545454545453,
+          "coverage_on_matched": 0.33587786259541985,
+          "difference_max": 1,
+          "difference_min": -13,
+          "empirical_limits": {
+            "lower_2_5": -6,
+            "upper_97_5": 1
+          },
+          "end_to_end_mae": 1.0913838120104438,
+          "exact": 145,
+          "exact_fraction": 0.3785900783289817,
+          "gold_max": 24,
+          "gold_rows": 383,
+          "gold_rows_zero": 92,
+          "greater_than_one": 62,
+          "identity_coverage": 0.6840731070496083,
+          "identity_matched": 262,
+          "identity_miss": 121,
+          "median_absolute_difference": 1,
+          "rmse": 1.980320938200867,
+          "supplied": 88,
+          "supplied_exact": 64,
+          "supplied_exact_fraction": 0.7272727272727273,
+          "supplied_fraction": 0.2297650130548303,
+          "within_one": 321,
+          "within_one_fraction": 0.8381201044386423,
+          "zero_baseline_exact": 81,
+          "zero_baseline_fraction": 0.21148825065274152
+        },
+        "carriers": {
+          "abstained": 140,
+          "bias": -1.3098958333333333,
+          "bland_altman": {
+            "lower": -6.712985949336333,
+            "mean": -1.3098958333333333,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 2.7566786306137754,
+            "upper": 4.093194282669667
+          },
+          "conditional_bias": 0.024390243902439025,
+          "conditional_mae": 0.23577235772357724,
+          "coverage_on_matched": 0.467680608365019,
+          "difference_max": 4,
+          "difference_min": -22,
+          "empirical_limits": {
+            "lower_2_5": -10,
+            "upper_97_5": 0
+          },
+          "end_to_end_mae": 1.3932291666666667,
+          "exact": 156,
+          "exact_fraction": 0.40625,
+          "gold_max": 29,
+          "gold_rows": 384,
+          "gold_rows_zero": 52,
+          "greater_than_one": 70,
+          "identity_coverage": 0.6848958333333334,
+          "identity_matched": 263,
+          "identity_miss": 121,
+          "median_absolute_difference": 1.0,
+          "rmse": 3.0520655573998843,
+          "supplied": 123,
+          "supplied_exact": 106,
+          "supplied_exact_fraction": 0.8617886178861789,
+          "supplied_fraction": 0.3203125,
+          "within_one": 314,
+          "within_one_fraction": 0.8177083333333334,
+          "zero_baseline_exact": 50,
+          "zero_baseline_fraction": 0.13020833333333334
+        },
+        "unaffected": {
+          "abstained": 234,
+          "bias": -0.3629242819843342,
+          "bland_altman": {
+            "lower": -3.827282160647595,
+            "mean": -0.3629242819843342,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 1.7675295299302352,
+            "upper": 3.101433596678927
+          },
+          "conditional_bias": 0.03571428571428571,
+          "conditional_mae": 0.17857142857142858,
+          "coverage_on_matched": 0.10687022900763359,
+          "difference_max": 3,
+          "difference_min": -20,
+          "empirical_limits": {
+            "lower_2_5": -4,
+            "upper_97_5": 0
+          },
+          "end_to_end_mae": 0.3785900783289817,
+          "exact": 340,
+          "exact_fraction": 0.8877284595300261,
+          "gold_max": 20,
+          "gold_rows": 383,
+          "gold_rows_zero": 331,
+          "greater_than_one": 23,
+          "identity_coverage": 0.6840731070496083,
+          "identity_matched": 262,
+          "identity_miss": 121,
+          "median_absolute_difference": 0,
+          "rmse": 1.8044042434081236,
+          "supplied": 28,
+          "supplied_exact": 25,
+          "supplied_exact_fraction": 0.8928571428571429,
+          "supplied_fraction": 0.0731070496083551,
+          "within_one": 360,
+          "within_one_fraction": 0.9399477806788512,
+          "zero_baseline_exact": 315,
+          "zero_baseline_fraction": 0.8224543080939948
+        }
+      },
+      "run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline",
+      "run_id": "20260903_protocol_cont120_01_baseline",
+      "runtime_source_sha256": "810807913047cf1720657f61337f2cdcd52238ff18f92c86e234ad0b9233cec0",
+      "tier_id": "mixed_gold_cont120_01",
+      "unique_pmids": 110
+    }
+  },
+  "comparison": null,
+  "evaluation_rule": {
+    "abstention_evaluated_as": 0,
+    "identity_miss_evaluated_as": 0,
+    "mirrors": "benchmarks/codex_paper_eval/secondary_count_endpoint.py (end-to-end carrier error) extended to affected and unaffected",
+    "stored_missing_value": null,
+    "text": "difference = automated count minus reference count for every gold row with an asserted value; an identity miss or a matched row without an automated count is evaluated as 0 (the full reference count is the error)"
+  },
+  "figure": "gold_difference",
+  "figure_contract": {
+    "chart_family": "faceted difference plots (automated minus reference against reference) with grouped markers sized by row count",
+    "height": 1320,
+    "labels": "the three largest supplied disagreements and the largest reference count lost to a miss or abstention, placed automatically",
+    "marker_radius": "min(28, 8 + 2*sqrt(rows at the coordinate))",
+    "reference_lines": [
+      "zero difference",
+      "mean difference (bias)",
+      "empirical 2.5th and 97.5th percentiles of the difference",
+      "difference = -reference (the boundary where a missing count sits)"
+    ],
+    "renderer": "editable SVG; vector PDF and PNG copies downstream",
+    "width": 2400,
+    "x_axis": "reference (gold) count, square-root scale, 0 to 50",
+    "x_max": 50,
+    "y_axis": "automated minus reference, signed square-root scale, \u00b150",
+    "y_max": 50
+  },
+  "generated_at": "2026-09-04T12:42:00.027249+00:00",
+  "outputs": {
+    "csv": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline/figures/data/gold_difference.csv",
+    "json": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline/figures/data/gold_difference.json",
+    "pdf": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline/figures/gold_difference.pdf",
+    "png": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline/figures/gold_difference.png",
+    "svg": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_baseline/figures/gold_difference.svg"
+  },
+  "paired": null,
+  "row_grain": "gold row with an asserted value, per count measure",
+  "title": "Automated minus reference counts on the gold standard"
+}

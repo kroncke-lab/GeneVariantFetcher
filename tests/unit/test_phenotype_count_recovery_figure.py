@@ -9,6 +9,7 @@ import pytest
 
 from benchmarks.codex_paper_eval import run_eval
 from scripts import build_phenotype_count_recovery as figure
+from scripts import build_stratified_phenotype_count_recovery as stratified
 
 
 def test_marker_size_key_uses_the_same_radius_function_as_plot_bubbles():
@@ -25,6 +26,30 @@ def test_marker_size_key_uses_the_same_radius_function_as_plot_bubbles():
 
 def test_unavailable_preferred_example_is_omitted_without_breaking_later_runs():
     assert figure.draw_example_annotations([], "affected", 100.0, 190.0, 900.0) == []
+
+
+def test_empty_custom_annotation_set_disables_default_examples():
+    row = {
+        "measure": "affected",
+        "gene": "RYR2",
+        "pmid": "15466642",
+        "manual_variant": "I4848V",
+        "manual_count": 4,
+        "ai_count_evaluation": 4,
+    }
+
+    assert (
+        figure.draw_example_annotations(
+            [row],
+            "affected",
+            100.0,
+            190.0,
+            900.0,
+            annotations={},
+            docks={},
+        )
+        == []
+    )
 
 
 def test_annotation_connectors_remain_diagonal_and_dock_on_title_block():
@@ -99,3 +124,46 @@ def test_scoring_artifact_builder_writes_run_scoped_outputs(
         "csv": "figures/data/phenotype_count_recovery.csv",
         "json": "figures/data/phenotype_count_recovery.json",
     }
+
+
+def test_candidate_score_refreshes_both_cumulative_figures(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    commands: list[list[str]] = []
+
+    def fake_run(command, **_kwargs):
+        commands.append(command)
+        return SimpleNamespace(returncode=0, stdout="generated", stderr="")
+
+    monkeypatch.setattr(run_eval.subprocess, "run", fake_run)
+
+    result = run_eval.build_cumulative_phenotype_count_artifacts(
+        {"tranche_consumption": {"comparison_arm": "candidate"}}
+    )
+
+    assert result["status"] == "generated"
+    assert [Path(command[1]).name for command in commands] == [
+        "build_combined_phenotype_count_recovery.py",
+        "build_stratified_phenotype_count_recovery.py",
+    ]
+
+
+def test_baseline_score_does_not_refresh_cumulative_figures():
+    result = run_eval.build_cumulative_phenotype_count_artifacts(
+        {"tranche_consumption": {"comparison_arm": "baseline"}}
+    )
+
+    assert result["status"] == "not_applicable"
+
+
+def test_stratified_cohort_attempt_labels_are_derived_not_hard_coded():
+    svg = stratified.render_svg(
+        [],
+        [],
+        historical_attempt_count=118,
+        mixed_attempt_count=218,
+    )
+
+    assert "Historical cardiac evaluation · 118 gene–paper attempts" in svg
+    assert "Opened mixed-gold candidate arms · 218 gene–paper attempts" in svg
+    assert "Opened mixed-gold calibration · 98 gene–paper attempts" not in svg

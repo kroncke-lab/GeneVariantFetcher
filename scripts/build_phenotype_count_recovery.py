@@ -471,10 +471,17 @@ def draw_example_annotations(
     plot_x: float,
     plot_top: float,
     size: float,
+    *,
+    annotations: dict[tuple[str, str, str, str], tuple[float, float]] | None = None,
+    docks: dict[tuple[str, str, str, str], str] | None = None,
 ) -> list[str]:
     """Label a few source rows without turning the plot into a lookup table."""
+    if annotations is None:
+        annotations = EXAMPLE_ANNOTATIONS
+    if docks is None:
+        docks = EXAMPLE_DOCKS
     output: list[str] = []
-    for (measure, gene, pmid, variant), (dx, dy) in EXAMPLE_ANNOTATIONS.items():
+    for (measure, gene, pmid, variant), (dx, dy) in annotations.items():
         if measure != field:
             continue
         matches = [
@@ -505,7 +512,7 @@ def draw_example_annotations(
             gene=gene,
             variant=variant,
             pmid=pmid,
-            dock=EXAMPLE_DOCKS.get((measure, gene, pmid, variant), "left"),
+            dock=docks.get((measure, gene, pmid, variant), "left"),
         )
         output.extend(
             [
@@ -891,6 +898,11 @@ def render_zero_filled_svg(
     paired_overlap: int,
     run_id: str,
     locked_at: str,
+    *,
+    title: str = "Automated versus reference phenotype counts",
+    example_annotations: dict[tuple[str, str, str, str], tuple[float, float]]
+    | None = None,
+    example_docks: dict[tuple[str, str, str, str], str] | None = None,
 ) -> str:
     """Render the publication figure using evaluation-time zero filling."""
 
@@ -904,11 +916,10 @@ def render_zero_filled_svg(
             f'height="4.2in" viewBox="0 0 {width} {height}" role="img" '
             'aria-labelledby="figure-title figure-desc">'
         ),
-        '<title id="figure-title">Automated versus reference phenotype counts</title>',
+        f'<title id="figure-title">{escape(title)}</title>',
         '<desc id="figure-desc">All identity-matched variant-paper rows are '
-        "scored. Missing automated counts are evaluated as zero. Affected "
-        "zero-filled exactness is 229 of 554 and unaffected zero-filled "
-        "exactness is 489 of 553. Agreement plots use a square-root count scale.</desc>",
+        "scored. Missing automated counts are evaluated as zero. Agreement "
+        "plots use a square-root count scale.</desc>",
         "<metadata>",
         f"Analysis run: {escape(run_id)}",
         f"Locked at: {escape(locked_at)}",
@@ -953,7 +964,7 @@ def render_zero_filled_svg(
         text_element(
             80,
             82,
-            "Automated versus reference phenotype counts",
+            title,
             "title",
         ),
         text_element(100, 161, "Affected individuals", "facet-title"),
@@ -1007,7 +1018,17 @@ def render_zero_filled_svg(
         for group in sorted(groups, key=lambda item: item["n"], reverse=True):
             lines.extend(draw_bubble(group, field, x0, plot_top, plot_size))
         lines.append("</g>")
-        lines.extend(draw_example_annotations(rows, field, x0, plot_top, plot_size))
+        lines.extend(
+            draw_example_annotations(
+                rows,
+                field,
+                x0,
+                plot_top,
+                plot_size,
+                annotations=example_annotations,
+                docks=example_docks,
+            )
+        )
 
     # One key applies to circles and diamonds because both use the same radius
     # function. It is placed over otherwise-empty upper-left plot space.
@@ -1028,7 +1049,14 @@ def render_zero_filled_svg(
     return "\n".join(lines) + "\n"
 
 
-def export_svg_copies(svg_path: Path, png_path: Path, pdf_path: Path) -> list[Path]:
+def export_svg_copies(
+    svg_path: Path,
+    png_path: Path,
+    pdf_path: Path,
+    *,
+    width: int = 2160,
+    height: int = 1260,
+) -> list[Path]:
     """Best-effort vector/raster copies without adding a Python dependency.
 
     librsvg is preferred when installed. macOS ``sips`` is the built-in
@@ -1044,7 +1072,7 @@ def export_svg_copies(svg_path: Path, png_path: Path, pdf_path: Path) -> list[Pa
             [
                 rsvg,
                 "--format=png",
-                "--width=2160",
+                f"--width={width}",
                 "--output",
                 str(png_path),
                 str(svg_path),
@@ -1067,11 +1095,20 @@ def export_svg_copies(svg_path: Path, png_path: Path, pdf_path: Path) -> list[Pa
     if qlmanage and ffmpeg and sips:
         # Quick Look rasterizes the SVG at the requested native width instead
         # of upsampling a 72-dpi preview. It emits a square canvas with the SVG
-        # anchored at the top, so crop exactly to the 2160x1260 viewBox.
+        # anchored at the top, so crop exactly to the requested viewBox.
         with tempfile.TemporaryDirectory(prefix="gvf-phenotype-figure-") as tmp:
             tmp_dir = Path(tmp)
+            preview_size = max(width, height)
             subprocess.run(
-                [qlmanage, "-t", "-s", "2160", "-o", str(tmp_dir), str(svg_path)],
+                [
+                    qlmanage,
+                    "-t",
+                    "-s",
+                    str(preview_size),
+                    "-o",
+                    str(tmp_dir),
+                    str(svg_path),
+                ],
                 check=True,
                 capture_output=True,
                 text=True,
@@ -1086,7 +1123,7 @@ def export_svg_copies(svg_path: Path, png_path: Path, pdf_path: Path) -> list[Pa
                     "-i",
                     str(rendered),
                     "-vf",
-                    "crop=2160:1260:0:0",
+                    f"crop={width}:{height}:0:0",
                     "-frames:v",
                     "1",
                     str(png_path),
@@ -1124,7 +1161,7 @@ def export_svg_copies(svg_path: Path, png_path: Path, pdf_path: Path) -> list[Pa
                 [
                     sips,
                     "--resampleWidth",
-                    "2160",
+                    str(width),
                     str(intermediate),
                     "--out",
                     str(png_path),

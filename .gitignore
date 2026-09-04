@@ -156,6 +156,7 @@ scripts/_inspect_missing.py
 dmypy.json
 
 # Temporary files
+/tmp/
 *.tmp
 *.bak
 .cache/

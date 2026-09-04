@@ -15,6 +15,22 @@ expected recall/MAE effect. If it moved a headline number, also add the detail t
 `RECALL_HISTORY.md`; if it changed the current protocol shape, update
 `ARCHITECTURE.md`. Never rewrite past rows — supersede with a new one.
 
+**Figure (every iteration):** follow
+`docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`. The per-protocol-change figure is the
+stratified phenotype-count recovery figure,
+`docs/figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.{png,svg,csv,json}`
+(recipe: `scripts/build_stratified_phenotype_count_recovery.py`, on the base
+plotting module `scripts/build_phenotype_count_recovery.py` and the
+opened-tranche combiner `scripts/build_combined_phenotype_count_recovery.py`).
+`run_eval.py score` regenerates it after every scored candidate arm; rebuild by
+hand with `.venv/bin/python scripts/build_stratified_phenotype_count_recovery.py`.
+A row that changed the protocol links that figure (and its JSON of run ids) in
+its effect column. The companion difference view, written per scored run to
+`<run>/figures/gold_difference.*` by the same score step and re-rendered by
+`compare` with the registered bounds, shows the identity misses and the frozen
+baseline on the identical gold rows (`scripts/build_gold_difference_figure.py`;
+copies in `docs/figures/gold_difference/`).
+
 Categories: `extract` (prompt/extraction/table logic), `trust` (guards, trust
 gate, final check), `gold` (gold sync/scoring scope), `acquire` (source/
 supplement acquisition), `discover` (search/priority), `infra` (harness, CI,

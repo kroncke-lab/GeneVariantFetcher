@@ -1,5 +1,12 @@
 # Mixed all-gold protocol tranches
 
+> **Superseded after tranche 02.** Tranches 01 and 02 remain immutable,
+> 49-attempt calibration slices. Unopened tranches 03–29 were abandoned on
+> 2026-09-03 in `abandonment_log.jsonl` after the lead requested cohorts at the
+> historical Gate-2 scale. Continue with
+> `../mixed_gold_continuation_120/registry.json`, whose 11 tranches contain
+> 120–121 previously unconsumed gene-paper attempts each.
+
 This seeded suite assigns all **1,422 source-available** gene-paper attempts from the repository's **1,534** named-variant gold inventory to exactly one of **29** mixed tranches.
 
 The primary score is `paper_derived`. Rows originating in ClinVar or PubTator remain locked as `external_linkage_variants` and contribute only to the secondary `linkage_assisted` diagnostic. A database citation is therefore never counted as evidence that the protocol found a variant in the paper. Ambiguous `mixed`, legacy, and unknown origins are locked in `unattributed_variants` but excluded from both scored lanes.

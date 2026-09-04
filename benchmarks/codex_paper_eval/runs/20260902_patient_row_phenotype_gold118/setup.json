@@ -1,0 +1,48 @@
+{
+  "azure_base_present": true,
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of carrier/affected/unaffected assertions. No gold values or row counts were written into this run or supplied to extraction.",
+  "cohort": {
+    "attempt_count": 118,
+    "gene_attempt_counts": {
+      "KCNH2": 28,
+      "KCNQ1": 30,
+      "RYR2": 30,
+      "SCN5A": 30
+    },
+    "id": "gold_120",
+    "manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/tier2_gold_120.tsv",
+    "registry": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/registry.json",
+    "selection_seed": 2026081301,
+    "sha256": "a70389566304ad6573d666721139aaf79c8185631b95c7e1ea86231fad53097e",
+    "unique_pmid_count": 114
+  },
+  "created_at": "2026-09-02T14:12:25.913308+00:00",
+  "provider_configuration_present": {
+    "ANTHROPIC_API_KEY": true,
+    "AZURE_AI_API_KEY": true,
+    "OPENAI_API_KEY": false
+  },
+  "python": "/Users/kronckbm/GitRepos/GeneVariantFetcher/.venv/bin/python",
+  "repository": {
+    "dirty": true,
+    "head": "eb34c363aa202ec9f49cd4e11ffb2e66e270b20b",
+    "runtime_source": {
+      "file_count": 237,
+      "sha256": "ca49ecf87dcb21056947c6804a0148c83de85a7f93d284ff486e828e4741a325"
+    },
+    "status_sha256": "1417f76e31fc325638b825a76efc8751ac123b89515b785c43125964efc63466"
+  },
+  "route": {
+    "calibrated_pmid_files": true,
+    "corpus_sync": false,
+    "driver": "python -m cli gvf-run",
+    "full_coverage": false,
+    "parallel_gene_processes": 4,
+    "primary_projection": "trusted_count_and_identity",
+    "publish_review": false,
+    "reason": "Apples-to-apples current-default recall arm against the accepted 20260820 gold119 production evaluation.",
+    "source_recovery": false
+  },
+  "run_id": "20260902_patient_row_phenotype_gold118",
+  "schema_version": 1
+}

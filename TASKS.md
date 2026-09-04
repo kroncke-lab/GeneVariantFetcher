@@ -18,6 +18,15 @@ Dated reports and benchmark run directories are evidence, not competing plans.
 Execute the acceptance gates in order. Do not publish a new headline, update the
 dashboard, enable a default-off recovery stage, or advance to a larger cohort
 until the preceding gate passes and its artifact is recorded.
+Every scored candidate arm regenerates the per-protocol-change figure
+(`docs/figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.*`,
+recipe `scripts/build_stratified_phenotype_count_recovery.py`) and every scored
+run writes the companion difference view `figures/gold_difference.*` (automated
+minus reference over every asserted gold row, candidate over frozen baseline;
+`compare` re-renders it with the registered bounds). Link the figure from the
+`docs/PROTOCOL_CHANGELOG.md` row for every protocol change. The hierarchy,
+zero-imputation semantics, provenance, and visual QA requirements are defined in
+`docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`.
 
 ## Active $100 improvement goal
 

@@ -1,0 +1,147 @@
+{
+  "analysis_run": "mixed_gold_opened_candidates_01_02_01",
+  "figure_contract": {
+    "evaluation_missing_count": 0,
+    "included_arms": "scored candidate arms only",
+    "included_tranches": [
+      "mixed_gold_01",
+      "mixed_gold_02",
+      "mixed_gold_cont120_01"
+    ],
+    "labeled_variant_paper_pairs": [
+      {
+        "gene": "SCN5A",
+        "measure": "affected",
+        "pmid": "30059973",
+        "variant": "E1784K"
+      },
+      {
+        "gene": "MYBPC3",
+        "measure": "affected",
+        "pmid": "33673806",
+        "variant": "c.3181C>T"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "affected",
+        "pmid": "15466642",
+        "variant": "I4848V"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "affected",
+        "pmid": "15466642",
+        "variant": "I419F"
+      },
+      {
+        "gene": "KCNQ1",
+        "measure": "unaffected",
+        "pmid": "21138517",
+        "variant": "G589D"
+      },
+      {
+        "gene": "KCNQ1",
+        "measure": "unaffected",
+        "pmid": "33498651",
+        "variant": "P631fsX"
+      },
+      {
+        "gene": "SCN5A",
+        "measure": "unaffected",
+        "pmid": "26803770",
+        "variant": "R1644H"
+      },
+      {
+        "gene": "SCN5A",
+        "measure": "unaffected",
+        "pmid": "11463728",
+        "variant": "V1777M"
+      }
+    ],
+    "marker_size_key_pairs": [
+      5,
+      10,
+      25
+    ],
+    "storage_missing_count": null,
+    "title": "Automated versus reference phenotype counts in opened mixed-gold candidates",
+    "unopened_tranches": "excluded"
+  },
+  "locked_at": "2026-09-03T23:52:59.594246+00:00",
+  "metrics": {
+    "affected": {
+      "ai_max": 24,
+      "count_extracted": 206,
+      "count_extracted_fraction": 0.30116959064327486,
+      "difference_equal_one": 257,
+      "exact": 259,
+      "exact_fraction": 0.3786549707602339,
+      "gold_asserted": 928,
+      "gold_nonzero": 571,
+      "greater_than_one": 168,
+      "identity_coverage": 0.7370689655172413,
+      "identity_matched": 684,
+      "identity_miss": 244,
+      "increment_over_zero_baseline": 0.2134502923976608,
+      "mae": 1.4181286549707601,
+      "manual_max": 69,
+      "median_absolute_difference": 1.0,
+      "nonzero_exact": 170,
+      "nonzero_exact_fraction": 0.29772329246935203,
+      "rmse": 3.649481257698469,
+      "within_one": 516,
+      "zero_baseline_exact": 113,
+      "zero_baseline_fraction": 0.1652046783625731,
+      "zero_filled": 478,
+      "zero_filled_fraction": 0.6988304093567251
+    },
+    "unaffected": {
+      "ai_max": 9,
+      "count_extracted": 33,
+      "count_extracted_fraction": 0.04824561403508772,
+      "difference_equal_one": 30,
+      "exact": 635,
+      "exact_fraction": 0.9283625730994152,
+      "gold_asserted": 928,
+      "gold_nonzero": 54,
+      "greater_than_one": 19,
+      "identity_coverage": 0.7370689655172413,
+      "identity_matched": 684,
+      "identity_miss": 244,
+      "increment_over_zero_baseline": 0.007309941520467836,
+      "mae": 0.18859649122807018,
+      "manual_max": 20,
+      "median_absolute_difference": 0.0,
+      "nonzero_exact": 11,
+      "nonzero_exact_fraction": 0.2037037037037037,
+      "rmse": 1.2594670737822091,
+      "within_one": 665,
+      "zero_baseline_exact": 630,
+      "zero_baseline_fraction": 0.9210526315789473,
+      "zero_filled": 651,
+      "zero_filled_fraction": 0.9517543859649122
+    }
+  },
+  "paired_rows_in_both_measures": 684,
+  "row_grain": "identity-matched variant-paper row and count measure",
+  "source_runs": [
+    {
+      "predictions_sha256": "cab68422a9aeb338314138ce9a26b005affab45076a01fc998e163fdd5161699",
+      "run_id": "20260903_protocol_mixed01_candidate",
+      "selection_sha256": "268a971c4e8cbee52e878995c1471e436b8cc796db4b6af903fd63159ce014fa",
+      "tier_id": "mixed_gold_01"
+    },
+    {
+      "predictions_sha256": "f627deddca64ecf8dd60f823c92d1a2b433284b4389adb6727111f8929031b97",
+      "run_id": "20260903_protocol_mixed02_candidate",
+      "selection_sha256": "c5a6891996fa70af6b5b75692583effe2fa4b84e5a4944664a881e8016b11e05",
+      "tier_id": "mixed_gold_02"
+    },
+    {
+      "predictions_sha256": "7cf77c800667269c08948a1e9e65f2109994c854e82d1f21751b37f9279b84d4",
+      "run_id": "20260903_protocol_cont120_01_candidate",
+      "selection_sha256": "f34730b3c7efe7afdb23f43b553026054464452136c5218d9ae65f9e12e028a2",
+      "tier_id": "mixed_gold_cont120_01"
+    }
+  ]
+}

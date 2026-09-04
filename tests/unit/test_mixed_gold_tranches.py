@@ -12,6 +12,7 @@ import pytest
 from benchmarks.codex_paper_eval.db_to_predictions import trace_usage
 from benchmarks.evaluation_tiers.build_mixed_tranches import (
     digest_answer_key,
+    excluded_pmids,
     sha256_file,
 )
 
@@ -28,6 +29,23 @@ def _manifest_rows(path: Path) -> list[tuple[str, str]]:
             gene, pmid = line.split()
             rows.append((gene, pmid))
     return rows
+
+
+def test_exclusion_manifests_remove_whole_articles_and_bind_their_bytes(
+    tmp_path: Path,
+):
+    first = tmp_path / "first.tsv"
+    second = tmp_path / "second.tsv"
+    first.write_text("# consumed\nKCNH2\t123\nKCNQ1\t123\n")
+    second.write_text("SCN5A\t456\n")
+
+    pmids, metadata = excluded_pmids([first, second])
+
+    assert pmids == {"123", "456"}
+    assert [record["sha256"] for record in metadata] == [
+        sha256_file(first),
+        sha256_file(second),
+    ]
 
 
 def test_every_runnable_attempt_is_assigned_once_and_articles_are_atomic():

@@ -14,6 +14,7 @@ the newest-looking filename.
 | How to raise gold-120 identity precision and cut cost? | [`PRECISION_COST_LEVERS.md`](PRECISION_COST_LEVERS.md) (ranking); paper-level evidence in `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/` |
 | How to raise affected/unaffected *value* precision? | [`AFFECTED_UNAFFECTED_PRECISION.md`](AFFECTED_UNAFFECTED_PRECISION.md) (exact-match of emitted integers; not Gate 2) |
 | What are the current measured metrics and caveats? | [`RECALL_STATUS.md`](RECALL_STATUS.md) |
+| How should phenotype-count progress and protocol deltas be plotted? | [`PHENOTYPE_COUNT_FIGURE_POLICY.md`](PHENOTYPE_COUNT_FIGURE_POLICY.md): the stratified automated-versus-reference figure is canonical; the all-row paired difference figure is its companion. Outputs: [`figures/evaluated_phenotype_counts/`](figures/evaluated_phenotype_counts/) and [`figures/gold_difference/`](figures/gold_difference/README.md). |
 | How does the current pipeline work? | [`ARCHITECTURE.md`](ARCHITECTURE.md) and [`EXTRACTION_CONTRACT.md`](EXTRACTION_CONTRACT.md) |
 | How do I install and run it? | [`QUICKSTART.md`](QUICKSTART.md) |
 | How do I refresh an existing run? | [`RECALL_REFRESH_RUNBOOK.md`](RECALL_REFRESH_RUNBOOK.md) |

@@ -49,6 +49,8 @@ biomedical literature for the Kroncke Lab variant interpretation pipeline.
   reason code that backs it (or the note that nothing does).
 - `docs/LLM_TRACING.md` - per-call prompt/response and decision trace contract,
   benchmark locking, and the curator adjudication workflow.
+- `docs/PHENOTYPE_COUNT_FIGURE_POLICY.md` - canonical progress figure versus
+  companion difference figure, their evaluation semantics, lifecycle, and QA.
 - `docs/VARIANT_BROWSER_INTEGRATION.md` - publish/adjudication round trip with
   the sibling Variant_Browser app.
 - `benchmarks/curated_extraction_eval/README.md` - fast curated extraction
@@ -167,6 +169,12 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
   the browser report is built by `utils/llm_trace_html.py`
   (`scripts/build_llm_trace_html.py` is a thin CLI). Contract, run isolation,
   integrity levels, and the report size policy are in `docs/LLM_TRACING.md`.
+- Per-protocol-change figures follow
+  `docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`. The stratified
+  automated-versus-reference view is canonical; the per-run all-gold-row
+  difference view adds identity misses and frozen-baseline deltas but never
+  replaces or pools the canonical view. `run_eval.py score` generates both at
+  the required cadence, and `compare` adds registered bounds to the companion.
 
 ## Files To Know
 

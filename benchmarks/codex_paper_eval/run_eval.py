@@ -3102,6 +3102,151 @@ def build_phenotype_count_recovery_artifacts(
     }
 
 
+def build_cumulative_phenotype_count_artifacts(
+    report: dict[str, Any],
+) -> dict[str, Any]:
+    """Refresh the opened-candidate and stratified progress figures."""
+
+    consumption = report.get("tranche_consumption") or {}
+    if consumption.get("comparison_arm") != "candidate":
+        return {
+            "status": "not_applicable",
+            "reason": "cumulative figure refreshes after scored candidate arms",
+        }
+    scripts = {
+        "opened_mixed_candidates": (
+            REPO / "scripts" / "build_combined_phenotype_count_recovery.py"
+        ),
+        "stratified_evaluated_cohorts": (
+            REPO / "scripts" / "build_stratified_phenotype_count_recovery.py"
+        ),
+    }
+    result: dict[str, Any] = {"status": "generated", "renderers": {}}
+    for name, script in scripts.items():
+        completed = subprocess.run(
+            [sys.executable, str(script)], capture_output=True, text=True
+        )
+        result["renderers"][name] = {
+            "returncode": completed.returncode,
+            "output": (completed.stdout or completed.stderr).strip().splitlines(),
+        }
+        if completed.returncode != 0:
+            result["status"] = "failed"
+    return result
+
+
+def build_gold_difference_artifacts(
+    run_dir: Path, gold_root: Path, report: dict[str, Any]
+) -> dict[str, Any]:
+    """Render the companion difference view of the phenotype-count figure family.
+
+    The canonical per-protocol-change figure is the stratified phenotype-count
+    recovery figure refreshed by ``build_cumulative_phenotype_count_artifacts``
+    after each scored candidate. This companion plots automated minus reference
+    counts for every gold row with an asserted value (identity misses and
+    abstentions scored as zero) and, for a candidate arm, draws the frozen
+    baseline on the identical rows; ``compare`` re-renders it once the
+    registered bounds exist. A rendering failure is recorded in the report; it
+    never blocks or alters the score.
+    """
+
+    count_metrics = (report.get("overall") or {}).get("count") or {}
+    if not any(
+        int((count_metrics.get(field) or {}).get("gold_asserted") or 0)
+        for field in COUNT_FIELDS
+    ):
+        return {
+            "status": "not_applicable",
+            "reason": "no authoritative gold count assertions",
+        }
+    figure_dir = run_dir / "figures"
+    outputs = {
+        "svg": figure_dir / "gold_difference.svg",
+        "png": figure_dir / "gold_difference.png",
+        "pdf": figure_dir / "gold_difference.pdf",
+        "csv": figure_dir / "data" / "gold_difference.csv",
+        "json": figure_dir / "data" / "gold_difference.json",
+    }
+    command = [
+        sys.executable,
+        str(REPO / "scripts" / "build_gold_difference_figure.py"),
+        "--run-dir",
+        str(run_dir),
+        "--gold-root",
+        str(gold_root),
+        "--out-dir",
+        str(figure_dir),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        return {
+            "status": "failed",
+            "detail": (result.stderr or result.stdout or "unknown renderer error")[
+                -1200:
+            ],
+        }
+    return {
+        "status": "generated",
+        "files": {
+            key: str(path.relative_to(run_dir))
+            for key, path in outputs.items()
+            if path.is_file()
+        },
+        "evaluation_rule": (
+            "automated minus reference for every asserted gold row; identity miss "
+            "and abstention scored as 0"
+        ),
+        "renderer_output": result.stdout.strip().splitlines(),
+    }
+
+
+def refresh_gold_difference_after_compare(
+    baseline_report: Path,
+    candidate_report: Path,
+    comparison_path: Path,
+    gold_root: Path | None,
+) -> dict[str, Any]:
+    """Re-render the candidate's gold difference figure with the registered bounds."""
+
+    candidate_dir = candidate_report.parent
+    baseline_dir = baseline_report.parent
+    for required in (
+        candidate_dir / "predictions.json",
+        candidate_dir / "LOCK.json",
+        baseline_dir / "predictions.json",
+        baseline_dir / "LOCK.json",
+    ):
+        if not required.is_file():
+            return {"status": "not_applicable", "reason": f"missing {required}"}
+    command = [
+        sys.executable,
+        str(REPO / "scripts" / "build_gold_difference_figure.py"),
+        "--run-dir",
+        str(candidate_dir),
+        "--baseline-run-dir",
+        str(baseline_dir),
+        "--comparison-json",
+        str(comparison_path.resolve()),
+        "--out-dir",
+        str(candidate_dir / "figures"),
+    ]
+    if gold_root is not None:
+        command.extend(["--gold-root", str(gold_root.resolve())])
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        return {
+            "status": "failed",
+            "detail": (result.stderr or result.stdout or "unknown renderer error")[
+                -1200:
+            ],
+        }
+    return {
+        "status": "generated",
+        "figure": str(candidate_dir / "figures" / "gold_difference.svg"),
+        "renderer_output": result.stdout.strip().splitlines(),
+    }
+
+
 def score_prediction_lane(
     selection: dict,
     predictions: dict,
@@ -3356,6 +3501,15 @@ def command_compare(args) -> None:
         comparison["integrity"]["secondary_endpoints_sha256"] = digest(secondary_path)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     write_json(args.out, comparison)
+    refresh = refresh_gold_difference_after_compare(
+        baseline_path, candidate_path, args.out, getattr(args, "gold_root", None)
+    )
+    if refresh.get("status") == "failed":
+        print(
+            "warning: gold difference figure not refreshed: "
+            + str(refresh.get("detail")),
+            file=sys.stderr,
+        )
     print(args.out)
 
 
@@ -3596,6 +3750,12 @@ def command_score(args) -> None:
     write_paper_metrics_csv(scores, run_dir / "paper_metrics.csv")
     report.setdefault("artifacts", {})["phenotype_count_recovery"] = (
         build_phenotype_count_recovery_artifacts(run_dir, gold_root, report)
+    )
+    report["artifacts"]["cumulative_phenotype_count_recovery"] = (
+        build_cumulative_phenotype_count_artifacts(report)
+    )
+    report["artifacts"]["gold_difference"] = build_gold_difference_artifacts(
+        run_dir, gold_root, report
     )
     write_json(run_dir / "report.json", report)
     write_markdown_report(report, run_dir / "report.md")
