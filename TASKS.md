@@ -556,6 +556,14 @@ remain specialized or historical evidence, not extra gates.
       — needs a per-paper look at what the oversized supplement is), a
       gene-scoped trim, or leave-and-rely-on-the-scout-budget. Do not delete
       or blind-truncate hard-won source.
+      2026-09-04 reviewer note at the PR #183 merge (grok 4.6 xhigh): after
+      the merge, `_expand_pending_archives` feeds nested-zip members through
+      the same per-file/total caps, and a cap skip is recorded only as an
+      omitted label, so a re-fold may legally drop previously folded text
+      (placeholder skips carry the old block forward; cap skips do not).
+      Before re-folding any giant paper, decide whether cap skips should
+      carry forward or refuse the re-fold, and add a nested-archive + cap +
+      re-fold test; neither side has one.
 
 Source acquisition is still the dominant recall opportunity. Do not replace a
 missing paper or table with speculative count arithmetic.
