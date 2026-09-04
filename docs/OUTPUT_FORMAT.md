@@ -201,6 +201,12 @@ CREATE TABLE fact_provenance (
 );
 ```
 
+For deterministic table extractions, migration maps the canonical JSON
+locators `source_ref`, `row_label`, and `column_ref` to `source_table`,
+`source_row`, and `source_column`. This keeps the exact count cell auditable and
+lets the trust gate distinguish a labelled per-variant table fact from an
+unlabelled or prose-derived count.
+
 #### `functional_data`
 Functional study results.
 

@@ -551,7 +551,7 @@ unacceptable MAE or attribution regression (see `TASKS.md`).
 ### Gold-free trust gate (Step 3.7) and traceability
 
 Before the LLM final check, a deterministic **gold-free** gate
-(`pipeline/trust_gate.py`, rule generation **tg4**) soft-quarantines
+(`pipeline/trust_gate.py`, rule generation **tg6**) soft-quarantines
 structurally-implausible counts into a two-tier (`trusted` / `quarantine`)
 projection. It **never** deletes a row or NULLs a raw value — quarantined fields
 are only masked from the trusted projection the scorer/report read by default,
@@ -564,7 +564,7 @@ transfer from cardiac missense to BRCA case-control:
 | `negative_count` | any carrier/affected/unaffected/uncertain < 0 |
 | `count_is_total` | the "carrier" count is really a cohort denominator / screened-N |
 | `population_count` | population allele magnitude (gnomAD/MAF label, or above the population ceiling) |
-| `paper_outlier` | carrier count is a wild within-paper outlier (median × k) |
+| `paper_outlier` | carrier count is a wild within-paper outlier (median × k, >50 absolute), unless the exact fact is an explicitly labelled per-variant cell from the code-owned deterministic table parser; prose-derived, model-authored, and unlabelled counts remain eligible for quarantine |
 | `study_type_mismatch` | clinical carrier counts from a review/functional/GWAS paper |
 | `implied_unaffected_zero` | a *derived* unaffected=0 (affected=total, zero not sourced) in an affirmatively cohort/biobank/case-control/family-cascade study — masks **only** the unaffected field; dormant on proband/unknown-design papers |
 | `recovered_count_unverified` | a count written by Step 3.55 whose provenance does not name the per-variant role for the field it filled — recovery lands rows as `quarantine` on purpose, so this gate is what *promotes* them |
@@ -577,7 +577,11 @@ to the row-level `trust_tier` when field masks are absent.
 **Traceability.** `variant_papers.source_notation` stores the verbatim variant
 string as written in each paper (before normalization), captured from the LLM
 schema and the deterministic regex-table parser, so a curator can trace a
-normalized ID back to the source and catch normalization errors.
+normalized ID back to the source and catch normalization errors. Migration also
+copies canonical table `source_ref`, `row_label`, and `column_ref` locators into
+`fact_provenance`; Step 3.7 binds the exact carrier fact by variant, PMID, and
+value before applying the table-cell exception. Older databases retain the
+conservative `variant_papers` source-layer/location fallback.
 
 **Design-aware discovery.** PubMed discovery includes a dedicated
 penetrance/segregation/cascade/unaffected-carrier query lane

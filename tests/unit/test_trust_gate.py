@@ -60,6 +60,54 @@ def test_paper_outlier_needs_enough_rows():
     assert evaluate_fact({"carriers": 92}, paper_stats=stats) == []
 
 
+def test_labelled_deterministic_table_count_outranks_paper_median():
+    stats = {"carriers_median": 2, "carriers_n": 185}
+    provenance = {
+        "carriers_column_label": "n",
+        "carriers_count_type": "per_variant_carrier",
+        "_carriers_fact_source_layer": "regex_table",
+        "_carriers_fact_source_location": "Fixed-width table",
+        "_carriers_fact_source_column": "n",
+    }
+
+    assert "paper_outlier" not in evaluate_fact(
+        {"carriers": 69}, provenance=provenance, paper_stats=stats
+    )
+
+    # Current migrations persist the table header separately from the generic
+    # location. The header need not contain the literal word "table".
+    provenance["_carriers_fact_source_table"] = (
+        "SCN5A mutations Exon Aminoacid changes Effect n"
+    )
+    assert "paper_outlier" not in evaluate_fact(
+        {"carriers": 69}, provenance=provenance, paper_stats=stats
+    )
+
+
+def test_model_authored_or_unlabelled_outlier_still_quarantines():
+    stats = {"carriers_median": 2, "carriers_n": 185}
+    model_authored = {
+        "carriers_column_label": "n",
+        "carriers_count_type": "per_variant_carrier",
+        "_carriers_fact_source_layer": "llm_table",
+        "_carriers_fact_source_location": "Table 2",
+        "_carriers_fact_source_column": "n",
+    }
+    unlabelled = {
+        "carriers_column_label": None,
+        "carriers_count_type": "per_variant_carrier",
+        "_carriers_fact_source_layer": "regex_table",
+        "_carriers_fact_source_location": "Fixed-width table",
+    }
+
+    assert "paper_outlier" in evaluate_fact(
+        {"carriers": 69}, provenance=model_authored, paper_stats=stats
+    )
+    assert "paper_outlier" in evaluate_fact(
+        {"carriers": 69}, provenance=unlabelled, paper_stats=stats
+    )
+
+
 def test_multiple_reasons_accumulate():
     reasons = evaluate_fact(
         {"carriers": 250_000, "affected": 300_000, "unaffected": 0},
@@ -69,10 +117,10 @@ def test_multiple_reasons_accumulate():
 
 
 def test_rule_version_is_stable_and_tagged():
-    # tg5 adds family_count_not_carrier. The prefix is bumped deliberately so a
-    # stored fact records which rule generation tiered it.
+    # tg6 lets code-parsed labelled table facts outrank the median heuristic.
+    # The prefix is bumped deliberately so stored facts pin that decision.
     version = trust_gate.rule_version()
-    assert version.startswith("tg5-")
+    assert version.startswith("tg6-")
     assert version == trust_gate.rule_version()
 
 
@@ -221,7 +269,7 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert stats["trusted"] == 1
     assert stats["quarantine"] == 1
     assert stats["by_reason"].get("population_count") == 1
-    assert stats["rule_version"].startswith("tg5-")
+    assert stats["rule_version"].startswith("tg6-")
 
     conn = sqlite3.connect(db)
     try:
@@ -240,6 +288,64 @@ def test_apply_trust_gate_soft_quarantines_and_preserves_counts(tmp_path):
     assert "population_count" in rows[2][2]
     # soft-quarantine: the raw count is preserved, never NULLed.
     assert rows[2][3] == 200_000
+
+
+def test_apply_trust_gate_retains_only_source_supported_table_outlier(tmp_path):
+    db = str(tmp_path / "t.db")
+    conn = create_database_schema(db)
+    try:
+        for pid, carriers in enumerate((1, 1, 2, 3), start=1):
+            _seed(conn, pid, "30059973", {"carriers": carriers})
+        _seed(
+            conn,
+            69,
+            "30059973",
+            {"carriers": 69},
+            count_provenance={
+                "carriers_column_label": "n",
+                "carriers_count_type": "per_variant_carrier",
+            },
+        )
+        conn.execute(
+            "UPDATE variant_papers SET source_layer='regex_table', "
+            "source_location='Fixed-width table' WHERE variant_id=69"
+        )
+
+        for pid, carriers in enumerate((1, 1, 2, 3), start=101):
+            _seed(conn, pid, "22338672", {"carriers": carriers})
+        _seed(
+            conn,
+            156,
+            "22338672",
+            {"carriers": 56},
+            count_provenance={"carriers_count_type": "per_variant_carrier"},
+        )
+        conn.execute(
+            "UPDATE variant_papers SET source_layer='llm_text', "
+            "source_location='Results' WHERE variant_id=156"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    stats = apply_trust_gate(db)
+    assert stats["paper_outlier_source_supported"] == 1
+    assert stats["by_reason"] == {"paper_outlier": 1}
+
+    conn = sqlite3.connect(db)
+    try:
+        retained = conn.execute(
+            "SELECT trust_tier, trust_reasons FROM penetrance_data WHERE variant_id=69"
+        ).fetchone()
+        quarantined = conn.execute(
+            "SELECT trust_tier, trust_reasons FROM penetrance_data WHERE variant_id=156"
+        ).fetchone()
+    finally:
+        conn.close()
+
+    assert retained == ("trusted", "[]")
+    assert quarantined[0] == "quarantine"
+    assert json.loads(quarantined[1]) == ["paper_outlier"]
 
 
 def test_apply_trust_gate_masks_family_count_only_from_carrier_total(tmp_path):

@@ -383,6 +383,48 @@ def test_insert_variant_data_writes_standard_fact_provenance_idempotently(tmp_pa
     conn.close()
 
 
+def test_fixed_width_count_keeps_canonical_row_locator_in_fact_provenance(tmp_path):
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('30059973')")
+    variant = {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": "c.5350G>A",
+        "protein_notation": "p.Glu1784Lys",
+        "source_location": "Fixed-width table",
+        "source_kind": "table",
+        "source_ref": "SCN5A mutations Exon Aminoacid changes Effect n",
+        "row_label": "c5350G>A 28 pGlu1784Lys Gain and loss 69",
+        "column_ref": "n",
+        "source_layer": "regex_table",
+        "patients": {"count": 69},
+        "penetrance_data": {"total_carriers_observed": 69},
+        "count_provenance": {
+            "carriers_column_label": "n",
+            "carriers_count_type": "per_variant_carrier",
+        },
+    }
+
+    insert_variant_data(cur, "30059973", variant)
+    conn.commit()
+    row = conn.execute(
+        """
+        SELECT source_table, source_row, source_column, count_type, source_layer
+        FROM fact_provenance
+        WHERE fact_type = 'total_carriers_observed'
+        """
+    ).fetchone()
+    conn.close()
+
+    assert row == (
+        "SCN5A mutations Exon Aminoacid changes Effect n",
+        "c5350G>A 28 pGlu1784Lys Gain and loss 69",
+        "n",
+        "per_variant_carrier",
+        "regex_table",
+    )
+
+
 def test_insert_variant_data_merges_age_bins_from_duplicate_penetrance(tmp_path):
     """Duplicate parent rows can still carry unique age-stratified child facts."""
     conn = create_database_schema(str(tmp_path / "t.db"))

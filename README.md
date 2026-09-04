@@ -25,7 +25,11 @@ marginal case — routed through
 per-run critical path, never a required step. A per-fact **trust gate** sorts
 every extracted fact into a **trusted** or **quarantine** tier using gold-free
 structural checks (`pipeline/trust_gate.py`, default-on in `gvf-run`;
-`scripts/trust_report.py` inspects the tiers). The optional source-grounded
+`scripts/trust_report.py` inspects the tiers). Its within-paper outlier rule is
+a triage fallback: an explicitly labelled
+per-variant count read by the deterministic table parser remains trusted, while
+prose-derived, model-authored, and unlabelled outliers remain quarantined. The
+optional source-grounded
 final-check composer (`pipeline/paper_final_check_gate.py`) adds exact
 model-found contradictions on top, and is currently parked — see
 [`docs/EXTRACTION_CONTRACT.md`](docs/EXTRACTION_CONTRACT.md). The comparison scorer
@@ -187,7 +191,10 @@ GVF's default workflow is:
 4. Reuse or update the local source corpus under `corpus/`.
 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
 6. Migrate extraction JSON to SQLite.
-7. Run DB-observed recovery layers and the default-on per-fact trust gate.
+7. Run DB-observed recovery layers and the default-on per-fact trust gate. Its
+   within-paper median rule yields to an explicitly labelled per-variant cell
+   from the deterministic table parser, but still quarantines prose-derived,
+   model-authored, and unlabelled outliers.
 8. Optionally run the `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test
    (Step 3.8). **Parked — default off since 2026-07-26**; the cost and latency of
    an `@xhigh` call per paper were not justified by its measured effect on a step

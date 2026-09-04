@@ -2085,13 +2085,22 @@ def _insert_standard_fact_provenance(
         source_layer=source_layer,
     )
 
-    # Structured locators the extractor may attach at the variant top level
-    # (e.g. the table-regex pass records source_table/source_row/source_column +
-    # the verbatim row). Thread them into the synthesized identity fact so the
-    # within-paper coordinate survives to fact_provenance.
+    # Structured locators the extractor may attach at the variant top level.
+    # Deterministic table parsers use the canonical extraction-schema names
+    # source_ref/row_label/column_ref; older paths used
+    # source_table/source_row/source_column.  Preserve both forms so the exact
+    # row/column survives into fact_provenance instead of collapsing to the
+    # generic source_location string.
     top_source_table = variant_data.get("source_table")
-    top_source_row = variant_data.get("source_row")
-    top_source_column = variant_data.get("source_column")
+    if (
+        not top_source_table
+        and str(variant_data.get("source_kind") or "").lower() == "table"
+    ):
+        top_source_table = variant_data.get("source_ref")
+    top_source_row = variant_data.get("source_row") or variant_data.get("row_label")
+    top_source_column = variant_data.get("source_column") or variant_data.get(
+        "column_ref"
+    )
     top_evidence_quote = variant_data.get("evidence_quote") or quote
 
     for notation_key in (
@@ -2142,6 +2151,8 @@ def _insert_standard_fact_provenance(
             fact_type="patient_count",
             fact_value=patients.get("count"),
             source_location=source_location,
+            source_table=top_source_table,
+            source_row=top_source_row,
             source_column=column,
             evidence_quote=quote,
             count_type=count_type,
@@ -2166,6 +2177,8 @@ def _insert_standard_fact_provenance(
             fact_type=fact_type,
             fact_value=penetrance.get(fact_type),
             source_location=source_location,
+            source_table=top_source_table,
+            source_row=top_source_row,
             source_column=column,
             evidence_quote=quote,
             count_type=count_type,

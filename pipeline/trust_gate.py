@@ -84,6 +84,14 @@ POPULATION_CARRIER_CEILING = 100_000
 OUTLIER_K = 10
 OUTLIER_ABS_FLOOR = 50
 
+# A deterministic table parser reads one source row at a time and assigns the
+# count column in code.  An explicit per-variant count from that lane is stronger
+# evidence than the paper-level median heuristic: a real founder/hotspot variant
+# can legitimately have tens of carriers while every other row is a singleton.
+# Model-authored ``llm_table`` provenance is deliberately excluded because its
+# role declaration is not independently structural.
+SOURCE_SUPPORTED_TABLE_LAYERS = frozenset({"regex_table"})
+
 # Study designs where a clinical per-variant carrier/penetrance count is a trap
 # (review, pure functional, GWAS allele tables). Soft-quarantine via
 # study_type_mismatch; never delete the row.
@@ -186,6 +194,7 @@ def rule_version() -> str:
             "population_ceiling": POPULATION_CARRIER_CEILING,
             "outlier_k": OUTLIER_K,
             "outlier_floor": OUTLIER_ABS_FLOOR,
+            "source_supported_table_layers": sorted(SOURCE_SUPPORTED_TABLE_LAYERS),
             "population_label_re": POPULATION_LABEL_RE.pattern,
             "study_type_mismatch_designs": sorted(STUDY_TYPE_MISMATCH_DESIGNS),
             "population_study_designs": sorted(POPULATION_STUDY_DESIGNS),
@@ -201,9 +210,10 @@ def rule_version() -> str:
         },
         sort_keys=True,
     )
-    # tg5: family counts remain auditable raw evidence but no longer project as
-    # individual carrier totals.
-    return "tg5-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    # tg6: an explicitly labelled, code-parsed per-variant table cell outranks
+    # the within-paper median heuristic.  The outlier rule remains active for
+    # prose, model-authored tables, and unlabelled/ambiguous count columns.
+    return "tg6-" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
 def _as_int(value: Any) -> Optional[int]:
@@ -213,6 +223,61 @@ def _as_int(value: Any) -> Optional[int]:
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _paper_outlier_triggered(
+    counts: dict[str, Any], paper_stats: Optional[dict[str, Any]] = None
+) -> bool:
+    """Whether the magnitude-only within-paper outlier predicate fires."""
+    paper_stats = paper_stats or {}
+    carriers = _as_int(counts.get("carriers"))
+    median = paper_stats.get("carriers_median")
+    n = paper_stats.get("carriers_n") or 0
+    return bool(
+        carriers is not None
+        and median is not None
+        and n >= 3
+        and median > 0
+        and carriers > median * OUTLIER_K
+        and carriers > OUTLIER_ABS_FLOOR
+    )
+
+
+def _source_supported_table_carrier(provenance: dict[str, Any]) -> bool:
+    """Return True for a labelled per-variant count read by code from a table.
+
+    ``variant_papers`` supplies the legacy source-layer/location fallback;
+    ``fact_provenance`` supplies the exact count fact's locator on current DBs.
+    The layer restriction is the non-forgeable boundary: an LLM may declare a
+    role or label, but it cannot turn its row into ``regex_table``.
+    """
+    count_type = str(provenance.get("carriers_count_type") or "").strip().lower()
+    label = str(provenance.get("carriers_column_label") or "").strip()
+    fact_column = str(provenance.get("_carriers_fact_source_column") or "").strip()
+    layer = (
+        str(
+            provenance.get("_carriers_fact_source_layer")
+            or provenance.get("_variant_paper_source_layer")
+            or ""
+        )
+        .strip()
+        .lower()
+    )
+    source_table = str(provenance.get("_carriers_fact_source_table") or "").strip()
+    source_location = str(
+        provenance.get("_carriers_fact_source_location")
+        or provenance.get("_variant_paper_source_location")
+        or ""
+    ).strip()
+    has_table_locator = bool(source_table) or "table" in source_location.casefold()
+
+    return bool(
+        count_type == "per_variant_carrier"
+        and label
+        and (not fact_column or fact_column.casefold() == label.casefold())
+        and layer in SOURCE_SUPPORTED_TABLE_LAYERS
+        and has_table_locator
+    )
 
 
 def evaluate_fact(
@@ -368,15 +433,10 @@ def evaluate_fact(
         reasons.add("study_type_mismatch")
 
     # paper_outlier: carrier count is a wild outlier vs the paper's other rows.
-    median = paper_stats.get("carriers_median")
-    n = paper_stats.get("carriers_n") or 0
-    if (
-        carriers is not None
-        and median is not None
-        and n >= 3
-        and median > 0
-        and carriers > median * OUTLIER_K
-        and carriers > OUTLIER_ABS_FLOOR
+    # A code-parsed, explicitly labelled per-variant table cell is primary
+    # source evidence and outranks this distributional triage signal.
+    if _paper_outlier_triggered(counts, paper_stats) and not (
+        _source_supported_table_carrier(provenance)
     ):
         reasons.add("paper_outlier")
 
@@ -420,6 +480,10 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
     conn = sqlite3.connect(db_path)
     try:
         conn.row_factory = sqlite3.Row
+        tables = {
+            r[0]
+            for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        }
         pd_cols = {r[1] for r in conn.execute("PRAGMA table_info(penetrance_data)")}
         for name, declaration in (
             ("trust_tier", "TEXT DEFAULT 'trusted'"),
@@ -468,6 +532,7 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
             for r in conn.execute(
                 f"""
                 SELECT pd.penetrance_id       AS penetrance_id,
+                       pd.variant_id           AS variant_id,
                        pd.pmid                 AS pmid,
                        pd.total_carriers_observed AS carriers,
                        pd.affected_count       AS affected,
@@ -478,6 +543,8 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                        pd.trust_rule_version    AS existing_trust_rule_version,
                        pd.field_trust           AS existing_field_trust,
                        vp.count_provenance     AS count_provenance,
+                       vp.source_layer         AS variant_paper_source_layer,
+                       vp.source_location      AS variant_paper_source_location,
                        {role_sql},
                        {study_sql}
                 FROM penetrance_data pd
@@ -494,11 +561,55 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
             )
         ]
 
+        # Bind the exact carrier fact's code-owned source and locator to the
+        # trust decision.  Older DBs may not have fact_provenance; the persisted
+        # variant_papers layer/location above remains the conservative fallback.
+        carrier_fact_provenance: dict[tuple[int, str, int], dict[str, Any]] = {}
+        if "fact_provenance" in tables:
+            fact_cols = {
+                r[1] for r in conn.execute("PRAGMA table_info(fact_provenance)")
+            }
+            required = {
+                "provenance_id",
+                "variant_id",
+                "pmid",
+                "fact_type",
+                "fact_value",
+                "source_location",
+                "source_table",
+                "source_row",
+                "source_column",
+                "source_layer",
+                "provenance_kind",
+            }
+            if required <= fact_cols:
+                for fact in conn.execute(
+                    """
+                    SELECT variant_id, pmid, fact_type, fact_value,
+                           source_location, source_table, source_row,
+                           source_column, source_layer, provenance_kind
+                    FROM fact_provenance
+                    WHERE fact_type IN ('total_carriers_observed', 'patient_count')
+                    ORDER BY variant_id, pmid,
+                             CASE fact_type
+                                 WHEN 'total_carriers_observed' THEN 0 ELSE 1 END,
+                             CASE provenance_kind
+                                 WHEN 'explicit' THEN 0 ELSE 1 END,
+                             provenance_id
+                    """
+                ):
+                    value = _as_int(fact["fact_value"])
+                    if value is None:
+                        continue
+                    key = (int(fact["variant_id"]), str(fact["pmid"]), value)
+                    carrier_fact_provenance.setdefault(key, dict(fact))
+
         paper_stats = _paper_carrier_stats(rows)
         stats: dict[str, Any] = {
             "trusted": 0,
             "quarantine": 0,
             "by_reason": {},
+            "paper_outlier_source_supported": 0,
             "rule_version": version,
         }
         updates: list[tuple[str, str, str, str, str, int]] = []
@@ -512,6 +623,29 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                     provenance = {}
             if not isinstance(provenance, dict):
                 provenance = {}
+            provenance["_variant_paper_source_layer"] = r.get(
+                "variant_paper_source_layer"
+            )
+            provenance["_variant_paper_source_location"] = r.get(
+                "variant_paper_source_location"
+            )
+            carrier_value = _as_int(r.get("carriers"))
+            fact = (
+                carrier_fact_provenance.get(
+                    (int(r["variant_id"]), str(r["pmid"]), carrier_value)
+                )
+                if carrier_value is not None
+                else None
+            )
+            if fact:
+                for source_key in (
+                    "source_layer",
+                    "source_location",
+                    "source_table",
+                    "source_row",
+                    "source_column",
+                ):
+                    provenance[f"_carriers_fact_{source_key}"] = fact.get(source_key)
             # Fill only what the JSON did not supply, so the persisted column
             # is a recovery path rather than an override.
             for field in ("carriers", "affected", "unaffected"):
@@ -524,10 +658,15 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
                 "ascertainment": r.get("ascertainment"),
                 "study_type": r.get("study_type"),
             }
+            pmid_stats = paper_stats.get(str(r.get("pmid")))
+            if _paper_outlier_triggered(r, pmid_stats) and (
+                _source_supported_table_carrier(provenance)
+            ):
+                stats["paper_outlier_source_supported"] += 1
             reasons = evaluate_fact(
                 r,
                 provenance,
-                paper_stats.get(str(r.get("pmid"))),
+                pmid_stats,
                 study_context=study_context,
             )
             existing_reasons: list[str] = []
@@ -606,10 +745,12 @@ def apply_trust_gate(db_path: str | Path) -> dict[str, Any]:
         )
         conn.commit()
         logger.info(
-            "trust gate: %d trusted, %d quarantined (%s) [%s]",
+            "trust gate: %d trusted, %d quarantined (%s), "
+            "%d source-supported table outlier(s) retained [%s]",
             stats["trusted"],
             stats["quarantine"],
             stats["by_reason"],
+            stats["paper_outlier_source_supported"],
             version,
         )
         return stats

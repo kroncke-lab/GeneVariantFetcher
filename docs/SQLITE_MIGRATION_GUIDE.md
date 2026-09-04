@@ -44,7 +44,10 @@ The database uses a normalized schema with the following tables:
 - **`penetrance_data`** - Cohort-level penetrance statistics (+ `trust_tier` / `trust_reasons` / `trust_rule_version` from the per-fact trust gate)
 - **`age_dependent_penetrance`** - Age-stratified penetrance
 - **`individual_records`** - Person-level carrier and affected status
-- **`fact_provenance`** - Exact source pointers for extracted variant/count/status facts
+- **`fact_provenance`** - Exact source pointers for extracted
+  variant/count/status facts; deterministic table `source_ref`, `row_label`, and
+  `column_ref` locators persist as `source_table`, `source_row`, and
+  `source_column`
 - **`functional_data`** - In vitro and functional assays
 - **`phenotypes`** - Patient phenotype descriptions
 - **`variant_metadata`** - Segregation and population frequency data

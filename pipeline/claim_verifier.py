@@ -1791,7 +1791,7 @@ def apply_verification_to_variant(
             pdata.get(pdata_key, patients.get(patient_key) if patient_key else None)
         )
         count_type = str(provenance.get(provenance_keys[field]) or "").strip().lower()
-        # Trust Gate tg5 has one deliberate raw-observation exception: a
+        # Trust Gate tg6 has one deliberate raw-observation exception: a
         # source-reported number of families remains auditable in the carrier
         # slot and is field-masked from trusted carrier consumers. Other typed
         # values are not covered by that exception; verification must still

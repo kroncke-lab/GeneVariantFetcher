@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-03.
+Last reviewed: 2026-09-04.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -98,6 +98,16 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       digest every scored arm binds). Both reviewers (agy, grok) judged this
       legitimate given the measured acquisition ceiling, provided it never
       re-adjudicates burned tranches and never loosens the identity rule.
+- [x] **Make the Step 3.7 outlier rule source-structural (2026-09-04).** An
+      explicitly labelled `per_variant_carrier` cell from the code-owned
+      deterministic table parser now outranks the within-paper median heuristic;
+      prose-derived, model-authored, and unlabelled values remain eligible for
+      `paper_outlier`. Canonical table/row/column locators now persist into
+      `fact_provenance`. Zero-extraction replays on copies of the locked mixed-02
+      arms restored SCN5A E1784K (PMID 30059973) at 69 carriers to the trusted
+      projection; the gold-118 prose-derived KCNH2 K897T value of 56 remained
+      quarantined. Original locks and the accepted headline are unchanged. Full
+      offline suite: 2,841 passed.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row

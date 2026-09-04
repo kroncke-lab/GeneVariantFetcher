@@ -15,6 +15,21 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-04 — deterministic table evidence outranks outlier triage
+
+Trust-gate generation `tg6` makes the within-paper median rule a fallback rather
+than a veto over stronger source structure. An explicitly labelled
+`per_variant_carrier` cell from the code-owned deterministic table parser, bound
+to the exact fact and a table locator, is retained; prose-derived,
+model-authored, and unlabelled outliers remain quarantined. Migration now
+persists canonical table, row, and column locators into `fact_provenance`.
+Zero-extraction replays on copies of both locked mixed-gold tranche-02 arms
+restored SCN5A E1784K (PMID 30059973) at 69 carriers to the trusted projection.
+The counterexample in the locked gold-118 database, prose-derived KCNH2 K897T
+at 56 carriers, remained `paper_outlier`. This was a deterministic re-tiering
+diagnostic, not a new scored extraction: original locks, recall/precision/MAE,
+and the accepted headline are unchanged.
+
 ## 2026-09-03 — continuation tranche 01 (120 attempts): v2 flat at Gate-2 scale; campaign closes
 
 After the lead asked for Gate-2-sized cohorts, the 49-attempt tranches 03–29
