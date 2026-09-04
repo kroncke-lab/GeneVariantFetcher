@@ -1,0 +1,35 @@
+{
+  "cohort_size": 50,
+  "gene": "BMPR2",
+  "important_distinction": "This is a queue for Variant Browser human adjudication. The secondary_llm_adjudicated field records the narrower subset that triggered GVF's second-reader adjudicator.",
+  "observed": {
+    "complete_fraction": 0.88,
+    "complete_papers": 44,
+    "papers_with_carrier_rows": 49,
+    "publication_decades": {
+      "2000s": 8,
+      "2010s": 28,
+      "2020s": 14
+    },
+    "publication_year_max": 2026,
+    "publication_year_min": 2001,
+    "secondary_llm_adjudicated_papers": 4,
+    "source_origins": {
+      "abstract-only": 8,
+      "browser-html-generic": 2,
+      "elsevier-api": 5,
+      "pmc_xml": 32,
+      "publisher-free": 1,
+      "wiley-api": 2
+    },
+    "trusted_complete_rows": 182,
+    "unique_variant_paper_counts": 628,
+    "variant_links": 629
+  },
+  "run_dir": "results/BMPR2/20260807_163246",
+  "selection_contract": {
+    "all_papers_have_extracted_variants": true,
+    "complete_paper_definition": "at least one trusted row with total_carriers_observed > 0, non-null affected_count and unaffected_count, and total >= affected + unaffected",
+    "minimum_complete_papers": 40
+  }
+}
