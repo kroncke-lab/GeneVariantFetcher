@@ -1,0 +1,101 @@
+{
+ "run_id": "20260902_false_zero_recovery_gold118",
+ "score_lane": "legacy_trusted_projection",
+ "fn_total": 89,
+ "by_leaf": {
+  "unknown_notation": 27,
+  "parser_dropped": 5,
+  "source_selection": 4,
+  "acquisition": 39,
+  "model_missed": 7,
+  "condensing": 2,
+  "projection_dropped": 4,
+  "matcher": 1
+ },
+ "by_paper": {
+  "KCNH2:29650123": {
+   "acquisition": 15,
+   "unknown_notation": 6
+  },
+  "SCN5A:15898185": {
+   "acquisition": 9,
+   "parser_dropped": 1
+  },
+  "RYR2:27114410": {
+   "acquisition": 9
+  },
+  "KCNQ1:31520628": {
+   "unknown_notation": 7
+  },
+  "KCNQ1:14678125": {
+   "unknown_notation": 4,
+   "acquisition": 2
+  },
+  "RYR2:19926015": {
+   "unknown_notation": 2,
+   "projection_dropped": 1,
+   "model_missed": 2
+  },
+  "RYR2:22677073": {
+   "projection_dropped": 1,
+   "model_missed": 3
+  },
+  "KCNH2:29121719": {
+   "parser_dropped": 3
+  },
+  "KCNQ1:24667783": {
+   "unknown_notation": 3
+  },
+  "RYR2:29350269": {
+   "source_selection": 3
+  },
+  "KCNQ1:19687231": {
+   "model_missed": 2
+  },
+  "SCN5A:22966897": {
+   "acquisition": 2
+  },
+  "KCNH2:10086971": {
+   "unknown_notation": 1
+  },
+  "KCNH2:16155735": {
+   "unknown_notation": 1
+  },
+  "KCNH2:19184172": {
+   "unknown_notation": 1
+  },
+  "KCNH2:29214556": {
+   "source_selection": 1
+  },
+  "KCNQ1:20368164": {
+   "parser_dropped": 1
+  },
+  "KCNQ1:26496715": {
+   "condensing": 1
+  },
+  "KCNQ1:27114410": {
+   "acquisition": 1
+  },
+  "KCNQ1:33082985": {
+   "unknown_notation": 1
+  },
+  "RYR2:18285261": {
+   "projection_dropped": 1
+  },
+  "RYR2:19216760": {
+   "matcher": 1
+  },
+  "RYR2:30835254": {
+   "condensing": 1
+  },
+  "SCN5A:17971661": {
+   "acquisition": 1
+  },
+  "SCN5A:25236808": {
+   "projection_dropped": 1
+  },
+  "SCN5A:28087622": {
+   "unknown_notation": 1
+  }
+ }
+}

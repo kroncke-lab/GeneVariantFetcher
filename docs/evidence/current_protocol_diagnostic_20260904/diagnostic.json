@@ -1,0 +1,1230 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-04T16:45:00Z",
+  "scope": {
+    "audited_cohorts": [
+      "gold_120_current",
+      "mixed_continuation_120"
+    ],
+    "gold_120b": {
+      "tier": "gold_120b",
+      "registered_attempts": 125,
+      "registered_unique_pmids": 124,
+      "matching_scored_runs": [],
+      "status": "registered but no locked report found"
+    },
+    "note": "The two audited cohorts are the latest locked, scored cohorts near 120 attempts. The registered gold_120b tier is reported separately because no matching locked report exists."
+  },
+  "cohort_metrics": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "run_id": "20260902_false_zero_recovery_gold118",
+      "score_lane": "trusted legacy projection (paper plus ClinVar/PubTator linkage)",
+      "attempts": 118,
+      "unique_pmids": 114,
+      "gold_rows": 632,
+      "tp": 543,
+      "fp": 275,
+      "fn": 89,
+      "precision": 0.6638141809290954,
+      "recall": 0.8591772151898734,
+      "f1": 0.7489655172413794,
+      "carrier_values_supplied": 207,
+      "carrier_supply_rate": 0.3275316455696203,
+      "carrier_conditional_mae": 0.178743961352657,
+      "carrier_end_to_end_mae": 1.1123417721518987,
+      "carrier_end_to_end_mae_nonzero_gold": 1.4766949152542372,
+      "carrier_end_to_end_mae_zero_gold": 0.0375,
+      "carrier_gold_zero_rows": 160,
+      "carrier_gold_nonzero_rows": 472,
+      "affected_supply_rate": 0.189873417721519,
+      "unaffected_supply_rate": 0.058637083993660855
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "run_id": "20260903_protocol_cont120_01_candidate",
+      "score_lane": "paper-derived primary",
+      "attempts": 120,
+      "unique_pmids": 110,
+      "gold_rows": 384,
+      "tp": 261,
+      "fp": 141,
+      "fn": 123,
+      "precision": 0.6492537313432836,
+      "recall": 0.6796875,
+      "f1": 0.6641221374045801,
+      "carrier_values_supplied": 130,
+      "carrier_supply_rate": 0.3385416666666667,
+      "carrier_conditional_mae": 0.23076923076923078,
+      "carrier_end_to_end_mae": 1.359375,
+      "carrier_end_to_end_mae_nonzero_gold": 1.5572289156626506,
+      "carrier_end_to_end_mae_zero_gold": 0.09615384615384616,
+      "carrier_gold_zero_rows": 52,
+      "carrier_gold_nonzero_rows": 332,
+      "affected_supply_rate": 0.23759791122715404,
+      "unaffected_supply_rate": 0.057441253263707574
+    }
+  ],
+  "gene_metrics": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "gene": "KCNH2",
+      "tp": 60,
+      "fp": 41,
+      "fn": 28,
+      "precision": 0.594059405940594,
+      "recall": 0.6818181818181818,
+      "carrier_supply_rate": 0.3181818181818182,
+      "carrier_conditional_mae": 0.17857142857142858
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "gene": "KCNQ1",
+      "tp": 145,
+      "fp": 100,
+      "fn": 22,
+      "precision": 0.5918367346938775,
+      "recall": 0.8682634730538922,
+      "carrier_supply_rate": 0.5449101796407185,
+      "carrier_conditional_mae": 0.10989010989010989
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "gene": "RYR2",
+      "tp": 154,
+      "fp": 24,
+      "fn": 24,
+      "precision": 0.8651685393258427,
+      "recall": 0.8651685393258427,
+      "carrier_supply_rate": 0.25842696629213485,
+      "carrier_conditional_mae": 0.21739130434782608
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "gene": "SCN5A",
+      "tp": 184,
+      "fp": 110,
+      "fn": 15,
+      "precision": 0.6258503401360545,
+      "recall": 0.9246231155778895,
+      "carrier_supply_rate": 0.21105527638190955,
+      "carrier_conditional_mae": 0.2857142857142857
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "APOE",
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "carrier_supply_rate": 1.0,
+      "carrier_conditional_mae": 0.0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "BRCA1",
+      "tp": 0,
+      "fp": 0,
+      "fn": 13,
+      "precision": 0.0,
+      "recall": 0.0,
+      "carrier_supply_rate": 0.0,
+      "carrier_conditional_mae": null
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "KCNH2",
+      "tp": 25,
+      "fp": 20,
+      "fn": 34,
+      "precision": 0.5555555555555556,
+      "recall": 0.423728813559322,
+      "carrier_supply_rate": 0.2711864406779661,
+      "carrier_conditional_mae": 0.0625
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "KCNQ1",
+      "tp": 37,
+      "fp": 16,
+      "fn": 11,
+      "precision": 0.6981132075471698,
+      "recall": 0.7708333333333334,
+      "carrier_supply_rate": 0.4375,
+      "carrier_conditional_mae": 0.14285714285714285
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "MYBPC3",
+      "tp": 25,
+      "fp": 5,
+      "fn": 3,
+      "precision": 0.8333333333333334,
+      "recall": 0.8928571428571429,
+      "carrier_supply_rate": 0.5714285714285714,
+      "carrier_conditional_mae": 0.0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "RYR2",
+      "tp": 63,
+      "fp": 11,
+      "fn": 14,
+      "precision": 0.8513513513513513,
+      "recall": 0.8181818181818182,
+      "carrier_supply_rate": 0.19480519480519481,
+      "carrier_conditional_mae": 0.4666666666666667
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "gene": "SCN5A",
+      "tp": 109,
+      "fp": 89,
+      "fn": 48,
+      "precision": 0.5505050505050505,
+      "recall": 0.6942675159235668,
+      "carrier_supply_rate": 0.3821656050955414,
+      "carrier_conditional_mae": 0.31666666666666665
+    }
+  ],
+  "fn_causes": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "acquisition",
+      "cause_label": "No usable source / row absent from acquired text",
+      "missed_rows": 39,
+      "share_of_fn": 0.43820224719101125,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "unknown_notation",
+      "cause_label": "Figure-only or notation not string-searchable",
+      "missed_rows": 27,
+      "share_of_fn": 0.30337078651685395,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "model_missed",
+      "cause_label": "Model omitted visible row",
+      "missed_rows": 7,
+      "share_of_fn": 0.07865168539325842,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "parser_dropped",
+      "cause_label": "Parser dropped model output",
+      "missed_rows": 5,
+      "share_of_fn": 0.056179775280898875,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "source_selection",
+      "cause_label": "Source staged incorrectly",
+      "missed_rows": 4,
+      "share_of_fn": 0.0449438202247191,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "projection_dropped",
+      "cause_label": "Trusted projection dropped row",
+      "missed_rows": 4,
+      "share_of_fn": 0.0449438202247191,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "condensing",
+      "cause_label": "Source lost during condensing",
+      "missed_rows": 2,
+      "share_of_fn": 0.02247191011235955,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "matcher",
+      "cause_label": "Scorer did not pair projected row",
+      "missed_rows": 1,
+      "share_of_fn": 0.011235955056179775,
+      "gold_rows": 632
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "acquisition",
+      "cause_label": "No usable source / row absent from acquired text",
+      "missed_rows": 72,
+      "share_of_fn": 0.5853658536585366,
+      "gold_rows": 384
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "unknown_notation",
+      "cause_label": "Figure-only or notation not string-searchable",
+      "missed_rows": 40,
+      "share_of_fn": 0.3252032520325203,
+      "gold_rows": 384
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "model_missed",
+      "cause_label": "Model omitted visible row",
+      "missed_rows": 5,
+      "share_of_fn": 0.04065040650406504,
+      "gold_rows": 384
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "parser_dropped",
+      "cause_label": "Parser dropped model output",
+      "missed_rows": 3,
+      "share_of_fn": 0.024390243902439025,
+      "gold_rows": 384
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "projection_dropped",
+      "cause_label": "Trusted projection dropped row",
+      "missed_rows": 2,
+      "share_of_fn": 0.016260162601626018,
+      "gold_rows": 384
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "paper_row_lost_to_linkage_origin",
+      "cause_label": "Paper row re-attributed to linkage",
+      "missed_rows": 1,
+      "share_of_fn": 0.008130081300813009,
+      "gold_rows": 384
+    }
+  ],
+  "problem_papers": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 1,
+      "gene": "KCNH2",
+      "pmid": "29650123",
+      "false_negatives": 21,
+      "true_positives": 1,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "15 No usable source / row absent from acquired text; 6 Figure-only or notation not string-searchable",
+      "source_breakdown": "15 substitution absent from acquired bytes; 6 notation not searchable"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 2,
+      "gene": "SCN5A",
+      "pmid": "15898185",
+      "false_negatives": 10,
+      "true_positives": 1,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "9 No usable source / row absent from acquired text; 1 Parser dropped model output",
+      "source_breakdown": "9 abstract/stub only; 1 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 3,
+      "gene": "RYR2",
+      "pmid": "27114410",
+      "false_negatives": 9,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "9 No usable source / row absent from acquired text",
+      "source_breakdown": "9 no acquired source"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 4,
+      "gene": "KCNQ1",
+      "pmid": "31520628",
+      "false_negatives": 7,
+      "true_positives": 2,
+      "false_positives": 2,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "7 Figure-only or notation not string-searchable",
+      "source_breakdown": "7 likely figure-only"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 5,
+      "gene": "KCNQ1",
+      "pmid": "14678125",
+      "false_negatives": 6,
+      "true_positives": 35,
+      "false_positives": 9,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "4 Figure-only or notation not string-searchable; 2 No usable source / row absent from acquired text",
+      "source_breakdown": "4 notation not searchable; 2 substitution absent from acquired bytes"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 6,
+      "gene": "RYR2",
+      "pmid": "19926015",
+      "false_negatives": 5,
+      "true_positives": 35,
+      "false_positives": 4,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "2 Figure-only or notation not string-searchable; 2 Model omitted visible row; 1 Trusted projection dropped row",
+      "source_breakdown": "3 present in body; later-stage loss; 2 likely figure-only"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 7,
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "false_negatives": 4,
+      "true_positives": 21,
+      "false_positives": 5,
+      "primary_bottleneck": "Model omitted visible row",
+      "stage_breakdown": "3 Model omitted visible row; 1 Trusted projection dropped row",
+      "source_breakdown": "4 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 8,
+      "gene": "KCNH2",
+      "pmid": "29121719",
+      "false_negatives": 3,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "Parser dropped model output",
+      "stage_breakdown": "3 Parser dropped model output",
+      "source_breakdown": "3 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 9,
+      "gene": "KCNQ1",
+      "pmid": "24667783",
+      "false_negatives": 3,
+      "true_positives": 13,
+      "false_positives": 1,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "3 Figure-only or notation not string-searchable",
+      "source_breakdown": "3 likely figure-only"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 10,
+      "gene": "RYR2",
+      "pmid": "29350269",
+      "false_negatives": 3,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "Source staged incorrectly",
+      "stage_breakdown": "3 Source staged incorrectly",
+      "source_breakdown": "3 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 11,
+      "gene": "KCNQ1",
+      "pmid": "19687231",
+      "false_negatives": 2,
+      "true_positives": 0,
+      "false_positives": 1,
+      "primary_bottleneck": "Model omitted visible row",
+      "stage_breakdown": "2 Model omitted visible row",
+      "source_breakdown": "2 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 12,
+      "gene": "SCN5A",
+      "pmid": "22966897",
+      "false_negatives": 2,
+      "true_positives": 0,
+      "false_positives": 3,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "2 No usable source / row absent from acquired text",
+      "source_breakdown": "2 substitution absent from acquired bytes"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 1,
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "false_negatives": 20,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "20 No usable source / row absent from acquired text",
+      "source_breakdown": "20 abstract/stub only"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 2,
+      "gene": "BRCA1",
+      "pmid": "10528853",
+      "false_negatives": 13,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "13 Figure-only or notation not string-searchable",
+      "source_breakdown": "13 likely figure-only"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 3,
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "false_negatives": 13,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "13 No usable source / row absent from acquired text",
+      "source_breakdown": "13 no acquired source"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 4,
+      "gene": "KCNH2",
+      "pmid": "17905336",
+      "false_negatives": 11,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "6 No usable source / row absent from acquired text; 4 Figure-only or notation not string-searchable; 1 Parser dropped model output",
+      "source_breakdown": "6 substitution absent from acquired bytes; 4 notation not searchable; 1 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 5,
+      "gene": "KCNH2",
+      "pmid": "12402336",
+      "false_negatives": 9,
+      "true_positives": 0,
+      "false_positives": 2,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "5 No usable source / row absent from acquired text; 3 Figure-only or notation not string-searchable; 1 Model omitted visible row",
+      "source_breakdown": "5 substitution absent from acquired bytes; 3 notation not searchable; 1 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 6,
+      "gene": "RYR2",
+      "pmid": "29447731",
+      "false_negatives": 9,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "6 No usable source / row absent from acquired text; 3 Figure-only or notation not string-searchable",
+      "source_breakdown": "6 substitution absent from acquired bytes; 3 notation not searchable"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 7,
+      "gene": "KCNH2",
+      "pmid": "24103226",
+      "false_negatives": 7,
+      "true_positives": 0,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "4 No usable source / row absent from acquired text; 3 Figure-only or notation not string-searchable",
+      "source_breakdown": "4 substitution absent from acquired bytes; 3 notation not searchable"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 8,
+      "gene": "KCNQ1",
+      "pmid": "22539601",
+      "false_negatives": 6,
+      "true_positives": 1,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "6 No usable source / row absent from acquired text",
+      "source_breakdown": "6 no acquired source"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 9,
+      "gene": "SCN5A",
+      "pmid": "17905336",
+      "false_negatives": 5,
+      "true_positives": 1,
+      "false_positives": 0,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "4 No usable source / row absent from acquired text; 1 Figure-only or notation not string-searchable",
+      "source_breakdown": "4 substitution absent from acquired bytes; 1 notation not searchable"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 10,
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "false_negatives": 4,
+      "true_positives": 21,
+      "false_positives": 5,
+      "primary_bottleneck": "Model omitted visible row",
+      "stage_breakdown": "3 Model omitted visible row; 1 Trusted projection dropped row",
+      "source_breakdown": "4 present in body; later-stage loss"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 11,
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "false_negatives": 3,
+      "true_positives": 25,
+      "false_positives": 5,
+      "primary_bottleneck": "Figure-only or notation not string-searchable",
+      "stage_breakdown": "3 Figure-only or notation not string-searchable",
+      "source_breakdown": "3 likely figure-only"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 12,
+      "gene": "SCN5A",
+      "pmid": "17227473",
+      "false_negatives": 3,
+      "true_positives": 1,
+      "false_positives": 3,
+      "primary_bottleneck": "No usable source / row absent from acquired text",
+      "stage_breakdown": "1 No usable source / row absent from acquired text; 1 Model omitted visible row; 1 Figure-only or notation not string-searchable",
+      "source_breakdown": "1 substitution absent from acquired bytes; 1 present in body; later-stage loss; 1 notation not searchable"
+    }
+  ],
+  "count_error_decomposition": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "identity_missed",
+      "cause_label": "Identity missed",
+      "rows": 89,
+      "absolute_error_units": 126,
+      "share_of_error": 0.17923186344238975
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "matched_count_missing",
+      "cause_label": "Matched identity, count omitted",
+      "rows": 336,
+      "absolute_error_units": 540,
+      "share_of_error": 0.7681365576102418
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "supplied_wrong",
+      "cause_label": "Count supplied, wrong value",
+      "rows": 23,
+      "absolute_error_units": 37,
+      "share_of_error": 0.05263157894736842
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "cause": "supplied_exact",
+      "cause_label": "Count supplied, exact",
+      "rows": 184,
+      "absolute_error_units": 0,
+      "share_of_error": 0.0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "identity_missed",
+      "cause_label": "Identity missed",
+      "rows": 123,
+      "absolute_error_units": 290,
+      "share_of_error": 0.5555555555555556
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "matched_count_missing",
+      "cause_label": "Matched identity, count omitted",
+      "rows": 131,
+      "absolute_error_units": 202,
+      "share_of_error": 0.38697318007662834
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "supplied_wrong",
+      "cause_label": "Count supplied, wrong value",
+      "rows": 20,
+      "absolute_error_units": 30,
+      "share_of_error": 0.05747126436781609
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "cause": "supplied_exact",
+      "cause_label": "Count supplied, exact",
+      "rows": 110,
+      "absolute_error_units": 0,
+      "share_of_error": 0.0
+    }
+  ],
+  "mae_problem_papers": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 1,
+      "gene": "KCNQ1",
+      "pmid": "14678125",
+      "absolute_error_units": 289,
+      "asserted_rows": 41,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 34,
+      "omitted_count_error": 255,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 2,
+      "gene": "RYR2",
+      "pmid": "19926015",
+      "absolute_error_units": 58,
+      "asserted_rows": 40,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 5,
+      "omitted_count_error": 52,
+      "wrong_count_error": 1
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 3,
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "absolute_error_units": 40,
+      "asserted_rows": 25,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 6,
+      "omitted_count_error": 34,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 4,
+      "gene": "RYR2",
+      "pmid": "19398665",
+      "absolute_error_units": 27,
+      "asserted_rows": 27,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 27,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 5,
+      "gene": "SCN5A",
+      "pmid": "15671429",
+      "absolute_error_units": 25,
+      "asserted_rows": 4,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 25,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 6,
+      "gene": "KCNH2",
+      "pmid": "29650123",
+      "absolute_error_units": 22,
+      "asserted_rows": 22,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 21,
+      "omitted_count_error": 1,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 7,
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "absolute_error_units": 19,
+      "asserted_rows": 21,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 15,
+      "wrong_count_error": 4
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 8,
+      "gene": "KCNH2",
+      "pmid": "10086971",
+      "absolute_error_units": 15,
+      "asserted_rows": 4,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 4,
+      "omitted_count_error": 11,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 9,
+      "gene": "KCNH2",
+      "pmid": "19184172",
+      "absolute_error_units": 12,
+      "asserted_rows": 4,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 2,
+      "omitted_count_error": 10,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 10,
+      "gene": "KCNH2",
+      "pmid": "26746457",
+      "absolute_error_units": 11,
+      "asserted_rows": 10,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 11,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 11,
+      "gene": "KCNQ1",
+      "pmid": "31520628",
+      "absolute_error_units": 11,
+      "asserted_rows": 9,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 9,
+      "omitted_count_error": 2,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "rank_in_cohort": 12,
+      "gene": "RYR2",
+      "pmid": "22222782",
+      "absolute_error_units": 10,
+      "asserted_rows": 7,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 9,
+      "wrong_count_error": 1
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 1,
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "absolute_error_units": 108,
+      "asserted_rows": 13,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 108,
+      "omitted_count_error": 0,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 2,
+      "gene": "BRCA1",
+      "pmid": "10528853",
+      "absolute_error_units": 56,
+      "asserted_rows": 13,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 56,
+      "omitted_count_error": 0,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 3,
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "absolute_error_units": 40,
+      "asserted_rows": 25,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 6,
+      "omitted_count_error": 34,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 4,
+      "gene": "RYR2",
+      "pmid": "19398665",
+      "absolute_error_units": 27,
+      "asserted_rows": 27,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 27,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 5,
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "absolute_error_units": 24,
+      "asserted_rows": 28,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 6,
+      "omitted_count_error": 18,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 6,
+      "gene": "SCN5A",
+      "pmid": "15671429",
+      "absolute_error_units": 24,
+      "asserted_rows": 4,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 23,
+      "wrong_count_error": 1
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 7,
+      "gene": "KCNQ1",
+      "pmid": "27810088",
+      "absolute_error_units": 20,
+      "asserted_rows": 1,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 20,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 8,
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "absolute_error_units": 20,
+      "asserted_rows": 20,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 20,
+      "omitted_count_error": 0,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 9,
+      "gene": "KCNH2",
+      "pmid": "27816319",
+      "absolute_error_units": 17,
+      "asserted_rows": 3,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 0,
+      "omitted_count_error": 17,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 10,
+      "gene": "KCNQ1",
+      "pmid": "22539601",
+      "absolute_error_units": 17,
+      "asserted_rows": 7,
+      "dominant_cause": "Matched identity, count omitted",
+      "identity_miss_error": 8,
+      "omitted_count_error": 9,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 11,
+      "gene": "KCNH2",
+      "pmid": "17905336",
+      "absolute_error_units": 13,
+      "asserted_rows": 11,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 13,
+      "omitted_count_error": 0,
+      "wrong_count_error": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "rank_in_cohort": 12,
+      "gene": "KCNH2",
+      "pmid": "21185499",
+      "absolute_error_units": 10,
+      "asserted_rows": 2,
+      "dominant_cause": "Identity missed",
+      "identity_miss_error": 10,
+      "omitted_count_error": 0,
+      "wrong_count_error": 0
+    }
+  ],
+  "recall_counterfactuals": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "scenario": "Current",
+      "rows_recovered": 0,
+      "recall_upper_bound": 0.8591772151898734,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "scenario": "Perfect recovery of reachable pipeline misses",
+      "rows_recovered": 23,
+      "recall_upper_bound": 0.8955696202531646,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "scenario": "Perfect recovery of hard acquisition misses",
+      "rows_recovered": 39,
+      "recall_upper_bound": 0.9208860759493671,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "scenario": "Perfect recovery of hard + figure/notation source misses",
+      "rows_recovered": 66,
+      "recall_upper_bound": 0.9636075949367089,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "scenario": "Current",
+      "rows_recovered": 0,
+      "recall_upper_bound": 0.6796875,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "scenario": "Perfect recovery of reachable pipeline misses",
+      "rows_recovered": 11,
+      "recall_upper_bound": 0.7083333333333334,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "scenario": "Perfect recovery of hard acquisition misses",
+      "rows_recovered": 72,
+      "recall_upper_bound": 0.8671875,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "scenario": "Perfect recovery of hard + figure/notation source misses",
+      "rows_recovered": 112,
+      "recall_upper_bound": 0.9713541666666666,
+      "note": "Diagnostic upper bound; not a measured candidate result"
+    }
+  ],
+  "solution_tests": [
+    {
+      "test": "v1 paper-agnostic reading/count bundle",
+      "evaluation_set": "mixed tranche 01 (49 attempts)",
+      "attempts": 49,
+      "recall_baseline": 0.640495867768595,
+      "recall_candidate": 0.6487603305785123,
+      "recall_delta_pp": 0.8264462809917328,
+      "carrier_e2e_mae_baseline": 2.6818181818181817,
+      "carrier_e2e_mae_candidate": 1.9504132231404958,
+      "carrier_e2e_mae_delta": -0.7314049586776858,
+      "carrier_coverage_delta_pp": 48.65009245942059,
+      "identity_decision": "reject_or_revise_candidate",
+      "count_endpoint_passed": true
+    },
+    {
+      "test": "v2 paper-agnostic reading/count bundle",
+      "evaluation_set": "mixed tranche 02 (49 attempts)",
+      "attempts": 49,
+      "recall_baseline": 0.8844884488448845,
+      "recall_candidate": 0.8811881188118812,
+      "recall_delta_pp": -0.330033003300334,
+      "carrier_e2e_mae_baseline": 0.6204620462046204,
+      "carrier_e2e_mae_candidate": 0.5973597359735974,
+      "carrier_e2e_mae_delta": -0.02310231023102305,
+      "carrier_coverage_delta_pp": -1.5484375873441758,
+      "identity_decision": "reject_or_revise_candidate",
+      "count_endpoint_passed": false
+    },
+    {
+      "test": "v2 paper-agnostic reading/count bundle",
+      "evaluation_set": "mixed continuation tranche 01 (120 attempts)",
+      "attempts": 120,
+      "recall_baseline": 0.6848958333333334,
+      "recall_candidate": 0.6796875,
+      "recall_delta_pp": -0.520833333333337,
+      "carrier_e2e_mae_baseline": 1.3932291666666667,
+      "carrier_e2e_mae_candidate": 1.359375,
+      "carrier_e2e_mae_delta": -0.03385416666666674,
+      "carrier_coverage_delta_pp": 3.0403682822720435,
+      "identity_decision": "reject_or_revise_candidate",
+      "count_endpoint_passed": false
+    },
+    {
+      "test": "tg6 source-backed table-outlier exception",
+      "evaluation_set": "gold_120 current lock (118 attempts)",
+      "attempts": 118,
+      "recall_baseline": 0.8591772151898734,
+      "recall_candidate": 0.8591772151898734,
+      "recall_delta_pp": 0.0,
+      "carrier_e2e_mae_baseline": 1.1123417721518987,
+      "carrier_e2e_mae_candidate": 1.1123417721518987,
+      "carrier_e2e_mae_delta": 0.0,
+      "carrier_coverage_delta_pp": 0.0,
+      "identity_decision": "no aggregate effect: 0 eligible rows, 0 material DB changes",
+      "count_endpoint_passed": null
+    },
+    {
+      "test": "tg6 source-backed table-outlier exception",
+      "evaluation_set": "mixed continuation tranche 01 (120 attempts)",
+      "attempts": 120,
+      "recall_baseline": 0.6796875,
+      "recall_candidate": 0.6796875,
+      "recall_delta_pp": 0.0,
+      "carrier_e2e_mae_baseline": 1.359375,
+      "carrier_e2e_mae_candidate": 1.359375,
+      "carrier_e2e_mae_delta": 0.0,
+      "carrier_coverage_delta_pp": 0.0,
+      "identity_decision": "no aggregate effect: 0 eligible rows, 0 material DB changes",
+      "count_endpoint_passed": null
+    }
+  ],
+  "trust_gate_replays": [
+    {
+      "cohort_id": "gold_120_current",
+      "cohort": "gold_120 current lock (118 attempts)",
+      "databases": 4,
+      "source_backed_outliers": 0,
+      "materially_changed_rows": 0
+    },
+    {
+      "cohort_id": "mixed_continuation_120",
+      "cohort": "mixed continuation tranche 01 (120 attempts)",
+      "databases": 7,
+      "source_backed_outliers": 0,
+      "materially_changed_rows": 0
+    }
+  ],
+  "sources": [
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/predictions.json",
+      "sha256": "adf3e438400a5cc1f4104b08a5e01444b9470965dcf4f9a90afc21ddf907f852"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/report.json",
+      "sha256": "af8bc7b475b29dc543ef6fd033b69c882b6b4e4bbcd4b9ea7ec5d34a7092bec0"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/compare_discovery_with_secondary.json",
+      "sha256": "cfb21c6a8d77fbdb8863b77ba8b458501eb9d83a2eb29391e5c05be90bae14fe"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/predictions.json",
+      "sha256": "7cf77c800667269c08948a1e9e65f2109994c854e82d1f21751b37f9279b84d4"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/report.json",
+      "sha256": "5d5a208b341c65fe33db466212266e588b44fa24ae92e8e86f5e89fbf3835fc6"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/compare_discovery_with_secondary.json",
+      "sha256": "e7c592885c8df0129c5ecc08f0c5029640890adc470878705d11984570cc824e"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate/compare_discovery_with_secondary.json",
+      "sha256": "bba431c0e3efaf1e8340a82ee164060da7cfb9905a5e1e32c3e5d246e4a3e894"
+    },
+    {
+      "path": "benchmarks/evaluation_tiers/registry.json",
+      "sha256": "d8d02c77a574659dd700edf65605f5ed5a31ee611ea18ad092e6710a61b9a1d5"
+    },
+    {
+      "path": "docs/evidence/current_protocol_diagnostic_20260904/cont120_fn_root_cause/fn_root_cause.tsv",
+      "sha256": "cf0e66d683442fa563a8f77854e9eeab63ab27b173afb1ef84dc59c427f14be5"
+    },
+    {
+      "path": "docs/evidence/current_protocol_diagnostic_20260904/gold118_fn_root_cause/fn_root_cause.tsv",
+      "sha256": "3b27b3f8f4aa789498d280bbb696eb0f2ed1da2a2c1533924459d2dfaa467330"
+    }
+  ]
+}

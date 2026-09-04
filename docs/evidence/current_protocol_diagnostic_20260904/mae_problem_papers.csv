@@ -1,0 +1,25 @@
+cohort_id,cohort,rank_in_cohort,gene,pmid,absolute_error_units,asserted_rows,dominant_cause,identity_miss_error,omitted_count_error,wrong_count_error
+gold_120_current,gold_120 current lock (118 attempts),1,KCNQ1,14678125,289,41,"Matched identity, count omitted",34,255,0
+gold_120_current,gold_120 current lock (118 attempts),2,RYR2,19926015,58,40,"Matched identity, count omitted",5,52,1
+gold_120_current,gold_120 current lock (118 attempts),3,RYR2,22677073,40,25,"Matched identity, count omitted",6,34,0
+gold_120_current,gold_120 current lock (118 attempts),4,RYR2,19398665,27,27,"Matched identity, count omitted",0,27,0
+gold_120_current,gold_120 current lock (118 attempts),5,SCN5A,15671429,25,4,"Matched identity, count omitted",0,25,0
+gold_120_current,gold_120 current lock (118 attempts),6,KCNH2,29650123,22,22,Identity missed,21,1,0
+gold_120_current,gold_120 current lock (118 attempts),7,RYR2,30403697,19,21,"Matched identity, count omitted",0,15,4
+gold_120_current,gold_120 current lock (118 attempts),8,KCNH2,10086971,15,4,"Matched identity, count omitted",4,11,0
+gold_120_current,gold_120 current lock (118 attempts),9,KCNH2,19184172,12,4,"Matched identity, count omitted",2,10,0
+gold_120_current,gold_120 current lock (118 attempts),10,KCNH2,26746457,11,10,"Matched identity, count omitted",0,11,0
+gold_120_current,gold_120 current lock (118 attempts),11,KCNQ1,31520628,11,9,Identity missed,9,2,0
+gold_120_current,gold_120 current lock (118 attempts),12,RYR2,22222782,10,7,"Matched identity, count omitted",0,9,1
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),1,SCN5A,20031634,108,13,Identity missed,108,0,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),2,BRCA1,10528853,56,13,Identity missed,56,0,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),3,RYR2,22677073,40,25,"Matched identity, count omitted",6,34,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),4,RYR2,19398665,27,27,"Matched identity, count omitted",0,27,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),5,MYBPC3,21302287,24,28,"Matched identity, count omitted",6,18,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),6,SCN5A,15671429,24,4,"Matched identity, count omitted",0,23,1
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),7,KCNQ1,27810088,20,1,"Matched identity, count omitted",0,20,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),8,SCN5A,25163546,20,20,Identity missed,20,0,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),9,KCNH2,27816319,17,3,"Matched identity, count omitted",0,17,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),10,KCNQ1,22539601,17,7,"Matched identity, count omitted",8,9,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),11,KCNH2,17905336,13,11,Identity missed,13,0,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),12,KCNH2,21185499,10,2,Identity missed,10,0,0

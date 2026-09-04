@@ -1,0 +1,6 @@
+test,evaluation_set,attempts,recall_baseline,recall_candidate,recall_delta_pp,carrier_e2e_mae_baseline,carrier_e2e_mae_candidate,carrier_e2e_mae_delta,carrier_coverage_delta_pp,identity_decision,count_endpoint_passed
+v1 paper-agnostic reading/count bundle,mixed tranche 01 (49 attempts),49,0.640495867768595,0.6487603305785123,0.8264462809917328,2.6818181818181817,1.9504132231404958,-0.7314049586776858,48.65009245942059,reject_or_revise_candidate,True
+v2 paper-agnostic reading/count bundle,mixed tranche 02 (49 attempts),49,0.8844884488448845,0.8811881188118812,-0.330033003300334,0.6204620462046204,0.5973597359735974,-0.02310231023102305,-1.5484375873441758,reject_or_revise_candidate,False
+v2 paper-agnostic reading/count bundle,mixed continuation tranche 01 (120 attempts),120,0.6848958333333334,0.6796875,-0.520833333333337,1.3932291666666667,1.359375,-0.03385416666666674,3.0403682822720435,reject_or_revise_candidate,False
+tg6 source-backed table-outlier exception,gold_120 current lock (118 attempts),118,0.8591772151898734,0.8591772151898734,0.0,1.1123417721518987,1.1123417721518987,0.0,0.0,"no aggregate effect: 0 eligible rows, 0 material DB changes",
+tg6 source-backed table-outlier exception,mixed continuation tranche 01 (120 attempts),120,0.6796875,0.6796875,0.0,1.359375,1.359375,0.0,0.0,"no aggregate effect: 0 eligible rows, 0 material DB changes",

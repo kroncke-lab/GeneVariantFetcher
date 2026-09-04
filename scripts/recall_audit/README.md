@@ -96,13 +96,15 @@ prediction or score.
 Latest result and interpretation:
 `docs/evidence/gold_source_presence_sweep_20260903.md`.
 
-## `fn_root_cause.py` — where did each paper-derived miss disappear?
+## `fn_root_cause.py` — where did each scored miss disappear?
 
 For a scored `codex_paper_eval` production run, walks every gold row in
 `report.json` `missed_gold` through the stages the run left on disk: the
 sweep class (corpus), the run-local text, the LLM request (what the model
 saw), the LLM response, the extraction JSON, the DB row with its source
-layers, and the paper-derived / linkage lanes of `predictions.json`. The leaf
+layers, and the scored / linkage lanes of `predictions.json`. The output reads
+`primary_score_lane` from `report.json`; reports without that field are labelled
+as the legacy trusted projection rather than paper-derived. The leaf
 names the owner: `acquisition`, `unknown_notation`, `source_selection`,
 `condensing`, `model_missed`, `parser_dropped`, `postprocess_dropped`,
 `paper_row_lost_to_linkage_origin`, `projection_dropped`, `matcher`.
@@ -115,3 +117,26 @@ names the owner: `acquisition`, `unknown_notation`, `source_selection`,
 Writes `diagnostics/fn_root_cause/{summary.md,summary.json,fn_root_cause.tsv}`
 inside the run directory. Run it only after the run is locked and scored; it
 reads gold via the report.
+
+## `current_protocol_diagnostic.py` — compare current locks by failure mode
+
+Builds a reproducible diagnostic across the current completed cohorts near the
+120-attempt scale. It preserves each report's score lane, recomputes end-to-end
+carrier MAE, decomposes false negatives and absolute-error units, ranks problem
+papers, collects the locked paper-agnostic candidate comparisons, and reports
+whether the registered `gold_120b` tier has a matching scored report. With
+`--replay-trust-gate`, it copies each active database to a temporary directory
+and measures the current trust gate without mutating a lock.
+
+Generate the current evidence bundle after creating both root-cause inputs:
+
+```bash
+.venv/bin/python scripts/recall_audit/current_protocol_diagnostic.py \
+  --out-dir docs/evidence/current_protocol_diagnostic_20260904 \
+  --generated-at 2026-09-04T16:45:00Z \
+  --replay-trust-gate
+```
+
+The two current identity scores are not an apples-to-apples comparison: Gold
+118 uses its legacy trusted projection, while Mixed 120 uses the paper-derived
+primary lane. The diagnostic makes that distinction explicit.

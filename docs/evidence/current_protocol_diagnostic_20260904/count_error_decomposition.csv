@@ -1,0 +1,9 @@
+cohort_id,cohort,cause,cause_label,rows,absolute_error_units,share_of_error
+gold_120_current,gold_120 current lock (118 attempts),identity_missed,Identity missed,89,126,0.17923186344238975
+gold_120_current,gold_120 current lock (118 attempts),matched_count_missing,"Matched identity, count omitted",336,540,0.7681365576102418
+gold_120_current,gold_120 current lock (118 attempts),supplied_wrong,"Count supplied, wrong value",23,37,0.05263157894736842
+gold_120_current,gold_120 current lock (118 attempts),supplied_exact,"Count supplied, exact",184,0,0.0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),identity_missed,Identity missed,123,290,0.5555555555555556
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),matched_count_missing,"Matched identity, count omitted",131,202,0.38697318007662834
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),supplied_wrong,"Count supplied, wrong value",20,30,0.05747126436781609
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),supplied_exact,"Count supplied, exact",110,0,0.0

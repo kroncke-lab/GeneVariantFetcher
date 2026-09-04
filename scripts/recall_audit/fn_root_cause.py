@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Root-cause every paper-derived false negative of a scored production run.
+"""Root-cause every scored false negative of a production run.
 
 For each gold row the locked report lists under ``missed_gold``, walk the
 pipeline stages the run left on disk and find the first one where the variant
@@ -19,8 +19,8 @@ Stages, in pipeline order
 ``extraction``  the per-paper extraction JSON (after parsing/merging)
 ``db``          a live ``variants`` row joined to this PMID, with its
                 ``source_layer`` origins
-``predictions`` the locked ``predictions.json`` paper-derived lane; the
-                linkage/unattributed lanes are reported separately
+``predictions`` the locked ``predictions.json`` scored lane; linkage and
+                unattributed lanes are reported separately when present
 
 Leaf (owner) is the first missing stage:
 
@@ -301,6 +301,13 @@ def _lane_names(predictions: dict) -> tuple[dict, dict]:
 
 
 def render(report: dict, rows: list[dict]) -> str:
+    score_lane = report.get("primary_score_lane") or "legacy_trusted_projection"
+    lane_label = (
+        "paper-derived primary"
+        if score_lane == "paper_derived"
+        else "legacy trusted-projection"
+    )
+    projected_column = "paper lane" if score_lane == "paper_derived" else "scored lane"
     leaves = Counter(r["leaf"] for r in rows)
     by_paper: dict = defaultdict(Counter)
     for r in rows:
@@ -308,7 +315,7 @@ def render(report: dict, rows: list[dict]) -> str:
     lines = [
         f"# FN root cause — `{report.get('run_id')}`",
         "",
-        f"{len(rows)} paper-derived false negatives.",
+        f"{len(rows)} {lane_label} false negatives.",
         "",
         "| leaf | rows |",
         "|---|---:|",
@@ -326,7 +333,7 @@ def render(report: dict, rows: list[dict]) -> str:
         "",
         "## Rows the reading protocol could have found",
         "",
-        "| gene | PMID | variant | leaf | db layers | run_text | request | response | extraction | db | paper lane | linkage lane |",
+        f"| gene | PMID | variant | leaf | db layers | run_text | request | response | extraction | db | {projected_column} | linkage lane |",
         "|---|---:|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in rows:
@@ -413,6 +420,7 @@ def main() -> int:
         by_paper[f"{r['gene']}:{r['pmid']}"][r["leaf"]] += 1
     summary = {
         "run_id": report.get("run_id"),
+        "score_lane": report.get("primary_score_lane") or "legacy_trusted_projection",
         "fn_total": len(rows),
         "by_leaf": dict(leaves),
         "by_paper": {
@@ -420,8 +428,10 @@ def main() -> int:
             for k, c in sorted(by_paper.items(), key=lambda kv: -sum(kv[1].values()))
         },
     }
-    (out_dir / "summary.json").write_text(json.dumps(summary, indent=1))
-    (out_dir / "summary.md").write_text(render(report, rows))
+    (out_dir / "summary.json").write_text(
+        json.dumps(summary, indent=1) + "\n", encoding="utf-8"
+    )
+    (out_dir / "summary.md").write_text(render(report, rows), encoding="utf-8")
     print(json.dumps(summary["by_leaf"], indent=1))
     print(f"wrote {out_dir}")
     return 0

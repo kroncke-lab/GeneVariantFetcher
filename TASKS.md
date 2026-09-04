@@ -108,6 +108,24 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       projection; the gold-118 prose-derived KCNH2 K897T value of 56 remained
       quarantined. Original locks and the accepted headline are unchanged. Full
       offline suite: 2,841 passed.
+- [x] **Diagnose current recall and carrier MAE across the two completed
+      ~120-attempt locks (2026-09-04).** Gold 118 is 543/275/89 (85.918%
+      recall; carrier e2e MAE 1.112) on its legacy trusted projection; Mixed
+      120 is 261/141/123 (67.969%; 1.359) on the paper-derived primary lane, so
+      the identity scores are not a head-to-head comparison. Acquisition plus
+      figure/unsearchable notation explains 66/89 and 112/123 false negatives.
+      Missing identities or counts create 94-95% of carrier absolute error;
+      wrong supplied values create only 5-6%. V1 missed the identity gate, V2
+      did not replicate, and temporary-copy `tg6` replays had zero eligible rows
+      in these locks. Ranked paper and MAE worklists:
+      `docs/evidence/current_protocol_diagnostic_20260904/`. The formal
+      `gold_120b` tier remains registered but unrun; no paid arm was opened.
+      Full unit suite: 2,843 passed.
+- [ ] **Work the source-acquisition/figure queue before another extraction
+      candidate.** Start with the ranked no-source/stub/absent-byte papers in
+      `docs/evidence/current_protocol_diagnostic_20260904/problem_papers.csv`,
+      define a deterministic paper-agnostic acquisition or figure-reading
+      candidate, and measure it on locked bytes before authorizing a paid arm.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row

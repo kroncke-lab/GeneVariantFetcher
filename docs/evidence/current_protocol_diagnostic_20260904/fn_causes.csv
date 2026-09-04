@@ -1,0 +1,15 @@
+cohort_id,cohort,cause,cause_label,missed_rows,share_of_fn,gold_rows
+gold_120_current,gold_120 current lock (118 attempts),acquisition,No usable source / row absent from acquired text,39,0.43820224719101125,632
+gold_120_current,gold_120 current lock (118 attempts),unknown_notation,Figure-only or notation not string-searchable,27,0.30337078651685395,632
+gold_120_current,gold_120 current lock (118 attempts),model_missed,Model omitted visible row,7,0.07865168539325842,632
+gold_120_current,gold_120 current lock (118 attempts),parser_dropped,Parser dropped model output,5,0.056179775280898875,632
+gold_120_current,gold_120 current lock (118 attempts),source_selection,Source staged incorrectly,4,0.0449438202247191,632
+gold_120_current,gold_120 current lock (118 attempts),projection_dropped,Trusted projection dropped row,4,0.0449438202247191,632
+gold_120_current,gold_120 current lock (118 attempts),condensing,Source lost during condensing,2,0.02247191011235955,632
+gold_120_current,gold_120 current lock (118 attempts),matcher,Scorer did not pair projected row,1,0.011235955056179775,632
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),acquisition,No usable source / row absent from acquired text,72,0.5853658536585366,384
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),unknown_notation,Figure-only or notation not string-searchable,40,0.3252032520325203,384
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),model_missed,Model omitted visible row,5,0.04065040650406504,384
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),parser_dropped,Parser dropped model output,3,0.024390243902439025,384
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),projection_dropped,Trusted projection dropped row,2,0.016260162601626018,384
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),paper_row_lost_to_linkage_origin,Paper row re-attributed to linkage,1,0.008130081300813009,384

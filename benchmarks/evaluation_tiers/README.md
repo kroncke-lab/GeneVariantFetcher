@@ -17,7 +17,7 @@ are not extra gates and must not be described as current.
 | 1 | `gold_50` | 50 | 50 | Scored gate: fixed cardiac 48 plus Nate's two lead-approved BRCA2 papers |
 | 2 | `gold_120` | 118 | 114 | Scored cardiac expansion: originally 30/gene; KCNH2 is 28 after quarantining two invalid PMIDs |
 | 3 | `reviewer_545` | 545 | 506 | Full reviewer backlog: ten 50-paper queues plus the 45-paper BRCA2 queue |
-| 4 | `gold_120b` | 125 | 124 | Scored replication tranche: 30/gene cardiac plus the 5 remaining curated BRCA2 papers, sharing no article with tiers 1-3 or the gold-150 rosters |
+| 4 | `gold_120b` | 125 | 124 | Registered, unrun replication tier: 30/gene cardiac plus the 5 remaining curated BRCA2 papers, sharing no article with tiers 1-3 or the gold-150 rosters |
 
 Counts are **gene–paper extraction/review attempts**, not necessarily distinct
 articles. A paper can appear in more than one gene–disease workspace. This is
@@ -47,8 +47,10 @@ why the full backlog has 545 attempts but 506 unique PMIDs.
    cohort; LMNA and TTN are narrowed from 99 to the ranked 50-paper manifests
    in `reviewer_pmids_50_20260811/`.
 
-4. `tier4_gold_120b.tsv` is the second scored tranche, drawn on 2026-08-25 with
-   seed `2026082501` by `select_tranche.py`. It answers a different question
+4. `tier4_gold_120b.tsv` is a scoreable second replication tranche, drawn on
+   2026-08-25 with seed `2026082501` by `select_tranche.py`. It has not been run
+   or scored: as of 2026-09-04 there is no matching locked report and its
+   precision, recall, and MAE are undefined. Once opened, it answers a different question
    from `gold_120` — does a protocol tuned on tier 2 hold on gold papers it has
    never been scored against? — so it is **article-level** disjoint from tiers
    1-3 and from the preregistered gold-150 calibration/holdout rosters. Same
@@ -75,8 +77,9 @@ why the full backlog has 545 attempts but 506 unique PMIDs.
    intervals here, and do not re-draw to chase row count — selecting on row
    count is selecting on the answer key.
 
-Tiers 1, 2, and 4 are scored benchmarks; Tier 3 is the independent operational
-review backlog. The `gold_120` sample overlaps the cardiac arm of `gold_50` by
+Tiers 1 and 2 have scored artifacts; Tier 4 is registered and scoreable but
+unrun. Tier 3 is the independent operational review backlog. The `gold_120`
+sample overlaps the cardiac arm of `gold_50` by
 nine attempts and adds 110 attempts, avoiding a second high-carrier-only sample.
 
 The empty ALPL, N4BP2L1, and TTR legacy workspaces are not paper cohorts.

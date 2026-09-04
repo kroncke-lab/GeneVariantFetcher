@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-09-03.
+Last updated: 2026-09-04.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -76,6 +76,46 @@ the paper-target LQTS definition); and KCNH2 P926AfsX14 PMID 20181576 is a
 four-carrier family whose ECG and symptom subsets do not match the legacy gold
 partition. None is a source-positive count silently rewritten to zero. Grok 4.6
 `xhigh` independently audited these cases and the high-value null rows.
+
+### Current two-cohort failure diagnostic (2026-09-04)
+
+The current diagnostic reads the latest completed locks near the requested
+120-attempt scale. The identity columns are **not a head-to-head comparison**:
+Gold 118 is scored from its legacy trusted projection, which can include
+ClinVar/PubTator linkage, while Mixed 120 uses the paper-derived primary lane.
+They remain useful within-lock snapshots and failure inventories.
+
+| Cohort | Scored lane | TP / FP / FN | Recall | Carrier supply | Conditional MAE | End-to-end MAE |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Gold 118 | Legacy trusted projection | 543 / 275 / 89 | 85.918% | 207 / 632 (32.753%) | 0.179 | 1.112 |
+| Mixed 120 | Paper-derived primary | 261 / 141 / 123 | 67.969% | 130 / 384 (33.854%) | 0.231 | 1.359 |
+
+Recall is principally source-bound: acquisition plus figure/unsearchable-
+notation failures account for **66/89 (74.2%)** Gold 118 false negatives and
+**112/123 (91.1%)** Mixed 120 false negatives. Only 23 and 11 misses,
+respectively, are reachable by downstream parser/model/projection changes on
+the bytes already acquired.
+
+Carrier error is also an omission problem. Gold 118 has 703 absolute-error
+units: 540 (76.8%) come from matched variants with no supplied count, 126
+(17.9%) from missed identities, and 37 (5.3%) from wrong supplied values. Mixed
+120 has 522 units: 290 (55.6%) from missed identities, 202 (38.7%) from omitted
+counts, and 30 (5.7%) from wrong supplied values.
+
+The largest false-negative attempts are KCNH2 PMID 29650123 (21; acquired bytes
+omit 15 substitutions and six notations are not searchable), SCN5A 15898185
+(10; nine behind a stub), and RYR2 27114410 (9; no source) in Gold 118; and
+SCN5A 25163546 (20; stub), SCN5A 20031634 (13; no source), and BRCA1 10528853
+(13; figure-only) in Mixed 120. The ranked worklists and row-level traces are in
+[`evidence/current_protocol_diagnostic_20260904/`](evidence/current_protocol_diagnostic_20260904/).
+
+Three locked paper-agnostic reading/count comparisons were tested. V1 improved
+Mixed 01 carrier end-to-end MAE by 0.731 but raised recall only 0.826 percentage
+points, below the identity gate; V2 changed recall by -0.330 points on Mixed 02
+and -0.521 points on Mixed 120, so it did not replicate. A temporary-copy replay
+of the `tg6` source-backed table-outlier exception found zero eligible rows and
+zero aggregate changes in these two locks. No candidate is promoted. The formal
+`gold_120b` replication tier is registered but still unrun and has no metric.
 
 ### How to report these numbers (2026-08-25)
 

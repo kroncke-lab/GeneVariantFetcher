@@ -1,0 +1,3 @@
+cohort_id,cohort,databases,source_backed_outliers,materially_changed_rows
+gold_120_current,gold_120 current lock (118 attempts),4,0,0
+mixed_continuation_120,mixed continuation tranche 01 (120 attempts),7,0,0
