@@ -1,0 +1,37 @@
+{
+  "recovered": [
+    {
+      "pmid": "20031634",
+      "source_url": "https://univ-brest.hal.science/hal-00750425/document",
+      "pdf": "validation_runs/phenotype_failure_panel_20260905/source_probe/20031634_d80be0d.pdf",
+      "pdf_sha256": "201e39aa350d5b03f2266de2c12fe6a40e63f8de4406834d41e750701b872181",
+      "full_context": "validation_runs/phenotype_failure_panel_20260905/recovered_sources/SCN5A/20031634_FULL_CONTEXT.md",
+      "full_context_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+      "characters": 47646,
+      "status": "verified_body_recovery_supplement_surface_unavailable"
+    },
+    {
+      "pmid": "25163546",
+      "source_url": "https://discovery.ucl.ac.uk/id/eprint/1447311/1/Syrris_Haas%20Eur%20Heart%20J.pdf",
+      "pdf": "validation_runs/phenotype_failure_panel_20260905/source_probe/25163546.pdf",
+      "pdf_sha256": "1f27875333ea9738ac7a4a5dbd36b7c9f6c3ebbb90341404fc1a92dbe07261e1",
+      "full_context": "validation_runs/phenotype_failure_panel_20260905/recovered_sources/SCN5A/25163546_FULL_CONTEXT.md",
+      "full_context_sha256": "0f0e5e20c39e03f857139d83fb81ba1ed87b26ccac0bdbd4a3066b58f06fcfc3",
+      "characters": 56150,
+      "status": "verified_body_recovery_supplement_surface_unavailable"
+    }
+  ],
+  "table1_checks": {
+    "rows": 13,
+    "source_totals": [
+      115,
+      54,
+      55,
+      6,
+      8
+    ],
+    "row_partitions_close": true,
+    "visual_review": "PDF page 3 (printed 553); header, 13 rows, and totals checked. Text-layer cDNA glyphs remain raw; not HGVS-normalized.",
+    "count_status": "source audit only; no pipeline count recovery or score promotion"
+  }
+}

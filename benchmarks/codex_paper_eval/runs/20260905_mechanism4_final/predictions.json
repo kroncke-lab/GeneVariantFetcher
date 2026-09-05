@@ -1,0 +1,1945 @@
+{
+  "comparison_score_lanes": [
+    "linkage_assisted"
+  ],
+  "completed_at": "2026-09-05T18:40:28.881378+00:00",
+  "count_projection": "trusted",
+  "excluded_source_layers": [],
+  "extraction_elapsed_seconds": 1148.0,
+  "extraction_started_at": "2026-09-05T13:32:13.748528",
+  "identity_projection": "trusted",
+  "linkage_shadows_excluded": 3,
+  "papers": [
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family E",
+            "unaffected": null,
+            "variant": "c.3963+12T>C"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family A",
+            "unaffected": null,
+            "variant": "c.612-2A>G"
+          },
+          {
+            "affected": 6,
+            "carriers": 11,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family L",
+            "unaffected": 4,
+            "variant": "p.1570_F1571insI"
+          },
+          {
+            "affected": 3,
+            "carriers": 5,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family K",
+            "unaffected": 2,
+            "variant": "p.Ala1223ProfsX7 c.3667delG"
+          },
+          {
+            "affected": 6,
+            "carriers": 9,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family I",
+            "unaffected": 2,
+            "variant": "p.Ala665GlyfsX16 c.1983_1993dup"
+          },
+          {
+            "affected": 4,
+            "carriers": 11,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family C",
+            "unaffected": 6,
+            "variant": "p.Arg225Trp c.673C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family J",
+            "unaffected": null,
+            "variant": "p.Arg535* c.1603C>T"
+          },
+          {
+            "affected": 3,
+            "carriers": 9,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family D",
+            "unaffected": 5,
+            "variant": "p.Asn1722Asp c.5164A>G"
+          },
+          {
+            "affected": 7,
+            "carriers": 11,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family M",
+            "unaffected": 4,
+            "variant": "p.Glu161Lys c.481G>A"
+          },
+          {
+            "affected": 4,
+            "carriers": 14,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family B",
+            "unaffected": 9,
+            "variant": "p.Gly1408Arg c.4222G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family H",
+            "unaffected": null,
+            "variant": "p.Gly752Arg c.2254G>A"
+          },
+          {
+            "affected": 4,
+            "carriers": 5,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family G",
+            "unaffected": 1,
+            "variant": "p.Leu839Pro c.2516T>C"
+          },
+          {
+            "affected": 3,
+            "carriers": 9,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 1, Family F",
+            "unaffected": 5,
+            "variant": "p.Ser1382Ile c.4145G>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "c.3960+1G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "c.3960+1G>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "c.475_482+3del"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Asn1721Asp c.5161A>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Gly1407Arg c.4219G>A"
+          }
+        ]
+      },
+      "elapsed_seconds": 155.39036500000003,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "c.3960+1G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "c.3960+1G>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "c.475_482+3del"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Arg225Gln c.674G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Arg225Pro c.674G>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Asn1721Asp c.5161A>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Gly1407Arg c.4219G>A"
+        }
+      ],
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 50286,
+        "llm_calls": 14,
+        "models": {
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 36490,
+            "llm_calls": 13,
+            "output_tokens": 4592,
+            "provider_seconds": 67.479307,
+            "successful_calls": 13,
+            "total_tokens": 41082
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 13796,
+            "llm_calls": 1,
+            "output_tokens": 10446,
+            "provider_seconds": 87.911058,
+            "successful_calls": 1,
+            "total_tokens": 24242
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 15038,
+        "provider_seconds": 155.39036500000003,
+        "successful_calls": 14,
+        "telemetry_available": true,
+        "total_tokens": 65324
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family E",
+          "unaffected": null,
+          "variant": "c.3963+12T>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family A",
+          "unaffected": null,
+          "variant": "c.612-2A>G"
+        },
+        {
+          "affected": 6,
+          "carriers": 11,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family L",
+          "unaffected": 4,
+          "variant": "p.1570_F1571insI"
+        },
+        {
+          "affected": 3,
+          "carriers": 5,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family K",
+          "unaffected": 2,
+          "variant": "p.Ala1223ProfsX7 c.3667delG"
+        },
+        {
+          "affected": 6,
+          "carriers": 9,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family I",
+          "unaffected": 2,
+          "variant": "p.Ala665GlyfsX16 c.1983_1993dup"
+        },
+        {
+          "affected": 4,
+          "carriers": 11,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family C",
+          "unaffected": 6,
+          "variant": "p.Arg225Trp c.673C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family J",
+          "unaffected": null,
+          "variant": "p.Arg535* c.1603C>T"
+        },
+        {
+          "affected": 3,
+          "carriers": 9,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family D",
+          "unaffected": 5,
+          "variant": "p.Asn1722Asp c.5164A>G"
+        },
+        {
+          "affected": 7,
+          "carriers": 11,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family M",
+          "unaffected": 4,
+          "variant": "p.Glu161Lys c.481G>A"
+        },
+        {
+          "affected": 4,
+          "carriers": 14,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family B",
+          "unaffected": 9,
+          "variant": "p.Gly1408Arg c.4222G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family H",
+          "unaffected": null,
+          "variant": "p.Gly752Arg c.2254G>A"
+        },
+        {
+          "affected": 4,
+          "carriers": 5,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family G",
+          "unaffected": 1,
+          "variant": "p.Leu839Pro c.2516T>C"
+        },
+        {
+          "affected": 3,
+          "carriers": 9,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 1, Family F",
+          "unaffected": 5,
+          "variant": "p.Ser1382Ile c.4145G>T"
+        }
+      ]
+    },
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.A302V c.905C>T",
+              "p.A302V c.905C>T"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "A302V"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.A341E c.1022C>A",
+              "p.A341E c.1022C>A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "A341E"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.G269S c.805G>A",
+              "p.G269S c.805G>A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "G269S"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.G584S c.1750G>A",
+              "p.G584S c.1750G>A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "G584S"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"| 34 | M | 5 | W | RYR2 | 44 | 6737 C>T | S2246L | G643S-KCNQ1, D85N-KCNE1 | Exertion | SUD | Negative |\"]",
+            "source_layer": "regex_text",
+            "source_location": "Text scan (protein_single_letter)",
+            "unaffected": null,
+            "variant": "G643S"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.I198V c.592A>G",
+              "p.I198V c.592A>G"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "I198V"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.T312I c.935C>T",
+              "p.T312I c.935C>T"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "T312I"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.T587M c.1760C>T",
+              "p.T587M c.1760C>T"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "T587M"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.W379R c.1135T>C",
+              "p.W379R c.1135T>C"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "W379R"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.Y111C c.332A>G",
+              "p.Y111C c.332A>G"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "Y111C"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, Row 2",
+            "unaffected": null,
+            "variant": "p.L163fs*236 c.488delT"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, Row 3",
+            "unaffected": null,
+            "variant": "p.L191fs*90"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Arg192fs c.573_577del"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Lys393Asn c.1179G>T"
+          }
+        ]
+      },
+      "elapsed_seconds": 153.22112800000005,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Arg192fs c.573_577del"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Leu163fs c.488del"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Lys393Asn c.1179G>T"
+        }
+      ],
+      "gene": "KCNQ1",
+      "pmid": "22677073",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 60364,
+        "llm_calls": 22,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 811,
+            "llm_calls": 1,
+            "output_tokens": 290,
+            "provider_seconds": 1.687748,
+            "successful_calls": 1,
+            "total_tokens": 1101
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 37961,
+            "llm_calls": 20,
+            "output_tokens": 4635,
+            "provider_seconds": 80.484098,
+            "successful_calls": 20,
+            "total_tokens": 42596
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 21592,
+            "llm_calls": 1,
+            "output_tokens": 10829,
+            "provider_seconds": 71.049282,
+            "successful_calls": 1,
+            "total_tokens": 32421
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 15754,
+        "provider_seconds": 153.22112800000005,
+        "successful_calls": 22,
+        "telemetry_available": true,
+        "total_tokens": 76118
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.A302V c.905C>T",
+            "p.A302V c.905C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "A302V"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.A341E c.1022C>A",
+            "p.A341E c.1022C>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "A341E"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.G269S c.805G>A",
+            "p.G269S c.805G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "G269S"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.G584S c.1750G>A",
+            "p.G584S c.1750G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "G584S"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"| 34 | M | 5 | W | RYR2 | 44 | 6737 C>T | S2246L | G643S-KCNQ1, D85N-KCNE1 | Exertion | SUD | Negative |\"]",
+          "source_layer": "regex_text",
+          "source_location": "Text scan (protein_single_letter)",
+          "unaffected": null,
+          "variant": "G643S"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.I198V c.592A>G",
+            "p.I198V c.592A>G"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "I198V"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.T312I c.935C>T",
+            "p.T312I c.935C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "T312I"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.T587M c.1760C>T",
+            "p.T587M c.1760C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "T587M"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.W379R c.1135T>C",
+            "p.W379R c.1135T>C"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "W379R"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.Y111C c.332A>G",
+            "p.Y111C c.332A>G"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "Y111C"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, Row 2",
+          "unaffected": null,
+          "variant": "p.L163fs*236 c.488delT"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, Row 3",
+          "unaffected": null,
+          "variant": "p.L191fs*90"
+        }
+      ]
+    },
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=regex_table",
+            "merged_notations": [
+              "p.Gly1885Glu c.5654G>A"
+            ],
+            "source_layer": "regex_table",
+            "source_location": "TABLE 2 (regex extraction)",
+            "unaffected": null,
+            "variant": "G1885E"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=regex_table",
+            "merged_notations": [
+              "p.Gly1886Ser c.5656G>A"
+            ],
+            "source_layer": "regex_table",
+            "source_location": "TABLE 2 (regex extraction)",
+            "unaffected": null,
+            "variant": "G1886S"
+          },
+          {
+            "affected": null,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=regex_table",
+            "source_layer": "regex_table",
+            "source_location": "TABLE 2, row 16 (router+deterministic)",
+            "unaffected": null,
+            "variant": "c.2398+5G>T"
+          },
+          {
+            "affected": null,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=regex_table",
+            "source_layer": "regex_table",
+            "source_location": "TABLE 2, row 35 (router+deterministic)",
+            "unaffected": null,
+            "variant": "c.6739C>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 28",
+            "unaffected": 0,
+            "variant": "p.D400H c.1198G>C"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 42",
+            "unaffected": 0,
+            "variant": "p.E4146K c.12436G>A"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 33",
+            "unaffected": 0,
+            "variant": "p.G2227V c.6680G>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "merged_notations": [
+              "p.Gly4935Arg c.14803G>A"
+            ],
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 45",
+            "unaffected": 0,
+            "variant": "p.G4936R c.14803G>A"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 27",
+            "unaffected": null,
+            "variant": "p.H240R c.719A>G"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 26",
+            "unaffected": 0,
+            "variant": "p.I217V c.649A>G"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 38",
+            "unaffected": 0,
+            "variant": "p.L3879P c.11636T>C"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 41",
+            "unaffected": null,
+            "variant": "p.N4097S c.12290A>G"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 39",
+            "unaffected": 0,
+            "variant": "p.Q3925E c.11773C>G"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 29",
+            "unaffected": 0,
+            "variant": "p.R407I c.1220G>T"
+          },
+          {
+            "affected": 2,
+            "carriers": 2,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, rows 30 and 31",
+            "unaffected": 0,
+            "variant": "p.R420W c.1258C>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 43",
+            "unaffected": 0,
+            "variant": "p.R4497C c.13610C>T"
+          },
+          {
+            "affected": 2,
+            "carriers": 2,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, rows 34 and 35",
+            "unaffected": 0,
+            "variant": "p.S2246L c.6737C>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 40",
+            "unaffected": null,
+            "variant": "p.S3959L c.11876C>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "[\"20 RYR2 (44.5%, 14 novel)\"]",
+            "merged_notations": [
+              "p.Thr1107Met c.3320C>T"
+            ],
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 16; Results section",
+            "unaffected": 0,
+            "variant": "p.T1107M c.3321C>T"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 37",
+            "unaffected": 0,
+            "variant": "p.T2510A c.7528A>G"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 27",
+            "unaffected": 0,
+            "variant": "p.T4158P c.12472A>C"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 32",
+            "unaffected": 0,
+            "variant": "p.V2113M c.6337G>A"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "merged_notations": [
+              "p.Trp4645Arg c.13933T>C"
+            ],
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 44",
+            "unaffected": 0,
+            "variant": "p.W4645R c.13933T>A"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=llm_table",
+            "source_layer": "llm_table",
+            "source_location": "Table 2, row 36",
+            "unaffected": 0,
+            "variant": "p.Y2392C c.7175A>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Ala1136Val c.3407C>T"
+          }
+        ]
+      },
+      "elapsed_seconds": 308.01719800000006,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Ala1136Val c.3407C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Gly1885Glu c.5654G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Gly1886Ser c.5656G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Gly4935Arg c.14803G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Thr1107Met c.3320C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Trp4645Arg c.13933T>C"
+        }
+      ],
+      "gene": "RYR2",
+      "pmid": "22677073",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 82734,
+        "llm_calls": 23,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 810,
+            "llm_calls": 1,
+            "output_tokens": 520,
+            "provider_seconds": 2.403948,
+            "successful_calls": 1,
+            "total_tokens": 1330
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 59738,
+            "llm_calls": 21,
+            "output_tokens": 13215,
+            "provider_seconds": 206.236886,
+            "successful_calls": 21,
+            "total_tokens": 72953
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 22186,
+            "llm_calls": 1,
+            "output_tokens": 14859,
+            "provider_seconds": 99.376364,
+            "successful_calls": 1,
+            "total_tokens": 37045
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 28594,
+        "provider_seconds": 308.01719800000006,
+        "successful_calls": 23,
+        "telemetry_available": true,
+        "total_tokens": 111328
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Gly1885Glu c.5654G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "TABLE 2 (regex extraction)",
+          "unaffected": null,
+          "variant": "G1885E"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Gly1886Ser c.5656G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "TABLE 2 (regex extraction)",
+          "unaffected": null,
+          "variant": "G1886S"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "TABLE 2, row 16 (router+deterministic)",
+          "unaffected": null,
+          "variant": "c.2398+5G>T"
+        },
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "TABLE 2, row 35 (router+deterministic)",
+          "unaffected": null,
+          "variant": "c.6739C>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 28",
+          "unaffected": 0,
+          "variant": "p.D400H c.1198G>C"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 42",
+          "unaffected": 0,
+          "variant": "p.E4146K c.12436G>A"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 33",
+          "unaffected": 0,
+          "variant": "p.G2227V c.6680G>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "merged_notations": [
+            "p.Gly4935Arg c.14803G>A"
+          ],
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 45",
+          "unaffected": 0,
+          "variant": "p.G4936R c.14803G>A"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 27",
+          "unaffected": null,
+          "variant": "p.H240R c.719A>G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 26",
+          "unaffected": 0,
+          "variant": "p.I217V c.649A>G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 38",
+          "unaffected": 0,
+          "variant": "p.L3879P c.11636T>C"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 41",
+          "unaffected": null,
+          "variant": "p.N4097S c.12290A>G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 39",
+          "unaffected": 0,
+          "variant": "p.Q3925E c.11773C>G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 29",
+          "unaffected": 0,
+          "variant": "p.R407I c.1220G>T"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, rows 30 and 31",
+          "unaffected": 0,
+          "variant": "p.R420W c.1258C>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 43",
+          "unaffected": 0,
+          "variant": "p.R4497C c.13610C>T"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, rows 34 and 35",
+          "unaffected": 0,
+          "variant": "p.S2246L c.6737C>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 40",
+          "unaffected": null,
+          "variant": "p.S3959L c.11876C>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "[\"20 RYR2 (44.5%, 14 novel)\"]",
+          "merged_notations": [
+            "p.Thr1107Met c.3320C>T"
+          ],
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 16; Results section",
+          "unaffected": 0,
+          "variant": "p.T1107M c.3321C>T"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 37",
+          "unaffected": 0,
+          "variant": "p.T2510A c.7528A>G"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 27",
+          "unaffected": 0,
+          "variant": "p.T4158P c.12472A>C"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 32",
+          "unaffected": 0,
+          "variant": "p.V2113M c.6337G>A"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "merged_notations": [
+            "p.Trp4645Arg c.13933T>C"
+          ],
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 44",
+          "unaffected": 0,
+          "variant": "p.W4645R c.13933T>A"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 2, row 36",
+          "unaffected": 0,
+          "variant": "p.Y2392C c.7175A>G"
+        }
+      ]
+    },
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.F2004L",
+              "p.F2004L"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "F2004L"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=figure",
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "I1334V"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.I1768V c.5302A>G",
+              "p.I1768V c.5302A>G"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "I1768V"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.I267L c.799A>C",
+              "p.I267L c.799A>C"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": 0,
+            "variant": "I267L"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.P2006A",
+              "p.P2006A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "P2006A"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.R104Q c.311G>A",
+              "p.R104Q c.311G>A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": 0,
+            "variant": "R104Q"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.R1193Q",
+              "p.R1193Q"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "R1193Q"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.R680H c.2039G>A",
+              "p.R680H c.2039G>A"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "R680H"
+          },
+          {
+            "affected": 4,
+            "carriers": 4,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.S1103Y",
+              "p.S1103Y"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": 0,
+            "variant": "S1103Y"
+          },
+          {
+            "affected": 2,
+            "carriers": 2,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.S216L",
+              "p.S216L",
+              "p.Ser216Leu c.647C>T"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": 0,
+            "variant": "S216L"
+          },
+          {
+            "affected": 1,
+            "carriers": 1,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.T220I c.659C>T",
+              "p.T220I c.659C>T"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": 0,
+            "variant": "T220I"
+          },
+          {
+            "affected": 2,
+            "carriers": 2,
+            "evidence": "no quote captured; source_layer=figure",
+            "merged_notations": [
+              "p.V1951L",
+              "p.V1951L"
+            ],
+            "source_layer": "figure",
+            "source_location": "figure-reader",
+            "unaffected": null,
+            "variant": "V1951L"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Ile1767Val c.5299A>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Pro2005Ala c.6013C>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Val1950Leu c.5848G>T"
+          }
+        ]
+      },
+      "elapsed_seconds": 240.368643,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Ile1767Val c.5299A>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Pro2005Ala c.6013C>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Ser216Leu c.647C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Val1950Leu c.5848G>T"
+        }
+      ],
+      "gene": "SCN5A",
+      "pmid": "22677073",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 60834,
+        "llm_calls": 22,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 811,
+            "llm_calls": 1,
+            "output_tokens": 498,
+            "provider_seconds": 3.864799,
+            "successful_calls": 1,
+            "total_tokens": 1309
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 38504,
+            "llm_calls": 20,
+            "output_tokens": 9110,
+            "provider_seconds": 151.01669299999998,
+            "successful_calls": 20,
+            "total_tokens": 47614
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 21519,
+            "llm_calls": 1,
+            "output_tokens": 12527,
+            "provider_seconds": 85.487151,
+            "successful_calls": 1,
+            "total_tokens": 34046
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 22135,
+        "provider_seconds": 240.368643,
+        "successful_calls": 22,
+        "telemetry_available": true,
+        "total_tokens": 82969
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.F2004L",
+            "p.F2004L"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "F2004L"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "I1334V"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.I1768V c.5302A>G",
+            "p.I1768V c.5302A>G"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "I1768V"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.I267L c.799A>C",
+            "p.I267L c.799A>C"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 0,
+          "variant": "I267L"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.P2006A",
+            "p.P2006A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "P2006A"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R104Q c.311G>A",
+            "p.R104Q c.311G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 0,
+          "variant": "R104Q"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R1193Q",
+            "p.R1193Q"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "R1193Q"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R680H c.2039G>A",
+            "p.R680H c.2039G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "R680H"
+        },
+        {
+          "affected": 4,
+          "carriers": 4,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.S1103Y",
+            "p.S1103Y"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 0,
+          "variant": "S1103Y"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.S216L",
+            "p.S216L",
+            "p.Ser216Leu c.647C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 0,
+          "variant": "S216L"
+        },
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.T220I c.659C>T",
+            "p.T220I c.659C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 0,
+          "variant": "T220I"
+        },
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.V1951L",
+            "p.V1951L"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "V1951L"
+        }
+      ]
+    }
+  ],
+  "prelock_gold_usage": {
+    "provenance": "all_production_run_statuses_record_gold_access_disabled",
+    "read_only_layer_scoring_possible": false,
+    "scores_feed_back_into_predictions": false
+  },
+  "primary_score_lane": "paper_derived",
+  "production_gold_access": [
+    {
+      "disabled": true,
+      "gene": "KCNQ1",
+      "gold_derived_alias_files_disabled": true,
+      "mode": "disabled"
+    },
+    {
+      "disabled": true,
+      "gene": "RYR2",
+      "gold_derived_alias_files_disabled": true,
+      "mode": "disabled"
+    },
+    {
+      "disabled": true,
+      "gene": "SCN5A",
+      "gold_derived_alias_files_disabled": true,
+      "mode": "disabled"
+    }
+  ],
+  "production_run_statuses": [
+    {
+      "gene": "KCNQ1",
+      "sha256": "ab66b1ef077a0bc771368f0e67b0c156118fb304f26cb938b2e9d41b824017f3",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/KCNQ1/20260905_133213/RUN_STATUS.json"
+    },
+    {
+      "gene": "RYR2",
+      "sha256": "163348916eed3c671d34f40b52eff7bdc7ac86c12b06c24ef7be094f98b84a55",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/RYR2/20260905_133213/RUN_STATUS.json"
+    },
+    {
+      "gene": "SCN5A",
+      "sha256": "25a48384723f4b0ecc0e53ea0f702553288d9003b15ca2c0fc8adb0f2496fc02",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/RUN_STATUS.json"
+    }
+  ],
+  "production_run_timing": [
+    {
+      "duration_seconds": 205,
+      "gene": "KCNQ1",
+      "source": "RUN_STATUS.json",
+      "start_timestamp": "2026-09-05T13:32:13.748535"
+    },
+    {
+      "duration_seconds": 463,
+      "gene": "RYR2",
+      "source": "RUN_STATUS.json",
+      "start_timestamp": "2026-09-05T13:32:13.788351"
+    },
+    {
+      "duration_seconds": 480,
+      "gene": "SCN5A",
+      "source": "RUN_STATUS.json",
+      "start_timestamp": "2026-09-05T13:32:13.748528"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 22,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 22,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/KCNQ1/20260905_133213/llm_traces/trace_manifest.json",
+      "run_id": "69952337-77e4-4afb-a4da-da7a90644611",
+      "sha256": "a6313762a8389e59b475d59859db8add98f9a2e08a458a4fe029bd039049dd65"
+    },
+    {
+      "decision_event_count": 23,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 23,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/RYR2/20260905_133213/llm_traces/trace_manifest.json",
+      "run_id": "48a267b9-b052-4c20-b4a3-e5603c0e83f9",
+      "sha256": "c2254458755219254117e1c89c0f8a9bbd845e4a12820a6ad0a1c320e4a497ad"
+    },
+    {
+      "decision_event_count": 37,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 36,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/llm_traces/trace_manifest.json",
+      "run_id": "84754dcd-a022-4b7b-806c-a564a7c2b62f",
+      "sha256": "24838a823a3f7b46ce55e9499b968b98bc1d5b4a402f958c9d445e8c7a19f31f"
+    }
+  ],
+  "provenance_policy": {
+    "ambiguous_unattributed_layers": [
+      "manual_or_legacy",
+      "mixed"
+    ],
+    "external_linkage_is_paper_discovery": false,
+    "external_linkage_layers": [
+      "clinvar",
+      "pubtator"
+    ],
+    "external_linkage_rows_in_primary_score": false,
+    "paper_derived_layers": [
+      "figure",
+      "llm_table",
+      "llm_text",
+      "regex_table",
+      "regex_text"
+    ],
+    "unclassified_rows_in_primary_score": false
+  },
+  "run_id": "20260905_mechanism4_final",
+  "schema_version": 1,
+  "source_databases": {
+    "KCNQ1": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/KCNQ1/20260905_133213/KCNQ1.db",
+    "RYR2": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/RYR2/20260905_133213/RYR2.db",
+    "SCN5A": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/SCN5A.db"
+  },
+  "started_at": null,
+  "strategy": "production_gvf_run",
+  "token_usage": {
+    "input_tokens": 254218,
+    "llm_calls": 81,
+    "models": {
+      "azure_ai/Kimi-K2.6-1": {
+        "input_tokens": 2432,
+        "llm_calls": 3,
+        "output_tokens": 1308,
+        "provider_seconds": 7.956495,
+        "successful_calls": 3,
+        "total_tokens": 3740
+      },
+      "azure_ai/gpt-5.6-sol": {
+        "input_tokens": 172693,
+        "llm_calls": 74,
+        "output_tokens": 31552,
+        "provider_seconds": 505.216984,
+        "successful_calls": 74,
+        "total_tokens": 204245
+      },
+      "azure_ai/grok-4.3": {
+        "input_tokens": 79093,
+        "llm_calls": 4,
+        "output_tokens": 48661,
+        "provider_seconds": 343.823855,
+        "successful_calls": 4,
+        "total_tokens": 127754
+      }
+    },
+    "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens; provider_seconds is summed call latency, not end-to-end wall clock.",
+    "output_tokens": 81521,
+    "provider_seconds": 856.9973340000001,
+    "successful_calls": 81,
+    "telemetry_available": true,
+    "total_tokens": 335739
+  },
+  "unattributed_rows_held_from_scores": 0
+}

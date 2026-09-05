@@ -1,0 +1,2730 @@
+{
+  "artifacts": {
+    "cumulative_phenotype_count_recovery": {
+      "reason": "cumulative figure refreshes after scored candidate arms",
+      "status": "not_applicable"
+    },
+    "gold_difference": {
+      "evaluation_rule": "automated minus reference for every asserted gold row; identity miss and abstention scored as 0",
+      "files": {
+        "csv": "figures/data/gold_difference.csv",
+        "json": "figures/data/gold_difference.json",
+        "pdf": "figures/gold_difference.pdf",
+        "png": "figures/gold_difference.png",
+        "svg": "figures/gold_difference.svg"
+      },
+      "renderer_output": [
+        "wrote 183 plotted rows to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/data/gold_difference.csv",
+        "wrote summary to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/data/gold_difference.json",
+        "wrote editable figure to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/gold_difference.svg",
+        "wrote figure copy to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/gold_difference.png",
+        "wrote figure copy to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/gold_difference.pdf"
+      ],
+      "status": "generated"
+    },
+    "phenotype_count_recovery": {
+      "evaluation_missing_count": 0,
+      "files": {
+        "csv": "figures/data/phenotype_count_recovery.csv",
+        "json": "figures/data/phenotype_count_recovery.json",
+        "pdf": "figures/phenotype_count_recovery.pdf",
+        "png": "figures/phenotype_count_recovery.png",
+        "svg": "figures/phenotype_count_recovery.svg"
+      },
+      "renderer_output": [
+        "wrote 110 plotted rows to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/data/phenotype_count_recovery.csv",
+        "wrote summary to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/data/phenotype_count_recovery.json",
+        "wrote editable figure to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/phenotype_count_recovery.svg",
+        "wrote figure copy to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/phenotype_count_recovery.png",
+        "wrote figure copy to /Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/phenotype_count_recovery.pdf"
+      ],
+      "status": "generated",
+      "storage_missing_count": null
+    }
+  },
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "by_gene": {
+    "KCNQ1": {
+      "count": {
+        "affected": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 11,
+          "mae": 1.0,
+          "predicted": 10,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 10,
+          "recall": 0.9090909090909091,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.9090909090909091,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 11,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 10,
+          "predicted_on_nonzero_gold": 10,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.9090909090909091,
+          "recall_nonzero_gold": 0.9090909090909091,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 11,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.0,
+          "rmse": null
+        }
+      },
+      "counted_precision": {
+        "count_bearing_matched_rows": 10,
+        "counted_extra_rows": 1,
+        "matched_rows": 10,
+        "precision_among_count_bearing_predictions": 0.9090909090909091,
+        "precision_vs_counted_gold_pmids": 0.9090909090909091
+      },
+      "elapsed_seconds": 153.22112800000005,
+      "f1": 0.8695652173913043,
+      "fn": 1,
+      "fp": 2,
+      "merged_notation_twin_rows": 0,
+      "papers": 1,
+      "precision": 0.8333333333333334,
+      "recall": 0.9090909090909091,
+      "token_usage": {
+        "input_tokens": 60364,
+        "output_tokens": 15754,
+        "total_tokens": 76118
+      },
+      "tp": 10
+    },
+    "RYR2": {
+      "count": {
+        "affected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 20,
+          "predicted_on_nonzero_gold": 20,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.8,
+          "recall_nonzero_gold": 0.8,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 20,
+          "predicted_on_nonzero_gold": 20,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.8,
+          "recall_nonzero_gold": 0.8,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 25,
+          "mae": 0.0,
+          "predicted": 17,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 17,
+          "recall": 0.68,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.68,
+          "rmse": 0.0
+        }
+      },
+      "counted_precision": {
+        "count_bearing_matched_rows": 20,
+        "counted_extra_rows": 2,
+        "matched_rows": 22,
+        "precision_among_count_bearing_predictions": 0.9090909090909091,
+        "precision_vs_counted_gold_pmids": 0.9166666666666666
+      },
+      "elapsed_seconds": 308.01719800000006,
+      "f1": 0.8979591836734694,
+      "fn": 3,
+      "fp": 2,
+      "merged_notation_twin_rows": 0,
+      "papers": 1,
+      "precision": 0.9166666666666666,
+      "recall": 0.88,
+      "token_usage": {
+        "input_tokens": 82734,
+        "output_tokens": 28594,
+        "total_tokens": 111328
+      },
+      "tp": 22
+    },
+    "SCN5A": {
+      "count": {
+        "affected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.05263157894736842,
+          "predicted": 19,
+          "predicted_on_nonzero_gold": 19,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.76,
+          "recall_nonzero_gold": 0.76,
+          "recall_zero_gold": null,
+          "rmse": 0.22941573387056177
+        },
+        "carriers": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.3157894736842105,
+          "predicted": 19,
+          "predicted_on_nonzero_gold": 19,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.76,
+          "recall_nonzero_gold": 0.76,
+          "recall_zero_gold": null,
+          "rmse": 0.5619514869490164
+        },
+        "unaffected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 13,
+          "gold_asserted_zero": 12,
+          "mae": 0.0,
+          "predicted": 13,
+          "predicted_on_nonzero_gold": 8,
+          "predicted_on_zero_gold": 5,
+          "recall": 0.52,
+          "recall_nonzero_gold": 0.6153846153846154,
+          "recall_zero_gold": 0.4166666666666667,
+          "rmse": 0.0
+        }
+      },
+      "counted_precision": {
+        "count_bearing_matched_rows": 19,
+        "counted_extra_rows": 1,
+        "matched_rows": 23,
+        "precision_among_count_bearing_predictions": 0.95,
+        "precision_vs_counted_gold_pmids": 0.9583333333333334
+      },
+      "elapsed_seconds": 395.759008,
+      "f1": 0.92,
+      "fn": 2,
+      "fp": 2,
+      "merged_notation_twin_rows": 0,
+      "papers": 2,
+      "precision": 0.92,
+      "recall": 0.92,
+      "token_usage": {
+        "input_tokens": 111120,
+        "output_tokens": 37173,
+        "total_tokens": 148293
+      },
+      "tp": 23
+    }
+  },
+  "by_gold_provenance": {
+    "human_curated_cardiac": {
+      "count": {
+        "affected": {
+          "gold_asserted": 61,
+          "gold_asserted_nonzero": 50,
+          "gold_asserted_zero": 11,
+          "mae": 0.22448979591836735,
+          "predicted": 49,
+          "predicted_on_nonzero_gold": 39,
+          "predicted_on_zero_gold": 10,
+          "recall": 0.8032786885245902,
+          "recall_nonzero_gold": 0.78,
+          "recall_zero_gold": 0.9090909090909091,
+          "rmse": 0.47380354147934284
+        },
+        "carriers": {
+          "gold_asserted": 61,
+          "gold_asserted_nonzero": 61,
+          "gold_asserted_zero": 0,
+          "mae": 0.12244897959183673,
+          "predicted": 49,
+          "predicted_on_nonzero_gold": 49,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.8032786885245902,
+          "recall_nonzero_gold": 0.8032786885245902,
+          "recall_zero_gold": null,
+          "rmse": 0.3499271061118826
+        },
+        "unaffected": {
+          "gold_asserted": 61,
+          "gold_asserted_nonzero": 13,
+          "gold_asserted_zero": 48,
+          "mae": 0.0,
+          "predicted": 30,
+          "predicted_on_nonzero_gold": 8,
+          "predicted_on_zero_gold": 22,
+          "recall": 0.4918032786885246,
+          "recall_nonzero_gold": 0.6153846153846154,
+          "recall_zero_gold": 0.4583333333333333,
+          "rmse": 0.0
+        }
+      },
+      "counted_precision": {
+        "count_bearing_matched_rows": 49,
+        "counted_extra_rows": 4,
+        "matched_rows": 55,
+        "precision_among_count_bearing_predictions": 0.9245283018867925,
+        "precision_vs_counted_gold_pmids": 0.9322033898305084
+      },
+      "elapsed_seconds": 856.9973340000001,
+      "f1": 0.9016393442622952,
+      "fn": 6,
+      "fp": 6,
+      "merged_notation_twin_rows": 0,
+      "papers": 4,
+      "precision": 0.9016393442622951,
+      "recall": 0.9016393442622951,
+      "token_usage": {
+        "input_tokens": 254218,
+        "output_tokens": 81521,
+        "total_tokens": 335739
+      },
+      "tp": 55
+    }
+  },
+  "gold_sources": {
+    "KCNQ1": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv",
+    "RYR2": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard/normalized/RYR2_recall_input.csv",
+    "SCN5A": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "integrity": {
+    "llm_trace_manifest_sha256": null,
+    "llm_trace_report_sha256": null,
+    "predictions_sha256": "139d76a8f59f977a6d830dea11e3683ff3427e8a8eb8674568c48154b0d7acce",
+    "production_run_statuses": [
+      {
+        "gene": "KCNQ1",
+        "sha256": "ab66b1ef077a0bc771368f0e67b0c156118fb304f26cb938b2e9d41b824017f3",
+        "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/KCNQ1/20260905_133213/RUN_STATUS.json"
+      },
+      {
+        "gene": "RYR2",
+        "sha256": "163348916eed3c671d34f40b52eff7bdc7ac86c12b06c24ef7be094f98b84a55",
+        "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/RYR2/20260905_133213/RUN_STATUS.json"
+      },
+      {
+        "gene": "SCN5A",
+        "sha256": "25a48384723f4b0ecc0e53ea0f702553288d9003b15ca2c0fc8adb0f2496fc02",
+        "status": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/RUN_STATUS.json"
+      }
+    ],
+    "production_trace_manifests": [
+      {
+        "decision_event_count": 22,
+        "gene": "KCNQ1",
+        "integrity_level": "write_time_verified",
+        "llm_call_count": 22,
+        "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/KCNQ1/20260905_133213/llm_traces/trace_manifest.json",
+        "run_id": "69952337-77e4-4afb-a4da-da7a90644611",
+        "sha256": "a6313762a8389e59b475d59859db8add98f9a2e08a458a4fe029bd039049dd65"
+      },
+      {
+        "decision_event_count": 23,
+        "gene": "RYR2",
+        "integrity_level": "write_time_verified",
+        "llm_call_count": 23,
+        "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/RYR2/20260905_133213/llm_traces/trace_manifest.json",
+        "run_id": "48a267b9-b052-4c20-b4a3-e5603c0e83f9",
+        "sha256": "c2254458755219254117e1c89c0f8a9bbd845e4a12820a6ad0a1c320e4a497ad"
+      },
+      {
+        "decision_event_count": 37,
+        "gene": "SCN5A",
+        "integrity_level": "write_time_verified",
+        "llm_call_count": 36,
+        "manifest": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/llm_traces/trace_manifest.json",
+        "run_id": "84754dcd-a022-4b7b-806c-a564a7c2b62f",
+        "sha256": "24838a823a3f7b46ce55e9499b968b98bc1d5b4a402f958c9d445e8c7a19f31f"
+      }
+    ],
+    "selection_sha256": "0eb2d956c6cf0f5533103892d3cd02f91496f06c547faf085d9f9744d632b34e",
+    "setup_sha256": null
+  },
+  "locked_at": "2026-09-05T18:40:29.976424+00:00",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 61,
+        "gold_asserted_nonzero": 50,
+        "gold_asserted_zero": 11,
+        "mae": 0.22448979591836735,
+        "predicted": 49,
+        "predicted_on_nonzero_gold": 39,
+        "predicted_on_zero_gold": 10,
+        "recall": 0.8032786885245902,
+        "recall_nonzero_gold": 0.78,
+        "recall_zero_gold": 0.9090909090909091,
+        "rmse": 0.47380354147934284
+      },
+      "carriers": {
+        "gold_asserted": 61,
+        "gold_asserted_nonzero": 61,
+        "gold_asserted_zero": 0,
+        "mae": 0.12244897959183673,
+        "predicted": 49,
+        "predicted_on_nonzero_gold": 49,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.8032786885245902,
+        "recall_nonzero_gold": 0.8032786885245902,
+        "recall_zero_gold": null,
+        "rmse": 0.3499271061118826
+      },
+      "unaffected": {
+        "gold_asserted": 61,
+        "gold_asserted_nonzero": 13,
+        "gold_asserted_zero": 48,
+        "mae": 0.0,
+        "predicted": 30,
+        "predicted_on_nonzero_gold": 8,
+        "predicted_on_zero_gold": 22,
+        "recall": 0.4918032786885246,
+        "recall_nonzero_gold": 0.6153846153846154,
+        "recall_zero_gold": 0.4583333333333333,
+        "rmse": 0.0
+      }
+    },
+    "counted_precision": {
+      "count_bearing_matched_rows": 49,
+      "counted_extra_rows": 4,
+      "matched_rows": 55,
+      "precision_among_count_bearing_predictions": 0.9245283018867925,
+      "precision_vs_counted_gold_pmids": 0.9322033898305084
+    },
+    "elapsed_seconds": 856.9973340000001,
+    "f1": 0.9016393442622952,
+    "fn": 6,
+    "fp": 6,
+    "merged_notation_twin_rows": 0,
+    "papers": 4,
+    "precision": 0.9016393442622951,
+    "recall": 0.9016393442622951,
+    "token_usage": {
+      "input_tokens": 254218,
+      "output_tokens": 81521,
+      "total_tokens": 335739
+    },
+    "tp": 55
+  },
+  "papers": [
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 13,
+          "gold_asserted_nonzero": 13,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 8,
+          "predicted_on_nonzero_gold": 8,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.6153846153846154,
+          "recall_nonzero_gold": 0.6153846153846154,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 13,
+          "gold_asserted_nonzero": 13,
+          "gold_asserted_zero": 0,
+          "mae": 0.625,
+          "predicted": 8,
+          "predicted_on_nonzero_gold": 8,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.6153846153846154,
+          "recall_nonzero_gold": 0.6153846153846154,
+          "recall_zero_gold": null,
+          "rmse": 0.7905694150420949
+        },
+        "unaffected": {
+          "gold_asserted": 13,
+          "gold_asserted_nonzero": 13,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 8,
+          "predicted_on_nonzero_gold": 8,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.6153846153846154,
+          "recall_nonzero_gold": 0.6153846153846154,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 10,
+          "predicted": 11,
+          "variant": "p.1570_F1571insI"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 10,
+          "predicted": 11,
+          "variant": "p.Arg225Trp c.673C>T"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 8,
+          "predicted": 9,
+          "variant": "p.Asn1722Asp c.5164A>G"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 13,
+          "predicted": 14,
+          "variant": "p.Gly1408Arg c.4222G>A"
+        },
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 8,
+          "predicted": 9,
+          "variant": "p.Ser1382Ile c.4145G>T"
+        }
+      ],
+      "counted_precision": {
+        "count_bearing_matched_rows": 8,
+        "counted_extra_rows": 1,
+        "matched_rows": 11,
+        "precision_among_count_bearing_predictions": 0.8888888888888888,
+        "precision_vs_counted_gold_pmids": 0.9166666666666666
+      },
+      "elapsed_seconds": 155.39036500000003,
+      "extra_predictions": [
+        "c.3963+12T>C",
+        "p.Ala665GlyfsX16 c.1983_1993dup"
+      ],
+      "f1": 0.8461538461538461,
+      "fn": 2,
+      "fp": 2,
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "matched_variants": [
+        {
+          "gold": "c.612-2A>G",
+          "predicted": "c.612-2A>G"
+        },
+        {
+          "gold": "P.1570_F1571INSI",
+          "predicted": "p.1570_F1571insI"
+        },
+        {
+          "gold": "c.3667delG",
+          "predicted": "p.Ala1223ProfsX7 c.3667delG"
+        },
+        {
+          "gold": "R225W",
+          "predicted": "p.Arg225Trp c.673C>T"
+        },
+        {
+          "gold": "R535X",
+          "predicted": "p.Arg535* c.1603C>T"
+        },
+        {
+          "gold": "N1722D",
+          "predicted": "p.Asn1722Asp c.5164A>G"
+        },
+        {
+          "gold": "E161K",
+          "predicted": "p.Glu161Lys c.481G>A"
+        },
+        {
+          "gold": "G1408R",
+          "predicted": "p.Gly1408Arg c.4222G>A"
+        },
+        {
+          "gold": "G752R",
+          "predicted": "p.Gly752Arg c.2254G>A"
+        },
+        {
+          "gold": "L839P",
+          "predicted": "p.Leu839Pro c.2516T>C"
+        },
+        {
+          "gold": "S1382I",
+          "predicted": "p.Ser1382Ile c.4145G>T"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [
+        "c.1983_1993dupGGCCCTCAGCG",
+        "c.3963+2T>C"
+      ],
+      "pmid": "20031634",
+      "precision": 0.8461538461538461,
+      "recall": 0.8461538461538461,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 50286,
+        "llm_calls": 14,
+        "models": {
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 36490,
+            "llm_calls": 13,
+            "output_tokens": 4592,
+            "provider_seconds": 67.479307,
+            "successful_calls": 13,
+            "total_tokens": 41082
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 13796,
+            "llm_calls": 1,
+            "output_tokens": 10446,
+            "provider_seconds": 87.911058,
+            "successful_calls": 1,
+            "total_tokens": 24242
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 15038,
+        "provider_seconds": 155.39036500000003,
+        "successful_calls": 14,
+        "telemetry_available": true,
+        "total_tokens": 65324
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "tp": 11
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 11,
+          "mae": 1.0,
+          "predicted": 10,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 10,
+          "recall": 0.9090909090909091,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.9090909090909091,
+          "rmse": 1.0
+        },
+        "carriers": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 11,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 10,
+          "predicted_on_nonzero_gold": 10,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.9090909090909091,
+          "recall_nonzero_gold": 0.9090909090909091,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 11,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 11,
+          "mae": null,
+          "predicted": 0,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.0,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.0,
+          "rmse": null
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "A302V"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "A341E"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "G269S"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "G584S"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "I198V"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "T312I"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "T587M"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "W379R"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "Y111C"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 0,
+          "predicted": 1,
+          "variant": "p.L191fs*90"
+        }
+      ],
+      "counted_precision": {
+        "count_bearing_matched_rows": 10,
+        "counted_extra_rows": 1,
+        "matched_rows": 10,
+        "precision_among_count_bearing_predictions": 0.9090909090909091,
+        "precision_vs_counted_gold_pmids": 0.9090909090909091
+      },
+      "elapsed_seconds": 153.22112800000005,
+      "extra_predictions": [
+        "G643S",
+        "p.L163fs*236 c.488delT"
+      ],
+      "f1": 0.8695652173913043,
+      "fn": 1,
+      "fp": 2,
+      "gene": "KCNQ1",
+      "gold_provenance": "human_curated_cardiac",
+      "matched_variants": [
+        {
+          "gold": "A302V",
+          "predicted": "A302V"
+        },
+        {
+          "gold": "A341E",
+          "predicted": "A341E"
+        },
+        {
+          "gold": "G269S",
+          "predicted": "G269S"
+        },
+        {
+          "gold": "G584S",
+          "predicted": "G584S"
+        },
+        {
+          "gold": "I198V",
+          "predicted": "I198V"
+        },
+        {
+          "gold": "T312I",
+          "predicted": "T312I"
+        },
+        {
+          "gold": "T587M",
+          "predicted": "T587M"
+        },
+        {
+          "gold": "W379R",
+          "predicted": "W379R"
+        },
+        {
+          "gold": "Y111C",
+          "predicted": "Y111C"
+        },
+        {
+          "gold": "L191fsX",
+          "predicted": "p.L191fs*90"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [
+        "L162fsX"
+      ],
+      "pmid": "22677073",
+      "precision": 0.8333333333333334,
+      "recall": 0.9090909090909091,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 60364,
+        "llm_calls": 22,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 811,
+            "llm_calls": 1,
+            "output_tokens": 290,
+            "provider_seconds": 1.687748,
+            "successful_calls": 1,
+            "total_tokens": 1101
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 37961,
+            "llm_calls": 20,
+            "output_tokens": 4635,
+            "provider_seconds": 80.484098,
+            "successful_calls": 20,
+            "total_tokens": 42596
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 21592,
+            "llm_calls": 1,
+            "output_tokens": 10829,
+            "provider_seconds": 71.049282,
+            "successful_calls": 1,
+            "total_tokens": 32421
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 15754,
+        "provider_seconds": 153.22112800000005,
+        "successful_calls": 22,
+        "telemetry_available": true,
+        "total_tokens": 76118
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "tp": 10
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 20,
+          "predicted_on_nonzero_gold": 20,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.8,
+          "recall_nonzero_gold": 0.8,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "carriers": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 25,
+          "gold_asserted_zero": 0,
+          "mae": 0.0,
+          "predicted": 20,
+          "predicted_on_nonzero_gold": 20,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.8,
+          "recall_nonzero_gold": 0.8,
+          "recall_zero_gold": null,
+          "rmse": 0.0
+        },
+        "unaffected": {
+          "gold_asserted": 25,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 25,
+          "mae": 0.0,
+          "predicted": 17,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 17,
+          "recall": 0.68,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.68,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [],
+      "counted_precision": {
+        "count_bearing_matched_rows": 20,
+        "counted_extra_rows": 2,
+        "matched_rows": 22,
+        "precision_among_count_bearing_predictions": 0.9090909090909091,
+        "precision_vs_counted_gold_pmids": 0.9166666666666666
+      },
+      "elapsed_seconds": 308.01719800000006,
+      "extra_predictions": [
+        "c.2398+5G>T",
+        "c.6739C>T"
+      ],
+      "f1": 0.8979591836734694,
+      "fn": 3,
+      "fp": 2,
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_cardiac",
+      "matched_variants": [
+        {
+          "gold": "G1885E",
+          "predicted": "G1885E"
+        },
+        {
+          "gold": "G1886S",
+          "predicted": "G1886S"
+        },
+        {
+          "gold": "D400H",
+          "predicted": "p.D400H c.1198G>C"
+        },
+        {
+          "gold": "E4146K",
+          "predicted": "p.E4146K c.12436G>A"
+        },
+        {
+          "gold": "G2227V",
+          "predicted": "p.G2227V c.6680G>T"
+        },
+        {
+          "gold": "G4936R",
+          "predicted": "p.G4936R c.14803G>A"
+        },
+        {
+          "gold": "H240R",
+          "predicted": "p.H240R c.719A>G"
+        },
+        {
+          "gold": "I217V",
+          "predicted": "p.I217V c.649A>G"
+        },
+        {
+          "gold": "L3879P",
+          "predicted": "p.L3879P c.11636T>C"
+        },
+        {
+          "gold": "N4097S",
+          "predicted": "p.N4097S c.12290A>G"
+        },
+        {
+          "gold": "Q3925E",
+          "predicted": "p.Q3925E c.11773C>G"
+        },
+        {
+          "gold": "R407I",
+          "predicted": "p.R407I c.1220G>T"
+        },
+        {
+          "gold": "R420W",
+          "predicted": "p.R420W c.1258C>T"
+        },
+        {
+          "gold": "R4497C",
+          "predicted": "p.R4497C c.13610C>T"
+        },
+        {
+          "gold": "S2246L",
+          "predicted": "p.S2246L c.6737C>T"
+        },
+        {
+          "gold": "S3959L",
+          "predicted": "p.S3959L c.11876C>T"
+        },
+        {
+          "gold": "T1107M",
+          "predicted": "p.T1107M c.3321C>T"
+        },
+        {
+          "gold": "T2510A",
+          "predicted": "p.T2510A c.7528A>G"
+        },
+        {
+          "gold": "T4158P",
+          "predicted": "p.T4158P c.12472A>C"
+        },
+        {
+          "gold": "V2113M",
+          "predicted": "p.V2113M c.6337G>A"
+        },
+        {
+          "gold": "W4645R",
+          "predicted": "p.W4645R c.13933T>A"
+        },
+        {
+          "gold": "Y2392C",
+          "predicted": "p.Y2392C c.7175A>G"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [
+        "Q2958R",
+        "A1136V",
+        "R4037C"
+      ],
+      "pmid": "22677073",
+      "precision": 0.9166666666666666,
+      "recall": 0.88,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 82734,
+        "llm_calls": 23,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 810,
+            "llm_calls": 1,
+            "output_tokens": 520,
+            "provider_seconds": 2.403948,
+            "successful_calls": 1,
+            "total_tokens": 1330
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 59738,
+            "llm_calls": 21,
+            "output_tokens": 13215,
+            "provider_seconds": 206.236886,
+            "successful_calls": 21,
+            "total_tokens": 72953
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 22186,
+            "llm_calls": 1,
+            "output_tokens": 14859,
+            "provider_seconds": 99.376364,
+            "successful_calls": 1,
+            "total_tokens": 37045
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 28594,
+        "provider_seconds": 308.01719800000006,
+        "successful_calls": 23,
+        "telemetry_available": true,
+        "total_tokens": 111328
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "tp": 22
+    },
+    {
+      "count": {
+        "affected": {
+          "gold_asserted": 12,
+          "gold_asserted_nonzero": 12,
+          "gold_asserted_zero": 0,
+          "mae": 0.09090909090909091,
+          "predicted": 11,
+          "predicted_on_nonzero_gold": 11,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.9166666666666666,
+          "recall_nonzero_gold": 0.9166666666666666,
+          "recall_zero_gold": null,
+          "rmse": 0.30151134457776363
+        },
+        "carriers": {
+          "gold_asserted": 12,
+          "gold_asserted_nonzero": 12,
+          "gold_asserted_zero": 0,
+          "mae": 0.09090909090909091,
+          "predicted": 11,
+          "predicted_on_nonzero_gold": 11,
+          "predicted_on_zero_gold": 0,
+          "recall": 0.9166666666666666,
+          "recall_nonzero_gold": 0.9166666666666666,
+          "recall_zero_gold": null,
+          "rmse": 0.30151134457776363
+        },
+        "unaffected": {
+          "gold_asserted": 12,
+          "gold_asserted_nonzero": 0,
+          "gold_asserted_zero": 12,
+          "mae": 0.0,
+          "predicted": 5,
+          "predicted_on_nonzero_gold": 0,
+          "predicted_on_zero_gold": 5,
+          "recall": 0.4166666666666667,
+          "recall_nonzero_gold": null,
+          "recall_zero_gold": 0.4166666666666667,
+          "rmse": 0.0
+        }
+      },
+      "count_errors": [
+        {
+          "error": 1,
+          "field": "carriers",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "S216L"
+        },
+        {
+          "error": 1,
+          "field": "affected",
+          "gold": 1,
+          "predicted": 2,
+          "variant": "S216L"
+        }
+      ],
+      "counted_precision": {
+        "count_bearing_matched_rows": 11,
+        "counted_extra_rows": 0,
+        "matched_rows": 12,
+        "precision_among_count_bearing_predictions": 1.0,
+        "precision_vs_counted_gold_pmids": 1.0
+      },
+      "elapsed_seconds": 240.368643,
+      "extra_predictions": [],
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "matched_variants": [
+        {
+          "gold": "F2004L",
+          "predicted": "F2004L"
+        },
+        {
+          "gold": "I1334V",
+          "predicted": "I1334V"
+        },
+        {
+          "gold": "I1768V",
+          "predicted": "I1768V"
+        },
+        {
+          "gold": "I267L",
+          "predicted": "I267L"
+        },
+        {
+          "gold": "P2006A",
+          "predicted": "P2006A"
+        },
+        {
+          "gold": "R104Q",
+          "predicted": "R104Q"
+        },
+        {
+          "gold": "R1193Q",
+          "predicted": "R1193Q"
+        },
+        {
+          "gold": "R680H",
+          "predicted": "R680H"
+        },
+        {
+          "gold": "S1103Y",
+          "predicted": "S1103Y"
+        },
+        {
+          "gold": "S216L",
+          "predicted": "S216L"
+        },
+        {
+          "gold": "T220I",
+          "predicted": "T220I"
+        },
+        {
+          "gold": "V1951L",
+          "predicted": "V1951L"
+        }
+      ],
+      "merged_notation_twin_rows": 0,
+      "missed_gold": [],
+      "pmid": "22677073",
+      "precision": 1.0,
+      "recall": 1.0,
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 60834,
+        "llm_calls": 22,
+        "models": {
+          "azure_ai/Kimi-K2.6-1": {
+            "input_tokens": 811,
+            "llm_calls": 1,
+            "output_tokens": 498,
+            "provider_seconds": 3.864799,
+            "successful_calls": 1,
+            "total_tokens": 1309
+          },
+          "azure_ai/gpt-5.6-sol": {
+            "input_tokens": 38504,
+            "llm_calls": 20,
+            "output_tokens": 9110,
+            "provider_seconds": 151.01669299999998,
+            "successful_calls": 20,
+            "total_tokens": 47614
+          },
+          "azure_ai/grok-4.3": {
+            "input_tokens": 21519,
+            "llm_calls": 1,
+            "output_tokens": 12527,
+            "provider_seconds": 85.487151,
+            "successful_calls": 1,
+            "total_tokens": 34046
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 22135,
+        "provider_seconds": 240.368643,
+        "successful_calls": 22,
+        "telemetry_available": true,
+        "total_tokens": 82969
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "tp": 12
+    }
+  ],
+  "prelock_gold_usage": {
+    "provenance": "all_production_run_statuses_record_gold_access_disabled",
+    "read_only_layer_scoring_possible": false,
+    "scores_feed_back_into_predictions": false
+  },
+  "primary_score_lane": "paper_derived",
+  "provenance_lane_scores": {
+    "linkage_assisted": {
+      "by_gene": {
+        "KCNQ1": {
+          "count": {
+            "affected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": 1.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 10,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.9090909090909091,
+              "rmse": 1.0
+            },
+            "carriers": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 11,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 10,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": 0.9090909090909091,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": null,
+              "predicted": 0,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.0,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.0,
+              "rmse": null
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 10,
+            "counted_extra_rows": 1,
+            "matched_rows": 10,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.9090909090909091
+          },
+          "elapsed_seconds": 153.22112800000005,
+          "f1": 0.8,
+          "fn": 1,
+          "fp": 4,
+          "merged_notation_twin_rows": 0,
+          "papers": 1,
+          "precision": 0.7142857142857143,
+          "recall": 0.9090909090909091,
+          "token_usage": {
+            "input_tokens": 60364,
+            "output_tokens": 15754,
+            "total_tokens": 76118
+          },
+          "tp": 10
+        },
+        "RYR2": {
+          "count": {
+            "affected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "carriers": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 25,
+              "mae": 0.0,
+              "predicted": 17,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 17,
+              "recall": 0.68,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.68,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 20,
+            "counted_extra_rows": 2,
+            "matched_rows": 23,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.92
+          },
+          "elapsed_seconds": 308.01719800000006,
+          "f1": 0.92,
+          "fn": 2,
+          "fp": 2,
+          "merged_notation_twin_rows": 0,
+          "papers": 1,
+          "precision": 0.92,
+          "recall": 0.92,
+          "token_usage": {
+            "input_tokens": 82734,
+            "output_tokens": 28594,
+            "total_tokens": 111328
+          },
+          "tp": 23
+        },
+        "SCN5A": {
+          "count": {
+            "affected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.05263157894736842,
+              "predicted": 19,
+              "predicted_on_nonzero_gold": 19,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.76,
+              "recall_nonzero_gold": 0.76,
+              "recall_zero_gold": null,
+              "rmse": 0.22941573387056177
+            },
+            "carriers": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.3157894736842105,
+              "predicted": 19,
+              "predicted_on_nonzero_gold": 19,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.76,
+              "recall_nonzero_gold": 0.76,
+              "recall_zero_gold": null,
+              "rmse": 0.5619514869490164
+            },
+            "unaffected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 12,
+              "mae": 0.0,
+              "predicted": 13,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 5,
+              "recall": 0.52,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": 0.4166666666666667,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 19,
+            "counted_extra_rows": 1,
+            "matched_rows": 23,
+            "precision_among_count_bearing_predictions": 0.95,
+            "precision_vs_counted_gold_pmids": 0.9583333333333334
+          },
+          "elapsed_seconds": 395.759008,
+          "f1": 0.793103448275862,
+          "fn": 2,
+          "fp": 10,
+          "merged_notation_twin_rows": 0,
+          "papers": 2,
+          "precision": 0.696969696969697,
+          "recall": 0.92,
+          "token_usage": {
+            "input_tokens": 111120,
+            "output_tokens": 37173,
+            "total_tokens": 148293
+          },
+          "tp": 23
+        }
+      },
+      "by_gold_provenance": {
+        "human_curated_cardiac": {
+          "count": {
+            "affected": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 50,
+              "gold_asserted_zero": 11,
+              "mae": 0.22448979591836735,
+              "predicted": 49,
+              "predicted_on_nonzero_gold": 39,
+              "predicted_on_zero_gold": 10,
+              "recall": 0.8032786885245902,
+              "recall_nonzero_gold": 0.78,
+              "recall_zero_gold": 0.9090909090909091,
+              "rmse": 0.47380354147934284
+            },
+            "carriers": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 61,
+              "gold_asserted_zero": 0,
+              "mae": 0.12244897959183673,
+              "predicted": 49,
+              "predicted_on_nonzero_gold": 49,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8032786885245902,
+              "recall_nonzero_gold": 0.8032786885245902,
+              "recall_zero_gold": null,
+              "rmse": 0.3499271061118826
+            },
+            "unaffected": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 48,
+              "mae": 0.0,
+              "predicted": 30,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 22,
+              "recall": 0.4918032786885246,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": 0.4583333333333333,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 49,
+            "counted_extra_rows": 4,
+            "matched_rows": 56,
+            "precision_among_count_bearing_predictions": 0.9245283018867925,
+            "precision_vs_counted_gold_pmids": 0.9333333333333333
+          },
+          "elapsed_seconds": 856.9973340000001,
+          "f1": 0.8421052631578947,
+          "fn": 5,
+          "fp": 16,
+          "merged_notation_twin_rows": 0,
+          "papers": 4,
+          "precision": 0.7777777777777778,
+          "recall": 0.9180327868852459,
+          "token_usage": {
+            "input_tokens": 254218,
+            "output_tokens": 81521,
+            "total_tokens": 335739
+          },
+          "tp": 56
+        }
+      },
+      "overall": {
+        "count": {
+          "affected": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 50,
+            "gold_asserted_zero": 11,
+            "mae": 0.22448979591836735,
+            "predicted": 49,
+            "predicted_on_nonzero_gold": 39,
+            "predicted_on_zero_gold": 10,
+            "recall": 0.8032786885245902,
+            "recall_nonzero_gold": 0.78,
+            "recall_zero_gold": 0.9090909090909091,
+            "rmse": 0.47380354147934284
+          },
+          "carriers": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 61,
+            "gold_asserted_zero": 0,
+            "mae": 0.12244897959183673,
+            "predicted": 49,
+            "predicted_on_nonzero_gold": 49,
+            "predicted_on_zero_gold": 0,
+            "recall": 0.8032786885245902,
+            "recall_nonzero_gold": 0.8032786885245902,
+            "recall_zero_gold": null,
+            "rmse": 0.3499271061118826
+          },
+          "unaffected": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 13,
+            "gold_asserted_zero": 48,
+            "mae": 0.0,
+            "predicted": 30,
+            "predicted_on_nonzero_gold": 8,
+            "predicted_on_zero_gold": 22,
+            "recall": 0.4918032786885246,
+            "recall_nonzero_gold": 0.6153846153846154,
+            "recall_zero_gold": 0.4583333333333333,
+            "rmse": 0.0
+          }
+        },
+        "counted_precision": {
+          "count_bearing_matched_rows": 49,
+          "counted_extra_rows": 4,
+          "matched_rows": 56,
+          "precision_among_count_bearing_predictions": 0.9245283018867925,
+          "precision_vs_counted_gold_pmids": 0.9333333333333333
+        },
+        "elapsed_seconds": 856.9973340000001,
+        "f1": 0.8421052631578947,
+        "fn": 5,
+        "fp": 16,
+        "merged_notation_twin_rows": 0,
+        "papers": 4,
+        "precision": 0.7777777777777778,
+        "recall": 0.9180327868852459,
+        "token_usage": {
+          "input_tokens": 254218,
+          "output_tokens": 81521,
+          "total_tokens": 335739
+        },
+        "tp": 56
+      },
+      "papers": [
+        {
+          "count": {
+            "affected": {
+              "gold_asserted": 13,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 8,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.6153846153846154,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "carriers": {
+              "gold_asserted": 13,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 0,
+              "mae": 0.625,
+              "predicted": 8,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.6153846153846154,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": null,
+              "rmse": 0.7905694150420949
+            },
+            "unaffected": {
+              "gold_asserted": 13,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 8,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.6153846153846154,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            }
+          },
+          "count_errors": [
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 10,
+              "predicted": 11,
+              "variant": "p.1570_F1571insI"
+            },
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 10,
+              "predicted": 11,
+              "variant": "p.Arg225Trp c.673C>T"
+            },
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 8,
+              "predicted": 9,
+              "variant": "p.Asn1722Asp c.5164A>G"
+            },
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 13,
+              "predicted": 14,
+              "variant": "p.Gly1408Arg c.4222G>A"
+            },
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 8,
+              "predicted": 9,
+              "variant": "p.Ser1382Ile c.4145G>T"
+            }
+          ],
+          "counted_precision": {
+            "count_bearing_matched_rows": 8,
+            "counted_extra_rows": 1,
+            "matched_rows": 11,
+            "precision_among_count_bearing_predictions": 0.8888888888888888,
+            "precision_vs_counted_gold_pmids": 0.9166666666666666
+          },
+          "elapsed_seconds": 155.39036500000003,
+          "extra_predictions": [
+            "c.3963+12T>C",
+            "p.Ala665GlyfsX16 c.1983_1993dup",
+            "c.3960+1G>A",
+            "c.3960+1G>T",
+            "c.475_482+3del",
+            "p.Asn1721Asp c.5161A>G",
+            "p.Gly1407Arg c.4219G>A"
+          ],
+          "f1": 0.7096774193548387,
+          "fn": 2,
+          "fp": 7,
+          "gene": "SCN5A",
+          "gold_provenance": "human_curated_cardiac",
+          "matched_variants": [
+            {
+              "gold": "c.612-2A>G",
+              "predicted": "c.612-2A>G"
+            },
+            {
+              "gold": "P.1570_F1571INSI",
+              "predicted": "p.1570_F1571insI"
+            },
+            {
+              "gold": "c.3667delG",
+              "predicted": "p.Ala1223ProfsX7 c.3667delG"
+            },
+            {
+              "gold": "R225W",
+              "predicted": "p.Arg225Trp c.673C>T"
+            },
+            {
+              "gold": "R535X",
+              "predicted": "p.Arg535* c.1603C>T"
+            },
+            {
+              "gold": "N1722D",
+              "predicted": "p.Asn1722Asp c.5164A>G"
+            },
+            {
+              "gold": "E161K",
+              "predicted": "p.Glu161Lys c.481G>A"
+            },
+            {
+              "gold": "G1408R",
+              "predicted": "p.Gly1408Arg c.4222G>A"
+            },
+            {
+              "gold": "G752R",
+              "predicted": "p.Gly752Arg c.2254G>A"
+            },
+            {
+              "gold": "L839P",
+              "predicted": "p.Leu839Pro c.2516T>C"
+            },
+            {
+              "gold": "S1382I",
+              "predicted": "p.Ser1382Ile c.4145G>T"
+            }
+          ],
+          "merged_notation_twin_rows": 0,
+          "missed_gold": [
+            "c.1983_1993dupGGCCCTCAGCG",
+            "c.3963+2T>C"
+          ],
+          "pmid": "20031634",
+          "precision": 0.6111111111111112,
+          "recall": 0.8461538461538461,
+          "source_completeness": "corpus_as_locked",
+          "token_usage": {
+            "input_tokens": 50286,
+            "llm_calls": 14,
+            "models": {
+              "azure_ai/gpt-5.6-sol": {
+                "input_tokens": 36490,
+                "llm_calls": 13,
+                "output_tokens": 4592,
+                "provider_seconds": 67.479307,
+                "successful_calls": 13,
+                "total_tokens": 41082
+              },
+              "azure_ai/grok-4.3": {
+                "input_tokens": 13796,
+                "llm_calls": 1,
+                "output_tokens": 10446,
+                "provider_seconds": 87.911058,
+                "successful_calls": 1,
+                "total_tokens": 24242
+              }
+            },
+            "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+            "output_tokens": 15038,
+            "provider_seconds": 155.39036500000003,
+            "successful_calls": 14,
+            "telemetry_available": true,
+            "total_tokens": 65324
+          },
+          "tool": "text",
+          "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+          "tp": 11
+        },
+        {
+          "count": {
+            "affected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": 1.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 10,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.9090909090909091,
+              "rmse": 1.0
+            },
+            "carriers": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 11,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 10,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": 0.9090909090909091,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": null,
+              "predicted": 0,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.0,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.0,
+              "rmse": null
+            }
+          },
+          "count_errors": [
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "A302V"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "A341E"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "G269S"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "G584S"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "I198V"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "T312I"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "T587M"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "W379R"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "Y111C"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 0,
+              "predicted": 1,
+              "variant": "p.L191fs*90"
+            }
+          ],
+          "counted_precision": {
+            "count_bearing_matched_rows": 10,
+            "counted_extra_rows": 1,
+            "matched_rows": 10,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.9090909090909091
+          },
+          "elapsed_seconds": 153.22112800000005,
+          "extra_predictions": [
+            "G643S",
+            "p.L163fs*236 c.488delT",
+            "p.Arg192fs c.573_577del",
+            "p.Lys393Asn c.1179G>T"
+          ],
+          "f1": 0.8,
+          "fn": 1,
+          "fp": 4,
+          "gene": "KCNQ1",
+          "gold_provenance": "human_curated_cardiac",
+          "matched_variants": [
+            {
+              "gold": "A302V",
+              "predicted": "A302V"
+            },
+            {
+              "gold": "A341E",
+              "predicted": "A341E"
+            },
+            {
+              "gold": "G269S",
+              "predicted": "G269S"
+            },
+            {
+              "gold": "G584S",
+              "predicted": "G584S"
+            },
+            {
+              "gold": "I198V",
+              "predicted": "I198V"
+            },
+            {
+              "gold": "T312I",
+              "predicted": "T312I"
+            },
+            {
+              "gold": "T587M",
+              "predicted": "T587M"
+            },
+            {
+              "gold": "W379R",
+              "predicted": "W379R"
+            },
+            {
+              "gold": "Y111C",
+              "predicted": "Y111C"
+            },
+            {
+              "gold": "L191fsX",
+              "predicted": "p.L191fs*90"
+            }
+          ],
+          "merged_notation_twin_rows": 0,
+          "missed_gold": [
+            "L162fsX"
+          ],
+          "pmid": "22677073",
+          "precision": 0.7142857142857143,
+          "recall": 0.9090909090909091,
+          "source_completeness": "corpus_as_locked",
+          "token_usage": {
+            "input_tokens": 60364,
+            "llm_calls": 22,
+            "models": {
+              "azure_ai/Kimi-K2.6-1": {
+                "input_tokens": 811,
+                "llm_calls": 1,
+                "output_tokens": 290,
+                "provider_seconds": 1.687748,
+                "successful_calls": 1,
+                "total_tokens": 1101
+              },
+              "azure_ai/gpt-5.6-sol": {
+                "input_tokens": 37961,
+                "llm_calls": 20,
+                "output_tokens": 4635,
+                "provider_seconds": 80.484098,
+                "successful_calls": 20,
+                "total_tokens": 42596
+              },
+              "azure_ai/grok-4.3": {
+                "input_tokens": 21592,
+                "llm_calls": 1,
+                "output_tokens": 10829,
+                "provider_seconds": 71.049282,
+                "successful_calls": 1,
+                "total_tokens": 32421
+              }
+            },
+            "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+            "output_tokens": 15754,
+            "provider_seconds": 153.22112800000005,
+            "successful_calls": 22,
+            "telemetry_available": true,
+            "total_tokens": 76118
+          },
+          "tool": "text",
+          "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+          "tp": 10
+        },
+        {
+          "count": {
+            "affected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "carriers": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 25,
+              "mae": 0.0,
+              "predicted": 17,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 17,
+              "recall": 0.68,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.68,
+              "rmse": 0.0
+            }
+          },
+          "count_errors": [],
+          "counted_precision": {
+            "count_bearing_matched_rows": 20,
+            "counted_extra_rows": 2,
+            "matched_rows": 23,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.92
+          },
+          "elapsed_seconds": 308.01719800000006,
+          "extra_predictions": [
+            "c.2398+5G>T",
+            "c.6739C>T"
+          ],
+          "f1": 0.92,
+          "fn": 2,
+          "fp": 2,
+          "gene": "RYR2",
+          "gold_provenance": "human_curated_cardiac",
+          "matched_variants": [
+            {
+              "gold": "G1885E",
+              "predicted": "G1885E"
+            },
+            {
+              "gold": "G1886S",
+              "predicted": "G1886S"
+            },
+            {
+              "gold": "D400H",
+              "predicted": "p.D400H c.1198G>C"
+            },
+            {
+              "gold": "E4146K",
+              "predicted": "p.E4146K c.12436G>A"
+            },
+            {
+              "gold": "G2227V",
+              "predicted": "p.G2227V c.6680G>T"
+            },
+            {
+              "gold": "G4936R",
+              "predicted": "p.G4936R c.14803G>A"
+            },
+            {
+              "gold": "H240R",
+              "predicted": "p.H240R c.719A>G"
+            },
+            {
+              "gold": "I217V",
+              "predicted": "p.I217V c.649A>G"
+            },
+            {
+              "gold": "L3879P",
+              "predicted": "p.L3879P c.11636T>C"
+            },
+            {
+              "gold": "N4097S",
+              "predicted": "p.N4097S c.12290A>G"
+            },
+            {
+              "gold": "Q3925E",
+              "predicted": "p.Q3925E c.11773C>G"
+            },
+            {
+              "gold": "R407I",
+              "predicted": "p.R407I c.1220G>T"
+            },
+            {
+              "gold": "R420W",
+              "predicted": "p.R420W c.1258C>T"
+            },
+            {
+              "gold": "R4497C",
+              "predicted": "p.R4497C c.13610C>T"
+            },
+            {
+              "gold": "S2246L",
+              "predicted": "p.S2246L c.6737C>T"
+            },
+            {
+              "gold": "S3959L",
+              "predicted": "p.S3959L c.11876C>T"
+            },
+            {
+              "gold": "T1107M",
+              "predicted": "p.T1107M c.3321C>T"
+            },
+            {
+              "gold": "T2510A",
+              "predicted": "p.T2510A c.7528A>G"
+            },
+            {
+              "gold": "T4158P",
+              "predicted": "p.T4158P c.12472A>C"
+            },
+            {
+              "gold": "V2113M",
+              "predicted": "p.V2113M c.6337G>A"
+            },
+            {
+              "gold": "W4645R",
+              "predicted": "p.W4645R c.13933T>A"
+            },
+            {
+              "gold": "Y2392C",
+              "predicted": "p.Y2392C c.7175A>G"
+            },
+            {
+              "gold": "A1136V",
+              "predicted": "p.Ala1136Val c.3407C>T"
+            }
+          ],
+          "merged_notation_twin_rows": 0,
+          "missed_gold": [
+            "Q2958R",
+            "R4037C"
+          ],
+          "pmid": "22677073",
+          "precision": 0.92,
+          "recall": 0.92,
+          "source_completeness": "corpus_as_locked",
+          "token_usage": {
+            "input_tokens": 82734,
+            "llm_calls": 23,
+            "models": {
+              "azure_ai/Kimi-K2.6-1": {
+                "input_tokens": 810,
+                "llm_calls": 1,
+                "output_tokens": 520,
+                "provider_seconds": 2.403948,
+                "successful_calls": 1,
+                "total_tokens": 1330
+              },
+              "azure_ai/gpt-5.6-sol": {
+                "input_tokens": 59738,
+                "llm_calls": 21,
+                "output_tokens": 13215,
+                "provider_seconds": 206.236886,
+                "successful_calls": 21,
+                "total_tokens": 72953
+              },
+              "azure_ai/grok-4.3": {
+                "input_tokens": 22186,
+                "llm_calls": 1,
+                "output_tokens": 14859,
+                "provider_seconds": 99.376364,
+                "successful_calls": 1,
+                "total_tokens": 37045
+              }
+            },
+            "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+            "output_tokens": 28594,
+            "provider_seconds": 308.01719800000006,
+            "successful_calls": 23,
+            "telemetry_available": true,
+            "total_tokens": 111328
+          },
+          "tool": "text",
+          "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+          "tp": 23
+        },
+        {
+          "count": {
+            "affected": {
+              "gold_asserted": 12,
+              "gold_asserted_nonzero": 12,
+              "gold_asserted_zero": 0,
+              "mae": 0.09090909090909091,
+              "predicted": 11,
+              "predicted_on_nonzero_gold": 11,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.9166666666666666,
+              "recall_nonzero_gold": 0.9166666666666666,
+              "recall_zero_gold": null,
+              "rmse": 0.30151134457776363
+            },
+            "carriers": {
+              "gold_asserted": 12,
+              "gold_asserted_nonzero": 12,
+              "gold_asserted_zero": 0,
+              "mae": 0.09090909090909091,
+              "predicted": 11,
+              "predicted_on_nonzero_gold": 11,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.9166666666666666,
+              "recall_nonzero_gold": 0.9166666666666666,
+              "recall_zero_gold": null,
+              "rmse": 0.30151134457776363
+            },
+            "unaffected": {
+              "gold_asserted": 12,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 12,
+              "mae": 0.0,
+              "predicted": 5,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 5,
+              "recall": 0.4166666666666667,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.4166666666666667,
+              "rmse": 0.0
+            }
+          },
+          "count_errors": [
+            {
+              "error": 1,
+              "field": "carriers",
+              "gold": 1,
+              "predicted": 2,
+              "variant": "S216L"
+            },
+            {
+              "error": 1,
+              "field": "affected",
+              "gold": 1,
+              "predicted": 2,
+              "variant": "S216L"
+            }
+          ],
+          "counted_precision": {
+            "count_bearing_matched_rows": 11,
+            "counted_extra_rows": 0,
+            "matched_rows": 12,
+            "precision_among_count_bearing_predictions": 1.0,
+            "precision_vs_counted_gold_pmids": 1.0
+          },
+          "elapsed_seconds": 240.368643,
+          "extra_predictions": [
+            "p.Ile1767Val c.5299A>G",
+            "p.Pro2005Ala c.6013C>G",
+            "p.Val1950Leu c.5848G>T"
+          ],
+          "f1": 0.888888888888889,
+          "fn": 0,
+          "fp": 3,
+          "gene": "SCN5A",
+          "gold_provenance": "human_curated_cardiac",
+          "matched_variants": [
+            {
+              "gold": "F2004L",
+              "predicted": "F2004L"
+            },
+            {
+              "gold": "I1334V",
+              "predicted": "I1334V"
+            },
+            {
+              "gold": "I1768V",
+              "predicted": "I1768V"
+            },
+            {
+              "gold": "I267L",
+              "predicted": "I267L"
+            },
+            {
+              "gold": "P2006A",
+              "predicted": "P2006A"
+            },
+            {
+              "gold": "R104Q",
+              "predicted": "R104Q"
+            },
+            {
+              "gold": "R1193Q",
+              "predicted": "R1193Q"
+            },
+            {
+              "gold": "R680H",
+              "predicted": "R680H"
+            },
+            {
+              "gold": "S1103Y",
+              "predicted": "S1103Y"
+            },
+            {
+              "gold": "S216L",
+              "predicted": "S216L"
+            },
+            {
+              "gold": "T220I",
+              "predicted": "T220I"
+            },
+            {
+              "gold": "V1951L",
+              "predicted": "V1951L"
+            }
+          ],
+          "merged_notation_twin_rows": 0,
+          "missed_gold": [],
+          "pmid": "22677073",
+          "precision": 0.8,
+          "recall": 1.0,
+          "source_completeness": "corpus_as_locked",
+          "token_usage": {
+            "input_tokens": 60834,
+            "llm_calls": 22,
+            "models": {
+              "azure_ai/Kimi-K2.6-1": {
+                "input_tokens": 811,
+                "llm_calls": 1,
+                "output_tokens": 498,
+                "provider_seconds": 3.864799,
+                "successful_calls": 1,
+                "total_tokens": 1309
+              },
+              "azure_ai/gpt-5.6-sol": {
+                "input_tokens": 38504,
+                "llm_calls": 20,
+                "output_tokens": 9110,
+                "provider_seconds": 151.01669299999998,
+                "successful_calls": 20,
+                "total_tokens": 47614
+              },
+              "azure_ai/grok-4.3": {
+                "input_tokens": 21519,
+                "llm_calls": 1,
+                "output_tokens": 12527,
+                "provider_seconds": 85.487151,
+                "successful_calls": 1,
+                "total_tokens": 34046
+              }
+            },
+            "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+            "output_tokens": 22135,
+            "provider_seconds": 240.368643,
+            "successful_calls": 22,
+            "telemetry_available": true,
+            "total_tokens": 82969
+          },
+          "tool": "text",
+          "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+          "tp": 12
+        }
+      ],
+      "role": "secondary_diagnostic"
+    },
+    "paper_derived": {
+      "by_gene": {
+        "KCNQ1": {
+          "count": {
+            "affected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": 1.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 10,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.9090909090909091,
+              "rmse": 1.0
+            },
+            "carriers": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 11,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 10,
+              "predicted_on_nonzero_gold": 10,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.9090909090909091,
+              "recall_nonzero_gold": 0.9090909090909091,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 11,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 11,
+              "mae": null,
+              "predicted": 0,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.0,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.0,
+              "rmse": null
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 10,
+            "counted_extra_rows": 1,
+            "matched_rows": 10,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.9090909090909091
+          },
+          "elapsed_seconds": 153.22112800000005,
+          "f1": 0.8695652173913043,
+          "fn": 1,
+          "fp": 2,
+          "merged_notation_twin_rows": 0,
+          "papers": 1,
+          "precision": 0.8333333333333334,
+          "recall": 0.9090909090909091,
+          "token_usage": {
+            "input_tokens": 60364,
+            "output_tokens": 15754,
+            "total_tokens": 76118
+          },
+          "tp": 10
+        },
+        "RYR2": {
+          "count": {
+            "affected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "carriers": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.0,
+              "predicted": 20,
+              "predicted_on_nonzero_gold": 20,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8,
+              "recall_nonzero_gold": 0.8,
+              "recall_zero_gold": null,
+              "rmse": 0.0
+            },
+            "unaffected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 0,
+              "gold_asserted_zero": 25,
+              "mae": 0.0,
+              "predicted": 17,
+              "predicted_on_nonzero_gold": 0,
+              "predicted_on_zero_gold": 17,
+              "recall": 0.68,
+              "recall_nonzero_gold": null,
+              "recall_zero_gold": 0.68,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 20,
+            "counted_extra_rows": 2,
+            "matched_rows": 22,
+            "precision_among_count_bearing_predictions": 0.9090909090909091,
+            "precision_vs_counted_gold_pmids": 0.9166666666666666
+          },
+          "elapsed_seconds": 308.01719800000006,
+          "f1": 0.8979591836734694,
+          "fn": 3,
+          "fp": 2,
+          "merged_notation_twin_rows": 0,
+          "papers": 1,
+          "precision": 0.9166666666666666,
+          "recall": 0.88,
+          "token_usage": {
+            "input_tokens": 82734,
+            "output_tokens": 28594,
+            "total_tokens": 111328
+          },
+          "tp": 22
+        },
+        "SCN5A": {
+          "count": {
+            "affected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.05263157894736842,
+              "predicted": 19,
+              "predicted_on_nonzero_gold": 19,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.76,
+              "recall_nonzero_gold": 0.76,
+              "recall_zero_gold": null,
+              "rmse": 0.22941573387056177
+            },
+            "carriers": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 25,
+              "gold_asserted_zero": 0,
+              "mae": 0.3157894736842105,
+              "predicted": 19,
+              "predicted_on_nonzero_gold": 19,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.76,
+              "recall_nonzero_gold": 0.76,
+              "recall_zero_gold": null,
+              "rmse": 0.5619514869490164
+            },
+            "unaffected": {
+              "gold_asserted": 25,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 12,
+              "mae": 0.0,
+              "predicted": 13,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 5,
+              "recall": 0.52,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": 0.4166666666666667,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 19,
+            "counted_extra_rows": 1,
+            "matched_rows": 23,
+            "precision_among_count_bearing_predictions": 0.95,
+            "precision_vs_counted_gold_pmids": 0.9583333333333334
+          },
+          "elapsed_seconds": 395.759008,
+          "f1": 0.92,
+          "fn": 2,
+          "fp": 2,
+          "merged_notation_twin_rows": 0,
+          "papers": 2,
+          "precision": 0.92,
+          "recall": 0.92,
+          "token_usage": {
+            "input_tokens": 111120,
+            "output_tokens": 37173,
+            "total_tokens": 148293
+          },
+          "tp": 23
+        }
+      },
+      "by_gold_provenance": {
+        "human_curated_cardiac": {
+          "count": {
+            "affected": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 50,
+              "gold_asserted_zero": 11,
+              "mae": 0.22448979591836735,
+              "predicted": 49,
+              "predicted_on_nonzero_gold": 39,
+              "predicted_on_zero_gold": 10,
+              "recall": 0.8032786885245902,
+              "recall_nonzero_gold": 0.78,
+              "recall_zero_gold": 0.9090909090909091,
+              "rmse": 0.47380354147934284
+            },
+            "carriers": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 61,
+              "gold_asserted_zero": 0,
+              "mae": 0.12244897959183673,
+              "predicted": 49,
+              "predicted_on_nonzero_gold": 49,
+              "predicted_on_zero_gold": 0,
+              "recall": 0.8032786885245902,
+              "recall_nonzero_gold": 0.8032786885245902,
+              "recall_zero_gold": null,
+              "rmse": 0.3499271061118826
+            },
+            "unaffected": {
+              "gold_asserted": 61,
+              "gold_asserted_nonzero": 13,
+              "gold_asserted_zero": 48,
+              "mae": 0.0,
+              "predicted": 30,
+              "predicted_on_nonzero_gold": 8,
+              "predicted_on_zero_gold": 22,
+              "recall": 0.4918032786885246,
+              "recall_nonzero_gold": 0.6153846153846154,
+              "recall_zero_gold": 0.4583333333333333,
+              "rmse": 0.0
+            }
+          },
+          "counted_precision": {
+            "count_bearing_matched_rows": 49,
+            "counted_extra_rows": 4,
+            "matched_rows": 55,
+            "precision_among_count_bearing_predictions": 0.9245283018867925,
+            "precision_vs_counted_gold_pmids": 0.9322033898305084
+          },
+          "elapsed_seconds": 856.9973340000001,
+          "f1": 0.9016393442622952,
+          "fn": 6,
+          "fp": 6,
+          "merged_notation_twin_rows": 0,
+          "papers": 4,
+          "precision": 0.9016393442622951,
+          "recall": 0.9016393442622951,
+          "token_usage": {
+            "input_tokens": 254218,
+            "output_tokens": 81521,
+            "total_tokens": 335739
+          },
+          "tp": 55
+        }
+      },
+      "overall": {
+        "count": {
+          "affected": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 50,
+            "gold_asserted_zero": 11,
+            "mae": 0.22448979591836735,
+            "predicted": 49,
+            "predicted_on_nonzero_gold": 39,
+            "predicted_on_zero_gold": 10,
+            "recall": 0.8032786885245902,
+            "recall_nonzero_gold": 0.78,
+            "recall_zero_gold": 0.9090909090909091,
+            "rmse": 0.47380354147934284
+          },
+          "carriers": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 61,
+            "gold_asserted_zero": 0,
+            "mae": 0.12244897959183673,
+            "predicted": 49,
+            "predicted_on_nonzero_gold": 49,
+            "predicted_on_zero_gold": 0,
+            "recall": 0.8032786885245902,
+            "recall_nonzero_gold": 0.8032786885245902,
+            "recall_zero_gold": null,
+            "rmse": 0.3499271061118826
+          },
+          "unaffected": {
+            "gold_asserted": 61,
+            "gold_asserted_nonzero": 13,
+            "gold_asserted_zero": 48,
+            "mae": 0.0,
+            "predicted": 30,
+            "predicted_on_nonzero_gold": 8,
+            "predicted_on_zero_gold": 22,
+            "recall": 0.4918032786885246,
+            "recall_nonzero_gold": 0.6153846153846154,
+            "recall_zero_gold": 0.4583333333333333,
+            "rmse": 0.0
+          }
+        },
+        "counted_precision": {
+          "count_bearing_matched_rows": 49,
+          "counted_extra_rows": 4,
+          "matched_rows": 55,
+          "precision_among_count_bearing_predictions": 0.9245283018867925,
+          "precision_vs_counted_gold_pmids": 0.9322033898305084
+        },
+        "elapsed_seconds": 856.9973340000001,
+        "f1": 0.9016393442622952,
+        "fn": 6,
+        "fp": 6,
+        "merged_notation_twin_rows": 0,
+        "papers": 4,
+        "precision": 0.9016393442622951,
+        "recall": 0.9016393442622951,
+        "token_usage": {
+          "input_tokens": 254218,
+          "output_tokens": 81521,
+          "total_tokens": 335739
+        },
+        "tp": 55
+      },
+      "role": "primary"
+    }
+  },
+  "provenance_policy": {
+    "ambiguous_unattributed_layers": [
+      "manual_or_legacy",
+      "mixed"
+    ],
+    "external_linkage_is_paper_discovery": false,
+    "external_linkage_layers": [
+      "clinvar",
+      "pubtator"
+    ],
+    "external_linkage_rows_in_primary_score": false,
+    "paper_derived_layers": [
+      "figure",
+      "llm_table",
+      "llm_text",
+      "regex_table",
+      "regex_text"
+    ],
+    "unclassified_rows_in_primary_score": false
+  },
+  "run_id": "20260905_mechanism4_final",
+  "scored_at": "2026-09-05T18:40:31.499600+00:00",
+  "seed": 2026090501,
+  "selection": {
+    "description": "Paper selection used the fixed manifest `mechanism_ablation.tsv` (4 papers) from the downloaded-source, named-variant-gold-eligible pool. Routing, extraction, counts, evidence, and source locations were gold-value-blind.",
+    "eligibility_mode": "variant",
+    "mode": "manifest",
+    "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/recall_campaign_20260905/mechanism_ablation.tsv",
+    "per_gene": 5,
+    "population": "fixed manifest `mechanism_ablation.tsv` (4 papers)",
+    "seed": 2026090501
+  },
+  "timing": {
+    "completed_at": "2026-09-05T18:40:28.881378+00:00",
+    "started_at": "2026-09-05T13:32:13.748528",
+    "summed_paper_seconds": 856.9973340000001,
+    "wall_seconds": 1148.0
+  },
+  "token_usage": {
+    "input_tokens": 254218,
+    "llm_calls": 81,
+    "models": {
+      "azure_ai/Kimi-K2.6-1": {
+        "input_tokens": 2432,
+        "llm_calls": 3,
+        "output_tokens": 1308,
+        "provider_seconds": 7.956495,
+        "successful_calls": 3,
+        "total_tokens": 3740
+      },
+      "azure_ai/gpt-5.6-sol": {
+        "input_tokens": 172693,
+        "llm_calls": 74,
+        "output_tokens": 31552,
+        "provider_seconds": 505.216984,
+        "successful_calls": 74,
+        "total_tokens": 204245
+      },
+      "azure_ai/grok-4.3": {
+        "input_tokens": 79093,
+        "llm_calls": 4,
+        "output_tokens": 48661,
+        "provider_seconds": 343.823855,
+        "successful_calls": 4,
+        "total_tokens": 127754
+      }
+    },
+    "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens; provider_seconds is summed call latency, not end-to-end wall clock.",
+    "output_tokens": 81521,
+    "provider_seconds": 856.9973340000001,
+    "successful_calls": 81,
+    "telemetry_available": true,
+    "total_tokens": 335739
+  },
+  "tools_used": {
+    "text": 4
+  }
+}

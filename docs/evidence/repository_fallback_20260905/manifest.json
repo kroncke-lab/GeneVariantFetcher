@@ -1,0 +1,16 @@
+{
+  "finished_at": "2026-09-05T17:44:55.967880+00:00",
+  "panel_sha256": "a72f3e7089db719d05540f2051820add1e0927d0c35d5f9b5c4cf412fef5f42b",
+  "purpose": "source-only live network evaluation; no extraction score or phenotype completeness claim",
+  "attempted": 16,
+  "recovered": 3,
+  "additional_attempted": 14,
+  "additional_recovered": 1,
+  "runtime_sha256": {
+    "harvesting/repository_pdf_fallback.py": "4fe34f07d2faabfaee961e6fb2482fefda235176829722e9bbd4cc3ee4acf26e",
+    "harvesting/unpaywall_api.py": "efe71676de124a77bf2fd33ff74c2715ea5a390bfbfe8722e854ff812cb56dc6",
+    "harvesting/orchestrator.py": "f537c2e81f460444fe91049ab0d523e336c900537d65b61079277732bbeaea46",
+    "harvesting/free_text_flow.py": "c83bac794f106e93f1e3a226e375c5210f85aef1e5793400a1aa8f24327c7ce9",
+    "scripts/fetch_paywalled.py": "759b68a9a90d2f81858422f56adf6bfb8294e3b6bae341d04ff6ccbd4486cb1c"
+  }
+}

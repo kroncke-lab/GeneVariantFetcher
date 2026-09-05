@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-09-04.
+Last updated: 2026-09-05.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -116,6 +116,72 @@ and -0.521 points on Mixed 120, so it did not replicate. A temporary-copy replay
 of the `tg6` source-backed table-outlier exception found zero eligible rows and
 zero aggregate changes in these two locks. No candidate is promoted. The formal
 `gold_120b` replication tier is registered but still unrun and has no metric.
+
+### Affected/unaffected source diagnostic (2026-09-05; no new score)
+
+The [22-paper failure panel](evidence/phenotype_failure_panel_20260905/README.md)
+examines 30 attempts selected from four opened locks: 14 papers have some A/U
+capture, including two exact controls, and eight have none. It distinguishes
+missing components, acquired but unconsumed clinical tables, lost count facts,
+and disagreement over symptoms, diagnosis, ECG or follow-up endpoints. Its
+deliberate enrichment is not a population estimate. The earlier identity-source
+ceiling does not measure completeness of phenotype evidence.
+
+Full bodies for SCN5A 20031634 and 25163546 are now recovered from author
+repositories and synced to the external corpus, with incomplete supplement
+status retained. PMID 20031634 Table 1 was visually checked: 115 carriers split
+into 54 ECG-positive, 55 not ECG-positive and six undetermined. The source
+partition differs from this lock's gold and requires endpoint adjudication.
+These are source acquisitions, not replay results; all locked scores and the
+accepted headline above remain unchanged. The panel report retains before/after
+source provenance, row evidence and both CLI reviews; `TASKS.md` owns the next
+implementation order.
+
+The subsequent [general repository-fallback validation](evidence/repository_fallback_20260905/README.md)
+reproduced both requested downloads through the normal harvester. A fixed
+16-paper network panel (those two plus 14 other ranked gold papers) downloaded
+3 bodies: 20031634, 25163546 and 29650123. This is **1/14** additional-paper
+download successes, not 3 new corpus recoveries; 29650123 already had a body
+and still lacks its mutation roster. The corpus builder upgraded 25163546's
+body and retained the other existing sources. That first validation did not score extraction. The subsequent targeted
+calibration below measures the utility of both recovered bodies.
+
+### Targeted source and reader calibration (2026-09-05)
+
+The [implementation campaign](evidence/recall_campaign_20260905/README.md)
+uses opened papers and preserves the accepted headline. Three fresh locked
+runs cover 15 attempts over nine unique papers; overlapping arms are not pooled.
+
+| Calibration | Attempts | TP / FP / FN | Test cost proxy |
+| --- | ---: | ---: | ---: |
+| Initial prototype | 10 | 348 / 41 / 12 | $2.6282 |
+| Prototype restricted to final ablation attempts | 4 | 55 / 11 / 6 | Included above |
+| Final code, identical source and asset hashes | 4 | 55 / 6 / 6 | $2.0381 |
+| Second recovered body, 25163546 | 1 | 0 / 0 / 20 | $0.0254 |
+
+SCN5A **20031634** changes from its old paper-derived **0 / 0 / 13** to
+**11 / 2 / 2**. Eight matched variants supply A/U, with zero conditional MAE
+for both fields; five +1 carrier disagreements reflect unknown phenotype
+included by the source but excluded by gold. Replaying the identical model
+response isolates the insertion validator's one recovered row; the fresh run
+retains that row through trusted projection. Three matched identities still
+lack A/U, and two source notation ambiguities remain unresolved.
+
+The final four-attempt run supplies affected/carrier values for 49/61 gold
+rows and unaffected values for 30/61. Conditional MAE is 0.224 / 0.122 / 0.000
+(affected / carriers / unaffected); end-to-end MAE is 0.967 / 1.098 / 0.197.
+Count changes outside the insertion example also reflect fresh-model variation
+and are not credited to this code change. All three speculative parser rules
+were withdrawn after their precision or incremental-yield checks failed.
+
+25163546's recovered body still lacks useful variant/count material: all 20
+gold identities remain missed, despite successful PDF acquisition. Its all-miss
+figure exposed and now verifies an empty-agreement reporting repair. Missing
+supplements and unconsumed clinical tables remain the main unresolved work.
+The [final difference figure](../benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/gold_difference.png)
+and [all-miss figure](../benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/gold_difference.png)
+retain these limitations. Test proxy total **$4.69165**, separate from
+**$3.07193** reported Claude consultation and unpriced Grok/Agy CLI reviews.
 
 ### How to report these numbers (2026-08-25)
 

@@ -1,0 +1,573 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "KCNQ1": 294,
+    "MYBPC3": 8,
+    "RYR2": 166,
+    "SCN5A": 675
+  },
+  "gold_sources": {
+    "KCNQ1": "gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv",
+    "MYBPC3": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/curated_extraction_eval/gold_overrides/MYBPC3_recall_input.csv",
+    "RYR2": "gene_variant_fetcher_gold_standard/normalized/RYR2_recall_input.csv",
+    "SCN5A": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/recall_campaign_20260905/mechanism_panel.tsv",
+  "papers": [
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_artifacts.json",
+      "artifacts_sha256": "f07627bfb227495ec9865403c944f10521f80d27d010a5433d278d22864cdecd",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20031634",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+      "source_bytes": 47802,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 47646,
+            "distinct_variant_tokens": 10,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+            "sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+            "table_rows": 0
+          },
+          {
+            "characters": 47646,
+            "distinct_variant_tokens": 10,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_CLEANED.md",
+            "sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 47646,
+          "distinct_variant_tokens": 10,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+          "sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_artifacts.json",
+      "artifacts_sha256": "f98c2cc8f78b6e511554cdcfc3b81a6cacac859d6b4f31b50b1fb228c8b39722",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_figures/fig_pmc_1.jpg": "807b073bd3ab38afc68e61326fe7fae39c45944f4a21cb628afc034e182e7c8a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_figures/fig_pmc_2.jpg": "b62b251895e7db6f5181ba106c657123df943f35e36c448ed2e80cfdb33b9bd9",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_supplements/PMC4588220_supplements/krad-03-01-1012978-g001.jpg": "807b073bd3ab38afc68e61326fe7fae39c45944f4a21cb628afc034e182e7c8a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_supplements/PMC4588220_supplements/krad-03-01-1012978-g002.jpg": "b62b251895e7db6f5181ba106c657123df943f35e36c448ed2e80cfdb33b9bd9"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_supplements/PMC4588220_supplements/krad-03-01-1012978-g001.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_supplements/PMC4588220_supplements/krad-03-01-1012978-g002.jpg"
+      ],
+      "gene": "KCNQ1",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "26481773",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_FULL_CONTEXT.md",
+      "source_bytes": 25624,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 25551,
+            "distinct_variant_tokens": 2,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_FULL_CONTEXT.md",
+            "sha256": "3b3c9681c1f9f1a9daa869cfbaa41237641eaa74a93779114ff06a957ca3b786",
+            "table_rows": 0
+          },
+          {
+            "characters": 10243,
+            "distinct_variant_tokens": 1,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_CLEANED.md",
+            "sha256": "f9b245bc0abfb392bd39b9e36894446ba82a32b78f3740adb02ec297fd6d5588",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 25551,
+          "distinct_variant_tokens": 2,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/26481773/26481773_FULL_CONTEXT.md",
+          "sha256": "3b3c9681c1f9f1a9daa869cfbaa41237641eaa74a93779114ff06a957ca3b786",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "3b3c9681c1f9f1a9daa869cfbaa41237641eaa74a93779114ff06a957ca3b786"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_artifacts.json",
+      "artifacts_sha256": "09c50710408c646b3fe5f957eb84d8325da8278b3ecf7ed367005b9fa348f2cc",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_figures/gr9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_figures/gr9.jpg"
+      ],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          },
+          {
+            "characters": 61448,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_CLEANED.md",
+            "sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_artifacts.json",
+      "artifacts_sha256": "261784e5ffa2e24a088ee1862de54ae3e1487334eb6c7e60794db2d29ff072aa",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_1.jpg": "2337632bf21516a74c766c4043624fd57e4b2c5bef149b17bc6158784eca7c3e",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_2.jpg": "e8b8e6de381e1f74ac1ae29bffef09b46b33269527d8f671dff20cd353fd4341",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_3.jpg": "2550614ce934e4f0f24186941d9b8ed15a9cef43df87f29c69ca24bc66c64973",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_4.jpg": "baf1e265825db884ef9af678459f8c612799619cb399540f91e8f3120587444d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_5.jpg": "11da8608a4f3bace2770531a6ad63361c6e2fc097a00a6bb7b287751b3eca200",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_6.jpg": "6430c870ca62a44d218e1a3c427c1fe320f88e8136967e7839b05075894470c6",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_7.jpg": "ef271f3cc938eb02f1e5f7b7875c861c8876a55c86b27cab5a4e2bee087ddcb7",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_8.jpg": "8dd21a142ef0d6106769a5cbf38eeeb6195653059785a6ebc2810f2a892dc757",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_3.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_4.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_5.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_6.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_7.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_8.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_figures/fig_pmc_9.jpg"
+      ],
+      "gene": "KCNQ1",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          },
+          {
+            "characters": 61448,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_CLEANED.md",
+            "sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_1.jpg": "2337632bf21516a74c766c4043624fd57e4b2c5bef149b17bc6158784eca7c3e",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_2.jpg": "e8b8e6de381e1f74ac1ae29bffef09b46b33269527d8f671dff20cd353fd4341",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_3.jpg": "2550614ce934e4f0f24186941d9b8ed15a9cef43df87f29c69ca24bc66c64973",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_4.jpg": "baf1e265825db884ef9af678459f8c612799619cb399540f91e8f3120587444d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_5.jpg": "11da8608a4f3bace2770531a6ad63361c6e2fc097a00a6bb7b287751b3eca200",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_6.jpg": "6430c870ca62a44d218e1a3c427c1fe320f88e8136967e7839b05075894470c6",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_7.jpg": "ef271f3cc938eb02f1e5f7b7875c861c8876a55c86b27cab5a4e2bee087ddcb7",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_8.jpg": "8dd21a142ef0d6106769a5cbf38eeeb6195653059785a6ebc2810f2a892dc757",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_3.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_4.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_5.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_6.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_7.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_8.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_figures/fig_pmc_9.jpg"
+      ],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          },
+          {
+            "characters": 61448,
+            "distinct_variant_tokens": 65,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_CLEANED.md",
+            "sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_artifacts.json",
+      "artifacts_sha256": "c629beaf0e73744b19b6f9c4877a92b18ae30e011aa455c5143ce9c10487f606",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_figures/fig_pmc_1.jpg": "15e7b70977a3bb8fd40e230f385420b75c4b997aaefba474586912dcda86497e",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_figures/fig_pmc_2.jpg": "29f1eadd785e6b92b978cecbe416f922d23aefab8496ebecb655beb50508927a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f1.jpg": "15e7b70977a3bb8fd40e230f385420b75c4b997aaefba474586912dcda86497e",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f2.jpg": "29f1eadd785e6b92b978cecbe416f922d23aefab8496ebecb655beb50508927a"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_figures/fig_pmc_1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_figures/fig_pmc_2.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f1.jpg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f2.jpg"
+      ],
+      "gene": "MYBPC3",
+      "gold_provenance": "curated_override",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "21302287",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_FULL_CONTEXT.md",
+      "source_bytes": 55873,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 55711,
+            "distinct_variant_tokens": 35,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_FULL_CONTEXT.md",
+            "sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab",
+            "table_rows": 216
+          },
+          {
+            "characters": 43501,
+            "distinct_variant_tokens": 35,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_CLEANED.md",
+            "sha256": "685487264a8344f6cb539b3d0c642e753fd795a1274f59747e61a51e5404bbd1",
+            "table_rows": 163
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 55711,
+          "distinct_variant_tokens": 35,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/MYBPC3/21302287/21302287_FULL_CONTEXT.md",
+          "sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab",
+          "table_rows": 216
+        }
+      },
+      "source_sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "30059973",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/30059973/30059973_FULL_CONTEXT.md",
+      "source_bytes": 147915,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 147539,
+            "distinct_variant_tokens": 3,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/30059973/30059973_FULL_CONTEXT.md",
+            "sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18",
+            "table_rows": 0
+          },
+          {
+            "characters": 106048,
+            "distinct_variant_tokens": 3,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/30059973/30059973_CLEANED.md",
+            "sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/30059973/30059973_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 147539,
+          "distinct_variant_tokens": 3,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/30059973/30059973_FULL_CONTEXT.md",
+          "sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18"
+    },
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_artifacts.json",
+      "artifacts_sha256": "49b576861c26fbe2e1fa23e9efc93b867819482a2b436de2df385c62413c958b",
+      "figure_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p10_0.png": "7d2ae5c0f821552d10992ae68064972c31c455621f2dc0aecc454dbca42189c6",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p11_0.png": "7b38722b00629f44637a4a86ce7ec53c5bafd8ba9beac88cc2ba6083d6f9cefc",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p12_0.png": "5946aed6424f0354ec6d213347c1a813f70b75d8add99efa1f64b31c8f87fa9a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p14_0.png": "da1ad456e4454e6008c5724dfe3856ed1ec5c2d614502bf3b617f5ea0360525b",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p15_0.png": "d8688d9b9a5241116942ce13310f76861a4a0ba6f08a7ed8854df8423721d48f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p16_0.png": "7812dca77e3de122929bdf9c35562960f0727b0a528c05d931f6ddb1443728f8",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p17_0.png": "bbc59d0b70a77505cd0e8f5124d7de910a1458ff1f138b3dedf0af8eb4975620",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p18_0.png": "a7e90deeff2d5e881c88f70a8bb2b36140a14f3423f5e8f3b5b6ff88ad8c47b1",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p19_0.png": "0baa4cdd291b591cbd51ea4a4a2fc4a43d0018f720e084a897a047e4b74e00f3",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p20_0.png": "daeb1321ad3204bd16364a71927bf5421a0b125f0b1e1abf4158cbc22ee29485",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p21_0.png": "233860970a26fed56f62a387a4d2c354d0df9342d585b8eb9f5b3ac5266164cb",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p23_0.png": "7d2ae5c0f821552d10992ae68064972c31c455621f2dc0aecc454dbca42189c6",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p24_0.png": "7b38722b00629f44637a4a86ce7ec53c5bafd8ba9beac88cc2ba6083d6f9cefc",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p25_0.png": "5946aed6424f0354ec6d213347c1a813f70b75d8add99efa1f64b31c8f87fa9a",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p27_0.png": "da1ad456e4454e6008c5724dfe3856ed1ec5c2d614502bf3b617f5ea0360525b",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p28_0.png": "d8688d9b9a5241116942ce13310f76861a4a0ba6f08a7ed8854df8423721d48f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p30_0.png": "ee1fa23463df0cae4a1af10855690b0526b4ab82c83e7c6f13ced6002e749bad",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p31_0.png": "d832878f59034653047d227f3d518663f2a93e1ea2488901c5fa4da7d6280238",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p3_0.jpeg": "b333ba0f8e19d6e7b9e16a2e2408654d3d9ad48a8e2930c16d517e24476006b6",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p3_0.png": "7812dca77e3de122929bdf9c35562960f0727b0a528c05d931f6ddb1443728f8",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p4_0.jpeg": "aa2caf00af84e47bcd62d6ded0764632689205e862b4f74387ec3cd2c96be91d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p4_0.png": "bbc59d0b70a77505cd0e8f5124d7de910a1458ff1f138b3dedf0af8eb4975620",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p5_0.png": "a7e90deeff2d5e881c88f70a8bb2b36140a14f3423f5e8f3b5b6ff88ad8c47b1",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p6_0.jpeg": "26e6c892038d20f2d4c98c8bf490115d48d3a879fa580b4bf585f09ca2d9adea",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p6_0.png": "0baa4cdd291b591cbd51ea4a4a2fc4a43d0018f720e084a897a047e4b74e00f3",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p7_0.png": "daeb1321ad3204bd16364a71927bf5421a0b125f0b1e1abf4158cbc22ee29485",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p8_0.jpeg": "b265c66c3bdd677d1f2ec23161ba494a16fdf953a2050143061f745768be285f",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p8_0.png": "233860970a26fed56f62a387a4d2c354d0df9342d585b8eb9f5b3ac5266164cb"
+      },
+      "figures": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p10_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p11_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p12_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p14_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p15_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p16_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p17_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p18_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p19_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p20_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p21_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p23_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p24_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p25_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p27_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p28_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p30_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p31_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p3_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p3_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p4_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p4_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p5_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p6_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p6_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p7_0.png",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p8_0.jpeg",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_figures/figures/fig_p8_0.png"
+      ],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_supplements/mmc1.pdf": "8013ac71c176180729e3330c19a437dc1b6e4272e117b7bb79b032e6c010817d",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_supplements/mmc3.pdf": "ef3bc3bb40469b6ca316ba97d2dded72fef9bdfa987077f95fbdd6f91631a49d"
+      },
+      "pdfs": [
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_supplements/mmc1.pdf",
+        "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_supplements/mmc3.pdf"
+      ],
+      "pmid": "32533946",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_FULL_CONTEXT.md",
+      "source_bytes": 223498,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 222579,
+            "distinct_variant_tokens": 187,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_FULL_CONTEXT.md",
+            "sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65",
+            "table_rows": 1149
+          },
+          {
+            "characters": 173476,
+            "distinct_variant_tokens": 196,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_CLEANED.md",
+            "sha256": "7c2686857c208141d5fc5bec54001cb71400c7ac8a23007edf5e3a6f179f281e",
+            "table_rows": 18
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 222579,
+          "distinct_variant_tokens": 187,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/32533946/32533946_FULL_CONTEXT.md",
+          "sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65",
+          "table_rows": 1149
+        }
+      },
+      "source_sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "19398417",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/19398417/19398417_FULL_CONTEXT.md",
+      "source_bytes": 2710,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 2710,
+            "distinct_variant_tokens": 1,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/19398417/19398417_FULL_CONTEXT.md",
+            "sha256": "c463c898ae3083b00de5b2be19d670de87392fcc39bfb19d6834e50e17fe893f",
+            "table_rows": 0
+          },
+          {
+            "characters": 2709,
+            "distinct_variant_tokens": 1,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/19398417/19398417_CLEANED.md",
+            "sha256": "3a7a6a14d2f5bcfa92399442b2777c5c4210f514bd14e7d90f13a90ad9bde1ef",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/19398417/19398417_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 2710,
+          "distinct_variant_tokens": 1,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/19398417/19398417_FULL_CONTEXT.md",
+          "sha256": "c463c898ae3083b00de5b2be19d670de87392fcc39bfb19d6834e50e17fe893f",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "c463c898ae3083b00de5b2be19d670de87392fcc39bfb19d6834e50e17fe893f"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25435091",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/25435091/25435091_FULL_CONTEXT.md",
+      "source_bytes": 13603,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 13535,
+            "distinct_variant_tokens": 2,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/25435091/25435091_FULL_CONTEXT.md",
+            "sha256": "6217c16b92900dc303d4e71fc7ecc0db1e2ff4bfde22feae45d17e8c03793a24",
+            "table_rows": 0
+          },
+          {
+            "characters": 13533,
+            "distinct_variant_tokens": 2,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/25435091/25435091_CLEANED.md",
+            "sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/25435091/25435091_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 13535,
+          "distinct_variant_tokens": 2,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/RYR2/25435091/25435091_FULL_CONTEXT.md",
+          "sha256": "6217c16b92900dc303d4e71fc7ecc0db1e2ff4bfde22feae45d17e8c03793a24",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "6217c16b92900dc303d4e71fc7ecc0db1e2ff4bfde22feae45d17e8c03793a24"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-05T18:12:54.941970+00:00",
+  "run_id": "20260905_mechanism10_candidate",
+  "schema_version": 1,
+  "seed": 2026090501
+}

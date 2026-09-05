@@ -1,0 +1,20 @@
+[
+  {
+    "pmid": "20031634",
+    "success": true,
+    "entrypoint": "PMCHarvester.download_pmid",
+    "path": "validation_runs/repository_fallback_20260905/normal_entrypoint_final/SCN5A/20031634_FULL_CONTEXT.md",
+    "characters": 46699,
+    "seconds": 3.67,
+    "sha256": "5d1bdddba306b57940d15eea42a5ea41b79af87e7a34ef4a945179e1e4f7d1a1"
+  },
+  {
+    "pmid": "25163546",
+    "success": true,
+    "entrypoint": "PMCHarvester.download_pmid",
+    "path": "validation_runs/repository_fallback_20260905/normal_entrypoint_final/SCN5A/25163546_FULL_CONTEXT.md",
+    "characters": 158256,
+    "seconds": 1.85,
+    "sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d"
+  }
+]

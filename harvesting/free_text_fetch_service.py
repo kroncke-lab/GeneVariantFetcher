@@ -129,7 +129,7 @@ def fetch_main_content_for_free_text(
             result.early_result = (False, "Suspicious free URL", None)
             return result
 
-        print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
+        print(f"  - Attempting to fetch from free URL: {free_url}")
 
         if elsevier_api.is_available and elsevier_api.is_elsevier_url(free_url):
             pii = elsevier_api.extract_pii_from_url(free_url)
@@ -294,17 +294,19 @@ def fetch_main_content_for_free_text(
                 result.early_result = (False, "Free text fetch failed", None)
                 return result
     elif not result.main_markdown:
-        print("  ❌ No DOI or free URL available to fetch full text")
-        print(
-            "     (PubMed metadata indicates free access but provides no usable link)"
+        reason = (
+            "DOI route failed and PubMed supplied no usable free-text URL"
+            if doi
+            else "No DOI or URL for free text"
         )
+        print(f"  - {reason}")
         pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
         log_paywalled(
             pmid,
-            "Free full text indicated but no DOI or URL in PubMed metadata",
+            reason,
             pubmed_url,
         )
-        result.early_result = (False, "No DOI or URL for free text", None)
+        result.early_result = (False, reason, None)
         return result
 
     if not result.main_markdown:

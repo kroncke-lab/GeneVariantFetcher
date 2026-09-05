@@ -1,0 +1,27 @@
+{
+  "ceiling_usd": 100,
+  "campaign": "20260905 new authorization; separate from closed84.035 campaign",
+  "test_spend_proxy_usd": 4.6916481999999995,
+  "claude_consult_reported_usd": 3.0719345000000002,
+  "grok_agy_consult_usd": null,
+  "pricing_basis": "benchmarks/evaluation_tiers/cost_calibration.json dated public-price proxy; API bill may differ",
+  "next_authorized_step": null,
+  "remaining_uncommitted_test_envelope_usd": 95.3083518,
+  "completed_tests": [
+    {
+      "run_id": "20260905_mechanism10_candidate",
+      "cost_proxy_usd": 2.6281657999999997,
+      "calls": 106
+    },
+    {
+      "run_id": "20260905_mechanism4_final",
+      "cost_proxy_usd": 2.03808615,
+      "calls": 81
+    },
+    {
+      "run_id": "20260905_repository1_final",
+      "cost_proxy_usd": 0.02539625,
+      "calls": 1
+    }
+  ]
+}

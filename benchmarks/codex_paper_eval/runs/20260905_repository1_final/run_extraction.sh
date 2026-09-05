@@ -1,0 +1,27 @@
+#!/bin/zsh
+set -euo pipefail
+cd /Users/kronckbm/GitRepos/GeneVariantFetcher
+PYTHON=/Users/kronckbm/GitRepos/GeneVariantFetcher/.venv/bin/python
+RUN_DIR=/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final
+EMAIL=brett.kroncke@gmail.com
+"$PYTHON" -c 'from pathlib import Path; import json,sys; from benchmarks.codex_paper_eval.setup_production_eval import runtime_fingerprint; assert runtime_fingerprint()==json.loads((Path(sys.argv[1])/"analysis_setup.json").read_text())["runtime"], "runtime drift"' "$RUN_DIR"
+export GVF_FROZEN_SOURCE_MANIFEST="$RUN_DIR/frozen_corpus/source_snapshot.json"
+mkdir -p "$RUN_DIR/operator_logs"
+typeset -a pids
+
+echo "Starting calibrated SCN5A extraction"
+(
+  "$PYTHON" -m cli gvf-run SCN5A --email "$EMAIL" --output "$RUN_DIR/production_runs" --pmid-file "$RUN_DIR/pmids/SCN5A.txt" --no-source-recovery --no-corpus-sync --no-publish-review --gold-free-run 2>&1 | tee "$RUN_DIR/operator_logs/SCN5A.log"
+) &
+pids+=($!)
+
+failed=0
+for pid in "${pids[@]}"; do
+  if ! wait "$pid"; then
+    failed=1
+  fi
+done
+if (( failed )); then
+  echo "At least one gene extraction failed; do not lock or score." >&2
+  exit 1
+fi

@@ -1,0 +1,193 @@
+{
+  "arms": {
+    "run": {
+      "attempts": 1,
+      "comparison_arm": null,
+      "gold_sources": {
+        "SCN5A": {
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv",
+          "sha256": "71b3510406f02af6d9bf733a4e2cca666cf5ffe271924540351b639d54e00988"
+        }
+      },
+      "identity": {
+        "fn": 20,
+        "fp": 0,
+        "precision": null,
+        "primary_score_lane": "paper_derived",
+        "recall": 0.0,
+        "tp": 0
+      },
+      "integrity": {
+        "predictions_sha256": "e6aea247b6053e7c0c17addadbeea3647d204be847d9d2090943260c26ede853",
+        "selection_sha256": "a8b6efaa29f4df8aeef342bddcbcc0322f40eb8ff30c9b9eca9b9f2d1ae05728"
+      },
+      "label": "run",
+      "locked_at": "2026-09-05T18:41:05.683317+00:00",
+      "metrics": {
+        "affected": {
+          "abstained": 0,
+          "bias": -1.0,
+          "bland_altman": {
+            "lower": -1.0,
+            "mean": -1.0,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 0.0,
+            "upper": -1.0
+          },
+          "conditional_bias": null,
+          "conditional_mae": null,
+          "coverage_on_matched": null,
+          "difference_max": -1,
+          "difference_min": -1,
+          "empirical_limits": {
+            "lower_2_5": -1,
+            "upper_97_5": -1
+          },
+          "end_to_end_mae": 1.0,
+          "exact": 0,
+          "exact_fraction": 0.0,
+          "gold_max": 1,
+          "gold_rows": 20,
+          "gold_rows_zero": 0,
+          "greater_than_one": 0,
+          "identity_coverage": 0.0,
+          "identity_matched": 0,
+          "identity_miss": 20,
+          "median_absolute_difference": 1.0,
+          "rmse": 1.0,
+          "supplied": 0,
+          "supplied_exact": 0,
+          "supplied_exact_fraction": null,
+          "supplied_fraction": 0.0,
+          "within_one": 20,
+          "within_one_fraction": 1.0,
+          "zero_baseline_exact": 0,
+          "zero_baseline_fraction": 0.0
+        },
+        "carriers": {
+          "abstained": 0,
+          "bias": -1.0,
+          "bland_altman": {
+            "lower": -1.0,
+            "mean": -1.0,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 0.0,
+            "upper": -1.0
+          },
+          "conditional_bias": null,
+          "conditional_mae": null,
+          "coverage_on_matched": null,
+          "difference_max": -1,
+          "difference_min": -1,
+          "empirical_limits": {
+            "lower_2_5": -1,
+            "upper_97_5": -1
+          },
+          "end_to_end_mae": 1.0,
+          "exact": 0,
+          "exact_fraction": 0.0,
+          "gold_max": 1,
+          "gold_rows": 20,
+          "gold_rows_zero": 0,
+          "greater_than_one": 0,
+          "identity_coverage": 0.0,
+          "identity_matched": 0,
+          "identity_miss": 20,
+          "median_absolute_difference": 1.0,
+          "rmse": 1.0,
+          "supplied": 0,
+          "supplied_exact": 0,
+          "supplied_exact_fraction": null,
+          "supplied_fraction": 0.0,
+          "within_one": 20,
+          "within_one_fraction": 1.0,
+          "zero_baseline_exact": 0,
+          "zero_baseline_fraction": 0.0
+        },
+        "unaffected": {
+          "abstained": 0,
+          "bias": 0.0,
+          "bland_altman": {
+            "lower": 0.0,
+            "mean": 0.0,
+            "note": "reported for completeness; the differences are zero-inflated",
+            "sd": 0.0,
+            "upper": 0.0
+          },
+          "conditional_bias": null,
+          "conditional_mae": null,
+          "coverage_on_matched": null,
+          "difference_max": 0,
+          "difference_min": 0,
+          "empirical_limits": {
+            "lower_2_5": 0,
+            "upper_97_5": 0
+          },
+          "end_to_end_mae": 0.0,
+          "exact": 20,
+          "exact_fraction": 1.0,
+          "gold_max": 0,
+          "gold_rows": 20,
+          "gold_rows_zero": 20,
+          "greater_than_one": 0,
+          "identity_coverage": 0.0,
+          "identity_matched": 0,
+          "identity_miss": 20,
+          "median_absolute_difference": 0.0,
+          "rmse": 0.0,
+          "supplied": 0,
+          "supplied_exact": 0,
+          "supplied_exact_fraction": null,
+          "supplied_fraction": 0.0,
+          "within_one": 20,
+          "within_one_fraction": 1.0,
+          "zero_baseline_exact": 20,
+          "zero_baseline_fraction": 1.0
+        }
+      },
+      "run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final",
+      "run_id": "20260905_repository1_final",
+      "runtime_source_sha256": null,
+      "tier_id": null,
+      "unique_pmids": 1
+    }
+  },
+  "comparison": null,
+  "evaluation_rule": {
+    "abstention_evaluated_as": 0,
+    "identity_miss_evaluated_as": 0,
+    "mirrors": "benchmarks/codex_paper_eval/secondary_count_endpoint.py (end-to-end carrier error) extended to affected and unaffected",
+    "stored_missing_value": null,
+    "text": "difference = automated count minus reference count for every gold row with an asserted value; an identity miss or a matched row without an automated count is evaluated as 0 (the full reference count is the error)"
+  },
+  "figure": "gold_difference",
+  "figure_contract": {
+    "chart_family": "faceted difference plots (automated minus reference against reference) with grouped markers sized by row count",
+    "height": 1320,
+    "labels": "the three largest supplied disagreements and the largest reference count lost to a miss or abstention, placed automatically",
+    "marker_radius": "min(28, 8 + 2*sqrt(rows at the coordinate))",
+    "reference_lines": [
+      "zero difference",
+      "mean difference (bias)",
+      "empirical 2.5th and 97.5th percentiles of the difference",
+      "difference = -reference (the boundary where a missing count sits)"
+    ],
+    "renderer": "editable SVG; vector PDF and PNG copies downstream",
+    "width": 2400,
+    "x_axis": "reference (gold) count, square-root scale, 0 to 20",
+    "x_max": 20,
+    "y_axis": "automated minus reference, signed square-root scale, \u00b120",
+    "y_max": 20
+  },
+  "generated_at": "2026-09-05T18:42:59.886103+00:00",
+  "outputs": {
+    "csv": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/data/gold_difference.csv",
+    "json": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/data/gold_difference.json",
+    "pdf": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/gold_difference.pdf",
+    "png": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/gold_difference.png",
+    "svg": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/figures/gold_difference.svg"
+  },
+  "paired": null,
+  "row_grain": "gold row with an asserted value, per count measure",
+  "title": "Automated minus reference counts on the gold standard"
+}

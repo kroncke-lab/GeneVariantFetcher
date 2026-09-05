@@ -1,0 +1,1436 @@
+{
+  "19687231_repository_recovery": {
+    "success": false,
+    "pmid": "19687231",
+    "doi": "10.1085/jgp.200910234",
+    "title": "Distinct subdomains of the KCNQ1 S6 segment determine channel modulation by different KCNE subunits.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A19687231+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1085/jgp.200910234",
+        "observed_title": "Distinct subdomains of the KCNQ1 S6 segment determine channel modulation by different KCNE subunits"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1085/jgp.200910234",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/2737226",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2737226",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2737226",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pmc.ncbi.nlm.nih.gov/articles/2737226"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1085/jgp.200910234",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1085/jgp.200910234",
+        "observed_title": "Distinct subdomains of the KCNQ1 S6 segment determine channel modulation by different KCNE subunits"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1085/jgp.200910234",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/2737226",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2737226",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1085%2Fjgp.200910234%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:52.714877+00:00"
+  },
+  "24667783_repository_recovery": {
+    "success": false,
+    "pmid": "24667783",
+    "doi": "10.1038/ejhg.2014.54",
+    "title": "Genetic analysis, in silico prediction, and family segregation in long QT syndrome.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A24667783+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1038/ejhg.2014.54",
+        "observed_title": "Genetic analysis, in silico prediction, and family segregation in long QT syndrome"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1038/ejhg.2014.54",
+            "repository_record": "https://doi.org/10.1038/ejhg.2014.54",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://www.nature.com/articles/ejhg201454.pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1038/ejhg.2014.54",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/4266740",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/4266740",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.nature.com/articles/ejhg201454.pdf",
+        "status": "rejected",
+        "reason": "response is not a PDF (magic bytes)"
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/4266740",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pmc.ncbi.nlm.nih.gov/articles/4266740"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1038/ejhg.2014.54",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1038/ejhg.2014.54",
+        "observed_title": "Genetic analysis, in silico prediction, and family segregation in long QT syndrome"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1038/ejhg.2014.54",
+            "repository_record": "https://doi.org/10.1038/ejhg.2014.54",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://www.nature.com/articles/ejhg201454.pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1038/ejhg.2014.54",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/4266740",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/4266740",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1038/ejhg.2014.54",
+            "repository_record": "https://escholarship.org/uc/item/80x579n7",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://escholarship.org/uc/item/80x579n7",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://escholarship.org/uc/item/80x579n7",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://escholarship.org/uc/item/80x579n7"
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1038%2Fejhg.2014.54%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:53.867603+00:00"
+  },
+  "14678125_repository_recovery": {
+    "success": false,
+    "pmid": "14678125",
+    "doi": "10.1046/j.1540-8167.2003.03177.x",
+    "title": "Location of mutation in the KCNQ1 and phenotypic presentation of long QT syndrome.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A14678125+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1046/j.1540-8167.2003.03177.x",
+        "observed_title": "Location of Mutation in the KCNQ1 and Phenotypic Presentation of Long QT Syndrome"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1046/j.1540-8167.2003.03177.x",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1046/j.1540-8167.2003.03177.x",
+        "observed_title": "Location of Mutation in the KCNQ1 and Phenotypic Presentation of Long QT Syndrome"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1046%2Fj.1540-8167.2003.03177.x%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:47.571287+00:00"
+  },
+  "31520628_repository_recovery": {
+    "success": false,
+    "pmid": "31520628",
+    "doi": "10.1016/j.ajog.2019.09.004",
+    "title": "Mothers with long QT syndrome are at increased risk for fetal death: findings from a multicenter international study.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A31520628+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.ajog.2019.09.004",
+        "observed_title": "Mothers with long QT syndrome are at increased risk for fetal death: findings from a multicenter international study"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.ajog.2019.09.004",
+            "repository_record": "https://pure.amsterdamumc.nl/en/publications/3a34a59b-8497-4dd1-9e93-aa23ebabb5e7",
+            "version": "publishedVersion",
+            "repository": true,
+            "url": "https://pure.amsterdamumc.nl/en/publications/3a34a59b-8497-4dd1-9e93-aa23ebabb5e7",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://pure.amsterdamumc.nl/en/publications/3a34a59b-8497-4dd1-9e93-aa23ebabb5e7",
+        "final_url": "https://pure.amsterdamumc.nl/en/publications/mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-dea/",
+        "status": "landing",
+        "pdf_links": 1
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://pure.amsterdamumc.nl/files/221235491/Mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study.pdf",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pure.amsterdamumc.nl/files/221235491/Mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study.pdf"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.ajog.2019.09.004",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.ajog.2019.09.004",
+        "observed_title": "Mothers with long QT syndrome are at increased risk for fetal death: findings from a multicenter international study"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.ajog.2019.09.004",
+            "repository_record": "https://pure.amsterdamumc.nl/en/publications/3a34a59b-8497-4dd1-9e93-aa23ebabb5e7",
+            "version": "publishedVersion",
+            "repository": true,
+            "url": "https://pure.amsterdamumc.nl/en/publications/3a34a59b-8497-4dd1-9e93-aa23ebabb5e7",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.ajog.2019.09.004",
+            "repository_record": "https://pure.amc.nl/en/publications/mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study(72803e59-d994-471d-87f3-33b1f98809b4).html",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://pure.amc.nl/en/publications/mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study(72803e59-d994-471d-87f3-33b1f98809b4).html",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.ajog.2019.09.004",
+            "repository_record": "https://mediatum.ub.tum.de/1601141",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://mediatum.ub.tum.de/1601141",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://pure.amc.nl/en/publications/mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study(72803e59-d994-471d-87f3-33b1f98809b4).html",
+        "status": "rejected",
+        "reason": "HTTPSConnectionPool(host='pure.amc.nl', port=443): Max retries exceeded with url: /en/publications/mothers-with-long-qt-syndrome-are-at-increased-risk-for-fetal-death-findings-from-a-multicenter-international-study(72803e59-d994-471d-87f3-33b1f98809b4).html (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] ssl/tls alert handshake failure (_ssl.c:1032)')))"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://mediatum.ub.tum.de/1601141",
+        "final_url": "https://mediatum.ub.tum.de/1601141",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.ajog.2019.09.004%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:49.540109+00:00"
+  },
+  "29650123_repository_recovery": {
+    "success": true,
+    "pmid": "29650123",
+    "doi": "10.1016/j.jacc.2018.01.078",
+    "title": "Interplay Between Genetic Substrate, QTc\u00a0Duration, and Arrhythmia Risk in Patients With Long QT Syndrome.",
+    "source_url": "https://repisalud.isciii.es/rest/api/core/bitstreams/724125b0-1374-4066-98bd-75dbfa9cf196/content",
+    "pdf_path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/repository_fallback_20260905/panel_final/sources/KCNH2/29650123_repository_364a9ca29c7b.pdf",
+    "pdf_sha256": "364a9ca29c7b913c882f599b4593795ecc3f5090970cc6622b096ca56795b97a",
+    "page_count": 13,
+    "identity_reason": "exact DOI metadata linkage and article-header title match",
+    "candidate": {
+      "provider": "unpaywall",
+      "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.jacc.2018.01.078",
+      "repository_record": "http://hdl.handle.net/20.500.12105/10498",
+      "version": "submittedVersion",
+      "repository": true,
+      "url": "https://repisalud.isciii.es/bitstreams/724125b0-1374-4066-98bd-75dbfa9cf196/download",
+      "kind": "pdf",
+      "discovered_on": "https://repisalud.isciii.es/entities/publication/389ea04e-d2d0-4407-9b62-535def75b44d"
+    },
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A29650123+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.jacc.2018.01.078",
+        "observed_title": "Interplay Between Genetic Substrate, QTc Duration, and Arrhythmia Risk in Patients With Long QT Syndrome"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.jacc.2018.01.078",
+            "repository_record": "https://doi.org/10.1016/j.jacc.2018.01.078",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://www.sciencedirect.com/science/article/pii/S0735109718332546/pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.jacc.2018.01.078",
+            "repository_record": "http://hdl.handle.net/20.500.12105/10498",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "http://hdl.handle.net/20.500.12105/10498",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.sciencedirect.com/science/article/pii/S0735109718332546/pdf",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://www.sciencedirect.com/science/article/pii/S0735109718332546/pdf"
+      },
+      {
+        "provider": "unpaywall",
+        "url": "http://hdl.handle.net/20.500.12105/10498",
+        "final_url": "https://repisalud.isciii.es/entities/publication/389ea04e-d2d0-4407-9b62-535def75b44d",
+        "status": "landing",
+        "pdf_links": 1
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://repisalud.isciii.es/bitstreams/724125b0-1374-4066-98bd-75dbfa9cf196/download",
+        "final_url": "https://repisalud.isciii.es/rest/api/core/bitstreams/724125b0-1374-4066-98bd-75dbfa9cf196/content",
+        "status": "accepted",
+        "pdf_sha256": "364a9ca29c7b913c882f599b4593795ecc3f5090970cc6622b096ca56795b97a",
+        "pages": 13,
+        "identity_reason": "exact DOI metadata linkage and article-header title match",
+        "discovered_on": "https://repisalud.isciii.es/entities/publication/389ea04e-d2d0-4407-9b62-535def75b44d"
+      }
+    ],
+    "error": "",
+    "recorded_at": "2026-09-05T17:44:45.787724+00:00"
+  },
+  "17905336_repository_recovery": {
+    "success": false,
+    "pmid": "17905336",
+    "doi": "10.1016/j.hrthm.2007.06.022",
+    "title": "Long QT and Brugada syndrome gene mutations in New Zealand.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A17905336+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.hrthm.2007.06.022",
+        "observed_title": "Long QT and Brugada syndrome gene mutations in New Zealand"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.hrthm.2007.06.022",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.hrthm.2007.06.022",
+        "observed_title": "Long QT and Brugada syndrome gene mutations in New Zealand"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.hrthm.2007.06.022",
+            "repository_record": "https://cronfa.swan.ac.uk/Record/cronfa12523",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://cronfa.swan.ac.uk/Record/cronfa12523",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://cronfa.swan.ac.uk/Record/cronfa12523",
+        "final_url": "https://cronfa.swan.ac.uk/Record/cronfa12523",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.hrthm.2007.06.022%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:55.966108+00:00"
+  },
+  "29121719_repository_recovery": {
+    "success": false,
+    "pmid": "29121719",
+    "doi": "10.1016/j.ijcard.2017.07.055",
+    "title": "Implantable cardioverter defibrillator therapy in repaired tetralogy of Fallot after pulmonary valve replacement: Implications for the mechanism of ventricular arrhythmia.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A29121719+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.ijcard.2017.07.055",
+        "observed_title": "Implantable cardioverter defibrillator therapy in repaired tetralogy of Fallot after pulmonary valve replacement: Implications for the mechanism of ventricular arrhythmia"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.ijcard.2017.07.055",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.ijcard.2017.07.055",
+        "observed_title": "Implantable cardioverter defibrillator therapy in repaired tetralogy of Fallot after pulmonary valve replacement: Implications for the mechanism of ventricular arrhythmia"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.ijcard.2017.07.055%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:50.761090+00:00"
+  },
+  "20031634_repository_recovery": {
+    "success": true,
+    "pmid": "20031634",
+    "doi": "10.1161/circgenetics.109.853374",
+    "title": "SCN5A mutations and the role of genetic background in the pathophysiology of Brugada syndrome.",
+    "source_url": "https://univ-brest.hal.science/hal-00750425/document",
+    "pdf_path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/repository_fallback_20260905/panel_final/sources/SCN5A/20031634_repository_201e39aa350d.pdf",
+    "pdf_sha256": "201e39aa350d5b03f2266de2c12fe6a40e63f8de4406834d41e750701b872181",
+    "page_count": 7,
+    "identity_reason": "exact DOI metadata linkage and article-header title match",
+    "candidate": {
+      "provider": "unpaywall",
+      "metadata_url": "https://api.unpaywall.org/v2/10.1161/circgenetics.109.853374",
+      "repository_record": "https://hal.univ-brest.fr/hal-00750425",
+      "version": "submittedVersion",
+      "repository": true,
+      "url": "https://hal.univ-brest.fr/hal-00750425/document",
+      "kind": "pdf"
+    },
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A20031634+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1161/circgenetics.109.853374",
+        "observed_title": "SCN5A Mutations and the Role of Genetic Background in the Pathophysiology of Brugada Syndrome"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1161/circgenetics.109.853374",
+            "repository_record": "https://hal.univ-brest.fr/hal-00750425",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://hal.univ-brest.fr/hal-00750425/document",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1161/circgenetics.109.853374",
+            "repository_record": "https://hal.univ-brest.fr/hal-00750425",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://hal.univ-brest.fr/hal-00750425",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://hal.univ-brest.fr/hal-00750425/document",
+        "final_url": "https://univ-brest.hal.science/hal-00750425/document",
+        "status": "accepted",
+        "pdf_sha256": "201e39aa350d5b03f2266de2c12fe6a40e63f8de4406834d41e750701b872181",
+        "pages": 7,
+        "identity_reason": "exact DOI metadata linkage and article-header title match",
+        "discovered_on": null
+      }
+    ],
+    "error": "",
+    "recorded_at": "2026-09-05T17:44:44.634510+00:00"
+  },
+  "15898185_repository_recovery": {
+    "success": false,
+    "pmid": "15898185",
+    "doi": "10.1016/j.hrthm.2004.08.011",
+    "title": "Genetics, ethics and ethnicity.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A15898185+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.hrthm.2004.08.011",
+        "observed_title": "Genetics, ethics and ethnicity"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.hrthm.2004.08.011",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.hrthm.2004.08.011",
+        "observed_title": "Genetics, ethics and ethnicity"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.hrthm.2004.08.011",
+            "repository_record": "http://hdl.handle.net/10822/505649",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "http://hdl.handle.net/10822/505649",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "http://hdl.handle.net/10822/505649",
+        "status": "rejected",
+        "reason": "404 Client Error: Not Found for url: http://hdl.handle.net/10822/505649"
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.hrthm.2004.08.011%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:45.474060+00:00"
+  },
+  "22966897_repository_recovery": {
+    "success": false,
+    "pmid": "22966897",
+    "doi": "10.1111/j.1540-8167.2012.02430.x",
+    "title": "Molecular autopsy for sudden unexplained death? Time to discuss pros and cons.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A22966897+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1111/j.1540-8167.2012.02430.x",
+        "observed_title": "Molecular Autopsy for Sudden Unexplained Death? Time to Discuss Pros and Cons"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1111/j.1540-8167.2012.02430.x",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1111/j.1540-8167.2012.02430.x",
+        "observed_title": "Molecular Autopsy for Sudden Unexplained Death? Time to Discuss Pros and Cons"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1111%2Fj.1540-8167.2012.02430.x%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:53.867806+00:00"
+  },
+  "25163546_repository_recovery": {
+    "success": true,
+    "pmid": "25163546",
+    "doi": "10.1093/eurheartj/ehu301",
+    "title": "Atlas of the clinical genetics of human dilated cardiomyopathy.",
+    "source_url": "https://pure.amsterdamumc.nl/ws/files/160678302/Atlas-of-the-clinical-genetics-of-human-dilated-cardiomyopathy.pdf",
+    "pdf_path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/repository_fallback_20260905/panel_final/sources/SCN5A/25163546_repository_8e67ee5d44ba.pdf",
+    "pdf_sha256": "8e67ee5d44baec5593611996bb55584059ace486b6cd12614e5a9a66b50e38c8",
+    "page_count": 16,
+    "identity_reason": "exact DOI metadata linkage and article-header title match",
+    "candidate": {
+      "provider": "unpaywall",
+      "metadata_url": "https://api.unpaywall.org/v2/10.1093/eurheartj/ehu301",
+      "repository_record": "https://pure.amsterdamumc.nl/en/publications/11773709-3988-4e63-a569-1e6117a13e2a",
+      "version": "submittedVersion",
+      "repository": true,
+      "url": "https://pure.amsterdamumc.nl/ws/files/160678302/Atlas-of-the-clinical-genetics-of-human-dilated-cardiomyopathy.pdf",
+      "kind": "pdf"
+    },
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A25163546+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1093/eurheartj/ehu301",
+        "observed_title": "Atlas of the clinical genetics of human dilated cardiomyopathy"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1093/eurheartj/ehu301",
+            "repository_record": "https://pure.amsterdamumc.nl/en/publications/11773709-3988-4e63-a569-1e6117a13e2a",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://pure.amsterdamumc.nl/ws/files/160678302/Atlas-of-the-clinical-genetics-of-human-dilated-cardiomyopathy.pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1093/eurheartj/ehu301",
+            "repository_record": "https://pure.amsterdamumc.nl/en/publications/11773709-3988-4e63-a569-1e6117a13e2a",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://pure.amsterdamumc.nl/en/publications/11773709-3988-4e63-a569-1e6117a13e2a",
+            "kind": "landing"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1093/eurheartj/ehu301",
+            "repository_record": "http://hdl.handle.net/20.500.11940/1966",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "http://hdl.handle.net/20.500.11940/1966",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://pure.amsterdamumc.nl/ws/files/160678302/Atlas-of-the-clinical-genetics-of-human-dilated-cardiomyopathy.pdf",
+        "final_url": "https://pure.amsterdamumc.nl/ws/files/160678302/Atlas-of-the-clinical-genetics-of-human-dilated-cardiomyopathy.pdf",
+        "status": "accepted",
+        "pdf_sha256": "8e67ee5d44baec5593611996bb55584059ace486b6cd12614e5a9a66b50e38c8",
+        "pages": 16,
+        "identity_reason": "exact DOI metadata linkage and article-header title match",
+        "discovered_on": null
+      }
+    ],
+    "error": "",
+    "recorded_at": "2026-09-05T17:44:43.755213+00:00"
+  },
+  "29350269_repository_recovery": {
+    "success": false,
+    "pmid": "29350269",
+    "doi": "10.1007/s00414-018-1775-y",
+    "title": "Exome analysis in 34 sudden unexplained death (SUD) victims mainly identified variants in channelopathy-associated genes.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A29350269+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1007/s00414-018-1775-y",
+        "observed_title": "Exome analysis in 34 sudden unexplained death (SUD) victims mainly identified variants in channelopathy-associated genes"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1007/s00414-018-1775-y",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1007/s00414-018-1775-y",
+        "observed_title": "Exome analysis in 34 sudden unexplained death (SUD) victims mainly identified variants in channelopathy-associated genes"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1007/s00414-018-1775-y",
+            "repository_record": "https://www.zora.uzh.ch/148415",
+            "version": "acceptedVersion",
+            "repository": true,
+            "url": "https://www.zora.uzh.ch/148415",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://www.zora.uzh.ch/148415",
+        "status": "rejected",
+        "reason": "404 Client Error: Not Found for url: https://www.zora.uzh.ch/148415"
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1007%2Fs00414-018-1775-y%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:52.828067+00:00"
+  },
+  "22677073_repository_recovery": {
+    "success": false,
+    "pmid": "22677073",
+    "doi": "10.1016/j.mayocp.2012.02.017",
+    "title": "Cardiac channel molecular autopsy: insights from 173 consecutive cases of autopsy-negative sudden unexplained death referred for postmortem genetic testing.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A22677073+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.mayocp.2012.02.017",
+        "observed_title": "Cardiac Channel Molecular Autopsy: Insights From 173 Consecutive Cases of Autopsy-Negative Sudden Unexplained Death Referred for Postmortem Genetic Testing"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.mayocp.2012.02.017",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.mayocp.2012.02.017",
+        "observed_title": "Cardiac Channel Molecular Autopsy: Insights From 173 Consecutive Cases of Autopsy-Negative Sudden Unexplained Death Referred for Postmortem Genetic Testing"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.mayocp.2012.02.017",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/3498431",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/3498431",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.mayocp.2012.02.017",
+            "repository_record": "https://boris.unibe.ch/42267/",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://boris.unibe.ch/42267/",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/3498431",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pmc.ncbi.nlm.nih.gov/articles/3498431"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://boris.unibe.ch/42267/",
+        "final_url": "https://boris-portal.unibe.ch/items/7fc5718d-d9a8-4e53-a6f8-841547f3abfd",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.mayocp.2012.02.017%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:50.516572+00:00"
+  },
+  "19926015_repository_recovery": {
+    "success": false,
+    "pmid": "19926015",
+    "doi": "10.1016/j.jacc.2009.08.022",
+    "title": "The RYR2-encoded ryanodine receptor/calcium release channel in patients diagnosed previously with either catecholaminergic polymorphic ventricular tachycardia or genotype negative, exercise-induced long QT syndrome: a comprehensive open reading frame mutational analysis.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A19926015+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1016/j.jacc.2009.08.022",
+        "observed_title": "The RYR2-Encoded Ryanodine Receptor/Calcium Release Channel in Patients Diagnosed Previously With Either Catecholaminergic Polymorphic Ventricular Tachycardia or Genotype Negative, Exercise-Induced Long QT Syndrome"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://doi.org/10.1016/j.jacc.2009.08.022",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://www.sciencedirect.com/science/article/pii/S0735109709029350/pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/2880864",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2880864",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.sciencedirect.com/science/article/pii/S0735109709029350/pdf",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://www.sciencedirect.com/science/article/pii/S0735109709029350/pdf"
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2880864",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pmc.ncbi.nlm.nih.gov/articles/2880864"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1016/j.jacc.2009.08.022",
+        "observed_title": "The RYR2-Encoded Ryanodine Receptor/Calcium Release Channel in Patients Diagnosed Previously With Either Catecholaminergic Polymorphic Ventricular Tachycardia or Genotype Negative, Exercise-Induced Long QT Syndrome"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://doi.org/10.1016/j.jacc.2009.08.022",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://www.sciencedirect.com/science/article/pii/S0735109709029350/pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://research.rug.nl/en/publications/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+            "version": "publishedVersion",
+            "repository": true,
+            "url": "https://research.rug.nl/en/publications/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/2880864",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/2880864",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://pure.amc.nl/en/publications/the-ryr2encoded-ryanodine-receptorcalcium-release-channel-in-patients-diagnosed-previously-with-either-catecholaminergic-polymorphic-ventricular-tachycardia-or-genotype-negative-exerciseinduced-long-qt-syndrome-a-comprehensive-open-reading-frame-mutational-analysis(6b9d73cb-1070-43cd-8cfc-486f6899b43c).html",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://pure.amc.nl/en/publications/the-ryr2encoded-ryanodine-receptorcalcium-release-channel-in-patients-diagnosed-previously-with-either-catecholaminergic-polymorphic-ventricular-tachycardia-or-genotype-negative-exerciseinduced-long-qt-syndrome-a-comprehensive-open-reading-frame-mutational-analysis(6b9d73cb-1070-43cd-8cfc-486f6899b43c).html",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://pure.amsterdamumc.nl/en/publications/fa279259-a111-4b36-9ec3-f74726717e51",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://pure.amsterdamumc.nl/en/publications/fa279259-a111-4b36-9ec3-f74726717e51",
+            "kind": "landing"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jacc.2009.08.022",
+            "repository_record": "https://hdl.handle.net/11370/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://hdl.handle.net/11370/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "openalex",
+        "url": "https://research.rug.nl/en/publications/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+        "final_url": "https://research.rug.nl/en/publications/the-ryr2-encoded-ryanodine-receptorcalcium-release-channel-in-pat/",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "openalex",
+        "url": "https://pure.amc.nl/en/publications/the-ryr2encoded-ryanodine-receptorcalcium-release-channel-in-patients-diagnosed-previously-with-either-catecholaminergic-polymorphic-ventricular-tachycardia-or-genotype-negative-exerciseinduced-long-qt-syndrome-a-comprehensive-open-reading-frame-mutational-analysis(6b9d73cb-1070-43cd-8cfc-486f6899b43c).html",
+        "status": "rejected",
+        "reason": "HTTPSConnectionPool(host='pure.amc.nl', port=443): Max retries exceeded with url: /en/publications/the-ryr2encoded-ryanodine-receptorcalcium-release-channel-in-patients-diagnosed-previously-with-either-catecholaminergic-polymorphic-ventricular-tachycardia-or-genotype-negative-exerciseinduced-long-qt-syndrome-a-comprehensive-open-reading-frame-mutational-analysis(6b9d73cb-1070-43cd-8cfc-486f6899b43c).html (Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] ssl/tls alert handshake failure (_ssl.c:1032)')))"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://pure.amsterdamumc.nl/en/publications/fa279259-a111-4b36-9ec3-f74726717e51",
+        "final_url": "https://pure.amsterdamumc.nl/en/publications/the-ryr2-encoded-ryanodine-receptorcalcium-release-channel-in-pat/",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "openalex",
+        "url": "https://hdl.handle.net/11370/60393e84-0683-4cd1-a0da-e47e97d3a4d0",
+        "final_url": "https://research.rug.nl/en/publications/the-ryr2-encoded-ryanodine-receptorcalcium-release-channel-in-pat/",
+        "status": "landing",
+        "pdf_links": 0
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1016%2Fj.jacc.2009.08.022%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:51.066052+00:00"
+  },
+  "27114410_repository_recovery": {
+    "success": false,
+    "pmid": "27114410",
+    "doi": "10.1161/circgenetics.115.001370",
+    "title": "Whole-Exome Molecular Autopsy After Exertion-Related Sudden Unexplained Death in the Young.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A27114410+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1161/circgenetics.115.001370",
+        "observed_title": "Whole-Exome Molecular Autopsy After Exertion-Related Sudden Unexplained Death in the Young"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1161/circgenetics.115.001370",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1161/circgenetics.115.001370",
+        "observed_title": "Whole-Exome Molecular Autopsy After Exertion-Related Sudden Unexplained Death in the Young"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": []
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1161%2Fcircgenetics.115.001370%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:45.913397+00:00"
+  },
+  "10528853_repository_recovery": {
+    "success": false,
+    "pmid": "10528853",
+    "doi": "10.1136/jmg.36.10.747",
+    "title": "A highly accurate, low cost test for BRCA1 mutations.",
+    "source_url": "",
+    "pdf_path": "",
+    "pdf_sha256": "",
+    "page_count": 0,
+    "identity_reason": "",
+    "candidate": {},
+    "attempts": [
+      {
+        "provider": "europe_pmc",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A10528853+AND+SRC%3AMED&format=json&pageSize=1",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "metadata_ok",
+        "reason": ""
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "10.1136/jmg.36.10.747",
+        "observed_title": "A highly accurate, low cost test forBRCA1 mutations"
+      },
+      {
+        "provider": "unpaywall",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1136/jmg.36.10.747",
+            "repository_record": "https://doi.org/10.1136/jmg.36.10.747",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://jmg.bmj.com/content/jmedgenet/36/10/747.full.pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "unpaywall",
+            "metadata_url": "https://api.unpaywall.org/v2/10.1136/jmg.36.10.747",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/1734249",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/1734249",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://jmg.bmj.com/content/jmedgenet/36/10/747.full.pdf",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://jmg.bmj.com/content/jmedgenet/36/10/747.full.pdf"
+      },
+      {
+        "provider": "unpaywall",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/1734249",
+        "status": "rejected",
+        "reason": "403 Client Error: Forbidden for url: https://pmc.ncbi.nlm.nih.gov/articles/1734249"
+      },
+      {
+        "provider": "openalex",
+        "url": "https://api.openalex.org/works/https://doi.org/10.1136/jmg.36.10.747",
+        "status": "metadata_ok"
+      },
+      {
+        "status": "metadata_identity_match",
+        "observed_doi": "https://doi.org/10.1136/jmg.36.10.747",
+        "observed_title": "A highly accurate, low cost test forBRCA1 mutations"
+      },
+      {
+        "provider": "openalex",
+        "status": "indexed_locations",
+        "candidates": [
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1136/jmg.36.10.747",
+            "repository_record": "https://doi.org/10.1136/jmg.36.10.747",
+            "version": "publishedVersion",
+            "repository": false,
+            "url": "https://jmg.bmj.com/content/jmedgenet/36/10/747.full.pdf",
+            "kind": "pdf"
+          },
+          {
+            "provider": "openalex",
+            "metadata_url": "https://api.openalex.org/works/https://doi.org/10.1136/jmg.36.10.747",
+            "repository_record": "https://www.ncbi.nlm.nih.gov/pmc/articles/1734249",
+            "version": "submittedVersion",
+            "repository": true,
+            "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/1734249",
+            "kind": "landing"
+          }
+        ]
+      },
+      {
+        "provider": "hal",
+        "url": "https://api.archives-ouvertes.fr/search/?q=doiId_s%3A%2210.1136%2Fjmg.36.10.747%22&wt=json&rows=5&fl=doiId_s%2Ctitle_s%2CfileMain_s%2Curi_s%2ChalId_s",
+        "status": "metadata_ok"
+      },
+      {
+        "provider": "hal",
+        "status": "indexed_locations",
+        "candidates": []
+      }
+    ],
+    "error": "no indexed copy passed download, identity and article-body gates",
+    "recorded_at": "2026-09-05T17:44:54.536443+00:00"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "SCN5A": 675
+  },
+  "gold_sources": {
+    "SCN5A": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/recall_campaign_20260905/repository_followup.tsv",
+  "papers": [
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_artifacts.json",
+      "artifacts_sha256": "b91752b35e1d40ec19d5a0546015ee30acd1d21f1de202b72c5694b6ab46be0e",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25163546",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/extractions/SCN5A_PMID_25163546.json",
+      "production_extraction_record_sha256": "7a39e71ca2102cc6ffb7bda4c6b913e3d507812567c0a8abcf050908b04c0796",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md": "b7f52a6e071b0a76cd745379def696de06ba3c015f890c08cf2f680e076dc546",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_FULL_CONTEXT.md": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md",
+      "source_bytes": 59842,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 59371,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md",
+            "sha256": "b7f52a6e071b0a76cd745379def696de06ba3c015f890c08cf2f680e076dc546"
+          },
+          {
+            "characters": 158256,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_FULL_CONTEXT.md",
+            "sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md",
+        "selected_metrics": {
+          "characters": 59371,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/pmc_fulltext/25163546_CLEANED.md",
+          "sha256": "b7f52a6e071b0a76cd745379def696de06ba3c015f890c08cf2f680e076dc546"
+        }
+      },
+      "source_sha256": "b7f52a6e071b0a76cd745379def696de06ba3c015f890c08cf2f680e076dc546"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-05T18:38:16.361431+00:00",
+  "production_source_rebinding": {
+    "binding_status_counts": {
+      "extraction_metadata_verified": 1
+    },
+    "changed_source_count": 1,
+    "cohort_membership_changed": false,
+    "gold_values_read": false,
+    "original_selection": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/selection_eligibility.json",
+    "original_selection_sha256": "d8599470d37d2769ae11f3aee81780a163d98cd7d8d412c7549c1674888b1036",
+    "paper_count": 1,
+    "rebound_at": "2026-09-05T18:41:03.617914+00:00",
+    "selected_representation_counts": {
+      "CLEANED.md": 1
+    }
+  },
+  "run_id": "20260905_repository1_final",
+  "schema_version": 1,
+  "seed": 2026090501
+}

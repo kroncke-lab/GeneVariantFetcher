@@ -1,0 +1,113 @@
+{
+  "selection": "Two requested examples plus first 14 distinct other PMIDs in the existing two-cohort ranked problem-paper report. Selected before network evaluation; only bibliographic identity used for discovery, not gold variants or counts. No opened/unopened scored extraction arm.",
+  "papers": [
+    {
+      "pmid": "20031634",
+      "gene": "SCN5A",
+      "role": "requested reproduction"
+    },
+    {
+      "pmid": "25163546",
+      "gene": "SCN5A",
+      "role": "requested reproduction"
+    },
+    {
+      "pmid": "29650123",
+      "gene": "KCNH2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "15 substitution absent from acquired bytes; 6 notation not searchable",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "15898185",
+      "gene": "SCN5A",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "9 abstract/stub only; 1 present in body; later-stage loss",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "27114410",
+      "gene": "RYR2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "9 no acquired source",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "31520628",
+      "gene": "KCNQ1",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "7 likely figure-only",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "14678125",
+      "gene": "KCNQ1",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "4 notation not searchable; 2 substitution absent from acquired bytes",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "19926015",
+      "gene": "RYR2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "3 present in body; later-stage loss; 2 likely figure-only",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "22677073",
+      "gene": "RYR2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "4 present in body; later-stage loss",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "29121719",
+      "gene": "KCNH2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "3 present in body; later-stage loss",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "24667783",
+      "gene": "KCNQ1",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "3 likely figure-only",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "29350269",
+      "gene": "RYR2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "3 present in body; later-stage loss",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "19687231",
+      "gene": "KCNQ1",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "2 present in body; later-stage loss",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "22966897",
+      "gene": "SCN5A",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "2 substitution absent from acquired bytes",
+      "cohort_id": "gold_120_current"
+    },
+    {
+      "pmid": "10528853",
+      "gene": "BRCA1",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "13 likely figure-only",
+      "cohort_id": "mixed_continuation_120"
+    },
+    {
+      "pmid": "17905336",
+      "gene": "KCNH2",
+      "role": "ranked additional gold paper",
+      "prior_source_breakdown": "6 substitution absent from acquired bytes; 4 notation not searchable; 1 present in body; later-stage loss",
+      "cohort_id": "mixed_continuation_120"
+    }
+  ]
+}

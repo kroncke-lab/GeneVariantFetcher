@@ -296,6 +296,7 @@ def make_extraction_script(
         f"RUN_DIR={shell_quote(run_dir)}",
         f"EMAIL={shell_quote(email)}",
         f'"$PYTHON" {shell_quote(setup)} check --run-dir "$RUN_DIR"',
+        'export GVF_FROZEN_SOURCE_MANIFEST="$RUN_DIR/frozen_corpus/source_snapshot.json"',
         'mkdir -p "$RUN_DIR/operator_logs"',
         "typeset -a pids",
         "",
@@ -465,6 +466,9 @@ def create(args: argparse.Namespace) -> Path:
     for gene, pmid in selected:
         by_gene[gene].append(pmid)
     genes = sorted(by_gene)
+    from pipeline.source_snapshot import freeze_sources
+
+    freeze_sources(selection["papers"], run_dir / "frozen_corpus")
     pmid_dir = run_dir / "pmids"
     production_root = run_dir / "production_runs"
     pmid_dir.mkdir()
@@ -508,6 +512,9 @@ def create(args: argparse.Namespace) -> Path:
             "driver": "python -m cli gvf-run",
             "calibrated_pmid_files": True,
             "source_recovery": False,
+            "frozen_source_manifest": str(
+                run_dir / "frozen_corpus/source_snapshot.json"
+            ),
             "corpus_sync": False,
             "publish_review": False,
             "full_coverage": False,

@@ -1,0 +1,27 @@
+[
+  {
+    "pmid": "30059973",
+    "url": "https://discovery.ucl.ac.uk/10055497/1/EURHEARTJ-D-17-02626_R1-3%20copy.pdf",
+    "final_url": "https://discovery.ucl.ac.uk/id/eprint/10055497/1/EURHEARTJ-D-17-02626_R1-3%20copy.pdf",
+    "status": 200,
+    "bytes": 3527527,
+    "pdf": true,
+    "path": "validation_runs/phenotype_failure_panel_20260905/source_probe/30059973.pdf",
+    "sha256": "f6999096e4264e37128fd0eda39d443a4d81b2c9a2934a234b035c7951d5811d"
+  },
+  {
+    "pmid": "25163546",
+    "url": "https://discovery.ucl.ac.uk/1447311/1/Syrris_Haas%20Eur%20Heart%20J.pdf",
+    "final_url": "https://discovery.ucl.ac.uk/id/eprint/1447311/1/Syrris_Haas%20Eur%20Heart%20J.pdf",
+    "status": 200,
+    "bytes": 1306824,
+    "pdf": true,
+    "path": "validation_runs/phenotype_failure_panel_20260905/source_probe/25163546.pdf",
+    "sha256": "1f27875333ea9738ac7a4a5dbd36b7c9f6c3ebbb90341404fc1a92dbe07261e1"
+  },
+  {
+    "pmid": "20031634",
+    "url": "https://citeseerx.ist.psu.edu/document?doi=ae2ff6eacb239e954b7bf399de9a1684d945aefe&repid=rep1&type=pdf",
+    "error": "HTTPSConnectionPool(host='citeseerx.ist.psu.edu', port=443): Max retries exceeded with url: /document?doi=ae2ff6eacb239e954b7bf399de9a1684d945aefe&repid=rep1&type=pdf (Caused by ConnectTimeoutError(<HTTPSConnection(host='citeseerx.ist.psu.edu', port=443) at 0x106f5ba10>, 'Connection to citeseerx.ist.psu.edu timed out. (connect timeout=45)'))"
+  }
+]

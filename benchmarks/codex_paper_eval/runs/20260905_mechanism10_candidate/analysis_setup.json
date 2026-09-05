@@ -1,0 +1,12 @@
+{
+  "classification": "opened calibration sample; not registered discovery or confirmation",
+  "runtime": {
+    "sha256": "de83ffe3e7a657adc1845d6d6d1979e80f3522b1517fa2db384f95c85938d7de",
+    "file_count": 251
+  },
+  "source_snapshot": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/source_snapshot.json",
+  "source_snapshot_sha256": "c148de65e5fb67edf914616f6092ca1f8c66a45bb42d3deeb04772ec67fcc47b",
+  "test_budget_reserved_usd": 5,
+  "attempts": 10,
+  "unique_pmids": 8
+}

@@ -15,7 +15,8 @@ Stages, in pipeline order
                 ``_CLEANED.md`` / ``_DATA_ZONES.md`` the run staged
 ``llm_request`` the user message of any ``paper_variant_extraction`` LLM call
                 (what the model actually saw)
-``llm_response`` the raw ``output_text`` of any such call (what the model said)
+``llm_response`` identity fields in structured variant rows returned by an
+                extraction call; narrative mentions are not extracted variants
 ``extraction``  the per-paper extraction JSON (after parsing/merging)
 ``db``          a live ``variants`` row joined to this PMID, with its
                 ``source_layer`` origins
@@ -46,6 +47,7 @@ import argparse
 import csv
 import glob
 import json
+import re
 import sqlite3
 import sys
 from collections import Counter, defaultdict
@@ -69,6 +71,30 @@ NOTATION_KEYS = (
     "legacy_notation",
     "source_notation",
 )
+
+
+def response_variant_notations(trace: dict) -> list[str]:
+    """Do not mistake an explanation of omission for an emitted variant row."""
+    if (
+        trace.get("record_type") != "llm_call"
+        or (trace.get("context") or {}).get("stage") != "paper_variant_extraction"
+    ):
+        return []
+    text = str((trace.get("response") or {}).get("output_text") or "").strip()
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
+    try:
+        payload = json.loads(text)
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(payload, dict):
+        return []
+    return [
+        str(row[key])
+        for row in (payload.get("variants") or [])
+        if isinstance(row, dict)
+        for key in NOTATION_KEYS
+        if row.get(key)
+    ]
 
 
 def _production_run_dir(run_dir: Path, gene: str) -> Path | None:
@@ -143,9 +169,9 @@ class RunPaper:
     def llm_response(self) -> str:
         if "llm_response" not in self._text:
             parts = [
-                str((t.get("response") or {}).get("output_text") or "")
-                for t in self.traces()
-                if t.get("record_type") == "llm_call"
+                value
+                for trace in self.traces()
+                for value in response_variant_notations(trace)
             ]
             self._text["llm_response"] = _squash("\n".join(parts))
         return self._text["llm_response"]

@@ -1,0 +1,166 @@
+{
+  "selection": "22 unique papers deliberately selected from four opened locks. Include every scored gene/run occurrence of each selected PMID; never pool them. Ranked worst count omissions, wrong supplied values, identity FP/FN with zero gold, and two exact positive controls.",
+  "runs": [
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118",
+      "lane": "trusted legacy (paper plus linkage)"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate",
+      "lane": "paper-derived primary"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate",
+      "lane": "paper-derived primary"
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate",
+      "lane": "paper-derived primary"
+    }
+  ],
+  "papers": [
+    {
+      "pmid": "30059973",
+      "role": "largest phenotype deficit; rich source; all NA",
+      "probe": {
+        "phrases": [
+          "Clinical characteristics according to specific mutations",
+          "Most common SCN5A mutations per phenotype",
+          "60 (19.4)",
+          "29 (15)"
+        ],
+        "identity_needles": [
+          "1784",
+          "5350"
+        ]
+      }
+    },
+    {
+      "pmid": "14678125",
+      "role": "large phenotype deficit; access shell; linkage contrast"
+    },
+    {
+      "pmid": "20031634",
+      "role": "large affected/unaffected identity misses; missing full-text table"
+    },
+    {
+      "pmid": "33673806",
+      "role": "partial capture; multi-person supplement rows; suspected vs confirmed phenotype",
+      "probe": {
+        "phrases": [
+          "presumed to be affected",
+          "c.3181C>T",
+          "c.2373dup"
+        ],
+        "identity_needles": [
+          "3181",
+          "2373"
+        ]
+      }
+    },
+    {
+      "pmid": "26496715",
+      "role": "all NA; supplement present but study body absent"
+    },
+    {
+      "pmid": "25814417",
+      "role": "largest supplied-value disagreement; endpoint and uncertain status"
+    },
+    {
+      "pmid": "19926015",
+      "role": "partial capture; case/control rows and historical references"
+    },
+    {
+      "pmid": "22677073",
+      "role": "partial capture across genes; diagnostic target and table ownership"
+    },
+    {
+      "pmid": "18808722",
+      "role": "partially captured article across genes; borderline phenotype"
+    },
+    {
+      "pmid": "21302287",
+      "role": "partial capture; patient-ID list and clinical join",
+      "probe": {
+        "phrases": [
+          "Patient ID",
+          "c.2340+18 C>G",
+          "278, 251 268, 194"
+        ],
+        "identity_needles": [
+          "2340",
+          "1223"
+        ]
+      }
+    },
+    {
+      "pmid": "30403697",
+      "role": "partial capture; multiple variants per patient and pedigree join",
+      "probe": {
+        "phrases": [
+          "Parents are phenotypically silent heterozygous carriers",
+          "Sister of subject 5",
+          "Asymptomatic"
+        ],
+        "identity_needles": [
+          "2075",
+          "4594",
+          "2028"
+        ]
+      }
+    },
+    {
+      "pmid": "15671429",
+      "role": "missing pedigree counts; partial capture in mixed run"
+    },
+    {
+      "pmid": "19632626",
+      "role": "largest identity FP count plus supplied phenotype disagreement"
+    },
+    {
+      "pmid": "20181576",
+      "role": "supplied counts disagree; symptoms vs QT phenotype and modifier allele"
+    },
+    {
+      "pmid": "33315912",
+      "role": "supplied counts disagree; follow-up and uncertain phenotype"
+    },
+    {
+      "pmid": "25819988",
+      "role": "supplied counts disagree; symptoms vs diagnosis",
+      "probe": {
+        "phrases": [
+          "6 patients (46%",
+          "nine carriers"
+        ],
+        "identity_needles": [
+          "562"
+        ]
+      }
+    },
+    {
+      "pmid": "25163546",
+      "role": "large identity FN; abstract-only source with repository full text"
+    },
+    {
+      "pmid": "29650123",
+      "role": "large identity FN hidden by zero phenotype gold; missing roster"
+    },
+    {
+      "pmid": "32533946",
+      "role": "large identity FP; functional study without clinical counts"
+    },
+    {
+      "pmid": "19398665",
+      "role": "all NA despite identities present; missing clinical tables and timepoints"
+    },
+    {
+      "pmid": "19398417",
+      "role": "positive control: explicit 4/2/2 split in abstract"
+    },
+    {
+      "pmid": "25435091",
+      "role": "positive control: explicit patient rows; 8/7/1 split"
+    }
+  ]
+}

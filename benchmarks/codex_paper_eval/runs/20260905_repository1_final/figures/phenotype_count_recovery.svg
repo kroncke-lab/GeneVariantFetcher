@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="7.2in" height="4.2in" viewBox="0 0 2160 1260" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Automated versus reference phenotype counts</title>
+<desc id="figure-desc">All identity-matched variant-paper rows are scored. Missing automated counts are evaluated as zero. Agreement plots use a square-root count scale.</desc>
+<metadata>
+Analysis run: 20260905_repository1_final
+Locked at: 2026-09-05T18:41:05.683317+00:00
+Evaluation rule: matched missing automated count is scored as zero
+Storage rule: missing automated count remains NULL in source data
+Identity misses are excluded from the plotted/scored rows
+Rows present in both count facets: 0
+Marker radius is 8 + 2*sqrt(pair count), capped at 28 viewBox units
+Marker-size key values: 5, 10, and 25 variant-paper pairs
+</metadata>
+<defs>
+<style><![CDATA[
+text { font-family: "Avenir Next Condensed", "Source Sans 3", "Helvetica Neue", Arial, sans-serif; fill: #17324D; }
+.title { font-size: 56px; font-weight: 600; letter-spacing: -0.3px; }
+.facet-title { font-size: 44px; font-weight: 600; }
+.tick { font-size: 29px; font-weight: 400; fill: #687584; }
+.axis-label { font-size: 32px; font-weight: 500; }
+.example-title { font-size: 30px; font-weight: 600; }
+.example-pmid { font-size: 27px; font-weight: 500; fill: #687584; }
+.example-line { stroke: #687584; stroke-width: 2.4; fill: none; }
+.size-key-box { fill: #FFFFFF; fill-opacity: 0.94; stroke: #DCE3E8; stroke-width: 2.2; }
+.size-key-title { font-size: 25px; font-weight: 600; }
+.size-key-value { font-size: 25px; font-weight: 600; fill: #687584; }
+.size-key-marker { fill: #FFFFFF; stroke: #17324D; stroke-width: 2.5; }
+.grid { stroke: #DCE3E8; stroke-width: 2.2; }
+.axis { stroke: #17324D; stroke-width: 3.5; fill: none; }
+.identity { stroke: #17324D; stroke-width: 4; stroke-dasharray: 12 10; }
+ ]]></style>
+<clipPath id="affected-clip"><rect x="100.0" y="190.0" width="900.0" height="900.0"/></clipPath>
+<clipPath id="unaffected-clip"><rect x="1160.0" y="190.0" width="900.0" height="900.0"/></clipPath>
+</defs>
+<rect width="2160" height="1260" fill="#F8FAFC"/>
+<text x="80.0" y="82.0" class="title">Automated versus reference phenotype counts</text>
+<text x="100.0" y="161.0" class="facet-title">Affected individuals</text>
+<text x="1160.0" y="161.0" class="facet-title">Unaffected individuals</text>
+<line x1="146.0" y1="190.0" x2="146.0" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="1044.0" x2="1000.0" y2="1044.0" class="grid"/>
+<text x="146.0" y="1127.0" class="tick" text-anchor="middle">0</text>
+<text x="80.0" y="1054.0" class="tick" text-anchor="end">0</text>
+<line x1="223.0" y1="190.0" x2="223.0" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="967.0" x2="1000.0" y2="967.0" class="grid"/>
+<text x="223.0" y="1127.0" class="tick" text-anchor="middle">1</text>
+<text x="80.0" y="977.0" class="tick" text-anchor="end">1</text>
+<line x1="255.0" y1="190.0" x2="255.0" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="935.0" x2="1000.0" y2="935.0" class="grid"/>
+<text x="255.0" y="1127.0" class="tick" text-anchor="middle">2</text>
+<text x="80.0" y="945.0" class="tick" text-anchor="end">2</text>
+<line x1="318.3" y1="190.0" x2="318.3" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="871.7" x2="1000.0" y2="871.7" class="grid"/>
+<text x="318.3" y="1127.0" class="tick" text-anchor="middle">5</text>
+<text x="80.0" y="881.7" class="tick" text-anchor="end">5</text>
+<line x1="389.6" y1="190.0" x2="389.6" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="800.4" x2="1000.0" y2="800.4" class="grid"/>
+<text x="389.6" y="1127.0" class="tick" text-anchor="middle">10</text>
+<text x="80.0" y="810.4" class="tick" text-anchor="end">10</text>
+<line x1="490.5" y1="190.0" x2="490.5" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="699.5" x2="1000.0" y2="699.5" class="grid"/>
+<text x="490.5" y="1127.0" class="tick" text-anchor="middle">20</text>
+<text x="80.0" y="709.5" class="tick" text-anchor="end">20</text>
+<line x1="690.8" y1="190.0" x2="690.8" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="499.2" x2="1000.0" y2="499.2" class="grid"/>
+<text x="690.8" y="1127.0" class="tick" text-anchor="middle">50</text>
+<text x="80.0" y="509.2" class="tick" text-anchor="end">50</text>
+<line x1="916.4" y1="190.0" x2="916.4" y2="1090.0" class="grid"/>
+<line x1="100.0" y1="273.6" x2="1000.0" y2="273.6" class="grid"/>
+<text x="916.4" y="1127.0" class="tick" text-anchor="middle">100</text>
+<text x="80.0" y="283.6" class="tick" text-anchor="end">100</text>
+<rect x="100.0" y="190.0" width="900.0" height="900.0" class="axis"/>
+<line x1="146.0" y1="1044.0" x2="954.0" y2="236.0" class="identity"/>
+<text x="550.0" y="1188.0" class="axis-label" text-anchor="middle">Manual reference count</text>
+<text x="550.0" y="640.0" class="facet-title" text-anchor="middle">No identity-matched count rows</text>
+<text x="550.0" y="688.0" class="tick" text-anchor="middle">Agreement is undefined; see the all-gold difference figure.</text>
+<g clip-path="url(#affected-clip)">
+</g>
+<line x1="1206.0" y1="190.0" x2="1206.0" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="1044.0" x2="2060.0" y2="1044.0" class="grid"/>
+<text x="1206.0" y="1127.0" class="tick" text-anchor="middle">0</text>
+<line x1="1283.0" y1="190.0" x2="1283.0" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="967.0" x2="2060.0" y2="967.0" class="grid"/>
+<text x="1283.0" y="1127.0" class="tick" text-anchor="middle">1</text>
+<line x1="1315.0" y1="190.0" x2="1315.0" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="935.0" x2="2060.0" y2="935.0" class="grid"/>
+<text x="1315.0" y="1127.0" class="tick" text-anchor="middle">2</text>
+<line x1="1378.3" y1="190.0" x2="1378.3" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="871.7" x2="2060.0" y2="871.7" class="grid"/>
+<text x="1378.3" y="1127.0" class="tick" text-anchor="middle">5</text>
+<line x1="1449.6" y1="190.0" x2="1449.6" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="800.4" x2="2060.0" y2="800.4" class="grid"/>
+<text x="1449.6" y="1127.0" class="tick" text-anchor="middle">10</text>
+<line x1="1550.5" y1="190.0" x2="1550.5" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="699.5" x2="2060.0" y2="699.5" class="grid"/>
+<text x="1550.5" y="1127.0" class="tick" text-anchor="middle">20</text>
+<line x1="1750.8" y1="190.0" x2="1750.8" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="499.2" x2="2060.0" y2="499.2" class="grid"/>
+<text x="1750.8" y="1127.0" class="tick" text-anchor="middle">50</text>
+<line x1="1976.4" y1="190.0" x2="1976.4" y2="1090.0" class="grid"/>
+<line x1="1160.0" y1="273.6" x2="2060.0" y2="273.6" class="grid"/>
+<text x="1976.4" y="1127.0" class="tick" text-anchor="middle">100</text>
+<rect x="1160.0" y="190.0" width="900.0" height="900.0" class="axis"/>
+<line x1="1206.0" y1="1044.0" x2="2014.0" y2="236.0" class="identity"/>
+<text x="1610.0" y="1188.0" class="axis-label" text-anchor="middle">Manual reference count</text>
+<text x="1610.0" y="640.0" class="facet-title" text-anchor="middle">No identity-matched count rows</text>
+<text x="1610.0" y="688.0" class="tick" text-anchor="middle">Agreement is undefined; see the all-gold difference figure.</text>
+<g clip-path="url(#unaffected-clip)">
+</g>
+<g role="group" aria-label="Marker size key for variant-paper pairs">
+<rect x="128.0" y="218.0" width="372.0" height="174.0" rx="12" class="size-key-box"/>
+<text x="146.0" y="256.0" class="size-key-title">Marker size · variant–paper pairs</text>
+<circle cx="200.0" cy="307.0" r="12.5" class="size-key-marker"/>
+<text x="200.0" y="366.0" class="size-key-value" text-anchor="middle">5</text>
+<circle cx="312.0" cy="307.0" r="14.3" class="size-key-marker"/>
+<text x="312.0" y="366.0" class="size-key-value" text-anchor="middle">10</text>
+<circle cx="434.0" cy="307.0" r="18.0" class="size-key-marker"/>
+<text x="434.0" y="366.0" class="size-key-value" text-anchor="middle">25</text>
+</g>
+<text x="32.0" y="640.0" class="axis-label" text-anchor="middle" transform="rotate(-90 32 640.0)">Automated count (missing scored 0)</text>
+</svg>

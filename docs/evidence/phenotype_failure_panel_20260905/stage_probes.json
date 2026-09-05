@@ -1,0 +1,1341 @@
+[
+  {
+    "run_id": "20260902_false_zero_recovery_gold118",
+    "gene": "KCNH2",
+    "pmid": "25819988",
+    "interpretation": "observed trace/artifact probe; not causal proof or an endpoint adjudication",
+    "stages": {
+      "FULL_CONTEXT": {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/pmc_fulltext/25819988_FULL_CONTEXT.md",
+        "sha256": "158ef772d035a603c84099fc62c82dccac90045e807e2f8798f614534f397c23",
+        "characters": 42325,
+        "markdown_tables": 0,
+        "phrase_present": {
+          "6 patients (46%": true,
+          "nine carriers": false
+        }
+      },
+      "CLEANED": {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/pmc_fulltext/25819988_CLEANED.md",
+        "sha256": "bfccc8ae539e5f4233430329c6bb20bad0f0df786991e42d7b053da250551975",
+        "characters": 42323,
+        "markdown_tables": 0,
+        "phrase_present": {
+          "6 patients (46%": true,
+          "nine carriers": false
+        }
+      },
+      "llm_request": {
+        "characters_squashed": 50096,
+        "phrase_present": {
+          "6 patients (46%": true,
+          "nine carriers": false
+        }
+      },
+      "llm_response": {
+        "characters_squashed": 7064,
+        "phrase_present": {
+          "6 patients (46%": true,
+          "nine carriers": false
+        }
+      }
+    },
+    "extractions": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/extractions/KCNH2_PMID_25819988.json",
+        "sha256": "406e1f8b5a71c63fa467da2419f443f4f3331359a6f6226634eac00e60c7a7d4",
+        "metadata_notes": "Only KCNH2 variant from this study extracted; H562P is literature reference only.",
+        "variants": [
+          {
+            "protein_notation": "p.H562R",
+            "cdna_notation": "c.1685A>G",
+            "patients": {
+              "count": 13,
+              "demographics": "mean age 48 (26) years; 46% male; Caucasian family",
+              "phenotype": "Long QT syndrome type 2 with heterogeneous QTc and symptoms",
+              "source_container": "main",
+              "source_kind": "text",
+              "source_ref": "Results",
+              "page_label": null,
+              "pdf_page": null,
+              "row_label": null,
+              "row_ordinal": null,
+              "column_ref": null,
+              "figure_panel": null,
+              "locator_extra": {}
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 13,
+              "affected_count": 6,
+              "unaffected_count": 7,
+              "uncertain_count": 0,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": null,
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": null,
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": "per_variant_carrier"
+            },
+            "phenotype_count_flags": null,
+            "claim_verification": null,
+            "fact_provenance": [
+              {
+                "fact_type": "variant_identity",
+                "fact_value": "c.1685A>G p.H562R",
+                "individual_id": null,
+                "source_location": "Results, Genetic Analysis",
+                "source_table": null,
+                "source_row": null,
+                "source_column": null,
+                "source_section": "Genetic Analysis",
+                "source_paragraph": null,
+                "evidence_quote": "The c.1685A>G, p.H562R (rs199472922) heterozygous variant was detected in exon 7 of the KCNH2 gene."
+              },
+              {
+                "fact_type": "total_carriers_observed",
+                "fact_value": "13",
+                "individual_id": null,
+                "source_location": "Results, Family Events",
+                "source_table": null,
+                "source_row": null,
+                "source_column": null,
+                "source_section": "Family Events",
+                "source_paragraph": null,
+                "evidence_quote": "Twenty-four family members were screened... and 12 relatives (50%) were carriers... Among the 13 carriers of the mutation"
+              },
+              {
+                "fact_type": "affected_count",
+                "fact_value": "6",
+                "individual_id": null,
+                "source_location": "Results, Family Events",
+                "source_table": null,
+                "source_row": null,
+                "source_column": null,
+                "source_section": "Family Events",
+                "source_paragraph": null,
+                "evidence_quote": "Among the 13 carriers of the mutation, 6 patients (46%, including the index case) had cardiac symptoms"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "trace_inputs": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/llm_traces/KCNH2/25819988/1788411342963886000-000084-5985be29_clinical_table_routing_table_router.json",
+        "sha256": "3da2af689e6c8535ddf478d71149ae94dce8e4161486c6fb8b9c88227f1ac38e",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/llm_traces/KCNH2/25819988/1788411394119935000-000085-5d6e9961_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "95bac4493b8c414763a5aa8cb4018ed6fdd22fa1fd24a5cd6e15cbd32db6abe7",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/KCNH2/20260902_233550/llm_traces/KCNH2/25819988/1788411394145929000-000086-a96a6fdb_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "ccb00330a1d9b596c281320a60670e160c82c7c6d6b9cb0c061d51d6bf36db2e",
+        "record_type": "decision_event"
+      }
+    ]
+  },
+  {
+    "run_id": "20260902_false_zero_recovery_gold118",
+    "gene": "RYR2",
+    "pmid": "30403697",
+    "interpretation": "observed trace/artifact probe; not causal proof or an endpoint adjudication",
+    "stages": {
+      "FULL_CONTEXT": {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/pmc_fulltext/30403697_FULL_CONTEXT.md",
+        "sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb",
+        "characters": 231340,
+        "markdown_tables": 7,
+        "phrase_present": {
+          "Parents are phenotypically silent heterozygous carriers": true,
+          "Sister of subject 5": true,
+          "Asymptomatic": true
+        }
+      },
+      "CLEANED": {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/pmc_fulltext/30403697_CLEANED.md",
+        "sha256": "cdbd6c0a088ed592cc77b4fedca439796905c5b5e2f360b21990107ff9658186",
+        "characters": 38773,
+        "markdown_tables": 2,
+        "phrase_present": {
+          "Parents are phenotypically silent heterozygous carriers": true,
+          "Sister of subject 5": true,
+          "Asymptomatic": true
+        }
+      },
+      "llm_request": {
+        "characters_squashed": 263346,
+        "phrase_present": {
+          "Parents are phenotypically silent heterozygous carriers": true,
+          "Sister of subject 5": true,
+          "Asymptomatic": true
+        }
+      },
+      "llm_response": {
+        "characters_squashed": 46847,
+        "phrase_present": {
+          "Parents are phenotypically silent heterozygous carriers": true,
+          "Sister of subject 5": false,
+          "Asymptomatic": true
+        }
+      }
+    },
+    "extractions": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/extractions/RYR2_PMID_30403697.json",
+        "sha256": "613eeaa26dfc8f9f2d0ffd281bcf0b0d885bb6e5960e764a0c2ebf3ea6d0f776",
+        "metadata_notes": "Only RYR2 variants extracted per target gene instruction. Non-RYR2 variants (CASQ2, SCN5A, DSG, etc.) excluded. All clinical counts derived from explicit patient rows in Table 1.",
+        "variants": [
+          {
+            "protein_notation": "p.I2075T",
+            "cdna_notation": null,
+            "patients": {
+              "count": 3,
+              "demographics": "Subjects 4 (F,12), 5 (F,10), 6 (F,5) all Caucasian",
+              "phenotype": "CPVT; SCA or asymptomatic",
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "Table 1",
+              "page_label": null,
+              "pdf_page": null,
+              "row_label": null,
+              "row_ordinal": null,
+              "column_ref": "Variant #1",
+              "figure_panel": null,
+              "locator_extra": {}
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 3,
+              "affected_count": 3,
+              "unaffected_count": null,
+              "uncertain_count": 1,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": "Variant #1",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": "Symptoms",
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": null,
+            "claim_verification": {
+              "verdict": "unsupported",
+              "field_verdicts": {
+                "variant": "directly_supported",
+                "total_carriers": "directly_supported",
+                "affected": "directly_supported",
+                "unaffected": "unsupported"
+              },
+              "corrected_values": {
+                "total_carriers": 3,
+                "affected": 3,
+                "unaffected": null
+              },
+              "reason": "Table 2 assigns p.I2075T to subjects 4, 5, and 6, giving three carriers. All three belong to the paper-defined population of CPVT patients; subject 6 being asymptomatic describes symptom status and does not make her unaffected for CPVT. No p.I2075T carrier is explicitly designated unaffected or clinically negative, so unaffected=0 is unsupported.",
+              "evidence_quote": "Table 2, L136: \"4, 5, 6 | RYR2- p.I2075T\"; Table 1, L110-L112 lists subjects 4 and 5 with SCA and subject 6 as \"Asymptomatic.\""
+            },
+            "fact_provenance": []
+          },
+          {
+            "protein_notation": "p.K4594R",
+            "cdna_notation": null,
+            "patients": {
+              "count": 3,
+              "demographics": "Subjects 4,5,6",
+              "phenotype": "CPVT",
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "Table 1",
+              "page_label": null,
+              "pdf_page": null,
+              "row_label": null,
+              "row_ordinal": null,
+              "column_ref": "Variant #2",
+              "figure_panel": null,
+              "locator_extra": {}
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 3,
+              "affected_count": 3,
+              "unaffected_count": 0,
+              "uncertain_count": 1,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": "Variant #2",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": "Symptoms",
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": null,
+            "claim_verification": {
+              "verdict": "directly_supported",
+              "field_verdicts": {
+                "variant": "directly_supported",
+                "total_carriers": "directly_supported",
+                "affected": "directly_supported",
+                "unaffected": "directly_supported"
+              },
+              "corrected_values": {
+                "total_carriers": 3,
+                "affected": 3,
+                "unaffected": 0
+              },
+              "reason": "Table 1 lists p.K4594R in exactly three CPVT-registry patients (subjects 4\u20136). All three are affected for the paper-defined CPVT phenotype; subject 6 being clinically asymptomatic does not negate her identification as a CPVT patient. Thus the closed carrier set contains three affected and no unaffected carriers.",
+              "evidence_quote": "L101: PACES CPVT Registry patients with multiple variants; L110\u2013L112: subjects 4, 5, and 6 each carry RYR2-p.K4594R, with subject 6 described as 'Asymptomatic.'"
+            },
+            "fact_provenance": []
+          },
+          {
+            "protein_notation": "p.R2028H",
+            "cdna_notation": null,
+            "patients": {
+              "count": 1,
+              "demographics": "Subject 7 (F,12,Caucasian)",
+              "phenotype": "CPVT; exertional SCA",
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "Table 1",
+              "page_label": null,
+              "pdf_page": null,
+              "row_label": "7",
+              "row_ordinal": 7,
+              "column_ref": "Variant #1",
+              "figure_panel": null,
+              "locator_extra": {}
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 1,
+              "affected_count": 1,
+              "unaffected_count": null,
+              "uncertain_count": 0,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": "Variant #1",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": "Symptoms",
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": null,
+            "claim_verification": {
+              "verdict": "unsupported",
+              "field_verdicts": {
+                "variant": "directly_supported",
+                "total_carriers": "directly_supported",
+                "affected": "directly_supported",
+                "unaffected": "unsupported"
+              },
+              "corrected_values": {
+                "total_carriers": 1,
+                "affected": 1,
+                "unaffected": null
+              },
+              "reason": "Table 1 identifies one CPVT Registry patient, subject 7, carrying RYR2 p.R2028H and reports exertional sudden cardiac arrest. This directly supports one affected carrier. The source does not state that there were zero unaffected p.R2028H carriers, so unaffected cannot be set to zero by subtraction.",
+              "evidence_quote": "L113: Subject 7 ... RYR2-p.R2028H ... Proband: Yes ... Symptoms: Exertional SCA."
+            },
+            "fact_provenance": []
+          }
+        ]
+      }
+    ],
+    "trace_inputs": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411765626093000-000142-c9247850_clinical_table_routing_table_router.json",
+        "sha256": "1c8a660c9e4f986076a0c2ea7665ce09577aad3ec7d7d338e3554999f1a9def4",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411765628844000-000143-47832445_clinical_table_routing_table_router.json",
+        "sha256": "2ab7db073082d61bcaafa6c3d73af9f177899da44474166e4e5f66913142765c",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411913313284000-000144-cb6385b1_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "415c580d379da77f5bc7cbb405d992188feb35c4c931966f02ad22501b839e22",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411926289341000-000145-a7a9e708_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "c5ce1f0dbd9a36641083bc6d066e0979c8f86a44194a1cb5c5b486735e346ec4",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411926294739000-000146-920f6c22_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "3116e9ede2c73d909246988541a1e19858255d685a3317895ae85c90e387e298",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411938576188000-000147-dcbdbad1_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "ed3185d92235b96169f3320b95964694bc7cd9cb73135052091dce5897c90908",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411938580452000-000148-fe749018_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "905565aa6c27552a206a1374424ec8426e86006557699be4588a25b655e360dc",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411944713780000-000149-8e0a3724_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "ec138e2581d06b58c4296fe6f34776115f8685eeb2998d4812ab7a16d0e5aab3",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411944715231000-000150-fbdcfdb6_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "d9baee622c043700585c2837e1eeea27fcd8ad4548dc0f2aee5fb1c2bb9ebc45",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411955677252000-000151-c9f8467a_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "68638595cb2f665b456d147458ee96a4b855084ff300d47a15e86f8b45ff7473",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411955679996000-000152-1eed4a7e_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "5f5a9dc871a2ca1e7bfb70c5f703d44ed9d73bf28bdd84eac42e4245f554952c",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411965214487000-000153-7716689c_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "a33d4d25e895a3d1bd73937f7ad186f05eb7b2738d273d441fe7c0d42d39912b",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411965218750000-000154-28d80d37_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "eac2198ac01755c84dfe5c39aa64e2684526176683b6fd864623935a504ef089",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411977279671000-000155-e4208948_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "a517e81dcf809161ef69cf320e327a338a3b6ccaaee71700f20584b451457eb5",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411977281083000-000156-581f5290_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "9ca710f661c68a61ad7359bcc0c38e34c98e49fa871d1afdfa7b5b660c2787b2",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411983472473000-000157-4be184e4_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "1f59fce1fab0f85b3e198f660f20ea1fb41f779bc486bad808b2fa1fb6a2ebd0",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411983473394000-000158-347893a4_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "40bb3c2793dbf4cc32a7a151eaebbe48b932790a2bd5cd39658b8e1c9cac7d0a",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411989153066000-000159-36e4276f_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "2edef1bfaff331c582686fd6bf766b48213a1db4a412f5567ec043256b63276e",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411989158835000-000160-6d5ad66b_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "adb57fccc729941a8a524d1d2b3d8786fd5026961e75fd518f1113e3ec96244d",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411999019101000-000161-b791ae7c_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "cce71c17a14648c55ee883be73ace3ccee0a6813717bb23fb4d1232062d84ba3",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788411999022010000-000162-3f927a98_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "c69794e5e89c58bb74d4d03d811b39cf08bd6abfa6138ae86acb67392cb6d985",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412013934096000-000163-6fb3fd38_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "0c5f3e433f5b86a3e9f5bac8dc2ef91d241471aeab3efbde75a2f4111ead42e5",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412013937011000-000164-4ff2e48b_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "2e4f1f06725383a82a982a7dec284d987923d0c362ae906ee0340d0c42916f4d",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412022956243000-000165-cf67374c_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "0b2fe00513eb1d6dd429a9b6dcbdfe87273c61ae5eca473d3c5f67f4565f6952",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412022958939000-000166-ca4e872b_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "850228ef8238bbac72f8483bf06cd6c39119ee53b54fa5e72f0b6223517115c0",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412032540377000-000167-a5ec9712_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "2fa57822fa890c6e8326149a2f7fadc0b7513b662e8d582b822e430c0c990ba6",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412032542966000-000168-247b0bec_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "e562fcca2d4bed0e3ecfdc49c6decc0348e1f7d2d4337cba422b57a9490d8c80",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412039468019000-000169-5638b694_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "63fd2ac03e83afc64d6da7d606456fe7580771720794cf275fa82bde596bebec",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412039470680000-000170-9a167b84_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "0e0c5d9cedddb89a4473af43dcea41cfc93e8b9c60cbd1756b6a780083f9b0b9",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412046697539000-000171-a8e297eb_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "26dcc77e3944229ec3e60bd2ea561f1bfa101863fc2e3d523d7fc655af5ea2aa",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412046700381000-000172-99e3cc13_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "202373c163b42069ecf98a7f2fa122fb7998975434876211bff6ac2885d19812",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412058999423000-000173-cbf313ba_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "08d6cf2df409f14b622dfae077f719298994440ef37f6ed1dccf0165b059ddce",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412059002616000-000174-2d2e2eca_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "b41229af15654526b502b7a229a961b37cf2f6c18b7959c9d7b3c60fb42c7df4",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412064323380000-000175-05b82eaa_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "c88f9addbdd1a52590ca436414e3e7218f55846f7decd4d41edd667d315711da",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412064325956000-000176-ec5b3556_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "182bb182ab9e525eec28f9cae4f4793e28294c20a117b200f714768348b78ca8",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412070039924000-000177-57f09b5d_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "b68a9f45e3ad80441ce222167013c0a974c449fb4fa2ebe2216febfca3e1b40c",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412070040710000-000178-e91fc593_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "6efe0e75d977d54d2964a9ebe690fa0cf5ec839888b89b3ad9e970a850df67f2",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412074742424000-000179-a61f0620_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "f66f2f4f90bacbcb8b7d3b457a6d8aad9f5dc720c3fbe4d5e00eeb492e943a80",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412074744969000-000180-5c273080_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "f1da9d98d46e799d9cef3e989cb5ac6e439b13f086dcc08562f30dbc4bf04691",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412082653102000-000181-e6d9f3dc_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "01ba44011ddce845162e320edc48c28e394143bc87730a1ab5ae01c4520f57a9",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412082656185000-000182-8a1d372f_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "f6b0118966d4c571e509f0838ad348b8bc9c58ff1b881330bed39501841c0e7a",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412089792034000-000183-cac23c7a_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "31d32ea76ec783d76bd82d911dc0bfa4aafaf1387d8a22f3fe216a3e572ee461",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412089793178000-000184-c5c8ef4b_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "1d6df53a9d270be23efe24ea94ad3e756a2a0f4f364835dcb945877fef7e3a99",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788412089802655000-000185-b5063132_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "758ec4f9c7b38e48b55fbc8d1031eb5862dd6ce2e6e03eb991a82f06e94f9280",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413086788481000-000075-a7ee8380_figure_variant_read_figure_variant_reader.json",
+        "sha256": "3189bdb7f1def6ae7a285aedc2f1f2f1db98badf14a60cbac7572aceef425811",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413086791980000-000076-6c318344_figure_variant_read_figure_variant_reader.json",
+        "sha256": "e92975aa4717175f0c6645731e7c4b13f76da6b4faaedca9b7e53e8a9cbf61df",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413094638970000-000077-726571d0_figure_variant_read_figure_variant_reader.json",
+        "sha256": "0352a89238c809a5c18ccc604fbb0ff88fd946f08da962bcd33f8eb25742511a",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413094641862000-000078-a513f71c_figure_variant_read_figure_variant_reader.json",
+        "sha256": "d2b881084d80cedce60cda2a294283ab4d0cf1492dcb1ebb48456622fd83ba45",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413104094201000-000079-8c5adc52_figure_variant_read_figure_variant_reader.json",
+        "sha256": "830ea0e67df81bbcd3a1f7576fc049d4c06b4fc6c112f1a490aeffce9e660cc5",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/llm_traces/RYR2/30403697/1788413104096440000-000080-340af9f9_figure_variant_read_figure_variant_reader.json",
+        "sha256": "4973e773c7c61f52b6f366072a3147bbbdfc6ab984e2ed7ee32742987033bde1",
+        "record_type": "decision_event"
+      }
+    ]
+  },
+  {
+    "run_id": "20260903_protocol_mixed01_candidate",
+    "gene": "MYBPC3",
+    "pmid": "33673806",
+    "interpretation": "observed trace/artifact probe; not causal proof or an endpoint adjudication",
+    "stages": {
+      "FULL_CONTEXT": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/pmc_fulltext/33673806_FULL_CONTEXT.md",
+        "sha256": "07dbfc064742904bcc0db279f90c992ab47a4b8f04da1f5d08636a1faf385e5c",
+        "characters": 190070,
+        "markdown_tables": 1,
+        "phrase_present": {
+          "presumed to be affected": true,
+          "c.3181C>T": true,
+          "c.2373dup": true
+        }
+      },
+      "CLEANED": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/pmc_fulltext/33673806_CLEANED.md",
+        "sha256": "1746459249b9d8dcc772a826a252ea045251c3816f8dff264d7cdb33fdee683a",
+        "characters": 79436,
+        "markdown_tables": 1,
+        "phrase_present": {
+          "presumed to be affected": true,
+          "c.3181C>T": true,
+          "c.2373dup": true
+        }
+      },
+      "DATA_ZONES": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/scout_output/33673806_DATA_ZONES.md",
+        "sha256": "3f7ff49837ef11fadc462f819b56197e57b4b6a05f3f438edae07db0b6861c6c",
+        "characters": 157615,
+        "markdown_tables": 1,
+        "phrase_present": {
+          "presumed to be affected": true,
+          "c.3181C>T": true,
+          "c.2373dup": true
+        }
+      },
+      "llm_request": {
+        "characters_squashed": 0,
+        "phrase_present": {
+          "presumed to be affected": false,
+          "c.3181C>T": false,
+          "c.2373dup": false
+        }
+      },
+      "llm_response": {
+        "characters_squashed": 60,
+        "phrase_present": {
+          "presumed to be affected": false,
+          "c.3181C>T": false,
+          "c.2373dup": false
+        }
+      }
+    },
+    "extractions": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/extractions/MYBPC3_PMID_33673806.json",
+        "sha256": "cd9cbbc2af5a36759165742b7c250ec2135912e0e0b4aee70241236a72678869",
+        "metadata_notes": "Router-first path: tables T2 parsed deterministically using azure_ai/Kimi-K2.6-1",
+        "variants": [
+          {
+            "protein_notation": "p.Trp792Valfs*41",
+            "cdna_notation": "c.2373dup",
+            "patients": {
+              "count": 14,
+              "phenotype": null,
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "Table T2",
+              "row_ordinal": 52,
+              "column_ref": "Case count",
+              "locator_extra": {
+                "parser": "table_router",
+                "table_id": "T2"
+              }
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 14,
+              "affected_count": null,
+              "unaffected_count": null,
+              "uncertain_count": null,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": "Case count",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": "Case count",
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": {
+              "affected": {
+                "raw": 14,
+                "reason": "copied_carriers_onto_affected",
+                "policy": "clear"
+              }
+            },
+            "claim_verification": null,
+            "fact_provenance": [
+              {
+                "source_location": "Table T2, row 52 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "52",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.2373dup | p.(Trp792Valfs*41)  | 14 |",
+                "source_layer": "llm_table",
+                "fact_type": "variant_identity",
+                "fact_value": "p.Trp792Valfs*41"
+              },
+              {
+                "source_location": "Table T2, row 52 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "52",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.2373dup | p.(Trp792Valfs*41)  | 14 |",
+                "source_layer": "llm_table",
+                "fact_type": "variant_identity",
+                "fact_value": "c.2373dup"
+              },
+              {
+                "source_location": "Table T2, row 52 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "52",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.2373dup | p.(Trp792Valfs*41)  | 14 |",
+                "source_layer": "llm_table",
+                "fact_type": "patient_count",
+                "fact_value": 14,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              },
+              {
+                "source_location": "Table T2, row 52 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "52",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.2373dup | p.(Trp792Valfs*41)  | 14 |",
+                "source_layer": "llm_table",
+                "fact_type": "total_carriers_observed",
+                "fact_value": 14,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              },
+              {
+                "source_location": "Table T2, row 52 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "52",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.2373dup | p.(Trp792Valfs*41)  | 14 |",
+                "source_layer": "llm_table",
+                "fact_type": "affected_count",
+                "fact_value": 14,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              }
+            ]
+          },
+          {
+            "protein_notation": "p.Gln1061*",
+            "cdna_notation": "c.3181C>T",
+            "patients": {
+              "count": 24,
+              "phenotype": null,
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "Table T2",
+              "row_ordinal": 67,
+              "column_ref": "Case count",
+              "locator_extra": {
+                "parser": "table_router",
+                "table_id": "T2"
+              }
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 24,
+              "affected_count": null,
+              "unaffected_count": null,
+              "uncertain_count": null,
+              "penetrance_percentage": null,
+              "age_dependent_penetrance": []
+            },
+            "count_provenance": {
+              "carriers_column_label": "Case count",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": "Case count",
+              "affected_count_type": "per_variant_carrier",
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": {
+              "affected": {
+                "raw": 24,
+                "reason": "copied_carriers_onto_affected",
+                "policy": "clear"
+              }
+            },
+            "claim_verification": null,
+            "fact_provenance": [
+              {
+                "source_location": "Table T2, row 67 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "67",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.3181C>T | p.(Gln1061*) | 24 |",
+                "source_layer": "llm_table",
+                "fact_type": "variant_identity",
+                "fact_value": "p.Gln1061*"
+              },
+              {
+                "source_location": "Table T2, row 67 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "67",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.3181C>T | p.(Gln1061*) | 24 |",
+                "source_layer": "llm_table",
+                "fact_type": "variant_identity",
+                "fact_value": "c.3181C>T"
+              },
+              {
+                "source_location": "Table T2, row 67 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "67",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.3181C>T | p.(Gln1061*) | 24 |",
+                "source_layer": "llm_table",
+                "fact_type": "patient_count",
+                "fact_value": 24,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              },
+              {
+                "source_location": "Table T2, row 67 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "67",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.3181C>T | p.(Gln1061*) | 24 |",
+                "source_layer": "llm_table",
+                "fact_type": "total_carriers_observed",
+                "fact_value": 24,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              },
+              {
+                "source_location": "Table T2, row 67 (router+deterministic)",
+                "source_table": "Table T2",
+                "source_row": "67",
+                "evidence_quote": "| MYBPC3 | HET  | pathogenic | c.3181C>T | p.(Gln1061*) | 24 |",
+                "source_layer": "llm_table",
+                "fact_type": "affected_count",
+                "fact_value": 24,
+                "source_column": "Case count",
+                "count_type": "per_variant_carrier"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "trace_inputs": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458935630983000-000001-f7ff5ae9_clinical_table_routing_table_router.json",
+        "sha256": "f4d8c70fadd2767f300f67c32f6bb95206b4cbe33751909f8725c718174c6139",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458935672742000-000002-d7f8350b_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "069c42507381bfd9c3d74934c27568a5fe1b259a114a77ef43cbc6e581d48b9e",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458948262507000-000001-26eb5244_figure_variant_read_figure_variant_reader.json",
+        "sha256": "78ab47a1d932640f3c0e4dd8482f31a7fcc36345593f69ed74b5cd03e5046408",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458948265614000-000002-4c2d2c00_figure_variant_read_figure_variant_reader.json",
+        "sha256": "a98d5b679c2a1b383ba5904b27f8c40a34ab581b3d7830d1926df1cf39569dd6",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458950795911000-000003-804f9dc6_figure_variant_read_figure_variant_reader.json",
+        "sha256": "6747ffd8f29cbda03cc77c50d3fef9ceb753b3e0938803bd279cc684e6966028",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458950796526000-000004-ae3e5b05_figure_variant_read_figure_variant_reader.json",
+        "sha256": "4eacff9eb0d18c789f755ef0a3d43b1bb471ce5b4cf89e709fe5c119dab4ab12",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458952743640000-000005-44d50f30_figure_variant_read_figure_variant_reader.json",
+        "sha256": "e3b39a91504c83081e7abde811fc176b01e31e4d6b581db11cf966c6ad57bf42",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788458952747186000-000006-cbc45599_figure_variant_read_figure_variant_reader.json",
+        "sha256": "e22e44d1881f3c1bda4be4bfe6811a543459b8280c5c5ae2eb66306f682cc765",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788459014226372000-000007-d1b8b59d_figure_variant_read_figure_variant_reader.json",
+        "sha256": "3a4bbdf75ef8325161d41176097bea5fb095cdc764fb8013c7ab87a7695de239",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed01_candidate/production_runs/MYBPC3/20260903_130849/llm_traces/MYBPC3/33673806/1788459014228613000-000008-000e8efe_figure_variant_read_figure_variant_reader.json",
+        "sha256": "ec729e8fd8138935456567feef7d77580a92722577ea403497d0a45908d9551a",
+        "record_type": "decision_event"
+      }
+    ]
+  },
+  {
+    "run_id": "20260903_protocol_mixed02_candidate",
+    "gene": "SCN5A",
+    "pmid": "30059973",
+    "interpretation": "observed trace/artifact probe; not causal proof or an endpoint adjudication",
+    "stages": {
+      "FULL_CONTEXT": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate/production_runs/SCN5A/20260903_141140/pmc_fulltext/30059973_FULL_CONTEXT.md",
+        "sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18",
+        "characters": 147539,
+        "markdown_tables": 0,
+        "phrase_present": {
+          "Clinical characteristics according to specific mutations": true,
+          "Most common SCN5A mutations per phenotype": true,
+          "60 (19.4)": true,
+          "29 (15)": true
+        }
+      },
+      "CLEANED": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate/production_runs/SCN5A/20260903_141140/pmc_fulltext/30059973_CLEANED.md",
+        "sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95",
+        "characters": 106048,
+        "markdown_tables": 0,
+        "phrase_present": {
+          "Clinical characteristics according to specific mutations": true,
+          "Most common SCN5A mutations per phenotype": true,
+          "60 (19.4)": true,
+          "29 (15)": true
+        }
+      },
+      "llm_request": {
+        "characters_squashed": 0,
+        "phrase_present": {
+          "Clinical characteristics according to specific mutations": false,
+          "Most common SCN5A mutations per phenotype": false,
+          "60 (19.4)": false,
+          "29 (15)": false
+        }
+      },
+      "llm_response": {
+        "characters_squashed": 0,
+        "phrase_present": {
+          "Clinical characteristics according to specific mutations": false,
+          "Most common SCN5A mutations per phenotype": false,
+          "60 (19.4)": false,
+          "29 (15)": false
+        }
+      }
+    },
+    "extractions": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate/production_runs/SCN5A/20260903_141140/extractions/SCN5A_PMID_30059973.json",
+        "sha256": "f8758fa1558d5cec3618e8d141b9d9b15e9d883faf23badc6757be44f6888dc5",
+        "metadata_notes": "Bypassed LLM using deterministic parser for large PDF/vertical table",
+        "variants": [
+          {
+            "protein_notation": "p.Glu1784Lys",
+            "cdna_notation": "c.5350G>A",
+            "patients": {
+              "count": 69,
+              "phenotype": "SCN5A-associated disease",
+              "source_container": "main",
+              "source_kind": "table",
+              "source_ref": "SCN5A mutations Exon Aminoacid changes Effect n",
+              "row_label": "c5350G>A 28 pGlu1784Lys Gain and loss 69",
+              "column_ref": "n",
+              "locator_extra": {
+                "parser": "fixed_width_table"
+              }
+            },
+            "penetrance_data": {
+              "total_carriers_observed": 69
+            },
+            "count_provenance": {
+              "carriers_column_label": "n",
+              "carriers_count_type": "per_variant_carrier",
+              "affected_column_label": null,
+              "affected_count_type": null,
+              "unaffected_column_label": null,
+              "unaffected_count_type": null
+            },
+            "phenotype_count_flags": null,
+            "claim_verification": null,
+            "fact_provenance": null
+          }
+        ]
+      }
+    ],
+    "trace_inputs": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_mixed02_candidate/production_runs/SCN5A/20260903_141140/llm_traces/SCN5A/30059973/1788463498921163000-000083-17b3b87d_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "a34fbf923373132ff790ee801efa15800d058d737419746c3c17d7ae9425094a",
+        "record_type": "decision_event"
+      }
+    ]
+  },
+  {
+    "run_id": "20260903_protocol_cont120_01_candidate",
+    "gene": "MYBPC3",
+    "pmid": "21302287",
+    "interpretation": "observed trace/artifact probe; not causal proof or an endpoint adjudication",
+    "stages": {
+      "FULL_CONTEXT": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/pmc_fulltext/21302287_FULL_CONTEXT.md",
+        "sha256": "22059e0d3f2fe6f180a6ceaf63d1d97da64a291a7cd04f63ea174d41b7e10ca1",
+        "characters": 43554,
+        "markdown_tables": 9,
+        "phrase_present": {
+          "Patient ID": true,
+          "c.2340+18 C>G": true,
+          "278, 251 268, 194": true
+        }
+      },
+      "CLEANED": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/pmc_fulltext/21302287_CLEANED.md",
+        "sha256": "685487264a8344f6cb539b3d0c642e753fd795a1274f59747e61a51e5404bbd1",
+        "characters": 43501,
+        "markdown_tables": 9,
+        "phrase_present": {
+          "Patient ID": true,
+          "c.2340+18 C>G": true,
+          "278, 251 268, 194": true
+        }
+      },
+      "DATA_ZONES": {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/scout_output/21302287_DATA_ZONES.md",
+        "sha256": "a158be163d67bce5e06f132d9e8d43cacb1b6af98a300137ff300e228c47e354",
+        "characters": 18200,
+        "markdown_tables": 9,
+        "phrase_present": {
+          "Patient ID": true,
+          "c.2340+18 C>G": true,
+          "278, 251 268, 194": true
+        }
+      },
+      "llm_request": {
+        "characters_squashed": 250391,
+        "phrase_present": {
+          "Patient ID": true,
+          "c.2340+18 C>G": true,
+          "278, 251 268, 194": true
+        }
+      },
+      "llm_response": {
+        "characters_squashed": 40908,
+        "phrase_present": {
+          "Patient ID": true,
+          "c.2340+18 C>G": false,
+          "278, 251 268, 194": false
+        }
+      }
+    },
+    "extractions": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/extractions/MYBPC3_PMID_21302287.json",
+        "sha256": "c428e6939e6d2fcaa7d9cf0159e9d5f2324bea646571160f916bb7daa47cbe53",
+        "metadata_notes": "All listed individuals are affected HCM probands/relatives; counts summed directly from Patient ID lists in Table 3. No unaffected carriers reported.",
+        "variants": [
+          {
+            "protein_notation": null,
+            "cdna_notation": "c.1223+29G>A",
+            "patients": {},
+            "penetrance_data": {},
+            "count_provenance": null,
+            "phenotype_count_flags": null,
+            "claim_verification": null,
+            "fact_provenance": null
+          },
+          {
+            "protein_notation": null,
+            "cdna_notation": "c.2340+18C>G",
+            "patients": {},
+            "penetrance_data": {},
+            "count_provenance": null,
+            "phenotype_count_flags": null,
+            "claim_verification": null,
+            "fact_provenance": null
+          }
+        ]
+      }
+    ],
+    "trace_inputs": [
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474462788189000-000001-13401021_clinical_table_routing_table_router.json",
+        "sha256": "2f511bd6eaa07605c7f4c9ce8567e0fbf326254b77fba7c523fffcfb1e64a758",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474462790551000-000002-6298476b_clinical_table_routing_table_router.json",
+        "sha256": "7ed69b12ee9e9212b8563f5d488b4f55ee7f1e240bf603f8d8f89f4ec750a822",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474557991263000-000003-3336a82e_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "b34a12145535e56e4e69260b9f5d6c532d20df1acdf4fa820307d6b929fc2dbd",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474568200610000-000004-a1a7c406_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "bdb71bef959650433f223e9a5661c6ac702795854f9a0842dc2200651815a813",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474568203861000-000005-e6d28426_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "91c2a4c0c7e3009c62fff82cd518235a88e5ac9656384dabd65ce3370a2761cc",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474578969563000-000006-4c4e7667_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "6b2a28b17408cede36b9c73fdb3d941a9bd5906b324ea8ff91133961f5a5e50e",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474578972075000-000007-6c615f99_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "d1bd31b6d51f5f23f47e12617fe31f0e44e21d6916959f4b9d7a5d9c45c95eb7",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474589916016000-000008-c61a6f6f_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "e98a8f02270781f01881d839de78bb2de6ffc007113f70d3de1dde596ee01e13",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474589918534000-000009-b336a47f_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "68b18db84606859350a1c60ec8e6a3ddff48366634045e398e77c03c5be69fb8",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474594615185000-000010-09188ff7_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "5c9aac52e04e31fc630228d17868f982d47302c420a4e9fadf2995cc27267bf2",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474594618233000-000011-32842a17_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "90e911f3dba5f1cd12242f46dc867362df8bbb028d6b79d3a7f8ac3acac26b98",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474598396983000-000012-db191764_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "6a2120f3e3838531b71f6555db864cca2a8846fbe6a2add17ed88f93c1e3cff3",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474598397847000-000013-5557b398_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "6b94954544edb9f96de0b1091ab29e31c23b4b0cc6dff4b363c27fdaab115960",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474602441503000-000014-7f78fb6f_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "830e14d823ea4b0a820712cc17b9cf5b841c7d75c31db04575921ef4b48ff604",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474602445280000-000015-04f1982a_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "d6105254c3c8934310ac10a6fab912e109ecb8c805f7ad4b14c083b17b3615bd",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474611373050000-000016-5c193ac4_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "2700e70783dafc7bd77b9330018242ef304a2bf979eab9a04fd2b4e493c4a946",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474611376706000-000017-e1680b49_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "b183076ed300100de77d28c9c4c7e571c0b7d649d083e94b86b48453a5125eb0",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474617859295000-000018-6fb4f8a9_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "f4bf892d0d0493b450baff4bf09c7bcde956b8c58ed3fdd658428242b0f49c8c",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474617863040000-000019-b93901b7_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "167faa79d048bd65c6354c5602ec30feaaf74d889f7b84de2aa94c0e4eb47f78",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474624907110000-000020-28addd71_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "0936762c85f5f299104a8deec1be7fb24a6c88c213522ae88543cead407aa247",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474624909387000-000021-33684f31_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "50aba09177da8fd6056bf40938abef34eaf4f47e1aed258dc587bced0bcc2d23",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474632589633000-000022-2cb6e49f_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "62220ae8c9a52e45005f450dada02797d756eff829e8c4743de186c5157d25dd",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474632593428000-000023-4184ff0f_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "724134be3566ab673e29c9f664d39b9c96b42ca498ec49916cb09b51506808e9",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474640038481000-000024-40b49a52_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "c6f784a6db2c714e6a26899694e3431084f820a2bd453ffcdfa20099e8885865",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474640040912000-000025-c49a9fc2_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "baf26296bea6cabd11cdf1f2a5ec589546951133899dd9ce46ec049b6fb4c907",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474648035506000-000026-1e0bf959_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "27f5a15c025769103798ca6026f26b820728bc1be9b1312a54c3a287bf244d2c",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474648038297000-000027-9c99eeaa_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "965bd48e4448ef13629488127e3f2cfc30e40f0bd59778059cea1c197abd4b45",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474658773364000-000028-289b3449_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "1f70a02e18b1921feaf9737eeeb3a2ca06de828d49793c0ae765664cdf92edc1",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474658775418000-000029-d6d16aaf_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "eead5b56211175192f99930181c4b0bd5a7004000205f4080973045bcd4d73dc",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474668665339000-000030-124b1930_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "ee56e996dbbd3b47de94beb626bfdce50bd625b8dfd383846efa25f29bafd58e",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474668666390000-000031-04ae7736_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "d9083ef27e997a00c2bddee111d38f1fb01336a0f884edf8dd311fff92994a5e",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474676970533000-000032-da4701c4_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "fd9ece1132f2428ca3df7b3e07f1f477c3ac9e082f7f94eda2bfcd49e89473f6",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474676971712000-000033-2ff9227c_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "19172ca6b90b7d7e5456684a4ee4bff991e7efc57c2a88b6733f953bb6813ed0",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474690231977000-000034-1fda673b_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "920c5fee4414d596e0e774036bf6f64f999b20517aaea3ca7a6f7531121c30f3",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474690235631000-000035-301cc736_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "a8457c999ee578ed9f9c00fd1125b206e9bfd6085d5dab6019963d59c82124a0",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474701166452000-000036-80212bf5_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "7020ed878689afc3385bd4a4f6aa5deb4f0de0ac384f2b113ca0abdf1ddb9ad2",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474701169957000-000037-82f3b296_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "91385b1b361229b9f2ec439e4aa5af0049e94ff5ed2e70c4ec7de36db75e37fd",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474707032096000-000038-fc2df6c2_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "d1f1e59555ce6175827de712e9b60dc425046e86a747ae45e46082ae50d98782",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474707035027000-000039-3cb63eb8_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "e44c45a9e34a04519d75b31425d0b49f41220982baf898ec4a513d334ad014fe",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474715090958000-000040-85b65699_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "e8983ba3f1ca53e9d12ab150cf195620c06e02902bb5b9cb33552da8fc4d3969",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474715094547000-000041-e7bab589_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "6b426a66759f9833c7cce36706be55e06afedffd3facfe0256b49ceec3dce70b",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474728126056000-000042-e4a76b26_variant_claim_verification_VariantClaimVerifier.json",
+        "sha256": "e0da0e3e166993ceeac9186a89f6e694359314f31bfd2235718f3fb98f93503d",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474728128722000-000043-674b7907_variant_claim_verification_decision_VariantClaimVerifier.json",
+        "sha256": "4431e8ed083456d8e11ad8d9433bafa60492295faa974810e5fb36d8548ec1bd",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474728144396000-000044-7b4b59d9_paper_variant_extraction_ExpertExtractor.json",
+        "sha256": "0212f406cbac28cf074887b2e7a9a77470e9a1528d3cf9a2bb5d5923509b7041",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474738848949000-000001-a4c597b1_figure_variant_read_figure_variant_reader.json",
+        "sha256": "fe9998446d79d7931f7dc0fa42a1c3fa882994ec4b7fe0f7927e90b98cbeea44",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474738858094000-000002-0695614e_figure_variant_read_figure_variant_reader.json",
+        "sha256": "508b85e0f2a88e7da8889f5347d56b2dcaec0d6a07782c7c6f70b14b16373852",
+        "record_type": "decision_event"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474743251800000-000003-760bc692_figure_variant_read_figure_variant_reader.json",
+        "sha256": "a934d96be6b493a129b7df358a0b2e05c7a5d1ead78e91619b09c97d29b4bbce",
+        "record_type": "llm_call"
+      },
+      {
+        "path": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/MYBPC3/20260903_172729/llm_traces/MYBPC3/21302287/1788474743254868000-000004-590e1465_figure_variant_read_figure_variant_reader.json",
+        "sha256": "40717107f872cc9144b13d2505aecf7e8e48502e5b0c83e7254803f5d4136e5c",
+        "record_type": "decision_event"
+      }
+    ]
+  }
+]

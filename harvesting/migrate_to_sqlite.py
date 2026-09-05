@@ -58,7 +58,10 @@ from utils.source_layers import (
     junk_notation_reason,
     normalize_source_layer,
 )
-from utils.protein_notation import PROTEIN_NOTATION_RE
+from utils.protein_notation import (
+    is_supported_protein_notation,
+    normalize_partial_protein_insertion,
+)
 from utils.variant_normalizer import (
     normalize_variant,
     preferred_alias_protein,
@@ -210,6 +213,12 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     if predicted:
         protein = f"p.{predicted.group(1)}"
         variant_data["protein_notation"] = protein
+    partial_insertion = normalize_partial_protein_insertion(protein)
+    if partial_insertion:
+        if not variant_data.get("source_notation"):
+            variant_data["source_notation"] = variant_data.get("protein_notation")
+        protein = partial_insertion
+        variant_data["protein_notation"] = protein
     cdna = (variant_data.get("cdna_notation") or "").strip().replace(" ", "")
     legacy = (variant_data.get("legacy_notation") or "").strip()
     genomic = (variant_data.get("genomic_position") or "").strip()
@@ -220,7 +229,7 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
         r"\s+", "", str(variant_data.get("source_notation") or "").strip()
     )
 
-    if protein and not PROTEIN_NOTATION_RE.fullmatch(protein):
+    if protein and not is_supported_protein_notation(protein):
         variant_data["protein_notation"] = None
         protein = ""
     if cdna and not CDNA_NOTATION_RE.fullmatch(cdna):

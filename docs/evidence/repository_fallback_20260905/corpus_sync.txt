@@ -1,0 +1,15 @@
+SCN5A dry run:
+MODE: DRY-RUN (nothing written; pass --apply)
+actions: add=0 upgrade=1 noop=1
+corpus (gene,PMID) entries: 2  SCN5A=2
+full_text ok: 0  body-only/retry: 2  stub/compromised: 0
+with figures: 0  with supplements: 1
+
+SCN5A apply:
+MODE: APPLIED -> /Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus
+actions: add=0 upgrade=1 noop=1
+corpus (gene,PMID) entries: 2  SCN5A=2
+full_text ok: 0  body-only/retry: 2  stub/compromised: 0
+with figures: 0  with supplements: 1
+
+KCNH2 dry run: add=0 upgrade=0 noop=1; existing complete source retained.

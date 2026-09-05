@@ -61,7 +61,6 @@ def initialize_free_text_access(
     output_dir: Path,
     success_log: Path,
     pmc_api: Any,
-    unpaywall: Any,
     converter: Any,
     elsevier_api: Any,
     springer_api: Any,
@@ -81,32 +80,11 @@ def initialize_free_text_access(
     if is_free:
         return FreeTextInitState(is_free=True, free_url=free_url)
 
-    print("  - No PMCID and not marked as free, trying Unpaywall...")
-
     if doi:
-        unpaywall_result, unpaywall_error = unpaywall.find_open_access(doi)
-        if unpaywall_result and unpaywall_result.get("pdf_url"):
-            print(
-                f"  ✓ Unpaywall found OA version: {unpaywall_result.get('oa_status')}"
-            )
-            pdf_url = unpaywall_result["pdf_url"]
-            pdf_path = output_dir / f"{pmid}_unpaywall.pdf"
-            success, dl_error = unpaywall.download_pdf(pdf_url, str(pdf_path))
-            if success:
-                main_markdown = converter.pdf_to_markdown(str(pdf_path))
-                if main_markdown and len(main_markdown) > 500:
-                    print(f"  ✓ Retrieved via Unpaywall ({len(main_markdown)} chars)")
-                    return FreeTextInitState(is_free=True, free_url=pdf_url)
-                print("  - Unpaywall PDF conversion failed or content too short")
-            else:
-                print(f"  - Unpaywall download failed: {dl_error}")
-        elif unpaywall_result and unpaywall_result.get("landing_page"):
-            print("  - Unpaywall found landing page but no direct PDF")
-        else:
-            print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
-
-    if doi:
-        print("  - Unpaywall failed, trying publisher APIs based on DOI prefix...")
+        # OA PDFs are handled by the shared repository fallback after publisher
+        # failure, regardless of PubMed's free flag. Never turn converted PDF
+        # text back into a URL for the HTML scraper to fetch a second time.
+        print("  - Trying publisher APIs based on DOI prefix...")
         provider_plan = build_publisher_attempt_plan(
             doi,
             [
@@ -200,11 +178,11 @@ def initialize_free_text_access(
                 early_result=(True, str(output_file), unified_content),
             )
 
-    print("  ❌ No PMCID and not available via any method (likely paywalled)")
+    print("  - Publisher APIs unavailable; repository/browser fallbacks remain")
     pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
     log_paywalled(
         pmid,
-        "No PMCID found, not free full text, Unpaywall failed, publisher APIs failed",
+        "No PMCID found, not free full text, publisher APIs failed",
         pubmed_url,
     )
     write_pmid_status(
@@ -212,7 +190,7 @@ def initialize_free_text_access(
         "paywalled",
         {
             "download_timestamp": datetime.datetime.now().isoformat(),
-            "failure_reason": "No PMCID found, not free full text, all methods failed",
+            "failure_reason": "No PMCID found, not free full text, publisher APIs failed",
             "source": "none",
         },
     )

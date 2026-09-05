@@ -1,0 +1,192 @@
+{
+  "comparison_score_lanes": [
+    "linkage_assisted"
+  ],
+  "completed_at": "2026-09-05T18:41:04.548280+00:00",
+  "count_projection": "trusted",
+  "excluded_source_layers": [],
+  "extraction_elapsed_seconds": 76.0,
+  "extraction_started_at": "2026-09-05T13:38:57.558994",
+  "identity_projection": "trusted",
+  "linkage_shadows_excluded": 0,
+  "papers": [
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "c.704-2A>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Arg1897His c.5690G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Gly213Asp c.638G>A"
+          }
+        ]
+      },
+      "elapsed_seconds": 5.861862,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "c.704-2A>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Arg1897His c.5690G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Gly213Asp c.638G>A"
+        }
+      ],
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 18417,
+        "llm_calls": 1,
+        "models": {
+          "azure_ai/grok-4.3": {
+            "input_tokens": 18417,
+            "llm_calls": 1,
+            "output_tokens": 950,
+            "provider_seconds": 5.861862,
+            "successful_calls": 1,
+            "total_tokens": 19367
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 950,
+        "provider_seconds": 5.861862,
+        "successful_calls": 1,
+        "telemetry_available": true,
+        "total_tokens": 19367
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": []
+    }
+  ],
+  "prelock_gold_usage": {
+    "provenance": "all_production_run_statuses_record_gold_access_disabled",
+    "read_only_layer_scoring_possible": false,
+    "scores_feed_back_into_predictions": false
+  },
+  "primary_score_lane": "paper_derived",
+  "production_gold_access": [
+    {
+      "disabled": true,
+      "gene": "SCN5A",
+      "gold_derived_alias_files_disabled": true,
+      "mode": "disabled"
+    }
+  ],
+  "production_run_statuses": [
+    {
+      "gene": "SCN5A",
+      "sha256": "59c04807ba03895f257a3ef14f50510ed2e75296fd655ebd2d8e53d776aa7d5a",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/RUN_STATUS.json"
+    }
+  ],
+  "production_run_timing": [
+    {
+      "duration_seconds": 76,
+      "gene": "SCN5A",
+      "source": "RUN_STATUS.json",
+      "start_timestamp": "2026-09-05T13:38:57.558994"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 2,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 1,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/llm_traces/trace_manifest.json",
+      "run_id": "b025f305-040d-41ac-9b83-fe3a7d3e63ea",
+      "sha256": "6e1b495d6219040755310f82783ef840f9712b8e2ab6bc168e9c6ac78a442d5a"
+    }
+  ],
+  "provenance_policy": {
+    "ambiguous_unattributed_layers": [
+      "manual_or_legacy",
+      "mixed"
+    ],
+    "external_linkage_is_paper_discovery": false,
+    "external_linkage_layers": [
+      "clinvar",
+      "pubtator"
+    ],
+    "external_linkage_rows_in_primary_score": false,
+    "paper_derived_layers": [
+      "figure",
+      "llm_table",
+      "llm_text",
+      "regex_table",
+      "regex_text"
+    ],
+    "unclassified_rows_in_primary_score": false
+  },
+  "run_id": "20260905_repository1_final",
+  "schema_version": 1,
+  "source_databases": {
+    "SCN5A": "benchmarks/codex_paper_eval/runs/20260905_repository1_final/production_runs/SCN5A/20260905_133857/SCN5A.db"
+  },
+  "started_at": null,
+  "strategy": "production_gvf_run",
+  "token_usage": {
+    "input_tokens": 18417,
+    "llm_calls": 1,
+    "models": {
+      "azure_ai/grok-4.3": {
+        "input_tokens": 18417,
+        "llm_calls": 1,
+        "output_tokens": 950,
+        "provider_seconds": 5.861862,
+        "successful_calls": 1,
+        "total_tokens": 19367
+      }
+    },
+    "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens; provider_seconds is summed call latency, not end-to-end wall clock.",
+    "output_tokens": 950,
+    "provider_seconds": 5.861862,
+    "successful_calls": 1,
+    "telemetry_available": true,
+    "total_tokens": 19367
+  },
+  "unattributed_rows_held_from_scores": 0
+}

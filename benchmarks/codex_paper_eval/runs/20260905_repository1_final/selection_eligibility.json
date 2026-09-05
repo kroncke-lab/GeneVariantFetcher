@@ -1,0 +1,61 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "SCN5A": 675
+  },
+  "gold_sources": {
+    "SCN5A": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/recall_campaign_20260905/repository_followup.tsv",
+  "papers": [
+    {
+      "artifacts": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_artifacts.json",
+      "artifacts_sha256": "b91752b35e1d40ec19d5a0546015ee30acd1d21f1de202b72c5694b6ab46be0e",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25163546",
+      "source": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+      "source_bytes": 158727,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 158256,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+            "sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d",
+            "table_rows": 0
+          },
+          {
+            "characters": 158256,
+            "distinct_variant_tokens": 0,
+            "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_CLEANED.md",
+            "sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 158256,
+          "distinct_variant_tokens": 0,
+          "path": "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+          "sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-05T18:38:16.361431+00:00",
+  "run_id": "20260905_repository1_final",
+  "schema_version": 1,
+  "seed": 2026090501
+}

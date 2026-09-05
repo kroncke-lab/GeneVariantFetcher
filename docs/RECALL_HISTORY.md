@@ -15,6 +15,79 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-05 — targeted repository and insertion validation on fresh sources
+
+Fifteen fresh attempts over nine opened papers cost $4.69165 by the dated test
+proxy. The ten-attempt prototype locked at 348/41/12 TP/FP/FN. Its four-attempt
+subset was 55/11/6; the final source-matched ablation is 55/6/6. Removing three
+speculative parser rules trades one RYR2 TP for an insertion TP while removing
+five gold extras. Count changes outside the insertion mechanism also vary
+between fresh model runs and are not attributed to code.
+
+Recovered SCN5A 20031634 improves from old paper-derived 0/0/13 to 11/2/2.
+Eight matched variants supply exact A/U pairs. A shared validator preserves
+`p.1570-Phe1571insIle` without inventing the missing left residue; an identical
+response replay isolates that row's previous loss. Carrier +1 disagreements
+preserve the source's unknown-phenotype people rather than forcing gold's
+partition. Two notation ambiguities and three matched rows' A/U omissions remain.
+The other recovered body, 25163546, stays 0/0/20; its missing variant roster is
+not repaired by downloading the main article.
+
+The final implementation also preserves browser-first completion and caption
+metadata in repository fallback, freezes selected source assets for gold-free
+reading experiments, corrects narrative-as-extraction FN diagnosis, and renders
+all-miss count figures with undefined agreement. All prior 34 audit hashes are
+unchanged. No accepted headline or registered acceptance decision changes.
+Final offline suite: **2,890 passed**. Claude, Grok and Agy CLI reviews and their
+dispositions, cost ledger, locks and
+figures: `docs/evidence/recall_campaign_20260905/README.md`.
+
+## 2026-09-05 — automatic repository fallback, validated on 16 papers (unscored)
+
+The manual HAL/UCL recovery is now a general source fallback shared by normal
+harvesting and the paywall helper. It runs after publisher failure regardless
+of PubMed's free flag, tries all indexed copies and repository landing links,
+binds exact DOI metadata to the attached article's title, and retains PDF/page
+provenance and body-only supplement status. It also repairs the old Unpaywall
+flow that discarded converted text and sent the PDF URL through HTML scraping.
+The misleading "No DOI" error after failed DOI resolution is corrected.
+
+Both 20031634 and 25163546 succeed through the real normal downloader. The
+fixed network panel downloads 3/16 bodies, including 1/14 additional gold
+papers (29650123); all 13 failures remain recorded. The existing 29650123
+corpus body was retained and its missing roster is still unresolved. Standard
+corpus sync upgraded only 25163546's body after dry run. All 34 prior audit
+lock/report/gold/selection hashes remain unchanged. Full offline suite:
+2,865 passed. No extraction score or accepted recall/MAE change is claimed.
+Evidence: `docs/evidence/repository_fallback_20260905/README.md`.
+
+## 2026-09-05 — 22-paper A/U audit and two recovered source bodies (unscored)
+
+Ranked 336 completed attempts across four opened locks and selected 22 unique
+papers / 30 attempts: 14 papers with some affected/unaffected capture (including
+two exact controls) and eight with none. The diagnostic separates identity
+extras/misses, omitted counts, wrong supplied values and source/gold endpoint
+conflicts; legacy linkage and paper-derived lanes remain separate. Grok and Agy
+CLI reviews challenged the findings, and unsupported initial diagnoses were
+corrected against source and trace evidence.
+
+The largest all-NA case, 30059973, already has clinical supplemental tables
+inside its manuscript PDF, but fixed-width identity extraction returns before
+phenotype reading. Other cases need actual table bodies, explicit patient-ID
+joins, consistent ascertainment, or preservation of uncertain phenotype.
+Author repositories supplied previously missing full bodies for SCN5A 20031634
+and 25163546; both were synced through the corpus builder after dry run, with
+body-only/retry status retained. PMID 20031634 Table 1 was visually checked and
+transcribed into 13 family rows: 115 carriers = 54 ECG-positive + 55 not
+ECG-positive + six undetermined. This disagrees with the locked gold partition
+and is source evidence for adjudication, not a claimed metric improvement.
+
+No production extraction or trust rule changed, no database counts were written,
+and no benchmark lock, gold or accepted metric changed. The diagnostic utility
+and existing difference-figure suite passed 12 tests. Reproducible panel, source
+hashes, count rows, stage probes and reviewer dispositions:
+`docs/evidence/phenotype_failure_panel_20260905/README.md`.
+
 ## 2026-09-04 — deterministic table evidence outranks outlier triage
 
 Trust-gate generation `tg6` makes the within-paper median rule a fallback rather

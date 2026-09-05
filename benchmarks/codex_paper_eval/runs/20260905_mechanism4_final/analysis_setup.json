@@ -1,0 +1,14 @@
+{
+  "classification": "fresh opened-calibration ablation; final reader vs prototype on four matched attempts",
+  "runtime": {
+    "sha256": "cfd7fc6a4256f775bd9c8b91d662467c04ed01264df9ef4da921279edcef34bb",
+    "file_count": 251
+  },
+  "source_snapshot": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/frozen_corpus/source_snapshot.json",
+  "source_snapshot_sha256": "67d23a3f79d78002b4b31e99e4534e9d8d144cc4d7309ef9acf979793f2067c8",
+  "test_budget_reserved_usd": 3,
+  "attempts": 4,
+  "unique_pmids": 2,
+  "source_reference": "benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/source_snapshot.json",
+  "all_input_asset_hashes_match_candidate": true
+}

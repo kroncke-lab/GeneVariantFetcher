@@ -698,6 +698,9 @@ def test_fetch_one_hands_article_identity_to_both_enrichment_paths(
     monkeypatch.setattr(
         fetch_paywalled, "try_scholar_pdf_fallback", lambda *_args, **_kwargs: None
     )
+    monkeypatch.setattr(
+        fetch_paywalled, "try_repository_pdf_fallback", lambda *_args, **_kwargs: None
+    )
 
     fetch_paywalled.fetch_one(
         fetcher,

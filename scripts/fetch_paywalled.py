@@ -75,6 +75,10 @@ from harvesting.scholar_pdf_fallback import (  # noqa: E402
     _source_identity_matches,
     try_scholar_pdf,
 )
+from harvesting.repository_pdf_fallback import (  # noqa: E402
+    RepositoryPDFRecovery,
+    write_repository_source,
+)
 from harvesting.springer_api import SpringerAPIClient  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
 from harvesting.wiley_api import WileyAPIClient  # noqa: E402
@@ -371,6 +375,42 @@ def try_pmc_fallback(
         "supplements_downloaded": enrichment.supplement_count,
         "supplement_surface_status": supplement_surface_status,
         "supplement_surface_reason": supplement_surface_reason,
+    }
+
+
+def try_repository_pdf_fallback(
+    pmid, output_dir, session, *, doi=None, title=None, supplement_markdown=""
+):
+    """Shared indexed-copy path; body-only success stays eligible for supplements."""
+    result = RepositoryPDFRecovery(email=_ncbi_email(), session=session).recover(
+        pmid=pmid, doi=doi, title=title, output_dir=output_dir
+    )
+    if not result.success:
+        return None
+    canonical, content = write_repository_source(
+        result, output_dir, supplement_markdown=supplement_markdown
+    )
+    pmid_dir = output_dir / pmid
+    pmid_dir.mkdir(parents=True, exist_ok=True)
+    per_pmid = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid.write_text(content)
+    (pmid_dir / "source.txt").write_text(
+        f"Recovered via indexed repository PDF: {result.source_url}\n"
+    )
+    return {
+        "outcome": "success_via_repository_body_only",
+        "strategy": "repository_pdf",
+        "reason": result.identity_reason,
+        "doi": result.doi,
+        "chars": len(content),
+        "final_url": result.source_url,
+        "path": str(canonical),
+        "canonical_path": str(canonical),
+        "per_pmid_path": str(per_pmid),
+        "source_identity_verified": True,
+        "source_identity_reason": result.identity_reason,
+        "supplement_surface_status": "unavailable",
+        "supplement_surface_reason": "Repository body recovered; separate supplement surface not verified",
     }
 
 
@@ -1260,9 +1300,20 @@ def fetch_one(
     recovery_session = pmc_session or getattr(fetcher, "session", None)
     publisher_supp_file_count = 0
 
-    def run_scholar_fallback() -> Optional[Dict]:
+    def run_last_resort_fallback(supplement_markdown="") -> Optional[Dict]:
         if recovery_session is None:
             return None
+        repository_row = try_repository_pdf_fallback(
+            pmid,
+            output_dir,
+            recovery_session,
+            doi=doi,
+            title=title,
+            supplement_markdown=supplement_markdown,
+        )
+        if repository_row is not None:
+            row.update(repository_row)
+            return repository_row
         scholar_row = try_scholar_pdf_fallback(
             pmid,
             output_dir,
@@ -1342,7 +1393,7 @@ def fetch_one(
             print(f"  Resolved DOI for {pmid} from PubMed: {doi}")
         else:
             row["reason"] = "no DOI"
-            run_scholar_fallback()
+            run_last_resort_fallback()
             return row
 
     # Tell the user which strategy will run, before we burn time on the fetch.
@@ -1359,7 +1410,7 @@ def fetch_one(
         if api_row is not None:
             promote_publisher_api_fallback(api_row)
             return row
-        run_scholar_fallback()
+        run_last_resort_fallback()
         return row
 
     result = fetcher.fetch(pmid=pmid, doi=doi, pub_date=None)
@@ -1375,7 +1426,7 @@ def fetch_one(
         if api_row is not None:
             promote_publisher_api_fallback(api_row)
             return row
-        run_scholar_fallback()
+        run_last_resort_fallback()
         return row
 
     row["final_url"] = result.final_url or ""
@@ -1501,13 +1552,16 @@ def fetch_one(
                 promote_pmc_fallback(pmc_row)
 
     if (
-        row["outcome"] in ("paywall_or_stub", "empty", "error")
+        row["outcome"]
+        in ("paywall_or_stub", "empty", "error", "success_supplement_only")
         and recovery_session is not None
     ):
-        scholar_row = run_scholar_fallback()
-        if scholar_row is not None:
+        fallback_row = run_last_resort_fallback(
+            enrichment.supplement_markdown if enrichment is not None else ""
+        )
+        if fallback_row is not None:
             print(
-                f"  Google Scholar PDF fallback succeeded: {scholar_row['chars']} chars"
+                f"  Public PDF fallback recovered body: {fallback_row['chars']} chars"
             )
 
     return row

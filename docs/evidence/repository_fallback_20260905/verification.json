@@ -1,0 +1,26 @@
+{
+  "unit_tests_passed": 2865,
+  "unit_test_seconds": 109.44,
+  "locked_input_hashes_verified": 34,
+  "final_runtime_hashes_match": true,
+  "corpus_entry_count_before": 22151,
+  "corpus_entry_count_after": 22151,
+  "corpus_index_rows_changed": [
+    {
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "before_source_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+      "after_source_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b"
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "before_source_sha256": "0f0e5e20c39e03f857139d83fb81ba1ed87b26ccac0bdbd4a3066b58f06fcfc3",
+      "after_source_sha256": "6bb847466ccbdb7f8347427e1fca2453e3d0792de2f478c01e2f0cc6295b8e1d"
+    }
+  ],
+  "upgraded_corpus_source_matches_live_output": true,
+  "upgraded_pdf_sha256": "8e67ee5d44baec5593611996bb55584059ace486b6cd12614e5a9a66b50e38c8",
+  "table_20031634_check": "New FULL_CONTEXT retains Table 1 title, G1408R row and printed totals 115/54/55/6/8; raw PDF hash is identical to the previously visually checked HAL source.",
+  "remaining_limit": "3/16 downloads; one of 14 additional papers succeeds. Supplement surface remains unverified and counts were not re-extracted."
+}

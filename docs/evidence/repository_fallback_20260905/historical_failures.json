@@ -1,0 +1,101 @@
+{
+  "source_directory": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/SCN5A/20260903_172729/pmc_fulltext",
+  "rows": {
+    "abstract_only_fallback.csv": [
+      {
+        "PMID": "20031634",
+        "Reason": "No PMCID and free-text/Tier 3.5 fallback failed: No DOI or URL for free text",
+        "Output_Path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/SCN5A/20260903_172729/pmc_fulltext/20031634_FULL_CONTEXT.md",
+        "Timestamp": "2026-09-03T17:29:44.459075"
+      },
+      {
+        "PMID": "25163546",
+        "Reason": "No PMCID and free-text/Tier 3.5 fallback failed: Free text fetch failed",
+        "Output_Path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/SCN5A/20260903_172729/pmc_fulltext/25163546_FULL_CONTEXT.md",
+        "Timestamp": "2026-09-03T17:31:19.676891"
+      }
+    ],
+    "browser_html_log.csv": [
+      {
+        "timestamp": "2026-09-03T17:29:44",
+        "pmid": "20031634",
+        "doi": "10.1161/CIRCGENETICS.109.853374",
+        "strategy": "aha",
+        "outcome": "failed",
+        "reason": "strategy returned empty main_markdown after extraction",
+        "markdown_chars": "0",
+        "supplement_count": "0",
+        "elapsed_s": "25.97"
+      },
+      {
+        "timestamp": "2026-09-03T17:31:19",
+        "pmid": "25163546",
+        "doi": "10.1093/eurheartj/ehu301",
+        "strategy": "oxford",
+        "outcome": "failed",
+        "reason": "strategy returned empty main_markdown after extraction",
+        "markdown_chars": "0",
+        "supplement_count": "0",
+        "elapsed_s": "24.47"
+      }
+    ],
+    "paywalled_missing.csv": [
+      {
+        "PMID": "20031634",
+        "Reason": "DOI resolution failed (free text, HTTP unknown): 10.1161/CIRCGENETICS.109.853374",
+        "URL": "https://doi.org/10.1161/CIRCGENETICS.109.853374",
+        "Classification": "PAYWALLED",
+        "Abstract_Carriers": "",
+        "Affected_Count": "",
+        "Unaffected_Count": "",
+        "Variants_Mentioned": "",
+        "Extraction_Confidence": "",
+        "More_In_Fulltext_Probability": "",
+        "Priority_Score": "",
+        "Notes": ""
+      },
+      {
+        "PMID": "20031634",
+        "Reason": "Free full text indicated but no DOI or URL in PubMed metadata",
+        "URL": "https://pubmed.ncbi.nlm.nih.gov/20031634/",
+        "Classification": "",
+        "Abstract_Carriers": "",
+        "Affected_Count": "",
+        "Unaffected_Count": "",
+        "Variants_Mentioned": "",
+        "Extraction_Confidence": "",
+        "More_In_Fulltext_Probability": "",
+        "Priority_Score": "",
+        "Notes": ""
+      },
+      {
+        "PMID": "25163546",
+        "Reason": "DOI resolution failed (free text, HTTP unknown): 10.1093/eurheartj/ehu301",
+        "URL": "https://doi.org/10.1093/eurheartj/ehu301",
+        "Classification": "PAYWALLED",
+        "Abstract_Carriers": "",
+        "Affected_Count": "",
+        "Unaffected_Count": "",
+        "Variants_Mentioned": "",
+        "Extraction_Confidence": "",
+        "More_In_Fulltext_Probability": "",
+        "Priority_Score": "",
+        "Notes": ""
+      },
+      {
+        "PMID": "25163546",
+        "Reason": "Free full text fetch failed: 403 Client Error: Forbidden for url: https://academic.oup.com/eurheartj/article-lookup/doi/10.1093/eurheartj/ehu301",
+        "URL": "https://academic.oup.com/eurheartj/article-lookup/doi/10.1093/eurheartj/ehu301",
+        "Classification": "",
+        "Abstract_Carriers": "",
+        "Affected_Count": "",
+        "Unaffected_Count": "",
+        "Variants_Mentioned": "",
+        "Extraction_Confidence": "",
+        "More_In_Fulltext_Probability": "",
+        "Priority_Score": "",
+        "Notes": ""
+      }
+    ]
+  }
+}

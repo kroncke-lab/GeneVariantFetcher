@@ -69,7 +69,6 @@ def test_initialize_free_text_access_marks_paywalled_when_unavailable(tmp_path):
         output_dir=tmp_path,
         success_log=tmp_path / "success.csv",
         pmc_api=_DummyPMCAPI(is_free=False),
-        unpaywall=_DummyUnpaywall(),
         converter=_DummyConverter(),
         elsevier_api=_DummyProvider(),
         springer_api=_DummyProvider(),
@@ -93,16 +92,14 @@ def test_initialize_free_text_access_marks_paywalled_when_unavailable(tmp_path):
     assert status_calls and status_calls[0][1] == "paywalled"
 
 
-def test_initialize_free_text_access_promotes_unpaywall_pdf(tmp_path):
+def test_free_flag_returns_publisher_url_without_pdf_conversion(tmp_path):
     state = initialize_free_text_access(
         pmid="456",
         doi="10.1000/test",
         output_dir=tmp_path,
         success_log=tmp_path / "success.csv",
-        pmc_api=_DummyPMCAPI(is_free=False),
-        unpaywall=_DummyUnpaywall(
-            oa={"pdf_url": "https://example.org/paper.pdf", "oa_status": "gold"},
-            download_ok=True,
+        pmc_api=_DummyPMCAPI(
+            is_free=True, free_url="https://publisher.example.org/article"
         ),
         converter=_DummyConverter(markdown=("a" * 600)),
         elsevier_api=_DummyProvider(),
@@ -120,4 +117,4 @@ def test_initialize_free_text_access_promotes_unpaywall_pdf(tmp_path):
 
     assert state.early_result is None
     assert state.is_free
-    assert state.free_url == "https://example.org/paper.pdf"
+    assert state.free_url == "https://publisher.example.org/article"

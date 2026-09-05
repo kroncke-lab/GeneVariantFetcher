@@ -59,6 +59,7 @@ from .figure_extractor import (
 )
 from .supplement_scraper import SupplementScraper
 from .unpaywall_api import UnpaywallClient
+from .repository_pdf_fallback import RepositoryPDFRecovery, write_repository_source
 from .wiley_api import WileyAPIClient
 
 logger = get_logger(__name__)
@@ -1689,6 +1690,9 @@ class PMCHarvester:
                     ),
                 )
             else:
+                recovered = self._download_repository_pmid(pmid, None)
+                if recovered[0]:
+                    return recovered
                 print("  ❌ No DOI available for publisher API fallback")
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
                 self._log_paywalled(
@@ -1816,6 +1820,14 @@ class PMCHarvester:
             )
             artifacts.add_note(f"content_validation_failed: {validation_reason}")
             artifacts.save()
+            recovered = self._download_repository_pmid(
+                pmid,
+                doi,
+                supplement_markdown=(render_captions_markdown(captions) or "")
+                + (supplement_markdown or ""),
+            )
+            if recovered[0]:
+                return recovered
             return self._build_abstract_only_fallback(
                 pmid,
                 reason=f"Content validation failed: {validation_reason}",
@@ -1857,22 +1869,15 @@ class PMCHarvester:
     def _download_with_tier35_fallback(
         self, pmid: str, doi: str
     ) -> Tuple[bool, str, Optional[str]]:
-        """Run free-text download; if it fails and Tier 3.5 is enabled, retry via browser HTML.
-
-        Tier 3.5 (browser-based HTML) is a strict additive fallback. The
-        existing free-text path runs unchanged; only on failure do we attempt
-        the browser-driven path. Tier 3.5 successes/failures are logged to
-        a separate ``browser_html_log.csv`` so existing paywall metrics are
-        unaffected.
-        """
+        """Preserve publisher/browser completion, then try indexed article copies."""
         success, result, content = self._download_free_text_pmid(pmid, doi)
         if success:
             return success, result, content
 
         if self.browser_html is None or not self.browser_html.is_enabled():
-            return success, result, content
+            return self._download_repository_pmid(pmid, doi)
         if not doi:
-            return success, result, content
+            return self._download_repository_pmid(pmid, doi)
 
         try:
             from .browser_html import get_pub_date_from_pmid
@@ -1882,11 +1887,43 @@ class PMCHarvester:
             pub_date = None
 
         print("  → Tier 3.5: trying browser-based HTML fallback...")
-        fr = self.browser_html.fetch(pmid=pmid, doi=doi, pub_date=pub_date)
-        if fr is None or not fr.is_usable():
-            return success, result, content
+        try:
+            fr = self.browser_html.fetch(pmid=pmid, doi=doi, pub_date=pub_date)
+            if fr is not None and fr.is_usable():
+                return self._finalize_browser_html(pmid, doi, fr)
+        except Exception as exc:
+            logger.warning("PMID %s browser fallback failed: %s", pmid, exc)
+        return self._download_repository_pmid(pmid, doi)
 
-        return self._finalize_browser_html(pmid, doi, fr)
+    def _download_repository_pmid(self, pmid, doi, *, supplement_markdown=""):
+        """Default fallback, independent of PubMed free flag/browser settings."""
+        recovery = RepositoryPDFRecovery(
+            email=self.unpaywall.email, session=self.session, unpaywall=self.unpaywall
+        ).recover(pmid=pmid, doi=doi, output_dir=self.output_dir)
+        if not recovery.success:
+            logger.info("PMID %s repository recovery: %s", pmid, recovery.error)
+            return False, recovery.error, None
+        path, content = write_repository_source(
+            recovery,
+            self.output_dir,
+            gene=self.gene_symbol,
+            supplement_markdown=supplement_markdown,
+        )
+        append_success_entry(self.success_log, pmid, "REPOSITORY_PDF", 0)
+        self._write_pmid_status(
+            pmid,
+            "extracted",
+            {
+                "source": "repository_pdf",
+                "source_url": recovery.source_url,
+                "source_identity_verified": True,
+                "supplement_surface_status": "unavailable",
+            },
+        )
+        print(
+            f"  ✓ Repository PDF recovered: {pmid} ({len(content)} chars; supplements unverified)"
+        )
+        return True, str(path), content
 
     def _finalize_browser_html(
         self, pmid: str, doi: str, fr
@@ -2046,7 +2083,6 @@ class PMCHarvester:
             output_dir=self.output_dir,
             success_log=self.success_log,
             pmc_api=self.pmc_api,
-            unpaywall=self.unpaywall,
             converter=self.converter,
             elsevier_api=self.elsevier_api,
             springer_api=self.springer_api,

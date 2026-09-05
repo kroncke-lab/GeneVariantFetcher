@@ -12,6 +12,33 @@ from scripts import build_phenotype_count_recovery as figure
 from scripts import build_stratified_phenotype_count_recovery as stratified
 
 
+def test_all_identity_misses_render_without_fabricating_count_agreement(tmp_path):
+    missing = {
+        field: {"count_extracted": 0, "zero_filled": 0, "identity_miss": 20}
+        for field in figure.FIELDS
+    }
+    report = {
+        "overall": {
+            "count": {
+                field: {"gold_asserted": 20, "predicted": 0} for field in figure.FIELDS
+            }
+        }
+    }
+    summary = figure.summarize([], missing, report)
+    for record in summary.values():
+        assert record["identity_coverage"] == 0
+        assert record["identity_miss"] == 20
+        assert record["mae"] is None
+        assert record["exact_fraction"] is None
+        assert record["nonzero_exact_fraction"] is None
+    svg = figure.render_zero_filled_svg([], summary, 0, "empty", "2026-09-05")
+    assert svg.count("No identity-matched count rows") == 2
+    path = tmp_path / "rows.csv"
+    figure.write_csv([], path)
+    assert len(path.read_text().splitlines()) == 1
+    assert "manual_count,ai_count_raw" in path.read_text()
+
+
 def test_marker_size_key_uses_the_same_radius_function_as_plot_bubbles():
     radii = [figure.bubble_radius(count) for count in figure.MARKER_SIZE_KEY_COUNTS]
 

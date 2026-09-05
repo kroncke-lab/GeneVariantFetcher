@@ -1,0 +1,27 @@
+{
+  "verified_at": "2026-09-05T16:31:26.172305+00:00",
+  "rebuild_path": "validation_runs/phenotype_failure_panel_20260905/recheck",
+  "identical_diagnostic_outputs_sha256": {
+    "all_papers.csv": "b03a6b0972820de140c47709c4847851d321869009cadc3d736388710fec73e0",
+    "panel.csv": "2762a7af851cffc4229a781bfda9ef2d0e6580b6a6a20dfeaf41a7b143bccb23",
+    "panel_rows.csv": "cc0e6c76de8916b9b2ad977e25e6fc037041f7a04f3159c89bcfa11aed0a6300",
+    "extra_predictions.csv": "f0cc206c4ca4336fb44ab7d12ad8c7f5f5d24ff6fc5b76fc15d963b652b9f9f6",
+    "stage_probes.json": "cc31bd9ff8d6414422844d98567ec8614f993569923d61a044bc83da9d478102"
+  },
+  "locked_metrics_identical": true,
+  "all_34_input_hashes_unchanged": true,
+  "source_inventory_note": "Original inventory is intentionally pre-recovery. Recheck inventories the upgraded corpus; do not overwrite the original.",
+  "recovered_sources": [
+    {
+      "pmid": "20031634",
+      "corpus_full_context_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+      "corpus_artifacts_sha256": "f07627bfb227495ec9865403c944f10521f80d27d010a5433d278d22864cdecd"
+    },
+    {
+      "pmid": "25163546",
+      "corpus_full_context_sha256": "0f0e5e20c39e03f857139d83fb81ba1ed87b26ccac0bdbd4a3066b58f06fcfc3",
+      "corpus_artifacts_sha256": "d55568f1911e0dd3157c60f96c98472a1b54e1a656693395709f19ae833312d2"
+    }
+  ],
+  "validation": "12 targeted tests passed before final documentation; Ruff and diff whitespace checks passed; 13 source table carrier partitions and five printed totals verified."
+}

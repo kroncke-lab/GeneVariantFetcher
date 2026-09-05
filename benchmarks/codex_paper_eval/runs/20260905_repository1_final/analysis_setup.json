@@ -1,0 +1,12 @@
+{
+  "classification": "fresh opened-calibration check of the second recovered repository body",
+  "runtime": {
+    "sha256": "cfd7fc6a4256f775bd9c8b91d662467c04ed01264df9ef4da921279edcef34bb",
+    "file_count": 251
+  },
+  "source_snapshot": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_repository1_final/frozen_corpus/source_snapshot.json",
+  "source_snapshot_sha256": "0bd616492f0bf5a095f4214710ec3fc25d2497278d1c593b50e534fafa0a8d29",
+  "test_budget_reserved_usd": 2,
+  "attempts": 1,
+  "unique_pmids": 1
+}

@@ -134,6 +134,7 @@ class UnpaywallClient:
                     "publisher": data.get("publisher"),
                     "pdf_url": None,
                     "best_oa_location": None,
+                    "oa_locations": data.get("oa_locations") or [],
                 }
 
                 # Find best OA location

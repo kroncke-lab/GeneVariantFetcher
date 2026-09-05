@@ -1,0 +1,207 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "KCNQ1": 2,
+    "RYR2": 3,
+    "SCN5A": 4
+  },
+  "gold_sources": {
+    "KCNQ1": "gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv",
+    "RYR2": "gene_variant_fetcher_gold_standard/normalized/RYR2_recall_input.csv",
+    "SCN5A": "gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/recall_campaign_20260905/mechanism_ablation.tsv",
+  "papers": [
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/20031634/20031634_artifacts.json",
+      "artifacts_sha256": "f07627bfb227495ec9865403c944f10521f80d27d010a5433d278d22864cdecd",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20031634",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+      "source_bytes": 47802,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 47646,
+            "distinct_variant_tokens": 10,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+            "sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+            "table_rows": 0
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 47646,
+          "distinct_variant_tokens": 10,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/20031634/20031634_FULL_CONTEXT.md",
+          "sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b",
+          "table_rows": 0
+        }
+      },
+      "source_sha256": "a77d00598a2ba48d83957962deaad60cb997e4c5a6b12f50d35d2b418208fc4b"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_artifacts.json",
+      "artifacts_sha256": "261784e5ffa2e24a088ee1862de54ae3e1487334eb6c7e60794db2d29ff072aa",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_1.jpg": "2337632bf21516a74c766c4043624fd57e4b2c5bef149b17bc6158784eca7c3e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_2.jpg": "e8b8e6de381e1f74ac1ae29bffef09b46b33269527d8f671dff20cd353fd4341",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_3.jpg": "2550614ce934e4f0f24186941d9b8ed15a9cef43df87f29c69ca24bc66c64973",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_4.jpg": "baf1e265825db884ef9af678459f8c612799619cb399540f91e8f3120587444d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_5.jpg": "11da8608a4f3bace2770531a6ad63361c6e2fc097a00a6bb7b287751b3eca200",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_6.jpg": "6430c870ca62a44d218e1a3c427c1fe320f88e8136967e7839b05075894470c6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_7.jpg": "ef271f3cc938eb02f1e5f7b7875c861c8876a55c86b27cab5a4e2bee087ddcb7",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_8.jpg": "8dd21a142ef0d6106769a5cbf38eeeb6195653059785a6ebc2810f2a892dc757",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_5.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_6.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_7.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_8.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_figures/fig_pmc_9.jpg"
+      ],
+      "gene": "KCNQ1",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/KCNQ1/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_artifacts.json",
+      "artifacts_sha256": "09c50710408c646b3fe5f957eb84d8325da8278b3ecf7ed367005b9fa348f2cc",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_figures/gr9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_figures/gr9.jpg"
+      ],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/RYR2/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_1.jpg": "2337632bf21516a74c766c4043624fd57e4b2c5bef149b17bc6158784eca7c3e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_2.jpg": "e8b8e6de381e1f74ac1ae29bffef09b46b33269527d8f671dff20cd353fd4341",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_3.jpg": "2550614ce934e4f0f24186941d9b8ed15a9cef43df87f29c69ca24bc66c64973",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_4.jpg": "baf1e265825db884ef9af678459f8c612799619cb399540f91e8f3120587444d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_5.jpg": "11da8608a4f3bace2770531a6ad63361c6e2fc097a00a6bb7b287751b3eca200",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_6.jpg": "6430c870ca62a44d218e1a3c427c1fe320f88e8136967e7839b05075894470c6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_7.jpg": "ef271f3cc938eb02f1e5f7b7875c861c8876a55c86b27cab5a4e2bee087ddcb7",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_8.jpg": "8dd21a142ef0d6106769a5cbf38eeeb6195653059785a6ebc2810f2a892dc757",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_9.jpg": "7aa0fa3cd39672b6e5068a9e470d4863063d5f1af24d594d6f8a967a67f88b6a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_4.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_5.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_6.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_7.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_8.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_figures/fig_pmc_9.jpg"
+      ],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "22677073",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+      "source_bytes": 61652,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 61451,
+            "distinct_variant_tokens": 65,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+            "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+            "table_rows": 111
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 61451,
+          "distinct_variant_tokens": 65,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/frozen_corpus/SCN5A/22677073/22677073_FULL_CONTEXT.md",
+          "sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619",
+          "table_rows": 111
+        }
+      },
+      "source_sha256": "ba7a32c626d3d93f7aef7b0e67cf04f57f9923173db24399d64da675ff465619"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-05T18:30:23.597759+00:00",
+  "run_id": "20260905_mechanism4_final",
+  "schema_version": 1,
+  "seed": 2026090501
+}

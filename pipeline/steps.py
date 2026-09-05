@@ -1345,12 +1345,22 @@ def download_fulltext(
 
     # Corpus cache first (authoritative, quality-gated cross-run cache), then
     # fall back to the legacy prior-run walk for anything not yet in corpus.
-    recovered_pmids = _consolidate_from_corpus(
-        pmids_to_download, harvest_dir, gene_symbol, _resolve_corpus_dir()
-    )
-    recovered_pmids |= _consolidate_prior_downloads(
-        pmids_to_download, harvest_dir, prior_output_base
-    )
+    frozen_manifest = os.environ.get("GVF_FROZEN_SOURCE_MANIFEST")
+    if frozen_manifest:
+        from pipeline.source_snapshot import stage_frozen_sources
+
+        if os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") != "1":
+            raise ValueError("frozen-source evaluation requires --gold-free-run")
+        recovered_pmids = stage_frozen_sources(
+            Path(frozen_manifest), gene_symbol, pmids_to_download, harvest_dir
+        )
+    else:
+        recovered_pmids = _consolidate_from_corpus(
+            pmids_to_download, harvest_dir, gene_symbol, _resolve_corpus_dir()
+        )
+        recovered_pmids |= _consolidate_prior_downloads(
+            pmids_to_download, harvest_dir, prior_output_base
+        )
 
     # Only send un-recovered PMIDs to the harvester
     remaining_pmids = [p for p in pmids_to_download if str(p) not in recovered_pmids]

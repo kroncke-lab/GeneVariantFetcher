@@ -1,0 +1,337 @@
+run_id,score_lane,gene,pmid,tp,fp,fn,phenotype_capture,phenotype_abs_error,phenotype_supplied_fields,phenotype_positive_supplied_fields,phenotype_wrong_supplied_fields,carriers_asserted,carriers_supplied,carriers_supplied_exact,carriers_wrong_supplied,carriers_abs_error,carriers_missing_positive_fields,carriers_missing_gold_zero_fields,carriers_overcount_units,carriers_supplied_undercount_units,carriers_identity_miss_error,carriers_abstained_error,carriers_supplied_error,affected_asserted,affected_supplied,affected_supplied_exact,affected_wrong_supplied,affected_abs_error,affected_missing_positive_fields,affected_missing_gold_zero_fields,affected_overcount_units,affected_supplied_undercount_units,affected_identity_miss_error,affected_abstained_error,affected_supplied_error,unaffected_asserted,unaffected_supplied,unaffected_supplied_exact,unaffected_wrong_supplied,unaffected_abs_error,unaffected_missing_positive_fields,unaffected_missing_gold_zero_fields,unaffected_overcount_units,unaffected_supplied_undercount_units,unaffected_identity_miss_error,unaffected_abstained_error,unaffected_supplied_error
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,30059973,182,3,3,all_na,445,0,0,0,185,181,181,0,72,4,0,0,0,3,69,0,185,0,0,0,445,185,0,0,0,3,442,0,185,0,0,0,0,0,185,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,14678125,35,9,6,all_na,289,0,0,0,41,0,0,0,289,41,0,0,0,34,255,0,41,0,0,0,289,41,0,0,0,34,255,0,41,0,0,0,0,0,41,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,14678125,0,0,41,all_na,289,0,0,0,41,0,0,0,289,41,0,0,0,289,0,0,41,0,0,0,289,41,0,0,0,289,0,0,41,0,0,0,0,0,41,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,20031634,0,0,13,all_na,108,0,0,0,13,0,0,0,108,13,0,0,0,108,0,0,13,0,0,0,60,13,0,0,0,60,0,0,13,0,0,0,48,13,0,0,0,48,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,MYBPC3,33673806,73,1,1,partial,93,55,55,1,74,73,72,1,3,1,0,0,2,1,0,2,74,55,54,1,93,19,0,0,2,1,90,2,74,0,0,0,0,0,74,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,26496715,41,6,1,all_na,82,0,0,0,42,41,41,0,1,1,0,0,0,1,0,0,42,0,0,0,82,42,0,0,0,1,81,0,42,0,0,0,0,0,42,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,25814417,1,0,0,all_supplied,68,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,24,0,0,24,0,0,0,24,1,1,0,1,44,0,0,0,44,0,0,44
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,19926015,35,4,5,partial,58,2,2,1,40,1,0,1,58,39,0,1,0,5,52,1,40,1,1,0,45,35,4,0,0,5,40,0,40,1,0,1,13,6,33,1,0,0,12,1
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,22677073,21,5,4,partial,41,2,2,0,25,3,3,0,40,22,0,0,0,6,34,0,25,2,2,0,41,23,0,0,0,6,35,0,25,0,0,0,0,0,25,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,22677073,21,5,4,partial,41,2,2,0,25,3,3,0,40,22,0,0,0,6,34,0,25,2,2,0,41,23,0,0,0,6,35,0,25,0,0,0,0,0,25,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,18808722,1,1,0,all_na,31,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,13,1,0,0,0,0,13,0,1,0,0,0,18,1,0,0,0,0,18,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,16764707,8,0,2,all_na,30,0,0,0,10,8,8,0,8,2,0,0,0,8,0,0,10,0,0,0,30,10,0,0,0,8,22,0,10,0,0,0,0,0,10,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,MYBPC3,21302287,25,5,3,partial,29,11,11,0,28,16,16,0,24,12,0,0,0,6,18,0,28,11,11,0,29,17,0,0,0,6,23,0,28,0,0,0,0,0,28,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,19398665,27,1,0,all_na,27,0,0,0,27,0,0,0,27,27,0,0,0,0,27,0,27,0,0,0,27,27,0,0,0,0,27,0,27,0,0,0,0,0,27,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,19398665,27,1,0,all_na,27,0,0,0,27,0,0,0,27,27,0,0,0,0,27,0,27,0,0,0,27,27,0,0,0,0,27,0,27,0,0,0,0,0,27,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,21129503,1,0,0,all_na,26,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,26,1,0,0,0,0,26,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,30403697,21,0,0,partial,26,8,7,1,21,11,8,3,19,10,0,0,4,0,15,4,21,6,6,0,17,15,0,0,0,0,17,0,20,2,1,1,9,7,11,0,1,0,8,1
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,15176425,0,0,5,all_na,26,0,0,0,5,0,0,0,26,5,0,0,0,26,0,0,5,0,0,0,20,5,0,0,0,20,0,0,5,0,0,0,6,2,3,0,0,6,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,15671429,4,8,0,all_na,25,0,0,0,4,0,0,0,25,4,0,0,0,0,25,0,4,0,0,0,10,4,0,0,0,0,10,0,4,0,0,0,15,1,3,0,0,0,15,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,15671429,4,1,0,partial,23,2,2,0,4,2,1,1,24,2,0,1,0,0,23,1,4,2,2,0,8,2,0,0,0,0,8,0,4,0,0,0,15,1,3,0,0,0,15,0
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,21954897,4,0,0,partial,23,1,1,0,4,4,4,0,0,0,0,0,0,0,0,0,4,1,1,0,23,3,0,0,0,0,23,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,27810088,1,0,0,all_na,20,0,0,0,1,0,0,0,20,1,0,0,0,0,20,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,20,1,0,0,0,0,20,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,25163546,0,0,20,all_na,20,0,0,0,20,0,0,0,20,20,0,0,0,20,0,0,20,0,0,0,20,20,0,0,0,20,0,0,20,0,0,0,0,0,20,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,19490267,2,3,0,partial,19,1,1,0,2,2,2,0,0,0,0,0,0,0,0,0,2,1,1,0,3,1,0,0,0,0,3,0,2,0,0,0,16,1,1,0,0,0,16,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,18808722,8,1,0,partial,18,2,2,0,8,5,5,0,3,3,0,0,0,0,3,0,8,2,2,0,8,6,0,0,0,0,8,0,8,0,0,0,10,2,6,0,0,0,10,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,21956039,16,0,0,partial,17,11,11,0,16,16,16,0,0,0,0,0,0,0,0,0,16,11,11,0,17,5,0,0,0,0,17,0,16,0,0,0,0,0,16,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,24667783,13,1,3,partial,17,7,7,0,16,12,11,1,7,4,0,0,1,5,1,1,16,7,7,0,13,8,1,0,0,3,10,0,16,0,0,0,4,3,13,0,0,2,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,27816319,3,1,0,all_na,17,0,0,0,3,0,0,0,17,3,0,0,0,0,17,0,3,0,0,0,14,3,0,0,0,0,14,0,3,0,0,0,3,1,2,0,0,0,3,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,16029385,1,0,0,all_na,16,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,9,1,0,0,0,0,9,0,1,0,0,0,7,1,0,0,0,0,7,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,12106943,0,0,16,all_na,16,0,0,0,16,0,0,0,16,16,0,0,0,16,0,0,16,0,0,0,16,16,0,0,0,16,0,0,16,0,0,0,0,0,16,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,9544837,5,0,0,all_na,15,0,0,0,5,0,0,0,15,5,0,0,0,0,15,0,5,0,0,0,14,5,0,0,0,0,14,0,5,0,0,0,1,1,4,0,0,0,1,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,26803770,1,0,0,all_na,15,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,10,1,0,0,0,0,10,0,1,0,0,0,5,1,0,0,0,0,5,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,10086971,3,1,1,all_na,14,0,0,0,4,0,0,0,15,4,0,0,0,4,11,0,4,0,0,0,10,4,0,0,0,2,8,0,4,0,0,0,4,2,2,0,0,2,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,17905336,0,0,11,all_na,13,0,0,0,11,0,0,0,13,11,0,0,0,13,0,0,11,0,0,0,12,10,1,0,0,12,0,0,11,0,0,0,1,1,10,0,0,1,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,17875969,1,0,0,all_na,13,0,0,0,1,1,0,1,3,0,0,3,0,0,0,3,1,0,0,0,13,1,0,0,0,0,13,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,15176425,0,0,7,all_na,13,0,0,0,7,0,0,0,13,7,0,0,0,13,0,0,7,0,0,0,13,7,0,0,0,13,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,22222782,7,0,0,all_na,12,0,0,0,7,5,3,2,7,2,0,0,4,0,3,4,7,0,0,0,9,7,0,0,0,0,9,0,7,0,0,0,3,3,4,0,0,0,3,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,25650408,0,0,12,all_na,12,0,0,0,12,0,0,0,12,12,0,0,0,12,0,0,12,0,0,0,12,12,0,0,0,12,0,0,12,0,0,0,0,0,12,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,26746457,10,32,0,all_na,11,0,0,0,10,0,0,0,11,10,0,0,0,0,11,0,10,0,0,0,3,3,7,0,0,0,3,0,10,0,0,0,8,7,3,0,0,0,8,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,19632626,1,63,0,all_supplied,11,2,2,2,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,6,0,0,6,0,0,0,6,1,1,0,1,5,0,0,0,5,0,0,5
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,31520628,2,2,7,all_na,11,0,0,0,9,0,0,0,11,9,0,0,0,9,2,0,9,0,0,0,11,9,0,0,0,9,2,0,9,0,0,0,0,0,9,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,19216760,4,0,1,partial,11,2,2,1,5,2,1,1,9,3,0,1,0,2,6,1,5,2,1,1,11,3,0,0,3,2,6,3,5,0,0,0,0,0,5,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,22222782,7,0,0,partial,11,1,1,0,7,2,1,1,10,5,0,0,1,0,9,1,7,1,1,0,8,6,0,0,0,0,8,0,7,0,0,0,3,3,4,0,0,0,3,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,15028074,1,0,0,all_na,11,0,0,0,1,0,0,0,11,1,0,0,0,0,11,0,1,0,0,0,9,1,0,0,0,0,9,0,1,0,0,0,2,1,0,0,0,0,2,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,19184172,3,0,1,all_na,10,0,0,0,4,0,0,0,12,4,0,0,0,2,10,0,4,0,0,0,5,4,0,0,0,1,4,0,4,0,0,0,5,4,0,0,0,1,4,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,20181576,2,1,0,all_supplied,10,4,3,4,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,4,0,0,4,0,0,0,4,2,2,0,2,6,0,0,0,6,0,0,6
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,27114410,0,0,9,all_na,10,0,0,0,9,0,0,0,10,9,0,0,0,10,0,0,9,0,0,0,10,9,0,0,0,10,0,0,9,0,0,0,0,0,9,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,22677073,12,3,0,partial,10,6,6,0,12,6,6,0,10,6,0,0,0,0,10,0,12,6,6,0,10,6,0,0,0,0,10,0,12,0,0,0,0,0,12,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,21185499,0,1,2,all_na,10,0,0,0,2,0,0,0,10,2,0,0,0,10,0,0,2,0,0,0,7,2,0,0,0,7,0,0,2,0,0,0,3,2,0,0,0,3,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,9702906,1,0,0,all_na,10,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,10,1,0,0,0,0,10,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,23424222,3,0,0,all_na,10,0,0,0,3,0,0,0,10,3,0,0,0,0,10,0,3,0,0,0,6,3,0,0,0,0,6,0,3,0,0,0,4,2,1,0,0,0,4,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,21308345,2,0,0,all_na,9,0,0,0,2,0,0,0,9,2,0,0,0,0,9,0,2,0,0,0,8,2,0,0,0,0,8,0,2,0,0,0,1,1,1,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,29214556,1,3,1,all_na,9,0,0,0,2,0,0,0,9,2,0,0,0,4,5,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,9,2,0,0,0,4,5,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,30546600,1,1,0,all_na,9,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,5,1,0,0,0,0,5,0,1,0,0,0,4,1,0,0,0,0,4,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,22685113,10,7,0,partial,9,1,1,0,10,9,9,0,1,1,0,0,0,0,1,0,10,1,1,0,9,9,0,0,0,0,9,0,10,0,0,0,0,0,10,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,12402336,0,2,9,all_na,9,0,0,0,9,0,0,0,9,9,0,0,0,9,0,0,9,0,0,0,9,9,0,0,0,9,0,0,9,0,0,0,0,0,9,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,17531263,1,0,0,all_na,9,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,7,1,0,0,0,0,7,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,19070294,1,0,0,all_na,9,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,9,1,0,0,0,0,9,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,22677073,10,2,1,partial,9,9,9,9,11,9,9,0,2,2,0,0,0,1,1,0,11,9,0,9,9,0,2,9,0,0,0,9,11,0,0,0,0,0,11,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,29447731,0,0,9,all_na,9,0,0,0,9,0,0,0,9,9,0,0,0,9,0,0,9,0,0,0,9,9,0,0,0,9,0,0,9,0,0,0,0,0,9,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,21131640,0,0,9,all_na,9,0,0,0,9,0,0,0,9,9,0,0,0,9,0,0,9,0,0,0,8,8,1,0,0,8,0,0,9,0,0,0,1,1,8,0,0,1,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,21167004,2,1,1,all_na,9,0,0,0,3,0,0,0,9,2,1,0,0,3,6,0,3,0,0,0,8,2,1,0,0,2,6,0,3,0,0,0,1,1,2,0,0,1,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,18580685,1,0,0,all_na,8,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,8,1,0,0,0,0,8,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,22613981,1,0,0,all_na,8,0,0,0,1,0,0,0,8,1,0,0,0,0,8,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,6,1,0,0,0,0,6,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,17971661,0,0,1,all_na,8,0,0,0,1,0,0,0,8,1,0,0,0,8,0,0,1,0,0,0,7,1,0,0,0,7,0,0,1,0,0,0,1,1,0,0,0,1,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,18580685,1,0,0,all_na,8,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,8,1,0,0,0,0,8,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,20981542,1,0,0,all_na,8,0,0,0,1,1,0,1,2,0,0,2,0,0,0,2,1,0,0,0,7,1,0,0,0,0,7,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,18463390,0,0,1,all_na,8,0,0,0,1,0,0,0,8,1,0,0,0,8,0,0,1,0,0,0,6,1,0,0,0,6,0,0,1,0,0,0,2,1,0,0,0,2,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,17971661,0,0,1,all_na,8,0,0,0,1,0,0,0,8,1,0,0,0,8,0,0,1,0,0,0,7,1,0,0,0,7,0,0,1,0,0,0,1,1,0,0,0,1,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,18675227,3,0,0,all_na,7,0,0,0,3,0,0,0,7,3,0,0,0,0,7,0,3,0,0,0,1,1,2,0,0,0,1,0,3,0,0,0,6,3,0,0,0,0,6,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,33315912,1,0,0,all_supplied,7,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,2,0,0,2,0,0,0,2,1,1,0,1,5,0,0,0,5,0,0,5
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,22882672,1,0,0,partial,7,1,1,1,1,1,0,1,7,0,0,0,7,0,0,7,1,1,0,1,2,0,0,0,2,0,0,2,1,0,0,0,5,1,0,0,0,0,5,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,14714110,1,7,0,all_na,7,0,0,0,1,0,0,0,7,1,0,0,0,0,7,0,1,0,0,0,6,1,0,0,0,0,6,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,24103226,0,0,7,all_na,7,0,0,0,7,0,0,0,7,7,0,0,0,7,0,0,7,0,0,0,7,7,0,0,0,7,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,16843546,4,0,0,partial,7,2,2,1,4,3,1,2,6,1,0,0,3,0,3,3,4,2,1,1,7,2,0,0,1,0,6,1,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,29759671,11,0,0,partial,7,4,4,0,11,11,11,0,0,0,0,0,0,0,0,0,11,4,4,0,7,7,0,0,0,0,7,0,11,0,0,0,0,0,11,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,25819988,1,0,0,all_supplied,6,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,3,0,0,0,3,0,0,3,1,1,0,1,3,0,0,3,0,0,0,3
+20260903_protocol_cont120_01_candidate,paper-derived primary,APOE,23990795,2,0,0,partial,6,2,1,0,2,2,2,0,0,0,0,0,0,0,0,0,2,1,1,0,2,1,0,0,0,0,2,0,2,1,1,0,4,1,0,0,0,0,4,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,12442276,3,3,0,partial,6,4,4,4,3,3,3,0,0,0,0,0,0,0,0,0,3,2,0,2,4,1,0,0,2,0,2,2,3,2,0,2,2,0,1,2,0,0,0,2
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,23094885,1,0,0,partial,6,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,5,1,0,0,0,0,5,0,1,1,0,1,1,0,0,1,0,0,0,1
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,17905336,1,0,5,partial,6,1,1,1,6,1,0,1,6,5,0,0,1,5,0,1,6,1,0,1,6,5,0,0,1,5,0,1,6,0,0,0,0,0,6,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,15176425,0,0,6,all_na,6,0,0,0,6,0,0,0,25,6,0,0,0,25,0,0,6,0,0,0,6,6,0,0,0,6,0,0,6,0,0,0,0,0,6,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,26129877,2,0,0,partial,6,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,2,0,0,0,2,2,0,0,0,4,2,0,0,0,0,4,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,11463728,1,0,0,all_na,6,0,0,0,1,0,0,0,6,1,0,0,0,0,6,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,4,1,0,0,0,0,4,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,33082985,2,1,1,partial,5,3,3,2,3,2,0,2,3,1,0,2,0,1,0,2,3,2,0,2,4,1,0,3,0,1,0,3,3,1,1,0,1,1,1,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,18285261,4,0,1,all_na,5,0,0,0,5,0,0,0,5,5,0,0,0,1,4,0,5,0,0,0,5,5,0,0,0,1,4,0,5,0,0,0,0,0,5,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,20167303,4,0,0,partial,5,2,2,1,4,4,4,0,0,0,0,0,0,0,0,0,4,1,0,1,4,3,0,1,0,0,3,1,4,1,1,0,1,1,2,0,0,0,1,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,23200271,2,0,0,all_na,5,0,0,0,2,1,1,0,2,1,0,0,0,0,2,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,3,2,0,0,0,0,3,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,27232914,3,1,2,all_na,5,0,0,0,5,0,0,0,5,5,0,0,0,2,3,0,5,0,0,0,5,5,0,0,0,2,3,0,5,0,0,0,0,0,5,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,25471708,8,1,0,partial,4,4,4,4,8,7,6,1,3,1,0,0,1,0,2,1,8,4,0,4,4,0,4,4,0,0,0,4,8,0,0,0,0,0,8,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,25463374,1,2,0,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,33536282,1,10,0,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,3,1,0,0,0,0,3,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,34661651,4,0,0,partial,4,1,1,0,4,2,2,0,3,2,0,0,0,0,3,0,4,1,1,0,4,3,0,0,0,0,4,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,15828879,1,1,0,all_supplied,4,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,2,0,0,0,2,0,0,2,1,1,0,1,2,0,0,2,0,0,0,2
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,25236808,0,1,1,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,4,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,3,1,0,0,0,3,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,BRCA1,10528853,0,0,13,all_na,4,0,0,0,13,0,0,0,56,13,0,0,0,56,0,0,13,0,0,0,4,4,9,0,0,4,0,0,13,0,0,0,0,0,13,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,16969682,0,0,1,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,4,0,0,1,0,0,0,4,1,0,0,0,4,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,18774102,0,2,2,all_na,4,0,0,0,2,0,0,0,4,2,0,0,0,4,0,0,2,0,0,0,4,2,0,0,0,4,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,25825456,1,0,0,all_na,4,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,29978770,1,0,0,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,2,1,0,0,0,0,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,31484877,2,0,0,partial,4,1,1,0,2,0,0,0,5,2,0,0,0,0,5,0,2,1,1,0,1,1,0,0,0,0,1,0,2,0,0,0,3,2,0,0,0,0,3,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,17227473,1,3,3,partial,4,1,1,0,4,1,1,0,4,3,0,0,0,4,0,0,4,1,1,0,4,3,0,0,0,4,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23612926,2,2,0,all_na,4,0,0,0,2,0,0,0,4,2,0,0,0,0,4,0,2,0,0,0,4,2,0,0,0,0,4,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,24439875,1,1,0,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,28217227,1,0,0,all_na,4,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,11804990,0,0,2,all_na,4,0,0,0,2,0,0,0,4,2,0,0,0,4,0,0,2,0,0,0,4,2,0,0,0,4,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,12566525,0,0,4,all_na,4,0,0,0,4,0,0,0,4,4,0,0,0,4,0,0,4,0,0,0,4,4,0,0,0,4,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,29062695,1,0,0,partial,4,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,1,0,1,2,0,0,2,0,0,0,2
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,29330128,1,6,0,all_na,4,0,0,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,22519458,4,0,0,partial,4,2,1,0,4,4,3,1,1,0,0,0,1,0,0,1,4,1,1,0,4,3,0,0,0,0,4,0,4,1,1,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,20025708,1,0,0,all_na,4,0,0,0,1,1,0,1,1,0,0,0,1,0,0,1,1,0,0,0,4,1,0,0,0,0,4,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,22764740,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,21070882,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,2,1,0,0,0,0,2,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,28491547,1,0,0,all_supplied,3,2,1,1,1,1,0,1,3,0,0,0,3,0,0,3,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,3,0,0,0,3,0,0,3
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,29350269,0,0,3,all_na,3,0,0,0,3,0,0,0,3,3,0,0,0,3,0,0,3,0,0,0,3,3,0,0,0,3,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,25171853,2,0,0,all_supplied,3,4,4,2,2,2,0,2,3,0,0,3,0,0,0,3,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,3,0,0,3,0,0,0,3
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,10790218,1,0,1,all_na,3,0,0,0,2,0,0,0,3,2,0,0,0,1,2,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,3,2,0,0,0,1,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,20167303,1,2,1,partial,3,2,2,0,2,1,0,1,4,1,0,0,1,3,0,1,2,1,1,0,2,1,0,0,0,2,0,0,2,1,1,0,1,1,0,0,0,1,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,15051636,2,0,0,all_na,3,0,0,0,2,0,0,0,3,2,0,0,0,0,3,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,1,1,1,0,0,0,1,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,22675453,1,1,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23503384,4,0,0,all_na,3,0,0,0,4,4,3,1,1,0,0,1,0,0,0,1,4,0,0,0,3,3,1,0,0,0,3,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,27816319,2,0,0,all_na,3,0,0,0,2,0,0,0,3,2,0,0,0,0,3,0,2,0,0,0,3,2,0,0,0,0,3,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,28018021,1,6,1,partial,3,2,2,0,2,1,1,0,3,1,0,0,0,3,0,0,2,1,1,0,1,1,0,0,0,1,0,0,2,1,1,0,2,1,0,0,0,2,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,27839804,1,1,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,10727653,3,0,0,all_na,3,0,0,0,3,0,0,0,3,3,0,0,0,0,3,0,3,0,0,0,3,3,0,0,0,0,3,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,17081365,3,0,0,all_na,3,0,0,0,3,0,0,0,3,3,0,0,0,0,3,0,3,0,0,0,3,3,0,0,0,0,3,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,28779003,2,1,1,all_na,3,0,0,0,3,0,0,0,3,3,0,0,0,1,2,0,3,0,0,0,3,3,0,0,0,1,2,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,19215240,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,26831020,1,1,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,29330128,1,5,0,all_na,3,0,0,0,1,0,0,0,5,1,0,0,0,0,5,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,27491078,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,24599044,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,25341504,1,0,0,all_na,3,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,30116708,1,0,0,all_na,3,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,3,1,0,0,0,0,3,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,16155735,1,0,1,all_na,2,0,0,0,2,1,1,0,1,1,0,0,0,1,0,0,2,0,0,0,2,2,0,0,0,1,1,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,22052944,1,0,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,30246897,3,0,0,all_supplied,2,6,3,2,3,3,3,0,0,0,0,0,0,0,0,0,3,3,2,1,1,0,0,1,0,0,0,1,3,3,2,1,1,0,0,0,1,0,0,1
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,29677589,2,0,0,partial,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,2,0,0,0,2,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,29876285,1,1,0,partial,2,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,2,0,0,0,2,0,0,2
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,15466642,8,0,0,partial,2,8,8,1,8,8,7,1,2,0,0,0,2,0,0,2,8,8,7,1,2,0,0,0,2,0,0,2,8,0,0,0,0,0,8,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,28798025,6,0,0,partial,2,4,4,0,6,4,4,0,2,2,0,0,0,0,2,0,6,4,4,0,2,2,0,0,0,0,2,0,6,0,0,0,0,0,6,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,21288276,1,1,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,24581105,1,0,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,19160088,2,0,0,all_na,2,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,22407026,2,0,0,all_na,2,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,26173150,1,0,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,17224687,2,3,1,partial,2,4,3,0,3,2,2,0,2,1,0,0,0,2,0,0,3,2,2,0,1,1,0,0,0,1,0,0,3,2,2,0,1,1,0,0,0,1,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,16155735,1,0,0,partial,2,1,1,1,1,1,0,1,2,0,0,0,2,0,0,2,1,1,0,1,1,0,0,0,1,0,0,1,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,18452873,2,1,0,partial,2,2,2,2,2,2,0,2,2,0,0,0,2,0,0,2,2,2,0,2,2,0,0,0,2,0,0,2,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,22407026,3,0,0,partial,2,2,2,2,3,0,0,0,0,0,3,0,0,0,0,0,3,2,0,2,2,0,1,2,0,0,0,2,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,22677073,12,0,0,partial,2,18,11,1,12,11,10,1,2,1,0,1,0,0,1,1,12,11,10,1,2,1,0,1,0,0,1,1,12,7,7,0,0,0,5,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23810369,1,0,0,all_na,2,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,24581105,1,0,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,29709244,1,33,0,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,16470702,0,0,1,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,29677589,2,0,0,partial,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,2,0,0,0,2,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,17062961,1,0,0,all_na,2,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,17556193,2,0,2,partial,2,2,2,0,4,2,2,0,2,2,0,0,0,2,0,0,4,2,2,0,2,2,0,0,0,2,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,23936059,2,1,0,all_na,2,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,26498160,2,2,0,all_na,2,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,BRCA1,18627636,0,18,1,all_na,2,0,0,0,1,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,2,1,0,0,0,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,14527360,2,0,0,all_na,2,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,20138589,1,0,0,all_na,2,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,29544605,2,0,0,partial,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,2,0,0,0,2,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,29922582,1,0,0,all_supplied,2,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,0,0,0,1,0,0,1
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,27646203,1,0,0,all_na,2,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,15057319,2,0,0,all_na,2,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,27784737,2,0,0,all_na,2,0,0,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,2,2,0,0,0,0,2,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,19065538,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,21779290,1,2,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,22314138,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,23917959,1,0,0,partial,1,1,1,0,1,1,0,1,1,0,0,0,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,26118593,1,0,0,all_na,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,29016797,2,0,0,partial,1,1,1,1,2,2,0,2,4,0,0,4,0,0,0,4,2,1,0,1,1,0,1,1,0,0,0,1,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,16155735,1,1,0,all_na,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,29851656,1,0,0,partial,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,22178870,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,30835254,0,0,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,32866913,1,0,0,all_supplied,1,2,2,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,33640691,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,35663620,1,0,0,all_na,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,17675083,2,1,0,partial,1,1,1,0,2,1,1,0,1,1,0,0,0,0,1,0,2,1,1,0,1,1,0,0,0,0,1,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,19406494,1,8,0,all_supplied,1,2,2,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,15670565,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,16155735,2,0,0,partial,1,1,1,0,2,2,2,0,0,0,0,0,0,0,0,0,2,1,1,0,1,1,0,0,0,0,1,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,18452873,0,1,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,11021476,1,0,0,partial,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,29876285,1,0,0,partial,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,1,0,0,0,1,0,0,1
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,30462975,0,1,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,26018045,1,5,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,33640691,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,19632629,1,4,0,all_supplied,1,2,2,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,20219395,0,0,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23683917,2,1,0,partial,1,1,1,0,2,2,1,1,1,0,0,1,0,0,0,1,2,1,1,0,1,1,0,0,0,0,1,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,24096004,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,24972929,1,17,0,all_na,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,26401487,2,2,0,all_na,1,0,0,0,2,0,0,0,1,1,1,0,0,0,1,0,2,0,0,0,1,1,1,0,0,0,1,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,26776555,1,3,0,partial,1,1,1,1,1,1,0,1,1,0,0,0,1,0,0,1,1,1,0,1,1,0,0,0,1,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,27684715,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,30218094,1,4,0,partial,1,1,1,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,29857160,1,0,0,all_supplied,1,2,2,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,30508507,1,2,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,33664273,1,4,0,all_na,1,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,12574983,0,0,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,15579534,1,0,0,partial,1,1,1,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,28469501,1,2,0,all_na,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,28637969,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,28638671,1,0,0,partial,1,1,1,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,14642688,0,0,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,15572050,0,1,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,26022375,0,0,1,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,26168993,1,0,0,partial,1,1,1,0,1,1,0,1,1,0,0,0,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,27868350,1,1,0,all_supplied,1,2,2,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,32508908,1,1,0,all_na,1,0,0,0,1,0,0,0,2,1,0,0,0,0,2,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,33498651,1,0,0,all_supplied,1,2,2,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,22710484,1,1,0,all_supplied,1,2,2,1,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,26129877,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,27281089,1,0,0,all_na,1,0,0,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,15500450,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,19034806,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,22067087,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,22338672,2,1,0,partial,0,2,2,0,2,1,1,0,0,0,1,0,0,0,0,0,2,1,1,0,0,0,1,0,0,0,0,0,2,1,1,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,23936059,2,0,0,all_na,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,29121719,0,0,3,all_na,0,0,0,0,3,0,0,0,3,3,0,0,0,3,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,29650123,1,0,21,all_na,0,0,0,0,22,0,0,0,22,22,0,0,0,21,1,0,22,0,0,0,0,0,22,0,0,0,0,0,22,0,0,0,0,0,22,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNH2,30036649,5,0,0,partial,0,6,5,0,5,5,5,0,0,0,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,5,1,1,0,0,0,4,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,11351021,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,18567635,1,9,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,19056345,4,0,0,all_na,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,19114714,3,0,0,all_na,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,19687231,0,1,2,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,20348026,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,20368164,1,2,1,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,20959120,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,27114410,1,0,1,all_na,0,0,0,0,2,0,0,0,2,2,0,0,0,1,1,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,28739325,1,0,0,all_na,0,0,0,0,1,1,0,1,2,0,0,2,0,0,0,2,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,31293497,1,2,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),KCNQ1,32168391,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,16517285,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,17161793,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,19398417,1,0,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,20395638,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,21652165,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,25435091,1,0,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,25500949,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),RYR2,27839804,1,1,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,15898185,1,0,10,all_na,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,16301357,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,16929919,2,2,0,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,19305639,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,19549036,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,20038812,1,1,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,20539757,11,14,0,all_na,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,21193062,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,22101522,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,22966897,0,3,2,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,23538678,1,0,0,partial,0,1,1,0,1,1,0,1,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,24573164,20,7,0,all_na,0,0,0,0,20,0,0,0,0,0,20,0,0,0,0,0,20,0,0,0,0,0,20,0,0,0,0,0,20,0,0,0,0,0,20,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,26820365,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,28087622,6,5,1,all_na,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,28339995,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,29544605,6,1,0,partial,0,6,6,0,6,6,6,0,0,0,0,0,0,0,0,0,6,6,6,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,6,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,29709101,11,3,0,all_supplied,0,22,18,0,11,11,11,0,0,0,0,0,0,0,0,0,11,11,11,0,0,0,0,0,0,0,0,0,11,11,11,0,0,0,0,0,0,0,0,0
+20260902_false_zero_recovery_gold118,trusted legacy (paper plus linkage),SCN5A,32533946,83,44,0,all_na,0,0,0,0,83,0,0,0,0,0,83,0,0,0,0,0,83,0,0,0,0,0,83,0,0,0,0,0,83,0,0,0,0,0,83,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNH2,27555138,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,15528464,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,16155735,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,19056345,4,0,0,all_na,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,19160088,1,0,0,all_na,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,19348785,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,19880070,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,21952006,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,22539601,1,0,6,all_na,0,0,0,0,7,0,0,0,17,7,0,0,0,8,9,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,25444851,1,3,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,26481773,0,0,1,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,29488358,1,4,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,KCNQ1,31293497,1,1,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,17199967,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,24793461,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,24978818,3,0,0,partial,0,4,4,0,3,3,2,1,1,0,0,1,0,0,0,1,3,3,3,0,0,0,0,0,0,0,0,0,3,1,1,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,30296944,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,RYR2,30308486,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,10532948,1,1,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,12068034,1,2,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,12454206,2,0,0,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,14500339,1,1,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,17016421,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,17445919,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,17675083,2,1,0,partial,0,2,2,0,2,2,1,1,4,0,0,4,0,0,0,4,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,18599870,2,0,0,partial,0,2,2,0,2,2,2,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,19669871,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,19719504,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,19808432,1,1,0,all_supplied,0,2,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,20451667,1,0,2,all_na,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,20950709,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,21498565,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,21677263,0,0,1,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,22129298,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23791817,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,23805106,9,0,0,all_na,0,0,0,0,9,0,0,0,0,0,9,0,0,0,0,0,9,0,0,0,0,0,9,0,0,0,0,0,9,0,0,0,0,0,9,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,24951663,1,3,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,25923670,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,26131924,2,1,0,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,27243970,1,0,0,all_na,0,0,0,0,1,1,0,1,3,0,0,3,0,0,0,3,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,27401036,0,0,1,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,27707468,7,0,0,partial,0,7,7,0,7,7,7,0,0,0,0,0,0,0,0,0,7,7,7,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,28491738,1,0,0,all_supplied,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,29514831,4,0,0,all_na,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_cont120_01_candidate,paper-derived primary,SCN5A,8917568,2,0,1,all_na,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,15466642,2,1,0,partial,0,2,2,0,2,2,2,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,15851119,4,9,0,partial,0,4,4,0,4,4,4,0,0,0,0,0,0,0,0,0,4,4,4,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,22067087,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,23936059,2,0,0,all_na,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,28491588,2,1,0,all_na,0,0,0,0,2,2,0,2,5,0,0,5,0,0,0,5,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNH2,29881912,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,12710526,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,21138517,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,KCNQ1,23092362,3,0,0,all_na,0,0,0,0,3,0,0,0,26,3,0,0,0,0,26,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,15466642,8,0,0,partial,0,8,8,0,8,8,8,0,0,0,0,0,0,0,0,0,8,8,8,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,RYR2,26230511,2,0,0,partial,0,3,2,0,2,2,2,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,2,1,1,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,14654377,1,1,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,19272188,1,2,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,23283979,2,2,0,all_na,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,23349452,1,2,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed01_candidate,paper-derived primary,SCN5A,23414114,1,21,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNH2,29752375,8,1,0,all_na,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0,8,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,KCNQ1,20421371,7,15,0,all_na,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,21652165,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,RYR2,29544605,12,0,0,partial,0,12,12,0,12,12,12,0,0,0,0,0,0,0,0,0,12,12,12,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,12,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,10200053,1,0,0,all_supplied,0,2,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,18242854,1,0,0,all_na,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,20395683,1,0,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,22835975,1,0,0,all_na,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,23168001,1,1,0,partial,0,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,28815794,1,0,0,all_supplied,0,2,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+20260903_protocol_mixed02_candidate,paper-derived primary,SCN5A,29544605,6,0,0,partial,0,6,6,0,6,6,6,0,0,0,0,0,0,0,0,0,6,6,6,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,6,0,0,0,0,0

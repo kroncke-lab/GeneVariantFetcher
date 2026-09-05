@@ -49,7 +49,8 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │   Sources (priority order):                                                      │
 │     1. PMC OA (Open Access) → BioC XML                                           │
 │     2. Publisher APIs (Elsevier, Springer, Wiley) → XML/PDF                      │
-│     3. Unpaywall → OA PDF links                                                  │
+│     3. Indexed copies (Unpaywall / OpenAlex / HAL) → verified article PDF        │
+│     4. Browser HTML fallback (when enabled)                                     │
 │   OUTPUT: pmc_fulltext/{PMID}_FULL_CONTEXT.md                                    │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -258,7 +259,7 @@ Filtered PMIDs
     │       ├─→ Springer API ─→ SpringerLink HTML/PDF
     │       └─→ Wiley API ────→ Wiley XML/PDF
     │
-    └─→ Unpaywall ────────────→ OA PDF location
+    └─→ Repository fallback ─→ Unpaywall / OpenAlex locations → HAL DOI search
             │
             ▼
     Format Conversion (XML/PDF/HTML → Markdown)
@@ -270,7 +271,37 @@ Filtered PMIDs
     {PMID}_FULL_CONTEXT.md (unified document)
 ```
 
+`harvesting/repository_pdf_fallback.py` runs after failed publisher retrieval
+and any enabled browser fallback, even if PubMed marked the article free, and
+also covers unavailable/invalid PMC
+bodies. `scripts/fetch_paywalled.py` uses the same fallback before Scholar.
+Exact DOI metadata binds candidate URLs to the paper; the attached article's
+title must match independently, excluding repository citation covers. It tries
+alternate PDFs and repository landing links, retains PDF hashes and page text,
+and writes ordinary FULL_CONTEXT/CLEANED/artifact inputs for corpus sync.
+Recovered bodies explicitly carry incomplete supplement status; they are usable
+for extraction but remain eligible for acquisition retries. This path makes no
+model calls. Live source-only validation and limits:
+`docs/evidence/repository_fallback_20260905/README.md`.
+
 ### Stage 3: Text → Variants
+
+Extraction and SQLite migration share the protein-notation validator. It also
+preserves explicit adjacent-position insertion shorthand such as
+`p.1570-Phe1571insIle` as `p.1570_F1571insI`, keeping the verbatim source label.
+The missing left reference residue remains unspecified; no cDNA allele or
+count is inferred. Existing gene ownership, position, provenance and count
+guards still apply. The same-response replay and fresh calibration are in
+`docs/evidence/recall_campaign_20260905/README.md`.
+
+Production-evaluation setup snapshots selected source text, metadata and local
+figure/supplement/PDF assets in each run. `GVF_FROZEN_SOURCE_MANIFEST` is allowed
+only with gold-free execution; staging verifies every listed asset hash and
+fails on missing or altered inputs. It skips initial harvesting and prior-run
+source substitution. PubMed metadata and downstream preprocessing remain
+ordinary pipeline steps, so `rebind_production_sources.py` still records the
+actual extraction rendering before locking. Ordinary production cache and
+incomplete-supplement retry policy are unchanged.
 
 ```
 {PMID}_FULL_CONTEXT.md

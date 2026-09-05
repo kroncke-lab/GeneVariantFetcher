@@ -1,0 +1,25 @@
+[
+  {
+    "url": "https://hal.science/hal-00750425/document",
+    "final_url": "https://univ-brest.hal.science/hal-00750425/document",
+    "status": 200,
+    "bytes": 959588,
+    "pdf": true,
+    "path": "validation_runs/phenotype_failure_panel_20260905/source_probe/20031634_d80be0d.pdf",
+    "sha256": "201e39aa350d5b03f2266de2c12fe6a40e63f8de4406834d41e750701b872181"
+  },
+  {
+    "url": "https://core.ac.uk/download/53007812.pdf",
+    "final_url": "https://core.ac.uk/download/53007812.pdf",
+    "status": 403,
+    "bytes": 5489,
+    "pdf": false
+  },
+  {
+    "url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCGENETICS.109.853374",
+    "final_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCGENETICS.109.853374",
+    "status": 403,
+    "bytes": 5676,
+    "pdf": false
+  }
+]

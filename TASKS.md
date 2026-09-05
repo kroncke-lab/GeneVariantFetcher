@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-04.
+Last reviewed: 2026-09-05.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -30,7 +30,32 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
 
 ## Active $100 improvement goal
 
-- [ ] **Mixed-gold tranche campaign (started 2026-09-03; Brett's /goal: 3-4
+New implementation authorization: 2026-09-05.
+
+- [x] Implement supported recall improvements on main with Claude, Grok and
+      Agy CLI review. The new campaign ran 15 fresh attempts over nine papers:
+      ten-attempt prototype, four-attempt source-matched final ablation, and
+      the second recovered body. SCN5A 20031634 improves from 0/0/13 to
+      **11/2/2 TP/FP/FN**, with eight matched A/U pairs all exact. The final
+      four-attempt arm keeps 55 TP / 6 FN while reducing prototype extras from
+      11 to 6. All three speculative parser rules were withdrawn; retain the
+      source insertion validator, repository fallback and measurement fixes.
+      SCN5A 25163546 remains 0/0/20: recover its actual roster before spending
+      on another reader. Test proxy **$4.692**; Claude consult **$3.072**;
+      Grok/Agy billing unavailable. The old $84.035 campaign stays separate.
+      This is opened calibration, not a passing discovery/confirmation or
+      headline promotion. Final offline suite: **2,890 passed**. Evidence:
+      `docs/evidence/recall_campaign_20260905/README.md`.
+- [x] Correct the old R594Q root-cause attribution. Its model returned
+      `variants=[]`; a narrative mention is not an extracted identity. The
+      diagnostic now uses structured response identity fields. Rebuilt the
+      opened continuation-01 diagnostic in the new campaign evidence directory,
+      preserving the old report and all 34 original audit hashes. Malformed
+      JSON without parseable variant rows still needs direct trace inspection.
+
+**Previous $100 campaign and follow-up evidence**
+
+- [x] **Mixed-gold tranche campaign (started 2026-09-03; Brett's /goal: 3-4
       tranches, recall up and MAE down, papers only, grok 4.6 + agy advice).**
       **Cohort-size correction 2026-09-03:** Brett specified that each tranche
       should be approximately the 118-attempt Gate-2 size. The already-scored
@@ -43,7 +68,8 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       the *identical* candidate runtime on the next unopened tranche.
       Acquisition ceiling measured first (`docs/evidence/
       gold_source_presence_sweep_20260903.md`: 15.8% hard / 28.7% wide of
-      runnable gold rows; supplements are NOT where the missing gold is).
+      runnable gold rows; this measures identity presence, not completeness
+      of count-bearing tables or phenotype evidence).
       Tranche 01 baseline locked: paper-derived 155/61/87 (recall 64.0%,
       precision 71.8%); 70/87 misses acquisition, 5 reachable
       (`scripts/recall_audit/fn_root_cause.py`). Candidate `b56f469f` (six
@@ -121,11 +147,59 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       `docs/evidence/current_protocol_diagnostic_20260904/`. The formal
       `gold_120b` tier remains registered but unrun; no paid arm was opened.
       Full unit suite: 2,843 passed.
-- [ ] **Work the source-acquisition/figure queue before another extraction
-      candidate.** Start with the ranked no-source/stub/absent-byte papers in
-      `docs/evidence/current_protocol_diagnostic_20260904/problem_papers.csv`,
-      define a deterministic paper-agnostic acquisition or figure-reading
-      candidate, and measure it on locked bytes before authorizing a paid arm.
+- [x] **Audit a mixed affected/unaffected failure panel with Grok and Agy
+      (2026-09-05).** Ranked 336 completed attempts from four opened locks;
+      selected 22 unique papers / 30 attempts, including 14 papers with some
+      A/U capture (two exact controls) and eight with none. Traced source,
+      request, extraction and guard behavior; separated identity FP/FN from
+      missing and wrong counts and from endpoint disagreements. Recovered
+      full papers for SCN5A 20031634 and 25163546 from author repositories,
+      verified identity/provenance, and synced both to the external corpus
+      through the builder after dry run. The 20031634 Table 1 audit preserves
+      all 13 family rows and unknown phenotype; no counts were written to a
+      database and no new extraction arm or score was opened. Evidence and
+      reviewer dispositions:
+      `docs/evidence/phenotype_failure_panel_20260905/README.md`.
+      Diagnostic utility and difference-figure tests: 12 passed.
+- [x] **Implement the manual repository recovery as a general fallback
+      (2026-09-05).** Normal harvesting now tries indexed article copies after
+      publisher failure regardless of PubMed's free flag; the standalone
+      paywall helper shares that path. All Unpaywall/OpenAlex locations and
+      repository landing links precede HAL DOI search; actual PDF/header
+      validation, bounded requests, original PDF hashes and body-only status
+      travel with the source. Both requested papers pass the real normal
+      downloader; a fixed 14-other-paper test downloads one additional body
+      (29650123), whose good existing corpus source is retained. This does not
+      recover its missing mutation roster or establish count improvement.
+      Full offline suite: 2,865 passed. The corpus builder upgraded only
+      SCN5A 25163546's source after dry run; historical locks are unchanged.
+      Evidence: `docs/evidence/repository_fallback_20260905/README.md`.
+- [ ] **Make source-component acquisition reliable before another extraction
+      candidate.** Follow the 22-paper audit alongside
+      `docs/evidence/current_protocol_diagnostic_20260904/problem_papers.csv`.
+      Distinguish actual bodies/tables/figures from shells and wrong supplement
+      HTML; bind article identity, asset URL/hash and converted component.
+      Resolve Online Table references to embedded PDF pages or linked assets,
+      not a table-count versus file-count gap. Prioritize 14678125's body,
+      19398665's clinical table bodies, and 25163546's article-specific
+      supplements; both recovered manuscripts remain body-only/retry until
+      their supplement surfaces are verified. Freeze recovered bytes before
+      any separately authorized replay.
+- [ ] **Continue phenotype reading after deterministic identity extraction.**
+      Use already-acquired 30059973 Tables 11/14 to validate a general bounded
+      clinical-component continuation and table-aware PDF conversion. Preserve
+      hierarchical headers, orientation, footnotes and endpoint labels; carrier
+      N is not automatically affected N. Do not optimize toward legacy gold's
+      carrier/affected equality.
+- [ ] **Prototype audited patient joins and consistent endpoint projection.**
+      Use 21302287's explicit patient-ID lists and 30403697's two variant
+      columns; retain per-person genotype, phenotype/timepoint and unknowns,
+      with explicit ownership for related prose. Apply one ascertainment rule
+      across 33673806's singleton and multi-person suspected-HCM groups.
+      Preserve the two exact controls and reject ambiguous joins, duplicated
+      IDs, missing genotypes and unsupported A/U complements. Keep source-only
+      gold conflicts visible; this panel is calibration evidence, never the
+      confirmation cohort. Existing acceptance gates and cost limits stand.
 - [x] **Close the repeated source-positive phenotype-count loss across all
       stages and rerun the full cardiac cohort (2026-09-03).** Code-owned
       provenance is now non-forgeable, refresh preserves it, exact patient-row

@@ -55,6 +55,8 @@ from utils.paper_scope import NONHUMAN_ORTHOLOG_REASON
 from utils.env_utils import get_env_int
 from utils.protein_notation import (
     PROTEIN_NOTATION_RE as STRICT_PROTEIN_NOTATION_RE,
+    is_supported_protein_notation,
+    normalize_partial_protein_insertion,
 )
 from utils.source_layers import infer_source_layer_from_text
 from utils.source_text import normalize_notation_token, normalize_source_text
@@ -3247,6 +3249,11 @@ class ExpertExtractor(BaseLLMCaller):
             parenthesized_protein = re.fullmatch(r"p\.\((.+)\)", protein_clean)
             if parenthesized_protein:
                 protein_clean = f"p.{parenthesized_protein.group(1)}"
+            partial_insertion = normalize_partial_protein_insertion(protein_clean)
+            if partial_insertion:
+                if not v.get("source_notation"):
+                    v["source_notation"] = protein
+                protein_clean = partial_insertion
             if protein_clean and protein_clean != protein:
                 v["protein_notation"] = protein_clean
             cdna_clean = re.sub(
@@ -3262,7 +3269,7 @@ class ExpertExtractor(BaseLLMCaller):
                 structural and vclass in self.STRUCTURAL_ONLY_VARIANT_CLASSES
             )
             protein_valid = bool(
-                not protein_clean or self.PROTEIN_NOTATION_RE.fullmatch(protein_clean)
+                not protein_clean or is_supported_protein_notation(protein_clean)
             )
             cdna_valid = bool(
                 not cdna_clean or self.CDNA_NOTATION_RE.fullmatch(cdna_clean)

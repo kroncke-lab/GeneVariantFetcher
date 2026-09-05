@@ -1,0 +1,14 @@
+{
+  "source_trace": "benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/production_runs/SCN5A/20260905_131329/llm_traces/SCN5A/20031634/1788632149694546000-000002-9407b2de_paper_variant_extraction_ExpertExtractor.json",
+  "source_trace_sha256": "5df8f90da8bffe8e35958c98476358f8b0fd494900a98e73cd0920f056d2c339",
+  "before_rows": 12,
+  "after_rows": 13,
+  "new_identity": "p.1570_F1571insI",
+  "source_notation": "p.1570-Phe1571insIle",
+  "carriers": 11,
+  "affected": 6,
+  "unaffected": 4,
+  "new_cdna": null,
+  "migration_preserves": true,
+  "scope": "zero-LLM replay of identical structured response; not an independent scored arm"
+}

@@ -244,6 +244,10 @@ def summarize(
     report: dict[str, Any],
 ) -> dict[str, dict[str, Any]]:
     summary: dict[str, dict[str, Any]] = {}
+
+    def fraction(numerator, denominator):
+        return numerator / denominator if denominator else None
+
     for field in FIELDS:
         values = [row for row in rows if row["measure"] == field]
         absolute = [int(row["absolute_difference"]) for row in values]
@@ -255,31 +259,44 @@ def summarize(
         record = {
             "gold_asserted": asserted,
             "identity_matched": matched,
-            "identity_coverage": matched / asserted,
+            "identity_coverage": fraction(matched, asserted),
             "count_extracted": missingness[field]["count_extracted"],
-            "count_extracted_fraction": missingness[field]["count_extracted"] / matched,
+            "count_extracted_fraction": fraction(
+                missingness[field]["count_extracted"], matched
+            ),
             "zero_filled": missingness[field]["zero_filled"],
-            "zero_filled_fraction": missingness[field]["zero_filled"] / matched,
+            "zero_filled_fraction": fraction(
+                missingness[field]["zero_filled"], matched
+            ),
             "exact": sum(error == 0 for error in absolute),
-            "exact_fraction": sum(error == 0 for error in absolute) / matched,
+            "exact_fraction": fraction(sum(error == 0 for error in absolute), matched),
             "zero_baseline_exact": zero_baseline_exact,
-            "zero_baseline_fraction": zero_baseline_exact / matched,
-            "increment_over_zero_baseline": (
-                sum(error == 0 for error in absolute) - zero_baseline_exact
-            )
-            / matched,
+            "zero_baseline_fraction": fraction(zero_baseline_exact, matched),
+            "increment_over_zero_baseline": fraction(
+                sum(error == 0 for error in absolute) - zero_baseline_exact, matched
+            ),
             "gold_nonzero": len(gold_nonzero),
             "nonzero_exact": nonzero_exact,
-            "nonzero_exact_fraction": nonzero_exact / len(gold_nonzero),
-            "mae": statistics.fmean(absolute),
-            "rmse": math.sqrt(statistics.fmean(error**2 for error in absolute)),
-            "median_absolute_difference": statistics.median(absolute),
+            "nonzero_exact_fraction": fraction(nonzero_exact, len(gold_nonzero)),
+            "mae": statistics.fmean(absolute) if absolute else None,
+            "rmse": (
+                math.sqrt(statistics.fmean(error**2 for error in absolute))
+                if absolute
+                else None
+            ),
+            "median_absolute_difference": statistics.median(absolute)
+            if absolute
+            else None,
             "difference_equal_one": sum(error == 1 for error in absolute),
             "within_one": sum(error <= 1 for error in absolute),
             "greater_than_one": sum(error > 1 for error in absolute),
             "identity_miss": missingness[field]["identity_miss"],
-            "manual_max": max(int(row["manual_count"]) for row in values),
-            "ai_max": max(int(row["ai_count_evaluation"]) for row in values),
+            "manual_max": max(
+                (int(row["manual_count"]) for row in values), default=None
+            ),
+            "ai_max": max(
+                (int(row["ai_count_evaluation"]) for row in values), default=None
+            ),
         }
         if record["count_extracted"] != int(
             report["overall"]["count"][field]["predicted"]
@@ -296,7 +313,34 @@ def summarize(
 def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        fields = (
+            list(rows[0])
+            if rows
+            else [
+                "analysis_run",
+                "analysis_locked_at",
+                "grain",
+                "gene",
+                "pmid",
+                "predicted_variant",
+                "manual_variant",
+                "measure",
+                "manual_count",
+                "ai_count_raw",
+                "ai_count_evaluation",
+                "evaluation_zero_filled",
+                "residual_ai_minus_manual",
+                "absolute_difference",
+                "exact_match",
+                "zero_nonzero_disagreement",
+                "prediction_source_layer",
+                "prediction_source_location",
+                "gold_value_set",
+                "gold_v2_status",
+                "gold_source",
+            ]
+        )
+        writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -1014,6 +1058,25 @@ def render_zero_filled_svg(
             ]
         )
         groups = grouped_coordinates(rows, field)
+        if not groups:
+            lines.append(
+                text_element(
+                    x0 + plot_size / 2,
+                    plot_top + plot_size / 2,
+                    "No identity-matched count rows",
+                    "facet-title",
+                    anchor="middle",
+                )
+            )
+            lines.append(
+                text_element(
+                    x0 + plot_size / 2,
+                    plot_top + plot_size / 2 + 48,
+                    "Agreement is undefined; see the all-gold difference figure.",
+                    "tick",
+                    anchor="middle",
+                )
+            )
         lines.append(f'<g clip-path="url(#{field}-clip)">')
         for group in sorted(groups, key=lambda item: item["n"], reverse=True):
             lines.extend(draw_bubble(group, field, x0, plot_top, plot_size))

@@ -1,0 +1,341 @@
+{
+  "calls_inspected": 339,
+  "json_responses": 327,
+  "new_substitution_promotions": [
+    {
+      "run": "20260903_protocol_cont120_01_candidate",
+      "trace": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/SCN5A/20260903_172729/llm_traces/SCN5A/8917568/1788478238020528000-000298-80ea01c7_paper_variant_extraction_ExpertExtractor.json",
+      "sha256": "a0fa7fc11f226237caa3a2499e8902dffccace7833c69b34d66feea81b92f25e",
+      "context": {
+        "attempt": 1,
+        "component": "ExpertExtractor",
+        "gene": "SCN5A",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "pmid": "8917568",
+        "provider": "litellm",
+        "stage": "paper_variant_extraction"
+      },
+      "before": {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": null,
+        "protein_notation": null,
+        "legacy_notation": null,
+        "source_notation": "N1325S",
+        "genomic_position": null,
+        "variant_class": "missense",
+        "structural_description": null,
+        "clinical_significance": null,
+        "patients": {
+          "count": null,
+          "demographics": null,
+          "phenotype": null,
+          "source_container": null,
+          "source_kind": null,
+          "source_ref": null,
+          "page_label": null,
+          "pdf_page": null,
+          "row_label": null,
+          "row_ordinal": null,
+          "column_ref": null,
+          "figure_panel": null,
+          "locator_extra": {}
+        },
+        "penetrance_data": {
+          "total_carriers_observed": null,
+          "affected_count": null,
+          "unaffected_count": null,
+          "uncertain_count": null,
+          "penetrance_percentage": null,
+          "age_dependent_penetrance": []
+        },
+        "count_provenance": {
+          "carriers_column_label": null,
+          "carriers_count_type": null,
+          "affected_column_label": null,
+          "affected_count_type": null,
+          "unaffected_column_label": null,
+          "unaffected_count_type": null
+        },
+        "phenotype_derivation": null,
+        "individual_records": [],
+        "functional_data": {
+          "summary": "Functional study - assay data only. N1325S showed ~3.12% sustained late Na+ current at -20 mV (highest among mutants), opposite voltage dependence of late current, and slower recovery from inactivation. Expressed in HEK293/tsA-201 cells.",
+          "assays": [
+            "whole-cell patch clamp",
+            "nonstationary variance analysis",
+            "steady-state inactivation/activation",
+            "recovery from inactivation",
+            "voltage ramps"
+          ]
+        },
+        "segregation_data": null,
+        "population_frequency": null,
+        "evidence_level": "strong",
+        "source_location": "Functional study - assay data only; Results, Figures 1-5",
+        "additional_notes": "Paper text contains internal inconsistency (N1325S described as Asp-1325); treated as Asn1325Ser per standard notation. No human carrier data.",
+        "key_quotes": [
+          "two point mutations, N1325S (Asp-1325 converted to serine) and R1644H"
+        ],
+        "fact_provenance": [
+          {
+            "fact_type": "variant_identity",
+            "fact_value": "N1325S",
+            "individual_id": null,
+            "source_location": "Main text, Introduction",
+            "source_table": null,
+            "source_row": null,
+            "source_column": null,
+            "source_section": "Introduction",
+            "source_paragraph": null,
+            "evidence_quote": "N1325S (Asp-1325 converted to serine)"
+          }
+        ]
+      },
+      "after": {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": null,
+        "protein_notation": "N1325S",
+        "legacy_notation": null,
+        "source_notation": "N1325S",
+        "genomic_position": null,
+        "variant_class": "missense",
+        "structural_description": null,
+        "clinical_significance": null,
+        "patients": {
+          "count": null,
+          "demographics": null,
+          "phenotype": null,
+          "source_container": null,
+          "source_kind": null,
+          "source_ref": null,
+          "page_label": null,
+          "pdf_page": null,
+          "row_label": null,
+          "row_ordinal": null,
+          "column_ref": null,
+          "figure_panel": null,
+          "locator_extra": {}
+        },
+        "penetrance_data": {
+          "total_carriers_observed": null,
+          "affected_count": null,
+          "unaffected_count": null,
+          "uncertain_count": null,
+          "penetrance_percentage": null,
+          "age_dependent_penetrance": []
+        },
+        "count_provenance": {
+          "carriers_column_label": null,
+          "carriers_count_type": null,
+          "affected_column_label": null,
+          "affected_count_type": null,
+          "unaffected_column_label": null,
+          "unaffected_count_type": null
+        },
+        "phenotype_derivation": null,
+        "individual_records": [],
+        "functional_data": {
+          "summary": "Functional study - assay data only. N1325S showed ~3.12% sustained late Na+ current at -20 mV (highest among mutants), opposite voltage dependence of late current, and slower recovery from inactivation. Expressed in HEK293/tsA-201 cells.",
+          "assays": [
+            "whole-cell patch clamp",
+            "nonstationary variance analysis",
+            "steady-state inactivation/activation",
+            "recovery from inactivation",
+            "voltage ramps"
+          ]
+        },
+        "segregation_data": null,
+        "population_frequency": null,
+        "evidence_level": "strong",
+        "source_location": "Functional study - assay data only; Results, Figures 1-5",
+        "additional_notes": "Paper text contains internal inconsistency (N1325S described as Asp-1325); treated as Asn1325Ser per standard notation. No human carrier data.",
+        "key_quotes": [
+          "two point mutations, N1325S (Asp-1325 converted to serine) and R1644H"
+        ],
+        "fact_provenance": [
+          {
+            "fact_type": "variant_identity",
+            "fact_value": "N1325S",
+            "individual_id": null,
+            "source_location": "Main text, Introduction",
+            "source_table": null,
+            "source_row": null,
+            "source_column": null,
+            "source_section": "Introduction",
+            "source_paragraph": null,
+            "evidence_quote": "N1325S (Asp-1325 converted to serine)"
+          }
+        ]
+      }
+    },
+    {
+      "run": "20260903_protocol_cont120_01_candidate",
+      "trace": "benchmarks/codex_paper_eval/runs/20260903_protocol_cont120_01_candidate/production_runs/SCN5A/20260903_172729/llm_traces/SCN5A/8917568/1788478238020528000-000298-80ea01c7_paper_variant_extraction_ExpertExtractor.json",
+      "sha256": "a0fa7fc11f226237caa3a2499e8902dffccace7833c69b34d66feea81b92f25e",
+      "context": {
+        "attempt": 1,
+        "component": "ExpertExtractor",
+        "gene": "SCN5A",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "pmid": "8917568",
+        "provider": "litellm",
+        "stage": "paper_variant_extraction"
+      },
+      "before": {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": null,
+        "protein_notation": null,
+        "legacy_notation": null,
+        "source_notation": "R1644H",
+        "genomic_position": null,
+        "variant_class": "missense",
+        "structural_description": null,
+        "clinical_significance": null,
+        "patients": {
+          "count": null,
+          "demographics": null,
+          "phenotype": null,
+          "source_container": null,
+          "source_kind": null,
+          "source_ref": null,
+          "page_label": null,
+          "pdf_page": null,
+          "row_label": null,
+          "row_ordinal": null,
+          "column_ref": null,
+          "figure_panel": null,
+          "locator_extra": {}
+        },
+        "penetrance_data": {
+          "total_carriers_observed": null,
+          "affected_count": null,
+          "unaffected_count": null,
+          "uncertain_count": null,
+          "penetrance_percentage": null,
+          "age_dependent_penetrance": []
+        },
+        "count_provenance": {
+          "carriers_column_label": null,
+          "carriers_count_type": null,
+          "affected_column_label": null,
+          "affected_count_type": null,
+          "unaffected_column_label": null,
+          "unaffected_count_type": null
+        },
+        "phenotype_derivation": null,
+        "individual_records": [],
+        "functional_data": {
+          "summary": "Functional study - assay data only. R1644H showed ~0.80% sustained late Na+ current at -20 mV (smallest among mutants), minimal disruption of inactivation, and recovery similar to WT. Expressed in HEK293/tsA-201 cells.",
+          "assays": [
+            "whole-cell patch clamp",
+            "nonstationary variance analysis",
+            "steady-state inactivation/activation",
+            "recovery from inactivation",
+            "voltage ramps"
+          ]
+        },
+        "segregation_data": null,
+        "population_frequency": null,
+        "evidence_level": "strong",
+        "source_location": "Functional study - assay data only; Results, Figures 1-5",
+        "additional_notes": "May be less severe based on smallest late current fraction. No human carrier data in this study.",
+        "key_quotes": [
+          "R1644H (Arg-1644 converted to histidine)"
+        ],
+        "fact_provenance": [
+          {
+            "fact_type": "variant_identity",
+            "fact_value": "R1644H",
+            "individual_id": null,
+            "source_location": "Main text, Introduction",
+            "source_table": null,
+            "source_row": null,
+            "source_column": null,
+            "source_section": "Introduction",
+            "source_paragraph": null,
+            "evidence_quote": "R1644H (Arg-1644 converted to histidine)"
+          }
+        ]
+      },
+      "after": {
+        "gene_symbol": "SCN5A",
+        "cdna_notation": null,
+        "protein_notation": "R1644H",
+        "legacy_notation": null,
+        "source_notation": "R1644H",
+        "genomic_position": null,
+        "variant_class": "missense",
+        "structural_description": null,
+        "clinical_significance": null,
+        "patients": {
+          "count": null,
+          "demographics": null,
+          "phenotype": null,
+          "source_container": null,
+          "source_kind": null,
+          "source_ref": null,
+          "page_label": null,
+          "pdf_page": null,
+          "row_label": null,
+          "row_ordinal": null,
+          "column_ref": null,
+          "figure_panel": null,
+          "locator_extra": {}
+        },
+        "penetrance_data": {
+          "total_carriers_observed": null,
+          "affected_count": null,
+          "unaffected_count": null,
+          "uncertain_count": null,
+          "penetrance_percentage": null,
+          "age_dependent_penetrance": []
+        },
+        "count_provenance": {
+          "carriers_column_label": null,
+          "carriers_count_type": null,
+          "affected_column_label": null,
+          "affected_count_type": null,
+          "unaffected_column_label": null,
+          "unaffected_count_type": null
+        },
+        "phenotype_derivation": null,
+        "individual_records": [],
+        "functional_data": {
+          "summary": "Functional study - assay data only. R1644H showed ~0.80% sustained late Na+ current at -20 mV (smallest among mutants), minimal disruption of inactivation, and recovery similar to WT. Expressed in HEK293/tsA-201 cells.",
+          "assays": [
+            "whole-cell patch clamp",
+            "nonstationary variance analysis",
+            "steady-state inactivation/activation",
+            "recovery from inactivation",
+            "voltage ramps"
+          ]
+        },
+        "segregation_data": null,
+        "population_frequency": null,
+        "evidence_level": "strong",
+        "source_location": "Functional study - assay data only; Results, Figures 1-5",
+        "additional_notes": "May be less severe based on smallest late current fraction. No human carrier data in this study.",
+        "key_quotes": [
+          "R1644H (Arg-1644 converted to histidine)"
+        ],
+        "fact_provenance": [
+          {
+            "fact_type": "variant_identity",
+            "fact_value": "R1644H",
+            "individual_id": null,
+            "source_location": "Main text, Introduction",
+            "source_table": null,
+            "source_row": null,
+            "source_column": null,
+            "source_section": "Introduction",
+            "source_paragraph": null,
+            "evidence_quote": "R1644H (Arg-1644 converted to histidine)"
+          }
+        ]
+      }
+    }
+  ],
+  "correction": "26481773 old response has variants=[]; R594Q occurs only in explanation. Prior string-search diagnosis of parser loss is not supported by the structured response."
+}
