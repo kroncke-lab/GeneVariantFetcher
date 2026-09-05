@@ -32,6 +32,12 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
 
 New implementation authorization: 2026-09-05.
 
+Budget preference clarified 2026-09-05: count API charges only. Prefer Azure
+for routine extraction, experiments and repeat runs because its allocation
+recurs. Use finite Anthropic credits sparingly, for bounded reviews or hard
+cases where they materially improve the decision. A CLI's reported dollar
+estimate is not an additional budget charge unless it represents API spend.
+
 - [x] Implement supported recall improvements on main with Claude, Grok and
       Agy CLI review. The new campaign ran 15 fresh attempts over nine papers:
       ten-attempt prototype, four-attempt source-matched final ablation, and
