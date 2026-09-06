@@ -180,7 +180,7 @@ different source-diagnostic cohort to its denominator.
 This follow-up made 36 API requests. Returned usage proxy is **$1.14701**; two failed probes retain **$1.54684** in unknown-charge reserves. Including conservative input/cache-write accounting gives **$2.78825** against the new $4.90 cap. Added to the immutable old campaign ledger, the original $150 envelope is **$147.82576 accounted**, with **$2.17424 remaining**. This includes the old $25 uncertainty margin and unknown reserves; it is not an Azure invoice. No Anthropic extraction API was used. CLI consultations are excluded as authorized. [Ledger summary](budget_summary.json).
 
 The 45 additional gold-exact A/U candidates comprise **25 positive values and
-20 explicit zeros**. All 45 pass this experiment's original source-adjudication
+20 derived zero values**. All 45 pass this experiment's original source-adjudication
 check; production acceptance still requires integration and paper-wide scope
 validation. Thirty additional carrier candidates are gold-exact, but only 15
 pass the original strict source gate before the separate schema refinements.
