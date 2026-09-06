@@ -40,5 +40,18 @@
     "grok": "completed",
     "agy": "completed",
     "disposition": "reviews/results_disposition.md"
+  },
+  "initial_ci": {
+    "run_id": 34046410186,
+    "commit": "7a4d3010",
+    "unit_result": "2941 passed; one stale TASKS heading expectation failed after final documentation update",
+    "other_jobs": "wheel smoke, benchmark guards, bounded offline end-to-end, lint and Pages passed",
+    "resolution": "Update the expected completed-test heading and keep the generic Completed archive-heading prohibition exact."
+  },
+  "post_documentation_focused_tests": {
+    "passed": 32,
+    "seconds": 1.46,
+    "log": "validation_runs/model_routing_20260906/final_post_document_tests.log",
+    "log_sha256": "6c92b7169bfe5350d0c7858550f3764173ec23afc19c8d8130a1a195e1355632"
   }
 }

@@ -103,7 +103,8 @@ explicit in a current-study sentence and matching the reference. There are
 **zero additional accepted affected/unaffected fields**.
 
 The reader's **unvalidated raw additive lane** supplies 75 new fields: 71 agree
-numerically with the reference and four do not. This includes **44 additional
+numerically with the reference and four do not. One of the 71 is the accepted
+carrier addition; the other 70 remain unvalidated. This includes **44 additional
 exact A/U fields and three additional A/U disagreements**, plus 27 additional
 exact carrier fields and one carrier disagreement. Combined A/U error would
 fall **1,132 → 1,065** (5.9%) in that diagnostic lane. These are not accepted
@@ -156,7 +157,7 @@ ceiling could be measured.
 All API pilots, probes and final arms are included: **$38.57768 returned-usage
 proxy + $81.45984 unknown-usage/retry reserves + $25 uncertainty margin =
 $145.03751 accounted envelope** against the approximately $150 authorization.
-No calls remain in flight. CLI costs are excluded and no Anthropic extraction
+No local API requests remain active. CLI costs are excluded and no Anthropic extraction
 was used. Unknown charges were not released as zero. Azure invoice reconciliation,
 cache-price adjustments and exact billing for unreturned SDK attempts remain
 unavailable; this envelope is not an exact invoice or guaranteed billing bound.

@@ -85,7 +85,7 @@ def test_tasks_is_the_single_forward_checklist_with_active_goal_progress():
     headings = re.findall(r"^## (.+)$", tasks, flags=re.MULTILINE)
 
     assert headings == [
-        "Active $150 model-routing test",
+        "Completed $150 model-routing test; next bounded evidence test",
         "Previous $100 improvement campaign",
         "1. Re-establish the scientific baseline",
         "2. Recover missing source before adding inference",
@@ -100,7 +100,7 @@ def test_tasks_is_the_single_forward_checklist_with_active_goal_progress():
     assert "- [x]" in tasks.lower()
     assert "- [ ]" in tasks.lower()
     assert "START HERE" not in tasks
-    assert "## Completed" not in tasks
+    assert "Completed" not in headings
     assert "## Active Tasks" not in tasks
 
 
