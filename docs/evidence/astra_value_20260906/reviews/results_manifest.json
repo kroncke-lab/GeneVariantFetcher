@@ -1,0 +1,20 @@
+{
+  "recorded_unix": 1788726544.329547,
+  "note": "Results consultation receipts and exact as-sent brief; code execution text is preserved inside executed_launcher_snapshot.json. Later report edits are not retroactively part of this brief.",
+  "files": {
+    "results_prompt.txt": "04af65e673e62486749f5f669f663741ac693139c5b4abf78b4d023fddd65d73",
+    "results_status.json": "18571a9cd9bd562e6caf36ab2eb77c824254467597ece746b7945bd52694b6b9",
+    "results_review_notes.md": "dd22ed211dc6a5a6853bab6369c66fa3e33e96dedb9117e0401f8b9c59d2f137",
+    "executed_launcher_snapshot.json": "b981be35b614c2d9262290042cc2fd25b3aa0e21a6dd2d444d2d6025f3731a13",
+    "design_manifest_verification.json": "3c5efa27827fb30c715fd5148647511f83d1b86aaacf9d3abc9c232679e2369e",
+    "claude_results.md": "04e1567fd734607fdc5c3411611bc8b5fa28c3efb6e759b98c63182e823a022a",
+    "claude_results_raw.json": "6cf2ae194879041830cac7a808b6bd76ab8bfe234f64919211737b9b7d5d8e58",
+    "claude_results_stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "grok_results.md": "79612e3c7cadc43ac06e21f6876c7c0e01951cbf744efc9822e06daa84d134e9",
+    "grok_results_raw.json": "d44b17061e1e5e552739213e3433c64adcffc02c5ef8082031f8fbe4a8391e87",
+    "grok_results_stderr.txt": "43e5d15ae8f7d270e6476ce0aa2420315f007fab61b8ff82c2a56bde0ba8bcc0",
+    "agy_results.md": "02e4c1db97b7b833a10400135fa30f4d8ecb6e5178104dbdbc7e17054ff3fd57",
+    "agy_results_raw.json": "e66b83c085a4466ab44685062df8cbfadd6d2191b4112109ecd4c27a327064fd",
+    "agy_results_stderr.txt": "3a7f8550106d86abb322e8ed0fb30a0296c0e97c6be03d5a8033b99d16737459"
+  }
+}

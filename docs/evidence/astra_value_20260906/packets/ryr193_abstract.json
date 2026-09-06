@@ -1,0 +1,61 @@
+{
+  "name": "ryr193_abstract",
+  "gene": "RYR2",
+  "pmid": "19398417",
+  "source_path": "validation_runs/model_routing_20260906/frozen_sources/RYR2/19398417/19398417_FULL_CONTEXT.md",
+  "source_sha256": "4aa46f457b35bef0db93b29bb622214bbe5321b2ce9fe475b7894afe838914e0",
+  "source_units": {
+    "A1": "1. Biol Res Nurs. 2009 Jul;11(1):66-72. doi: 10.1177/1099800409333369. Epub 2009 ",
+    "A2": "Apr 26.",
+    "A4": "Genetic characterization of familial CPVT after 30 years.",
+    "A6": "Beery TA(1), Shah MJ, Benson DW.",
+    "A8": "Author information:",
+    "A9": "(1)University of Cincinnati, and Cincinnati Children's Hospital Medical Center, ",
+    "A10": "Cincinnati, Ohio 45221-0038, USA. Theresa.beery@uc.edu",
+    "A12": "INTRODUCTION: Catecholaminergic polymorphic ventricular tachycardia (CPVT) is a ",
+    "A13": "stress-related, bidirectional ventricular tachycardia and atrial tachyarrhythmia ",
+    "A14": "in the absence of either structural heart disease or prolonged QT interval. ",
+    "A15": "Autosomal dominant and recessive forms of CPVT because of mutations in the ",
+    "A16": "cardiac ryanodine receptor (RyR2) or calsequestrin 2 (CASQ2) have been reported. ",
+    "A17": "The objective of this study was the clinical and genetic characterization of the ",
+    "A18": "family of an individual initially diagnosed as a child in 1978.",
+    "A19": "METHOD: We collected family medical history and recorded a four-generation ",
+    "A20": "pedigree. We performed mutation analysis of RyR2 \"critical regions'' in the ",
+    "A21": "N-terminus, FKBP12.6 binding domain, Ca2+ binding domain, and transmembrane ",
+    "A22": "domains of the C-terminus by direct sequencing.",
+    "A23": "RESULTS: CPVT was diagnosed in two of the nine family members evaluated. ",
+    "A24": "Pedigree analysis suggested autosomal dominant disease transmission. There were ",
+    "A25": "no additional reports of seizures, pregnancy loss, neonatal death, or sudden ",
+    "A26": "cardiac death in family members. A novel RyR2 gene variant (W4645R) was found in ",
+    "A27": "four family members including two without symptoms. RyR2-W4645R segregates with ",
+    "A28": "disease in this family with incomplete penetrance. The W4645 residue is ",
+    "A29": "evolutionarily conserved in the transmembrane region adjacent to previously ",
+    "A30": "reported disease-causing mutations. Based on sorting intolerant from tolerant ",
+    "A31": "analysis of protein structure, RyR2-W4645R is predicted to be deleterious.",
+    "A32": "CONCLUSIONS: All current evidence supports RyR2-W4645R as a disease-causing ",
+    "A33": "variant, which was silent in persons for two generations before causing symptoms ",
+    "A34": "in persons for the next two generations, beginning in 1978.",
+    "A36": "DOI: 10.1177/1099800409333369",
+    "A37": "PMID: 19398417 [Indexed for MEDLINE]"
+  },
+  "scope": "The family clinically and genetically evaluated in this report.",
+  "endpoint": "Reported clinical symptom status among carriers; this query is symptoms, not an assertion of diagnostic test negativity.",
+  "queries": [
+    {
+      "id": "q1_carriers",
+      "variant": "p.W4645R",
+      "field": "carriers"
+    },
+    {
+      "id": "q1_affected",
+      "variant": "p.W4645R",
+      "field": "affected"
+    },
+    {
+      "id": "q1_unaffected",
+      "variant": "p.W4645R",
+      "field": "unaffected"
+    }
+  ],
+  "prompt": "Extract only the requested human per-variant counts from this source packet.\nThe queries define the study population and clinical endpoint, not the answers.\nReturn one claim per query ID. Use null when the source cannot support an exact\ncount for that variant, population and endpoint. Unknown is not zero. A list of\nvariants does not establish one carrier per row. Do not turn cohort enrollment,\npopulation allele frequencies, prior-literature cases, relatives without stated\ngenotype, repeat tests or percentages rounded in prose into exact patient counts.\nInclude explicitly documented carrier relatives when the requested population\nincludes them; respect variant-specific inheritance and overlapping people.\nUse the paper's actual phenotype labels and timepoints. Disease-negative,\nsymptom-free, no diagnostic test result, and unknown are different states.\nIf the query requests a specific endpoint, do not substitute a different one.\nAn explicit count is a literal published number bound to this variant and role.\nA derived count is a transparent aggregation or join of source-supported people\nor disjoint groups. For derived counts state the arithmetic or membership in\nreason. Do not label arithmetic as explicit. sources must use exact provided\nIDs, including all needed headers, footnotes and cohort/join evidence. quote is\na short verbatim contiguous excerpt (at most 600 characters), or null when no\ncount is supplied; additional support can be cited in sources. Do not invent\nsource IDs, clean up a quotation, or consult external information. Keep reasons\nconcise. Return only JSON matching the schema; report unresolved limitations.\n\nGENE: RYR2; PMID: 19398417\nPOPULATION: The family clinically and genetically evaluated in this report.\nENDPOINT: Reported clinical symptom status among carriers; this query is symptoms, not an assertion of diagnostic test negativity.\nQUERIES: [{\"id\": \"q1_carriers\", \"variant\": \"p.W4645R\", \"field\": \"carriers\"}, {\"id\": \"q1_affected\", \"variant\": \"p.W4645R\", \"field\": \"affected\"}, {\"id\": \"q1_unaffected\", \"variant\": \"p.W4645R\", \"field\": \"unaffected\"}]\nSOURCE:\nA1: 1. Biol Res Nurs. 2009 Jul;11(1):66-72. doi: 10.1177/1099800409333369. Epub 2009 \nA2: Apr 26.\nA4: Genetic characterization of familial CPVT after 30 years.\nA6: Beery TA(1), Shah MJ, Benson DW.\nA8: Author information:\nA9: (1)University of Cincinnati, and Cincinnati Children's Hospital Medical Center, \nA10: Cincinnati, Ohio 45221-0038, USA. Theresa.beery@uc.edu\nA12: INTRODUCTION: Catecholaminergic polymorphic ventricular tachycardia (CPVT) is a \nA13: stress-related, bidirectional ventricular tachycardia and atrial tachyarrhythmia \nA14: in the absence of either structural heart disease or prolonged QT interval. \nA15: Autosomal dominant and recessive forms of CPVT because of mutations in the \nA16: cardiac ryanodine receptor (RyR2) or calsequestrin 2 (CASQ2) have been reported. \nA17: The objective of this study was the clinical and genetic characterization of the \nA18: family of an individual initially diagnosed as a child in 1978.\nA19: METHOD: We collected family medical history and recorded a four-generation \nA20: pedigree. We performed mutation analysis of RyR2 \"critical regions'' in the \nA21: N-terminus, FKBP12.6 binding domain, Ca2+ binding domain, and transmembrane \nA22: domains of the C-terminus by direct sequencing.\nA23: RESULTS: CPVT was diagnosed in two of the nine family members evaluated. \nA24: Pedigree analysis suggested autosomal dominant disease transmission. There were \nA25: no additional reports of seizures, pregnancy loss, neonatal death, or sudden \nA26: cardiac death in family members. A novel RyR2 gene variant (W4645R) was found in \nA27: four family members including two without symptoms. RyR2-W4645R segregates with \nA28: disease in this family with incomplete penetrance. The W4645 residue is \nA29: evolutionarily conserved in the transmembrane region adjacent to previously \nA30: reported disease-causing mutations. Based on sorting intolerant from tolerant \nA31: analysis of protein structure, RyR2-W4645R is predicted to be deleterious.\nA32: CONCLUSIONS: All current evidence supports RyR2-W4645R as a disease-causing \nA33: variant, which was silent in persons for two generations before causing symptoms \nA34: in persons for the next two generations, beginning in 1978.\nA36: DOI: 10.1177/1099800409333369\nA37: PMID: 19398417 [Indexed for MEDLINE]"
+}

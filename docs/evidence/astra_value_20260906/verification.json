@@ -1,0 +1,59 @@
+{
+  "unit_tests": {
+    "command": ".venv/bin/python -m pytest tests/unit -q",
+    "passed": 2964,
+    "seconds": 112.17,
+    "exit_code": 0
+  },
+  "build": {
+    "command": "uv build --wheel --out-dir validation_runs/astra_value_20260906/dist",
+    "exit_code": 0
+  },
+  "cli_smoke": {
+    "command": ".venv/bin/python -m cli --help",
+    "exit_code": 0
+  },
+  "canonical_figure": {
+    "command": "uv run --no-project --with matplotlib python scripts/build_stratified_phenotype_count_recovery.py",
+    "exit_code": 0,
+    "visually_inspected": true,
+    "historical_attempts": 118,
+    "opened_candidate_attempts": 458,
+    "new_diagnostic_not_pooled": true
+  },
+  "focused_final_scorer_tests": {
+    "command": ".venv/bin/python -m pytest tests/unit/test_astra_value_diagnostic.py -q",
+    "passed": 18,
+    "seconds": 0.38,
+    "exit_code": 0
+  },
+  "evidence_compileall": {
+    "command": ".venv/bin/python -m compileall -q docs/evidence/astra_value_20260906",
+    "exit_code": 0
+  },
+  "wheel_payload_matches_current_checkout": {
+    "files": 159,
+    "verified": true
+  },
+  "final_build": {
+    "command": "uv build --wheel --out-dir validation_runs/astra_value_20260906/dist",
+    "exit_code": 0
+  },
+  "final_cli_help": {
+    "exit_code": 0
+  },
+  "final_unit_tests": {
+    "command": ".venv/bin/python -m pytest tests/unit -q",
+    "passed": 2969,
+    "seconds": 110.34,
+    "exit_code": 0
+  },
+  "final_offline_replays": {
+    "primary_exact_replay": true,
+    "remediation_exact_replay": true,
+    "budget_and_code_audit": true,
+    "post_format_compile": true,
+    "ruff_check": true,
+    "git_diff_check": true
+  }
+}

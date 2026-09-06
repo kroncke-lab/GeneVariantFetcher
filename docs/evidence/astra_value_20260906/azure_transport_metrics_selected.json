@@ -1,0 +1,2627 @@
+{
+  "resource_id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource",
+  "start_utc": "2026-09-06T19:30:20.013733+00:00",
+  "end_utc": "2026-09-06T20:12:03.026378+00:00",
+  "queried_at_utc": "2026-09-06T20:12:03.026385+00:00",
+  "interval": "PT1M",
+  "queries": {
+    "requests_by_status": {
+      "arguments": [
+        "--metrics",
+        "ModelRequests",
+        "--aggregation",
+        "Total",
+        "--filter",
+        "ModelDeploymentName eq 'grok-4.6' and StatusCode eq '*'"
+      ],
+      "exit_code": 0,
+      "data": {
+        "cost": 41,
+        "interval": "PT1M",
+        "namespace": "Microsoft.CognitiveServices/accounts",
+        "resourceregion": "eastus2",
+        "timespan": "2026-09-06T19:30:20Z/2026-09-06T20:12:03Z",
+        "value": [
+          {
+            "displayDescription": "Number of calls made to the model API over a period of time. Applies to PTU, PTU-Managed and Pay-as-you-go deployments.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/ModelRequests",
+            "name": {
+              "localizedValue": "Model Requests",
+              "value": "ModelRequests"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "timeStamp": "2026-09-06T19:30:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:31:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:32:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:33:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:34:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:35:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:36:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:37:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:38:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:39:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:40:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:41:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:42:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:43:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:44:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:45:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:46:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:47:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:48:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:49:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:50:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:51:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:52:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:53:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:54:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:55:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:56:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:57:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:58:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:59:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:00:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:01:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:02:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:03:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:04:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:05:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:06:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:07:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:08:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:09:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:10:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:11:00Z",
+                    "total": 0.0
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  },
+                  {
+                    "name": {
+                      "localizedValue": "statuscode",
+                      "value": "statuscode"
+                    },
+                    "value": "499"
+                  }
+                ]
+              },
+              {
+                "data": [
+                  {
+                    "timeStamp": "2026-09-06T19:30:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:31:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:32:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:33:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:34:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:35:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:36:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:37:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:38:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:39:00Z",
+                    "total": 2.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:40:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:41:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:42:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:43:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:44:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:45:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:46:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:47:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:48:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:49:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:50:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:51:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:52:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:53:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:54:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:55:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:56:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:57:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:58:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:59:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:00:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:01:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:02:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:03:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:04:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:05:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:06:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:07:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:08:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:09:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:10:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:11:00Z",
+                    "total": 0.0
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  },
+                  {
+                    "name": {
+                      "localizedValue": "statuscode",
+                      "value": "statuscode"
+                    },
+                    "value": "200"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "Count"
+          }
+        ]
+      },
+      "stderr": ""
+    },
+    "grok_latency": {
+      "arguments": [
+        "--metrics",
+        "TimeToResponse",
+        "TimeToLastByte",
+        "NormalizedTimeToFirstToken",
+        "NormalizedTimeBetweenTokens",
+        "--aggregation",
+        "Minimum",
+        "Maximum",
+        "Average",
+        "--filter",
+        "ModelDeploymentName eq 'grok-4.6'"
+      ],
+      "exit_code": 0,
+      "data": {
+        "cost": 492,
+        "interval": "PT1M",
+        "namespace": "Microsoft.CognitiveServices/accounts",
+        "resourceregion": "eastus2",
+        "timespan": "2026-09-06T19:30:20Z/2026-09-06T20:12:03Z",
+        "value": [
+          {
+            "displayDescription": "Recommended latency (responsiveness) measure. Applies to PTU and PTU-managed deployments. Calculated as time taken for the first response to appear after a user sends a prompt, as measured by the API gateway. This number increases as the prompt size increases and/or cache hit size reduces. To breakdown time to response metric, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, and ModelVersion. \n\nNote: this metric is an approximation as measured latency is heavily dependent on multiple factors, including concurrent calls and overall workload pattern. In addition, it does not account for any client-side latency that may exist between your client and the API endpoint. For non-streaming requests, this value is an estimate. Please refer to your own logging for optimal latency tracking.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/TimeToResponse",
+            "name": {
+              "localizedValue": "Time to Response",
+              "value": "TimeToResponse"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:30:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:31:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:32:00Z"
+                  },
+                  {
+                    "average": 189.007,
+                    "maximum": 189.007,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:33:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:34:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:35:00Z"
+                  },
+                  {
+                    "average": 184.506,
+                    "maximum": 184.506,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:36:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:37:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:38:00Z"
+                  },
+                  {
+                    "average": 168.96066666666667,
+                    "maximum": 201.324,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:39:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:40:00Z"
+                  },
+                  {
+                    "average": 194.627,
+                    "maximum": 194.627,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:41:00Z"
+                  },
+                  {
+                    "average": 106.529,
+                    "maximum": 106.529,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:42:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:43:00Z"
+                  },
+                  {
+                    "average": 111.567,
+                    "maximum": 111.567,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:44:00Z"
+                  },
+                  {
+                    "average": 111.218,
+                    "maximum": 111.218,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:45:00Z"
+                  },
+                  {
+                    "average": 114.56,
+                    "maximum": 114.56,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:46:00Z"
+                  },
+                  {
+                    "average": 432.368,
+                    "maximum": 432.368,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:47:00Z"
+                  },
+                  {
+                    "average": 439.326,
+                    "maximum": 439.326,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:48:00Z"
+                  },
+                  {
+                    "average": 191.904,
+                    "maximum": 191.904,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:49:00Z"
+                  },
+                  {
+                    "average": 445.902,
+                    "maximum": 445.902,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:50:00Z"
+                  },
+                  {
+                    "average": 110.923,
+                    "maximum": 110.923,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:51:00Z"
+                  },
+                  {
+                    "average": 374.335,
+                    "maximum": 374.335,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:52:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:53:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:54:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:55:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:56:00Z"
+                  },
+                  {
+                    "average": 198.58,
+                    "maximum": 198.58,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:57:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:58:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:59:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:00:00Z"
+                  },
+                  {
+                    "average": 452.146,
+                    "maximum": 452.146,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:01:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:02:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:03:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:04:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:05:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:06:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:07:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:08:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:09:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:10:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:11:00Z"
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          },
+          {
+            "displayDescription": "Time it takes for last byte of response data to be received after request is made by model. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/TimeToLastByte",
+            "name": {
+              "localizedValue": "Time to Last Byte",
+              "value": "TimeToLastByte"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:30:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:31:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:32:00Z"
+                  },
+                  {
+                    "average": 122365.046,
+                    "maximum": 122365.046,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:33:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:34:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:35:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:36:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:37:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:38:00Z"
+                  },
+                  {
+                    "average": 118346.22450000001,
+                    "maximum": 119932.38,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:39:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:40:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:41:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:42:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:43:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:44:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:45:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:46:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:47:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:48:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:49:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:50:00Z"
+                  },
+                  {
+                    "average": 51324.243,
+                    "maximum": 51324.243,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:51:00Z"
+                  },
+                  {
+                    "average": 18175.077,
+                    "maximum": 18175.077,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:52:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:53:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:54:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:55:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:56:00Z"
+                  },
+                  {
+                    "average": 205001.911,
+                    "maximum": 205001.911,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:57:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:58:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:59:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:00:00Z"
+                  },
+                  {
+                    "average": 368358.255,
+                    "maximum": 368358.255,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:01:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:02:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:03:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:04:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:05:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:06:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:07:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:08:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:09:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:10:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:11:00Z"
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          },
+          {
+            "displayDescription": "Time it takes for first byte of response data to be received after request is made by model, normalized by token. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/NormalizedTimeToFirstToken",
+            "name": {
+              "localizedValue": "Normalized Time to First Byte",
+              "value": "NormalizedTimeToFirstToken"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:30:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:31:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:32:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:33:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:34:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:35:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:36:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:37:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:38:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:39:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:40:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:41:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:42:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:43:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:44:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:45:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:46:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:47:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:48:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:49:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:50:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:51:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:52:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:53:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:54:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:55:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:56:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:57:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:58:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:59:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:00:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:01:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:02:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:03:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:04:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:05:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:06:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:07:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:08:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:09:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:10:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:11:00Z"
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          },
+          {
+            "displayDescription": "Model token generation rate, measured in milliseconds. Applies to PTU and PTU-managed deployments. For non-streaming requests, this value is an estimate.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/NormalizedTimeBetweenTokens",
+            "name": {
+              "localizedValue": "Time Between Tokens",
+              "value": "NormalizedTimeBetweenTokens"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:30:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:31:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:32:00Z"
+                  },
+                  {
+                    "average": 139.527,
+                    "maximum": 139.527,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:33:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:34:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:35:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:36:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:37:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:38:00Z"
+                  },
+                  {
+                    "average": 230.548,
+                    "maximum": 264.163,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:39:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:40:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:41:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:42:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:43:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:44:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:45:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:46:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:47:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:48:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:49:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:50:00Z"
+                  },
+                  {
+                    "average": 143.765,
+                    "maximum": 143.765,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:51:00Z"
+                  },
+                  {
+                    "average": 54.092,
+                    "maximum": 54.092,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:52:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:53:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:54:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:55:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:56:00Z"
+                  },
+                  {
+                    "average": 188.248,
+                    "maximum": 188.248,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:57:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:58:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T19:59:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:00:00Z"
+                  },
+                  {
+                    "average": 748.696,
+                    "maximum": 748.696,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:01:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:02:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:03:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:04:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:05:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:06:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:07:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:08:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:09:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:10:00Z"
+                  },
+                  {
+                    "average": 0.0,
+                    "maximum": 0.0,
+                    "minimum": 0.0,
+                    "timeStamp": "2026-09-06T20:11:00Z"
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "grok-4.6"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          }
+        ]
+      },
+      "stderr": ""
+    },
+    "astra_latency": {
+      "arguments": [
+        "--metrics",
+        "TimeToResponse",
+        "TimeToLastByte",
+        "NormalizedTimeToFirstToken",
+        "--aggregation",
+        "Minimum",
+        "Maximum",
+        "Average",
+        "--filter",
+        "ModelDeploymentName eq 'gpt-6-astra'"
+      ],
+      "exit_code": 0,
+      "data": {
+        "cost": 360,
+        "interval": "PT1M",
+        "namespace": "Microsoft.CognitiveServices/accounts",
+        "resourceregion": "eastus2",
+        "timespan": "2026-09-06T19:30:20Z/2026-09-06T20:12:03Z",
+        "value": [
+          {
+            "displayDescription": "Recommended latency (responsiveness) measure. Applies to PTU and PTU-managed deployments. Calculated as time taken for the first response to appear after a user sends a prompt, as measured by the API gateway. This number increases as the prompt size increases and/or cache hit size reduces. To breakdown time to response metric, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, and ModelVersion. \n\nNote: this metric is an approximation as measured latency is heavily dependent on multiple factors, including concurrent calls and overall workload pattern. In addition, it does not account for any client-side latency that may exist between your client and the API endpoint. For non-streaming requests, this value is an estimate. Please refer to your own logging for optimal latency tracking.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/TimeToResponse",
+            "name": {
+              "localizedValue": "Time to Response",
+              "value": "TimeToResponse"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          },
+          {
+            "displayDescription": "Time it takes for last byte of response data to be received after request is made by model. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/TimeToLastByte",
+            "name": {
+              "localizedValue": "Time to Last Byte",
+              "value": "TimeToLastByte"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          },
+          {
+            "displayDescription": "Time it takes for first byte of response data to be received after request is made by model, normalized by token. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/NormalizedTimeToFirstToken",
+            "name": {
+              "localizedValue": "Normalized Time to First Byte",
+              "value": "NormalizedTimeToFirstToken"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          }
+        ]
+      },
+      "stderr": ""
+    },
+    "astra_azure_openai_requests_by_status": {
+      "arguments": [
+        "--metrics",
+        "AzureOpenAIRequests",
+        "--aggregation",
+        "Total",
+        "--filter",
+        "ModelDeploymentName eq 'gpt-6-astra' and StatusCode eq '*'"
+      ],
+      "exit_code": 0,
+      "data": {
+        "cost": 41,
+        "interval": "PT1M",
+        "namespace": "Microsoft.CognitiveServices/accounts",
+        "resourceregion": "eastus2",
+        "timespan": "2026-09-06T19:30:20Z/2026-09-06T20:12:03Z",
+        "value": [
+          {
+            "displayDescription": "Number of calls made to the Azure OpenAI API over a period of time. Applies to PTU, PTU-Managed and Pay-as-you-go deployments. To breakdown API requests, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, ModelVersion, StatusCode (successful, clienterrors, server errors), IsSpillover for spillover information, ServiceTier, StreamType (Streaming vs non-streaming requests) and operation.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/AzureOpenAIRequests",
+            "name": {
+              "localizedValue": "Azure OpenAI Requests",
+              "value": "AzureOpenAIRequests"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [
+              {
+                "data": [
+                  {
+                    "timeStamp": "2026-09-06T19:30:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:31:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:32:00Z",
+                    "total": 2.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:33:00Z",
+                    "total": 6.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:34:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:35:00Z",
+                    "total": 4.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:36:00Z",
+                    "total": 2.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:37:00Z",
+                    "total": 5.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:38:00Z",
+                    "total": 3.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:39:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:40:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:41:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:42:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:43:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:44:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:45:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:46:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:47:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:48:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:49:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:50:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:51:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:52:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:53:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:54:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:55:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:56:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:57:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:58:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:59:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:00:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:01:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:02:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:03:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:04:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:05:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:06:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:07:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:08:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:09:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:10:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:11:00Z",
+                    "total": 0.0
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "gpt-6-astra"
+                  },
+                  {
+                    "name": {
+                      "localizedValue": "statuscode",
+                      "value": "statuscode"
+                    },
+                    "value": "200"
+                  }
+                ]
+              },
+              {
+                "data": [
+                  {
+                    "timeStamp": "2026-09-06T19:30:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:31:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:32:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:33:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:34:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:35:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:36:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:37:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:38:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:39:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:40:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:41:00Z",
+                    "total": 1.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:42:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:43:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:44:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:45:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:46:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:47:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:48:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:49:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:50:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:51:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:52:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:53:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:54:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:55:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:56:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:57:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:58:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:59:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:00:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:01:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:02:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:03:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:04:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:05:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:06:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:07:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:08:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:09:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:10:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:11:00Z",
+                    "total": 0.0
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "gpt-6-astra"
+                  },
+                  {
+                    "name": {
+                      "localizedValue": "statuscode",
+                      "value": "statuscode"
+                    },
+                    "value": "499"
+                  }
+                ]
+              },
+              {
+                "data": [
+                  {
+                    "timeStamp": "2026-09-06T19:30:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:31:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:32:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:33:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:34:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:35:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:36:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:37:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:38:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:39:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:40:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:41:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:42:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:43:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:44:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:45:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:46:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:47:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:48:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:49:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:50:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:51:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:52:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:53:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:54:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:55:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:56:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:57:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:58:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T19:59:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:00:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:01:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:02:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:03:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:04:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:05:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:06:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:07:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:08:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:09:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:10:00Z",
+                    "total": 0.0
+                  },
+                  {
+                    "timeStamp": "2026-09-06T20:11:00Z",
+                    "total": 0.0
+                  }
+                ],
+                "metadatavalues": [
+                  {
+                    "name": {
+                      "localizedValue": "modeldeploymentname",
+                      "value": "modeldeploymentname"
+                    },
+                    "value": "gpt-6-astra"
+                  },
+                  {
+                    "name": {
+                      "localizedValue": "statuscode",
+                      "value": "statuscode"
+                    },
+                    "value": "400"
+                  }
+                ]
+              }
+            ],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "Count"
+          }
+        ]
+      },
+      "stderr": "",
+      "queried_at_utc": "2026-09-06T20:13:10.635527+00:00"
+    },
+    "astra_azure_openai_response_time": {
+      "arguments": [
+        "--metrics",
+        "AzureOpenAITimeToResponse",
+        "--aggregation",
+        "Minimum",
+        "Maximum",
+        "Average",
+        "--filter",
+        "ModelDeploymentName eq 'gpt-6-astra'"
+      ],
+      "exit_code": 0,
+      "data": {
+        "cost": 120,
+        "interval": "PT1M",
+        "namespace": "Microsoft.CognitiveServices/accounts",
+        "resourceregion": "eastus2",
+        "timespan": "2026-09-06T19:30:20Z/2026-09-06T20:12:03Z",
+        "value": [
+          {
+            "displayDescription": "Recommended latency (responsiveness) measure for streaming requests. Applies to PTU, PTU-managed and Pay-as-you-go deployments. Calculated as time taken for the first response to appear after a user sends a prompt, as measured by the API gateway. This number increases as the prompt size increases and/or cache hit size reduces. To breakdown time to response metric, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, and ModelVersion. \n\nNote: this metric is an approximation as measured latency is heavily dependent on multiple factors, including concurrent calls and overall workload pattern. In addition, it does not account for any client-side latency that may exist between your client and the API endpoint. Please refer to your own logging for optimal latency tracking.",
+            "errorCode": "Success",
+            "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/AzureOpenAITimeToResponse",
+            "name": {
+              "localizedValue": "Time to Response",
+              "value": "AzureOpenAITimeToResponse"
+            },
+            "resourceGroup": "MAGen",
+            "timeseries": [],
+            "type": "Microsoft.Insights/metrics",
+            "unit": "MilliSeconds"
+          }
+        ]
+      },
+      "stderr": "",
+      "queried_at_utc": "2026-09-06T20:13:10.631562+00:00"
+    }
+  },
+  "selected_definitions": [
+    {
+      "name": {
+        "localizedValue": "Model Requests",
+        "value": "ModelRequests"
+      },
+      "unit": "Count",
+      "category": "Models - HTTP Requests",
+      "displayDescription": "Number of calls made to the model API over a period of time. Applies to PTU, PTU-Managed and Pay-as-you-go deployments.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        },
+        {
+          "localizedValue": "StatusCode",
+          "value": "StatusCode"
+        },
+        {
+          "localizedValue": "IsSpillover",
+          "value": "IsSpillover"
+        },
+        {
+          "localizedValue": "ServiceTierRequest",
+          "value": "ServiceTierRequest"
+        },
+        {
+          "localizedValue": "ServiceTierResponse",
+          "value": "ServiceTierResponse"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "None",
+        "Average",
+        "Minimum",
+        "Maximum",
+        "Total",
+        "Count"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Time to Response",
+        "value": "TimeToResponse"
+      },
+      "unit": "MilliSeconds",
+      "category": "Models - Latency",
+      "displayDescription": "Recommended latency (responsiveness) measure. Applies to PTU and PTU-managed deployments. Calculated as time taken for the first response to appear after a user sends a prompt, as measured by the API gateway. This number increases as the prompt size increases and/or cache hit size reduces. To breakdown time to response metric, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, and ModelVersion. \n\nNote: this metric is an approximation as measured latency is heavily dependent on multiple factors, including concurrent calls and overall workload pattern. In addition, it does not account for any client-side latency that may exist between your client and the API endpoint. For non-streaming requests, this value is an estimate. Please refer to your own logging for optimal latency tracking.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        },
+        {
+          "localizedValue": "StatusCode",
+          "value": "StatusCode"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "Minimum",
+        "Maximum",
+        "Average"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Time Between Tokens",
+        "value": "NormalizedTimeBetweenTokens"
+      },
+      "unit": "MilliSeconds",
+      "category": "Models - Latency",
+      "displayDescription": "Model token generation rate, measured in milliseconds. Applies to PTU and PTU-managed deployments. For non-streaming requests, this value is an estimate.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "Maximum",
+        "Minimum",
+        "Average"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Time to Last Byte",
+        "value": "TimeToLastByte"
+      },
+      "unit": "MilliSeconds",
+      "category": "Models - Latency",
+      "displayDescription": "Time it takes for last byte of response data to be received after request is made by model. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "Maximum",
+        "Minimum",
+        "Average"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Normalized Time to First Byte",
+        "value": "NormalizedTimeToFirstToken"
+      },
+      "unit": "MilliSeconds",
+      "category": "Models - Latency",
+      "displayDescription": "Time it takes for first byte of response data to be received after request is made by model, normalized by token. Applies to PTU, PTU-managed, and Pay-as-you-go deployments. For non-streaming requests, this value is an estimate.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "Maximum",
+        "Minimum",
+        "Average"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Azure OpenAI Requests",
+        "value": "AzureOpenAIRequests"
+      },
+      "unit": "Count",
+      "category": "Azure OpenAI - HTTP Requests",
+      "displayDescription": "Number of calls made to the Azure OpenAI API over a period of time. Applies to PTU, PTU-Managed and Pay-as-you-go deployments. To breakdown API requests, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, ModelVersion, StatusCode (successful, clienterrors, server errors), IsSpillover for spillover information, ServiceTier, StreamType (Streaming vs non-streaming requests) and operation.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        },
+        {
+          "localizedValue": "StatusCode",
+          "value": "StatusCode"
+        },
+        {
+          "localizedValue": "IsSpillover",
+          "value": "IsSpillover"
+        },
+        {
+          "localizedValue": "ServiceTierRequest",
+          "value": "ServiceTierRequest"
+        },
+        {
+          "localizedValue": "ServiceTierResponse",
+          "value": "ServiceTierResponse"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "None",
+        "Average",
+        "Minimum",
+        "Maximum",
+        "Total",
+        "Count"
+      ]
+    },
+    {
+      "name": {
+        "localizedValue": "Time to Response",
+        "value": "AzureOpenAITimeToResponse"
+      },
+      "unit": "MilliSeconds",
+      "category": "Azure OpenAI - Latency",
+      "displayDescription": "Recommended latency (responsiveness) measure for streaming requests. Applies to PTU, PTU-managed and Pay-as-you-go deployments. Calculated as time taken for the first response to appear after a user sends a prompt, as measured by the API gateway. This number increases as the prompt size increases and/or cache hit size reduces. To breakdown time to response metric, you can add a filter or apply splitting by the following dimensions: ModelDeploymentName, ModelName, and ModelVersion. \n\nNote: this metric is an approximation as measured latency is heavily dependent on multiple factors, including concurrent calls and overall workload pattern. In addition, it does not account for any client-side latency that may exist between your client and the API endpoint. Please refer to your own logging for optimal latency tracking.",
+      "dimensions": [
+        {
+          "localizedValue": "ApiName",
+          "value": "ApiName"
+        },
+        {
+          "localizedValue": "OperationName",
+          "value": "OperationName"
+        },
+        {
+          "localizedValue": "Region",
+          "value": "Region"
+        },
+        {
+          "localizedValue": "StreamType",
+          "value": "StreamType"
+        },
+        {
+          "localizedValue": "ModelDeploymentName",
+          "value": "ModelDeploymentName"
+        },
+        {
+          "localizedValue": "ModelName",
+          "value": "ModelName"
+        },
+        {
+          "localizedValue": "ModelVersion",
+          "value": "ModelVersion"
+        },
+        {
+          "localizedValue": "StatusCode",
+          "value": "StatusCode"
+        },
+        {
+          "localizedValue": "ServiceTierRequest",
+          "value": "ServiceTierRequest"
+        },
+        {
+          "localizedValue": "ServiceTierResponse",
+          "value": "ServiceTierResponse"
+        }
+      ],
+      "supportedAggregationTypes": [
+        "Minimum",
+        "Maximum",
+        "Average"
+      ]
+    }
+  ]
+}

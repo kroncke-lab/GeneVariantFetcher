@@ -1,0 +1,275 @@
+Provide an adversarial review of this completed decision experiment. Do not access files, run tools, spend API funds or suggest changing already locked answers. Respond with: decision on routine Astra use now; material flaws/overclaims; what bounded use is actually supported; necessary corrections before publication. Distinguish deploy-now decisions from claims that Astra can never help. User values API cost; CLI costs excluded, Anthropic extraction credits finite. About $150 original API authorization, now conservatively $149.4599652 including unknown reservations; no new budget. No population/human ceiling can be claimed.
+
+All 32 actual API requests are complete and locked. The initial 24 shared prompt, source and schema, randomized model order within each paper, and used a 4,096-token cap and 180-second timeout. The eight-request follow-up is a post-hoc package with an inline schema, json_object, 8,192-token cap and 1,200-second timeout. It is neither unchanged production nor a one-factor ablation. Clinical answers were not read until every output for that phase was locked. Sources and references were frozen. These are eight opened papers, not a holdout. The 43 questions cluster within papers: 24 positive numeric references and 19 valid nulls, with no zero references. One interpretive affected=2 field is excluded in a separate sensitivity analysis. Numeric agreement is not clinical acceptance. No default changed and no unopened tranche was consumed.
+
+Completed report follows. Please challenge rather than simply endorse it. In particular: Is zero incremental accepted count sufficient to reject routine inclusion now despite Astra's faster observed completion? Does a manual fallback proposal overstate unreplicated benefit? Are matched-successful cost ratios clearly qualified? Are these tests being mistaken for a human ceiling or general accuracy proof?
+
+
+# Does Astra justify routine count extraction?
+
+**Decision: retain the existing default; routine Astra use is not justified by
+these tests.** Astra can read difficult source material and sometimes completes
+when Grok 4.6 stalls, but the apparent new counts in this panel do not add usable
+coverage over the saved functioning Grok 4.3 protocol. The completed cheaper-reader
+remediation test recovers every apparent Astra-only number. On seven matching
+papers with known usage, Astra costs **5.42 times as much**, with no additional
+accepted count. Its demonstrated advantage here is faster completion under the
+tested configurations.
+
+This is an opened-source diagnostic, not a production rollout or a new recall
+headline. No extraction defaults, literal validators, databases, or unopened
+tranches changed.
+
+## What was tested
+
+Eight already-opened papers provide 43 fixed questions per arm: 24 positive
+numeric references and 19 valid null references. The packets mix clinical tables,
+relatives outside the numbered cohort, diagnostic timepoints, aggregate prose,
+an abstract, a 179-person roster, and two sources with variants but no applicable
+clinical counts. There are no zero-reference questions. The investigator supplies
+target variants, population and endpoint; autonomous discovery of those elements
+is outside this test.
+
+Each packet receives independent Grok 4.6 low, repeated Grok 4.6 low, and Astra low
+requests. All three receive the same source, prompt and strict provider JSON
+schema, a 4,096 completion-token cap, a 180-second timeout and no retries.
+Within-packet order is seeded; “first” and “repeat” identify arms rather than
+necessarily temporal order. The repeated Grok request receives no prior answer.
+
+Sources, references and requests were frozen before dispatch. All 24 outputs
+were locked before clinical inspection or scoring. A source-only independent
+review identified one interpretive reference, RYR2 19398417 affected=2; the
+43-question primary remains immutable, with a separate 42-question sensitivity
+excluding that field. An explained null on it is not a false positive.
+
+After three settled calls, metadata-only observation of slow service led to a
+recorded scheduling amendment from serial dispatch to three isolated workers.
+No in-flight call was canceled and no scientific input changed. Scheduling and
+shared service conditions limit latency comparisons.
+
+## Locked primary result
+
+| Outcome | Grok first | Grok repeat | Astra low |
+| --- | ---: | ---: | ---: |
+| Successful papers / 8 | 2 | 3 | 7 |
+| Exact numeric references / 24 | 4 | 13 | 22 |
+| Correct nulls / 19 | 6 | 6 | 15 |
+| Wrong nonnull answers returned | 0 | 0 | 0 |
+| Failed/missing question slots | 33 | 24 | 6 |
+| Mechanically source-bound exact numeric answers | 4 | 12 | 22 |
+| Correct numeric claims accepted by existing literal validator | 0 | 0 | 1 |
+
+Failures never earn null credit. Source binding means allowed source IDs and a
+verbatim quotation; it does not establish clinical meaning, complete cohorts or
+correct timepoints. One Grok repeat quotation splices noncontiguous rows, while
+its numeric answer remains correct. Astra's interpretive affected=2 answer
+passes mechanical checks but its explanation does not independently prove the
+clinical split. These are separate quality dimensions.
+
+The nine Astra-only numeric candidates occur on three papers where **both Grok
+calls timed out**, not where Grok completed with wrong numbers:
+
+| Source question | Astra values, carrier / affected / unaffected | Increment over saved Grok 4.3 protocol |
+| --- | --- | --- |
+| RYR2 25435091, initial diagnostic test | 8 / 7 / 1 | All three already present. Only carrier=8 passes the current literal validator in this diagnostic. |
+| RYR2 19398417, abstract | 4 / 2 / 2 | All three already present; affected=2 retains an interpretive caveat. |
+| RYR2 25814417, living baseline, previous symptoms | 179 / 45 / 133 | Different cohort/endpoint from existing 185 / 97 / 62; not three recovered errors. |
+
+The four documented-relative carrier counts absent from the saved baseline are
+recovered by Astra **and both successful Grok arms**. They are not an Astra
+advantage, and a whole-paper merge still requires the population contract.
+The original 12-paper full-pipeline experiment likewise failed to justify Astra
+as primary: its accepted independent overlay added one carrier field and no
+A/U fields at about $6.41 returned incremental API proxy. In the separate
+93-person transcription experiment, cheaper Grok and Astra derived the same
+counts. Together these findings support a decision about current routine use,
+not a claim that Astra can never help.
+
+## Cheaper-reader remediation comparison
+
+This separately frozen post-hoc arm covers all eight packets; all eight
+responses were locked before inspection and scoring. It keeps source, questions, references and the local semantic
+schema, expresses the contract inline, uses provider `json_object`, raises the
+cap to 8,192 and uses the ordinary 1,200-second timeout. These settings change as
+a package: this is neither an isolated schema experiment nor an unchanged
+production run (production does not explicitly request `json_object`). Earlier
+answers and reference values are not included in requests. Unknown charges stay
+reserved under the same budget. After two settled serial calls, a second
+metadata-only scheduling amendment resumes the remaining six with two isolated
+workers and at least 22 seconds between subprocess launches. No in-flight call
+was canceled. Azure key retrieval precedes HTTP dispatch, so that launch
+spacing is not a guaranteed exact request interval.
+
+| Outcome | Grok remediated package | Astra original package |
+| --- | ---: | ---: |
+| Successful papers / 8 | 8 | 7 |
+| Exact positive references / 24 | 24 | 22 |
+| Correct nulls / 19 | 19 | 15 |
+| Wrong nonnull / failed query slots | 0 / 0 | 0 / 6 |
+| Exact answers in 42-query sensitivity | 42 | 36 |
+| Mechanically supported exact answers in sensitivity | 42 | 36 |
+| Accepted correct literal counts | 1 | 1 |
+
+Grok recovers all nine previously Astra-only numeric candidates. Eight have
+mechanically valid evidence; the ninth is the already-disputed affected=2
+inference, for which Grok also stitches a nonverbatim quote. This is excluded
+from the 42-query sensitivity, not silently repaired. The only accepted count
+is identical in both models, and already exists in the retained Grok 4.3
+baseline. An Astra missing-only overlay on remediated Grok adds **zero raw
+numeric answers and zero accepted counts**.
+
+The complete eight-paper Grok package costs **$0.097632** returned proxy
+(**$0.109575** with input premium) and has median elapsed time **305 seconds**.
+On the **seven same papers where both packages completed with known usage**,
+Grok costs **$0.088746** versus Astra **$0.480560**, with observed medians
+**324 seconds versus 13 seconds**. Astra is 5.42 times the returned-proxy cost.
+This conditional subset excludes Astra's failure; the complete panel above
+retains it. An all-eight known-use price ratio would be misleading, so the
+scorer suppresses it and retains Astra's unknown reservation separately.
+These are packet-package measurements, not whole-paper pricing or a controlled
+model-speed ablation. The eight papers are selected and correlated within
+paper; 43 questions are not 43 independent trials.
+
+[Remediation scores](remediated_scores.json), [lock](remediation_locked.json),
+[baseline comparison](baseline_comparison.md), and
+[transport findings](transport_findings.md) preserve the distinctions.
+[Azure deployment metrics](azure_transport_metrics.md) corroborate long remote
+completion times and show no 429 series in the observed window, but do not
+isolate queueing, reasoning or schema overhead. Deployment aggregates do not
+replace our receipt counts or resolve individual timeout billing.
+
+## Practical implication
+
+Keep Astra out of the automatic regular protocol. If a bounded cheaper call
+fails, Astra low remains an optional source-reading fallback for human review;
+this experiment does not validate an automatic timeout-only routing policy or
+its incremental accepted yield. Medium effort had no count advantage in the
+previous paired roster test. No claimed corpus uplift or 75%-of-human ceiling
+follows from any of these selected diagnostics.
+
+The next acceptance gate is a source-validated derived-count contract shared
+by readers: explicit person/cohort/variant ownership, endpoint and timepoint,
+unknown cells, duplicate relatives and index cases, and source coordinates.
+Use deterministic table handling and arithmetic when the representation permits
+it. SCN5A 20031634 still exposes a table-representation gap; source-correct
+sums cannot safely be admitted by simply relaxing the literal-quote validator.
+A more expensive reader does not itself resolve that integration problem.
+
+## Costs, verification and reproduction
+
+The final audit verifies **32 API requests**, with 20 known-usage responses
+and 12 unknown-usage timeouts. New returned API proxy is **$0.627676**;
+input premiums and full unknown reservations bring new conservative accounting
+to **$1.634202**. The original envelope now stands at **$149.4599652 / $150**,
+with **$0.5400348** unallocated; the Azure invoice remains unreconciled.
+[Budget summary](budget_summary.json) and [ledger](budget.json).
+
+The prior $150 envelope carried $147.8257632 of
+conservative accounting. This campaign reserves at most another $2.17, uses
+Azure extraction only, retains full unknown-call reservations, and treats
+returned token prices as proxies rather than invoices. CLI consultation costs
+are excluded under the user's instruction. No new Anthropic extraction API was
+used.
+
+The full offline unit suite passed: **2,969 tests**, including 18 new diagnostic
+scoring regressions. Wheel build and CLI help passed. The canonical phenotype
+figure was rebuilt and visually checked; its historical and opened cohorts stay
+separate, and these component questions are not pooled into it.
+
+Artifacts: [frozen plan](plan.json), [reference review](reference_review.md),
+[source adjudication](source_adjudication.md), [primary lock](outputs_locked.json),
+[primary scores](source_scores.json), [semantic review](semantic_review.md),
+[remediation plan](remediation_plan.json), and [verification](verification.json).
+The source packets and response receipts are under `packets/` and `responses/`.
+A stale settings description calling Sol the strongest available deployment was
+corrected; its model default is unchanged. The unused health-probe entrypoint
+was removed from the imported experimental client only after all requests
+settled. The audit proves its executed functions unchanged and records the
+narrow cleanup in `client_cleanup.json`; pre-format code snapshots preserve
+exact execution text.
+
+Launch scripts are historical paid-test records with overwrite/budget guards;
+do not rerun them to reproduce a score. Offline scorers replay the frozen
+receipts and retain failures. Full frozen-source hash verification additionally
+requires the original local `validation_runs/model_routing_20260906` snapshot.
+
+```bash
+.venv/bin/python docs/evidence/astra_value_20260906/score.py --check
+.venv/bin/python docs/evidence/astra_value_20260906/score_remediation.py --check
+.venv/bin/python docs/evidence/astra_value_20260906/audit.py
+```
+
+
+Independent baseline audit:
+# Marginal benefit against the retained Grok 4.3 baseline
+
+**The new test demonstrates no additional comparable, accepted count over the
+saved regular-protocol baseline.** Of 24 positive frozen source questions, 17
+already have the same stored baseline number: 16 are strongly comparable and
+one is the previously flagged interpretive affected count. Four carrier counts
+are missing in that baseline, but both experimental Grok 4.6 arms and Astra
+recover the same documented-relative candidates. The remaining three questions
+use a different cohort or phenotype endpoint and cannot be scored as baseline
+errors or Astra gains.
+
+The machine-readable companion is `baseline_comparison.json`. It records each
+question, unique strict allele match, original primary prediction, scope and
+endpoint qualification, source evidence, initial experimental result, and input
+hashes. The audit reads only
+`benchmarks/codex_paper_eval/runs/20260906_model12_grok43/predictions.json`'s
+primary `papers[].variants` array; it does not substitute linkage-assisted or
+comparison-lane predictions. No paid calls or remediation outputs were used.
+
+## All positive reference questions
+
+Values below are carriers/affected/unaffected where three fields are shown.
+
+| Frozen packet and targets | Saved Grok 4.3 baseline | Frozen reference | Comparability and marginal value |
+| --- | --- | --- | --- |
+| SCN5A 20031634: Gly1408Arg | 14/4/9 | 14/4/9 | All three already present, Table 1 family B, same phenotype columns. |
+| SCN5A 20031634: c.3963+2T>C | 10/2/8 | 10/2/8 | All three already present, Table 1 family E. The OCR identity limitation remains, but the stored identity is already the normalized target. |
+| SCN5A 20031634: Ala665GlyfsX16 | 9/6/2 | 9/6/2 | All three already present, Table 1 family I. Unknown phenotype is not counted as unaffected. |
+| RYR2 30403697: R417L, R2028H, Y4721C, G4772S | All four carrier fields null | 3, 2, 2, 2 carriers | New source-supported documented-relative candidates, shared by both experimental Grok arms and Astra. The packet's explicitly documented set is not an independently proved exhaustive whole-paper count; derived-count acceptance also remains outstanding. |
+| RYR2 25435091: C2277R | 8/7/1 | 8/7/1 | All three already present with initial EST evidence. Astra's accepted experimental carrier fill is therefore not new over the retained protocol. |
+| RYR2 18929323: P2328S, V4653F | 13 and 6 carriers | 13 and 6 carriers | Both already present with the same current-study Holter cohort evidence. Astra's initial request failed on this packet. |
+| RYR2 19398417: W4645R | 4/2/2 | 4/2/2 | Carriers 4 and symptom-negative 2 already present. Affected 2 has the same interpretive ambiguity in both outputs; it is not counted as a strong safe exact reference. |
+| RYR2 25814417: G357S | 185/97/62 | 179/45/133 | Not comparable: baseline includes six genotyped SCD cases and a combined symptoms/VA phenotype; packet asks only living baseline people and the Previous symptoms column. |
+
+The SCN5A 20031634 baseline export often says `no quote captured`, but it
+explicitly records each Table 1 family location. The source table independently
+supports those exact values and roles. This audit establishes that the counts
+already exist; it does not claim their exported provenance is ideal or that
+every stored count would pass the newly tested literal recovery validator.
+
+## Astra's nine unique values relative to the failed Grok 4.6 attempts
+
+Those nine divide as follows:
+
+- RYR2 25435091: all three already exist in the retained baseline.
+- RYR2 19398417: all three already exist; two are directly supported and one
+  remains interpretive.
+- RYR2 25814417: all three answer a differently scoped question.
+
+Thus six of nine have the same baseline values, including five strongly
+comparable values and one interpretive value. Three have an incompatible scope
+or endpoint. None demonstrates a new accepted regular-protocol count. This
+does not negate Astra's measured availability advantage against these Grok 4.6
+requests; it limits what that advantage means for the decision to pay for Astra
+in the existing protocol.
+
+## Counts and limits
+
+| Classification | Positive questions |
+| --- | ---: |
+| Same stored value, strong endpoint/scope comparability | 16 |
+| Same stored value, interpretive reference | 1 |
+| Baseline null, documented-subset carrier candidate shared by cheaper Grok | 4 |
+| Different cohort or phenotype endpoint | 3 |
+| Total | 24 |
+
+This is a read-only audit of a saved production run, not a new same-day Grok 4.3
+rerun or a population-level benchmark. The selected targets and detailed query
+endpoints were supplied in advance. Do not report 17/24 as a regular-protocol
+accuracy rate: the denominator includes four qualified subset candidates and
+three incompatible questions. Retain the separate 42-query sensitivity for
+RYR2 19398417's affected count and the original locked primary scores.

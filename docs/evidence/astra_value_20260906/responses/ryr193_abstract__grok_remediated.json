@@ -1,0 +1,97 @@
+{
+  "name": "ryr193_abstract__grok_remediated",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract only the requested human per-variant counts from this source packet.\nThe queries define the study population and clinical endpoint, not the answers.\nReturn one claim per query ID. Use null when the source cannot support an exact\ncount for that variant, population and endpoint. Unknown is not zero. A list of\nvariants does not establish one carrier per row. Do not turn cohort enrollment,\npopulation allele frequencies, prior-literature cases, relatives without stated\ngenotype, repeat tests or percentages rounded in prose into exact patient counts.\nInclude explicitly documented carrier relatives when the requested population\nincludes them; respect variant-specific inheritance and overlapping people.\nUse the paper's actual phenotype labels and timepoints. Disease-negative,\nsymptom-free, no diagnostic test result, and unknown are different states.\nIf the query requests a specific endpoint, do not substitute a different one.\nAn explicit count is a literal published number bound to this variant and role.\nA derived count is a transparent aggregation or join of source-supported people\nor disjoint groups. For derived counts state the arithmetic or membership in\nreason. Do not label arithmetic as explicit. sources must use exact provided\nIDs, including all needed headers, footnotes and cohort/join evidence. quote is\na short verbatim contiguous excerpt (at most 600 characters), or null when no\ncount is supplied; additional support can be cited in sources. Do not invent\nsource IDs, clean up a quotation, or consult external information. Keep reasons\nconcise. Return only JSON matching the schema; report unresolved limitations.\n\nGENE: RYR2; PMID: 19398417\nPOPULATION: The family clinically and genetically evaluated in this report.\nENDPOINT: Reported clinical symptom status among carriers; this query is symptoms, not an assertion of diagnostic test negativity.\nQUERIES: [{\"id\": \"q1_carriers\", \"variant\": \"p.W4645R\", \"field\": \"carriers\"}, {\"id\": \"q1_affected\", \"variant\": \"p.W4645R\", \"field\": \"affected\"}, {\"id\": \"q1_unaffected\", \"variant\": \"p.W4645R\", \"field\": \"unaffected\"}]\nSOURCE:\nA1: 1. Biol Res Nurs. 2009 Jul;11(1):66-72. doi: 10.1177/1099800409333369. Epub 2009 \nA2: Apr 26.\nA4: Genetic characterization of familial CPVT after 30 years.\nA6: Beery TA(1), Shah MJ, Benson DW.\nA8: Author information:\nA9: (1)University of Cincinnati, and Cincinnati Children's Hospital Medical Center, \nA10: Cincinnati, Ohio 45221-0038, USA. Theresa.beery@uc.edu\nA12: INTRODUCTION: Catecholaminergic polymorphic ventricular tachycardia (CPVT) is a \nA13: stress-related, bidirectional ventricular tachycardia and atrial tachyarrhythmia \nA14: in the absence of either structural heart disease or prolonged QT interval. \nA15: Autosomal dominant and recessive forms of CPVT because of mutations in the \nA16: cardiac ryanodine receptor (RyR2) or calsequestrin 2 (CASQ2) have been reported. \nA17: The objective of this study was the clinical and genetic characterization of the \nA18: family of an individual initially diagnosed as a child in 1978.\nA19: METHOD: We collected family medical history and recorded a four-generation \nA20: pedigree. We performed mutation analysis of RyR2 \"critical regions'' in the \nA21: N-terminus, FKBP12.6 binding domain, Ca2+ binding domain, and transmembrane \nA22: domains of the C-terminus by direct sequencing.\nA23: RESULTS: CPVT was diagnosed in two of the nine family members evaluated. \nA24: Pedigree analysis suggested autosomal dominant disease transmission. There were \nA25: no additional reports of seizures, pregnancy loss, neonatal death, or sudden \nA26: cardiac death in family members. A novel RyR2 gene variant (W4645R) was found in \nA27: four family members including two without symptoms. RyR2-W4645R segregates with \nA28: disease in this family with incomplete penetrance. The W4645 residue is \nA29: evolutionarily conserved in the transmembrane region adjacent to previously \nA30: reported disease-causing mutations. Based on sorting intolerant from tolerant \nA31: analysis of protein structure, RyR2-W4645R is predicted to be deleterious.\nA32: CONCLUSIONS: All current evidence supports RyR2-W4645R as a disease-causing \nA33: variant, which was silent in persons for two generations before causing symptoms \nA34: in persons for the next two generations, beginning in 1978.\nA36: DOI: 10.1177/1099800409333369\nA37: PMID: 19398417 [Indexed for MEDLINE]\n\nOUTPUT CONTRACT (validated locally after your response):\n{\"type\": \"object\", \"additionalProperties\": false, \"required\": [\"claims\", \"limitations\"], \"properties\": {\"claims\": {\"type\": \"array\", \"items\": {\"type\": \"object\", \"additionalProperties\": false, \"required\": [\"id\", \"value\", \"basis\", \"sources\", \"quote\", \"reason\"], \"properties\": {\"id\": {\"type\": \"string\", \"enum\": [\"q1_carriers\", \"q1_affected\", \"q1_unaffected\"]}, \"value\": {\"type\": [\"integer\", \"null\"]}, \"basis\": {\"type\": \"string\", \"enum\": [\"explicit\", \"derived\", \"unknown\"]}, \"sources\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"enum\": [\"A1\", \"A2\", \"A4\", \"A6\", \"A8\", \"A9\", \"A10\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\", \"A17\", \"A18\", \"A19\", \"A20\", \"A21\", \"A22\", \"A23\", \"A24\", \"A25\", \"A26\", \"A27\", \"A28\", \"A29\", \"A30\", \"A31\", \"A32\", \"A33\", \"A34\", \"A36\", \"A37\"]}}, \"quote\": {\"type\": [\"string\", \"null\"]}, \"reason\": {\"type\": \"string\"}}}}, \"limitations\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}}}}"
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 8192,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 1200,
+  "reserved_usd": 0.068787,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "86fe76a8-f03e-42d4-a7d3-8d13e138e5d9",
+    "x-ms-client-request-id": "c81e8e67-2259-4a62-8526-2e9b3b05bf88",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "48552",
+    "x-ratelimit-reset-tokens": "1",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "c81e8e67-2259-4a62-8526-2e9b3b05bf88",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "86fe76a8-f03e-42d4-a7d3-8d13e138e5d9",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"claims\": [\n    {\n      \"id\": \"q1_carriers\",\n      \"value\": 4,\n      \"basis\": \"explicit\",\n      \"sources\": [\"A26\", \"A27\"],\n      \"quote\": \"A novel RyR2 gene variant (W4645R) was found in four family members including two without symptoms.\",\n      \"reason\": \"Paper states the variant was found in four family members.\"\n    },\n    {\n      \"id\": \"q1_affected\",\n      \"value\": 2,\n      \"basis\": \"derived\",\n      \"sources\": [\"A23\", \"A26\", \"A27\"],\n      \"quote\": \"CPVT was diagnosed in two of the nine family members evaluated. ... found in four family members including two without symptoms.\",\n      \"reason\": \"Four carriers minus two without symptoms, matching two CPVT diagnoses.\"\n    },\n    {\n      \"id\": \"q1_unaffected\",\n      \"value\": 2,\n      \"basis\": \"explicit\",\n      \"sources\": [\"A26\", \"A27\"],\n      \"quote\": \"found in four family members including two without symptoms.\",\n      \"reason\": \"Explicit count of carriers without symptoms.\"\n    }\n  ],\n  \"limitations\": [\n    \"Symptom status uses CPVT diagnosis and 'without symptoms'; no further timepoint or test-negativity distinction is given.\"\n  ]\n}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1414,
+      "completion_tokens": 308,
+      "total_tokens": 1844,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 1414,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 122,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788725761,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 252.66153608390596,
+  "usage": {
+    "prompt_tokens": 1414,
+    "completion_tokens": 308,
+    "total_tokens": 1844,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "text_tokens": 1414,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 122,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.005408,
+  "accounted_usd": 0.006115
+}

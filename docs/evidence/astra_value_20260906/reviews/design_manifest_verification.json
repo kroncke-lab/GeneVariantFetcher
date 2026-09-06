@@ -1,0 +1,84 @@
+{
+  "recorded_unix": 1788726449.9111109,
+  "manifest_sha256": "8e2e0d2207624c87b5d99f460933e8a680f10bd16bd29507572f5f37e71c2aed",
+  "files": [
+    {
+      "file": "agy_design.md",
+      "recorded_sha256": "fe8129429d7b8ee4e8c12d5057ffea8034045f1fa0273feb7801b797de609b6d",
+      "current_sha256": "fe8129429d7b8ee4e8c12d5057ffea8034045f1fa0273feb7801b797de609b6d",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "agy_design_raw.json",
+      "recorded_sha256": "59a2011b86165f475647f829433470e2140e3a8f1d69c22dd26a226d1542b29a",
+      "current_sha256": "59a2011b86165f475647f829433470e2140e3a8f1d69c22dd26a226d1542b29a",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "agy_design_stderr.txt",
+      "recorded_sha256": "3a7f8550106d86abb322e8ed0fb30a0296c0e97c6be03d5a8033b99d16737459",
+      "current_sha256": "3a7f8550106d86abb322e8ed0fb30a0296c0e97c6be03d5a8033b99d16737459",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "claude_design.md",
+      "recorded_sha256": "8526331f089855ca24578947edb944fb8efb318dba297b7805c68224d409e6f0",
+      "current_sha256": "8526331f089855ca24578947edb944fb8efb318dba297b7805c68224d409e6f0",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "claude_design_raw.json",
+      "recorded_sha256": "391eab79d411f2891f287d39266cf5a96c31893c47e11dfe4cce418dc8150c64",
+      "current_sha256": "391eab79d411f2891f287d39266cf5a96c31893c47e11dfe4cce418dc8150c64",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "claude_design_stderr.txt",
+      "recorded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "design_prompt.txt",
+      "recorded_sha256": "68bf04775aa36cdefb564833ff233fd429bfda32de2ef34d79a996e040a4098f",
+      "current_sha256": "68bf04775aa36cdefb564833ff233fd429bfda32de2ef34d79a996e040a4098f",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "design_review_notes.md",
+      "recorded_sha256": "afb9ff3d8cbdc7f94b158e074cba40fe72a13c7bfdefc0f306d95aeabd44e9b8",
+      "current_sha256": "afb9ff3d8cbdc7f94b158e074cba40fe72a13c7bfdefc0f306d95aeabd44e9b8",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "design_status.json",
+      "recorded_sha256": "18571a9cd9bd562e6caf36ab2eb77c824254467597ece746b7945bd52694b6b9",
+      "current_sha256": "18571a9cd9bd562e6caf36ab2eb77c824254467597ece746b7945bd52694b6b9",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "grok_design.md",
+      "recorded_sha256": "5b9d541cb6b88e3ef6a75c187cc4f3a04e9cebc2bc069c712933ef9aea9826ba",
+      "current_sha256": "5b9d541cb6b88e3ef6a75c187cc4f3a04e9cebc2bc069c712933ef9aea9826ba",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "grok_design_raw.json",
+      "recorded_sha256": "d00062ab33d73cfb5f51f26c6231d08210ce1cc972da7e30b3b165f510887cab",
+      "current_sha256": "d00062ab33d73cfb5f51f26c6231d08210ce1cc972da7e30b3b165f510887cab",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "grok_design_stderr.txt",
+      "recorded_sha256": "5ab1b64e5db4a645935ca4a3fa4e370dd0dc461165af1f56204675ad9dc249f0",
+      "current_sha256": "5ab1b64e5db4a645935ca4a3fa4e370dd0dc461165af1f56204675ad9dc249f0",
+      "verification": "exact_hash"
+    },
+    {
+      "file": "launcher_snapshot.py",
+      "recorded_sha256": "c72b18e9b14ef1d003675e0a13ea691b565c2d1863edb22daf948309f7e521aa",
+      "current_sha256": "e696b78224544a4ea67b61fb50089ad15b92dd84c2993c79711dc2dc51c6b7a9",
+      "verification": "original_scratch_launcher_AST_equivalent_after_formatting"
+    }
+  ]
+}

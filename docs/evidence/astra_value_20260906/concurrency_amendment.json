@@ -1,0 +1,8 @@
+{
+  "recorded_unix": 1788723522.9285078,
+  "plan_sha256": "fb378be9745daa46085e2853c622125153f01e047da07ca94097b3b53f943131",
+  "completed_calls": 3,
+  "workers": 3,
+  "reason": "Serial Grok latency observed from transport metadata. Original runner stopped between completed calls with no pending reservation; no clinical answers inspected. Remaining unchanged requests run in separate processes, preserving per-call budget locks. This changes scheduling only, not prompt, model, cap, deadline, reference, or scoring. No API request canceled or retried.",
+  "runner_sha256": "c9a470733f3eff8954d37c227519cdc21e797c2231bc194a009cf0a63d2f998a"
+}

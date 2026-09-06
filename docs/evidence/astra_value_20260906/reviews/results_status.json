@@ -1,0 +1,17 @@
+[
+  {
+    "reviewer": "agy",
+    "exit_code": 0,
+    "readable_result": true
+  },
+  {
+    "reviewer": "claude",
+    "exit_code": 0,
+    "readable_result": true
+  },
+  {
+    "reviewer": "grok",
+    "exit_code": 0,
+    "readable_result": true
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "scn200_table": {
+    "q1_carriers": 14,
+    "q1_affected": 4,
+    "q1_unaffected": 9,
+    "q2_carriers": 10,
+    "q2_affected": 2,
+    "q2_unaffected": 8,
+    "q3_carriers": 9,
+    "q3_affected": 6,
+    "q3_unaffected": 2
+  },
+  "ryr304_relatives": {
+    "q1_carriers": 3,
+    "q2_carriers": 2,
+    "q3_carriers": 2,
+    "q4_carriers": 2
+  },
+  "ryr254_timepoint": {
+    "q1_carriers": 8,
+    "q1_affected": 7,
+    "q1_unaffected": 1
+  },
+  "ryr189_aggregate": {
+    "q1_carriers": 13,
+    "q1_affected": null,
+    "q1_unaffected": null,
+    "q2_carriers": 6,
+    "q2_affected": null,
+    "q2_unaffected": null
+  },
+  "ryr193_abstract": {
+    "q1_carriers": 4,
+    "q1_affected": 2,
+    "q1_unaffected": 2
+  },
+  "scn325_prior_counts": {
+    "q1_carriers": null,
+    "q1_affected": null,
+    "q1_unaffected": null,
+    "q2_carriers": null,
+    "q2_affected": null,
+    "q2_unaffected": null,
+    "q3_carriers": null,
+    "q3_affected": null,
+    "q3_unaffected": null
+  },
+  "ryr258_roster": {
+    "q1_carriers": 179,
+    "q1_affected": 45,
+    "q1_unaffected": 133
+  },
+  "scn251_variant_list": {
+    "q1_carriers": null,
+    "q1_affected": null,
+    "q1_unaffected": null,
+    "q2_carriers": null,
+    "q2_affected": null,
+    "q2_unaffected": null
+  }
+}

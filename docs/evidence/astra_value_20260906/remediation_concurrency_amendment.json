@@ -1,0 +1,9 @@
+{
+  "recorded_unix": 1788725210.801541,
+  "plan_sha256": "799bdf7740cd527632975292074288c4f6196f895d739e7959a8b281f4a58817",
+  "stop_receipt_sha256": "47100548524166f75cc5d23f16134fc22330bf99185258f77a81f3d0d27b238b",
+  "workers": 2,
+  "minimum_start_interval_seconds": 22,
+  "runner_sha256": "c71d6c8e10631336e4f010a70d66c64c7ae7d572f55d3ea7cf7c80adb82b0724",
+  "reason": "Completed serial calls take minutes. Resume remaining identical requests with two independently locked worker processes and globally spaced subprocess launches. Azure key retrieval precedes HTTP dispatch, so launch spacing is not a guaranteed exact dispatch interval. No clinical outputs inspected, no in-flight requests canceled, no prompt/cap/deadline/reference changes."
+}

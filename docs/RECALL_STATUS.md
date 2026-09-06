@@ -12,7 +12,39 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
-## Latest bounded-reader diagnostic (2026-09-06; no promotion)
+## Latest Astra inclusion decision (2026-09-06; no promotion)
+
+**Do not add Astra to the regular protocol on current evidence.** A new,
+source-frozen eight-paper diagnostic has 24 numeric and 19 valid-null questions.
+In its initial 180-second strict-schema package, Astra completes 7/8 papers
+versus 2/8 and 3/8 for independent Grok 4.6 calls. Its nine apparent extra
+numeric values consist of six already present in the retained Grok 4.3 baseline
+and three using a different cohort/phenotype question. The sole accepted Astra
+literal count also already exists in that baseline.
+
+A separately locked, post-hoc Grok package uses an inline contract, JSON-object
+output, 8,192-token cap and ordinary 1,200-second timeout. It completes **8/8**,
+matching **24/24 numeric values and 19/19 nulls**. Excluding one interpretive
+abstract inference gives **42/42 numeric and mechanical-source passes**. It
+recovers all nine apparent Astra-only numbers; both packages yield the same
+one accepted literal count. Adding Astra contributes **zero additional raw or
+accepted counts**. This tests a package, not an isolated model/configuration
+change or whole-paper recall; reference agreement is not clinical validation.
+
+On seven matching completed papers with known usage, returned API proxy is
+**$0.088746 Grok versus $0.480560 Astra (5.42×)**, with observed median elapsed
+time **324 versus 13 seconds** under different configurations. This leaves an
+untested manual option for speed, not a validated automatic fallback. No headline,
+default, literal-validator or unopened-tranche change follows. The current
+priority remains source-validated derivation and cohort/endpoint ownership.
+
+New 32-request proxy **$0.627676**; retaining unknown charges and input premiums
+makes new accounting **$1.634202**, combined original envelope
+**$149.4599652 / $150**. Billing remains unreconciled. Full offline suite:
+**2,969 passed**, wheel bytes and CLI startup verified.
+[Report, locks, baseline audit and CLI reviews](evidence/astra_value_20260906/README.md).
+
+## Earlier bounded-reader diagnostic (2026-09-06; no promotion)
 
 Grok 4.6 now returns on all eight source packets, and its corrected production
 SDK route passes live. Earlier timeouts were intermittent; counterbalanced

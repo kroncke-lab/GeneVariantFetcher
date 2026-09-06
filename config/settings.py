@@ -435,9 +435,9 @@ class Settings(BaseSettings):
         default="azure_ai/gpt-5.6-sol",
         validation_alias="COUNT_RECOVERY_MODEL",
         description=(
-            "Model for the count-recovery pass. Defaults to the strongest "
-            "available reasoning deployment because count attribution is the "
-            "judgment-heaviest step; the prompt is a variant list plus source, "
+            "Model for the count-recovery pass. Defaults to the configured Sol "
+            "reader; newer deployments require a separate cost/quality "
+            "evaluation. The prompt is a variant list plus source, "
             "not a full re-extraction."
         ),
     )

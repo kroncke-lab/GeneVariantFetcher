@@ -484,6 +484,16 @@ Research-only strict-schema roster probes preserve source identifiers; derived
 packet counts still require whole-paper cohort/endpoint reconciliation before
 production integration.
 
+The subsequent [Astra value diagnostic](evidence/astra_value_20260906/README.md)
+does not justify adding Astra to the regular protocol. Its apparent unique
+answers against timed-out Grok 4.6 requests are already in the retained Grok 4.3
+baseline or use a different cohort/endpoint. Availability and numeric agreement
+remain separate from incremental accepted counts. The existing count-recovery
+transport normally allows 1,200 seconds and an 8,192 completion-token cap; the
+diagnostic's initial 180-second/4,096-token strict-schema package is not that
+production configuration. Keep automatic routing and the literal validator
+unchanged until the derived-count acceptance gate passes.
+
 Treat reasoning effort as a secondary lever. Source acquisition, supplement
 folding, extraction logic, and matcher behavior usually move recall more than a
 non-default effort value. Change one stage at a time and re-score before keeping

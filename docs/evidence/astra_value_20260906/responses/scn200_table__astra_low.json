@@ -1,0 +1,346 @@
+{
+  "name": "scn200_table__astra_low",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract only the requested human per-variant counts from this source packet.\nThe queries define the study population and clinical endpoint, not the answers.\nReturn one claim per query ID. Use null when the source cannot support an exact\ncount for that variant, population and endpoint. Unknown is not zero. A list of\nvariants does not establish one carrier per row. Do not turn cohort enrollment,\npopulation allele frequencies, prior-literature cases, relatives without stated\ngenotype, repeat tests or percentages rounded in prose into exact patient counts.\nInclude explicitly documented carrier relatives when the requested population\nincludes them; respect variant-specific inheritance and overlapping people.\nUse the paper's actual phenotype labels and timepoints. Disease-negative,\nsymptom-free, no diagnostic test result, and unknown are different states.\nIf the query requests a specific endpoint, do not substitute a different one.\nAn explicit count is a literal published number bound to this variant and role.\nA derived count is a transparent aggregation or join of source-supported people\nor disjoint groups. For derived counts state the arithmetic or membership in\nreason. Do not label arithmetic as explicit. sources must use exact provided\nIDs, including all needed headers, footnotes and cohort/join evidence. quote is\na short verbatim contiguous excerpt (at most 600 characters), or null when no\ncount is supplied; additional support can be cited in sources. Do not invent\nsource IDs, clean up a quotation, or consult external information. Keep reasons\nconcise. Return only JSON matching the schema; report unresolved limitations.\n\nGENE: SCN5A; PMID: 20031634\nPOPULATION: The current study families, using the genotype-positive people in Table 1.\nENDPOINT: BrS ECG positive versus explicitly Not BrS ECG positive, as defined by this paper. Preserve undetermined phenotype separately.\nQUERIES: [{\"id\": \"q1_carriers\", \"variant\": \"p.Gly1408Arg\", \"field\": \"carriers\"}, {\"id\": \"q1_affected\", \"variant\": \"p.Gly1408Arg\", \"field\": \"affected\"}, {\"id\": \"q1_unaffected\", \"variant\": \"p.Gly1408Arg\", \"field\": \"unaffected\"}, {\"id\": \"q2_carriers\", \"variant\": \"c.3963+2T>C\", \"field\": \"carriers\"}, {\"id\": \"q2_affected\", \"variant\": \"c.3963+2T>C\", \"field\": \"affected\"}, {\"id\": \"q2_unaffected\", \"variant\": \"c.3963+2T>C\", \"field\": \"unaffected\"}, {\"id\": \"q3_carriers\", \"variant\": \"p.Ala665GlyfsX16\", \"field\": \"carriers\"}, {\"id\": \"q3_affected\", \"variant\": \"p.Ala665GlyfsX16\", \"field\": \"affected\"}, {\"id\": \"q3_unaffected\", \"variant\": \"p.Ala665GlyfsX16\", \"field\": \"unaffected\"}]\nSOURCE:\nL109: Table 1. Summary of the Phenotype-Genotype Relationship in the Study Group (n513 Families)\nL110:  Mutation Mutation Mutation Positive, Mutation\nL111: Family Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nL112: No. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nL113: A c.612–2A.G … 6 3 3 0 3 Wrong splice\nL114: B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27\nL115: C c.673C.T p.Arg225Trp 11 4 6 1 0 Missense28\nL116: D c.5164A.G p.Asn1722Asp 9 3 5 1 2 Missense\nL117: E c.396312T.C … 10 2 8 0 0 Wrong splice16\nL118: F c.4145G.T p.Ser1382Ile 9 3 5 1 1 Missense29\nL119: G c.2516T.C p.Leu839Pro 5 4 1 0 0 Missense\nL120: H c.2254G.A p.Gly752.Arg 6 4 2 0 0 Missense29,30\nL121: I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop\nL122: J c.1603C.T p.Arg535X 9 5 4 0 0 Non sense29\nL123: K c.3667delG p.Ala1223ProfsX7 5 3 2 0 0 Frameshift, stop\nL124: L p.1570-Phe1571insIle 11 6 4 1 0 Insertion\nL125: M c.481G.A p.Glu161Lys 11 7 4 0 1 Missense23,29\nL126:  Total 115 54 55 6 8\nL127: \nL128: \nL129: (GPD1L, CACNA1C, CACNB2, SCN1B, and KCNE3) have 16 years of age and in those showing severe conduction defects at\nL130: been associated with BrS, but the prevalence of variants in rest. Underlying structural heart disease was excluded by echocar-\nL131:  diography, chest roentgenogram, and exercise testing. Laboratory\nL132: these genes is yet unknown.9 –12 SCN5A mutations may also\nL133:  tests excluded acute ischemia and metabolic or electrolyte\nL134: lead to progressive cardiac conduction defects, long-QT disturbances.\nL135: syndrome type 3, or atrial standstill.13–15 Progressive cardiac ECG parameters that were analyzed, before and after drug testing,\nL136: conduction defects and BrS are both associated with a loss of were as follows: heart rate, PQ interval (in lead II), QRS duration,\nL137: function of the mutant sodium channel. Accordingly, “over- maximal ST elevation (right precordial leads), and QTc duration in\nL138:  V4 (Bazett’s formula).\nL139: lap” families who present a mixed phenotype with features of\nL140: both diseases exist.16 –18 The causality of SCN5A mutations in Genetic Analysis\nL141: progressive cardiac conduction defects was proven by linkage Genomic DNA was extracted from peripheral blood leukocytes using\nL142: analysis.13,16,19 In contrast, SCN5A mutations in BrS were standard protocols. All 28 exons of SCN5A were amplified by\nL143: discovered by a candidate gene approach20 and linkage data polymerase chain reaction using intronic primers.26 Polymerase\nL144: are still lacking, with the exception of a large overlap family chain reaction products were screened for a SCN5A mutation using\nL145:  denaturing high performance liquid chromatography-DNA sequenc-\nL146: in which the causal mutation is linked with a mixed pheno-\nL147:  ing. DNA variants were disease-causing mutations, rather than\nL148: type.21 Of note, not only is the proportion of SCN5A mutation polymorphisms, if they were present in highly conserved regions of\nL149: carriers low, but also, conversely, BrS-ECGs1 were reported SCN5A and absent in 200 control individuals. Annotation of muta-\nL150: among members of SCN5A-positive BrS families who did not tions was based on the cDNA reference sequence GenBank\nL151: carry the familial SCN5A mutation.22,23 Clearly, the associa- NM_198056. Sequencing of the SCN5A gene was performed in\nL152:  probands and in all mutation-negative BrS-ECG1 patients.\nL153: tion between BrS and SCN5A mutations is complex. In this\nL154: study, we set out to investigate this association in a larger Statistical Analysis\nL155: group of families. ECG parameters were compared with Student t test. Clinical data are\nL156:  expressed as mean value6SD for continuous data or proportions for\nL157:  Methods categorical data. A probability value ,0.05 was considered significant.\nL158: This retrospective study was conducted at the center of reference for\nL159: rare arrhythmic diseases of Nantes University Hospital and at the Results\nL160: Academic Medical Center, University of Amsterdam, in accordance\nL161: with the local guidelines for genetic research and with the approval Clinical and Electrocardiographic Results\nL162: of the local medical ethics committees. Informed written consent was Among a total of 444 genotyped probands with BrS-ECGs1\nL163: obtained from all patients. in whom molecular screening was conducted in our interna-\nL164:  Large genotyped BrS families in which 5 or more family members tional multicenter database, 118 (26%) carried an SCN5A\nL165: carried a SCN5A mutation were included for the present investiga-\nL166: tion. An individual was defined as affected by BrS if he/she\nL167:  mutation. Thirteen of them, each with a different mutation\nL168: displayed a BrS-ECG at baseline or after provocation with a class I (Table 1), belonged to large families with $5 SCN5A-\nL169: antiarrhythmic drug (BrS-ECG1).24 A BrS-ECG1 was defined as a positive members. For this analysis, all the screened members\nL170: coved-type ST-segment elevation $0.2 mV at its peak followed of these 13 families were included, and they constituted the\nL171: (without isoelectric separation) by a negative T wave in 2 or more study population (n5264; Table 2). A history of sudden\nL172: right precordial leads.25 Either intravenous ajmaline (1 mg/kg body\nL173: weight at a rate of 10 mg/min) or flecainide (2 mg/kg body weight cardiac death at young age was present in 3 families. In the 13\nL174: in 10 minutes with a maximum of 150 mg) were used for drug probands, the workup that led to the diagnosis of BrS was\nL175: testing. Drug challenge was not performed in patients younger than conducted because of (1) unexplained syncopal episode\nL184: Table 2. PR and QRS Duration in the 13 Families during car racing from sudden cardiac death and that second\nL185: (264 Members) event initiated familial screening.\nL186:  n PR Interval, ms QRS Interval, ms Genetic analysis of the probands’ relatives identified a total\nL187:  of 115 carriers (Figure 1) of the familial SCN5A mutation and\nL188: Mutation positive BrS-ECG1 54 194637 113618\nL189:  149 mutation negative relatives (mutation negative unaf-\nL190: Mutation positive not BrS-ECG1 61 193637 113621\nL191:  fected individuals not shown in Figure 1). In total, a sponta-\nL192: Mutation carriers (total) 115 193637* 113620**\nL193:  neous BrS-ECG1 was present in 21 of 115 mutation carriers\nL194: Mutation negative BrS-ECG1 8 158625 94615 (18%) and in 3 of the noncarriers. Provocation testing,\nL195: Mutation negative not BrS-ECG1 141 162631 94614 performed in 67 mutation carriers and 63 noncarriers, was\nL196: Mutation negative subjects (total) 149 162629* 95614** positive in 33 additional mutation carriers and in 5 noncarri-\nL197: Total 264 ers. Thus, among carriers of the familial mutation the pen-\nL198:   *P,0.00001; **P,0.001 etrance of the BrS phenotype increased from 18% at baseline\nL199:  to 61% after drug testing (54/88 patients). Twenty-five\nL200: (n54); (2) ECG performed because of chest pain (n52); (3) mutation carriers received an implantable cardioverter/\nL201: ECG performed because of palpitations (n52); (4) ECG defibrillator.\nL202: performed for other reason (n54); and (5) ECG performed At baseline, mutation carriers had, on average, significantly\nL203: because of a family history of sudden death (n51). Eleven of longer PR (193637 ms versus 162629 ms, P,0.00001) and\nL204: 13 probands had a spontaneous BrS-ECG1 (type I), whereas QRS intervals (113620 versus 95614 ms, P,0.0001), com-\nL205: 1 showed a BrS-ECG1 only after drug provocation (family pared with the noncarriers (Table 2). There was a higher\nL206: D; Figure 1). The last proband (family L) suffered from proportion of patients affected by a first-degree AV block among\nL207: sudden cardiac death during car racing; his brother also died carriers (27/115, 23%) than among noncarriers (4/149, 3%,\nL208: \nL209: \nL210: Figure 1. Pedigrees of the 13 SCN5A-related BrS families. Squares represent males and circles represent females. Probands are indicated\nL211: by an arrow. Family members affected by the BrS phenotype (BrS-ECG1) before or after provocation challenge are represented with a left-\nL212: half ﬁlled symbol. Family members affected by progressive cardiac conduction disease are represented with a right half-ﬁlled symbol. Muta-\nL213: tion carriers without BrS phenotype (mutation negative BrS-ECG2) are in white. Patients with undetermined phenotype are shown with gray\nL214: symbol and unknown genotype is indicated by a “?”. Family members carriers of a SCN5A mutation are indicated with 1 and noncarriers\nL215: with 2. The noncarriers of the SCN5A mutation but affected by the BrS are circled (mutation negative BrS-ECG1). Patients who underwent\nL216: sodium channel blocker testing are indicated with a T. Unaffected mutation-negative individuals are not shown."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "source_counts",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "claims",
+            "limitations"
+          ],
+          "properties": {
+            "claims": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "value",
+                  "basis",
+                  "sources",
+                  "quote",
+                  "reason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "q1_carriers",
+                      "q1_affected",
+                      "q1_unaffected",
+                      "q2_carriers",
+                      "q2_affected",
+                      "q2_unaffected",
+                      "q3_carriers",
+                      "q3_affected",
+                      "q3_unaffected"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "explicit",
+                      "derived",
+                      "unknown"
+                    ]
+                  },
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "L109",
+                        "L110",
+                        "L111",
+                        "L112",
+                        "L113",
+                        "L114",
+                        "L115",
+                        "L116",
+                        "L117",
+                        "L118",
+                        "L119",
+                        "L120",
+                        "L121",
+                        "L122",
+                        "L123",
+                        "L124",
+                        "L125",
+                        "L126",
+                        "L127",
+                        "L128",
+                        "L129",
+                        "L130",
+                        "L131",
+                        "L132",
+                        "L133",
+                        "L134",
+                        "L135",
+                        "L136",
+                        "L137",
+                        "L138",
+                        "L139",
+                        "L140",
+                        "L141",
+                        "L142",
+                        "L143",
+                        "L144",
+                        "L145",
+                        "L146",
+                        "L147",
+                        "L148",
+                        "L149",
+                        "L150",
+                        "L151",
+                        "L152",
+                        "L153",
+                        "L154",
+                        "L155",
+                        "L156",
+                        "L157",
+                        "L158",
+                        "L159",
+                        "L160",
+                        "L161",
+                        "L162",
+                        "L163",
+                        "L164",
+                        "L165",
+                        "L166",
+                        "L167",
+                        "L168",
+                        "L169",
+                        "L170",
+                        "L171",
+                        "L172",
+                        "L173",
+                        "L174",
+                        "L175",
+                        "L184",
+                        "L185",
+                        "L186",
+                        "L187",
+                        "L188",
+                        "L189",
+                        "L190",
+                        "L191",
+                        "L192",
+                        "L193",
+                        "L194",
+                        "L195",
+                        "L196",
+                        "L197",
+                        "L198",
+                        "L199",
+                        "L200",
+                        "L201",
+                        "L202",
+                        "L203",
+                        "L204",
+                        "L205",
+                        "L206",
+                        "L207",
+                        "L208",
+                        "L209",
+                        "L210",
+                        "L211",
+                        "L212",
+                        "L213",
+                        "L214",
+                        "L215",
+                        "L216"
+                      ]
+                    }
+                  },
+                  "quote": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.400725,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3496338",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "7c6a8f99-9c55-4354-a4cd-3b31c67c03cb",
+    "apim-request-id": "084e39e1-4a8c-4f4d-b096-528fee1dffd4",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\n  \"claims\": [\n    {\n      \"id\": \"q1_carriers\",\n      \"value\": 14,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L114\"],\n      \"quote\": \"B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27\",\n      \"reason\": \"Table 1 explicitly lists 14 mutation carriers in family B.\"\n    },\n    {\n      \"id\": \"q1_affected\",\n      \"value\": 4,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L114\", \"L166\", \"L168\", \"L169\", \"L170\", \"L171\", \"L172\"],\n      \"quote\": \"B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27\",\n      \"reason\": \"Table 1 lists 4 mutation-positive BrS-ECG positive people; the endpoint includes baseline or drug-provoked BrS ECG.\"\n    },\n    {\n      \"id\": \"q1_unaffected\",\n      \"value\": 9,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L114\"],\n      \"quote\": \"B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27\",\n      \"reason\": \"Table 1 explicitly lists 9 mutation-positive Not BrS ECG positive people. The separate undetermined person is excluded.\"\n    },\n    {\n      \"id\": \"q2_carriers\",\n      \"value\": 10,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L117\"],\n      \"quote\": \"E c.396312T.C … 10 2 8 0 0 Wrong splice16\",\n      \"reason\": \"Family E's splice variant, rendered c.396312T.C in the packet, corresponds to the queried c.3963+2T>C; Table 1 lists 10 carriers.\"\n    },\n    {\n      \"id\": \"q2_affected\",\n      \"value\": 2,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L117\", \"L166\", \"L168\", \"L169\", \"L170\", \"L171\", \"L172\"],\n      \"quote\": \"E c.396312T.C … 10 2 8 0 0 Wrong splice16\",\n      \"reason\": \"Table 1 lists 2 mutation-positive BrS-ECG positive people for family E, including baseline or drug-provoked positivity.\"\n    },\n    {\n      \"id\": \"q2_unaffected\",\n      \"value\": 8,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L117\"],\n      \"quote\": \"E c.396312T.C … 10 2 8 0 0 Wrong splice16\",\n      \"reason\": \"Table 1 explicitly lists 8 mutation-positive Not BrS ECG positive people and 0 with undetermined phenotype.\"\n    },\n    {\n      \"id\": \"q3_carriers\",\n      \"value\": 9,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L121\"],\n      \"quote\": \"I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop\",\n      \"reason\": \"Table 1 explicitly lists 9 mutation carriers in family I.\"\n    },\n    {\n      \"id\": \"q3_affected\",\n      \"value\": 6,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L121\", \"L166\", \"L168\", \"L169\", \"L170\", \"L171\", \"L172\"],\n      \"quote\": \"I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop\",\n      \"reason\": \"Table 1 lists 6 mutation-positive BrS-ECG positive people. The separate mutation-negative BrS ECG positive person is excluded.\"\n    },\n    {\n      \"id\": \"q3_unaffected\",\n      \"value\": 2,\n      \"basis\": \"explicit\",\n      \"sources\": [\"L109\", \"L110\", \"L111\", \"L112\", \"L121\"],\n      \"quote\": \"I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop\",\n      \"reason\": \"Table 1 explicitly lists 2 mutation-positive Not BrS ECG positive people. The separate undetermined person is excluded.\"\n    }\n  ],\n  \"limitations\": [\n    \"Table 1 preserves undetermined phenotype separately: p.Gly1408Arg has 1, c.3963+2T>C has 0, and p.Ala665GlyfsX16 has 1. These are not counted as Not BrS ECG positive.\",\n    \"The packet's nucleotide notation for family E is OCR-rendered as c.396312T.C.\",\n    \"Not BrS ECG positive is the requested ECG category, not a claim of symptom freedom or absence of other cardiac disease. Table 2 combines negative and undetermined carriers, so its broader category was not substituted for Table 1.\"\n  ]\n}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788723165,
+    "id": "chatcmpl-ELCtZvdbtIBIhIiOFAy4klS16VbgJ",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260903032459-40fac7a1-prefill-r11-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1245,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 151,
+        "service_tbt_ms": 9,
+        "service_ttft_ms": 987,
+        "service_ttlt_ms": 11875,
+        "user_visible_ttft_ms": 837
+      },
+      "prompt_tokens": 3662,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 3659,
+        "cached_tokens": 0
+      },
+      "total_tokens": 4907
+    }
+  },
+  "status": "returned",
+  "seconds": 13.041648084064946,
+  "usage": {
+    "completion_tokens": 1245,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 151,
+      "service_tbt_ms": 9,
+      "service_ttft_ms": 987,
+      "service_ttlt_ms": 11875,
+      "user_visible_ttft_ms": 837
+    },
+    "prompt_tokens": 3662,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 3659,
+      "cached_tokens": 0
+    },
+    "total_tokens": 4907
+  },
+  "api_proxy_usd": 0.09887,
+  "accounted_usd": 0.108025
+}

@@ -1,0 +1,7 @@
+{
+  "pid": 34125,
+  "completed_remediation_calls": 2,
+  "no_pending_calls": true,
+  "unix": 1788725189.354841,
+  "note": "Stopped between completed calls for two-worker continuation; no request canceled and no clinical response inspected."
+}

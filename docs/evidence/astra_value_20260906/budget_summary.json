@@ -1,0 +1,71 @@
+{
+  "actual_api_requests": 32,
+  "returned_usage_requests": 20,
+  "unknown_usage_requests": 12,
+  "returned_api_proxy_usd": 0.627676,
+  "unknown_reservations_usd": 0.935071,
+  "returned_accounting_with_input_premium_usd": 0.6991310000000001,
+  "new_accounted_usd": 1.634202,
+  "prior_accounted_usd": 147.8257632,
+  "new_limit_usd": 2.17,
+  "combined_accounted_usd": 149.4599652,
+  "remaining_original_150_envelope_usd": 0.5400348000000008,
+  "remaining_current_campaign_usd": 0.535798,
+  "budget_sha256": "e58b7f21f4754299df676455acf4cd8c11bc4e60221779dc869625c7cef55423",
+  "prior_budget_sha256": "dbeabed9d309cb03264606ea0b521188a872d20f47d23ab4f97bf02a8c02221e",
+  "original_budget_sha256": "03f21ea91625de7933ba71b20cf9cbf9e2b60a5c06d5092826c71ecb2cbd2fc8",
+  "lock_hashes": {
+    "outputs_locked.json": "de1d065d908a6d82743557ecc9e2ec094a5e79fb2f5ec731abc6b462c2c7392c",
+    "remediation_locked.json": "9bdb5791692be5fc6937906b6a64bc8dd8819509e316df7fed51a4e72198e51e"
+  },
+  "panels": {
+    "primary": {
+      "planned": 24,
+      "dispatched": 24,
+      "undispatched": 0
+    },
+    "remediation": {
+      "planned": 8,
+      "dispatched": 8,
+      "undispatched": 0
+    }
+  },
+  "code_integrity": {
+    "client.py": {
+      "recorded_sha256": "a9ad62658fd4587084003c84cfb30471861862cb25d789b447e7306eede006e1",
+      "verified": true,
+      "allowed_exception": "Only the unused __main__ health-probe block was removed after both output locks; imported transport AST is unchanged.",
+      "exception_receipt_sha256": "e94bb3d5d0d39e0d05dfd88aab1f7b26153e2aa24acdd20463a6607d7fc523c9"
+    },
+    "prepare.py": {
+      "recorded_sha256": "d7cfa00bb39d38fa8526ffe411e823553b0726afb1ecba9ef6395e25084d5402",
+      "verified": true
+    },
+    "run.py": {
+      "recorded_sha256": "51c6bf2dae7468319de161c10dc846b59d31181ad550899232f5bd58b727b5f9",
+      "verified": true
+    },
+    "run_parallel.py": {
+      "recorded_sha256": "c9a470733f3eff8954d37c227519cdc21e797c2231bc194a009cf0a63d2f998a",
+      "verified": true
+    },
+    "remediate.py": {
+      "recorded_sha256": "84ed60b910664f94aa2026e69f8fc5ff816d20c23501372d8e4ef11e6d1ce0e3",
+      "verified": true
+    },
+    "run_remediation_parallel.py": {
+      "recorded_sha256": "c71d6c8e10631336e4f010a70d66c64c7ae7d572f55d3ea7cf7c80adb82b0724",
+      "verified": true
+    },
+    "score.py": {
+      "recorded_sha256": "e88aca47c49776a33926339186eef5edd615ba6056ed02acd2931b8515137a3b",
+      "verified": true
+    },
+    "pipeline/count_recovery.py": {
+      "recorded_sha256": "a13e6d9b5dbafc43a5cf203fd3529f88025dd8e7a453561ac6abb87bbb11f923",
+      "verified": true
+    }
+  },
+  "verified_response_hashes": 32,
+  "price_basis": "Uncached proxy rates plus 25% input premium in conservative accounting; reasoning uses max(completion, total-input). Unknown charges retain full reservations. Azure invoice not reconciled; CLI costs excluded."
+}

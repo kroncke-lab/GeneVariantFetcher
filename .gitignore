@@ -177,3 +177,4 @@ tests/run_*.py
 
 # Experiment accounting semaphore; the JSON ledger is the durable artifact.
 /docs/evidence/model_followup_20260906/budget.lock
+/docs/evidence/astra_value_20260906/budget.lock

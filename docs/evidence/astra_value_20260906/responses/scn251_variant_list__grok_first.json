@@ -1,0 +1,205 @@
+{
+  "name": "scn251_variant_list__grok_first",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract only the requested human per-variant counts from this source packet.\nThe queries define the study population and clinical endpoint, not the answers.\nReturn one claim per query ID. Use null when the source cannot support an exact\ncount for that variant, population and endpoint. Unknown is not zero. A list of\nvariants does not establish one carrier per row. Do not turn cohort enrollment,\npopulation allele frequencies, prior-literature cases, relatives without stated\ngenotype, repeat tests or percentages rounded in prose into exact patient counts.\nInclude explicitly documented carrier relatives when the requested population\nincludes them; respect variant-specific inheritance and overlapping people.\nUse the paper's actual phenotype labels and timepoints. Disease-negative,\nsymptom-free, no diagnostic test result, and unknown are different states.\nIf the query requests a specific endpoint, do not substitute a different one.\nAn explicit count is a literal published number bound to this variant and role.\nA derived count is a transparent aggregation or join of source-supported people\nor disjoint groups. For derived counts state the arithmetic or membership in\nreason. Do not label arithmetic as explicit. sources must use exact provided\nIDs, including all needed headers, footnotes and cohort/join evidence. quote is\na short verbatim contiguous excerpt (at most 600 characters), or null when no\ncount is supplied; additional support can be cited in sources. Do not invent\nsource IDs, clean up a quotation, or consult external information. Keep reasons\nconcise. Return only JSON matching the schema; report unresolved limitations.\n\nGENE: SCN5A; PMID: 25163546\nPOPULATION: Current-study human participants carrying the requested variant.\nENDPOINT: Per-variant DCM-affected versus explicitly unaffected people; the source must establish a patient count, not just an entry in a variant list.\nQUERIES: [{\"id\": \"q1_carriers\", \"variant\": \"c.704-2A>G\", \"field\": \"carriers\"}, {\"id\": \"q1_affected\", \"variant\": \"c.704-2A>G\", \"field\": \"affected\"}, {\"id\": \"q1_unaffected\", \"variant\": \"c.704-2A>G\", \"field\": \"unaffected\"}, {\"id\": \"q2_carriers\", \"variant\": \"p.T220N\", \"field\": \"carriers\"}, {\"id\": \"q2_affected\", \"variant\": \"p.T220N\", \"field\": \"affected\"}, {\"id\": \"q2_unaffected\", \"variant\": \"p.T220N\", \"field\": \"unaffected\"}]\nSOURCE:\nL1180: # PDF PAGE 6\nL1181: \nL1182: Supplemental Table 6: Category Ib-III variants\nL1183: \nL1184: \nL1374: RYR2 NM_001035 exon9 c.A593T p.N198I\nL1375: \nL1376: # PDF PAGE 10\nL1377: \nL1378: RYR2 NM_001035 exon90 c.12546_12547insA p.E4182fs\nL1379: RYR2 NM_001035 exon90 c.G12470A p.R4157Q\nL1380: SCN5A NM_000335 exon8 c.704-2A>G\nL1381: SCN5A NM_001160160 exon6 c.C659A p.T220N\nL1382: SCN5A NM_001160160 exon6 c.T615G p.Y205X\nL1383: SCN5A NM_198056 exon12 c.C1715A p.A572D\nL1384: SCN5A NM_198056 exon12 c.C1717T p.Q573X\nL1385: SCN5A NM_198056 exon12 c.C1852T p.L618F\nL1386: SCN5A NM_198056 exon18 c.G3340A p.D1114N\nL1387: SCN5A NM_198056 exon2 c.C52T p.R18W\nL1388: SCN5A NM_198056 exon2 c.T210G p.N70K\nL1389: SCN5A NM_198056 exon23 c.G4018A p.V1340I\nL1390: SCN5A NM_198056 exon25 c.A4342C p.I1448L\nL1391: SCN5A NM_198056 exon27 c.T4786A p.F1596I\nL1392: SCN5A NM_198056 exon28 c.C4859T p.T1620M\nL1393: SCN5A NM_198056 exon28 c.C6016G p.P2006A\nL1394: SCN5A NM_198056 exon28 c.G5693A p.R1898H\nL1395: SCN5A NM_198056 exon28 c.T6010C p.F2004L\nL1396: SCN5A NM_198056 exon6 c.C647T p.S216L\nL1397: SCN5A NM_198056 exon6 c.C659T p.T220I"
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "source_counts",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "claims",
+            "limitations"
+          ],
+          "properties": {
+            "claims": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "value",
+                  "basis",
+                  "sources",
+                  "quote",
+                  "reason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "q1_carriers",
+                      "q1_affected",
+                      "q1_unaffected",
+                      "q2_carriers",
+                      "q2_affected",
+                      "q2_unaffected"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "explicit",
+                      "derived",
+                      "unknown"
+                    ]
+                  },
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "L1180",
+                        "L1181",
+                        "L1182",
+                        "L1183",
+                        "L1184",
+                        "L1374",
+                        "L1375",
+                        "L1376",
+                        "L1377",
+                        "L1378",
+                        "L1379",
+                        "L1380",
+                        "L1381",
+                        "L1382",
+                        "L1383",
+                        "L1384",
+                        "L1385",
+                        "L1386",
+                        "L1387",
+                        "L1388",
+                        "L1389",
+                        "L1390",
+                        "L1391",
+                        "L1392",
+                        "L1393",
+                        "L1394",
+                        "L1395",
+                        "L1396",
+                        "L1397"
+                      ]
+                    }
+                  },
+                  "quote": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.041711,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "a2dd943c-d6a9-4b59-81ab-b135943611c3",
+    "x-ms-client-request-id": "a448db7c-f3ff-4083-b066-cdc7d60b4f03",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "48827",
+    "x-ratelimit-reset-tokens": "1",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "a448db7c-f3ff-4083-b066-cdc7d60b4f03",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "a2dd943c-d6a9-4b59-81ab-b135943611c3",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"claims\":[{\"id\":\"q1_carriers\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1380\"],\"quote\":null,\"reason\":\"Variant listed in Category Ib-III table with no patient, carrier, or phenotype counts.\"},{\"id\":\"q1_affected\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1380\"],\"quote\":null,\"reason\":\"No DCM-affected count is bound to c.704-2A>G.\"},{\"id\":\"q1_unaffected\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1380\"],\"quote\":null,\"reason\":\"No explicitly unaffected count is bound to c.704-2A>G.\"},{\"id\":\"q2_carriers\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1381\"],\"quote\":null,\"reason\":\"Variant listed in Category Ib-III table with no patient, carrier, or phenotype counts.\"},{\"id\":\"q2_affected\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1381\"],\"quote\":null,\"reason\":\"No DCM-affected count is bound to p.T220N.\"},{\"id\":\"q2_unaffected\",\"value\":null,\"basis\":\"unknown\",\"sources\":[\"L1182\",\"L1381\"],\"quote\":null,\"reason\":\"No explicitly unaffected count is bound to p.T220N.\"}],\"limitations\":[\"Supplemental Table 6 is a variant catalog only; rows do not encode per-person carrier or DCM status.\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1470,
+      "completion_tokens": 357,
+      "total_tokens": 2002,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 1470,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 175,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788724263,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 51.58349208300933,
+  "usage": {
+    "prompt_tokens": 1470,
+    "completion_tokens": 357,
+    "total_tokens": 2002,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "text_tokens": 1470,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 175,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.006132,
+  "accounted_usd": 0.006867
+}

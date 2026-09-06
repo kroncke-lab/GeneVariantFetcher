@@ -28,8 +28,16 @@ minus reference over every asserted gold row, candidate over frozen baseline;
 zero-imputation semantics, provenance, and visual QA requirements are defined in
 `docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`.
 
-## Completed $150 model-routing test; next bounded evidence test
+## Completed $150 model-routing tests; derived-count acceptance gate
 
+- [x] Decide whether routine Astra inclusion is worth its API cost. The new
+      eight-paper panel and full cheaper-reader remediation complete; all
+      apparent Astra-only numeric candidates are recovered by cheaper Grok.
+      The retained baseline audit and unchanged-validator replay show no new
+      accepted Astra count. Keep defaults unchanged; Astra low is an untested
+      option for manual investigation after a properly configured cheaper call,
+      not an automatic fallback policy. Report and budget audit:
+      `docs/evidence/astra_value_20260906/README.md`.
 - [x] Retry Grok 4.6 and expand the bounded Astra roster test. All 24 primary
       requests return on eight packets from seven opened papers; the repeated
       DOC representation remains separate from the 93 distinct people.
@@ -49,8 +57,11 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
 - [ ] **Next acceptance gate: integrate and validate the derived-count contract.**
       Freeze person/cohort/variant ownership, source coordinates, genotype,
       endpoint/timepoint, blank-versus-merged cells and duplicate/index-case rules
-      before testing. The opened source diagnostic supports Astra low for
-      unresolved roster transcription/joins; medium had no count benefit.
+      before testing. The opened source diagnostics do not justify routine
+      Astra use: cheaper Grok can produce the same derived counts, and the
+      harder-panel Astra-only candidates are already in the retained baseline
+      or answer different cohort/endpoint questions. Astra low remains an
+      untested option for manual investigation; medium had no count benefit.
       Prefer structured table parsing and strict source-ID schemas. Resolve
       relatives outside the main table before promoting a packet sum to a
       paper-wide count, and preserve valid evidence through model failures.
@@ -60,8 +71,9 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       evidence. Keep the existing literal validator unchanged until a separate
       derived-count path passes. Design:
       `docs/evidence/model_routing_20260906/roster_followup_design.md`.
-      The follow-up used the remaining original $150 allowance; its ledger
-      retains unknown charges. Reconcile billing or establish a fresh envelope
+      The follow-ups used the original $150 allowance; the latest audit is
+      `docs/evidence/astra_value_20260906/budget_summary.json` and retains
+      unknown charges. Reconcile billing or establish a fresh envelope
       before a larger campaign. Only a passing fixed implementation advances to the
       unopened discovery/confirmation sequence.
 
@@ -94,7 +106,7 @@ estimate is not an additional budget charge unless it represents API spend.
       scope-specific forecast: `docs/evidence/tranche_validation_20260905/README.md`.
       Tranche 04 remains unopened; no headline/default-stage promotion.
 - [x] Recover and validate SCN5A 25163546's actual article-specific supplement.
-      The publisher ZIP contains the 53-page roster PDF and methods DOCX.
+      The publisher ZIP contains the 53-page variant-table PDF and methods DOCX.
       A separate fresh, source-only locked check recovers 20 TP / 0 FP / 0 FN,
       with all carrier/A/U counts NULL. Managed corpus upgrade and normal
       cache reuse preserve all 20 cDNA strings and fold the two components

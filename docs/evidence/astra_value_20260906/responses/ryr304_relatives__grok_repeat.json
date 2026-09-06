@@ -1,0 +1,206 @@
+{
+  "name": "ryr304_relatives__grok_repeat",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract only the requested human per-variant counts from this source packet.\nThe queries define the study population and clinical endpoint, not the answers.\nReturn one claim per query ID. Use null when the source cannot support an exact\ncount for that variant, population and endpoint. Unknown is not zero. A list of\nvariants does not establish one carrier per row. Do not turn cohort enrollment,\npopulation allele frequencies, prior-literature cases, relatives without stated\ngenotype, repeat tests or percentages rounded in prose into exact patient counts.\nInclude explicitly documented carrier relatives when the requested population\nincludes them; respect variant-specific inheritance and overlapping people.\nUse the paper's actual phenotype labels and timepoints. Disease-negative,\nsymptom-free, no diagnostic test result, and unknown are different states.\nIf the query requests a specific endpoint, do not substitute a different one.\nAn explicit count is a literal published number bound to this variant and role.\nA derived count is a transparent aggregation or join of source-supported people\nor disjoint groups. For derived counts state the arithmetic or membership in\nreason. Do not label arithmetic as explicit. sources must use exact provided\nIDs, including all needed headers, footnotes and cohort/join evidence. quote is\na short verbatim contiguous excerpt (at most 600 characters), or null when no\ncount is supplied; additional support can be cited in sources. Do not invent\nsource IDs, clean up a quotation, or consult external information. Keep reasons\nconcise. Return only JSON matching the schema; report unresolved limitations.\n\nGENE: RYR2; PMID: 30403697\nPOPULATION: All distinct people explicitly documented as carrying each variant in this current-study packet, including stated carrier relatives outside the numbered patient rows. Count documented people, not an estimate of unreported family size.\nENDPOINT: Carrier counts only; no affected/unaffected query because family-history endpoints are not uniform.\nQUERIES: [{\"id\": \"q1_carriers\", \"variant\": \"p.R417L\", \"field\": \"carriers\"}, {\"id\": \"q2_carriers\", \"variant\": \"p.R2028H\", \"field\": \"carriers\"}, {\"id\": \"q3_carriers\", \"variant\": \"p.Y4721C\", \"field\": \"carriers\"}, {\"id\": \"q4_carriers\", \"variant\": \"p.G4772S\", \"field\": \"carriers\"}]\nSOURCE:\nL93: This is a retrospective study derived from the PACES CPVT Registry, which is an international multicenter registry of children (≤19 years) and their first-degree relatives with a diagnosis of CPVT made by consensus criteria. [ 1 ] Clinical, genotypic and outcome data were previously reported. [ 13 , 14 ] Participating sites received ethical approval locally and the protocol adhered to the 1975 Declaration of Helsinki. The coordinating center was responsible for data collection and analysis, and the protocol was approved by the UBC C&W Research Ethics Board. The review board did not require individual patient consent as the study was a retrospective chart review. All data were de-identified prior to entry and analysis. A stepwise bioinformatics approach was implemented to classify variant pathogenicity, including structural mapping using 3D model of pig RyR2 in open-state ( Fig 1 ). Continuous data are presented as the median (interquartile range). Detailed methods are available in the supporting supplemental information ( S1 File and S2 File ).\nL94: \nL95: *Figure: Domains are coloured according to the linear sequence scheme shown above the ribbon diagram. Structure obtained from PDB: 5GOA. [ 15 ] The ribbon diagram shows a RyR2 dimer from the side. Red circles represent large alpha solenoid regions which are unstructured in the cryo-electron micrograph (CryoEM) structure. All variants discussed in the manuscript are shown in sphere representations. Red squares highlight location of the most likely damaging variants (expanded in Fig 2 ). Domains are named according to nomenclature used by des Georges, et al., 2016. A ( dark orange ), B ( green ), and C ( light blue ) domains: form part of the N-terminal domain (NTD); NSol ( dark blue ): alpha-solenoid region near the NTD; SPRY1 ( light orange ), SPRY2 ( dark green ), and SPRY3 ( dark grey ): three domains named after sp lA kinase and Ry Rs where they were first identified; Sol2 ( light grey ): second alpha-solenoid region centrally located on RyR2; Rep12 ( yellow ) and Rep23 ( brown ): four repeats (~100 aa each) in two tandem arrangements, Repeats 1 and 2 located between SPRY 1 and SPRY2, and Repeats 3 and 4 located within Sol2; CSol3 ( magenta ): third alpha-solenoid region located near the C-terminal; EFs ( red ): pair of EF hand-like motifs located within CSol3 region; TaF ( light green ): thumb and forefingers domain; DR1/2/3 ( white ): evolutionary divergent regions of RyR isoforms (not shown in the ribbon diagrams); pVSD ( gold ): pseudo voltage-sensing domain; PFD ( wheat ): pore-forming domain; CTD ( pink ): C-terminal domain.*\nL96: \nL97: ## Results\nL98: \nL99: ### Population\nL100: \nL101: Of 237 patients entered in the PACES CPVT Registry, 193 (81%) underwent genetic testing. There were 15 patients (8%) from 12 families with ≥2 variants. Table 1 summarizes the genotypes and phenotypes of these multi-variant carriers. The median age at presentation was 9 years (IQR 5–12) and 9 (60%) were female. Thirteen children (87%) had ≥2 RYR2 variants, one had CASQ2 and RYR2 variants, and one had RYR2 and SCN5A variants ( Table 1 , Table 2 and S2 File ). There were 12 children (80%) who were probands. Inheritance could not be established in 6 children (40%) owing to a lack of parental genetic data. A family history of suspected/confirmed CPVT was reported in 10 patients (67%). VT and/or sudden cardiac arrest (SCA) occurred in 13 of 15 cases (87%). The exceptions were subject #6 who was asymptomatic and subject #12 who had exertional syncope and seizures. Pedigrees for patients from select families are available in the supporting information ( S3 File ).\nL102: \nL103: #### Table 1. Clinical characteristics and outcomes of multi-variant carriers.\nL104: \nL105: | Subject | Sex | Ethnicity | Age (years) | Proband | Variant #1 | Variant #2 | Inheritance | Phase (cis vs trans) | Family History | Symptoms | Treatments | Treatment Failure |\nL106: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\nL107: | 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\nL108: | 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |\nL109: | 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |\nL110: | 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\nL111: | 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |\nL112: | 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |\nL113: | 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |\nL114: | 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |\nL115: | 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |\nL116: | 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\nL117: | 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |\nL118: | 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |\nL119: | 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |\nL120: | 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\nL121: | 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |\nL122: Open in a new tab\nL123: \nL124: *Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "source_counts",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "claims",
+            "limitations"
+          ],
+          "properties": {
+            "claims": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "value",
+                  "basis",
+                  "sources",
+                  "quote",
+                  "reason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "q1_carriers",
+                      "q2_carriers",
+                      "q3_carriers",
+                      "q4_carriers"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "basis": {
+                    "type": "string",
+                    "enum": [
+                      "explicit",
+                      "derived",
+                      "unknown"
+                    ]
+                  },
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "L93",
+                        "L94",
+                        "L95",
+                        "L96",
+                        "L97",
+                        "L98",
+                        "L99",
+                        "L100",
+                        "L101",
+                        "L102",
+                        "L103",
+                        "L104",
+                        "L105",
+                        "L106",
+                        "L107",
+                        "L108",
+                        "L109",
+                        "L110",
+                        "L111",
+                        "L112",
+                        "L113",
+                        "L114",
+                        "L115",
+                        "L116",
+                        "L117",
+                        "L118",
+                        "L119",
+                        "L120",
+                        "L121",
+                        "L122",
+                        "L123",
+                        "L124"
+                      ]
+                    }
+                  },
+                  "quote": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.056396,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "48aab99f-7173-4f53-9bdf-a1db7b373a0b",
+    "x-ms-client-request-id": "f06afdb6-22e2-4361-ba46-1fdc470255ce",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "47364",
+    "x-ratelimit-reset-tokens": "3",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "f06afdb6-22e2-4361-ba46-1fdc470255ce",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "48aab99f-7173-4f53-9bdf-a1db7b373a0b",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"claims\": [\n    {\n      \"id\": \"q1_carriers\",\n      \"value\": 3,\n      \"basis\": \"derived\",\n      \"sources\": [\"L105\", \"L107\", \"L108\"],\n      \"quote\": \"1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic\\n2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1\",\n      \"reason\": \"Subjects 1 and 2 plus the paternal gene-carrier father (paternal cis inheritance of p.R417L).\"\n    },\n    {\n      \"id\": \"q2_carriers\",\n      \"value\": 2,\n      \"basis\": \"derived\",\n      \"sources\": [\"L105\", \"L113\"],\n      \"quote\": \"7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers\",\n      \"reason\": \"Subject 7 plus the mother who transmitted variant #1 (p.R2028H).\"\n    },\n    {\n      \"id\": \"q3_carriers\",\n      \"value\": 2,\n      \"basis\": \"derived\",\n      \"sources\": [\"L105\", \"L113\"],\n      \"quote\": \"7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers\",\n      \"reason\": \"Subject 7 plus the father who transmitted variant #2 (p.Y4721C).\"\n    },\n    {\n      \"id\": \"q4_carriers\",\n      \"value\": 2,\n      \"basis\": \"derived\",\n      \"sources\": [\"L105\", \"L120\"],\n      \"quote\": \"14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S)\",\n      \"reason\": \"Subject 14 plus the explicitly genotyped symptomatic cousin.\"\n    }\n  ],\n  \"limitations\": [\n    \"Unspecified additional relatives with SCA for p.G4772S are not counted as documented carriers.\",\n    \"Pedigrees in S3 File are referenced but not provided in the packet.\"\n  ]\n}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2921,
+      "completion_tokens": 609,
+      "total_tokens": 3870,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 2921,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 340,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788723621,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 120.2014758340083,
+  "usage": {
+    "prompt_tokens": 2921,
+    "completion_tokens": 609,
+    "total_tokens": 3870,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "text_tokens": 2921,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 340,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.011536,
+  "accounted_usd": 0.0129965
+}

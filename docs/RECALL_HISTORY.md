@@ -15,6 +15,36 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — Astra routine-inclusion decision
+
+An additional opened eight-paper component panel compares independent Grok 4.6
+first/repeat calls with Astra low under the same 180-second strict-schema
+package. All 24 outputs lock before inspection: Astra returns 7/8, Grok 2/8 and
+3/8. Nine apparent Astra-only numeric answers arise on timed-out Grok papers.
+A retained Grok 4.3 baseline audit finds six already present, including one
+interpretive affected value, and three answers to a different cohort/endpoint.
+The only literal-validator accepted Astra value also already exists.
+
+A separately frozen post-hoc cheaper-reader package covers all eight papers,
+with inline schema, JSON-object output, 8,192 cap and 1,200-second timeout.
+All eight responses lock before inspection and match 24 numeric plus 19 null
+references. The 42-query sensitivity excluding the interpretive abstract field
+passes numeric and mechanical provenance checks throughout. Grok recovers all
+nine prior Astra-only numbers; an Astra overlay adds no raw or accepted count.
+The same seven completed/known-use papers cost $0.088746 Grok versus $0.480560
+Astra (5.42×), with package latency medians 324 versus 13 seconds. These are
+selected component results, not a causal model comparison, new headline, or
+human ceiling. Keep routine defaults unchanged; the next gate remains a
+validated derived-count evidence contract.
+
+New 32-call returned proxy $0.627676; input premiums and unknown reservations
+make new accounting $1.634202 and combined original-envelope accounting
+$149.4599652/150. No Anthropic extraction API or unopened tranche is used.
+Correct a stale Sol “strongest available” settings description and the current
+SCN5A 25163546 supplement wording (variant-table PDF, not a patient roster).
+Full offline suite 2,969 passed; wheel source bytes and CLI startup verified.
+[Report and adversarial CLI reviews](evidence/astra_value_20260906/README.md).
+
 ## 2026-09-06 — Grok retry and expanded bounded roster diagnostic
 
 Grok 4.6 returns again; the live production SDK path passes after adopting the

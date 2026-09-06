@@ -1,0 +1,34 @@
+{
+  "recorded_unix": 1788726650.9303539,
+  "note": "Original design_manifest.json, original 14-file results_manifest.json and design_manifest_verification.json are preserved as recorded before readable-MD whitespace curation. Raw CLI JSON and as-sent prompts remain byte-identical. Use results_current_manifest.json for current files, and this bridge to validate the permitted differences against original hashes.",
+  "original_manifest_hashes": {
+    "design_manifest.json": "8e2e0d2207624c87b5d99f460933e8a680f10bd16bd29507572f5f37e71c2aed",
+    "results_manifest.json": "62c74dadba4dc605b4e8c5df15c418ae2dea6b93c2e01c8a3439315b5b3c9471",
+    "design_manifest_verification.json": "3c5efa27827fb30c715fd5148647511f83d1b86aaacf9d3abc9c232679e2369e"
+  },
+  "whitespace_receipt_sha256": "f281b22d1559b55250f4a82136da2bd61045754631e03ec97471a3acd888b2ad",
+  "executed_launcher_snapshot_sha256": "b981be35b614c2d9262290042cc2fd25b3aa0e21a6dd2d444d2d6025f3731a13",
+  "readable_changes": {
+    "agy_design.md": {
+      "original_sha256": "fe8129429d7b8ee4e8c12d5057ffea8034045f1fa0273feb7801b797de609b6d",
+      "current_sha256": "2ff6104d7d519eccae31fcdb61cb75017da117b3b4812775ce86f337f22d31cc",
+      "allowed_change": "Strip trailing spaces/tabs from each line; retain one terminal newline."
+    },
+    "agy_results.md": {
+      "original_sha256": "02e4c1db97b7b833a10400135fa30f4d8ecb6e5178104dbdbc7e17054ff3fd57",
+      "current_sha256": "a28a6141e486f2989fa4bd3b56da8fae92ad25d173eca9bf50f76630a48dc0ff",
+      "allowed_change": "Strip trailing spaces/tabs from each line; retain one terminal newline."
+    },
+    "grok_results.md": {
+      "original_sha256": "79612e3c7cadc43ac06e21f6876c7c0e01951cbf744efc9822e06daa84d134e9",
+      "current_sha256": "6de331d8ebc6935fad8deca2c04b0c7491d2d13ded0f879f5682030cf17766fd",
+      "allowed_change": "Strip trailing spaces/tabs from each line; retain one terminal newline."
+    }
+  },
+  "code_change": {
+    "file": "launcher_snapshot.py",
+    "original_sha256": "c72b18e9b14ef1d003675e0a13ea691b565c2d1863edb22daf948309f7e521aa",
+    "current_sha256": "e696b78224544a4ea67b61fb50089ad15b92dd84c2993c79711dc2dc51c6b7a9",
+    "allowed_change": "Ruff formatting only; AST-equivalent to exact executed text preserved in executed_launcher_snapshot.json."
+  }
+}

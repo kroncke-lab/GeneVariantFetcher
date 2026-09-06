@@ -1,0 +1,5355 @@
+{
+  "classification": "Post-hoc production-compatible cheaper-reader package, selected after primary scoring. Full eight-paper panel; same source, queries, references and local schema. No reference values or earlier model answers enter requests. Changes inline schema/prompt adapter, provider JSON-object format, cap and deadline together. This is a package comparison, not a causal ablation of any one setting, and not unchanged production transport.",
+  "integrity": {
+    "remediation_plan_sha256": "799bdf7740cd527632975292074288c4f6196f895d739e7959a8b281f4a58817",
+    "remediation_lock_sha256": "9bdb5791692be5fc6937906b6a64bc8dd8819509e316df7fed51a4e72198e51e",
+    "primary_plan_sha256": "fb378be9745daa46085e2853c622125153f01e047da07ca94097b3b53f943131",
+    "primary_lock_sha256": "de1d065d908a6d82743557ecc9e2ec094a5e79fb2f5ec731abc6b462c2c7392c",
+    "primary_score_sha256": "80a7f259d036cd49830df24d0a9e028be3e0595c1b8e2f8da397d51575bedd36",
+    "reference_sha256": "8c41c3289d3d897703c9d134d9ee1fd7592f71c8975fc9ee0fb4c14571f8f3a8",
+    "score_code_sha256": "04ca5bfcb355bbabb99a5ddb83197d3233f37e6eee23dacfa9b8845e38b064b4",
+    "reused_primary_score_code_sha256": "e88aca47c49776a33926339186eef5edd615ba6056ed02acd2931b8515137a3b",
+    "prepared_unix": 1788724613.365134,
+    "locked_unix": 1788726224.584499,
+    "concurrency_amendment_sha256": "11d590e629aa13b94f2cc9f4f13fddcab7dc52cd1e6dfe4106f1abcc2f43fb7c",
+    "boundary_stop_receipt_sha256": "47100548524166f75cc5d23f16134fc22330bf99185258f77a81f3d0d27b238b"
+  },
+  "limitations": [
+    "This post-hoc package preserves frozen queries, sources, references and local validation; it changes prompt adapter, provider format, cap, deadline and scheduling together.",
+    "It is neither a causal strict-schema ablation nor an execution of unchanged production transport.",
+    "The regular runtime's 1200-second default differs from the primary test's 180-second deadline; primary timeout advantages cannot alone establish regular-protocol value or intrinsic intelligence.",
+    "Numeric agreement is with investigator packet references. Mechanical quote and source-ID checks do not establish clinical semantic support or whole-paper scope.",
+    "Current-validator acceptance is replayed without source-reference correctness as a gate. Derived claims remain unaccepted candidates.",
+    "Every planned query, including nondispatched and failed cells, remains in the full-panel denominator. Failure is never correct abstention.",
+    "The sensitivity omits one disputed RYR2 19398417 symptom-complement inference without altering frozen references or original primary scores.",
+    "Matched-paper cost compares corresponding packets. API proxies are not Azure invoices; unknown reserves remain separately accounted.",
+    "The hypothetical Astra overlay preserves existing nonnull values and is not a tested trigger-selected production escalation policy."
+  ],
+  "full_43_query_metrics": {
+    "grok_first": {
+      "planned_queries": 43,
+      "reference_nonnull": 24,
+      "reference_positive": 24,
+      "reference_zero": 0,
+      "reference_unknown": 19,
+      "outcomes": {
+        "exact_nonnull": 4,
+        "wrong_nonnull": 0,
+        "null_miss": 0,
+        "correct_abstention": 6,
+        "response_failure_or_missing_claim": 33
+      },
+      "numeric_exact_including_valid_abstentions": 10,
+      "mechanical_source_quote_pass": 10,
+      "exact_nonnull_with_mechanical_source_quote_pass": 4,
+      "current_validator_accepted_correct": 0,
+      "current_validator_accepted_wrong": 0,
+      "current_validator_raw_accepts_before_mechanical_gate": 0,
+      "by_model_declared_basis_not_adjudicated_basis": {
+        "explicit": {
+          "claims": 0,
+          "outcomes": {},
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "derived": {
+          "claims": 4,
+          "outcomes": {
+            "exact_nonnull": 4
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "unknown": {
+          "claims": 6,
+          "outcomes": {
+            "correct_abstention": 6
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "None": {
+          "claims": 33,
+          "outcomes": {
+            "response_failure_or_missing_claim": 33
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        }
+      }
+    },
+    "grok_repeat": {
+      "planned_queries": 43,
+      "reference_nonnull": 24,
+      "reference_positive": 24,
+      "reference_zero": 0,
+      "reference_unknown": 19,
+      "outcomes": {
+        "exact_nonnull": 13,
+        "wrong_nonnull": 0,
+        "null_miss": 0,
+        "correct_abstention": 6,
+        "response_failure_or_missing_claim": 24
+      },
+      "numeric_exact_including_valid_abstentions": 19,
+      "mechanical_source_quote_pass": 18,
+      "exact_nonnull_with_mechanical_source_quote_pass": 12,
+      "current_validator_accepted_correct": 0,
+      "current_validator_accepted_wrong": 0,
+      "current_validator_raw_accepts_before_mechanical_gate": 0,
+      "by_model_declared_basis_not_adjudicated_basis": {
+        "explicit": {
+          "claims": 9,
+          "outcomes": {
+            "exact_nonnull": 9
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "derived": {
+          "claims": 4,
+          "outcomes": {
+            "exact_nonnull": 4
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "unknown": {
+          "claims": 6,
+          "outcomes": {
+            "correct_abstention": 6
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "None": {
+          "claims": 24,
+          "outcomes": {
+            "response_failure_or_missing_claim": 24
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        }
+      }
+    },
+    "astra_low": {
+      "planned_queries": 43,
+      "reference_nonnull": 24,
+      "reference_positive": 24,
+      "reference_zero": 0,
+      "reference_unknown": 19,
+      "outcomes": {
+        "exact_nonnull": 22,
+        "wrong_nonnull": 0,
+        "null_miss": 0,
+        "correct_abstention": 15,
+        "response_failure_or_missing_claim": 6
+      },
+      "numeric_exact_including_valid_abstentions": 37,
+      "mechanical_source_quote_pass": 37,
+      "exact_nonnull_with_mechanical_source_quote_pass": 22,
+      "current_validator_accepted_correct": 1,
+      "current_validator_accepted_wrong": 0,
+      "current_validator_raw_accepts_before_mechanical_gate": 1,
+      "by_model_declared_basis_not_adjudicated_basis": {
+        "explicit": {
+          "claims": 15,
+          "outcomes": {
+            "exact_nonnull": 15
+          },
+          "accepted_correct": 1,
+          "accepted_wrong": 0
+        },
+        "derived": {
+          "claims": 7,
+          "outcomes": {
+            "exact_nonnull": 7
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "unknown": {
+          "claims": 15,
+          "outcomes": {
+            "correct_abstention": 15
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "None": {
+          "claims": 6,
+          "outcomes": {
+            "response_failure_or_missing_claim": 6
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        }
+      }
+    },
+    "grok_remediated": {
+      "planned_queries": 43,
+      "reference_nonnull": 24,
+      "reference_positive": 24,
+      "reference_zero": 0,
+      "reference_unknown": 19,
+      "outcomes": {
+        "exact_nonnull": 24,
+        "wrong_nonnull": 0,
+        "null_miss": 0,
+        "correct_abstention": 19,
+        "response_failure_or_missing_claim": 0
+      },
+      "numeric_exact_including_valid_abstentions": 43,
+      "mechanical_source_quote_pass": 42,
+      "exact_nonnull_with_mechanical_source_quote_pass": 23,
+      "current_validator_accepted_correct": 1,
+      "current_validator_accepted_wrong": 0,
+      "current_validator_raw_accepts_before_mechanical_gate": 1,
+      "by_model_declared_basis_not_adjudicated_basis": {
+        "explicit": {
+          "claims": 17,
+          "outcomes": {
+            "exact_nonnull": 17
+          },
+          "accepted_correct": 1,
+          "accepted_wrong": 0
+        },
+        "derived": {
+          "claims": 7,
+          "outcomes": {
+            "exact_nonnull": 7
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "unknown": {
+          "claims": 19,
+          "outcomes": {
+            "correct_abstention": 19
+          },
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        },
+        "None": {
+          "claims": 0,
+          "outcomes": {},
+          "accepted_correct": 0,
+          "accepted_wrong": 0
+        }
+      }
+    }
+  },
+  "sensitivity_42_queries": {
+    "excluded_query": {
+      "packet": "ryr193_abstract",
+      "id": "q1_affected"
+    },
+    "reason": "The abstract's 'including two without symptoms' wording may not independently prove that every other carrier was symptomatic. The frozen primary reference remains unchanged.",
+    "metrics": {
+      "grok_first": {
+        "planned_queries": 42,
+        "reference_nonnull": 23,
+        "reference_positive": 23,
+        "reference_zero": 0,
+        "reference_unknown": 19,
+        "outcomes": {
+          "exact_nonnull": 4,
+          "wrong_nonnull": 0,
+          "null_miss": 0,
+          "correct_abstention": 6,
+          "response_failure_or_missing_claim": 32
+        },
+        "numeric_exact_including_valid_abstentions": 10,
+        "mechanical_source_quote_pass": 10,
+        "exact_nonnull_with_mechanical_source_quote_pass": 4,
+        "current_validator_accepted_correct": 0,
+        "current_validator_accepted_wrong": 0,
+        "current_validator_raw_accepts_before_mechanical_gate": 0,
+        "by_model_declared_basis_not_adjudicated_basis": {
+          "explicit": {
+            "claims": 0,
+            "outcomes": {},
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "derived": {
+            "claims": 4,
+            "outcomes": {
+              "exact_nonnull": 4
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "unknown": {
+            "claims": 6,
+            "outcomes": {
+              "correct_abstention": 6
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "None": {
+            "claims": 32,
+            "outcomes": {
+              "response_failure_or_missing_claim": 32
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          }
+        }
+      },
+      "grok_repeat": {
+        "planned_queries": 42,
+        "reference_nonnull": 23,
+        "reference_positive": 23,
+        "reference_zero": 0,
+        "reference_unknown": 19,
+        "outcomes": {
+          "exact_nonnull": 13,
+          "wrong_nonnull": 0,
+          "null_miss": 0,
+          "correct_abstention": 6,
+          "response_failure_or_missing_claim": 23
+        },
+        "numeric_exact_including_valid_abstentions": 19,
+        "mechanical_source_quote_pass": 18,
+        "exact_nonnull_with_mechanical_source_quote_pass": 12,
+        "current_validator_accepted_correct": 0,
+        "current_validator_accepted_wrong": 0,
+        "current_validator_raw_accepts_before_mechanical_gate": 0,
+        "by_model_declared_basis_not_adjudicated_basis": {
+          "explicit": {
+            "claims": 9,
+            "outcomes": {
+              "exact_nonnull": 9
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "derived": {
+            "claims": 4,
+            "outcomes": {
+              "exact_nonnull": 4
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "unknown": {
+            "claims": 6,
+            "outcomes": {
+              "correct_abstention": 6
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "None": {
+            "claims": 23,
+            "outcomes": {
+              "response_failure_or_missing_claim": 23
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          }
+        }
+      },
+      "astra_low": {
+        "planned_queries": 42,
+        "reference_nonnull": 23,
+        "reference_positive": 23,
+        "reference_zero": 0,
+        "reference_unknown": 19,
+        "outcomes": {
+          "exact_nonnull": 21,
+          "wrong_nonnull": 0,
+          "null_miss": 0,
+          "correct_abstention": 15,
+          "response_failure_or_missing_claim": 6
+        },
+        "numeric_exact_including_valid_abstentions": 36,
+        "mechanical_source_quote_pass": 36,
+        "exact_nonnull_with_mechanical_source_quote_pass": 21,
+        "current_validator_accepted_correct": 1,
+        "current_validator_accepted_wrong": 0,
+        "current_validator_raw_accepts_before_mechanical_gate": 1,
+        "by_model_declared_basis_not_adjudicated_basis": {
+          "explicit": {
+            "claims": 15,
+            "outcomes": {
+              "exact_nonnull": 15
+            },
+            "accepted_correct": 1,
+            "accepted_wrong": 0
+          },
+          "derived": {
+            "claims": 6,
+            "outcomes": {
+              "exact_nonnull": 6
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "unknown": {
+            "claims": 15,
+            "outcomes": {
+              "correct_abstention": 15
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "None": {
+            "claims": 6,
+            "outcomes": {
+              "response_failure_or_missing_claim": 6
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          }
+        }
+      },
+      "grok_remediated": {
+        "planned_queries": 42,
+        "reference_nonnull": 23,
+        "reference_positive": 23,
+        "reference_zero": 0,
+        "reference_unknown": 19,
+        "outcomes": {
+          "exact_nonnull": 23,
+          "wrong_nonnull": 0,
+          "null_miss": 0,
+          "correct_abstention": 19,
+          "response_failure_or_missing_claim": 0
+        },
+        "numeric_exact_including_valid_abstentions": 42,
+        "mechanical_source_quote_pass": 42,
+        "exact_nonnull_with_mechanical_source_quote_pass": 23,
+        "current_validator_accepted_correct": 1,
+        "current_validator_accepted_wrong": 0,
+        "current_validator_raw_accepts_before_mechanical_gate": 1,
+        "by_model_declared_basis_not_adjudicated_basis": {
+          "explicit": {
+            "claims": 17,
+            "outcomes": {
+              "exact_nonnull": 17
+            },
+            "accepted_correct": 1,
+            "accepted_wrong": 0
+          },
+          "derived": {
+            "claims": 6,
+            "outcomes": {
+              "exact_nonnull": 6
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "unknown": {
+            "claims": 19,
+            "outcomes": {
+              "correct_abstention": 19
+            },
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          },
+          "None": {
+            "claims": 0,
+            "outcomes": {},
+            "accepted_correct": 0,
+            "accepted_wrong": 0
+          }
+        }
+      }
+    }
+  },
+  "grok_remediated_operations": {
+    "planned_requests": 8,
+    "dispatched": 8,
+    "successful_stop": 8,
+    "known_usage_requests": 8,
+    "unknown_usage_requests": 0,
+    "returned_api_proxy_usd": 0.097632,
+    "accounted_usd_including_unknown_reserves": 0.109575,
+    "elapsed_request_seconds_sum": 2496.7172057901043,
+    "elapsed_request_seconds_median": 305.0010985000408
+  },
+  "previous_astra_only_values": {
+    "number": 9,
+    "papers": [
+      "ryr193_abstract",
+      "ryr254_timepoint",
+      "ryr258_roster"
+    ],
+    "recovered_numeric_exact_by_grok": 9,
+    "recovered_numeric_exact_and_mechanical_pass": 8,
+    "remaining_numeric_advantage_values": 0,
+    "remaining_numeric_advantage_papers": [],
+    "queries": [
+      {
+        "packet": "ryr254_timepoint",
+        "pmid": "25435091",
+        "id": "q1_carriers",
+        "variant": "p.C2277R",
+        "field": "carriers",
+        "expected": 8,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_carriers",
+          "value": 8,
+          "basis": "explicit",
+          "sources": [
+            "S11"
+          ],
+          "quote": "8 carriers of the new RYR2 C2277R variant (genotype+)",
+          "reason": "Explicit variant-specific count of current carrier family members."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_carriers",
+          "value": 8,
+          "basis": "explicit",
+          "sources": [
+            "S5",
+            "S11",
+            "S22"
+          ],
+          "quote": "8 carriers of the new RYR2 C2277R variant (genotype+)",
+          "reason": "Paper states a cohort of eight living family members carrying RYR2 C2277R, listed in the clinical table."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": true,
+        "astra_current_validator_accepted_correct": true,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr254_timepoint",
+        "pmid": "25435091",
+        "id": "q1_affected",
+        "variant": "p.C2277R",
+        "field": "affected",
+        "expected": 7,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_affected",
+          "value": 7,
+          "basis": "explicit",
+          "sources": [
+            "S11",
+            "S22",
+            "S24"
+          ],
+          "quote": "Thus, we obtained a cohort of 8 carrier subjects, 7 of whom were found by EST to have the CPVT phenotype (87.5% penetrance).",
+          "reason": "Seven carriers explicitly had the CPVT phenotype on initial EST, rather than merely previous symptoms or follow-up arrhythmias."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_affected",
+          "value": 7,
+          "basis": "explicit",
+          "sources": [
+            "S11",
+            "S21",
+            "S22",
+            "S5",
+            "S6"
+          ],
+          "quote": "7 of whom exhibit the CPVT phenotype according to EST results (phenotype+).",
+          "reason": "Seven of eight carriers met diagnostic CPVT criteria on initial EST; II:9 did not."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr254_timepoint",
+        "pmid": "25435091",
+        "id": "q1_unaffected",
+        "variant": "p.C2277R",
+        "field": "unaffected",
+        "expected": 1,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_unaffected",
+          "value": 1,
+          "basis": "explicit",
+          "sources": [
+            "S5",
+            "S6",
+            "S17",
+            "S20",
+            "S21"
+          ],
+          "quote": "The mutation cosegregated with the CPVT phenotype, although in 1 person (II: 9), who also underwent an adrenaline test (Mayo Clinic protocol), ventricular arrhythmias did not meet the diagnostic criteria.",
+          "reason": "Carrier II:9 explicitly did not meet CPVT diagnostic criteria on initial testing. This is diagnostic-phenotype negative, not symptom-free: previous palpitations and nondiagnostic ventricular extrasystoles were documented."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_unaffected",
+          "value": 1,
+          "basis": "explicit",
+          "sources": [
+            "S21",
+            "S22",
+            "S5",
+            "S6"
+          ],
+          "quote": "in 1 person (II: 9), who also underwent an adrenaline test (Mayo Clinic protocol), ventricular arrhythmias did not meet the diagnostic criteria.",
+          "reason": "Exactly one carrier (II:9) had non-diagnostic ventricular extrasystoles on initial EST/adrenaline testing."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr193_abstract",
+        "pmid": "19398417",
+        "id": "q1_carriers",
+        "variant": "p.W4645R",
+        "field": "carriers",
+        "expected": 4,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_carriers",
+          "value": 4,
+          "basis": "explicit",
+          "sources": [
+            "A26",
+            "A27"
+          ],
+          "quote": "A novel RyR2 gene variant (W4645R) was found in \nfour family members including two without symptoms.",
+          "reason": "Four family members explicitly carried W4645R."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_carriers",
+          "value": 4,
+          "basis": "explicit",
+          "sources": [
+            "A26",
+            "A27"
+          ],
+          "quote": "A novel RyR2 gene variant (W4645R) was found in four family members including two without symptoms.",
+          "reason": "Paper states the variant was found in four family members."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr193_abstract",
+        "pmid": "19398417",
+        "id": "q1_affected",
+        "variant": "p.W4645R",
+        "field": "affected",
+        "expected": 2,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_affected",
+          "value": 2,
+          "basis": "derived",
+          "sources": [
+            "A26",
+            "A27",
+            "A28",
+            "A32",
+            "A33",
+            "A34"
+          ],
+          "quote": "four family members including two without symptoms.",
+          "reason": "Four carriers minus two reported without symptoms yields two symptomatic carriers; the conclusion also describes symptoms in the subsequent two generations."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_affected",
+          "value": 2,
+          "basis": "derived",
+          "sources": [
+            "A23",
+            "A26",
+            "A27"
+          ],
+          "quote": "CPVT was diagnosed in two of the nine family members evaluated. ... found in four family members including two without symptoms.",
+          "reason": "Four carriers minus two without symptoms, matching two CPVT diagnoses."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": false,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": false
+      },
+      {
+        "packet": "ryr193_abstract",
+        "pmid": "19398417",
+        "id": "q1_unaffected",
+        "variant": "p.W4645R",
+        "field": "unaffected",
+        "expected": 2,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_unaffected",
+          "value": 2,
+          "basis": "explicit",
+          "sources": [
+            "A26",
+            "A27"
+          ],
+          "quote": "A novel RyR2 gene variant (W4645R) was found in \nfour family members including two without symptoms.",
+          "reason": "Two carriers explicitly reported without symptoms, matching the requested symptom endpoint rather than diagnostic negativity."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_unaffected",
+          "value": 2,
+          "basis": "explicit",
+          "sources": [
+            "A26",
+            "A27"
+          ],
+          "quote": "found in four family members including two without symptoms.",
+          "reason": "Explicit count of carriers without symptoms."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr258_roster",
+        "pmid": "25814417",
+        "id": "q1_carriers",
+        "variant": "p.G357S",
+        "field": "carriers",
+        "expected": 179,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_carriers",
+          "value": 179,
+          "basis": "explicit",
+          "sources": [
+            "L33",
+            "L51",
+            "L225",
+            "L229"
+          ],
+          "quote": "A cascade screening performed in 1404 family members identified 179 living p.G357S_RyR2 mutation-positive individuals.",
+          "reason": "The published count identifies living variant-positive individuals; L51 links their baseline characteristics to Supplementary Table 3."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_carriers",
+          "value": 179,
+          "basis": "explicit",
+          "sources": [
+            "L33",
+            "L225",
+            "L229",
+            "L408"
+          ],
+          "quote": "A cascade screening performed in 1404 family members identified 179 living p.G357S_RyR2 mutation-positive individuals.",
+          "reason": "Text and Supplementary Table 3 both enumerate 179 living mutation-positive subjects (patients 1–179) at baseline."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr258_roster",
+        "pmid": "25814417",
+        "id": "q1_affected",
+        "variant": "p.G357S",
+        "field": "affected",
+        "expected": 45,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_affected",
+          "value": 45,
+          "basis": "derived",
+          "sources": [
+            "L33",
+            "L51",
+            "L225",
+            "L229",
+            "L230",
+            "L234",
+            "L241",
+            "L242",
+            "L243",
+            "L244",
+            "L245",
+            "L256",
+            "L258",
+            "L259",
+            "L260",
+            "L267",
+            "L270",
+            "L283",
+            "L286",
+            "L289",
+            "L291",
+            "L296",
+            "L300",
+            "L306",
+            "L310",
+            "L316",
+            "L319",
+            "L321",
+            "L324",
+            "L327",
+            "L328",
+            "L329",
+            "L335",
+            "L339",
+            "L345",
+            "L347",
+            "L348",
+            "L351",
+            "L355",
+            "L359",
+            "L360",
+            "L361",
+            "L363",
+            "L372",
+            "L381",
+            "L386",
+            "L397",
+            "L402",
+            "L408"
+          ],
+          "quote": "| 118 | Female | 49 | Syncope/Dizzeness | Yes | Yes |",
+          "reason": "Count of patients with reported Previous symptoms: 1, 5, 12–16, 27, 29–31, 38, 41, 54, 57, 60, 62, 67, 71, 77, 81, 87, 90, 92, 95, 98–100, 106, 110, 116, 118–119, 122, 126, 130–132, 134, 143, 152, 157, 168, 173, 179 = 45 unique people. Includes Dizziness, Syncope and combined labels, not VA/CVA."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_affected",
+          "value": 45,
+          "basis": "derived",
+          "sources": [
+            "L225",
+            "L229",
+            "L230",
+            "L234",
+            "L241",
+            "L242",
+            "L243",
+            "L244",
+            "L245",
+            "L256",
+            "L258",
+            "L259",
+            "L260",
+            "L267",
+            "L270",
+            "L283",
+            "L286",
+            "L289",
+            "L291",
+            "L296",
+            "L300",
+            "L306",
+            "L310",
+            "L316",
+            "L319",
+            "L321",
+            "L324",
+            "L327",
+            "L328",
+            "L329",
+            "L335",
+            "L339",
+            "L345",
+            "L347",
+            "L348",
+            "L351",
+            "L355",
+            "L359",
+            "L360",
+            "L361",
+            "L363",
+            "L372",
+            "L381",
+            "L386",
+            "L397",
+            "L402",
+            "L408"
+          ],
+          "quote": "Previous symptoms",
+          "reason": "Counted 45 table rows whose Previous symptoms cell is a reported symptom (Dizziness, Syncope, or combined labels), excluding explicit No and the single dash."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      },
+      {
+        "packet": "ryr258_roster",
+        "pmid": "25814417",
+        "id": "q1_unaffected",
+        "variant": "p.G357S",
+        "field": "unaffected",
+        "expected": 133,
+        "previous_grok_first_outcome": "response_failure_or_missing_claim",
+        "previous_grok_repeat_outcome": "response_failure_or_missing_claim",
+        "astra_primary_claim": {
+          "id": "q1_unaffected",
+          "value": 133,
+          "basis": "derived",
+          "sources": [
+            "L33",
+            "L51",
+            "L225",
+            "L229",
+            "L230",
+            "L231",
+            "L232",
+            "L233",
+            "L234",
+            "L235",
+            "L236",
+            "L237",
+            "L238",
+            "L239",
+            "L240",
+            "L241",
+            "L242",
+            "L243",
+            "L244",
+            "L245",
+            "L246",
+            "L247",
+            "L248",
+            "L249",
+            "L250",
+            "L251",
+            "L252",
+            "L253",
+            "L254",
+            "L255",
+            "L256",
+            "L257",
+            "L258",
+            "L259",
+            "L260",
+            "L261",
+            "L262",
+            "L263",
+            "L264",
+            "L265",
+            "L266",
+            "L267",
+            "L268",
+            "L269",
+            "L270",
+            "L271",
+            "L272",
+            "L273",
+            "L274",
+            "L275",
+            "L276",
+            "L277",
+            "L278",
+            "L279",
+            "L280",
+            "L281",
+            "L282",
+            "L283",
+            "L284",
+            "L285",
+            "L286",
+            "L287",
+            "L288",
+            "L289",
+            "L290",
+            "L291",
+            "L292",
+            "L293",
+            "L294",
+            "L295",
+            "L296",
+            "L297",
+            "L298",
+            "L299",
+            "L300",
+            "L301",
+            "L302",
+            "L303",
+            "L304",
+            "L305",
+            "L306",
+            "L307",
+            "L308",
+            "L309",
+            "L310",
+            "L311",
+            "L312",
+            "L313",
+            "L314",
+            "L315",
+            "L316",
+            "L317",
+            "L318",
+            "L319",
+            "L320",
+            "L321",
+            "L322",
+            "L323",
+            "L324",
+            "L325",
+            "L326",
+            "L327",
+            "L328",
+            "L329",
+            "L330",
+            "L331",
+            "L332",
+            "L333",
+            "L334",
+            "L335",
+            "L336",
+            "L337",
+            "L338",
+            "L339",
+            "L340",
+            "L341",
+            "L342",
+            "L343",
+            "L344",
+            "L345",
+            "L346",
+            "L347",
+            "L348",
+            "L349",
+            "L350",
+            "L351",
+            "L352",
+            "L353",
+            "L354",
+            "L355",
+            "L356",
+            "L357",
+            "L358",
+            "L359",
+            "L360",
+            "L361",
+            "L362",
+            "L363",
+            "L364",
+            "L365",
+            "L366",
+            "L367",
+            "L368",
+            "L369",
+            "L370",
+            "L371",
+            "L372",
+            "L373",
+            "L374",
+            "L375",
+            "L376",
+            "L377",
+            "L378",
+            "L379",
+            "L380",
+            "L381",
+            "L382",
+            "L383",
+            "L384",
+            "L385",
+            "L386",
+            "L387",
+            "L388",
+            "L389",
+            "L390",
+            "L391",
+            "L392",
+            "L393",
+            "L394",
+            "L395",
+            "L396",
+            "L397",
+            "L398",
+            "L399",
+            "L400",
+            "L401",
+            "L402",
+            "L403",
+            "L404",
+            "L405",
+            "L406",
+            "L407",
+            "L408"
+          ],
+          "quote": "| 2 | Female | 21 | No | No | No |",
+          "reason": "The Previous symptoms column contains 133 explicit No entries: 179 patients minus 45 with reported symptoms minus patient 37 with missing symptoms ('-') = 133. This is symptom-negative at baseline, not disease-negative."
+        },
+        "grok_remediated_claim": {
+          "id": "q1_unaffected",
+          "value": 133,
+          "basis": "derived",
+          "sources": [
+            "L225",
+            "L229",
+            "L231",
+            "L232",
+            "L233",
+            "L235",
+            "L236",
+            "L237",
+            "L238",
+            "L239",
+            "L240",
+            "L246",
+            "L247",
+            "L248",
+            "L249",
+            "L250",
+            "L251",
+            "L252",
+            "L253",
+            "L254",
+            "L255",
+            "L257",
+            "L261",
+            "L262",
+            "L263",
+            "L264",
+            "L265",
+            "L266",
+            "L268",
+            "L269",
+            "L271",
+            "L272",
+            "L273",
+            "L274",
+            "L275",
+            "L276",
+            "L277",
+            "L278",
+            "L279",
+            "L280",
+            "L281",
+            "L282",
+            "L284",
+            "L285",
+            "L287",
+            "L288",
+            "L290",
+            "L292",
+            "L293",
+            "L294",
+            "L295",
+            "L297",
+            "L298",
+            "L299",
+            "L301",
+            "L302",
+            "L303",
+            "L304",
+            "L305",
+            "L307",
+            "L308",
+            "L309",
+            "L311",
+            "L312",
+            "L313",
+            "L314",
+            "L315",
+            "L317",
+            "L318",
+            "L320",
+            "L322",
+            "L323",
+            "L325",
+            "L326",
+            "L330",
+            "L331",
+            "L332",
+            "L333",
+            "L334",
+            "L336",
+            "L337",
+            "L338",
+            "L340",
+            "L341",
+            "L342",
+            "L343",
+            "L344",
+            "L346",
+            "L349",
+            "L350",
+            "L352",
+            "L353",
+            "L354",
+            "L356",
+            "L357",
+            "L358",
+            "L362",
+            "L364",
+            "L365",
+            "L366",
+            "L367",
+            "L368",
+            "L369",
+            "L370",
+            "L371",
+            "L373",
+            "L374",
+            "L375",
+            "L376",
+            "L377",
+            "L378",
+            "L379",
+            "L380",
+            "L382",
+            "L383",
+            "L384",
+            "L385",
+            "L387",
+            "L388",
+            "L389",
+            "L390",
+            "L391",
+            "L392",
+            "L393",
+            "L394",
+            "L395",
+            "L396",
+            "L398",
+            "L399",
+            "L400",
+            "L401",
+            "L403",
+            "L404",
+            "L405",
+            "L406",
+            "L407"
+          ],
+          "quote": "No",
+          "reason": "179 living carriers minus 45 with reported previous symptoms minus 1 missing Previous symptoms (patient 37 dash) equals 133 explicit No."
+        },
+        "grok_remediated_outcome": "exact_nonnull",
+        "grok_recovered_numeric_exact": true,
+        "grok_mechanical_source_quote_ok": true,
+        "grok_current_validator_accepted_correct": false,
+        "astra_current_validator_accepted_correct": false,
+        "included_in_42_query_sensitivity": true
+      }
+    ]
+  },
+  "astra_missing_only_overlay_on_remediated_grok": {
+    "raw_candidates": {
+      "lane": "raw_candidates",
+      "planned_queries": 43,
+      "conflict_preserving_first": 0,
+      "new_correct_nonnull": 0,
+      "new_wrong_nonnull": 0,
+      "final_correct_nonnull": 24,
+      "final_wrong_nonnull": 0,
+      "net_additional_correct_minus_wrong": 0,
+      "queries": [
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_carriers",
+          "variant": "p.Gly1408Arg",
+          "field": "carriers",
+          "expected": 14,
+          "first_value": 14,
+          "overlay_value": 14,
+          "selected_value": 14,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_affected",
+          "variant": "p.Gly1408Arg",
+          "field": "affected",
+          "expected": 4,
+          "first_value": 4,
+          "overlay_value": 4,
+          "selected_value": 4,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_unaffected",
+          "variant": "p.Gly1408Arg",
+          "field": "unaffected",
+          "expected": 9,
+          "first_value": 9,
+          "overlay_value": 9,
+          "selected_value": 9,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_carriers",
+          "variant": "c.3963+2T>C",
+          "field": "carriers",
+          "expected": 10,
+          "first_value": 10,
+          "overlay_value": 10,
+          "selected_value": 10,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_affected",
+          "variant": "c.3963+2T>C",
+          "field": "affected",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_unaffected",
+          "variant": "c.3963+2T>C",
+          "field": "unaffected",
+          "expected": 8,
+          "first_value": 8,
+          "overlay_value": 8,
+          "selected_value": 8,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_carriers",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "carriers",
+          "expected": 9,
+          "first_value": 9,
+          "overlay_value": 9,
+          "selected_value": 9,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_affected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "affected",
+          "expected": 6,
+          "first_value": 6,
+          "overlay_value": 6,
+          "selected_value": 6,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_unaffected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "unaffected",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q1_carriers",
+          "variant": "p.R417L",
+          "field": "carriers",
+          "expected": 3,
+          "first_value": 3,
+          "overlay_value": 3,
+          "selected_value": 3,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q2_carriers",
+          "variant": "p.R2028H",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q3_carriers",
+          "variant": "p.Y4721C",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q4_carriers",
+          "variant": "p.G4772S",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_carriers",
+          "variant": "p.C2277R",
+          "field": "carriers",
+          "expected": 8,
+          "first_value": 8,
+          "overlay_value": 8,
+          "selected_value": 8,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_affected",
+          "variant": "p.C2277R",
+          "field": "affected",
+          "expected": 7,
+          "first_value": 7,
+          "overlay_value": 7,
+          "selected_value": 7,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_unaffected",
+          "variant": "p.C2277R",
+          "field": "unaffected",
+          "expected": 1,
+          "first_value": 1,
+          "overlay_value": 1,
+          "selected_value": 1,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_carriers",
+          "variant": "p.P2328S",
+          "field": "carriers",
+          "expected": 13,
+          "first_value": 13,
+          "overlay_value": null,
+          "selected_value": 13,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_affected",
+          "variant": "p.P2328S",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_unaffected",
+          "variant": "p.P2328S",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_carriers",
+          "variant": "p.V4653F",
+          "field": "carriers",
+          "expected": 6,
+          "first_value": 6,
+          "overlay_value": null,
+          "selected_value": 6,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_affected",
+          "variant": "p.V4653F",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_unaffected",
+          "variant": "p.V4653F",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_carriers",
+          "variant": "p.W4645R",
+          "field": "carriers",
+          "expected": 4,
+          "first_value": 4,
+          "overlay_value": 4,
+          "selected_value": 4,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_affected",
+          "variant": "p.W4645R",
+          "field": "affected",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_unaffected",
+          "variant": "p.W4645R",
+          "field": "unaffected",
+          "expected": 2,
+          "first_value": 2,
+          "overlay_value": 2,
+          "selected_value": 2,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_carriers",
+          "variant": "p.Thr220Ile",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_affected",
+          "variant": "p.Thr220Ile",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_unaffected",
+          "variant": "p.Thr220Ile",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_carriers",
+          "variant": "p.Gly752Arg",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_affected",
+          "variant": "p.Gly752Arg",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_unaffected",
+          "variant": "p.Gly752Arg",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_carriers",
+          "variant": "p.Glu1784Lys",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_affected",
+          "variant": "p.Glu1784Lys",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_unaffected",
+          "variant": "p.Glu1784Lys",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_carriers",
+          "variant": "p.G357S",
+          "field": "carriers",
+          "expected": 179,
+          "first_value": 179,
+          "overlay_value": 179,
+          "selected_value": 179,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_affected",
+          "variant": "p.G357S",
+          "field": "affected",
+          "expected": 45,
+          "first_value": 45,
+          "overlay_value": 45,
+          "selected_value": 45,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_unaffected",
+          "variant": "p.G357S",
+          "field": "unaffected",
+          "expected": 133,
+          "first_value": 133,
+          "overlay_value": 133,
+          "selected_value": 133,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_carriers",
+          "variant": "c.704-2A>G",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_affected",
+          "variant": "c.704-2A>G",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_unaffected",
+          "variant": "c.704-2A>G",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_carriers",
+          "variant": "p.T220N",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_affected",
+          "variant": "p.T220N",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_unaffected",
+          "variant": "p.T220N",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        }
+      ],
+      "cost_assumption": "Replay of Astra on every paper; this is not a measured conditional escalation policy.",
+      "incremental_astra_returned_proxy_usd": 0.48056,
+      "incremental_astra_accounted_usd": 0.840025,
+      "proxy_usd_per_added_correct_nonnull": null,
+      "proxy_usd_per_net_added_correct_minus_wrong": null
+    },
+    "current_validator": {
+      "lane": "current_validator",
+      "planned_queries": 43,
+      "conflict_preserving_first": 0,
+      "new_correct_nonnull": 0,
+      "new_wrong_nonnull": 0,
+      "final_correct_nonnull": 1,
+      "final_wrong_nonnull": 0,
+      "net_additional_correct_minus_wrong": 0,
+      "queries": [
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_carriers",
+          "variant": "p.Gly1408Arg",
+          "field": "carriers",
+          "expected": 14,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_affected",
+          "variant": "p.Gly1408Arg",
+          "field": "affected",
+          "expected": 4,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q1_unaffected",
+          "variant": "p.Gly1408Arg",
+          "field": "unaffected",
+          "expected": 9,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_carriers",
+          "variant": "c.3963+2T>C",
+          "field": "carriers",
+          "expected": 10,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_affected",
+          "variant": "c.3963+2T>C",
+          "field": "affected",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q2_unaffected",
+          "variant": "c.3963+2T>C",
+          "field": "unaffected",
+          "expected": 8,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_carriers",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "carriers",
+          "expected": 9,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_affected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "affected",
+          "expected": 6,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn200_table",
+          "pmid": "20031634",
+          "id": "q3_unaffected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "unaffected",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q1_carriers",
+          "variant": "p.R417L",
+          "field": "carriers",
+          "expected": 3,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q2_carriers",
+          "variant": "p.R2028H",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q3_carriers",
+          "variant": "p.Y4721C",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "pmid": "30403697",
+          "id": "q4_carriers",
+          "variant": "p.G4772S",
+          "field": "carriers",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_carriers",
+          "variant": "p.C2277R",
+          "field": "carriers",
+          "expected": 8,
+          "first_value": 8,
+          "overlay_value": 8,
+          "selected_value": 8,
+          "selected_from": "first",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": true,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_affected",
+          "variant": "p.C2277R",
+          "field": "affected",
+          "expected": 7,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "pmid": "25435091",
+          "id": "q1_unaffected",
+          "variant": "p.C2277R",
+          "field": "unaffected",
+          "expected": 1,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_carriers",
+          "variant": "p.P2328S",
+          "field": "carriers",
+          "expected": 13,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_affected",
+          "variant": "p.P2328S",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q1_unaffected",
+          "variant": "p.P2328S",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_carriers",
+          "variant": "p.V4653F",
+          "field": "carriers",
+          "expected": 6,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_affected",
+          "variant": "p.V4653F",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "pmid": "18929323",
+          "id": "q2_unaffected",
+          "variant": "p.V4653F",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_carriers",
+          "variant": "p.W4645R",
+          "field": "carriers",
+          "expected": 4,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_affected",
+          "variant": "p.W4645R",
+          "field": "affected",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "pmid": "19398417",
+          "id": "q1_unaffected",
+          "variant": "p.W4645R",
+          "field": "unaffected",
+          "expected": 2,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_carriers",
+          "variant": "p.Thr220Ile",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_affected",
+          "variant": "p.Thr220Ile",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q1_unaffected",
+          "variant": "p.Thr220Ile",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_carriers",
+          "variant": "p.Gly752Arg",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_affected",
+          "variant": "p.Gly752Arg",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q2_unaffected",
+          "variant": "p.Gly752Arg",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_carriers",
+          "variant": "p.Glu1784Lys",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_affected",
+          "variant": "p.Glu1784Lys",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "pmid": "32533946",
+          "id": "q3_unaffected",
+          "variant": "p.Glu1784Lys",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_carriers",
+          "variant": "p.G357S",
+          "field": "carriers",
+          "expected": 179,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_affected",
+          "variant": "p.G357S",
+          "field": "affected",
+          "expected": 45,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "pmid": "25814417",
+          "id": "q1_unaffected",
+          "variant": "p.G357S",
+          "field": "unaffected",
+          "expected": 133,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_carriers",
+          "variant": "c.704-2A>G",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_affected",
+          "variant": "c.704-2A>G",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q1_unaffected",
+          "variant": "c.704-2A>G",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_carriers",
+          "variant": "p.T220N",
+          "field": "carriers",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_affected",
+          "variant": "p.T220N",
+          "field": "affected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "pmid": "25163546",
+          "id": "q2_unaffected",
+          "variant": "p.T220N",
+          "field": "unaffected",
+          "expected": null,
+          "first_value": null,
+          "overlay_value": null,
+          "selected_value": null,
+          "selected_from": "none",
+          "conflict_preserving_first": false,
+          "new_correct_nonnull": false,
+          "new_wrong_nonnull": false,
+          "final_correct_nonnull": false,
+          "final_wrong_nonnull": false
+        }
+      ],
+      "cost_assumption": "Replay of Astra on every paper; this is not a measured conditional escalation policy.",
+      "incremental_astra_returned_proxy_usd": 0.48056,
+      "incremental_astra_accounted_usd": 0.840025,
+      "proxy_usd_per_added_correct_nonnull": null,
+      "proxy_usd_per_net_added_correct_minus_wrong": null
+    }
+  },
+  "matched_paper_quality_and_cost": [
+    {
+      "name": "all_planned_papers",
+      "packets": [
+        "ryr189_aggregate",
+        "ryr193_abstract",
+        "ryr254_timepoint",
+        "ryr258_roster",
+        "ryr304_relatives",
+        "scn200_table",
+        "scn251_variant_list",
+        "scn325_prior_counts"
+      ],
+      "grok_remediated": {
+        "metrics": {
+          "planned_queries": 43,
+          "reference_nonnull": 24,
+          "reference_positive": 24,
+          "reference_zero": 0,
+          "reference_unknown": 19,
+          "outcomes": {
+            "exact_nonnull": 24,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 19,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 43,
+          "mechanical_source_quote_pass": 42,
+          "exact_nonnull_with_mechanical_source_quote_pass": 23,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 17,
+              "outcomes": {
+                "exact_nonnull": 17
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 19,
+              "outcomes": {
+                "correct_abstention": 19
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 8,
+          "dispatched": 8,
+          "successful_stop": 8,
+          "known_usage_requests": 8,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.097632,
+          "accounted_usd_including_unknown_reserves": 0.109575,
+          "elapsed_request_seconds_sum": 2496.7172057901043,
+          "elapsed_request_seconds_median": 305.0010985000408
+        }
+      },
+      "astra_primary_180s_4096_strict": {
+        "metrics": {
+          "planned_queries": 43,
+          "reference_nonnull": 24,
+          "reference_positive": 24,
+          "reference_zero": 0,
+          "reference_unknown": 19,
+          "outcomes": {
+            "exact_nonnull": 22,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 15,
+            "response_failure_or_missing_claim": 6
+          },
+          "numeric_exact_including_valid_abstentions": 37,
+          "mechanical_source_quote_pass": 37,
+          "exact_nonnull_with_mechanical_source_quote_pass": 22,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 15,
+              "outcomes": {
+                "exact_nonnull": 15
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 15,
+              "outcomes": {
+                "correct_abstention": 15
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 6,
+              "outcomes": {
+                "response_failure_or_missing_claim": 6
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 8,
+          "dispatched": 8,
+          "successful_stop": 7,
+          "known_usage_requests": 7,
+          "unknown_usage_requests": 1,
+          "returned_api_proxy_usd": 0.48056,
+          "accounted_usd_including_unknown_reserves": 0.840025,
+          "elapsed_request_seconds_sum": 278.40708841814194,
+          "elapsed_request_seconds_median": 13.823551917041186
+        }
+      },
+      "all_planned_paired_requests_dispatched_with_known_usage": false,
+      "grok_to_astra_returned_proxy_ratio": null,
+      "latency_comparability": "Observed package latency only: cap, timeout, prompt, format and scheduling differ. Primary 180-second failures are not evidence of intrinsic reasoning weakness."
+    },
+    {
+      "name": "papers_with_previous_Astra_only_numeric_values",
+      "packets": [
+        "ryr193_abstract",
+        "ryr254_timepoint",
+        "ryr258_roster"
+      ],
+      "grok_remediated": {
+        "metrics": {
+          "planned_queries": 9,
+          "reference_nonnull": 9,
+          "reference_positive": 9,
+          "reference_zero": 0,
+          "reference_unknown": 0,
+          "outcomes": {
+            "exact_nonnull": 9,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 0,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 9,
+          "mechanical_source_quote_pass": 8,
+          "exact_nonnull_with_mechanical_source_quote_pass": 8,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 6,
+              "outcomes": {
+                "exact_nonnull": 6
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 3,
+              "outcomes": {
+                "exact_nonnull": 3
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 3,
+          "dispatched": 3,
+          "successful_stop": 3,
+          "known_usage_requests": 3,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.044516,
+          "accounted_usd_including_unknown_reserves": 0.0499615,
+          "elapsed_request_seconds_sum": 955.4431430000113,
+          "elapsed_request_seconds_median": 324.21649075008463
+        }
+      },
+      "astra_primary_180s_4096_strict": {
+        "metrics": {
+          "planned_queries": 9,
+          "reference_nonnull": 9,
+          "reference_positive": 9,
+          "reference_zero": 0,
+          "reference_unknown": 0,
+          "outcomes": {
+            "exact_nonnull": 9,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 0,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 9,
+          "mechanical_source_quote_pass": 9,
+          "exact_nonnull_with_mechanical_source_quote_pass": 9,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 6,
+              "outcomes": {
+                "exact_nonnull": 6
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 3,
+              "outcomes": {
+                "exact_nonnull": 3
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 3,
+          "dispatched": 3,
+          "successful_stop": 3,
+          "known_usage_requests": 3,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.22122999999999998,
+          "accounted_usd_including_unknown_reserves": 0.24725000000000003,
+          "elapsed_request_seconds_sum": 43.71467366698198,
+          "elapsed_request_seconds_median": 11.25927016697824
+        }
+      },
+      "all_planned_paired_requests_dispatched_with_known_usage": true,
+      "grok_to_astra_returned_proxy_ratio": 0.201220449306152,
+      "latency_comparability": "Observed package latency only: cap, timeout, prompt, format and scheduling differ. Primary 180-second failures are not evidence of intrinsic reasoning weakness."
+    },
+    {
+      "name": "both_packages_dispatched_secondary_subset",
+      "packets": [
+        "ryr189_aggregate",
+        "ryr193_abstract",
+        "ryr254_timepoint",
+        "ryr258_roster",
+        "ryr304_relatives",
+        "scn200_table",
+        "scn251_variant_list",
+        "scn325_prior_counts"
+      ],
+      "grok_remediated": {
+        "metrics": {
+          "planned_queries": 43,
+          "reference_nonnull": 24,
+          "reference_positive": 24,
+          "reference_zero": 0,
+          "reference_unknown": 19,
+          "outcomes": {
+            "exact_nonnull": 24,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 19,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 43,
+          "mechanical_source_quote_pass": 42,
+          "exact_nonnull_with_mechanical_source_quote_pass": 23,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 17,
+              "outcomes": {
+                "exact_nonnull": 17
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 19,
+              "outcomes": {
+                "correct_abstention": 19
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 8,
+          "dispatched": 8,
+          "successful_stop": 8,
+          "known_usage_requests": 8,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.097632,
+          "accounted_usd_including_unknown_reserves": 0.109575,
+          "elapsed_request_seconds_sum": 2496.7172057901043,
+          "elapsed_request_seconds_median": 305.0010985000408
+        }
+      },
+      "astra_primary_180s_4096_strict": {
+        "metrics": {
+          "planned_queries": 43,
+          "reference_nonnull": 24,
+          "reference_positive": 24,
+          "reference_zero": 0,
+          "reference_unknown": 19,
+          "outcomes": {
+            "exact_nonnull": 22,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 15,
+            "response_failure_or_missing_claim": 6
+          },
+          "numeric_exact_including_valid_abstentions": 37,
+          "mechanical_source_quote_pass": 37,
+          "exact_nonnull_with_mechanical_source_quote_pass": 22,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 15,
+              "outcomes": {
+                "exact_nonnull": 15
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 15,
+              "outcomes": {
+                "correct_abstention": 15
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 6,
+              "outcomes": {
+                "response_failure_or_missing_claim": 6
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 8,
+          "dispatched": 8,
+          "successful_stop": 7,
+          "known_usage_requests": 7,
+          "unknown_usage_requests": 1,
+          "returned_api_proxy_usd": 0.48056,
+          "accounted_usd_including_unknown_reserves": 0.840025,
+          "elapsed_request_seconds_sum": 278.40708841814194,
+          "elapsed_request_seconds_median": 13.823551917041186
+        }
+      },
+      "all_planned_paired_requests_dispatched_with_known_usage": false,
+      "grok_to_astra_returned_proxy_ratio": null,
+      "latency_comparability": "Observed package latency only: cap, timeout, prompt, format and scheduling differ. Primary 180-second failures are not evidence of intrinsic reasoning weakness."
+    },
+    {
+      "name": "both_packages_successful_with_known_usage_secondary_subset",
+      "packets": [
+        "ryr193_abstract",
+        "ryr254_timepoint",
+        "ryr258_roster",
+        "ryr304_relatives",
+        "scn200_table",
+        "scn251_variant_list",
+        "scn325_prior_counts"
+      ],
+      "grok_remediated": {
+        "metrics": {
+          "planned_queries": 37,
+          "reference_nonnull": 22,
+          "reference_positive": 22,
+          "reference_zero": 0,
+          "reference_unknown": 15,
+          "outcomes": {
+            "exact_nonnull": 22,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 15,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 37,
+          "mechanical_source_quote_pass": 36,
+          "exact_nonnull_with_mechanical_source_quote_pass": 21,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 15,
+              "outcomes": {
+                "exact_nonnull": 15
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 15,
+              "outcomes": {
+                "correct_abstention": 15
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 7,
+          "dispatched": 7,
+          "successful_stop": 7,
+          "known_usage_requests": 7,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.088746,
+          "accounted_usd_including_unknown_reserves": 0.0999945,
+          "elapsed_request_seconds_sum": 2210.9314995401073,
+          "elapsed_request_seconds_median": 324.21649075008463
+        }
+      },
+      "astra_primary_180s_4096_strict": {
+        "metrics": {
+          "planned_queries": 37,
+          "reference_nonnull": 22,
+          "reference_positive": 22,
+          "reference_zero": 0,
+          "reference_unknown": 15,
+          "outcomes": {
+            "exact_nonnull": 22,
+            "wrong_nonnull": 0,
+            "null_miss": 0,
+            "correct_abstention": 15,
+            "response_failure_or_missing_claim": 0
+          },
+          "numeric_exact_including_valid_abstentions": 37,
+          "mechanical_source_quote_pass": 37,
+          "exact_nonnull_with_mechanical_source_quote_pass": 22,
+          "current_validator_accepted_correct": 1,
+          "current_validator_accepted_wrong": 0,
+          "current_validator_raw_accepts_before_mechanical_gate": 1,
+          "by_model_declared_basis_not_adjudicated_basis": {
+            "explicit": {
+              "claims": 15,
+              "outcomes": {
+                "exact_nonnull": 15
+              },
+              "accepted_correct": 1,
+              "accepted_wrong": 0
+            },
+            "derived": {
+              "claims": 7,
+              "outcomes": {
+                "exact_nonnull": 7
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "unknown": {
+              "claims": 15,
+              "outcomes": {
+                "correct_abstention": 15
+              },
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            },
+            "None": {
+              "claims": 0,
+              "outcomes": {},
+              "accepted_correct": 0,
+              "accepted_wrong": 0
+            }
+          }
+        },
+        "operations": {
+          "planned_requests": 7,
+          "dispatched": 7,
+          "successful_stop": 7,
+          "known_usage_requests": 7,
+          "unknown_usage_requests": 0,
+          "returned_api_proxy_usd": 0.48056,
+          "accounted_usd_including_unknown_reserves": 0.5338375,
+          "elapsed_request_seconds_sum": 98.21031687711366,
+          "elapsed_request_seconds_median": 13.041648084064946
+        }
+      },
+      "all_planned_paired_requests_dispatched_with_known_usage": true,
+      "grok_to_astra_returned_proxy_ratio": 0.18467204927584485,
+      "latency_comparability": "Observed package latency only: cap, timeout, prompt, format and scheduling differ. Primary 180-second failures are not evidence of intrinsic reasoning weakness."
+    }
+  ],
+  "cells": [
+    {
+      "name": "scn200_table__grok_remediated",
+      "packet": "scn200_table",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 205.67280666599981,
+      "api_proxy_usd": 0.015648,
+      "accounted_usd": 0.017559,
+      "queries": [
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q1_carriers",
+          "variant": "p.Gly1408Arg",
+          "field": "carriers",
+          "expected": 14,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 14,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L114"
+            ],
+            "quote": "B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+            "reason": "Table 1 lists 14 mutation-positive members for p.Gly1408Arg in the study families."
+          },
+          "response_usable": true,
+          "value": 14,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Gly1408Arg",
+                "field": "carriers",
+                "value": 14,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q1_affected",
+          "variant": "p.Gly1408Arg",
+          "field": "affected",
+          "expected": 4,
+          "claim": {
+            "id": "q1_affected",
+            "value": 4,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L114"
+            ],
+            "quote": "B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+            "reason": "Mutation-positive BrS-ECG+ column is 4 for this variant."
+          },
+          "response_usable": true,
+          "value": 4,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Gly1408Arg",
+                "field": "affected",
+                "value": 4,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q1_unaffected",
+          "variant": "p.Gly1408Arg",
+          "field": "unaffected",
+          "expected": 9,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": 9,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L114"
+            ],
+            "quote": "B c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+            "reason": "Mutation-positive Not BrS ECG+ column is 9; undetermined (1) is not counted as unaffected."
+          },
+          "response_usable": true,
+          "value": 9,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Gly1408Arg",
+                "field": "unaffected",
+                "value": 9,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q2_carriers",
+          "variant": "c.3963+2T>C",
+          "field": "carriers",
+          "expected": 10,
+          "claim": {
+            "id": "q2_carriers",
+            "value": 10,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L117"
+            ],
+            "quote": "E c.396312T.C … 10 2 8 0 0 Wrong splice16",
+            "reason": "Table 1 family E splice variant c.3963+2T>C has 10 mutation-positive members."
+          },
+          "response_usable": true,
+          "value": 10,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "c.3963+2T>C",
+                "field": "carriers",
+                "value": 10,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q2_affected",
+          "variant": "c.3963+2T>C",
+          "field": "affected",
+          "expected": 2,
+          "claim": {
+            "id": "q2_affected",
+            "value": 2,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L117"
+            ],
+            "quote": "E c.396312T.C … 10 2 8 0 0 Wrong splice16",
+            "reason": "Mutation-positive BrS-ECG+ count is 2."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "c.3963+2T>C",
+                "field": "affected",
+                "value": 2,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q2_unaffected",
+          "variant": "c.3963+2T>C",
+          "field": "unaffected",
+          "expected": 8,
+          "claim": {
+            "id": "q2_unaffected",
+            "value": 8,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L117"
+            ],
+            "quote": "E c.396312T.C … 10 2 8 0 0 Wrong splice16",
+            "reason": "Mutation-positive Not BrS ECG+ count is 8; undetermined is 0."
+          },
+          "response_usable": true,
+          "value": 8,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "c.3963+2T>C",
+                "field": "unaffected",
+                "value": 8,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q3_carriers",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "carriers",
+          "expected": 9,
+          "claim": {
+            "id": "q3_carriers",
+            "value": 9,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L121"
+            ],
+            "quote": "I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+            "reason": "Table 1 lists 9 mutation-positive members for p.Ala665GlyfsX16."
+          },
+          "response_usable": true,
+          "value": 9,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Ala665GlyfsX16",
+                "field": "carriers",
+                "value": 9,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q3_affected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "affected",
+          "expected": 6,
+          "claim": {
+            "id": "q3_affected",
+            "value": 6,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L121"
+            ],
+            "quote": "I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+            "reason": "Mutation-positive BrS-ECG+ column is 6."
+          },
+          "response_usable": true,
+          "value": 6,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Ala665GlyfsX16",
+                "field": "affected",
+                "value": 6,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn200_table",
+          "gene": "SCN5A",
+          "pmid": "20031634",
+          "id": "q3_unaffected",
+          "variant": "p.Ala665GlyfsX16",
+          "field": "unaffected",
+          "expected": 2,
+          "claim": {
+            "id": "q3_unaffected",
+            "value": 2,
+            "basis": "explicit",
+            "sources": [
+              "L109",
+              "L110",
+              "L111",
+              "L112",
+              "L121"
+            ],
+            "quote": "I c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+            "reason": "Mutation-positive Not BrS ECG+ is 2; undetermined (1) kept separate."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.Ala665GlyfsX16",
+                "field": "unaffected",
+                "value": 2,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "ryr304_relatives__grok_remediated",
+      "packet": "ryr304_relatives",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 368.92325558303855,
+      "api_proxy_usd": 0.010538,
+      "accounted_usd": 0.0120295,
+      "queries": [
+        {
+          "packet": "ryr304_relatives",
+          "gene": "RYR2",
+          "pmid": "30403697",
+          "id": "q1_carriers",
+          "variant": "p.R417L",
+          "field": "carriers",
+          "expected": 3,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 3,
+            "basis": "derived",
+            "sources": [
+              "L107",
+              "L108"
+            ],
+            "quote": "RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic",
+            "reason": "Subjects 1 and 2 plus the documented paternal gene-carrier father (cis R417L/F3496L)."
+          },
+          "response_usable": true,
+          "value": 3,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "gene": "RYR2",
+          "pmid": "30403697",
+          "id": "q2_carriers",
+          "variant": "p.R2028H",
+          "field": "carriers",
+          "expected": 2,
+          "claim": {
+            "id": "q2_carriers",
+            "value": 2,
+            "basis": "derived",
+            "sources": [
+              "L113"
+            ],
+            "quote": "RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers",
+            "reason": "Subject 7 plus the mother stated to transmit p.R2028H as a heterozygous carrier."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "gene": "RYR2",
+          "pmid": "30403697",
+          "id": "q3_carriers",
+          "variant": "p.Y4721C",
+          "field": "carriers",
+          "expected": 2,
+          "claim": {
+            "id": "q3_carriers",
+            "value": 2,
+            "basis": "derived",
+            "sources": [
+              "L113"
+            ],
+            "quote": "RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers",
+            "reason": "Subject 7 plus the father stated to transmit p.Y4721C as a heterozygous carrier."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr304_relatives",
+          "gene": "RYR2",
+          "pmid": "30403697",
+          "id": "q4_carriers",
+          "variant": "p.G4772S",
+          "field": "carriers",
+          "expected": 2,
+          "claim": {
+            "id": "q4_carriers",
+            "value": 2,
+            "basis": "derived",
+            "sources": [
+              "L120"
+            ],
+            "quote": "RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S)",
+            "reason": "Subject 14 plus the explicitly genotyped symptomatic cousin carrying RYR2-G4772S."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "ryr254_timepoint__grok_remediated",
+      "packet": "ryr254_timepoint",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 324.21649075008463,
+      "api_proxy_usd": 0.009154,
+      "accounted_usd": 0.010481,
+      "queries": [
+        {
+          "packet": "ryr254_timepoint",
+          "gene": "RYR2",
+          "pmid": "25435091",
+          "id": "q1_carriers",
+          "variant": "p.C2277R",
+          "field": "carriers",
+          "expected": 8,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 8,
+            "basis": "explicit",
+            "sources": [
+              "S5",
+              "S11",
+              "S22"
+            ],
+            "quote": "8 carriers of the new RYR2 C2277R variant (genotype+)",
+            "reason": "Paper states a cohort of eight living family members carrying RYR2 C2277R, listed in the clinical table."
+          },
+          "response_usable": true,
+          "value": 8,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": true,
+            "rejections": [],
+            "accepted_evidence": [
+              {
+                "field": "carriers",
+                "value": 8,
+                "quote": "8 carriers of the new RYR2 C2277R variant (genotype+)",
+                "count_role": "per_variant_carriers",
+                "evidence_locator": {
+                  "kind": "prose_sentence",
+                  "sentence": "8 carriers of the new RYR2 C2277R variant (genotype+)",
+                  "model_declared": {
+                    "source_ids": "S5,S11,S22"
+                  }
+                }
+              }
+            ]
+          },
+          "current_validator_lane_accepted": true,
+          "accepted_correct": true,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "gene": "RYR2",
+          "pmid": "25435091",
+          "id": "q1_affected",
+          "variant": "p.C2277R",
+          "field": "affected",
+          "expected": 7,
+          "claim": {
+            "id": "q1_affected",
+            "value": 7,
+            "basis": "explicit",
+            "sources": [
+              "S11",
+              "S21",
+              "S22",
+              "S5",
+              "S6"
+            ],
+            "quote": "7 of whom exhibit the CPVT phenotype according to EST results (phenotype+).",
+            "reason": "Seven of eight carriers met diagnostic CPVT criteria on initial EST; II:9 did not."
+          },
+          "response_usable": true,
+          "value": 7,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.C2277R",
+                "field": "affected",
+                "value": 7,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr254_timepoint",
+          "gene": "RYR2",
+          "pmid": "25435091",
+          "id": "q1_unaffected",
+          "variant": "p.C2277R",
+          "field": "unaffected",
+          "expected": 1,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": 1,
+            "basis": "explicit",
+            "sources": [
+              "S21",
+              "S22",
+              "S5",
+              "S6"
+            ],
+            "quote": "in 1 person (II: 9), who also underwent an adrenaline test (Mayo Clinic protocol), ventricular arrhythmias did not meet the diagnostic criteria.",
+            "reason": "Exactly one carrier (II:9) had non-diagnostic ventricular extrasystoles on initial EST/adrenaline testing."
+          },
+          "response_usable": true,
+          "value": 1,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.C2277R",
+                "field": "unaffected",
+                "value": 1,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "ryr189_aggregate__grok_remediated",
+      "packet": "ryr189_aggregate",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 285.785706249997,
+      "api_proxy_usd": 0.008886,
+      "accounted_usd": 0.0095805,
+      "queries": [
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q1_carriers",
+          "variant": "p.P2328S",
+          "field": "carriers",
+          "expected": 13,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 13,
+            "basis": "explicit",
+            "sources": [
+              "L21"
+            ],
+            "quote": "a 24-h ECG recording was performed in each patient carrying 1 of 2 different RyR2 mutations (P2328S, n = 13, or V4653F, n = 6)",
+            "reason": "Holter-study enrollment count of P2328S gene-positive patients is stated directly."
+          },
+          "response_usable": true,
+          "value": 13,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.P2328S",
+                "field": "carriers",
+                "value": 13,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q1_affected",
+          "variant": "p.P2328S",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q1_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L21",
+              "L23"
+            ],
+            "quote": null,
+            "reason": "Symptomatic history is given only as a pooled 13/19; no P2328S-specific phenotype split."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q1_unaffected",
+          "variant": "p.P2328S",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L21",
+              "L23"
+            ],
+            "quote": null,
+            "reason": "Asymptomatic status is not attributed to P2328S carriers separately from the other mutation."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q2_carriers",
+          "variant": "p.V4653F",
+          "field": "carriers",
+          "expected": 6,
+          "claim": {
+            "id": "q2_carriers",
+            "value": 6,
+            "basis": "explicit",
+            "sources": [
+              "L21"
+            ],
+            "quote": "a 24-h ECG recording was performed in each patient carrying 1 of 2 different RyR2 mutations (P2328S, n = 13, or V4653F, n = 6)",
+            "reason": "Holter-study enrollment count of V4653F gene-positive patients is stated directly."
+          },
+          "response_usable": true,
+          "value": 6,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.V4653F",
+                "field": "carriers",
+                "value": 6,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q2_affected",
+          "variant": "p.V4653F",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q2_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L21",
+              "L23"
+            ],
+            "quote": null,
+            "reason": "Symptomatic history is given only as a pooled 13/19; no V4653F-specific phenotype split."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr189_aggregate",
+          "gene": "RYR2",
+          "pmid": "18929323",
+          "id": "q2_unaffected",
+          "variant": "p.V4653F",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q2_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L21",
+              "L23"
+            ],
+            "quote": null,
+            "reason": "Asymptomatic status is not attributed to V4653F carriers separately from the other mutation."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "ryr193_abstract__grok_remediated",
+      "packet": "ryr193_abstract",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 252.66153608390596,
+      "api_proxy_usd": 0.005408,
+      "accounted_usd": 0.006115,
+      "queries": [
+        {
+          "packet": "ryr193_abstract",
+          "gene": "RYR2",
+          "pmid": "19398417",
+          "id": "q1_carriers",
+          "variant": "p.W4645R",
+          "field": "carriers",
+          "expected": 4,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 4,
+            "basis": "explicit",
+            "sources": [
+              "A26",
+              "A27"
+            ],
+            "quote": "A novel RyR2 gene variant (W4645R) was found in four family members including two without symptoms.",
+            "reason": "Paper states the variant was found in four family members."
+          },
+          "response_usable": true,
+          "value": 4,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.W4645R",
+                "field": "carriers",
+                "value": 4,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "gene": "RYR2",
+          "pmid": "19398417",
+          "id": "q1_affected",
+          "variant": "p.W4645R",
+          "field": "affected",
+          "expected": 2,
+          "claim": {
+            "id": "q1_affected",
+            "value": 2,
+            "basis": "derived",
+            "sources": [
+              "A23",
+              "A26",
+              "A27"
+            ],
+            "quote": "CPVT was diagnosed in two of the nine family members evaluated. ... found in four family members including two without symptoms.",
+            "reason": "Four carriers minus two without symptoms, matching two CPVT diagnoses."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": false,
+          "mechanical_errors": [
+            "quote_not_verbatim_in_packet"
+          ],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr193_abstract",
+          "gene": "RYR2",
+          "pmid": "19398417",
+          "id": "q1_unaffected",
+          "variant": "p.W4645R",
+          "field": "unaffected",
+          "expected": 2,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": 2,
+            "basis": "explicit",
+            "sources": [
+              "A26",
+              "A27"
+            ],
+            "quote": "found in four family members including two without symptoms.",
+            "reason": "Explicit count of carriers without symptoms."
+          },
+          "response_usable": true,
+          "value": 2,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.W4645R",
+                "field": "unaffected",
+                "value": 2,
+                "reason": "quote does not uniquely bind the count to this variant"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "scn325_prior_counts__grok_remediated",
+      "packet": "scn325_prior_counts",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 251.45417429099325,
+      "api_proxy_usd": 0.011344,
+      "accounted_usd": 0.0129785,
+      "queries": [
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q1_carriers",
+          "variant": "p.Thr220Ile",
+          "field": "carriers",
+          "expected": null,
+          "claim": {
+            "id": "q1_carriers",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L222",
+              "L234",
+              "L348",
+              "L349",
+              "L1101",
+              "L1103"
+            ],
+            "quote": null,
+            "reason": "Table S1 BrS/Unaff. numbers are literature/gnomAD curation, not newly enrolled current-study patients; this work reports in-vitro patch clamp, not new Brugada phenotypes."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q1_affected",
+          "variant": "p.Thr220Ile",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q1_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L222",
+              "L234",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "No current-study Brugada-positive carrier count for p.Thr220Ile; published 2 is prior-literature BrS1."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q1_unaffected",
+          "variant": "p.Thr220Ile",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L222",
+              "L234",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "No current-study Brugada-negative carrier count; Unaff. 2 is literature, not this cohort."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q2_carriers",
+          "variant": "p.Gly752Arg",
+          "field": "carriers",
+          "expected": null,
+          "claim": {
+            "id": "q2_carriers",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L222",
+              "L237",
+              "L238",
+              "L348",
+              "L349",
+              "L1103"
+            ],
+            "quote": null,
+            "reason": "p.Gly752Arg is a previously studied control with literature BrS/Unaff. counts only; no new clinical carriers."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q2_affected",
+          "variant": "p.Gly752Arg",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q2_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L238",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "Literature BrS1=8 is not a current-study phenotype-positive count."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q2_unaffected",
+          "variant": "p.Gly752Arg",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q2_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L238",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "Literature Unaff.=1 is not a current-study phenotype-negative count."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q3_carriers",
+          "variant": "p.Glu1784Lys",
+          "field": "carriers",
+          "expected": null,
+          "claim": {
+            "id": "q3_carriers",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L222",
+              "L246",
+              "L348",
+              "L349",
+              "L1103"
+            ],
+            "quote": null,
+            "reason": "p.Glu1784Lys counts in Table S1 are literature BrS/LQT/Unaff., not newly studied clinical participants."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q3_affected",
+          "variant": "p.Glu1784Lys",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q3_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L246",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "Literature BrS1=31 is not current-study Brugada-positive carriers."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn325_prior_counts",
+          "gene": "SCN5A",
+          "pmid": "32533946",
+          "id": "q3_unaffected",
+          "variant": "p.Glu1784Lys",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q3_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L246",
+              "L348",
+              "L349"
+            ],
+            "quote": null,
+            "reason": "Literature Unaff.=19 is not current-study Brugada-negative carriers."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "ryr258_roster__grok_remediated",
+      "packet": "ryr258_roster",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 378.56511616602074,
+      "api_proxy_usd": 0.029954,
+      "accounted_usd": 0.0333655,
+      "queries": [
+        {
+          "packet": "ryr258_roster",
+          "gene": "RYR2",
+          "pmid": "25814417",
+          "id": "q1_carriers",
+          "variant": "p.G357S",
+          "field": "carriers",
+          "expected": 179,
+          "claim": {
+            "id": "q1_carriers",
+            "value": 179,
+            "basis": "explicit",
+            "sources": [
+              "L33",
+              "L225",
+              "L229",
+              "L408"
+            ],
+            "quote": "A cascade screening performed in 1404 family members identified 179 living p.G357S_RyR2 mutation-positive individuals.",
+            "reason": "Text and Supplementary Table 3 both enumerate 179 living mutation-positive subjects (patients 1–179) at baseline."
+          },
+          "response_usable": true,
+          "value": 179,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "explicit",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": true,
+            "accepted": false,
+            "rejections": [
+              {
+                "variant": "p.G357S",
+                "field": "carriers",
+                "value": 179,
+                "reason": "number not stated in the quote as the requested count role"
+              }
+            ],
+            "accepted_evidence": []
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "gene": "RYR2",
+          "pmid": "25814417",
+          "id": "q1_affected",
+          "variant": "p.G357S",
+          "field": "affected",
+          "expected": 45,
+          "claim": {
+            "id": "q1_affected",
+            "value": 45,
+            "basis": "derived",
+            "sources": [
+              "L225",
+              "L229",
+              "L230",
+              "L234",
+              "L241",
+              "L242",
+              "L243",
+              "L244",
+              "L245",
+              "L256",
+              "L258",
+              "L259",
+              "L260",
+              "L267",
+              "L270",
+              "L283",
+              "L286",
+              "L289",
+              "L291",
+              "L296",
+              "L300",
+              "L306",
+              "L310",
+              "L316",
+              "L319",
+              "L321",
+              "L324",
+              "L327",
+              "L328",
+              "L329",
+              "L335",
+              "L339",
+              "L345",
+              "L347",
+              "L348",
+              "L351",
+              "L355",
+              "L359",
+              "L360",
+              "L361",
+              "L363",
+              "L372",
+              "L381",
+              "L386",
+              "L397",
+              "L402",
+              "L408"
+            ],
+            "quote": "Previous symptoms",
+            "reason": "Counted 45 table rows whose Previous symptoms cell is a reported symptom (Dizziness, Syncope, or combined labels), excluding explicit No and the single dash."
+          },
+          "response_usable": true,
+          "value": 45,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "ryr258_roster",
+          "gene": "RYR2",
+          "pmid": "25814417",
+          "id": "q1_unaffected",
+          "variant": "p.G357S",
+          "field": "unaffected",
+          "expected": 133,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": 133,
+            "basis": "derived",
+            "sources": [
+              "L225",
+              "L229",
+              "L231",
+              "L232",
+              "L233",
+              "L235",
+              "L236",
+              "L237",
+              "L238",
+              "L239",
+              "L240",
+              "L246",
+              "L247",
+              "L248",
+              "L249",
+              "L250",
+              "L251",
+              "L252",
+              "L253",
+              "L254",
+              "L255",
+              "L257",
+              "L261",
+              "L262",
+              "L263",
+              "L264",
+              "L265",
+              "L266",
+              "L268",
+              "L269",
+              "L271",
+              "L272",
+              "L273",
+              "L274",
+              "L275",
+              "L276",
+              "L277",
+              "L278",
+              "L279",
+              "L280",
+              "L281",
+              "L282",
+              "L284",
+              "L285",
+              "L287",
+              "L288",
+              "L290",
+              "L292",
+              "L293",
+              "L294",
+              "L295",
+              "L297",
+              "L298",
+              "L299",
+              "L301",
+              "L302",
+              "L303",
+              "L304",
+              "L305",
+              "L307",
+              "L308",
+              "L309",
+              "L311",
+              "L312",
+              "L313",
+              "L314",
+              "L315",
+              "L317",
+              "L318",
+              "L320",
+              "L322",
+              "L323",
+              "L325",
+              "L326",
+              "L330",
+              "L331",
+              "L332",
+              "L333",
+              "L334",
+              "L336",
+              "L337",
+              "L338",
+              "L340",
+              "L341",
+              "L342",
+              "L343",
+              "L344",
+              "L346",
+              "L349",
+              "L350",
+              "L352",
+              "L353",
+              "L354",
+              "L356",
+              "L357",
+              "L358",
+              "L362",
+              "L364",
+              "L365",
+              "L366",
+              "L367",
+              "L368",
+              "L369",
+              "L370",
+              "L371",
+              "L373",
+              "L374",
+              "L375",
+              "L376",
+              "L377",
+              "L378",
+              "L379",
+              "L380",
+              "L382",
+              "L383",
+              "L384",
+              "L385",
+              "L387",
+              "L388",
+              "L389",
+              "L390",
+              "L391",
+              "L392",
+              "L393",
+              "L394",
+              "L395",
+              "L396",
+              "L398",
+              "L399",
+              "L400",
+              "L401",
+              "L403",
+              "L404",
+              "L405",
+              "L406",
+              "L407"
+            ],
+            "quote": "No",
+            "reason": "179 living carriers minus 45 with reported previous symptoms minus 1 missing Previous symptoms (patient 37 dash) equals 133 explicit No."
+          },
+          "response_usable": true,
+          "value": 133,
+          "numeric_outcome": "exact_nonnull",
+          "numeric_exact": true,
+          "model_declared_basis": "derived",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false,
+            "reason": "Only model-declared explicit nonnull integers are replayed"
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    },
+    {
+      "name": "scn251_variant_list__grok_remediated",
+      "packet": "scn251_variant_list",
+      "arm": "grok_remediated",
+      "dispatched": true,
+      "status": "returned",
+      "finish_reason": "stop",
+      "schema_valid": true,
+      "request_successful_stop": true,
+      "errors": [],
+      "duplicate_query_ids": [],
+      "missing_query_ids": [],
+      "extra_query_ids": [],
+      "complete_query_set": true,
+      "seconds": 429.4381200000644,
+      "api_proxy_usd": 0.0067,
+      "accounted_usd": 0.007466,
+      "queries": [
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q1_carriers",
+          "variant": "c.704-2A>G",
+          "field": "carriers",
+          "expected": null,
+          "claim": {
+            "id": "q1_carriers",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1380"
+            ],
+            "quote": null,
+            "reason": "Supplemental Table 6 only lists the variant among Category Ib-III variants; no carrier count is given."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q1_affected",
+          "variant": "c.704-2A>G",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q1_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1380"
+            ],
+            "quote": null,
+            "reason": "No DCM-affected patient count is bound to c.704-2A>G."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q1_unaffected",
+          "variant": "c.704-2A>G",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q1_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1380"
+            ],
+            "quote": null,
+            "reason": "No explicitly unaffected count is bound to c.704-2A>G."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q2_carriers",
+          "variant": "p.T220N",
+          "field": "carriers",
+          "expected": null,
+          "claim": {
+            "id": "q2_carriers",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1381"
+            ],
+            "quote": null,
+            "reason": "Supplemental Table 6 only lists p.T220N; a variant row is not a carrier count."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q2_affected",
+          "variant": "p.T220N",
+          "field": "affected",
+          "expected": null,
+          "claim": {
+            "id": "q2_affected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1381"
+            ],
+            "quote": null,
+            "reason": "No DCM-affected patient count is bound to p.T220N."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        },
+        {
+          "packet": "scn251_variant_list",
+          "gene": "SCN5A",
+          "pmid": "25163546",
+          "id": "q2_unaffected",
+          "variant": "p.T220N",
+          "field": "unaffected",
+          "expected": null,
+          "claim": {
+            "id": "q2_unaffected",
+            "value": null,
+            "basis": "unknown",
+            "sources": [
+              "L1182",
+              "L1381"
+            ],
+            "quote": null,
+            "reason": "No explicitly unaffected count is bound to p.T220N."
+          },
+          "response_usable": true,
+          "value": null,
+          "numeric_outcome": "correct_abstention",
+          "numeric_exact": true,
+          "model_declared_basis": "unknown",
+          "mechanical_source_quote_ok": true,
+          "mechanical_errors": [],
+          "literal_validator": {
+            "attempted": false,
+            "accepted": false
+          },
+          "current_validator_lane_accepted": false,
+          "accepted_correct": false,
+          "accepted_wrong": false
+        }
+      ]
+    }
+  ]
+}
