@@ -15,6 +15,14 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — stale build-cache follow-up; no new score
+
+Artifact inspection found a deleted module retained in ignored wheel staging.
+The clean rebuild has 159 source/data files matching the checkout and 150
+importable modules, with the retired module absent. CI now checks wheel bytes
+against current source. This changes packaging verification, not extraction
+scores or historical locks. [Staging audit](evidence/maintenance_20260906/wheel_staging_audit.json).
+
 ## 2026-09-06 — runtime and documentation maintenance; no new score
 
 Extraction summaries now count actual rows rather than trusting model totals.

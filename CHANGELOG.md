@@ -42,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hermetically without reading the local corpus.
 
 ### Fixed
+- Wheel validation rejects deleted or changed source/data files retained by a
+  stale local build cache; clean builds are checked outside the checkout.
 - Extraction summaries count actual rows instead of malformed model totals.
   Workflow CLIs propagate returned failures, and `gvf-run` attributes extraction
   failures to the exact allocated/resumed directory rather than a newer sibling.

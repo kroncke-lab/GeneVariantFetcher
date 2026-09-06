@@ -1,0 +1,33 @@
+{
+  "stale_incremental_wheel_sha256": "74167e6314814b71c0315a550be732fb006062c0fab01694af3f2d18a2d0110d",
+  "rejected_members": [
+    "pipeline/failure_logger.py"
+  ],
+  "clean_wheel": {
+    "wheel": "genevariantfetcher-2.1.0-py3-none-any.whl",
+    "wheel_sha256": "3b03564c401c32e41c5d6c48001835ce05e7b11fc485da9b6ce4b675735ad6e7",
+    "packaged_python_modules": 150,
+    "packaged_source_and_data_files_matching_checkout": 159,
+    "mismatches": [],
+    "checks": [
+      {
+        "check": "gvf help",
+        "exit_code": 0
+      },
+      {
+        "check": "gvf-run help",
+        "exit_code": 0
+      },
+      {
+        "check": "python -m cli help",
+        "exit_code": 0
+      },
+      {
+        "check": "all packaged imports/references and retired module absence",
+        "exit_code": 0
+      }
+    ],
+    "supersedes": "Initial incremental wheel included the deleted pipeline/failure_logger.py from old build/lib; archived generated staging and rebuilt clean."
+  },
+  "repair": "Archived ignored build/ staging, rebuilt the wheel and reinstalled isolated environment. Exact payload comparison rejects the old artifact and accepts the clean artifact."
+}

@@ -78,6 +78,12 @@ Build and install a wheel into a separate test environment, then run `gvf
 missing packaged modules or data. `.github/workflows/ci.yml` contains the
 current isolated-wheel recipe and reference-resource assertions.
 
+Start local builds with a clean generated `build/` staging directory. A reused
+`build/lib` can put previously deleted modules back into an otherwise valid
+wheel; archiving that generated directory before rebuilding avoids the stale
+copy. Clearing only the wheel output directory does not clear staging. CI checks
+each packaged source/data file against the checkout as well as running imports.
+
 Check supported maintenance scripts with `--help` before using them:
 
 ```bash

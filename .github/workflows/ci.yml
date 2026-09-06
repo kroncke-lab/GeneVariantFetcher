@@ -78,6 +78,22 @@ jobs:
         run: |
           python -m pip install --upgrade pip build
           python -m build --wheel
+          # A reused build/lib can silently reintroduce a deleted module.
+          # Check the artifact bytes before testing imports in isolation.
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          wheel = next(Path("dist").glob("*.whl"))
+          with ZipFile(wheel) as archive:
+              files = [name for name in archive.namelist()
+                       if ".dist-info/" not in name and not name.endswith("/")]
+              for name in files:
+                  source = Path(name)
+                  assert source.is_file(), f"Stale wheel member: {name}"
+                  assert archive.read(name) == source.read_bytes(), name
+          print(f"Verified {len(files)} packaged source/data files")
+          PY
           python -m venv /tmp/gvf-wheel-smoke
           /tmp/gvf-wheel-smoke/bin/python -m pip install dist/*.whl
           cd /tmp
@@ -92,6 +108,7 @@ jobs:
           from utils.variant_normalizer import _load_gene_aliases
 
           assert importlib.util.find_spec("scripts") is None
+          assert importlib.util.find_spec("pipeline.failure_logger") is None
           assert callable(probe_institutional_access)
           assert callable(make_session)
           assert len(_load_gene_aliases("KCNH2")) > 4_000

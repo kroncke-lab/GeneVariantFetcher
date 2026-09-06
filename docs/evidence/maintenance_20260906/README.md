@@ -29,6 +29,13 @@ gold scoring, source acquisition or headline promotion was performed.
   Reinstalling the editable package repairs it. The declared `cli:app` entry
   point and `cli/__main__.py` were already correct. CI now tests console and
   module help inside the isolated wheel environment as well as packaged data.
+- An old ignored `build/lib` directory silently reintroduced the deleted
+  `pipeline/failure_logger.py` into the incremental wheel. The artifact audit
+  found this after the first commit. Generated staging and the old wheel were
+  archived; the clean rebuild contains only current source/data. The payload
+  check rejects the old wheel and accepts all current members; the installed
+  wheel also confirms the retired module is absent. CI now enforces byte-level
+  payload agreement. See [staging audit](wheel_staging_audit.json).
 - Starting-main CI failed two calibration tests because full operator traces
   under ignored `results/` were absent. An exporter validates the original
   hashes and totals and emits 1,809 usage-only receipts for APOE, BRCA1, BRCA2
@@ -67,7 +74,7 @@ dependencies. The updated source compiles 476 Python files. The full local
 suite passed 2,906 tests; a later exporter guard and regression passed in the
 42-test focused run. Nine bounded/negative tests and eight current-doc/config
 checks also passed. Ruff, formatting and dependency compatibility pass. The
-wheel imports all 151 packaged modules outside the checkout; packaged reference
+wheel imports all 150 packaged modules outside the checkout; packaged reference
 data and all three CLI help checks pass. Thirteen documented command/script
 help checks pass. See [verification receipts](verification.json) and
 [wheel checks](wheel_smoke.json).

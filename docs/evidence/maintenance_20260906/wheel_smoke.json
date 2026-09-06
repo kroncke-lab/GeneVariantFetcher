@@ -1,6 +1,9 @@
 {
   "wheel": "genevariantfetcher-2.1.0-py3-none-any.whl",
-  "packaged_python_modules": 151,
+  "wheel_sha256": "3b03564c401c32e41c5d6c48001835ce05e7b11fc485da9b6ce4b675735ad6e7",
+  "packaged_python_modules": 150,
+  "packaged_source_and_data_files_matching_checkout": 159,
+  "mismatches": [],
   "checks": [
     {
       "check": "gvf help",
@@ -15,8 +18,9 @@
       "exit_code": 0
     },
     {
-      "check": "all packaged module imports and references",
+      "check": "all packaged imports/references and retired module absence",
       "exit_code": 0
     }
-  ]
+  ],
+  "supersedes": "Initial incremental wheel included the deleted pipeline/failure_logger.py from old build/lib; archived generated staging and rebuilt clean."
 }
