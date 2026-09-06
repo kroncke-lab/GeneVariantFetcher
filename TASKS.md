@@ -30,6 +30,14 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
 
 ## Completed $150 model-routing test; next bounded evidence test
 
+- [x] Retry Grok 4.6 and expand the bounded Astra roster test. All 24 primary
+      requests return on eight packets from seven opened papers; the repeated
+      DOC representation remains separate from the 93 distinct people.
+      Astra low/medium produce identical source-derived counts. Two post-hoc
+      strict-schema probes repair the observed citation issues. Grok's live
+      production route works; counterbalanced controls do not attribute earlier
+      timeouts solely to cap spelling. No default or holdout promotion.
+      Evidence: `docs/evidence/model_followup_20260906/README.md`.
 - [x] Complete a source-frozen 12-paper opened calibration of Grok 4.3 versus
       Astra medium and an independent Astra clinical reader. All final arms
       locked before scoring. Corrected Grok 4.6 failed deployment-health probes;
@@ -38,19 +46,23 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       [`model-routing report`](docs/evidence/model_routing_20260906/README.md).
       No primary/default promotion or tranche-04 opening. Runtime compatibility,
       failed-call accounting and post-score figure layout are verified on main.
-- [ ] **Next acceptance gate: bounded patient evidence and derived-count contract.**
+- [ ] **Next acceptance gate: integrate and validate the derived-count contract.**
       Freeze person/cohort/variant ownership, source coordinates, genotype,
       endpoint/timepoint, blank-versus-merged cells and duplicate/index-case rules
-      before testing. Prefer structured table parsing; test Astra on unresolved
-      roster transcription or joins, with compact inputs and bounded retries.
+      before testing. The opened source diagnostic supports Astra low for
+      unresolved roster transcription/joins; medium had no count benefit.
+      Prefer structured table parsing and strict source-ID schemas. Resolve
+      relatives outside the main table before promoting a packet sum to a
+      paper-wide count, and preserve valid evidence through model failures.
       Compare source-validated derived values with both source adjudication and
       existing references; retain ambiguities, count-bearing identity extras and
       failed papers. A model timeout must not silently erase independently valid
       evidence. Keep the existing literal validator unchanged until a separate
       derived-count path passes. Design:
       `docs/evidence/model_routing_20260906/roster_followup_design.md`.
-      Reconcile unknown API charges and establish a fresh test envelope before
-      more API work. Only a passing fixed implementation advances to the
+      The follow-up used the remaining original $150 allowance; its ledger
+      retains unknown charges. Reconcile billing or establish a fresh envelope
+      before a larger campaign. Only a passing fixed implementation advances to the
       unopened discovery/confirmation sequence.
 
 ## Previous $100 improvement campaign

@@ -1,0 +1,164 @@
+{
+  "name": "astra_medium_ryr304_multivariant",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: RYR2; PMID 30403697\nTASK: Roster is numbered subjects in Table 1 only; do not add relatives from Family History. Copy Symptoms as phenotype. Include extra target-gene variants from the subject-14 footnote. Endpoint is documented VT and/or sudden cardiac arrest at presentation, NOT all CPVT diagnoses or any symptoms. The cohort prose specifies the exceptions. Family is null because no family IDs are supplied. Keep subject 5 self-sibling wording as a limitation; do not merge people.\nSOURCE:\nL101: Of 237 patients entered in the PACES CPVT Registry, 193 (81%) underwent genetic testing. There were 15 patients (8%) from 12 families with ≥2 variants. Table 1 summarizes the genotypes and phenotypes of these multi-variant carriers. The median age at presentation was 9 years (IQR 5–12) and 9 (60%) were female. Thirteen children (87%) had ≥2 RYR2 variants, one had CASQ2 and RYR2 variants, and one had RYR2 and SCN5A variants ( Table 1 , Table 2 and S2 File ). There were 12 children (80%) who were probands. Inheritance could not be established in 6 children (40%) owing to a lack of parental genetic data. A family history of suspected/confirmed CPVT was reported in 10 patients (67%). VT and/or sudden cardiac arrest (SCA) occurred in 13 of 15 cases (87%). The exceptions were subject #6 who was asymptomatic and subject #12 who had exertional syncope and seizures. Pedigrees for patients from select families are available in the supporting information ( S3 File ).\nL102: \nL103: #### Table 1. Clinical characteristics and outcomes of multi-variant carriers.\nL104: \nL105: | Subject | Sex | Ethnicity | Age (years) | Proband | Variant #1 | Variant #2 | Inheritance | Phase (cis vs trans) | Family History | Symptoms | Treatments | Treatment Failure |\nL106: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\nL107: | 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\nL108: | 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |\nL109: | 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |\nL110: | 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\nL111: | 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |\nL112: | 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |\nL113: | 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |\nL114: | 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |\nL115: | 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |\nL116: | 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\nL117: | 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |\nL118: | 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |\nL119: | 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |\nL120: | 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\nL121: | 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |\nL122: Open in a new tab\nL123: \nL124: *Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.\nL125: \nL126: N/A = not applicable\nL127: "
+      }
+    ],
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.3168875,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3498050",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "f49e0d09-7eea-481b-8c3e-0377e5d4ff41",
+    "apim-request-id": "cd586c9d-51db-404f-95ad-3773f72b21a0",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\n  \"columns\": [\"sources\", \"variants\", \"family\", \"person\", \"genotype\", \"phenotype\", \"index_case\", \"endpoint_status\"],\n  \"rows\": [\n    [[\"Table 1, L107\", \"L101\"], [\"R417L\", \"F3496L\"], null, \"1\", \"Y\", \"Exertional syncope, exertional VT\", true, \"positive\"],\n    [[\"Table 1, L108\", \"L101\"], [\"R417L\", \"F3496L\"], null, \"2\", \"Y\", \"Family screening, exertional VT\", false, \"positive\"],\n    [[\"Table 1, L109\", \"L101\"], [\"S3938R\", \"R485Q\"], null, \"3\", \"Y\", \"Exertional SCA\", true, \"positive\"],\n    [[\"Table 1, L110\", \"L101\"], [\"I2075T\", \"K4594R\"], null, \"4\", \"Y\", \"SCA\", true, \"positive\"],\n    [[\"Table 1, L111\", \"L101\"], [\"I2075T\", \"K4594R\"], null, \"5\", \"Y\", \"Exertional SCA\", false, \"positive\"],\n    [[\"Table 1, L112\", \"L101\"], [\"I2075T\", \"K4594R\"], null, \"6\", \"Y\", \"Asymptomatic\", false, \"negative\"],\n    [[\"Table 1, L113\", \"L101\"], [\"R2028H\", \"Y4721C\"], null, \"7\", \"Y\", \"Exertional SCA\", true, \"positive\"],\n    [[\"Table 1, L114\", \"L101\"], [\"T1107M\"], null, \"8\", \"Y\", \"Exertional syncope, SCA, VT on EST\", true, \"positive\"],\n    [[\"Table 1, L115\", \"L101\"], [\"R2474K\", \"A1136V\"], null, \"9\", \"Y\", \"Exertional SCA\", true, \"positive\"],\n    [[\"Table 1, L116\", \"L101\"], [\"L4188P\", \"G1886S\"], null, \"10\", \"Y\", \"Seizures, emotional SCA\", true, \"positive\"],\n    [[\"Table 1, L117\", \"L101\"], [\"S2246L\", \"G1886S\"], null, \"11\", \"Y\", \"SCA\", true, \"positive\"],\n    [[\"Table 1, L118\", \"L101\"], [\"H2464D\", \"G1885E\"], null, \"12\", \"Y\", \"Exertional syncope, epilepsy\", true, \"negative\"],\n    [[\"Table 1, L119\", \"L101\"], [\"R2401H\"], null, \"13\", \"Y\", \"Exertional SCA\", true, \"positive\"],\n    [[\"Table 1, L120\", \"Subject 14 footnote, L124\", \"L101\"], [\"G4772S\", \"c.3599-9delT\", \"c.14091-11dupT\"], null, \"14\", \"Y\", \"Exertional syncope, SCA, & VT storm\", true, \"positive\"],\n    [[\"Table 1, L121\", \"L101\"], [\"A2317E\"], null, \"15\", \"Y\", \"Exertional SCA\", true, \"positive\"]\n  ],\n  \"limitations\": [\n    \"Subject 5's Family History says \\\"Sister of subject 5\\\" (L111); this self-sibling wording is unresolved, and no people were merged.\",\n    \"L101's gene-combination summary does not match subject 13's RYR2/DSG row (L119); variants follow Table 1.\"\n  ]\n}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715461,
+    "id": "chatcmpl-ELAtJGZqjR5G7Znq5ZejeZbcsOopc",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r24-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1141,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 320,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 121,
+        "service_tbt_ms": 43,
+        "service_ttft_ms": 3053,
+        "service_ttlt_ms": 52481,
+        "user_visible_ttft_ms": 2932
+      },
+      "prompt_tokens": 1950,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 1947,
+        "cached_tokens": 0
+      },
+      "total_tokens": 3091
+    }
+  },
+  "status": "returned",
+  "seconds": 53.72309070895426,
+  "usage": {
+    "completion_tokens": 1141,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 320,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 121,
+      "service_tbt_ms": 43,
+      "service_ttft_ms": 3053,
+      "service_ttlt_ms": 52481,
+      "user_visible_ttft_ms": 2932
+    },
+    "prompt_tokens": 1950,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1947,
+      "cached_tokens": 0
+    },
+    "total_tokens": 3091
+  },
+  "api_proxy_usd": 0.07655,
+  "accounted_usd": 0.081425
+}

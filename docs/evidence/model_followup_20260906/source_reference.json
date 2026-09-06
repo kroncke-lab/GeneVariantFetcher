@@ -1,0 +1,2058 @@
+{
+  "classification": "Investigator-prepared source adjudication, previously opened papers, no gold access in preparation; not independent human validation",
+  "columns": [
+    "sources",
+    "variants",
+    "family",
+    "person",
+    "genotype",
+    "phenotype",
+    "index_case",
+    "endpoint_status"
+  ],
+  "rows": {
+    "myb204_markdown": [
+      {
+        "sources": [
+          "L288"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:3",
+        "genotype": "N",
+        "phenotype": "NoDx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L289"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "66",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L290"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L291"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L292"
+        ],
+        "variants": [
+          "A216T"
+        ],
+        "family": "H42",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "34",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L293"
+        ],
+        "variants": [
+          "IVS6+5G>A"
+        ],
+        "family": "H56",
+        "person": "II:5",
+        "genotype": "Y",
+        "phenotype": "28",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L294"
+        ],
+        "variants": [
+          "IVS6+5G>A"
+        ],
+        "family": "H56",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "34",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L295"
+        ],
+        "variants": [
+          "IVS11-9G>A"
+        ],
+        "family": "H110",
+        "person": "I:1",
+        "genotype": "Y",
+        "phenotype": "58",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L296"
+        ],
+        "variants": [
+          "IVS11-9G>A"
+        ],
+        "family": "H110",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "21",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L297"
+        ],
+        "variants": [
+          "Q327fs"
+        ],
+        "family": "H13",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "64",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L298"
+        ],
+        "variants": [
+          "Q327fs"
+        ],
+        "family": "H13",
+        "person": "III:1",
+        "genotype": "Y",
+        "phenotype": "37",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L299"
+        ],
+        "variants": [
+          "V471E"
+        ],
+        "family": "H279",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "57",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L300"
+        ],
+        "variants": [
+          "V471E"
+        ],
+        "family": "H279",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L301"
+        ],
+        "variants": [
+          "R495W"
+        ],
+        "family": "H161",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "71",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L302"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "50",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L303"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "42",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L304"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L305"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H614",
+        "person": "I:1",
+        "genotype": "Y",
+        "phenotype": "68",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L306"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H614",
+        "person": "II:3",
+        "genotype": "Y",
+        "phenotype": "15",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L307"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "¿",
+        "index_case": false,
+        "endpoint_status": "unknown"
+      },
+      {
+        "sources": [
+          "L308"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "II:8",
+        "genotype": "Y",
+        "phenotype": "59",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L309"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "III:1",
+        "genotype": "Y",
+        "phenotype": "35",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L310"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L311"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "II-1",
+        "genotype": "N",
+        "phenotype": "58",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L312"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L313"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "III:3",
+        "genotype": "Y",
+        "phenotype": "16",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L314"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H166",
+        "person": "III:7",
+        "genotype": "Y",
+        "phenotype": "53",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L315"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H641",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "65",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L316"
+        ],
+        "variants": [
+          "K600fs"
+        ],
+        "family": "H37",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "50",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L317"
+        ],
+        "variants": [
+          "K600fs"
+        ],
+        "family": "H37",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L318"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "36",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L319"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "IV:1",
+        "genotype": "Y",
+        "phenotype": "16",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L320"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "IV:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L321"
+        ],
+        "variants": [
+          "T957S"
+        ],
+        "family": "H120",
+        "person": "II:3",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L322"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H18",
+        "person": "II:5",
+        "genotype": "Y",
+        "phenotype": "52",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L323"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "67",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L324"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "21",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L325"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L326"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:5",
+        "genotype": "Y",
+        "phenotype": "27",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L327",
+          "L120"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "IV-1",
+        "genotype": "N",
+        "phenotype": "22",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L329",
+          "L120"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "IV-5",
+        "genotype": "N",
+        "phenotype": "17",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L331"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "45",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L332"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "IV:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L333"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "IV:5",
+        "genotype": "Y",
+        "phenotype": "24",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L334"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "64",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L336"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "63",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L337"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L338"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "III:6",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      }
+    ],
+    "myb204_structured": [
+      {
+        "sources": [
+          "H1"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:3",
+        "genotype": "N",
+        "phenotype": "NoDx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H2"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "66",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H3"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H4"
+        ],
+        "variants": [
+          "D75N"
+        ],
+        "family": "H73",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H5"
+        ],
+        "variants": [
+          "A216T"
+        ],
+        "family": "H42",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "34",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H6"
+        ],
+        "variants": [
+          "IVS6+5G>A"
+        ],
+        "family": "H56",
+        "person": "II:5",
+        "genotype": "Y",
+        "phenotype": "28",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H7"
+        ],
+        "variants": [
+          "IVS6+5G>A"
+        ],
+        "family": "H56",
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "34",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H8"
+        ],
+        "variants": [
+          "IVS11-9G>A"
+        ],
+        "family": "H110",
+        "person": "I:1",
+        "genotype": "Y",
+        "phenotype": "58",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H9"
+        ],
+        "variants": [
+          "IVS11-9G>A"
+        ],
+        "family": "H110",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "21",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H10"
+        ],
+        "variants": [
+          "Q327fs"
+        ],
+        "family": "H13",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "64",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H11"
+        ],
+        "variants": [
+          "Q327fs"
+        ],
+        "family": "H13",
+        "person": "III:1",
+        "genotype": "Y",
+        "phenotype": "37",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H12"
+        ],
+        "variants": [
+          "V471E"
+        ],
+        "family": "H279",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "57",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H13"
+        ],
+        "variants": [
+          "V471E"
+        ],
+        "family": "H279",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H14"
+        ],
+        "variants": [
+          "R495W"
+        ],
+        "family": "H161",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "71",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H15"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "50",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H16"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "42",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H17"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H147",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H18"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H614",
+        "person": "I:1",
+        "genotype": "Y",
+        "phenotype": "68",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H19"
+        ],
+        "variants": [
+          "R502Q"
+        ],
+        "family": "H614",
+        "person": "II:3",
+        "genotype": "Y",
+        "phenotype": "15",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H20"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "II:7",
+        "genotype": "Y",
+        "phenotype": "¿",
+        "index_case": false,
+        "endpoint_status": "unknown"
+      },
+      {
+        "sources": [
+          "H21"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "II:8",
+        "genotype": "Y",
+        "phenotype": "59",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H22"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "III:1",
+        "genotype": "Y",
+        "phenotype": "35",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H23"
+        ],
+        "variants": [
+          "K504del"
+        ],
+        "family": "H46",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H24"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "II-1",
+        "genotype": "N",
+        "phenotype": "58",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H25"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H26"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H153",
+        "person": "III:3",
+        "genotype": "Y",
+        "phenotype": "16",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H27"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H166",
+        "person": "III:7",
+        "genotype": "Y",
+        "phenotype": "53",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H28"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": "H641",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "65",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H29"
+        ],
+        "variants": [
+          "K600fs"
+        ],
+        "family": "H37",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "50",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H30"
+        ],
+        "variants": [
+          "K600fs"
+        ],
+        "family": "H37",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H31"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "36",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H32"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "IV:1",
+        "genotype": "Y",
+        "phenotype": "16",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H33"
+        ],
+        "variants": [
+          "P955fs"
+        ],
+        "family": "H160",
+        "person": "IV:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H34"
+        ],
+        "variants": [
+          "T957S"
+        ],
+        "family": "H120",
+        "person": "II:3",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H35"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H18",
+        "person": "II:5",
+        "genotype": "Y",
+        "phenotype": "52",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H36"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "II:2",
+        "genotype": "Y",
+        "phenotype": "67",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H37"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "21",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H38"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "44",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H39"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "III:5",
+        "genotype": "Y",
+        "phenotype": "27",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H40",
+          "L120"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "IV-1",
+        "genotype": "N",
+        "phenotype": "22",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H41",
+          "L120"
+        ],
+        "variants": [
+          "R1022P"
+        ],
+        "family": "H49",
+        "person": "IV-5",
+        "genotype": "N",
+        "phenotype": "17",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H42"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "45",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H43"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "IV:4",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H44"
+        ],
+        "variants": [
+          "IVS29+5G>A"
+        ],
+        "family": "H131",
+        "person": "IV:5",
+        "genotype": "Y",
+        "phenotype": "24",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H45"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "64",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H46"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "II:4",
+        "genotype": "Y",
+        "phenotype": "63",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "H47"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "III:2",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "H48"
+        ],
+        "variants": [
+          "E1179K"
+        ],
+        "family": "H95",
+        "person": "III:6",
+        "genotype": "Y",
+        "phenotype": "No Dx",
+        "index_case": false,
+        "endpoint_status": "negative"
+      }
+    ],
+    "ryr304_multivariant": [
+      {
+        "sources": [
+          "L107"
+        ],
+        "variants": [
+          "R417L",
+          "F3496L"
+        ],
+        "family": null,
+        "person": "1",
+        "genotype": "Y",
+        "phenotype": "Exertional syncope, exertional VT",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L108"
+        ],
+        "variants": [
+          "R417L",
+          "F3496L"
+        ],
+        "family": null,
+        "person": "2",
+        "genotype": "Y",
+        "phenotype": "Family screening, exertional VT",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L109"
+        ],
+        "variants": [
+          "S3938R",
+          "R485Q"
+        ],
+        "family": null,
+        "person": "3",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L110"
+        ],
+        "variants": [
+          "I2075T",
+          "K4594R"
+        ],
+        "family": null,
+        "person": "4",
+        "genotype": "Y",
+        "phenotype": "SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L111"
+        ],
+        "variants": [
+          "I2075T",
+          "K4594R"
+        ],
+        "family": null,
+        "person": "5",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L112"
+        ],
+        "variants": [
+          "I2075T",
+          "K4594R"
+        ],
+        "family": null,
+        "person": "6",
+        "genotype": "Y",
+        "phenotype": "Asymptomatic",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L113"
+        ],
+        "variants": [
+          "R2028H",
+          "Y4721C"
+        ],
+        "family": null,
+        "person": "7",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L114"
+        ],
+        "variants": [
+          "T1107M"
+        ],
+        "family": null,
+        "person": "8",
+        "genotype": "Y",
+        "phenotype": "Exertional syncope, SCA, VT on EST",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L115"
+        ],
+        "variants": [
+          "R2474K",
+          "A1136V"
+        ],
+        "family": null,
+        "person": "9",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L116"
+        ],
+        "variants": [
+          "L4188P",
+          "G1886S"
+        ],
+        "family": null,
+        "person": "10",
+        "genotype": "Y",
+        "phenotype": "Seizures, emotional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L117"
+        ],
+        "variants": [
+          "S2246L",
+          "G1886S"
+        ],
+        "family": null,
+        "person": "11",
+        "genotype": "Y",
+        "phenotype": "SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L118"
+        ],
+        "variants": [
+          "H2464D",
+          "G1885E"
+        ],
+        "family": null,
+        "person": "12",
+        "genotype": "Y",
+        "phenotype": "Exertional syncope, epilepsy",
+        "index_case": true,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "L119"
+        ],
+        "variants": [
+          "R2401H"
+        ],
+        "family": null,
+        "person": "13",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L120",
+          "L124"
+        ],
+        "variants": [
+          "G4772S",
+          "c.3599-9delT",
+          "c.14091-11dupT"
+        ],
+        "family": null,
+        "person": "14",
+        "genotype": "Y",
+        "phenotype": "Exertional syncope, SCA, & VT storm",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L121"
+        ],
+        "variants": [
+          "A2317E"
+        ],
+        "family": null,
+        "person": "15",
+        "genotype": "Y",
+        "phenotype": "Exertional SCA",
+        "index_case": true,
+        "endpoint_status": "positive"
+      }
+    ],
+    "ryr254_narrative": [
+      {
+        "sources": [
+          "T1",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:1",
+        "genotype": "Y",
+        "phenotype": "VE, Big, D, NSVT",
+        "index_case": true,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T2",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:3",
+        "genotype": "Y",
+        "phenotype": "VE, Big, NSVT",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T3",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:6",
+        "genotype": "Y",
+        "phenotype": "VE, Big, NSVT",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T4",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:8",
+        "genotype": "Y",
+        "phenotype": "VE, Big, D",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T5",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:9",
+        "genotype": "Y",
+        "phenotype": "VE",
+        "index_case": false,
+        "endpoint_status": "negative"
+      },
+      {
+        "sources": [
+          "T6",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "II:15",
+        "genotype": "Y",
+        "phenotype": "VE, Big, Trig",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T7",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "III:4",
+        "genotype": "Y",
+        "phenotype": "VE, Big, D",
+        "index_case": false,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "T8",
+          "T9",
+          "N1"
+        ],
+        "variants": [
+          "C2277R"
+        ],
+        "family": null,
+        "person": "III:9",
+        "genotype": "Y",
+        "phenotype": "VE, Big, D",
+        "index_case": false,
+        "endpoint_status": "positive"
+      }
+    ],
+    "myb213_patient_ids": [
+      {
+        "sources": [
+          "L120",
+          "L13"
+        ],
+        "variants": [
+          "A364T"
+        ],
+        "family": null,
+        "person": "233",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L121",
+          "L13"
+        ],
+        "variants": [
+          "D605H"
+        ],
+        "family": null,
+        "person": "180",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L121",
+          "L13"
+        ],
+        "variants": [
+          "D605H"
+        ],
+        "family": null,
+        "person": "186",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L121",
+          "L13"
+        ],
+        "variants": [
+          "D605H"
+        ],
+        "family": null,
+        "person": "208",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L122",
+          "L13"
+        ],
+        "variants": [
+          "E542Q"
+        ],
+        "family": null,
+        "person": "244",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L123",
+          "L13"
+        ],
+        "variants": [
+          "2309−2"
+        ],
+        "family": null,
+        "person": "234",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L124",
+          "L13"
+        ],
+        "variants": [
+          "2905+1"
+        ],
+        "family": null,
+        "person": "157",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L125",
+          "L13"
+        ],
+        "variants": [
+          "Q969X"
+        ],
+        "family": null,
+        "person": "188",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L126",
+          "L13"
+        ],
+        "variants": [
+          "R493X"
+        ],
+        "family": null,
+        "person": "220",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L127",
+          "L13"
+        ],
+        "variants": [
+          "Q1012X"
+        ],
+        "family": null,
+        "person": "181",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L128",
+          "L13"
+        ],
+        "variants": [
+          "Q1233X"
+        ],
+        "family": null,
+        "person": "251",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L129",
+          "L13"
+        ],
+        "variants": [
+          "M949IfsX100"
+        ],
+        "family": null,
+        "person": "278",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L130",
+          "L13"
+        ],
+        "variants": [
+          "K754EfsX78"
+        ],
+        "family": null,
+        "person": "195",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L130",
+          "L13"
+        ],
+        "variants": [
+          "K754EfsX78"
+        ],
+        "family": null,
+        "person": "228",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L131",
+          "L13"
+        ],
+        "variants": [
+          "K1065QfsX11"
+        ],
+        "family": null,
+        "person": "194",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L132",
+          "L13"
+        ],
+        "variants": [
+          "T885M"
+        ],
+        "family": null,
+        "person": "265",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L133",
+          "L13"
+        ],
+        "variants": [
+          "R668C"
+        ],
+        "family": null,
+        "person": "214",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L134",
+          "L13"
+        ],
+        "variants": [
+          "L1084P"
+        ],
+        "family": null,
+        "person": "177",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L134",
+          "L13"
+        ],
+        "variants": [
+          "L1084P"
+        ],
+        "family": null,
+        "person": "185",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L135",
+          "L13"
+        ],
+        "variants": [
+          "V771M"
+        ],
+        "family": null,
+        "person": "221",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L136",
+          "L13"
+        ],
+        "variants": [
+          "Arg810His"
+        ],
+        "family": null,
+        "person": "270",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      },
+      {
+        "sources": [
+          "L137",
+          "L13"
+        ],
+        "variants": [
+          "R458H"
+        ],
+        "family": null,
+        "person": "268",
+        "genotype": "Y",
+        "phenotype": "HCM",
+        "index_case": null,
+        "endpoint_status": "positive"
+      }
+    ],
+    "ryr189_missing_table": [],
+    "ryr193_abstract": [],
+    "ryr258_functional": []
+  }
+}

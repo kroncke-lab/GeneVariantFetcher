@@ -12,7 +12,30 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
-## Latest model-routing calibration (2026-09-06; no promotion)
+## Latest bounded-reader diagnostic (2026-09-06; no promotion)
+
+Grok 4.6 now returns on all eight source packets, and its corrected production
+SDK route passes live. Earlier timeouts were intermittent; counterbalanced
+cap-spelling controls later all succeed, so the backend cause remains unknown.
+Astra low and medium both return on all eight packets and recover the same
+source-derived counts. Seven opened papers include four patient-bearing papers
+with **93 distinct people**, three roster-negative source packets, and a second
+representation of one 48-person DOC. Excluding that repeated representation,
+all three arms give **168/168 exact source-derived count fields** under the
+packet-specific cohort/endpoint contracts. This is not whole-paper gold recall.
+
+Strict provenance checks initially reject decorated Astra citations and missing
+Grok cohort citations. Two separate post-hoc strict-schema probes pass all
+source checks for the affected 15- and 22-person packets. Existing-gold overlap
+shows **45 additional exact A/U candidates** and six carrier disagreements;
+family members outside the numbered roster explain some scope differences.
+No values are promoted to production. Medium adds cost without count improvement
+here; no overall uplift percentage or human-relative ceiling is established.
+Follow-up returned API proxy **$1.14701**; with new reserves/premiums, combined
+original-envelope accounting is **$147.82576 / $150**, invoice unreconciled.
+[Report, locks, CLI reviews and figures](evidence/model_followup_20260906/README.md).
+
+## Earlier model-routing calibration (2026-09-06; no promotion)
 
 On 12 deliberately selected, already-opened papers with frozen sources, the
 Grok 4.3 control is **699/36/89 TP/FP/FN** (88.71% recall); Astra medium is
@@ -27,8 +50,9 @@ carrier count, zero A/U fields**. Its unvalidated raw proposals add 44 exact A/U
 values and three additional A/U disagreements, pointing to a separate source-
 validated person-aggregation test. A compact Astra-low probe transcribes 48
 people correctly in audited fields, with endpoint and source-join qualifications;
-it does not establish clinical-count accuracy. Corrected Azure Grok 4.6 did not
-pass the bounded health probes and has no scored paper arm.
+it does not establish clinical-count accuracy. In that campaign, corrected
+Azure Grok 4.6 did not pass the bounded health probes and had no scored paper arm;
+the subsequent successful bounded-reader retry is reported above.
 
 Preflagged exclusion of 20129283 and 25814417 changes the A/U error direction
 (628 → 585), so retain the full and sensitivity results together. This calibration

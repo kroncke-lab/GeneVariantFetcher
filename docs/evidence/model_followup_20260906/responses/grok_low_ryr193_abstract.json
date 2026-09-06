@@ -1,0 +1,97 @@
+{
+  "name": "grok_low_ryr193_abstract",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: RYR2; PMID 19398417\nTASK: Abstract only. Copy individually identified people only; aggregate family summaries do not identify individual patient rows.\nSOURCE:\nA1: 1. Biol Res Nurs. 2009 Jul;11(1):66-72. doi: 10.1177/1099800409333369. Epub 2009 \nApr 26.\n\nGenetic characterization of familial CPVT after 30 years.\n\nBeery TA(1), Shah MJ, Benson DW.\n\nAuthor information:\n(1)University of Cincinnati, and Cincinnati Children's Hospital Medical Center, \nCincinnati, Ohio 45221-0038, USA. Theresa.beery@uc.edu\n\nINTRODUCTION: Catecholaminergic polymorphic ventricular tachycardia (CPVT) is a \nstress-related, bidirectional ventricular tachycardia and atrial tachyarrhythmia \nin the absence of either structural heart disease or prolonged QT interval. \nAutosomal dominant and recessive forms of CPVT because of mutations in the \ncardiac ryanodine receptor (RyR2) or calsequestrin 2 (CASQ2) have been reported. \nThe objective of this study was the clinical and genetic characterization of the \nfamily of an individual initially diagnosed as a child in 1978.\nMETHOD: We collected family medical history and recorded a four-generation \npedigree. We performed mutation analysis of RyR2 \"critical regions'' in the \nN-terminus, FKBP12.6 binding domain, Ca2+ binding domain, and transmembrane \ndomains of the C-terminus by direct sequencing.\nRESULTS: CPVT was diagnosed in two of the nine family members evaluated. \nPedigree analysis suggested autosomal dominant disease transmission. There were \nno additional reports of seizures, pregnancy loss, neonatal death, or sudden \ncardiac death in family members. A novel RyR2 gene variant (W4645R) was found in \nfour family members including two without symptoms. RyR2-W4645R segregates with \ndisease in this family with incomplete penetrance. The W4645 residue is \nevolutionarily conserved in the transmembrane region adjacent to previously \nreported disease-causing mutations. Based on sorting intolerant from tolerant \nanalysis of protein structure, RyR2-W4645R is predicted to be deleterious.\nCONCLUSIONS: All current evidence supports RyR2-W4645R as a disease-causing \nvariant, which was silent in persons for two generations before causing symptoms \nin persons for the next two generations, beginning in 1978.\n\nDOI: 10.1177/1099800409333369\nPMID: 19398417 [Indexed for MEDLINE]"
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 1024,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.022059,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "104d6890-51e1-4a41-bcf3-8a7845d7defc",
+    "x-ms-client-request-id": "12f9e50c-8203-47ee-ab28-6ff1ec90ccf2",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "48924",
+    "x-ratelimit-reset-tokens": "1",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "12f9e50c-8203-47ee-ab28-6ff1ec90ccf2",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "104d6890-51e1-4a41-bcf3-8a7845d7defc",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"columns\": [\"sources\", \"variants\", \"family\", \"person\", \"genotype\", \"phenotype\", \"index_case\", \"endpoint_status\"],\n  \"rows\": [],\n  \"limitations\": [\"Abstract-only packet reports only aggregate family counts (nine evaluated, two with CPVT, four with W4645R including two asymptomatic) with no named or otherwise individually identified persons; aggregates cannot be converted into roster rows.\"]\n}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 899,
+      "completion_tokens": 94,
+      "total_tokens": 1284,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 310,
+        "audio_tokens": 0,
+        "text_tokens": 899,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 291,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788715708,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 25.04714574990794,
+  "usage": {
+    "prompt_tokens": 899,
+    "completion_tokens": 94,
+    "total_tokens": 1284,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 310,
+      "audio_tokens": 0,
+      "text_tokens": 899,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 291,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.004108,
+  "accounted_usd": 0.0045575
+}

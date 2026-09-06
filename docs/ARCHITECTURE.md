@@ -461,8 +461,9 @@ without an OpenAI-style effort knob.
 
 `gpt-6-astra` and `grok-4.6` are explicit effort-capable deployments. Both map
 `none`/`minimal` to `low`; the existing `max` alias still means `xhigh`, not a
-literal provider `max`. Astra chat requests omit sampling/log-probability
-parameters and translate `max_tokens` to `max_completion_tokens`. Its local
+literal provider `max`. Both translate `max_tokens` to the documented
+reasoning-inclusive `max_completion_tokens`. Astra chat requests also omit
+sampling/log-probability parameters. Its local
 output ceiling is 64,000 tokens, including reasoning. Grok 4.6 has a separate
 32,000 local output ceiling; older Grok models retain 15,000. These are GVF
 request policies, not provider limits. The SDK allow-list explicitly preserves
@@ -476,6 +477,12 @@ their own HTTPS `/openai/v1` endpoint and key-variable name. Unlisted stages
 stay on the original Azure resource. See [API keys](API_KEYS.md) for setup.
 The opened calibration in `docs/evidence/model_routing_20260906/` tests these
 model configurations; support alone does not promote either to a default.
+The subsequent [bounded-reader test](evidence/model_followup_20260906/README.md)
+verifies a live Grok SDK request and paired Astra low/medium source packets.
+Grok's intermittent earlier timeouts are not explained solely by cap spelling.
+Research-only strict-schema roster probes preserve source identifiers; derived
+packet counts still require whole-paper cohort/endpoint reconciliation before
+production integration.
 
 Treat reasoning effort as a secondary lever. Source acquisition, supplement
 folding, extraction logic, and matcher behavior usually move recall more than a

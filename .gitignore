@@ -174,3 +174,6 @@ tests/run_*.py
 
 # Linked-supplement recovery bookkeeping (scripts/fetch_linked_supplements.py)
 .gvf_linked_supplements/
+
+# Experiment accounting semaphore; the JSON ledger is the durable artifact.
+/docs/evidence/model_followup_20260906/budget.lock

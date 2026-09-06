@@ -1,0 +1,161 @@
+{
+  "name": "astra_health_low_256",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly OK."
+      }
+    ],
+    "max_completion_tokens": 256,
+    "reasoning_effort": "low"
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 55,
+  "reserved_usd": 0.040225,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3499990",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "8d4a0671-75a2-4534-9e9e-6a2d728aa5c9",
+    "apim-request-id": "b42c9689-9706-40b9-917c-42420f91188a",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "OK",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715275,
+    "id": "chatcmpl-ELAqJQyXzCc9HM48SktSZcyIkQF1S",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r0-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 4,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 49,
+        "service_tbt_ms": 55,
+        "service_ttft_ms": 21927,
+        "service_ttlt_ms": 22149,
+        "user_visible_ttft_ms": 21878
+      },
+      "prompt_tokens": 10,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 14
+    }
+  },
+  "status": "returned",
+  "seconds": 22.700325999991037,
+  "usage": {
+    "completion_tokens": 4,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 49,
+      "service_tbt_ms": 55,
+      "service_ttft_ms": 21927,
+      "service_ttlt_ms": 22149,
+      "user_visible_ttft_ms": 21878
+    },
+    "prompt_tokens": 10,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 14
+  },
+  "api_proxy_usd": 0.0003,
+  "accounted_usd": 0.000325
+}

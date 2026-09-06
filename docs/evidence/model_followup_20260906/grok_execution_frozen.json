@@ -1,0 +1,9 @@
+{
+  "time_unix": 1788715454.127041,
+  "arm": "grok_low",
+  "contract_sha256": "b9728f4cf2bc0371586ef3a90c61a9da3c5f9e284c4b3c159f7f06f0c0d3f622",
+  "client_sha256": "986cbca0586761465ea53fd177ce863922190891d3d80ce7e6727ceaf508a009",
+  "run_sha256": "d862d0a676703dfa7da675ba01a2c8d9d52b889407728cbf6940a244f19a9761",
+  "prepared_sha256": "91119bca72e9b9d529be58622ee1482f3ea39ef4199bcbd2263f4dc569f9e56b",
+  "note": "Same eight frozen packets/schema/caps/deadlines; low effort. Added after live health passes, before any Astra roster output inspection or score. Original Astra effort ablation unchanged."
+}

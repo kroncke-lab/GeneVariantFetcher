@@ -1,0 +1,94 @@
+{
+  "name": "grok_cap_aba_modern_before",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly OK."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 256
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 55,
+  "reserved_usd": 0.0070135,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "cd898f4f-f023-4b48-8feb-a111117b02d5",
+    "x-ms-client-request-id": "a14a01f5-2761-4270-a7f3-168cb2018728",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "49967",
+    "x-ratelimit-reset-tokens": "0",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "a14a01f5-2761-4270-a7f3-168cb2018728",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "cd898f4f-f023-4b48-8feb-a111117b02d5",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "OK"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 8,
+      "completion_tokens": 1,
+      "total_tokens": 51,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 8,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 42,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788715672,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 1.8560635420726612,
+  "usage": {
+    "prompt_tokens": 8,
+    "completion_tokens": 1,
+    "total_tokens": 51,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "text_tokens": 8,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 42,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.000274,
+  "accounted_usd": 0.000278
+}

@@ -1,0 +1,87 @@
+{
+  "locked_unix": 1788715689.2993479,
+  "classification": "All planned outputs locked before grading; nondispatches retained",
+  "cells": [
+    {
+      "name": "astra_low_myb204_structured",
+      "path": "responses/astra_low_myb204_structured.json",
+      "sha256": "564fbe5cc9a5ebdcf14ce81419c5779b79840f1cf9b2c6d84f4c316c83df8364"
+    },
+    {
+      "name": "astra_medium_ryr258_functional",
+      "path": "responses/astra_medium_ryr258_functional.json",
+      "sha256": "db2b36699183a67affc27942e19ed04713d446ad1e1e1d06f9a95baefcbac83e"
+    },
+    {
+      "name": "astra_medium_myb204_structured",
+      "path": "responses/astra_medium_myb204_structured.json",
+      "sha256": "9ea23cacfc2b49b24b095910727534bd484e23b85a22b34f0c1e933fbd4a74ce"
+    },
+    {
+      "name": "astra_medium_ryr304_multivariant",
+      "path": "responses/astra_medium_ryr304_multivariant.json",
+      "sha256": "17403a2753c5ae04aef2d6da8218148240138bbff59625b149ebbf82a99e32f0"
+    },
+    {
+      "name": "astra_low_ryr189_missing_table",
+      "path": "responses/astra_low_ryr189_missing_table.json",
+      "sha256": "5724827c5eef4efe9a560f091f6debe67024cb1841418c1bf2b32920eaa81d95"
+    },
+    {
+      "name": "astra_low_ryr254_narrative",
+      "path": "responses/astra_low_ryr254_narrative.json",
+      "sha256": "60b6dd90d19c1c17ab59af7620be3ec827334b4f10bfa7159f6dcf87275cf772"
+    },
+    {
+      "name": "astra_medium_ryr193_abstract",
+      "path": "responses/astra_medium_ryr193_abstract.json",
+      "sha256": "e3662ddb72a68be7d407b2fb96be26713d426d422b08c740da939a628e401ca5"
+    },
+    {
+      "name": "astra_low_ryr258_functional",
+      "path": "responses/astra_low_ryr258_functional.json",
+      "sha256": "4778f92aa1d7957e1981d169c4041d197a8c9fd6506896463ae6c1447d6f3f3a"
+    },
+    {
+      "name": "astra_low_myb213_patient_ids",
+      "path": "responses/astra_low_myb213_patient_ids.json",
+      "sha256": "1bd0aeeb79781671119570cf342ecc08a3644be7a2f6b64a783f9294ee062927"
+    },
+    {
+      "name": "astra_low_ryr193_abstract",
+      "path": "responses/astra_low_ryr193_abstract.json",
+      "sha256": "e5993bd915d553421170eba9d09ea5ecaa8730236e85802d4aa0c6d33e8b2562"
+    },
+    {
+      "name": "astra_low_myb204_markdown",
+      "path": "responses/astra_low_myb204_markdown.json",
+      "sha256": "27dadb8238323c753cb8bdc0fa84f0a25069797a029f846c5f2ce755bcbcf3a8"
+    },
+    {
+      "name": "astra_medium_myb204_markdown",
+      "path": "responses/astra_medium_myb204_markdown.json",
+      "sha256": "b6daef5d2ce2b037ce6795489f35315fa3c585d5172f88a47353963fe15d9adc"
+    },
+    {
+      "name": "astra_medium_myb213_patient_ids",
+      "path": "responses/astra_medium_myb213_patient_ids.json",
+      "sha256": "44a567dcc54b0a69fdc47bdb53a1ab2b6ed3f5f3ed9cc709dcc42e9b585f7b09"
+    },
+    {
+      "name": "astra_medium_ryr254_narrative",
+      "path": "responses/astra_medium_ryr254_narrative.json",
+      "sha256": "02ddf02ff28d74e81a121742db52856d2956bd59bfb08c59b6f1654450d3a06d"
+    },
+    {
+      "name": "astra_low_ryr304_multivariant",
+      "path": "responses/astra_low_ryr304_multivariant.json",
+      "sha256": "7b2369ac8374ab02b2846966e3252c74224697d69ceb3574d633a96b10e37385"
+    },
+    {
+      "name": "astra_medium_ryr189_missing_table",
+      "path": "responses/astra_medium_ryr189_missing_table.json",
+      "sha256": "4f1d86b18ee351a4c6858d7550b6b50687f73211dd1816b54256b894d821e12e"
+    }
+  ],
+  "execution_sha256": "69cc5388ea2013e656f88f77ffda1b52827cd38eddecc26990d792c91f5e4d89"
+}

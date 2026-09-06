@@ -1,0 +1,3152 @@
+{
+  "graded_unix": 1788715962.654937,
+  "source_score_sha256": "f9e225f09eaa73208a5255241daddc8b4acde543ae1b3dbabb32ab7b9c4c53b9",
+  "baseline_sha256": "e689982fdb47e100164a0ca1d83963924ad0300a1694f83f92df9dbac6cb2438",
+  "classification": "Post-lock source candidate overlap, strict matching; not whole-paper precision/recall, no production merge",
+  "rows": [
+    {
+      "gene": "RYR2",
+      "pmid": "25435091",
+      "source_variant": "C2277R",
+      "counts": {
+        "carriers": 8,
+        "positive": 7,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "C2277R",
+          "carriers": 8,
+          "affected": 7,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 7,
+          "carriers": 8,
+          "evidence": "[\"we obtained a cohort of 8 carrier subjects, 7 of whom were found by EST to have the CPVT phenotype (87.5% penetrance)\", \"a previously unreported heterozygous missense variant in exon 45 (C2277R)\"]",
+          "source_layer": "llm_table",
+          "source_location": "Results, Table",
+          "unaffected": 1,
+          "variant": "p.Cys2277Arg"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 8,
+          "gold": 8,
+          "baseline": 8,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 7,
+          "gold": 7,
+          "baseline": 7,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "A364T",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.1090G>A",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.A364T c.1090G>A"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "D605H",
+      "counts": {
+        "carriers": 3,
+        "positive": 3,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.1813G>C",
+          "carriers": 3,
+          "affected": 3,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 3,
+          "carriers": 3,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.D605H c.1813G>C"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": 3,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": 3,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "E542Q",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.1624G>C",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.E542Q c.1624G>C"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "2309−2",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "2905+1",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "Q969X",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.2905C>T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.Q969* c.2905C>T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "R493X",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "Q1012X",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.3034C>T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.Q1012* c.3034C>T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "Q1233X",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.3697C>T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.Q1233* c.3697C>T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "M949IfsX100",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.M949IfsX100 c.2846-2847InsT",
+            "p.M949IfsX100 c.2846-2847InsT",
+            "p.Met949fs c.2846dup"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "M949IfsX100"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "K754EfsX78",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.K754EfsX78 c.2258-2259InsT",
+            "p.K754EfsX78 c.2258-2259InsT"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "K754EfsX78"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "K1065QfsX11",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.K1065QfsX11 c.3192-3193InsC"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "T885M",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.2654C>T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.T885M c.2654C>T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "R668C",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.2002C>T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R668C c.2002C>T",
+            "p.R668C c.2002C>T"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "R668C"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "L1084P",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.3251T>C",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.L1084P c.3251T>C",
+            "p.L1084P c.3251T>C"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "L1084P"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": 2,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "V771M",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.2311G>A",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.V771M c.2311G>A"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "Arg810His",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": []
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "source_variant": "R458H",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.1373G>A",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 1,
+          "carriers": 1,
+          "evidence": "no quote captured; source_layer=llm_table",
+          "source_layer": "llm_table",
+          "source_location": "Table 3",
+          "unaffected": null,
+          "variant": "p.R458H c.1373G>A"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "D75N",
+      "counts": {
+        "carriers": 3,
+        "positive": 1,
+        "negative": 2,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.D75N",
+          "carriers": 3,
+          "affected": 1,
+          "unaffected": 2
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.D75N",
+            "p.D75N",
+            "p.Asp75Asn c.223G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "D75N"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "A216T",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.A216T",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Ala216Thr c.646G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table (regex extraction), block 4, row 5",
+          "unaffected": null,
+          "variant": "A216T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "IVS6+5G>A",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "IVS6+5G>A",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "IVS11-9G>A",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "IVS11-9G>A",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "Q327fs",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.Q327fs",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": 2,
+          "carriers": 2,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "Q327fsX",
+            "Q327fsX"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "Q327fs"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": 2,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": 2,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "V471E",
+      "counts": {
+        "carriers": 2,
+        "positive": 1,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.V471E",
+          "carriers": 2,
+          "affected": 1,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.V471E",
+            "p.V471E"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": 1,
+          "variant": "V471E"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": 1,
+          "gold_exact": true,
+          "baseline_exact": true,
+          "baseline_missing": false,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "R495W",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.R495W",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg495Trp c.1483C>T"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table (regex extraction), block 4, row 14",
+          "unaffected": null,
+          "variant": "R495W"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "R502Q",
+      "counts": {
+        "carriers": 5,
+        "positive": 4,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.R502Q",
+          "carriers": 5,
+          "affected": 4,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R502Q",
+            "p.R502Q",
+            "p.Arg502Gln c.1505G>A"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "R502Q"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 5,
+          "gold": 5,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 4,
+          "gold": 4,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "K504del",
+      "counts": {
+        "carriers": 4,
+        "positive": 2,
+        "negative": 1,
+        "unknown": 1
+      },
+      "gold_matches": [
+        {
+          "variant": "p.K504del",
+          "carriers": 4,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table T4, row 20 (router+deterministic)",
+          "unaffected": null,
+          "variant": "K504del"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 4,
+          "gold": 4,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "E542Q",
+      "counts": {
+        "carriers": 4,
+        "positive": 4,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.E542Q",
+          "carriers": 4,
+          "affected": 4,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.E542Q",
+            "p.E542Q",
+            "p.E542Q c.1624G>C"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "E542Q"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 4,
+          "gold": 4,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 4,
+          "gold": 4,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "K600fs",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.K600fs",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.K600fsX"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "K600fs"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "P955fs",
+      "counts": {
+        "carriers": 3,
+        "positive": 2,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.P955fs",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"7S, R1022P (2 families), E1179K, K504del, K600fs, P955fs and IVS29+5G>A]. Maximum wall thickness and age a\"]",
+          "merged_notations": [
+            "P955fs",
+            "P955fs"
+          ],
+          "source_layer": "regex_text",
+          "source_location": "Text scan (protein_single_letter)",
+          "unaffected": null,
+          "variant": "P955FS"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "T957S",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.T957S",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Thr957Ser c.2870C>G"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table (regex extraction), block 4, row 34",
+          "unaffected": null,
+          "variant": "T957S"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "R1022P",
+      "counts": {
+        "carriers": 5,
+        "positive": 5,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.R1022P",
+          "carriers": 5,
+          "affected": 5,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=figure",
+          "merged_notations": [
+            "p.R1022P",
+            "p.R1022P",
+            "p.Arg1022Pro c.3065G>C"
+          ],
+          "source_layer": "figure",
+          "source_location": "figure-reader",
+          "unaffected": null,
+          "variant": "R1022P"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 5,
+          "gold": 5,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 5,
+          "gold": 5,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 0,
+          "gold": 0,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "IVS29+5G>A",
+      "counts": {
+        "carriers": 3,
+        "positive": 2,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "IVS29+5G>A",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "source_variant": "E1179K",
+      "counts": {
+        "carriers": 4,
+        "positive": 2,
+        "negative": 2,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "p.E1179K",
+          "carriers": 4,
+          "affected": 2,
+          "unaffected": 2
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Glu1179Lys c.3535G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table (regex extraction), block 4, row 47",
+          "unaffected": null,
+          "variant": "E1179K"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": true,
+      "source_qualified_variant": true,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 4,
+          "gold": 4,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "affected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        },
+        {
+          "field": "unaffected",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": true,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "R417L",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "R417L",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg417Leu c.1250G>T"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "R417L"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "F3496L",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "F3496L",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Phe3496Leu c.10488T>G"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "F3496L"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "S3938R",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "S3938R",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Ser3938Arg c.11812A>C",
+            "p.Ser3938Arg c.11814C>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "S3938R"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "R485Q",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "R485Q",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg485Gln c.1454G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "R485Q"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "I2075T",
+      "counts": {
+        "carriers": 3,
+        "positive": 2,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "I2075T",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Ile2075Thr c.6224T>C"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "I2075T"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "K4594R",
+      "counts": {
+        "carriers": 3,
+        "positive": 2,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "K4594R",
+          "carriers": 3,
+          "affected": 2,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "K4594R"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 3,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "R2028H",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "R2028H",
+          "carriers": 3,
+          "affected": 1,
+          "unaffected": 2
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg2028His c.6083G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "R2028H"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "Y4721C",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "Y4721C",
+          "carriers": 3,
+          "affected": 1,
+          "unaffected": 2
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "Y4721C"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 3,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "T1107M",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "T1107M",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Thr1107Met c.3320C>T"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "T1107M"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "R2474K",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "R2474K",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg2474Lys c.7421G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "R2474K"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "A1136V",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "A1136V",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "A1136V"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "L4188P",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "L4188P",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "L4188P"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "G1886S",
+      "counts": {
+        "carriers": 2,
+        "positive": 2,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "G1886S",
+          "carriers": 2,
+          "affected": 2,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "G1886S"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 2,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "S2246L",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "S2246L",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Ser2246Leu c.6737C>T"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "S2246L"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "H2464D",
+      "counts": {
+        "carriers": 1,
+        "positive": 0,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "H2464D",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "H2464D"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "G1885E",
+      "counts": {
+        "carriers": 1,
+        "positive": 0,
+        "negative": 1,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "G1885E",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "G1885E"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "R2401H",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "R2401H",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "merged_notations": [
+            "p.Arg2401His c.7202G>A"
+          ],
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "R2401H"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "G4772S",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "G4772S",
+          "carriers": 2,
+          "affected": 1,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "G4772S"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "c.3599-9delT",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.3599-9delT",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": null
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 2 (regex extraction)",
+          "unaffected": null,
+          "variant": "c.3599-9delT"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "c.14091-11dupT",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "c.14091-11dupT",
+          "carriers": 2,
+          "affected": 1,
+          "unaffected": 1
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 2 (regex extraction)",
+          "unaffected": null,
+          "variant": "c.14091-11dupT"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 2,
+          "baseline": null,
+          "gold_exact": false,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "source_variant": "A2317E",
+      "counts": {
+        "carriers": 1,
+        "positive": 1,
+        "negative": 0,
+        "unknown": 0
+      },
+      "gold_matches": [
+        {
+          "variant": "A2317E",
+          "carriers": 1,
+          "affected": 1,
+          "unaffected": 0
+        }
+      ],
+      "baseline_matches": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=regex_table",
+          "source_layer": "regex_table",
+          "source_location": "Table 1 (regex extraction)",
+          "unaffected": null,
+          "variant": "A2317E"
+        }
+      ],
+      "matching": "unique strict equivalent allele only; ambiguous/unmapped retained",
+      "endpoint_comparable_for_AU": false,
+      "source_qualified_variant": false,
+      "comparisons": [
+        {
+          "field": "carriers",
+          "source_value": 1,
+          "gold": 1,
+          "baseline": null,
+          "gold_exact": true,
+          "baseline_exact": false,
+          "baseline_missing": true,
+          "source_qualified": false,
+          "interpretation": "Packet/cohort/table endpoint may still differ from existing gold; inspect disagreements."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "carriers": {
+      "matched": 49,
+      "source_exact": 43,
+      "baseline_exact": 13,
+      "new_exact_fills": 30,
+      "new_disagreeing_fills": 6
+    },
+    "affected": {
+      "matched": 28,
+      "source_exact": 28,
+      "baseline_exact": 9,
+      "new_exact_fills": 19,
+      "new_disagreeing_fills": 0
+    },
+    "unaffected": {
+      "matched": 28,
+      "source_exact": 28,
+      "baseline_exact": 2,
+      "new_exact_fills": 26,
+      "new_disagreeing_fills": 0
+    }
+  },
+  "unmapped_or_ambiguous": [
+    [
+      "MYBPC3",
+      "21302287",
+      "2309−2"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "2905+1"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "R493X"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "M949IfsX100"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "K754EfsX78"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "K1065QfsX11"
+    ],
+    [
+      "MYBPC3",
+      "21302287",
+      "Arg810His"
+    ]
+  ]
+}

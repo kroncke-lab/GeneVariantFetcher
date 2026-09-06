@@ -1,0 +1,18 @@
+{
+  "locked_unix": 1788716321.8598,
+  "plan_sha256": "39dfcd9f97adbb375b4925414e5f953d94c5c4ade420303ba878d6afcc5239d9",
+  "cells": [
+    {
+      "name": "astra_strict_ryr304_multivariant",
+      "packet": "ryr304_multivariant",
+      "path": "responses/astra_strict_ryr304_multivariant.json",
+      "sha256": "27fb5c54fbbe29d62373bcc1910ce1d196794460a727e274fea7d31c87608201"
+    },
+    {
+      "name": "grok_strict_myb213_patient_ids",
+      "packet": "myb213_patient_ids",
+      "path": "responses/grok_strict_myb213_patient_ids.json",
+      "sha256": "bde2efbdc43465da7075e03d2c8b5f57271cc4caab2b6c6b6d4612d26024582b"
+    }
+  ]
+}

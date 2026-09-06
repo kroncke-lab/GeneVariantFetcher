@@ -1,0 +1,164 @@
+{
+  "name": "astra_low_ryr254_narrative",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: RYR2; PMID 25435091\nTASK: Roster is the eight individually identified members in the clinical table. Copy Maximum arrhythmia in the initial EST as phenotype, omit superscript footnote letters. Endpoint is initial diagnostic CPVT on EST/adrenaline, not previous symptoms or later treatment response. Family null (no identifier). Proband true only when indicated; others false. Use table footnote and narrative for diagnosis threshold.\nSOURCE:\nT0: Table Clinical Characteristics of the Cohort of Eight Family Members Carrying the Mutation in RYR2 Case Sex Age at diagnosis, years Previous symptoms Baseline ECG Maximum arrhythmia in the initial EST Treatment a Events during evolution b \nT1: II:1 (proband) F 56 Syncope and palpitations SB, prominent U VE, Big, D, NSVT c Nadolol 20 mg/24 h + Fl + ICD Presyncope\nT2: II:3 M 53 No Normal VE, Big, NSVT Nadolol 80 mg/24 h + Fl No\nT3: II:6 F 43 No Normal VE, Big, NSVT Atenolol 50 mg/12 h + Fl No\nT4: II:8 M 55 No SB VE, Big, D Nadolol 80 mg/24 h + Fl No\nT5: II:9 M 50 Palpitations Normal VE d Atenolol 100 mg/12 h No\nT6: II:15 M 49 No Normal VE, Big, Trig Atenolol 100 mg/12 h + Fl No\nT7: III:4 M 35 No Normal VE, Big, D Nadolol 20 mg/24 h + Fl No\nT8: III:9 M 27 Syncope and palpitations SB VE, Big, D Nadolol 10 mg/día No\nT9: Big, bigeminy; D, doublets; ECG, electrocardiogram; EST, exercise stress test; F, female; Fl, flecainide; ICD, implantable cardioverter defibrillator; M, male; NSVT, nonsustained ventricular tachycardia with 180° change of axis; SB, sinus bradycardia; Trig, trigeminy; VE, ventricular extrasystoles. a Treatment at end of follow-up when the manuscript was submitted. b Sudden death, arrhythmic symptoms, or appropriate defibrillator discharge. Mean follow-up, 34 months (standard deviation, 4). c The initial exercise stress test was carried out while undergoing treatment with beta-blockers. d Ventricular extrasystoles not diagnostic of catecholaminergic polymorphic ventricular tachycardia. \nN1: Our objective is to describe a kindred with 19 living members ( Figure A ), 4 with sudden death and 8 carriers of the new RYR2 C2277R variant (genotype+) ( Figure B ), 7 of whom exhibit the CPVT phenotype according to EST results (phenotype+). The proband (II: 1), aged 56, presented with syncope and palpitations. She reported the sudden death of 3 siblings, aged 11 and 15 years (due to physical exercise and an argument) and 1.5 months, and a daughter aged 29 years (while dancing, with previous syncope during exertion), although autopsy was only performed in the latter case, and was inconclusive. We applied the protocol approved by our ethics committee for family studies following sudden death in individuals with unknown cause, and all individuals gave informed consent. In the proband, the electrocardiogram and echocardiogram were normal. Her EST (Bruce protocol) showed ventricular arrhythmias at 100 bpm and above, and was diagnostic of CPVT ( Figure C ). This diagnosis was defined by the presence of ventricular doublets, sustained ventricular tachycardia, or non-sustained polymorphic ventricular tachycardia or > 10 premature ventricular contractions/min during the EST or adrenaline test. 6 Six other members of the 19 tested showed a similar response, with different degrees of complexity of the ventricular arrhythmias ( Figure A , Table ). Suspecting autosomal dominant CPVT, we sequenced the 33 most frequently affected exons of the RYR2 gene in the proband. We identified a previously unreported heterozygous missense variant in exon 45 (C2277R), located in a hot spot encoding part of the calstabin-binding domain, which was classified as a mutation that is probably associated with the disease. The mutation cosegregated with the CPVT phenotype, although in 1 person (II: 9), who also underwent an adrenaline test (Mayo Clinic protocol), ventricular arrhythmias did not meet the diagnostic criteria. Thus, we obtained a cohort of 8 carrier subjects, 7 of whom were found by EST to have the CPVT phenotype (87.5% penetrance). Of the carriers, 75% were male, mean age 46 years (SD, 10), 37% reported prior arrhythmic symptoms, and 100% had a normal electrocardiogram at rest (heart rate, 63 [SD,10] bpm, QTc 400 [SD,27] ms). In the initial EST (duration 9 [SD,2] min), the maximum heart rate was 150 [SD,15] bpm, and the diagnosis was established at a heart rate of 132 (SD,11) bpm. The carriers were treated with beta-blockers at the maximum tolerated dose, and while the ventricular arrhythmias disappeared during the follow-up EST in 3 subjects (37%), in the remaining 5 (63%) the arrhythmic burden (frequent ventricular premature beats, bigeminy, doublets, nonsustained ventricular tachycardia) persisted enough to add flecainide to the treatment regime, as previously proposed 1 ( Table ). The proband was implanted with a defibrillator due to presyncope with nonsustained ventricular tachycardia during the EST, despite maximum treatment with beta-blockers (before starting the use of the flecainide treatment in this clinical context 1 ). Finally, at 34 (SD,4) months follow-up, all patients were asymptomatic, without arrhythmia or remarkable clinical events (sudden death, syncope, or appropriate defibrillator discharge). In summary, for the first time we describe the RYR2 C2277R mutation as a cause of CPVT, in a family with high lethality in younger individuals, with a good diagnostic yield using EST and an excellent response to treatment with beta-blockers, with and without flecainide. "
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.3249625,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3498240",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "132ca2bf-f168-4941-9949-b8f01f27f811",
+    "apim-request-id": "cee93f25-0a45-4e3d-9f91-a69ea0f7304a",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\n  \"columns\": [\"sources\", \"variants\", \"family\", \"person\", \"genotype\", \"phenotype\", \"index_case\", \"endpoint_status\"],\n  \"rows\": [\n    [[\"T0\", \"T1\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:1\", \"Y\", \"VE, Big, D, NSVT\", true, \"positive\"],\n    [[\"T0\", \"T2\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:3\", \"Y\", \"VE, Big, NSVT\", false, \"positive\"],\n    [[\"T0\", \"T3\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:6\", \"Y\", \"VE, Big, NSVT\", false, \"positive\"],\n    [[\"T0\", \"T4\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:8\", \"Y\", \"VE, Big, D\", false, \"positive\"],\n    [[\"T0\", \"T5\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:9\", \"Y\", \"VE\", false, \"negative\"],\n    [[\"T0\", \"T6\", \"T9\", \"N1\"], [\"C2277R\"], null, \"II:15\", \"Y\", \"VE, Big, Trig\", false, \"positive\"],\n    [[\"T0\", \"T7\", \"T9\", \"N1\"], [\"C2277R\"], null, \"III:4\", \"Y\", \"VE, Big, D\", false, \"positive\"],\n    [[\"T0\", \"T8\", \"T9\", \"N1\"], [\"C2277R\"], null, \"III:9\", \"Y\", \"VE, Big, D\", false, \"positive\"]\n  ],\n  \"limitations\": [\n    \"II:15's phenotype does not specify ectopy frequency; positive status follows N1's identification of II:9 as the sole carrier not meeting diagnostic criteria.\",\n    \"The proband's initial EST was performed during beta-blocker treatment (T9).\"\n  ]\n}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715509,
+    "id": "chatcmpl-ELAu54BLfnVYcptndS5GxkitUNpZu",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r2-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 470,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 150,
+        "service_tbt_ms": 34,
+        "service_ttft_ms": 2885,
+        "service_ttlt_ms": 18854,
+        "user_visible_ttft_ms": 2735
+      },
+      "prompt_tokens": 1760,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 1757,
+        "cached_tokens": 0
+      },
+      "total_tokens": 2230
+    }
+  },
+  "status": "returned",
+  "seconds": 20.03538316709455,
+  "usage": {
+    "completion_tokens": 470,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 150,
+      "service_tbt_ms": 34,
+      "service_ttft_ms": 2885,
+      "service_ttlt_ms": 18854,
+      "user_visible_ttft_ms": 2735
+    },
+    "prompt_tokens": 1760,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1757,
+      "cached_tokens": 0
+    },
+    "total_tokens": 2230
+  },
+  "api_proxy_usd": 0.0411,
+  "accounted_usd": 0.0455
+}

@@ -1,0 +1,37 @@
+{
+  "source_scores_sha256": "f9e225f09eaa73208a5255241daddc8b4acde543ae1b3dbabb32ab7b9c4c53b9",
+  "data": [
+    {
+      "arm": "astra_low",
+      "people": 93,
+      "source_bound": 78,
+      "count_fields": 168,
+      "count_exact": 168,
+      "positive_reference_fields": 122,
+      "positive_reference_exact": 122,
+      "api_proxy": 0.32096
+    },
+    {
+      "arm": "astra_medium",
+      "people": 93,
+      "source_bound": 78,
+      "count_fields": 168,
+      "count_exact": 168,
+      "positive_reference_fields": 122,
+      "positive_reference_exact": 122,
+      "api_proxy": 0.38356
+    },
+    {
+      "arm": "grok_low",
+      "people": 93,
+      "source_bound": 71,
+      "count_fields": 168,
+      "count_exact": 168,
+      "positive_reference_fields": 122,
+      "positive_reference_exact": 122,
+      "api_proxy": 0.070596
+    }
+  ],
+  "classification": "Primary source diagnostic, not population recall or benchmark A/U accuracy",
+  "duplicate_representation_excluded": "myb204_structured"
+}

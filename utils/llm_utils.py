@@ -298,9 +298,13 @@ def resolve_litellm_model_and_kwargs(
         # explicit temperature=1. Do not rely on LiteLLM's versioned registry.
         for parameter in ("temperature", "top_p", "top_logprobs", "logprobs"):
             out.pop(parameter, None)
-        if "max_tokens" in out:
-            legacy_cap = out.pop("max_tokens")
-            out.setdefault("max_completion_tokens", legacy_cap)
+    if _requires_reasoning(resolved) and "max_tokens" in out:
+        # Both Astra and Grok 4.6 document this as the cap including reasoning.
+        # Both spellings worked in later live Grok probes; use the documented
+        # reasoning-inclusive form rather than relying on legacy behavior.
+        # Keep an explicit modern cap when a caller supplies both spellings.
+        legacy_cap = out.pop("max_tokens")
+        out.setdefault("max_completion_tokens", legacy_cap)
     # gpt-5.6-sol rejects temperature != 1 (and temperature=0 is common in GVF).
     # Omit the param so the provider default applies.
     if _model_rejects_nondefault_temperature(resolved) and "temperature" in out:

@@ -1,0 +1,214 @@
+{
+  "name": "grok_strict_myb213_patient_ids",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON matching the supplied schema. Each row is a record object. sources must use exact source IDs from the supplied enum, and must include both the person row and any cohort/footnote/join evidence needed to support phenotype or genotype.\n\nTARGET: MYBPC3; PMID 21302287\nTASK: Roster is Table 3 Panel (a) only, target variant is the Protein mutation column (copy reported spelling, even if notation appears inconsistent). Every listed patient ID is a person; suffix c/d is a footnote marker, not another patient. Include all listed relatives, not just unrelated probands. Copy HCM as phenotype from the enrollment sentence. Endpoint is enrolled clinical HCM at ascertainment. Do not guess family IDs or proband status. Do not include Panel (b).\nSOURCE:\nL13: One hundred thirty-six Italian patients (n = 125 unrelated) diagnosed with HCM between 2005 and 2007 by cardiologists at the dedicated cardiomyopathy outpatient clinic of Azienda Ospedaliera Sant'Andrea, Sapienza University of Rome, were enrolled for the study. The study was approved by the Internal Ethic Committee of Azienda Ospedaliera Sant'Andrea, and all participants gave written informed consent to be included in the study. Patients with any relative diagnosed with HCM were considered familial cases, and patients without a family history of HCM and affected relatives were considered sporadic cases. When carriers were found, screening was suggested for first-degree family members.\nL85: Thirty-two individuals in our cohort of 136 HCM patients (23.5%) were found carrying mutations: of these, 28 were unrelated, accounting for 22.4% of the 125 unrelated patients. Specifically, 6 distinct mutations were found in MHY7 in 9/125 (7.2%) patients and 18 distinct mutations were found in MYBPC3 in 19/125 (15.2%) patients (Tables 2 and 3, respectively). All mutations were in heterozygosis. Multiple mutations, present either within the same gene or in both genes contemporaneously, were not encountered. A total of 384 chromosomes from healthy, unrelated Italian subjects were used as controls.\nL113: ### Table 3\nL114: \nL115: Variations Detected on MYBPC3* With DHPLC Followed by Direct Sequencing**\nL116: \nL117: | DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\nL118: |---|---|---|---|---|---|\nL119: | Panel (a) mutationsa |  |  |  |  |  |\nL120: | c.1090G>A | 11 | Potential splicing alteration | A364T | No | 233 |\nL121: | c.1813G>C | 17 | Potential splicing alteration | D605H | No | 180c, 186c, 208c |\nL122: | c.1624G>C | 15 | Potential splicing alteration | E542Q | No | 244 |\nL123: | c.2309-2A>G | 22 | Potential splicing alteration | 2309−2 | No | 234 |\nL124: | c.2905+1G>A | 25 | Potential splicing alterationb | 2905+1 | Yes | 157 |\nL125: | c.2905C>T | 25 | Nonsense: STOP codon | Q969X | No | 188 |\nL126: | c.2827C>T | 25 | Nonsense: STOP codon | R493X | Yes | 220 |\nL127: | c.3034C>T | 27 | Nonsense: STOP codon | Q1012X | No | 181 |\nL128: | c.3697C>T | 31 | Nonsense: STOP codon | Q1233X | No | 251 |\nL129: | c.2846–2847InsT | 25 | Frameshift: STOP codon | M949IfsX100 | Yes | 278 |\nL130: | c.2258–2259InsT | 21 | Frameshift: STOP codon | K754EfsX78 | Yes | 195, 228 |\nL131: | c.3192–3193InsC | 28 | Frameshift: STOP codon | K1065QfsX11 | No | 194 |\nL132: | c.2654C>T | 24 | Missense | T885M | Yes | 265 |\nL133: | c.2002C>T | 19 | Missense | R668C | Yes | 214 |\nL134: | c.3251T>C | 28 | Missense | L1084P | Yes | 177d, 185d |\nL135: | c. 2311G>A | 22 | Missense | V771M | No | 221 |\nL136: | c.2429 G>A | 25 | Missense | Arg810His | Yes | 270 |\nL137: | c.1373G>A | 14 | Missense | R458H | No | 268 |\nL138: \nL167: Eighteen distinct mutations were found in MYBPC3 (14.4%): five were potential alternative splicing sites (all generated by nucleotide substitutions), seven were stop codons (four caused by nonsense substitutions and three formed from insertions generating frameshifts), and six were missense mutations (Table 3a). Nine (7.2%) unrelated patients harbored novel mutations, whereas 10/125 (8%) carried known mutations. Three of the mutations were present in more than one patient.\nL175: Ten out of the 18 mutations detected (8%) are already described in public mutation databases: A364T (Smaniotto et al., 2009), D605H (Alders et al., 2003), E542Q (Carrier et al., 1997), and c.2309-2A>G (Niimura et al., 2002) are substitutions potentially generating splicing alterations, the last one found in the intronic side of the junction and D605H harbored by three related patients (father, son, and nephew); three (Q969X, Q1012X, and Q1233X) are nonsense mutations creating stop codons in exons 25, 27, and 31, respectively (Yu et al., 1998; Erdmann et al., 2001; Nanni et al., 2003); K1065QfsX11 (Girolami et al., 2006) is a nucleotide insertion generating, through a frameshift, a premature stop codon in exon 28; V771M (Garcia-Castro et al., 2005); and R458H (Van Driest et al., 2004) are missense mutations caused by amino acid substitutions in exon 22 and 14, respectively (Cardiogenomics Mutation Database, 2005; HGMD, http://www.hgmd.cf.ac.uk/ac/all.php)."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "patient_roster",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rows",
+            "limitations"
+          ],
+          "properties": {
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sources",
+                  "variants",
+                  "family",
+                  "person",
+                  "genotype",
+                  "phenotype",
+                  "index_case",
+                  "endpoint_status"
+                ],
+                "properties": {
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "L13",
+                        "L85",
+                        "L113",
+                        "L114",
+                        "L115",
+                        "L116",
+                        "L117",
+                        "L118",
+                        "L119",
+                        "L120",
+                        "L121",
+                        "L122",
+                        "L123",
+                        "L124",
+                        "L125",
+                        "L126",
+                        "L127",
+                        "L128",
+                        "L129",
+                        "L130",
+                        "L131",
+                        "L132",
+                        "L133",
+                        "L134",
+                        "L135",
+                        "L136",
+                        "L137",
+                        "L138",
+                        "L167",
+                        "L175"
+                      ]
+                    }
+                  },
+                  "variants": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "family": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "person": {
+                    "type": "string"
+                  },
+                  "genotype": {
+                    "type": "string",
+                    "enum": [
+                      "Y",
+                      "N",
+                      "?"
+                    ]
+                  },
+                  "phenotype": {
+                    "type": "string"
+                  },
+                  "index_case": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "endpoint_status": {
+                    "type": "string",
+                    "enum": [
+                      "positive",
+                      "negative",
+                      "unknown"
+                    ]
+                  }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.0494285,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "ee3562da-1963-483f-8d26-cb9ef6fd48ae",
+    "x-ms-client-request-id": "d5207a9b-2ef7-47b9-9b30-afbba5620cd9",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "48063",
+    "x-ratelimit-reset-tokens": "2",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "d5207a9b-2ef7-47b9-9b30-afbba5620cd9",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "ee3562da-1963-483f-8d26-cb9ef6fd48ae",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"rows\": [\n    {\n      \"sources\": [\"L13\", \"L120\"],\n      \"variants\": [\"A364T\"],\n      \"family\": null,\n      \"person\": \"233\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L121\", \"L175\"],\n      \"variants\": [\"D605H\"],\n      \"family\": null,\n      \"person\": \"180\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L121\", \"L175\"],\n      \"variants\": [\"D605H\"],\n      \"family\": null,\n      \"person\": \"186\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L121\", \"L175\"],\n      \"variants\": [\"D605H\"],\n      \"family\": null,\n      \"person\": \"208\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L122\"],\n      \"variants\": [\"E542Q\"],\n      \"family\": null,\n      \"person\": \"244\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L123\"],\n      \"variants\": [\"2309−2\"],\n      \"family\": null,\n      \"person\": \"234\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L124\"],\n      \"variants\": [\"2905+1\"],\n      \"family\": null,\n      \"person\": \"157\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L125\"],\n      \"variants\": [\"Q969X\"],\n      \"family\": null,\n      \"person\": \"188\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L126\"],\n      \"variants\": [\"R493X\"],\n      \"family\": null,\n      \"person\": \"220\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L127\"],\n      \"variants\": [\"Q1012X\"],\n      \"family\": null,\n      \"person\": \"181\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L128\"],\n      \"variants\": [\"Q1233X\"],\n      \"family\": null,\n      \"person\": \"251\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L129\"],\n      \"variants\": [\"M949IfsX100\"],\n      \"family\": null,\n      \"person\": \"278\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L130\"],\n      \"variants\": [\"K754EfsX78\"],\n      \"family\": null,\n      \"person\": \"195\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L130\"],\n      \"variants\": [\"K754EfsX78\"],\n      \"family\": null,\n      \"person\": \"228\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L131\"],\n      \"variants\": [\"K1065QfsX11\"],\n      \"family\": null,\n      \"person\": \"194\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L132\"],\n      \"variants\": [\"T885M\"],\n      \"family\": null,\n      \"person\": \"265\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L133\"],\n      \"variants\": [\"R668C\"],\n      \"family\": null,\n      \"person\": \"214\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L134\"],\n      \"variants\": [\"L1084P\"],\n      \"family\": null,\n      \"person\": \"177\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L134\"],\n      \"variants\": [\"L1084P\"],\n      \"family\": null,\n      \"person\": \"185\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L135\"],\n      \"variants\": [\"V771M\"],\n      \"family\": null,\n      \"person\": \"221\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L136\"],\n      \"variants\": [\"Arg810His\"],\n      \"family\": null,\n      \"person\": \"270\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    },\n    {\n      \"sources\": [\"L13\", \"L137\"],\n      \"variants\": [\"R458H\"],\n      \"family\": null,\n      \"person\": \"268\",\n      \"genotype\": \"Y\",\n      \"phenotype\": \"HCM\",\n      \"index_case\": null,\n      \"endpoint_status\": \"positive\"\n    }\n  ],\n  \"limitations\": [\n    \"Family IDs and index/proband status were not assigned because they were not given as identifiers; footnote letters were stripped from person IDs only.\",\n    \"Panel (b) was excluded as instructed.\"\n  ]\n}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2098,
+      "completion_tokens": 1745,
+      "total_tokens": 4354,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 2098,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 511,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788716261,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 150.6120026250137,
+  "usage": {
+    "prompt_tokens": 2098,
+    "completion_tokens": 1745,
+    "total_tokens": 4354,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "text_tokens": 2098,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 511,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.017732,
+  "accounted_usd": 0.018781
+}

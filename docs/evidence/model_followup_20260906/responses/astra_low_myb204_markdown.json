@@ -1,0 +1,164 @@
+{
+  "name": "astra_low_myb204_markdown",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: MYBPC3; PMID 20433692\nTASK: Roster is Additional file 1 only. Copy Age diagnosis as phenotype. Endpoint is table-defined diagnosis at recorded diagnosis/last observation: numeric diagnosis age is positive, No Dx is table-defined negative, unknown mark remains unknown. This is not an ECG-normal endpoint. Table footnote defines No Dx. Prose is available to support blank-family joins and expose contradictions; do not add people mentioned only in prose. Shifted Markdown continuation cells require care; variant/family can inherit only supported grouping. Two original family cells for IV-1 and IV-5 are blank rather than merged; use prose only if it supplies the family.\nSOURCE:\nL120: A genetic study was carried out in 46 positive index cases relatives: 24 were carriers and 22 non-carriers. Out of those 24 carriers, 14 showed HCM, 4 with suggestive electrocardiographic alterations but not HCM diagnostic (H73-II:6 = D75N H197-III:4 = R502Q, H76-II:7 = K504del and H160-IV:2 = P955fs,)], and 6 women, ages 25 (H279-III:2 = V471E), 29 (H95-III:6 = E1179K), 32 (H95-III:2 = E1179K), 33(H131-IV:4 = IVS29+5G>A), 49 (H46-III:4 = K504del) and 68 (H73-II:7 = D75N), were healthy carriers. Within those 22 non-carriers, 18 were considered healthy, 1 with sugestive electrocardiographic alterations (H73-II:3 = D75N), 2 probably affected (H49-IV:1 & IV:5 = R1022P) and 1 case presented HCM (H153-II:1 = E542Q).\nL285: Additional file 1- Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers.\nL286: | Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\nL287: |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\nL288: | D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\nL289: | II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |\nL290: | II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |\nL291: | II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |\nL292: | A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |\nL293: | IVS6+5G>A | H56 | II:5 | Y | M | 28 | 40 | 26 | - | - | ¿ | + | + | II | AF-IRBBB | - | - |\nL294: | II:6* | Y | F | 34 | 39 | 24 | - | - | + | + | + | II | T(-) | ICD | AD |  |  |\nL295: | IVS11-9G>A | H110 | I:1* | Y | M | 58 | 62 | 17 | - | + | - | - | - | I | Normal | - | - |\nL296: | II:2 | Y | F | 21 | 27 | 17 | - | - | - | - | - | I | LVH, T(-), LABBH | - | - |  |  |\nL297: | Q327fs | H13 | II:7* | Y | M | 64 | 73 | 19 | + | - | ¿ | + | - | III | AF, Q | + | Death CHF |\nL298: | III:1 | Y | F | 37 | 37 | 16 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\nL299: | V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |\nL300: | III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |\nL301: | R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |\nL302: | R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\nL303: | II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\nL304: | III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\nL305: | H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\nL306: | II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |\nL307: | K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |\nL308: | II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |\nL309: | III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |\nL310: | III:4 | Y | F | No Dx | 49 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |\nL311: | E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\nL312: | II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\nL313: | III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\nL314: | H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\nL315: | H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |\nL316: | K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\nL317: | II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |\nL318: | P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\nL319: | IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |\nL320: | IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |\nL321: | T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |\nL322: | R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\nL323: | H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\nL324: | III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\nL325: | III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\nL326: | III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |\nL327: | IV-1 | N | M | 22 | 29 | 12 | - | - | - | - | - | I | HVI |  |  |  |  |\nL328: | Q | - | - |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\nL329: | IV-5 | N | M | 17 | 22 | 13 | - | - | - | - | - | I | HVI |  |  |  |  |\nL330: | Q | - | - |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\nL331: | IVS29+5G>A | H131 | III:2* | Y | F | 45 | 54 | 41 | - | + | - | + | + | III | LVH, T(-) | - | - |\nL332: | IV:4 | Y | F | No Dx | 33 | 10 | - | - | ¿ | ¿ | + | I | Normal | - | - |  |  |\nL333: | IV:5 | Y | F | 24 | 31 | 15 | - | - | ¿ | - | + | I | Normal | - | - |  |  |\nL334: | E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\nL335: | T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\nL336: | II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\nL337: | III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\nL338: | III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |\nL339: ABPR: Abnormal blood pressure response, AD: Appropriate discharge, AF: atrial fibrillation, Age FU: Age last follow up, FE: Femoral embolism, FHSD: family history of sudden death, RBBB: right bundle branch block, LBBB: left bundle branch block, ICD: implantable cardioverter defibrillator, ECG: electrocardiogram, Fam: family, LABBH: left anterior bundle branch hemiblockade, LVH: left ventricular hypertrophy, CHF: congestive heart failure, PM: pacemaker, MP: Mitral prothesis, Mut: presence of mutation, N: no, No Dx: Unaffected or healthy, NYHA: New York Association functional class, Q: abnormal Q wave, S: Syncope, SA: Septal ablation, ST: ST segment abnormalities, SO: Subaortic obstruction , T(-): negative T wave, NSVT: non-sustained ventricular tachycardia, TX: cardiac transplantation, WT: Max wall thickness, Y: yes, *: index case."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.3472625,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3496533",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "8ab99ac5-8185-40b6-9c84-f8d479a9b793",
+    "apim-request-id": "62453095-7260-4c08-acf5-b3d86cf2d96c",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\n  \"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\n  \"rows\":[\n    [[\"L288\",\"L339\"],[\"D75N\"],\"H73\",\"II:3\",\"N\",\"NoDx\",false,\"negative\"],\n    [[\"L289\",\"L288\",\"L339\"],[\"D75N\"],\"H73\",\"II:4\",\"Y\",\"66\",true,\"positive\"],\n    [[\"L290\",\"L288\",\"L339\"],[\"D75N\"],\"H73\",\"II:6\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L291\",\"L288\",\"L339\"],[\"D75N\"],\"H73\",\"II:7\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L292\",\"L339\"],[\"A216T\"],\"H42\",\"II:6\",\"Y\",\"34\",true,\"positive\"],\n    [[\"L293\",\"L339\"],[\"IVS6+5G>A\"],\"H56\",\"II:5\",\"Y\",\"28\",false,\"positive\"],\n    [[\"L294\",\"L293\",\"L339\"],[\"IVS6+5G>A\"],\"H56\",\"II:6\",\"Y\",\"34\",true,\"positive\"],\n    [[\"L295\",\"L339\"],[\"IVS11-9G>A\"],\"H110\",\"I:1\",\"Y\",\"58\",true,\"positive\"],\n    [[\"L296\",\"L295\",\"L339\"],[\"IVS11-9G>A\"],\"H110\",\"II:2\",\"Y\",\"21\",false,\"positive\"],\n    [[\"L297\",\"L339\"],[\"Q327fs\"],\"H13\",\"II:7\",\"Y\",\"64\",true,\"positive\"],\n    [[\"L298\",\"L297\",\"L339\"],[\"Q327fs\"],\"H13\",\"III:1\",\"Y\",\"37\",false,\"positive\"],\n    [[\"L299\",\"L339\"],[\"V471E\"],\"H279\",\"II:1\",\"Y\",\"57\",true,\"positive\"],\n    [[\"L300\",\"L299\",\"L339\"],[\"V471E\"],\"H279\",\"III:2\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L301\",\"L339\"],[\"R495W\"],\"H161\",\"II:4\",\"Y\",\"71\",true,\"positive\"],\n    [[\"L302\",\"L339\"],[\"R502Q\"],\"H147\",\"II:2\",\"Y\",\"50\",false,\"positive\"],\n    [[\"L303\",\"L302\",\"L339\"],[\"R502Q\"],\"H147\",\"II:4\",\"Y\",\"42\",true,\"positive\"],\n    [[\"L304\",\"L302\",\"L339\",\"L120\"],[\"R502Q\"],\"H147\",\"III:4\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L305\",\"L302\",\"L339\"],[\"R502Q\"],\"H614\",\"I:1\",\"Y\",\"68\",false,\"positive\"],\n    [[\"L306\",\"L305\",\"L302\",\"L339\"],[\"R502Q\"],\"H614\",\"II:3\",\"Y\",\"15\",true,\"positive\"],\n    [[\"L307\",\"L339\"],[\"K504del\"],\"H46\",\"II:7\",\"Y\",\"¿\",false,\"unknown\"],\n    [[\"L308\",\"L307\",\"L339\"],[\"K504del\"],\"H46\",\"II:8\",\"Y\",\"59\",false,\"positive\"],\n    [[\"L309\",\"L307\",\"L339\"],[\"K504del\"],\"H46\",\"III:1\",\"Y\",\"35\",true,\"positive\"],\n    [[\"L310\",\"L307\",\"L339\"],[\"K504del\"],\"H46\",\"III:4\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L311\",\"L339\"],[\"E542Q\"],\"H153\",\"II-1\",\"N\",\"58\",false,\"positive\"],\n    [[\"L312\",\"L311\",\"L339\"],[\"E542Q\"],\"H153\",\"II:4\",\"Y\",\"44\",true,\"positive\"],\n    [[\"L313\",\"L311\",\"L339\"],[\"E542Q\"],\"H153\",\"III:3\",\"Y\",\"16\",false,\"positive\"],\n    [[\"L314\",\"L311\",\"L339\"],[\"E542Q\"],\"H166\",\"III:7\",\"Y\",\"53\",true,\"positive\"],\n    [[\"L315\",\"L311\",\"L339\"],[\"E542Q\"],\"H641\",\"II:2\",\"Y\",\"65\",true,\"positive\"],\n    [[\"L316\",\"L339\"],[\"K600fs\"],\"H37\",\"II:1\",\"Y\",\"50\",false,\"positive\"],\n    [[\"L317\",\"L316\",\"L339\"],[\"K600fs\"],\"H37\",\"II:2\",\"Y\",\"44\",true,\"positive\"],\n    [[\"L318\",\"L339\"],[\"P955fs\"],\"H160\",\"III:2\",\"Y\",\"36\",true,\"positive\"],\n    [[\"L319\",\"L318\",\"L339\"],[\"P955fs\"],\"H160\",\"IV:1\",\"Y\",\"16\",false,\"positive\"],\n    [[\"L320\",\"L318\",\"L339\"],[\"P955fs\"],\"H160\",\"IV:2\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L321\",\"L339\"],[\"T957S\"],\"H120\",\"II:3\",\"Y\",\"44\",true,\"positive\"],\n    [[\"L322\",\"L339\"],[\"R1022P\"],\"H18\",\"II:5\",\"Y\",\"52\",true,\"positive\"],\n    [[\"L323\",\"L322\",\"L339\"],[\"R1022P\"],\"H49\",\"II:2\",\"Y\",\"67\",false,\"positive\"],\n    [[\"L324\",\"L323\",\"L322\",\"L339\"],[\"R1022P\"],\"H49\",\"III:2\",\"Y\",\"21\",false,\"positive\"],\n    [[\"L325\",\"L323\",\"L322\",\"L339\"],[\"R1022P\"],\"H49\",\"III:4\",\"Y\",\"44\",false,\"positive\"],\n    [[\"L326\",\"L323\",\"L322\",\"L339\"],[\"R1022P\"],\"H49\",\"III:5\",\"Y\",\"27\",true,\"positive\"],\n    [[\"L327\",\"L322\",\"L120\",\"L339\"],[\"R1022P\"],\"H49\",\"IV-1\",\"N\",\"22\",false,\"positive\"],\n    [[\"L329\",\"L322\",\"L120\",\"L339\"],[\"R1022P\"],\"H49\",\"IV-5\",\"N\",\"17\",false,\"positive\"],\n    [[\"L331\",\"L339\"],[\"IVS29+5G>A\"],\"H131\",\"III:2\",\"Y\",\"45\",true,\"positive\"],\n    [[\"L332\",\"L331\",\"L339\"],[\"IVS29+5G>A\"],\"H131\",\"IV:4\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L333\",\"L331\",\"L339\"],[\"IVS29+5G>A\"],\"H131\",\"IV:5\",\"Y\",\"24\",false,\"positive\"],\n    [[\"L334\",\"L339\"],[\"E1179K\"],\"H95\",\"II:1\",\"Y\",\"64\",true,\"positive\"],\n    [[\"L336\",\"L334\",\"L339\"],[\"E1179K\"],\"H95\",\"II:4\",\"Y\",\"63\",false,\"positive\"],\n    [[\"L337\",\"L334\",\"L339\"],[\"E1179K\"],\"H95\",\"III:2\",\"Y\",\"No Dx\",false,\"negative\"],\n    [[\"L338\",\"L334\",\"L339\"],[\"E1179K\"],\"H95\",\"III:6\",\"Y\",\"No Dx\",false,\"negative\"]\n  ],\n  \"limitations\":[\n    \"L304 groups R502Q III:4 under H147; L120 instead names H197-III:4. Table grouping is retained without resolving the discrepancy.\",\n    \"L120 supplies H49 for the blank family cells of IV-1 and IV-5, calling them probably affected; their numeric table diagnosis ages determine positive endpoint status.\",\n    \"Variants for noncarriers identify the table mutation group, not carried variants. L311 'no' is normalized to N.\",\n    \"L328, L330 and L335 are clinical-cell continuations, not people. Prose-only people are excluded.\"\n  ]\n}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715540,
+    "id": "chatcmpl-ELAuaZ6ji2HzPPSO2JiiyrE0Jk5RZ",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r19-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1728,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 95,
+        "service_tbt_ms": 32,
+        "service_ttft_ms": 3471,
+        "service_ttlt_ms": 58426,
+        "user_visible_ttft_ms": 3376
+      },
+      "prompt_tokens": 3467,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 3464,
+        "cached_tokens": 0
+      },
+      "total_tokens": 5195
+    }
+  },
+  "status": "returned",
+  "seconds": 59.72563983302098,
+  "usage": {
+    "completion_tokens": 1728,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 95,
+      "service_tbt_ms": 32,
+      "service_ttft_ms": 3471,
+      "service_ttlt_ms": 58426,
+      "user_visible_ttft_ms": 3376
+    },
+    "prompt_tokens": 3467,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 3464,
+      "cached_tokens": 0
+    },
+    "total_tokens": 5195
+  },
+  "api_proxy_usd": 0.12107,
+  "accounted_usd": 0.1297375
+}

@@ -1,0 +1,164 @@
+{
+  "name": "astra_low_ryr258_functional",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: RYR2; PMID 25814417\nTASK: Only a functional-assay section is supplied. Cells, alleles, channels, experimental replicates and other nonhuman units are not patients. This is a source-section negative control, not a claim that the whole paper lacks patient counts.\nSOURCE:\nL35: #### Functional characterization of the G357S mutation under basal conditions\nL36: \nL37: To functionally characterize the effect of the G357S mutation, stable and inducible HEK293 cell lines expressing RyR2 WT (wild type) or G357S were generated. Both cell lines showed RyR2 expression after 48 hours of tetracycline induction, and no RyR2 expression was observed in the absence of tetracycline ( Online Supplemental Figure 1 ). Calcium imaging experiments were used to evaluate the activity of the RyR2 channels in terms of caffeine sensitivity and SOICR activity as a function of extracellular calcium. The evaluation of RyR2 caffeine sensitivity showed no significant differences between the half maximal effective concentrations (EC50) of RyR2 WT and RyR2 G357S variant (EC50 WT = 0.16 ± 0.08 mM vs EC50 G357S = 0.21 ± 0.04 mM) ( Figures 3A and 3B ). In addition, the SOICR analysis showed no shift between the SOICR curves and no significant differences in the EC50 for extracellular calcium (EC50 WT = 0.74 ± 0.03 mM vs EC50 G357S = 0.71 ± 0.03 mM) ( Figures 3C and 3D ).\nL38: \nL39: #### Functional characterization of the G357S mutation under conditions that mimic catecholaminergic stress\nL40: \nL41: Increased sympathetic activity is a typical physiological response to stress and is thought to be the basis of arrhythmias in CPVT. Activation of the adrenergic signaling pathway generates increased cyclic adenosine monophosphate (cAMP) levels and activates protein kinase A (PKA). In the heart, activated PKA can phosphorylate RYR2 at 2 residues, S2030 and S2808. The phosphorylation of these serine residues increases the resting open probability of RyR2 promoting a calcium leak from the sarcoplasmic reticulum. 22,23 To evaluate the activity of the RyR2 channel under conditions that mimic catecholaminergic stress, calcium-imaging experiments were performed using forskolin to increase intracellular levels of cAMP. Caffeine sensitivity of the G357S channel was higher than that of the WT channel in the presence of forskolin ( Figures 4A and 4B ). We observed a significant shift to the left for the G357S caffeine curve, which produced significant differences between the EC50 under conditions that mimic catecholaminergic stress (EC50 WT = 0.095 ± 0.01 mM and EC50 G357S = 0.069 ± 0.01 mM; n = 7; P < .0001) ( Figure 4B ). Furthermore, in the presence of forskolin, SOICR activity was significantly higher in cells expressing RyR2 G357S than in cells expressing RyR2 WT; for example, at 500 µM calcium the oscillation per minute was 1.21 ± 0.04 for WT cells and 1.55 ± 0.05 for G357S cells (n WT = 234 and n G357S = 298; P < .0001) ( Figures 4C and 4D ). In addition, forskolin modulated spontaneous release activity in a concentration-dependent fashion ( Figure 4E ), and RyR2 G357S cells had a greater response to increasing concentrations of forskolin. At 5 μM forskolin, the number of oscillations was 1.25 ± 0.02 for WT cells and 1.43 ± 0.02 for G357S cells (n = 6; P < .001).\nL42: "
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 1024,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.1432625,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3498814",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "6cf99fca-8892-4832-81db-d6b94df9dd33",
+    "apim-request-id": "da0fae10-ccf6-4781-85c8-9173548d4488",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[],\"limitations\":[\"The supplied functional-assay section (L35–L41) contains no individually identified patient roster. HEK293 cells, channels and experimental replicates are not patients. This limitation applies only to the supplied section, not the whole paper.\"]}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715523,
+    "id": "chatcmpl-ELAuJHRUUUoQt86qIVpmLsganB9D0",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r23-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 85,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 73,
+        "service_tbt_ms": 44,
+        "service_ttft_ms": 2406,
+        "service_ttlt_ms": 6134,
+        "user_visible_ttft_ms": 2333
+      },
+      "prompt_tokens": 1186,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 1183,
+        "cached_tokens": 0
+      },
+      "total_tokens": 1271
+    }
+  },
+  "status": "returned",
+  "seconds": 6.906454958021641,
+  "usage": {
+    "completion_tokens": 85,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 73,
+      "service_tbt_ms": 44,
+      "service_ttft_ms": 2406,
+      "service_ttlt_ms": 6134,
+      "user_visible_ttft_ms": 2333
+    },
+    "prompt_tokens": 1186,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1183,
+      "cached_tokens": 0
+    },
+    "total_tokens": 1271
+  },
+  "api_proxy_usd": 0.01611,
+  "accounted_usd": 0.019075
+}

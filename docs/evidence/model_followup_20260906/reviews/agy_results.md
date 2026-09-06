@@ -1,0 +1,19 @@
+Here is the adversarial final review challenging the draft report's claims, metrics, and conclusions.
+
+### 1. Denominators and Sample Size Inflation
+The report presents 216/216 exact derived fields in its primary table, knowingly including a duplicated 48-person DOC (tested as both a frozen packet and an expanded grid). While the text later clarifies the deduplicated count (168/168 fields across 56 variant-packet groups), leading with the inflated 216/216 obscures the true task volume. Furthermore, the entire positive evaluation rests on just 93 unique people from exactly four positive papers. Asserting that the "readable-table bottleneck is tractable" based on an n=4 paper sample is a massive, statistically unsupported extrapolation.
+
+### 2. Causal Claims Regarding Grok Availability
+The conclusion that counterbalanced probes "rule out cap spelling as a sufficient explanation" for the initial 55-second timeouts is logically flawed. The initial failures occurred exclusively under the direct HTTP legacy cap. The fact that a *subsequent* legacy-cap probe succeeded only proves the failure is non-deterministic, not that the legacy cap was blameless. By declaring the issue "intermittent request latency" and stating "Azure internal root cause unknown," the report dismisses the possibility that the legacy cap interacts poorly with specific network conditions or payload states. Asserting "No claimfix cures availability" is premature when the modern SDK and `max_completion_tokens` explicitly avoided the 55-second hangs in production.
+
+### 3. Source Adjudication and Post-Hoc Excuses
+The methodology relies on "investigator-adjudicated, opened calibration" rather than blinded human validation. The same investigator who prepared the packets and prompts also wrote the scorer, introducing inherent bias.
+More critically, the report undermines its own "outputs locked before grading" standard by making post-hoc excuses for model failures:
+*   **Astra's Citation Failure:** Astra failed the strict locator check for 15 people by generating `Table 1, L107` instead of `L107`. Highlighting a "separate post-hoc, format-only sensitivity" that fixes 14/15 softens the blow of the actual 126/141 source-bound row appearance score.
+*   **Grok's Schema Violations:** Grok failed to provide the required enrollment citation for 22 patients and emitted `null` instead of `false` for 28 structured flags. Dismissing this as a "metadata interpretation issue" or blaming "prompting ambiguity" violates the strict evaluation criteria. If the prompt was ambiguous, the test design is flawed; you cannot selectively forgive schema errors while claiming rigorous validation.
+
+### 4. Premature Model Routing Recommendations
+Recommending Astra low over Astra medium because medium "added no count accuracy in this test" and cost 20% more is unjustified. You cannot conclusively route models or declare that medium is strictly for "unresolved reasoning" based on identical performance across an 8-packet micro-sample. Furthermore, recommending Grok 4.6 low as a "cheaper candidate reader" completely ignores its severe provenance omissions (missing citations and boolean schema failures). Cost efficiency ($0.088 vs $0.441) is entirely irrelevant if the downstream pipeline cannot trust the model's structural output or source bindings.
+
+### 5. Budgetary and Accounting Blind Spots
+The financial section admits that "proxy pricing is not Azure invoice" and relies on an immutable old ledger with a $4.90 vs $4.962 discrepancy. The accounting uses a 25-cent margin to cover unknown reserves and attributes output uncertainty (~$0.77 each) to the failed legacy calls. By deliberately excluding CLI costs, Anthropic extraction API costs, and masking discrepancies behind proxy estimations and cache-write upper bounds, the report fails to provide a reliable Total Cost of Ownership (TCO) for this pipeline stage.

@@ -15,6 +15,29 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — Grok retry and expanded bounded roster diagnostic
+
+Grok 4.6 returns again; the live production SDK path passes after adopting the
+documented reasoning-inclusive cap. Modern/legacy/modern direct controls all
+succeed later, so cap spelling does not explain the earlier intermittent
+availability failures. Twenty-four primary requests cover eight packets from
+seven opened papers with Astra low/medium and Grok low. Four patient-bearing
+papers contain 93 distinct people; a repeated 48-person DOC creates 141 row
+appearances per arm. All arms derive 168/168 source-exact C/endpoint-positive/
+endpoint-negative fields after excluding that repeated representation. These
+are packet-specific source values, not whole-paper gold or population recall.
+
+Strict source gates expose citation/metadata issues; two additional post-hoc
+strict-schema probes repair the tested Astra and Grok citation cases. Gold
+overlap offers 45 additional exact A/U candidates plus six carrier disagreements
+requiring family/cohort reconciliation. No production count merge, default
+promotion or unopened-tranche consumption occurs. Astra medium adds 20% proxy
+cost without count improvement on these packets. No human-performance ceiling
+or overall uplift percentage is established. New API proxy $1.14701 and
+conservative accounting $2.78825 keep the original envelope at $147.82576/150.
+The old ledger remains immutable. Full unit suite 2,951 passed; wheel source
+bytes and installed runtime verified. [Report and CLI reviews](evidence/model_followup_20260906/README.md).
+
 ## 2026-09-06 — new-model routing calibration; no promotion
 
 A frozen, opened 12-paper panel compares the fresh Grok 4.3 control with Astra

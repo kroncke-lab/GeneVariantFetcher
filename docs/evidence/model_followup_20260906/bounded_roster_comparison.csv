@@ -1,0 +1,4 @@
+arm,people,source_bound,count_fields,count_exact,positive_reference_fields,positive_reference_exact,api_proxy
+astra_low,93,78,168,168,122,122,0.32096
+astra_medium,93,78,168,168,122,122,0.38356
+grok_low,93,71,168,168,122,122,0.070596

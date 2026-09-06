@@ -1,0 +1,15 @@
+{
+  "actual_api_requests": 36,
+  "returned_usage_requests": 34,
+  "unknown_usage_requests": 2,
+  "returned_api_proxy_usd": 1.147008,
+  "unknown_reservations_usd": 1.5468350000000002,
+  "returned_accounting_with_input_premium_usd": 1.2414145,
+  "new_accounted_usd": 2.7882495,
+  "prior_accounted_usd": 145.0375137,
+  "new_limit_usd": 4.9,
+  "old_budget_sha256": "03f21ea91625de7933ba71b20cf9cbf9e2b60a5c06d5092826c71ecb2cbd2fc8",
+  "budget_sha256": "dbeabed9d309cb03264606ea0b521188a872d20f47d23ab4f97bf02a8c02221e",
+  "combined_accounted_usd": 147.8257632,
+  "remaining_original_150_envelope_usd": 2.1742367999999885
+}

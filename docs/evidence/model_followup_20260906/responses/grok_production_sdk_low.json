@@ -1,0 +1,93 @@
+{
+  "name": "grok_production_sdk_low",
+  "retries": 0,
+  "reserved_usd": 0.01,
+  "accounted_usd": 0.000266,
+  "status": "returned",
+  "response": {
+    "id": "a5853282-af14-475b-b800-96490c4c41af",
+    "created": 1788715632,
+    "model": "grok-4.6",
+    "object": "chat.completion",
+    "system_fingerprint": null,
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "OK",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          }
+        },
+        "provider_specific_fields": {}
+      }
+    ],
+    "usage": {
+      "completion_tokens": 1,
+      "prompt_tokens": 8,
+      "total_tokens": 49,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 40,
+        "rejected_prediction_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": null,
+        "cached_tokens": 0,
+        "text_tokens": 8,
+        "image_tokens": 0
+      },
+      "audio_prompt_tokens": 0,
+      "num_sources_used": 0
+    },
+    "moderation": null,
+    "service_tier": null,
+    "prompt_filter_results": null
+  },
+  "usage": {
+    "completion_tokens": 1,
+    "prompt_tokens": 8,
+    "total_tokens": 49,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 40,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": null,
+      "image_tokens": null,
+      "video_tokens": null
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0,
+      "text_tokens": 8,
+      "image_tokens": 0,
+      "video_tokens": null
+    },
+    "audio_prompt_tokens": 0,
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.000262,
+  "seconds": 2.0335309579968452,
+  "serialized_requests": [
+    {
+      "messages": [
+        {
+          "role": "user",
+          "content": "Return exactly OK."
+        }
+      ],
+      "model": "grok-4.6",
+      "max_completion_tokens": 256,
+      "reasoning_effort": "low",
+      "temperature": 0
+    }
+  ]
+}

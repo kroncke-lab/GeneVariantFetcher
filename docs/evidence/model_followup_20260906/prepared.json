@@ -1,0 +1,23 @@
+{
+  "prepared_unix": 1788715359.697619,
+  "packets": {
+    "myb204_markdown": "0bbf6ff9f492af5046a9ea3f324e8e5aeae7120a21ac9036a0cb16c24906d2e0",
+    "myb204_structured": "f421824200d626abff5929dc6d41075fe76300e29c266d2155662f7c1a02033e",
+    "ryr304_multivariant": "0acaa1281f25ff30e6fafb10a4ada7ca2a0f27920d30d5daa36f5caf53a17b10",
+    "ryr254_narrative": "5b9061d9c8d5b5874602f14cbd9b58de17ae6e3a0c794435d7018c103630745f",
+    "myb213_patient_ids": "edccadc911aaa1fd2edaa476857535bac2be89b5a273743cbb1077bf5b3a0aff",
+    "ryr189_missing_table": "7cde0320e78f1863e51ce1593efaa497fcd4ce7ee0f081358eed732ae80e4993",
+    "ryr193_abstract": "90e0c38c7e8fd85e2111e555118478c82c3f5468055f63c9e7ca7e94224f823c",
+    "ryr258_functional": "6f9d6f0be451c26b78ae516ae29d0495b5043f85731111c242e16d9e1409267f"
+  },
+  "reference_sha256": "ad8f0ec0047640c5fc0d4e07ce7c56830afa9ee1610200c545641ece45631b8d",
+  "prompt_sha256": "76c6d8154889db4da1ea419e91f26dfd54f3529ae5235f74fa37c8660243b3dc",
+  "source_preparation_sha256": "c186f9ea0a175225565d3309ea70bba5f134623bebed1adf611233c7987a960e",
+  "head": "b311541085ec498d9971111a3d0f599cd136bacf",
+  "arms": [
+    "astra_low",
+    "astra_medium"
+  ],
+  "order_seed": 20260906,
+  "notes": "Eight source packets from seven opened papers. Structured-vs-Markdown pair is separate representation ablation. One draw per cell, no population inference. All new outputs locked before grading."
+}

@@ -1,0 +1,164 @@
+{
+  "name": "astra_medium_myb213_patient_ids",
+  "request": {
+    "model": "gpt-6-astra",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: MYBPC3; PMID 21302287\nTASK: Roster is Table 3 Panel (a) only, target variant is the Protein mutation column (copy reported spelling, even if notation appears inconsistent). Every listed patient ID is a person; suffix c/d is a footnote marker, not another patient. Include all listed relatives, not just unrelated probands. Copy HCM as phenotype from the enrollment sentence. Endpoint is enrolled clinical HCM at ascertainment. Do not guess family IDs or proband status. Do not include Panel (b).\nSOURCE:\nL13: One hundred thirty-six Italian patients (n = 125 unrelated) diagnosed with HCM between 2005 and 2007 by cardiologists at the dedicated cardiomyopathy outpatient clinic of Azienda Ospedaliera Sant'Andrea, Sapienza University of Rome, were enrolled for the study. The study was approved by the Internal Ethic Committee of Azienda Ospedaliera Sant'Andrea, and all participants gave written informed consent to be included in the study. Patients with any relative diagnosed with HCM were considered familial cases, and patients without a family history of HCM and affected relatives were considered sporadic cases. When carriers were found, screening was suggested for first-degree family members.\nL85: Thirty-two individuals in our cohort of 136 HCM patients (23.5%) were found carrying mutations: of these, 28 were unrelated, accounting for 22.4% of the 125 unrelated patients. Specifically, 6 distinct mutations were found in MHY7 in 9/125 (7.2%) patients and 18 distinct mutations were found in MYBPC3 in 19/125 (15.2%) patients (Tables 2 and 3, respectively). All mutations were in heterozygosis. Multiple mutations, present either within the same gene or in both genes contemporaneously, were not encountered. A total of 384 chromosomes from healthy, unrelated Italian subjects were used as controls.\nL113: ### Table 3\nL114: \nL115: Variations Detected on MYBPC3* With DHPLC Followed by Direct Sequencing**\nL116: \nL117: | DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\nL118: |---|---|---|---|---|---|\nL119: | Panel (a) mutationsa |  |  |  |  |  |\nL120: | c.1090G>A | 11 | Potential splicing alteration | A364T | No | 233 |\nL121: | c.1813G>C | 17 | Potential splicing alteration | D605H | No | 180c, 186c, 208c |\nL122: | c.1624G>C | 15 | Potential splicing alteration | E542Q | No | 244 |\nL123: | c.2309-2A>G | 22 | Potential splicing alteration | 2309−2 | No | 234 |\nL124: | c.2905+1G>A | 25 | Potential splicing alterationb | 2905+1 | Yes | 157 |\nL125: | c.2905C>T | 25 | Nonsense: STOP codon | Q969X | No | 188 |\nL126: | c.2827C>T | 25 | Nonsense: STOP codon | R493X | Yes | 220 |\nL127: | c.3034C>T | 27 | Nonsense: STOP codon | Q1012X | No | 181 |\nL128: | c.3697C>T | 31 | Nonsense: STOP codon | Q1233X | No | 251 |\nL129: | c.2846–2847InsT | 25 | Frameshift: STOP codon | M949IfsX100 | Yes | 278 |\nL130: | c.2258–2259InsT | 21 | Frameshift: STOP codon | K754EfsX78 | Yes | 195, 228 |\nL131: | c.3192–3193InsC | 28 | Frameshift: STOP codon | K1065QfsX11 | No | 194 |\nL132: | c.2654C>T | 24 | Missense | T885M | Yes | 265 |\nL133: | c.2002C>T | 19 | Missense | R668C | Yes | 214 |\nL134: | c.3251T>C | 28 | Missense | L1084P | Yes | 177d, 185d |\nL135: | c. 2311G>A | 22 | Missense | V771M | No | 221 |\nL136: | c.2429 G>A | 25 | Missense | Arg810His | Yes | 270 |\nL137: | c.1373G>A | 14 | Missense | R458H | No | 268 |\nL138: \nL167: Eighteen distinct mutations were found in MYBPC3 (14.4%): five were potential alternative splicing sites (all generated by nucleotide substitutions), seven were stop codons (four caused by nonsense substitutions and three formed from insertions generating frameshifts), and six were missense mutations (Table 3a). Nine (7.2%) unrelated patients harbored novel mutations, whereas 10/125 (8%) carried known mutations. Three of the mutations were present in more than one patient.\nL175: Ten out of the 18 mutations detected (8%) are already described in public mutation databases: A364T (Smaniotto et al., 2009), D605H (Alders et al., 2003), E542Q (Carrier et al., 1997), and c.2309-2A>G (Niimura et al., 2002) are substitutions potentially generating splicing alterations, the last one found in the intronic side of the junction and D605H harbored by three related patients (father, son, and nephew); three (Q969X, Q1012X, and Q1233X) are nonsense mutations creating stop codons in exons 25, 27, and 31, respectively (Yu et al., 1998; Erdmann et al., 2001; Nanni et al., 2003); K1065QfsX11 (Girolami et al., 2006) is a nucleotide insertion generating, through a frameshift, a premature stop codon in exon 28; V771M (Garcia-Castro et al., 2005); and R458H (Van Driest et al., 2004) are missense mutations caused by amino acid substitutions in exon 22 and 14, respectively (Cardiogenomics Mutation Database, 2005; HGMD, http://www.hgmd.cf.ac.uk/ac/all.php)."
+      }
+    ],
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 4096,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.3160375,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-key": "gpt-6-astra",
+    "x-ratelimit-limit-requests": "3500",
+    "x-ratelimit-limit-tokens": "3500000",
+    "x-ratelimit-remaining-requests": "3499",
+    "x-ratelimit-remaining-tokens": "3498195",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-ratelimit-reset-requests": "0",
+    "x-ratelimit-reset-tokens": "0",
+    "x-request-id": "48177681-51d4-4603-a804-046e328cef32",
+    "apim-request-id": "d1cd3790-e3bd-4609-8d77-db6483931c6f",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "choices": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": [],
+          "content": "{\"columns\": [\"sources\", \"variants\", \"family\", \"person\", \"genotype\", \"phenotype\", \"index_case\", \"endpoint_status\"], \"rows\": [[[\"L120\", \"L13\"], [\"A364T\"], null, \"233\", \"Y\", \"HCM\", null, \"positive\"], [[\"L121\", \"L13\", \"L175\"], [\"D605H\"], null, \"180\", \"Y\", \"HCM\", null, \"positive\"], [[\"L121\", \"L13\", \"L175\"], [\"D605H\"], null, \"186\", \"Y\", \"HCM\", null, \"positive\"], [[\"L121\", \"L13\", \"L175\"], [\"D605H\"], null, \"208\", \"Y\", \"HCM\", null, \"positive\"], [[\"L122\", \"L13\"], [\"E542Q\"], null, \"244\", \"Y\", \"HCM\", null, \"positive\"], [[\"L123\", \"L13\"], [\"2309\\u22122\"], null, \"234\", \"Y\", \"HCM\", null, \"positive\"], [[\"L124\", \"L13\"], [\"2905+1\"], null, \"157\", \"Y\", \"HCM\", null, \"positive\"], [[\"L125\", \"L13\"], [\"Q969X\"], null, \"188\", \"Y\", \"HCM\", null, \"positive\"], [[\"L126\", \"L13\"], [\"R493X\"], null, \"220\", \"Y\", \"HCM\", null, \"positive\"], [[\"L127\", \"L13\"], [\"Q1012X\"], null, \"181\", \"Y\", \"HCM\", null, \"positive\"], [[\"L128\", \"L13\"], [\"Q1233X\"], null, \"251\", \"Y\", \"HCM\", null, \"positive\"], [[\"L129\", \"L13\"], [\"M949IfsX100\"], null, \"278\", \"Y\", \"HCM\", null, \"positive\"], [[\"L130\", \"L13\"], [\"K754EfsX78\"], null, \"195\", \"Y\", \"HCM\", null, \"positive\"], [[\"L130\", \"L13\"], [\"K754EfsX78\"], null, \"228\", \"Y\", \"HCM\", null, \"positive\"], [[\"L131\", \"L13\"], [\"K1065QfsX11\"], null, \"194\", \"Y\", \"HCM\", null, \"positive\"], [[\"L132\", \"L13\"], [\"T885M\"], null, \"265\", \"Y\", \"HCM\", null, \"positive\"], [[\"L133\", \"L13\"], [\"R668C\"], null, \"214\", \"Y\", \"HCM\", null, \"positive\"], [[\"L134\", \"L13\"], [\"L1084P\"], null, \"177\", \"Y\", \"HCM\", null, \"positive\"], [[\"L134\", \"L13\"], [\"L1084P\"], null, \"185\", \"Y\", \"HCM\", null, \"positive\"], [[\"L135\", \"L13\"], [\"V771M\"], null, \"221\", \"Y\", \"HCM\", null, \"positive\"], [[\"L136\", \"L13\"], [\"Arg810His\"], null, \"270\", \"Y\", \"HCM\", null, \"positive\"], [[\"L137\", \"L13\"], [\"R458H\"], null, \"268\", \"Y\", \"HCM\", null, \"positive\"]], \"limitations\": [\"Family IDs and individual index-case status are not supplied. L175 identifies the D605H carriers as related without mapping kinship roles to IDs.\", \"Footnote definitions for c/d are absent; these suffixes were removed as instructed.\"]}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788715600,
+    "id": "chatcmpl-ELAvYOdHc8HtU6JuAcapGNO1OTALx",
+    "model": "gpt-6-astra-2026-09-03",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "prompt_index": 0,
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        }
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20260906052358-e2911967-prefill-r7-dp0-prefill"
+    },
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1021,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 198,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 69,
+        "service_tbt_ms": 39,
+        "service_ttft_ms": 1786,
+        "service_ttlt_ms": 41118,
+        "user_visible_ttft_ms": 1717
+      },
+      "prompt_tokens": 1805,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 1802,
+        "cached_tokens": 0
+      },
+      "total_tokens": 2826
+    }
+  },
+  "status": "returned",
+  "seconds": 41.80820366705302,
+  "usage": {
+    "completion_tokens": 1021,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 198,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "pre_inference_ms": 69,
+      "service_tbt_ms": 39,
+      "service_ttft_ms": 1786,
+      "service_ttlt_ms": 41118,
+      "user_visible_ttft_ms": 1717
+    },
+    "prompt_tokens": 1805,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1802,
+      "cached_tokens": 0
+    },
+    "total_tokens": 2826
+  },
+  "api_proxy_usd": 0.0691,
+  "accounted_usd": 0.0736125
+}

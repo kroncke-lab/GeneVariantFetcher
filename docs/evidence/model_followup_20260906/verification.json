@@ -1,0 +1,27 @@
+{
+  "checked_unix": 1788716817.94313,
+  "full_offline_suite": "2951 passed",
+  "post_format_focused_and_freshness": "30 passed",
+  "compileall": "passed",
+  "isolated_wheel_source_data_files": 159,
+  "installed_runtime_and_CLI_help": "passed",
+  "visual_qa": [
+    "bounded_roster_comparison.png",
+    "canonical stratified figure",
+    "original DOC page3 blank family geometry"
+  ],
+  "original_ledger_unchanged": true,
+  "cli_reviews": {
+    "design": 3,
+    "source": 3,
+    "results": 3
+  },
+  "model_calls_after_final_budget_summary": 0,
+  "log_sha256": {
+    "unit_suite.log": "30fb4e27aa627a8942c04270ab4beeb5564f791001fdd4ae898dfb259b9aff23",
+    "final_focused.log": "38ebcf6bd7c7ade8d8026af29aafb58bfa1d682b44d2be77e3f88be6de584ddb",
+    "wheel_smoke.log": "6fe26298d66479084c2a02fbe40b64fe76181569efc2ac46c52383a144e61be1",
+    "wheel_cli_help.log": "cfb1589c77dbfcea6f10e53bee536e3ea98f434dc3ff527dd9b16849d4462527",
+    "wheel_gvf_run_help.log": "f873adca346419e2b1048b063e05a3aa3e5df591f64152edfa2fa5b0d0c440d1"
+  }
+}

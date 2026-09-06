@@ -1,0 +1,23 @@
+{
+  "name": "grok_chat_low_1024",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly OK."
+      }
+    ],
+    "max_tokens": 1024,
+    "reasoning_effort": "low"
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 55,
+  "reserved_usd": 0.0115965,
+  "status": "failed",
+  "error_type": "ReadTimeout",
+  "error": "The read operation timed out",
+  "seconds": 55.171396416961215,
+  "accounted_usd": 0.0115965
+}

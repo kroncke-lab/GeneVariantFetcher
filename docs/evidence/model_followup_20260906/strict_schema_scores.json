@@ -1,0 +1,1714 @@
+{
+  "graded_unix": 1788716358.834264,
+  "classification": "Post-hoc schema and prompt refinement, not primary randomized effort comparison",
+  "lock_sha256": "6398361539cda3045f1eda3d2e4595b900bd9905fbb8d5b6fe04798fafbe9990",
+  "results": [
+    {
+      "packet": "ryr304_multivariant",
+      "reference_people": 15,
+      "reference_counts": {
+        "r417l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "f3496l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s3938r": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r485q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "i2075t": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "k4594r": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2028h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "y4721c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t1107m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r2474k": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a1136v": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l4188p": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g1886s": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s2246l": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "h2464d": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "g1885e": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2401h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g4772s": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.3599-9delt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.14091-11dupt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a2317e": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "status": "scored",
+      "exact_people": 15,
+      "missing_people": 0,
+      "extra_people": 0,
+      "field_differences": [],
+      "source_binding_errors": [],
+      "endpoint_errors": [],
+      "duplicate_people": [],
+      "counts": {
+        "r417l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "f3496l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s3938r": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r485q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "i2075t": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "k4594r": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2028h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "y4721c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t1107m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r2474k": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a1136v": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l4188p": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g1886s": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s2246l": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "h2464d": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "g1885e": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2401h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g4772s": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.3599-9delt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.14091-11dupt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a2317e": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "count_comparison": [
+        {
+          "variant": "a1136v",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a1136v",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a1136v",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "a2317e",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a2317e",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a2317e",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "c.14091-11dupt",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "c.14091-11dupt",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "c.14091-11dupt",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "c.3599-9delt",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "c.3599-9delt",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "c.3599-9delt",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "f3496l",
+          "field": "carriers",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "f3496l",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "f3496l",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "g1885e",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g1885e",
+          "field": "positive",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "g1885e",
+          "field": "negative",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g1886s",
+          "field": "carriers",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g1886s",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g1886s",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "g4772s",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g4772s",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "g4772s",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "h2464d",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "h2464d",
+          "field": "positive",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "h2464d",
+          "field": "negative",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "i2075t",
+          "field": "carriers",
+          "actual": 3,
+          "reference": 3,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "i2075t",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "i2075t",
+          "field": "negative",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k4594r",
+          "field": "carriers",
+          "actual": 3,
+          "reference": 3,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k4594r",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k4594r",
+          "field": "negative",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "l4188p",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "l4188p",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "l4188p",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r2028h",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2028h",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2028h",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r2401h",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2401h",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2401h",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r2474k",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2474k",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r2474k",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r417l",
+          "field": "carriers",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r417l",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r417l",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r485q",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r485q",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r485q",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "s2246l",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "s2246l",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "s2246l",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "s3938r",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "s3938r",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "s3938r",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "t1107m",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "t1107m",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "t1107m",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "y4721c",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "y4721c",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "y4721c",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        }
+      ],
+      "seconds": 45.347490667016245,
+      "api_proxy_usd": 0.06741,
+      "accounted_usd": 0.0728125,
+      "finish_reason": "stop",
+      "reasoning_tokens": 0,
+      "returned_people": 15,
+      "limitations": [
+        "L111 calls subject 5 'Sister of subject 5'; this self-sibling wording is unresolved and no people were merged.",
+        "L101's aggregate variant composition conflicts with subject 13's DSG variant in L119; roster variants follow Table 1 and the subject-14 footnote.",
+        "No family IDs are supplied. Relatives mentioned in Family History are not roster records."
+      ],
+      "roster_values_exact": true,
+      "complete_source_bound_roster": true,
+      "correct_empty_roster": null,
+      "source_adjudicated_complete_variant_counts": {
+        "r417l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "f3496l": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s3938r": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r485q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "i2075t": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "k4594r": {
+          "carriers": 3,
+          "positive": 2,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2028h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "y4721c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t1107m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r2474k": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a1136v": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l4188p": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g1886s": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "s2246l": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "h2464d": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "g1885e": {
+          "carriers": 1,
+          "positive": 0,
+          "negative": 1,
+          "unknown": 0
+        },
+        "r2401h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "g4772s": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.3599-9delt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "c.14091-11dupt": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "a2317e": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "model_probe": "astra_strict_ryr304_multivariant"
+    },
+    {
+      "packet": "myb213_patient_ids",
+      "reference_people": 22,
+      "reference_counts": {
+        "a364t": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "d605h": {
+          "carriers": 3,
+          "positive": 3,
+          "negative": 0,
+          "unknown": 0
+        },
+        "e542q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2309-2": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2905+1": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q969x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r493x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1012x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1233x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "m949ifsx100": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k754efsx78": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k1065qfsx11": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t885m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r668c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l1084p": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "v771m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "arg810his": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r458h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "status": "scored",
+      "exact_people": 22,
+      "missing_people": 0,
+      "extra_people": 0,
+      "field_differences": [],
+      "source_binding_errors": [],
+      "endpoint_errors": [],
+      "duplicate_people": [],
+      "counts": {
+        "a364t": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "d605h": {
+          "carriers": 3,
+          "positive": 3,
+          "negative": 0,
+          "unknown": 0
+        },
+        "e542q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2309-2": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2905+1": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q969x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r493x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1012x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1233x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "m949ifsx100": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k754efsx78": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k1065qfsx11": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t885m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r668c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l1084p": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "v771m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "arg810his": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r458h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "count_comparison": [
+        {
+          "variant": "2309-2",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "2309-2",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "2309-2",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "2905+1",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "2905+1",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "2905+1",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "a364t",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a364t",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "a364t",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "arg810his",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "arg810his",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "arg810his",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "d605h",
+          "field": "carriers",
+          "actual": 3,
+          "reference": 3,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "d605h",
+          "field": "positive",
+          "actual": 3,
+          "reference": 3,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "d605h",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "e542q",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "e542q",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "e542q",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "k1065qfsx11",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k1065qfsx11",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k1065qfsx11",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "k754efsx78",
+          "field": "carriers",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k754efsx78",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "k754efsx78",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "l1084p",
+          "field": "carriers",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "l1084p",
+          "field": "positive",
+          "actual": 2,
+          "reference": 2,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "l1084p",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "m949ifsx100",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "m949ifsx100",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "m949ifsx100",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "q1012x",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q1012x",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q1012x",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "q1233x",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q1233x",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q1233x",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "q969x",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q969x",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "q969x",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r458h",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r458h",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r458h",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r493x",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r493x",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r493x",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "r668c",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r668c",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "r668c",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "t885m",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "t885m",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "t885m",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        },
+        {
+          "variant": "v771m",
+          "field": "carriers",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "v771m",
+          "field": "positive",
+          "actual": 1,
+          "reference": 1,
+          "exact": true,
+          "reference_positive": true
+        },
+        {
+          "variant": "v771m",
+          "field": "negative",
+          "actual": 0,
+          "reference": 0,
+          "exact": true,
+          "reference_positive": false
+        }
+      ],
+      "seconds": 150.6120026250137,
+      "api_proxy_usd": 0.017732,
+      "accounted_usd": 0.018781,
+      "finish_reason": "stop",
+      "reasoning_tokens": 511,
+      "returned_people": 22,
+      "limitations": [
+        "Family IDs and index/proband status were not assigned because they were not given as identifiers; footnote letters were stripped from person IDs only.",
+        "Panel (b) was excluded as instructed."
+      ],
+      "roster_values_exact": true,
+      "complete_source_bound_roster": true,
+      "correct_empty_roster": null,
+      "source_adjudicated_complete_variant_counts": {
+        "a364t": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "d605h": {
+          "carriers": 3,
+          "positive": 3,
+          "negative": 0,
+          "unknown": 0
+        },
+        "e542q": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2309-2": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "2905+1": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q969x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r493x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1012x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "q1233x": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "m949ifsx100": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k754efsx78": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "k1065qfsx11": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "t885m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r668c": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "l1084p": {
+          "carriers": 2,
+          "positive": 2,
+          "negative": 0,
+          "unknown": 0
+        },
+        "v771m": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "arg810his": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        },
+        "r458h": {
+          "carriers": 1,
+          "positive": 1,
+          "negative": 0,
+          "unknown": 0
+        }
+      },
+      "model_probe": "grok_strict_myb213_patient_ids"
+    }
+  ]
+}

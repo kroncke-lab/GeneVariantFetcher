@@ -138,10 +138,25 @@ def test_new_model_effort_reaches_actual_sdk_request(monkeypatch, model, effort)
     )
     assert len(sent) == 1
     assert sent[0]["reasoning_effort"] == effort
-    cap = "max_completion_tokens" if model == "gpt-6-astra" else "max_tokens"
-    assert sent[0][cap] == 32000
+    assert sent[0]["max_completion_tokens"] == 32000
+    assert "max_tokens" not in sent[0]
     if model == "gpt-6-astra":
         assert "temperature" not in sent[0]
+
+
+@pytest.mark.parametrize("model", ["gpt-6-astra", "grok-4.6"])
+def test_reasoning_cap_preserves_explicit_modern_value(model):
+    _, kwargs = resolve_litellm_model_and_kwargs(
+        "openai/" + model, max_tokens=32000, max_completion_tokens=1024
+    )
+    assert kwargs["max_completion_tokens"] == 1024
+    assert "max_tokens" not in kwargs
+
+
+def test_older_grok_retains_legacy_cap():
+    _, kwargs = resolve_litellm_model_and_kwargs("openai/grok-4.3", max_tokens=2048)
+    assert kwargs["max_tokens"] == 2048
+    assert "max_completion_tokens" not in kwargs
 
 
 @pytest.mark.parametrize(

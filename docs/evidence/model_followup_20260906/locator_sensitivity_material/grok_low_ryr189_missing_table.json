@@ -1,0 +1,97 @@
+{
+  "name": "grok_low_ryr189_missing_table",
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Read only the supplied current-study source packet. Return a compact patient roster, not scalar totals. Use only individually identified people in the target table; do not manufacture people from aggregate counts, cells, healthy-control denominators, repeated tests or earlier publications. A person carrying multiple target-gene variants is one record with multiple variants. Index cases already occur in the roster. Include explicitly listed noncarriers with genotype N. Canonical genotype values Y/N/?; missing family or index status is JSON null. Preserve literal phenotype evidence (including No Dx or unknown marks). Strip index stars and footnote letters from person IDs, not digits. Preserve variant spelling except remove gene prefix and p. prefix and whitespace; use the target variant column specified below. Source references must include the actual table row and any necessary footnote/cohort/join line; never cite an unrelated row. Record identifiers only from supplied source. No external facts or medical inference. Map endpoint_status to positive/negative/unknown only according to the defined endpoint and source; asymptomatic does not generally mean disease negative, and follow-up status does not erase baseline disease. Preserve uncertainty, don't silently reconcile contradictions. If the packet has no individually identified patient roster, return rows:[] and explain why in limitations; aggregate counts are not person records. Keep explanations short. Return JSON only: {\"columns\":[\"sources\",\"variants\",\"family\",\"person\",\"genotype\",\"phenotype\",\"index_case\",\"endpoint_status\"],\"rows\":[...],\"limitations\":[]}. Each row is an 8-element array; sources and variants are arrays of strings. Do not repeat column names or provide scalar counts.\n\nTARGET: RYR2; PMID 18929323\nTASK: This packet includes study-subject prose but not Table 1 itself. Do not turn cohort totals or repeated Holters into individual people. No roster can be reconstructed without individual identifiers.\nSOURCE:\nL19: #### Study subjects\nL20: \nL21: We studied 19 CPVT patients and 19 unaffected control subjects. For this study, we reviewed Finnish families with a known RyR2 mutation. Nineteen gene-positive patients coming from 2 affected families participated in the study protocol. Thus, a 24-h ECG recording was performed in each patient carrying 1 of 2 different RyR2 mutations (P2328S, n = 13, or V4653F, n = 6). Thirteen patients (68%) had either exercise-related syncope or cardiac arrest in their medical history ( Table 1 ). In the past history of the 2 families, the cumulative mortality by the age of 30 years was 31%. 2\nL22: \nL23: All CPVT patients had normal findings on echocardiography, and at baseline electrolyte test, none showed electrolyte abnormalities. None of the patients were taking any medications known to affect the QT interval. The CPVT patients first performed a bicycle ergometer exercise test with continuous ECG recording. The heart rate at which ventricular bigeminy appeared was recorded. After the exercise test the 24-h ECG recording was started. Treatment with beta-adrenergic blocking agents was discontinued at least 5 drug half-lives before the exercise test until the study protocols were completed. After completing the tests, all 17 patients using regular beta-blocker medication continued the treatment. Two asymptomatic patients with no ventricular arrhythmias during exercise testing did not use beta-blocker medications. Twelve of 17 patients (P2328S, n = 6; V4653F, n = 6) repeated a second 24-h ECG recording while on a tolerable dose of a beta-blocker medication ( Table 1 ); 5 patients refused the second Holter recording.\nL24: \nL25: For control subjects, we reviewed our database of genotyped unaffected healthy family members of patients with symptomatic long QT syndrome with available Holter recordings. We took the closest age match for each male patient and each female patient with a RyR2 mutation. No control subject took beta-blockers or any other medication known to affect cardiac repolarization.\nL26: \nL27: Table 1 shows the ECG characteristics of the study subjects. All study subjects were in sinus rhythm, and none showed a bundle-branch block. Normal daily activities were encouraged during the recordings. The study complies with the Declaration of Helsinki. The Ethical Review Committee of the Department of Medicine, University of Helsinki, approved the study and informed consent was obtained from all participants.\nL28: \nL29: #### Holter recordings and analyses\nL30: \nL31: The 24-h ECG recordings were done using commercial tape recorders (model 8500; Marquette Electronics Inc., Milwaukee, WI). The tapes were initially analyzed with a Marquette 8000 Holter Analysis system (version 5.8 software) to label the QRS complexes to normal, ventricular extrasystoles, or aberrant complexes. The ECG data were then transferred to a personal computer for further analysis."
+      }
+    ],
+    "reasoning_effort": "low",
+    "max_completion_tokens": 1024,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/chat/completions",
+  "retries": 0,
+  "timeout_seconds": 180,
+  "reserved_usd": 0.024114,
+  "http_status": 200,
+  "headers": {
+    "x-request-id": "27bc18f8-7c0d-4784-8535-6a448d4ababf",
+    "x-ms-client-request-id": "fc9b826f-4d08-4d11-838e-0f02107b7d84",
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "48719",
+    "x-ratelimit-reset-tokens": "1",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "apim-request-id": "fc9b826f-4d08-4d11-838e-0f02107b7d84",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "27bc18f8-7c0d-4784-8535-6a448d4ababf",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"columns\": [\"sources\", \"variants\", \"family\", \"person\", \"genotype\", \"phenotype\", \"index_case\", \"endpoint_status\"], \"rows\": [], \"limitations\": [\"Packet has only study-subject prose and aggregate n (19 patients, 2 families, P2328S n=13 / V4653F n=6) plus mentions of Table 1; no individually identified people, IDs, or per-person rows. Cohort totals and repeated Holters are not person records.\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1045,
+      "completion_tokens": 115,
+      "total_tokens": 1383,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 310,
+        "audio_tokens": 0,
+        "text_tokens": 1045,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 223,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788715683,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "status": "returned",
+  "seconds": 7.392774582956918,
+  "usage": {
+    "prompt_tokens": 1045,
+    "completion_tokens": 115,
+    "total_tokens": 1383,
+    "audio_prompt_tokens": 0,
+    "prompt_tokens_details": {
+      "cached_tokens": 310,
+      "audio_tokens": 0,
+      "text_tokens": 1045,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 223,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "num_sources_used": 0
+  },
+  "api_proxy_usd": 0.004118,
+  "accounted_usd": 0.0046405
+}

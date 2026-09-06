@@ -1,0 +1,14 @@
+{
+  "prepared_unix": 1788715670.372917,
+  "order": [
+    "modern",
+    "legacy",
+    "modern"
+  ],
+  "prompt": "Return exactly OK.",
+  "effort": "low",
+  "cap": 256,
+  "timeout": 55,
+  "only_payload_change": "max_completion_tokens versus max_tokens",
+  "legacy_unknown_output_reserve": 128000
+}

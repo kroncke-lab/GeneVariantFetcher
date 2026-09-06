@@ -1,0 +1,137 @@
+{
+  "name": "grok_responses_low_256",
+  "request": {
+    "model": "grok-4.6",
+    "input": "Return exactly OK.",
+    "reasoning": {
+      "effort": "low"
+    },
+    "max_output_tokens": 256
+  },
+  "endpoint": "https://magen-api-2-resource.services.ai.azure.com/openai/v1/responses",
+  "retries": 0,
+  "timeout_seconds": 55,
+  "reserved_usd": 0.006931,
+  "http_status": 200,
+  "headers": {
+    "x-ratelimit-key": "grok-4.6",
+    "x-ratelimit-remaining-requests": "49",
+    "x-ratelimit-reset-requests": "1",
+    "x-ratelimit-limit-requests": "50",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "49996",
+    "x-ratelimit-reset-tokens": "0",
+    "x-ratelimit-limit-tokens": "50000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "x-request-id": "dcb4e8b6-93e6-4b84-9969-2fd7d1f0b3d4",
+    "apim-request-id": "639bb74a-f0f0-4a0e-a1c5-3e93a0b15fce",
+    "x-ms-region": "East US 2"
+  },
+  "response": {
+    "id": "resp_012fefae3fa3f99b006a9da11b69f4819089da66c9ced9076a",
+    "object": "response",
+    "created_at": 1788715291,
+    "status": "completed",
+    "background": false,
+    "completed_at": 1788715294,
+    "content_filters": null,
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 256,
+    "max_tool_calls": null,
+    "model": "grok-4.6",
+    "moderation": null,
+    "output": [
+      {
+        "id": "msg_012fefae3fa3f99b006a9da11e8b6c8190b53e5109187854f5",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "OK"
+          }
+        ],
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": false,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "context": null,
+      "effort": "low",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "auto",
+    "store": true,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [],
+    "top_logprobs": 0,
+    "top_p": 1.0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 4,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 79,
+      "output_tokens_details": {
+        "reasoning_tokens": 78
+      },
+      "total_tokens": 83
+    },
+    "user": null,
+    "metadata": {}
+  },
+  "status": "returned",
+  "seconds": 3.4817259999690577,
+  "usage": {
+    "input_tokens": 4,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 79,
+    "output_tokens_details": {
+      "reasoning_tokens": 78
+    },
+    "total_tokens": 83
+  },
+  "api_proxy_usd": 0.000482,
+  "accounted_usd": 0.000484
+}
