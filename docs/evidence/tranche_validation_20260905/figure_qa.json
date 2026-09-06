@@ -1,0 +1,64 @@
+{
+  "checked": [
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/figures/phenotype_count_recovery.png",
+      "sha256": "1318a380ef8daba86bd30fdb3e305494daa3fc5b0062a8b41da1890071c08a1c",
+      "visual_review": "Legible axes and labels, distinct missing/count-supplied markers, correct 120-attempt run identity; no material clipping. Difference panels retain all asserted rows; paired candidate figure displays the registered non-passing result."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/figures/gold_difference.png",
+      "sha256": "ddfed07ade8dcf5c1fa05a723bbd90ed5e204ccffb810ad31e97fa7e9777bcac",
+      "visual_review": "Legible axes and labels, distinct missing/count-supplied markers, correct 120-attempt run identity; no material clipping. Difference panels retain all asserted rows; paired candidate figure displays the registered non-passing result."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/figures/phenotype_count_recovery.png",
+      "sha256": "b8e411978226f8c514bc0ab4b6fbaea6d7ff8e54f3346da449494cf846f2c91e",
+      "visual_review": "Legible axes and labels, distinct missing/count-supplied markers, correct 120-attempt run identity; no material clipping. Difference panels retain all asserted rows; paired candidate figure displays the registered non-passing result."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/figures/gold_difference.png",
+      "sha256": "6d8eda792e771339d18a321de5376772b44edbbca66b9dbbeb445e80dbe5a4d7",
+      "visual_review": "Legible axes and labels, distinct missing/count-supplied markers, correct 120-attempt run identity; no material clipping. Difference panels retain all asserted rows; paired candidate figure displays the registered non-passing result."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/figures/gold_difference.png",
+      "sha256": "f0181b297337c046c3cbd1039fd582eaf3eddf1b92e859b5aef1ddb685aab585",
+      "visual_review": "Legible labels and axes, all 20 identities matched with no supplied counts; affected abstentions at reference 1, unaffected at reference 0. Zero-imputed exactness is distinct from supplied count capture. No material clipping."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/figures/phenotype_count_recovery.png",
+      "sha256": "5c51bca9c578dd33e31381a5cae3574a4d5a12db50a294c22aa38a92209848c9",
+      "visual_review": "Legible labels and axes, all 20 identities matched with no supplied counts; affected abstentions at reference 1, unaffected at reference 0. Zero-imputed exactness is distinct from supplied count capture. No material clipping."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/figures/gold_difference.png",
+      "sha256": "95087078ad90c2d8db9402c8a1e526e5ffb38fd7cb88073727134349418099b6",
+      "visual_review": "Legible labels and axes, 120-attempt baseline identity with correct runtime. Difference plot includes 959 asserted rows per field and the large H558R omission. No material clipping. Canonical companion distinguishes disagreement and exact/zero-baseline points."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/figures/phenotype_count_recovery.png",
+      "sha256": "03926c223dd07222720177b4dd33f4969e684699d7ec4aee9143e9459c4a65f0",
+      "visual_review": "Legible labels and axes, 120-attempt baseline identity with correct runtime. Difference plot includes 959 asserted rows per field and the large H558R omission. No material clipping. Canonical companion distinguishes disagreement and exact/zero-baseline points."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/figures/gold_difference.png",
+      "sha256": "19e9a00f22a33a05a4d97fad918ecadb210dcfcdc0600e4e52a64d6a54115809",
+      "visual_review": "Legible paired labels and registered non-passing bounds; all 959 asserted rows per field retained, including H558R. No material clipping."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/figures/phenotype_count_recovery.png",
+      "sha256": "973edff97d2e5fb153a016544cb431895e9c6bc573d0cd0cd6e5153e0608fbbe",
+      "visual_review": "Legible 120-attempt candidate labels and agreement/missing markers. No material clipping."
+    },
+    {
+      "path": "docs/figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.png",
+      "sha256": "c92163a9f96632473734d620bdd1b72b20ec15e8f792af200b4a5a39620f876f",
+      "visual_review": "Legible separate legacy and opened-candidate panels. 118 legacy plus 458 opened mixed candidate attempts span older runtime revisions; not pooled current-runtime performance. H558R 408 is beyond the canonical 110-count axes by policy, and is retained in the all-row companion."
+    },
+    {
+      "path": "docs/figures/mixed_gold_opened_candidates/phenotype_count_recovery.png",
+      "sha256": "25a2a97459aac59b63ad489da9a90597bad5ac6e4f67169bd5bacf518f636633",
+      "visual_review": "Legible 458-attempt opened-candidate historical aggregation; multiple revisions, not a new same-runtime performance estimate. No material clipping."
+    }
+  ]
+}

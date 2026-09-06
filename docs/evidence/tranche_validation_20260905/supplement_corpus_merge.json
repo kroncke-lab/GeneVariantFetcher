@@ -1,0 +1,44 @@
+{
+  "applied_at_utc": "2026-09-06T00:55:50.536310+00:00",
+  "command": "scripts/build_source_corpus.py --roots validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus --gene SCN5A --out corpus --apply",
+  "actions_each_pass": {
+    "add": 0,
+    "upgrade": 1,
+    "noop": 0
+  },
+  "passes": 3,
+  "reason_for_second_pass": "First pass upgraded text but file-count comparison kept two unrelated old supplement files instead of two real ones. Retaining the original publisher ZIP alongside its two extracted members made the supported builder replace the stale folder. Recommend provenance/validity comparison instead of file-count-only ordering.",
+  "verified_source_files": {
+    "corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md": "a83efedf5c3465b09348fcbb5fac39618cebc1c854b893c0e9ff31da1cfc1156",
+    "corpus/SCN5A/25163546/25163546_artifacts.json": "c4d6cf2bee66ab205f17ea1199998a226b25c464c5e4ef057494f60924861f33",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301_Supplementary_Data.zip": "c3effc082439355a36baef9c28bb2de4413818c7b22aed57d8e021b1e3ee071f",
+    "corpus/SCN5A/25163546/25163546_supplements/acquisition_receipt.json": "d39fc85bb1fed3265a376a8fb7aca3b0d83d3c6eede87b9178fe184689823f2b",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301_Supplementary_Data/ehu301supp_tables.pdf": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301_Supplementary_Data/ehu301supp.docx": "eb1fd0730278d1c336b2fa54ae025b9d74e0a132993e2b5959ff233fd058b18b"
+  },
+  "no_prediction_or_database_write": true,
+  "paired_tranche_snapshots_previously_frozen": true,
+  "initial_verified_source_files": {
+    "corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md": "0369b9ae6cb98a797c3e5f0813cce33c55a1254fef75bef406a5d2be74396c1c",
+    "corpus/SCN5A/25163546/25163546_artifacts.json": "35266b5a503349243e141c4d5f52a1d4f5ecdfd71d1b077a91b45679d32b1255",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301_Supplementary_Data.zip": "c3effc082439355a36baef9c28bb2de4413818c7b22aed57d8e021b1e3ee071f",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301supp_tables.pdf": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122",
+    "corpus/SCN5A/25163546/25163546_supplements/ehu301supp.docx": "eb1fd0730278d1c336b2fa54ae025b9d74e0a132993e2b5959ff233fd058b18b"
+  },
+  "final_layout_update": {
+    "applied_at_utc": "2026-09-06T01:18:59.338851+00:00",
+    "source_tree": "validation_runs/tranche_validation_20260905/supplement_recheck/corpus_ready/SCN5A/25163546",
+    "dry_run_and_apply": {
+      "add": 0,
+      "upgrade": 1,
+      "noop": 0
+    },
+    "source_members": "Original ZIP with two members in its stem directory and a source-only receipt; standard fold sentinels",
+    "local_reuse_evidence": "cache_reuse_check.json"
+  },
+  "final_builder_dry_run": {
+    "add": 0,
+    "upgrade": 0,
+    "noop": 1
+  }
+}

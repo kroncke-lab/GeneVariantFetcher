@@ -1,0 +1,82 @@
+{
+  "updated_date": "2026-09-06",
+  "classification": "Engineering planning scenarios, not confidence intervals, measured fresh-cohort outcomes or acceptance criteria",
+  "supersedes": "prior_forecast.json; retain that file unchanged",
+  "broader_existing_source_reader": {
+    "registered_identity_passes": 0,
+    "registered_carrier_secondary_passes": 0,
+    "tranches": 2,
+    "pooled_recall_delta_pp": -0.13071895424836555,
+    "planning_recall_gain_pp": 0,
+    "planning_au_relative_error_reduction_range": [
+      0,
+      0.05
+    ],
+    "rationale": "No confirmed recall transfer. AU error fell 2.87% in pair02 and 4.01% in pair03 after removing the disputed 408 row; pooled residual 3.43%. 0\u20135% is a cautious planning allowance, not an empirically calibrated bound. Regression remains possible.",
+    "fp_reduction": "No reliable reduction forecast; pooled FP 315 to 315.",
+    "remaining_acquisition_and_clinical_reader_work": "No corpus-wide numerical yield established; source-selected successes cannot determine prevalence or automated retrieval success."
+  },
+  "original_hard_continuation01": {
+    "reference_run": "20260903_protocol_cont120_01_candidate",
+    "reference_tp": 261,
+    "reference_fp": 141,
+    "reference_fn": 123,
+    "gold_identities": 384,
+    "reference_au_error": 576,
+    "selected_two_paper_substitution": {
+      "pmids": [
+        "20031634",
+        "25163546"
+      ],
+      "tp": 292,
+      "fp": 143,
+      "fn": 92,
+      "recall": 0.7604166666666666,
+      "precision": 0.671264367816092,
+      "relative_fn_reduction": 0.25203252032520324,
+      "au_error": 506,
+      "relative_au_error_reduction": 0.12152777777777778,
+      "fresh_full_cohort_score": false
+    },
+    "planning_recall": {
+      "central": 0.76,
+      "range": [
+        0.74,
+        0.78
+      ],
+      "increment_from_unimplemented_work_in_central": 0,
+      "relative_fn_reduction_range": [
+        0.18829268292682902,
+        0.3131707317073169
+      ],
+      "basis": "Rounded selected-paper substitution, assuming retained recovery and net-neutral remaining identity work. Range allows roughly eight identities of run variation each way; it is a judgment, not a fitted interval."
+    },
+    "planning_au": {
+      "central_relative_error_reduction": 0.12152777777777778,
+      "range": [
+        0.1,
+        0.17
+      ],
+      "increment_from_unimplemented_work_in_central": 0,
+      "conditional_additional_reduction_upper_bound": 0.050347222222222224,
+      "basis": "Existing 70-unit reduction from 20031634; 25163546 supplies no counts. Up to 29 additional affected-error units are present in 21302287, only if all are source-resolvable and correctly recovered. Approximate 17% upper scenario is not a guarantee."
+    },
+    "precision": "Selected substitution 67.13%; no general preservation or FP-reduction promise.",
+    "excluded_upside": [
+      "RYR2 25814417 endpoint rule is already implemented",
+      "SCN5A 30059973 and RYR2 30403697 belong to other reference cohorts",
+      "H558R 408 gain belongs to the new tranches and has unresolved unit/attribution"
+    ]
+  },
+  "review_basis": [
+    "grok_review_final_raw.json",
+    "agy_review_final_raw.json",
+    "review_adjudication.md"
+  ],
+  "input_sha256": {
+    "results.json": "c06a54ff6e926cb06b41a46ad31eac033f5fb96f2bd26ccafc3db1c9857b8a1d",
+    "prior_forecast.json": "023ec1e1eefc18e57bc344d7bdcab8b6d80144894145d14c1d0c848717b7e3d4",
+    "supplement_check_results.json": "b3dcb9929d710eead728de11b79704b89231ecba0c6cc657f2eb05497c6f7a22",
+    "outlier_sensitivity.json": "9793a0d3ac5faa4820cf0a091849969b50f5eab139dcc53bb280df975ca383c9"
+  }
+}

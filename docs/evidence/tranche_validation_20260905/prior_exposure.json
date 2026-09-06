@@ -1,0 +1,1332 @@
+{
+  "tranche_02": {
+    "attempts": 120,
+    "unique_pmids": 110,
+    "previously_scored_pmids": {
+      "20038812": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "29037160": [
+        "codex_20260723_seed2026072301"
+      ],
+      "27566755": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "16272262": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "25814417": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "26496715": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "20368164": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "30036649": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "26848529": [
+        "20260810_brca2_8_production",
+        "20260810_brca2_8_production_paperonly",
+        "20260813_experimental_brca2_gold2",
+        "20260820_brca2_gold2_noinference"
+      ],
+      "29709101": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "29650123": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "14571276": [
+        "codex_20260723_comparison20_routed"
+      ],
+      "30246897": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "11844290": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "18285261": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "25236808": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "22764740": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "11854117": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ]
+    },
+    "previously_unscored_attempts": [
+      {
+        "gene": "SCN5A",
+        "pmid": "21216356"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28491684"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "29331839"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "11748104"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "32218223"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "35439358"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17897635"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "30371189"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "18803136"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "29672598"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "29372044"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15851440"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "21292648"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17205354"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "18464931"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "14676148"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19843921"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "11304498"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "28100344"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "11274952"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28739862"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "31899541"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "32830254"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "25139741"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "11150514"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "17038145"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "10690282"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "25786344"
+      },
+      {
+        "gene": "APOE",
+        "pmid": "27108409"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26036855"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "12051963"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "15364333"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "30878014"
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28837624"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21596231"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "21130771"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26636822"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "28158428"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24112685"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "26022593"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "30244407"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "31875585"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24613995"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "23276942"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "23400408"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "9693036"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15851227"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "26847485"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "23237912"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19083750"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "24057343"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "27761169"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24144883"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "24112685"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19808664"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "23350853"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "16627448"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21609529"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "34135346"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24363796"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30157307"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "35245853"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "18776039"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "18929323"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17442746"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "27676163"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15161528"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "16039271"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "27082542"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "32405922"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "22250012"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "18400097"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "30170673"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "21216356"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17198989"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30471092"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21321465"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "30244407"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29672598"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "22885917"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17331104"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29791480"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "28491650"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "16980337"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24445991"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25757662"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24349418"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "23237912"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20137763"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15996170"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "17171344"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20022821"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19762097"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "18452876"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15121794"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "18441444"
+      }
+    ]
+  },
+  "tranche_03": {
+    "attempts": 120,
+    "unique_pmids": 110,
+    "previously_scored_pmids": {
+      "10220144": [
+        "codex_20260723_comparison20_routed"
+      ],
+      "25463374": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "31520628": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "12062363": [
+        "codex_20260723_seed2026072301"
+      ],
+      "28341781": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "22966897": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "15500450": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "18675227": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "28237968": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "32866913": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "27225049": [
+        "codex_20260723_comparison20_routed"
+      ],
+      "18451998": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "32533946": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118",
+        "20260905_mechanism10_candidate"
+      ],
+      "15365993": [
+        "20260810_brca2_8_production",
+        "20260810_brca2_8_production_paperonly"
+      ],
+      "25435091": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118",
+        "20260905_mechanism10_candidate"
+      ],
+      "28491547": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "18713323": [
+        "20260724_fixed48_grok",
+        "20260724_fixed48_sol",
+        "20260724_legacy48_grok",
+        "20260726_fixed48_production",
+        "20260726_fixed48_production_paperonly",
+        "codex_20260723_highcarrier48_routed"
+      ],
+      "33536282": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ],
+      "12093772": [
+        "codex_20260723_comparison20_routed"
+      ],
+      "28087622": [
+        "20260813_gold120_current",
+        "20260813_gold120_verticalfix",
+        "20260820_gold119_noinference",
+        "20260821_candidate_local_gold119",
+        "20260821_current_changes_gold119",
+        "20260821_scanner_attribution_gold119",
+        "20260821_table_attribution_gold119",
+        "20260824_aha_table_sourcebound_gold118",
+        "20260824_grouped_structural_gold118",
+        "20260824_postfix_gold118",
+        "20260824_source_recovery_gold118",
+        "20260902_channelopathy_context_gold118",
+        "20260902_false_zero_recovery_gold118",
+        "20260902_paper_target_guard_gold118",
+        "20260902_patient_row_phenotype_gold118_rerun",
+        "20260902_patient_row_phenotype_v2_gold118",
+        "20260902_zero_claim_guard_gold118"
+      ]
+    },
+    "previously_unscored_attempts": [
+      {
+        "gene": "SCN5A",
+        "pmid": "18822425"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "19843919"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "18060054"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "24269949"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "25230101"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15689442"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "22885918"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "21499742"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "21895724"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "23498838"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29017927"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "34130155"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "17697823"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "27871843"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "10735633"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "24113177"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25483584"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26412604"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25261036"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "30419068"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19026623"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "25634836"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "21659649"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "23995044"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28493952"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25401102"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "12796143"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "25914329"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29572929"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "30337886"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28011106"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "21459285"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21051419"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "19157587"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "19781797"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "22885918"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "19843919"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28104484"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "24372464"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "23995044"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26733869"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15338453"
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "16858239"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "14642691"
+      },
+      {
+        "gene": "BRCA1",
+        "pmid": "10441573"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29540853"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "25616976"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "22402334"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "31565860"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "18551196"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "22885918"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28294644"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "16945804"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28781849"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "16918210"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "26412604"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20129283"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "12569159"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19377070"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24871449"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "27756708"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "11997281"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "22402334"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "23998552"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "27871843"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "30354299"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26279430"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "14990510"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "24059039"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "26423924"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "31751991"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "29506689"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21705349"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "15520322"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "19841300"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "18984536"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "11997281"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "33552729"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "22519808"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "18266681"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "28249770"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "25987402"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "26412604"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25065297"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "16239976"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "26667357"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "12808265"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28069705"
+      },
+      {
+        "gene": "KCNH2",
+        "pmid": "19136169"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "28584071"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "21552533"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "28814790"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25179549"
+      },
+      {
+        "gene": "KCNQ1",
+        "pmid": "26279191"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20102920"
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "31970460"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "18156160"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "19318916"
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "22155680"
+      }
+    ]
+  }
+}

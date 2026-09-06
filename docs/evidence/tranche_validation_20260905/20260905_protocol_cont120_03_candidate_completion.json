@@ -1,0 +1,412 @@
+[
+  {
+    "gene": "BRCA1",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "BRCA1.db",
+    "duration_seconds": 129,
+    "stage_failures": [],
+    "stage_warnings": [],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 1,
+      "abstract_only": 0,
+      "total": 1,
+      "abstract_only_ratio": 0.0,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 1,
+        "full_text": 1,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": true,
+        "source_class_discrepancies": []
+      }
+    },
+    "llm_trace": {
+      "run_id": "08de4074-f941-49f2-a7bb-4984acb57ac0",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/BRCA1/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/BRCA1/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 7,
+      "decision_event_count": 8,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 0,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 1,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "BRCA2",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "BRCA2.db",
+    "duration_seconds": 164,
+    "stage_failures": [],
+    "stage_warnings": [],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 1,
+      "abstract_only": 0,
+      "total": 1,
+      "abstract_only_ratio": 0.0,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 1,
+        "full_text": 1,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": true,
+        "source_class_discrepancies": []
+      }
+    },
+    "llm_trace": {
+      "run_id": "d96ab553-e3cd-4f6d-87ad-67e27f30e78e",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/BRCA2/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/BRCA2/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 6,
+      "decision_event_count": 7,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 0,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 1,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "KCNH2.db",
+    "duration_seconds": 1281,
+    "stage_failures": [],
+    "stage_warnings": [
+      "source accounting disagreement: on-disk scan says 21 full text / 0 abstract-only, finalized extraction records say 19 / 0"
+    ],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 21,
+      "abstract_only": 0,
+      "total": 21,
+      "abstract_only_ratio": 0.0,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 19,
+        "full_text": 19,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": false,
+        "source_class_discrepancies": [
+          {
+            "pmid": "10220144",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "10735633",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "21499742",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          }
+        ]
+      }
+    },
+    "llm_trace": {
+      "run_id": "5613f2eb-8c5a-422c-a07d-591ea62d66a7",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/KCNH2/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/KCNH2/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 73,
+      "decision_event_count": 95,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 1,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 13,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "KCNQ1.db",
+    "duration_seconds": 1475,
+    "stage_failures": [],
+    "stage_warnings": [
+      "source accounting disagreement: on-disk scan says 24 full text / 1 abstract-only, finalized extraction records say 25 / 0"
+    ],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 24,
+      "abstract_only": 1,
+      "total": 25,
+      "abstract_only_ratio": 0.04,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 25,
+        "full_text": 25,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": false,
+        "source_class_discrepancies": [
+          {
+            "pmid": "10220144",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "19843919",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "26423924",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          }
+        ]
+      }
+    },
+    "llm_trace": {
+      "run_id": "dd7899ec-cf3b-49cb-a66c-eddbfb1859a4",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/KCNQ1/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/KCNQ1/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 120,
+      "decision_event_count": 142,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [],
+      "omissions": 15,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "MYBPC3",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "MYBPC3.db",
+    "duration_seconds": 73,
+    "stage_failures": [],
+    "stage_warnings": [],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 1,
+      "abstract_only": 0,
+      "total": 1,
+      "abstract_only_ratio": 0.0,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 1,
+        "full_text": 1,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": true,
+        "source_class_discrepancies": []
+      }
+    },
+    "llm_trace": {
+      "run_id": "d595e24a-c2c2-4ad4-81cd-af267239cbd8",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/MYBPC3/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/MYBPC3/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 1,
+      "decision_event_count": 2,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 0,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 0,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "RYR2",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "RYR2.db",
+    "duration_seconds": 1016,
+    "stage_failures": [],
+    "stage_warnings": [
+      "source accounting disagreement: on-disk scan says 14 full text / 0 abstract-only, finalized extraction records say 13 / 0"
+    ],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 14,
+      "abstract_only": 0,
+      "total": 14,
+      "abstract_only_ratio": 0.0,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 13,
+        "full_text": 13,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": false,
+        "source_class_discrepancies": []
+      }
+    },
+    "llm_trace": {
+      "run_id": "d26b6cc3-6de7-4865-a386-aafc8d9606f5",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/RYR2/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/RYR2/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 47,
+      "decision_event_count": 66,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 1,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 11,
+      "sharded": false
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "status": "completed",
+    "severity": "ok",
+    "exit_code": 0,
+    "active_db": "SCN5A.db",
+    "duration_seconds": 2959,
+    "stage_failures": [],
+    "stage_warnings": [
+      "source accounting disagreement: on-disk scan says 51 full text / 6 abstract-only, finalized extraction records say 57 / 0"
+    ],
+    "gold_access": {
+      "disabled": true,
+      "mode": "disabled",
+      "gold_derived_alias_files_disabled": true
+    },
+    "source_integrity": {
+      "full_text": 51,
+      "abstract_only": 6,
+      "total": 57,
+      "abstract_only_ratio": 0.105,
+      "threshold": 0.85,
+      "degraded": false,
+      "finalized_ledger": {
+        "papers_finalized": 57,
+        "full_text": 57,
+        "abstract_only": 0,
+        "source_unverified": 0,
+        "agrees_with_disk_scan": false,
+        "source_class_discrepancies": [
+          {
+            "pmid": "11997281",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "12796143",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "15338453",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "16239976",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "24059039",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "26667357",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "28294644",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          },
+          {
+            "pmid": "30354299",
+            "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+          }
+        ]
+      }
+    },
+    "llm_trace": {
+      "run_id": "d2ebf618-c780-4269-b9ad-e0e00a328bf3",
+      "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/llm_traces",
+      "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/llm_trace_report.html",
+      "llm_call_count": 192,
+      "decision_event_count": 241,
+      "integrity_level": "write_time_verified",
+      "integrity_errors": [],
+      "missing_decision_links": [
+        {
+          "stage": "clinical_table_routing",
+          "expected_event": "table_routing_decision",
+          "llm_calls": 13,
+          "reason": "decision events carry no accepted_response_trace_id"
+        }
+      ],
+      "omissions": 41,
+      "sharded": false
+    }
+  }
+]

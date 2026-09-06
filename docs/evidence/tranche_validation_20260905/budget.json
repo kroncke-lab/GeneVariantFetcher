@@ -1,0 +1,53 @@
+{
+  "campaign_api_ceiling_usd": 100,
+  "prior_api_test_proxy_usd": 4.6916482,
+  "remaining_before_tranches_usd": 95.3083518,
+  "two_pair_reserve_usd": 65,
+  "tranche_02_pair_estimate_usd": 24.9748,
+  "tranche_03_pair_estimate_usd": 25.3696,
+  "pricing_basis": "Repository dated API list-price proxy; actual invoice may differ; non-API CLI costs excluded",
+  "provider_policy": "Azure; Anthropic API credential suppressed for these runs",
+  "completed_arms": [
+    {
+      "run_id": "20260905_protocol_cont120_02_baseline",
+      "api_proxy_usd": 12.097649350000001,
+      "calls": 519
+    },
+    {
+      "run_id": "20260905_protocol_cont120_02_candidate",
+      "api_proxy_usd": 10.69024205,
+      "calls": 479
+    },
+    {
+      "run_id": "20260905_protocol_cont120_03_baseline",
+      "api_proxy_usd": 8.325308249999999,
+      "calls": 424
+    },
+    {
+      "run_id": "20260905_protocol_cont120_03_candidate",
+      "api_proxy_usd": 8.7814825,
+      "calls": 446
+    }
+  ],
+  "tranche_api_proxy_usd": 39.89468215,
+  "campaign_api_proxy_usd": 44.734542850000004,
+  "remaining_api_envelope_usd": 55.265457149999996,
+  "operational_failed_attempts": [
+    {
+      "run_id": "20260905_protocol_cont120_03_baseline",
+      "gene": "BRCA1",
+      "api_proxy_usd": 0.09305125,
+      "calls": 3,
+      "evidence": "operational_retry_03_baseline.json"
+    }
+  ],
+  "operational_failed_attempts_api_proxy_usd": 0.09305125,
+  "additional_opened_checks": [
+    {
+      "run_id": "20260905_supplement1_source_check",
+      "api_proxy_usd": 0.05516125,
+      "calls": 1
+    }
+  ],
+  "additional_opened_checks_api_proxy_usd": 0.05516125
+}

@@ -1,0 +1,82 @@
+{
+  "run_id": "20260905_protocol_cont120_03_baseline",
+  "gene": "BRCA1",
+  "retry_number": 1,
+  "decision_before_tranche03_gold_access": true,
+  "selection_rule": "Retry the first operationally failed gene exactly once with unchanged runtime/config/source; no quality-based selection. Retain first complete attempt. All selected papers remain in denominator.",
+  "cause": "TypeError in pipeline/steps.py extraction_metadata.total_variants_found summation: int + str",
+  "runtime_changed": false,
+  "source_changed": false,
+  "failed_attempt_path": "validation_runs/tranche_validation_20260905/failed_operational_attempts/03_baseline/BRCA1/20260905_185716",
+  "usage": {
+    "input_tokens": 25864,
+    "output_tokens": 5218,
+    "total_tokens": 31082,
+    "provider_seconds": 48.909967,
+    "llm_calls": 3,
+    "successful_calls": 3,
+    "models": {
+      "azure_ai/grok-4.3": {
+        "input_tokens": 19831,
+        "output_tokens": 4307,
+        "total_tokens": 24138,
+        "provider_seconds": 36.216213,
+        "llm_calls": 1,
+        "successful_calls": 1
+      },
+      "azure_ai/gpt-5.6-sol": {
+        "input_tokens": 6033,
+        "output_tokens": 911,
+        "total_tokens": 6944,
+        "provider_seconds": 12.693754,
+        "llm_calls": 2,
+        "successful_calls": 2
+      }
+    }
+  },
+  "api_proxy_usd": 0.09305125,
+  "files_sha256": {
+    "BRCA1_pmids.txt": "2cd59f6ca45b5d6e549371173e523510c7343d7f01b0a3d3b0aaa19e5f1daacc",
+    "gene_disease_context.json": "836000323bbcbcc175a407745d9eef8f4070a62802f080c76afb0cea64571b66",
+    "BRCA1_workflow.log": "6fb09bea6868fb009668791a931c9229e48c9ded87041cc9997b86261a82dd62",
+    "run_manifest.json": "bf1b92a235f5c59d31246cd78f57a3afed7d07bb4a6c8a31271f6ba475eaea2d",
+    "abstract_json/10441573.json": "4e5fd0466c828cd2457f728cf63fb271f2eff29d22237a57990662f9eb2c21f5",
+    "pmc_fulltext/browser_html_log.csv": "10bcae5e7a8864bdcd1e45845522837b750cfb9cce2dac7f44841ef1307ec51d",
+    "pmc_fulltext/10441573_artifacts.json": "f53406795a09d2c10d86d9e6cba612dd3b5b95ec9b990f7f8186cce50648c0e1",
+    "pmc_fulltext/paywalled_missing.csv": "02136b410340ad4fda6291ae666917660779c1535685932271fd745ae21a1869",
+    "pmc_fulltext/10441573_CLEANED.md": "97e92fbd2dd970b8aceae03666ecb93c13a84ca04ab2ffbda216c0d8abafa4f3",
+    "pmc_fulltext/10441573_FULL_CONTEXT.md": "1011f5ae8e4a93012d78b3758e09897017be7effb717c5dfc24a214d37130fc6",
+    "pmc_fulltext/successful_downloads.csv": "fbefa4d1aaff20e9669afc390e4dbefa7aca39c900809d412f7c981fbfcea6b0",
+    "scout_output/10441573_DATA_ZONES.json": "09b6c413424b80b5aaa4b604e917a3b6f9a9deaf2a84b883caa4ee3f0b09156c",
+    "scout_output/scout_manifest.json": "aea0ed589e1239405eb7a516ccb345e0efb75ad92ba8314fccd8b321e911329e",
+    "scout_output/10441573_DATA_ZONES.md": "a712bc5312e83eb387e5fbaa93ad79aac1fbfb88768614e6a2e677fae82d8f69",
+    "llm_traces/trace_index.jsonl": "30844893e0c683c360ba0c7ebfd815bdcb346991915fcce307c590376e32da02",
+    "extractions/BRCA1_PMID_10441573.json": "45ae269bc5f06d289c728537d7b0b20556a73d4193c404a1287d1f193191740d",
+    "pmid_status/dense_table_overflow.json": "3ceb3930b6d7c0419bb42e6193b01a16f8f80aba51014df8e159d5648dea6733",
+    "pmid_status/dense_table_overflow.tsv": "6e4977c2199803c3b770d121261e17011cbc94d0b61e1c9447cbeb042af844c9",
+    "pmid_status/paper_scope_exclusions.csv": "6fb2cbfd4f0df6d632538cc0ae209dca1f954cd8fcf774ff29b3c06f7c208c0e",
+    "llm_traces/BRCA1/10441573/1788652642201392000-000001-ee374222_clinical_table_routing_table_router.json": "4c6055170ec5e2f222a5167aff6ccfda07ada6868de08ac5676a6ba99ce338cc",
+    "llm_traces/BRCA1/10441573/1788652695602741000-000007-97bf92e3_paper_variant_extraction_ExpertExtractor.json": "bafe3c243ab6c39d7636e4246702d0b27cbedf75415a8648c40d0101bf70c137",
+    "llm_traces/BRCA1/10441573/1788652687615928000-000004-15323176_variant_claim_verification_decision_VariantClaimVerifier.json": "40ca0f622499f0398ff52977394564bab7a754da33fe41304dd44e4b3849010c",
+    "llm_traces/BRCA1/10441573/1788652682798499000-000002-7c28c303_paper_variant_extraction_ExpertExtractor.json": "06452513ca5cc952100ea8828cc6b99f10d729fb7b9cfc73f434e5686b0948d9",
+    "llm_traces/BRCA1/10441573/1788652695583901000-000005-2f8cdad1_variant_claim_verification_VariantClaimVerifier.json": "0b77ce822fcd3dd22989b461e94ba8902fdf5b6a74f6fee62285bee04e1594f0",
+    "llm_traces/BRCA1/10441573/1788652687612967000-000003-9e92fd39_variant_claim_verification_VariantClaimVerifier.json": "798b031d80c307a7a141d391eba7bc001d615f325cd86fb82a5f465c3412234f",
+    "llm_traces/BRCA1/10441573/1788652695587437000-000006-b1a84b71_variant_claim_verification_decision_VariantClaimVerifier.json": "a3535490eaa1c46e0cfbe2334cccb097775065409a04d93ef7b336d90d72edad",
+    "pmc_fulltext/10441573_supplements/10441573.pdf": "4b5154a39336a31be506d1359f3ffb3f94f427279f4b7339109aefad0786ab9f",
+    "pmc_fulltext/10441573_figures/fig_browser_1.gif": "8e678214bb44fb52df692d96286988a5df283aac1b70f9af6ba15916d3b9cd86",
+    "pmc_fulltext/10441573_figures/fig_browser_3.gif": "759db02965cd86c5379c840cb57160f82a6211a16e4a38c4bfc6871a96bd5872",
+    "pmc_fulltext/10441573_figures/fig_browser_2.gif": "12f9fee0bc8105911c99bd89ecb0dfbb16c93361b152e5b0b98f11d0745bca84",
+    "pmc_fulltext/10441573_figures/fig_browser_4.gif": "055f50af605c03f797a2096cb3cbfa8cdd7da2851811b95ce88c732985005aa6",
+    "pmc_fulltext/10441573_figures/captions_index.json": "fa0da9435865056483d015bc21e0d1f4c4e4786b7eaa1e43f1a70f74b444056c"
+  },
+  "original_operator_log_sha256": "25cbd23d3515a651db56962bec9d4f0646037c6f875bdd44a270bc5b0667f789",
+  "retry_exit_code": 0,
+  "retry_production_folders": [
+    "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/production_runs/BRCA1/20260905_191159"
+  ],
+  "sensitivity_analysis": {
+    "defined_at_utc": "2026-09-06T00:26:35.931104+00:00",
+    "defined_before_tranche03_lock": true,
+    "scenario": "Also report a descriptive sensitivity with the failed BRCA1 baseline paper treated as empty output. Main comparison retains the first operationally successful retry. No new acceptance threshold."
+  }
+}

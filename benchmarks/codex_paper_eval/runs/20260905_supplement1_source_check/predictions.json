@@ -1,0 +1,517 @@
+{
+  "comparison_score_lanes": [
+    "linkage_assisted"
+  ],
+  "completed_at": "2026-09-06T00:49:48.918389+00:00",
+  "count_projection": "trusted",
+  "excluded_source_layers": [],
+  "extraction_elapsed_seconds": 153.0,
+  "extraction_started_at": "2026-09-05T19:47:14.759285",
+  "identity_projection": "trusted",
+  "linkage_shadows_excluded": 0,
+  "papers": [
+    {
+      "comparison_variants": {
+        "linkage_assisted": [
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_000335 exon8 c.704-2A>G\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "c.704-2A>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon12 c.C1715A p.A572D\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.A572D c.1715C>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon18 c.G3340A p.D1114N\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.D1114N c.3340G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon27 c.T4786A p.F1596I\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.F1596I c.4786T>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon28 c.T6010C p.F2004L\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.F2004L c.6010T>C"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon6 c.G638A p.G213D\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.G213D c.638G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon25 c.A4342C p.I1448L\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.I1448L c.4342A>C"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon12 c.C1852T p.L618F\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.L618F c.1852C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon2 c.T210G p.N70K\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.N70K c.210T>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon28 c.C6016G p.P2006A\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.P2006A c.6016C>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon12 c.C1717T p.Q573X\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.Q573* c.1717C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon28 c.G5693A p.R1898H\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.R1898H c.5693G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon2 c.C52T p.R18W\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.R18W c.52C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon6 c.C647T p.S216L\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.S216L c.647C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon28 c.C4859T p.T1620M\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.T1620M c.4859C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon6 c.C659T p.T220I\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.T220I c.659C>T"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_001160160 exon6 c.C659A p.T220N\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.T220N c.659C>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon23 c.G4018A p.V1340I\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.V1340I c.4018G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_198056 exon7 c.G880A p.V294M\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.V294M c.880G>A"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "[\"SCN5A NM_001160160 exon6 c.T615G p.Y205X\"]",
+            "source_layer": "llm_table",
+            "source_location": "Supplemental Table 6",
+            "unaffected": null,
+            "variant": "p.Y205* c.615T>G"
+          },
+          {
+            "affected": null,
+            "carriers": null,
+            "evidence": "no quote captured; source_layer=clinvar",
+            "source_layer": "clinvar",
+            "source_location": "ClinVar (PMID citation)",
+            "unaffected": null,
+            "variant": "p.Arg1897His c.5690G>A"
+          }
+        ]
+      },
+      "elapsed_seconds": 94.974971,
+      "external_linkage_variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "no quote captured; source_layer=clinvar",
+          "source_layer": "clinvar",
+          "source_location": "ClinVar (PMID citation)",
+          "unaffected": null,
+          "variant": "p.Arg1897His c.5690G>A"
+        }
+      ],
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "source_completeness": "corpus_as_locked",
+      "token_usage": {
+        "input_tokens": 14077,
+        "llm_calls": 1,
+        "models": {
+          "azure_ai/grok-4.3": {
+            "input_tokens": 14077,
+            "llm_calls": 1,
+            "output_tokens": 15026,
+            "provider_seconds": 94.974971,
+            "successful_calls": 1,
+            "total_tokens": 29103
+          }
+        },
+        "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens.",
+        "output_tokens": 15026,
+        "provider_seconds": 94.974971,
+        "successful_calls": 1,
+        "telemetry_available": true,
+        "total_tokens": 29103
+      },
+      "tool": "text",
+      "tool_rationale": "Production gvf-run calibrated-manifest strategy using the current deterministic and model-backed extraction, verification, trust, and recovery layers. Exact code, prompt, model, source, and call-trace provenance is bound separately by the run and evaluation manifests. Mapped to the harness 'text' route because no single harness route describes the multi-stage production pipeline.",
+      "unattributed_variants": [],
+      "variants": [
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_000335 exon8 c.704-2A>G\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "c.704-2A>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon12 c.C1715A p.A572D\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.A572D c.1715C>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon18 c.G3340A p.D1114N\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.D1114N c.3340G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon27 c.T4786A p.F1596I\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.F1596I c.4786T>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon28 c.T6010C p.F2004L\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.F2004L c.6010T>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon6 c.G638A p.G213D\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.G213D c.638G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon25 c.A4342C p.I1448L\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.I1448L c.4342A>C"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon12 c.C1852T p.L618F\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.L618F c.1852C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon2 c.T210G p.N70K\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.N70K c.210T>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon28 c.C6016G p.P2006A\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.P2006A c.6016C>G"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon12 c.C1717T p.Q573X\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.Q573* c.1717C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon28 c.G5693A p.R1898H\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.R1898H c.5693G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon2 c.C52T p.R18W\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.R18W c.52C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon6 c.C647T p.S216L\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.S216L c.647C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon28 c.C4859T p.T1620M\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.T1620M c.4859C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon6 c.C659T p.T220I\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.T220I c.659C>T"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_001160160 exon6 c.C659A p.T220N\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.T220N c.659C>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon23 c.G4018A p.V1340I\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.V1340I c.4018G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_198056 exon7 c.G880A p.V294M\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.V294M c.880G>A"
+        },
+        {
+          "affected": null,
+          "carriers": null,
+          "evidence": "[\"SCN5A NM_001160160 exon6 c.T615G p.Y205X\"]",
+          "source_layer": "llm_table",
+          "source_location": "Supplemental Table 6",
+          "unaffected": null,
+          "variant": "p.Y205* c.615T>G"
+        }
+      ]
+    }
+  ],
+  "prelock_gold_usage": {
+    "provenance": "all_production_run_statuses_record_gold_access_disabled",
+    "read_only_layer_scoring_possible": false,
+    "scores_feed_back_into_predictions": false
+  },
+  "primary_score_lane": "paper_derived",
+  "production_gold_access": [
+    {
+      "disabled": true,
+      "gene": "SCN5A",
+      "gold_derived_alias_files_disabled": true,
+      "mode": "disabled"
+    }
+  ],
+  "production_run_statuses": [
+    {
+      "gene": "SCN5A",
+      "sha256": "25c494aac98f137c88fd0c3a6e145ed52bc76a596d8d24fd6897795f0e08e7e9",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/RUN_STATUS.json"
+    }
+  ],
+  "production_run_timing": [
+    {
+      "duration_seconds": 153,
+      "gene": "SCN5A",
+      "source": "RUN_STATUS.json",
+      "start_timestamp": "2026-09-05T19:47:14.759285"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 2,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 1,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/llm_traces/trace_manifest.json",
+      "run_id": "8080102a-62f6-4151-840f-b48667535666",
+      "sha256": "e62fc69f3e29c89f5cadf43e50523f07b86e88053fd741befa42321b073df5bc"
+    }
+  ],
+  "provenance_policy": {
+    "ambiguous_unattributed_layers": [
+      "manual_or_legacy",
+      "mixed"
+    ],
+    "external_linkage_is_paper_discovery": false,
+    "external_linkage_layers": [
+      "clinvar",
+      "pubtator"
+    ],
+    "external_linkage_rows_in_primary_score": false,
+    "paper_derived_layers": [
+      "figure",
+      "llm_table",
+      "llm_text",
+      "regex_table",
+      "regex_text"
+    ],
+    "unclassified_rows_in_primary_score": false
+  },
+  "run_id": "20260905_supplement1_source_check",
+  "schema_version": 1,
+  "source_databases": {
+    "SCN5A": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/SCN5A.db"
+  },
+  "started_at": null,
+  "strategy": "production_gvf_run",
+  "token_usage": {
+    "input_tokens": 14077,
+    "llm_calls": 1,
+    "models": {
+      "azure_ai/grok-4.3": {
+        "input_tokens": 14077,
+        "llm_calls": 1,
+        "output_tokens": 15026,
+        "provider_seconds": 94.974971,
+        "successful_calls": 1,
+        "total_tokens": 29103
+      }
+    },
+    "note": "Trace-derived. output_tokens is total minus input and therefore conservatively includes billed reasoning tokens; provider_seconds is summed call latency, not end-to-end wall clock.",
+    "output_tokens": 15026,
+    "provider_seconds": 94.974971,
+    "successful_calls": 1,
+    "telemetry_available": true,
+    "total_tokens": 29103
+  },
+  "unattributed_rows_held_from_scores": 0
+}

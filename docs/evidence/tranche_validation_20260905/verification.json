@@ -1,0 +1,1194 @@
+{
+  "classification": "Local integrity and arithmetic verification; not proof of clinical correctness",
+  "runtime": {
+    "sha256": "e9fef8ebe7e79457098e7ad6debf2c9cc6e9f601ae34cde659682d168cbab02b",
+    "file_count": 251
+  },
+  "runtime_files_verified": 251,
+  "prior_locked_input_files_verified": 34,
+  "registry_sha256": "9a6bbbf6b386aeff7c6cb500e46c0b4a76cd2c5ef7a54f58dc980dc7959c1f54",
+  "runs": {
+    "20260905_protocol_cont120_02_baseline": {
+      "selected_attempts": 120,
+      "completed_gold_disabled_gene_jobs": 7,
+      "status_details": [
+        {
+          "gene": "APOE",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "BRCA2",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 3,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 2,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "KCNH2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 20 full text / 1 abstract-only, finalized extraction records say 21 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 20,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 4,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 20,
+            "abstract_only": 1,
+            "total": 21,
+            "abstract_only_ratio": 0.048,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 21,
+              "full_text": 21,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11844290",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "17171344",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21216356",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24057343",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "KCNQ1",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 23 full text / 2 abstract-only, finalized extraction records say 25 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 21,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 23,
+            "abstract_only": 2,
+            "total": 25,
+            "abstract_only_ratio": 0.08,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 25,
+              "full_text": 25,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "23400408",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26022593",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "32830254",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "MYBPC3",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 4,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "RYR2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 13 full text / 1 abstract-only, finalized extraction records say 14 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 10,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 3,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 13,
+            "abstract_only": 1,
+            "total": 14,
+            "abstract_only_ratio": 0.071,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 14,
+              "full_text": 14,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "14571276",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "28100344",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "SCN5A",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 48 full text / 9 abstract-only, finalized extraction records say 57 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 45,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 48,
+            "abstract_only": 9,
+            "total": 57,
+            "abstract_only_ratio": 0.158,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 57,
+              "full_text": 57,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11304498",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15161528",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15996170",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "16980337",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "17205354",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "18803136",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "19083750",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21216356",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21609529",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24112685",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "30246897",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "20260905_protocol_cont120_02_candidate": {
+      "selected_attempts": 120,
+      "completed_gold_disabled_gene_jobs": 7,
+      "status_details": [
+        {
+          "gene": "APOE",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "BRCA2",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 1,
+              "reason": "decision events carry no accepted_response_trace_id"
+            },
+            {
+              "stage": "paper_variant_extraction",
+              "expected_event": "paper_extraction_selection",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "KCNH2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 20 full text / 1 abstract-only, finalized extraction records say 21 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 15,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 4,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 20,
+            "abstract_only": 1,
+            "total": 21,
+            "abstract_only_ratio": 0.048,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 21,
+              "full_text": 21,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11844290",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "17171344",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21216356",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24057343",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "KCNQ1",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 23 full text / 2 abstract-only, finalized extraction records say 25 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 20,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 23,
+            "abstract_only": 2,
+            "total": 25,
+            "abstract_only_ratio": 0.08,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 25,
+              "full_text": 25,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "23400408",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26022593",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "32830254",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "MYBPC3",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 3,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "RYR2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 13 full text / 1 abstract-only, finalized extraction records say 14 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 9,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 3,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 13,
+            "abstract_only": 1,
+            "total": 14,
+            "abstract_only_ratio": 0.071,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 14,
+              "full_text": 14,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "14571276",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "28100344",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "SCN5A",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 48 full text / 9 abstract-only, finalized extraction records say 57 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 46,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 48,
+            "abstract_only": 9,
+            "total": 57,
+            "abstract_only_ratio": 0.158,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 57,
+              "full_text": 57,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11304498",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15161528",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15996170",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "16980337",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "17205354",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "18803136",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "19083750",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21216356",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21609529",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24112685",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "30246897",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "20260905_protocol_cont120_03_baseline": {
+      "selected_attempts": 120,
+      "completed_gold_disabled_gene_jobs": 7,
+      "status_details": [
+        {
+          "gene": "BRCA1",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "BRCA2",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "KCNH2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 21 full text / 0 abstract-only, finalized extraction records say 19 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 10,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 1,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 21,
+            "abstract_only": 0,
+            "total": 21,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 19,
+              "full_text": 19,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "10220144",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "10735633",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21499742",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "KCNQ1",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 24 full text / 1 abstract-only, finalized extraction records say 25 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 11,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 24,
+            "abstract_only": 1,
+            "total": 25,
+            "abstract_only_ratio": 0.04,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 25,
+              "full_text": 25,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "10220144",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "19843919",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26423924",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "MYBPC3",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 0,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "RYR2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 14 full text / 0 abstract-only, finalized extraction records say 13 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 8,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 1,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 14,
+            "abstract_only": 0,
+            "total": 14,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 13,
+              "full_text": 13,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "31970460",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "SCN5A",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 51 full text / 6 abstract-only, finalized extraction records say 57 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 36,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 51,
+            "abstract_only": 6,
+            "total": 57,
+            "abstract_only_ratio": 0.105,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 57,
+              "full_text": 57,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11997281",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "12796143",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15338453",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "16239976",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24059039",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26667357",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "28294644",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "30354299",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "20260905_protocol_cont120_03_candidate": {
+      "selected_attempts": 120,
+      "completed_gold_disabled_gene_jobs": 7,
+      "status_details": [
+        {
+          "gene": "BRCA1",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "BRCA2",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 1,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "KCNH2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 21 full text / 0 abstract-only, finalized extraction records say 19 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 13,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 1,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 21,
+            "abstract_only": 0,
+            "total": 21,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 19,
+              "full_text": 19,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "10220144",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "10735633",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "21499742",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "KCNQ1",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 24 full text / 1 abstract-only, finalized extraction records say 25 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 15,
+          "missing_decision_links": [],
+          "source_integrity": {
+            "full_text": 24,
+            "abstract_only": 1,
+            "total": 25,
+            "abstract_only_ratio": 0.04,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 25,
+              "full_text": 25,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "10220144",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "19843919",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26423924",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "gene": "MYBPC3",
+          "severity": "ok",
+          "stage_warnings": [],
+          "stage_failures": [],
+          "trace_omissions": 0,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 0,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 1,
+            "abstract_only": 0,
+            "total": 1,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 1,
+              "full_text": 1,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": true,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "RYR2",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 14 full text / 0 abstract-only, finalized extraction records say 13 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 11,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 1,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 14,
+            "abstract_only": 0,
+            "total": 14,
+            "abstract_only_ratio": 0.0,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 13,
+              "full_text": 13,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": []
+            }
+          }
+        },
+        {
+          "gene": "SCN5A",
+          "severity": "ok",
+          "stage_warnings": [
+            "source accounting disagreement: on-disk scan says 51 full text / 6 abstract-only, finalized extraction records say 57 / 0"
+          ],
+          "stage_failures": [],
+          "trace_omissions": 41,
+          "missing_decision_links": [
+            {
+              "stage": "clinical_table_routing",
+              "expected_event": "table_routing_decision",
+              "llm_calls": 13,
+              "reason": "decision events carry no accepted_response_trace_id"
+            }
+          ],
+          "source_integrity": {
+            "full_text": 51,
+            "abstract_only": 6,
+            "total": 57,
+            "abstract_only_ratio": 0.105,
+            "threshold": 0.85,
+            "degraded": false,
+            "finalized_ledger": {
+              "papers_finalized": 57,
+              "full_text": 57,
+              "abstract_only": 0,
+              "source_unverified": 0,
+              "agrees_with_disk_scan": false,
+              "source_class_discrepancies": [
+                {
+                  "pmid": "11997281",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "12796143",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "15338453",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "16239976",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "24059039",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "26667357",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "28294644",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                },
+                {
+                  "pmid": "30354299",
+                  "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "initial_snapshot_equal_attempts": 240,
+  "actual_primary_text_equal_attempts": 239,
+  "successful_attempt_executions": 480,
+  "additional_supplement_check_attempts": 1,
+  "preserved_operational_failed_attempts": 1,
+  "new_api_proxy_usd": 40.04289465,
+  "campaign_api_proxy_usd": 44.734542850000004,
+  "supplement_source_hashes_verified": 6,
+  "figure_qa_hashes_verified": 12,
+  "operational_empty_failure_sensitivity_equal": true,
+  "caveats": [
+    "Source classes are availability flags, not proof of count-bearing evidence.",
+    "RUN_STATUS completion includes the recorded stage warnings and missing trace-decision links below.",
+    "Frozen availability matches, but one primary input differs due to protocol validation.",
+    "Gold agreement does not adjudicate H558R unit or control-study attribution.",
+    "Both per-tranche identity and carrier gates fail; no promotion."
+  ],
+  "analysis_files_sha256": {
+    "results.json": "c06a54ff6e926cb06b41a46ad31eac033f5fb96f2bd26ccafc3db1c9857b8a1d",
+    "outlier_sensitivity.json": "9793a0d3ac5faa4820cf0a091849969b50f5eab139dcc53bb280df975ca383c9",
+    "updated_forecast.json": "b84a3da2942e19cc25f01cb64b9275880acd470479bf1706b279a3cbbaf97650",
+    "source_review_03_receipt.json": "d9849a1854100964305654cf4dd3c7b19def5df32f997a7e737c93d3523c31da",
+    "budget.json": "6d6d603e7df86e6d8bba10e9a2b1a54a0801c0c973e357ac6e9d01b9da0d1450"
+  }
+}

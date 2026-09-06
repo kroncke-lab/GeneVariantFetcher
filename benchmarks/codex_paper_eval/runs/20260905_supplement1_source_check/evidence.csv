@@ -1,0 +1,21 @@
+gene,pmid,tool,source_completeness,variant,carriers,affected,unaffected,evidence,source_location
+SCN5A,25163546,text,corpus_as_locked,c.704-2A>G,,,,"[""SCN5A NM_000335 exon8 c.704-2A>G""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.A572D c.1715C>A,,,,"[""SCN5A NM_198056 exon12 c.C1715A p.A572D""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.D1114N c.3340G>A,,,,"[""SCN5A NM_198056 exon18 c.G3340A p.D1114N""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.F1596I c.4786T>A,,,,"[""SCN5A NM_198056 exon27 c.T4786A p.F1596I""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.F2004L c.6010T>C,,,,"[""SCN5A NM_198056 exon28 c.T6010C p.F2004L""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.G213D c.638G>A,,,,"[""SCN5A NM_198056 exon6 c.G638A p.G213D""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.I1448L c.4342A>C,,,,"[""SCN5A NM_198056 exon25 c.A4342C p.I1448L""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.L618F c.1852C>T,,,,"[""SCN5A NM_198056 exon12 c.C1852T p.L618F""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.N70K c.210T>G,,,,"[""SCN5A NM_198056 exon2 c.T210G p.N70K""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.P2006A c.6016C>G,,,,"[""SCN5A NM_198056 exon28 c.C6016G p.P2006A""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.Q573* c.1717C>T,,,,"[""SCN5A NM_198056 exon12 c.C1717T p.Q573X""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.R1898H c.5693G>A,,,,"[""SCN5A NM_198056 exon28 c.G5693A p.R1898H""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.R18W c.52C>T,,,,"[""SCN5A NM_198056 exon2 c.C52T p.R18W""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.S216L c.647C>T,,,,"[""SCN5A NM_198056 exon6 c.C647T p.S216L""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.T1620M c.4859C>T,,,,"[""SCN5A NM_198056 exon28 c.C4859T p.T1620M""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.T220I c.659C>T,,,,"[""SCN5A NM_198056 exon6 c.C659T p.T220I""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.T220N c.659C>A,,,,"[""SCN5A NM_001160160 exon6 c.C659A p.T220N""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.V1340I c.4018G>A,,,,"[""SCN5A NM_198056 exon23 c.G4018A p.V1340I""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.V294M c.880G>A,,,,"[""SCN5A NM_198056 exon7 c.G880A p.V294M""]",Supplemental Table 6
+SCN5A,25163546,text,corpus_as_locked,p.Y205* c.615T>G,,,,"[""SCN5A NM_001160160 exon6 c.T615G p.Y205X""]",Supplemental Table 6

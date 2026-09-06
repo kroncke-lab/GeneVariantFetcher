@@ -1,0 +1,33 @@
+{
+  "classification": "Local source-layout/cache-reuse check; no model calls or new score",
+  "source_components": 2,
+  "duplicate_component_blocks": 0,
+  "second_fold_byte_identical": true,
+  "source_scn5a_cdna_rows_preserved": 20,
+  "source_derived_cdna_notations": [
+    "c.704-2A>G",
+    "c.C659A",
+    "c.T615G",
+    "c.C1715A",
+    "c.C1717T",
+    "c.C1852T",
+    "c.G3340A",
+    "c.C52T",
+    "c.T210G",
+    "c.G4018A",
+    "c.A4342C",
+    "c.T4786A",
+    "c.C4859T",
+    "c.C6016G",
+    "c.G5693A",
+    "c.T6010C",
+    "c.C647T",
+    "c.C659T",
+    "c.G638A",
+    "c.G880A"
+  ],
+  "assembled_corpus_chars": 324952,
+  "normal_reuse_chars": 257634,
+  "normal_reuse_sha256": "91ee29214ca98105c471d2c67f9a65e7dda440258aef73ec3c81fb2a6abbb7cd",
+  "canonical_source_tree": "validation_runs/tranche_validation_20260905/supplement_recheck/corpus_ready/SCN5A/25163546"
+}

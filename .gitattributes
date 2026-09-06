@@ -1,0 +1,6 @@
+# Preserve byte hashes of the new locked evaluation CSVs under core.autocrlf=input.
+/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/**/*.csv -text
+/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/**/*.csv -text
+/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/**/*.csv -text
+/benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/**/*.csv -text
+/benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/**/*.csv -text

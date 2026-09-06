@@ -1,0 +1,64 @@
+{
+  "classification": "Post-lock source audit; no rescoring or runtime changes",
+  "initial_frozen_snapshot_equal_attempts": 240,
+  "actual_primary_text_equal_attempts": 239,
+  "exceptions": [
+    {
+      "tranche": "03",
+      "gene": "RYR2",
+      "pmid": "31970460",
+      "baseline": {
+        "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/production_runs/RYR2/20260905_185716/abstract_json/31970460.json",
+        "sha256": "e2c4b0ed1f024ca09ee065efc4326bcd1b678a0860ee433ee64f2562b2e5098c",
+        "bytes": 4824
+      },
+      "candidate": {
+        "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/RYR2/20260905_194540/pmc_fulltext/31970460_CLEANED.md",
+        "sha256": "83c867212895aa77199416e08cf7bf5a08ed3406b79a29c67e0885e052518159",
+        "bytes": 74456
+      },
+      "explanation": "Historical validator rejected the staged body as an abstract/reference shell, so baseline used abstract JSON. Candidate accepted the staged body. Frozen availability matched; no new acquisition.",
+      "both_scored_outcomes": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "counts": "all omitted"
+      }
+    }
+  ],
+  "dominant_row": {
+    "baseline": {
+      "primary_text": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/production_runs/SCN5A/20260905_185716/pmc_fulltext/20129283_CLEANED.md",
+      "primary_text_sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c",
+      "reviewed_full_context": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/production_runs/SCN5A/20260905_185716/pmc_fulltext/20129283_FULL_CONTEXT.md",
+      "full_context_sha256": "2d60eb26486f2c33e7c0897b18517fd0db357515bd536ed9713bea0992bd0d8f"
+    },
+    "candidate": {
+      "primary_text": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/pmc_fulltext/20129283_CLEANED.md",
+      "primary_text_sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c",
+      "reviewed_full_context": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/pmc_fulltext/20129283_FULL_CONTEXT.md",
+      "full_context_sha256": "2d60eb26486f2c33e7c0897b18517fd0db357515bd536ed9713bea0992bd0d8f"
+    },
+    "gene": "SCN5A",
+    "pmid": "20129283",
+    "variant": "H558R",
+    "location": "Table 2, Number column; FULL_CONTEXT lines 118, 120, 136; methods line 28",
+    "baseline_counts": {
+      "carriers": null,
+      "affected": null,
+      "unaffected": null
+    },
+    "candidate_counts": {
+      "carriers": 408,
+      "affected": null,
+      "unaffected": 408
+    },
+    "clinical_adjudication": "Unresolved person-versus-allele unit and attribution of previously reported control cohort. Official gold remains unchanged.",
+    "source_support": "Table caption says 2,600 reference alleles; methods describe 1,300 healthy volunteers credited to earlier references. Number cell is 408.",
+    "mechanism_caution": "Source table evidence is identical. Structural outlier retention is plausible, but no identical-response mechanism replay was done for this row."
+  },
+  "driver_log_sha256": {
+    "validation_runs/tranche_validation_20260905/03_baseline_driver.log": "66c748316e2346b5e608281159cde1fa5a878d57bad03cf1605db0c402bf2b32",
+    "validation_runs/tranche_validation_20260905/03_candidate_driver.log": "6e9f0d2108128edb5cca264e5b0a5b3f518d3b9d3f6af2b443b7edde487392d6"
+  }
+}

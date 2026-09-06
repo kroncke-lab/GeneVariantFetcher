@@ -1,0 +1,100 @@
+{
+  "analysis_run": "20260905_protocol_cont120_02_baseline",
+  "figure_contract": {
+    "axes": "shared square-root count scale; 0 to 110 display domain",
+    "chart_family": "faceted square-root-scale bubble agreement plots with a single variant-identity context line",
+    "evaluation_missing_count": 0,
+    "fallback": "identity misses remain excluded; every identity-matched row with an authoritative count is plotted",
+    "labeled_variant_paper_pairs": [
+      {
+        "gene": "RYR2",
+        "measure": "affected",
+        "pmid": "25814417",
+        "variant": "G357S"
+      },
+      {
+        "gene": "RYR2",
+        "measure": "unaffected",
+        "pmid": "25814417",
+        "variant": "G357S"
+      }
+    ],
+    "marker_radius": "min(28, 8 + 2*sqrt(variant-paper pairs))",
+    "marker_size_key_pairs": [
+      5,
+      10,
+      25
+    ],
+    "question": "Among identity-matched variant-paper rows, how closely do affected and unaffected counts agree when a missing automated count is evaluated as zero?",
+    "renderer": "editable SVG; vector PDF and 300-dpi PNG downstream",
+    "storage_missing_count": null
+  },
+  "integrity": {
+    "predictions_sha256": "154b49250d6b2e074be2d2f48bc9681030f9182abb6893e03e8be6d456a212e0",
+    "selection_sha256": "0654d0f525a8b0424ecd596bbd2c8d4120e00f3bfe2f32a62c37978cf698eae4"
+  },
+  "locked_at": "2026-09-05T22:55:32.382222+00:00",
+  "metrics": {
+    "affected": {
+      "ai_max": 97,
+      "count_extracted": 107,
+      "count_extracted_fraction": 0.24263038548752835,
+      "difference_equal_one": 155,
+      "exact": 142,
+      "exact_fraction": 0.3219954648526077,
+      "gold_asserted": 571,
+      "gold_nonzero": 368,
+      "greater_than_one": 144,
+      "identity_coverage": 0.7723292469352014,
+      "identity_matched": 441,
+      "identity_miss": 130,
+      "increment_over_zero_baseline": 0.1564625850340136,
+      "mae": 2.258503401360544,
+      "manual_max": 73,
+      "median_absolute_difference": 1,
+      "nonzero_exact": 83,
+      "nonzero_exact_fraction": 0.22554347826086957,
+      "rmse": 5.953714136414393,
+      "within_one": 297,
+      "zero_baseline_exact": 73,
+      "zero_baseline_fraction": 0.1655328798185941,
+      "zero_filled": 334,
+      "zero_filled_fraction": 0.7573696145124716
+    },
+    "unaffected": {
+      "ai_max": 62,
+      "count_extracted": 34,
+      "count_extracted_fraction": 0.07709750566893424,
+      "difference_equal_one": 28,
+      "exact": 386,
+      "exact_fraction": 0.8752834467120182,
+      "gold_asserted": 571,
+      "gold_nonzero": 67,
+      "greater_than_one": 27,
+      "identity_coverage": 0.7723292469352014,
+      "identity_matched": 441,
+      "identity_miss": 130,
+      "increment_over_zero_baseline": 0.027210884353741496,
+      "mae": 0.3968253968253968,
+      "manual_max": 106,
+      "median_absolute_difference": 0,
+      "nonzero_exact": 16,
+      "nonzero_exact_fraction": 0.23880597014925373,
+      "rmse": 2.387134830379863,
+      "within_one": 414,
+      "zero_baseline_exact": 374,
+      "zero_baseline_fraction": 0.8480725623582767,
+      "zero_filled": 407,
+      "zero_filled_fraction": 0.9229024943310657
+    }
+  },
+  "not_available": "explicit cohort and phenotype identifiers",
+  "paired_rows_in_both_measures": 441,
+  "row_grain": "identity-matched variant-paper row and count measure",
+  "variant_identity": {
+    "coverage": 0.7723292469352014,
+    "gold_rows": 571,
+    "matched": 441,
+    "missed": 130
+  }
+}

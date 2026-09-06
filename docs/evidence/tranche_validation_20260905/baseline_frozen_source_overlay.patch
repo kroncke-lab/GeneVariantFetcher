@@ -1,0 +1,25 @@
+--- a/pipeline/steps.py
++++ b/pipeline/steps.py
+@@ -1343,6 +1343,16 @@
+-    recovered_pmids = _consolidate_from_corpus(
+-        pmids_to_download, harvest_dir, gene_symbol, _resolve_corpus_dir()
+-    )
+-    recovered_pmids |= _consolidate_prior_downloads(
+-        pmids_to_download, harvest_dir, prior_output_base
+-    )
++    frozen_manifest = os.environ.get("GVF_FROZEN_SOURCE_MANIFEST")
++    if frozen_manifest:
++        from pipeline.source_snapshot import stage_frozen_sources
++
++        if os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") != "1":
++            raise ValueError("frozen-source evaluation requires --gold-free-run")
++        recovered_pmids = stage_frozen_sources(
++            Path(frozen_manifest), gene_symbol, pmids_to_download, harvest_dir
++        )
++    else:
++        recovered_pmids = _consolidate_from_corpus(
++            pmids_to_download, harvest_dir, gene_symbol, _resolve_corpus_dir()
++        )
++        recovered_pmids |= _consolidate_prior_downloads(
++            pmids_to_download, harvest_dir, prior_output_base
++        )

@@ -1,0 +1,72 @@
+{
+  "definition": "registered nine-file 506a949c reading protocol with shared current infrastructure and frozen-source staging",
+  "reference_commit": "506a949c",
+  "common_infrastructure_commit": "d2996c74f993f9d66558d564c8e515272c679995",
+  "runtime": {
+    "sha256": "e620f9927cffc965293b1fa2feb235c412f67309c3a3492dca33dcdf31bd5d9d",
+    "file_count": 251
+  },
+  "files_restored": [
+    {
+      "path": "benchmarks/codex_paper_eval/db_to_predictions.py",
+      "base_git_sha256": "050d17b160446fd7861f1ca6cdda417e4d86fe5419a524d273c3d6292fc83343",
+      "materialized_sha256": "050d17b160446fd7861f1ca6cdda417e4d86fe5419a524d273c3d6292fc83343",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "harvesting/content_validation.py",
+      "base_git_sha256": "69cfdf0e1daa287a9f3a5c63c6fb97b0f9befb0f84fa49fd5594a64243ce83c9",
+      "materialized_sha256": "69cfdf0e1daa287a9f3a5c63c6fb97b0f9befb0f84fa49fd5594a64243ce83c9",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "pipeline/extraction.py",
+      "base_git_sha256": "7200b06d75a1bacb200450194253908ccb7b9ebc7b84e084595f1cf1de8ab7dd",
+      "materialized_sha256": "7200b06d75a1bacb200450194253908ccb7b9ebc7b84e084595f1cf1de8ab7dd",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "pipeline/source_quality.py",
+      "base_git_sha256": "2d1294ea74845e3fd38b8ff9966adf169f37bf15a2465fac13d4484ad4a40340",
+      "materialized_sha256": "2d1294ea74845e3fd38b8ff9966adf169f37bf15a2465fac13d4484ad4a40340",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "pipeline/steps.py",
+      "base_git_sha256": "2c357e73f2b3cfc37eddb8f252ebb906724406eb14fc48a0db2dc81fa4aabc3e",
+      "materialized_sha256": "321a7d3e90d5891c5b4641ac57a6d15e8dd882f6d660a7232c359827dce65f2e",
+      "shared_snapshot_overlay": true
+    },
+    {
+      "path": "pipeline/table_router.py",
+      "base_git_sha256": "157b6c9b3034a762ece396f76365ac9bbdf533b038d65058fdf0ad7c7c7d20ae",
+      "materialized_sha256": "157b6c9b3034a762ece396f76365ac9bbdf533b038d65058fdf0ad7c7c7d20ae",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "pipeline/trust_gate.py",
+      "base_git_sha256": "f0a3fd787802a02d6d99d18e67e045eadabb16846a648c8e9224acc9eb848862",
+      "materialized_sha256": "f0a3fd787802a02d6d99d18e67e045eadabb16846a648c8e9224acc9eb848862",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "utils/legacy_notation.py",
+      "base_git_sha256": "347dca99a85ccebf5aec976e2dbe9b6de5dca2844782e74cce48fdb66be5ba1a",
+      "materialized_sha256": "347dca99a85ccebf5aec976e2dbe9b6de5dca2844782e74cce48fdb66be5ba1a",
+      "shared_snapshot_overlay": false
+    },
+    {
+      "path": "utils/source_layers.py",
+      "base_git_sha256": "3169e3a3245aac55637f8d9cbddee9657fc5db5ad1fb72c32451bfc18352936b",
+      "materialized_sha256": "3169e3a3245aac55637f8d9cbddee9657fc5db5ad1fb72c32451bfc18352936b",
+      "shared_snapshot_overlay": false
+    }
+  ],
+  "shared_snapshot_branch_sha256": "9b64efb349ecf03e0c79c07270049017e660a1d74da2026d2de481ad7ae09309",
+  "archive_sha256": "8f5e87002359003f7826c4567a109f61368438f42bab8049b8b81b16ec073084",
+  "measurement_overlay_patch": {
+    "path": "docs/evidence/tranche_validation_20260905/baseline_frozen_source_overlay.patch",
+    "sha256": "ada2ed2ced0e5c5f36eaa47eb0f408d2b8e2c6fc9ed5611603f0509b93871ceb",
+    "apply_command": "git apply --unidiff-zero docs/evidence/tranche_validation_20260905/baseline_frozen_source_overlay.patch"
+  }
+}

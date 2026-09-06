@@ -1,0 +1,1 @@
+[2m2026-09-06T11:56:49.515772Z[0m [33m WARN[0m new_session: git repo discovery failed unexpectedly [3merror[0m[2m=[0munsupported extension name extensions.relativeworktrees; class=Repository (6) [3mcwd[0m[2m=[0m/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/review_scratch

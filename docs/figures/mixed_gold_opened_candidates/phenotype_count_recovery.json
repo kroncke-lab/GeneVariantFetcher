@@ -1,12 +1,14 @@
 {
-  "analysis_run": "mixed_gold_opened_candidates_01_02_01",
+  "analysis_run": "mixed_gold_opened_candidates_01_02_01_02_03",
   "figure_contract": {
     "evaluation_missing_count": 0,
     "included_arms": "scored candidate arms only",
     "included_tranches": [
       "mixed_gold_01",
       "mixed_gold_02",
-      "mixed_gold_cont120_01"
+      "mixed_gold_cont120_01",
+      "mixed_gold_cont120_02",
+      "mixed_gold_cont120_03"
     ],
     "labeled_variant_paper_pairs": [
       {
@@ -67,62 +69,62 @@
     "title": "Automated versus reference phenotype counts in opened mixed-gold candidates",
     "unopened_tranches": "excluded"
   },
-  "locked_at": "2026-09-03T23:52:59.594246+00:00",
+  "locked_at": "2026-09-06T01:36:47.509682+00:00",
   "metrics": {
     "affected": {
-      "ai_max": 24,
-      "count_extracted": 206,
-      "count_extracted_fraction": 0.30116959064327486,
-      "difference_equal_one": 257,
-      "exact": 259,
-      "exact_fraction": 0.3786549707602339,
-      "gold_asserted": 928,
-      "gold_nonzero": 571,
-      "greater_than_one": 168,
-      "identity_coverage": 0.7370689655172413,
-      "identity_matched": 684,
-      "identity_miss": 244,
-      "increment_over_zero_baseline": 0.2134502923976608,
-      "mae": 1.4181286549707601,
-      "manual_max": 69,
+      "ai_max": 97,
+      "count_extracted": 455,
+      "count_extracted_fraction": 0.2399789029535865,
+      "difference_equal_one": 780,
+      "exact": 740,
+      "exact_fraction": 0.39029535864978904,
+      "gold_asserted": 2458,
+      "gold_nonzero": 1480,
+      "greater_than_one": 376,
+      "identity_coverage": 0.7713588283157038,
+      "identity_matched": 1896,
+      "identity_miss": 562,
+      "increment_over_zero_baseline": 0.17088607594936708,
+      "mae": 1.4108649789029535,
+      "manual_max": 73,
       "median_absolute_difference": 1.0,
-      "nonzero_exact": 170,
-      "nonzero_exact_fraction": 0.29772329246935203,
-      "rmse": 3.649481257698469,
-      "within_one": 516,
-      "zero_baseline_exact": 113,
-      "zero_baseline_fraction": 0.1652046783625731,
-      "zero_filled": 478,
-      "zero_filled_fraction": 0.6988304093567251
+      "nonzero_exact": 374,
+      "nonzero_exact_fraction": 0.2527027027027027,
+      "rmse": 3.93023281216341,
+      "within_one": 1520,
+      "zero_baseline_exact": 416,
+      "zero_baseline_fraction": 0.21940928270042195,
+      "zero_filled": 1441,
+      "zero_filled_fraction": 0.7600210970464135
     },
     "unaffected": {
-      "ai_max": 9,
-      "count_extracted": 33,
-      "count_extracted_fraction": 0.04824561403508772,
-      "difference_equal_one": 30,
-      "exact": 635,
-      "exact_fraction": 0.9283625730994152,
-      "gold_asserted": 928,
-      "gold_nonzero": 54,
-      "greater_than_one": 19,
-      "identity_coverage": 0.7370689655172413,
-      "identity_matched": 684,
-      "identity_miss": 244,
-      "increment_over_zero_baseline": 0.007309941520467836,
-      "mae": 0.18859649122807018,
-      "manual_max": 20,
+      "ai_max": 408,
+      "count_extracted": 211,
+      "count_extracted_fraction": 0.11128691983122363,
+      "difference_equal_one": 79,
+      "exact": 1745,
+      "exact_fraction": 0.9203586497890295,
+      "gold_asserted": 2458,
+      "gold_nonzero": 253,
+      "greater_than_one": 72,
+      "identity_coverage": 0.7713588283157038,
+      "identity_matched": 1896,
+      "identity_miss": 562,
+      "increment_over_zero_baseline": 0.05379746835443038,
+      "mae": 0.22468354430379747,
+      "manual_max": 408,
       "median_absolute_difference": 0.0,
-      "nonzero_exact": 11,
-      "nonzero_exact_fraction": 0.2037037037037037,
-      "rmse": 1.2594670737822091,
-      "within_one": 665,
-      "zero_baseline_exact": 630,
-      "zero_baseline_fraction": 0.9210526315789473,
-      "zero_filled": 651,
-      "zero_filled_fraction": 0.9517543859649122
+      "nonzero_exact": 113,
+      "nonzero_exact_fraction": 0.44664031620553357,
+      "rmse": 1.4819590182071736,
+      "within_one": 1824,
+      "zero_baseline_exact": 1643,
+      "zero_baseline_fraction": 0.8665611814345991,
+      "zero_filled": 1685,
+      "zero_filled_fraction": 0.8887130801687764
     }
   },
-  "paired_rows_in_both_measures": 684,
+  "paired_rows_in_both_measures": 1896,
   "row_grain": "identity-matched variant-paper row and count measure",
   "source_runs": [
     {
@@ -142,6 +144,18 @@
       "run_id": "20260903_protocol_cont120_01_candidate",
       "selection_sha256": "f34730b3c7efe7afdb23f43b553026054464452136c5218d9ae65f9e12e028a2",
       "tier_id": "mixed_gold_cont120_01"
+    },
+    {
+      "predictions_sha256": "b327608ab456d34abd5a60d8daf7e06e93023bbcd69f988e6fff78b9bfc688e1",
+      "run_id": "20260905_protocol_cont120_02_candidate",
+      "selection_sha256": "b93bfe8f5b647ff2cbf1a0e98d51df275a249fd45925ab6b73dc70ecc080a987",
+      "tier_id": "mixed_gold_cont120_02"
+    },
+    {
+      "predictions_sha256": "56f1076e1c86762ed76c3afca0d6814b778233aa300e8cb151ac7720e34be217",
+      "run_id": "20260905_protocol_cont120_03_candidate",
+      "selection_sha256": "2ca962af3240300933496c8d05500e96aa3cc4485bf4ea9964f172f7e13bd9ac",
+      "tier_id": "mixed_gold_cont120_03"
     }
   ]
 }

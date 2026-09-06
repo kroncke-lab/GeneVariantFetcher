@@ -1,0 +1,51 @@
+{
+  "pmid": "25163546",
+  "doi": "10.1093/eurheartj/ehu301",
+  "article_url": "https://academic.oup.com/eurheartj/article/36/18/1123/2293182",
+  "discovery": "Direct Supplementary Data link on article page in browser; not a guessed URL",
+  "asset_url_without_temporary_signature": "https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/eurheartj/36/18/10.1093_eurheartj_ehu301/2/ehu301_Supplementary_Data.zip",
+  "path": "validation_runs/tranche_validation_20260905/supplement_recheck/25163546/ehu301_Supplementary_Data.zip",
+  "sha256": "c3effc082439355a36baef9c28bb2de4413818c7b22aed57d8e021b1e3ee071f",
+  "bytes": 2240128,
+  "archive_inventory": [
+    {
+      "name": "ehu301supp.docx",
+      "uncompressed_bytes": 143055,
+      "compressed_bytes": 143055
+    },
+    {
+      "name": "ehu301supp_tables.pdf",
+      "uncompressed_bytes": 2096827,
+      "compressed_bytes": 2096827
+    }
+  ],
+  "count_bearing_roster_verified": false,
+  "used_in_new_tranche_comparison": false,
+  "verified_variant_roster": true,
+  "roster_table": "Supplemental Table 6, Category Ib-III variants",
+  "roster_header_pdf_page": 6,
+  "scn5a_roster_pdf_page": 10,
+  "scn5a_source_rows": 20,
+  "per_variant_count_column_present": false,
+  "aggregate_scn5a_diagram_pdf_page": 43,
+  "visual_qa_pdf_pages": [
+    6,
+    10,
+    43
+  ],
+  "followup_run": "20260905_supplement1_source_check",
+  "followup_classification": "Unregistered opened-source calibration, separate from paired tranches",
+  "followup_api_reserve_usd": 2,
+  "followup_decided_at_utc": "2026-09-06T00:42:23.449066+00:00",
+  "files": {
+    "ehu301supp.docx": {
+      "sha256": "eb1fd0730278d1c336b2fa54ae025b9d74e0a132993e2b5959ff233fd058b18b",
+      "bytes": 143055
+    },
+    "ehu301supp_tables.pdf": {
+      "sha256": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122",
+      "bytes": 2096827
+    }
+  },
+  "corpus_merge_evidence": "supplement_corpus_merge.json"
+}

@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-09-05.
+Last updated: 2026-09-06.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -11,6 +11,59 @@ carry the active work plan or dated session log.
 
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
+
+## Latest two-tranche validation (2026-09-06; no promotion)
+
+Two additional fixed-source paired tranches use the same 251-file candidate
+runtime (`e9fef8e…`) against the registered historical nine-file baseline.
+There are 240 gene-paper attempts / 220 articles, each extracted once per arm.
+Both identity and carrier-count acceptance rules fail on both tranches.
+Tranche 03 is further discovery/calibration, not successful confirmation.
+
+| Registered cohort | TP / FP / FN, baseline → candidate | Recall | Precision | A/U absolute error |
+| --- | --- | --- | --- | --- |
+| Continuation 02 | 441 / 182 / 130 → 445 / 180 / 126 | 77.23% → 77.93% | 70.79% → 71.20% | 1,531 → 1,487 |
+| Continuation 03 | 773 / 133 / 186 → 767 / 135 / 192 | 80.60% → 79.98% | 85.32% → 85.03% | 1,881 → 1,414 |
+| Pooled, descriptive | 1,214 / 315 / 316 → 1,212 / 315 / 318 | 79.35% → 79.22% | 79.40% → 79.37% | 3,412 → 2,901 |
+
+Pooled recall delta −0.13 percentage points has a descriptive PMID-cluster
+95% interval of −0.98 to +0.61. Combined A/U error falls 14.98%, but 408 of
+511 recovered units come from SCN5A 20129283 H558R. Its Number cell matches
+gold, while person-versus-allele unit and attribution of the prior control
+cohort remain unresolved. Excluding that count row post hoc leaves 3.43%
+relative A/U improvement. Official scores and decisions are unchanged.
+Pooled A/U supply rises 414 → 427 and exact supplied values 349 → 366; tranche
+03 separately declines on both. Affected error alone falls only 3.44%.
+
+The predeclared previously-unscored subset is 196 attempts / 182 articles:
+790 / 144 / 215 → 793 / 146 / 212; recall +0.30 points (95% interval −0.37 to
++1.48), A/U error 1,713 → 1,228. Its gain includes the same 408 row; excluding
+that row leaves 5.90% improvement. These subsets introduce no replacement gate.
+All initial snapshots match; actual primary text matches on 239/240 attempts.
+RYR2 31970460's abstract/body difference produces no score difference. One
+unchanged-runtime BRCA1 retry is recorded; empty-failure sensitivity is identical.
+
+A separate opened-source check of **SCN5A 25163546**, after acquiring its actual
+publisher supplement, is **20 TP / 0 FP / 0 FN** with every count NULL. It
+supersedes the body-only 0/0/20 status below, is now reusable from the external
+corpus, and is excluded from the paired estimates. Selected substitutions for
+this paper and 20031634 into otherwise unchanged continuation-01 predictions
+would give 292 / 143 / 92 (76.04% recall, 67.13% precision), with 12.15% less
+A/U error. This is not a fresh 120-attempt result or a new headline.
+
+The revised engineering scenario for that original hard cohort is about 76%
+recall (74–78%) and 12% lower A/U error (10–17%), assuming retained selected
+recoveries; no additional unimplemented gain is in either central estimate.
+For broader available-source reading, there is no confirmed recall lift and
+only a cautious 0–5% count-error improvement allowance. These ranges are
+judgments, not confidence intervals or a corpus-wide performance guarantee.
+
+New API proxy **$40.04289**; active campaign **$44.73454 used / $55.26546
+remaining**. All new extraction used Azure; no Anthropic in these tests/reviews.
+[Report, forecast and source recommendations](evidence/tranche_validation_20260905/README.md),
+[full results](evidence/tranche_validation_20260905/results.json),
+[paired 02 figure](../benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/figures/gold_difference.png),
+[paired 03 figure](../benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/figures/gold_difference.png).
 
 ## Accepted locked snapshot (legacy linkage-assisted headline)
 
@@ -174,8 +227,9 @@ Count changes outside the insertion example also reflect fresh-model variation
 and are not credited to this code change. All three speculative parser rules
 were withdrawn after their precision or incremental-yield checks failed.
 
-25163546's recovered body still lacks useful variant/count material: all 20
-gold identities remain missed, despite successful PDF acquisition. Its all-miss
+In that earlier body-only check, 25163546 lacked useful variant/count material
+and all 20 gold identities were missed. The 2026-09-06 supplement check above
+supersedes its identity/source status, while counts remain unavailable. Its all-miss
 figure exposed and now verifies an empty-agreement reporting repair. Missing
 supplements and unconsumed clinical tables remain the main unresolved work.
 The [final difference figure](../benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/figures/gold_difference.png)

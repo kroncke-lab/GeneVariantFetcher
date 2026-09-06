@@ -1,0 +1,113 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-09-05T22:55:32.382222+00:00",
+  "predictions_sha256": "154b49250d6b2e074be2d2f48bc9681030f9182abb6893e03e8be6d456a212e0",
+  "production_run_statuses": [
+    {
+      "gene": "APOE",
+      "sha256": "53d52f206abf258c84b9ad3e79453f7bb66d2c3a496bcc7e5cf9cb1d90c91d95",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/APOE/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "BRCA2",
+      "sha256": "e665bd695c622721077a5b6e5615fa57df43254f8821a2c2ba4bb7c050efec32",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/BRCA2/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "KCNH2",
+      "sha256": "b549a1c6dede00ee00654e41b5d4d50f2f967bc0d81d1d6463af86890f563ad4",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/KCNH2/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "KCNQ1",
+      "sha256": "8df568a070abf6046a1b3fd82fc2c3394347f9eb53f25808c0aad2b49633edd8",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/KCNQ1/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "MYBPC3",
+      "sha256": "d9189bc61f39643ffb256567d2b9209aff935ce1622853a7def84b0a65f644ab",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/MYBPC3/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "RYR2",
+      "sha256": "14880cdeacfc5309aa8dc8ec0d951a7a46613280b9b42fb8747ac1b0fcb3e28e",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/RYR2/20260905_165700/RUN_STATUS.json"
+    },
+    {
+      "gene": "SCN5A",
+      "sha256": "94db2277392069047600d5f894c1427e0b41cd3d562f7fee2cd38aea730ce736",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/SCN5A/20260905_165700/RUN_STATUS.json"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 4,
+      "gene": "APOE",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 3,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/APOE/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "c5fe0572-1b72-4022-af06-8707ac91e2ce",
+      "sha256": "86a3c2e39c981788d47032c81ad3e098f396f8ef67f4af6becb361f370c26cd0"
+    },
+    {
+      "decision_event_count": 14,
+      "gene": "BRCA2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 15,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/BRCA2/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "54f605dd-d814-4787-8bca-00b9ad077713",
+      "sha256": "a4c979aa7a62fac72a7243a635f1bb8c320f7acafbaa5d0d3da433b18c0b9e41"
+    },
+    {
+      "decision_event_count": 101,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 85,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/KCNH2/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "f063c4b7-a772-4fd0-984e-3658229bbd45",
+      "sha256": "afae28590d91d57aec0aeb2c74c50eb66b8aa255c5a41848811f21014f561cc8"
+    },
+    {
+      "decision_event_count": 141,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 119,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/KCNQ1/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "02364f2d-fc6b-4afe-8741-0713eadaaa6e",
+      "sha256": "6891c8b3e7c69f10a254ce4a1ffb1e85b9e0cf77b6d8887914cb81018f88e90f"
+    },
+    {
+      "decision_event_count": 18,
+      "gene": "MYBPC3",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 18,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/MYBPC3/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "faacc677-c72a-40fd-a02c-df3489bcf63a",
+      "sha256": "bc4d3d87ec10968e4151c9780012ae15939c8fa644d1ae0338421365823704c2"
+    },
+    {
+      "decision_event_count": 46,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 36,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/RYR2/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "8dbae308-8370-42b0-944c-2888daef334f",
+      "sha256": "be1ef24ed2576719dccd0e815f1e5f5cf21b4f998c0dbf3118e0d3cb0d384cc5"
+    },
+    {
+      "decision_event_count": 301,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 243,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_baseline/production_runs/SCN5A/20260905_165700/llm_traces/trace_manifest.json",
+      "run_id": "6377e055-fc36-49d6-91d3-41fa8367d824",
+      "sha256": "3023fc1a0bd7fc7f0a029cd65ee31e3cceae8808774ab3b95d8fc303a3c54b73"
+    }
+  ],
+  "selection_sha256": "0654d0f525a8b0424ecd596bbd2c8d4120e00f3bfe2f32a62c37978cf698eae4",
+  "setup_sha256": "3fe943c17735b163624bbb481d918594fbf76faa30b93a952560b0f78cbaea21",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}

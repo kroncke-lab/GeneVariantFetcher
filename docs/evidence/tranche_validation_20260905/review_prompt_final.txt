@@ -1,0 +1,367 @@
+Review these completed results and critique the proposed forecast. Facts only; do not call tools, edit files, or create new acceptance thresholds. Keep your answer under 650 words.
+Two 120-attempt tranches, 110 PMIDs each, disjoint; same candidate runtime in both, historical nine-file baseline with common measurement infrastructure. Azure only, no Anthropic. Full cohorts are not completely untouched: pre-scoring exposure audit gives novel subsets of 97 and 99 attempts. Candidate 03 had no operational failure. One baseline BRCA1 metadata-type exception was retried once with unchanged runtime before gold access; its completed result was 0 TP/0 FP, so the predeclared empty-failure sensitivity is numerically identical. All starting frozen assets match. Actual extraction rendering matches 239/240: RYR2 31970460 was rejected to abstract by old validation but accepted as body by candidate; both score 0 TP/1 FP/1 FN, all counts omitted. No new code fitted to these tranches.
+Identity rule: observed recall gain >=1pp, recall lower bound >=-1pp, precision lower bound >=-2pp. Both tranches fail. Pair02 NI bounds do PASS; pair03 both NI bounds fail. Carrier secondary requires MAE delta<=-.05, upper95<0, coverage guard and identity guard; both fail. A/U and pooled analyses are descriptive only. Omissions are zero PREDICTIONS, with full positive-reference error, not zero error.
+Dominance: pair02 carrier error reduction131 includes128 from SCN5A27566755 (previously scored), with no A/U supplied. Pair03 carrier gain411 and unaffected gain408 include one H558R row at SCN5A20129283: baseline N/U NULL, candidate N/U408. Combined AU gain467. Pooled AU error3412->2901 (14.98% reduction), but removing that single 408-error row gives3004->2901 (3.43%). That paper IS previously unscored. The source Table2 has H558R Number408 among controls, caption 'Control variants found in 2,600 reference alleles', and 1,300 healthy people; it reuses previously genotyped controls. Person-versus-allele and study-attribution semantics need adjudication. Keep official gold score, but do not call the 408 clinically validated person counts. Pair03 A/U supply273->264, exact240->237, despite lower MAE. No uniform coverage gain.
+Separate acquisition check: newly obtained article-bound publisher supplement for already-opened SCN5A25163546 recovers20TP/0FP/0FN for $0.05516. Table6 has20 identities, no per-variant count column; all carrier/A/U values remain NULL. No count gain. Full53-page PDF plus methods supplied, source-only and locked before scoring. Normal cache-reuse local check preserves20source notations and avoids duplicate folds. Not in paired tranches.
+Old forecast concerns opened continuation01:261TP/141FP/123FN (384 identities), recall67.96875%, combined AU error576. Earlier20031634 source recovery adds11TP/2FP and reducesAU error70; already included in old forecast. Adding the NEW25163546 result to that selected-paper substitution gives292TP/143FP/92FN, recall76.0417%, precision67.1264%, FN25.2% fewer, AU12.15% lower. This is NOT a fresh120-paper score. Historical paired baseline above is NOT this old candidate; never add paired deltas mechanically to67.97%.
+Remaining work: source-component validation/cache ordering; clinical table continuation after identity shortcuts; explicit patient-ID joins; preserve carrier values while A/U unknown; DOC merged-cell repair. RYR225814417 97/62/26 is ALREADY implemented and an endpoint dispute, not future parser upside. Within old continuation01, MYBPC321302287 has at most29affected error units (23on matched,6on missing identities), only5.03% of old576 total if ALL recoverable. Big445-error30059973 and26-error30403697 are OTHER cohorts; don't add them tooldcohort.
+Proposed revised engineering forecast for original hard cohort after remaining work: central recall76%, planning range74-78% (old central74%, range72-76%); about19-31% fewer identity FNs. Combined AU error central15% lower, range10-20% (old15-25%). Rationale: selected source substitution76.04/12.15 already observed; modest additional count upside in explicit joins, cushion for stochastic regressions. Not a CI, not corpus-wide performance. Broad reading transfer should be described as no confirmed recall gain and modest count gains beyond the dominant row; no promised FP reduction. Total campaign API proxy44.73454, newwork40.04289; noAnthropic in these tests/reviews.
+Tell us if these engineering ranges are defensible, what to change, and what limitations must accompany them. Numerical judgement is advisory; the paired scores and gate decisions stay fixed.
+
+Completed metrics (recall/precision CI entries below are fractions; explicit *_pp fields are percentage points):
+{
+  "02": {
+    "all_registered_attempts": {
+      "attempts": 120,
+      "pmids": 110,
+      "baseline_tp_fp_fn": [
+        441,
+        182,
+        130
+      ],
+      "candidate_tp_fp_fn": [
+        445,
+        180,
+        126
+      ],
+      "recall_delta_pp": 0.7005253940455258,
+      "precision_delta_pp": 0.4134831460674171,
+      "count_error_reduction_percent": {
+        "carriers": 14.040728831725616,
+        "affected": 2.406832298136646,
+        "unaffected": 5.349794238683128,
+        "affected_unaffected_combined": 2.8739386022207705
+      },
+      "AU_supplied": [
+        141,
+        163
+      ],
+      "AU_exact_supplied": [
+        109,
+        129
+      ]
+    },
+    "previously_unscored_attempts": {
+      "attempts": 97,
+      "pmids": 92,
+      "baseline_tp_fp_fn": [
+        210,
+        58,
+        82
+      ],
+      "candidate_tp_fp_fn": [
+        214,
+        62,
+        78
+      ],
+      "recall_delta_pp": 1.3698630136986356,
+      "precision_delta_pp": -0.8219770711659136,
+      "count_error_reduction_percent": {
+        "carriers": -1.6172506738544474,
+        "affected": 5.915492957746479,
+        "unaffected": 12.0,
+        "affected_unaffected_combined": 7.5
+      },
+      "AU_supplied": [
+        90,
+        115
+      ],
+      "AU_exact_supplied": [
+        65,
+        84
+      ]
+    },
+    "descriptive_CI": {
+      "recall": {
+        "two_sided_95_percentile_interval": [
+          -0.0030674846625766694,
+          0.0212418300653594
+        ],
+        "valid_resamples": 10000
+      },
+      "precision": {
+        "two_sided_95_percentile_interval": [
+          -0.015925394548063077,
+          0.01837070285758652
+        ],
+        "valid_resamples": 10000
+      },
+      "carriers_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.6864111498257841,
+          0.09466019417475735
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.11599999999999966,
+          -0.006493506493506551
+        ],
+        "valid_resamples": 10000
+      },
+      "unaffected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.06732673267326733,
+          0.0035335689045936647
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_unaffected_combined_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.08056265984654742,
+          -0.00867052023121384
+        ],
+        "valid_resamples": 10000
+      }
+    },
+    "registered": {
+      "passed": false,
+      "metrics": {
+        "precision": {
+          "baseline": 0.7078651685393258,
+          "candidate": 0.712,
+          "delta_candidate_minus_baseline": 0.004134831460674171,
+          "one_sided_lower_confidence_bound": -0.012875707565973116
+        },
+        "recall": {
+          "baseline": 0.7723292469352014,
+          "candidate": 0.7793345008756567,
+          "delta_candidate_minus_baseline": 0.007005253940455258,
+          "one_sided_lower_confidence_bound": -0.0017271157167529916
+        }
+      }
+    },
+    "carrier_endpoint_passed": false
+  },
+  "03": {
+    "all_registered_attempts": {
+      "attempts": 120,
+      "pmids": 110,
+      "baseline_tp_fp_fn": [
+        773,
+        133,
+        186
+      ],
+      "candidate_tp_fp_fn": [
+        767,
+        135,
+        192
+      ],
+      "recall_delta_pp": -0.6256517205422307,
+      "precision_delta_pp": -0.2868288767174265,
+      "count_error_reduction_percent": {
+        "carriers": 27.997275204359674,
+        "affected": 4.442771084337349,
+        "unaffected": 73.77938517179024,
+        "affected_unaffected_combined": 24.82721956406167
+      },
+      "AU_supplied": [
+        273,
+        264
+      ],
+      "AU_exact_supplied": [
+        240,
+        237
+      ]
+    },
+    "previously_unscored_attempts": {
+      "attempts": 99,
+      "pmids": 90,
+      "baseline_tp_fp_fn": [
+        580,
+        86,
+        133
+      ],
+      "candidate_tp_fp_fn": [
+        579,
+        84,
+        134
+      ],
+      "recall_delta_pp": -0.14025245441795509,
+      "precision_delta_pp": 0.2432296549943591,
+      "count_error_reduction_percent": {
+        "carriers": 45.68306010928962,
+        "affected": 5.777166437414031,
+        "unaffected": 80.43478260869566,
+        "affected_unaffected_combined": 36.41524736415248
+      },
+      "AU_supplied": [
+        250,
+        248
+      ],
+      "AU_exact_supplied": [
+        229,
+        228
+      ]
+    },
+    "descriptive_CI": {
+      "recall": {
+        "two_sided_95_percentile_interval": [
+          -0.025495750708215303,
+          0.0010050251256281673
+        ],
+        "valid_resamples": 10000
+      },
+      "precision": {
+        "two_sided_95_percentile_interval": [
+          -0.026268115942028936,
+          0.014374707754498783
+        ],
+        "valid_resamples": 10000
+      },
+      "carriers_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.7364203027604632,
+          0.06016597510373445
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.26567164179104497,
+          0.01180438448566612
+        ],
+        "valid_resamples": 10000
+      },
+      "unaffected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.7335766423357664,
+          0.028865979381443307
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_unaffected_combined_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.38967861557478367,
+          -0.0007507507507507061
+        ],
+        "valid_resamples": 10000
+      }
+    },
+    "registered": {
+      "passed": false,
+      "metrics": {
+        "precision": {
+          "baseline": 0.8532008830022075,
+          "candidate": 0.8503325942350333,
+          "delta_candidate_minus_baseline": -0.002868288767174265,
+          "one_sided_lower_confidence_bound": -0.020982425393116233
+        },
+        "recall": {
+          "baseline": 0.8060479666319083,
+          "candidate": 0.799791449426486,
+          "delta_candidate_minus_baseline": -0.006256517205422307,
+          "one_sided_lower_confidence_bound": -0.021164021164021163
+        }
+      }
+    },
+    "carrier_endpoint_passed": false
+  },
+  "pooled": {
+    "all_registered_attempts": {
+      "attempts": 240,
+      "pmids": 220,
+      "baseline_tp_fp_fn": [
+        1214,
+        315,
+        316
+      ],
+      "candidate_tp_fp_fn": [
+        1212,
+        315,
+        318
+      ],
+      "recall_delta_pp": -0.13071895424836555,
+      "precision_delta_pp": -0.02698323570113903,
+      "count_error_reduction_percent": {
+        "carriers": 22.573927530195753,
+        "affected": 3.4403669724770642,
+        "unaffected": 52.88944723618091,
+        "affected_unaffected_combined": 14.976553341148884
+      },
+      "AU_supplied": [
+        414,
+        427
+      ],
+      "AU_exact_supplied": [
+        349,
+        366
+      ]
+    },
+    "previously_unscored_attempts": {
+      "attempts": 196,
+      "pmids": 182,
+      "baseline_tp_fp_fn": [
+        790,
+        144,
+        215
+      ],
+      "candidate_tp_fp_fn": [
+        793,
+        146,
+        212
+      ],
+      "recall_delta_pp": 0.29850746268657025,
+      "precision_delta_pp": -0.13089691753721544,
+      "count_error_reduction_percent": {
+        "carriers": 32.03732503888025,
+        "affected": 5.822550831792976,
+        "unaffected": 66.87797147385103,
+        "affected_unaffected_combined": 28.312901342673673
+      },
+      "AU_supplied": [
+        340,
+        363
+      ],
+      "AU_exact_supplied": [
+        294,
+        312
+      ]
+    },
+    "descriptive_CI": {
+      "recall": {
+        "two_sided_95_percentile_interval": [
+          -0.009838998211091243,
+          0.006103763987792443
+        ],
+        "valid_resamples": 10000
+      },
+      "precision": {
+        "two_sided_95_percentile_interval": [
+          -0.014419462404585137,
+          0.011190131448201357
+        ],
+        "valid_resamples": 10000
+      },
+      "carriers_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.642644431209053,
+          0.027085590465872222
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.15627906976744188,
+          -0.008317929759704246
+        ],
+        "valid_resamples": 10000
+      },
+      "unaffected_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.5685185185185184,
+          0.005689900426742556
+        ],
+        "valid_resamples": 10000
+      },
+      "affected_unaffected_combined_end_to_end_mae": {
+        "two_sided_95_percentile_interval": [
+          -0.30510388437217706,
+          -0.016603773584905612
+        ],
+        "valid_resamples": 10000
+      }
+    }
+  }
+}

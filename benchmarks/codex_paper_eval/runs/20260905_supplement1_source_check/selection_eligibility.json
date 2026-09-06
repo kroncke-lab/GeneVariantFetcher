@@ -1,0 +1,58 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "SCN5A": 1
+  },
+  "gold_sources": {
+    "SCN5A": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard/normalized/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 2000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/tranche_validation_20260905/supplement_check.tsv",
+  "papers": [
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_artifacts.json",
+      "artifacts_sha256": "35266b5a503349243e141c4d5f52a1d4f5ecdfd71d1b077a91b45679d32b1255",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_supplements/ehu301supp_tables.pdf": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_supplements/ehu301supp_tables.pdf"
+      ],
+      "pmid": "25163546",
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+      "source_bytes": 325312,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 324795,
+            "distinct_variant_tokens": 431,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+            "sha256": "0369b9ae6cb98a797c3e5f0813cce33c55a1254fef75bef406a5d2be74396c1c",
+            "table_rows": 1
+          }
+        ],
+        "policy": "pareto_richness",
+        "rationale": "Selected a candidate only when it Pareto-dominated the priority candidate on table rows, distinct variant tokens, and characters; preserved priority order when candidate renderings traded off.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 324795,
+          "distinct_variant_tokens": 431,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/tranche_validation_20260905/supplement_recheck/source_corpus/SCN5A/25163546/25163546_FULL_CONTEXT.md",
+          "sha256": "0369b9ae6cb98a797c3e5f0813cce33c55a1254fef75bef406a5d2be74396c1c",
+          "table_rows": 1
+        }
+      },
+      "source_sha256": "0369b9ae6cb98a797c3e5f0813cce33c55a1254fef75bef406a5d2be74396c1c"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-06T00:47:12.440759+00:00",
+  "run_id": "20260905_supplement1_source_check",
+  "schema_version": 1,
+  "seed": 2026090502
+}

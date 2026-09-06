@@ -61,13 +61,15 @@
       "unique_pmids": 114
     },
     "opened_mixed_gold_candidates": {
-      "gene_paper_attempts": 218,
-      "plotted_rows": 1368,
+      "gene_paper_attempts": 458,
+      "plotted_rows": 3792,
       "protocol_note": "cumulative progress/failure view; candidate protocol may change across opened disjoint tranches",
       "run_ids": [
         "20260903_protocol_mixed01_candidate",
         "20260903_protocol_mixed02_candidate",
-        "20260903_protocol_cont120_01_candidate"
+        "20260903_protocol_cont120_01_candidate",
+        "20260905_protocol_cont120_02_candidate",
+        "20260905_protocol_cont120_03_candidate"
       ],
       "source_metrics": [
         {
@@ -231,14 +233,124 @@
             "zero_filled": 238,
             "zero_filled_fraction": 0.9153846153846154
           }
+        },
+        {
+          "affected": {
+            "ai_max": 97,
+            "count_extracted": 122,
+            "count_extracted_fraction": 0.27415730337078653,
+            "difference_equal_one": 145,
+            "exact": 159,
+            "exact_fraction": 0.35730337078651686,
+            "gold_asserted": 571,
+            "gold_nonzero": 369,
+            "greater_than_one": 141,
+            "identity_coverage": 0.7793345008756567,
+            "identity_matched": 445,
+            "identity_miss": 126,
+            "increment_over_zero_baseline": 0.18651685393258427,
+            "mae": 2.1775280898876406,
+            "manual_max": 73,
+            "median_absolute_difference": 1,
+            "nonzero_exact": 98,
+            "nonzero_exact_fraction": 0.26558265582655827,
+            "rmse": 5.902770250417467,
+            "within_one": 304,
+            "zero_baseline_exact": 76,
+            "zero_baseline_fraction": 0.1707865168539326,
+            "zero_filled": 323,
+            "zero_filled_fraction": 0.7258426966292135
+          },
+          "unaffected": {
+            "ai_max": 62,
+            "count_extracted": 41,
+            "count_extracted_fraction": 0.09213483146067415,
+            "difference_equal_one": 27,
+            "exact": 393,
+            "exact_fraction": 0.8831460674157303,
+            "gold_asserted": 571,
+            "gold_nonzero": 67,
+            "greater_than_one": 25,
+            "identity_coverage": 0.7793345008756567,
+            "identity_matched": 445,
+            "identity_miss": 126,
+            "increment_over_zero_baseline": 0.033707865168539325,
+            "mae": 0.36404494382022473,
+            "manual_max": 106,
+            "median_absolute_difference": 0,
+            "nonzero_exact": 17,
+            "nonzero_exact_fraction": 0.2537313432835821,
+            "rmse": 2.3329587714345665,
+            "within_one": 420,
+            "zero_baseline_exact": 378,
+            "zero_baseline_fraction": 0.849438202247191,
+            "zero_filled": 404,
+            "zero_filled_fraction": 0.9078651685393259
+          }
+        },
+        {
+          "affected": {
+            "ai_max": 38,
+            "count_extracted": 127,
+            "count_extracted_fraction": 0.16558018252933507,
+            "difference_equal_one": 378,
+            "exact": 322,
+            "exact_fraction": 0.4198174706649283,
+            "gold_asserted": 959,
+            "gold_nonzero": 540,
+            "greater_than_one": 67,
+            "identity_coverage": 0.799791449426486,
+            "identity_matched": 767,
+            "identity_miss": 192,
+            "increment_over_zero_baseline": 0.12385919165580182,
+            "mae": 0.9595827900912647,
+            "manual_max": 38,
+            "median_absolute_difference": 1,
+            "nonzero_exact": 106,
+            "nonzero_exact_fraction": 0.1962962962962963,
+            "rmse": 2.4680487571228924,
+            "within_one": 700,
+            "zero_baseline_exact": 227,
+            "zero_baseline_fraction": 0.29595827900912647,
+            "zero_filled": 640,
+            "zero_filled_fraction": 0.834419817470665
+          },
+          "unaffected": {
+            "ai_max": 408,
+            "count_extracted": 137,
+            "count_extracted_fraction": 0.17861799217731422,
+            "difference_equal_one": 22,
+            "exact": 717,
+            "exact_fraction": 0.9348109517601043,
+            "gold_asserted": 959,
+            "gold_nonzero": 132,
+            "greater_than_one": 28,
+            "identity_coverage": 0.799791449426486,
+            "identity_matched": 767,
+            "identity_miss": 192,
+            "increment_over_zero_baseline": 0.10691003911342895,
+            "mae": 0.1760104302477184,
+            "manual_max": 408,
+            "median_absolute_difference": 0,
+            "nonzero_exact": 85,
+            "nonzero_exact_fraction": 0.6439393939393939,
+            "rmse": 0.9255182839210846,
+            "within_one": 739,
+            "zero_baseline_exact": 635,
+            "zero_baseline_fraction": 0.8279009126466753,
+            "zero_filled": 630,
+            "zero_filled_fraction": 0.8213820078226858
+          }
         }
       ],
       "tier_ids": [
         "mixed_gold_01",
         "mixed_gold_02",
-        "mixed_gold_cont120_01"
+        "mixed_gold_cont120_01",
+        "mixed_gold_cont120_02",
+        "mixed_gold_cont120_03"
       ],
-      "unique_pmids": 200
+      "unique_pmids": 420
     }
   },
   "evaluation_rule": {
@@ -247,9 +359,9 @@
     "stored_missing_value": null
   },
   "overlap": {
-    "automated_count_disagreements": 16,
-    "gene_paper_attempts": 23,
-    "plotted_measure_variant_keys": 210,
+    "automated_count_disagreements": 31,
+    "gene_paper_attempts": 45,
+    "plotted_measure_variant_keys": 544,
     "rule": "shown in separate strata; never deduplicated or pooled"
   },
   "title": "Automated versus reference phenotype counts across evaluated cohorts"

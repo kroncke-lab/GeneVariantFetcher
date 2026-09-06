@@ -1,0 +1,50 @@
+{
+  "gene": "SCN5A",
+  "status": "completed",
+  "severity": "ok",
+  "exit_code": 0,
+  "active_db": "SCN5A.db",
+  "duration_seconds": 153,
+  "stage_failures": [],
+  "stage_warnings": [],
+  "gold_access": {
+    "disabled": true,
+    "mode": "disabled",
+    "gold_derived_alias_files_disabled": true
+  },
+  "source_integrity": {
+    "full_text": 1,
+    "abstract_only": 0,
+    "total": 1,
+    "abstract_only_ratio": 0.0,
+    "threshold": 0.85,
+    "degraded": false,
+    "finalized_ledger": {
+      "papers_finalized": 1,
+      "full_text": 1,
+      "abstract_only": 0,
+      "source_unverified": 0,
+      "agrees_with_disk_scan": true,
+      "source_class_discrepancies": []
+    }
+  },
+  "llm_trace": {
+    "run_id": "8080102a-62f6-4151-840f-b48667535666",
+    "trace_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/llm_traces",
+    "report": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/llm_trace_report.html",
+    "llm_call_count": 1,
+    "decision_event_count": 2,
+    "integrity_level": "write_time_verified",
+    "integrity_errors": [],
+    "missing_decision_links": [
+      {
+        "stage": "clinical_table_routing",
+        "expected_event": "table_routing_decision",
+        "llm_calls": 0,
+        "reason": "decision events carry no accepted_response_trace_id"
+      }
+    ],
+    "omissions": 3,
+    "sharded": false
+  }
+}

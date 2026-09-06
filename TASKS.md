@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-05.
+Last reviewed: 2026-09-06.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -38,6 +38,25 @@ recurs. Use finite Anthropic credits sparingly, for bounded reviews or hard
 cases where they materially improve the decision. A CLI's reported dollar
 estimate is not an additional budget charge unless it represents API spend.
 
+- [x] Validate the unchanged reader on continuation tranches 02 and 03.
+      Both paired 120-attempt tranches completed and failed the registered
+      identity and carrier-count rules. Pooled recall is essentially flat;
+      the A/U gain is dominated by one 408-count row with unresolved unit and
+      study attribution. Previously-unscored subsets and post-hoc influence
+      checks are descriptive only. Grok and Agy reviewed both stages.
+      New API proxy $40.04289; active campaign **$44.73454 used / $55.26546
+      remaining**. No Anthropic used for these tests/reviews. Report and revised
+      scope-specific forecast: `docs/evidence/tranche_validation_20260905/README.md`.
+      Tranche 04 remains unopened; no headline/default-stage promotion.
+- [x] Recover and validate SCN5A 25163546's actual article-specific supplement.
+      The publisher ZIP contains the 53-page roster PDF and methods DOCX.
+      A separate fresh, source-only locked check recovers 20 TP / 0 FP / 0 FN,
+      with all carrier/A/U counts NULL. Managed corpus upgrade and normal
+      cache reuse preserve all 20 cDNA strings and fold the two components
+      once. This supersedes the earlier body-only failure; it is outside the
+      two paired tranches. See `supplement_check_results.json` and
+      `cache_reuse_check.json` in the same evidence directory.
+
 - [x] Implement supported recall improvements on main with Claude, Grok and
       Agy CLI review. The new campaign ran 15 fresh attempts over nine papers:
       ten-attempt prototype, four-attempt source-matched final ablation, and
@@ -46,8 +65,8 @@ estimate is not an additional budget charge unless it represents API spend.
       four-attempt arm keeps 55 TP / 6 FN while reducing prototype extras from
       11 to 6. All three speculative parser rules were withdrawn; retain the
       source insertion validator, repository fallback and measurement fixes.
-      SCN5A 25163546 remains 0/0/20: recover its actual roster before spending
-      on another reader. Test proxy **$4.692**; Claude consult **$3.072**;
+      SCN5A 25163546 was 0/0/20 in that body-only check; the subsequent
+      supplement check above supersedes its source status. Test proxy **$4.692**; Claude consult **$3.072**;
       Grok/Agy billing unavailable. The old $84.035 campaign stays separate.
       This is opened calibration, not a passing discovery/confirmation or
       headline promotion. Final offline suite: **2,890 passed**. Evidence:
@@ -187,16 +206,29 @@ estimate is not an additional budget charge unless it represents API spend.
       HTML; bind article identity, asset URL/hash and converted component.
       Resolve Online Table references to embedded PDF pages or linked assets,
       not a table-count versus file-count gap. Prioritize 14678125's body,
-      19398665's clinical table bodies, and 25163546's article-specific
-      supplements; both recovered manuscripts remain body-only/retry until
-      their supplement surfaces are verified. Freeze recovered bytes before
-      any separately authorized replay.
+      19398665's clinical table bodies, and component validation across the
+      remaining backlog. 25163546's roster is now verified and cached, but
+      does not contain per-variant counts. Let validated article/component
+      quality outrank file-count ties when updating the corpus. Freeze source
+      before measuring a new candidate.
 - [ ] **Continue phenotype reading after deterministic identity extraction.**
       Use already-acquired 30059973 Tables 11/14 to validate a general bounded
       clinical-component continuation and table-aware PDF conversion. Preserve
       hierarchical headers, orientation, footnotes and endpoint labels; carrier
       N is not automatically affected N. Do not optimize toward legacy gold's
       carrier/affected equality.
+- [ ] **Bind retained counts to units and source-cohort ownership.**
+      Adjudicate SCN5A 20129283 H558R's Number = 408 under the table's
+      reference-allele caption and prior-control-cohort context. Retain raw
+      evidence without treating a structural table stamp as proof of people
+      or clinical status. Keep official gold/locked scores unchanged.
+- [ ] **Abstain independently by count field.** Preserve explicit carrier
+      counts when A/U is unknown; RYR2 18929323's 13/6 counts are the concrete
+      regression case. Require complete endpoint partitions before subtraction.
+- [ ] **Harden malformed metadata failure reporting.** Normalize or reject
+      nonnumeric total_variants_found before arithmetic; always emit failed
+      RUN_STATUS on process exceptions. Validate with the archived tranche-03
+      BRCA1 operational failure, without replacing any locked attempt.
 - [ ] **Prototype audited patient joins and consistent endpoint projection.**
       Use 21302287's explicit patient-ID lists and 30403697's two variant
       columns; retain per-person genotype, phenotype/timepoint and unknowns,

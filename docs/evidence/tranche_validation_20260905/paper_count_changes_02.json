@@ -1,0 +1,3002 @@
+[
+  {
+    "gene": "APOE",
+    "pmid": "27108409",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "BRCA2",
+    "pmid": "26848529",
+    "baseline": {
+      "carriers": 23.0,
+      "affected": 23.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 23.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -19.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "11844290",
+    "baseline": {
+      "carriers": 86.0,
+      "affected": 43.0,
+      "unaffected": 43.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 86.0,
+      "affected": 43.0,
+      "unaffected": 43.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "11854117",
+    "baseline": {
+      "carriers": 147.0,
+      "affected": 201.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 147.0,
+      "affected": 201.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "14676148",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "15364333",
+    "baseline": {
+      "carriers": 20.0,
+      "affected": 20.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 20.0,
+      "affected": 20.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "17171344",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 9.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 9.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "18776039",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "21130771",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "21216356",
+    "baseline": {
+      "carriers": 9.0,
+      "affected": 7.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 9.0,
+      "affected": 7.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "22764740",
+    "baseline": {
+      "carriers": 3.0,
+      "affected": 0.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 3.0,
+      "affected": 0.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "23237912",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "24057343",
+    "baseline": {
+      "carriers": 7.0,
+      "affected": 4.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 7.0,
+      "affected": 4.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "24112685",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "26496715",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 101.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 101.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "26847485",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "27761169",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "29331839",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 2.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": -2.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "29650123",
+    "baseline": {
+      "carriers": 22.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 22.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "30036649",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 5,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 5,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "30244407",
+    "baseline": {
+      "carriers": 10.0,
+      "affected": 12.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 10.0,
+      "affected": 11.0,
+      "unaffected": 2.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -1.0,
+      "unaffected": -1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "30246897",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNH2",
+    "pmid": "9693036",
+    "baseline": {
+      "carriers": 20.0,
+      "affected": 20.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 20.0,
+      "affected": 20.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "16627448",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 7.0,
+      "affected": 3.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 7.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "17038145",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "18400097",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "18441444",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "18464931",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "20368164",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "22250012",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "23350853",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 9.0,
+      "unaffected": 12.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 12.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -7.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "23400408",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -4.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "25139741",
+    "baseline": {
+      "carriers": 8.0,
+      "affected": 4.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 8.0,
+      "affected": 4.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "25786344",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 4.0,
+      "unaffected": 4.0,
+      "supplied_affected": 4,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 4.0,
+      "unaffected": 4.0,
+      "supplied_affected": 4,
+      "supplied_unaffected": 4
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 4
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "26022593",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "26496715",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 70.0,
+      "unaffected": 0.0,
+      "supplied_affected": 8,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 62.0,
+      "unaffected": 0.0,
+      "supplied_affected": 11,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "28491650",
+    "baseline": {
+      "carriers": 10.0,
+      "affected": 2.0,
+      "unaffected": 8.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 10.0,
+      "affected": 1.0,
+      "unaffected": 8.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "29037160",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 5.0,
+      "unaffected": 5.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 3
+    },
+    "candidate": {
+      "carriers": 14.0,
+      "affected": 1.0,
+      "unaffected": 7.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 10.0,
+      "affected": -4.0,
+      "unaffected": 2.0,
+      "supplied_affected": -3,
+      "supplied_unaffected": -3
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "29372044",
+    "baseline": {
+      "carriers": 3.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -3.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "29672598",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 3.0,
+      "unaffected": 6.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 4.0,
+      "unaffected": 6.0,
+      "supplied_affected": 4,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 3.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "30036649",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 6.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 6.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "30170673",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "30244407",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "30878014",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "31899541",
+    "baseline": {
+      "carriers": 7.0,
+      "affected": 7.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 6.0,
+      "affected": 6.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -1.0,
+      "affected": -1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "32405922",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "32830254",
+    "baseline": {
+      "carriers": 7.0,
+      "affected": 3.0,
+      "unaffected": 5.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 7.0,
+      "affected": 2.0,
+      "unaffected": 5.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "34135346",
+    "baseline": {
+      "carriers": 10.0,
+      "affected": 1.0,
+      "unaffected": 9.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 10.0,
+      "affected": 1.0,
+      "unaffected": 9.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "MYBPC3",
+    "pmid": "20433692",
+    "baseline": {
+      "carriers": 33.0,
+      "affected": 30.0,
+      "unaffected": 5.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 4
+    },
+    "candidate": {
+      "carriers": 37.0,
+      "affected": 34.0,
+      "unaffected": 7.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 2
+    },
+    "delta": {
+      "carriers": 4.0,
+      "affected": 4.0,
+      "unaffected": 2.0,
+      "supplied_affected": -3,
+      "supplied_unaffected": -2
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "14571276",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 4.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 4.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "16272262",
+    "baseline": {
+      "carriers": 59.0,
+      "affected": 40.0,
+      "unaffected": 19.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 59.0,
+      "affected": 40.0,
+      "unaffected": 19.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "18285261",
+    "baseline": {
+      "carriers": 5.0,
+      "affected": 5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 5.0,
+      "affected": 5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "18929323",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 19.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 19.0,
+      "affected": 19.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 19.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "21292648",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "25814417",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 24.0,
+      "unaffected": 44.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 24.0,
+      "unaffected": 44.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "28100344",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "28158428",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 14.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 14.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "30157307",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "30471092",
+    "baseline": {
+      "carriers": 9.0,
+      "affected": 9.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 9.0,
+      "affected": 9.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "31875585",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "32218223",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 3.0,
+      "unaffected": 1.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 2
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 2
+    },
+    "delta": {
+      "carriers": -1.0,
+      "affected": 0.0,
+      "unaffected": -1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "35245853",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "35439358",
+    "baseline": {
+      "carriers": 7.0,
+      "affected": 3.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": -7.0,
+      "affected": -3.0,
+      "unaffected": -3.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "10690282",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "11150514",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "11274952",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 9.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 2.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": -2.0,
+      "unaffected": -7.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "11304498",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "11748104",
+    "baseline": {
+      "carriers": 13.0,
+      "affected": 12.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 13.0,
+      "affected": 12.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "12051963",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "15121794",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "15161528",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "15851227",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "15851440",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "15996170",
+    "baseline": {
+      "carriers": 12.0,
+      "affected": 7.0,
+      "unaffected": 5.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 12.0,
+      "affected": 7.0,
+      "unaffected": 5.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "16039271",
+    "baseline": {
+      "carriers": 5.0,
+      "affected": 1.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 5.0,
+      "affected": 1.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "16980337",
+    "baseline": {
+      "carriers": 12.0,
+      "affected": 9.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 12.0,
+      "affected": 9.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "17198989",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": -1
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "17205354",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "17331104",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "17442746",
+    "baseline": {
+      "carriers": 3.0,
+      "affected": 0.0,
+      "unaffected": 3.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": -3.0,
+      "affected": 0.0,
+      "unaffected": -3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "17897635",
+    "baseline": {
+      "carriers": 6.0,
+      "affected": 3.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 6.0,
+      "affected": 3.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "18452876",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "18803136",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "19083750",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "19762097",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "19808664",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "19843921",
+    "baseline": {
+      "carriers": 12.0,
+      "affected": 12.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 12.0,
+      "affected": 12.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "20022821",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 1.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "20038812",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "20137763",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "21216356",
+    "baseline": {
+      "carriers": 3.0,
+      "affected": 3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 3.0,
+      "affected": 3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "21321465",
+    "baseline": {
+      "carriers": 5.0,
+      "affected": 5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 7,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 5.0,
+      "affected": 6.0,
+      "unaffected": 0.0,
+      "supplied_affected": 6,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 1
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "21596231",
+    "baseline": {
+      "carriers": 5.0,
+      "affected": 5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -3.0,
+      "affected": -3.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "21609529",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "22885917",
+    "baseline": {
+      "carriers": 40.0,
+      "affected": 40.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 40.0,
+      "affected": 40.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "23237912",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 2.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 3.0,
+      "affected": 1.0,
+      "unaffected": 2.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 3.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "23276942",
+    "baseline": {
+      "carriers": 6.0,
+      "affected": 2.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 6.0,
+      "affected": 2.0,
+      "unaffected": 4.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24112685",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -1.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24144883",
+    "baseline": {
+      "carriers": 7.0,
+      "affected": 8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 7.0,
+      "affected": 8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24349418",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": -2,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24363796",
+    "baseline": {
+      "carriers": 8.0,
+      "affected": 5.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 8.0,
+      "affected": 5.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24445991",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": -1
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "24613995",
+    "baseline": {
+      "carriers": 6.0,
+      "affected": 8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 5,
+      "supplied_unaffected": 3
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 13,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -6.0,
+      "affected": -8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 8,
+      "supplied_unaffected": -3
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "25236808",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "25757662",
+    "baseline": {
+      "carriers": 5.0,
+      "affected": 5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 6,
+      "supplied_unaffected": 6
+    },
+    "delta": {
+      "carriers": -5.0,
+      "affected": -5.0,
+      "unaffected": 0.0,
+      "supplied_affected": 5,
+      "supplied_unaffected": 6
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "26036855",
+    "baseline": {
+      "carriers": 12.0,
+      "affected": 12.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 12.0,
+      "affected": 12.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "26496715",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 4.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "26636822",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "27082542",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "27566755",
+    "baseline": {
+      "carriers": 198.0,
+      "affected": 406.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 70.0,
+      "affected": 406.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": -128.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "27676163",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 1,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "28491684",
+    "baseline": {
+      "carriers": 4.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 4.0,
+      "affected": 1.0,
+      "unaffected": 3.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "28739862",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 1.0,
+      "unaffected": 1.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "28837624",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 3,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "29672598",
+    "baseline": {
+      "carriers": 6.0,
+      "affected": 8.0,
+      "unaffected": 0.0,
+      "supplied_affected": 9,
+      "supplied_unaffected": 1
+    },
+    "candidate": {
+      "carriers": 7.0,
+      "affected": 6.0,
+      "unaffected": 0.0,
+      "supplied_affected": 11,
+      "supplied_unaffected": 1
+    },
+    "delta": {
+      "carriers": 1.0,
+      "affected": -2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "29709101",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 11,
+      "supplied_unaffected": 11
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 11,
+      "supplied_unaffected": 11
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "29791480",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 1.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "30036649",
+    "baseline": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 2,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "30246897",
+    "baseline": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 1.0,
+      "affected": 1.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 0,
+      "supplied_unaffected": 0
+    }
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "30371189",
+    "baseline": {
+      "carriers": 2.0,
+      "affected": 0.0,
+      "unaffected": 0.0,
+      "supplied_affected": 5,
+      "supplied_unaffected": 0
+    },
+    "candidate": {
+      "carriers": 2.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": 4,
+      "supplied_unaffected": 0
+    },
+    "delta": {
+      "carriers": 0.0,
+      "affected": 2.0,
+      "unaffected": 0.0,
+      "supplied_affected": -1,
+      "supplied_unaffected": 0
+    }
+  }
+]

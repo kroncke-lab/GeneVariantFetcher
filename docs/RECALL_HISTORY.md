@@ -15,6 +15,43 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — two additional paired tranches and a recovered supplement
+
+The unchanged d299 candidate runtime (251 files, e9fef8e…) completed continuation
+02 and 03 against the same historical nine-file baseline and fixed source
+availability. Each tranche has 120 attempts / 110 PMIDs. Both identity and
+carrier secondary gates fail. 02 is 441/182/130 → 445/180/126 TP/FP/FN,
+recall +0.70 pp; 03 is 773/133/186 → 767/135/192, recall −0.63 pp. Pooled
+240-attempt recall is 79.35% → 79.22%, with FP unchanged at 315. The 196-attempt
+previously-unscored subset has +0.30 pp recall, with uncertainty crossing zero.
+
+A/U absolute error falls 3,412 → 2,901 (14.98%), but SCN5A 20129283 H558R's
+408 unaffected count explains 79.8% of the reduction. The source cell exists;
+its person/allele unit and prior-control-cohort attribution need adjudication.
+Excluding its count fields post hoc leaves 3.43% pooled A/U improvement, without
+changing official results. Tranche 03 count supply/exactness declines, although
+pooled supply rises. Initial source snapshots match everywhere; one primary
+text differs because of historical content validation, with unchanged scores.
+A preserved baseline BRCA1 operational failure received one unchanged-runtime
+retry before gold access; the empty-failure sensitivity is numerically identical.
+
+Separately, the real publisher Supplementary Data archive for SCN5A 25163546
+was recovered and validated. A fresh locked source-only check yields 20/0/0,
+all counts NULL, superseding the 2026-09-05 body-only 0/0/20 source status.
+The external corpus now retains the actual archive and table/method members;
+normal reuse preserves the 20 SCN5A cDNA strings and folds components once.
+No production runtime changes were inserted between paired arms.
+
+Grok and Agy reviews informed a narrower forecast: the original hard cohort's
+selected two-paper substitution is 76.04% recall and 12.15% lower A/U error,
+not a fresh 120-paper result. Approximate 74–78% recall / 10–17% lower A/U
+error are planning scenarios only. The broad reader has no confirmed recall
+transfer. New API proxy $40.04289, current campaign $44.73454 used / $55.26546
+remaining; all new extractions Azure, no Anthropic in these tests/reviews.
+No headline, default-off-stage or confirmation promotion. Evidence, full
+results, sensitivities, forecast and recommendations:
+[`tranche_validation_20260905`](evidence/tranche_validation_20260905/README.md).
+
 ## 2026-09-05 — targeted repository and insertion validation on fresh sources
 
 Fifteen fresh attempts over nine opened papers cost $4.69165 by the dated test

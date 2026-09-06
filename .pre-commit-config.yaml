@@ -20,4 +20,6 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1200"]
+        # Preserve the complete SHA-locked tranche-03 prediction records.
+        exclude: ^benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_(baseline|candidate)/predictions\.json$
       - id: check-merge-conflict

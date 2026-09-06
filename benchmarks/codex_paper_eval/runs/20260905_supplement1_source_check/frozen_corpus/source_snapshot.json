@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "papers": [
+    {
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "files": {
+        "25163546_FULL_CONTEXT.md": "0369b9ae6cb98a797c3e5f0813cce33c55a1254fef75bef406a5d2be74396c1c",
+        "25163546_artifacts.json": "35266b5a503349243e141c4d5f52a1d4f5ecdfd71d1b077a91b45679d32b1255",
+        "25163546_supplements/ehu301supp.docx": "eb1fd0730278d1c336b2fa54ae025b9d74e0a132993e2b5959ff233fd058b18b",
+        "25163546_supplements/ehu301supp_tables.pdf": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122"
+      }
+    }
+  ]
+}

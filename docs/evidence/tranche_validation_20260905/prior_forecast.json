@@ -1,0 +1,49 @@
+{
+  "classification": "Prior engineering forecast, not a measured benchmark result",
+  "scope": "Hard opened continuation-01 cohort after implementing proposed acquisition and reading improvements; not corpus-wide",
+  "reference_candidate": {
+    "run_id": "20260903_protocol_cont120_01_candidate",
+    "tp": 261,
+    "fp": 141,
+    "fn": 123,
+    "gold_identities": 384,
+    "recall": 0.6796875,
+    "affected_absolute_error_sum": 428,
+    "unaffected_absolute_error_sum": 148
+  },
+  "prior_forecast": {
+    "central_recall": 0.74,
+    "recall_range": [
+      0.72,
+      0.76
+    ],
+    "relative_fn_reduction_range": [
+      0.13,
+      0.25
+    ],
+    "relative_affected_unaffected_error_reduction_range": [
+      0.15,
+      0.25
+    ],
+    "precision": "roughly stable"
+  },
+  "already_observed_opened_paper_substitution": {
+    "gene": "SCN5A",
+    "pmid": "20031634",
+    "tp_gain": 11,
+    "cohort_recall_percentage_point_equivalent": 2.8645833333333335,
+    "affected_error_reduction": 34,
+    "unaffected_error_reduction": 36,
+    "combined_relative_error_reduction": 0.12152777777777778,
+    "caution": "A substitution using one freshly rerun selected paper; not a fresh full-cohort score. Already included in the prior forecast, so do not add twice."
+  },
+  "untested_forecast_components": [
+    "Recovery of the actual variant-bearing supplementary roster for PMID 25163546",
+    "Clinical-table continuation after an identity-only table shortcut",
+    "Explicit patient-ID joins for phenotype counts"
+  ],
+  "new_tranche_estimand": "Within-tranche current reader versus historical nine-file baseline on identical frozen source assets. Acquisition upside is not independently tested by this comparison.",
+  "historical_baseline_caution": "The new paired baseline is the historical nine-file 506a949c protocol, not the 20260903 continuation-01 candidate used as the forecast reference. Current-minus-historical deltas include earlier reader changes as well as the latest fixes. Do not mechanically add these deltas to 67.96875% as an incremental causal estimate.",
+  "numeric_forecast_recorded_before_new_tranche_scoring": true,
+  "historical_baseline_caution_recorded": "After baseline lock, before candidate lock; numeric forecast unchanged."
+}

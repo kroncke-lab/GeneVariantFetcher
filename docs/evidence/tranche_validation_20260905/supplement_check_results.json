@@ -1,0 +1,100 @@
+{
+  "run_id": "20260905_supplement1_source_check",
+  "classification": "Unregistered opened-source calibration; do not pool with the two fixed-source paired tranches",
+  "overall": {
+    "count": {
+      "affected": {
+        "gold_asserted": 20,
+        "gold_asserted_nonzero": 20,
+        "gold_asserted_zero": 0,
+        "mae": null,
+        "predicted": 0,
+        "predicted_on_nonzero_gold": 0,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.0,
+        "recall_nonzero_gold": 0.0,
+        "recall_zero_gold": null,
+        "rmse": null
+      },
+      "carriers": {
+        "gold_asserted": 20,
+        "gold_asserted_nonzero": 20,
+        "gold_asserted_zero": 0,
+        "mae": null,
+        "predicted": 0,
+        "predicted_on_nonzero_gold": 0,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.0,
+        "recall_nonzero_gold": 0.0,
+        "recall_zero_gold": null,
+        "rmse": null
+      },
+      "unaffected": {
+        "gold_asserted": 20,
+        "gold_asserted_nonzero": 0,
+        "gold_asserted_zero": 20,
+        "mae": null,
+        "predicted": 0,
+        "predicted_on_nonzero_gold": 0,
+        "predicted_on_zero_gold": 0,
+        "recall": 0.0,
+        "recall_nonzero_gold": null,
+        "recall_zero_gold": 0.0,
+        "rmse": null
+      }
+    },
+    "counted_precision": {
+      "count_bearing_matched_rows": 0,
+      "counted_extra_rows": 0,
+      "matched_rows": 20,
+      "precision_among_count_bearing_predictions": null,
+      "precision_vs_counted_gold_pmids": 1.0
+    },
+    "elapsed_seconds": 94.974971,
+    "f1": 1.0,
+    "fn": 0,
+    "fp": 0,
+    "merged_notation_twin_rows": 0,
+    "papers": 1,
+    "precision": 1.0,
+    "recall": 1.0,
+    "token_usage": {
+      "input_tokens": 14077,
+      "output_tokens": 15026,
+      "total_tokens": 29103
+    },
+    "tp": 20
+  },
+  "api_proxy_usd": 0.05516125,
+  "count_absolute_error": {
+    "carriers": 20.0,
+    "affected": 20.0,
+    "unaffected": 0.0
+  },
+  "artifact_sha256": {
+    "LOCK.json": "a6c44818cb5721865177a963bc461153e65bf9e32b3ed2e6d49b268039f6de85",
+    "selection.json": "c89dc28914563aef93652192d1de6b30925d027193ff8ba0c1dc1a097cca43de",
+    "predictions.json": "4ab719a6536642ffe2c6c63e30b7f0993ec635e52ff8abbf3c878e294978205f",
+    "report.json": "7b3f42e07cc698c383b41848be9f9f5c63f25e0c0437248172305c24906c3753",
+    "analysis_setup.json": "f3ad6f0168110c96c14c9702d5c937a0f523d4a9285b9282881f6f36419a39c5",
+    "frozen_corpus/source_snapshot.json": "4c250b00df0b62414c9dfaa6e41c3662d8f8a920dbffaf80b4a27db269fb1cac"
+  },
+  "hard_continuation01_substitution": {
+    "old_tp": 261,
+    "old_fp": 141,
+    "old_fn": 123,
+    "gold_identities": 384,
+    "additional_tp_from_20031634": 11,
+    "additional_fp_from_20031634": 2,
+    "additional_tp_from_25163546": 20,
+    "additional_fp_from_25163546": 0,
+    "substituted_tp": 292,
+    "substituted_fp": 143,
+    "substituted_fn": 92,
+    "substituted_recall": 0.7604166666666666,
+    "substituted_precision": 0.671264367816092,
+    "relative_fn_reduction": 0.25203252032520324,
+    "combined_affected_unaffected_error_reduction": 0.12152777777777778,
+    "caution": "Selected-paper substitutions into otherwise frozen old predictions, not a fresh 120-paper score. The new supplement adds no per-variant count capture. Do not add current-minus-historical paired reader deltas to this as an incremental causal estimate."
+  }
+}

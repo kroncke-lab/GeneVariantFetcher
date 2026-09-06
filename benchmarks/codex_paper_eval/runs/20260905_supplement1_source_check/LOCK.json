@@ -1,0 +1,29 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-09-06T00:49:50.168670+00:00",
+  "predictions_sha256": "4ab719a6536642ffe2c6c63e30b7f0993ec635e52ff8abbf3c878e294978205f",
+  "production_run_statuses": [
+    {
+      "gene": "SCN5A",
+      "sha256": "25c494aac98f137c88fd0c3a6e145ed52bc76a596d8d24fd6897795f0e08e7e9",
+      "status": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/RUN_STATUS.json"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 2,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 1,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/llm_traces/trace_manifest.json",
+      "run_id": "8080102a-62f6-4151-840f-b48667535666",
+      "sha256": "e62fc69f3e29c89f5cadf43e50523f07b86e88053fd741befa42321b073df5bc"
+    }
+  ],
+  "selection_sha256": "c89dc28914563aef93652192d1de6b30925d027193ff8ba0c1dc1a097cca43de",
+  "setup_sha256": null,
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}

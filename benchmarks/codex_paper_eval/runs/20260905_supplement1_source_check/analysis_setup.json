@@ -1,0 +1,26 @@
+{
+  "classification": "Fresh opened-calibration check after browser discovery of the article-bound supplement; separate from registered pairs and forecast evidence for source acquisition only.",
+  "runtime": {
+    "sha256": "e9fef8ebe7e79457098e7ad6debf2c9cc6e9f601ae34cde659682d168cbab02b",
+    "file_count": 251
+  },
+  "source_snapshot": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/frozen_corpus/source_snapshot.json",
+  "source_snapshot_sha256": "4c250b00df0b62414c9dfaa6e41c3662d8f8a920dbffaf80b4a27db269fb1cac",
+  "test_budget_reserved_usd": 2,
+  "attempts": 1,
+  "unique_pmids": 1,
+  "model_configuration": {
+    "provider": "azure",
+    "tier2": "azure_ai/gpt-5.6-luna",
+    "tier3": [
+      "azure_ai/grok-4.3"
+    ],
+    "table_router": "azure_ai/Kimi-K2.6-1",
+    "tier3_adjudicators": [
+      "azure_ai/gpt-5.6-sol"
+    ],
+    "vision": "azure_ai/gpt-5.6-sol",
+    "count_recovery": "azure_ai/gpt-5.6-luna"
+  },
+  "anthropic_credential_suppressed": true
+}

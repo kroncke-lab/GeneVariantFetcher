@@ -1,0 +1,12 @@
+{
+  "classification": "Post-lock notation-search triage, not manually adjudicated causal labels or a recall ceiling",
+  "source_sweep": "docs/evidence/gold_source_presence_sweep_20260903/gold_rows.tsv",
+  "source_sweep_sha256": "cbe8496a46c55c011592bbe9457c0fa8c3c91073024641947c0827d4be293e2b",
+  "current_run_text_present_despite_acquisition_label": [],
+  "cautions": [
+    "Source sweep predates these runs; inspect actual frozen input before claiming a missing component.",
+    "Absence from an LLM request can be intentional when deterministic tables handle a row. Later extraction/DB presence overrides a simple first-missing-stage causal interpretation.",
+    "String or alias presence can include discussion or a different variant and does not independently establish correct per-variant evidence.",
+    "Unknown notation and figures-present rows are unresolved, not proof of missing downloads."
+  ]
+}
