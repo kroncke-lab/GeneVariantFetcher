@@ -20,6 +20,7 @@ After running GVF, your output directory contains:
 ├── {GENE}_penetrance_summary.json      # Aggregated penetrance data
 ├── {GENE}_workflow.log                 # Execution log
 ├── run_manifest.json                   # Execution metadata
+├── RUN_STATUS.json                     # gvf-run outcome, exit code, failures
 │
 ├── abstract_json/                      # Per-paper metadata & abstracts
 │   └── {PMID}.json
@@ -42,6 +43,17 @@ After running GVF, your output directory contains:
 ```
 
 ---
+
+`gvf-run` records the outcome in the exact directory it allocated or explicitly
+resumed. An extraction exception or returned failure records `failed` / exit 3;
+no produced database records `failed` / exit 4. Failures before allocation have
+no run-local status. Do not select a successful older sibling by modification
+time to represent a failed attempt. Lower-level workflow commands return a
+nonzero exit on explicit failure but do not own this turnkey status file.
+
+Workflow extraction totals count actual variant-object rows, before any
+cross-paper aggregation. The model's `total_variants_found` metadata is
+advisory and may disagree; it is preserved rather than used for arithmetic.
 
 ## SQLite Database Schema
 

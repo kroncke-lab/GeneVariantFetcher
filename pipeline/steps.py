@@ -2423,11 +2423,14 @@ def extract_variants(
         )
     )
 
-    # Count variants
+    # Count the actual extracted rows, not the model's self-reported metadata.
+    # Cached responses may contain a string/null/stale total_variants_found;
+    # arithmetic on that advisory field used to crash after successful extraction.
     total_variants = sum(
-        e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
+        sum(isinstance(row, dict) for row in (e.extracted_data.get("variants") or []))
         for e in extractions
-        if e.extracted_data
+        if isinstance(e.extracted_data, dict)
+        and isinstance(e.extracted_data.get("variants"), list)
     )
 
     return StepResult(

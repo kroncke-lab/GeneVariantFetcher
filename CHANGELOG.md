@@ -42,6 +42,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hermetically without reading the local corpus.
 
 ### Fixed
+- Extraction summaries count actual rows instead of malformed model totals.
+  Workflow CLIs propagate returned failures, and `gvf-run` attributes extraction
+  failures to the exact allocated/resumed directory rather than a newer sibling.
+- Fresh-checkout calibration tests use pinned usage-only receipts instead of
+  ignored workstation traces. Isolated-wheel CI verifies installed CLI entry
+  points; setup/testing and deprecated-helper guidance reflect current behavior.
 - Bare uppercase proline in forms such as `P1730H` is no longer consumed as an
   HGVS `p` prefix.
 - Gold-free run provenance is explicit instead of relying on a conservative

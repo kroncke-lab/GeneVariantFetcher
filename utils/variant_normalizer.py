@@ -1567,7 +1567,7 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
     and comparison. Normalizes to single-letter format for protein variants
     (A561V) and c. prefix format for cDNA.
 
-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_variant()
+    Current public normalizer; supersedes the removed utils.variant_utils module.
 
     Normalization rules applied (in order):
     1. Strip whitespace and common prefixes
@@ -1737,7 +1737,8 @@ def normalize_protein_variant(variant: str) -> str:
     """
     Normalize a protein variant to short format (e.g., A561V).
 
-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()
+    Deprecated public compatibility helper; prefer normalize_variant().
+    The historical return behavior is retained for existing callers.
 
     Args:
         variant: Protein variant in any format (p.Ala561Val, A561V, etc.)
@@ -1761,7 +1762,8 @@ def normalize_cdna_variant(variant: str) -> str:
     """
     Normalize a cDNA variant notation.
 
-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()
+    Deprecated public compatibility helper; prefer VariantNormalizer.normalize_cdna().
+    The historical fallback to the original input is retained here.
 
     Args:
         variant: cDNA variant (c.1682C>T, 1682C>T, etc.)
@@ -1785,7 +1787,7 @@ def variants_match(v1: str, v2: str, gene_symbol: str = "KCNH2") -> bool:
     """
     Check if two variant notations refer to the same variant.
 
-    DROP-IN REPLACEMENT for utils.variant_utils.variants_match()
+    Current public matcher for two variant notations.
 
     Args:
         v1: First variant notation
@@ -1810,7 +1812,9 @@ def find_matching_variants(
     """
     Compare extracted variants against expected variants.
 
-    DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()
+    Deprecated public compatibility helper. Use variants_match() for a pair
+    or match_variants_to_baseline() for baseline comparison; their interfaces
+    differ from this legacy three-list return value.
 
     Args:
         extracted: List of extracted variant strings

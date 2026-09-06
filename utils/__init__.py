@@ -3,7 +3,7 @@ Shared utility modules for GeneVariantFetcher.
 
 This package provides common functionality used across multiple modules:
 - llm_utils: LLM calling and response parsing
-- html_utils: HTML parsing and PMID extraction
+- html_utils: deprecated HTML parsing compatibility helpers
 - retry_utils: Retry configuration and decorators
 - pubmed_utils: Unified PubMed/NCBI API access
 - pmid_utils: PMID extraction and validation

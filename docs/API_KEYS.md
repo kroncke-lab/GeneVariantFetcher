@@ -14,9 +14,9 @@ How to obtain API keys for each service GVF uses, and what works without them.
 | **NCBI API Key** | Optional | Yes | 3x faster rate limits |
 | **Elsevier API key** | Optional | Yes | Metadata/API access for ScienceDirect |
 | **Elsevier Insttoken** | Recommended | Institutional | Highest-leverage unlock for subscription full text |
-| **Springer** | Optional | Yes | +10-15% paper coverage |
-| **Wiley** | Optional | Yes (TDM) | +5-10% paper coverage |
-| **PMC** | No key needed | Yes | ~30% of papers |
+| **Springer** | Optional | Depends on access plan | Springer/Nature routes; article access varies |
+| **Wiley** | Optional | Depends on TDM access | Wiley routes; subscription/access may be required |
+| **PMC** | No publisher key | Yes | Available archive articles; not all PubMed records |
 
 ## Required: One LLM Provider Key
 
@@ -122,8 +122,9 @@ NCBI_API_KEY=your-ncbi-api-key
 ### Insttoken
 
 The API key alone does not unlock many Vanderbilt-subscribed ScienceDirect
-articles. The current recall blocker is the institutional `X-ELS-Insttoken`
-header value, configured as `ELSEVIER_INSTTOKEN`.
+articles. Institutional access can require an `X-ELS-Insttoken` header,
+configured as `ELSEVIER_INSTTOKEN`. Current measured blockers live in
+[RECALL_STATUS.md](RECALL_STATUS.md), not this credential guide.
 
 Obtain it through Vanderbilt library/e-resources support or an approved
 ScienceDirect TDM workflow. Treat it like a credential.
@@ -138,10 +139,9 @@ ELSEVIER_INSTTOKEN=your-x-els-insttoken
 
 ### Coverage
 
-Elsevier publishes ~20% of biomedical literature. With the API key plus
-institutional token, expect:
-- +15-20% more papers downloaded
-- Access to Cell, Lancet, American Journal of Human Genetics, many more
+The API key and institutional token enable configured Elsevier routes when
+article access is available. Measure newly recovered bodies and supplements
+on the actual PMID set; a credential does not imply a fixed coverage gain.
 
 ---
 
@@ -175,9 +175,8 @@ SPRINGER_API_KEY=your-springer-key
 
 ### Coverage
 
-Springer Nature publishes Nature, Scientific Reports, European Journal of Human Genetics, and more:
-- +10-15% more papers downloaded
-- Critical for Nature family journals
+Access depends on the article and enabled API product. Check the download
+ledger and missing-supplement worklist for the measured effect on your cohort.
 
 ---
 
@@ -211,9 +210,8 @@ WILEY_API_KEY=your-wiley-key
 
 ### Coverage
 
-Wiley publishes Human Mutation, Clinical Genetics, Genetic Epidemiology:
-- +5-10% more papers
-- Important for genetics-focused journals
+Access depends on the article and TDM entitlement. Measure usable bodies and
+supplements separately; publisher presence alone does not prove count coverage.
 
 ---
 
@@ -221,44 +219,30 @@ Wiley publishes Human Mutation, Clinical Genetics, Genetic Epidemiology:
 
 **No API key needed!**
 
-PMC provides free access to ~30% of PubMed articles. GVF uses this by default.
+PMC is a free full-text archive distinct from PubMed's citation database.
+It includes participating-journal content, selected deposits and author
+manuscripts; it does not contain every PubMed record or every open-access
+article. See the [PMC FAQ](https://pmc.ncbi.nlm.nih.gov/about/faq/).
 
-### What's in PMC?
-
-- All NIH-funded research (after 12-month embargo)
-- All articles from open access journals
-- Author-deposited manuscripts
-
-### Limitations
-
-- Not all journals deposit in PMC
-- Embargo periods mean recent papers may be missing
-- Supplemental materials not always available
+For automated retrieval, PMC provides article datasets through designated
+services. Public readability is distinct from inclusion in the
+[Open Access Subset](https://pmc.ncbi.nlm.nih.gov/tools/openftlist/).
+Body availability also does not guarantee that the needed supplement is present.
 
 ---
 
-## What Works Without Keys
+## What Works Without Publisher Keys
 
-### PMC-Only Mode
+GVF can discover candidate PMIDs, reuse cached sources, and try configured
+public full-text routes. Extraction still requires an LLM provider. Missing
+bodies or count-bearing supplements remain source gaps; neither discovery
+completeness nor a fixed download percentage is guaranteed.
 
-Without any publisher keys, GVF still:
-- ✅ Discovers all relevant PMIDs
-- ✅ Downloads ~30% of papers (PMC open access)
-- ✅ Extracts variants from available papers
-- ✅ Creates SQLite database
-
-### What You Miss
-
-- ~70% of papers are behind paywalls
-- Some high-impact journals (Cell, Nature) limited without keys
-- Fewer variants extracted overall
-
-### Recommendation
-
-For best results, obtain at least:
-1. **One LLM provider key** (required) — Azure AI, Anthropic, or OpenAI
-2. **Elsevier API key + `ELSEVIER_INSTTOKEN`** (biggest current impact)
-3. **Springer** (free, good coverage)
+`--no-source-recovery` skips the later recovery pass. It does not restrict
+ordinary harvesting to PMC. Start with the selected provider and NCBI email,
+then use the actual blocked-paper worklist to decide which publisher access
+would help. Keep provider-token usage and source availability as separate
+measurements.
 
 ---
 
@@ -325,17 +309,14 @@ Service setting and the GVF GitHub Actions secret; rotate both together.
 
 ---
 
-## Cost-Benefit Summary
+## Measuring Cost and Coverage
 
-| Configuration | Paper Coverage | Est. Cost/Gene |
-|--------------|----------------|----------------|
-| LLM key only | ~30% | $2-10 |
-| + Elsevier | ~50% | $2-10 |
-| + Springer | ~60% | $2-10 |
-| + Wiley | ~65% | $2-10 |
-| Full setup | ~70% | $2-10 |
-
-*Paper coverage varies by gene. Cost is primarily LLM usage.*
+Use the chosen run's source ledger and LLM traces. Report the number of attempted
+papers, usable bodies, available count-bearing sections, model tokens and the
+price basis/date. Credential combinations do not have a universal paper-coverage
+percentage or dollar cost per gene. Dated observations remain in
+[PROTOCOL_COST_EVAL.md](PROTOCOL_COST_EVAL.md); current validation and budget
+constraints remain in [TASKS.md](../TASKS.md).
 
 ---
 

@@ -109,9 +109,10 @@ def query_pubmed_for_gene(
     email: Optional[str] = None,
 ) -> Set[str]:
     """
-    Query PubMed for papers mentioning a specific gene.
+    Deprecated gene-query convenience wrapper, retained with its set return.
 
-    This function constructs a gene-specific query that searches both
+    query_pubmed_with_entrez takes a complete query and returns a list; callers
+    needing the historical set should convert explicitly. This function constructs a gene-specific query that searches both
     the Gene Symbol field and Title/Abstract.
 
     Args:
@@ -128,7 +129,7 @@ def query_pubmed_for_gene(
     """
     warn_deprecated(
         "utils.pubmed_utils.query_pubmed_for_gene",
-        "query_pubmed_with_entrez or gene_literature.discovery",
+        "query_pubmed_with_entrez (complete query, list result; convert to set if needed) or gene_literature.discovery",
     )
     logger.info(f"Querying PubMed for gene symbol: {gene_symbol}")
 

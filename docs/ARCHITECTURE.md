@@ -6,6 +6,21 @@ A deep dive into GVF's pipeline architecture, module responsibilities, and exten
 
 GVF is a multi-stage pipeline that transforms a gene symbol into a structured database of variants and patient data extracted from the biomedical literature.
 
+The turnkey orchestrator in `cli/gvf_run.py` allocates one exact run directory
+before invoking the automated workflow. An explicit resume directory takes
+precedence over the environment, and a same-second new run gets a unique
+suffix. The workflow receives that path directly; orchestration never infers
+the new run from sibling directory modification times. Workflow exceptions or
+an explicit failure result record a failed `RUN_STATUS.json` with exit 3 in
+that directory; a missing database records exit 4. Failures before directory
+allocation cannot produce a run-local status. The lower-level `gvf extract`
+and `python -m cli.automated_workflow` also exit nonzero for failure results.
+
+Extraction summary totals count actual variant-object rows. Model-authored
+`extraction_metadata.total_variants_found` remains an advisory source field,
+so malformed or inflated metadata cannot crash this summary or inflate its
+row count. This does not change variant identities, count fields or scoring.
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                         GeneVariantFetcher Pipeline                              │

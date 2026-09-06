@@ -14,11 +14,49 @@ from __future__ import annotations
 
 import json
 import os
+from datetime import datetime
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 import cli.gvf_run as gvf_run
+
+
+def test_same_second_extractions_keep_distinct_output_and_preserve_first(
+    tmp_path, monkeypatch
+):
+    import cli.automated_workflow as workflow
+
+    monkeypatch.delenv("GVF_RESUME_DIR", raising=False)
+    monkeypatch.setattr(
+        gvf_run, "datetime", SimpleNamespace(now=lambda: datetime(2026, 9, 6, 12, 0, 0))
+    )
+    calls = []
+
+    def fake_workflow(**kwargs):
+        run_dir = kwargs["run_directory"]
+        calls.append(run_dir)
+        (run_dir / "SCN5A.db").write_text(f"run {len(calls)}")
+        return {"success": True}
+
+    monkeypatch.setattr(
+        workflow, "automated_variant_extraction_workflow", fake_workflow
+    )
+    kwargs = dict(
+        gene="SCN5A",
+        email="ci@ncbi.test",
+        output_dir=tmp_path,
+        pmid_file=None,
+        max_pmids=1,
+        resume_dir=None,
+    )
+    first = gvf_run.step_extract(**kwargs)
+    second = gvf_run.step_extract(**kwargs)
+    assert first != second
+    assert calls == [first, second]
+    assert (first / "SCN5A.db").read_text() == "run 1"
+    assert (second / "SCN5A.db").read_text() == "run 2"
 
 
 @pytest.fixture(autouse=True)
@@ -1286,3 +1324,80 @@ def test_publish_refused_when_any_required_stage_failed(tmp_path: Path, monkeypa
     )
     assert rc == gvf_run.EXIT_STAGE_WARNINGS
     assert publish_calls == []
+
+
+@pytest.mark.parametrize("failure_mode", ["exception", "returned_failure", "no_db"])
+def test_real_extract_boundary_records_failure_in_its_own_run(
+    tmp_path, monkeypatch, failure_mode
+):
+    import cli.automated_workflow as workflow
+
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.delenv("GVF_RESUME_DIR", raising=False)
+    old = tmp_path / "TESTGENE" / "old_success"
+    old.mkdir(parents=True)
+    old_status = old / "RUN_STATUS.json"
+    old_status.write_text('{"status": "completed"}\n')
+    (old / "TESTGENE.db").write_bytes(b"old db")
+    captured = {}
+
+    def fake_workflow(*, run_directory, **kwargs):
+        captured["run"] = run_directory
+        assert run_directory != old
+        # Reproduce the previous newest-sibling trap without touching old data.
+        os.utime(old, (2_000_000_000, 2_000_000_000))
+        if failure_mode == "exception":
+            raise TypeError("malformed extraction metadata")
+        if failure_mode == "returned_failure":
+            return {"success": False, "error": "abstract fetch failed"}
+        return {"statistics": {"papers_extracted": 0}}
+
+    monkeypatch.setattr(
+        workflow, "automated_variant_extraction_workflow", fake_workflow
+    )
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="test@example.org",
+        output=tmp_path,
+        source_recovery=False,
+        corpus_sync=False,
+        gold_free_run=True,
+    )
+    assert rc == (4 if failure_mode == "no_db" else 3)
+    status = json.loads((captured["run"] / "RUN_STATUS.json").read_text())
+    assert status["status"] == "failed"
+    assert status["exit_code"] == rc
+    assert status["stage_failures"]
+    assert status["gold_access"]["disabled"] is True
+    assert status["gold_access"]["gold_derived_alias_files_disabled"] is True
+    assert old_status.read_text() == '{"status": "completed"}\n'
+
+
+def test_step_extract_uses_explicit_resume_outside_output_without_leaking_env(
+    tmp_path, monkeypatch
+):
+    import cli.automated_workflow as workflow
+
+    original_env = tmp_path / "environment_resume"
+    requested = tmp_path / "explicit_resume"
+    monkeypatch.setenv("GVF_RESUME_DIR", str(original_env))
+    captured = {}
+
+    def fake_workflow(*, run_directory, **kwargs):
+        captured["run"] = run_directory
+        return {"statistics": {"papers_extracted": 0}}
+
+    monkeypatch.setattr(
+        workflow, "automated_variant_extraction_workflow", fake_workflow
+    )
+    actual = gvf_run.step_extract(
+        gene="TESTGENE",
+        email="test@example.org",
+        output_dir=tmp_path / "output",
+        pmid_file=None,
+        max_pmids=1,
+        resume_dir=requested,
+    )
+    assert actual == requested == captured["run"]
+    assert os.environ["GVF_RESUME_DIR"] == str(original_env)
+    assert not original_env.exists()

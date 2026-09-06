@@ -1,0 +1,841 @@
+You are an adversarial maintenance reviewer of GeneVariantFetcher. User explicitly requested Grok, Claude and Agy CLI adversarial reviews. Review supplied source only; no tools, no file edits, no external calls, no subagents. Find concrete runtime/compatibility problems or stale CURRENT docs, with exact path/line and reasoning. Distinguish live code from historical benchmark evidence, which must remain immutable. Avoid deleting public compatibility wrappers solely because deprecated; require caller/semantic evidence. Prioritize 3-6 actionable findings; do not invent unobserved failures. Main e80fd27a matches origin. All 474 tracked Python files compile, 116 installed packages are compatible, CLI help works; full tests running. Python 3.13 local, CI Python 3.11. Main runtime provider default remains Anthropic but user prefers Azure to conserve finite Anthropic; provider key alone does not change MODEL_PROVIDER. A prior run crashed in pipeline/steps.py summing metadata.total_variants_found when a model returned a string. The completed 240-attempt benchmarks must not be rewritten or promoted. Output findings and minimal safe repairs plus meaningful tests.
+Focus on the real extraction-metadata crash and precise RUN_STATUS behavior. Propose a small robust repair that does not invent extracted variants or misattribute failed/reused runs. Avoid architecture rewrites.
+
+### pipeline/steps.py
+2048:     failures: list[tuple[str, str]] = []
+2049:     total = len(markdown_files) + len(abstract_papers)
+2050:     completed = 0
+2051:     fulltext_by_pmid: dict[str, Path] = {}
+2052:     for md_file in markdown_files:
+2053:         pmid = extract_pmid_from_filename(md_file)
+2054:         if pmid:
+2055:             fulltext_by_pmid[pmid] = md_file
+2056:     abstract_by_pmid: dict[str, str] = {
+2057:         pmid: record_path for pmid, record_path in abstract_papers
+2058:     }
+2059:
+2060:     def process_fulltext(md_file: Path) -> Tuple[Any, Optional[Tuple[str, str]]]:
+2061:         pmid = extract_pmid_from_filename(md_file)
+2062:         if not pmid:
+2063:             return (None, (md_file.name, "Could not extract PMID"))
+2064:
+2065:         try:
+2066:             if not is_usable_fulltext_source(md_file):
+2067:                 return (None, (pmid, "Source is abstract-only fallback"))
+2068:
+2069:             output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+2070:             fingerprint = source_fingerprint(md_file)
+2071:             if pmid not in force_pmid_set:
+2072:                 existing = load_existing_extraction(
+2073:                     output_file,
+2074:                     pmid,
+2075:                     source_kind="fulltext",
+2076:                     fingerprint=fingerprint,
+2077:                 )
+2078:                 if existing is not None:
+2079:                     return (existing, None)
+2080:
+2081:             content = md_file.read_text(encoding="utf-8")
+2082:             paper = Paper(
+2083:                 pmid=pmid,
+2084:                 title=f"Paper {pmid}",
+2085:                 full_text=content,
+2086:                 gene_symbol=gene_symbol,
+2087:                 disease=disease,
+2088:             )
+2089:
+2090:             result = get_extractor().extract(paper)
+2091:
+2092:             if result.success:
+2093:                 # Persist model_used into the saved JSON's extraction_metadata
+2094:                 # so cascading is auditable after the run finishes.
+2095:                 if result.extracted_data:
+2096:                     md = result.extracted_data.setdefault("extraction_metadata", {})
+2097:                     md.update(fingerprint)
+2098:                     md["source_type"] = "fulltext"
+2099:                     md["abstract_only"] = False
+2100:                     md["model_used"] = result.model_used
+2101:                 from pipeline.target_gene_specificity import (
+2102:                     apply_target_gene_specificity,
+2103:                 )
+2104:
+2105:                 apply_target_gene_specificity(
+2106:                     result.extracted_data,
+2107:                     gene_symbol=gene_symbol,
+2108:                     source_text=content,
+2109:                 )
+2110:                 _apply_nonhuman_clinical_count_guard(
+2111:                     result.extracted_data, source_text=content
+2112:                 )
+2113:                 _apply_phenotype_count_guard(
+2114:                     result.extracted_data, source_text=content, disease=disease
+2115:                 )
+2116:                 # Count hygiene (flag/clear), no-op when both policies are off.
+2117:                 _apply_count_hygiene(result.extracted_data)
+2118:                 with open(output_file, "w") as f:
+2119:                     json.dump(result.extracted_data, f, indent=2)
+2120:                 return (result, None)
+2121:             else:
+2122:                 return (None, (pmid, result.error))
+2123:
+2124:         except Exception as e:
+2125:             return (None, (pmid, str(e)))
+2126:
+2127:     def process_abstract(
+2128:         pmid: str, record_path: str
+2129:     ) -> Tuple[Any, Optional[Tuple[str, str]]]:
+2130:         try:
+2131:             output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+2132:             record = None
+2133:             record_file = Path(record_path)
+2134:             fingerprint = source_fingerprint(record_file)
+2135:             if pmid not in force_pmid_set:
+2136:                 existing = load_existing_extraction(
+2137:                     output_file,
+2138:                     pmid,
+2139:                     source_kind="abstract",
+2140:                     fingerprint=fingerprint,
+2141:                 )
+2142:                 if existing is not None:
+2143:                     return (existing, None)
+2144:
+2145:             with open(record_file, "r", encoding="utf-8") as f:
+
+### pipeline/steps.py
+2360:                 "Extraction retry pass %s/%s recovered %s/%s failures",
+2361:                 attempt_number,
+2362:                 extraction_retry_attempts,
+2363:                 len(retry_recovered_pmids),
+2364:                 len(retry_attempted_pmids),
+2365:             )
+2366:             if not pending_failures:
+2367:                 break
+2368:
+2369:         skipped_failures = [
+2370:             (record["pmid"], record["error"])
+2371:             for record in retry_skipped_records
+2372:             if record["pmid"] not in retry_recovered_pmids
+2373:         ]
+2374:         failures = pending_failures + skipped_failures
+2375:
+2376:     if initial_failures:
+2377:         retry_report_path = (
+2378:             extraction_dir.parent / "pmid_status" / "extraction_retry_summary.json"
+2379:         )
+2380:         retry_report_path.parent.mkdir(parents=True, exist_ok=True)
+2381:         retry_report_path.write_text(
+2382:             json.dumps(
+2383:                 {
+2384:                     "enabled": retry_failed_extractions,
+2385:                     "attempts_configured": extraction_retry_attempts,
+2386:                     "retry_workers": extraction_retry_max_workers,
+2387:                     "retry_backoff_seconds": extraction_retry_backoff_seconds,
+2388:                     "initial_failures": [
+2389:                         {"pmid": pmid, "error": error}
+2390:                         for pmid, error in initial_failures
+2391:                     ],
+2392:                     "attempts": retry_attempt_records,
+2393:                     "skipped": retry_skipped_records,
+2394:                     "final_failures": [
+2395:                         {"pmid": pmid, "error": error} for pmid, error in failures
+2396:                     ],
+2397:                 },
+2398:                 indent=2,
+2399:             ),
+2400:             encoding="utf-8",
+2401:         )
+2402:
+2403:     # Save final failures after retry. If all initial failures recovered, write
+2404:     # a header-only CSV so stale failure rows from an earlier pass do not linger.
+2405:     if failures or initial_failures:
+2406:         failures_file = (
+2407:             extraction_dir.parent / "pmid_status" / "extraction_failures.csv"
+2408:         )
+2409:         failures_file.parent.mkdir(parents=True, exist_ok=True)
+2410:         with open(failures_file, "w", newline="", encoding="utf-8") as f:
+2411:             writer = csv.writer(f)
+2412:             writer.writerow(["PMID", "Error"])
+2413:             writer.writerows(failures)
+2414:
+2415:     retry_failed_pmids = {
+2416:         pmid for pmid, _error in failures if pmid in retry_attempted_pmids
+2417:     }
+2418:     dense_table_report_path, dense_table_report_tsv, cap_qc_summary = (
+2419:         _write_dense_table_overflow_report(
+2420:             extractions=extractions,
+2421:             harvest_dir=harvest_dir,
+2422:             output_dir=extraction_dir.parent,
+2423:         )
+2424:     )
+2425:
+2426:     # Count variants
+2427:     total_variants = sum(
+2428:         e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
+2429:         for e in extractions
+2430:         if e.extracted_data
+2431:     )
+2432:
+2433:     return StepResult(
+2434:         success=True,
+2435:         stats={
+2436:             "papers_extracted": len(extractions),
+2437:             "failures": len(failures),
+2438:             "initial_failures": len(initial_failures),
+2439:             "total_variants": total_variants,
+2440:             "candidate_pmid_count": len(candidate_pmid_order)
+2441:             if candidate_pmid_set is not None
+2442:             else None,
+2443:             "extraction_retry_enabled": retry_failed_extractions,
+2444:             "extraction_retry_attempts": extraction_retry_attempts,
+2445:             "extraction_retry_attempted": len(retry_attempted_pmids),
+2446:             "extraction_retry_succeeded": len(retry_recovered_pmids),
+2447:             "extraction_retry_failed": len(retry_failed_pmids),
+2448:             "extraction_retry_skipped": len(retry_skipped_records),
+2449:             "extraction_retry_report": str(retry_report_path)
+2450:             if retry_report_path
+2451:             else None,
+2452:             "dense_table_overflow_records": cap_qc_summary.get("records", 0),
+2453:             "scanner_cap_trips": cap_qc_summary.get("scanner_cap_trips", 0),
+2454:             "table_merge_cap_trips": cap_qc_summary.get("table_merge_cap_trips", 0),
+2455:             "table_candidates_omitted_after_dedupe": cap_qc_summary.get(
+2456:                 "table_candidates_omitted_after_dedupe", 0
+2457:             ),
+2458:             "missing_supplement_ref_pmids": cap_qc_summary.get(
+2459:                 "missing_supplement_ref_pmids", 0
+2460:             ),
+2461:             "dense_table_overflow_report": str(dense_table_report_path)
+2462:             if dense_table_report_path
+2463:             else None,
+2464:             **priority_summary,
+2465:         },
+2466:         data={
+2467:             "extractions": extractions,
+2468:             "failures": failures,
+2469:             "initial_failures": initial_failures,
+2470:             "retry_report_path": str(retry_report_path) if retry_report_path else None,
+2471:             "dense_table_overflow_report": str(dense_table_report_path)
+2472:             if dense_table_report_path
+2473:             else None,
+2474:             "dense_table_overflow_tsv": str(dense_table_report_tsv)
+2475:             if dense_table_report_tsv
+2476:             else None,
+2477:             "priority_report_dir": (
+2478:                 str(priority_result.report_dir)
+2479:                 if priority_result and priority_result.report_dir
+2480:                 else None
+
+### cli/gvf_run.py
+1897: def _write_run_status(
+1898:     run_dir: Path,
+1899:     gene: str,
+1900:     status: str,
+1901:     exit_code: int,
+1902:     stage_failures: list[str],
+1903:     stage_warnings: list[str],
+1904:     started_at: float,
+1905:     active_db: Path,
+1906:     integrity: Optional[dict] = None,
+1907:     count_recovery: Optional[dict] = None,
+1908:     llm_trace: Optional[dict] = None,
+1909:     gold_free_run: bool = False,
+1910: ) -> None:
+1911:     """Write a machine-readable RUN_STATUS.json so a fleet orchestrator keys off
+1912:     structured stage status (and the process exit code) instead of scraping
+1913:     RUN_REPORT.md.
+1914:
+1915:     ``active_db`` names the finalized database consumed by the post-extraction
+1916:     stages. Paths inside ``run_dir`` are stored relative to the directory that
+1917:     contains RUN_STATUS.json; paths outside it are stored as absolute paths.
+1918:     Consumers can therefore resolve a relative value against
+1919:     ``RUN_STATUS.json.parent``. Best-effort: never raises into the run.
+1920:     """
+1921:     try:
+1922:         try:
+1923:             active_db_ref = str(active_db.relative_to(run_dir))
+1924:         except ValueError:
+1925:             resolved_run_dir = run_dir.resolve()
+1926:             resolved_active_db = active_db.resolve()
+1927:             try:
+1928:                 active_db_ref = str(resolved_active_db.relative_to(resolved_run_dir))
+1929:             except ValueError:
+1930:                 active_db_ref = str(resolved_active_db)
+1931:
+1932:         payload = {
+1933:             "gene": gene,
+1934:             "status": status,
+1935:             "severity": "warning" if stage_failures else "ok",
+1936:             "exit_code": exit_code,
+1937:             "active_db": active_db_ref,
+1938:             "duration_seconds": int(time.time() - started_at),
+1939:             "stage_failures": list(stage_failures),
+1940:             "stage_warnings": list(stage_warnings),
+1941:             "gold_access": {
+1942:                 "disabled": bool(gold_free_run),
+1943:                 "mode": "disabled" if gold_free_run else "auto_discovery_allowed",
+1944:                 # Record the observed runtime gate, not merely the CLI intent.
+1945:                 # The gold-free wrapper sets this for the entire pipeline and
+1946:                 # restores the caller's environment only after status is written.
+1947:                 "gold_derived_alias_files_disabled": (
+1948:                     os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") == "1"
+1949:                 ),
+1950:             },
+1951:         }
+1952:         if integrity is not None:
+1953:             payload["source_integrity"] = integrity
+1954:         if count_recovery is not None:
+1955:             payload["count_recovery"] = count_recovery
+1956:         if llm_trace is not None:
+1957:             payload["llm_trace"] = llm_trace
+1958:         (run_dir / "RUN_STATUS.json").write_text(
+1959:             json.dumps(payload, indent=2),
+1960:             encoding="utf-8",
+1961:         )
+1962:     except OSError as e:
+1963:         logger.warning("could not write RUN_STATUS.json: %s", e)
+1964:
+1965:
+1966: def run_gvf_pipeline(
+1967:     gene: str,
+1968:     email: str,
+1969:     output: Path,
+1970:     pmid_file: Optional[Path] = None,
+1971:     max_pmids: int = 1500,
+1972:     resume_dir: Optional[Path] = None,
+1973:     include_v12: bool = False,
+1974:     gold_free_run: bool = False,
+1975:     skip: Optional[list[str]] = None,
+1976:     source_recovery: bool = True,
+1977:     source_recovery_timeout_s: int = 120,
+1978:     allow_degraded_institutional: bool = False,
+1979:     disease: Optional[str] = None,
+1980:     include_all_clinigen_phenotypes: bool = False,
+1981:     corpus_sync: bool = True,
+1982:     publish_review: bool = False,
+1983:     review_repo: Optional[Path] = None,
+1984:     publish_timeout_s: int = 600,
+1985:     extraction_top_n: Optional[int] = None,
+1986:     extraction_priority_offset: int = 0,
+1987:     extraction_triage_mode: Optional[str] = None,
+1988:     extraction_triage_model: Optional[str] = None,
+1989:     extraction_triage_include_defer: bool = False,
+1990:     extraction_triage_max_llm: Optional[int] = None,
+1991:     full_coverage: bool = False,
+1992:     extraction_model: Optional[str] = None,
+1993:     extraction_workers: Optional[int] = None,
+1994:     taper_min_variants: int = 8,
+1995:     carrier_guard: bool = True,
+1996:     vf_enrich: bool = True,
+1997:     require_vf_enrich: bool = False,
+1998: ) -> int:
+1999:     """Execute the full pipeline. Returns exit code.
+2000:
+2001:     Wraps the pipeline so the trace identity this invocation publishes
+2002:     (``GVF_LLM_TRACE_DIR`` / ``GVF_LLM_TRACE_RUN_ID``, exported for nested and
+2003:     subprocess stages) is restored on every exit path. A leaked run id would make
+2004:     the NEXT in-process run adopt this run's identity and write into its trace
+2005:     directory — which then mixes runs and makes the manifest rebuild refuse.
+2006:     """
+2007:     previous_dir = os.environ.get("GVF_LLM_TRACE_DIR")
+2008:     previous_run = os.environ.get("GVF_LLM_TRACE_RUN_ID")
+2009:     previous_alias_policy = os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES")
+2010:     if gold_free_run:
+2011:         os.environ["GVF_DISABLE_GOLD_DERIVED_ALIASES"] = "1"
+2012:     try:
+2013:         return _run_gvf_pipeline(
+2014:             gene=gene,
+2015:             email=email,
+2016:             output=output,
+2017:             pmid_file=pmid_file,
+2018:             max_pmids=max_pmids,
+2019:             resume_dir=resume_dir,
+2020:             include_v12=include_v12,
+2021:             gold_free_run=gold_free_run,
+2022:             skip=skip,
+2023:             source_recovery=source_recovery,
+2024:             source_recovery_timeout_s=source_recovery_timeout_s,
+2025:             allow_degraded_institutional=allow_degraded_institutional,
+2026:             disease=disease,
+2027:             include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+2028:             corpus_sync=corpus_sync,
+2029:             publish_review=publish_review,
+2030:             review_repo=review_repo,
+2031:             publish_timeout_s=publish_timeout_s,
+2032:             extraction_top_n=extraction_top_n,
+2033:             extraction_priority_offset=extraction_priority_offset,
+2034:             extraction_triage_mode=extraction_triage_mode,
+2035:             extraction_triage_model=extraction_triage_model,
+2036:             extraction_triage_include_defer=extraction_triage_include_defer,
+2037:             extraction_triage_max_llm=extraction_triage_max_llm,
+2038:             full_coverage=full_coverage,
+2039:             extraction_model=extraction_model,
+2040:             extraction_workers=extraction_workers,
+2041:             taper_min_variants=taper_min_variants,
+2042:             carrier_guard=carrier_guard,
+2043:             vf_enrich=vf_enrich,
+2044:             require_vf_enrich=require_vf_enrich,
+2045:         )
+2046:     finally:
+2047:         for key, value in (
+2048:             ("GVF_LLM_TRACE_DIR", previous_dir),
+2049:             ("GVF_LLM_TRACE_RUN_ID", previous_run),
+2050:             ("GVF_DISABLE_GOLD_DERIVED_ALIASES", previous_alias_policy),
+2051:         ):
+2052:             if value is None:
+2053:                 os.environ.pop(key, None)
+2054:             else:
+2055:                 os.environ[key] = value
+2056:
+2057:
+2058: def _run_gvf_pipeline(
+2059:     *,
+2060:     gene: str,
+2061:     email: str,
+2062:     output: Path,
+2063:     pmid_file: Optional[Path] = None,
+2064:     max_pmids: int = 1500,
+2065:     resume_dir: Optional[Path] = None,
+2066:     include_v12: bool = False,
+2067:     gold_free_run: bool = False,
+2068:     skip: Optional[list[str]] = None,
+2069:     source_recovery: bool = True,
+2070:     source_recovery_timeout_s: int = 120,
+2071:     allow_degraded_institutional: bool = False,
+2072:     disease: Optional[str] = None,
+2073:     include_all_clinigen_phenotypes: bool = False,
+2074:     corpus_sync: bool = True,
+2075:     publish_review: bool = False,
+2076:     review_repo: Optional[Path] = None,
+2077:     publish_timeout_s: int = 600,
+2078:     extraction_top_n: Optional[int] = None,
+2079:     extraction_priority_offset: int = 0,
+2080:     extraction_triage_mode: Optional[str] = None,
+2081:     extraction_triage_model: Optional[str] = None,
+2082:     extraction_triage_include_defer: bool = False,
+2083:     extraction_triage_max_llm: Optional[int] = None,
+2084:     full_coverage: bool = False,
+2085:     extraction_model: Optional[str] = None,
+2086:     extraction_workers: Optional[int] = None,
+2087:     taper_min_variants: int = 8,
+2088:     carrier_guard: bool = True,
+2089:     vf_enrich: bool = True,
+2090:     require_vf_enrich: bool = False,
+2091: ) -> int:
+2092:     initialize_runtime()
+2093:
+2094:     if gold_free_run and include_v12:
+2095:         logger.error("--gold-free-run is incompatible with --with-v12")
+2096:         return EXIT_STAGE_WARNINGS
+2097:
+2098:     skip = {s.lower() for s in (skip or [])}
+2099:     started = time.time()
+2100:     # Accumulates non-fatal stage failures (recovery subprocesses that exit
+2101:     # nonzero but let the run continue) so the final status and RUN_REPORT.md
+2102:     # reflect them instead of "✅ Done" hiding a swallowed error.
+2103:     stage_failures: list[str] = []
+2104:     # Best-effort stages (corpus sync, metadata backfill, quality passes) whose
+2105:     # failure does not remove core evidence: recorded for visibility but they do
+2106:     # NOT flip the exit code.
+2107:     stage_warnings: list[str] = []
+2108:
+2109:     logging.basicConfig(
+2110:         level=logging.INFO,
+2111:         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+2112:     )
+2113:
+2114:     output = Path(output).expanduser()
+2115:     output.mkdir(parents=True, exist_ok=True)
+2116:
+2117:     # Honor the --email flag as NCBI_EMAIL so the documented cold-start command
+2118:     # (gvf gvf-run <GENE> --email you@lab.edu) works on a fresh clone with no
+2119:     # pre-populated .env. The explicit flag wins over any env/.env value, which
+2120:     # also keeps the doctor reachability check consistent with the email the
+2121:     # extraction step actually uses.
+2122:     if email:
+2123:         os.environ["NCBI_EMAIL"] = email
+2124:
+2125:     # Step 1: doctor
+2126:     logger.info("🩺 Step 1: doctor")
+2127:     status = doctor()
+2128:     if not status["ok"] and "doctor" not in skip:
+2129:         logger.error(
+2130:             "Doctor failed required-env check; pass --skip doctor to override."
+2131:         )
+2132:         for k, v in status["required"].items():
+2133:             if not v:
+2134:                 logger.error("  missing: %s", k)
+2135:         if not any(status.get("llm_providers", {}).values()):
+2136:             logger.error(
+2137:                 "  missing: one of OPENAI_API_KEY, AZURE_AI_API_KEY, ANTHROPIC_API_KEY"
+2138:             )
+2139:         return 2
+2140:
+2141:     # A "full-dataset" run is one that actually attempts paywalled/supplementary
+2142:     # recovery: source recovery ON, not a --pmid-file calibration run, and the
+2143:     # recovery steps not skipped. Only these are guarded/audited for institutional
+2144:     # access; fast (--no-source-recovery) and calibration (--pmid-file) runs are
+2145:     # expected to be abstract-limited and must pass through untouched.
+2146:     institutional_run = (
+2147:         source_recovery
+2148:         and pmid_file is None
+2149:         and "source-recovery" not in skip
+2150:         and "source-qc" not in skip
+2151:     )
+2152:
+2153:     # Advisory (cheap, presence-only) — always shown.
+2154:     auth_status = status.get("institutional_auth") or {}
+2155:     if auth_status:
+2156:         if not auth_status.get("ready", True):
+2157:             logger.warning("🔒 institutional auth: %s", auth_status.get("reason"))
+2158:         elif not auth_status.get("ezproxy_configured"):
+2159:             logger.info("🔒 institutional auth: %s", auth_status.get("reason"))
+2160:
+2161:     # Live institutional-access preflight guard. A full-dataset run must not START
+2162:     # if paywall access is dead, otherwise the orchestrator silently degrades every
+2163:     # unreachable paywalled paper to an abstract-only stub and still reports
+2164:     # success. Unlike the advisory above (presence-only), this routes a real Wiley
+2165:     # DOI through EZproxy and verifies licensed full text comes back.
+2166:     if not institutional_run:
+2167:         logger.info("🔓 institutional preflight skipped (not a full-recovery run)")
+2168:     elif os.environ.get("GVF_PREFLIGHT_SKIP"):
+2169:         logger.warning(
+2170:             "🔓 institutional preflight skipped (GVF_PREFLIGHT_SKIP set) — live "
+2171:             "paywall access was NOT verified."
+2172:         )
+2173:     else:
+2174:         logger.info("🔐 institutional preflight: probing live paywall access…")
+2175:         access = None
+2176:         try:
+2177:             from cli.institutional_preflight import (
+2178:                 format_block_message,
+2179:                 probe_institutional_access,
+2180:             )
+2181:
+2182:             access = probe_institutional_access()
+2183:         except Exception as e:  # noqa: BLE001 - a guard bug must not brick every run
+2184:             logger.exception("institutional preflight probe errored: %s", e)
+2185:             stage_warnings.append(
+2186:                 "institutional preflight probe could not run; access unverified"
+2187:             )
+2188:         if access is not None and access.should_block:
+2189:             healed = _attempt_ezproxy_self_heal(access)
+2190:             if healed is not None:
+2191:                 access = healed
+2192:         if access is not None:
+2193:             for ln in access.lines:
+2194:                 logger.info("   %s", ln)
+2195:             if access.should_block and not allow_degraded_institutional:
+2196:                 print(format_block_message(access))
+2197:                 logger.error(
+2198:                     "institutional preflight blocked the run (exit %d). Override "
+2199:                     "with --allow-degraded-institutional if this is intentional.",
+2200:                     EXIT_INSTITUTIONAL_BLOCK,
+2201:                 )
+2202:                 return EXIT_INSTITUTIONAL_BLOCK
+2203:             if access.should_block:
+2204:                 logger.warning(
+2205:                     "⚠️  institutional access DEGRADED (%s) — proceeding anyway via "
+2206:                     "--allow-degraded-institutional; expect abstract-only coverage "
+2207:                     "for paywalled papers.",
+2208:                     access.reason,
+2209:                 )
+2210:                 stage_failures.append(
+2211:                     f"institutional access degraded (overridden): {access.reason}"
+2212:                 )
+2213:             else:
+2214:                 logger.info(
+2215:                     "✅ institutional preflight: live full-text access confirmed."
+2216:                 )
+2217:
+2218:     # Step 2: extract (unless skipped)
+2219:     gene = gene.upper()
+2220:     run_dir: Optional[Path] = None
+2221:     # Identifies THIS invocation, independent of the run dir it works in, so a
+2222:     # skip-extract pass can isolate its own traces without borrowing (and then
+2223:     # overwriting) the identity of the run that produced the directory.
+2224:     gvf_run_id = _new_gvf_run_id()
+2225:     effective_extraction_top_n = extraction_top_n
+2226:     seeded_priority_count = 0
+2227:     if (
+2228:         full_coverage
+2229:         and "extract" not in skip
+2230:         and (effective_extraction_top_n is None or effective_extraction_top_n <= 0)
+2231:     ):
+2232:         effective_extraction_top_n = 1000
+2233:         logger.info(
+2234:             "Full coverage enabled: seeding priority extraction with top %d before walk-to-taper",
+2235:             effective_extraction_top_n,
+2236:         )
+2237:     if "extract" in skip:
+2238:         # Find existing run dir
+2239:         gene_root = output / gene
+2240:         if gene_root.is_dir():
+2241:             runs = sorted(
+2242:                 (p for p in gene_root.iterdir() if p.is_dir()),
+2243:                 key=lambda p: p.stat().st_mtime,
+2244:             )
+2245:             run_dir = runs[-1] if runs else None
+2246:         if not run_dir:
+2247:             logger.error(
+2248:                 "--skip extract requires an existing run dir under %s", output / gene
+2249:             )
+2250:             return 2
+2251:         logger.info("⏭️  Step 2: extract — SKIPPED (using existing %s)", run_dir)
+2252:     else:
+2253:         logger.info("📚 Step 2: extract")
+2254:         try:
+2255:             run_dir = step_extract(
+2256:                 gene=gene,
+2257:                 email=email,
+2258:                 output_dir=output,
+2259:                 pmid_file=pmid_file,
+2260:                 max_pmids=max_pmids,
+2261:                 resume_dir=resume_dir,
+2262:                 disease=disease,
+2263:                 include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+2264:                 extraction_top_n=effective_extraction_top_n,
+2265:                 extraction_priority_offset=extraction_priority_offset,
+2266:                 extraction_triage_mode=extraction_triage_mode,
+2267:                 extraction_triage_model=extraction_triage_model,
+2268:                 extraction_triage_include_defer=extraction_triage_include_defer,
+2269:                 extraction_triage_max_llm=extraction_triage_max_llm,
+2270:             )
+2271:             if effective_extraction_top_n and effective_extraction_top_n > 0:
+2272:                 seeded_priority_count = effective_extraction_top_n
+2273:         except Exception as e:
+2274:             logger.exception("extract step failed: %s", e)
+2275:             return 3
+2276:
+2277:     db = _find_db(run_dir, gene)
+2278:     if not db:
+2279:         logger.error("No DB produced in %s", run_dir)
+2280:         return 4
+2281:
+2282:     # Trace the WHOLE remaining lifecycle, not just extraction. On the
+2283:     # skip-extract path this points at a run-scoped directory so the previous
+2284:     # run's manifest and report are never rewritten or relabelled.
+2285:     trace_session = open_trace_session(
+2286:         run_dir, gvf_run_id, extraction_ran="extract" not in skip
+2287:     )
+2288:
+2289:     # Step 2.5: full-coverage walk-to-taper extraction (opt-in via --full-coverage).
+2290:     # Continues priority extraction in offset batches until variant yield tapers,
+2291:     # on a high-TPM model — vs the single bounded top-N pass above.
+2292:     if full_coverage and "walk" not in skip:
+2293:         logger.info("🚶 Step 2.5: full-coverage walk-to-taper extraction")
+2294:         try:
+2295:             walk_start_offset = extraction_priority_offset + seeded_priority_count
+
+### tests/unit/test_gvf_run_pipeline_wiring.py
+1: """Offline regression net for the gvf-run cold-path orchestrator.
+2:
+3: `run_gvf_pipeline` is the turnkey driver (doctor -> extract -> source-qc ->
+4: source-recovery -> layers -> report). The expensive bits (NCBI/LLM extraction
+5: and the recovery subprocesses) are network-bound, so this module monkeypatches
+6: *only* those boundaries and asserts the chain itself wires together: that it
+7: runs to completion, threads `--disease` into extraction, defaults
+8: source-recovery ON, and emits a RUN_REPORT.md. This catches chain regressions
+9: in seconds without a multi-hour live run (the previous gap: the cold path had
+10: no non-mocked completion test at all).
+11: """
+12:
+13: from __future__ import annotations
+14:
+15: import json
+16: import os
+17: from pathlib import Path
+18:
+19: import pytest
+20:
+21: import cli.gvf_run as gvf_run
+22:
+23:
+24: @pytest.fixture(autouse=True)
+25: def _skip_institutional_preflight(monkeypatch):
+26:     """These tests exercise pipeline WIRING in a hermetic, mocked environment with
+27:     no live EZproxy. Opt out of the institutional-access preflight (covered
+28:     directly in test_institutional_preflight.py, and by
+29:     ``test_full_run_blocks_when_institutional_access_degraded`` below) the same way
+30:     CI/automation does, so a full-recovery run does not halt at the live probe.
+31:     """
+32:     monkeypatch.setenv("GVF_PREFLIGHT_SKIP", "1")
+33:     # The wiring fixture writes a placeholder, not a real SQLite database. Keep
+34:     # the deterministic composer inert unless a test explicitly replaces it.
+35:     monkeypatch.setattr(
+36:         gvf_run,
+37:         "step_paper_final_check_gate",
+38:         lambda db: {"skipped": "wiring fixture"},
+39:     )
+40:     # Keep the wiring suite hermetic. The dedicated corpus-sync test below
+41:     # replaces this stub with a recorder and verifies default/disabled behavior.
+42:     # Calling the real step would scan and rewrite the user's local multi-GB
+43:     # corpus once per test.
+44:     monkeypatch.setattr(
+45:         gvf_run,
+46:         "step_corpus_sync",
+47:         lambda run_dir, stage_warnings=None, gene=None: None,
+48:     )
+49:
+50:
+51: def _ok_doctor() -> dict:
+52:     return {
+53:         "ok": True,
+54:         "required": {"NCBI_EMAIL": True},
+55:         "recommended": {},
+56:         "llm_providers": {"ANTHROPIC_API_KEY": True},
+57:         "unlocks": {"ELSEVIER_INSTTOKEN": True},
+58:         "ncbi_reachable": True,
+59:     }
+60:
+61:
+62: def _fake_extract_factory(captured: dict, name: str = "run1"):
+63:     """Return a step_extract stand-in that records its kwargs and seeds a DB."""
+64:
+65:     def fake_extract(
+66:         gene,
+67:         email,
+68:         output_dir,
+69:         pmid_file,
+70:         max_pmids,
+71:         resume_dir,
+72:         disease=None,
+73:         **kwargs,
+74:     ):
+75:         captured["disease"] = disease
+76:         captured["gene"] = gene
+77:         captured["extract_kwargs"] = kwargs
+78:         run_dir = Path(output_dir) / gene / name
+79:         run_dir.mkdir(parents=True, exist_ok=True)
+80:         (run_dir / f"{gene}.db").write_bytes(b"sqlite")
+81:         return run_dir
+82:
+83:     return fake_extract
+84:
+85:
+86: def test_full_run_blocks_when_institutional_access_degraded(
+87:     tmp_path: Path, monkeypatch
+88: ):
+89:     """A full-dataset run (source_recovery on, no --pmid-file) must HALT at the
+90:     institutional preflight when EZproxy is unconfigured — before any extraction —
+91:     rather than silently harvesting abstract-only. This is the guard's whole point.
+92:     """
+93:     # Run the real guard, but mock the probe to report degraded access. The live
+94:     # probe is non-deterministic (network) and run_gvf_pipeline reloads .env at
+95:     # startup (initialize_runtime -> load_dotenv), so env-manipulation cannot
+96:     # reliably simulate "no access". The probe's own logic is covered in
+97:     # test_institutional_preflight.py; here we assert a should_block report HALTS
+98:     # the run before extraction.
+99:     monkeypatch.delenv("GVF_PREFLIGHT_SKIP", raising=False)
+100:     import cli.institutional_preflight as ip
+101:
+102:     monkeypatch.setattr(
+103:         ip,
+104:         "probe_institutional_access",
+105:         lambda **kw: ip.AccessReport(
+106:             viable=False,
+107:             should_block=True,
+108:             reason="degraded (test)",
+109:             lines=["(test) EZproxy configured: NO"],
+110:         ),
+111:     )
+112:     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+113:
+114:     def _extract_must_not_run(*args, **kwargs):
+115:         raise AssertionError("extraction ran despite a blocked preflight")
+116:
+117:     monkeypatch.setattr(gvf_run, "step_extract", _extract_must_not_run)
+118:
+119:     rc = gvf_run.run_gvf_pipeline(
+120:         gene="SCN5A",
+121:         email="t@example.org",
+122:         output=tmp_path,
+123:         source_recovery=True,
+124:         corpus_sync=False,
+125:     )
+126:     assert rc == gvf_run.EXIT_INSTITUTIONAL_BLOCK
+127:
+128:
+129: def test_allow_degraded_institutional_overrides_block(tmp_path: Path, monkeypatch):
+130:     """--allow-degraded-institutional lets a degraded full run PROCEED past the
+
+### tests/unit/test_gvf_run_pipeline_wiring.py
+660:
+661: def test_stage_failure_sets_nonzero_exit_and_status(tmp_path: Path, monkeypatch):
+662:     """A completeness-stage failure -> non-zero exit (EXIT_STAGE_WARNINGS) plus a
+663:     machine-readable RUN_STATUS.json, so a fleet detects the incomplete run
+664:     instead of reading a clean exit 0. Also guards the no-double-run fix."""
+665:     captured: dict = {}
+666:     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+667:     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+668:     monkeypatch.setattr(
+669:         gvf_run,
+670:         "step_corpus_sync",
+671:         lambda run_dir, stage_warnings=None, gene=None: None,
+672:     )
+673:     monkeypatch.setattr(gvf_run, "step_backfill_metadata", lambda **kwargs: None)
+674:
+675:     qc_calls: list[str] = []
+676:
+677:     def failing_qc(gene, run_dir, outdir, stage_failures=None):
+678:         qc_calls.append("qc")
+679:         if stage_failures is not None:
+680:             stage_failures.append("source-qc (source_acquisition_audit.py) exited 1")
+681:         return None  # QC failed -> no summary
+682:
+683:     monkeypatch.setattr(gvf_run, "step_source_qc", failing_qc)
+684:
+685:     output = tmp_path / "out"
+686:     rc = gvf_run.run_gvf_pipeline(
+687:         gene="TESTGENE",
+688:         email="x@example.com",
+689:         output=output,
+690:         source_recovery=True,
+691:         skip=["layers"],
+692:     )
+693:
+694:     assert rc == gvf_run.EXIT_STAGE_WARNINGS
+695:     # A failed Step-3 QC must not be re-run by the Step-4 fallback.
+696:     assert qc_calls == ["qc"], "source-qc ran twice after a failure"
+697:
+698:     status = json.loads((output / "TESTGENE" / "run1" / "RUN_STATUS.json").read_text())
+699:     assert status["status"] == "completed_with_warnings"
+700:     assert status["severity"] == "warning"
+701:     assert status["exit_code"] == gvf_run.EXIT_STAGE_WARNINGS
+702:     assert status["active_db"] == "TESTGENE.db"
+703:     assert any("source-qc" in f for f in status["stage_failures"])
+704:
+705:
+706: def test_fatal_extract_failure_does_not_write_completed_status(
+707:     tmp_path: Path, monkeypatch
+708: ):
+709:     """Fatal exit 3 must not leave a RUN_STATUS that claims completion."""
+710:     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+711:
+712:     def failing_extract(*, gene, output_dir, **kwargs):
+713:         # Model an extractor that creates its run directory before raising.
+714:         (Path(output_dir) / gene / "run1").mkdir(parents=True)
+715:         raise RuntimeError("fatal extraction failure")
+716:
+717:     monkeypatch.setattr(gvf_run, "step_extract", failing_extract)
+718:
+719:     output = tmp_path / "out"
+720:     rc = gvf_run.run_gvf_pipeline(
+721:         gene="TESTGENE",
+722:         email="x@example.com",
+723:         output=output,
+724:         source_recovery=False,
+725:     )
+726:
+727:     assert rc == 3
+728:     assert not (output / "TESTGENE" / "run1" / "RUN_STATUS.json").exists()
+729:
+730:
+731: def test_trust_gate_runs_by_default(tmp_path: Path, monkeypatch):
+732:     """The per-fact trust gate runs by default — the primary quality control."""
+733:     captured: dict = {}
+734:     calls: list = []
+735:     monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+736:     monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+737:     monkeypatch.setattr(
+738:         gvf_run,
+739:         "step_trust_gate",
+740:         lambda db: calls.append(db) or {"trusted": 0, "quarantine": 0},

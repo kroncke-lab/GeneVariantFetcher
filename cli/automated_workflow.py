@@ -101,6 +101,7 @@ def automated_variant_extraction_workflow(
     extraction_triage_model: str | None = None,
     extraction_triage_include_defer: bool = False,
     extraction_triage_max_llm: int | None = None,
+    run_directory: Path | None = None,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -138,6 +139,9 @@ def automated_variant_extraction_workflow(
         extraction_triage_model: Optional LLM model for triage; defaults to Tier-2.
         extraction_triage_include_defer: Extract triage "defer" papers as well.
         extraction_triage_max_llm: Optional cap on LLM triage calls.
+        run_directory: Exact output directory allocated by the caller. Overrides
+            GVF_RESUME_DIR so gvf-run can attribute success or failure without
+            selecting a directory by modification time.
     """
     initialize_runtime()
     setup_logging(level=logging.INFO)
@@ -198,8 +202,10 @@ def automated_variant_extraction_workflow(
     import os as _os
 
     resume_dir = _os.environ.get("GVF_RESUME_DIR")
-    if resume_dir:
-        output_path = Path(resume_dir)
+    if run_directory is not None:
+        output_path = Path(run_directory)
+    elif resume_dir:
+        output_path = Path(resume_dir).expanduser()
     else:
         output_path = (
             Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1395,7 +1401,7 @@ Examples:
 
     # Run workflow
     try:
-        automated_variant_extraction_workflow(
+        summary = automated_variant_extraction_workflow(
             gene_symbol=args.gene,
             email=args.email,
             output_dir=args.output,
@@ -1407,6 +1413,8 @@ Examples:
             synonyms=args.synonyms,
             scout_first=args.scout_first,
         )
+        if isinstance(summary, dict) and summary.get("success") is False:
+            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
 
         # Exit with success code
         sys.exit(0)

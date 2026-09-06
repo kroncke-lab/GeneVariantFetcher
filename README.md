@@ -110,11 +110,12 @@ rescore. The active forward checklist lives in [`TASKS.md`](TASKS.md), and the
 [documentation map](docs/README.md) identifies current authorities versus dated
 evidence. Do not copy recall numbers into new docs; they drift.
 
-**Recall, precision, MAE, and RMSE (RMSD) are reported only for the four cardiac genes
-(KCNH2, KCNQ1, SCN5A, RYR2)** — the only gene-disease pairs with a fully
-human-curated, manually derived gold standard. Other genes (APOE, BRCA1, BRCA2,
-MYBPC3) are review targets scored against curator/derived `gold_overrides`, not
-counted in headline metrics. See `docs/RECALL_STATUS.md` for the scope rule.
+The accepted cardiac headline is limited to KCNH2, KCNQ1, SCN5A and RYR2.
+Separately labelled mixed-gold evaluations also report identity/count metrics
+for APOE, BRCA1, BRCA2 and MYBPC3 using their registered curator/derived
+references. Those exploratory comparisons do not enter the cardiac headline.
+See [RECALL_STATUS.md](docs/RECALL_STATUS.md) for the current scopes, provenance
+and acceptance decisions.
 
 Lead-approved Variant_Browser adjudications are pulled directly from its live
 Azure review database into GVF's versioned `review_gold.sqlite3` cache. Every

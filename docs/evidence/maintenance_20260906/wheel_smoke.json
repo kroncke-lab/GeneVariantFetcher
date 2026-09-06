@@ -1,0 +1,22 @@
+{
+  "wheel": "genevariantfetcher-2.1.0-py3-none-any.whl",
+  "packaged_python_modules": 151,
+  "checks": [
+    {
+      "check": "gvf help",
+      "exit_code": 0
+    },
+    {
+      "check": "gvf-run help",
+      "exit_code": 0
+    },
+    {
+      "check": "python -m cli help",
+      "exit_code": 0
+    },
+    {
+      "check": "all packaged module imports and references",
+      "exit_code": 0
+    }
+  ]
+}

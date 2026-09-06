@@ -1236,11 +1236,10 @@ class Settings(BaseSettings):
     # Provider-aware model resolution
     # ------------------------------------------------------------------
     # The pipeline asks "which model should this tier use?" via these
-    # helpers. They prefer (1) an explicit TIER*_MODEL env var, then
-    # (2) the Anthropic default when MODEL_PROVIDER=anthropic, then
-    # (3) the original tier field default. This keeps every tier
-    # independently configurable while letting --model-provider switch
-    # them in bulk.
+    # helpers. Explicit stage-model overrides win, followed by provider-specific
+    # defaults: Anthropic, Azure deployments with azure_ai/ routing, or OpenAI.
+    # A credential alone never selects its provider. Each stage remains
+    # independently configurable while --model-provider switches the defaults.
 
     def _is_anthropic(self) -> bool:
         return (self.model_provider or "").strip().lower() == "anthropic"

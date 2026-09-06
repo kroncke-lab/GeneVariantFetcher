@@ -1,0 +1,1225 @@
+You are an adversarial maintenance reviewer of GeneVariantFetcher. User explicitly requested Grok, Claude and Agy CLI adversarial reviews. Review supplied source only; no tools, no file edits, no external calls, no subagents. Find concrete runtime/compatibility problems or stale CURRENT docs, with exact path/line and reasoning. Distinguish live code from historical benchmark evidence, which must remain immutable. Avoid deleting public compatibility wrappers solely because deprecated; require caller/semantic evidence. Prioritize 3-6 actionable findings; do not invent unobserved failures. Main e80fd27a matches origin. All 474 tracked Python files compile, 116 installed packages are compatible, CLI help works; full tests running. Python 3.13 local, CI Python 3.11. Main runtime provider default remains Anthropic but user prefers Azure to conserve finite Anthropic; provider key alone does not change MODEL_PROVIDER. A prior run crashed in pipeline/steps.py summing metadata.total_variants_found when a model returned a string. The completed 240-attempt benchmarks must not be rewritten or promoted. Output findings and minimal safe repairs plus meaningful tests.
+Focus on packaging/entry points and deprecated compatibility surface. Check misleading declarations versus actual behavior. Identify safe removal only when supported, otherwise deprecation-documentation cleanup.
+
+### pyproject.toml
+1: [project]
+2: name = "genevariantfetcher"
+3: version = "2.1.0"
+4: description = "A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature"
+5: license = "MIT"
+6: requires-python = ">=3.11"
+7: dependencies = [
+8:     "beautifulsoup4>=4.12.3",
+9:     "biopython>=1.86",
+10:     "litellm>=1.30.0",
+11:     "markitdown[pdf,docx]>=0.1.3",  # Include pdfminer.six for PDF and python-docx for DOCX support
+12:     "pdfplumber>=0.11.0",  # Fallback PDF extraction (better table detection)
+13:     "openai>=2.8.1",
+14:     "pandas>=2.3.3",
+15:     "pydantic>=2.13,<3",  # <3 cap: settings rely on v2 Field/validation_alias behavior
+16:     "pydantic-settings>=2.14",
+17:     "pymupdf>=1.24.0",
+18:     "rapidfuzz>=3.0.0",  # deterministic fuzzy variant matching in the recall scorer
+19:     "xlrd>=2.0.1",
+20:     "openpyxl>=3.1.0",
+21:     "python-docx>=1.2.0",
+22:     "python-dotenv>=1.0.0",
+23:     "requests>=2.32.5",
+24:     "tabulate>=0.9.0",
+25:     "tenacity>=9.1.2",
+26:     "typer>=0.9.0",
+27: ]
+28:
+29: [project.optional-dependencies]
+30: browser = [
+31:     "playwright>=1.40.0",
+32:     "browser-cookie3>=0.19.0",  # read browser cookies for authenticated paywall fetches
+33: ]
+34: # Stealth backend for Cloudflare-fronted publishers (Wiley etc.) when EZproxy
+35: # isn't available. Patched-Playwright drop-in; run `patchright install chromium`.
+36: # Clears the CF managed challenge only with real Chrome, headful (see
+37: # fetch_paywalled.py --stealth and docs/RECALL_REFRESH_RUNBOOK.md).
+38: stealth = [
+39:     "patchright>=1.40.0",
+40: ]
+41: # Optional direct Anthropic SDK for gene_literature.llm_relevance; the main LLM
+42: # path goes through litellm, so this is only needed for that opt-in relevance check.
+43: relevance = [
+44:     "anthropic>=0.25.0",
+45: ]
+46: # Optional YAML variant-mapping files for cli.compare_variants (JSON mappings
+47: # work without it).
+48: mapping = [
+49:     "PyYAML>=6.0",
+50: ]
+51: dev = [
+52:     "pytest>=7.4.0",
+53:     "ruff==0.15.20",
+54:     "mypy>=1.5.0",
+55: ]
+56:
+57: [project.scripts]
+58: gvf = "cli:app"
+59:
+60: [tool.setuptools.packages.find]
+61: include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*", "gvf_data*"]
+62: exclude = ["test_*", "automated_output*"]
+63: namespaces = false
+64:
+65: [tool.setuptools.package-data]
+66: gvf_data = [
+67:     "*.json",
+68:     "*.md",
+69:     "reference_sequences/*.fasta",
+70:     "reference_sequences/*.json",
+71: ]
+
+### cli/__init__.py
+1: """
+2: CLI tools for GeneVariantFetcher.
+3:
+4: Typer commands registered below: extract, discover, reharvest, gvf-run,
+5: audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
+6:
+7: Internal helpers (not exposed as Typer commands):
+8: - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
+9: - fetch_manager: Post-fetch markdown conversion + Data Scout, available as
+10:   `python -m cli.fetch_manager <paywalled_missing.csv>` for manual work.
+11: """
+12:
+13: import os
+14: from pathlib import Path
+15: from typing import Optional
+16:
+17: import typer
+18: from typing_extensions import Annotated
+19:
+20: from cli.automated_workflow import automated_variant_extraction_workflow
+21: from cli.audit_paywalls import run_paywall_audit
+22: from cli.discover import discover_command, run_discover
+23: from cli.extract import run_extraction
+24: from cli.reharvest import reharvest_command
+25: from cli.scout import run_scout
+26: from utils.bootstrap import has_llm_provider_key, initialize_runtime
+27:
+28: __all__ = [
+29:     "automated_variant_extraction_workflow",
+30:     "run_scout",
+31:     "run_paywall_audit",
+32:     "run_extraction",
+33:     "run_discover",
+34:     "reharvest_command",
+35:     "app",
+36: ]
+37:
+38: app = typer.Typer(
+39:     help="GeneVariantFetcher CLI - Tools for extracting genetic variant data from literature"
+40: )
+41:
+42:
+43: def _read_pmid_file(path: Path) -> list[str]:
+44:     """Read PMIDs from a file, one per line. '#' comments and blank lines ignored."""
+45:     if not path.exists():
+46:         raise typer.BadParameter(f"PMID list file not found: {path}")
+47:     tokens: list[str] = []
+48:     for line in path.read_text(encoding="utf-8").splitlines():
+49:         line = line.strip()
+50:         if not line or line.startswith("#"):
+51:             continue
+52:         # Allow trailing comments after the PMID (e.g. "12345 # paper title")
+53:         token = line.split("#", 1)[0].strip()
+54:         if token:
+55:             tokens.append(token)
+56:     return tokens
+57:
+58:
+59: def _parse_pmid_arg(arg: str) -> list[str]:
+60:     """Parse a --pmids argument: '@path/to/file.txt' or 'pmid1,pmid2,...'.
+61:
+62:     Returns a deduplicated list preserving first-seen order. PMIDs are validated
+63:     as all-digit tokens; non-digit tokens are dropped with no warning so that
+64:     file headers and stray whitespace pass through cleanly.
+65:     """
+66:     if arg.startswith("@"):
+67:         raw_tokens = _read_pmid_file(Path(arg[1:]).expanduser())
+68:     else:
+69:         raw_tokens = [tok.strip() for tok in arg.split(",")]
+70:
+71:     seen: set[str] = set()
+72:     pmids: list[str] = []
+73:     for tok in raw_tokens:
+74:         if tok.isdigit() and tok not in seen:
+75:             seen.add(tok)
+76:             pmids.append(tok)
+77:     return pmids
+78:
+79:
+80: @app.command("extract")
+81: def extract_command(
+82:     gene: Annotated[str, typer.Argument(help="Gene symbol (e.g., BRCA1, SCN5A, TP53)")],
+83:     email: Annotated[
+84:         str, typer.Option("--email", "-e", help="Your email for NCBI E-utilities")
+85:     ],
+86:     output: Annotated[
+87:         str,
+88:         typer.Option(
+
+### config/settings.py
+1: """Validated configuration for the Gene Variant Fetcher pipeline."""
+2:
+3: import logging
+4: import os
+5: from functools import lru_cache
+6: from pathlib import Path
+7: from typing import ClassVar, List, Optional, Union
+8:
+9: from pydantic import AliasChoices, Field, field_validator, model_validator
+10: from pydantic_settings import BaseSettings, SettingsConfigDict
+11:
+12: from config.constants import (
+13:     SCANNER_MAX_HINTS,
+14:     SCANNER_MERGE_MIN_CONFIDENCE,
+15:     TEXT_TRUNCATION_MAX_CHARS,
+16: )
+17:
+18: _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+19: logger = logging.getLogger(__name__)
+20:
+21:
+22: # Default Anthropic model strings. Used by the get_*_model() helpers when
+23: # MODEL_PROVIDER=anthropic and the user has not set the per-tier env var.
+24: # All routed through LiteLLM, which understands the "anthropic/" prefix.
+25: ANTHROPIC_HAIKU_MODEL_ID = "claude-haiku-4-5-20251001"
+26: ANTHROPIC_TIER2_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
+27: ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
+28: ANTHROPIC_TABLE_ROUTER_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
+29: ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
+30: FINAL_ADJUDICATOR_DEFAULT = "anthropic/claude-sonnet-5"
+31: FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
+32:
+33: # Azure-first staging defaults. These are deployment names on the active Azure
+34: # AI Foundry endpoint, not base model names. Per-tier env vars still win.
+35: AZURE_TIER2_DEFAULT = "gpt-5.4"
+36: AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
+37: AZURE_TIER3_DEFAULT = "grok-4.3"
+38: AZURE_PAPER_FINAL_CHECK_DEFAULT = "gpt-5.6-sol"
+39:
+40: # Tier-model env var names. Used to decide whether the user explicitly set
+41: # a tier model (in which case --model-provider does not override it) vs.
+42: # left it at the field default.
+43: _TIER_ENV_VARS = {
+44:     "tier2_model": "TIER2_MODEL",
+45:     "tier3_models": "TIER3_MODELS",
+46:     "tier3_adjudicator_models": "TIER3_ADJUDICATOR_MODELS",
+47:     "table_router_model": "TABLE_ROUTER_MODEL",
+48:     "vision_model": "VISION_MODEL",
+49:     "paper_final_check_model": "PAPER_FINAL_CHECK_MODEL",
+50:     "count_recovery_model": "COUNT_RECOVERY_MODEL",
+51: }
+52:
+53:
+54: class Settings(BaseSettings):
+55:     """Centralized application settings loaded from environment variables."""
+56:
+57:     _DEPRECATED_NOOP_SETTINGS: ClassVar[dict[str, tuple[str, str]]] = {
+58:         "gemini_api_key": (
+59:             "GEMINI_API_KEY",
+60:             "GVF model routing does not read this Settings field; provider libraries may still read the environment variable directly",
+61:         ),
+62:         "azure_deployment_gpt5_codex": (
+63:             "AZURE_DEPLOYMENT_GPT5_CODEX",
+64:             "use the stage-specific model/deployment variables documented in .env.example",
+65:         ),
+66:         "tier1_model": (
+67:             "TIER1_MODEL",
+68:             "Tier 1 is heuristic; configure TIER2_MODEL for LLM classification",
+69:         ),
+70:         "enable_tier3": (
+71:             "ENABLE_TIER3",
+72:             "this flag does not gate extraction; select the intended extraction command/stages instead",
+73:         ),
+74:         "tier1_use_llm": (
+75:             "TIER1_USE_LLM",
+76:             "Tier 1 is heuristic; configure Tier 2 for LLM classification",
+77:         ),
+78:     }
+79:     _DEPRECATED_EXTRACTION_SETTINGS: ClassVar[dict[str, tuple[str, object, str]]] = {
+80:         "extraction_max_chars": (
+81:             "EXTRACTION_MAX_CHARS",
+82:             TEXT_TRUNCATION_MAX_CHARS,
+83:             "config.constants.TEXT_TRUNCATION_MAX_CHARS",
+84:         ),
+85:         "scanner_merge_confidence": (
+86:             "SCANNER_MERGE_CONFIDENCE",
+87:             SCANNER_MERGE_MIN_CONFIDENCE,
+88:             "config.constants.SCANNER_MERGE_MIN_CONFIDENCE",
+89:         ),
+90:         "scanner_max_hints": (
+91:             "SCANNER_MAX_HINTS",
+92:             SCANNER_MAX_HINTS,
+93:             "config.constants.SCANNER_MAX_HINTS",
+94:         ),
+95:     }
+96:
+97:     # API Keys - all loaded from .env file
+98:     openai_api_key: Optional[str] = Field(
+99:         default=None, validation_alias="OPENAI_API_KEY"
+100:     )
+101:     anthropic_api_key: Optional[str] = Field(
+102:         default=None, validation_alias="ANTHROPIC_API_KEY"
+103:     )
+104:     gemini_api_key: Optional[str] = Field(
+105:         default=None, validation_alias="GEMINI_API_KEY"
+106:     )
+107:     ncbi_email: Optional[str] = Field(default=None, validation_alias="NCBI_EMAIL")
+108:     ncbi_api_key: Optional[str] = Field(default=None, validation_alias="NCBI_API_KEY")
+109:     elsevier_api_key: Optional[str] = Field(
+110:         default=None, validation_alias="ELSEVIER_API_KEY"
+111:     )
+112:     elsevier_insttoken: Optional[str] = Field(
+113:         default=None,
+114:         validation_alias="ELSEVIER_INSTTOKEN",
+115:         description="Elsevier institution token for subscription access",
+116:     )
+117:     wiley_api_key: Optional[str] = Field(default=None, validation_alias="WILEY_API_KEY")
+118:     springer_api_key: Optional[str] = Field(
+119:         default=None, validation_alias="SPRINGER_API_KEY"
+120:     )
+121:
+122:     # Azure AI Foundry integration. A single resource can host multiple
+123:     # deployments accessed via LiteLLM model strings like "azure_ai/<deployment>".
+124:     # LiteLLM reads AZURE_AI_API_KEY / AZURE_AI_API_BASE from the process
+125:     # environment automatically; we expose them here so other modules can read
+126:     # them via Settings and so missing-key validation can include them.
+127:     azure_ai_api_key: Optional[str] = Field(
+128:         default=None, validation_alias="AZURE_AI_API_KEY"
+129:     )
+130:     azure_ai_api_base: Optional[str] = Field(
+131:         default=None,
+132:         validation_alias="AZURE_AI_API_BASE",
+133:         description=(
+134:             "Azure AI Foundry inference endpoint, e.g. "
+135:             "https://<resource>.services.ai.azure.com (resource root). "
+136:             "Portal project URLs (.../api/projects/<project>) are for the "
+137:             "SDK; strip that path for LiteLLM azure_ai/* calls. OpenAI v1 "
+138:             "bases ending in /openai/v1 are also supported."
+139:         ),
+140:     )
+141:     azure_ai_api_version: Optional[str] = Field(
+142:         default="2024-08-01-preview", validation_alias="AZURE_AI_API_VERSION"
+143:     )
+144:     azure_deployment_gpt5_codex: Optional[str] = Field(
+145:         default=None, validation_alias="AZURE_DEPLOYMENT_GPT5_CODEX"
+
+### config/settings.py
+1190:                 "Set PUBMIND_ONLY=true to restrict to PubMind only or toggle USE_PUBMED/USE_EUROPEPMC to disable specific sources."
+1191:             )
+1192:
+1193:         logger.info(
+1194:             "Literature sourcing enabled for %s. Set PUBMIND_ONLY=true or disable USE_PUBMED/USE_EUROPEPMC to limit discovery.",
+1195:             ", ".join(active_sources),
+1196:         )
+1197:
+1198:         return self
+1199:
+1200:     @model_validator(mode="after")
+1201:     def warn_about_deprecated_noop_settings(self):
+1202:         """Make explicitly configured false knobs visible without changing science."""
+1203:
+1204:         supplied_fields = self.model_fields_set
+1205:         for field_name, (
+1206:             env_var,
+1207:             replacement,
+1208:         ) in self._DEPRECATED_NOOP_SETTINGS.items():
+1209:             if field_name in supplied_fields:
+1210:                 logger.warning(
+1211:                     "%s is deprecated because GVF does not use it as a runtime knob; %s.",
+1212:                     env_var,
+1213:                     replacement,
+1214:                 )
+1215:
+1216:         for field_name, (
+1217:             env_var,
+1218:             runtime_value,
+1219:             authority,
+1220:         ) in self._DEPRECATED_EXTRACTION_SETTINGS.items():
+1221:             if field_name not in supplied_fields:
+1222:                 continue
+1223:             if getattr(self, field_name) == runtime_value:
+1224:                 continue
+1225:             logger.warning(
+1226:                 "%s=%r is deprecated and ignored; extraction uses %s=%r.",
+1227:                 env_var,
+1228:                 getattr(self, field_name),
+1229:                 authority,
+1230:                 runtime_value,
+1231:             )
+1232:
+1233:         return self
+1234:
+1235:     # ------------------------------------------------------------------
+1236:     # Provider-aware model resolution
+1237:     # ------------------------------------------------------------------
+1238:     # The pipeline asks "which model should this tier use?" via these
+1239:     # helpers. They prefer (1) an explicit TIER*_MODEL env var, then
+1240:     # (2) the Anthropic default when MODEL_PROVIDER=anthropic, then
+1241:     # (3) the original tier field default. This keeps every tier
+1242:     # independently configurable while letting --model-provider switch
+1243:     # them in bulk.
+1244:
+1245:     def _is_anthropic(self) -> bool:
+
+### utils/deprecations.py
+1: """Small, consistent deprecation notices for legacy importable helpers."""
+2:
+3: from __future__ import annotations
+4:
+5: import warnings
+6:
+7:
+8: def warn_deprecated(name: str, replacement: str) -> None:
+9:     """Warn callers while preserving one compatibility window."""
+10:
+11:     warnings.warn(
+12:         f"{name} is deprecated; use {replacement}.",
+13:         DeprecationWarning,
+14:         stacklevel=3,
+15:     )
+
+### utils/variant_normalizer.py
+1725:     if range_dup and "_" in range_dup:
+1726:         return range_dup
+1727:
+1728:     # Unknown format - return uppercase. A leading p./P. is presentation, not
+1729:     # identity: every matcher form is prefix-free, so keeping it would leave a
+1730:     # verbatim emission disjoint from all of them.
+1731:     if v_lower.startswith("p."):
+1732:         variant = variant[2:]
+1733:     return variant.upper()
+1734:
+1735:
+1736: def normalize_protein_variant(variant: str) -> str:
+1737:     """
+1738:     Normalize a protein variant to short format (e.g., A561V).
+1739:
+1740:     DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()
+1741:
+1742:     Args:
+1743:         variant: Protein variant in any format (p.Ala561Val, A561V, etc.)
+1744:
+1745:     Returns:
+1746:         Normalized variant in short format (A561V)
+1747:     """
+1748:     warn_deprecated(
+1749:         "utils.variant_normalizer.normalize_protein_variant",
+1750:         "normalize_variant",
+1751:     )
+1752:     if not variant:
+1753:         return ""
+1754:
+1755:     normalizer = VariantNormalizer("UNKNOWN")
+1756:     single = normalizer.normalize_to_single_letter(variant)
+1757:     return single if single else variant.strip().upper()
+1758:
+1759:
+1760: def normalize_cdna_variant(variant: str) -> str:
+1761:     """
+1762:     Normalize a cDNA variant notation.
+1763:
+1764:     DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()
+1765:
+1766:     Args:
+1767:         variant: cDNA variant (c.1682C>T, 1682C>T, etc.)
+1768:
+1769:     Returns:
+1770:         Normalized cDNA variant (c.1682C>T)
+1771:     """
+1772:     warn_deprecated(
+1773:         "utils.variant_normalizer.normalize_cdna_variant",
+1774:         "VariantNormalizer.normalize_cdna",
+1775:     )
+1776:     if not variant:
+1777:         return ""
+1778:
+1779:     normalizer = VariantNormalizer("UNKNOWN")
+1780:     cdna = normalizer.normalize_cdna(variant)
+1781:     return cdna if cdna else variant.strip()
+1782:
+1783:
+1784: def variants_match(v1: str, v2: str, gene_symbol: str = "KCNH2") -> bool:
+1785:     """
+1786:     Check if two variant notations refer to the same variant.
+1787:
+1788:     DROP-IN REPLACEMENT for utils.variant_utils.variants_match()
+1789:
+1790:     Args:
+1791:         v1: First variant notation
+1792:         v2: Second variant notation
+1793:         gene_symbol: Gene symbol for context
+1794:
+1795:     Returns:
+1796:         True if variants match after normalization
+1797:     """
+1798:     norm1 = normalize_variant(v1, gene_symbol)
+1799:     norm2 = normalize_variant(v2, gene_symbol)
+1800:
+1801:     if not norm1 or not norm2:
+1802:         return False
+1803:
+1804:     return norm1 == norm2
+1805:
+1806:
+1807: def find_matching_variants(
+1808:     extracted: List[str], expected: List[str], gene_symbol: str = "KCNH2"
+1809: ) -> Tuple[List[Tuple[str, str]], List[str], List[str]]:
+1810:     """
+1811:     Compare extracted variants against expected variants.
+1812:
+1813:     DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()
+1814:
+1815:     Args:
+1816:         extracted: List of extracted variant strings
+1817:         expected: List of expected variant strings
+1818:         gene_symbol: Gene symbol for context
+1819:
+1820:     Returns:
+1821:         Tuple of (matched, missed, extra) where:
+1822:         - matched: List of (extracted, expected) tuples that match
+1823:         - missed: List of expected variants not found in extracted
+1824:         - extra: List of extracted variants not found in expected
+1825:     """
+1826:     warn_deprecated(
+1827:         "utils.variant_normalizer.find_matching_variants",
+1828:         "variants_match or match_variants_to_baseline",
+1829:     )
+1830:
+1831:     # Normalize all variants
+1832:     norm_extracted = {normalize_variant(v, gene_symbol): v for v in extracted if v}
+1833:     norm_expected = {normalize_variant(v, gene_symbol): v for v in expected if v}
+1834:
+1835:     matched = []
+1836:     missed = []
+1837:     extra = []
+1838:
+1839:     # Find matches
+1840:     for norm_exp, orig_exp in norm_expected.items():
+1841:         if norm_exp in norm_extracted:
+1842:             matched.append((norm_extracted[norm_exp], orig_exp))
+1843:         else:
+1844:             missed.append(orig_exp)
+1845:
+1846:     # Find extras
+1847:     for norm_ext, orig_ext in norm_extracted.items():
+1848:         if norm_ext not in norm_expected:
+1849:             extra.append(orig_ext)
+1850:
+
+### utils/pubmed_utils.py
+1: """
+2: PubMed/NCBI utilities for querying and fetching paper metadata.
+3:
+4: This module provides unified access to PubMed and NCBI Entrez APIs,
+5: consolidating different query approaches into a single consistent interface.
+6: """
+7:
+8: import logging
+9: import os
+10: from http.client import IncompleteRead
+11: from typing import Any, Dict, List, Optional, Set
+12: from urllib.error import URLError
+13:
+14: import requests
+15: from Bio import Entrez
+16: from Bio.Entrez.Parser import ValidationError
+17:
+18: from .deprecations import warn_deprecated
+19: from .retry_utils import api_retry, get_standard_retry_decorator
+20:
+21: logger = logging.getLogger(__name__)
+22:
+23: # Exceptions that should trigger a retry
+24: _RETRYABLE_EXCEPTIONS = (
+25:     requests.exceptions.RequestException,
+26:     requests.exceptions.Timeout,
+27:     ConnectionError,
+28:     TimeoutError,
+29:     IncompleteRead,  # Server closes connection before sending complete response
+30:     URLError,  # General urllib network errors
+31: )
+32:
+33:
+34: def _set_entrez_email(custom_email: Optional[str] = None) -> str:
+35:     """Set ``Entrez.email`` to the provided value or the configured default."""
+36:
+37:     email = custom_email or os.getenv("NCBI_EMAIL")
+38:     if not email:
+39:         # Keep PubMed helpers usable in isolated tests/utilities without
+40:         # requiring full application settings initialization.
+41:         email = "gvf@example.org"
+42:         logger.warning(
+43:             "NCBI_EMAIL is not set; falling back to '%s' for Entrez requests.", email
+44:         )
+45:     Entrez.email = email
+46:     return email
+47:
+48:
+49: _pubmed_retry = get_standard_retry_decorator(
+50:     max_attempts=3,
+51:     retry_exceptions=_RETRYABLE_EXCEPTIONS,
+52: )
+53:
+54:
+55: @_pubmed_retry
+56: def query_pubmed_with_entrez(
+57:     query: str,
+58:     max_results: int = 100,
+59:     sort: str = "relevance",
+60:     email: Optional[str] = None,
+61: ) -> List[str]:
+62:     """
+63:     Query PubMed using Bio.Entrez and return PMIDs.
+64:
+65:     This is the recommended method for querying PubMed as it uses the
+66:     official Biopython Entrez interface.
+67:
+68:     Args:
+69:         query: PubMed search query (e.g., "BRCA1[Gene Symbol]")
+70:         max_results: Maximum number of results to return (default: 100)
+71:         sort: Sort order - "relevance", "pub_date", or "first_author" (default: "relevance")
+72:
+73:     Returns:
+74:         List of PMID strings
+75:
+76:     Example:
+77:         >>> pmids = query_pubmed_with_entrez("BRCA1[Gene Symbol]", max_results=50)
+78:         >>> print(f"Found {len(pmids)} papers")
+79:     """
+80:     logger.info(f"Querying PubMed with query: {query}")
+81:
+82:     try:
+83:         _set_entrez_email(email)
+84:         handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results, sort=sort)
+85:         record = Entrez.read(handle)
+86:         handle.close()
+87:
+88:         pmids = record.get("IdList", [])
+89:         logger.info(f"PubMed query returned {len(pmids)} PMIDs")
+90:
+91:         return pmids
+92:
+93:     except _RETRYABLE_EXCEPTIONS as exc:
+94:         logger.warning(
+95:             "Transient error during PubMed query for '%s'; raising for retry",
+96:             query,
+97:             exc_info=exc,
+98:         )
+99:         raise
+100:     except (ValidationError, ValueError) as exc:
+101:         logger.error("PubMed query returned malformed data for '%s': %s", query, exc)
+102:         return []
+103:
+104:
+105: def query_pubmed_for_gene(
+106:     gene_symbol: str,
+107:     max_results: int = 100,
+108:     include_abstract: bool = True,
+109:     email: Optional[str] = None,
+110: ) -> Set[str]:
+111:     """
+112:     Query PubMed for papers mentioning a specific gene.
+113:
+114:     This function constructs a gene-specific query that searches both
+115:     the Gene Symbol field and Title/Abstract.
+116:
+117:     Args:
+118:         gene_symbol: Gene symbol to search for (e.g., "BRCA1")
+119:         max_results: Maximum number of results to return (default: 100)
+120:         include_abstract: Whether to search in abstracts (default: True)
+121:
+122:     Returns:
+123:         Set of PMID strings
+124:
+125:     Example:
+126:         >>> pmids = query_pubmed_for_gene("BRCA1", max_results=50)
+127:         >>> print(pmids)
+128:     """
+129:     warn_deprecated(
+130:         "utils.pubmed_utils.query_pubmed_for_gene",
+131:         "query_pubmed_with_entrez or gene_literature.discovery",
+132:     )
+133:     logger.info(f"Querying PubMed for gene symbol: {gene_symbol}")
+134:
+135:     # Build query
+136:     if include_abstract:
+137:         query = f"{gene_symbol}[Gene Symbol] OR {gene_symbol}[Title/Abstract]"
+138:     else:
+139:         query = f"{gene_symbol}[Gene Symbol]"
+140:
+141:     pmids = query_pubmed_with_entrez(query, max_results=max_results, email=email)
+142:     return set(pmids)
+143:
+144:
+145: @api_retry
+146: def fetch_paper_metadata(
+147:     pmid: str, email: Optional[str] = None
+148: ) -> Optional[Dict[str, Any]]:
+149:     """
+150:     Fetch metadata for a single paper from PubMed.
+151:
+152:     Uses the Entrez ESummary API to retrieve comprehensive metadata
+153:     including title, authors, journal, publication date, etc.
+154:
+155:     Args:
+156:         pmid: PubMed ID (as string)
+157:
+158:     Returns:
+159:         Dictionary containing paper metadata, or None if fetch fails
+160:
+161:     Example:
+162:         >>> metadata = fetch_paper_metadata("12345678")
+163:         >>> print(metadata.get("Title"))
+164:     """
+165:     logger.debug(f"Fetching metadata for PMID: {pmid}")
+
+### utils/pubmed_utils.py
+425:     logger.info(f"Fetching metadata for {len(pmids)} papers in batches of {batch_size}")
+426:
+427:     metadata_dict = {}
+428:
+429:     # Process in batches
+430:     for i in range(0, len(pmids), batch_size):
+431:         batch = pmids[i : i + batch_size]
+432:         batch_ids = ",".join(batch)
+433:
+434:         try:
+435:             _set_entrez_email(email)
+436:             handle = Entrez.esummary(db="pubmed", id=batch_ids)
+437:             records = Entrez.read(handle)
+438:             handle.close()
+439:
+440:             # Parse the batch results
+441:             for record in records:
+442:                 if "Id" in record:
+443:                     pmid = str(record["Id"])
+444:                     metadata_dict[pmid] = record
+445:
+446:             logger.debug(f"Fetched metadata for batch {i // batch_size + 1}")
+447:
+448:         except Exception as e:
+449:             logger.error(f"Failed to fetch metadata for batch starting at {i}: {e}")
+450:             continue
+451:
+452:     logger.info(f"Successfully fetched metadata for {len(metadata_dict)} papers")
+453:     return metadata_dict
+454:
+455:
+456: def validate_pmid(pmid: str) -> bool:
+457:     """
+458:     Validate that a PMID exists in PubMed.
+459:
+460:     Args:
+461:         pmid: PubMed ID to validate
+462:
+463:     Returns:
+464:         True if the PMID exists in PubMed
+465:
+466:     Example:
+467:         >>> is_valid = validate_pmid("12345678")
+468:         >>> print(is_valid)
+469:     """
+470:     warn_deprecated(
+471:         "utils.pubmed_utils.validate_pmid",
+472:         "utils.pmid_utils.is_valid_pmid for format checks or fetch_paper_metadata for existence checks",
+473:     )
+474:     metadata = fetch_paper_metadata(pmid)
+475:     return metadata is not None
+
+### utils/html_utils.py
+1: """
+2: HTML parsing utilities for extracting PMIDs and other identifiers.
+3:
+4: This module provides unified utilities for parsing HTML and extracting
+5: PubMed IDs (PMIDs) from various sources including PubMind and PMC.
+6: """
+7:
+8: import logging
+9: import re
+10: from typing import Any, Dict, Set, Union
+11:
+12: import requests
+13: from bs4 import BeautifulSoup
+14:
+15: from utils.deprecations import warn_deprecated
+16: from utils.http_utils import get_browser_session
+17:
+18: logger = logging.getLogger(__name__)
+19:
+20:
+21: def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
+22:     """
+23:     Extract PubMed IDs (PMIDs) from HTML content.
+24:
+25:     This function uses multiple strategies to find PMIDs:
+26:     1. Links to pubmed.ncbi.nlm.nih.gov with numeric IDs
+27:     2. Text patterns like "PMID: 12345678" or "PMID:12345678"
+28:     3. Standalone 7-10 digit numbers in relevant contexts
+29:     4. Table cells and list items containing PMIDs
+30:
+31:     Args:
+32:         html: Either raw HTML string or a BeautifulSoup object
+33:
+34:     Returns:
+35:         Set of PMID strings (numeric IDs as strings)
+36:
+37:     Example:
+38:         >>> html = '<a href="https://pubmed.ncbi.nlm.nih.gov/12345678">Paper</a>'
+39:         >>> pmids = extract_pmids_from_html(html)
+40:         >>> print(pmids)
+41:         {'12345678'}
+42:     """
+43:     warn_deprecated(
+44:         "utils.html_utils.extract_pmids_from_html",
+45:         "a source-specific parser (PubMind keeps its parser private)",
+46:     )
+47:
+48:     # Convert to BeautifulSoup if necessary
+49:     if isinstance(html, str):
+50:         soup = BeautifulSoup(html, "html.parser")
+51:     else:
+52:         soup = html
+53:
+54:     pmids = set()
+55:
+56:     # Strategy 1: Extract from PubMed links
+57:     # Look for URLs like https://pubmed.ncbi.nlm.nih.gov/12345678
+58:     pubmed_links = soup.find_all(
+59:         "a", href=re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
+60:     )
+61:     for link in pubmed_links:
+62:         match = re.search(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)", link.get("href", ""))
+63:         if match:
+64:             pmid = match.group(1)
+65:             if _is_valid_pmid(pmid):
+66:                 pmids.add(pmid)
+67:                 logger.debug(f"Found PMID {pmid} in link")
+68:
+69:     # Strategy 2: Extract from "PMID:" patterns in text
+70:     # Matches patterns like "PMID: 12345678" or "PMID:12345678"
+71:     pmid_pattern = re.compile(r"PMID:?\s*(\d{7,10})", re.IGNORECASE)
+72:
+73:     # Search in all text content
+74:     all_text = soup.get_text()
+75:     for match in pmid_pattern.finditer(all_text):
+76:         pmid = match.group(1)
+77:         if _is_valid_pmid(pmid):
+78:             pmids.add(pmid)
+79:             logger.debug(f"Found PMID {pmid} in text pattern")
+80:
+81:     # Strategy 3: Extract from table cells (common in PubMind results)
+82:     # Look for table cells that might contain PMIDs
+83:     for cell in soup.find_all(["td", "th"]):
+84:         cell_text = cell.get_text().strip()
+85:         # Look for standalone numbers that could be PMIDs
+86:         numbers = re.findall(r"(?<!\d)(\d{7,10})(?!\d)", cell_text)
+87:         for num in numbers:
+88:             if _is_valid_pmid(num):
+89:                 # Additional validation: check if context suggests it's a PMID
+90:                 context = cell_text.lower()
+91:                 if any(
+92:                     keyword in context
+93:                     for keyword in ["pmid", "pubmed", "article", "paper"]
+94:                 ):
+95:                     pmids.add(num)
+96:                     logger.debug(f"Found PMID {num} in table cell")
+97:
+98:     # Strategy 4: Extract from anchor text and titles
+99:     for link in soup.find_all("a"):
+100:         link_text = link.get_text()
+101:         for match in pmid_pattern.finditer(link_text):
+102:             pmid = match.group(1)
+103:             if _is_valid_pmid(pmid):
+104:                 pmids.add(pmid)
+105:                 logger.debug(f"Found PMID {pmid} in link text")
+106:
+107:     logger.info(f"Extracted {len(pmids)} unique PMIDs from HTML")
+108:     return pmids
+109:
+110:
+111: def _is_valid_pmid(pmid: str) -> bool:
+112:     """
+113:     Validate that a string is a plausible PMID.
+114:
+115:     PMIDs are typically 7-10 digit numbers. This function performs
+116:     basic validation to filter out obvious non-PMIDs.
+117:
+118:     Args:
+119:         pmid: String to validate
+120:
+121:     Returns:
+122:         True if the string could be a valid PMID
+123:     """
+124:     if not pmid or not pmid.isdigit():
+125:         return False
+126:
+127:     # PMIDs are typically 7-10 digits
+128:     if len(pmid) < 7 or len(pmid) > 10:
+129:         return False
+130:
+131:     # PMIDs don't start with 0
+132:     if pmid.startswith("0"):
+133:         return False
+134:
+135:     return True
+136:
+137:
+138: def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
+139:     """
+140:     Extract DOIs (Digital Object Identifiers) from HTML content.
+141:
+142:     Args:
+143:         html: Either raw HTML string or a BeautifulSoup object
+144:
+145:     Returns:
+146:         Set of DOI strings
+147:
+148:     Example:
+149:         >>> html = '<a href="https://doi.org/10.1038/nature12345">Paper</a>'
+150:         >>> dois = extract_dois_from_html(html)
+151:         >>> print(dois)
+152:         {'10.1038/nature12345'}
+153:     """
+154:     warn_deprecated(
+155:         "utils.html_utils.extract_dois_from_html",
+156:         "the source adapter's DOI parser",
+157:     )
+158:
+159:     if isinstance(html, str):
+160:         soup = BeautifulSoup(html, "html.parser")
+161:     else:
+162:         soup = html
+163:
+164:     dois = set()
+165:
+166:     # Pattern for DOIs: 10.xxxx/xxxxx
+167:     doi_pattern = re.compile(r'10\.\d{4,}/[^\s"<>]+', re.IGNORECASE)
+168:
+169:     # Search in all text
+170:     all_text = soup.get_text()
+171:     for match in doi_pattern.finditer(all_text):
+172:         doi = match.group(0)
+173:         # Clean up common trailing punctuation
+174:         doi = doi.rstrip(".,;)")
+175:         dois.add(doi)
+176:         logger.debug(f"Found DOI {doi}")
+177:
+178:     # Also check href attributes for doi.org links
+179:     for link in soup.find_all("a", href=True):
+180:         href = link.get("href", "")
+181:         if "doi.org" in href:
+182:             match = re.search(r'10\.\d{4,}/[^\s"<>]+', href)
+183:             if match:
+184:                 doi = match.group(0).rstrip(".,;)")
+185:                 dois.add(doi)
+186:                 logger.debug(f"Found DOI {doi} in link")
+187:
+188:     logger.info(f"Extracted {len(dois)} unique DOIs from HTML")
+189:     return dois
+190:
+191:
+192: def create_scraping_session() -> requests.Session:
+193:     """
+194:     Create a requests session configured for web scraping.
+195:
+196:     This function creates a session with headers that mimic a regular browser,
+197:     which helps avoid being blocked by websites that check for bot traffic.
+198:
+199:     Note:
+200:         This is an alias for get_browser_session() from utils.http_utils.
+201:         Prefer using get_browser_session() directly in new code.
+202:
+203:     Returns:
+204:         Configured requests.Session object
+205:
+206:     Example:
+207:         >>> session = create_scraping_session()
+208:         >>> response = session.get("https://example.com")
+209:     """
+210:     warn_deprecated(
+211:         "utils.html_utils.create_scraping_session",
+212:         "utils.http_utils.get_browser_session",
+213:     )
+214:     logger.debug("Created scraping session with browser-like headers")
+215:     return get_browser_session()
+216:
+217:
+218: def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:
+219:     """
+220:     Extract PMIDs from JSON API responses.
+221:
+222:     This function handles various JSON structures returned by different APIs
+223:     (PubMind, PubMed, EuropePMC) and extracts PMIDs from them.
+224:
+225:     Args:
+226:         json_data: Parsed JSON response from API
+227:
+228:     Returns:
+229:         Set of PMID strings
+230:
+231:     Example:
+232:         >>> json_data = {"results": [{"pmid": "12345678"}, {"pmid": "87654321"}]}
+233:         >>> pmids = extract_pmids_from_json_results(json_data)
+234:         >>> print(pmids)
+235:         {'12345678', '87654321'}
+236:     """
+237:     warn_deprecated(
+238:         "utils.html_utils.extract_pmids_from_json_results",
+239:         "the source adapter's typed response parser",
+240:     )
+241:     pmids = set()
+242:
+243:     def _recursive_search(obj, keys=("pmid", "pubmed_id", "PMID", "pubmedId")):
+244:         """Recursively search for PMID fields in nested JSON."""
+245:         if isinstance(obj, dict):
+246:             for key, value in obj.items():
+247:                 if key.lower() in [k.lower() for k in keys]:
+248:                     if isinstance(value, (str, int)):
+249:                         pmid = str(value)
+250:                         if _is_valid_pmid(pmid):
+251:                             pmids.add(pmid)
+252:                 else:
+253:                     _recursive_search(value, keys)
+254:         elif isinstance(obj, list):
+255:             for item in obj:
+256:                 _recursive_search(item, keys)
+257:
+258:     _recursive_search(json_data)
+259:     logger.info(f"Extracted {len(pmids)} PMIDs from JSON")
+260:     return pmids
+
+### scripts/README.md
+1: # Scripts
+2:
+3: Prefer the `gvf` CLI for normal work. These scripts are support tools for
+4: refreshing runs, scoring recall, recovering source, and preparing review data.
+5:
+6: ## Routine Recall And Refresh
+7:
+8: Use these when updating an existing scored run or measuring recall.
+9:
+10: | Script | Purpose |
+11: | --- | --- |
+12: | `refresh_run_db.py` | Rebuild a run DB from selected source artifacts and recovery layers. |
+13: | `refresh_recall.py` | Refresh and score the tracked recall genes. |
+14: | `run_recall_suite.py` | Score one or more gene DBs against normalized gold inputs. |
+15: | `manage_review_gold.py` | Inspect immutable Azure gold snapshots, changes, tiers, and reversible exclusions. |
+16: | `recall_mae.py` | Compare rows-mode MAE and run-to-run score changes. |
+17: | `trust_report.py` | Inspect the trust-gate two-tier DB (trusted/quarantine counts, rate, by reason). |
+18: | `precision_sample.py` | Draw + score an adjudicated precision-calibration sample (Wilson CI) for gate thresholds. |
+19: | `phenotype_value_precision.py` | Measure exact-match precision of supplied carrier/affected/unaffected values on an existing locked prediction set. |
+20: | `build_status_dashboard.py` | Render the self-contained historical strategy/status dashboard from scored artifacts. |
+21:
+22: ## Source And Corpus
+23:
+24: Use these for full-text, supplement, figure, and corpus maintenance.
+25:
+26: | Script | Purpose |
+27: | --- | --- |
+28: | `fetch_paywalled.py` | Authenticated paywall/full-text recovery. |
+29: | `fetch_elsevier_supplements.py` | Elsevier supplement recovery. |
+30: | `fetch_linked_supplements.py` | Recover supplement links already recorded in paper markup but missed by publisher/API acquisition. |
+31: | `fold_supplements.py` | Fold downloaded supplements into full-context source files. |
+32: | `fulltext_acquisition_pass.py` | Source-acquisition-only pass without extraction. |
+33: | `build_source_corpus.py` | Build or update the local ignored source corpus. |
+34: | `corpus_to_harvest.py` | Copy corpus source back into harvest-shaped run folders. |
+35: | `extract_figure_variants.py` | Extract variant evidence from figures. |
+36: | `fetch_reference_sequences.py` | Fetch reference protein sequences used by validation code. |
+37: | `ezproxy_relogin.py` | Bootstrap or refresh the persistent EZproxy session used by authenticated recovery. |
+38:
+39: ## Recovery Layers
+40:
+41: These mutate or enrich an existing SQLite DB. Back up the DB first unless the
+42: calling workflow already does it.
+43:
+44: | Script | Purpose |
+45: | --- | --- |
+46: | `recall_recovery/run_all_layers.py` | Run DB-observed recovery layers. |
+47: | `recall_recovery/ingest_clinvar.py` | Ingest ClinVar-observed variants. |
+48: | `recall_recovery/ingest_pubtator.py` | Ingest PubTator-observed variants. |
+49: | `apply_count_classifier.py` | Apply count-role classifier output. |
+50: | `apply_count_outlier_guard.py` | Quarantine implausible carrier counts. |
+51: | `apply_somatic_germline_qc.py` | Flag somatic/germline ambiguity. |
+52: | `backfill_paper_metadata.py` | Backfill paper metadata columns. |
+53: | `backfill_source_layers.py` | Backfill source-layer provenance. |
+54: | `quarantine_fp.py` | Quarantine known false-positive rows. |
+55:
+56: ## Review And Curation
+57:
+58: Use these when preparing human review packets or Variant Browser round trips.
+59:
+60: | Script | Purpose |
+61: | --- | --- |
+62: | `ingest_review_adjudications.py` | Import Variant Browser adjudication exports. |
+63: | `build_curation_packet.py` | Build cold-start manual-curation packets. |
+64: | `audit_split_firewall.py` | Audit a calibration/holdout split for cross-arm article leakage before curation and before holdout release. |
+65: | `score_curation_packet.py` | Convert reviewed packets into recall inputs and score them. |
+66: | `build_adjudication_sheet.py` | Build reviewer spreadsheet inputs. |
+67: | `build_adjudication_html.py` | Build static reviewer HTML from adjudication data. |
+68: | `build_evidence_cards.py` | Build evidence-card rows for review. |
+69: | `build_llm_trace_manifest.py` | Hash/index per-call LLM and decision traces for adjudication (thin CLI over `utils.llm_trace`). |
+70: | `build_llm_trace_html.py` | Build a self-contained per-paper browser view of LLM traces (thin CLI over `utils.llm_trace_html`; bounded bodies, shards large runs). |
+71: | `recover_counts.py` | Standalone additive fill of NULL per-variant counts (`pipeline.count_recovery`). `--dry-run` first; refuses nothing but writes only NULL slots, lands them as `quarantine`, and backs up the DB. |
+72: | `publish_curated_review_set.py` | Publish the curated extraction-eval subset to Variant Browser staging after scope exclusions; not the full-gene publish path. |
+73:
+74: ## Recall Audit
+75:
+76: The `recall_audit/` subdirectory contains report builders and targeted audit
+77: pilots. Start with `recall_audit/README.md`.
+78:
+79: | Script | Purpose |
+80: | --- | --- |
+81: | `collaborator_readiness_audit.py` | Audit fixed collaborator cohorts for structural/source/trace/trust readiness while leaving publication on hold. |
+82: | `final_check_triage_report.py` | Produce a no-LLM shadow report for the parked final-check triage predicate. |
+83:
+84: ## Gold Input Builders
+85:
+86: These regenerate committed gold-standard inputs from external curation sources.
+87: They are not part of normal extraction.
+88:
+89: | Script | Purpose |
+90: | --- | --- |
+91: | `build_gold_standard_from_varbrowser.py` | Export gold counts from Variant Browser SQL. |
+92: | `build_ryr2_gold_standard_from_xlsx.py` | Build RYR2 gold counts from the source spreadsheet. |
+93: | `build_gold_standard_pilots.py` | Build pilot gold-standard packages. |
+94: | `run_gold_standard_api_pilots.py` | Run API pilot checks for gold-standard packages. |
+95:
+96: ## Dev Or Historical Tools
+97:
+98: These are retained for diagnosis or historical comparison. Do not use them for
+99: new recall work unless a runbook points here.
+100:
+101: | Script | Status |
+102: | --- | --- |
+103: | `test_insttoken_unlock.py` | Manual credential probe. |
+104: | `check_ezproxy.py` | Manual institutional-access probe. |
+105: | `check_wiley_api.py` | Manual Wiley TDM credential/connectivity probe; requires network. |
+106: | `discover_recall.py` | Historical recall-discovery helper. |
+107: | `enrich_from_variantfeatures.py` | Manual enrichment helper for legacy VariantFeatures data. |
+108: | `run_priority_extraction.py` | Historical priority-walk driver support; prefer `gvf gvf-run` unless reproducing that experiment. |
+109: | `targeted_land.py` | Historical acceptance-gated DB promotion helper. |
+110: | `replay_cap_trip_extractions.py` | Deprecated 2026-08-20; retained only to reproduce existing dense-table/scanner cap-trip run artifacts until `gvf-run` owns equivalent targeted replay. |
+111: | `retry_failed_extractions.py` | Deprecated 2026-08-20; retained for targeted repair of an existing run's failure CSV. New runs use the retry path in `pipeline.steps.extract_variants`. |
+112: | `smoke_azure_models.py` | Opt-in live connectivity/JSON smoke test for configured Azure LLM deployments. |
+113:
+114: ## Cleanup Rule
+115:
+116: New scripts should be added to exactly one section above and linked from a
+117: runbook or test. One-off local drivers belong outside Git.
+
+### docs/TESTING.md
+1: # GVF Thorough Test Prompt
+2:
+3: > **This is a paste-prompt, not an authority.** It is a smoke harness for "does
+4: > a fresh checkout still work end to end", and it is deliberately not wired into
+5: > CI. Two cautions before you trust its output:
+6: > - Step 7 scores the local `validation_runs/canonical_baseline/` DBs, which are
+7: >   gitignored operator data from June 2026. They will **not** reproduce the
+8: >   accepted lock reported in [`RECALL_STATUS.md`](RECALL_STATUS.md). Treat step
+9: >   7 as "the scorer runs", not as a headline metric.
+10: > - The per-paper expectations below (for example the figure-variant count in
+11: >   step 6) are from an older run and may drift without anything being broken.
+12:
+13: Paste this into any agent (Claude Code, codex, etc.) standing in front of a
+14: fresh checkout of GeneVariantFetcher. It exercises every layer of the
+15: pipeline and the post-extraction recovery stack, then scores against the
+16: gold standard.
+17:
+18: ---
+19:
+20: ## Prompt
+21:
+22: > Run a thorough test of GeneVariantFetcher end-to-end. Use the project
+23: > `.venv`. Do not modify CLAUDE.md, .env, or anything in `results/` that
+24: > isn't a generated artifact. Treat any failure as a stop-and-investigate
+25: > signal — don't paper over errors.
+26: >
+27: > ### 1. Environment + static checks
+28: > 1. Verify `.venv/` exists and is Python 3.11+; if missing, stop and follow
+29: >    `docs/QUICKSTART.md` before continuing.
+30: > 2. Confirm required and high-value env vars from `docs/API_KEYS.md`, including
+31: >    `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM provider key, publisher keys, and
+32: >    institutional full-text credentials when available.
+33: >    Report missing ones.
+34: > 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
+35: >    `.venv/bin/python -m ruff format --check .`. Report any issues.
+36: >
+37: > ### 2. Unit tests
+38: > Run `.venv/bin/python -m pytest tests/unit -q`. Expect several hundred
+39: > passing (the count grows as coverage expands, so treat it as a floor, not a
+40: > fixed target); skips depend on optional external credentials and local tools.
+41: > Capture the count and any failures.
+42: >
+43: > ### 3. Module-import smoke
+44: > Verify every importable module loads cleanly:
+45: > ```bash
+46: > .venv/bin/python -c "
+47: > import importlib, pkgutil
+48: > for pkg in ['cli', 'pipeline', 'harvesting', 'utils', 'gene_literature']:
+49: >     for _, name, _ in pkgutil.walk_packages([pkg], prefix=pkg + '.'):
+50: >         try: importlib.import_module(name)
+51: >         except Exception as e: print(f'IMPORT FAIL {name}: {e}')
+52: > print('All modules imported')"
+53: > ```
+54: > No `IMPORT FAIL` lines should appear.
+55: >
+56: > ### 4. End-to-end pipeline for KCNH2 (small)
+57: > Run a bounded e2e to confirm the pipeline produces a valid DB. Use
+58: > `--max-pmids 25` so it finishes in minutes, not hours:
+59: > ```bash
+60: > .venv/bin/python -m cli gvf-run KCNH2 --email "$NCBI_EMAIL" \
+61: >   --output results/test_kcnh2 --max-pmids 25
+62: > ```
+63: > Expect `results/test_kcnh2/KCNH2/<timestamp>/KCNH2.db` with non-zero
+64: > papers and variants. Print the row counts.
+65: >
+66: > ### 5. Recovery scripts smoke test
+67: > Each of these should import + parse `--help` without error:
+68: > ```bash
+69: > for s in ingest_clinvar ingest_pubtator; do
+70: >   .venv/bin/python scripts/recall_recovery/$s.py --help || echo "FAIL $s"
+71: > done
+72: > .venv/bin/python scripts/recover_counts.py --help
+73: > .venv/bin/python scripts/extract_figure_variants.py --help
+74: > .venv/bin/python scripts/run_recall_suite.py --help
+75: > ```
+76: >
+77: > ### 6. Figure-reader on existing data
+78: > If `corpus/KCNH2/*/*_figures/` exists, pick
+79: > one PMID with figures and run:
+80: > ```bash
+81: > .venv/bin/python scripts/extract_figure_variants.py \
+82: >   --gene KCNH2 --pmid 19038855 \
+83: >   --pmc-dir corpus/KCNH2 \
+84: >   --out /tmp/figure_test
+85: > ```
+86: > Expect a JSON report under `/tmp/figure_test/19038855.json` with a
+87: > non-empty `distinct_variants` list (this PMID's Table 2 yielded 34
+88: > variants in our last run).
+89: >
+90: > ### 7. Score against gold
+91: > ```bash
+92: > .venv/bin/python scripts/run_recall_suite.py --score --genes KCNH2 \
+93: >   --db KCNH2=validation_runs/canonical_baseline/KCNH2.db \
+94: >   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
+95: > ```
+96: > Compare against the current baseline recorded in
+97: > `docs/RECALL_STATUS.md`. Do not copy metric tables into
+98: > this test prompt; they drift quickly. Anything materially below the current
+99: > baseline is a regression for cold-start turnkey behavior.
+100: >
+101: > ### 8. Report
+102: > Produce a single-page summary:
+103: > * Test step → pass/fail + 1-line note
+104: > * Final recall numbers vs baseline above
+105: > * Any modules that failed to import
+106: > * Any failing unit tests
+107: > * One paragraph: "if this branch shipped today, would you be comfortable?"

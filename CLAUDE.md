@@ -65,8 +65,9 @@ gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease
 `gvf-run` runs doctor checks, extraction, source QC, source recovery, DB-observed
 recovery layers, scoring/report handoff, and corpus sync. Source recovery
 (paywall plus supplement acquisition) runs by default; pass
-`--no-source-recovery` for a fast PMC/free-text-only pass or for calibrated
-`--pmid-file` measurement runs.
+`--no-source-recovery` to omit the later recovery stage or for calibrated
+`--pmid-file` measurement runs. Ordinary extraction still uses its configured
+cache and full-text harvesters; this flag is not a PMC-only access restriction.
 
 Use the project virtualenv:
 
@@ -139,7 +140,8 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
   `REPO / "corpus"` and `read_text()`-ed every `*_artifacts.json` under it, so
   once the corpus moved to an external volume the offline suite spent minutes
   walking it over USB — `tests/unit/test_gvf_run_pipeline_wiring.py` hung
-  outright. With the guard applied, `pytest tests/unit` runs in ~43s.
+  outright. The offline suite keeps guessed workstation data disabled;
+  elapsed time varies with the machine and current test inventory.
 - Corpus cache: `corpus/<GENE>/<PMID>/`, indexed by `corpus/INDEX.json` and
   `corpus/INDEX.csv`, managed by `scripts/build_source_corpus.py`, and
   gitignored. `gvf-run` reuses usable cached source and folds new fetches back by

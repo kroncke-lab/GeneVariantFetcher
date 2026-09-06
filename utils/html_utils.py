@@ -1,8 +1,9 @@
 """
-HTML parsing utilities for extracting PMIDs and other identifiers.
+Deprecated compatibility helpers for HTML identifiers and scraping sessions.
 
-This module provides unified utilities for parsing HTML and extracting
-PubMed IDs (PMIDs) from various sources including PubMind and PMC.
+Retained for external import compatibility. Production adapters own their
+source-specific identifier parsers; these broad parsers have no single public
+drop-in replacement. New HTTP callers should use utils.http_utils.get_browser_session.
 """
 
 import logging

@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 import pipeline.extraction as extraction_module
 from pipeline.extraction import ExpertExtractor, _normalize_llm_extraction_shape
 from pipeline.steps import _write_dense_table_overflow_report, extract_variants
@@ -711,3 +713,44 @@ def test_table_hints_are_bounded_for_noisy_large_sources():
     assert "c.1009A>G" in hints
     assert "c.1010A>G" not in hints
     assert "65 additional table-detected variants omitted" in hints
+
+
+@pytest.mark.parametrize("reported_total", ["2", "many", None, True, 2.5, -1, 999])
+def test_cached_extraction_counts_rows_instead_of_model_metadata(
+    tmp_path, monkeypatch, reported_total
+):
+    """Malformed cached metadata must not prevent migration of valid rows."""
+    harvest = tmp_path / "pmc_fulltext"
+    output = tmp_path / "extractions"
+    harvest.mkdir()
+    output.mkdir()
+    pmid = "12345678"
+    (harvest / f"{pmid}_FULL_CONTEXT.md").write_text(
+        ("## Results\nSCN5A R100W and G200S were identified in two families. " * 100)
+    )
+    cached = output / f"SCN5A_PMID_{pmid}.json"
+    cached.write_text(
+        json.dumps(
+            {
+                "paper_metadata": {"pmid": pmid},
+                "variants": [
+                    {"gene_symbol": "SCN5A", "protein_notation": "R100W"},
+                    {"gene_symbol": "SCN5A", "protein_notation": "G200S"},
+                ],
+                "extraction_metadata": {"total_variants_found": reported_total},
+            }
+        )
+    )
+    before = cached.read_bytes()
+
+    def must_not_extract(*args, **kwargs):
+        raise AssertionError("valid cached rows were unnecessarily re-extracted")
+
+    monkeypatch.setattr(ExpertExtractor, "extract", must_not_extract)
+    result = extract_variants(
+        harvest_dir=harvest, extraction_dir=output, gene_symbol="SCN5A", max_workers=1
+    )
+    assert result.success
+    assert result.stats["papers_extracted"] == 1
+    assert result.stats["total_variants"] == 2
+    assert cached.read_bytes() == before

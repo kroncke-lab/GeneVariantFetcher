@@ -15,6 +15,11 @@ Install pre-commit hooks after the project environment is active:
 .venv/bin/pre-commit install
 ```
 
+If the environment is managed by uv and has no pip, use
+`uv pip install --python .venv/bin/python pre-commit` for the install step.
+See [installation and runtime checks](docs/TESTING.md) for wheel and CLI
+verification outside the checkout.
+
 ## Adding a New Gene
 
 1. **Add protein length** to `PROTEIN_LENGTHS` in `utils/variant_normalizer.py`:

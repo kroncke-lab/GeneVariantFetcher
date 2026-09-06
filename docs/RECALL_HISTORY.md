@@ -15,6 +15,23 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — runtime and documentation maintenance; no new score
+
+Extraction summaries now count actual rows rather than trusting model totals.
+The archived BRCA1 operational failure replays successfully on temporary copies
+with network/model calls blocked, preserving all 32 original hashes. The CLI
+uses the exact allocated/resumed run directory and records extraction failures;
+lower-level commands also propagate returned failures. Calibration checks now
+use pinned usage-only receipts so fresh CI does not require ignored traces.
+Packaging/entry-point and current-doc checks accompany the changes, with bounded
+Grok, Claude and Agy adversarial reviews. [Maintenance evidence](evidence/maintenance_20260906/README.md).
+
+No extraction accuracy rerun, source acquisition, score change, or headline
+promotion accompanies this maintenance. Earlier measurements retain their own
+runtime fingerprints. Existing [canonical figure](figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.png)
+and [run membership](figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.json)
+remain unchanged.
+
 ## 2026-09-06 — two additional paired tranches and a recovered supplement
 
 The unchanged d299 candidate runtime (251 files, e9fef8e…) completed continuation

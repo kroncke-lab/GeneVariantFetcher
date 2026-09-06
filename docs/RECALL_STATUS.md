@@ -14,6 +14,11 @@ file, this file is authoritative.
 
 ## Latest two-tranche validation (2026-09-06; no promotion)
 
+The subsequent [maintenance changes](evidence/maintenance_20260906/README.md)
+repair runtime summaries, failure attribution and installation checks. They
+have offline validation only; the locked measurements below describe their
+recorded runtimes, not a new extraction of the maintained code.
+
 Two additional fixed-source paired tranches use the same 251-file candidate
 runtime (`e9fef8e…`) against the registered historical nine-file baseline.
 There are 240 gene-paper attempts / 220 articles, each extracted once per arm.

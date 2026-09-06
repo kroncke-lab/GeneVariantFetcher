@@ -361,6 +361,14 @@ def doctor() -> dict:
 # ---------------------------------------------------------------------------
 
 
+class ExtractionStepError(RuntimeError):
+    """Extraction failed after allocating this exact run directory."""
+
+    def __init__(self, run_dir: Path, message: str):
+        super().__init__(message)
+        self.run_dir = run_dir
+
+
 def step_extract(
     gene: str,
     email: str,
@@ -380,10 +388,6 @@ def step_extract(
     """Run the existing automated workflow. Returns the run dir it produced."""
     from cli.automated_workflow import automated_variant_extraction_workflow
 
-    if resume_dir:
-        os.environ["GVF_RESUME_DIR"] = str(resume_dir)
-        logger.info("Resuming from %s", resume_dir)
-
     pmids = None
     if pmid_file:
         pmids = [
@@ -397,32 +401,47 @@ def step_extract(
     if disease:
         logger.info("Scoping discovery + Tier-2 filter by disease: %s", disease)
 
-    automated_variant_extraction_workflow(
-        gene_symbol=gene,
-        email=email,
-        output_dir=str(output_dir),
-        max_pmids=max_pmids,
-        pmids=pmids,
-        scout_first=True,
-        disease=disease,
-        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
-        extraction_top_n=extraction_top_n,
-        extraction_priority_offset=extraction_priority_offset,
-        extraction_triage_mode=extraction_triage_mode,
-        extraction_triage_model=extraction_triage_model,
-        extraction_triage_include_defer=extraction_triage_include_defer,
-        extraction_triage_max_llm=extraction_triage_max_llm,
-    )
-
-    # Find the run dir the workflow just created (latest timestamped child).
-    gene_root = output_dir / gene
-    runs = sorted(
-        (p for p in gene_root.iterdir() if p.is_dir()),
-        key=lambda p: p.stat().st_mtime,
-    )
-    if not runs:
-        raise RuntimeError(f"No run dir under {gene_root}")
-    return runs[-1]
+    # Allocate once and pass the exact path to the workflow. A newer sibling
+    # directory (or an explicit resume outside output_dir) must never win by mtime.
+    resume_path = resume_dir or os.environ.get("GVF_RESUME_DIR")
+    if resume_path:
+        run_dir = Path(resume_path).expanduser()
+        run_dir.mkdir(parents=True, exist_ok=True)
+        logger.info("Resuming from %s", run_dir)
+    else:
+        gene_root = Path(output_dir).expanduser() / gene
+        gene_root.mkdir(parents=True, exist_ok=True)
+        run_dir = gene_root / datetime.now().strftime("%Y%m%d_%H%M%S")
+        try:
+            run_dir.mkdir()
+        except FileExistsError:
+            # Preserve the ordinary timestamp layout while avoiding accidental
+            # resume when two invocations start in the same second.
+            run_dir = gene_root / f"{run_dir.name}_{uuid.uuid4().hex[:8]}"
+            run_dir.mkdir()
+    try:
+        summary = automated_variant_extraction_workflow(
+            run_directory=run_dir,
+            gene_symbol=gene,
+            email=email,
+            output_dir=str(output_dir),
+            max_pmids=max_pmids,
+            pmids=pmids,
+            scout_first=True,
+            disease=disease,
+            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+            extraction_top_n=extraction_top_n,
+            extraction_priority_offset=extraction_priority_offset,
+            extraction_triage_mode=extraction_triage_mode,
+            extraction_triage_model=extraction_triage_model,
+            extraction_triage_include_defer=extraction_triage_include_defer,
+            extraction_triage_max_llm=extraction_triage_max_llm,
+        )
+        if isinstance(summary, dict) and summary.get("success") is False:
+            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+    except Exception as exc:
+        raise ExtractionStepError(run_dir, str(exc)) from exc
+    return run_dir
 
 
 # ---------------------------------------------------------------------------
@@ -2272,11 +2291,34 @@ def _run_gvf_pipeline(
                 seeded_priority_count = effective_extraction_top_n
         except Exception as e:
             logger.exception("extract step failed: %s", e)
+            if isinstance(e, ExtractionStepError):
+                _write_run_status(
+                    e.run_dir,
+                    gene,
+                    "failed",
+                    3,
+                    [*stage_failures, f"extract: {e}"],
+                    stage_warnings,
+                    started,
+                    e.run_dir / f"{gene}.db",
+                    gold_free_run=gold_free_run,
+                )
             return 3
 
     db = _find_db(run_dir, gene)
     if not db:
         logger.error("No DB produced in %s", run_dir)
+        _write_run_status(
+            run_dir,
+            gene,
+            "failed",
+            4,
+            [*stage_failures, "extract: no database produced"],
+            stage_warnings,
+            started,
+            run_dir / f"{gene}.db",
+            gold_free_run=gold_free_run,
+        )
         return 4
 
     # Trace the WHOLE remaining lifecycle, not just extraction. On the

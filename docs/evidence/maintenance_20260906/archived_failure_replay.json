@@ -1,0 +1,31 @@
+{
+  "source": "validation_runs/tranche_validation_20260905/failed_operational_attempts/03_baseline/BRCA1/20260905_185716",
+  "old_sum_type_error_reproduced": true,
+  "reported_total_type": "str",
+  "actual_variant_rows": 2,
+  "replay_success": true,
+  "replay_stats": {
+    "papers_extracted": 1,
+    "failures": 0,
+    "initial_failures": 0,
+    "total_variants": 2,
+    "candidate_pmid_count": null,
+    "extraction_retry_enabled": true,
+    "extraction_retry_attempts": 1,
+    "extraction_retry_attempted": 0,
+    "extraction_retry_succeeded": 0,
+    "extraction_retry_failed": 0,
+    "extraction_retry_skipped": 0,
+    "extraction_retry_report": null,
+    "dense_table_overflow_records": 0,
+    "scanner_cap_trips": 0,
+    "table_merge_cap_trips": 0,
+    "table_candidates_omitted_after_dedupe": 0,
+    "missing_supplement_ref_pmids": 0,
+    "dense_table_overflow_report": "/var/folders/ly/5n_8bddx1sl5q0ym1hp2k2q00000gn/T/gvf-archive-replay-ftfhjvz4/pmid_status/dense_table_overflow.json"
+  },
+  "original_files_checked": 32,
+  "original_files_unchanged": true,
+  "model_calls": 0,
+  "network_blocked": true
+}

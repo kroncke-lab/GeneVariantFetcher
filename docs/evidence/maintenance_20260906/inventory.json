@@ -1,0 +1,288 @@
+{
+  "current_markdown_files_scanned": 44,
+  "missing_link_targets": [],
+  "deprecated_functions": [
+    {
+      "path": "utils/html_utils.py",
+      "name": "extract_pmids_from_html",
+      "line": 21,
+      "replacement": "a source-specific parser (PubMind keeps its parser private)",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 11,
+          "text": "lambda: html_utils.extract_pmids_from_html(\"<p>PMID: 12345678</p>\"),"
+        },
+        {
+          "path": "utils/__init__.py",
+          "line": 13,
+          "text": "from .html_utils import create_scraping_session, extract_pmids_from_html"
+        },
+        {
+          "path": "utils/__init__.py",
+          "line": 27,
+          "text": "\"extract_pmids_from_html\","
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 21,
+          "text": "def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 39,
+          "text": ">>> pmids = extract_pmids_from_html(html)"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 44,
+          "text": "\"utils.html_utils.extract_pmids_from_html\","
+        }
+      ]
+    },
+    {
+      "path": "utils/html_utils.py",
+      "name": "extract_dois_from_html",
+      "line": 138,
+      "replacement": "the source adapter's DOI parser",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 12,
+          "text": "lambda: html_utils.extract_dois_from_html(\"<p>10.1000/example</p>\"),"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 138,
+          "text": "def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 150,
+          "text": ">>> dois = extract_dois_from_html(html)"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 155,
+          "text": "\"utils.html_utils.extract_dois_from_html\","
+        }
+      ]
+    },
+    {
+      "path": "utils/html_utils.py",
+      "name": "create_scraping_session",
+      "line": 192,
+      "replacement": "utils.http_utils.get_browser_session",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 13,
+          "text": "lambda: html_utils.create_scraping_session(),"
+        },
+        {
+          "path": "utils/__init__.py",
+          "line": 13,
+          "text": "from .html_utils import create_scraping_session, extract_pmids_from_html"
+        },
+        {
+          "path": "utils/__init__.py",
+          "line": 28,
+          "text": "\"create_scraping_session\","
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 192,
+          "text": "def create_scraping_session() -> requests.Session:"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 207,
+          "text": ">>> session = create_scraping_session()"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 211,
+          "text": "\"utils.html_utils.create_scraping_session\","
+        }
+      ]
+    },
+    {
+      "path": "utils/html_utils.py",
+      "name": "extract_pmids_from_json_results",
+      "line": 218,
+      "replacement": "the source adapter's typed response parser",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 14,
+          "text": "lambda: html_utils.extract_pmids_from_json_results("
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 218,
+          "text": "def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 233,
+          "text": ">>> pmids = extract_pmids_from_json_results(json_data)"
+        },
+        {
+          "path": "utils/html_utils.py",
+          "line": 238,
+          "text": "\"utils.html_utils.extract_pmids_from_json_results\","
+        }
+      ]
+    },
+    {
+      "path": "utils/pubmed_utils.py",
+      "name": "query_pubmed_for_gene",
+      "line": 105,
+      "replacement": "query_pubmed_with_entrez or gene_literature.discovery",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 34,
+          "text": "with pytest.warns(DeprecationWarning, match=\"query_pubmed_for_gene\"):"
+        },
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 35,
+          "text": "result = pubmed_utils.query_pubmed_for_gene(\"BRCA1\")"
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 105,
+          "text": "def query_pubmed_for_gene("
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 126,
+          "text": ">>> pmids = query_pubmed_for_gene(\"BRCA1\", max_results=50)"
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 130,
+          "text": "\"utils.pubmed_utils.query_pubmed_for_gene\","
+        }
+      ]
+    },
+    {
+      "path": "utils/pubmed_utils.py",
+      "name": "validate_pmid",
+      "line": 456,
+      "replacement": "utils.pmid_utils.is_valid_pmid for format checks or fetch_paper_metadata for existence checks",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 47,
+          "text": "with pytest.warns(DeprecationWarning, match=\"validate_pmid\"):"
+        },
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 48,
+          "text": "assert pubmed_utils.validate_pmid(\"12345678\") is True"
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 456,
+          "text": "def validate_pmid(pmid: str) -> bool:"
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 467,
+          "text": ">>> is_valid = validate_pmid(\"12345678\")"
+        },
+        {
+          "path": "utils/pubmed_utils.py",
+          "line": 471,
+          "text": "\"utils.pubmed_utils.validate_pmid\","
+        }
+      ]
+    },
+    {
+      "path": "utils/variant_normalizer.py",
+      "name": "normalize_protein_variant",
+      "line": 1736,
+      "replacement": "normalize_variant",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 17,
+          "text": "lambda: variant_normalizer.normalize_protein_variant(\"p.Ala561Val\"),"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1736,
+          "text": "def normalize_protein_variant(variant: str) -> str:"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1740,
+          "text": "DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1749,
+          "text": "\"utils.variant_normalizer.normalize_protein_variant\","
+        }
+      ]
+    },
+    {
+      "path": "utils/variant_normalizer.py",
+      "name": "normalize_cdna_variant",
+      "line": 1760,
+      "replacement": "VariantNormalizer.normalize_cdna",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 18,
+          "text": "lambda: variant_normalizer.normalize_cdna_variant(\"1682C>T\"),"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1760,
+          "text": "def normalize_cdna_variant(variant: str) -> str:"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1764,
+          "text": "DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1773,
+          "text": "\"utils.variant_normalizer.normalize_cdna_variant\","
+        }
+      ]
+    },
+    {
+      "path": "utils/variant_normalizer.py",
+      "name": "find_matching_variants",
+      "line": 1807,
+      "replacement": "variants_match or match_variants_to_baseline",
+      "references": [
+        {
+          "path": "tests/unit/test_deprecated_helpers.py",
+          "line": 19,
+          "text": "lambda: variant_normalizer.find_matching_variants([\"A561V\"], [\"A561V\"]),"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1807,
+          "text": "def find_matching_variants("
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1813,
+          "text": "DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()"
+        },
+        {
+          "path": "utils/variant_normalizer.py",
+          "line": 1827,
+          "text": "\"utils.variant_normalizer.find_matching_variants\","
+        }
+      ]
+    }
+  ]
+}

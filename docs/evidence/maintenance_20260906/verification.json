@@ -1,0 +1,48 @@
+{
+  "base_commit": "e80fd27a57634fa5ea173fa0b8bf55c8d095e44b",
+  "runtime": {
+    "sha256": "3adc02bec98e994129f777f6b1ce8cba575f0c1f87fa03eef54572e9c7b563aa",
+    "file_count": 251
+  },
+  "prior_analysis_files_checked": 5,
+  "prior_analysis_files_changed": [],
+  "compile": {
+    "python_files": 476,
+    "failures": 0
+  },
+  "tests": {
+    "unit_before.log": {
+      "summary": "======================= 2890 passed in 113.08s (0:01:53) =======================",
+      "sha256": "b1f786fc62ffc0d8261d3e92bed8c3e763418a71bb90c163b2028729ab9edf51"
+    },
+    "unit_final.log": {
+      "summary": "======================= 2906 passed in 109.97s (0:01:49) =======================",
+      "sha256": "56b58400db59115ec01c289f5e90265be705b781670041154421d1d7135bd43c"
+    },
+    "reviewer_regressions.log": {
+      "summary": "============================== 42 passed in 1.14s ==============================",
+      "sha256": "69bf434ad5cae79e815187114575464e2bc2631beb43ad436fdb0032f3541e2a"
+    },
+    "offline_after.log": {
+      "summary": "============================== 9 passed in 9.34s ===============================",
+      "sha256": "f424804bbaae644b25c0a64d8b64cc506d5f7aed8a2e5301c93037a785d4f626"
+    },
+    "docs_config_final.log": {
+      "summary": "============================== 8 passed in 1.72s ===============================",
+      "sha256": "b2f70d5570d322e7d3b83ec66908881264add870b7917679376de81f8c834d44"
+    }
+  },
+  "test_scope": "Offline only. Full local suite preceded the last exporter regression addition; that addition is included in reviewer_regressions.log. Final remote CI runs the complete committed suite.",
+  "dependencies": {
+    "packages_checked": 117,
+    "compatible": true
+  },
+  "review_source_scope": "Bounded supplied source packets; reviewer claims are adjudicated against code and execution, not treated as observed executions.",
+  "historical_tracked_changes": [],
+  "static_checks": {
+    "ruff_final.log": "All checks passed!",
+    "format_final.log": "476 files already formatted"
+  },
+  "cost_receipts_reexport_sha256": "3617fc19464fa32734c8b933a3a5f0c058faa6790962f01e53e5062f6c588b97",
+  "precommit": "passed; rerun on commit"
+}

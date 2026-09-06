@@ -1,8 +1,8 @@
 """
 CLI tools for GeneVariantFetcher.
 
-Typer commands registered below: extract, discover, reharvest, gvf-run,
-audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
+Typer commands are registered below. Run `gvf --help` for the current command
+list, including extraction, discovery, recovery and dashboard entry points.
 
 Internal helpers (not exposed as Typer commands):
 - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
@@ -12,10 +12,9 @@ Internal helpers (not exposed as Typer commands):
 
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 import typer
-from typing_extensions import Annotated
 
 from cli.automated_workflow import automated_variant_extraction_workflow
 from cli.audit_paywalls import run_paywall_audit
@@ -309,9 +308,8 @@ def extract_command(
 
         reset_settings_cache()
 
-    # Require at least one LLM provider key. ANTHROPIC_API_KEY, OPENAI_API_KEY,
-    # or AZURE_AI_API_KEY all satisfy the pipeline since LiteLLM resolves
-    # credentials per-call based on the configured TIER*_MODEL strings.
+    # Anthropic requires its own key here; other routes retain the general
+    # key-presence preflight. Actual credentials are resolved per model call.
     selected_provider = (
         (model_provider.strip().lower() if model_provider else None)
         or os.getenv("MODEL_PROVIDER", "").strip().lower()
@@ -365,7 +363,7 @@ def extract_command(
         )
 
     try:
-        automated_variant_extraction_workflow(
+        summary = automated_variant_extraction_workflow(
             gene_symbol=gene,
             email=email,
             output_dir=output,
@@ -386,6 +384,8 @@ def extract_command(
             extraction_triage_include_defer=extraction_triage_include_defer,
             extraction_triage_max_llm=extraction_triage_max_llm,
         )
+        if isinstance(summary, dict) and summary.get("success") is False:
+            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
     except KeyboardInterrupt:
         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
         raise typer.Exit(1)

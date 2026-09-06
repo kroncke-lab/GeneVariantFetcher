@@ -1,0 +1,979 @@
+You are an adversarial maintenance reviewer of GeneVariantFetcher. User explicitly requested Grok, Claude and Agy CLI adversarial reviews. Review supplied source only; no tools, no file edits, no external calls, no subagents. Find concrete runtime/compatibility problems or stale CURRENT docs, with exact path/line and reasoning. Distinguish live code from historical benchmark evidence, which must remain immutable. Avoid deleting public compatibility wrappers solely because deprecated; require caller/semantic evidence. Prioritize 3-6 actionable findings; do not invent unobserved failures. Main e80fd27a matches origin. All 474 tracked Python files compile, 116 installed packages are compatible, CLI help works; full tests running. Python 3.13 local, CI Python 3.11. Main runtime provider default remains Anthropic but user prefers Azure to conserve finite Anthropic; provider key alone does not change MODEL_PROVIDER. A prior run crashed in pipeline/steps.py summing metadata.total_variants_found when a model returned a string. The completed 240-attempt benchmarks must not be rewritten or promoted. Output findings and minimal safe repairs plus meaningful tests.
+Focus on stale CURRENT Markdown and dangerous/misleading runnable examples. Contrast docs with supplied executable CLI help and code configuration. Historical metrics belong only in dated evidence or RECALL_STATUS. Identify which modern guidance conflicts and whether promised behavior is actually wired.
+
+### README.md
+1: # GeneVariantFetcher (GVF)
+2:
+3: [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+4: [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+5: [![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](CHANGELOG.md)
+6:
+7: Builds an auditable evidence database from gene-focused biomedical literature,
+8: designed to run **autonomously at scale** — hundreds of genes and hundreds of
+9: thousands of papers — with automated quality gates, not human review, as the
+10: primary control.
+11:
+12: ## What GVF Does
+13:
+14: Given a gene, GVF discovers relevant papers, downloads full text and
+15: supplements, extracts variants and carrier/count evidence with an LLM-backed
+16: pipeline, and writes a queryable SQLite database with per-fact provenance so
+17: every extracted count is auditable back to its source table, row, and quote.
+18:
+19: The design target is unattended operation across many genes: automated source
+20: QC, acceptance gates, count guards, non-regression checks, and per-fact
+21: provenance decide what to trust, so runs scale without a human in the per-paper
+22: loop. Human adjudication is an **exception-only escape hatch** for the rare
+23: marginal case — routed through
+24: [Variant_Browser](docs/VARIANT_BROWSER_INTEGRATION.md), off the per-paper and
+25: per-run critical path, never a required step. A per-fact **trust gate** sorts
+26: every extracted fact into a **trusted** or **quarantine** tier using gold-free
+27: structural checks (`pipeline/trust_gate.py`, default-on in `gvf-run`;
+28: `scripts/trust_report.py` inspects the tiers). Its within-paper outlier rule is
+29: a triage fallback: an explicitly labelled
+30: per-variant count read by the deterministic table parser remains trusted, while
+31: prose-derived, model-authored, and unlabelled outliers remain quarantined. The
+32: optional source-grounded
+33: final-check composer (`pipeline/paper_final_check_gate.py`) adds exact
+34: model-found contradictions on top, and is currently parked — see
+35: [`docs/EXTRACTION_CONTRACT.md`](docs/EXTRACTION_CONTRACT.md). The comparison scorer
+36: now defaults to the trusted field projection while preserving raw counts and
+37: variant identity; moving the remaining report/publish consumers and calibrating
+38: the gate per gene class are still in progress.
+39:
+40: The current production entry point is:
+41:
+42: ```bash
+43: gvf gvf-run <GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
+44: ```
+45:
+46: Source recovery, including paywall and supplement acquisition, runs by default.
+47: Pass `--no-source-recovery` only for a fast PMC/free-text-only pass or a
+48: controlled measurement run.
+49:
+50: ## Scope and Intended Use
+51:
+52: - **Operating model:** unattended, high-throughput extraction across many genes
+53:   and hundreds of thousands of papers. Automated quality gates are the primary
+54:   control; human adjudication is an exception-only escape hatch for the rare
+55:   marginal case, not a per-record or per-run step.
+56: - **Research use only.** GVF is not a patient-facing or clinical-decision
+57:   system. Do not treat extracted variants, carrier counts, or classifications as
+58:   clinical-grade.
+59: - **Validation surface:** metrics are strongest on the four cardiac gold genes
+60:   (KCNH2, KCNQ1, SCN5A, RYR2), which are in-distribution from repeated tuning.
+61:   Generalization to other gene classes — e.g. BRCA1/BRCA2, whose truncating and
+62:   case-control evidence differs structurally from cardiac missense — and
+63:   arbitrary-gene cold start are exercised separately by
+64:   [`benchmarks/cold_start_eval/`](benchmarks/cold_start_eval/README.md); report
+65:   cardiac-gold, generalization, and cold-start numbers distinctly.
+66:
+67: ## Source Access and Browser Cookies
+68:
+69: Default source recovery loads cookies from your local Chrome profile
+70: (`scripts/fetch_paywalled.py`) so authenticated/institutional publisher access
+71: carries into the fetch. This reads your browser session — only run it on a
+72: machine and account you control, and only where your institution's access terms
+73: permit programmatic full-text/supplement retrieval. To disable cookie loading,
+74: pass `--no-cookies` to `scripts/fetch_paywalled.py`; for a fast run with no
+75: paywall/cookie access at all, use `gvf gvf-run --no-source-recovery`.
+76:
+77: ## Local Corpus Storage
+78:
+79: On Brett's current macOS workstation, GVF's large paper corpus is stored on the
+80: external APFS volume `Ezekers`:
+81:
+82: | Stable repo path | Physical storage |
+83: |---|---|
+84: | `corpus/` | `/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus` |
+85:
+86: `corpus/` is an absolute, local-only symlink, so normal GVF commands should
+87: continue to use the repo-relative path. The symlink is untracked and must be
+88: recreated in a fresh checkout on this workstation after verifying that its
+89: external target exists. `GVF_CORPUS_DIR` remains available for a deliberate
+90: override. Before any job that reads or writes the corpus, verify the link and
+91: mounted target:
+92:
+93: ```bash
+94: test -L corpus && test -d corpus
+95: test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus"
+96: ```
+97:
+98: If either check fails, mount the volume at `/Volumes/Ezekers` before continuing.
+99: Do not rename the volume, replace the broken link, or create a fallback local
+100: `corpus/`; doing so would split the canonical corpus across disks. The corpus
+101: remains untracked by Git.
+102:
+103: ## Current Status
+104:
+105: Live recall metrics and blockers live in
+106: [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). The published
+107: [status dashboard](https://kroncke-lab.github.io/GeneVariantFetcher/dashboard/)
+108: is an archived pre-correction snapshot until that file records an accepted
+109: rescore. The active forward checklist lives in [`TASKS.md`](TASKS.md), and the
+110: [documentation map](docs/README.md) identifies current authorities versus dated
+111: evidence. Do not copy recall numbers into new docs; they drift.
+112:
+113: **Recall, precision, MAE, and RMSE (RMSD) are reported only for the four cardiac genes
+114: (KCNH2, KCNQ1, SCN5A, RYR2)** — the only gene-disease pairs with a fully
+115: human-curated, manually derived gold standard. Other genes (APOE, BRCA1, BRCA2,
+116: MYBPC3) are review targets scored against curator/derived `gold_overrides`, not
+117: counted in headline metrics. See `docs/RECALL_STATUS.md` for the scope rule.
+118:
+119: Lead-approved Variant_Browser adjudications are pulled directly from its live
+120: Azure review database into GVF's versioned `review_gold.sqlite3` cache. Every
+121: source revision and added/updated/removed record is retained. Release scoring
+122: defaults to the cardiac-only tier; use `--review-gold-tier all` for an analysis
+123: that includes non-cardiac genes. Inspect snapshots or make audited reversible
+124: exclusions with `scripts/manage_review_gold.py`. Release scoring uses
+125: `scripts/run_recall_suite.py --review-gold-sync required`; see
+126: [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md).
+127:
+128: For protocol rollout, use only the manifests in
+129: [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md). That
+130: README and its `registry.json` are the authority for which tiers are active and
+131: for their exact attempt counts; do not copy those counts into other documents.
+132: The strategy-diverse
+133: [`curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md)
+134: remains a specialized regression fixture, not a fourth rollout cohort. Confirm
+135: headline changes with the full recall scorer before claiming a metric.
+136:
+137: ## Start Here
+138:
+139: | Need | Start here |
+140: |------|------------|
+141: | Distinguish current instructions from historical evidence | [`docs/README.md`](docs/README.md) |
+142: | Choose the active paper-evaluation cohort | [`benchmarks/evaluation_tiers/`](benchmarks/evaluation_tiers/README.md) |
+143: | Install locally and run once | [`docs/QUICKSTART.md`](docs/QUICKSTART.md) |
+144: | Configure credentials | [`docs/API_KEYS.md`](docs/API_KEYS.md) |
+145: | Run a new gene-disease pair with no gold standard | [`docs/NEW_GENE_RUNBOOK.md`](docs/NEW_GENE_RUNBOOK.md) |
+146: | Re-run recall after new papers, credentials, or recovery code | [`docs/RECALL_REFRESH_RUNBOOK.md`](docs/RECALL_REFRESH_RUNBOOK.md) |
+147: | Run the portable recall workflow on another machine | [`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md) |
+148: | Understand pipeline internals | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+149: | Know what extraction must capture and must refuse | [`docs/EXTRACTION_CONTRACT.md`](docs/EXTRACTION_CONTRACT.md) |
+150: | Inspect output schema | [`docs/OUTPUT_FORMAT.md`](docs/OUTPUT_FORMAT.md) |
+151: | Publish/adjudicate with Variant_Browser | [`docs/VARIANT_BROWSER_INTEGRATION.md`](docs/VARIANT_BROWSER_INTEGRATION.md) |
+152: | Understand which support scripts to use | [`scripts/README.md`](scripts/README.md) |
+153:
+154: ## Minimal First Run
+155:
+156: Follow [`docs/QUICKSTART.md`](docs/QUICKSTART.md) for the canonical install and
+157: `.env` setup. Then:
+158:
+159: ```bash
+160: source .venv/bin/activate
+161: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --disease "Long QT Syndrome"
+162: ```
+163:
+164: The primary output is:
+165:
+166: ```text
+167: ./results/KCNH2/<timestamp>/KCNH2.db
+168: ```
+169:
+170: ## Main Commands
+171:
+172: | Command | Purpose |
+173: |---------|---------|
+174: | `gvf gvf-run` | Turnkey run: doctor checks, extraction, source QC, source recovery, recovery layers, scoring/report handoff, and corpus sync |
+175: | `gvf extract` | Lower-level extraction command for debugging individual stages |
+176: | `gvf scout` | Data Scout on existing downloaded papers |
+177: | `gvf audit-paywalls` | Summarize blocked full-text and supplement acquisition |
+178: | `gvf dashboard` | Static HTML coverage, provenance, and adjudication dashboard |
+179:
+180: Prefer `gvf gvf-run` for normal work. Use lower-level commands when debugging
+181: or replaying a specific stage.
+182:
+183: ## Pipeline Shape
+184:
+185: GVF's default workflow is:
+186:
+187: 1. Discover PMIDs from PubMind and PubMed (and Europe PMC when `USE_EUROPEPMC=1`).
+188: 2. Fetch abstracts and apply Tier 1/Tier 2 relevance filtering.
+189: 3. Download full text and supplements from PMC, publisher APIs, Unpaywall, and
+190:    authenticated recovery routes when configured.
+191: 4. Reuse or update the local source corpus under `corpus/`.
+192: 5. Extract variants, carrier counts, phenotypes, provenance, and evidence.
+193: 6. Migrate extraction JSON to SQLite.
+194: 7. Run DB-observed recovery layers and the default-on per-fact trust gate. Its
+195:    within-paper median rule yields to an explicitly labelled per-variant cell
+196:    from the deterministic table parser, but still quarantines prose-derived,
+197:    model-authored, and unlabelled outliers.
+198: 8. Optionally run the `azure_ai/gpt-5.6-sol`/`xhigh` final per-paper sniff test
+199:    (Step 3.8). **Parked — default off since 2026-07-26**; the cost and latency of
+200:    an `@xhigh` call per paper were not justified by its measured effect on a step
+201:    that only records findings. Revive with `PAPER_FINAL_CHECK_ENABLED=1` together
+202:    with `PAPER_FINAL_CHECK_GATE_ENABLED=1`.
+203: 9. Compose high-severity, source-quoted objective contradictions (wrong column,
+204:    cohort total, population count, arithmetic or phenotype contradiction, wrong
+205:    gene, or a count the source credits to another publication) into the trusted
+206:    count-field projection (Step 3.9) — **parked with Step 3.8**. When enabled,
+207:    weak/absent-support findings remain advisory, raw counts and variant
+208:    identities remain auditable, and grounded completeness gaps make run
+209:    acceptance nonzero and require replay.
+210: 10. Produce optional recall scoring and report handoff artifacts.
+211:
+212: Technical details live in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+213:
+214: ## Output
+215:
+216: A run directory contains the SQLite database, workflow logs, per-paper
+217: extraction JSON, downloaded source, source-QC artifacts, and reports:
+218:
+219: ```text
+220: results/<GENE>/<timestamp>/
+221: ├── <GENE>.db
+222: ├── <GENE>_workflow_summary.json
+223: ├── abstract_json/
+224: ├── extractions/
+225: ├── pmc_fulltext/
+226: └── source_qc/
+227: ```
+228:
+229: See [`docs/OUTPUT_FORMAT.md`](docs/OUTPUT_FORMAT.md) and
+230: [`docs/SQLITE_MIGRATION_GUIDE.md`](docs/SQLITE_MIGRATION_GUIDE.md) for schema
+231: details.
+232:
+233: ## Development
+234:
+235: Use the project `.venv`:
+236:
+237: ```bash
+238: source .venv/bin/activate
+239: .venv/bin/python -m pytest tests/unit -q
+240: ```
+241:
+242: Live network and institutional-access checks are opt-in:
+243:
+244: ```bash
+245: GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_network tests/integration -q
+246: ```
+247:
+248: Project dependencies are defined in [`pyproject.toml`](pyproject.toml). Install
+249: with `pip install -e ".[browser,dev]"`. A pinned snapshot of a known-good
+250: environment is committed as [`requirements.lock`](requirements.lock)
+251: (`uv pip install -r requirements.lock`); each run records that lock's hash, the
+252: git SHA, versioned extractor code/config hashes, the legacy raw digest, and the
+253: resolved model routing in its `run_manifest.json` under `provenance`.
+254:
+255: ## Repository Hygiene
+256:
+257: Do not commit `.env`, local `results/`, SQLite DBs, generated `recall_metrics/`,
+258: `validation_runs/`, the fetched `corpus/`, or agent scratch files. These are
+259: intentionally gitignored.
+260:
+261: Tracked runtime data lives in [`gvf_data/`](gvf_data/README.md): variant aliases and
+262: reference protein sequences used by validation code.
+263:
+264: ## Citation
+265:
+266: ```bibtex
+267: @software{genevariantfetcher,
+268:   title = {GeneVariantFetcher: Automated Extraction of Genetic Variant Carriers from Biomedical Literature},
+269:   author = {Kronck, Brett M. and Roden, Dan M.},
+270:   year = {2026},
+271:   version = {2.1.0},
+272:   url = {https://github.com/kroncke-lab/GeneVariantFetcher}
+273: }
+274: ```
+275:
+276: MIT License; see [`LICENSE`](LICENSE).
+
+### docs/QUICKSTART.md
+1: # GeneVariantFetcher — Quick Start Guide
+2:
+3: Get GVF running in 5 minutes and extract genetic variants from the literature.
+4: This is the canonical local setup and first-run guide; README and agent
+5: handoff files should link here instead of duplicating install or `.env` blocks.
+6:
+7: Scope: use this for local installation and a first single-gene run. Use
+8: `NEW_GENE_RUNBOOK.md` for no-gold production runs, `RECALL_REFRESH_RUNBOOK.md`
+9: for existing scored runs, and `END_TO_END_RECALL_RUN.md` for portable recall
+10: runs on another machine.
+11:
+12: ## Prerequisites
+13:
+14: - **Python 3.11+** (required)
+15: - **pip** (Python package manager)
+16: - **LLM provider API key** (Anthropic, OpenAI, or Azure AI; required for extraction)
+17: - **Email address** (required for NCBI API compliance)
+18:
+19: Optional but recommended:
+20: - Publisher credentials for expanded paper access, especially
+21:   `ELSEVIER_API_KEY` plus `ELSEVIER_INSTTOKEN`
+22:
+23: ## Installation
+24:
+25: ```bash
+26: # Clone the repository
+27: git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
+28: cd GeneVariantFetcher
+29:
+30: # Create and activate a virtual environment
+31: python3 -m venv .venv
+32: source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+33:
+34: # Install GVF in development mode
+35: pip install -e ".[browser,dev]"
+36: python -m playwright install chromium
+37: ```
+38:
+39: ### Verify the installation
+40:
+41: Run this after installation and after rebuilding the virtual environment:
+42:
+43: ```bash
+44: .venv/bin/gvf --help
+45: ```
+46:
+47: A repository-root test run can import local source even when the console entry
+48: point is no longer installed, so green unit tests alone do not prove that the
+49: editable install survived a virtual-environment rebuild.
+50:
+51: ## Configuration
+52:
+53: Create a `.env` file in the repository root:
+54:
+55: ```bash
+56: # Required
+57: NCBI_EMAIL=brett.kroncke@gmail.com
+58:
+59: # Required: select a provider and configure its key. Anthropic is the shipped
+60: # default; set MODEL_PROVIDER=azure or openai when using those providers.
+61: MODEL_PROVIDER=anthropic
+62: ANTHROPIC_API_KEY=your-anthropic-key
+63: # MODEL_PROVIDER=azure
+64: # AZURE_AI_API_KEY=your-azure-ai-key
+65: # AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+66: # MODEL_PROVIDER=openai
+67: # OPENAI_API_KEY=sk-your-openai-key-here
+68:
+69: # Optional: Publisher APIs for better paper coverage
+70: ELSEVIER_API_KEY=your-elsevier-key
+71: ELSEVIER_INSTTOKEN=your-elsevier-insttoken
+72: SPRINGER_API_KEY=your-springer-key
+73: WILEY_API_KEY=your-wiley-key
+74:
+75: # Optional: Higher rate limits with NCBI API key
+76: NCBI_API_KEY=your-ncbi-key
+77: ```
+78:
+79: See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
+80:
+81: ## Local Corpus Preflight
+82:
+83: On Brett's current workstation, the repo's `corpus/` path is an absolute
+84: symlink to
+85: `/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus`. Before the first run
+86: or any corpus maintenance job:
+87:
+88: ```bash
+89: test -L corpus && test -d corpus
+90: test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus"
+91: ```
+92:
+93: If a check fails, mount the APFS volume named `Ezekers` at `/Volumes/Ezekers`.
+94: Do not replace the broken symlink or create a local `corpus/`, because that
+95: would send new papers to a second corpus on the internal disk. The workstation
+96: symlink is local-only and untracked; a fresh checkout must recreate it after
+97: verifying that the external target exists.
+98:
+99: `gvf-run`'s doctor step enforces this: a **dangling** `corpus/` symlink (the drive
+100: was expected and is not attached) stops the run at Step 1 rather than silently
+101: re-fetching the whole corpus over the network. It names the volume from the link
+102: itself, so the message is correct on any machine. `--skip doctor` overrides.
+103:
+104: ### On a collaborator's machine
+105:
+106: You do **not** need Brett's drive. `corpus/` is only a cache of already-fetched
+107: source, so an **absent** `corpus/` never blocks a run — it just starts cold. Pick
+108: one of:
+109:
+110: ```bash
+111: mkdir corpus                      # plain local cache (needs the flag below)
+112: ln -s /path/to/your/storage corpus   # or your own external storage
+113: export GVF_CORPUS_DIR=/path/to/corpus   # or point at it without a symlink
+114: ```
+115:
+116: A plain local `corpus/` on the internal disk is a deliberate choice, so confirm it
+117: with `GVF_ALLOW_LOCAL_CORPUS=1` (otherwise corpus-writing jobs refuse, to protect
+118: against an accidentally-detached drive). What you actually need for a first run is
+119: API keys — see [API_KEYS.md](API_KEYS.md).
+120:
+121: ## First Run
+122:
+123: `gvf gvf-run` is the one command you need. Point it at **your own gene** — any
+124: HGNC symbol works, and no gold standard is required:
+125:
+126: ```bash
+127: gvf gvf-run <YOUR_GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
+128: ```
+129:
+130: `gvf-run` runs the regular end-to-end path (discovery → triage → full-text and
+131: supplement acquisition → extraction → SQLite → recovery layers), with source
+132: recovery on by default. The `--email` flag is used for NCBI compliance; it is
+133: applied automatically, so you do not need an `NCBI_EMAIL` line in `.env` just to
+134: run (you do still need one LLM provider key).
+135:
+136: To reproduce a known result first, KCNH2 (a well-studied cardiac gene) is a good
+137: validation target:
+138:
+139: ```bash
+140: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --disease "Long QT Syndrome"
+141: ```
+142:
+143: The lower-level `gvf extract` command exists for debugging individual stages;
+144: prefer `gvf gvf-run` for normal work.
+145:
+146: ### What This Does
+147:
+148: 1. **Discovers papers** — Searches PubMind and PubMed for KCNH2-related literature
+149: 2. **Downloads full-text** — Retrieves papers from PMC and publisher APIs
+150: 3. **Extracts variants** — Uses the configured LLM provider to identify genetic variants and patient data
+151: 4. **Aggregates results** — Combines findings across papers
+152: 5. **Creates database** — Migrates everything to a queryable SQLite database
+153:
+154: ### Command Options
+155:
+156: ```bash
+157: # Limit papers for faster testing
+158: gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --max-pmids 20 --max-downloads 10
+159:
+160: # Verbose output
+161: gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --verbose
+162:
+163: # Custom output directory
+164: gvf extract KCNH2 --email brett.kroncke@gmail.com --output /path/to/results
+165:
+166: # Publish the scored run into the Variant_Browser review DB for collaborator
+167: # adjudication (opt-in, best-effort; needs a sibling Variant_Browser checkout)
+168: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --publish-review
+169: ```
+170:
+171: To pull collaborator adjudications directly from the live Azure review database
+172: into GVF's local gold SQLite cache, see
+173: [docs/VARIANT_BROWSER_INTEGRATION.md](VARIANT_BROWSER_INTEGRATION.md)
+174: (`scripts/ingest_review_adjudications.py`).
+175:
+176: ## What to Expect
+177:
+178: ### Timing (KCNH2 example)
+179:
+180: | Stage | Typical Duration | Notes |
+181: |-------|-----------------|-------|
+182: | Paper discovery | 1-2 min | ~150-300 PMIDs found |
+183: | Full-text download | 5-15 min | ~30-50% success rate (normal) |
+184: | Variant extraction | 10-30 min | Depends on paper count |
+185: | Aggregation + DB | 1-2 min | Fast |
+186: | **Total** | **20-50 min** | Varies by gene |
+187:
+188: ### Output Files
+189:
+190: After completion, you'll find:
+191:
+192: ```
+193: ./results/KCNH2/<RUN_TIMESTAMP>/
+194: ├── KCNH2.db                        # ← SQLite database (query this!)
+195: ├── KCNH2_pmids.txt                 # Discovered PMIDs
+196: ├── KCNH2_penetrance_summary.json   # Aggregated penetrance data
+197: ├── KCNH2_workflow_summary.json     # Run statistics
+198: ├── extractions/                    # Per-paper extraction JSONs
+199: │   ├── KCNH2_PMID_12345678.json
+200: │   └── ...
+201: └── pmc_fulltext/                   # Downloaded papers
+202:     ├── 12345678_FULL_CONTEXT.md
+203:     └── ...
+204: ```
+205:
+206: See [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md) for detailed format specifications.
+207:
+208: ### Sample Output
+209:
+210: ```
+211: ================================================================================
+212: WORKFLOW COMPLETE!
+213: ================================================================================
+214: Gene: KCNH2
+215: PMIDs discovered: 245
+216: Papers downloaded: 78
+217: Papers with extractions: 72
+218: Total variants found: 234
+219: Success rate: 32%
+220:
+221: SQLite database: ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
+222: ================================================================================
+223: ```
+224:
+225: ## Quick Database Queries
+226:
+227: ```bash
+228: # Open the database
+229: sqlite3 ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
+230:
+231: # Count variants
+232: sqlite> SELECT COUNT(*) FROM variants;
+233:
+234: # List pathogenic variants
+235: sqlite> SELECT protein_notation, clinical_significance
+236:         FROM variants
+237:         WHERE clinical_significance = 'pathogenic';
+238:
+239: # Get penetrance data
+240: sqlite> SELECT v.protein_notation, p.total_carriers_observed, p.affected_count
+241:         FROM variants v
+242:         JOIN penetrance_data p ON v.variant_id = p.variant_id
+243:         ORDER BY p.total_carriers_observed DESC
+244:         LIMIT 10;
+245: ```
+246:
+247: ## PMC-Only Mode (No API Keys)
+248:
+249: If you don't have publisher API keys, GVF still works using only PubMed Central:
+250:
+251: ```bash
+252: # Works without publisher keys; skips live paywall recovery
+253: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --no-source-recovery
+254: ```
+255:
+256: **Limitations:**
+257: - Only ~30% of papers have PMC full-text available
+258: - Supplemental materials may be limited
+259: - Some high-value papers behind paywalls will be skipped
+260:
+261: For comprehensive coverage, obtain at least Elsevier and Springer keys (both free for researchers).
+262:
+263: ## Troubleshooting
+264:
+265: ### "No PMIDs found"
+266: - Check your internet connection
+267: - Verify the gene symbol is correct
+268: - Some rare genes have limited literature
+269:
+270: ### "LLM API error"
+271: - Verify one provider key is present, for example `echo $ANTHROPIC_API_KEY`
+272: - Check the selected provider account has credits or quota
+273: - Rate limits may require waiting
+274:
+275: ### "Few papers downloaded"
+276: - Normal — only ~30% of PubMed has PMC full-text
+277: - Add publisher API keys for better coverage
+278: - Check `pmc_fulltext/paywalled_missing.csv` for inaccessible papers
+279:
+280: ### Extraction seems slow
+281: - LLM calls take time; this is normal
+282: - For a bounded fetch test, run `gvf extract ... --output ./results --max-downloads 10`; `gvf-run` does not expose that limit
+283: - Check `--verbose` output for progress
+284:
+285: ## Next Steps
+286:
+287: - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Understand the pipeline
+288: - **[API_KEYS.md](API_KEYS.md)** — Get publisher API keys
+289: - **[OUTPUT_FORMAT.md](OUTPUT_FORMAT.md)** — Work with results
+290: - **[RECALL_STATUS.md](RECALL_STATUS.md)** — Current recall metrics and blockers
+291:
+292: ## Getting Help
+293:
+294: 1. Check the troubleshooting section above
+295: 2. Review error logs in `{gene}_workflow.log`
+296: 3. Open an issue on GitHub with:
+297:    - Gene symbol you tried
+298:    - Error message
+299:    - Contents of `{gene}_workflow.log`
+
+### docs/TESTING.md
+1: # GVF Thorough Test Prompt
+2:
+3: > **This is a paste-prompt, not an authority.** It is a smoke harness for "does
+4: > a fresh checkout still work end to end", and it is deliberately not wired into
+5: > CI. Two cautions before you trust its output:
+6: > - Step 7 scores the local `validation_runs/canonical_baseline/` DBs, which are
+7: >   gitignored operator data from June 2026. They will **not** reproduce the
+8: >   accepted lock reported in [`RECALL_STATUS.md`](RECALL_STATUS.md). Treat step
+9: >   7 as "the scorer runs", not as a headline metric.
+10: > - The per-paper expectations below (for example the figure-variant count in
+11: >   step 6) are from an older run and may drift without anything being broken.
+12:
+13: Paste this into any agent (Claude Code, codex, etc.) standing in front of a
+14: fresh checkout of GeneVariantFetcher. It exercises every layer of the
+15: pipeline and the post-extraction recovery stack, then scores against the
+16: gold standard.
+17:
+18: ---
+19:
+20: ## Prompt
+21:
+22: > Run a thorough test of GeneVariantFetcher end-to-end. Use the project
+23: > `.venv`. Do not modify CLAUDE.md, .env, or anything in `results/` that
+24: > isn't a generated artifact. Treat any failure as a stop-and-investigate
+25: > signal — don't paper over errors.
+26: >
+27: > ### 1. Environment + static checks
+28: > 1. Verify `.venv/` exists and is Python 3.11+; if missing, stop and follow
+29: >    `docs/QUICKSTART.md` before continuing.
+30: > 2. Confirm required and high-value env vars from `docs/API_KEYS.md`, including
+31: >    `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM provider key, publisher keys, and
+32: >    institutional full-text credentials when available.
+33: >    Report missing ones.
+34: > 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
+35: >    `.venv/bin/python -m ruff format --check .`. Report any issues.
+36: >
+37: > ### 2. Unit tests
+38: > Run `.venv/bin/python -m pytest tests/unit -q`. Expect several hundred
+39: > passing (the count grows as coverage expands, so treat it as a floor, not a
+40: > fixed target); skips depend on optional external credentials and local tools.
+41: > Capture the count and any failures.
+42: >
+43: > ### 3. Module-import smoke
+44: > Verify every importable module loads cleanly:
+45: > ```bash
+46: > .venv/bin/python -c "
+47: > import importlib, pkgutil
+48: > for pkg in ['cli', 'pipeline', 'harvesting', 'utils', 'gene_literature']:
+49: >     for _, name, _ in pkgutil.walk_packages([pkg], prefix=pkg + '.'):
+50: >         try: importlib.import_module(name)
+51: >         except Exception as e: print(f'IMPORT FAIL {name}: {e}')
+52: > print('All modules imported')"
+53: > ```
+54: > No `IMPORT FAIL` lines should appear.
+55: >
+56: > ### 4. End-to-end pipeline for KCNH2 (small)
+57: > Run a bounded e2e to confirm the pipeline produces a valid DB. Use
+58: > `--max-pmids 25` so it finishes in minutes, not hours:
+59: > ```bash
+60: > .venv/bin/python -m cli gvf-run KCNH2 --email "$NCBI_EMAIL" \
+61: >   --output results/test_kcnh2 --max-pmids 25
+62: > ```
+63: > Expect `results/test_kcnh2/KCNH2/<timestamp>/KCNH2.db` with non-zero
+64: > papers and variants. Print the row counts.
+65: >
+66: > ### 5. Recovery scripts smoke test
+67: > Each of these should import + parse `--help` without error:
+68: > ```bash
+69: > for s in ingest_clinvar ingest_pubtator; do
+70: >   .venv/bin/python scripts/recall_recovery/$s.py --help || echo "FAIL $s"
+71: > done
+72: > .venv/bin/python scripts/recover_counts.py --help
+73: > .venv/bin/python scripts/extract_figure_variants.py --help
+74: > .venv/bin/python scripts/run_recall_suite.py --help
+75: > ```
+76: >
+77: > ### 6. Figure-reader on existing data
+78: > If `corpus/KCNH2/*/*_figures/` exists, pick
+79: > one PMID with figures and run:
+80: > ```bash
+81: > .venv/bin/python scripts/extract_figure_variants.py \
+82: >   --gene KCNH2 --pmid 19038855 \
+83: >   --pmc-dir corpus/KCNH2 \
+84: >   --out /tmp/figure_test
+85: > ```
+86: > Expect a JSON report under `/tmp/figure_test/19038855.json` with a
+87: > non-empty `distinct_variants` list (this PMID's Table 2 yielded 34
+88: > variants in our last run).
+89: >
+90: > ### 7. Score against gold
+91: > ```bash
+92: > .venv/bin/python scripts/run_recall_suite.py --score --genes KCNH2 \
+93: >   --db KCNH2=validation_runs/canonical_baseline/KCNH2.db \
+94: >   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
+95: > ```
+96: > Compare against the current baseline recorded in
+97: > `docs/RECALL_STATUS.md`. Do not copy metric tables into
+98: > this test prompt; they drift quickly. Anything materially below the current
+99: > baseline is a regression for cold-start turnkey behavior.
+100: >
+101: > ### 8. Report
+102: > Produce a single-page summary:
+103: > * Test step → pass/fail + 1-line note
+104: > * Final recall numbers vs baseline above
+105: > * Any modules that failed to import
+106: > * Any failing unit tests
+107: > * One paragraph: "if this branch shipped today, would you be comfortable?"
+
+### docs/README.md
+1: # GVF Documentation Map
+2:
+3: Last reviewed: 2026-08-25.
+4:
+5: Use this page to distinguish current operating instructions from dated evidence.
+6: When two documents disagree, use the authority order below rather than choosing
+7: the newest-looking filename.
+8:
+9: ## Current authorities
+10:
+11: | Question | Authority |
+12: | --- | --- |
+13: | What should be done next? | [`../TASKS.md`](../TASKS.md) |
+14: | How to raise gold-120 identity precision and cut cost? | [`PRECISION_COST_LEVERS.md`](PRECISION_COST_LEVERS.md) (ranking); paper-level evidence in `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/` |
+15: | How to raise affected/unaffected *value* precision? | [`AFFECTED_UNAFFECTED_PRECISION.md`](AFFECTED_UNAFFECTED_PRECISION.md) (exact-match of emitted integers; not Gate 2) |
+16: | What are the current measured metrics and caveats? | [`RECALL_STATUS.md`](RECALL_STATUS.md) |
+17: | How should phenotype-count progress and protocol deltas be plotted? | [`PHENOTYPE_COUNT_FIGURE_POLICY.md`](PHENOTYPE_COUNT_FIGURE_POLICY.md): the stratified automated-versus-reference figure is canonical; the all-row paired difference figure is its companion. Outputs: [`figures/evaluated_phenotype_counts/`](figures/evaluated_phenotype_counts/) and [`figures/gold_difference/`](figures/gold_difference/README.md). |
+18: | How does the current pipeline work? | [`ARCHITECTURE.md`](ARCHITECTURE.md) and [`EXTRACTION_CONTRACT.md`](EXTRACTION_CONTRACT.md) |
+19: | How do I install and run it? | [`QUICKSTART.md`](QUICKSTART.md) |
+20: | How do I refresh an existing run? | [`RECALL_REFRESH_RUNBOOK.md`](RECALL_REFRESH_RUNBOOK.md) |
+21: | How do I run a new gene or move to another machine? | [`NEW_GENE_RUNBOOK.md`](NEW_GENE_RUNBOOK.md) and [`END_TO_END_RECALL_RUN.md`](END_TO_END_RECALL_RUN.md) |
+22: | What files and schema are produced? | [`OUTPUT_FORMAT.md`](OUTPUT_FORMAT.md); executable schema in `harvesting/migrate_to_sqlite.py` |
+23: | How does review-gold exchange work? | [`VARIANT_BROWSER_INTEGRATION.md`](VARIANT_BROWSER_INTEGRATION.md) |
+24: | Which evaluation cohorts are active? | [`../benchmarks/evaluation_tiers/README.md`](../benchmarks/evaluation_tiers/README.md) — its `registry.json` is the count authority |
+25: | Which credentials do I need, and what works without them? | [`API_KEYS.md`](API_KEYS.md) |
+26: | How are per-call prompts, responses, and decisions traced? | [`LLM_TRACING.md`](LLM_TRACING.md) |
+27: | What is the stage-manifest JSON contract? | [`manifest-schema.md`](manifest-schema.md) — executable authority is `utils/manifest.py` |
+28: | How do I smoke-test a fresh checkout? | [`TESTING.md`](TESTING.md) — a paste-prompt, not a metric authority |
+29:
+30: `CLAUDE.md` is the canonical agent handoff. `AGENTS.md` and `CODEX.md` are
+31: pointer files only. The handoff may summarize stable operating constraints, but
+32: it must defer tasks and metrics to the authorities above.
+33:
+34: ## Append-only history
+35:
+36: - [`RECALL_HISTORY.md`](RECALL_HISTORY.md) records benchmark and metric changes.
+37: - [`PROTOCOL_CHANGELOG.md`](PROTOCOL_CHANGELOG.md) records protocol-affecting
+38:   changes.
+39: - [`../CHANGELOG.md`](../CHANGELOG.md) records release-level changes.
+40:
+41: Append new entries. Do not rewrite older measurements to make them resemble the
+42: current protocol.
+43:
+44: ## Dated or historical evidence
+45:
+46: `PROTOCOL_COST_EVAL.md`, `RECALL_SOURCE_STRATIFIED.md`,
+47: `SUPPLEMENT_ACQUISITION_PLAN.md`, `REPO_AUDIT_2026-08-12.md`, files under
+48: `docs/reviews/`, dated files under `docs/evidence/`, and dated benchmark run
+49: directories describe the protocol and data available when they were produced.
+50: Their measurements remain useful, but their commands, model routes, checklists,
+51: and status statements are not the current operating plan unless a current
+52: authority links to them for a specific step.
+53:
+54: The published dashboard is also historical until `RECALL_STATUS.md` says it was
+55: regenerated from an accepted rescore.
+56:
+57: One dated evidence file is an exception worth naming, because it constrains how
+58: the current numbers may be reported rather than only recording a past
+59: measurement:
+60: [`evidence/generalization_consult_20260825.md`](evidence/generalization_consult_20260825.md).
+61: It records the two-model generality audit of the 2026-08-24 lock — the
+62: paper-versus-linkage lane split, the counted-extra naming correction, the
+63: gold-derived alias map in the runtime path, and seven hypotheses that were
+64: falsified on measurement. `RECALL_STATUS.md` and `PRECISION_COST_LEVERS.md` both
+65: carry its conclusions; read it before proposing a precision or MAE change.
+66:
+67: ## Maintenance rule
+68:
+69: Keep one live checklist and one live metrics file. New current-facing Markdown
+70: must link to the relevant authority instead of copying task lists or recall
+71: tables. Label frozen cohorts, dated experiments, and superseded instructions at
+72: the top of their own document.
+
+### docs/API_KEYS.md
+1: # GeneVariantFetcher — API Keys Guide
+2:
+3: How to obtain API keys for each service GVF uses, and what works without them.
+4:
+5: ## Quick Reference
+6:
+7: | API | Required? | Free? | Coverage Impact |
+8: |-----|-----------|-------|-----------------|
+9: | **LLM provider** | ✅ Yes | Varies | Anthropic, OpenAI, or Azure AI is required for extraction |
+10: | **Anthropic** | One LLM option | No (pay-per-use) | Claude extraction and vision-capable tiers |
+11: | **OpenAI** | One LLM option | No (pay-per-use) | OpenAI extraction tiers |
+12: | **Azure AI** | One LLM option | Varies | Azure-hosted model deployments |
+13: | **NCBI (Email)** | ✅ Yes | Yes | Required for PubMed |
+14: | **NCBI API Key** | Optional | Yes | 3x faster rate limits |
+15: | **Elsevier API key** | Optional | Yes | Metadata/API access for ScienceDirect |
+16: | **Elsevier Insttoken** | Recommended | Institutional | Highest-leverage unlock for subscription full text |
+17: | **Springer** | Optional | Yes | +10-15% paper coverage |
+18: | **Wiley** | Optional | Yes (TDM) | +5-10% paper coverage |
+19: | **PMC** | No key needed | Yes | ~30% of papers |
+20:
+21: ## Required: One LLM Provider Key
+22:
+23: **Purpose:** Powers LLM-based variant extraction (the core of GVF).
+24: GVF accepts Anthropic, OpenAI, or Azure AI credentials through LiteLLM. A key
+25: does not select its provider: `MODEL_PROVIDER` must match the credential. The
+26: shipped default is `anthropic`.
+27:
+28: ### Common Options
+29:
+30: - Anthropic: create an API key in the Anthropic console and set `ANTHROPIC_API_KEY`.
+31: - OpenAI: create an API key at [platform.openai.com](https://platform.openai.com/) and set `OPENAI_API_KEY`.
+32: - Azure AI: configure your Azure AI Foundry endpoint and key with `AZURE_AI_API_KEY` and `AZURE_AI_API_BASE`.
+33:
+34: ### Configuration
+35:
+36: ```bash
+37: # In your .env file
+38: MODEL_PROVIDER=anthropic
+39: ANTHROPIC_API_KEY=your-anthropic-key
+40: # or:
+41: # MODEL_PROVIDER=openai
+42: # OPENAI_API_KEY=sk-your-key-here
+43: # or:
+44: # MODEL_PROVIDER=azure
+45: # AZURE_AI_API_KEY=your-azure-ai-key
+46: # AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+47:
+48: # Or as environment variable
+49: export ANTHROPIC_API_KEY=your-anthropic-key
+50: ```
+51:
+52: ### Illustrative Cost Range
+53:
+54: | Gene Size | Papers Extracted | Approx Cost |
+55: |-----------|-----------------|-------------|
+56: | Small (20 papers) | ~15 | $0.50-2.00 |
+57: | Medium (100 papers) | ~60 | $2.00-8.00 |
+58: | Large (300 papers) | ~150 | $5.00-20.00 |
+59:
+60: *These are rough historical planning ranges, not current provider pricing.
+61: Verify deployed-model prices and measure actual token usage before budgeting a
+62: large run.*
+
+### config/settings.py
+1: """Validated configuration for the Gene Variant Fetcher pipeline."""
+2:
+3: import logging
+4: import os
+5: from functools import lru_cache
+6: from pathlib import Path
+7: from typing import ClassVar, List, Optional, Union
+8:
+9: from pydantic import AliasChoices, Field, field_validator, model_validator
+10: from pydantic_settings import BaseSettings, SettingsConfigDict
+11:
+12: from config.constants import (
+13:     SCANNER_MAX_HINTS,
+14:     SCANNER_MERGE_MIN_CONFIDENCE,
+15:     TEXT_TRUNCATION_MAX_CHARS,
+16: )
+17:
+18: _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+19: logger = logging.getLogger(__name__)
+20:
+21:
+22: # Default Anthropic model strings. Used by the get_*_model() helpers when
+23: # MODEL_PROVIDER=anthropic and the user has not set the per-tier env var.
+24: # All routed through LiteLLM, which understands the "anthropic/" prefix.
+25: ANTHROPIC_HAIKU_MODEL_ID = "claude-haiku-4-5-20251001"
+26: ANTHROPIC_TIER2_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
+27: ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
+28: ANTHROPIC_TABLE_ROUTER_DEFAULT = f"anthropic/{ANTHROPIC_HAIKU_MODEL_ID}"
+29: ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
+30: FINAL_ADJUDICATOR_DEFAULT = "anthropic/claude-sonnet-5"
+31: FINAL_ARBITER_DEFAULT = "anthropic/claude-opus-4-8"
+32:
+33: # Azure-first staging defaults. These are deployment names on the active Azure
+34: # AI Foundry endpoint, not base model names. Per-tier env vars still win.
+35: AZURE_TIER2_DEFAULT = "gpt-5.4"
+36: AZURE_TABLE_ROUTER_DEFAULT = "Kimi-K2.6-1"
+37: AZURE_TIER3_DEFAULT = "grok-4.3"
+38: AZURE_PAPER_FINAL_CHECK_DEFAULT = "gpt-5.6-sol"
+39:
+40: # Tier-model env var names. Used to decide whether the user explicitly set
+41: # a tier model (in which case --model-provider does not override it) vs.
+42: # left it at the field default.
+43: _TIER_ENV_VARS = {
+44:     "tier2_model": "TIER2_MODEL",
+45:     "tier3_models": "TIER3_MODELS",
+46:     "tier3_adjudicator_models": "TIER3_ADJUDICATOR_MODELS",
+47:     "table_router_model": "TABLE_ROUTER_MODEL",
+48:     "vision_model": "VISION_MODEL",
+49:     "paper_final_check_model": "PAPER_FINAL_CHECK_MODEL",
+50:     "count_recovery_model": "COUNT_RECOVERY_MODEL",
+51: }
+52:
+53:
+54: class Settings(BaseSettings):
+55:     """Centralized application settings loaded from environment variables."""
+56:
+57:     _DEPRECATED_NOOP_SETTINGS: ClassVar[dict[str, tuple[str, str]]] = {
+58:         "gemini_api_key": (
+59:             "GEMINI_API_KEY",
+60:             "GVF model routing does not read this Settings field; provider libraries may still read the environment variable directly",
+61:         ),
+62:         "azure_deployment_gpt5_codex": (
+63:             "AZURE_DEPLOYMENT_GPT5_CODEX",
+64:             "use the stage-specific model/deployment variables documented in .env.example",
+65:         ),
+66:         "tier1_model": (
+67:             "TIER1_MODEL",
+68:             "Tier 1 is heuristic; configure TIER2_MODEL for LLM classification",
+69:         ),
+70:         "enable_tier3": (
+71:             "ENABLE_TIER3",
+72:             "this flag does not gate extraction; select the intended extraction command/stages instead",
+73:         ),
+74:         "tier1_use_llm": (
+75:             "TIER1_USE_LLM",
+76:             "Tier 1 is heuristic; configure Tier 2 for LLM classification",
+77:         ),
+78:     }
+79:     _DEPRECATED_EXTRACTION_SETTINGS: ClassVar[dict[str, tuple[str, object, str]]] = {
+80:         "extraction_max_chars": (
+81:             "EXTRACTION_MAX_CHARS",
+82:             TEXT_TRUNCATION_MAX_CHARS,
+83:             "config.constants.TEXT_TRUNCATION_MAX_CHARS",
+84:         ),
+85:         "scanner_merge_confidence": (
+86:             "SCANNER_MERGE_CONFIDENCE",
+87:             SCANNER_MERGE_MIN_CONFIDENCE,
+88:             "config.constants.SCANNER_MERGE_MIN_CONFIDENCE",
+89:         ),
+90:         "scanner_max_hints": (
+91:             "SCANNER_MAX_HINTS",
+92:             SCANNER_MAX_HINTS,
+93:             "config.constants.SCANNER_MAX_HINTS",
+94:         ),
+95:     }
+96:
+97:     # API Keys - all loaded from .env file
+98:     openai_api_key: Optional[str] = Field(
+99:         default=None, validation_alias="OPENAI_API_KEY"
+100:     )
+101:     anthropic_api_key: Optional[str] = Field(
+102:         default=None, validation_alias="ANTHROPIC_API_KEY"
+103:     )
+104:     gemini_api_key: Optional[str] = Field(
+105:         default=None, validation_alias="GEMINI_API_KEY"
+106:     )
+107:     ncbi_email: Optional[str] = Field(default=None, validation_alias="NCBI_EMAIL")
+108:     ncbi_api_key: Optional[str] = Field(default=None, validation_alias="NCBI_API_KEY")
+109:     elsevier_api_key: Optional[str] = Field(
+110:         default=None, validation_alias="ELSEVIER_API_KEY"
+111:     )
+112:     elsevier_insttoken: Optional[str] = Field(
+113:         default=None,
+114:         validation_alias="ELSEVIER_INSTTOKEN",
+115:         description="Elsevier institution token for subscription access",
+116:     )
+117:     wiley_api_key: Optional[str] = Field(default=None, validation_alias="WILEY_API_KEY")
+118:     springer_api_key: Optional[str] = Field(
+119:         default=None, validation_alias="SPRINGER_API_KEY"
+120:     )
+121:
+122:     # Azure AI Foundry integration. A single resource can host multiple
+123:     # deployments accessed via LiteLLM model strings like "azure_ai/<deployment>".
+124:     # LiteLLM reads AZURE_AI_API_KEY / AZURE_AI_API_BASE from the process
+125:     # environment automatically; we expose them here so other modules can read
+126:     # them via Settings and so missing-key validation can include them.
+127:     azure_ai_api_key: Optional[str] = Field(
+128:         default=None, validation_alias="AZURE_AI_API_KEY"
+129:     )
+130:     azure_ai_api_base: Optional[str] = Field(
+131:         default=None,
+132:         validation_alias="AZURE_AI_API_BASE",
+133:         description=(
+134:             "Azure AI Foundry inference endpoint, e.g. "
+135:             "https://<resource>.services.ai.azure.com (resource root). "
+136:             "Portal project URLs (.../api/projects/<project>) are for the "
+137:             "SDK; strip that path for LiteLLM azure_ai/* calls. OpenAI v1 "
+138:             "bases ending in /openai/v1 are also supported."
+139:         ),
+140:     )
+141:     azure_ai_api_version: Optional[str] = Field(
+142:         default="2024-08-01-preview", validation_alias="AZURE_AI_API_VERSION"
+143:     )
+144:     azure_deployment_gpt5_codex: Optional[str] = Field(
+145:         default=None, validation_alias="AZURE_DEPLOYMENT_GPT5_CODEX"
+
+CLI help:
+zsh:2: no such file or directory: .venv/bin/gvf
+zsh:3: no such file or directory: .venv/bin/gvf

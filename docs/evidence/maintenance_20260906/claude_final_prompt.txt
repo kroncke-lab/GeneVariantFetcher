@@ -1,0 +1,971 @@
+Adversarial final review of GeneVariantFetcher maintenance. Source packet only; no tools, file edits, external calls or subagents. User requested Grok, Claude and Agy reviews. Return at most three concrete remaining defects, or say no blocking findings; prioritize supported correctness and CI failures over style. Historical benchmark evidence is immutable. Local baseline 2890 tests passed; all 67 targeted final regressions pass including metadata types, failed/missing DB status attributed to the exact run, untouched older runs, explicit external resume and lower-level CLI exit codes. Full final suite running. Both installed CLI helps now pass. Initial review corrections: pyproject already has gvf = cli:app, cli/__main__.py supports python -m cli; the actual missing launcher was repaired by reinstalling editable package. Azure getters already add azure_ai/ to deployment names; do not infer absent code is absent functionality. Deprecated public wrappers stay for compatibility; replacement semantics documented. The calibration fixture contains 1809 usage-only receipts exported and validated from real ignored traces; tests bind SHA plus original profile and unchanged registry; fresh CI must not depend on ignored results. No new extraction or recall claim. Python >=3.11. Review these final changes, explicitly distinguishing a reproduced defect from a suggestion.
+Focus on runtime correctness, exact directory ownership, error propagation and whether tests prove it.
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 7cf20242..fb13dba6 100755
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -81,6 +81,9 @@ jobs:
+           python -m venv /tmp/gvf-wheel-smoke
+           /tmp/gvf-wheel-smoke/bin/python -m pip install dist/*.whl
+           cd /tmp
++          /tmp/gvf-wheel-smoke/bin/gvf --help
++          /tmp/gvf-wheel-smoke/bin/gvf gvf-run --help
++          /tmp/gvf-wheel-smoke/bin/python -m cli --help
+           /tmp/gvf-wheel-smoke/bin/python - <<'PY'
+           import importlib.util
+           from cli.institutional_preflight import probe_institutional_access
+diff --git a/cli/__init__.py b/cli/__init__.py
+index 8414d720..4a184326 100755
+--- a/cli/__init__.py
++++ b/cli/__init__.py
+@@ -1,8 +1,8 @@
+ """
+ CLI tools for GeneVariantFetcher.
+
+-Typer commands registered below: extract, discover, reharvest, gvf-run,
+-audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
++Typer commands are registered below. Run `gvf --help` for the current command
++list, including extraction, discovery, recovery and dashboard entry points.
+
+ Internal helpers (not exposed as Typer commands):
+ - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
+@@ -12,10 +12,9 @@ Internal helpers (not exposed as Typer commands):
+
+ import os
+ from pathlib import Path
+-from typing import Optional
++from typing import Annotated, Optional
+
+ import typer
+-from typing_extensions import Annotated
+
+ from cli.automated_workflow import automated_variant_extraction_workflow
+ from cli.audit_paywalls import run_paywall_audit
+@@ -309,9 +308,8 @@ def extract_command(
+
+         reset_settings_cache()
+
+-    # Require at least one LLM provider key. ANTHROPIC_API_KEY, OPENAI_API_KEY,
+-    # or AZURE_AI_API_KEY all satisfy the pipeline since LiteLLM resolves
+-    # credentials per-call based on the configured TIER*_MODEL strings.
++    # Anthropic requires its own key here; other routes retain the general
++    # key-presence preflight. Actual credentials are resolved per model call.
+     selected_provider = (
+         (model_provider.strip().lower() if model_provider else None)
+         or os.getenv("MODEL_PROVIDER", "").strip().lower()
+@@ -365,7 +363,7 @@ def extract_command(
+         )
+
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=gene,
+             email=email,
+             output_dir=output,
+@@ -386,6 +384,8 @@ def extract_command(
+             extraction_triage_include_defer=extraction_triage_include_defer,
+             extraction_triage_max_llm=extraction_triage_max_llm,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+     except KeyboardInterrupt:
+         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
+         raise typer.Exit(1)
+diff --git a/cli/automated_workflow.py b/cli/automated_workflow.py
+index 140f54eb..81a1e34d 100755
+--- a/cli/automated_workflow.py
++++ b/cli/automated_workflow.py
+@@ -101,6 +101,7 @@ def automated_variant_extraction_workflow(
+     extraction_triage_model: str | None = None,
+     extraction_triage_include_defer: bool = False,
+     extraction_triage_max_llm: int | None = None,
++    run_directory: Path | None = None,
+ ):
+     """
+     Complete automated workflow from gene symbol to extracted variant data.
+@@ -138,6 +139,9 @@ def automated_variant_extraction_workflow(
+         extraction_triage_model: Optional LLM model for triage; defaults to Tier-2.
+         extraction_triage_include_defer: Extract triage "defer" papers as well.
+         extraction_triage_max_llm: Optional cap on LLM triage calls.
++        run_directory: Exact output directory allocated by the caller. Overrides
++            GVF_RESUME_DIR so gvf-run can attribute success or failure without
++            selecting a directory by modification time.
+     """
+     initialize_runtime()
+     setup_logging(level=logging.INFO)
+@@ -198,8 +202,10 @@ def automated_variant_extraction_workflow(
+     import os as _os
+
+     resume_dir = _os.environ.get("GVF_RESUME_DIR")
+-    if resume_dir:
+-        output_path = Path(resume_dir)
++    if run_directory is not None:
++        output_path = Path(run_directory)
++    elif resume_dir:
++        output_path = Path(resume_dir).expanduser()
+     else:
+         output_path = (
+             Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+@@ -1395,7 +1401,7 @@ Examples:
+
+     # Run workflow
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=args.gene,
+             email=args.email,
+             output_dir=args.output,
+@@ -1407,6 +1413,8 @@ Examples:
+             synonyms=args.synonyms,
+             scout_first=args.scout_first,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+
+         # Exit with success code
+         sys.exit(0)
+diff --git a/cli/gvf_run.py b/cli/gvf_run.py
+index 6fff85e8..ef1f042e 100644
+--- a/cli/gvf_run.py
++++ b/cli/gvf_run.py
+@@ -361,6 +361,14 @@ def doctor() -> dict:
+ # ---------------------------------------------------------------------------
+
+
++class ExtractionStepError(RuntimeError):
++    """Extraction failed after allocating this exact run directory."""
++
++    def __init__(self, run_dir: Path, message: str):
++        super().__init__(message)
++        self.run_dir = run_dir
++
++
+ def step_extract(
+     gene: str,
+     email: str,
+@@ -380,10 +388,6 @@ def step_extract(
+     """Run the existing automated workflow. Returns the run dir it produced."""
+     from cli.automated_workflow import automated_variant_extraction_workflow
+
+-    if resume_dir:
+-        os.environ["GVF_RESUME_DIR"] = str(resume_dir)
+-        logger.info("Resuming from %s", resume_dir)
+-
+     pmids = None
+     if pmid_file:
+         pmids = [
+@@ -397,32 +401,47 @@ def step_extract(
+     if disease:
+         logger.info("Scoping discovery + Tier-2 filter by disease: %s", disease)
+
+-    automated_variant_extraction_workflow(
+-        gene_symbol=gene,
+-        email=email,
+-        output_dir=str(output_dir),
+-        max_pmids=max_pmids,
+-        pmids=pmids,
+-        scout_first=True,
+-        disease=disease,
+-        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+-        extraction_top_n=extraction_top_n,
+-        extraction_priority_offset=extraction_priority_offset,
+-        extraction_triage_mode=extraction_triage_mode,
+-        extraction_triage_model=extraction_triage_model,
+-        extraction_triage_include_defer=extraction_triage_include_defer,
+-        extraction_triage_max_llm=extraction_triage_max_llm,
+-    )
+-
+-    # Find the run dir the workflow just created (latest timestamped child).
+-    gene_root = output_dir / gene
+-    runs = sorted(
+-        (p for p in gene_root.iterdir() if p.is_dir()),
+-        key=lambda p: p.stat().st_mtime,
+-    )
+-    if not runs:
+-        raise RuntimeError(f"No run dir under {gene_root}")
+-    return runs[-1]
++    # Allocate once and pass the exact path to the workflow. A newer sibling
++    # directory (or an explicit resume outside output_dir) must never win by mtime.
++    resume_path = resume_dir or os.environ.get("GVF_RESUME_DIR")
++    if resume_path:
++        run_dir = Path(resume_path).expanduser()
++        run_dir.mkdir(parents=True, exist_ok=True)
++        logger.info("Resuming from %s", run_dir)
++    else:
++        gene_root = Path(output_dir).expanduser() / gene
++        gene_root.mkdir(parents=True, exist_ok=True)
++        run_dir = gene_root / datetime.now().strftime("%Y%m%d_%H%M%S")
++        try:
++            run_dir.mkdir()
++        except FileExistsError:
++            # Preserve the ordinary timestamp layout while avoiding accidental
++            # resume when two invocations start in the same second.
++            run_dir = gene_root / f"{run_dir.name}_{uuid.uuid4().hex[:8]}"
++            run_dir.mkdir()
++    try:
++        summary = automated_variant_extraction_workflow(
++            run_directory=run_dir,
++            gene_symbol=gene,
++            email=email,
++            output_dir=str(output_dir),
++            max_pmids=max_pmids,
++            pmids=pmids,
++            scout_first=True,
++            disease=disease,
++            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
++            extraction_top_n=extraction_top_n,
++            extraction_priority_offset=extraction_priority_offset,
++            extraction_triage_mode=extraction_triage_mode,
++            extraction_triage_model=extraction_triage_model,
++            extraction_triage_include_defer=extraction_triage_include_defer,
++            extraction_triage_max_llm=extraction_triage_max_llm,
++        )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
++    except Exception as exc:
++        raise ExtractionStepError(run_dir, str(exc)) from exc
++    return run_dir
+
+
+ # ---------------------------------------------------------------------------
+@@ -2272,11 +2291,34 @@ def _run_gvf_pipeline(
+                 seeded_priority_count = effective_extraction_top_n
+         except Exception as e:
+             logger.exception("extract step failed: %s", e)
++            if isinstance(e, ExtractionStepError):
++                _write_run_status(
++                    e.run_dir,
++                    gene,
++                    "failed",
++                    3,
++                    [*stage_failures, f"extract: {e}"],
++                    stage_warnings,
++                    started,
++                    e.run_dir / f"{gene}.db",
++                    gold_free_run=gold_free_run,
++                )
+             return 3
+
+     db = _find_db(run_dir, gene)
+     if not db:
+         logger.error("No DB produced in %s", run_dir)
++        _write_run_status(
++            run_dir,
++            gene,
++            "failed",
++            4,
++            [*stage_failures, "extract: no database produced"],
++            stage_warnings,
++            started,
++            run_dir / f"{gene}.db",
++            gold_free_run=gold_free_run,
++        )
+         return 4
+
+     # Trace the WHOLE remaining lifecycle, not just extraction. On the
+diff --git a/config/settings.py b/config/settings.py
+index 7b749c93..f13af89c 100755
+--- a/config/settings.py
++++ b/config/settings.py
+@@ -1236,11 +1236,10 @@ class Settings(BaseSettings):
+     # Provider-aware model resolution
+     # ------------------------------------------------------------------
+     # The pipeline asks "which model should this tier use?" via these
+-    # helpers. They prefer (1) an explicit TIER*_MODEL env var, then
+-    # (2) the Anthropic default when MODEL_PROVIDER=anthropic, then
+-    # (3) the original tier field default. This keeps every tier
+-    # independently configurable while letting --model-provider switch
+-    # them in bulk.
++    # helpers. Explicit stage-model overrides win, followed by provider-specific
++    # defaults: Anthropic, Azure deployments with azure_ai/ routing, or OpenAI.
++    # A credential alone never selects its provider. Each stage remains
++    # independently configurable while --model-provider switches the defaults.
+
+     def _is_anthropic(self) -> bool:
+         return (self.model_provider or "").strip().lower() == "anthropic"
+diff --git a/pipeline/steps.py b/pipeline/steps.py
+index 8a5070cf..6bd40f4b 100755
+--- a/pipeline/steps.py
++++ b/pipeline/steps.py
+@@ -2423,11 +2423,14 @@ def extract_variants(
+         )
+     )
+
+-    # Count variants
++    # Count the actual extracted rows, not the model's self-reported metadata.
++    # Cached responses may contain a string/null/stale total_variants_found;
++    # arithmetic on that advisory field used to crash after successful extraction.
+     total_variants = sum(
+-        e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
++        sum(isinstance(row, dict) for row in (e.extracted_data.get("variants") or []))
+         for e in extractions
+-        if e.extracted_data
++        if isinstance(e.extracted_data, dict)
++        and isinstance(e.extracted_data.get("variants"), list)
+     )
+
+     return StepResult(
+diff --git a/tests/unit/test_extraction_regressions.py b/tests/unit/test_extraction_regressions.py
+index f2fcdcca..4c832ddf 100644
+--- a/tests/unit/test_extraction_regressions.py
++++ b/tests/unit/test_extraction_regressions.py
+@@ -1,5 +1,7 @@
+ import json
+
++import pytest
++
+ import pipeline.extraction as extraction_module
+ from pipeline.extraction import ExpertExtractor, _normalize_llm_extraction_shape
+ from pipeline.steps import _write_dense_table_overflow_report, extract_variants
+@@ -711,3 +713,44 @@ def test_table_hints_are_bounded_for_noisy_large_sources():
+     assert "c.1009A>G" in hints
+     assert "c.1010A>G" not in hints
+     assert "65 additional table-detected variants omitted" in hints
++
++
++@pytest.mark.parametrize("reported_total", ["2", "many", None, True, 2.5, -1, 999])
++def test_cached_extraction_counts_rows_instead_of_model_metadata(
++    tmp_path, monkeypatch, reported_total
++):
++    """Malformed cached metadata must not prevent migration of valid rows."""
++    harvest = tmp_path / "pmc_fulltext"
++    output = tmp_path / "extractions"
++    harvest.mkdir()
++    output.mkdir()
++    pmid = "12345678"
++    (harvest / f"{pmid}_FULL_CONTEXT.md").write_text(
++        ("## Results\nSCN5A R100W and G200S were identified in two families. " * 100)
++    )
++    cached = output / f"SCN5A_PMID_{pmid}.json"
++    cached.write_text(
++        json.dumps(
++            {
++                "paper_metadata": {"pmid": pmid},
++                "variants": [
++                    {"gene_symbol": "SCN5A", "protein_notation": "R100W"},
++                    {"gene_symbol": "SCN5A", "protein_notation": "G200S"},
++                ],
++                "extraction_metadata": {"total_variants_found": reported_total},
++            }
++        )
++    )
++    before = cached.read_bytes()
++
++    def must_not_extract(*args, **kwargs):
++        raise AssertionError("valid cached rows were unnecessarily re-extracted")
++
++    monkeypatch.setattr(ExpertExtractor, "extract", must_not_extract)
++    result = extract_variants(
++        harvest_dir=harvest, extraction_dir=output, gene_symbol="SCN5A", max_workers=1
++    )
++    assert result.success
++    assert result.stats["papers_extracted"] == 1
++    assert result.stats["total_variants"] == 2
++    assert cached.read_bytes() == before
+diff --git a/tests/unit/test_gvf_run_pipeline_wiring.py b/tests/unit/test_gvf_run_pipeline_wiring.py
+index eafac50e..83b3c5db 100644
+--- a/tests/unit/test_gvf_run_pipeline_wiring.py
++++ b/tests/unit/test_gvf_run_pipeline_wiring.py
+@@ -1286,3 +1286,80 @@ def test_publish_refused_when_any_required_stage_failed(tmp_path: Path, monkeypa
+     )
+     assert rc == gvf_run.EXIT_STAGE_WARNINGS
+     assert publish_calls == []
++
++
++@pytest.mark.parametrize("failure_mode", ["exception", "returned_failure", "no_db"])
++def test_real_extract_boundary_records_failure_in_its_own_run(
++    tmp_path, monkeypatch, failure_mode
++):
++    import cli.automated_workflow as workflow
++
++    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
++    monkeypatch.delenv("GVF_RESUME_DIR", raising=False)
++    old = tmp_path / "TESTGENE" / "old_success"
++    old.mkdir(parents=True)
++    old_status = old / "RUN_STATUS.json"
++    old_status.write_text('{"status": "completed"}\n')
++    (old / "TESTGENE.db").write_bytes(b"old db")
++    captured = {}
++
++    def fake_workflow(*, run_directory, **kwargs):
++        captured["run"] = run_directory
++        assert run_directory != old
++        # Reproduce the previous newest-sibling trap without touching old data.
++        os.utime(old, (2_000_000_000, 2_000_000_000))
++        if failure_mode == "exception":
++            raise TypeError("malformed extraction metadata")
++        if failure_mode == "returned_failure":
++            return {"success": False, "error": "abstract fetch failed"}
++        return {"statistics": {"papers_extracted": 0}}
++
++    monkeypatch.setattr(
++        workflow, "automated_variant_extraction_workflow", fake_workflow
++    )
++    rc = gvf_run.run_gvf_pipeline(
++        gene="TESTGENE",
++        email="test@example.org",
++        output=tmp_path,
++        source_recovery=False,
++        corpus_sync=False,
++        gold_free_run=True,
++    )
++    assert rc == (4 if failure_mode == "no_db" else 3)
++    status = json.loads((captured["run"] / "RUN_STATUS.json").read_text())
++    assert status["status"] == "failed"
++    assert status["exit_code"] == rc
++    assert status["stage_failures"]
++    assert status["gold_access"]["disabled"] is True
++    assert status["gold_access"]["gold_derived_alias_files_disabled"] is True
++    assert old_status.read_text() == '{"status": "completed"}\n'
++
++
++def test_step_extract_uses_explicit_resume_outside_output_without_leaking_env(
++    tmp_path, monkeypatch
++):
++    import cli.automated_workflow as workflow
++
++    original_env = tmp_path / "environment_resume"
++    requested = tmp_path / "explicit_resume"
++    monkeypatch.setenv("GVF_RESUME_DIR", str(original_env))
++    captured = {}
++
++    def fake_workflow(*, run_directory, **kwargs):
++        captured["run"] = run_directory
++        return {"statistics": {"papers_extracted": 0}}
++
++    monkeypatch.setattr(
++        workflow, "automated_variant_extraction_workflow", fake_workflow
++    )
++    actual = gvf_run.step_extract(
++        gene="TESTGENE",
++        email="test@example.org",
++        output_dir=tmp_path / "output",
++        pmid_file=None,
++        max_pmids=1,
++        resume_dir=requested,
++    )
++    assert actual == requested == captured["run"]
++    assert os.environ["GVF_RESUME_DIR"] == str(original_env)
++    assert not original_env.exists()
+diff --git a/tests/unit/test_mixed_gold_tranches.py b/tests/unit/test_mixed_gold_tranches.py
+index 35412c3f..ca2c26c9 100644
+--- a/tests/unit/test_mixed_gold_tranches.py
++++ b/tests/unit/test_mixed_gold_tranches.py
+@@ -9,7 +9,6 @@ from pathlib import Path
+
+ import pytest
+
+-from benchmarks.codex_paper_eval.db_to_predictions import trace_usage
+ from benchmarks.evaluation_tiers.build_mixed_tranches import (
+     digest_answer_key,
+     excluded_pmids,
+@@ -21,6 +20,23 @@ REPO = Path(__file__).parents[2]
+ SUITE = REPO / "benchmarks" / "evaluation_tiers" / "mixed_gold"
+
+
++# Usage-only receipts are exported from the original ignored operator traces.
++# Keep their bytes pinned without rewriting historical cost/registry digests.
++USAGE_RECEIPTS = REPO / "tests/fixtures/cost_calibration_usage.json"
++USAGE_RECEIPTS_SHA256 = (
++    "3617fc19464fa32734c8b933a3a5f0c058faa6790962f01e53e5062f6c588b97"
++)
++
++
++def _usage_receipts():
++    assert sha256_file(USAGE_RECEIPTS) == USAGE_RECEIPTS_SHA256
++    receipts = json.loads(USAGE_RECEIPTS.read_text())
++    assert receipts["calibration_sha256"] == sha256_file(
++        REPO / "benchmarks/evaluation_tiers/cost_calibration.json"
++    )
++    return receipts["calibrations"]
++
++
+ def _manifest_rows(path: Path) -> list[tuple[str, str]]:
+     rows = []
+     for raw in path.read_text().splitlines():
+@@ -145,16 +161,25 @@ def test_inventory_is_complete_and_costs_reconcile():
+     calibration = REPO / registry["cost_model"]["calibration"]
+     assert sha256_file(calibration) == registry["cost_model"]["calibration_sha256"]
+     cost_profile = json.loads(calibration.read_text())
+-    for observed in cost_profile["calibrations"].values():
++    receipts = _usage_receipts()
++    for gene, observed in cost_profile["calibrations"].items():
+         source = REPO / observed["source"]
+-        assert source.is_file()
+-        assert sha256_file(source) == observed["source_sha256"]
++        if source.name == "predictions.json":
++            assert sha256_file(source) == observed["source_sha256"]
++        else:
++            # Full traces are deliberately gitignored. A fresh checkout validates
++            # the exported source identity and usage receipts, not local files.
++            receipt = receipts[gene]
++            assert receipt["source"] == observed["source"]
++            assert receipt["source_sha256"] == observed["source_sha256"]
++            assert receipt["attempts"] == observed["attempts"]
+
+
+-def test_cost_calibration_matches_exact_locked_trace_usage():
++def test_cost_calibration_matches_locked_predictions_and_trace_usage_receipts():
+     profile = json.loads(
+         (REPO / "benchmarks" / "evaluation_tiers" / "cost_calibration.json").read_text()
+     )
++    receipts = _usage_receipts()
+     for gene, calibration in profile["calibrations"].items():
+         source = REPO / calibration["source"]
+         if source.name == "predictions.json":
+@@ -172,17 +197,16 @@ def test_cost_calibration_matches_exact_locked_trace_usage():
+                         }
+                     )
+         else:
+-            usage, _ = trace_usage(source.parent)
+-            actual = {
+-                model: Counter(
++            actual = defaultdict(Counter)
++            for call in receipts[gene]["calls"]:
++                assert len(call["trace_sha256"]) == 64
++                actual[call["model"]].update(
+                     {
+-                        "calls": values["llm_calls"],
+-                        "input_tokens": values["input_tokens"],
+-                        "output_tokens": values["output_tokens"],
++                        "calls": 1,
++                        "input_tokens": call["input_tokens"],
++                        "output_tokens": call["output_tokens"],
+                     }
+                 )
+-                for model, values in usage["models"].items()
+-            }
+         assert {model: dict(values) for model, values in actual.items()} == calibration[
+             "models"
+         ]
+diff --git a/utils/__init__.py b/utils/__init__.py
+index 3a0c2256..e20d35cb 100755
+--- a/utils/__init__.py
++++ b/utils/__init__.py
+@@ -3,7 +3,7 @@ Shared utility modules for GeneVariantFetcher.
+
+ This package provides common functionality used across multiple modules:
+ - llm_utils: LLM calling and response parsing
+-- html_utils: HTML parsing and PMID extraction
++- html_utils: deprecated HTML parsing compatibility helpers
+ - retry_utils: Retry configuration and decorators
+ - pubmed_utils: Unified PubMed/NCBI API access
+ - pmid_utils: PMID extraction and validation
+diff --git a/utils/html_utils.py b/utils/html_utils.py
+index a8cd7a0c..c4191a07 100755
+--- a/utils/html_utils.py
++++ b/utils/html_utils.py
+@@ -1,8 +1,9 @@
+ """
+-HTML parsing utilities for extracting PMIDs and other identifiers.
++Deprecated compatibility helpers for HTML identifiers and scraping sessions.
+
+-This module provides unified utilities for parsing HTML and extracting
+-PubMed IDs (PMIDs) from various sources including PubMind and PMC.
++Retained for external import compatibility. Production adapters own their
++source-specific identifier parsers; these broad parsers have no single public
++drop-in replacement. New HTTP callers should use utils.http_utils.get_browser_session.
+ """
+
+ import logging
+diff --git a/utils/pubmed_utils.py b/utils/pubmed_utils.py
+index 88db2d2f..af590985 100755
+--- a/utils/pubmed_utils.py
++++ b/utils/pubmed_utils.py
+@@ -109,9 +109,10 @@ def query_pubmed_for_gene(
+     email: Optional[str] = None,
+ ) -> Set[str]:
+     """
+-    Query PubMed for papers mentioning a specific gene.
++    Deprecated gene-query convenience wrapper, retained with its set return.
+
+-    This function constructs a gene-specific query that searches both
++    query_pubmed_with_entrez takes a complete query and returns a list; callers
++    needing the historical set should convert explicitly. This function constructs a gene-specific query that searches both
+     the Gene Symbol field and Title/Abstract.
+
+     Args:
+@@ -128,7 +129,7 @@ def query_pubmed_for_gene(
+     """
+     warn_deprecated(
+         "utils.pubmed_utils.query_pubmed_for_gene",
+-        "query_pubmed_with_entrez or gene_literature.discovery",
++        "query_pubmed_with_entrez (complete query, list result; convert to set if needed) or gene_literature.discovery",
+     )
+     logger.info(f"Querying PubMed for gene symbol: {gene_symbol}")
+
+diff --git a/utils/variant_normalizer.py b/utils/variant_normalizer.py
+index 7b45c8a1..bc5f9755 100644
+--- a/utils/variant_normalizer.py
++++ b/utils/variant_normalizer.py
+@@ -1567,7 +1567,7 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
+     and comparison. Normalizes to single-letter format for protein variants
+     (A561V) and c. prefix format for cDNA.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_variant()
++    Current public normalizer; supersedes the removed utils.variant_utils module.
+
+     Normalization rules applied (in order):
+     1. Strip whitespace and common prefixes
+@@ -1737,7 +1737,8 @@ def normalize_protein_variant(variant: str) -> str:
+     """
+     Normalize a protein variant to short format (e.g., A561V).
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()
++    Deprecated public compatibility helper; prefer normalize_variant().
++    The historical return behavior is retained for existing callers.
+
+     Args:
+         variant: Protein variant in any format (p.Ala561Val, A561V, etc.)
+@@ -1761,7 +1762,8 @@ def normalize_cdna_variant(variant: str) -> str:
+     """
+     Normalize a cDNA variant notation.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()
++    Deprecated public compatibility helper; prefer VariantNormalizer.normalize_cdna().
++    The historical fallback to the original input is retained here.
+
+     Args:
+         variant: cDNA variant (c.1682C>T, 1682C>T, etc.)
+@@ -1785,7 +1787,7 @@ def variants_match(v1: str, v2: str, gene_symbol: str = "KCNH2") -> bool:
+     """
+     Check if two variant notations refer to the same variant.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.variants_match()
++    Current public matcher for two variant notations.
+
+     Args:
+         v1: First variant notation
+@@ -1810,7 +1812,9 @@ def find_matching_variants(
+     """
+     Compare extracted variants against expected variants.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()
++    Deprecated public compatibility helper. Use variants_match() for a pair
++    or match_variants_to_baseline() for baseline comparison; their interfaces
++    differ from this legacy three-list return value.
+
+     Args:
+         extracted: List of extracted variant strings
+
+### tests/unit/test_workflow_cli_exit.py
+1: """Workflow failures returned as data must fail both public CLI entry points."""
+2:
+3: import sys
+4:
+5: import pytest
+6: from typer.testing import CliRunner
+7:
+8: import cli
+9: import cli.automated_workflow as workflow
+10:
+11:
+12: @pytest.mark.parametrize("entrypoint", ["typer", "module"])
+13: @pytest.mark.parametrize("success", [True, False])
+14: def test_workflow_result_controls_cli_exit(monkeypatch, tmp_path, entrypoint, success):
+15:     result = {"success": success, "error": "abstract retrieval failed"}
+16:     monkeypatch.setenv("MODEL_PROVIDER", "azure")
+17:     monkeypatch.setenv("AZURE_AI_API_KEY", "offline-test-key")
+18:     monkeypatch.setattr(cli, "initialize_runtime", lambda: None)
+19:     monkeypatch.setattr(workflow, "initialize_runtime", lambda: None)
+20:     monkeypatch.setattr(cli, "has_llm_provider_key", lambda: True)
+21:     monkeypatch.setattr(workflow, "has_llm_provider_key", lambda: True)
+22:     monkeypatch.setattr(
+23:         cli, "automated_variant_extraction_workflow", lambda **kw: result
+24:     )
+25:     monkeypatch.setattr(
+26:         workflow, "automated_variant_extraction_workflow", lambda **kw: result
+27:     )
+28:     args = ["SCN5A", "--email", "ci@ncbi.test", "--output", str(tmp_path)]
+29:     if entrypoint == "typer":
+30:         outcome = CliRunner().invoke(cli.app, ["extract", *args])
+31:         assert outcome.exit_code == (0 if success else 1), outcome.output
+32:         if not success:
+33:             assert "abstract retrieval failed" in outcome.output
+34:     else:
+35:         monkeypatch.setattr(
+36:             sys, "argv", ["automated_workflow", *args, "--tier-threshold", "1"]
+37:         )
+38:         with pytest.raises(SystemExit) as exc:
+39:             workflow.main()
+40:         assert exc.value.code == (0 if success else 1)
+
+### benchmarks/evaluation_tiers/export_cost_usage_receipts.py
+1: #!/usr/bin/env python3
+2: """Export usage-only calibration evidence for tests on a fresh checkout.
+3:
+4: Requires the original ignored operator traces. Does not change the SHA-pinned
+5: cost profile or registries, and never exports prompts or response text.
+6: """
+7:
+8: import argparse
+9: import hashlib
+10: import json
+11: from pathlib import Path
+12:
+13: ROOT = Path(__file__).resolve().parents[2]
+14:
+15:
+16: def sha(path: Path) -> str:
+17:     return hashlib.sha256(path.read_bytes()).hexdigest()
+18:
+19:
+20: def export(profile_path: Path, destination: Path) -> dict:
+21:     profile = json.loads(profile_path.read_text())
+22:     result = {
+23:         "schema_version": 1,
+24:         "purpose": "Portable usage-only receipts from local calibration traces; no prompts, responses, credentials or paper text. Original calibration/profile bytes remain unchanged.",
+25:         "calibration_sha256": sha(profile_path),
+26:         "calibrations": {},
+27:     }
+28:     for gene, calibration in profile["calibrations"].items():
+29:         source = ROOT / calibration["source"]
+30:         if source.name == "predictions.json":
+31:             continue  # These complete locked predictions are already tracked.
+32:         if sha(source) != calibration["source_sha256"]:
+33:             raise ValueError(f"Calibration source changed: {source}")
+34:         calls = []
+35:         for path in sorted(source.parent.rglob("*.json")):
+36:             if path == source:
+37:                 continue
+38:             try:
+39:                 record = json.loads(path.read_text())
+40:             except (OSError, ValueError):
+41:                 continue
+42:             if record.get("record_type") != "llm_call":
+43:                 continue
+44:             usage = (record.get("response") or {}).get("usage") or {}
+45:             input_tokens = int(
+46:                 usage.get("prompt_tokens") or usage.get("input_tokens") or 0
+47:             )
+48:             total_tokens = int(usage.get("total_tokens") or 0)
+49:             calls.append(
+50:                 {
+51:                     "trace_sha256": sha(path),
+52:                     "model": str(
+53:                         (record.get("context") or {}).get("model") or "unknown"
+54:                     ),
+55:                     "input_tokens": input_tokens,
+56:                     "output_tokens": max(total_tokens - input_tokens, 0),
+57:                 }
+58:             )
+59:         actual = {}
+60:         for call in calls:
+61:             counts = actual.setdefault(
+62:                 call["model"], dict(calls=0, input_tokens=0, output_tokens=0)
+63:             )
+64:             counts["calls"] += 1
+65:             counts["input_tokens"] += call["input_tokens"]
+66:             counts["output_tokens"] += call["output_tokens"]
+67:         if actual != calibration["models"]:
+68:             raise ValueError(f"Trace usage disagrees with calibration: {gene}")
+69:         result["calibrations"][gene] = {
+70:             "source": calibration["source"],
+71:             "source_sha256": calibration["source_sha256"],
+72:             "attempts": calibration["attempts"],
+73:             "calls": calls,
+74:         }
+75:     destination.parent.mkdir(parents=True, exist_ok=True)
+76:     destination.write_text(json.dumps(result, indent=2) + "\n")
+77:     return result
+78:
+79:
+80: def main():
+81:     parser = argparse.ArgumentParser(description=__doc__)
+82:     parser.add_argument(
+83:         "--profile",
+84:         type=Path,
+85:         default=Path(__file__).with_name("cost_calibration.json"),
+86:     )
+87:     parser.add_argument("--out", type=Path, required=True)
+88:     args = parser.parse_args()
+89:     result = export(args.profile, args.out)
+90:     print(
+91:         f"Exported {len(result['calibrations'])} usage receipts; SHA-256 {sha(args.out)}"
+92:     )
+93:
+94:
+95: if __name__ == "__main__":
+96:     main()
+
+### cli/automated_workflow.py
+180:         ).strip().lower() in {"1", "true", "yes", "on", "all"}
+181:
+182:     # Track whether the caller supplied an explicit PMID list. We need this
+183:     # later (after STEP 1 has reassigned `pmids`) to skip Tier 1/2 filtering.
+184:     explicit_pmids_provided = bool(pmids)
+185:
+186:     from config.settings import get_settings
+187:     from pipeline.steps import (
+188:         aggregate_data,
+189:         discover_synonyms,
+190:         download_fulltext,
+191:         extract_variants,
+192:         fetch_abstracts,
+193:         fetch_pmids,
+194:         filter_papers,
+195:         migrate_to_sqlite,
+196:         preprocess_papers,
+197:     )
+198:
+199:     # Setup output directory.  GVF_RESUME_DIR lets you point a re-run at an
+200:     # existing timestamped run dir so cached abstracts / pmid_status / harvested
+201:     # papers are reused (resume semantics) instead of starting fresh.
+202:     import os as _os
+203:
+204:     resume_dir = _os.environ.get("GVF_RESUME_DIR")
+205:     if run_directory is not None:
+206:         output_path = Path(run_directory)
+207:     elif resume_dir:
+208:         output_path = Path(resume_dir).expanduser()
+209:     else:
+210:         output_path = (
+211:             Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+212:         )
+213:     output_path.mkdir(parents=True, exist_ok=True)
+214:
+215:     # Set up file logging
+216:     log_file = output_path / f"{gene_symbol}_workflow.log"
+217:     setup_logging(level=logging.INFO, log_file=log_file)
+218:     logger.info(f"Logging to file: {log_file}")
+219:
+220:     # Initialize run manifest
+221:     run_manifest = RunManifestManager.create_for_workflow(gene_symbol, str(output_path))
+222:
+223:     # Every normal workflow gets a durable per-call LLM trace unless explicitly
+224:     # disabled.  An explicit GVF_LLM_TRACE_DIR can place traces on encrypted or
+225:     # high-capacity storage; otherwise they live with the run they explain.
+226:     from utils.llm_trace import (
+227:         TRACE_INDEX_NAME,
+228:         configure_llm_tracing,
+229:         resolve_trace_location,
+230:         tracing_enabled_by_environment,
+
+### cli/automated_workflow.py
+419:             max_results=max_pmids,
+420:             synonyms=all_synonyms if all_synonyms else None,
+421:             use_pubmind=settings.use_pubmind,
+422:             use_pubmed=settings.use_pubmed and not settings.pubmind_only,
+423:             use_europepmc=settings.use_europepmc,
+424:             api_key=os.getenv("NCBI_API_KEY"),
+425:             disease=disease,
+426:             disease_terms=disease_terms,
+427:         )
+428:
+429:         if not pmid_result.success:
+430:             logger.error(f"PMID discovery failed: {pmid_result.error}")
+431:             checkpoint.mark_failed(pmid_result.error, PipelineStep.FETCHING_PMIDS)
+432:             checkpoint_manager.save(checkpoint)
+433:             run_manifest.add_error(f"PMID discovery failed: {pmid_result.error}")
+434:             run_manifest.finalize(success=False)
+435:             return {"success": False, "error": pmid_result.error}
+436:
+437:         pmids = pmid_result.data.get("pmids", [])
+438:         logger.info(
+439:             f"✓ Found {pmid_result.stats.get('pubmind_count', 0)} PubMind PMIDs, "
+440:             f"{pmid_result.stats.get('pubmed_count', 0)} PubMed PMIDs, "
+441:             f"and {pmid_result.stats.get('europepmc_count', 0)} Europe PMC PMIDs"
+442:         )
+443:         logger.info(f"✓ Using {len(pmids)} unique PMIDs after merging sources")
+444:
+445:     if not pmids:
+446:         logger.warning(f"No PMIDs found for {gene_symbol}. Workflow terminated.")
+447:         checkpoint.mark_failed("No PMIDs found", PipelineStep.FETCHING_PMIDS)
+448:         checkpoint_manager.save(checkpoint)
+449:         run_manifest.add_warning("No PMIDs found for gene")
+450:         run_manifest.finalize(success=False)
+451:         return {"success": False, "error": "No PMIDs found"}
+452:
+453:     workflow_stats["pmids_discovered"] = len(pmids)
+454:
+455:     # Update checkpoint and manifest with discovered PMIDs
+456:     checkpoint.discovered_pmids = pmids
+
+### cli/gvf_run.py
+1940:     try:
+1941:         try:
+1942:             active_db_ref = str(active_db.relative_to(run_dir))
+1943:         except ValueError:
+1944:             resolved_run_dir = run_dir.resolve()
+1945:             resolved_active_db = active_db.resolve()
+1946:             try:
+1947:                 active_db_ref = str(resolved_active_db.relative_to(resolved_run_dir))
+1948:             except ValueError:
+1949:                 active_db_ref = str(resolved_active_db)
+1950:
+1951:         payload = {
+1952:             "gene": gene,
+1953:             "status": status,
+1954:             "severity": "warning" if stage_failures else "ok",
+1955:             "exit_code": exit_code,
+1956:             "active_db": active_db_ref,
+1957:             "duration_seconds": int(time.time() - started_at),
+1958:             "stage_failures": list(stage_failures),
+1959:             "stage_warnings": list(stage_warnings),
+1960:             "gold_access": {
+1961:                 "disabled": bool(gold_free_run),
+1962:                 "mode": "disabled" if gold_free_run else "auto_discovery_allowed",
+1963:                 # Record the observed runtime gate, not merely the CLI intent.
+1964:                 # The gold-free wrapper sets this for the entire pipeline and
+1965:                 # restores the caller's environment only after status is written.
+1966:                 "gold_derived_alias_files_disabled": (
+1967:                     os.environ.get("GVF_DISABLE_GOLD_DERIVED_ALIASES") == "1"
+1968:                 ),
+1969:             },
+1970:         }
+1971:         if integrity is not None:
+1972:             payload["source_integrity"] = integrity
+1973:         if count_recovery is not None:
+1974:             payload["count_recovery"] = count_recovery
+1975:         if llm_trace is not None:
+1976:             payload["llm_trace"] = llm_trace
+1977:         (run_dir / "RUN_STATUS.json").write_text(
+1978:             json.dumps(payload, indent=2),
+1979:             encoding="utf-8",
+1980:         )
+1981:     except OSError as e:
+1982:         logger.warning("could not write RUN_STATUS.json: %s", e)
+1983:
+1984:
+1985: def run_gvf_pipeline(
+1986:     gene: str,
+1987:     email: str,
+1988:     output: Path,
+1989:     pmid_file: Optional[Path] = None,
+1990:     max_pmids: int = 1500,
+1991:     resume_dir: Optional[Path] = None,
+1992:     include_v12: bool = False,
+1993:     gold_free_run: bool = False,
+1994:     skip: Optional[list[str]] = None,
+1995:     source_recovery: bool = True,
+1996:     source_recovery_timeout_s: int = 120,
+1997:     allow_degraded_institutional: bool = False,
+1998:     disease: Optional[str] = None,
+1999:     include_all_clinigen_phenotypes: bool = False,
+2000:     corpus_sync: bool = True,
+2001:     publish_review: bool = False,
+2002:     review_repo: Optional[Path] = None,
+2003:     publish_timeout_s: int = 600,
+2004:     extraction_top_n: Optional[int] = None,
+2005:     extraction_priority_offset: int = 0,
+2006:     extraction_triage_mode: Optional[str] = None,
+2007:     extraction_triage_model: Optional[str] = None,
+2008:     extraction_triage_include_defer: bool = False,
+2009:     extraction_triage_max_llm: Optional[int] = None,
+2010:     full_coverage: bool = False,
+2011:     extraction_model: Optional[str] = None,
+2012:     extraction_workers: Optional[int] = None,
+2013:     taper_min_variants: int = 8,
+2014:     carrier_guard: bool = True,
+2015:     vf_enrich: bool = True,
+2016:     require_vf_enrich: bool = False,
+2017: ) -> int:
+2018:     """Execute the full pipeline. Returns exit code.
+
+### cli/__main__.py
+1: """Entry point for `python -m cli` invocations."""
+2:
+3: from cli import app
+4:
+5: if __name__ == "__main__":
+6:     app()

@@ -1,6 +1,6 @@
 # GVF Documentation Map
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-09-06.
 
 Use this page to distinguish current operating instructions from dated evidence.
 When two documents disagree, use the authority order below rather than choosing
@@ -25,7 +25,7 @@ the newest-looking filename.
 | Which credentials do I need, and what works without them? | [`API_KEYS.md`](API_KEYS.md) |
 | How are per-call prompts, responses, and decisions traced? | [`LLM_TRACING.md`](LLM_TRACING.md) |
 | What is the stage-manifest JSON contract? | [`manifest-schema.md`](manifest-schema.md) — executable authority is `utils/manifest.py` |
-| How do I smoke-test a fresh checkout? | [`TESTING.md`](TESTING.md) — a paste-prompt, not a metric authority |
+| How do I smoke-test a fresh checkout? | [`TESTING.md`](TESTING.md) — installation, offline checks and separately bounded live validation |
 
 `CLAUDE.md` is the canonical agent handoff. `AGENTS.md` and `CODEX.md` are
 pointer files only. The handoff may summarize stable operating constraints, but

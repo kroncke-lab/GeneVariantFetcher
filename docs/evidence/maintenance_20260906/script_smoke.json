@@ -1,0 +1,106 @@
+[
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "extract",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "discover",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "reharvest",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "gvf-run",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "scout",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/gvf",
+      "dashboard",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "scripts/recall_recovery/ingest_clinvar.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "scripts/recall_recovery/ingest_pubtator.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "scripts/recover_counts.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "scripts/extract_figure_variants.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "scripts/run_recall_suite.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "benchmarks/evaluation_tiers/export_cost_usage_receipts.py",
+      "--help"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "benchmarks/curated_extraction_eval/run_benchmark.py",
+      "--help"
+    ],
+    "exit_code": 0
+  }
+]

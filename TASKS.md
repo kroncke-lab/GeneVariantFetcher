@@ -225,10 +225,15 @@ estimate is not an additional budget charge unless it represents API spend.
 - [ ] **Abstain independently by count field.** Preserve explicit carrier
       counts when A/U is unknown; RYR2 18929323's 13/6 counts are the concrete
       regression case. Require complete endpoint partitions before subtraction.
-- [ ] **Harden malformed metadata failure reporting.** Normalize or reject
-      nonnumeric total_variants_found before arithmetic; always emit failed
-      RUN_STATUS on process exceptions. Validate with the archived tranche-03
-      BRCA1 operational failure, without replacing any locked attempt.
+- [x] **Harden malformed metadata failure reporting (2026-09-06).** Summary
+      arithmetic now counts actual variant rows rather than model metadata.
+      Cached string/invalid totals have offline regressions; the archived BRCA1
+      failure also replays on copies with no model calls and all hashes intact.
+      Extraction failures
+      after run-directory allocation receive failed RUN_STATUS in that exact
+      directory. Lower-level CLI failure results also exit nonzero. Packaging,
+      portable CI calibration receipts and current-doc cleanup are recorded in
+      `docs/evidence/maintenance_20260906/README.md`. No locked attempt replaced.
 - [ ] **Prototype audited patient joins and consistent endpoint projection.**
       Use 21302287's explicit patient-ID lists and 30403697's two variant
       columns; retain per-person genotype, phenotype/timepoint and unknowns,

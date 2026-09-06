@@ -1,6 +1,6 @@
 # GeneVariantFetcher — Quick Start Guide
 
-Get GVF running in 5 minutes and extract genetic variants from the literature.
+Install GVF and run extraction against gene-focused literature.
 This is the canonical local setup and first-run guide; README and agent
 handoff files should link here instead of duplicating install or `.env` blocks.
 
@@ -42,11 +42,17 @@ Run this after installation and after rebuilding the virtual environment:
 
 ```bash
 .venv/bin/gvf --help
+.venv/bin/python -m cli --help
 ```
 
 A repository-root test run can import local source even when the console entry
 point is no longer installed, so green unit tests alone do not prove that the
 editable install survived a virtual-environment rebuild.
+
+If `gvf` is missing, restore the editable install with
+`.venv/bin/python -m pip install -e ".[browser,dev]"`. A uv-managed environment
+may omit pip; use `uv pip install --python .venv/bin/python -e ".[browser,dev]"`
+in that case. The console entry is `cli:app`; do not point it at `cli:main`.
 
 ## Configuration
 
@@ -56,13 +62,14 @@ Create a `.env` file in the repository root:
 # Required
 NCBI_EMAIL=brett.kroncke@gmail.com
 
-# Required: select a provider and configure its key. Anthropic is the shipped
-# default; set MODEL_PROVIDER=azure or openai when using those providers.
-MODEL_PROVIDER=anthropic
-ANTHROPIC_API_KEY=your-anthropic-key
-# MODEL_PROVIDER=azure
-# AZURE_AI_API_KEY=your-azure-ai-key
-# AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+# Required: select a provider and configure its matching credentials.
+# Azure is preferred for this workstation's recurring allocation.
+MODEL_PROVIDER=azure
+AZURE_AI_API_KEY=your-azure-ai-key
+AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+# Alternative (the shipped default when MODEL_PROVIDER is unset):
+# MODEL_PROVIDER=anthropic
+# ANTHROPIC_API_KEY=your-anthropic-key
 # MODEL_PROVIDER=openai
 # OPENAI_API_KEY=sk-your-openai-key-here
 
@@ -175,12 +182,12 @@ into GVF's local gold SQLite cache, see
 
 ## What to Expect
 
-### Timing (KCNH2 example)
+### Illustrative timing (not a benchmark or runtime guarantee)
 
 | Stage | Typical Duration | Notes |
 |-------|-----------------|-------|
 | Paper discovery | 1-2 min | ~150-300 PMIDs found |
-| Full-text download | 5-15 min | ~30-50% success rate (normal) |
+| Full-text download | 5-15 min | Depends on access, publisher and cache |
 | Variant extraction | 10-30 min | Depends on paper count |
 | Aggregation + DB | 1-2 min | Fast |
 | **Total** | **20-50 min** | Varies by gene |
@@ -244,21 +251,21 @@ sqlite> SELECT v.protein_notation, p.total_carriers_observed, p.affected_count
         LIMIT 10;
 ```
 
-## PMC-Only Mode (No API Keys)
+## Run without live source recovery
 
-If you don't have publisher API keys, GVF still works using only PubMed Central:
+Extraction still requires a configured LLM provider. To skip the additional
+paywall/cookie recovery pass, use:
 
 ```bash
 # Works without publisher keys; skips live paywall recovery
 gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --no-source-recovery
 ```
 
-**Limitations:**
-- Only ~30% of papers have PMC full-text available
-- Supplemental materials may be limited
-- Some high-value papers behind paywalls will be skipped
-
-For comprehensive coverage, obtain at least Elsevier and Springer keys (both free for researchers).
+`--no-source-recovery` is not a strict PMC-only switch: normal harvesting can
+still use cached source and its configured free-text/publisher routes. It skips
+the later recovery pass, so inaccessible bodies or missing supplements can
+remain unresolved. Publisher coverage and credentials are described in
+[API_KEYS.md](API_KEYS.md).
 
 ## Troubleshooting
 
@@ -268,12 +275,13 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 - Some rare genes have limited literature
 
 ### "LLM API error"
-- Verify one provider key is present, for example `echo $ANTHROPIC_API_KEY`
+- Verify the selected provider's credential is present without printing it;
+  use the configuration/status checks in [TESTING.md](TESTING.md).
 - Check the selected provider account has credits or quota
 - Rate limits may require waiting
 
 ### "Few papers downloaded"
-- Normal — only ~30% of PubMed has PMC full-text
+- Inspect whether the source is absent, abstract-only, or missing a required supplement
 - Add publisher API keys for better coverage
 - Check `pmc_fulltext/paywalled_missing.csv` for inaccessible papers
 

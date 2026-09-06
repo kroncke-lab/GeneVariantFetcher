@@ -1,0 +1,175 @@
+{
+  "review_rounds": {
+    "agy_final": {
+      "reported_cost_usd": null,
+      "usage": {
+        "input_tokens": 22430,
+        "output_tokens": 26898,
+        "thinking_tokens": 26220,
+        "cache_read_tokens": 8146,
+        "total_tokens": 49328
+      },
+      "raw_sha256": "2132555d2f905e797a1dd4b45bc864f45e4e806b0f0dab463731d726123be5de"
+    },
+    "agy_initial": {
+      "reported_cost_usd": null,
+      "usage": {
+        "input_tokens": 21770,
+        "output_tokens": 7941,
+        "thinking_tokens": 6711,
+        "cache_read_tokens": 8145,
+        "total_tokens": 29711
+      },
+      "raw_sha256": "39cd85bbd5f2c0b5500837d6e7fe3dd642f879cf63eb80afb2e9b925849cc816"
+    },
+    "claude_final": {
+      "reported_cost_usd": 0.2302248,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 19647,
+        "cache_read_input_tokens": 3289,
+        "output_tokens": 13680,
+        "output_tokens_details": {
+          "thinking_tokens": 12295
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 19647,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 13680,
+            "cache_read_input_tokens": 3289,
+            "cache_creation_input_tokens": 19647,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 19647
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      },
+      "raw_sha256": "86ec8a397816da256590d5811c584e2897f99946c13f8cc071c7c279b4a8de67"
+    },
+    "claude_initial": {
+      "reported_cost_usd": 0.1743178,
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 17525,
+        "cache_read_input_tokens": 3289,
+        "output_tokens": 9010,
+        "output_tokens_details": {
+          "thinking_tokens": 6481
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 17525,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 9010,
+            "cache_read_input_tokens": 3289,
+            "cache_creation_input_tokens": 17525,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 17525
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      },
+      "raw_sha256": "0fcc24aedf4811ccc7b933003cfdcd88574d2c5a87ff76c4a501b4f5dbf0b90c"
+    },
+    "grok_initial": {
+      "reported_cost_usd": 0.02203846,
+      "usage": {
+        "input_tokens": 28669,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "output_tokens": 12050,
+        "reasoning_tokens": 8858,
+        "total_tokens": 40719
+      },
+      "raw_sha256": "a102c6b041b07773184d159a184c13dde2673d182b7e4a5f256153e7577ec97e"
+    },
+    "grok_final_retry": {
+      "reported_cost_usd": 0.0160157,
+      "usage": {
+        "input_tokens": 17821,
+        "cache_read_input_tokens": 256,
+        "cache_creation_input_tokens": 0,
+        "output_tokens": 9740,
+        "reasoning_tokens": 9320,
+        "total_tokens": 27817
+      },
+      "raw_sha256": "9eaf6cd4b8e33d60f1bfbf0da88891da6090aec9cb09b498ed18f51e3e9b8e8b"
+    }
+  },
+  "adjudication": [
+    {
+      "reviewer": "Claude initial",
+      "finding": "Malformed self-reported metadata raises TypeError at extraction summary",
+      "disposition": "adopted; count actual rows; archived failure reproduced and repaired on copies"
+    },
+    {
+      "reviewer": "Grok initial",
+      "finding": "Redundant typing_extensions import and misleading replacement docstrings",
+      "disposition": "adopted; standard library Annotated and precise deprecation semantics"
+    },
+    {
+      "reviewer": "Agy initial",
+      "finding": "Installed launcher absent",
+      "disposition": "confirmed; repaired editable install; pyproject cli:app was already correct"
+    },
+    {
+      "reviewer": "Grok/Agy initial",
+      "finding": "Missing module entry point or Azure model prefix",
+      "disposition": "rejected; cli/__main__.py exists and Settings getters add azure_ai/"
+    },
+    {
+      "reviewer": "Claude final",
+      "finding": "Possible missing uuid/defaultdict imports",
+      "disposition": "imports already exist; executed tests cover both, including added same-second isolation test"
+    },
+    {
+      "reviewer": "Claude final",
+      "finding": "Post-extraction bookkeeping can lose status",
+      "disposition": "not reproduced: the cited operation assigns an existing integer local variable. Preallocation errors are explicitly outside run-local status scope. No guessed directory fallback added"
+    },
+    {
+      "reviewer": "Agy final",
+      "finding": "Returned-failure RuntimeError escapes module CLI",
+      "disposition": "rejected; existing except Exception logs and calls sys.exit(1); tests execute success and failure branches"
+    },
+    {
+      "reviewer": "Agy final",
+      "finding": "Unrelated JSON arrays crash usage exporter",
+      "disposition": "adopted; type guard plus regression; real receipts re-export byte-identically"
+    },
+    {
+      "reviewer": "Grok final retry",
+      "finding": "Malformed nested llm_call fields and alternative output-token fields",
+      "disposition": "Adopt nested shape validation with explicit ValueError and no new receipt; never silently skip genuine calls. Reject token-semantic change: this exporter intentionally reproduces the historical calibrator total-minus-input convention and requires exact locked aggregates, not future provider normalization."
+    }
+  ],
+  "scope_note": "Reviewers were asked for source-only analysis. Claims labeled reproduced by a reviewer are not treated as executions; only local/CI evidence establishes that. Claude final text self-reported two attempted commands, but returned a single-turn JSON with no tool transcript or permission denial; no claimed command result was used.",
+  "anthropic_cli_reported_usd": 0.4045426,
+  "grok_completed_cli_reported_usd": 0.038054160000000004,
+  "billing_note": "CLI-reported estimates are not verified invoices. Grok timed-out request billing and Agy dollar billing are unavailable, not zero. No paper extraction API calls in maintenance."
+}

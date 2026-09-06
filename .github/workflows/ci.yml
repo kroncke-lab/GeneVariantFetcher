@@ -81,6 +81,9 @@ jobs:
           python -m venv /tmp/gvf-wheel-smoke
           /tmp/gvf-wheel-smoke/bin/python -m pip install dist/*.whl
           cd /tmp
+          /tmp/gvf-wheel-smoke/bin/gvf --help
+          /tmp/gvf-wheel-smoke/bin/gvf gvf-run --help
+          /tmp/gvf-wheel-smoke/bin/python -m cli --help
           /tmp/gvf-wheel-smoke/bin/python - <<'PY'
           import importlib.util
           from cli.institutional_preflight import probe_institutional_access

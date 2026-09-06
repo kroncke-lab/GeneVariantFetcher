@@ -1,107 +1,110 @@
-# GVF Thorough Test Prompt
+# Installation and runtime checks
 
-> **This is a paste-prompt, not an authority.** It is a smoke harness for "does
-> a fresh checkout still work end to end", and it is deliberately not wired into
-> CI. Two cautions before you trust its output:
-> - Step 7 scores the local `validation_runs/canonical_baseline/` DBs, which are
->   gitignored operator data from June 2026. They will **not** reproduce the
->   accepted lock reported in [`RECALL_STATUS.md`](RECALL_STATUS.md). Treat step
->   7 as "the scorer runs", not as a headline metric.
-> - The per-paper expectations below (for example the figure-variant count in
->   step 6) are from an older run and may drift without anything being broken.
+Use these checks after installation or maintenance. They establish that the
+software builds and runs; they do not establish extraction accuracy or promote
+a recall headline. Current metrics and acceptance rules remain in
+[RECALL_STATUS.md](RECALL_STATUS.md) and [TASKS.md](../TASKS.md).
 
-Paste this into any agent (Claude Code, codex, etc.) standing in front of a
-fresh checkout of GeneVariantFetcher. It exercises every layer of the
-pipeline and the post-extraction recovery stack, then scores against the
-gold standard.
+## Installation and static checks
 
----
+Follow [QUICKSTART.md](QUICKSTART.md) for Python 3.11+ and the editable install.
+Test both entry points: repository-root tests can pass even when the installed
+console script is missing.
 
-## Prompt
+```bash
+.venv/bin/gvf --help
+.venv/bin/gvf gvf-run --help
+.venv/bin/python -m cli --help
+.venv/bin/python -m ruff check .
+.venv/bin/python -m ruff format --check .
+```
 
-> Run a thorough test of GeneVariantFetcher end-to-end. Use the project
-> `.venv`. Do not modify CLAUDE.md, .env, or anything in `results/` that
-> isn't a generated artifact. Treat any failure as a stop-and-investigate
-> signal — don't paper over errors.
->
-> ### 1. Environment + static checks
-> 1. Verify `.venv/` exists and is Python 3.11+; if missing, stop and follow
->    `docs/QUICKSTART.md` before continuing.
-> 2. Confirm required and high-value env vars from `docs/API_KEYS.md`, including
->    `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM provider key, publisher keys, and
->    institutional full-text credentials when available.
->    Report missing ones.
-> 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
->    `.venv/bin/python -m ruff format --check .`. Report any issues.
->
-> ### 2. Unit tests
-> Run `.venv/bin/python -m pytest tests/unit -q`. Expect several hundred
-> passing (the count grows as coverage expands, so treat it as a floor, not a
-> fixed target); skips depend on optional external credentials and local tools.
-> Capture the count and any failures.
->
-> ### 3. Module-import smoke
-> Verify every importable module loads cleanly:
-> ```bash
-> .venv/bin/python -c "
-> import importlib, pkgutil
-> for pkg in ['cli', 'pipeline', 'harvesting', 'utils', 'gene_literature']:
->     for _, name, _ in pkgutil.walk_packages([pkg], prefix=pkg + '.'):
->         try: importlib.import_module(name)
->         except Exception as e: print(f'IMPORT FAIL {name}: {e}')
-> print('All modules imported')"
-> ```
-> No `IMPORT FAIL` lines should appear.
->
-> ### 4. End-to-end pipeline for KCNH2 (small)
-> Run a bounded e2e to confirm the pipeline produces a valid DB. Use
-> `--max-pmids 25` so it finishes in minutes, not hours:
-> ```bash
-> .venv/bin/python -m cli gvf-run KCNH2 --email "$NCBI_EMAIL" \
->   --output results/test_kcnh2 --max-pmids 25
-> ```
-> Expect `results/test_kcnh2/KCNH2/<timestamp>/KCNH2.db` with non-zero
-> papers and variants. Print the row counts.
->
-> ### 5. Recovery scripts smoke test
-> Each of these should import + parse `--help` without error:
-> ```bash
-> for s in ingest_clinvar ingest_pubtator; do
->   .venv/bin/python scripts/recall_recovery/$s.py --help || echo "FAIL $s"
-> done
-> .venv/bin/python scripts/recover_counts.py --help
-> .venv/bin/python scripts/extract_figure_variants.py --help
-> .venv/bin/python scripts/run_recall_suite.py --help
-> ```
->
-> ### 6. Figure-reader on existing data
-> If `corpus/KCNH2/*/*_figures/` exists, pick
-> one PMID with figures and run:
-> ```bash
-> .venv/bin/python scripts/extract_figure_variants.py \
->   --gene KCNH2 --pmid 19038855 \
->   --pmc-dir corpus/KCNH2 \
->   --out /tmp/figure_test
-> ```
-> Expect a JSON report under `/tmp/figure_test/19038855.json` with a
-> non-empty `distinct_variants` list (this PMID's Table 2 yielded 34
-> variants in our last run).
->
-> ### 7. Score against gold
-> ```bash
-> .venv/bin/python scripts/run_recall_suite.py --score --genes KCNH2 \
->   --db KCNH2=validation_runs/canonical_baseline/KCNH2.db \
->   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
-> ```
-> Compare against the current baseline recorded in
-> `docs/RECALL_STATUS.md`. Do not copy metric tables into
-> this test prompt; they drift quickly. Anything materially below the current
-> baseline is a regression for cold-start turnkey behavior.
->
-> ### 8. Report
-> Produce a single-page summary:
-> * Test step → pass/fail + 1-line note
-> * Final recall numbers vs baseline above
-> * Any modules that failed to import
-> * Any failing unit tests
-> * One paragraph: "if this branch shipped today, would you be comfortable?"
+Check dependency compatibility with `.venv/bin/python -m pip check`, or
+`uv pip check --python .venv/bin/python` in a uv environment without pip.
+Do not print API keys while checking configuration. `MODEL_PROVIDER` selects
+the provider; a credential alone does not. Set `MODEL_PROVIDER=azure` with the
+Azure credentials for this workstation's preferred route. Explicit per-stage
+model overrides still win; the shipped unset-provider default is Anthropic.
+
+Compile only tracked Python files, avoiding virtual environments and paper data:
+
+```bash
+.venv/bin/python - <<'PY'
+import py_compile
+import subprocess
+import tempfile
+from pathlib import Path
+
+paths = [p for p in subprocess.check_output(
+    ["git", "ls-files", "-z"], text=True
+).split("\0") if p.endswith(".py")]
+with tempfile.TemporaryDirectory(prefix="gvf-compile-") as target:
+    for index, path in enumerate(paths):
+        py_compile.compile(path, cfile=str(Path(target) / f"{index}.pyc"), doraise=True)
+print(f"Compiled {len(paths)} tracked Python files")
+PY
+```
+
+## Offline execution and regression checks
+
+These are the CI suites; no paid extraction is needed:
+
+```bash
+.venv/bin/python -m pytest tests/unit -q
+.venv/bin/python -m pytest tests/recall/test_bounded_e2e.py -q
+.venv/bin/python -m pytest benchmarks/curated_extraction_eval/negative_cases -q
+```
+
+The bounded end-to-end fixture exercises SQLite, scoring and recovery-driver
+wiring. The unit suite also exercises the full orchestrator with network and
+model boundaries replaced by fixtures. Report actual test counts and failures;
+there is no fixed historical count to treat as the current target.
+
+The mixed-gold cost checks read tracked predictions and SHA-pinned usage-only
+receipts in `tests/fixtures/cost_calibration_usage.json`. Full operator traces
+under ignored `results/` are not a CI prerequisite. Re-export those receipts
+only when the original calibration traces are available, using
+`benchmarks/evaluation_tiers/export_cost_usage_receipts.py`; the exporter checks
+source hashes and model totals without changing the historical cost profile.
+
+For import coverage, skip `__main__` modules, which execute CLI argument parsing.
+A smoke script must raise or exit nonzero on any import failure; printing
+“All modules imported” after catching errors is not a passing check.
+
+## Wheel and script checks
+
+Build and install a wheel into a separate test environment, then run `gvf
+--help` from outside the repository. This prevents the checkout from hiding
+missing packaged modules or data. `.github/workflows/ci.yml` contains the
+current isolated-wheel recipe and reference-resource assertions.
+
+Check supported maintenance scripts with `--help` before using them:
+
+```bash
+.venv/bin/python scripts/recall_recovery/ingest_clinvar.py --help
+.venv/bin/python scripts/recall_recovery/ingest_pubtator.py --help
+.venv/bin/python scripts/recover_counts.py --help
+.venv/bin/python scripts/extract_figure_variants.py --help
+.venv/bin/python scripts/run_recall_suite.py --help
+```
+
+## Separately bounded live validation
+
+A live extraction spends API quota and depends on publisher access. Choose a
+small explicit PMID manifest, set the provider deliberately, and use a new
+output directory. `--max-pmids` limits discovery, not a guaranteed total of model
+calls. For a fixed-source reading check, use the registered evaluation harness
+and its frozen-source manifest; do not substitute live acquisition midway.
+Verify the external `corpus/` link before any corpus job.
+
+Inspect the exit code and the exact run's `RUN_STATUS.json`, active database,
+source ledger and trace manifest. An extraction exception after allocating a
+run directory records `failed` with exit 3; a missing database records exit 4.
+A nonzero exit, absent status, or unresolved source-integrity failure must not
+be called a completed run. Healthy execution may still find zero variants or
+leave counts unknown when the source lacks evidence.
+
+Use [RECALL_REFRESH_RUNBOOK.md](RECALL_REFRESH_RUNBOOK.md) for measurement.
+Old local canonical-baseline DBs and historical figure-reader counts are not
+fresh acceptance criteria. A scorer smoke test is not a head-to-head recall
+comparison, and historical locks must remain unchanged.

@@ -9,7 +9,6 @@ from pathlib import Path
 
 import pytest
 
-from benchmarks.codex_paper_eval.db_to_predictions import trace_usage
 from benchmarks.evaluation_tiers.build_mixed_tranches import (
     digest_answer_key,
     excluded_pmids,
@@ -21,6 +20,23 @@ REPO = Path(__file__).parents[2]
 SUITE = REPO / "benchmarks" / "evaluation_tiers" / "mixed_gold"
 
 
+# Usage-only receipts are exported from the original ignored operator traces.
+# Keep their bytes pinned without rewriting historical cost/registry digests.
+USAGE_RECEIPTS = REPO / "tests/fixtures/cost_calibration_usage.json"
+USAGE_RECEIPTS_SHA256 = (
+    "3617fc19464fa32734c8b933a3a5f0c058faa6790962f01e53e5062f6c588b97"
+)
+
+
+def _usage_receipts():
+    assert sha256_file(USAGE_RECEIPTS) == USAGE_RECEIPTS_SHA256
+    receipts = json.loads(USAGE_RECEIPTS.read_text())
+    assert receipts["calibration_sha256"] == sha256_file(
+        REPO / "benchmarks/evaluation_tiers/cost_calibration.json"
+    )
+    return receipts["calibrations"]
+
+
 def _manifest_rows(path: Path) -> list[tuple[str, str]]:
     rows = []
     for raw in path.read_text().splitlines():
@@ -29,6 +45,78 @@ def _manifest_rows(path: Path) -> list[tuple[str, str]]:
             gene, pmid = line.split()
             rows.append((gene, pmid))
     return rows
+
+
+def test_usage_export_ignores_unrelated_json_but_rejects_malformed_calls(
+    tmp_path, monkeypatch
+):
+    from benchmarks.evaluation_tiers import export_cost_usage_receipts as exporter
+
+    monkeypatch.setattr(exporter, "ROOT", tmp_path)
+    traces = tmp_path / "traces"
+    traces.mkdir()
+    manifest = traces / "manifest.json"
+    manifest.write_text('{"schema_version": 1}')
+    (traces / "unrelated.json").write_text("[1, 2, 3]")
+    (traces / "call.json").write_text(
+        json.dumps(
+            {
+                "record_type": "llm_call",
+                "context": {"model": "offline"},
+                "response": {
+                    "text": "private response",
+                    "usage": {
+                        "prompt_tokens": 100,
+                        "total_tokens": 140,
+                    },
+                },
+            }
+        )
+    )
+    profile = tmp_path / "profile.json"
+    profile.write_text(
+        json.dumps(
+            {
+                "calibrations": {
+                    "GENE": {
+                        "source": "traces/manifest.json",
+                        "source_sha256": sha256_file(manifest),
+                        "attempts": 1,
+                        "models": {
+                            "offline": {
+                                "calls": 1,
+                                "input_tokens": 100,
+                                "output_tokens": 40,
+                            }
+                        },
+                    }
+                }
+            }
+        )
+    )
+    original = profile.read_bytes()
+    destination = tmp_path / "receipt.json"
+    receipt = exporter.export(profile, destination)
+    calls = receipt["calibrations"]["GENE"]["calls"]
+    assert len(calls) == 1
+    assert calls[0]["input_tokens"] == 100 and calls[0]["output_tokens"] == 40
+    assert "private response" not in destination.read_text()
+    assert profile.read_bytes() == original
+
+    # Ignore unrelated records, but never silently omit a malformed model call
+    # from the cost ledger or write a new receipt from incomplete usage.
+    valid_call = json.loads((traces / "call.json").read_text())
+    destination.unlink()
+    for field, malformed in (
+        ("response", "error text"),
+        ("context", []),
+        ("response", {"usage": [100, 140]}),
+    ):
+        (traces / "call.json").write_text(json.dumps({**valid_call, field: malformed}))
+        with pytest.raises(ValueError, match="Malformed llm_call"):
+            exporter.export(profile, destination)
+        assert not destination.exists()
+        assert profile.read_bytes() == original
 
 
 def test_exclusion_manifests_remove_whole_articles_and_bind_their_bytes(
@@ -145,16 +233,25 @@ def test_inventory_is_complete_and_costs_reconcile():
     calibration = REPO / registry["cost_model"]["calibration"]
     assert sha256_file(calibration) == registry["cost_model"]["calibration_sha256"]
     cost_profile = json.loads(calibration.read_text())
-    for observed in cost_profile["calibrations"].values():
+    receipts = _usage_receipts()
+    for gene, observed in cost_profile["calibrations"].items():
         source = REPO / observed["source"]
-        assert source.is_file()
-        assert sha256_file(source) == observed["source_sha256"]
+        if source.name == "predictions.json":
+            assert sha256_file(source) == observed["source_sha256"]
+        else:
+            # Full traces are deliberately gitignored. A fresh checkout validates
+            # the exported source identity and usage receipts, not local files.
+            receipt = receipts[gene]
+            assert receipt["source"] == observed["source"]
+            assert receipt["source_sha256"] == observed["source_sha256"]
+            assert receipt["attempts"] == observed["attempts"]
 
 
-def test_cost_calibration_matches_exact_locked_trace_usage():
+def test_cost_calibration_matches_locked_predictions_and_trace_usage_receipts():
     profile = json.loads(
         (REPO / "benchmarks" / "evaluation_tiers" / "cost_calibration.json").read_text()
     )
+    receipts = _usage_receipts()
     for gene, calibration in profile["calibrations"].items():
         source = REPO / calibration["source"]
         if source.name == "predictions.json":
@@ -172,17 +269,16 @@ def test_cost_calibration_matches_exact_locked_trace_usage():
                         }
                     )
         else:
-            usage, _ = trace_usage(source.parent)
-            actual = {
-                model: Counter(
+            actual = defaultdict(Counter)
+            for call in receipts[gene]["calls"]:
+                assert len(call["trace_sha256"]) == 64
+                actual[call["model"]].update(
                     {
-                        "calls": values["llm_calls"],
-                        "input_tokens": values["input_tokens"],
-                        "output_tokens": values["output_tokens"],
+                        "calls": 1,
+                        "input_tokens": call["input_tokens"],
+                        "output_tokens": call["output_tokens"],
                     }
                 )
-                for model, values in usage["models"].items()
-            }
         assert {model: dict(values) for model, values in actual.items()} == calibration[
             "models"
         ]

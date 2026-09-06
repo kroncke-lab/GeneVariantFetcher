@@ -1,0 +1,406 @@
+Final adversarial patch review, retry after previous request timed out at 270s. No tools, no edits, no web, no subagents. At most TWO supported defects, 400 words maximum, no speculative missing imports. Installed CLI and all 151 wheel modules run; baseline 2890 unit tests pass and 68 targeted regressions now pass. Preserve legacy wrappers, historical gold and logs. These maintenance patches fix metadata sum crashes, exact run-directory ownership, returned-failure CLI exit codes and fresh-CI usage receipts. cli/gvf_run.py already imports uuid. automated_workflow.main catches RuntimeError and exits 1. All five calibration tests pass, and the actual re-export has the identical pinned SHA. Agy's non-dict unrelated JSON guard was adopted; Claude's collision-test request adopted. Check real remaining correctness defects only.
+diff --git a/cli/__init__.py b/cli/__init__.py
+index 8414d720..4a184326 100755
+--- a/cli/__init__.py
++++ b/cli/__init__.py
+@@ -1,8 +1,8 @@
+ """
+ CLI tools for GeneVariantFetcher.
+
+-Typer commands registered below: extract, discover, reharvest, gvf-run,
+-audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
++Typer commands are registered below. Run `gvf --help` for the current command
++list, including extraction, discovery, recovery and dashboard entry points.
+
+ Internal helpers (not exposed as Typer commands):
+ - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
+@@ -12,10 +12,9 @@ Internal helpers (not exposed as Typer commands):
+
+ import os
+ from pathlib import Path
+-from typing import Optional
++from typing import Annotated, Optional
+
+ import typer
+-from typing_extensions import Annotated
+
+ from cli.automated_workflow import automated_variant_extraction_workflow
+ from cli.audit_paywalls import run_paywall_audit
+@@ -309,9 +308,8 @@ def extract_command(
+
+         reset_settings_cache()
+
+-    # Require at least one LLM provider key. ANTHROPIC_API_KEY, OPENAI_API_KEY,
+-    # or AZURE_AI_API_KEY all satisfy the pipeline since LiteLLM resolves
+-    # credentials per-call based on the configured TIER*_MODEL strings.
++    # Anthropic requires its own key here; other routes retain the general
++    # key-presence preflight. Actual credentials are resolved per model call.
+     selected_provider = (
+         (model_provider.strip().lower() if model_provider else None)
+         or os.getenv("MODEL_PROVIDER", "").strip().lower()
+@@ -365,7 +363,7 @@ def extract_command(
+         )
+
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=gene,
+             email=email,
+             output_dir=output,
+@@ -386,6 +384,8 @@ def extract_command(
+             extraction_triage_include_defer=extraction_triage_include_defer,
+             extraction_triage_max_llm=extraction_triage_max_llm,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+     except KeyboardInterrupt:
+         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
+         raise typer.Exit(1)
+diff --git a/cli/automated_workflow.py b/cli/automated_workflow.py
+index 140f54eb..81a1e34d 100755
+--- a/cli/automated_workflow.py
++++ b/cli/automated_workflow.py
+@@ -101,6 +101,7 @@ def automated_variant_extraction_workflow(
+     extraction_triage_model: str | None = None,
+     extraction_triage_include_defer: bool = False,
+     extraction_triage_max_llm: int | None = None,
++    run_directory: Path | None = None,
+ ):
+     """
+     Complete automated workflow from gene symbol to extracted variant data.
+@@ -138,6 +139,9 @@ def automated_variant_extraction_workflow(
+         extraction_triage_model: Optional LLM model for triage; defaults to Tier-2.
+         extraction_triage_include_defer: Extract triage "defer" papers as well.
+         extraction_triage_max_llm: Optional cap on LLM triage calls.
++        run_directory: Exact output directory allocated by the caller. Overrides
++            GVF_RESUME_DIR so gvf-run can attribute success or failure without
++            selecting a directory by modification time.
+     """
+     initialize_runtime()
+     setup_logging(level=logging.INFO)
+@@ -198,8 +202,10 @@ def automated_variant_extraction_workflow(
+     import os as _os
+
+     resume_dir = _os.environ.get("GVF_RESUME_DIR")
+-    if resume_dir:
+-        output_path = Path(resume_dir)
++    if run_directory is not None:
++        output_path = Path(run_directory)
++    elif resume_dir:
++        output_path = Path(resume_dir).expanduser()
+     else:
+         output_path = (
+             Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+@@ -1395,7 +1401,7 @@ Examples:
+
+     # Run workflow
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=args.gene,
+             email=args.email,
+             output_dir=args.output,
+@@ -1407,6 +1413,8 @@ Examples:
+             synonyms=args.synonyms,
+             scout_first=args.scout_first,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+
+         # Exit with success code
+         sys.exit(0)
+diff --git a/cli/gvf_run.py b/cli/gvf_run.py
+index 6fff85e8..ef1f042e 100644
+--- a/cli/gvf_run.py
++++ b/cli/gvf_run.py
+@@ -361,6 +361,14 @@ def doctor() -> dict:
+ # ---------------------------------------------------------------------------
+
+
++class ExtractionStepError(RuntimeError):
++    """Extraction failed after allocating this exact run directory."""
++
++    def __init__(self, run_dir: Path, message: str):
++        super().__init__(message)
++        self.run_dir = run_dir
++
++
+ def step_extract(
+     gene: str,
+     email: str,
+@@ -380,10 +388,6 @@ def step_extract(
+     """Run the existing automated workflow. Returns the run dir it produced."""
+     from cli.automated_workflow import automated_variant_extraction_workflow
+
+-    if resume_dir:
+-        os.environ["GVF_RESUME_DIR"] = str(resume_dir)
+-        logger.info("Resuming from %s", resume_dir)
+-
+     pmids = None
+     if pmid_file:
+         pmids = [
+@@ -397,32 +401,47 @@ def step_extract(
+     if disease:
+         logger.info("Scoping discovery + Tier-2 filter by disease: %s", disease)
+
+-    automated_variant_extraction_workflow(
+-        gene_symbol=gene,
+-        email=email,
+-        output_dir=str(output_dir),
+-        max_pmids=max_pmids,
+-        pmids=pmids,
+-        scout_first=True,
+-        disease=disease,
+-        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+-        extraction_top_n=extraction_top_n,
+-        extraction_priority_offset=extraction_priority_offset,
+-        extraction_triage_mode=extraction_triage_mode,
+-        extraction_triage_model=extraction_triage_model,
+-        extraction_triage_include_defer=extraction_triage_include_defer,
+-        extraction_triage_max_llm=extraction_triage_max_llm,
+-    )
+-
+-    # Find the run dir the workflow just created (latest timestamped child).
+-    gene_root = output_dir / gene
+-    runs = sorted(
+-        (p for p in gene_root.iterdir() if p.is_dir()),
+-        key=lambda p: p.stat().st_mtime,
+-    )
+-    if not runs:
+-        raise RuntimeError(f"No run dir under {gene_root}")
+-    return runs[-1]
++    # Allocate once and pass the exact path to the workflow. A newer sibling
++    # directory (or an explicit resume outside output_dir) must never win by mtime.
++    resume_path = resume_dir or os.environ.get("GVF_RESUME_DIR")
++    if resume_path:
++        run_dir = Path(resume_path).expanduser()
++        run_dir.mkdir(parents=True, exist_ok=True)
++        logger.info("Resuming from %s", run_dir)
++    else:
++        gene_root = Path(output_dir).expanduser() / gene
++        gene_root.mkdir(parents=True, exist_ok=True)
++        run_dir = gene_root / datetime.now().strftime("%Y%m%d_%H%M%S")
++        try:
++            run_dir.mkdir()
++        except FileExistsError:
++            # Preserve the ordinary timestamp layout while avoiding accidental
++            # resume when two invocations start in the same second.
++            run_dir = gene_root / f"{run_dir.name}_{uuid.uuid4().hex[:8]}"
++            run_dir.mkdir()
++    try:
++        summary = automated_variant_extraction_workflow(
++            run_directory=run_dir,
++            gene_symbol=gene,
++            email=email,
++            output_dir=str(output_dir),
++            max_pmids=max_pmids,
++            pmids=pmids,
++            scout_first=True,
++            disease=disease,
++            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
++            extraction_top_n=extraction_top_n,
++            extraction_priority_offset=extraction_priority_offset,
++            extraction_triage_mode=extraction_triage_mode,
++            extraction_triage_model=extraction_triage_model,
++            extraction_triage_include_defer=extraction_triage_include_defer,
++            extraction_triage_max_llm=extraction_triage_max_llm,
++        )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
++    except Exception as exc:
++        raise ExtractionStepError(run_dir, str(exc)) from exc
++    return run_dir
+
+
+ # ---------------------------------------------------------------------------
+@@ -2272,11 +2291,34 @@ def _run_gvf_pipeline(
+                 seeded_priority_count = effective_extraction_top_n
+         except Exception as e:
+             logger.exception("extract step failed: %s", e)
++            if isinstance(e, ExtractionStepError):
++                _write_run_status(
++                    e.run_dir,
++                    gene,
++                    "failed",
++                    3,
++                    [*stage_failures, f"extract: {e}"],
++                    stage_warnings,
++                    started,
++                    e.run_dir / f"{gene}.db",
++                    gold_free_run=gold_free_run,
++                )
+             return 3
+
+     db = _find_db(run_dir, gene)
+     if not db:
+         logger.error("No DB produced in %s", run_dir)
++        _write_run_status(
++            run_dir,
++            gene,
++            "failed",
++            4,
++            [*stage_failures, "extract: no database produced"],
++            stage_warnings,
++            started,
++            run_dir / f"{gene}.db",
++            gold_free_run=gold_free_run,
++        )
+         return 4
+
+     # Trace the WHOLE remaining lifecycle, not just extraction. On the
+diff --git a/pipeline/steps.py b/pipeline/steps.py
+index 8a5070cf..6bd40f4b 100755
+--- a/pipeline/steps.py
++++ b/pipeline/steps.py
+@@ -2423,11 +2423,14 @@ def extract_variants(
+         )
+     )
+
+-    # Count variants
++    # Count the actual extracted rows, not the model's self-reported metadata.
++    # Cached responses may contain a string/null/stale total_variants_found;
++    # arithmetic on that advisory field used to crash after successful extraction.
+     total_variants = sum(
+-        e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
++        sum(isinstance(row, dict) for row in (e.extracted_data.get("variants") or []))
+         for e in extractions
+-        if e.extracted_data
++        if isinstance(e.extracted_data, dict)
++        and isinstance(e.extracted_data.get("variants"), list)
+     )
+
+     return StepResult(
+
+Exporter:
+#!/usr/bin/env python3
+"""Export usage-only calibration evidence for tests on a fresh checkout.
+
+Requires the original ignored operator traces. Does not change the SHA-pinned
+cost profile or registries, and never exports prompts or response text.
+"""
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def sha(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def export(profile_path: Path, destination: Path) -> dict:
+    profile = json.loads(profile_path.read_text())
+    result = {
+        "schema_version": 1,
+        "purpose": "Portable usage-only receipts from local calibration traces; no prompts, responses, credentials or paper text. Original calibration/profile bytes remain unchanged.",
+        "calibration_sha256": sha(profile_path),
+        "calibrations": {},
+    }
+    for gene, calibration in profile["calibrations"].items():
+        source = ROOT / calibration["source"]
+        if source.name == "predictions.json":
+            continue  # These complete locked predictions are already tracked.
+        if sha(source) != calibration["source_sha256"]:
+            raise ValueError(f"Calibration source changed: {source}")
+        calls = []
+        for path in sorted(source.parent.rglob("*.json")):
+            if path == source:
+                continue
+            try:
+                record = json.loads(path.read_text())
+            except (OSError, ValueError):
+                continue
+            if not isinstance(record, dict) or record.get("record_type") != "llm_call":
+                continue
+            usage = (record.get("response") or {}).get("usage") or {}
+            input_tokens = int(
+                usage.get("prompt_tokens") or usage.get("input_tokens") or 0
+            )
+            total_tokens = int(usage.get("total_tokens") or 0)
+            calls.append(
+                {
+                    "trace_sha256": sha(path),
+                    "model": str(
+                        (record.get("context") or {}).get("model") or "unknown"
+                    ),
+                    "input_tokens": input_tokens,
+                    "output_tokens": max(total_tokens - input_tokens, 0),
+                }
+            )
+        actual = {}
+        for call in calls:
+            counts = actual.setdefault(
+                call["model"], dict(calls=0, input_tokens=0, output_tokens=0)
+            )
+            counts["calls"] += 1
+            counts["input_tokens"] += call["input_tokens"]
+            counts["output_tokens"] += call["output_tokens"]
+        if actual != calibration["models"]:
+            raise ValueError(f"Trace usage disagrees with calibration: {gene}")
+        result["calibrations"][gene] = {
+            "source": calibration["source"],
+            "source_sha256": calibration["source_sha256"],
+            "attempts": calibration["attempts"],
+            "calls": calls,
+        }
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(result, indent=2) + "\n")
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        default=Path(__file__).with_name("cost_calibration.json"),
+    )
+    parser.add_argument("--out", type=Path, required=True)
+    args = parser.parse_args()
+    result = export(args.profile, args.out)
+    print(
+        f"Exported {len(result['calibrations'])} usage receipts; SHA-256 {sha(args.out)}"
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+Workflow CLI surrounding catch:
+        settings = get_settings()
+        tier_threshold = settings.tier3_threshold
+
+    # Run workflow
+    try:
+        summary = automated_variant_extraction_workflow(
+            gene_symbol=args.gene,
+            email=args.email,
+            output_dir=args.output,
+            max_pmids=args.max_pmids,
+            max_papers_to_download=args.max_downloads,
+            tier_threshold=tier_threshold,
+            use_clinical_triage=args.clinical_triage,
+            auto_synonyms=args.auto_synonyms,
+            synonyms=args.synonyms,
+            scout_first=args.scout_first,
+        )
+        if isinstance(summary, dict) and summary.get("success") is False:
+            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+
+        # Exit with success code
+        sys.exit(0)
+
+    except KeyboardInterrupt:
+        logger.warning("\n⚠️  Workflow interrupted by user")
+        sys.exit(1)
+
+    except Exception as e:
+        logger.error(f"\n❌ Workflow failed with error: {e}", exc_info=True)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

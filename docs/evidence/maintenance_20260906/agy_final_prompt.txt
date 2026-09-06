@@ -1,0 +1,1210 @@
+Adversarial final review of GeneVariantFetcher maintenance. Source packet only; no tools, file edits, external calls or subagents. User requested Grok, Claude and Agy reviews. Return at most three concrete remaining defects, or say no blocking findings; prioritize supported correctness and CI failures over style. Historical benchmark evidence is immutable. Local baseline 2890 tests passed; all 67 targeted final regressions pass including metadata types, failed/missing DB status attributed to the exact run, untouched older runs, explicit external resume and lower-level CLI exit codes. Full final suite running. Both installed CLI helps now pass. Initial review corrections: pyproject already has gvf = cli:app, cli/__main__.py supports python -m cli; the actual missing launcher was repaired by reinstalling editable package. Azure getters already add azure_ai/ to deployment names; do not infer absent code is absent functionality. Deprecated public wrappers stay for compatibility; replacement semantics documented. The calibration fixture contains 1809 usage-only receipts exported and validated from real ignored traces; tests bind SHA plus original profile and unchanged registry; fresh CI must not depend on ignored results. No new extraction or recall claim. Python >=3.11. Review these final changes, explicitly distinguishing a reproduced defect from a suggestion.
+Focus on runnable instructions and claims, and identify any severe runtime issue.
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 7cf20242..fb13dba6 100755
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -81,6 +81,9 @@ jobs:
+           python -m venv /tmp/gvf-wheel-smoke
+           /tmp/gvf-wheel-smoke/bin/python -m pip install dist/*.whl
+           cd /tmp
++          /tmp/gvf-wheel-smoke/bin/gvf --help
++          /tmp/gvf-wheel-smoke/bin/gvf gvf-run --help
++          /tmp/gvf-wheel-smoke/bin/python -m cli --help
+           /tmp/gvf-wheel-smoke/bin/python - <<'PY'
+           import importlib.util
+           from cli.institutional_preflight import probe_institutional_access
+diff --git a/cli/__init__.py b/cli/__init__.py
+index 8414d720..4a184326 100755
+--- a/cli/__init__.py
++++ b/cli/__init__.py
+@@ -1,8 +1,8 @@
+ """
+ CLI tools for GeneVariantFetcher.
+
+-Typer commands registered below: extract, discover, reharvest, gvf-run,
+-audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
++Typer commands are registered below. Run `gvf --help` for the current command
++list, including extraction, discovery, recovery and dashboard entry points.
+
+ Internal helpers (not exposed as Typer commands):
+ - automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
+@@ -12,10 +12,9 @@ Internal helpers (not exposed as Typer commands):
+
+ import os
+ from pathlib import Path
+-from typing import Optional
++from typing import Annotated, Optional
+
+ import typer
+-from typing_extensions import Annotated
+
+ from cli.automated_workflow import automated_variant_extraction_workflow
+ from cli.audit_paywalls import run_paywall_audit
+@@ -309,9 +308,8 @@ def extract_command(
+
+         reset_settings_cache()
+
+-    # Require at least one LLM provider key. ANTHROPIC_API_KEY, OPENAI_API_KEY,
+-    # or AZURE_AI_API_KEY all satisfy the pipeline since LiteLLM resolves
+-    # credentials per-call based on the configured TIER*_MODEL strings.
++    # Anthropic requires its own key here; other routes retain the general
++    # key-presence preflight. Actual credentials are resolved per model call.
+     selected_provider = (
+         (model_provider.strip().lower() if model_provider else None)
+         or os.getenv("MODEL_PROVIDER", "").strip().lower()
+@@ -365,7 +363,7 @@ def extract_command(
+         )
+
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=gene,
+             email=email,
+             output_dir=output,
+@@ -386,6 +384,8 @@ def extract_command(
+             extraction_triage_include_defer=extraction_triage_include_defer,
+             extraction_triage_max_llm=extraction_triage_max_llm,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+     except KeyboardInterrupt:
+         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
+         raise typer.Exit(1)
+diff --git a/cli/automated_workflow.py b/cli/automated_workflow.py
+index 140f54eb..81a1e34d 100755
+--- a/cli/automated_workflow.py
++++ b/cli/automated_workflow.py
+@@ -101,6 +101,7 @@ def automated_variant_extraction_workflow(
+     extraction_triage_model: str | None = None,
+     extraction_triage_include_defer: bool = False,
+     extraction_triage_max_llm: int | None = None,
++    run_directory: Path | None = None,
+ ):
+     """
+     Complete automated workflow from gene symbol to extracted variant data.
+@@ -138,6 +139,9 @@ def automated_variant_extraction_workflow(
+         extraction_triage_model: Optional LLM model for triage; defaults to Tier-2.
+         extraction_triage_include_defer: Extract triage "defer" papers as well.
+         extraction_triage_max_llm: Optional cap on LLM triage calls.
++        run_directory: Exact output directory allocated by the caller. Overrides
++            GVF_RESUME_DIR so gvf-run can attribute success or failure without
++            selecting a directory by modification time.
+     """
+     initialize_runtime()
+     setup_logging(level=logging.INFO)
+@@ -198,8 +202,10 @@ def automated_variant_extraction_workflow(
+     import os as _os
+
+     resume_dir = _os.environ.get("GVF_RESUME_DIR")
+-    if resume_dir:
+-        output_path = Path(resume_dir)
++    if run_directory is not None:
++        output_path = Path(run_directory)
++    elif resume_dir:
++        output_path = Path(resume_dir).expanduser()
+     else:
+         output_path = (
+             Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+@@ -1395,7 +1401,7 @@ Examples:
+
+     # Run workflow
+     try:
+-        automated_variant_extraction_workflow(
++        summary = automated_variant_extraction_workflow(
+             gene_symbol=args.gene,
+             email=args.email,
+             output_dir=args.output,
+@@ -1407,6 +1413,8 @@ Examples:
+             synonyms=args.synonyms,
+             scout_first=args.scout_first,
+         )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
+
+         # Exit with success code
+         sys.exit(0)
+diff --git a/cli/gvf_run.py b/cli/gvf_run.py
+index 6fff85e8..ef1f042e 100644
+--- a/cli/gvf_run.py
++++ b/cli/gvf_run.py
+@@ -361,6 +361,14 @@ def doctor() -> dict:
+ # ---------------------------------------------------------------------------
+
+
++class ExtractionStepError(RuntimeError):
++    """Extraction failed after allocating this exact run directory."""
++
++    def __init__(self, run_dir: Path, message: str):
++        super().__init__(message)
++        self.run_dir = run_dir
++
++
+ def step_extract(
+     gene: str,
+     email: str,
+@@ -380,10 +388,6 @@ def step_extract(
+     """Run the existing automated workflow. Returns the run dir it produced."""
+     from cli.automated_workflow import automated_variant_extraction_workflow
+
+-    if resume_dir:
+-        os.environ["GVF_RESUME_DIR"] = str(resume_dir)
+-        logger.info("Resuming from %s", resume_dir)
+-
+     pmids = None
+     if pmid_file:
+         pmids = [
+@@ -397,32 +401,47 @@ def step_extract(
+     if disease:
+         logger.info("Scoping discovery + Tier-2 filter by disease: %s", disease)
+
+-    automated_variant_extraction_workflow(
+-        gene_symbol=gene,
+-        email=email,
+-        output_dir=str(output_dir),
+-        max_pmids=max_pmids,
+-        pmids=pmids,
+-        scout_first=True,
+-        disease=disease,
+-        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+-        extraction_top_n=extraction_top_n,
+-        extraction_priority_offset=extraction_priority_offset,
+-        extraction_triage_mode=extraction_triage_mode,
+-        extraction_triage_model=extraction_triage_model,
+-        extraction_triage_include_defer=extraction_triage_include_defer,
+-        extraction_triage_max_llm=extraction_triage_max_llm,
+-    )
+-
+-    # Find the run dir the workflow just created (latest timestamped child).
+-    gene_root = output_dir / gene
+-    runs = sorted(
+-        (p for p in gene_root.iterdir() if p.is_dir()),
+-        key=lambda p: p.stat().st_mtime,
+-    )
+-    if not runs:
+-        raise RuntimeError(f"No run dir under {gene_root}")
+-    return runs[-1]
++    # Allocate once and pass the exact path to the workflow. A newer sibling
++    # directory (or an explicit resume outside output_dir) must never win by mtime.
++    resume_path = resume_dir or os.environ.get("GVF_RESUME_DIR")
++    if resume_path:
++        run_dir = Path(resume_path).expanduser()
++        run_dir.mkdir(parents=True, exist_ok=True)
++        logger.info("Resuming from %s", run_dir)
++    else:
++        gene_root = Path(output_dir).expanduser() / gene
++        gene_root.mkdir(parents=True, exist_ok=True)
++        run_dir = gene_root / datetime.now().strftime("%Y%m%d_%H%M%S")
++        try:
++            run_dir.mkdir()
++        except FileExistsError:
++            # Preserve the ordinary timestamp layout while avoiding accidental
++            # resume when two invocations start in the same second.
++            run_dir = gene_root / f"{run_dir.name}_{uuid.uuid4().hex[:8]}"
++            run_dir.mkdir()
++    try:
++        summary = automated_variant_extraction_workflow(
++            run_directory=run_dir,
++            gene_symbol=gene,
++            email=email,
++            output_dir=str(output_dir),
++            max_pmids=max_pmids,
++            pmids=pmids,
++            scout_first=True,
++            disease=disease,
++            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
++            extraction_top_n=extraction_top_n,
++            extraction_priority_offset=extraction_priority_offset,
++            extraction_triage_mode=extraction_triage_mode,
++            extraction_triage_model=extraction_triage_model,
++            extraction_triage_include_defer=extraction_triage_include_defer,
++            extraction_triage_max_llm=extraction_triage_max_llm,
++        )
++        if isinstance(summary, dict) and summary.get("success") is False:
++            raise RuntimeError(str(summary.get("error") or "workflow reported failure"))
++    except Exception as exc:
++        raise ExtractionStepError(run_dir, str(exc)) from exc
++    return run_dir
+
+
+ # ---------------------------------------------------------------------------
+@@ -2272,11 +2291,34 @@ def _run_gvf_pipeline(
+                 seeded_priority_count = effective_extraction_top_n
+         except Exception as e:
+             logger.exception("extract step failed: %s", e)
++            if isinstance(e, ExtractionStepError):
++                _write_run_status(
++                    e.run_dir,
++                    gene,
++                    "failed",
++                    3,
++                    [*stage_failures, f"extract: {e}"],
++                    stage_warnings,
++                    started,
++                    e.run_dir / f"{gene}.db",
++                    gold_free_run=gold_free_run,
++                )
+             return 3
+
+     db = _find_db(run_dir, gene)
+     if not db:
+         logger.error("No DB produced in %s", run_dir)
++        _write_run_status(
++            run_dir,
++            gene,
++            "failed",
++            4,
++            [*stage_failures, "extract: no database produced"],
++            stage_warnings,
++            started,
++            run_dir / f"{gene}.db",
++            gold_free_run=gold_free_run,
++        )
+         return 4
+
+     # Trace the WHOLE remaining lifecycle, not just extraction. On the
+diff --git a/config/settings.py b/config/settings.py
+index 7b749c93..f13af89c 100755
+--- a/config/settings.py
++++ b/config/settings.py
+@@ -1236,11 +1236,10 @@ class Settings(BaseSettings):
+     # Provider-aware model resolution
+     # ------------------------------------------------------------------
+     # The pipeline asks "which model should this tier use?" via these
+-    # helpers. They prefer (1) an explicit TIER*_MODEL env var, then
+-    # (2) the Anthropic default when MODEL_PROVIDER=anthropic, then
+-    # (3) the original tier field default. This keeps every tier
+-    # independently configurable while letting --model-provider switch
+-    # them in bulk.
++    # helpers. Explicit stage-model overrides win, followed by provider-specific
++    # defaults: Anthropic, Azure deployments with azure_ai/ routing, or OpenAI.
++    # A credential alone never selects its provider. Each stage remains
++    # independently configurable while --model-provider switches the defaults.
+
+     def _is_anthropic(self) -> bool:
+         return (self.model_provider or "").strip().lower() == "anthropic"
+diff --git a/pipeline/steps.py b/pipeline/steps.py
+index 8a5070cf..6bd40f4b 100755
+--- a/pipeline/steps.py
++++ b/pipeline/steps.py
+@@ -2423,11 +2423,14 @@ def extract_variants(
+         )
+     )
+
+-    # Count variants
++    # Count the actual extracted rows, not the model's self-reported metadata.
++    # Cached responses may contain a string/null/stale total_variants_found;
++    # arithmetic on that advisory field used to crash after successful extraction.
+     total_variants = sum(
+-        e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
++        sum(isinstance(row, dict) for row in (e.extracted_data.get("variants") or []))
+         for e in extractions
+-        if e.extracted_data
++        if isinstance(e.extracted_data, dict)
++        and isinstance(e.extracted_data.get("variants"), list)
+     )
+
+     return StepResult(
+diff --git a/tests/unit/test_extraction_regressions.py b/tests/unit/test_extraction_regressions.py
+index f2fcdcca..4c832ddf 100644
+--- a/tests/unit/test_extraction_regressions.py
++++ b/tests/unit/test_extraction_regressions.py
+@@ -1,5 +1,7 @@
+ import json
+
++import pytest
++
+ import pipeline.extraction as extraction_module
+ from pipeline.extraction import ExpertExtractor, _normalize_llm_extraction_shape
+ from pipeline.steps import _write_dense_table_overflow_report, extract_variants
+@@ -711,3 +713,44 @@ def test_table_hints_are_bounded_for_noisy_large_sources():
+     assert "c.1009A>G" in hints
+     assert "c.1010A>G" not in hints
+     assert "65 additional table-detected variants omitted" in hints
++
++
++@pytest.mark.parametrize("reported_total", ["2", "many", None, True, 2.5, -1, 999])
++def test_cached_extraction_counts_rows_instead_of_model_metadata(
++    tmp_path, monkeypatch, reported_total
++):
++    """Malformed cached metadata must not prevent migration of valid rows."""
++    harvest = tmp_path / "pmc_fulltext"
++    output = tmp_path / "extractions"
++    harvest.mkdir()
++    output.mkdir()
++    pmid = "12345678"
++    (harvest / f"{pmid}_FULL_CONTEXT.md").write_text(
++        ("## Results\nSCN5A R100W and G200S were identified in two families. " * 100)
++    )
++    cached = output / f"SCN5A_PMID_{pmid}.json"
++    cached.write_text(
++        json.dumps(
++            {
++                "paper_metadata": {"pmid": pmid},
++                "variants": [
++                    {"gene_symbol": "SCN5A", "protein_notation": "R100W"},
++                    {"gene_symbol": "SCN5A", "protein_notation": "G200S"},
++                ],
++                "extraction_metadata": {"total_variants_found": reported_total},
++            }
++        )
++    )
++    before = cached.read_bytes()
++
++    def must_not_extract(*args, **kwargs):
++        raise AssertionError("valid cached rows were unnecessarily re-extracted")
++
++    monkeypatch.setattr(ExpertExtractor, "extract", must_not_extract)
++    result = extract_variants(
++        harvest_dir=harvest, extraction_dir=output, gene_symbol="SCN5A", max_workers=1
++    )
++    assert result.success
++    assert result.stats["papers_extracted"] == 1
++    assert result.stats["total_variants"] == 2
++    assert cached.read_bytes() == before
+diff --git a/tests/unit/test_gvf_run_pipeline_wiring.py b/tests/unit/test_gvf_run_pipeline_wiring.py
+index eafac50e..83b3c5db 100644
+--- a/tests/unit/test_gvf_run_pipeline_wiring.py
++++ b/tests/unit/test_gvf_run_pipeline_wiring.py
+@@ -1286,3 +1286,80 @@ def test_publish_refused_when_any_required_stage_failed(tmp_path: Path, monkeypa
+     )
+     assert rc == gvf_run.EXIT_STAGE_WARNINGS
+     assert publish_calls == []
++
++
++@pytest.mark.parametrize("failure_mode", ["exception", "returned_failure", "no_db"])
++def test_real_extract_boundary_records_failure_in_its_own_run(
++    tmp_path, monkeypatch, failure_mode
++):
++    import cli.automated_workflow as workflow
++
++    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
++    monkeypatch.delenv("GVF_RESUME_DIR", raising=False)
++    old = tmp_path / "TESTGENE" / "old_success"
++    old.mkdir(parents=True)
++    old_status = old / "RUN_STATUS.json"
++    old_status.write_text('{"status": "completed"}\n')
++    (old / "TESTGENE.db").write_bytes(b"old db")
++    captured = {}
++
++    def fake_workflow(*, run_directory, **kwargs):
++        captured["run"] = run_directory
++        assert run_directory != old
++        # Reproduce the previous newest-sibling trap without touching old data.
++        os.utime(old, (2_000_000_000, 2_000_000_000))
++        if failure_mode == "exception":
++            raise TypeError("malformed extraction metadata")
++        if failure_mode == "returned_failure":
++            return {"success": False, "error": "abstract fetch failed"}
++        return {"statistics": {"papers_extracted": 0}}
++
++    monkeypatch.setattr(
++        workflow, "automated_variant_extraction_workflow", fake_workflow
++    )
++    rc = gvf_run.run_gvf_pipeline(
++        gene="TESTGENE",
++        email="test@example.org",
++        output=tmp_path,
++        source_recovery=False,
++        corpus_sync=False,
++        gold_free_run=True,
++    )
++    assert rc == (4 if failure_mode == "no_db" else 3)
++    status = json.loads((captured["run"] / "RUN_STATUS.json").read_text())
++    assert status["status"] == "failed"
++    assert status["exit_code"] == rc
++    assert status["stage_failures"]
++    assert status["gold_access"]["disabled"] is True
++    assert status["gold_access"]["gold_derived_alias_files_disabled"] is True
++    assert old_status.read_text() == '{"status": "completed"}\n'
++
++
++def test_step_extract_uses_explicit_resume_outside_output_without_leaking_env(
++    tmp_path, monkeypatch
++):
++    import cli.automated_workflow as workflow
++
++    original_env = tmp_path / "environment_resume"
++    requested = tmp_path / "explicit_resume"
++    monkeypatch.setenv("GVF_RESUME_DIR", str(original_env))
++    captured = {}
++
++    def fake_workflow(*, run_directory, **kwargs):
++        captured["run"] = run_directory
++        return {"statistics": {"papers_extracted": 0}}
++
++    monkeypatch.setattr(
++        workflow, "automated_variant_extraction_workflow", fake_workflow
++    )
++    actual = gvf_run.step_extract(
++        gene="TESTGENE",
++        email="test@example.org",
++        output_dir=tmp_path / "output",
++        pmid_file=None,
++        max_pmids=1,
++        resume_dir=requested,
++    )
++    assert actual == requested == captured["run"]
++    assert os.environ["GVF_RESUME_DIR"] == str(original_env)
++    assert not original_env.exists()
+diff --git a/tests/unit/test_mixed_gold_tranches.py b/tests/unit/test_mixed_gold_tranches.py
+index 35412c3f..ca2c26c9 100644
+--- a/tests/unit/test_mixed_gold_tranches.py
++++ b/tests/unit/test_mixed_gold_tranches.py
+@@ -9,7 +9,6 @@ from pathlib import Path
+
+ import pytest
+
+-from benchmarks.codex_paper_eval.db_to_predictions import trace_usage
+ from benchmarks.evaluation_tiers.build_mixed_tranches import (
+     digest_answer_key,
+     excluded_pmids,
+@@ -21,6 +20,23 @@ REPO = Path(__file__).parents[2]
+ SUITE = REPO / "benchmarks" / "evaluation_tiers" / "mixed_gold"
+
+
++# Usage-only receipts are exported from the original ignored operator traces.
++# Keep their bytes pinned without rewriting historical cost/registry digests.
++USAGE_RECEIPTS = REPO / "tests/fixtures/cost_calibration_usage.json"
++USAGE_RECEIPTS_SHA256 = (
++    "3617fc19464fa32734c8b933a3a5f0c058faa6790962f01e53e5062f6c588b97"
++)
++
++
++def _usage_receipts():
++    assert sha256_file(USAGE_RECEIPTS) == USAGE_RECEIPTS_SHA256
++    receipts = json.loads(USAGE_RECEIPTS.read_text())
++    assert receipts["calibration_sha256"] == sha256_file(
++        REPO / "benchmarks/evaluation_tiers/cost_calibration.json"
++    )
++    return receipts["calibrations"]
++
++
+ def _manifest_rows(path: Path) -> list[tuple[str, str]]:
+     rows = []
+     for raw in path.read_text().splitlines():
+@@ -145,16 +161,25 @@ def test_inventory_is_complete_and_costs_reconcile():
+     calibration = REPO / registry["cost_model"]["calibration"]
+     assert sha256_file(calibration) == registry["cost_model"]["calibration_sha256"]
+     cost_profile = json.loads(calibration.read_text())
+-    for observed in cost_profile["calibrations"].values():
++    receipts = _usage_receipts()
++    for gene, observed in cost_profile["calibrations"].items():
+         source = REPO / observed["source"]
+-        assert source.is_file()
+-        assert sha256_file(source) == observed["source_sha256"]
++        if source.name == "predictions.json":
++            assert sha256_file(source) == observed["source_sha256"]
++        else:
++            # Full traces are deliberately gitignored. A fresh checkout validates
++            # the exported source identity and usage receipts, not local files.
++            receipt = receipts[gene]
++            assert receipt["source"] == observed["source"]
++            assert receipt["source_sha256"] == observed["source_sha256"]
++            assert receipt["attempts"] == observed["attempts"]
+
+
+-def test_cost_calibration_matches_exact_locked_trace_usage():
++def test_cost_calibration_matches_locked_predictions_and_trace_usage_receipts():
+     profile = json.loads(
+         (REPO / "benchmarks" / "evaluation_tiers" / "cost_calibration.json").read_text()
+     )
++    receipts = _usage_receipts()
+     for gene, calibration in profile["calibrations"].items():
+         source = REPO / calibration["source"]
+         if source.name == "predictions.json":
+@@ -172,17 +197,16 @@ def test_cost_calibration_matches_exact_locked_trace_usage():
+                         }
+                     )
+         else:
+-            usage, _ = trace_usage(source.parent)
+-            actual = {
+-                model: Counter(
++            actual = defaultdict(Counter)
++            for call in receipts[gene]["calls"]:
++                assert len(call["trace_sha256"]) == 64
++                actual[call["model"]].update(
+                     {
+-                        "calls": values["llm_calls"],
+-                        "input_tokens": values["input_tokens"],
+-                        "output_tokens": values["output_tokens"],
++                        "calls": 1,
++                        "input_tokens": call["input_tokens"],
++                        "output_tokens": call["output_tokens"],
+                     }
+                 )
+-                for model, values in usage["models"].items()
+-            }
+         assert {model: dict(values) for model, values in actual.items()} == calibration[
+             "models"
+         ]
+diff --git a/utils/__init__.py b/utils/__init__.py
+index 3a0c2256..e20d35cb 100755
+--- a/utils/__init__.py
++++ b/utils/__init__.py
+@@ -3,7 +3,7 @@ Shared utility modules for GeneVariantFetcher.
+
+ This package provides common functionality used across multiple modules:
+ - llm_utils: LLM calling and response parsing
+-- html_utils: HTML parsing and PMID extraction
++- html_utils: deprecated HTML parsing compatibility helpers
+ - retry_utils: Retry configuration and decorators
+ - pubmed_utils: Unified PubMed/NCBI API access
+ - pmid_utils: PMID extraction and validation
+diff --git a/utils/html_utils.py b/utils/html_utils.py
+index a8cd7a0c..c4191a07 100755
+--- a/utils/html_utils.py
++++ b/utils/html_utils.py
+@@ -1,8 +1,9 @@
+ """
+-HTML parsing utilities for extracting PMIDs and other identifiers.
++Deprecated compatibility helpers for HTML identifiers and scraping sessions.
+
+-This module provides unified utilities for parsing HTML and extracting
+-PubMed IDs (PMIDs) from various sources including PubMind and PMC.
++Retained for external import compatibility. Production adapters own their
++source-specific identifier parsers; these broad parsers have no single public
++drop-in replacement. New HTTP callers should use utils.http_utils.get_browser_session.
+ """
+
+ import logging
+diff --git a/utils/pubmed_utils.py b/utils/pubmed_utils.py
+index 88db2d2f..af590985 100755
+--- a/utils/pubmed_utils.py
++++ b/utils/pubmed_utils.py
+@@ -109,9 +109,10 @@ def query_pubmed_for_gene(
+     email: Optional[str] = None,
+ ) -> Set[str]:
+     """
+-    Query PubMed for papers mentioning a specific gene.
++    Deprecated gene-query convenience wrapper, retained with its set return.
+
+-    This function constructs a gene-specific query that searches both
++    query_pubmed_with_entrez takes a complete query and returns a list; callers
++    needing the historical set should convert explicitly. This function constructs a gene-specific query that searches both
+     the Gene Symbol field and Title/Abstract.
+
+     Args:
+@@ -128,7 +129,7 @@ def query_pubmed_for_gene(
+     """
+     warn_deprecated(
+         "utils.pubmed_utils.query_pubmed_for_gene",
+-        "query_pubmed_with_entrez or gene_literature.discovery",
++        "query_pubmed_with_entrez (complete query, list result; convert to set if needed) or gene_literature.discovery",
+     )
+     logger.info(f"Querying PubMed for gene symbol: {gene_symbol}")
+
+diff --git a/utils/variant_normalizer.py b/utils/variant_normalizer.py
+index 7b45c8a1..bc5f9755 100644
+--- a/utils/variant_normalizer.py
++++ b/utils/variant_normalizer.py
+@@ -1567,7 +1567,7 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
+     and comparison. Normalizes to single-letter format for protein variants
+     (A561V) and c. prefix format for cDNA.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_variant()
++    Current public normalizer; supersedes the removed utils.variant_utils module.
+
+     Normalization rules applied (in order):
+     1. Strip whitespace and common prefixes
+@@ -1737,7 +1737,8 @@ def normalize_protein_variant(variant: str) -> str:
+     """
+     Normalize a protein variant to short format (e.g., A561V).
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()
++    Deprecated public compatibility helper; prefer normalize_variant().
++    The historical return behavior is retained for existing callers.
+
+     Args:
+         variant: Protein variant in any format (p.Ala561Val, A561V, etc.)
+@@ -1761,7 +1762,8 @@ def normalize_cdna_variant(variant: str) -> str:
+     """
+     Normalize a cDNA variant notation.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()
++    Deprecated public compatibility helper; prefer VariantNormalizer.normalize_cdna().
++    The historical fallback to the original input is retained here.
+
+     Args:
+         variant: cDNA variant (c.1682C>T, 1682C>T, etc.)
+@@ -1785,7 +1787,7 @@ def variants_match(v1: str, v2: str, gene_symbol: str = "KCNH2") -> bool:
+     """
+     Check if two variant notations refer to the same variant.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.variants_match()
++    Current public matcher for two variant notations.
+
+     Args:
+         v1: First variant notation
+@@ -1810,7 +1812,9 @@ def find_matching_variants(
+     """
+     Compare extracted variants against expected variants.
+
+-    DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()
++    Deprecated public compatibility helper. Use variants_match() for a pair
++    or match_variants_to_baseline() for baseline comparison; their interfaces
++    differ from this legacy three-list return value.
+
+     Args:
+         extracted: List of extracted variant strings
+
+### tests/unit/test_workflow_cli_exit.py
+1: """Workflow failures returned as data must fail both public CLI entry points."""
+2:
+3: import sys
+4:
+5: import pytest
+6: from typer.testing import CliRunner
+7:
+8: import cli
+9: import cli.automated_workflow as workflow
+10:
+11:
+12: @pytest.mark.parametrize("entrypoint", ["typer", "module"])
+13: @pytest.mark.parametrize("success", [True, False])
+14: def test_workflow_result_controls_cli_exit(monkeypatch, tmp_path, entrypoint, success):
+15:     result = {"success": success, "error": "abstract retrieval failed"}
+16:     monkeypatch.setenv("MODEL_PROVIDER", "azure")
+17:     monkeypatch.setenv("AZURE_AI_API_KEY", "offline-test-key")
+18:     monkeypatch.setattr(cli, "initialize_runtime", lambda: None)
+19:     monkeypatch.setattr(workflow, "initialize_runtime", lambda: None)
+20:     monkeypatch.setattr(cli, "has_llm_provider_key", lambda: True)
+21:     monkeypatch.setattr(workflow, "has_llm_provider_key", lambda: True)
+22:     monkeypatch.setattr(
+23:         cli, "automated_variant_extraction_workflow", lambda **kw: result
+24:     )
+25:     monkeypatch.setattr(
+26:         workflow, "automated_variant_extraction_workflow", lambda **kw: result
+27:     )
+28:     args = ["SCN5A", "--email", "ci@ncbi.test", "--output", str(tmp_path)]
+29:     if entrypoint == "typer":
+30:         outcome = CliRunner().invoke(cli.app, ["extract", *args])
+31:         assert outcome.exit_code == (0 if success else 1), outcome.output
+32:         if not success:
+33:             assert "abstract retrieval failed" in outcome.output
+34:     else:
+35:         monkeypatch.setattr(
+36:             sys, "argv", ["automated_workflow", *args, "--tier-threshold", "1"]
+37:         )
+38:         with pytest.raises(SystemExit) as exc:
+39:             workflow.main()
+40:         assert exc.value.code == (0 if success else 1)
+
+### benchmarks/evaluation_tiers/export_cost_usage_receipts.py
+1: #!/usr/bin/env python3
+2: """Export usage-only calibration evidence for tests on a fresh checkout.
+3:
+4: Requires the original ignored operator traces. Does not change the SHA-pinned
+5: cost profile or registries, and never exports prompts or response text.
+6: """
+7:
+8: import argparse
+9: import hashlib
+10: import json
+11: from pathlib import Path
+12:
+13: ROOT = Path(__file__).resolve().parents[2]
+14:
+15:
+16: def sha(path: Path) -> str:
+17:     return hashlib.sha256(path.read_bytes()).hexdigest()
+18:
+19:
+20: def export(profile_path: Path, destination: Path) -> dict:
+21:     profile = json.loads(profile_path.read_text())
+22:     result = {
+23:         "schema_version": 1,
+24:         "purpose": "Portable usage-only receipts from local calibration traces; no prompts, responses, credentials or paper text. Original calibration/profile bytes remain unchanged.",
+25:         "calibration_sha256": sha(profile_path),
+26:         "calibrations": {},
+27:     }
+28:     for gene, calibration in profile["calibrations"].items():
+29:         source = ROOT / calibration["source"]
+30:         if source.name == "predictions.json":
+31:             continue  # These complete locked predictions are already tracked.
+32:         if sha(source) != calibration["source_sha256"]:
+33:             raise ValueError(f"Calibration source changed: {source}")
+34:         calls = []
+35:         for path in sorted(source.parent.rglob("*.json")):
+36:             if path == source:
+37:                 continue
+38:             try:
+39:                 record = json.loads(path.read_text())
+40:             except (OSError, ValueError):
+41:                 continue
+42:             if record.get("record_type") != "llm_call":
+43:                 continue
+44:             usage = (record.get("response") or {}).get("usage") or {}
+45:             input_tokens = int(
+46:                 usage.get("prompt_tokens") or usage.get("input_tokens") or 0
+47:             )
+48:             total_tokens = int(usage.get("total_tokens") or 0)
+49:             calls.append(
+50:                 {
+51:                     "trace_sha256": sha(path),
+52:                     "model": str(
+53:                         (record.get("context") or {}).get("model") or "unknown"
+54:                     ),
+55:                     "input_tokens": input_tokens,
+56:                     "output_tokens": max(total_tokens - input_tokens, 0),
+57:                 }
+58:             )
+59:         actual = {}
+60:         for call in calls:
+61:             counts = actual.setdefault(
+62:                 call["model"], dict(calls=0, input_tokens=0, output_tokens=0)
+63:             )
+64:             counts["calls"] += 1
+65:             counts["input_tokens"] += call["input_tokens"]
+66:             counts["output_tokens"] += call["output_tokens"]
+67:         if actual != calibration["models"]:
+68:             raise ValueError(f"Trace usage disagrees with calibration: {gene}")
+69:         result["calibrations"][gene] = {
+70:             "source": calibration["source"],
+71:             "source_sha256": calibration["source_sha256"],
+72:             "attempts": calibration["attempts"],
+73:             "calls": calls,
+74:         }
+75:     destination.parent.mkdir(parents=True, exist_ok=True)
+76:     destination.write_text(json.dumps(result, indent=2) + "\n")
+77:     return result
+78:
+79:
+80: def main():
+81:     parser = argparse.ArgumentParser(description=__doc__)
+82:     parser.add_argument(
+83:         "--profile",
+84:         type=Path,
+85:         default=Path(__file__).with_name("cost_calibration.json"),
+86:     )
+87:     parser.add_argument("--out", type=Path, required=True)
+88:     args = parser.parse_args()
+89:     result = export(args.profile, args.out)
+90:     print(
+91:         f"Exported {len(result['calibrations'])} usage receipts; SHA-256 {sha(args.out)}"
+92:     )
+93:
+94:
+95: if __name__ == "__main__":
+96:     main()
+
+### docs/TESTING.md
+1: # Installation and runtime checks
+2:
+3: Use these checks after installation or maintenance. They establish that the
+4: software builds and runs; they do not establish extraction accuracy or promote
+5: a recall headline. Current metrics and acceptance rules remain in
+6: [RECALL_STATUS.md](RECALL_STATUS.md) and [TASKS.md](../TASKS.md).
+7:
+8: ## Installation and static checks
+9:
+10: Follow [QUICKSTART.md](QUICKSTART.md) for Python 3.11+ and the editable install.
+11: Test both entry points: repository-root tests can pass even when the installed
+12: console script is missing.
+13:
+14: ```bash
+15: .venv/bin/gvf --help
+16: .venv/bin/gvf gvf-run --help
+17: .venv/bin/python -m cli --help
+18: .venv/bin/python -m ruff check .
+19: .venv/bin/python -m ruff format --check .
+20: ```
+21:
+22: Check dependency compatibility with `.venv/bin/python -m pip check`, or
+23: `uv pip check --python .venv/bin/python` in a uv environment without pip.
+24: Do not print API keys while checking configuration. `MODEL_PROVIDER` selects
+25: the provider; a credential alone does not. Set `MODEL_PROVIDER=azure` with the
+26: Azure credentials for this workstation's preferred route. Explicit per-stage
+27: model overrides still win; the shipped unset-provider default is Anthropic.
+28:
+29: Compile only tracked Python files, avoiding virtual environments and paper data:
+30:
+31: ```bash
+32: .venv/bin/python - <<'PY'
+33: import py_compile
+34: import subprocess
+35: import tempfile
+36: from pathlib import Path
+37:
+38: paths = [p for p in subprocess.check_output(
+39:     ["git", "ls-files", "-z"], text=True
+40: ).split("\0") if p.endswith(".py")]
+41: with tempfile.TemporaryDirectory(prefix="gvf-compile-") as target:
+42:     for index, path in enumerate(paths):
+43:         py_compile.compile(path, cfile=str(Path(target) / f"{index}.pyc"), doraise=True)
+44: print(f"Compiled {len(paths)} tracked Python files")
+45: PY
+46: ```
+47:
+48: ## Offline execution and regression checks
+49:
+50: These are the CI suites; no paid extraction is needed:
+51:
+52: ```bash
+53: .venv/bin/python -m pytest tests/unit -q
+54: .venv/bin/python -m pytest tests/recall/test_bounded_e2e.py -q
+55: .venv/bin/python -m pytest benchmarks/curated_extraction_eval/negative_cases -q
+56: ```
+57:
+58: The bounded end-to-end fixture exercises SQLite, scoring and recovery-driver
+59: wiring. The unit suite also exercises the full orchestrator with network and
+60: model boundaries replaced by fixtures. Report actual test counts and failures;
+61: there is no fixed historical count to treat as the current target.
+62:
+63: The mixed-gold cost checks read tracked predictions and SHA-pinned usage-only
+64: receipts in `tests/fixtures/cost_calibration_usage.json`. Full operator traces
+65: under ignored `results/` are not a CI prerequisite. Re-export those receipts
+66: only when the original calibration traces are available, using
+67: `benchmarks/evaluation_tiers/export_cost_usage_receipts.py`; the exporter checks
+68: source hashes and model totals without changing the historical cost profile.
+69:
+70: For import coverage, skip `__main__` modules, which execute CLI argument parsing.
+71: A smoke script must raise or exit nonzero on any import failure; printing
+72: “All modules imported” after catching errors is not a passing check.
+73:
+74: ## Wheel and script checks
+75:
+76: Build and install a wheel into a separate test environment, then run `gvf
+77: --help` from outside the repository. This prevents the checkout from hiding
+78: missing packaged modules or data. `.github/workflows/ci.yml` contains the
+79: current isolated-wheel recipe and reference-resource assertions.
+80:
+81: Check supported maintenance scripts with `--help` before using them:
+82:
+83: ```bash
+84: .venv/bin/python scripts/recall_recovery/ingest_clinvar.py --help
+85: .venv/bin/python scripts/recall_recovery/ingest_pubtator.py --help
+86: .venv/bin/python scripts/recover_counts.py --help
+87: .venv/bin/python scripts/extract_figure_variants.py --help
+88: .venv/bin/python scripts/run_recall_suite.py --help
+89: ```
+90:
+91: ## Separately bounded live validation
+92:
+93: A live extraction spends API quota and depends on publisher access. Choose a
+94: small explicit PMID manifest, set the provider deliberately, and use a new
+95: output directory. `--max-pmids` limits discovery, not a guaranteed total of model
+96: calls. For a fixed-source reading check, use the registered evaluation harness
+97: and its frozen-source manifest; do not substitute live acquisition midway.
+98: Verify the external `corpus/` link before any corpus job.
+99:
+100: Inspect the exit code and the exact run's `RUN_STATUS.json`, active database,
+101: source ledger and trace manifest. An extraction exception after allocating a
+102: run directory records `failed` with exit 3; a missing database records exit 4.
+103: A nonzero exit, absent status, or unresolved source-integrity failure must not
+104: be called a completed run. Healthy execution may still find zero variants or
+105: leave counts unknown when the source lacks evidence.
+106:
+107: Use [RECALL_REFRESH_RUNBOOK.md](RECALL_REFRESH_RUNBOOK.md) for measurement.
+108: Old local canonical-baseline DBs and historical figure-reader counts are not
+109: fresh acceptance criteria. A scorer smoke test is not a head-to-head recall
+110: comparison, and historical locks must remain unchanged.
+
+### docs/QUICKSTART.md
+1: # GeneVariantFetcher — Quick Start Guide
+2:
+3: Install GVF and run extraction against gene-focused literature.
+4: This is the canonical local setup and first-run guide; README and agent
+5: handoff files should link here instead of duplicating install or `.env` blocks.
+6:
+7: Scope: use this for local installation and a first single-gene run. Use
+8: `NEW_GENE_RUNBOOK.md` for no-gold production runs, `RECALL_REFRESH_RUNBOOK.md`
+9: for existing scored runs, and `END_TO_END_RECALL_RUN.md` for portable recall
+10: runs on another machine.
+11:
+12: ## Prerequisites
+13:
+14: - **Python 3.11+** (required)
+15: - **pip** (Python package manager)
+16: - **LLM provider API key** (Anthropic, OpenAI, or Azure AI; required for extraction)
+17: - **Email address** (required for NCBI API compliance)
+18:
+19: Optional but recommended:
+20: - Publisher credentials for expanded paper access, especially
+21:   `ELSEVIER_API_KEY` plus `ELSEVIER_INSTTOKEN`
+22:
+23: ## Installation
+24:
+25: ```bash
+26: # Clone the repository
+27: git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
+28: cd GeneVariantFetcher
+29:
+30: # Create and activate a virtual environment
+31: python3 -m venv .venv
+32: source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+33:
+34: # Install GVF in development mode
+35: pip install -e ".[browser,dev]"
+36: python -m playwright install chromium
+37: ```
+38:
+39: ### Verify the installation
+40:
+41: Run this after installation and after rebuilding the virtual environment:
+42:
+43: ```bash
+44: .venv/bin/gvf --help
+45: .venv/bin/python -m cli --help
+46: ```
+47:
+48: A repository-root test run can import local source even when the console entry
+49: point is no longer installed, so green unit tests alone do not prove that the
+50: editable install survived a virtual-environment rebuild.
+51:
+52: If `gvf` is missing, restore the editable install with
+53: `.venv/bin/python -m pip install -e ".[browser,dev]"`. A uv-managed environment
+54: may omit pip; use `uv pip install --python .venv/bin/python -e ".[browser,dev]"`
+55: in that case. The console entry is `cli:app`; do not point it at `cli:main`.
+56:
+57: ## Configuration
+58:
+59: Create a `.env` file in the repository root:
+60:
+61: ```bash
+62: # Required
+63: NCBI_EMAIL=brett.kroncke@gmail.com
+64:
+65: # Required: select a provider and configure its matching credentials.
+66: # Azure is preferred for this workstation's recurring allocation.
+67: MODEL_PROVIDER=azure
+68: AZURE_AI_API_KEY=your-azure-ai-key
+69: AZURE_AI_API_BASE=https://your-resource.services.ai.azure.com
+70: # Alternative (the shipped default when MODEL_PROVIDER is unset):
+71: # MODEL_PROVIDER=anthropic
+72: # ANTHROPIC_API_KEY=your-anthropic-key
+73: # MODEL_PROVIDER=openai
+74: # OPENAI_API_KEY=sk-your-openai-key-here
+75:
+76: # Optional: Publisher APIs for better paper coverage
+77: ELSEVIER_API_KEY=your-elsevier-key
+78: ELSEVIER_INSTTOKEN=your-elsevier-insttoken
+79: SPRINGER_API_KEY=your-springer-key
+80: WILEY_API_KEY=your-wiley-key
+81:
+82: # Optional: Higher rate limits with NCBI API key
+83: NCBI_API_KEY=your-ncbi-key
+84: ```
+85:
+86: See [API_KEYS.md](API_KEYS.md) for instructions on obtaining each key.
+87:
+88: ## Local Corpus Preflight
+89:
+90: On Brett's current workstation, the repo's `corpus/` path is an absolute
+91: symlink to
+92: `/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus`. Before the first run
+93: or any corpus maintenance job:
+94:
+95: ```bash
+96: test -L corpus && test -d corpus
+97: test "$(readlink corpus)" = "/Volumes/Ezekers/ResearchData/GeneVariantFetcher/corpus"
+98: ```
+99:
+100: If a check fails, mount the APFS volume named `Ezekers` at `/Volumes/Ezekers`.
+101: Do not replace the broken symlink or create a local `corpus/`, because that
+102: would send new papers to a second corpus on the internal disk. The workstation
+103: symlink is local-only and untracked; a fresh checkout must recreate it after
+104: verifying that the external target exists.
+105:
+106: `gvf-run`'s doctor step enforces this: a **dangling** `corpus/` symlink (the drive
+107: was expected and is not attached) stops the run at Step 1 rather than silently
+108: re-fetching the whole corpus over the network. It names the volume from the link
+109: itself, so the message is correct on any machine. `--skip doctor` overrides.
+110:
+111: ### On a collaborator's machine
+112:
+113: You do **not** need Brett's drive. `corpus/` is only a cache of already-fetched
+114: source, so an **absent** `corpus/` never blocks a run — it just starts cold. Pick
+115: one of:
+116:
+117: ```bash
+118: mkdir corpus                      # plain local cache (needs the flag below)
+119: ln -s /path/to/your/storage corpus   # or your own external storage
+120: export GVF_CORPUS_DIR=/path/to/corpus   # or point at it without a symlink
+121: ```
+122:
+123: A plain local `corpus/` on the internal disk is a deliberate choice, so confirm it
+124: with `GVF_ALLOW_LOCAL_CORPUS=1` (otherwise corpus-writing jobs refuse, to protect
+125: against an accidentally-detached drive). What you actually need for a first run is
+126: API keys — see [API_KEYS.md](API_KEYS.md).
+127:
+128: ## First Run
+129:
+130: `gvf gvf-run` is the one command you need. Point it at **your own gene** — any
+131: HGNC symbol works, and no gold standard is required:
+132:
+133: ```bash
+134: gvf gvf-run <YOUR_GENE> --email brett.kroncke@gmail.com --output ./results [--disease "<phenotype>"]
+135: ```
+136:
+137: `gvf-run` runs the regular end-to-end path (discovery → triage → full-text and
+138: supplement acquisition → extraction → SQLite → recovery layers), with source
+139: recovery on by default. The `--email` flag is used for NCBI compliance; it is
+140: applied automatically, so you do not need an `NCBI_EMAIL` line in `.env` just to
+141: run (you do still need one LLM provider key).
+142:
+143: To reproduce a known result first, KCNH2 (a well-studied cardiac gene) is a good
+144: validation target:
+145:
+146: ```bash
+147: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --disease "Long QT Syndrome"
+148: ```
+149:
+150: The lower-level `gvf extract` command exists for debugging individual stages;
+151: prefer `gvf gvf-run` for normal work.
+152:
+153: ### What This Does
+154:
+155: 1. **Discovers papers** — Searches PubMind and PubMed for KCNH2-related literature
+156: 2. **Downloads full-text** — Retrieves papers from PMC and publisher APIs
+157: 3. **Extracts variants** — Uses the configured LLM provider to identify genetic variants and patient data
+158: 4. **Aggregates results** — Combines findings across papers
+159: 5. **Creates database** — Migrates everything to a queryable SQLite database
+160:
+161: ### Command Options
+162:
+163: ```bash
+164: # Limit papers for faster testing
+165: gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --max-pmids 20 --max-downloads 10
+166:
+167: # Verbose output
+168: gvf extract KCNH2 --email brett.kroncke@gmail.com --output ./results --verbose
+169:
+170: # Custom output directory
+171: gvf extract KCNH2 --email brett.kroncke@gmail.com --output /path/to/results
+172:
+173: # Publish the scored run into the Variant_Browser review DB for collaborator
+174: # adjudication (opt-in, best-effort; needs a sibling Variant_Browser checkout)
+175: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --publish-review
+176: ```
+177:
+178: To pull collaborator adjudications directly from the live Azure review database
+179: into GVF's local gold SQLite cache, see
+180: [docs/VARIANT_BROWSER_INTEGRATION.md](VARIANT_BROWSER_INTEGRATION.md)
+181: (`scripts/ingest_review_adjudications.py`).
+182:
+183: ## What to Expect
+184:
+185: ### Illustrative timing (not a benchmark or runtime guarantee)
+186:
+187: | Stage | Typical Duration | Notes |
+188: |-------|-----------------|-------|
+189: | Paper discovery | 1-2 min | ~150-300 PMIDs found |
+190: | Full-text download | 5-15 min | Depends on access, publisher and cache |
+191: | Variant extraction | 10-30 min | Depends on paper count |
+192: | Aggregation + DB | 1-2 min | Fast |
+193: | **Total** | **20-50 min** | Varies by gene |
+194:
+195: ### Output Files
+196:
+197: After completion, you'll find:
+198:
+199: ```
+200: ./results/KCNH2/<RUN_TIMESTAMP>/
+201: ├── KCNH2.db                        # ← SQLite database (query this!)
+202: ├── KCNH2_pmids.txt                 # Discovered PMIDs
+203: ├── KCNH2_penetrance_summary.json   # Aggregated penetrance data
+204: ├── KCNH2_workflow_summary.json     # Run statistics
+205: ├── extractions/                    # Per-paper extraction JSONs
+206: │   ├── KCNH2_PMID_12345678.json
+207: │   └── ...
+208: └── pmc_fulltext/                   # Downloaded papers
+209:     ├── 12345678_FULL_CONTEXT.md
+210:     └── ...
+211: ```
+212:
+213: See [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md) for detailed format specifications.
+214:
+215: ### Sample Output
+216:
+217: ```
+218: ================================================================================
+219: WORKFLOW COMPLETE!
+220: ================================================================================
+221: Gene: KCNH2
+222: PMIDs discovered: 245
+223: Papers downloaded: 78
+224: Papers with extractions: 72
+225: Total variants found: 234
+226: Success rate: 32%
+227:
+228: SQLite database: ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
+229: ================================================================================
+230: ```
+231:
+232: ## Quick Database Queries
+233:
+234: ```bash
+235: # Open the database
+236: sqlite3 ./results/KCNH2/<RUN_TIMESTAMP>/KCNH2.db
+237:
+238: # Count variants
+239: sqlite> SELECT COUNT(*) FROM variants;
+240:
+241: # List pathogenic variants
+242: sqlite> SELECT protein_notation, clinical_significance
+243:         FROM variants
+244:         WHERE clinical_significance = 'pathogenic';
+245:
+246: # Get penetrance data
+247: sqlite> SELECT v.protein_notation, p.total_carriers_observed, p.affected_count
+248:         FROM variants v
+249:         JOIN penetrance_data p ON v.variant_id = p.variant_id
+250:         ORDER BY p.total_carriers_observed DESC
+251:         LIMIT 10;
+252: ```
+253:
+254: ## Run without live source recovery
+255:
+256: Extraction still requires a configured LLM provider. To skip the additional
+257: paywall/cookie recovery pass, use:
+258:
+259: ```bash
+260: # Works without publisher keys; skips live paywall recovery
+261: gvf gvf-run KCNH2 --email brett.kroncke@gmail.com --output ./results --no-source-recovery
+262: ```
+263:
+264: `--no-source-recovery` is not a strict PMC-only switch: normal harvesting can
+265: still use cached source and its configured free-text/publisher routes. It skips
+266: the later recovery pass, so inaccessible bodies or missing supplements can
+267: remain unresolved. Publisher coverage and credentials are described in
+268: [API_KEYS.md](API_KEYS.md).
+269:
+270: ## Troubleshooting
+271:
+272: ### "No PMIDs found"
+273: - Check your internet connection
+274: - Verify the gene symbol is correct
+275: - Some rare genes have limited literature
+276:
+277: ### "LLM API error"
+278: - Verify the selected provider's credential is present without printing it;
+279:   use the configuration/status checks in [TESTING.md](TESTING.md).
+280: - Check the selected provider account has credits or quota
+281: - Rate limits may require waiting
+282:
+283: ### "Few papers downloaded"
+284: - Inspect whether the source is absent, abstract-only, or missing a required supplement
+285: - Add publisher API keys for better coverage
+286: - Check `pmc_fulltext/paywalled_missing.csv` for inaccessible papers
+287:
+288: ### Extraction seems slow
+289: - LLM calls take time; this is normal
+290: - For a bounded fetch test, run `gvf extract ... --output ./results --max-downloads 10`; `gvf-run` does not expose that limit
+291: - Check `--verbose` output for progress
+292:
+293: ## Next Steps
+294:
+295: - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Understand the pipeline
+296: - **[API_KEYS.md](API_KEYS.md)** — Get publisher API keys
+297: - **[OUTPUT_FORMAT.md](OUTPUT_FORMAT.md)** — Work with results
+298: - **[RECALL_STATUS.md](RECALL_STATUS.md)** — Current recall metrics and blockers
+299:
+300: ## Getting Help
+301:
+302: 1. Check the troubleshooting section above
+303: 2. Review error logs in `{gene}_workflow.log`
+304: 3. Open an issue on GitHub with:
+305:    - Gene symbol you tried
+306:    - Error message
+307:    - Contents of `{gene}_workflow.log`
