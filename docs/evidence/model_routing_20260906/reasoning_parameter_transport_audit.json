@@ -1,0 +1,130 @@
+[
+  {
+    "model": "gpt-6-astra",
+    "requested_effort": "medium",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "gpt-6-astra",
+    "requested_effort": "medium",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {},
+      "reasoning_effort": "medium"
+    }
+  },
+  {
+    "model": "gpt-6-astra",
+    "requested_effort": "high",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "gpt-6-astra",
+    "requested_effort": "high",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {},
+      "reasoning_effort": "high"
+    }
+  },
+  {
+    "model": "grok-4.6",
+    "requested_effort": "medium",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "grok-4.6",
+    "requested_effort": "medium",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {},
+      "reasoning_effort": "medium"
+    }
+  },
+  {
+    "model": "grok-4.6",
+    "requested_effort": "high",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "grok-4.6",
+    "requested_effort": "high",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "extra_body": {},
+      "reasoning_effort": "high"
+    }
+  },
+  {
+    "model": "gpt-5.6-sol",
+    "requested_effort": "medium",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "reasoning_effort": "medium",
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "gpt-5.6-sol",
+    "requested_effort": "medium",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "reasoning_effort": "medium",
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "gpt-5.6-sol",
+    "requested_effort": "high",
+    "explicit_allowlist": false,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "reasoning_effort": "high",
+      "extra_body": {}
+    }
+  },
+  {
+    "model": "gpt-5.6-sol",
+    "requested_effort": "high",
+    "explicit_allowlist": true,
+    "litellm_dispatch_parameters": {
+      "stream": false,
+      "max_completion_tokens": 32000,
+      "reasoning_effort": "high",
+      "extra_body": {}
+    }
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "context": {
+    "gene": "MYBPC3",
+    "pmid": "20433692",
+    "stage": "representation_route"
+  },
+  "event": {
+    "data": {
+      "method": "fixed source-only text; no model routing decision",
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "MYBPC3",
+        "missing_fields": 36,
+        "pmid": "20433692",
+        "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976",
+        "triggered": true
+      }
+    },
+    "type": "representation_route"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:38:08.164818+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788705488164832000-000002-b83a8464"
+}

@@ -1,0 +1,51 @@
+{
+  "http_status": 200,
+  "body": {
+    "id": "3e057e84-ad0f-4cb1-a44d-4c3ec167b0ac",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"ok\":true}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 12,
+      "completion_tokens": 5,
+      "total_tokens": 165,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 12,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 148,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788702460,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly JSON {\"ok\":true}."
+      }
+    ],
+    "max_tokens": 1024
+  },
+  "probe": "grok_chat_no_effort",
+  "elapsed_seconds": 31.398056208970957
+}

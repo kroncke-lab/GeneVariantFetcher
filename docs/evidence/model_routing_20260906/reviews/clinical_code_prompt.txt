@@ -1,0 +1,560 @@
+Review this not-yet-run clinical reader implementation adversarially. Production model comparison is currently running frozen, no scores inspected. No tools, edits, web, subagents or experiments. Max 600 words. Find concrete correctness, attribution, acceptance or accounting bugs. Do not invent requirements or use gold. Baseline source is fixed. The new reader sees source only; only explicit current-study source-validated null fills are accepted, raw fills are diagnostic. Existing production validators are not relaxed. Identify whether source/count claims and locking are honest.
+
+FILE docs/evidence/model_routing_20260906/PLAN.md
+# New Azure readers and selective clinical reading: opened calibration
+
+Started 2026-09-06. The user authorizes up to approximately $150 in extraction
+API spend for this test; CLI consultation costs are excluded. This is a new
+envelope, separate from previous campaign ledgers. Azure is preferred; no
+Anthropic extraction is planned. This document records the experiment, while
+TASKS.md remains the active checklist.
+
+The question is whether Grok 4.6 should replace Grok 4.3 as primary reader and
+whether Astra should read independently on papers with unresolved clinical
+counts, or should itself be the primary reader. New deployment access is not
+evidence of an accuracy gain.
+
+1. Repair model compatibility and run tiny deployment probes. Preserve older
+   routes/defaults. Record actual request parameters, model identifiers and
+   usage. Reserve $5 including failed-call uncertainty.
+2. Freeze 12 already-opened gene-paper attempts: RYR2 18929323, SCN5A 30059973,
+   MYBPC3 20433692, MYBPC3 21302287, RYR2 30403697, SCN5A 20031634,
+   RYR2 19398417, RYR2 25435091, SCN5A 32533946, SCN5A 25163546,
+   RYR2 25814417 and SCN5A 20129283. These include omissions, joins, exact
+   controls, legitimately unavailable counts and endpoint/unit disputes.
+   Bind actual previously acquired components and their hashes before calls.
+   Do not tune prompts with gold values; exposure to the earlier paper audit
+   makes this calibration, not a blinded population sample.
+3. Run the current production extraction path with Grok 4.3, Grok 4.6 and
+   Astra as the primary model, keeping source and other stages fixed. Record
+   which papers actually reach the primary model; deterministic shortcuts
+   are part of the current workflow, not evidence that models are equivalent.
+   Grok 4.6 and Astra request high reasoning; the older deployment retains its
+   current default. This compares model configurations, not weights alone.
+   Initial reservation: $60.
+4. Test a bounded independent Astra clinical reading on source-bearing papers
+   where the Grok 4.6 result is incomplete. The independent reading does not
+   receive Grok's proposed answers or the gold. Preserve raw proposals and
+   separate source-validated accepted fields from rejected/unresolved fields.
+   Do not accept a count because two models agree. Record the trigger and
+   compare with the ordinary Grok result. Initial reservation: $35.
+5. Repeat the useful contrasts on the same fixed panel, or extend to another
+   opened panel if failure mechanisms justify it. Reserve $35 for this and
+   $15 for retries/uncertainty. Do not spend just to exhaust the envelope.
+
+The roster and initial design are fixed before new paper outputs. Any revision
+must be dated and state which outputs were already inspected. No original
+source, gold, lock or scored output may be overwritten. All arms are locked
+before scoring. Use the established paper-derived trusted projection and
+scoring/figure tools; report raw-reader output as a separate diagnostic.
+
+Report identity TP/FP/FN, positive-reference count coverage, exact supplied
+counts, count error including omissions, wrong supplied counts, per-paper
+changes, endpoint disputes, API usage and cost per additional correct count.
+Report the SCN5A 20129283 influence separately without replacing official
+scores. Preserve cardiac/manual versus MYBPC3 reference provenance. A useful
+small-panel result does not promote defaults, reset the existing gates or
+authorize an unearned confirmation claim on tranche 04.
+
+Pricing uses explicit, dated token-rate proxies until provider charges can be
+reconciled; unknown or failed-call usage is never silently zero. Reserve a
+conservative cost before dispatch and record all returned usage, including
+reasoning, retries and operational failures. CLI advice is adversarial input,
+not independent human validation.
+
+Pre-paper amendment (2026-09-06, after tiny deployment probes only): Astra's
+Chat Completions endpoint requires `max_completion_tokens`; compatibility now
+translates GVF's legacy cap. Grok 4.6's first two Azure probes timed out; run
+baseline and Astra while checking that endpoint, and omit a failed deployment
+from accuracy comparisons. If Grok remains unavailable, use the current Grok
+4.3 baseline to trigger the independent clinical reader. This is an operational
+fallback and cannot establish a Grok 4.6 accuracy result.
+
+Pin non-primary adjudication and verification to Sol `medium` in every arm to
+prevent inherited primary reasoning from confounding them; the previous default
+was unspecified, so the fresh Grok 4.3 arm is a controlled comparator, not a
+byte-identical replay of historical defaults. Tier 2 Luna retains `xhigh`.
+Request 32,000 primary output tokens; current per-model clamping gives Grok
+15,000 and Astra 32,000. Record actual request caps and truncations. Vision stays
+Sol with its existing provider-default effort. Count recovery stays off.
+
+The additive clinical-reader experiment only fills missing count fields on
+identities already retained by the baseline's trusted paper projection.
+Independently proposed values for already-filled fields are retained as
+contradictions for audit, never silently overwritten. The reader receives the
+frozen paper text and target gene only, no earlier answer, variant list, or gold.
+Require a verbatim source quote and variant/cohort/person-unit binding; preserve
+rejected proposals separately. A table cell spanning variants, allele-frequency
+number, assay count, or ambiguous cohort total cannot become a patient count.
+
+Operational update before Grok 4.6 paper outputs: all three configurations passed
+exact shared-client probes, including Grok 4.6 high reasoning with JSON output.
+The original three-arm design proceeds. Early timeouts remain operational
+failures in the smoke receipts, not paper-level false negatives.
+
+Accounting update during the first baseline/Astra calls: Azure Grok Chat
+Completions reports reasoning separately from `completion_tokens` (unlike the
+Astra response). The frozen hook's returned-usage proxy is conservatively
+reconciled once per second using `max(completion_tokens, total_tokens -
+prompt_tokens)` for Grok, retaining all raw counters. A further $20 uncertainty
+reserve stays inside the $150 envelope during these runs. The normalizer is
+`reconcile_live_budget.py`; neither model input nor extraction runtime changes.
+
+Independent-reader trigger and raw diagnostic frozen while production runs were
+in progress, before scores or trusted paper projections were inspected: trigger
+when the chosen baseline retains at least one identity with a null count and its
+frozen source contains a clinical person/count signal (`carrier`, `patient`,
+`proband`, `symptomatic`, `asymptomatic`, `affected`, `unaffected`). This permissive
+trigger deliberately permits negative controls; measure its firing rate and cost.
+No retained identities means no additive recovery. The independent reader can
+propose explicit counts or individually enumerated patient-row derivations.
+Only the existing literal-evidence validator's accepted, current-study, explicit
+values enter the primary additive result. Raw proposed fills are a separately
+labelled unvalidated diagnostic lane. A disagreement or ambiguous identity match
+is never resolved using gold. No validator relaxation is allowed in this test.
+
+FILE docs/evidence/model_routing_20260906/clinical_reader.py
+"""Independent Astra reading plus a source-validated, missing-field-only overlay.
+
+This campaign tool never updates production databases. Its two diagnostic lanes
+are locked and scored externally; the raw lane is explicitly unvalidated.
+"""
+
+import argparse
+import copy
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from campaign import ROOT, GOLD, HARNESS, PYTHON, FROZEN, environment, run, run_dir, sha
+
+sys.path.insert(0, str(ROOT))
+from budget_guard import install
+from pipeline.count_recovery import (
+    PaperGap,
+    VariantGap,
+    validate_paper_response,
+    result_to_dict,
+    _notation_matches_target,
+)
+from utils.llm_trace import (
+    configure_llm_tracing,
+    llm_trace_scope,
+    record_trace_event,
+    last_llm_trace,
+)
+from utils.llm_utils import litellm_completion, parse_llm_json_response
+
+FIELDS = ("carriers", "affected", "unaffected")
+SIGNAL = re.compile(
+    r"\b(?:carriers?|patients?|probands?|symptomatic|asymptomatic|affected|unaffected)\b",
+    re.I,
+)
+
+
+def event(stage, data):
+    return record_trace_event(stage, data, stage=stage)
+
+
+def identity_parts(notation):
+    # Match existing explicit HGVS components only; never infer a protein from a codon.
+    parts = re.findall(r"(?:p\.|c\.)[^\s]+", notation)
+    return tuple(parts or [notation])
+
+
+def reconcile(paper, payload, source):
+    rows = copy.deepcopy(paper["variants"])
+    raw_rows = copy.deepcopy(rows)
+    targets = [
+        VariantGap(
+            i,
+            row["variant"],
+            [f for f in FIELDS if row.get(f) is None],
+            parts=identity_parts(row["variant"]),
+            paper_derived=True,
+        )
+        for i, row in enumerate(rows)
+    ]
+    audit = {"accepted": [], "rejected": [], "contradictions": [], "raw_fills": []}
+    candidates = {}
+    for proposal in payload.get("variants", []):
+        if not isinstance(proposal, dict):
+            continue
+        notation = str(proposal.get("variant") or "")
+        matched = [
+            v for v in targets if _notation_matches_target(notation, v, paper["gene"])
+        ]
+        if len(matched) != 1:
+            audit["rejected"].append(
+                {
+                    "variant": notation,
+                    "reason": "no unique retained baseline identity",
+                    "matching_rows": len(matched),
+                    "proposal": proposal,
+                }
+            )
+            continue
+        target = matched[0]
+        for field in FIELDS:
+            value = proposal.get(field)
+            if value is None:
+                continue
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                audit["rejected"].append(
+                    {
+                        "variant": notation,
+                        "field": field,
+                        "value": value,
+                        "reason": "invalid count",
+                    }
+                )
+                continue
+            evidence = proposal.get(field + "_evidence") or {}
+            if not isinstance(evidence, dict):
+                evidence = {}
+            candidate = {
+                "variant": target.notation,
+                field: value,
+                "quote": evidence.get("quote"),
+                "count_role": evidence.get("count_role"),
+                "evidence_locator": evidence.get("evidence_locator"),
+            }
+            item = {
+                "target": target.variant_id,
+                "variant": notation,
+                "field": field,
+                "value": value,
+                "entry": candidate,
+                "evidence": evidence,
+            }
+            if field not in target.missing:
+                if rows[target.variant_id].get(field) != value:
+                    audit["contradictions"].append(item)
+                continue
+            candidates.setdefault((target.variant_id, field), []).append(item)
+    for (idx, field), items in candidates.items():
+        values = {x["value"] for x in items}
+        if len(values) != 1:
+            audit["rejected"].append(
+                {
+                    "variant": targets[idx].notation,
+                    "field": field,
+                    "reason": "conflicting independent proposals",
+                    "proposals": items,
+                }
+            )
+            continue
+        item = items[0]
+        raw_rows[idx][field] = item["value"]
+        audit["raw_fills"].append(item)
+        evidence = item["evidence"]
+        if (
+            evidence.get("basis") != "explicit"
+            or evidence.get("scope") != "current_study"
+        ):
+            audit["rejected"].append(
+                dict(
+                    item,
+                    reason="acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+                )
+            )
+            continue
+        result = validate_paper_response(
+            PaperGap(paper["gene"], str(paper["pmid"]), [targets[idx]]),
+            [item["entry"]],
+            source,
+        )
+        detail = result_to_dict(result)
+        audit["accepted"].extend(detail["accepted"])
+        audit["rejected"].extend(detail["rejected"])
+        for accepted in result.accepted:
+            rows[accepted.variant_id][accepted.field] = accepted.value
+            rows[accepted.variant_id]["evidence"] += (
+                "\nIndependent Astra evidence: " + accepted.quote
+            )
+    # The source validator checks individual fields. This overlay additionally
+    # refuses new fills that contradict the retained per-variant person total.
+    inconsistent = set()
+    for index, row in enumerate(rows):
+        carrier = row.get("carriers")
+        supplied = [row.get(f) for f in ("affected", "unaffected")]
+        if carrier is not None and (
+            any(v is not None and v > carrier for v in supplied)
+            or (all(v is not None for v in supplied) and sum(supplied) > carrier)
+        ):
+            inconsistent.add(index)
+    retained = []
+    for fill in audit["accepted"]:
+        index = fill["variant_id"]
+        if index in inconsistent:
+            rows[index][fill["field"]] = paper["variants"][index].get(fill["field"])
+            audit["rejected"].append(
+                dict(fill, reason="new fill conflicts with retained person counts")
+            )
+        else:
+            retained.append(fill)
+    audit["accepted"] = retained
+    for row in rows + raw_rows:
+        row["inclusion_rationale"] = (
+            "Identity retained from the locked baseline trusted paper projection."
+        )
+        row["count_rationale"] = (
+            "Original non-null fields retained; null fields changed only by the declared accepted or raw diagnostic overlay. See locked per-paper audit."
+        )
+    return rows, raw_rows, audit
+
+
+def main(base_arm):
+    base = run_dir(base_arm)
+    assert (base / "LOCK.json").is_file(), "Lock baseline before independent reading"
+    folder = HARNESS / "runs" / f"20260906_model12_{base_arm}_astra_clinical"
+    assert not folder.exists(), folder
+    run(
+        [
+            PYTHON,
+            HARNESS / "run_eval.py",
+            "prepare",
+            "--run-id",
+            folder.name,
+            "--seed",
+            "2026090601",
+            "--paper-manifest",
+            HERE / "paper_manifest.tsv",
+            "--corpus-root",
+            FROZEN,
+            "--gold-root",
+            GOLD,
+            "--eligibility-mode",
+            "variant",
+            "--minimum-chars",
+            "1000",
+        ],
+        HERE / "clinical_prepare.log",
+    )
+    selection = json.loads((folder / "selection.json").read_text())
+    baseline = json.loads((base / "predictions.json").read_text())
+    by_key = {(p["gene"], str(p["pmid"])): p for p in baseline["papers"]}
+    template = (HERE / "clinical_reader_prompt.txt").read_text()
+    triggers = []
+    for source_paper in selection["papers"]:
+        paper = by_key[(source_paper["gene"], str(source_paper["pmid"]))]
+        source = Path(source_paper["source"]).read_text()
+        missing = sum(row.get(f) is None for row in paper["variants"] for f in FIELDS)
+        triggers.append(
+            {
+                "gene": paper["gene"],
+                "pmid": paper["pmid"],
+                "missing_fields": missing,
+                "clinical_signal": bool(SIGNAL.search(source)),
+                "triggered": bool(missing and SIGNAL.search(source)),
+                "source_sha256": sha(Path(source_paper["source"])),
+            }
+        )
+    (folder / "trigger_manifest.json").write_text(json.dumps(triggers, indent=2) + "\n")
+    setup = {
+        "classification": "Opened-calibration independent clinical reader, accepted additive overlay and unvalidated raw diagnostic",
+        "base_run": str(base),
+        "base_lock_sha256": sha(base / "LOCK.json"),
+        "prompt_sha256": sha(HERE / "clinical_reader_prompt.txt"),
+        "script_sha256": sha(Path(__file__)),
+        "trigger_manifest_sha256": sha(folder / "trigger_manifest.json"),
+        "no_baseline_answers_sent_to_reader": True,
+        "no_gold_values_read_before_lock": True,
+    }
+    (folder / "analysis_setup.json").write_text(json.dumps(setup, indent=2) + "\n")
+    os.environ.update(environment("astra"))
+    os.environ["GVF_EXPERIMENT_ARM"] = base_arm + "_astra_clinical"
+    install()
+    configure_llm_tracing(folder / "llm_traces", run_id=folder.name)
+    output = copy.deepcopy(baseline)
+    output.update(
+        schema_version=2,
+        run_id=folder.name,
+        strategy="independent_astra_clinical_additive_overlay",
+        primary_score_lane="source_validated_additive",
+        comparison_score_lanes=["reader_raw_additive"],
+        papers=[],
+    )
+    output["clinical_reader_setup"] = setup
+    output["clinical_reader_audits"] = []
+    start = time.monotonic()
+    for source_paper, trigger in zip(selection["papers"], triggers):
+        gene, pmid = source_paper["gene"], str(source_paper["pmid"])
+        paper = copy.deepcopy(by_key[(gene, pmid)])
+        source = Path(source_paper["source"]).read_text()
+        t = time.monotonic()
+        with llm_trace_scope(gene=gene, pmid=pmid):
+            refs = [
+                event(
+                    "representation_route",
+                    {
+                        "method": "fixed source-only text; no model routing decision",
+                        "trigger": trigger,
+                    },
+                ),
+                event(
+                    "representation_route_decision",
+                    {
+                        "tool": "text",
+                        "source_sha256": trigger["source_sha256"],
+                        "source_chars": len(source),
+                    },
+                ),
+            ]
+            payload = {"variants": []}
+            usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+            error = None
+            if trigger["triggered"]:
+                prompt = (
+                    template.replace("{gene}", gene)
+                    .replace("{pmid}", pmid)
+                    .replace("{source}", source)
+                )
+                try:
+                    with llm_trace_scope(
+                        stage="paper_curation", component="independent_clinical_reader"
+                    ):
+                        response = litellm_completion(
+                            model="azure_ai/gpt-6-astra",
+                            messages=[{"role": "user", "content": prompt}],
+                            max_tokens=32000,
+                            reasoning_effort="high",
+                            temperature=0,
+                            response_format={"type": "json_object"},
+                            timeout=240,
+                            num_retries=0,
+                        )
+                        refs.append(last_llm_trace())
+                        usage = response.usage.model_dump()
+                        if response.choices[0].finish_reason != "stop":
+                            raise RuntimeError(
+                                "Independent response incomplete: "
+                                + str(response.choices[0].finish_reason)
+                            )
+                        payload = parse_llm_json_response(
+                            response.choices[0].message.content
+                        )
+                        if not isinstance(payload, dict):
+                            raise RuntimeError("Independent JSON was not an object")
+                except Exception as exc:
+                    error = type(exc).__name__ + ": " + str(exc)[:600]
+                    payload = {"variants": []}
+                    refs.append(
+                        event("paper_curation", {"status": "failed", "error": error})
+                    )
+            else:
+                refs.append(
+                    event(
+                        "paper_curation",
+                        {"status": "not_triggered", "retained_baseline": True},
+                    )
+                )
+            accepted, raw, audit = reconcile(paper, payload, source)
+            audit.update(gene=gene, pmid=pmid, trigger=trigger, error=error)
+            refs.append(event("paper_curation_decision", audit))
+        paper.update(
+            variants=accepted,
+            comparison_variants={"reader_raw_additive": raw},
+            tool="text",
+            tool_rationale="Frozen source-only independent reading when clinical gaps trigger; otherwise retain baseline.",
+            source_completeness=source_paper.get("source_completeness")
+            or paper.get("source_completeness"),
+            elapsed_seconds=time.monotonic() - t,
+            curation_rationale="Missing-field-only overlay; accepted values pass existing literal source validator. Original counts and identities stay fixed.",
+            llm_trace_refs=[r for r in refs if r],
+            token_usage={
+                "telemetry_available": True,
+                "input_tokens": usage.get("prompt_tokens", 0),
+                "output_tokens": usage.get("completion_tokens", 0),
+                "total_tokens": usage.get("total_tokens", 0),
+            },
+        )
+        output["papers"].append(paper)
+        output["clinical_reader_audits"].append(audit)
+        (folder / "clinical_progress.json").write_text(
+            json.dumps(output, indent=2) + "\n"
+        )
+        print(
+            gene,
+            pmid,
+            "trigger",
+            trigger["triggered"],
+            "accepted",
+            len(audit["accepted"]),
+            "raw",
+            len(audit["raw_fills"]),
+            "error",
+            error,
+            flush=True,
+        )
+    output["completed_at"] = datetime.now(timezone.utc).isoformat()
+    output["extraction_elapsed_seconds"] = time.monotonic() - start
+    output["token_usage"]["note"] = (
+        "Baseline production usage only; incremental clinical usage is exact per paper and in campaign budget ledger."
+    )
+    (folder / "predictions.json").write_text(json.dumps(output, indent=2) + "\n")
+    run(
+        [PYTHON, HARNESS / "run_eval.py", "lock", "--run-dir", folder],
+        HERE / "clinical_lock.log",
+    )
+    print("LOCKED CLINICAL", folder, flush=True)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base-arm", default="grok46", choices=["grok43", "grok46"])
+    args = parser.parse_args()
+    main(args.base_arm)
+
+FILE docs/evidence/model_routing_20260906/clinical_reader_prompt.txt
+Read the supplied biomedical article independently as a clinical evidence curator.
+Target gene: {gene}. Article PMID: {pmid}.
+
+Identify target-gene variants and the numbers of HUMAN individuals carrying each
+variant in this article's study. Read methods, results, tables, footnotes, and
+article-bound supplements together. Extract three distinct fields:
+- carriers: distinct human people reported to carry this particular variant;
+- affected: those carriers explicitly described as symptomatic/phenotype-positive;
+- unaffected: those carriers explicitly described as asymptomatic/phenotype-negative.
+A count can be absent even when the variant identity is present. Return null for
+absence or uncertainty; never convert null to zero. Zero needs explicit evidence.
+
+Preserve study, variant, and person-unit ownership. Do not substitute allele or
+chromosome counts, allele frequencies, families, electrophysiology replicates,
+animals, or the overall number screened for per-variant people. A multi-variant
+cohort total cannot be copied onto each variant. Do not treat every case in a
+disease-ascertained cohort as affected without applicable phenotype evidence.
+Do not infer unaffected by subtracting affected from carriers. Do not add
+current-study and cited prior-study cohorts, or overlapping patient lists.
+
+Prefer an explicit per-variant count. If a patient-level table uniquely identifies
+each person, a count may instead be derived by enumerating and deduplicating
+those exact patient IDs, joining tables only through explicit IDs. In that case
+label the basis individual_rows and return all IDs and the verbatim source rows
+supporting the derivation. Do not manufacture a literal quote containing a sum.
+If layout/merged cells or IDs make ownership ambiguous, return null and explain.
+
+For each non-null field provide that field's own evidence: a verbatim contiguous
+quote or exact table header plus row, source locator, count role, basis, and scope.
+The normal downstream validator may refuse a derivation even if you consider it
+valid; your job here is an independent reading, with all uncertainty retained.
+Do not seek external sources or use remembered facts about the paper.
+
+Return JSON only:
+{"variants":[{"variant":"paper's variant notation", "carriers":null,
+"affected":null,"unaffected":null,
+"carriers_evidence":{"quote":"exact source span", "count_role":"per_variant_carriers", "basis":"explicit|individual_rows|none", "scope":"current_study|prior_study|unclear", "person_ids":[], "evidence_locator":{"kind":"sentence|table_row|patient_rows", "section":"", "table":"", "column":"", "row":""}},
+"affected_evidence":{},"unaffected_evidence":{},"uncertainty":""}],
+"clinical_count_status":"present|not_reported|ambiguous", "unresolved_sources":[]}
+
+Use per_variant_affected and per_variant_unaffected for the respective field's
+role. Include only the target gene and biological variants actually in the source.
+
+--- ARTICLE SOURCE ---
+{source}

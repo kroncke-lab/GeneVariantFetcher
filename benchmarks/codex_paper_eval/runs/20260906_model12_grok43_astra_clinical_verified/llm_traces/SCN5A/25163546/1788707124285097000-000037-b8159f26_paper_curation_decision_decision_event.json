@@ -1,0 +1,566 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "25163546",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": null,
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "raw_fills": [],
+      "rejected": [
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C659A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_001160160 exon6 c.C659A p.T220N",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C659A (p.T220N)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C659A (p.T220N)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.T615G",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_001160160 exon6 c.T615G p.Y205X",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "No per-variant person or phenotype counts are reported. Supplemental Figure 1.60 reports stop/start 2 (3), which does not allocate counts between the two stop variants.",
+            "variant": "c.T615G (p.Y205X)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.T615G (p.Y205X)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C1715A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon12 c.C1715A p.A572D",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C1715A (p.A572D)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C1715A (p.A572D)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C1717T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon12 c.C1717T p.Q573X",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "No per-variant person or phenotype counts are reported. Supplemental Figure 1.60 reports stop/start 2 (3), which does not allocate counts between the two stop variants.",
+            "variant": "c.C1717T (p.Q573X)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C1717T (p.Q573X)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C1852T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon12 c.C1852T p.L618F",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C1852T (p.L618F)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C1852T (p.L618F)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.G3340A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon18 c.G3340A p.D1114N",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.G3340A (p.D1114N)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.G3340A (p.D1114N)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C52T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon2 c.C52T p.R18W",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C52T (p.R18W)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C52T (p.R18W)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.T210G",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon2 c.T210G p.N70K",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.T210G (p.N70K)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.T210G (p.N70K)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.G4018A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon23 c.G4018A p.V1340I",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.G4018A (p.V1340I)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.G4018A (p.V1340I)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.A4342C",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon25 c.A4342C p.I1448L",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.A4342C (p.I1448L)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.A4342C (p.I1448L)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.T4786A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon27 c.T4786A p.F1596I",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.T4786A (p.F1596I)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.T4786A (p.F1596I)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C4859T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon28 c.C4859T p.T1620M",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C4859T (p.T1620M)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C4859T (p.T1620M)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C6016G",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon28 c.C6016G p.P2006A",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C6016G (p.P2006A)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C6016G (p.P2006A)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.G5693A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon28 c.G5693A p.R1898H",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.G5693A (p.R1898H)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.G5693A (p.R1898H)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.T6010C",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon28 c.T6010C p.F2004L",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.T6010C (p.F2004L)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.T6010C (p.F2004L)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C647T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon6 c.C647T p.S216L",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C647T (p.S216L)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C647T (p.S216L)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.C659T",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon6 c.C659T p.T220I",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.C659T (p.T220I)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.C659T (p.T220I)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.G638A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon6 c.G638A p.G213D",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.G638A (p.G213D)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.G638A (p.G213D)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Gene transcript ID exon cDNA AA change",
+                "kind": "table_row",
+                "row": "SCN5A c.G880A",
+                "section": "ehu301supp_tables.pdf, PDF page 10",
+                "table": "Supplemental Table 6: Category Ib-III variants"
+              },
+              "person_ids": [],
+              "quote": "SCN5A NM_198056 exon7 c.G880A p.V294M",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Variant identity is reported without per-variant person counts, patient IDs, or attributable phenotype counts. Gene-level and category-level totals cannot be assigned to this variant.",
+            "variant": "c.G880A (p.V294M)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.G880A (p.V294M)"
+        }
+      ],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "SCN5A",
+        "missing_fields": 60,
+        "pmid": "25163546",
+        "source_sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T15:05:24.284883+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788707124285097000-000037-b8159f26"
+}

@@ -1,0 +1,20 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "20129283",
+    "stage": "paper_curation"
+  },
+  "event": {
+    "data": {
+      "error": "RuntimeError: Independent response incomplete: length",
+      "status": "failed"
+    },
+    "type": "paper_curation"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T15:28:18.044371+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788708498044402000-000047-91473fac"
+}

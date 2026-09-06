@@ -880,6 +880,10 @@ def draw_labels(
         for side in sides:
             lx = mx + radius + 14 if side == "start" else mx - radius - 14
             box_x = lx if side == "start" else lx - width
+            # Long source/status captions may fit the panel but not the space
+            # beside the marker. Shift the label inside before placing it.
+            box_x = max(x0 + 6, min(box_x, x0 + PANEL - 6 - width))
+            lx = box_x if side == "start" else box_x + width
             outside = max(0.0, x0 + 6 - box_x) + max(
                 0.0, box_x + width - (x0 + PANEL - 6)
             )
@@ -898,7 +902,7 @@ def draw_labels(
         assert best is not None
         _cost, anchor, lx, ly, box = best
         placed.append(box)
-        if abs((ly + 10) - my) > radius + 16:
+        if abs((ly + 10) - my) > radius + 16 or abs(lx - mx) > radius + 16:
             start_x = mx + radius if anchor == "start" else mx - radius
             end_x = lx - 4 if anchor == "start" else lx + 4
             output.append(

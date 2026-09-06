@@ -28,7 +28,32 @@ minus reference over every asserted gold row, candidate over frozen baseline;
 zero-imputation semantics, provenance, and visual QA requirements are defined in
 `docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`.
 
-## Active $100 improvement goal
+## Completed $150 model-routing test; next bounded evidence test
+
+- [x] Complete a source-frozen 12-paper opened calibration of Grok 4.3 versus
+      Astra medium and an independent Astra clinical reader. All final arms
+      locked before scoring. Corrected Grok 4.6 failed deployment-health probes;
+      no corrected paper arm or accuracy ranking. Pilots remain unscored.
+      Results, cost reserves, source audits and Claude/Grok/Agy reviews:
+      [`model-routing report`](docs/evidence/model_routing_20260906/README.md).
+      No primary/default promotion or tranche-04 opening. Runtime compatibility,
+      failed-call accounting and post-score figure layout are verified on main.
+- [ ] **Next acceptance gate: bounded patient evidence and derived-count contract.**
+      Freeze person/cohort/variant ownership, source coordinates, genotype,
+      endpoint/timepoint, blank-versus-merged cells and duplicate/index-case rules
+      before testing. Prefer structured table parsing; test Astra on unresolved
+      roster transcription or joins, with compact inputs and bounded retries.
+      Compare source-validated derived values with both source adjudication and
+      existing references; retain ambiguities, count-bearing identity extras and
+      failed papers. A model timeout must not silently erase independently valid
+      evidence. Keep the existing literal validator unchanged until a separate
+      derived-count path passes. Design:
+      `docs/evidence/model_routing_20260906/roster_followup_design.md`.
+      Reconcile unknown API charges and establish a fresh test envelope before
+      more API work. Only a passing fixed implementation advances to the
+      unopened discovery/confirmation sequence.
+
+## Previous $100 improvement campaign
 
 New implementation authorization: 2026-09-05.
 

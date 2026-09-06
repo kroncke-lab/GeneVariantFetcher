@@ -35,6 +35,7 @@ from utils.llm_trace import (
     record_trace_event,
 )
 from utils.llm_utils import (
+    azure_connection_for_model,
     azure_responses_api_url,
     build_reasoning_effort_kwargs,
     build_responses_reasoning_param,
@@ -53,6 +54,8 @@ logger = logging.getLogger(__name__)
 _RESPONSES_API_PREFIXES = (
     "gpt-5",
     "azure_ai/gpt-5",
+    "gpt-6-astra",
+    "azure_ai/gpt-6-astra",
 )
 
 
@@ -82,8 +85,7 @@ def _call_azure_responses_api_vision(
     model emitted, or None on transport / non-200 errors. Caller is
     responsible for retry semantics.
     """
-    base = normalize_azure_ai_api_base()
-    key = os.environ.get("AZURE_AI_API_KEY", "")
+    base, key = azure_connection_for_model(deployment)
     if not base or not key:
         logger.error(
             "Responses API call requires AZURE_AI_API_BASE and AZURE_AI_API_KEY"

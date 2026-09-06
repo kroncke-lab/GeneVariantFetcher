@@ -703,8 +703,8 @@ def test_markdown_does_not_invent_legacy_telemetry_or_traces(tmp_path: Path):
     write_markdown_report(report, markdown_path)
     markdown = markdown_path.read_text()
 
-    assert "token and timing telemetry was not captured" in markdown
-    assert "zero placeholders must not be interpreted as zero cost" in markdown
+    assert "Complete API token telemetry is unavailable" in markdown
+    assert "must not be interpreted as total cost" in markdown
     assert "Exact per-call LLM traces are not attached" in markdown
     assert "`llm_traces/<GENE>/<PMID>/`" not in markdown
     assert "| n/a | n/a |" in markdown

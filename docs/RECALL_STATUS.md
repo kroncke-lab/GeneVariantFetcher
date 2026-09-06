@@ -12,6 +12,33 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
+## Latest model-routing calibration (2026-09-06; no promotion)
+
+On 12 deliberately selected, already-opened papers with frozen sources, the
+Grok 4.3 control is **699/36/89 TP/FP/FN** (88.71% recall); Astra medium is
+**608/21/180** (77.16%). Astra supplies more exact affected values (22 → 37),
+but carrier absolute error rises 337 → 512 and combined A/U error 1,132 → 1,200.
+Six Astra primary-stage calls exhaust their output cap without visible output.
+Two shared deterministic papers account for 602/788 reference identities;
+this is a workflow comparison, not a model-only or corpus estimate.
+
+The accepted independent Astra overlay retains 699/36/89 and adds **one exact
+carrier count, zero A/U fields**. Its unvalidated raw proposals add 44 exact A/U
+values and three additional A/U disagreements, pointing to a separate source-
+validated person-aggregation test. A compact Astra-low probe transcribes 48
+people correctly in audited fields, with endpoint and source-join qualifications;
+it does not establish clinical-count accuracy. Corrected Azure Grok 4.6 did not
+pass the bounded health probes and has no scored paper arm.
+
+Preflagged exclusion of 20129283 and 25814417 changes the A/U error direction
+(628 → 585), so retain the full and sensitivity results together. This calibration
+does not change the headline, production defaults, tranche status, or establish
+any human-relative ceiling. All arms locked before scores; accounting amendments
+preserve scientific predictions and score formulas. The API ledger records
+$38.57768 returned proxy, $81.45984 unknown reserves and a $25 margin, totaling
+$145.03751; the Azure invoice is unreconciled. Details and final CLI reviews:
+[report](evidence/model_routing_20260906/README.md).
+
 ## Latest two-tranche validation (2026-09-06; no promotion)
 
 The subsequent [maintenance changes](evidence/maintenance_20260906/README.md)

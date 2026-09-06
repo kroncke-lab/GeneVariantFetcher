@@ -1,0 +1,126 @@
+{
+  "classification": "source-only freeze from opened runs; no prediction or DB copying",
+  "papers": [
+    {
+      "gene": "RYR2",
+      "pmid": "18929323",
+      "prior_run": "20260905_protocol_cont120_02_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/RYR2/20260905_175554/pmc_fulltext/18929323_CLEANED.md",
+      "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86",
+      "source_bytes": 38895,
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "30059973",
+      "prior_run": "20260905_mechanism10_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/production_runs/SCN5A/20260905_131329/pmc_fulltext/30059973_CLEANED.md",
+      "source_sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95",
+      "source_bytes": 106424,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "prior_run": "20260905_protocol_cont120_02_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/MYBPC3/20260905_175554/pmc_fulltext/20433692_FULL_CONTEXT.md",
+      "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976",
+      "source_bytes": 39266,
+      "gold_provenance": "curated_override_mixed_provenance",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "prior_run": "20260905_mechanism10_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/production_runs/MYBPC3/20260905_131329/pmc_fulltext/21302287_FULL_CONTEXT.md",
+      "source_sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab",
+      "source_bytes": 55873,
+      "gold_provenance": "curated_override",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "prior_run": "20260902_false_zero_recovery_gold118",
+      "source": "benchmarks/codex_paper_eval/runs/20260902_false_zero_recovery_gold118/production_runs/RYR2/20260902_233550/pmc_fulltext/30403697_FULL_CONTEXT.md",
+      "source_sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb",
+      "source_bytes": 231803,
+      "gold_provenance": null,
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "prior_run": "20260905_mechanism4_final",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_mechanism4_final/production_runs/SCN5A/20260905_133213/pmc_fulltext/20031634_CLEANED.md",
+      "source_sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670",
+      "source_bytes": 36366,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "19398417",
+      "prior_run": "20260905_mechanism10_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_mechanism10_candidate/production_runs/RYR2/20260905_131329/abstract_json/19398417.json",
+      "source_sha256": "4aa46f457b35bef0db93b29bb622214bbe5321b2ce9fe475b7894afe838914e0",
+      "source_bytes": 2471,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25435091",
+      "prior_run": "20260905_protocol_cont120_03_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/RYR2/20260905_194540/pmc_fulltext/25435091_CLEANED.md",
+      "source_sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db",
+      "source_bytes": 13601,
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "32533946",
+      "prior_run": "20260905_protocol_cont120_03_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/pmc_fulltext/32533946_FULL_CONTEXT.md",
+      "source_sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65",
+      "source_bytes": 223498,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "25163546",
+      "prior_run": "20260905_supplement1_source_check",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/production_runs/SCN5A/20260905_194714/pmc_fulltext/25163546_CLEANED.md",
+      "source_sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6",
+      "source_bytes": 133086,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "RYR2",
+      "pmid": "25814417",
+      "prior_run": "20260905_protocol_cont120_02_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/RYR2/20260905_175554/pmc_fulltext/25814417_FULL_CONTEXT.md",
+      "source_sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef",
+      "source_bytes": 62343,
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    },
+    {
+      "gene": "SCN5A",
+      "pmid": "20129283",
+      "prior_run": "20260905_protocol_cont120_03_candidate",
+      "source": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/production_runs/SCN5A/20260905_194540/pmc_fulltext/20129283_CLEANED.md",
+      "source_sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c",
+      "source_bytes": 59870,
+      "gold_provenance": "human_curated_cardiac",
+      "source_format_note": "Original selected bytes, including abstract JSON for 19398417; all arms receive the same bytes."
+    }
+  ],
+  "snapshot_sha256": "4d7840dae0f2fdb4953f3795aebc42003f88548b76eed444984a43d0ced1343a"
+}

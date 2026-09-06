@@ -1,0 +1,159 @@
+{
+  "cost": 59,
+  "interval": "PT5M",
+  "namespace": "Microsoft.CognitiveServices/accounts",
+  "resourceregion": "eastus2",
+  "timespan": "2026-09-06T13:30:00Z/2026-09-06T14:30:00Z",
+  "value": [
+    {
+      "displayDescription": "Number of calls made to the model API over a period of time. Applies to PTU, PTU-Managed and Pay-as-you-go deployments.",
+      "errorCode": "Success",
+      "id": "/subscriptions/3c2867cc-afb1-4ff8-96e8-4cee3e09d869/resourceGroups/MAGen/providers/Microsoft.CognitiveServices/accounts/magen-api-2-resource/providers/Microsoft.Insights/metrics/ModelRequests",
+      "name": {
+        "localizedValue": "Model Requests",
+        "value": "ModelRequests"
+      },
+      "resourceGroup": "MAGen",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "timeStamp": "2026-09-06T13:30:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:35:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:40:00Z",
+              "total": 1.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:45:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:50:00Z",
+              "total": 8.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:55:00Z",
+              "total": 10.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:00:00Z",
+              "total": 14.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:05:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:10:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:15:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:20:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:25:00Z",
+              "total": 0.0
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "modeldeploymentname",
+                "value": "modeldeploymentname"
+              },
+              "value": "grok-4.6"
+            },
+            {
+              "name": {
+                "localizedValue": "statuscode",
+                "value": "statuscode"
+              },
+              "value": "200"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "timeStamp": "2026-09-06T13:30:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:35:00Z",
+              "total": 1.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:40:00Z",
+              "total": 3.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:45:00Z",
+              "total": 3.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:50:00Z",
+              "total": 1.0
+            },
+            {
+              "timeStamp": "2026-09-06T13:55:00Z",
+              "total": 3.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:00:00Z",
+              "total": 1.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:05:00Z",
+              "total": 6.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:10:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:15:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:20:00Z",
+              "total": 0.0
+            },
+            {
+              "timeStamp": "2026-09-06T14:25:00Z",
+              "total": 5.0
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "modeldeploymentname",
+                "value": "modeldeploymentname"
+              },
+              "value": "grok-4.6"
+            },
+            {
+              "name": {
+                "localizedValue": "statuscode",
+                "value": "statuscode"
+              },
+              "value": "499"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

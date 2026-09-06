@@ -1,0 +1,17 @@
+{
+  "gene": "MYBPC3",
+  "pmid": "20433692",
+  "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976",
+  "clinical_table_copies": 2,
+  "table_sha256": [
+    "1792d428475da029cdb731776111ab27b28e88e174dfc950ffcd78b4a510bd35",
+    "1792d428475da029cdb731776111ab27b28e88e174dfc950ffcd78b4a510bd35"
+  ],
+  "table_chars": [
+    4488,
+    4488
+  ],
+  "duplicate_text": true,
+  "source_chars": 39192,
+  "note": "Frozen test input retained both copies. This detects repeated text, not an assertion that these are different cohorts or that a new table layout is clinically validated."
+}

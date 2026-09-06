@@ -1,0 +1,95 @@
+{
+  "classification": "Pre-score source/response audit; no gold values read",
+  "gene": "RYR2",
+  "pmid": "18929323",
+  "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86",
+  "baseline_predictions_sha256": "e689982fdb47e100164a0ca1d83963924ad0300a1694f83f92df9dbac6cb2438",
+  "baseline_counts": [
+    {
+      "variant": "p.Pro2328Ser",
+      "carriers": 13,
+      "affected": null,
+      "unaffected": null
+    },
+    {
+      "variant": "p.Val4653Phe",
+      "carriers": 6,
+      "affected": null,
+      "unaffected": null
+    }
+  ],
+  "reader": {
+    "trace_id": "1788705531483728000-000007-a0ba54d7",
+    "path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/RYR2/18929323/1788705531483728000-000007-a0ba54d7_paper_curation_independent_clinical_reader.json",
+    "sha256": "48dc9902ffd6bf9d9bfc7448acf4b474154cd62891610d16363ad3b10ffde93a",
+    "parsed": {
+      "variants": [
+        {
+          "variant": "P2328S",
+          "carriers": 13,
+          "affected": null,
+          "unaffected": null,
+          "carriers_evidence": {
+            "quote": "Thus, a 24-h ECG recording was performed in each patient carrying 1 of 2 different RyR2 mutations (P2328S, n = 13, or V4653F, n = 6).",
+            "count_role": "per_variant_carriers",
+            "basis": "explicit",
+            "scope": "current_study",
+            "person_ids": [],
+            "evidence_locator": {
+              "kind": "sentence",
+              "section": "Methods \u2014 Study subjects",
+              "table": "",
+              "column": "",
+              "row": ""
+            }
+          },
+          "affected_evidence": {},
+          "unaffected_evidence": {},
+          "uncertainty": "The 13 patients with exercise-related syncope or cardiac arrest are a combined-cohort count, not a P2328S-specific count. The two asymptomatic patients without exercise-induced ventricular arrhythmias are not assigned to variants. The six P2328S patients undergoing repeat recording are an overlapping subset, not additional carriers; beta-blocker use does not establish phenotype status. Repeated passages in the supplied text describe the same cohort."
+        },
+        {
+          "variant": "V4653F",
+          "carriers": 6,
+          "affected": null,
+          "unaffected": null,
+          "carriers_evidence": {
+            "quote": "Thus, a 24-h ECG recording was performed in each patient carrying 1 of 2 different RyR2 mutations (P2328S, n = 13, or V4653F, n = 6).",
+            "count_role": "per_variant_carriers",
+            "basis": "explicit",
+            "scope": "current_study",
+            "person_ids": [],
+            "evidence_locator": {
+              "kind": "sentence",
+              "section": "Methods \u2014 Study subjects",
+              "table": "",
+              "column": "",
+              "row": ""
+            }
+          },
+          "affected_evidence": {},
+          "unaffected_evidence": {},
+          "uncertainty": "The 13 patients with exercise-related syncope or cardiac arrest are a combined-cohort count, not a V4653F-specific count. The two asymptomatic patients without exercise-induced ventricular arrhythmias are not assigned to variants. All six V4653F carriers underwent repeat recording on beta-blockers, but medication use does not explicitly establish affected status or an unaffected count of zero. Repeat recordings and repeated text do not identify additional people."
+        }
+      ],
+      "clinical_count_status": "present",
+      "unresolved_sources": [
+        "Table 1 is referenced for symptom history, study-subject characteristics, and repeat recordings, but its contents and footnotes were not supplied. Any variant-specific phenotype counts or patient-level assignments there could not be assessed.",
+        "Tables 2 and 3 are referenced for repolarization measurements, but their contents and footnotes were not supplied."
+      ]
+    }
+  },
+  "source_findings": [
+    "Source lines 21 and 47 repeat the same explicit variant-specific carrier totals, P2328S 13 and V4653F 6.",
+    "The 13 with syncope/cardiac arrest and the 2 asymptomatic without exercise arrhythmia are not assigned to variants in supplied prose.",
+    "The 19 unaffected controls are a separate comparison cohort, not unaffected RYR2 carriers.",
+    "Table 1 is cited for subject characteristics but its table body is absent from the supplied frozen text; the local corpus has only CLEANED/FULL_CONTEXT markdown and no table artifact."
+  ],
+  "interpretation": "Both the fresh Grok control and independent Astra read the two carrier totals. Zero additive fills here is not a reader omission; the trigger fires on unresolved A/U fields. The earlier documented Grok carrier omission is a different run. Do not extrapolate this single comparison to a model effect or derive variant-specific phenotype counts from cohort totals.",
+  "bounded_public_lookup": {
+    "date": "2026-09-06",
+    "pubmed": "https://pubmed.ncbi.nlm.nih.gov/18929323/",
+    "journal": "https://www.heartrhythmjournal.com/article/S1547-5271%2808%2900624-3/fulltext",
+    "publisher": "https://www.sciencedirect.com/science/article/abs/pii/S1547527108006243",
+    "result": "Search index confirms the article; direct journal/publisher fetches returned HTTP 403 and PubMed fetch returned 429. No table content recovered; no new evidence or count changes claimed."
+  }
+}

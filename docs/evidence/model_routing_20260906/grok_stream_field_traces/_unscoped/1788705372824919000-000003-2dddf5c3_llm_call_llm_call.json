@@ -1,0 +1,55 @@
+{
+  "context": {
+    "model": "azure_ai/grok-4.6",
+    "provider": "litellm"
+  },
+  "reasoning_capture": {
+    "note": "response_paths lists provider-returned reasoning CONTENT only. reasoning_token_usage is billing telemetry and never implies that any reasoning content was exposed. Hidden chain-of-thought is not available through model APIs and is not recorded.",
+    "provider_exposed_reasoning_available": false,
+    "reasoning_token_usage": {},
+    "response_paths": []
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "llm_call",
+  "request": {
+    "payload": {
+      "allowed_openai_params": [
+        "reasoning_effort"
+      ],
+      "api_base": "https://magen-api-2-resource.services.ai.azure.com/openai/v1",
+      "api_key": "<redacted>",
+      "max_completion_tokens": 1024,
+      "max_retries": 0,
+      "messages": [
+        {
+          "content": "Return exactly JSON {\"ok\":true}.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/grok-4.6",
+      "num_retries": 0,
+      "reasoning_effort": "high",
+      "stream": null,
+      "timeout": 65
+    },
+    "provider": "litellm",
+    "requested_model": "azure_ai/grok-4.6",
+    "resolved_model": "openai/grok-4.6",
+    "started_at": "2026-09-06T14:35:07.540389+00:00"
+  },
+  "response": {
+    "completed_at": "2026-09-06T14:36:12.824906+00:00",
+    "duration_seconds": 65.283779,
+    "envelope": null,
+    "error": {
+      "message": "litellm.Timeout: APITimeoutError - Request timed out. Error_str: Request timed out.",
+      "type": "Timeout"
+    },
+    "output_text": null,
+    "success": false,
+    "usage": null
+  },
+  "run_id": "grok_stream_field_probe",
+  "schema_version": 2,
+  "trace_id": "1788705372824919000-000003-2dddf5c3"
+}

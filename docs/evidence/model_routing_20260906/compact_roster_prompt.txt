@@ -1,0 +1,61 @@
+Transcribe this current-study MYBPC3 clinical supplement into compact person records. This is a transcription task, not scalar count extraction or clinical diagnosis. Only this article source is evidence. No external facts.
+The DOC-to-Markdown conversion omitted merged variant/family cells on continuation rows and shifted columns left. Preserve evidence line IDs. Inherit variant/family only when table grouping is unambiguous; mark uncertain rows rather than guess. Exclude wrapped clinical-cell continuation fragments that are not people, but list those line IDs in ignored_fragments. Keep carriers (Y) and non-carriers (N/no) separate. Do not convert No Dx into healthy: copy the diagnosis cell literally. Preserve unknown/question-mark cells. Index cases have a star; they are already people in the table, not additional people to add later. Do not invent people or split a homozygote into two people. Return one record per table person, deduplicated by family plus person ID. Do not emit scalar totals, long explanations, or repeated table quotes; source line references bind the evidence.
+Return JSON: {"columns":["line","variant","family","person","mut","diagnosis_cell","index_case","inherited_group"],"rows":[[290,"D75N","H73","II:3","N","NoDx",false,false]],"ambiguous_rows":[],"ignored_fragments":[]}.
+The example is a format illustration; transcribe actual source line IDs. Output only JSON.
+
+SOURCE LINES:
+L285: Additional file 1- Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers.
+L286: | Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |
+L287: |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+L288: | D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |
+L289: | II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |
+L290: | II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |
+L291: | II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |
+L292: | A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |
+L293: | IVS6+5G>A | H56 | II:5 | Y | M | 28 | 40 | 26 | - | - | ¿ | + | + | II | AF-IRBBB | - | - |
+L294: | II:6* | Y | F | 34 | 39 | 24 | - | - | + | + | + | II | T(-) | ICD | AD |  |  |
+L295: | IVS11-9G>A | H110 | I:1* | Y | M | 58 | 62 | 17 | - | + | - | - | - | I | Normal | - | - |
+L296: | II:2 | Y | F | 21 | 27 | 17 | - | - | - | - | - | I | LVH, T(-), LABBH | - | - |  |  |
+L297: | Q327fs | H13 | II:7* | Y | M | 64 | 73 | 19 | + | - | ¿ | + | - | III | AF, Q | + | Death CHF |
+L298: | III:1 | Y | F | 37 | 37 | 16 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |
+L299: | V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |
+L300: | III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |
+L301: | R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |
+L302: | R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |
+L303: | II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |
+L304: | III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |
+L305: | H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |
+L306: | II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |
+L307: | K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |
+L308: | II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |
+L309: | III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |
+L310: | III:4 | Y | F | No Dx | 49 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |
+L311: | E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |
+L312: | II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |
+L313: | III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |
+L314: | H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |
+L315: | H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |
+L316: | K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |
+L317: | II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |
+L318: | P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |
+L319: | IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |
+L320: | IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |
+L321: | T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |
+L322: | R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |
+L323: | H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |
+L324: | III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |
+L325: | III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |
+L326: | III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |
+L327: | IV-1 | N | M | 22 | 29 | 12 | - | - | - | - | - | I | HVI |  |  |  |  |
+L328: | Q | - | - |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+L329: | IV-5 | N | M | 17 | 22 | 13 | - | - | - | - | - | I | HVI |  |  |  |  |
+L330: | Q | - | - |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+L331: | IVS29+5G>A | H131 | III:2* | Y | F | 45 | 54 | 41 | - | + | - | + | + | III | LVH, T(-) | - | - |
+L332: | IV:4 | Y | F | No Dx | 33 | 10 | - | - | ¿ | ¿ | + | I | Normal | - | - |  |  |
+L333: | IV:5 | Y | F | 24 | 31 | 15 | - | - | ¿ | - | + | I | Normal | - | - |  |  |
+L334: | E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |
+L335: | T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+L336: | II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |
+L337: | III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |
+L338: | III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |
+L339: ABPR: Abnormal blood pressure response, AD: Appropriate discharge, AF: atrial fibrillation, Age FU: Age last follow up, FE: Femoral embolism, FHSD: family history of sudden death, RBBB: right bundle branch block, LBBB: left bundle branch block, ICD: implantable cardioverter defibrillator, ECG: electrocardiogram, Fam: family, LABBH: left anterior bundle branch hemiblockade, LVH: left ventricular hypertrophy, CHF: congestive heart failure, PM: pacemaker, MP: Mitral prothesis, Mut: presence of mutation, N: no, No Dx: Unaffected or healthy, NYHA: New York Association functional class, Q: abnormal Q wave, S: Syncope, SA: Septal ablation, ST: ST segment abnormalities, SO: Subaortic obstruction , T(-): negative T wave, NSVT: non-sustained ventricular tachycardia, TX: cardiac transplantation, WT: Max wall thickness, Y: yes, *: index case.

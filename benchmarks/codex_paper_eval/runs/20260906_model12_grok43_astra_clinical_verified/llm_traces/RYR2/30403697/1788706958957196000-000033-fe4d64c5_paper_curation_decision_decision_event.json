@@ -1,0 +1,2740 @@
+{
+  "context": {
+    "gene": "RYR2",
+    "pmid": "30403697",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [
+        {
+          "count_role": "per_variant_carriers",
+          "evidence_locator": {
+            "kind": "prose_sentence",
+            "model_declared": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion",
+              "table": ""
+            },
+            "sentence": "An example is RYR2- p.G1886S, which occurred in 2 of our patients, and was also seen in the general population."
+          },
+          "field": "carriers",
+          "model_declared_role": "per_variant_carriers",
+          "quote": "An example is RYR2- p.G1886S, which occurred in 2 of our patients, and was also seen in the general population.",
+          "value": 2,
+          "variant": "G1886S",
+          "variant_id": 4
+        }
+      ],
+      "contradictions": [],
+      "error": null,
+      "gene": "RYR2",
+      "pmid": "30403697",
+      "raw_fills": [
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "variant": "R417L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "1",
+              "2"
+            ],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 13,
+          "value": 2,
+          "variant": "p.R417L"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Variant #2; Inheritance; Phase (cis vs trans); Family History",
+              "kind": "table_row",
+              "row": "1",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |",
+            "unaffected": 1,
+            "variant": "R417L"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Variant #2; Inheritance; Phase (cis vs trans); Family History",
+              "kind": "table_row",
+              "row": "1",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 13,
+          "value": 1,
+          "variant": "p.R417L"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "variant": "F3496L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "1",
+              "2"
+            ],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 2,
+          "value": 2,
+          "variant": "p.F3496L"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Variant #2; Inheritance; Phase (cis vs trans); Family History",
+              "kind": "table_row",
+              "row": "1",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |",
+            "unaffected": 1,
+            "variant": "F3496L"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Variant #2; Inheritance; Phase (cis vs trans); Family History",
+              "kind": "table_row",
+              "row": "1",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 2,
+          "value": 1,
+          "variant": "p.F3496L"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "S3938R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 16,
+          "value": 1,
+          "variant": "p.S3938R"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "S3938R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 16,
+          "value": 1,
+          "variant": "p.S3938R"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "R485Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 14,
+          "value": 1,
+          "variant": "p.R485Q"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "R485Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 14,
+          "value": 1,
+          "variant": "p.R485Q"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "variant": "I2075T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "4",
+              "5"
+            ],
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 7,
+          "value": 2,
+          "variant": "p.I2075T"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "unaffected": 1,
+            "variant": "I2075T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "6"
+            ],
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 7,
+          "value": 1,
+          "variant": "p.I2075T"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "variant": "K4594R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "4",
+              "5"
+            ],
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 8,
+          "value": 2,
+          "variant": "p.K4594R"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "unaffected": 1,
+            "variant": "K4594R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "6"
+            ],
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 8,
+          "value": 1,
+          "variant": "p.K4594R"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "variant": "R2028H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "7"
+            ],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 10,
+          "value": 1,
+          "variant": "p.R2028H"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Inheritance; Family History",
+              "kind": "table_row",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "unaffected": 1,
+            "variant": "R2028H"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #1; Inheritance; Family History",
+              "kind": "table_row",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 10,
+          "value": 1,
+          "variant": "p.R2028H"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "variant": "Y4721C"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "7"
+            ],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 18,
+          "value": 1,
+          "variant": "p.Y4721C"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #2; Inheritance; Family History",
+              "kind": "table_row",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "unaffected": 1,
+            "variant": "Y4721C"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Variant #2; Inheritance; Family History",
+              "kind": "table_row",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 18,
+          "value": 1,
+          "variant": "p.Y4721C"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "variant": "T1107M"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "8"
+            ],
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 17,
+          "value": 1,
+          "variant": "p.T1107M"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "variant": "T1107M"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "8"
+            ],
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 17,
+          "value": 1,
+          "variant": "p.T1107M"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "R2474K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 12,
+          "value": 1,
+          "variant": "p.R2474K"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "R2474K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 12,
+          "value": 1,
+          "variant": "p.R2474K"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "A1136V"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 0,
+          "value": 1,
+          "variant": "p.A1136V"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "A1136V"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 0,
+          "value": 1,
+          "variant": "p.A1136V"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "variant": "L4188P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 9,
+          "value": 1,
+          "variant": "p.L4188P"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "variant": "L4188P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 9,
+          "value": 1,
+          "variant": "p.L4188P"
+        },
+        {
+          "entry": {
+            "carriers": 2,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion",
+              "table": ""
+            },
+            "quote": "An example is RYR2- p.G1886S, which occurred in 2 of our patients, and was also seen in the general population.",
+            "variant": "G1886S"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion",
+              "table": ""
+            },
+            "person_ids": [],
+            "quote": "An example is RYR2- p.G1886S, which occurred in 2 of our patients, and was also seen in the general population.",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 4,
+          "value": 2,
+          "variant": "p.G1886S"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "10, 11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\n| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "G1886S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "10, 11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10",
+              "11"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\n| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 4,
+          "value": 2,
+          "variant": "p.G1886S"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "S2246L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "11"
+            ],
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 15,
+          "value": 1,
+          "variant": "p.S2246L"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "S2246L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "11"
+            ],
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 15,
+          "value": 1,
+          "variant": "p.S2246L"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "H2464D"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 6,
+          "value": 1,
+          "variant": "p.H2464D"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "H2464D"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 6,
+          "value": 1,
+          "variant": "p.H2464D"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "G1885E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 3,
+          "value": 1,
+          "variant": "p.G1885E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "G1885E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 3,
+          "value": 1,
+          "variant": "p.G1885E"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "variant": "R2401H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "13"
+            ],
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 11,
+          "value": 1,
+          "variant": "p.R2401H"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "variant": "R2401H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "13"
+            ],
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 11,
+          "value": 1,
+          "variant": "p.R2401H"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Variant #2 footnote",
+              "kind": "sentence",
+              "row": "Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.3599-9delT"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Variant #2 footnote",
+              "kind": "sentence",
+              "row": "Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 20,
+          "value": 1,
+          "variant": "c.3599-9delT"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.3599-9delT"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 20,
+          "value": 1,
+          "variant": "c.3599-9delT"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Variant #2 footnote",
+              "kind": "sentence",
+              "row": "Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.14091-11dupT"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Variant #2 footnote",
+              "kind": "sentence",
+              "row": "Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 19,
+          "value": 1,
+          "variant": "c.14091-11dupT"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.14091-11dupT"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 19,
+          "value": 1,
+          "variant": "c.14091-11dupT"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "variant": "A2317E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "15"
+            ],
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 1,
+          "value": 1,
+          "variant": "p.A2317E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "variant": "A2317E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "15"
+            ],
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 1,
+          "value": 1,
+          "variant": "p.A2317E"
+        }
+      ],
+      "rejected": [
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {},
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Present only in S2's Published evidence cell for p.G1885E: 'two ARVC families with double mutations (cis) with *RYR2-Q*2958R16'. This is prior-study family evidence, not a person count, and no current-study carrier is assigned this variant.",
+            "variant": "RYR2-Q2958R"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "RYR2-Q2958R"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {},
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Appears in the title of S2 reference 8 describing previously published familial ryanodine-receptor mutations. The supplied source does not explicitly map this nucleotide notation to a particular protein-variant entry or provide a per-variant person count in that notation. It is not treated as an additional current-study variant or assigned counts through an inferred alias.",
+            "variant": "c.6224T>C"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.6224T>C"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {},
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Appears in the title of S2 reference 8 describing previously published familial ryanodine-receptor mutations. No explicit nucleotide-to-protein mapping or per-variant person count is supplied. It is not treated as an additional current-study variant or assigned counts through an inferred alias.",
+            "variant": "c.13781A>G"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.13781A>G"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {},
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Mentioned only in the title of main-text reference 33, 'The Deletion of Exon 3 in the Cardiac Ryanodine Receptor Is Rescued by β Strand Switching.' No current-study carrier or human phenotype count is supplied.",
+            "variant": "Deletion of Exon 3"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "Deletion of Exon 3"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "variant": "R417L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "1",
+              "2"
+            ],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 13,
+          "value": 2,
+          "variant": "p.R417L"
+        },
+        {
+          "field": "unaffected",
+          "reason": "number not stated in the target variant's table row",
+          "value": 1,
+          "variant": "R417L"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "variant": "F3496L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "1, 2",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "1",
+              "2"
+            ],
+            "quote": "| 1 | F | Hispanic | 16 | Yes | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Father is gene carrier, asymptomatic | Exertional syncope, exertional VT | Nadolol | No |\n| 2 | F | Hispanic | 9 | No | RYR2 -p.R417L | RYR2 -p.F3496L | Paternal | Cis | Sibling of subject 1 | Family screening, exertional VT | Untreated | N/A |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 2,
+          "value": 2,
+          "variant": "p.F3496L"
+        },
+        {
+          "field": "unaffected",
+          "reason": "number not stated in the target variant's table row",
+          "value": 1,
+          "variant": "F3496L"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "S3938R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 16,
+          "value": 1,
+          "variant": "p.S3938R"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "S3938R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 16,
+          "value": 1,
+          "variant": "p.S3938R"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "R485Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 14,
+          "value": 1,
+          "variant": "p.R485Q"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "variant": "R485Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "3",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "3"
+            ],
+            "quote": "| 3 | M | Caucasian | 12 | Yes | RYR2- p.S3938R | RYR2- p.R485Q | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 14,
+          "value": 1,
+          "variant": "p.R485Q"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "variant": "I2075T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "4",
+              "5"
+            ],
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 7,
+          "value": 2,
+          "variant": "p.I2075T"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "unaffected": 1,
+            "variant": "I2075T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "6"
+            ],
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 7,
+          "value": 1,
+          "variant": "p.I2075T"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "variant": "K4594R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "4, 5",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "4",
+              "5"
+            ],
+            "quote": "| 4 | F | Caucasian | 12 | Yes | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Positive for SCA in sister | SCA | Metoprolol & ICD | No |\n| 5 | F | Caucasian | 10 | No | RYR2- p.I2075T | RYR2- p.K4594R | Obligate paternal inheritance | Cis | Sister of subject 5 | Exertional SCA | Metoprolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 8,
+          "value": 2,
+          "variant": "p.K4594R"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "unaffected": 1,
+            "variant": "K4594R"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "6",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "6"
+            ],
+            "quote": "| 6 | F | Caucasian | 5 | No | RYR2- p.I2075T | RYR2- p.K4594R | Paternal inheritance | Cis | Paternal cousin of subject 5 | Asymptomatic | ICD | N/A |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 8,
+          "value": 1,
+          "variant": "p.K4594R"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "variant": "R2028H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "7"
+            ],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 10,
+          "value": 1,
+          "variant": "p.R2028H"
+        },
+        {
+          "field": "unaffected",
+          "reason": "number not stated in the target variant's table row",
+          "value": 1,
+          "variant": "R2028H"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "variant": "Y4721C"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "7",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "7"
+            ],
+            "quote": "| 7 | F | Caucasian | 12 | Yes | RYR2- p.R2028H | RYR2- p.Y4721C | Variant #1 from mother, variant #2 from father | Trans | Parents are phenotypically silent heterozygous carriers | Exertional SCA | Atenolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 18,
+          "value": 1,
+          "variant": "p.Y4721C"
+        },
+        {
+          "field": "unaffected",
+          "reason": "number not stated in the target variant's table row",
+          "value": 1,
+          "variant": "Y4721C"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "variant": "T1107M"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "8"
+            ],
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 17,
+          "value": 1,
+          "variant": "p.T1107M"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "variant": "T1107M"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "8",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "8"
+            ],
+            "quote": "| 8 | M | Arab | 7 | Yes | RYR2- p.T1107M | CASQ2- c.IVS5+1G>C (homozygous) | CASQ2 inherited from consanguineous parents | Trans | Parents are first cousins No suspected/known CPVT | Exertional syncope, SCA, VT on EST | Nadolol, flecainide, ICD, sympathectomy | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 17,
+          "value": 1,
+          "variant": "p.T1107M"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "R2474K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 12,
+          "value": 1,
+          "variant": "p.R2474K"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "R2474K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 12,
+          "value": 1,
+          "variant": "p.R2474K"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "A1136V"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 0,
+          "value": 1,
+          "variant": "p.A1136V"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "variant": "A1136V"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "9",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "9"
+            ],
+            "quote": "| 9 | M | Caucasian | newborn | Yes | RYR2- p.R2474K | RYR2- p.A1136V | De novo | Unknown | No suspected/known CPVT | Exertional SCA | Atenolol, later changed to nadolol & ICD | Yes |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 0,
+          "value": 1,
+          "variant": "p.A1136V"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "variant": "L4188P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "p.L4188P"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "variant": "L4188P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "10",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "p.L4188P"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "10, 11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\n| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "G1886S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "10, 11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "10",
+              "11"
+            ],
+            "quote": "| 10 | F | Hispanic | 11 | Yes | RYR2- p.L4188P | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | Seizures, emotional SCA | Nadolol | No |\n| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 4,
+          "value": 2,
+          "variant": "p.G1886S"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "S2246L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "11"
+            ],
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 15,
+          "value": 1,
+          "variant": "p.S2246L"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "variant": "S2246L"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "11",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "11"
+            ],
+            "quote": "| 11 | F | Caucasian | 4 | Yes | RYR2- p.S2246L | RYR2- p.G1886S | Unknown | Unknown | No suspected/known CPVT | SCA | Nadolol & ICD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 15,
+          "value": 1,
+          "variant": "p.S2246L"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "H2464D"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 6,
+          "value": 1,
+          "variant": "p.H2464D"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "H2464D"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 6,
+          "value": 1,
+          "variant": "p.H2464D"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "G1885E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #2",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 1,
+          "variant": "p.G1885E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "variant": "G1885E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #2; Symptoms",
+              "kind": "patient_rows",
+              "row": "12",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "12"
+            ],
+            "quote": "| 12 | M | Caucasian | 9 | Yes | RYR2- p.H2464D | RYR2- p.G1885E | Mother gene negative, father unknown | Unknown | No suspected/known CPVT | Exertional syncope, epilepsy | Atenolol, later changed to nadolol, flecainide & valproate | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 1,
+          "variant": "p.G1885E"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "variant": "R2401H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "13"
+            ],
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 11,
+          "value": 1,
+          "variant": "p.R2401H"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "variant": "R2401H"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "13",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "13"
+            ],
+            "quote": "| 13 | M | White | 7 | Yes | RYR2- p.R2401H | DSG- p.V288I | Unknown | Unknown | No suspected/known CPVT | Exertional SCA | Nadolol | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 11,
+          "value": 1,
+          "variant": "p.R2401H"
+        },
+        {
+          "field": "carriers",
+          "reason": "number not stated in the quote as the requested count role",
+          "value": 1,
+          "variant": "c.3599-9delT"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.3599-9delT"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 20,
+          "value": 1,
+          "variant": "c.3599-9delT"
+        },
+        {
+          "field": "carriers",
+          "reason": "number not stated in the quote as the requested count role",
+          "value": 1,
+          "variant": "c.14091-11dupT"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "variant": "c.14091-11dupT"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Symptoms; Variant #2 footnote",
+              "kind": "patient_rows",
+              "row": "14 and explicitly linked Subject 14 footnote",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "14"
+            ],
+            "quote": "| 14 | M | White | 5 | Yes | RYR2- p.G4772S | Multiple * | Unknown | Unknown | SCA in multiple relatives (symptomatic cousin carries RYR2- G4772S) | Exertional syncope, SCA, & VT storm | Nadolol & ICD | Yes |\n*Subject 14 had additional variants as follows: RYR2- c.3599-9delT, RYR2- c.14091-11dupT, CACNA1c- p.T1870M, CACNA1C- c.5680+11C>T, TMEM43- c.512+19G>T, PKP2- c.2300-4G>C, DSP- p.R1458G.",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 19,
+          "value": 1,
+          "variant": "c.14091-11dupT"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "variant": "A2317E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Subject; Variant #1",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "15"
+            ],
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 1,
+          "variant": "p.A2317E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "variant": "A2317E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Subject; Variant #1; Symptoms",
+              "kind": "patient_rows",
+              "row": "15",
+              "section": "Results — Population",
+              "table": "Table 1"
+            },
+            "person_ids": [
+              "15"
+            ],
+            "quote": "| 15 | F | Arab | 8 | Yes | RYR2- p.A2317E | SCN5A- p.Q692K | Unknown | Unknown | Sudden death in maternal grandfather (swimming at 39 years old) | Exertional SCA | Nadolol, ICD & LCSD | No |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 1,
+          "variant": "p.A2317E"
+        }
+      ],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "RYR2",
+        "missing_fields": 63,
+        "pmid": "30403697",
+        "source_sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T15:02:38.956179+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788706958957196000-000033-fe4d64c5"
+}

@@ -1,0 +1,26 @@
+{
+  "budget_sha256": "03f21ea91625de7933ba71b20cf9cbf9e2b60a5c06d5092826c71ecb2cbd2fc8",
+  "campaign_calls_in_flight": 0,
+  "binder_sha256": "ccb91595c21ec9645702ffbe91b78486216c6d2736b516c212d336d02f64e198",
+  "before_predictions_sha256": "35defd59f1ee827356f266f5a9b11f4902bee0345ba141dbfff286bea04432b5",
+  "after_predictions_sha256": "cc25ae7c4876cf25eb4d7053629e7cda72e5606239d2f670f539ccccbd7232aa",
+  "scientific_predictions_sha256_unchanged": "710c052f7ba391d00ac03ef71de071e27cd7d33a93a5431a1df520d3540670bd",
+  "attached_failure_references": [
+    {
+      "gene": "SCN5A",
+      "pmid": "30059973",
+      "failed_trace_ids": [
+        "1788706688587807000-000019-280a50a7"
+      ]
+    }
+  ],
+  "budget_not_dispatched": [
+    {
+      "gene": "SCN5A",
+      "pmid": "32533946",
+      "budget_decision_trace_id": "1788711353060230000-000049-1df5d23e"
+    }
+  ],
+  "new_score_artifacts_absent_on_all_final_arms": true,
+  "operator_attestation": "No new gold scores were inspected before binding; this is opened-paper calibration, not investigator-blind research."
+}

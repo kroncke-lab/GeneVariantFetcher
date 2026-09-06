@@ -69,7 +69,12 @@ _IMAGE_SUFFIXES = frozenset(
     {".png", ".jpg", ".jpeg", ".gif", ".tiff", ".tif", ".webp", ".bmp"}
 )
 
-_RESPONSES_API_PREFIXES = ("gpt-5", "azure_ai/gpt-5")
+_RESPONSES_API_PREFIXES = (
+    "gpt-5",
+    "azure_ai/gpt-5",
+    "gpt-6-astra",
+    "azure_ai/gpt-6-astra",
+)
 
 #: Off-switch for the caption triage gate (default ON). Read live, not at
 #: import, so one process can score runs under both policies — the same

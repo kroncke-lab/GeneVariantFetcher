@@ -459,6 +459,24 @@ Chat-completions calls use
 `utils/llm_utils.build_responses_reasoning_param`. Both helpers no-op for models
 without an OpenAI-style effort knob.
 
+`gpt-6-astra` and `grok-4.6` are explicit effort-capable deployments. Both map
+`none`/`minimal` to `low`; the existing `max` alias still means `xhigh`, not a
+literal provider `max`. Astra chat requests omit sampling/log-probability
+parameters and translate `max_tokens` to `max_completion_tokens`. Its local
+output ceiling is 64,000 tokens, including reasoning. Grok 4.6 has a separate
+32,000 local output ceiling; older Grok models retain 15,000. These are GVF
+request policies, not provider limits. The SDK allow-list explicitly preserves
+`reasoning_effort` for the new names: LiteLLM otherwise silently drops it under
+`drop_params=True`. Transport tests inspect the actual SDK HTTP request, beyond
+the pre-SDK trace. Astra figure/pedigree calls use the Responses API path;
+that routing has offline coverage, not a new-model vision accuracy result.
+
+Optional process-environment `AZURE_AI_MODEL_ROUTES` maps deployment names to
+their own HTTPS `/openai/v1` endpoint and key-variable name. Unlisted stages
+stay on the original Azure resource. See [API keys](API_KEYS.md) for setup.
+The opened calibration in `docs/evidence/model_routing_20260906/` tests these
+model configurations; support alone does not promote either to a default.
+
 Treat reasoning effort as a secondary lever. Source acquisition, supplement
 folding, extraction logic, and matcher behavior usually move recall more than a
 non-default effort value. Change one stage at a time and re-score before keeping

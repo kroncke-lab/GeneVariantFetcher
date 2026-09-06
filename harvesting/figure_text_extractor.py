@@ -35,6 +35,7 @@ from utils.llm_trace import (
     record_trace_event,
 )
 from utils.llm_utils import (
+    azure_connection_for_model,
     azure_responses_api_url,
     build_reasoning_effort_kwargs,
     build_responses_reasoning_param,
@@ -51,6 +52,8 @@ _IMAGE_SUFFIXES = frozenset(
 _RESPONSES_API_PREFIXES = (
     "gpt-5",
     "azure_ai/gpt-5",
+    "gpt-6-astra",
+    "azure_ai/gpt-6-astra",
 )
 
 _EXTRACT_PROMPT = """\
@@ -370,8 +373,7 @@ def call_responses_api_vision(
     ``low``, and if the retry is also empty accept it — with the outcome
     recorded in the trace — rather than re-burning the cap at the same effort.
     """
-    base = normalize_azure_ai_api_base()
-    key = os.environ.get("AZURE_AI_API_KEY", "")
+    base, key = azure_connection_for_model(model)
     if not base or not key:
         raise RuntimeError(
             "Responses API figure extraction requires AZURE_AI_API_BASE and "

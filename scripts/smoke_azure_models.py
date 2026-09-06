@@ -20,7 +20,16 @@ from config.settings import get_settings
 from utils.llm_utils import litellm_completion
 
 
-REASONING_HINTS = ("kimi", "grok-4", "gpt-5", "gpt5", "deepseek", "o1", "o3")
+REASONING_HINTS = (
+    "kimi",
+    "grok-4",
+    "gpt-5",
+    "gpt-6-astra",
+    "gpt5",
+    "deepseek",
+    "o1",
+    "o3",
+)
 
 
 def _unique(items: Iterable[str]) -> list[str]:

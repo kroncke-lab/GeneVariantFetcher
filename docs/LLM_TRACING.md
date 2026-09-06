@@ -277,6 +277,21 @@ read-only. `score` recomputes their digests before it opens gold. Because the
 lock-time manifest rebuild now cross-checks write-time digests, a record forged
 between extraction and lock fails the lock instead of being re-blessed.
 
+Native predictions normally require exact per-paper token telemetry. A timeout
+that returns no usage may instead record `telemetry_available: false`, null
+input/output/total counters, `status: unknown_failed_call`, and
+`unknown_failed_call_trace_ids`. Each ID must reference an intact, same-paper
+failed API call with no provider usage; the ordinary write-time manifest checks
+still apply. The failed-ID set must cover every indexed unknown-usage call
+for that paper, and `known_usage` must equal its indexed returned-usage subset.
+Run-level counters must also be null when any paper has unknown usage, with the
+known subset reported separately. A missing trace, successful response,
+mismatched paper, or zero placeholder does not qualify. This records an operational failure without
+dropping its paper or inventing a cost. Reports label aggregate telemetry as
+incomplete; use returned usage plus separately recorded failed-call reservations
+for experiment budgeting. Scientific predictions and count acceptance do not
+change when these failure references are attached.
+
 Historical evaluation runs created before this recorder retain final
 predictions, evidence, route rationale, source hashes, timing, and aggregate
 token telemetry, but not exact raw request/response envelopes. Those missing

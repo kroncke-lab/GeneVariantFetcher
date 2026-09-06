@@ -1,0 +1,52 @@
+{
+  "model": "grok-4.6",
+  "http_status": 200,
+  "body": {
+    "id": "36c6c11b-f7d1-42f0-878e-1ad3861d91c1",
+    "model": "grok-4.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"ok\":true,\"answer\":7}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 18,
+      "completion_tokens": 9,
+      "total_tokens": 150,
+      "audio_prompt_tokens": 0,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0,
+        "text_tokens": 18,
+        "image_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 123,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0
+    },
+    "created": 1788703332,
+    "object": "chat.completion",
+    "prompt_filter_results": null
+  },
+  "elapsed_seconds": 6.068818791070953,
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly the JSON object {\"ok\":true,\"answer\":7}."
+      }
+    ],
+    "max_completion_tokens": 1024,
+    "reasoning_effort": "high"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "grok43": {
+    "all_non_usage_aggregate_fields_identical": true,
+    "report_sha256": "8a202bb0c6e4fcabe207e823429bcc85fb948cd38f0dc57361a562c0e2d168ee"
+  },
+  "astra_medium_verified": {
+    "all_non_usage_aggregate_fields_identical": true,
+    "report_sha256": "68ce6a46637c013ef5d131f1264dea6190ba39fedfd5ed2279b261ab7b60c28e"
+  },
+  "grok43_astra_clinical_verified": {
+    "all_non_usage_aggregate_fields_identical": true,
+    "report_sha256": "21041e78b5a9f82008143cd66e798fc77f9defb5dc641fdb937b4d0c6383995f"
+  }
+}

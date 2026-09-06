@@ -1,0 +1,432 @@
+Review this model routing and SDK compatibility patch adversarially. No tools, edits, web, subagents or experiments. Max 600 words. API calls already proved Astra needs max_completion_tokens and actual HTTP mock transport tests proved LiteLLM drops reasoning_effort on new names unless allowed_openai_params explicitly keeps it. Per-model routes are opt-in process environment; .env unchanged. Production comparisons are running frozen; no gold scores opened. Focus concrete regressions, route credential safety, cap/reasoning behavior, and whether tests verify the real request. Distinguish real bugs from optional hardening.
+diff --git a/harvesting/figure_text_extractor.py b/harvesting/figure_text_extractor.py
+index 879abf92..c5519090 100644
+--- a/harvesting/figure_text_extractor.py
++++ b/harvesting/figure_text_extractor.py
+@@ -35,6 +35,7 @@ from utils.llm_trace import (
+     record_trace_event,
+ )
+ from utils.llm_utils import (
++    azure_connection_for_model,
+     azure_responses_api_url,
+     build_reasoning_effort_kwargs,
+     build_responses_reasoning_param,
+@@ -51,6 +52,8 @@ _IMAGE_SUFFIXES = frozenset(
+ _RESPONSES_API_PREFIXES = (
+     "gpt-5",
+     "azure_ai/gpt-5",
++    "gpt-6-astra",
++    "azure_ai/gpt-6-astra",
+ )
+ 
+ _EXTRACT_PROMPT = """\
+@@ -370,8 +373,7 @@ def call_responses_api_vision(
+     ``low``, and if the retry is also empty accept it — with the outcome
+     recorded in the trace — rather than re-burning the cap at the same effort.
+     """
+-    base = normalize_azure_ai_api_base()
+-    key = os.environ.get("AZURE_AI_API_KEY", "")
++    base, key = azure_connection_for_model(model)
+     if not base or not key:
+         raise RuntimeError(
+             "Responses API figure extraction requires AZURE_AI_API_BASE and "
+diff --git a/harvesting/figure_variant_reader.py b/harvesting/figure_variant_reader.py
+index fe43c27b..e599e2ef 100644
+--- a/harvesting/figure_variant_reader.py
++++ b/harvesting/figure_variant_reader.py
+@@ -69,7 +69,12 @@ _IMAGE_SUFFIXES = frozenset(
+     {".png", ".jpg", ".jpeg", ".gif", ".tiff", ".tif", ".webp", ".bmp"}
+ )
+ 
+-_RESPONSES_API_PREFIXES = ("gpt-5", "azure_ai/gpt-5")
++_RESPONSES_API_PREFIXES = (
++    "gpt-5",
++    "azure_ai/gpt-5",
++    "gpt-6-astra",
++    "azure_ai/gpt-6-astra",
++)
+ 
+ #: Off-switch for the caption triage gate (default ON). Read live, not at
+ #: import, so one process can score runs under both policies — the same
+diff --git a/pipeline/pedigree_extractor.py b/pipeline/pedigree_extractor.py
+index a4ecfea7..7137a097 100755
+--- a/pipeline/pedigree_extractor.py
++++ b/pipeline/pedigree_extractor.py
+@@ -35,6 +35,7 @@ from utils.llm_trace import (
+     record_trace_event,
+ )
+ from utils.llm_utils import (
++    azure_connection_for_model,
+     azure_responses_api_url,
+     build_reasoning_effort_kwargs,
+     build_responses_reasoning_param,
+@@ -53,6 +54,8 @@ logger = logging.getLogger(__name__)
+ _RESPONSES_API_PREFIXES = (
+     "gpt-5",
+     "azure_ai/gpt-5",
++    "gpt-6-astra",
++    "azure_ai/gpt-6-astra",
+ )
+ 
+ 
+@@ -82,8 +85,7 @@ def _call_azure_responses_api_vision(
+     model emitted, or None on transport / non-200 errors. Caller is
+     responsible for retry semantics.
+     """
+-    base = normalize_azure_ai_api_base()
+-    key = os.environ.get("AZURE_AI_API_KEY", "")
++    base, key = azure_connection_for_model(deployment)
+     if not base or not key:
+         logger.error(
+             "Responses API call requires AZURE_AI_API_BASE and AZURE_AI_API_KEY"
+diff --git a/scripts/smoke_azure_models.py b/scripts/smoke_azure_models.py
+index 598d5bd9..768c5051 100755
+--- a/scripts/smoke_azure_models.py
++++ b/scripts/smoke_azure_models.py
+@@ -20,7 +20,16 @@ from config.settings import get_settings
+ from utils.llm_utils import litellm_completion
+ 
+ 
+-REASONING_HINTS = ("kimi", "grok-4", "gpt-5", "gpt5", "deepseek", "o1", "o3")
++REASONING_HINTS = (
++    "kimi",
++    "grok-4",
++    "gpt-5",
++    "gpt-6-astra",
++    "gpt5",
++    "deepseek",
++    "o1",
++    "o3",
++)
+ 
+ 
+ def _unique(items: Iterable[str]) -> list[str]:
+diff --git a/tests/unit/test_azure_openai_v1_routing.py b/tests/unit/test_azure_openai_v1_routing.py
+index 58002ff3..19343953 100644
+--- a/tests/unit/test_azure_openai_v1_routing.py
++++ b/tests/unit/test_azure_openai_v1_routing.py
+@@ -1,6 +1,56 @@
+ """Regression coverage for Azure Foundry's OpenAI-compatible v1 endpoint."""
+ 
+ from utils.llm_utils import resolve_litellm_model_and_kwargs
++import pytest
++import json
++
++
++def test_new_models_can_use_a_separate_resource_without_moving_old_stages(monkeypatch):
++    monkeypatch.setenv(
++        "AZURE_AI_API_BASE", "https://old.services.ai.azure.com/openai/v1"
++    )
++    monkeypatch.setenv("AZURE_AI_API_KEY", "old-key")
++    monkeypatch.setenv("NEW_RESOURCE_KEY", "new-key")
++    monkeypatch.setenv(
++        "AZURE_AI_MODEL_ROUTES",
++        json.dumps(
++            {
++                "gpt-6-astra": {
++                    "api_base": "https://new.services.ai.azure.com/openai/v1",
++                    "api_key_env": "NEW_RESOURCE_KEY",
++                }
++            }
++        ),
++    )
++    _, old = resolve_litellm_model_and_kwargs("azure_ai/grok-4.3")
++    _, new = resolve_litellm_model_and_kwargs("azure_ai/gpt-6-astra")
++    assert old["api_key"] == "old-key"
++    assert new["api_key"] == "new-key"
++    assert old["api_base"] != new["api_base"]
++    monkeypatch.delenv("NEW_RESOURCE_KEY")
++    with pytest.raises(ValueError, match="requires NEW_RESOURCE_KEY"):
++        resolve_litellm_model_and_kwargs("azure_ai/gpt-6-astra")
++
++
++@pytest.mark.parametrize("temperature", [0, 1, None])
++def test_astra_omits_all_unsupported_sampling_parameters(monkeypatch, temperature):
++    monkeypatch.setenv(
++        "AZURE_AI_API_BASE", "https://example.services.ai.azure.com/openai/v1"
++    )
++    model, kwargs = resolve_litellm_model_and_kwargs(
++        "azure_ai/gpt-6-astra",
++        temperature=temperature,
++        top_p=0.9,
++        logprobs=False,
++        top_logprobs=2,
++        max_tokens=32000,
++        reasoning_effort="high",
++    )
++    assert model == "openai/gpt-6-astra"
++    assert not {"temperature", "top_p", "logprobs", "top_logprobs"}.intersection(kwargs)
++    assert "max_tokens" not in kwargs
++    assert kwargs["max_completion_tokens"] == 32000
++    assert kwargs["reasoning_effort"] == "high"
+ 
+ 
+ def test_openai_v1_base_rewrites_azure_model_and_preserves_credentials(
+@@ -36,3 +86,76 @@ def test_resource_root_keeps_standard_azure_ai_route(monkeypatch):
+ 
+     assert model == "azure_ai/gpt-5.4"
+     assert kwargs == {"temperature": 0}
++
++
++@pytest.mark.parametrize("model", ["gpt-6-astra", "grok-4.6"])
++@pytest.mark.parametrize("effort", ["medium", "high"])
++def test_new_model_effort_reaches_actual_sdk_request(monkeypatch, model, effort):
++    import httpx
++    from openai import OpenAI
++    from utils.llm_utils import litellm_completion
++
++    sent = []
++
++    def handle(request):
++        sent.append(json.loads(request.content))
++        return httpx.Response(
++            200,
++            json={
++                "id": "wire-test",
++                "object": "chat.completion",
++                "created": 1,
++                "model": model,
++                "choices": [
++                    {
++                        "index": 0,
++                        "message": {"role": "assistant", "content": "{}"},
++                        "finish_reason": "stop",
++                    }
++                ],
++                "usage": {
++                    "prompt_tokens": 10,
++                    "completion_tokens": 2,
++                    "total_tokens": 12,
++                },
++            },
++        )
++
++    client = OpenAI(
++        api_key="test-only-key",
++        base_url="https://mock.invalid/v1",
++        http_client=httpx.Client(transport=httpx.MockTransport(handle)),
++        max_retries=0,
++    )
++    litellm_completion(
++        model="openai/" + model,
++        client=client,
++        messages=[{"role": "user", "content": "Return JSON"}],
++        max_tokens=32000,
++        reasoning_effort=effort,
++        temperature=0,
++        response_format={"type": "json_object"},
++    )
++    assert len(sent) == 1
++    assert sent[0]["reasoning_effort"] == effort
++    cap = "max_completion_tokens" if model == "gpt-6-astra" else "max_tokens"
++    assert sent[0][cap] == 32000
++    if model == "gpt-6-astra":
++        assert "temperature" not in sent[0]
++
++
++@pytest.mark.parametrize(
++    "route",
++    [
++        None,
++        {
++            "api_base": "https://new.services.ai.azure.com",
++            "api_key_env": "NEW_RESOURCE_KEY",
++        },
++    ],
++)
++def test_selected_malformed_route_never_falls_back_to_old_resource(monkeypatch, route):
++    monkeypatch.setenv("AZURE_AI_MODEL_ROUTES", json.dumps({"gpt-6-astra": route}))
++    monkeypatch.setenv("NEW_RESOURCE_KEY", "test-key")
++    with pytest.raises(ValueError):
++        resolve_litellm_model_and_kwargs("azure_ai/gpt-6-astra")
+diff --git a/tests/unit/test_llm_token_limits.py b/tests/unit/test_llm_token_limits.py
+index 65e8a227..d060c8f3 100644
+--- a/tests/unit/test_llm_token_limits.py
++++ b/tests/unit/test_llm_token_limits.py
+@@ -3,6 +3,27 @@ from utils.llm_utils import (
+     build_responses_reasoning_param,
+     clamp_max_tokens,
+ )
++import pytest
++
++
++@pytest.mark.parametrize("model", ["azure_ai/gpt-6-astra", "azure_ai/grok-4.6"])
++def test_new_reader_effort_is_sent_in_both_api_shapes(model):
++    assert build_reasoning_effort_kwargs(model, "high") == {"reasoning_effort": "high"}
++    assert build_responses_reasoning_param(model, "high") == {
++        "reasoning": {"effort": "high"}
++    }
++    for unsupported in ("none", "minimal"):
++        assert build_reasoning_effort_kwargs(model, unsupported) == {
++            "reasoning_effort": "low"
++        }
++        assert build_responses_reasoning_param(model, unsupported) == {
++            "reasoning": {"effort": "low"}
++        }
++
++
++def test_astra_does_not_fall_back_to_unknown_model_output_limit():
++    assert clamp_max_tokens("azure_ai/gpt-6-astra", 32000, warn=False) == 32000
++    assert clamp_max_tokens("azure_ai/gpt-6-astra", 128000, warn=False) == 64000
+ 
+ 
+ def test_new_azure_deployments_have_large_output_budget():
+diff --git a/utils/llm_utils.py b/utils/llm_utils.py
+index e226c821..e31fec7f 100755
+--- a/utils/llm_utils.py
++++ b/utils/llm_utils.py
+@@ -79,6 +79,10 @@ MODEL_TOKEN_LIMITS = {
+     # long inputs. Give ample headroom (verified on the source-grounded summary).
+     "gpt-5.6-sol": (128000, 64000),  # OpenAI GPT-5.6 Sol via Azure Foundry
+     "gpt-5.6": (128000, 64000),  # OpenAI GPT-5.6 family via Azure
++    "gpt-6-astra": (128000, 64000),  # Includes hidden reasoning plus emitted JSON
++    # Local request policy for the new deployment, not a provider maximum.
++    # The inherited 15k Grok cap truncated full-paper JSON in live calibration.
++    "grok-4.6": (32000, 32000),
+     # Generic GPT-5 family fallback. Lookup is longest-pattern-first, so the
+     # specific gpt-5.x entries above still win; this only catches gpt-5.x ids we
+     # haven't enumerated yet. Without it an unrecognized gpt-5.x falls to
+@@ -141,13 +145,28 @@ DEFAULT_TOKEN_LIMIT = (4096, 4000)
+ # "xhigh" as the deepest available). We treat "max" as an alias of "xhigh".
+ # Anthropic exposes the same capability through extended `thinking`, which
+ # additionally requires temperature=1 — so we do NOT route Claude through this
+-# helper yet. Grok-4-class models reason by default and ignore an effort param.
++# helper yet. Grok 4.6 accepts effort; older Grok deployments retain their
++# existing provider-default reasoning configuration.
+ # litellm.drop_params=True would silently drop an unsupported value, so this
+ # allow-list exists to make the no-op explicit (and logged) rather than leaving
+ # callers believing effort was applied.
+ REASONING_EFFORT_LEVELS = ("none", "minimal", "low", "medium", "high", "xhigh")
+ REASONING_EFFORT_ALIASES = {"max": "xhigh"}
+-_REASONING_EFFORT_MODEL_HINTS = ("gpt-5", "gpt5", "o1", "o3", "o4-mini")
++_REASONING_EFFORT_MODEL_HINTS = (
++    "gpt-5",
++    "gpt5",
++    "gpt-6-astra",
++    "grok-4.6",
++    "o1",
++    "o3",
++    "o4-mini",
++)
++
++
++def _requires_reasoning(model: Optional[str]) -> bool:
++    """These explicitly supported deployments cannot disable reasoning."""
++    name = (model or "").lower().rsplit("/", 1)[-1]
++    return name.startswith(("gpt-6-astra", "grok-4.6"))
+ 
+ 
+ # =============================================================================
+@@ -175,6 +194,59 @@ def is_azure_openai_v1_base(base: Optional[str] = None) -> bool:
+     return normalized.endswith("/openai/v1")
+ 
+ 
++def azure_connection_for_model(model: str) -> tuple[str, str]:
++    """Resolve an opt-in deployment-specific Azure resource without key copies.
++
++    AZURE_AI_MODEL_ROUTES maps deployment names to api_base and api_key_env.
++    The map contains environment-variable names, never credential values.
++    Unknown deployments retain the existing resource; malformed selected routes
++    fail before dispatch rather than accidentally charging another provider.
++    """
++    base = normalize_azure_ai_api_base()
++    key = (os.environ.get("AZURE_AI_API_KEY") or "").strip()
++    raw = os.environ.get("AZURE_AI_MODEL_ROUTES", "").strip()
++    if not raw:
++        return base, key
++    try:
++        routes = json.loads(raw)
++    except json.JSONDecodeError as exc:
++        raise ValueError("AZURE_AI_MODEL_ROUTES must be a JSON object") from exc
++    if not isinstance(routes, dict):
++        raise ValueError("AZURE_AI_MODEL_ROUTES must be a JSON object")
++    deployment = (model or "").rsplit("/", 1)[-1]
++    if deployment not in routes:
++        return base, key
++    route = routes[deployment]
++    if not isinstance(route, dict) or set(route) != {"api_base", "api_key_env"}:
++        raise ValueError("Azure model route requires only api_base and api_key_env")
++    if not isinstance(route["api_base"], str) or not isinstance(
++        route["api_key_env"], str
++    ):
++        raise ValueError("Azure model route values must be strings")
++    from urllib.parse import urlsplit
++
++    parsed = urlsplit(route["api_base"])
++    if (
++        parsed.scheme != "https"
++        or not parsed.hostname
++        or parsed.username
++        or parsed.password
++        or parsed.query
++        or parsed.fragment
++    ):
++        raise ValueError(
++            "Azure model route requires an HTTPS API base without credentials or query"
++        )
++    if not is_azure_openai_v1_base(route["api_base"]):
++        raise ValueError("Azure model routes require an /openai/v1 API base")
++    routed_key = (os.environ.get(route["api_key_env"]) or "").strip()
++    if not routed_key:
++        raise ValueError(
++            f"Azure deployment {deployment!r} requires {route['api_key_env']}"
++        )
++    return normalize_azure_ai_api_base(route["api_base"]), routed_key
++
++
+ def azure_responses_api_url(base: Optional[str] = None) -> str:
+     """Build the Azure Foundry Responses API URL for the configured base.
+ 
+@@ -203,8 +275,9 @@ def resolve_litellm_model_and_kwargs(
+ ) -> tuple[str, Dict[str, Any]]:
+     """Rewrite azure_ai/* for Foundry OpenAI v1 bases; otherwise pass through."""
+     out = dict(kwargs)
+-    base = normalize_azure_ai_api_base()
+-    key = (os.environ.get("AZURE_AI_API_KEY") or "").strip()
++    base, key = (
++        azure_connection_for_model(model) if model.startswith("azure_ai/") else ("", "")
++    )
+     resolved = model
+     if model.startswith("azure_ai/") and is_azure_openai_v1_base(base):
+         deployment = model[len("azure_ai/") :]
+@@ -212,6 +285,22 @@ def resolve_litellm_model_and_kwargs(
+         if key:
+             out.setdefault("api_key", key)
+         resolved = f"openai/{deployment}"
++    if _requires_reasoning(resolved) and out.get("reasoning_effort") is not None:
++        # LiteLLM versions without these new model names silently drop effort
++        # under drop_params=True. Explicitly allow this verified parameter so
++        # the SDK's dispatch payload, not just our pre-SDK trace, carries it.
++        allowed = list(out.get("allowed_openai_params") or [])
++        if "reasoning_effort" not in allowed:
++            allowed.append("reasoning_effort")
++        out["allowed_openai_params"] = allowed
++    if resolved.lower().rsplit("/", 1)[-1].startswith("gpt-6-astra"):
++        # Astra disallows sampling/log-probability parameters, including an
++        # explicit temperature=1. Do not rely on LiteLLM's versioned registry.
++        for parameter in ("temperature", "top_p", "top_logprobs", "logprobs"):
++            out.pop(parameter, None)
++        if "max_tokens" in out:
++            legacy_cap = out.pop("max_tokens")
++            out.setdefault("max_completion_tokens", legacy_cap)
+     # gpt-5.6-sol rejects temperature != 1 (and temperature=0 is common in GVF).
+     # Omit the param so the provider default applies.
+     if _model_rejects_nondefault_temperature(resolved) and "temperature" in out:
+@@ -262,6 +351,8 @@ def build_reasoning_effort_kwargs(
+     effort = normalize_reasoning_effort(effort)
+     if not effort:
+         return {}
++    if _requires_reasoning(model) and effort in {"none", "minimal"}:
++        effort = "low"
+     m = (model or "").lower()
+     if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
+         return {"reasoning_effort": effort}
+@@ -287,6 +378,8 @@ def build_responses_reasoning_param(
+     effort = normalize_reasoning_effort(effort)
+     if not effort:
+         return {}
++    if _requires_reasoning(model) and effort in {"none", "minimal"}:
++        effort = "low"
+     m = (model or "").lower()
+     if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
+         return {"reasoning": {"effort": effort}}

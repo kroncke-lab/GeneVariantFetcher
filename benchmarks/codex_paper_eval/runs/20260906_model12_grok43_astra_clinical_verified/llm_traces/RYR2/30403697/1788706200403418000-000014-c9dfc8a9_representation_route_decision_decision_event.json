@@ -1,0 +1,21 @@
+{
+  "context": {
+    "gene": "RYR2",
+    "pmid": "30403697",
+    "stage": "representation_route_decision"
+  },
+  "event": {
+    "data": {
+      "source_chars": 231340,
+      "source_sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb",
+      "tool": "text"
+    },
+    "type": "representation_route_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:50:00.403412+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788706200403418000-000014-c9dfc8a9"
+}

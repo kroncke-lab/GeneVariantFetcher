@@ -1,0 +1,39 @@
+{
+  "classification": "Source-only original-DOC layout cross-check, not gold/count accuracy",
+  "original_doc": "corpus/MYBPC3/20433692/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-S1.DOC",
+  "original_doc_sha256": "ab8471b010acb8885b96ed9612e1c3a3f1834bf105b5f55752c296281b6098c5",
+  "html_sha256": "881322ac08168bc02f1b39439026127e3bdbda0f0a6a39d121862505974277b2",
+  "rendered_pdf_sha256": "035b531acb703ba166e855648bace9e68d71433314b2b4d7dea7d5f83dbd6205",
+  "conversion": "LibreOffice read-only HTML and PDF exports; original corpus file unchanged",
+  "visual_pages_inspected": [
+    1,
+    2,
+    3
+  ],
+  "person_rows": 48,
+  "mechanical_comparison_fields": [
+    "variant",
+    "family",
+    "person",
+    "mut",
+    "diagnosis_cell",
+    "index_case"
+  ],
+  "differences": [],
+  "blank_family_cells_carried_with_prose_support": [
+    {
+      "original_person_row": 40,
+      "person": "IV-1",
+      "carried_family": "H49",
+      "note": "Family cell is explicitly blank, not a merged H49 cell; prose line 120 supplies H49 for these noncarriers."
+    },
+    {
+      "original_person_row": 41,
+      "person": "IV-5",
+      "carried_family": "H49",
+      "note": "Family cell is explicitly blank, not a merged H49 cell; prose line 120 supplies H49 for these noncarriers."
+    }
+  ],
+  "footnote": "No Dx: Unaffected or healthy",
+  "endpoint_qualification": "The table includes 9 No Dx carriers; prose distinguishes 6 healthy carriers from 4 with suggestive ECG but no diagnostic HCM (3 No Dx plus 1 unknown diagnosis). Do not equate all table No Dx with ECG-normal or asymptomatic. This source audit does not choose the benchmark endpoint or modify predictions."
+}

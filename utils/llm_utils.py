@@ -79,6 +79,10 @@ MODEL_TOKEN_LIMITS = {
     # long inputs. Give ample headroom (verified on the source-grounded summary).
     "gpt-5.6-sol": (128000, 64000),  # OpenAI GPT-5.6 Sol via Azure Foundry
     "gpt-5.6": (128000, 64000),  # OpenAI GPT-5.6 family via Azure
+    "gpt-6-astra": (128000, 64000),  # Includes hidden reasoning plus emitted JSON
+    # Local request policy for the new deployment, not a provider maximum.
+    # The inherited 15k Grok cap truncated full-paper JSON in live calibration.
+    "grok-4.6": (32000, 32000),
     # Generic GPT-5 family fallback. Lookup is longest-pattern-first, so the
     # specific gpt-5.x entries above still win; this only catches gpt-5.x ids we
     # haven't enumerated yet. Without it an unrecognized gpt-5.x falls to
@@ -141,13 +145,28 @@ DEFAULT_TOKEN_LIMIT = (4096, 4000)
 # "xhigh" as the deepest available). We treat "max" as an alias of "xhigh".
 # Anthropic exposes the same capability through extended `thinking`, which
 # additionally requires temperature=1 — so we do NOT route Claude through this
-# helper yet. Grok-4-class models reason by default and ignore an effort param.
+# helper yet. Grok 4.6 accepts effort; older Grok deployments retain their
+# existing provider-default reasoning configuration.
 # litellm.drop_params=True would silently drop an unsupported value, so this
 # allow-list exists to make the no-op explicit (and logged) rather than leaving
 # callers believing effort was applied.
 REASONING_EFFORT_LEVELS = ("none", "minimal", "low", "medium", "high", "xhigh")
 REASONING_EFFORT_ALIASES = {"max": "xhigh"}
-_REASONING_EFFORT_MODEL_HINTS = ("gpt-5", "gpt5", "o1", "o3", "o4-mini")
+_REASONING_EFFORT_MODEL_HINTS = (
+    "gpt-5",
+    "gpt5",
+    "gpt-6-astra",
+    "grok-4.6",
+    "o1",
+    "o3",
+    "o4-mini",
+)
+
+
+def _requires_reasoning(model: Optional[str]) -> bool:
+    """These explicitly supported deployments cannot disable reasoning."""
+    name = (model or "").lower().rsplit("/", 1)[-1]
+    return name.startswith(("gpt-6-astra", "grok-4.6"))
 
 
 # =============================================================================
@@ -173,6 +192,59 @@ def is_azure_openai_v1_base(base: Optional[str] = None) -> bool:
     """True when the configured Azure base is the Foundry OpenAI v1 endpoint."""
     normalized = normalize_azure_ai_api_base(base)
     return normalized.endswith("/openai/v1")
+
+
+def azure_connection_for_model(model: str) -> tuple[str, str]:
+    """Resolve an opt-in deployment-specific Azure resource without key copies.
+
+    AZURE_AI_MODEL_ROUTES maps deployment names to api_base and api_key_env.
+    The map contains environment-variable names, never credential values.
+    Unknown deployments retain the existing resource; malformed selected routes
+    fail before dispatch rather than accidentally charging another provider.
+    """
+    base = normalize_azure_ai_api_base()
+    key = (os.environ.get("AZURE_AI_API_KEY") or "").strip()
+    raw = os.environ.get("AZURE_AI_MODEL_ROUTES", "").strip()
+    if not raw:
+        return base, key
+    try:
+        routes = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError("AZURE_AI_MODEL_ROUTES must be a JSON object") from exc
+    if not isinstance(routes, dict):
+        raise ValueError("AZURE_AI_MODEL_ROUTES must be a JSON object")
+    deployment = (model or "").rsplit("/", 1)[-1]
+    if deployment not in routes:
+        return base, key
+    route = routes[deployment]
+    if not isinstance(route, dict) or set(route) != {"api_base", "api_key_env"}:
+        raise ValueError("Azure model route requires only api_base and api_key_env")
+    if not isinstance(route["api_base"], str) or not isinstance(
+        route["api_key_env"], str
+    ):
+        raise ValueError("Azure model route values must be strings")
+    from urllib.parse import urlsplit
+
+    parsed = urlsplit(route["api_base"])
+    if (
+        parsed.scheme != "https"
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise ValueError(
+            "Azure model route requires an HTTPS API base without credentials or query"
+        )
+    if not is_azure_openai_v1_base(route["api_base"]):
+        raise ValueError("Azure model routes require an /openai/v1 API base")
+    routed_key = (os.environ.get(route["api_key_env"]) or "").strip()
+    if not routed_key:
+        raise ValueError(
+            f"Azure deployment {deployment!r} requires {route['api_key_env']}"
+        )
+    return normalize_azure_ai_api_base(route["api_base"]), routed_key
 
 
 def azure_responses_api_url(base: Optional[str] = None) -> str:
@@ -203,8 +275,9 @@ def resolve_litellm_model_and_kwargs(
 ) -> tuple[str, Dict[str, Any]]:
     """Rewrite azure_ai/* for Foundry OpenAI v1 bases; otherwise pass through."""
     out = dict(kwargs)
-    base = normalize_azure_ai_api_base()
-    key = (os.environ.get("AZURE_AI_API_KEY") or "").strip()
+    base, key = (
+        azure_connection_for_model(model) if model.startswith("azure_ai/") else ("", "")
+    )
     resolved = model
     if model.startswith("azure_ai/") and is_azure_openai_v1_base(base):
         deployment = model[len("azure_ai/") :]
@@ -212,6 +285,22 @@ def resolve_litellm_model_and_kwargs(
         if key:
             out.setdefault("api_key", key)
         resolved = f"openai/{deployment}"
+    if _requires_reasoning(resolved) and out.get("reasoning_effort") is not None:
+        # LiteLLM versions without these new model names silently drop effort
+        # under drop_params=True. Explicitly allow this verified parameter so
+        # the SDK's dispatch payload, not just our pre-SDK trace, carries it.
+        allowed = list(out.get("allowed_openai_params") or [])
+        if "reasoning_effort" not in allowed:
+            allowed.append("reasoning_effort")
+        out["allowed_openai_params"] = allowed
+    if resolved.lower().rsplit("/", 1)[-1].startswith("gpt-6-astra"):
+        # Astra disallows sampling/log-probability parameters, including an
+        # explicit temperature=1. Do not rely on LiteLLM's versioned registry.
+        for parameter in ("temperature", "top_p", "top_logprobs", "logprobs"):
+            out.pop(parameter, None)
+        if "max_tokens" in out:
+            legacy_cap = out.pop("max_tokens")
+            out.setdefault("max_completion_tokens", legacy_cap)
     # gpt-5.6-sol rejects temperature != 1 (and temperature=0 is common in GVF).
     # Omit the param so the provider default applies.
     if _model_rejects_nondefault_temperature(resolved) and "temperature" in out:
@@ -262,6 +351,8 @@ def build_reasoning_effort_kwargs(
     effort = normalize_reasoning_effort(effort)
     if not effort:
         return {}
+    if _requires_reasoning(model) and effort in {"none", "minimal"}:
+        effort = "low"
     m = (model or "").lower()
     if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
         return {"reasoning_effort": effort}
@@ -287,6 +378,8 @@ def build_responses_reasoning_param(
     effort = normalize_reasoning_effort(effort)
     if not effort:
         return {}
+    if _requires_reasoning(model) and effort in {"none", "minimal"}:
+        effort = "low"
     m = (model or "").lower()
     if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
         return {"reasoning": {"effort": effort}}

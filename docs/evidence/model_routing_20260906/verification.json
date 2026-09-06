@@ -1,0 +1,44 @@
+{
+  "unit_suite": {
+    "passed": 2942,
+    "log": "validation_runs/model_routing_20260906/final_unit_tests_v3.log",
+    "seconds": 114.2
+  },
+  "focused_transport_cap_tests": {
+    "passed": 23,
+    "log": "validation_runs/model_routing_20260906/final_transport_tests.log"
+  },
+  "campaign_and_token_tests": {
+    "passed": 24,
+    "log": "validation_runs/model_routing_20260906/final_campaign_tests.log"
+  },
+  "compileall": "passed after final production usage change",
+  "ruff_check": "all repository checks passed",
+  "wheel_build": "passed",
+  "isolated_wheel_gvf_help": "passed outside repository",
+  "isolated_wheel_gvf_run_help": "passed outside repository",
+  "live_vision_accuracy": "not tested",
+  "failed_telemetry_tests": {
+    "passed": 83,
+    "log": "validation_runs/model_routing_20260906/failed_telemetry_tests.log"
+  },
+  "budget_non_dispatch_and_native_failure_tests": {
+    "passed": 23,
+    "log": "validation_runs/model_routing_20260906/budget_non_dispatch_tests.log"
+  },
+  "projection_and_native_failure_tests": {
+    "passed": 18,
+    "log": "validation_runs/model_routing_20260906/final_projection_usage_tests.log"
+  },
+  "figure_layout_tests": {
+    "passed": 8,
+    "log": "validation_runs/model_routing_20260906/figure_layout_tests.log"
+  },
+  "final_artifact_check": "Final prediction/selection lock hashes verified; canonical and paired PNGs visually inspected.",
+  "cli_result_reviews": {
+    "claude": "completed",
+    "grok": "completed",
+    "agy": "completed",
+    "disposition": "reviews/results_disposition.md"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "classification": "Opened-calibration independent clinical reader, accepted additive overlay and unvalidated raw diagnostic",
+  "base_run": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_grok43",
+  "base_lock_sha256": "f932e9a18eee23855eb0ebd31c6b4da01536e16c75cb9a3769826cf81a48637d",
+  "prompt_sha256": "6c72036531982dd380d6f7fe2cfb898f327ad73f622db3690b2cce0130c14065",
+  "script_sha256": "41f1c1bf385a02fcca4792963b5e8cca285b39ae36ab94b0b6ed352b938a5b71",
+  "trigger_manifest_sha256": "3ee061ca0401644d3c64dac88dcf240920922adaed6ef9f2c3249a9c397d8be9",
+  "no_baseline_answers_sent_to_reader": true,
+  "gold_use": "prepare checks PMID eligibility only; no gold identities or values supplied to reader or overlay"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "model": "azure_ai/grok-4.6",
+    "status": "failed",
+    "error": "litellm.Timeout: APITimeoutError - Request timed out. Error_str: Request timed out.",
+    "elapsed_seconds": 360.86978170799557
+  },
+  {
+    "model": "azure_ai/gpt-6-astra",
+    "status": "failed",
+    "error": "litellm.BadRequestError: OpenAIException - Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.",
+    "elapsed_seconds": 0.33620212494861335
+  }
+]

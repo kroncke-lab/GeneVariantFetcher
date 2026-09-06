@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "error": "litellm.Timeout: APITimeoutError - Request timed out. Error_str: Request timed out.",
+  "json_mode": true,
+  "seconds": 65.38207158294972,
+  "cap_parameter": "max_completion_tokens"
+}

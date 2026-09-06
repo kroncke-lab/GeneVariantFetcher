@@ -1,0 +1,57 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-09-06T16:29:37.660503+00:00",
+  "predictions_sha256": "af34e05b7964b93a8825bcb978e99b275fb3ed5d2bd5bee16021b6520ede5b5c",
+  "production_run_statuses": [
+    {
+      "gene": "MYBPC3",
+      "sha256": "9da53ed24edc676701b8cb9bcac947f5ed5758d7aee3aa7c324149fbfc6b7b2f",
+      "status": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/RUN_STATUS.json"
+    },
+    {
+      "gene": "RYR2",
+      "sha256": "2309cd3a9aa9f6e1abaef65d3e355440874e5f68b040c1d1ca4e915aec5b27e3",
+      "status": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/RUN_STATUS.json"
+    },
+    {
+      "gene": "SCN5A",
+      "sha256": "5c1953a197365258ea21d326fa43bf64a64ce03bd0df2df36937b9fc4d94ab16",
+      "status": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/RUN_STATUS.json"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 31,
+      "gene": "MYBPC3",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 32,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/llm_traces/trace_manifest.json",
+      "run_id": "b3a5f34f-e371-4f0b-955d-3974ad70e677",
+      "sha256": "f8f9b90854be6a7a82e07b84f10939e8008c6124ebc7e0d4c6e798c6ffdf5d00"
+    },
+    {
+      "decision_event_count": 18,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 14,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/trace_manifest.json",
+      "run_id": "65a45d27-db42-40e1-9671-0523aa369e75",
+      "sha256": "d81870e098f155520fa0a4e2ba0903dee0c338c4f44ac968a7e9140780529aa4"
+    },
+    {
+      "decision_event_count": 24,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 21,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/llm_traces/trace_manifest.json",
+      "run_id": "5d3bb40e-a625-48cb-bfe8-607705c88f27",
+      "sha256": "3097f0e6c5530f263d2800bd1afae1c6a6aded515a02f5a4f4b390d492365244"
+    }
+  ],
+  "selection_sha256": "d06d19b13a76c7692fc3a2e99e267071d1c0d38019247520d4adc1c199252ae2",
+  "setup_sha256": null,
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}

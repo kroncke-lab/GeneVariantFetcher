@@ -49,6 +49,21 @@ ANTHROPIC_API_KEY=your-anthropic-key
 export ANTHROPIC_API_KEY=your-anthropic-key
 ```
 
+To use deployments on multiple Azure resources, export `AZURE_AI_MODEL_ROUTES`
+as a JSON object in the process environment. For example:
+
+```bash
+export AZURE_AI_MODEL_ROUTES='{"gpt-6-astra":{"api_base":"https://second-resource.services.ai.azure.com/openai/v1","api_key_env":"SECOND_AZURE_API_KEY"}}'
+```
+
+Supply `SECOND_AZURE_API_KEY` through your existing secret-management environment.
+The route contains the variable's name, never its credential value. These
+arbitrary key variables must be exported; Settings does not load them from
+`.env`. Unlisted models use the ordinary `AZURE_AI_API_BASE` and
+`AZURE_AI_API_KEY`. A selected route with a missing key or malformed endpoint
+fails before dispatch. Both chat and Azure Responses vision paths honor the
+per-deployment route. Selecting a deployment does not change stage defaults.
+
 ### Illustrative Cost Range
 
 | Gene Size | Papers Extracted | Approx Cost |

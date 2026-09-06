@@ -1,0 +1,40 @@
+{
+  "locks_verified": {
+    "grok43": {
+      "lock_sha256": "f932e9a18eee23855eb0ebd31c6b4da01536e16c75cb9a3769826cf81a48637d",
+      "report_sha256": "8a202bb0c6e4fcabe207e823429bcc85fb948cd38f0dc57361a562c0e2d168ee"
+    },
+    "astra_medium_verified": {
+      "lock_sha256": "1bd422d343131cd7d6478fabe0ba3dfbd874f5bdcd76a46b4b58abee0e681298",
+      "report_sha256": "68ce6a46637c013ef5d131f1264dea6190ba39fedfd5ed2279b261ab7b60c28e"
+    },
+    "grok43_astra_clinical_verified": {
+      "lock_sha256": "69e11e5f218821ea7b30e0a27c849f2bc9d2062b0bdd8c124ad2bf2a1a97f4e2",
+      "report_sha256": "21041e78b5a9f82008143cd66e798fc77f9defb5dc641fdb937b4d0c6383995f"
+    }
+  },
+  "canonical_membership_unchanged": true,
+  "figures": [
+    {
+      "path": "docs/figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.png",
+      "sha256": "c92163a9f96632473734d620bdd1b72b20ec15e8f792af200b4a5a39620f876f",
+      "visual_qa": "Inspected: cohort counts and paired baselines correct; annotations contained, connectors attached, statuses distinguishable."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/figures/gold_difference.png",
+      "sha256": "8c9742918e1e7aee64279e8959601138748f65a9777eb5474551f7cf19e72f0a",
+      "visual_qa": "Inspected: cohort counts and paired baselines correct; annotations contained, connectors attached, statuses distinguishable."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/figures/gold_difference.png",
+      "sha256": "4aca115467151488134bc36f67f4053319cc15ff0aa10416ea441343108a394d",
+      "visual_qa": "Inspected: cohort counts and paired baselines correct; annotations contained, connectors attached, statuses distinguishable."
+    },
+    {
+      "path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/figures/gold_difference.png",
+      "sha256": "de4e69cc691817b1de038248421bc8516d40ffe04ba3fb7d80f395414ba8fda5",
+      "visual_qa": "Inspected: cohort counts and paired baselines correct; annotations contained, connectors attached, statuses distinguishable."
+    }
+  ],
+  "canonical_panel_sampling": "Historical 118 and opened candidate 458 attempts remain separate; model panel not pooled."
+}

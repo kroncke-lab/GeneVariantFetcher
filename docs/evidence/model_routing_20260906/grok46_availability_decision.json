@@ -1,0 +1,14 @@
+{
+  "classification": "deployment availability failure; no corrected Grok 4.6 accuracy estimate",
+  "decision": "Do not dispatch corrected Grok 4.6 paper batch after failing live 32k gate",
+  "checked_paths": [
+    "Chat Completions through SDK",
+    "minimal direct Chat Completions HTTP",
+    "direct Responses HTTP"
+  ],
+  "last_checks": [
+    "grok_final_health_responses_low.json",
+    "grok_final_health_chat_default.json"
+  ],
+  "qualification": "Earlier default-effective probes and partial paper pilots returned; later bounded requests timed out. No evidence identifies provider root cause; usage on failed/canceled requests is reserved. The Grok CLI is a separate service path, not this Azure deployment."
+}

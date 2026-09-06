@@ -1,0 +1,20 @@
+{
+  "context": {
+    "gene": "RYR2",
+    "pmid": "25435091",
+    "stage": "paper_curation"
+  },
+  "event": {
+    "data": {
+      "retained_baseline": true,
+      "status": "not_triggered"
+    },
+    "type": "paper_curation"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:58:08.597148+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788706688597153000-000028-341590aa"
+}

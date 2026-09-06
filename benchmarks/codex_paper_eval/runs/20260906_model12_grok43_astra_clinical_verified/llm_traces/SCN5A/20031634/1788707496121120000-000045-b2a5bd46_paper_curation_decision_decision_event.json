@@ -1,0 +1,738 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "20031634",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": null,
+      "gene": "SCN5A",
+      "pmid": "20031634",
+      "raw_fills": [],
+      "rejected": [
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 3,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "A",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nA c.612–2A.G … 6 3 3 0 3 Wrong splice",
+              "scope": "current_study"
+            },
+            "carriers": 6,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "A",
+                "section": "PDF page 3",
+                "table": "Table 1. Summary of the Phenotype-Genotype Relationship in the Study Group (n513 Families)"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nA c.612–2A.G … 6 3 3 0 3 Wrong splice",
+              "scope": "current_study"
+            },
+            "unaffected": 3,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "A",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nA c.612–2A.G … 6 3 3 0 3 Wrong splice",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote the table's BrS-ECG phenotype classifications, not clinical symptom status or absence of conduction disease. Provocation testing was not performed in every family member. The three mutation-negative BrS-ECG1 individuals are excluded.",
+            "variant": "c.612–2A.G"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.612–2A.G"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 4,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "B",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nB c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+              "scope": "current_study"
+            },
+            "carriers": 14,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "B",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nB c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+              "scope": "current_study"
+            },
+            "unaffected": 9,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "B",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nB c.4222G.A p.Gly1408Arg 14 4 9 1 0 Missense27",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. One carrier has undetermined phenotype and is included in neither phenotype count. Provocation testing was incomplete.",
+            "variant": "c.4222G.A (p.Gly1408Arg)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.4222G.A (p.Gly1408Arg)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 4,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "C",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nC c.673C.T p.Arg225Trp 11 4 6 1 0 Missense28",
+              "scope": "current_study"
+            },
+            "carriers": 11,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "C",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nC c.673C.T p.Arg225Trp 11 4 6 1 0 Missense28",
+              "scope": "current_study"
+            },
+            "unaffected": 6,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "C",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nC c.673C.T p.Arg225Trp 11 4 6 1 0 Missense28",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. One carrier has undetermined phenotype. Provocation testing was incomplete. R225W in reference 33 is an alternative notation; no prior-study people are added.",
+            "variant": "c.673C.T (p.Arg225Trp)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.673C.T (p.Arg225Trp)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 3,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "D",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nD c.5164A.G p.Asn1722Asp 9 3 5 1 2 Missense",
+              "scope": "current_study"
+            },
+            "carriers": 9,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "D",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nD c.5164A.G p.Asn1722Asp 9 3 5 1 2 Missense",
+              "scope": "current_study"
+            },
+            "unaffected": 5,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "D",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nD c.5164A.G p.Asn1722Asp 9 3 5 1 2 Missense",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. One carrier has undetermined phenotype. Provocation testing was incomplete. The two mutation-negative BrS-ECG1 individuals, including symptomatic patient d2, are excluded.",
+            "variant": "c.5164A.G (p.Asn1722Asp)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.5164A.G (p.Asn1722Asp)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 2,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "E",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nE c.396312T.C … 10 2 8 0 0 Wrong splice16",
+              "scope": "current_study"
+            },
+            "carriers": 10,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "E",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nE c.396312T.C … 10 2 8 0 0 Wrong splice16",
+              "scope": "current_study"
+            },
+            "unaffected": 8,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "E",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nE c.396312T.C … 10 2 8 0 0 Wrong splice16",
+              "scope": "current_study"
+            },
+            "uncertainty": "Variant notation is preserved exactly as supplied; the splice-site notation may contain a text-extraction artifact and is not corrected. Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. Provocation testing was incomplete.",
+            "variant": "c.396312T.C"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.396312T.C"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 3,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "F",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nF c.4145G.T p.Ser1382Ile 9 3 5 1 1 Missense29",
+              "scope": "current_study"
+            },
+            "carriers": 9,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "F",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nF c.4145G.T p.Ser1382Ile 9 3 5 1 1 Missense29",
+              "scope": "current_study"
+            },
+            "unaffected": 5,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "F",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nF c.4145G.T p.Ser1382Ile 9 3 5 1 1 Missense29",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. One carrier has undetermined phenotype. Provocation testing was incomplete. The mutation-negative BrS-ECG1 individual is excluded.",
+            "variant": "c.4145G.T (p.Ser1382Ile)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.4145G.T (p.Ser1382Ile)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 4,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "G",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nG c.2516T.C p.Leu839Pro 5 4 1 0 0 Missense",
+              "scope": "current_study"
+            },
+            "carriers": 5,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "G",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nG c.2516T.C p.Leu839Pro 5 4 1 0 0 Missense",
+              "scope": "current_study"
+            },
+            "unaffected": 1,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "G",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nG c.2516T.C p.Leu839Pro 5 4 1 0 0 Missense",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. Provocation testing was not performed in every family member.",
+            "variant": "c.2516T.C (p.Leu839Pro)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2516T.C (p.Leu839Pro)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 4,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "H",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nH c.2254G.A p.Gly752.Arg 6 4 2 0 0 Missense29,30",
+              "scope": "current_study"
+            },
+            "carriers": 6,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "H",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nH c.2254G.A p.Gly752.Arg 6 4 2 0 0 Missense29,30",
+              "scope": "current_study"
+            },
+            "unaffected": 2,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "H",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nH c.2254G.A p.Gly752.Arg 6 4 2 0 0 Missense29,30",
+              "scope": "current_study"
+            },
+            "uncertainty": "The table's p.Gly752.Arg notation is preserved; the Discussion writes p.Gly752Arg. Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. Provocation testing was incomplete.",
+            "variant": "c.2254G.A (p.Gly752.Arg)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2254G.A (p.Gly752.Arg)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 6,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "I",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nI c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+              "scope": "current_study"
+            },
+            "carriers": 9,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "I",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nI c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+              "scope": "current_study"
+            },
+            "unaffected": 2,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "I",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nI c.1983–1993dup p.Ala665GlyfsX16 9 6 2 1 1 Frameshift, stop",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. One carrier has undetermined phenotype. Provocation testing was incomplete. The mutation-negative BrS-ECG1 individual is excluded.",
+            "variant": "c.1983–1993dup (p.Ala665GlyfsX16)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.1983–1993dup (p.Ala665GlyfsX16)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 5,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "J",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nJ c.1603C.T p.Arg535X 9 5 4 0 0 Non sense29",
+              "scope": "current_study"
+            },
+            "carriers": 9,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "J",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nJ c.1603C.T p.Arg535X 9 5 4 0 0 Non sense29",
+              "scope": "current_study"
+            },
+            "unaffected": 4,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "J",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nJ c.1603C.T p.Arg535X 9 5 4 0 0 Non sense29",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. Provocation testing was not performed in every family member.",
+            "variant": "c.1603C.T (p.Arg535X)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.1603C.T (p.Arg535X)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 6,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "L",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nL p.1570-Phe1571insIle 11 6 4 1 0 Insertion",
+              "scope": "current_study"
+            },
+            "carriers": 11,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "L",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nL p.1570-Phe1571insIle 11 6 4 1 0 Insertion",
+              "scope": "current_study"
+            },
+            "unaffected": 4,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "L",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nL p.1570-Phe1571insIle 11 6 4 1 0 Insertion",
+              "scope": "current_study"
+            },
+            "uncertainty": "The supplied insertion notation is preserved. Counts use the explicit BrS-ECG classifications, with one carrier's phenotype undetermined. The sudden deaths described for the proband and his brother are not added: their ownership relative to the counted phenotype categories cannot be established through explicit patient IDs in the supplied text. Unaffected does not mean free of all cardiac phenotypes; provocation testing was incomplete.",
+            "variant": "p.1570-Phe1571insIle"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "p.1570-Phe1571insIle"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 7,
+            "affected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mutation Positive BrS-ECG1",
+                "kind": "table_row",
+                "row": "M",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nM c.481G.A p.Glu161Lys 11 7 4 0 1 Missense23,29",
+              "scope": "current_study"
+            },
+            "carriers": 11,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation Carriers",
+                "kind": "table_row",
+                "row": "M",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nM c.481G.A p.Glu161Lys 11 7 4 0 1 Missense23,29",
+              "scope": "current_study"
+            },
+            "unaffected": 4,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mutation Positive Not BrS ECG1",
+                "kind": "table_row",
+                "row": "M",
+                "section": "PDF page 3",
+                "table": "Table 1"
+              },
+              "person_ids": [],
+              "quote": "Mutation Mutation Mutation Positive, Mutation\nFamily Mutation Mutation Mutation Positive Positive Phenotype Negative Type of\nNo. (Nucleotide) (Amino Acid) Carriers BrS-ECG1 Not BrS ECG1 Undetermined BrS ECG1 Mutation\nM c.481G.A p.Glu161Lys 11 7 4 0 1 Missense23,29",
+              "scope": "current_study"
+            },
+            "uncertainty": "Affected and unaffected denote reported BrS-ECG phenotype status, not symptom status or absence of conduction disease. Provocation testing was incomplete. The mutation-negative BrS-ECG1 individual is excluded. E161K in reference 23 is an alternative notation; its two cited families are not person counts and are not added.",
+            "variant": "c.481G.A (p.Glu161Lys)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.481G.A (p.Glu161Lys)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "",
+                "kind": "sentence",
+                "row": "",
+                "section": "Discussion, PDF page 5",
+                "table": ""
+              },
+              "person_ids": [],
+              "quote": "2 are frameshift mutations (c.3816delG and\nc.1983 to 1993dup)",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "The Discussion names this variant among mutations in the 13 studied families, but gives no per-variant human counts. Table 1 instead names c.3667delG for the deletion frameshift in family K. This may be an inconsistent designation, but the source does not establish equivalence. Counts from family K are not transferred, and this entry does not establish an additional independent cohort or mutation.",
+            "variant": "c.3816delG"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.3816delG"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": null,
+            "carriers_evidence": {
+              "basis": "none",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "",
+                "kind": "sentence",
+                "row": "",
+                "section": "References, reference 33, PDF page 7",
+                "table": ""
+              },
+              "person_ids": [],
+              "quote": "Compound heterozy-\ngosity for mutations (W156X and R225W) in SCN5A associated with\nsevere cardiac conduction disturbances and degenerative changes in the\nconduction system.",
+              "scope": "prior_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Present only in a cited prior-study title. No human count is supplied, and W156X is not identified as a variant carried by this article's current-study participants. Compound heterozygosity does not establish a numerical person count.",
+            "variant": "W156X"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "W156X"
+        }
+      ],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "SCN5A",
+        "missing_fields": 3,
+        "pmid": "20031634",
+        "source_sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T15:11:36.120516+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788707496121120000-000045-b2a5bd46"
+}

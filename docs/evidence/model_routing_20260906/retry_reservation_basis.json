@@ -1,0 +1,7 @@
+{
+  "inspected": "installed LiteLLM OpenAIChatCompletion.completion",
+  "source_sha256": "27d68ae3490016e6ef02418e8d34420524ee2f676ba9065bf5c3321c5410ed17",
+  "sdk_retry_default": 2,
+  "reservation_attempts": 3,
+  "decision": "Keep the three-attempt reserve. Observing zero retries on returned calls does not prove future SDK retries are disabled. No live accounting reduction or runtime change."
+}

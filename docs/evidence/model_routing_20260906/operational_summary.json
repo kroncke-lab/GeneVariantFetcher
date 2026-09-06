@@ -1,0 +1,1359 @@
+{
+  "grok43": {
+    "scope": "Primary extraction, its empty-output retries and JSON repair calls",
+    "calls": 10,
+    "papers_reaching_stage": [
+      "MYBPC3:20433692",
+      "MYBPC3:21302287",
+      "RYR2:18929323",
+      "RYR2:19398417",
+      "RYR2:25435091",
+      "RYR2:25814417",
+      "RYR2:30403697",
+      "SCN5A:20031634",
+      "SCN5A:25163546",
+      "SCN5A:32533946"
+    ],
+    "finish_reasons": {
+      "stop": 9,
+      "length": 1
+    },
+    "empty_visible_returns": 0,
+    "known_reasoning_tokens": 23700,
+    "call_records": [
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702554460886000-000003-d3124755",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/MYBPC3/20260906_084806/llm_traces/MYBPC3/20433692/1788702554460886000-000003-d3124755_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 38.643802,
+        "finish_reason": "stop",
+        "visible_output_chars": 23108,
+        "reasoning_tokens": 1342,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 5784,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1342,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 16888,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 4,
+            "image_tokens": 0,
+            "text_tokens": 16888
+          },
+          "total_tokens": 24014
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.038925,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "21302287",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702737011192000-000027-63b68452",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/MYBPC3/20260906_084806/llm_traces/MYBPC3/21302287/1788702737011192000-000027-63b68452_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 69.395176,
+        "finish_reason": "stop",
+        "visible_output_chars": 33074,
+        "reasoning_tokens": 4027,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 8562,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 4027,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 23890,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 4,
+            "image_tokens": 0,
+            "text_tokens": 23890
+          },
+          "total_tokens": 36479
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.061335,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "18929323",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702523380561000-000002-a4a4f8c8",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/RYR2/20260906_084806/llm_traces/RYR2/18929323/1788702523380561000-000002-a4a4f8c8_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 24.611793,
+        "finish_reason": "stop",
+        "visible_output_chars": 7533,
+        "reasoning_tokens": 2616,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 1817,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2616,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 12268,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 4,
+            "image_tokens": 0,
+            "text_tokens": 12268
+          },
+          "total_tokens": 16701
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.0264175,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "19398417",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702551474690000-000005-f233d879",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/RYR2/20260906_084806/llm_traces/RYR2/19398417/1788702551474690000-000005-f233d879_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 22.298697,
+        "finish_reason": "stop",
+        "visible_output_chars": 5120,
+        "reasoning_tokens": 2047,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 1186,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2047,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 4626,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 3844,
+            "image_tokens": 0,
+            "text_tokens": 4626
+          },
+          "total_tokens": 7859
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.013865,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25435091",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702583644985000-000008-5a4f91e3",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/RYR2/20260906_084806/llm_traces/RYR2/25435091/1788702583644985000-000008-5a4f91e3_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 32.148977,
+        "finish_reason": "stop",
+        "visible_output_chars": 12341,
+        "reasoning_tokens": 2401,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 3030,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2401,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 7893,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 4,
+            "image_tokens": 0,
+            "text_tokens": 7893
+          },
+          "total_tokens": 13324
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.02344375,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25814417",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702608672377000-000011-c2423484",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/RYR2/20260906_084806/llm_traces/RYR2/25814417/1788702608672377000-000011-c2423484_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 24.743157,
+        "finish_reason": "stop",
+        "visible_output_chars": 7387,
+        "reasoning_tokens": 2783,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 1718,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2783,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 19102,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 3908,
+            "image_tokens": 0,
+            "text_tokens": 19102
+          },
+          "total_tokens": 23603
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.03513,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30403697",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702712807893000-000015-31c7b20c",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/RYR2/20260906_084806/llm_traces/RYR2/30403697/1788702712807893000-000015-31c7b20c_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 95.459366,
+        "finish_reason": "length",
+        "visible_output_chars": 59251,
+        "reasoning_tokens": 2140,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 15000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2140,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 20294,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 3908,
+            "image_tokens": 0,
+            "text_tokens": 20294
+          },
+          "total_tokens": 37434
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.0682175,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20031634",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702561422144000-000002-0eb198a3",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/SCN5A/20260906_084806/llm_traces/SCN5A/20031634/1788702561422144000-000002-0eb198a3_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 62.638324,
+        "finish_reason": "stop",
+        "visible_output_chars": 34315,
+        "reasoning_tokens": 2518,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 8922,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2518,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 13796,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 4,
+            "image_tokens": 0,
+            "text_tokens": 13796
+          },
+          "total_tokens": 25236
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.045845,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25163546",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702717885600000-000030-87108ff0",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/SCN5A/20260906_084806/llm_traces/SCN5A/25163546/1788702717885600000-000030-87108ff0_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 92.305505,
+        "finish_reason": "stop",
+        "visible_output_chars": 44085,
+        "reasoning_tokens": 2628,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 11006,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2628,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 14077,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 3844,
+            "image_tokens": 0,
+            "text_tokens": 14077
+          },
+          "total_tokens": 27711
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.05168125,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "32533946",
+        "model": "azure_ai/grok-4.3",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788702835054493000-000036-64bb6302",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43/production_runs/SCN5A/20260906_084806/llm_traces/SCN5A/32533946/1788702835054493000-000036-64bb6302_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 16.721364,
+        "finish_reason": "stop",
+        "visible_output_chars": 6027,
+        "reasoning_tokens": 1198,
+        "usage": {
+          "audio_prompt_tokens": 0,
+          "completion_tokens": 1472,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1198,
+            "rejected_prediction_tokens": 0
+          },
+          "num_sources_used": 0,
+          "prompt_tokens": 29125,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 3844,
+            "image_tokens": 0,
+            "text_tokens": 29125
+          },
+          "total_tokens": 31795
+        },
+        "error": null,
+        "sdk_retry_count": null,
+        "returned_proxy_usd": 0.04308125,
+        "unknown_retry_reserve_usd": null
+      }
+    ]
+  },
+  "astra_medium_verified": {
+    "scope": "Primary extraction, its empty-output retries and JSON repair calls",
+    "calls": 15,
+    "papers_reaching_stage": [
+      "MYBPC3:20433692",
+      "MYBPC3:21302287",
+      "RYR2:18929323",
+      "RYR2:19398417",
+      "RYR2:25435091",
+      "RYR2:25814417",
+      "RYR2:30403697",
+      "SCN5A:20031634",
+      "SCN5A:25163546",
+      "SCN5A:32533946"
+    ],
+    "finish_reasons": {
+      "length": 6,
+      "stop": 8,
+      "None": 1
+    },
+    "empty_visible_returns": 6,
+    "known_reasoning_tokens": 195999,
+    "call_records": [
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788706010989862000-000003-71cad74f",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/llm_traces/MYBPC3/20433692/1788706010989862000-000003-71cad74f_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 1113.356548,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 82,
+            "service_tbt_ms": 34,
+            "service_ttft_ms": 1696,
+            "service_ttlt_ms": 1104912,
+            "user_visible_ttft_ms": 1614
+          },
+          "prompt_tokens": 17315,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 13383,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 49315
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.77315,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "empty_content_retry",
+        "attempt": 2,
+        "trace_id": "1788706246345420000-000004-75bb95f7",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/llm_traces/MYBPC3/20433692/1788706246345420000-000004-75bb95f7_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 235.338115,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 209,
+            "service_tbt_ms": 7,
+            "service_ttft_ms": 991,
+            "service_ttlt_ms": 220283,
+            "user_visible_ttft_ms": 782
+          },
+          "prompt_tokens": 17315,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 13383,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 49315
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.77315,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "json_repair",
+        "attempt": 3,
+        "trace_id": "1788706251578439000-000005-a647b4b6",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/llm_traces/MYBPC3/20433692/1788706251578439000-000005-a647b4b6_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 5.227902,
+        "finish_reason": "stop",
+        "visible_output_chars": 2,
+        "reasoning_tokens": 14,
+        "usage": {
+          "completion_tokens": 27,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 14,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 77,
+            "service_tbt_ms": 84,
+            "service_ttft_ms": 2373,
+            "service_ttlt_ms": 4644,
+            "user_visible_ttft_ms": 2296
+          },
+          "prompt_tokens": 122,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "total_tokens": 149
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.00257,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "21302287",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788707155707089000-000009-c725f01e",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/llm_traces/MYBPC3/21302287/1788707155707089000-000009-c725f01e_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 901.22105,
+        "finish_reason": "stop",
+        "visible_output_chars": 86338,
+        "reasoning_tokens": 1659,
+        "usage": {
+          "completion_tokens": 25755,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1659,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 125,
+            "service_tbt_ms": 34,
+            "service_ttft_ms": 3431,
+            "service_ttlt_ms": 891311,
+            "user_visible_ttft_ms": 3306
+          },
+          "prompt_tokens": 25108,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 25105,
+            "cached_tokens": 0
+          },
+          "total_tokens": 50863
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.53883,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "18929323",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788705069808048000-000002-983e7334",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/18929323/1788705069808048000-000002-983e7334_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 194.248949,
+        "finish_reason": "stop",
+        "visible_output_chars": 14013,
+        "reasoning_tokens": 97,
+        "usage": {
+          "completion_tokens": 3387,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 97,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 141,
+            "service_tbt_ms": 38,
+            "service_ttft_ms": 62056,
+            "service_ttlt_ms": 190978,
+            "user_visible_ttft_ms": 61915
+          },
+          "prompt_tokens": 12579,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 12576,
+            "cached_tokens": 0
+          },
+          "total_tokens": 15966
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.29514,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "19398417",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788705096645664000-000005-12f70a4b",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/19398417/1788705096645664000-000005-12f70a4b_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 20.786035,
+        "finish_reason": "stop",
+        "visible_output_chars": 6885,
+        "reasoning_tokens": 367,
+        "usage": {
+          "completion_tokens": 1871,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 367,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 138,
+            "service_tbt_ms": 10,
+            "service_ttft_ms": 908,
+            "service_ttlt_ms": 19274,
+            "user_visible_ttft_ms": 770
+          },
+          "prompt_tokens": 4719,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 787,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 6590
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.14074,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25435091",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788705355803526000-000008-290b131b",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/25435091/1788705355803526000-000008-290b131b_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 259.113263,
+        "finish_reason": "stop",
+        "visible_output_chars": 26103,
+        "reasoning_tokens": 310,
+        "usage": {
+          "completion_tokens": 6459,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 310,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 103,
+            "service_tbt_ms": 39,
+            "service_ttft_ms": 2017,
+            "service_ttlt_ms": 255783,
+            "user_visible_ttft_ms": 1914
+          },
+          "prompt_tokens": 8135,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 4203,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 14594
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.4043,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25814417",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788706547484394000-000013-924b0c33",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/25814417/1788706547484394000-000013-924b0c33_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 1187.258174,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 111,
+            "service_tbt_ms": 36,
+            "service_ttft_ms": 2850,
+            "service_ttlt_ms": 1170465,
+            "user_visible_ttft_ms": 2739
+          },
+          "prompt_tokens": 19803,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 15871,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 51803
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.79803,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25814417",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "empty_content_retry",
+        "attempt": 2,
+        "trace_id": "1788707685031858000-000014-9152adc6",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/25814417/1788707685031858000-000014-9152adc6_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 1137.562018,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 116,
+            "service_tbt_ms": 33,
+            "service_ttft_ms": 61656,
+            "service_ttlt_ms": 1127357,
+            "user_visible_ttft_ms": 61540
+          },
+          "prompt_tokens": 19803,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 19800,
+            "cached_tokens": 0
+          },
+          "total_tokens": 51803
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.79803,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "25814417",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "json_repair",
+        "attempt": 3,
+        "trace_id": "1788707690851888000-000015-b0d19605",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/25814417/1788707690851888000-000015-b0d19605_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 5.814644,
+        "finish_reason": "stop",
+        "visible_output_chars": 2,
+        "reasoning_tokens": 16,
+        "usage": {
+          "completion_tokens": 29,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 16,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 306,
+            "service_tbt_ms": 90,
+            "service_ttft_ms": 2763,
+            "service_ttlt_ms": 5370,
+            "user_visible_ttft_ms": 2457
+          },
+          "prompt_tokens": 122,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "total_tokens": 151
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.00267,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30403697",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788708777995367000-000019-d340c0fc",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/30403697/1788708777995367000-000019-d340c0fc_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 278.170867,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 132,
+            "service_tbt_ms": 8,
+            "service_ttft_ms": 1041,
+            "service_ttlt_ms": 260990,
+            "user_visible_ttft_ms": 909
+          },
+          "prompt_tokens": 21015,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 21012,
+            "cached_tokens": 0
+          },
+          "total_tokens": 53015
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.81015,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30403697",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "empty_content_retry",
+        "attempt": 2,
+        "trace_id": "1788711352679940000-000020-1ce985a9",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/llm_traces/RYR2/30403697/1788711352679940000-000020-1ce985a9_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": false,
+        "seconds": 2574.710417,
+        "finish_reason": null,
+        "visible_output_chars": 0,
+        "reasoning_tokens": null,
+        "usage": null,
+        "error": {
+          "message": "litellm.InternalServerError: InternalServerError: OpenAIException - Connection error.",
+          "type": "InternalServerError"
+        },
+        "sdk_retry_count": null,
+        "returned_proxy_usd": null,
+        "unknown_retry_reserve_usd": null
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20031634",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788705815250585000-000002-bd25eb54",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/llm_traces/SCN5A/20031634/1788705815250585000-000002-bd25eb54_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 938.589745,
+        "finish_reason": "stop",
+        "visible_output_chars": 92113,
+        "reasoning_tokens": 1024,
+        "usage": {
+          "completion_tokens": 24351,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1024,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 120,
+            "service_tbt_ms": 35,
+            "service_ttft_ms": 61773,
+            "service_ttlt_ms": 922359,
+            "user_visible_ttft_ms": 61653
+          },
+          "prompt_tokens": 14328,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 10396,
+            "cached_tokens": 3929
+          },
+          "total_tokens": 38679
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.36083,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25163546",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788706465678290000-000028-cdbe09ef",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/llm_traces/SCN5A/25163546/1788706465678290000-000028-cdbe09ef_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 583.74017,
+        "finish_reason": "stop",
+        "visible_output_chars": 55611,
+        "reasoning_tokens": 512,
+        "usage": {
+          "completion_tokens": 14822,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 512,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 133,
+            "service_tbt_ms": 34,
+            "service_ttft_ms": 1811,
+            "service_ttlt_ms": 502689,
+            "user_visible_ttft_ms": 1677
+          },
+          "prompt_tokens": 14365,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 0,
+            "cached_tokens": 14362
+          },
+          "total_tokens": 29187
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.88475,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "32533946",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": "primary",
+        "attempt": 1,
+        "trace_id": "1788708913306683000-000034-5d63ee8e",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/llm_traces/SCN5A/32533946/1788708913306683000-000034-5d63ee8e_paper_variant_extraction_ExpertExtractor.json",
+        "api_success": true,
+        "seconds": 1790.612256,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 173,
+            "service_tbt_ms": 32,
+            "service_ttft_ms": 2107,
+            "service_ttlt_ms": 1035851,
+            "user_visible_ttft_ms": 1934
+          },
+          "prompt_tokens": 29613,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 29610,
+            "cached_tokens": 0
+          },
+          "total_tokens": 61613
+        },
+        "error": null,
+        "sdk_retry_count": 1,
+        "returned_proxy_usd": 1.89613,
+        "unknown_retry_reserve_usd": 2.49293
+      }
+    ]
+  },
+  "grok43_astra_clinical_verified": {
+    "scope": "Incremental clinical calls",
+    "calls": 8,
+    "papers_reaching_stage": [
+      "MYBPC3:20433692",
+      "MYBPC3:21302287",
+      "RYR2:18929323",
+      "RYR2:30403697",
+      "SCN5A:20031634",
+      "SCN5A:20129283",
+      "SCN5A:25163546",
+      "SCN5A:30059973"
+    ],
+    "finish_reasons": {
+      "stop": 6,
+      "length": 1,
+      "None": 1
+    },
+    "empty_visible_returns": 1,
+    "known_reasoning_tokens": 38698,
+    "call_records": [
+      {
+        "gene": "MYBPC3",
+        "pmid": "20433692",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788706483312734000-000015-074bfe41",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/MYBPC3/20433692/1788706483312734000-000015-074bfe41_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 995.132377,
+        "finish_reason": "stop",
+        "visible_output_chars": 40263,
+        "reasoning_tokens": 1958,
+        "usage": {
+          "completion_tokens": 14706,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1958,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 173,
+            "service_tbt_ms": 40,
+            "service_ttft_ms": 1972,
+            "service_ttlt_ms": 583738,
+            "user_visible_ttft_ms": 1799
+          },
+          "prompt_tokens": 13241,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 0,
+            "cached_tokens": 13238
+          },
+          "total_tokens": 27947
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.86771,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "MYBPC3",
+        "pmid": "21302287",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788706198844572000-000011-f7aa64c7",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/MYBPC3/21302287/1788706198844572000-000011-f7aa64c7_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 665.675203,
+        "finish_reason": "stop",
+        "visible_output_chars": 46557,
+        "reasoning_tokens": 2478,
+        "usage": {
+          "completion_tokens": 15878,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 2478,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 97,
+            "service_tbt_ms": 41,
+            "service_ttft_ms": 2096,
+            "service_ttlt_ms": 659358,
+            "user_visible_ttft_ms": 1998
+          },
+          "prompt_tokens": 20255,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 20252,
+            "cached_tokens": 0
+          },
+          "total_tokens": 36133
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.99645,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "18929323",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788705531483728000-000007-a0ba54d7",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/RYR2/18929323/1788705531483728000-000007-a0ba54d7_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 43.31489,
+        "finish_reason": "stop",
+        "visible_output_chars": 2807,
+        "reasoning_tokens": 157,
+        "usage": {
+          "completion_tokens": 828,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 157,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 173,
+            "service_tbt_ms": 49,
+            "service_ttft_ms": 1834,
+            "service_ttlt_ms": 41993,
+            "user_visible_ttft_ms": 1661
+          },
+          "prompt_tokens": 9111,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 9108,
+            "cached_tokens": 0
+          },
+          "total_tokens": 9939
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.13251,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "RYR2",
+        "pmid": "30403697",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788706958878116000-000032-3b767dc6",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/RYR2/30403697/1788706958878116000-000032-3b767dc6_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 474.351733,
+        "finish_reason": "stop",
+        "visible_output_chars": 38381,
+        "reasoning_tokens": 1224,
+        "usage": {
+          "completion_tokens": 11707,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 1224,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 319,
+            "service_tbt_ms": 40,
+            "service_ttft_ms": 2075,
+            "service_ttlt_ms": 467139,
+            "user_visible_ttft_ms": 1757
+          },
+          "prompt_tokens": 66618,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 66615,
+            "cached_tokens": 0
+          },
+          "total_tokens": 78325
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.25153,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20031634",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788707496095898000-000044-ac6247d6",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/SCN5A/20031634/1788707496095898000-000044-ac6247d6_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 339.806561,
+        "finish_reason": "stop",
+        "visible_output_chars": 34176,
+        "reasoning_tokens": 708,
+        "usage": {
+          "completion_tokens": 9748,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 708,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 95,
+            "service_tbt_ms": 34,
+            "service_ttft_ms": 3626,
+            "service_ttlt_ms": 335212,
+            "user_visible_ttft_ms": 3531
+          },
+          "prompt_tokens": 10680,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 10677,
+            "cached_tokens": 0
+          },
+          "total_tokens": 20428
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.5942,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "20129283",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788708498035483000-000046-ab4181e5",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/SCN5A/20129283/1788708498035483000-000046-ab4181e5_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 1001.045974,
+        "finish_reason": "length",
+        "visible_output_chars": 0,
+        "reasoning_tokens": 32000,
+        "usage": {
+          "completion_tokens": 32000,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 32000,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 135,
+            "service_tbt_ms": 31,
+            "service_ttft_ms": 2454,
+            "service_ttlt_ms": 980867,
+            "user_visible_ttft_ms": 2319
+          },
+          "prompt_tokens": 20977,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 20974,
+            "cached_tokens": 0
+          },
+          "total_tokens": 52977
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 1.80977,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "25163546",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788707122590533000-000036-39ab580c",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/SCN5A/25163546/1788707122590533000-000036-39ab580c_paper_curation_independent_clinical_reader.json",
+        "api_success": true,
+        "seconds": 163.627077,
+        "finish_reason": "stop",
+        "visible_output_chars": 18913,
+        "reasoning_tokens": 173,
+        "usage": {
+          "completion_tokens": 5157,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 173,
+            "rejected_prediction_tokens": 0
+          },
+          "latency_checkpoint": {
+            "pre_inference_ms": 190,
+            "service_tbt_ms": 31,
+            "service_ttft_ms": 2591,
+            "service_ttlt_ms": 160952,
+            "user_visible_ttft_ms": 2401
+          },
+          "prompt_tokens": 50186,
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": 50183,
+            "cached_tokens": 0
+          },
+          "total_tokens": 55343
+        },
+        "error": null,
+        "sdk_retry_count": 0,
+        "returned_proxy_usd": 0.75971,
+        "unknown_retry_reserve_usd": 0.0
+      },
+      {
+        "gene": "SCN5A",
+        "pmid": "30059973",
+        "model": "azure_ai/gpt-6-astra",
+        "operation": null,
+        "attempt": null,
+        "trace_id": "1788706688587807000-000019-280a50a7",
+        "trace_path": "benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified/llm_traces/SCN5A/30059973/1788706688587807000-000019-280a50a7_paper_curation_independent_clinical_reader.json",
+        "api_success": false,
+        "seconds": 1200.399202,
+        "finish_reason": null,
+        "visible_output_chars": 0,
+        "reasoning_tokens": null,
+        "usage": null,
+        "error": {
+          "message": "litellm.Timeout: APITimeoutError - Request timed out. Error_str: Request timed out.",
+          "type": "Timeout"
+        },
+        "sdk_retry_count": null,
+        "returned_proxy_usd": null,
+        "unknown_retry_reserve_usd": null
+      }
+    ]
+  }
+}

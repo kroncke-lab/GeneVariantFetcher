@@ -1,0 +1,2 @@
+# Process synchronization file; the JSON ledger is the durable evidence.
+budget.lock

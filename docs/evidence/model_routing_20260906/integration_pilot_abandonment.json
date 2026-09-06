@@ -1,0 +1,13 @@
+{
+  "status": "abandoned_unscored_integration_pilots",
+  "arms": [
+    "astra",
+    "astra_medium",
+    "grok43_astra_clinical",
+    "grok46"
+  ],
+  "reason": "Actual SDK transformation stripped reasoning_effort for new model names. Retain outputs as operational diagnostics, not scored accuracy arms or a high-vs-medium comparison.",
+  "baseline": "grok43 is complete and locked; its model parameters and shared Sol stage parameters survived SDK transformation.",
+  "next": "Fix and verify transmitted parameters; fresh same-source corrected model configurations and selective clinical reader. No gold scores inspected.",
+  "unknown_inflight_spend": "Kept in campaign budget ledger at conservative reservation; never treated as zero."
+}

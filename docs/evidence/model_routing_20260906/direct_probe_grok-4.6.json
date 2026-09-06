@@ -1,0 +1,16 @@
+{
+  "model": "grok-4.6",
+  "error": "ReadTimeout: The read operation timed out",
+  "elapsed_seconds": 75.26163054106291,
+  "request": {
+    "model": "grok-4.6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Return exactly the JSON object {\"ok\":true,\"answer\":7}."
+      }
+    ],
+    "max_completion_tokens": 1024,
+    "reasoning_effort": "low"
+  }
+}

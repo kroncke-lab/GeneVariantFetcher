@@ -1,0 +1,6 @@
+{
+  "status": "abandoned_unscored",
+  "reason": "Requested medium was stripped by LiteLLM; same effective default as initial Astra arm. One in-flight call canceled; potential spend reserved, no zero assumption.",
+  "no_gold_score_read": true,
+  "remaining_gene_runs_not_dispatched": true
+}

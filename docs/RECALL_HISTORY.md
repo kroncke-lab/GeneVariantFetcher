@@ -15,6 +15,30 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-06 — new-model routing calibration; no promotion
+
+A frozen, opened 12-paper panel compares the fresh Grok 4.3 control with Astra
+medium and an independent Astra clinical overlay. Primary TP/FP/FN is
+699/36/89 → 608/21/180; recall declines 88.71% → 77.16%. Astra raises exact
+supplied affected values 22 → 37 but raises carrier error 337 → 512 and combined
+A/U error 1,132 → 1,200. Output-budget failures dominate identity losses.
+The accepted overlay adds one correct carrier count and no A/U fields. Its
+unvalidated raw lane adds 44 reference-exact A/U values and three disagreements;
+this motivates testing a derived-count evidence contract, not bypassing the
+literal validator. A separate compact-roster source audit reads 48 people
+correctly, with explicit endpoint/blank-cell qualifications.
+
+Two deterministic papers dominate the identity denominator; preflagged source/
+reference exclusions change the A/U error direction. Corrected Grok 4.6 failed
+bounded Azure health probes; pilots with dropped effort parameters remain
+unscored. No population forecast, human ceiling, headline, default promotion or
+unopened tranche change follows. All final arms locked before scoring. Exact
+runtime reconstruction isolates pre-score accounting amendments, with unchanged
+scientific predictions and non-usage aggregate scores. API proxy $38.57768 plus
+unknown reserves $81.45984 and margin $25 gives a $145.03751 accounted envelope;
+CLI costs excluded, invoice unreconciled. Full offline suite 2,942 passed,
+with focused accounting and figure checks. [Report and CLI review receipts](evidence/model_routing_20260906/README.md).
+
 ## 2026-09-06 — stale build-cache follow-up; no new score
 
 Artifact inspection found a deleted module retained in ignored wheel staging.

@@ -1,0 +1,27 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "30059973",
+    "stage": "representation_route"
+  },
+  "event": {
+    "data": {
+      "method": "fixed source-only text; no model routing decision",
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "SCN5A",
+        "missing_fields": 370,
+        "pmid": "30059973",
+        "source_sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95",
+        "triggered": true
+      }
+    },
+    "type": "representation_route"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:03:48.328616+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical",
+  "schema_version": 2,
+  "trace_id": "1788703428328626000-000003-b17029fe"
+}

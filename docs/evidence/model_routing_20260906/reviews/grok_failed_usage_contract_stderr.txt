@@ -1,0 +1,2 @@
+[2m2026-09-06T15:04:20.087336Z[0m [33m WARN[0m new_session: git repo discovery failed unexpectedly [3merror[0m[2m=[0munsupported extension name extensions.relativeworktrees; class=Repository (6) [3mcwd[0m[2m=[0m/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/model_routing_20260906
+[2m2026-09-06T15:07:00.408699Z[0m [33m WARN[0m Resident session actor exited unexpectedly; reaping as DeadFailed [3msession_id[0m[2m=[0m01a0773f-b662-7c11-9565-ae4bb9473c9a

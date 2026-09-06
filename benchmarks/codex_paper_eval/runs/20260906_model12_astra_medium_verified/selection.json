@@ -1,0 +1,760 @@
+{
+  "blinding": "Gold was used only to confirm PMID eligibility and the presence of at least one named variant assertion. No gold identities, values, or row counts were written into this run or supplied to extraction.",
+  "eligibility_mode": "variant",
+  "eligible_counts": {
+    "MYBPC3": 2,
+    "RYR2": 5,
+    "SCN5A": 5
+  },
+  "gold_sources": {
+    "MYBPC3": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/MYBPC3_recall_input.csv",
+    "RYR2": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/RYR2_recall_input.csv",
+    "SCN5A": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key/SCN5A_recall_input.csv"
+  },
+  "minimum_source_chars": 1000,
+  "paper_manifest": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/model_routing_20260906/paper_manifest.tsv",
+  "papers": [
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "18929323",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/extractions/RYR2_PMID_18929323.json",
+      "production_extraction_record_sha256": "e6705c97959adfe0e8380e40cb9cfbbad7227a2086f698c515a334e86e146a2f",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_FULL_CONTEXT.md": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md",
+      "source_bytes": 38895,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 38857,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md",
+            "sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+          },
+          {
+            "characters": 38857,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_FULL_CONTEXT.md",
+            "sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md",
+        "selected_metrics": {
+          "characters": 38857,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/18929323_CLEANED.md",
+          "sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+        }
+      },
+      "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "30059973",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/extractions/SCN5A_PMID_30059973.json",
+      "production_extraction_record_sha256": "29317995e0f0bb6cefeaa2eab7e870afb796fed60a6fb3f8ecdb5e827a8e21ac",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_FULL_CONTEXT.md": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md",
+      "source_bytes": 106424,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 106048,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md",
+            "sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+          },
+          {
+            "characters": 106048,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_FULL_CONTEXT.md",
+            "sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md",
+        "selected_metrics": {
+          "characters": 106048,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/30059973_CLEANED.md",
+          "sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+        }
+      },
+      "source_sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_artifacts.json",
+      "artifacts_sha256": "d955826d47f2e700483c6a810a7a5fa8014a7cec5ab037292f3a1de9ad080bcf",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_1.jpg": "1e7eb46ed0c56fd8fa025c6cbafae3e29b4e10bd67788a26bf40e03d90544672",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_2.jpg": "ecb8cf56023f20eb96107cf34323e13bccfa1161dbbb1354743726dfe5324139",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_3.jpg": "395e681f38f8cbffedd71501d054dd827647dbd03fb63de7119e25d509cac373",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-1.jpg": "1e7eb46ed0c56fd8fa025c6cbafae3e29b4e10bd67788a26bf40e03d90544672",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-2.jpg": "ecb8cf56023f20eb96107cf34323e13bccfa1161dbbb1354743726dfe5324139",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-3.jpg": "395e681f38f8cbffedd71501d054dd827647dbd03fb63de7119e25d509cac373"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_supplements/PMC2880974_supplements/1471-2350-11-67-3.jpg"
+      ],
+      "gene": "MYBPC3",
+      "gold_provenance": "curated_override_mixed_provenance",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20433692",
+      "production_extraction_record": null,
+      "production_extraction_record_sha256": null,
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_CLEANED.md": "e02061ee2c5458af6ecdbd60f812a33ec5ac7d273482306e2ea1fdf1a4c0ad72",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md",
+      "source_bytes": 39266,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 39114,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_CLEANED.md",
+            "sha256": "e02061ee2c5458af6ecdbd60f812a33ec5ac7d273482306e2ea1fdf1a4c0ad72"
+          },
+          {
+            "characters": 39192,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md",
+            "sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976"
+          }
+        ],
+        "policy": "no_extraction_record_fallback",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 39192,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/20433692_FULL_CONTEXT.md",
+          "sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976"
+        }
+      },
+      "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_artifacts.json",
+      "artifacts_sha256": "c629beaf0e73744b19b6f9c4877a92b18ae30e011aa455c5143ce9c10487f606",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_figures/fig_pmc_1.jpg": "15e7b70977a3bb8fd40e230f385420b75c4b997aaefba474586912dcda86497e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_figures/fig_pmc_2.jpg": "29f1eadd785e6b92b978cecbe416f922d23aefab8496ebecb655beb50508927a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f1.jpg": "15e7b70977a3bb8fd40e230f385420b75c4b997aaefba474586912dcda86497e",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f2.jpg": "29f1eadd785e6b92b978cecbe416f922d23aefab8496ebecb655beb50508927a"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_supplements/PMC3229838_supplements/jcp0226-2894-f2.jpg"
+      ],
+      "gene": "MYBPC3",
+      "gold_provenance": "curated_override_mixed_provenance",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "21302287",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/extractions/MYBPC3_PMID_21302287.json",
+      "production_extraction_record_sha256": "df2b2c0775ce0e67b4d5a640d6c51ed800d5916238cc728943e468250560d361",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_CLEANED.md": "a04835c8ddd285892bec0e8612e355f04aa033b2c3aa3ae84fd972c692bc3b53",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md",
+      "source_bytes": 55873,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 55533,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_CLEANED.md",
+            "sha256": "a04835c8ddd285892bec0e8612e355f04aa033b2c3aa3ae84fd972c692bc3b53"
+          },
+          {
+            "characters": 55711,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md",
+            "sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 55711,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/MYBPC3/20260906_092751/pmc_fulltext/21302287_FULL_CONTEXT.md",
+          "sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+        }
+      },
+      "source_sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_artifacts.json",
+      "artifacts_sha256": "b982ac9305d78597d28f3a1b311ec5fea248ffaf23309dac7e92d56195dd5d98",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_1.jpg": "74707e877299b96b2c0ca8469a5b65fe07f17767384ecd7ffebac8e9a68b6022",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_2.jpg": "143f3690595b3f7b7e639f22f39a1cb3ec3e74b4e1cb07e85d057a22218432da",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_3.jpg": "3d8d56afc9a4f5914eac50aa76fcd627db969b02bc7f640d632d5a87513f47d6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p10_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p11_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p12_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p13_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p14_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p1_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p2_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p3_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p3_1.jpeg": "1c8c1f65ec0ad8917beffda0a13876174a3c50d00273ca010aa676160584ecb5",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p4_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p5_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p6_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p7_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p8_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p8_1.jpeg": "6a8a5f33ee285093b2dbb8c8139a8d4b760c85b2c7499c72f0f520810e0a80e1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p9_0.jpeg": "5e7467084561a79473cc79abcd42e690b4d5f2be704b63b267557584c6b575b3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p9_1.jpeg": "c0a6386951c1dc966c8f3a54c25980719f7ca80a68c769bb5e55bf9e224df7b0",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g001.jpg": "74707e877299b96b2c0ca8469a5b65fe07f17767384ecd7ffebac8e9a68b6022",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g002.jpg": "143f3690595b3f7b7e639f22f39a1cb3ec3e74b4e1cb07e85d057a22218432da",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g003.jpg": "3d8d56afc9a4f5914eac50aa76fcd627db969b02bc7f640d632d5a87513f47d6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.t001.jpg": "2583dedec0c95c70b959d5b2188365bedf2a9d6cd8ef269a5da3e54f27559a83",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.t002.jpg": "0a39d66a38fec1f5fdad5e95c3f3582f40742cb21a1d0346c5c5ca6a77ad7206"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_1.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_2.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/fig_pmc_3.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p10_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p11_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p12_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p13_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p14_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p1_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p2_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p3_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p4_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p5_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p6_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p7_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p8_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p8_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p9_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_figures/figures/fig_p9_1.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.g003.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.t001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/PMC6221297_supplements/pone.0205925.t002.jpg"
+      ],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/pone.0205925.pdf": "02d2a119db6c7afc1d859fe9ccfb54d23cbfa1b34043f382c13716c96fde5117"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_supplements/pone.0205925.pdf"
+      ],
+      "pmid": "30403697",
+      "production_extraction_record": null,
+      "production_extraction_record_sha256": null,
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_CLEANED.md": "cdbd6c0a088ed592cc77b4fedca439796905c5b5e2f360b21990107ff9658186",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md",
+      "source_bytes": 231803,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 38773,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_CLEANED.md",
+            "sha256": "cdbd6c0a088ed592cc77b4fedca439796905c5b5e2f360b21990107ff9658186"
+          },
+          {
+            "characters": 231340,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md",
+            "sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb"
+          }
+        ],
+        "policy": "no_extraction_record_fallback",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 231340,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/30403697_FULL_CONTEXT.md",
+          "sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb"
+        }
+      },
+      "source_sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_artifacts.json",
+      "artifacts_sha256": "f07627bfb227495ec9865403c944f10521f80d27d010a5433d278d22864cdecd",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20031634",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/extractions/SCN5A_PMID_20031634.json",
+      "production_extraction_record_sha256": "750622980c4814c82bd065845ae9f7fc254581ea6eadbddda82890d2a066eca5",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_FULL_CONTEXT.md": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md",
+      "source_bytes": 36366,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 36210,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md",
+            "sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+          },
+          {
+            "characters": 36210,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_FULL_CONTEXT.md",
+            "sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md",
+        "selected_metrics": {
+          "characters": 36210,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20031634_CLEANED.md",
+          "sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+        }
+      },
+      "source_sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "19398417",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/extractions/RYR2_PMID_19398417.json",
+      "production_extraction_record_sha256": "336112eed37908fbdb15c76199dc23efb4f696a14d6abd2582fdb1e6935f5e8e",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md": "dca09b4a145fa0385f7f6bf7a8fd0866fc66fbbac6708b885c0e84d1c1c22d04",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_FULL_CONTEXT.md": "4aa46f457b35bef0db93b29bb622214bbe5321b2ce9fe475b7894afe838914e0"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md",
+      "source_bytes": 2438,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 2438,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md",
+            "sha256": "dca09b4a145fa0385f7f6bf7a8fd0866fc66fbbac6708b885c0e84d1c1c22d04"
+          },
+          {
+            "characters": 2471,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_FULL_CONTEXT.md",
+            "sha256": "4aa46f457b35bef0db93b29bb622214bbe5321b2ce9fe475b7894afe838914e0"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md",
+        "selected_metrics": {
+          "characters": 2438,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/19398417_CLEANED.md",
+          "sha256": "dca09b4a145fa0385f7f6bf7a8fd0866fc66fbbac6708b885c0e84d1c1c22d04"
+        }
+      },
+      "source_sha256": "dca09b4a145fa0385f7f6bf7a8fd0866fc66fbbac6708b885c0e84d1c1c22d04"
+    },
+    {
+      "artifacts": null,
+      "artifacts_sha256": null,
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25435091",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/extractions/RYR2_PMID_25435091.json",
+      "production_extraction_record_sha256": "c0eb6b73b3c58f4774325e247be2f5de1331d6e8a5f98519fd208e05b1edba73",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_FULL_CONTEXT.md": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md",
+      "source_bytes": 13601,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 13533,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md",
+            "sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+          },
+          {
+            "characters": 13533,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_FULL_CONTEXT.md",
+            "sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md",
+        "selected_metrics": {
+          "characters": 13533,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25435091_CLEANED.md",
+          "sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+        }
+      },
+      "source_sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_artifacts.json",
+      "artifacts_sha256": "49b576861c26fbe2e1fa23e9efc93b867819482a2b436de2df385c62413c958b",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p10_0.png": "7d2ae5c0f821552d10992ae68064972c31c455621f2dc0aecc454dbca42189c6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p11_0.png": "7b38722b00629f44637a4a86ce7ec53c5bafd8ba9beac88cc2ba6083d6f9cefc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p12_0.png": "5946aed6424f0354ec6d213347c1a813f70b75d8add99efa1f64b31c8f87fa9a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p14_0.png": "da1ad456e4454e6008c5724dfe3856ed1ec5c2d614502bf3b617f5ea0360525b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p15_0.png": "d8688d9b9a5241116942ce13310f76861a4a0ba6f08a7ed8854df8423721d48f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p16_0.png": "7812dca77e3de122929bdf9c35562960f0727b0a528c05d931f6ddb1443728f8",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p17_0.png": "bbc59d0b70a77505cd0e8f5124d7de910a1458ff1f138b3dedf0af8eb4975620",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p18_0.png": "a7e90deeff2d5e881c88f70a8bb2b36140a14f3423f5e8f3b5b6ff88ad8c47b1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p19_0.png": "0baa4cdd291b591cbd51ea4a4a2fc4a43d0018f720e084a897a047e4b74e00f3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p20_0.png": "daeb1321ad3204bd16364a71927bf5421a0b125f0b1e1abf4158cbc22ee29485",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p21_0.png": "233860970a26fed56f62a387a4d2c354d0df9342d585b8eb9f5b3ac5266164cb",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p23_0.png": "7d2ae5c0f821552d10992ae68064972c31c455621f2dc0aecc454dbca42189c6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p24_0.png": "7b38722b00629f44637a4a86ce7ec53c5bafd8ba9beac88cc2ba6083d6f9cefc",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p25_0.png": "5946aed6424f0354ec6d213347c1a813f70b75d8add99efa1f64b31c8f87fa9a",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p27_0.png": "da1ad456e4454e6008c5724dfe3856ed1ec5c2d614502bf3b617f5ea0360525b",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p28_0.png": "d8688d9b9a5241116942ce13310f76861a4a0ba6f08a7ed8854df8423721d48f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p30_0.png": "ee1fa23463df0cae4a1af10855690b0526b4ab82c83e7c6f13ced6002e749bad",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p31_0.png": "d832878f59034653047d227f3d518663f2a93e1ea2488901c5fa4da7d6280238",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p3_0.jpeg": "b333ba0f8e19d6e7b9e16a2e2408654d3d9ad48a8e2930c16d517e24476006b6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p3_0.png": "7812dca77e3de122929bdf9c35562960f0727b0a528c05d931f6ddb1443728f8",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p4_0.jpeg": "aa2caf00af84e47bcd62d6ded0764632689205e862b4f74387ec3cd2c96be91d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p4_0.png": "bbc59d0b70a77505cd0e8f5124d7de910a1458ff1f138b3dedf0af8eb4975620",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p5_0.png": "a7e90deeff2d5e881c88f70a8bb2b36140a14f3423f5e8f3b5b6ff88ad8c47b1",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p6_0.jpeg": "26e6c892038d20f2d4c98c8bf490115d48d3a879fa580b4bf585f09ca2d9adea",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p6_0.png": "0baa4cdd291b591cbd51ea4a4a2fc4a43d0018f720e084a897a047e4b74e00f3",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p7_0.png": "daeb1321ad3204bd16364a71927bf5421a0b125f0b1e1abf4158cbc22ee29485",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p8_0.jpeg": "b265c66c3bdd677d1f2ec23161ba494a16fdf953a2050143061f745768be285f",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p8_0.png": "233860970a26fed56f62a387a4d2c354d0df9342d585b8eb9f5b3ac5266164cb"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p10_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p11_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p12_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p14_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p15_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p16_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p17_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p18_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p19_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p20_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p21_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p23_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p24_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p25_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p27_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p28_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p30_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p31_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p3_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p3_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p4_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p4_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p5_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p6_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p6_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p7_0.png",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p8_0.jpeg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_figures/figures/fig_p8_0.png"
+      ],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_supplements/mmc1.pdf": "8013ac71c176180729e3330c19a437dc1b6e4272e117b7bb79b032e6c010817d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_supplements/mmc3.pdf": "ef3bc3bb40469b6ca316ba97d2dded72fef9bdfa987077f95fbdd6f91631a49d"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_supplements/mmc1.pdf",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_supplements/mmc3.pdf"
+      ],
+      "pmid": "32533946",
+      "production_extraction_record": null,
+      "production_extraction_record_sha256": null,
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_CLEANED.md": "9a02740acd6fae69ab147decbf26d9f05fd7625bde769e3e5c7f70782901aa99",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md",
+      "source_bytes": 223498,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 201929,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_CLEANED.md",
+            "sha256": "9a02740acd6fae69ab147decbf26d9f05fd7625bde769e3e5c7f70782901aa99"
+          },
+          {
+            "characters": 222579,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md",
+            "sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+          }
+        ],
+        "policy": "no_extraction_record_fallback",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 222579,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/32533946_FULL_CONTEXT.md",
+          "sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+        }
+      },
+      "source_sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_artifacts.json",
+      "artifacts_sha256": "35266b5a503349243e141c4d5f52a1d4f5ecdfd71d1b077a91b45679d32b1255",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_supplements/ehu301supp_tables.pdf": "d7f66792a68476ab997c173fa3fd1875e0a7f5fbfe07d196125247b42f89e122"
+      },
+      "pdfs": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_supplements/ehu301supp_tables.pdf"
+      ],
+      "pmid": "25163546",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/extractions/SCN5A_PMID_25163546.json",
+      "production_extraction_record_sha256": "74321051bd5785f684ff2791cdc971068b8c496b40ea575a2fda93b24f1b783c",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_FULL_CONTEXT.md": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md",
+      "source_bytes": 133086,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 132569,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md",
+            "sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+          },
+          {
+            "characters": 132569,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_FULL_CONTEXT.md",
+            "sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md",
+        "selected_metrics": {
+          "characters": 132569,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/25163546_CLEANED.md",
+          "sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+        }
+      },
+      "source_sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_artifacts.json",
+      "artifacts_sha256": "210abd6a33e2ce05a561b7c788e0f3f461a1800f62d74c369181315ce3f7387f",
+      "figure_sha256": {},
+      "figures": [],
+      "gene": "RYR2",
+      "gold_provenance": "human_curated_ryr2_pilot",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "25814417",
+      "production_extraction_record": null,
+      "production_extraction_record_sha256": null,
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_CLEANED.md": "b7a5e6589716fc0500bc6e47ed9d699fad0e53b4b18df218917abc3a33e3e672",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md",
+      "source_bytes": 62343,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 62114,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_CLEANED.md",
+            "sha256": "b7a5e6589716fc0500bc6e47ed9d699fad0e53b4b18df218917abc3a33e3e672"
+          },
+          {
+            "characters": 62190,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md",
+            "sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+          }
+        ],
+        "policy": "no_extraction_record_fallback",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md",
+        "selected_metrics": {
+          "characters": 62190,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/RYR2/20260906_092751/pmc_fulltext/25814417_FULL_CONTEXT.md",
+          "sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+        }
+      },
+      "source_sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+    },
+    {
+      "artifacts": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_artifacts.json",
+      "artifacts_sha256": "81112222491617fba9fd7e64892f5130e127c445f30d1a07b95e60b41f6968b1",
+      "figure_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0001.jpg": "3a6e4482083f49e22fc7db42a6b275b2eafd1a36e6b4cba4808def6d15d5ab1d",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0002.jpg": "d245dc36ac952ee582c403291d4394ad07bf949dc78d7d223632d80c24d3c223",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0004.jpg": "8cbb698c2bd33913f8cf95c0488732b399e5d9ad1b780aa41500958a0ce955d1"
+      },
+      "figures": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0001.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0002.jpg",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_figures/nihms-169148-f0004.jpg"
+      ],
+      "gene": "SCN5A",
+      "gold_provenance": "human_curated_cardiac",
+      "pdf_sha256": {},
+      "pdfs": [],
+      "pmid": "20129283",
+      "production_extraction_record": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/extractions/SCN5A_PMID_20129283.json",
+      "production_extraction_record_sha256": "9f047428e940bc4b0261e825bb3e778e895e03c75fdddf159e83d059267556a1",
+      "production_run_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751",
+      "representation_sha256": {
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_FULL_CONTEXT.md": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+      },
+      "representations": [
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md",
+        "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_FULL_CONTEXT.md"
+      ],
+      "source": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md",
+      "source_bytes": 59870,
+      "source_selection": {
+        "candidates": [
+          {
+            "characters": 59783,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md",
+            "sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+          },
+          {
+            "characters": 59783,
+            "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_FULL_CONTEXT.md",
+            "sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+          }
+        ],
+        "policy": "extraction_metadata_verified",
+        "rationale": "Bound after extraction and before gold scoring to the source path/SHA persisted by gvf-run extraction metadata. All run-local text representations available to the multi-stage extractor are hashed separately. A missing extraction record is labeled as a fallback, never as a verified read. Cohort membership and gold values were unchanged.",
+        "selected": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md",
+        "selected_metrics": {
+          "characters": 59783,
+          "path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/production_runs/SCN5A/20260906_092751/pmc_fulltext/20129283_CLEANED.md",
+          "sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+        }
+      },
+      "source_sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+    }
+  ],
+  "per_gene": 5,
+  "prepared_at": "2026-09-06T14:27:15.582845+00:00",
+  "production_source_rebinding": {
+    "binding_status_counts": {
+      "extraction_metadata_verified": 8,
+      "no_extraction_record_fallback": 4
+    },
+    "changed_source_count": 1,
+    "cohort_membership_changed": false,
+    "gold_values_read": false,
+    "original_selection": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/codex_paper_eval/runs/20260906_model12_astra_medium_verified/selection_eligibility.json",
+    "original_selection_sha256": "63099eb9c435f0cb807e556b4e62f2503ff8a846758ed66f2b95fc69d2679835",
+    "paper_count": 12,
+    "rebound_at": "2026-09-06T16:25:12.008420+00:00",
+    "selected_representation_counts": {
+      "CLEANED.md": 7,
+      "FULL_CONTEXT.md": 5
+    }
+  },
+  "run_id": "20260906_model12_astra_medium_verified",
+  "schema_version": 1,
+  "seed": 2026090601
+}

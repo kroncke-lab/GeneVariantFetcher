@@ -83,6 +83,7 @@ def empty_usage() -> dict:
         "provider_seconds": 0.0,
         "llm_calls": 0,
         "successful_calls": 0,
+        "unknown_failed_call_trace_ids": [],
         "models": {},
     }
 
@@ -90,6 +91,16 @@ def empty_usage() -> dict:
 def add_usage(target: dict, record: dict) -> None:
     response = record.get("response") or {}
     usage = response.get("usage") or {}
+    unknown_id = None
+    if not usage:
+        if (
+            response.get("success") is not False
+            or not response.get("error")
+            or not record.get("trace_id")
+        ):
+            raise ValueError("Missing usage requires a traceable failed API call")
+        unknown_id = record["trace_id"]
+        target["unknown_failed_call_trace_ids"].append(unknown_id)
     input_tokens = int(usage.get("prompt_tokens") or usage.get("input_tokens") or 0)
     total_tokens = int(usage.get("total_tokens") or 0)
     output_tokens = max(total_tokens - input_tokens, 0)
@@ -103,12 +114,35 @@ def add_usage(target: dict, record: dict) -> None:
     model_usage = target["models"].setdefault(model, empty_usage())
     # Model buckets do not need a nested copy of themselves.
     model_usage.pop("models", None)
+    if unknown_id is not None:
+        model_usage["unknown_failed_call_trace_ids"].append(unknown_id)
     model_usage["input_tokens"] += input_tokens
     model_usage["output_tokens"] += output_tokens
     model_usage["total_tokens"] += total_tokens
     model_usage["provider_seconds"] += float(response.get("duration_seconds") or 0)
     model_usage["llm_calls"] += 1
     model_usage["successful_calls"] += int(bool(response.get("success")))
+
+
+def finalized_usage(usage: dict) -> dict:
+    """Keep aggregation internal; publish unknown totals with a known subset."""
+    result = dict(usage)
+    if "models" in result:
+        result["models"] = {
+            model: finalized_usage(bucket) for model, bucket in result["models"].items()
+        }
+    unknown = usage.get("unknown_failed_call_trace_ids") or []
+    result["telemetry_available"] = not bool(unknown)
+    if unknown:
+        fields = ("input_tokens", "output_tokens", "total_tokens")
+        result["status"] = "unknown_failed_call"
+        result["known_usage"] = {field: usage[field] for field in fields}
+        result.update(dict.fromkeys(fields))
+        result["note"] = (
+            "Failed API calls returned no usage. Token totals are unknown; "
+            "known_usage contains the returned subset, including reasoning."
+        )
+    return result
 
 
 def trace_usage(trace_root: Path) -> tuple[dict, dict[str, dict]]:
@@ -747,6 +781,9 @@ def main() -> int:
             }
         )
         gene_usage, by_pmid = trace_usage(trace_manifest_path.parent)
+        run_usage["unknown_failed_call_trace_ids"].extend(
+            gene_usage["unknown_failed_call_trace_ids"]
+        )
         for field in (
             "input_tokens",
             "output_tokens",
@@ -759,6 +796,9 @@ def main() -> int:
         for model, model_usage in gene_usage["models"].items():
             bucket = run_usage["models"].setdefault(model, empty_usage())
             bucket.pop("models", None)
+            bucket["unknown_failed_call_trace_ids"].extend(
+                model_usage["unknown_failed_call_trace_ids"]
+            )
             for field in (
                 "input_tokens",
                 "output_tokens",
@@ -836,12 +876,11 @@ def main() -> int:
                 "source_completeness": "corpus_as_locked",
                 "elapsed_seconds": paper_usage["provider_seconds"],
                 "token_usage": {
-                    "telemetry_available": True,
-                    **paper_usage,
                     "note": (
                         "Trace-derived. output_tokens is total minus input and "
                         "therefore conservatively includes billed reasoning tokens."
                     ),
+                    **finalized_usage(paper_usage),
                 },
                 "variants": variants,
                 **(
@@ -909,13 +948,12 @@ def main() -> int:
         ),
         "completed_at": datetime.now(timezone.utc).isoformat(),
         "token_usage": {
-            "telemetry_available": True,
-            **run_usage,
             "note": (
                 "Trace-derived. output_tokens is total minus input and therefore "
                 "conservatively includes billed reasoning tokens; provider_seconds "
                 "is summed call latency, not end-to-end wall clock."
             ),
+            **finalized_usage(run_usage),
         },
         "papers": papers,
     }

@@ -14,12 +14,21 @@ repos:
         # LOCK.json digests; predictions.json is also chmod read-only.
         # The mixed-gold inventory/manifests are SHA-256-pinned by
         # registry.json (an empty trailing column is a trailing tab).
-        exclude: ^benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold(?:_continuation_120)?)/
+        # Preserve the audited diff and exact as-sent CLI review inputs too.
+        exclude: |
+          (?x)^(
+            benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold(?:_continuation_120)?)/
+            |docs/evidence/model_routing_20260906/(runtime_telemetry_amendment\.diff|reviews/(failed_usage_contract|runtime_compatibility|non_dispatch)_prompt\.txt)$
+          )
       - id: end-of-file-fixer
-        exclude: ^benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold(?:_continuation_120)?)/
+        exclude: |
+          (?x)^(
+            benchmarks/(codex_paper_eval/runs|evaluation_tiers/mixed_gold(?:_continuation_120)?)/
+            |docs/evidence/model_routing_20260906/(runtime_telemetry_amendment\.diff|reviews/(failed_usage_contract|runtime_compatibility|non_dispatch)_prompt\.txt)$
+          )
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1200"]
-        # Preserve the complete SHA-locked tranche-03 prediction records.
-        exclude: ^benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_(baseline|candidate)/predictions\.json$
+        # Preserve complete SHA-locked tranche-03 and clinical-overlay records.
+        exclude: ^benchmarks/codex_paper_eval/runs/(20260905_protocol_cont120_03_(baseline|candidate)|20260906_model12_grok43_astra_clinical_verified)/predictions\.json$
       - id: check-merge-conflict

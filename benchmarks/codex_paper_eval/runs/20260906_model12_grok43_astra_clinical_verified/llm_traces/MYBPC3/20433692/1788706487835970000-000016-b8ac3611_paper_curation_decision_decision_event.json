@@ -1,0 +1,2051 @@
+{
+  "context": {
+    "gene": "MYBPC3",
+    "pmid": "20433692",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": null,
+      "gene": "MYBPC3",
+      "pmid": "20433692",
+      "raw_fills": [
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "D75N / H73 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |\n| II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |\n| II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |",
+            "variant": "D75N"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "D75N / H73 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H73-II:4",
+              "H73-II:6",
+              "H73-II:7"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |\n| II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |\n| II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 1,
+          "value": 3,
+          "variant": "D75N"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA",
+              "kind": "patient_rows",
+              "row": "H73-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |",
+            "variant": "D75N"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA",
+              "kind": "patient_rows",
+              "row": "H73-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H73-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 1,
+          "value": 1,
+          "variant": "D75N"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (i) Not previously described mutations",
+              "table": ""
+            },
+            "quote": "To explain these cases we can speculate that, in the case of V471E, one young healthy women carriers could have had a late onset of the disease expression, and in the case of D75N, as the index cases had been diagnosed at the age of 66, the healthy 68 women could develope HCM in the following years.",
+            "unaffected": 1,
+            "variant": "D75N"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (i) Not previously described mutations",
+              "table": ""
+            },
+            "person_ids": [],
+            "quote": "To explain these cases we can speculate that, in the case of V471E, one young healthy women carriers could have had a late onset of the disease expression, and in the case of D75N, as the index cases had been diagnosed at the age of 66, the healthy 68 women could develope HCM in the following years.",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 1,
+          "value": 1,
+          "variant": "D75N"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "A216T / H42-II:6*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |",
+            "variant": "A216T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "A216T / H42-II:6*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H42-II:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 0,
+          "value": 1,
+          "variant": "A216T"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (iii) Severe and early forms of HCM and SD in patients with mutations in MyBPC3",
+              "table": ""
+            },
+            "quote": "The index case of A216T was a woman with HCM and thrombotic problems (she needed two surgical aortic valve replacements and finally went into heart transplantation).",
+            "variant": "A216T"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (iii) Severe and early forms of HCM and SD in patients with mutations in MyBPC3",
+              "table": ""
+            },
+            "person_ids": [],
+            "quote": "The index case of A216T was a woman with HCM and thrombotic problems (she needed two surgical aortic valve replacements and finally went into heart transplantation).",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 0,
+          "value": 1,
+          "variant": "A216T"
+        },
+        {
+          "entry": {
+            "carriers": 2,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "V471E / H279 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |\n| III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "variant": "V471E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "V471E / H279 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H279-II:1",
+              "H279-III:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |\n| III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 12,
+          "value": 2,
+          "variant": "V471E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H279-II:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |",
+            "variant": "V471E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H279-II:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H279-II:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 12,
+          "value": 1,
+          "variant": "V471E"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R495W / H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "variant": "R495W"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R495W / H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H161-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 9,
+          "value": 1,
+          "variant": "R495W"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "variant": "R495W"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H161-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 9,
+          "value": 1,
+          "variant": "R495W"
+        },
+        {
+          "entry": {
+            "carriers": 5,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R502Q / H147 and H614 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "variant": "R502Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R502Q / H147 and H614 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H147-II:2",
+              "H147-II:4",
+              "H147-III:4",
+              "H614-I:1",
+              "H614-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 10,
+          "value": 5,
+          "variant": "R502Q"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG; Intervention",
+              "kind": "patient_rows",
+              "row": "H147-II:2; H147-II:4*; H614-I:1; H614-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "variant": "R502Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG; Intervention",
+              "kind": "patient_rows",
+              "row": "H147-II:2; H147-II:4*; H614-I:1; H614-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H147-II:2",
+              "H147-II:4",
+              "H614-I:1",
+              "H614-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 10,
+          "value": 4,
+          "variant": "R502Q"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (ii) Previously described mutations",
+              "table": ""
+            },
+            "quote": "For example, the familial study in mutation K504del does not let us confirm its pathogenicity (out of four carriers, one is healthy and another one is questionable, Additional file 1), but the existence of 2 previously described families [18,21] supports the association of the mutation with the disease.",
+            "variant": "K504del"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (ii) Previously described mutations",
+              "table": ""
+            },
+            "person_ids": [],
+            "quote": "For example, the familial study in mutation K504del does not let us confirm its pathogenicity (out of four carriers, one is healthy and another one is questionable, Additional file 1), but the existence of 2 previously described families [18,21] supports the association of the mutation with the disease.",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 4,
+          "value": 4,
+          "variant": "K504del"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H46-II:8; H46-III:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |\n| II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |\n| III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |",
+            "variant": "K504del"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H46-II:8; H46-III:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H46-II:8",
+              "H46-III:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |\n| II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |\n| III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 4,
+          "value": 2,
+          "variant": "K504del"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (ii) Previously described mutations",
+              "table": ""
+            },
+            "quote": "For example, the familial study in mutation K504del does not let us confirm its pathogenicity (out of four carriers, one is healthy and another one is questionable, Additional file 1), but the existence of 2 previously described families [18,21] supports the association of the mutation with the disease.",
+            "unaffected": 1,
+            "variant": "K504del"
+          },
+          "evidence": {
+            "basis": "explicit",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "",
+              "kind": "sentence",
+              "row": "",
+              "section": "Discussion (ii) Previously described mutations",
+              "table": ""
+            },
+            "person_ids": [],
+            "quote": "For example, the familial study in mutation K504del does not let us confirm its pathogenicity (out of four carriers, one is healthy and another one is questionable, Additional file 1), but the existence of 2 previously described families [18,21] supports the association of the mutation with the disease.",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 4,
+          "value": 1,
+          "variant": "K504del"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E542Q / H153, H166 and H641 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "variant": "E542Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E542Q / H153, H166 and H641 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H153-II:4",
+              "H153-III:3",
+              "H166-III:7",
+              "H641-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 3,
+          "value": 4,
+          "variant": "E542Q"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H153-II:4*; H153-III:3; H166-III:7*; H641-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "variant": "E542Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H153-II:4*; H153-III:3; H166-III:7*; H641-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H153-II:4",
+              "H153-III:3",
+              "H166-III:7",
+              "H641-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 3,
+          "value": 4,
+          "variant": "E542Q"
+        },
+        {
+          "entry": {
+            "carriers": 2,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "K600fs / H37 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "variant": "K600fs"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "K600fs / H37 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H37-II:1",
+              "H37-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 5,
+          "value": 2,
+          "variant": "K600fs"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H37-II:1; H37-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "variant": "K600fs"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H37-II:1; H37-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H37-II:1",
+              "H37-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 5,
+          "value": 2,
+          "variant": "K600fs"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "P955fs / H160 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |\n| IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |",
+            "variant": "P955FS"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "P955fs / H160 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H160-III:2",
+              "H160-IV:1",
+              "H160-IV:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |\n| IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 6,
+          "value": 3,
+          "variant": "P955fs"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H160-III:2*; H160-IV:1",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |",
+            "variant": "P955FS"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H160-III:2*; H160-IV:1",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H160-III:2",
+              "H160-IV:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 6,
+          "value": 2,
+          "variant": "P955fs"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "T957S / H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "variant": "T957S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "T957S / H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H120-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 11,
+          "value": 1,
+          "variant": "T957S"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "variant": "T957S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H120-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 11,
+          "value": 1,
+          "variant": "T957S"
+        },
+        {
+          "entry": {
+            "carriers": 5,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R1022P / H18 and H49 carrier rows",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "variant": "R1022P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R1022P / H18 and H49 carrier rows",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H18-II:5",
+              "H49-II:2",
+              "H49-III:2",
+              "H49-III:4",
+              "H49-III:5"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 8,
+          "value": 5,
+          "variant": "R1022P"
+        },
+        {
+          "entry": {
+            "affected": 5,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); S; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H18-II:5*; H49-II:2; H49-III:2; H49-III:4; H49-III:5*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "variant": "R1022P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); S; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H18-II:5*; H49-II:2; H49-III:2; H49-III:4; H49-III:5*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H18-II:5",
+              "H49-II:2",
+              "H49-III:2",
+              "H49-III:4",
+              "H49-III:5"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 8,
+          "value": 5,
+          "variant": "R1022P"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E1179K / H95 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E1179K / H95 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-II:1",
+              "H95-II:4",
+              "H95-III:2",
+              "H95-III:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 2,
+          "value": 4,
+          "variant": "E1179K"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H95-II:1*; H95-II:4",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |",
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H95-II:1*; H95-II:4",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-II:1",
+              "H95-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 2,
+          "value": 2,
+          "variant": "E1179K"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H95-III:2; H95-III:6",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "unaffected": 2,
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H95-III:2; H95-III:6",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-III:2",
+              "H95-III:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "target": 2,
+          "value": 2,
+          "variant": "E1179K"
+        }
+      ],
+      "rejected": [
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 2,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+                "kind": "patient_rows",
+                "row": "H56-II:5; H56-II:6*",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H56-II:5",
+                "H56-II:6"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS6+5G>A | H56 | II:5 | Y | M | 28 | 40 | 26 | - | - | ¿ | + | + | II | AF-IRBBB | - | - |\n| II:6* | Y | F | 34 | 39 | 24 | - | - | + | + | + | II | T(-) | ICD | AD |  |  |",
+              "scope": "current_study"
+            },
+            "carriers": 2,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation; Fam.; Case; Mut",
+                "kind": "patient_rows",
+                "row": "IVS6+5G>A / H56 block",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H56-II:5",
+                "H56-II:6"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS6+5G>A | H56 | II:5 | Y | M | 28 | 40 | 26 | - | - | ¿ | + | + | II | AF-IRBBB | - | - |\n| II:6* | Y | F | 34 | 39 | 24 | - | - | + | + | + | II | T(-) | ICD | AD |  |  |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Homozygosity does not multiply the person count. Untested deceased relatives described as likely homozygous are excluded. The previously published family is not added again. No explicit unaffected count is reported.",
+            "variant": "IVS6+5G>A"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "IVS6+5G>A"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 2,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mut; Age diagnosis; WT  (mm)",
+                "kind": "patient_rows",
+                "row": "H110-I:1*; H110-II:2",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H110-I:1",
+                "H110-II:2"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS11-9G>A | H110 | I:1* | Y | M | 58 | 62 | 17 | - | + | - | - | - | I | Normal | - | - |\n| II:2 | Y | F | 21 | 27 | 17 | - | - | - | - | - | I | LVH, T(-), LABBH | - | - |  |  |",
+              "scope": "current_study"
+            },
+            "carriers": 2,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation; Fam.; Case; Mut",
+                "kind": "patient_rows",
+                "row": "IVS11-9G>A / H110 block",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H110-I:1",
+                "H110-II:2"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS11-9G>A | H110 | I:1* | Y | M | 58 | 62 | 17 | - | + | - | - | - | I | Normal | - | - |\n| II:2 | Y | F | 21 | 27 | 17 | - | - | - | - | - | I | LVH, T(-), LABBH | - | - |  |  |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Both carriers have a recorded diagnosis age and 17-mm wall thickness. A normal ECG in the index case is not treated as an unaffected phenotype. No explicit unaffected count is reported.",
+            "variant": "IVS11-9G>A"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "IVS11-9G>A"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 2,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "Mut; Age diagnosis; WT  (mm); NYHA",
+                "kind": "patient_rows",
+                "row": "H131-III:2*; H131-IV:5",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H131-III:2",
+                "H131-IV:5"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS29+5G>A | H131 | III:2* | Y | F | 45 | 54 | 41 | - | + | - | + | + | III | LVH, T(-) | - | - |\n| IV:4 | Y | F | No Dx | 33 | 10 | - | - | ¿ | ¿ | + | I | Normal | - | - |  |  |\n| IV:5 | Y | F | 24 | 31 | 15 | - | - | ¿ | - | + | I | Normal | - | - |  |  |",
+              "scope": "current_study"
+            },
+            "carriers": 3,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Mutation; Fam.; Case; Mut",
+                "kind": "patient_rows",
+                "row": "IVS29+5G>A / H131 block",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H131-III:2",
+                "H131-IV:4",
+                "H131-IV:5"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS29+5G>A | H131 | III:2* | Y | F | 45 | 54 | 41 | - | + | - | + | + | III | LVH, T(-) | - | - |\n| IV:4 | Y | F | No Dx | 33 | 10 | - | - | ¿ | ¿ | + | I | Normal | - | - |  |  |\n| IV:5 | Y | F | 24 | 31 | 15 | - | - | ¿ | - | + | I | Normal | - | - |  |  |",
+              "scope": "current_study"
+            },
+            "unaffected": 1,
+            "unaffected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Mut; Age diagnosis; WT  (mm); ECG",
+                "kind": "patient_rows",
+                "row": "H131-IV:4",
+                "section": "Additional file 1",
+                "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+              },
+              "person_ids": [
+                "H131-IV:4"
+              ],
+              "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| IVS29+5G>A | H131 | III:2* | Y | F | 45 | 54 | 41 | - | + | - | + | + | III | LVH, T(-) | - | - |\n| IV:4 | Y | F | No Dx | 33 | 10 | - | - | ¿ | ¿ | + | I | Normal | - | - |  |  |",
+              "scope": "current_study"
+            },
+            "uncertainty": "The supplement defines No Dx as unaffected or healthy, and Results (iii) explicitly includes H131-IV:4 among healthy carriers. H131-IV:5 has a recorded diagnosis despite a normal ECG. Untested sudden deaths are excluded.",
+            "variant": "IVS29+5G>A"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "IVS29+5G>A"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "D75N / H73 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |\n| II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |\n| II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |",
+            "variant": "D75N"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "D75N / H73 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H73-II:4",
+              "H73-II:6",
+              "H73-II:7"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |\n| II:6 | Y | F | No Dx | 70 | 12 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |  |\n| II:7 | Y | F | No Dx | 68 | - | - | - | ¿ | ¿ | - | I | ¿ | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 3,
+          "variant": "D75N"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA",
+              "kind": "patient_rows",
+              "row": "H73-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |",
+            "variant": "D75N"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA",
+              "kind": "patient_rows",
+              "row": "H73-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H73-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| D75N | H73 | II:3 | N | F | NoDx | 77 | 13 | + | - | ¿ | ¿ | - | I | LBBB | - | - |\n| II:4* | Y | F | 66 | 72 | 18 | - | - | - | - | - | II | T (-) | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 1,
+          "variant": "D75N"
+        },
+        {
+          "field": "unaffected",
+          "reason": "quote does not uniquely bind the count to this variant",
+          "value": 1,
+          "variant": "D75N"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "A216T / H42-II:6*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |",
+            "variant": "A216T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "A216T / H42-II:6*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H42-II:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| A216T | H42 | II:6* | Y | F | 34 | 41 | 25 | - | +++ | + | - | + | III-IV | AF-LVH | SA, ICD, MP | TX |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 0,
+          "value": 1,
+          "variant": "A216T"
+        },
+        {
+          "field": "affected",
+          "reason": "number not stated in the quote as the requested count role",
+          "value": 1,
+          "variant": "A216T"
+        },
+        {
+          "entry": {
+            "carriers": 2,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "V471E / H279 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |\n| III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "variant": "V471E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "V471E / H279 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H279-II:1",
+              "H279-III:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |\n| III:2 | Y | F | No Dx | 25 | 9 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 12,
+          "value": 2,
+          "variant": "V471E"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H279-II:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |",
+            "variant": "V471E"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H279-II:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H279-II:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| V471E | H279 | II:1* | Y | M | 57 | 65 | 17 | - | - | - | - | - | I | LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 12,
+          "value": 1,
+          "variant": "V471E"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R495W / H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "variant": "R495W"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R495W / H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H161-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "R495W"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "variant": "R495W"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H161-II:4*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H161-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R495W | H161 | II:4* | Y | M | 71 | 75 | 18 | - | - | - | + | - | I | AF, LVH, T(-) | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "R495W"
+        },
+        {
+          "entry": {
+            "carriers": 5,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R502Q / H147 and H614 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "variant": "R502Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R502Q / H147 and H614 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H147-II:2",
+              "H147-II:4",
+              "H147-III:4",
+              "H614-I:1",
+              "H614-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 10,
+          "value": 5,
+          "variant": "R502Q"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG; Intervention",
+              "kind": "patient_rows",
+              "row": "H147-II:2; H147-II:4*; H614-I:1; H614-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "variant": "R502Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG; Intervention",
+              "kind": "patient_rows",
+              "row": "H147-II:2; H147-II:4*; H614-I:1; H614-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H147-II:2",
+              "H147-II:4",
+              "H614-I:1",
+              "H614-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R502Q | H147 | II:2 | Y | M | 50 | 70 | 23 | + | - | + | + | - | II | LVH, T(-) | - | - |\n| II:4* | Y | M | 42 | 66 | 20 | - | - | - | - | - | II | T(-) | Myectomy, PM | - |  |  |\n| III:4 | Y | M | No Dx | 34 | 11 | - | - | - | - | - | I | Q | - | - |  |  |\n| H614 | I:1 | Y | M | 68 | 69 | 17 | - | - | - | - | - | I | Normal | - | - |  |\n| II:3* | Y | M | 15 | 36 | 36 | + | ++ | + | + | - | I | LVH, Q | ICD | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 10,
+          "value": 4,
+          "variant": "R502Q"
+        },
+        {
+          "field": "carriers",
+          "reason": "number not stated in the quote as the requested count role",
+          "value": 4,
+          "variant": "K504del"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H46-II:8; H46-III:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |\n| II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |\n| III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |",
+            "variant": "K504del"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H46-II:8; H46-III:1*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H46-II:8",
+              "H46-III:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K504del | H46 | II:7 | Y | M | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | ¿ | - | - |\n| II:8 | Y | M | 59 | 76 | 17 | - | - | + | - | - | II | Q, PM | PM | - |  |  |\n| III:1* | Y | M | 35 | 52 | 19 | - | - | - | - | - | I | Q, LVH | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 4,
+          "value": 2,
+          "variant": "K504del"
+        },
+        {
+          "field": "unaffected",
+          "reason": "number not stated in the quote as the requested count role",
+          "value": 1,
+          "variant": "K504del"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E542Q / H153, H166 and H641 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "variant": "E542Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E542Q / H153, H166 and H641 blocks",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H153-II:4",
+              "H153-III:3",
+              "H166-III:7",
+              "H641-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 4,
+          "variant": "E542Q"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H153-II:4*; H153-III:3; H166-III:7*; H641-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "variant": "E542Q"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H153-II:4*; H153-III:3; H166-III:7*; H641-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H153-II:4",
+              "H153-III:3",
+              "H166-III:7",
+              "H641-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E542Q | H153 | II-1 | no | M | 58 | 70 | 17 | - | - | - | - | - | I | N | - | ACV(70) |\n| II:4* | Y | F | 44 | 51 | 20 | - | +++ | + | - | - | II | LVH, T(-) | MP | - |  |  |\n| III:3 | Y | M | 16 | 17 | 14 | - | - | - | - | - | I | LVH | - | - |  |  |\n| H166 | III:7* | Y | F | 53 | 61 | 23 | - | - | - | - | + | III | AF | PM | - |  |\n| H641 | II:2* | Y | F | 65 | 73 | 28 | - | - | - | - | - | II | AF, Q, ST | - | - |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 4,
+          "variant": "E542Q"
+        },
+        {
+          "entry": {
+            "carriers": 2,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "K600fs / H37 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "variant": "K600fs"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "K600fs / H37 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H37-II:1",
+              "H37-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 5,
+          "value": 2,
+          "variant": "K600fs"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H37-II:1; H37-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "variant": "K600fs"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H37-II:1; H37-II:2*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H37-II:1",
+              "H37-II:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| K600fs | H37 | II:1 | Y | F | 50 | 59 | 21 | + | - | + | ¿ | - | II | AF-LBBB | PM | - |\n| II:2* | Y | M | 44 | 58 | 23 | - | ++ | + | - | - | II | AF, Q T(-) | - | FE |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 5,
+          "value": 2,
+          "variant": "K600fs"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "P955fs / H160 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |\n| IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |",
+            "variant": "P955FS"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "P955fs / H160 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H160-III:2",
+              "H160-IV:1",
+              "H160-IV:2"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |\n| IV:2 | Y | M | No Dx | 23 | 8 | - | - | - | - | + | I | Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 6,
+          "value": 3,
+          "variant": "P955fs"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H160-III:2*; H160-IV:1",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |",
+            "variant": "P955FS"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H160-III:2*; H160-IV:1",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H160-III:2",
+              "H160-IV:1"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| P955fs | H160 | III:2* | Y | M | 36 | 49 | 28 | - | - | - | - | + | I | LVH, Q, T(-) | - | - |\n| IV:1 | Y | F | 16 | 28 | 21 | - | - | - | - | + | I | LVH, T(-) | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 6,
+          "value": 2,
+          "variant": "P955fs"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "T957S / H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "variant": "T957S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "T957S / H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H120-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 11,
+          "value": 1,
+          "variant": "T957S"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "variant": "T957S"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H120-II:3*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H120-II:3"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| T957S | H120 | II:3* | Y | M | 44 | 56 | 12 | - | - | - | - | - | II | LVHA, | - | - |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 11,
+          "value": 1,
+          "variant": "T957S"
+        },
+        {
+          "entry": {
+            "carriers": 5,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R1022P / H18 and H49 carrier rows",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "variant": "R1022P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "R1022P / H18 and H49 carrier rows",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H18-II:5",
+              "H49-II:2",
+              "H49-III:2",
+              "H49-III:4",
+              "H49-III:5"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 8,
+          "value": 5,
+          "variant": "R1022P"
+        },
+        {
+          "entry": {
+            "affected": 5,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); S; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H18-II:5*; H49-II:2; H49-III:2; H49-III:4; H49-III:5*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "variant": "R1022P"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); S; NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H18-II:5*; H49-II:2; H49-III:2; H49-III:4; H49-III:5*",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H18-II:5",
+              "H49-II:2",
+              "H49-III:2",
+              "H49-III:4",
+              "H49-III:5"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| R1022P | H18 | II:5* | Y | M | 52 | 76 | 20 | - | - | - | + | - | I | AF, LVH, Q, ST | - | - |\n| H49 | II:2 | Y | F | 67 | 67 | 15 | - | - | ¿ | ¿ | - | II | LBBB | - | - |  |\n| III:2 | Y | F | 21 | 46 | 14 | + | - | - | + | - | II | AF, Q, RBBB | - | - |  |  |\n| III:4 | Y | M | 44 | 45 | 24 | - | - | ¿ | ¿ | - | I | T(-) | - | - |  |  |\n| III:5* | Y | F | 27 | 41 | 16 | - | - | - | - | - | I | LVH, Q | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 8,
+          "value": 5,
+          "variant": "R1022P"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E1179K / H95 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Mutation; Fam.; Case; Mut",
+              "kind": "patient_rows",
+              "row": "E1179K / H95 block",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-II:1",
+              "H95-II:4",
+              "H95-III:2",
+              "H95-III:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 2,
+          "value": 4,
+          "variant": "E1179K"
+        },
+        {
+          "entry": {
+            "affected": 2,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H95-II:1*; H95-II:4",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |",
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); NYHA; ECG",
+              "kind": "patient_rows",
+              "row": "H95-II:1*; H95-II:4",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-II:1",
+              "H95-II:4"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 2,
+          "value": 2,
+          "variant": "E1179K"
+        },
+        {
+          "entry": {
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H95-III:2; H95-III:6",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "unaffected": 2,
+            "variant": "E1179K"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_unaffected",
+            "evidence_locator": {
+              "column": "Mut; Age diagnosis; WT  (mm); ECG",
+              "kind": "patient_rows",
+              "row": "H95-III:2; H95-III:6",
+              "section": "Additional file 1",
+              "table": "Clinical characteristics of MyBPC3 mutation carriers and affected non-carriers"
+            },
+            "person_ids": [
+              "H95-III:2",
+              "H95-III:6"
+            ],
+            "quote": "| Mutation | Fam. | Case | Mut | Sex | Age diagnosis | Age FU | WT  (mm) | S | SO | ABPR | NSVT | FHSD | NYHA | ECG | Intervention | Event |\n| E1179K | H95 | II:1* | Y | M | 64 | 69 | 22 | - | - | - | - | - | II | AF, LVH, |  |  |\n| T(-), Q | - | Ictus (66) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |\n| II:4 | Y | F | 63 | 67 | 19 | - | + | - | - | - | II | LVH | - | - |  |  |\n| III:2 | Y | F | No Dx | 32 | 8 | - | - | ¿ | ¿ | - | I | Normal | - | - |  |  |\n| III:6 | Y | F | No Dx | 29 | 7 | - | - | - | - | - | I | Normal | - | - |  |  |",
+            "scope": "current_study"
+          },
+          "field": "unaffected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 2,
+          "value": 2,
+          "variant": "E1179K"
+        }
+      ],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "MYBPC3",
+        "missing_fields": 36,
+        "pmid": "20433692",
+        "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:54:47.835231+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788706487835970000-000016-b8ac3611"
+}

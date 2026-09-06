@@ -3,6 +3,33 @@ from utils.llm_utils import (
     build_responses_reasoning_param,
     clamp_max_tokens,
 )
+import pytest
+
+
+@pytest.mark.parametrize("model", ["azure_ai/gpt-6-astra", "azure_ai/grok-4.6"])
+def test_new_reader_effort_is_sent_in_both_api_shapes(model):
+    assert build_reasoning_effort_kwargs(model, "high") == {"reasoning_effort": "high"}
+    assert build_responses_reasoning_param(model, "high") == {
+        "reasoning": {"effort": "high"}
+    }
+    for unsupported in ("none", "minimal"):
+        assert build_reasoning_effort_kwargs(model, unsupported) == {
+            "reasoning_effort": "low"
+        }
+        assert build_responses_reasoning_param(model, unsupported) == {
+            "reasoning": {"effort": "low"}
+        }
+
+
+def test_astra_does_not_fall_back_to_unknown_model_output_limit():
+    assert clamp_max_tokens("azure_ai/gpt-6-astra", 32000, warn=False) == 32000
+    assert clamp_max_tokens("azure_ai/gpt-6-astra", 128000, warn=False) == 64000
+
+
+def test_grok46_output_policy_is_separate_from_older_grok():
+    assert clamp_max_tokens("azure_ai/grok-4.6", 32000, warn=False) == 32000
+    assert clamp_max_tokens("azure_ai/grok-4.6", 60000, warn=False) == 32000
+    assert clamp_max_tokens("azure_ai/grok-4.3", 32000, warn=False) == 15000
 
 
 def test_new_azure_deployments_have_large_output_budget():
@@ -27,7 +54,7 @@ def test_reasoning_effort_kwargs_gate():
     assert build_reasoning_effort_kwargs("o3-mini", "low") == {
         "reasoning_effort": "low"
     }
-    # Anthropic (extended thinking, not wired yet) and Grok (no knob) -> no-op.
+    # Anthropic and older Grok retain their existing no-op effort behavior.
     assert build_reasoning_effort_kwargs("anthropic/claude-sonnet-4-6", "high") == {}
     assert build_reasoning_effort_kwargs("azure_ai/grok-4.3", "high") == {}
     # Falsy effort -> provider default (empty kwargs).

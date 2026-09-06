@@ -1,0 +1,8 @@
+{
+  "scope": "Rendering only, after all three final arms scored",
+  "path": "scripts/build_gold_difference_figure.py",
+  "before_sha256": "249b7f2d953781c92441eb4d941ac6644fecaa8d91fe926cad8e43438858cf79",
+  "after_sha256": "8a22ea4452148c0c89ba79fdd91b1b5fb2e4a7725ae7c5aad57625e69acf6f77",
+  "change": "Clamp label boxes within the panel and draw connectors for horizontal displacement. No score or prediction change.",
+  "existing_figure_tests_passed": 8
+}

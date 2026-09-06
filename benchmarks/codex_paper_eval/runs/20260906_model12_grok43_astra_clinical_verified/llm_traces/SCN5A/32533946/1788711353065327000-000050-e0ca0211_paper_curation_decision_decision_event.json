@@ -1,0 +1,33 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "32533946",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": "RuntimeError: Campaign API budget prevents call to azure_ai/gpt-6-astra; reservation $12.028",
+      "gene": "SCN5A",
+      "pmid": "32533946",
+      "raw_fills": [],
+      "rejected": [],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "SCN5A",
+        "missing_fields": 309,
+        "pmid": "32533946",
+        "source_sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T16:15:53.065242+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788711353065327000-000050-e0ca0211"
+}

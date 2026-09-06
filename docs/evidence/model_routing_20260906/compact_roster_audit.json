@@ -1,0 +1,39 @@
+{
+  "classification": "source-text transcription consistency only; no reference score or clinical acceptance",
+  "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976",
+  "source_person_rows": 48,
+  "returned_rows": 48,
+  "differences": [],
+  "unique_family_person_ids": 48,
+  "ignored_fragments_match": true,
+  "mutation_status": {
+    "N": 3,
+    "Y": 44,
+    "no": 1
+  },
+  "index_people": 20,
+  "carrier_diagnosis_cell_groups": {
+    "numeric_diagnosis_age": 34,
+    "No_Dx": 9,
+    "unknown": 1
+  },
+  "per_variant_carrier_row_counts": {
+    "D75N": 3,
+    "A216T": 1,
+    "IVS6+5G>A": 2,
+    "IVS11-9G>A": 2,
+    "Q327fs": 2,
+    "V471E": 2,
+    "R495W": 1,
+    "R502Q": 5,
+    "K504del": 4,
+    "E542Q": 4,
+    "K600fs": 2,
+    "P955fs": 3,
+    "T957S": 1,
+    "R1022P": 5,
+    "IVS29+5G>A": 3,
+    "E1179K": 4
+  },
+  "qualification": "Audit uses the same text conversion and explicit continuation-row carry-forward convention. It does not validate the original DOC geometry or resolve phenotype definitions, contradictory family IDs in prose, or gold agreement. No Dx is not promoted to asymptomatic/healthy, and numeric diagnosis age is not a new accepted affected count. These totals never enter benchmark predictions."
+}

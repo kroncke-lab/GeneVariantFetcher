@@ -85,7 +85,8 @@ def test_tasks_is_the_single_forward_checklist_with_active_goal_progress():
     headings = re.findall(r"^## (.+)$", tasks, flags=re.MULTILINE)
 
     assert headings == [
-        "Active $100 improvement goal",
+        "Active $150 model-routing test",
+        "Previous $100 improvement campaign",
         "1. Re-establish the scientific baseline",
         "2. Recover missing source before adding inference",
         "3. Measure count semantics and recovery",

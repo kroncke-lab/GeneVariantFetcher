@@ -1,0 +1,45 @@
+{
+  "context": {
+    "model": "azure_ai/grok-4.6",
+    "provider": "azure_http_probe"
+  },
+  "reasoning_capture": {
+    "note": "response_paths lists provider-returned reasoning CONTENT only. reasoning_token_usage is billing telemetry and never implies that any reasoning content was exposed. Hidden chain-of-thought is not available through model APIs and is not recorded.",
+    "provider_exposed_reasoning_available": false,
+    "reasoning_token_usage": {},
+    "response_paths": []
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "llm_call",
+  "request": {
+    "payload": {
+      "max_tokens": 32000,
+      "messages": [
+        {
+          "content": "Return exactly OK.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4.6"
+    },
+    "provider": "azure_http_probe",
+    "requested_model": "azure_ai/grok-4.6",
+    "resolved_model": "grok-4.6",
+    "started_at": "2026-09-06T14:41:52.746834+00:00"
+  },
+  "response": {
+    "completed_at": "2026-09-06T14:42:47.945473+00:00",
+    "duration_seconds": 55.198025,
+    "envelope": null,
+    "error": {
+      "message": "The read operation timed out",
+      "type": "ReadTimeout"
+    },
+    "output_text": null,
+    "success": false,
+    "usage": null
+  },
+  "run_id": "grok_final_health",
+  "schema_version": 2,
+  "trace_id": "1788705767945509000-000002-81815431"
+}

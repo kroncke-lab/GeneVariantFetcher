@@ -1,0 +1,2201 @@
+{
+  "context": {
+    "gene": "MYBPC3",
+    "pmid": "21302287",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": null,
+      "gene": "MYBPC3",
+      "pmid": "21302287",
+      "raw_fills": [
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 234"
+            },
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "variant": "c.2309-2A>G"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 234"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 16,
+          "value": 1,
+          "variant": "c.2309-2A>G"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 181",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 181"
+            },
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "variant": "p.Q1012* c.3034C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 181",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 181"
+            },
+            "person_ids": [
+              "181"
+            ],
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 24,
+          "value": 1,
+          "variant": "c.3034C>T (Q1012X)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 251"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "p.Q1233* c.3697C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 251"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 25,
+          "value": 1,
+          "variant": "c.3697C>T (Q1233X)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 221"
+            },
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "variant": "p.V771M c.2311G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 221"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 29,
+          "value": 1,
+          "variant": "c. 2311G>A (V771M)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.472G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.472G>A | Exon 4 | Non-synonymous | rs3729986 | V158M | 270 |",
+            "variant": "V158M c.472G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.472G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "270"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.472G>A | Exon 4 | Non-synonymous | rs3729986 | V158M | 270 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 13,
+          "value": 1,
+          "variant": "c.472G>A (V158M; rs3729986)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "rs3729986, ID 270",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 270"
+            },
+            "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |",
+            "variant": "V158M c.472G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "rs3729986, ID 270",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 270"
+            },
+            "person_ids": [
+              "270"
+            ],
+            "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 13,
+          "value": 1,
+          "variant": "c.472G>A (V158M; rs3729986)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.977G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.977G>A | Exon 11 | Non-synonymous | rs34580776 | R326Q | 251 |",
+            "variant": "R326Q c.977G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.977G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.977G>A | Exon 11 | Non-synonymous | rs34580776 | R326Q | 251 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 9,
+          "value": 1,
+          "variant": "c.977G>A (R326Q; rs34580776)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 251"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "R326Q c.977G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 251"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 9,
+          "value": 1,
+          "variant": "c.977G>A (R326Q; rs34580776)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1564 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1564 G>A | Exon 15 | Non-synonymous | rs11570082 | A522T | 221 |",
+            "variant": "A522T c.1564G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1564 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1564 G>A | Exon 15 | Non-synonymous | rs11570082 | A522T | 221 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 0,
+          "value": 1,
+          "variant": "c.1564 G>A (A522T; rs11570082)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 221"
+            },
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "variant": "A522T c.1564G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 221"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 0,
+          "value": 1,
+          "variant": "c.1564 G>A (A522T; rs11570082)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.492 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.492 C>T | Exon 4 | Synonymous | rs3218719 | G164G | 214 |",
+            "variant": "G164G c.492C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.492 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "214"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.492 C>T | Exon 4 | Synonymous | rs3218719 | G164G | 214 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 3,
+          "value": 1,
+          "variant": "c.492 C>T (G164G; rs3218719)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 214",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 214"
+            },
+            "quote": "| R668C | 214 | 76/M | 69 | N | N | N | N | N | N | N | 20 | ANT | 60 |",
+            "variant": "G164G c.492C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 214",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 214"
+            },
+            "person_ids": [
+              "214"
+            ],
+            "quote": "| R668C | 214 | 76/M | 69 | N | N | N | N | N | N | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 3,
+          "value": 1,
+          "variant": "c.492 C>T (G164G; rs3218719)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2550 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2550 C>T | Exon 23 | Synonymous | rs3729953 | V849V | 278, 251, 268 |",
+            "variant": "V849V c.2550C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2550 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2550 C>T | Exon 23 | Synonymous | rs3729953 | V849V | 278, 251, 268 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 14,
+          "value": 3,
+          "variant": "c.2550 C>T (V849V; rs3729953)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "V849V c.2550C>T"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 278",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729953 | 278 | 34/M | 21 | N | N | N | N | N | N | N | 18 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 14,
+          "value": 3,
+          "variant": "c.2550 C>T (V849V; rs3729953)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.3288 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.3288 G>A | Exon 28 | Synonymous | rs1052373 | E1096E | 234 |",
+            "variant": "E1096E c.3288G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.3288 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.3288 G>A | Exon 28 | Synonymous | rs1052373 | E1096E | 234 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 1,
+          "value": 1,
+          "variant": "c.3288 G>A (E1096E; rs1052373)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "rs1052373, ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4"
+            },
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "variant": "E1096E c.3288G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "rs1052373, ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 1,
+          "value": 1,
+          "variant": "c.3288 G>A (E1096E; rs1052373)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1223+29 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1223+29 G>A | Intron 12 | Synonymous | rs11570078 | — | 181, 221, 194 |",
+            "variant": "c.1223+29G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1223+29 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "181",
+              "221",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1223+29 G>A | Intron 12 | Synonymous | rs11570078 | — | 181, 221, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 15,
+          "value": 3,
+          "variant": "c.1223+29 G>A (rs11570078)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 181, 221, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "variant": "c.1223+29G>A"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 221",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 181, 221, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "181",
+              "221",
+              "194"
+            ],
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 15,
+          "value": 3,
+          "variant": "c.1223+29 G>A (rs11570078)"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2340+18 C>G",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2340+18 C>G | Intron 21 | Synonymous | rs3729948 | — | 278, 251 268, 194 |",
+            "variant": "c.2340+18C>G"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2340+18 C>G",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2340+18 C>G | Intron 21 | Synonymous | rs3729948 | — | 278, 251 268, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 17,
+          "value": 4,
+          "variant": "c.2340+18 C>G (rs3729948)"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "c.2340+18C>G"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 278",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729953 | 278 | 34/M | 21 | N | N | N | N | N | N | N | 18 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 17,
+          "value": 4,
+          "variant": "c.2340+18 C>G (rs3729948)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2737+12 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2737+12 C>T | Intron 24 | Synonymous | rs3729936 | — | 251, 268, 194 |",
+            "variant": "c.2737+12C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2737+12 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2737+12 C>T | Intron 24 | Synonymous | rs3729936 | — | 251, 268, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "target": 18,
+          "value": 3,
+          "variant": "c.2737+12 C>T (rs3729936)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "c.2737+12C>T"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "target": 18,
+          "value": 3,
+          "variant": "c.2737+12 C>T (rs3729936)"
+        }
+      ],
+      "rejected": [
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 1,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; Syncope; NSVT; Max LVWT",
+                "kind": "patient_rows",
+                "row": "R943X, ID 220",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4, joined to Table 3(a) by ID 220"
+              },
+              "person_ids": [
+                "220"
+              ],
+              "quote": "| R943X | 220 | 42/M | 36 | N | N | N | Y | Y | N | N | 22 | ANT | 55 |",
+              "scope": "current_study"
+            },
+            "carriers": 1,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "c.2827C>T",
+                "section": "Results — Genetic analysis",
+                "table": "Table 3(a)"
+              },
+              "person_ids": [
+                "220"
+              ],
+              "quote": "| DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\n| c.2827C>T | 25 | Nonsense: STOP codon | R493X | Yes | 220 |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "The protein notation is inconsistent: Table 3 and the main text say R493X, whereas S4 says R943X. The DNA notation is retained without correction. The phenotype join uses explicit ID 220, not an assumed equivalence of protein spellings.",
+            "variant": "c.2827C>T (R493X)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2827C>T (R493X)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 1,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; Max LVWT; Loc.",
+                "kind": "patient_rows",
+                "row": "ID 278",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4, joined to Table 3(a) by ID 278"
+              },
+              "person_ids": [
+                "278"
+              ],
+              "quote": "| rs 3729953 | 278 | 34/M | 21 | N | N | N | N | N | N | N | 18 | ANT | 60 |",
+              "scope": "current_study"
+            },
+            "carriers": 1,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "c.2846–2847InsT",
+                "section": "Results — Genetic analysis",
+                "table": "Table 3(a)"
+              },
+              "person_ids": [
+                "278"
+              ],
+              "quote": "| DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\n| c.2846–2847InsT | 25 | Frameshift: STOP codon | M949IfsX100 | Yes | 278 |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "ID 278 has LVWT 18 mm. Negative entries for selected symptoms are not treated as an explicit asymptomatic classification.",
+            "variant": "c.2846–2847InsT (M949IfsX100)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2846–2847InsT (M949IfsX100)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": null,
+            "affected_evidence": {},
+            "carriers": 2,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "",
+                "kind": "sentence",
+                "row": "",
+                "section": "Discussion",
+                "table": ""
+              },
+              "person_ids": [],
+              "quote": "For example, we found two unrelated patients carrying the same MYBPC3 K754EfsX78 mutation: at the time of diagnosis, both were asymptomatic, but later on one required an implantable defibrillator while the other did not, suggesting that other genetic variations were pivotal in the natural history of the disease in these patients.",
+              "scope": "current_study"
+            },
+            "unaffected": 2,
+            "unaffected_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "",
+                "kind": "sentence",
+                "row": "",
+                "section": "Discussion",
+                "table": ""
+              },
+              "person_ids": [],
+              "quote": "For example, we found two unrelated patients carrying the same MYBPC3 K754EfsX78 mutation: at the time of diagnosis, both were asymptomatic, but later on one required an implantable defibrillator while the other did not, suggesting that other genetic variations were pivotal in the natural history of the disease in these patients.",
+              "scope": "current_study"
+            },
+            "uncertainty": "Unaffected here means explicitly asymptomatic at diagnosis, not HCM phenotype-negative. Table 3(a) and the supplementary figure identify 195 and 228, but S4 uses 195 and 208, with 208 also assigned to D605H and different demographics. The lists are not combined or silently corrected. A complete phenotype-positive count is therefore left null. The main text also prints K754EfsX782 once; no additional variant is inferred from that spelling.",
+            "variant": "c.2258–2259InsT (K754EfsX78)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2258–2259InsT (K754EfsX78)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 1,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; Max LVWT; Loc.",
+                "kind": "patient_rows",
+                "row": "R668C, ID 214",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4"
+              },
+              "person_ids": [
+                "214"
+              ],
+              "quote": "| R668C | 214 | 76/M | 69 | N | N | N | N | N | N | N | 20 | ANT | 60 |",
+              "scope": "current_study"
+            },
+            "carriers": 1,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "c.2002C>T",
+                "section": "Results — Genetic analysis",
+                "table": "Table 3(a)"
+              },
+              "person_ids": [
+                "214"
+              ],
+              "quote": "| DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\n| c.2002C>T | 19 | Missense | R668C | Yes | 214 |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "LVWT 20 mm supports phenotype positivity. No explicit unaffected count.",
+            "variant": "c.2002C>T (R668C)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2002C>T (R668C)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 1,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; NSVT; AF; Max LVWT",
+                "kind": "patient_rows",
+                "row": "L1084P #F, ID 185",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4"
+              },
+              "person_ids": [
+                "185"
+              ],
+              "quote": "| L1084P #F | 185 | 60/M | 54 | Y | N | N | N | Y | Y | N | 19 | ANT | 70 |",
+              "scope": "current_study"
+            },
+            "carriers": 2,
+            "carriers_evidence": {
+              "basis": "explicit",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "",
+                "kind": "sentence",
+                "row": "",
+                "section": "Results — Mutations in MYBPC3 — Novel mutations",
+                "table": ""
+              },
+              "person_ids": [],
+              "quote": "L1084P was detected in a father/son pair, and the novel insertion K754EfsX782 was carried by two unrelated patients, one of which (patient ID 195) presented also with a delC in intron 4, only 12 bp upstream of exon 5.",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "One carrier, ID 185, is explicitly phenotype-positive with NSVT, AF and LVWT 19 mm. The other, ID 177, is an adult with LVWT 13 mm and negative listed clinical features; neither an asymptomatic nor a phenotype-negative classification is explicitly stated. The affected count enumerates the documented positive carrier, not an assertion that the other is unaffected. The supplementary figure prints '177, 85', conflicting with IDs 177 and 185 in Tables 3 and S4; no additional carrier is added.",
+            "variant": "c.3251T>C (L1084P)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.3251T>C (L1084P)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 1,
+            "affected_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; Max LVWT; Loc.",
+                "kind": "patient_rows",
+                "row": "ID 270",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4, joined to Table 3(a) by ID 270"
+              },
+              "person_ids": [
+                "270"
+              ],
+              "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |",
+              "scope": "current_study"
+            },
+            "carriers": 1,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "c.2429 G>A",
+                "section": "Results — Genetic analysis",
+                "table": "Table 3(a)"
+              },
+              "person_ids": [
+                "270"
+              ],
+              "quote": "| DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\n| c.2429 G>A | 25 | Missense | Arg810His | Yes | 270 |",
+              "scope": "current_study"
+            },
+            "unaffected": null,
+            "unaffected_evidence": {},
+            "uncertainty": "Table 3 calls the protein change Arg810His and places it in exon 25; Table 4 calls the same DNA change R810Q in exon 23, and the text/S4 use R810Q. These inconsistent annotations are retained as one DNA-identified entry rather than counted as separate variants. ID 270 has LVWT 22 mm.",
+            "variant": "c.2429 G>A (Arg810His; R810Q elsewhere in the paper)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.2429 G>A (Arg810His; R810Q elsewhere in the paper)"
+        },
+        {
+          "matching_rows": 0,
+          "proposal": {
+            "affected": 3,
+            "affected_evidence": {
+              "additional_source_rows": [
+                {
+                  "evidence_locator": {
+                    "column": "ID; Max LVWT",
+                    "kind": "patient_rows",
+                    "row": "ID 251",
+                    "section": "Supplementary Material 1",
+                    "table": "Supplementary Table S4"
+                  },
+                  "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |"
+                },
+                {
+                  "evidence_locator": {
+                    "column": "ID; Max LVWT",
+                    "kind": "patient_rows",
+                    "row": "ID 270",
+                    "section": "Supplementary Material 1",
+                    "table": "Supplementary Table S4"
+                  },
+                  "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |"
+                }
+              ],
+              "basis": "individual_rows",
+              "count_role": "per_variant_affected",
+              "evidence_locator": {
+                "column": "ID; Max LVWT",
+                "kind": "patient_rows",
+                "row": "IDs 195, 251, 270",
+                "section": "Supplementary Material 1",
+                "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+              },
+              "person_ids": [
+                "195",
+                "251",
+                "270"
+              ],
+              "quote": "| del C | 195 | 34/M | 29 | N | N | N | N | N | N | N | 25 | ANT | 72 |",
+              "scope": "current_study"
+            },
+            "carriers": 3,
+            "carriers_evidence": {
+              "basis": "individual_rows",
+              "count_role": "per_variant_carriers",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "c.506–12",
+                "section": "Results — Genetic analysis",
+                "table": "Table 3(b)"
+              },
+              "person_ids": [
+                "195",
+                "251",
+                "270"
+              ],
+              "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.506–12 | Intron 4 | — | Yes | delC | 195, 251, 270 |",
+              "scope": "current_study"
+            },
+            "unaffected": 1,
+            "unaffected_evidence": {
+              "additional_source_rows": [
+                {
+                  "evidence_locator": {
+                    "column": "Patient ID",
+                    "kind": "patient_rows",
+                    "row": "c.2258–2259InsT",
+                    "section": "Results — Genetic analysis",
+                    "table": "Table 3(a)"
+                  },
+                  "quote": "| DNA variation | Exon | Type of mutation | Protein mutation | Novel | Patient ID |\n| c.2258–2259InsT | 21 | Frameshift: STOP codon | K754EfsX78 | Yes | 195, 228 |"
+                },
+                {
+                  "evidence_locator": {
+                    "column": "Patient ID",
+                    "kind": "patient_rows",
+                    "row": "c.506–12",
+                    "section": "Results — Genetic analysis",
+                    "table": "Table 3(b)"
+                  },
+                  "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.506–12 | Intron 4 | — | Yes | delC | 195, 251, 270 |"
+                }
+              ],
+              "basis": "individual_rows",
+              "count_role": "per_variant_unaffected",
+              "evidence_locator": {
+                "column": "Patient ID",
+                "kind": "patient_rows",
+                "row": "Intersection of K754EfsX78 and delC carrier IDs: 195",
+                "section": "Discussion; Results — Genetic analysis",
+                "table": "Table 3(a) and Table 3(b)"
+              },
+              "person_ids": [
+                "195"
+              ],
+              "quote": "For example, we found two unrelated patients carrying the same MYBPC3 K754EfsX78 mutation: at the time of diagnosis, both were asymptomatic, but later on one required an implantable defibrillator while the other did not, suggesting that other genetic variations were pivotal in the natural history of the disease in these patients.",
+              "scope": "current_study"
+            },
+            "uncertainty": "The three carriers are enumerated from Table 3(b), even though S4 displays delC only beside ID 195. All three have phenotype-positive LVWT measurements. ID 195 is also unambiguously one of the two K754EfsX78 carriers explicitly asymptomatic at diagnosis; unaffected=1 counts that documented asymptomatic carrier only. It does not classify IDs 251 or 270, and does not mean ID 195 was phenotype-negative. Thus the affected and asymptomatic-at-diagnosis counts can overlap.",
+            "variant": "c.506–12 (delC)"
+          },
+          "reason": "no unique retained baseline identity",
+          "variant": "c.506–12 (delC)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 234"
+            },
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "variant": "c.2309-2A>G"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 234"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 16,
+          "value": 1,
+          "variant": "c.2309-2A>G"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 181",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 181"
+            },
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "variant": "p.Q1012* c.3034C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 181",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 181"
+            },
+            "person_ids": [
+              "181"
+            ],
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 24,
+          "value": 1,
+          "variant": "c.3034C>T (Q1012X)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 251"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "p.Q1233* c.3697C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 251"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 25,
+          "value": 1,
+          "variant": "c.3697C>T (Q1233X)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 221"
+            },
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "variant": "p.V771M c.2311G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(a) by ID 221"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 29,
+          "value": 1,
+          "variant": "c. 2311G>A (V771M)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.472G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.472G>A | Exon 4 | Non-synonymous | rs3729986 | V158M | 270 |",
+            "variant": "V158M c.472G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.472G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "270"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.472G>A | Exon 4 | Non-synonymous | rs3729986 | V158M | 270 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 13,
+          "value": 1,
+          "variant": "c.472G>A (V158M; rs3729986)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "rs3729986, ID 270",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 270"
+            },
+            "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |",
+            "variant": "V158M c.472G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "rs3729986, ID 270",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 270"
+            },
+            "person_ids": [
+              "270"
+            ],
+            "quote": "| rs 3729986 | 270 | 43/M | 32 | N | N | N | N | N | N | N | 22 | ANT |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 13,
+          "value": 1,
+          "variant": "c.472G>A (V158M; rs3729986)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.977G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.977G>A | Exon 11 | Non-synonymous | rs34580776 | R326Q | 251 |",
+            "variant": "R326Q c.977G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.977G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.977G>A | Exon 11 | Non-synonymous | rs34580776 | R326Q | 251 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "c.977G>A (R326Q; rs34580776)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 251"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "R326Q c.977G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; NSVT; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 251",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 251"
+            },
+            "person_ids": [
+              "251"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 9,
+          "value": 1,
+          "variant": "c.977G>A (R326Q; rs34580776)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1564 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1564 G>A | Exon 15 | Non-synonymous | rs11570082 | A522T | 221 |",
+            "variant": "A522T c.1564G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1564 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1564 G>A | Exon 15 | Non-synonymous | rs11570082 | A522T | 221 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 0,
+          "value": 1,
+          "variant": "c.1564 G>A (A522T; rs11570082)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 221"
+            },
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "variant": "A522T c.1564G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Syncope; NSVT; AF; Max LVWT",
+              "kind": "patient_rows",
+              "row": "ID 221",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 221"
+            },
+            "person_ids": [
+              "221"
+            ],
+            "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 0,
+          "value": 1,
+          "variant": "c.1564 G>A (A522T; rs11570082)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.492 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.492 C>T | Exon 4 | Synonymous | rs3218719 | G164G | 214 |",
+            "variant": "G164G c.492C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.492 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "214"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.492 C>T | Exon 4 | Synonymous | rs3218719 | G164G | 214 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 1,
+          "variant": "c.492 C>T (G164G; rs3218719)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 214",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 214"
+            },
+            "quote": "| R668C | 214 | 76/M | 69 | N | N | N | N | N | N | N | 20 | ANT | 60 |",
+            "variant": "G164G c.492C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT; Loc.",
+              "kind": "patient_rows",
+              "row": "ID 214",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by ID 214"
+            },
+            "person_ids": [
+              "214"
+            ],
+            "quote": "| R668C | 214 | 76/M | 69 | N | N | N | N | N | N | N | 20 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 3,
+          "value": 1,
+          "variant": "c.492 C>T (G164G; rs3218719)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2550 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2550 C>T | Exon 23 | Synonymous | rs3729953 | V849V | 278, 251, 268 |",
+            "variant": "V849V c.2550C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2550 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2550 C>T | Exon 23 | Synonymous | rs3729953 | V849V | 278, 251, 268 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 14,
+          "value": 3,
+          "variant": "c.2550 C>T (V849V; rs3729953)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "V849V c.2550C>T"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 278",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729953 | 278 | 34/M | 21 | N | N | N | N | N | N | N | 18 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 14,
+          "value": 3,
+          "variant": "c.2550 C>T (V849V; rs3729953)"
+        },
+        {
+          "entry": {
+            "carriers": 1,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.3288 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.3288 G>A | Exon 28 | Synonymous | rs1052373 | E1096E | 234 |",
+            "variant": "E1096E c.3288G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.3288 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.3288 G>A | Exon 28 | Synonymous | rs1052373 | E1096E | 234 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 1,
+          "variant": "c.3288 G>A (E1096E; rs1052373)"
+        },
+        {
+          "entry": {
+            "affected": 1,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "rs1052373, ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4"
+            },
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "variant": "E1096E c.3288G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Chest pain; Syncope; Max LVWT",
+              "kind": "patient_rows",
+              "row": "rs1052373, ID 234",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4"
+            },
+            "person_ids": [
+              "234"
+            ],
+            "quote": "| rs1052373 | 234 | 22/M | 15 | N | N | Y | Y | N | N | N | 16 | ANT | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 1,
+          "value": 1,
+          "variant": "c.3288 G>A (E1096E; rs1052373)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1223+29 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1223+29 G>A | Intron 12 | Synonymous | rs11570078 | — | 181, 221, 194 |",
+            "variant": "c.1223+29G>A"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.1223+29 G>A",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "181",
+              "221",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.1223+29 G>A | Intron 12 | Synonymous | rs11570078 | — | 181, 221, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 15,
+          "value": 3,
+          "variant": "c.1223+29 G>A (rs11570078)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 181, 221, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "variant": "c.1223+29G>A"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 221",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs1170082 rs11570078 | 221 | 69/M | 33 | N | N | N | Y | Y | Y | N | 20 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 181, 221, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "181",
+              "221",
+              "194"
+            ],
+            "quote": "| rs11570078 | 181 | 23/M | 16 | N | N | N | N | N | N | N | 25 | POST | 65 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 15,
+          "value": 3,
+          "variant": "c.1223+29 G>A (rs11570078)"
+        },
+        {
+          "entry": {
+            "carriers": 4,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2340+18 C>G",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2340+18 C>G | Intron 21 | Synonymous | rs3729948 | — | 278, 251 268, 194 |",
+            "variant": "c.2340+18C>G"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2340+18 C>G",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2340+18 C>G | Intron 21 | Synonymous | rs3729948 | — | 278, 251 268, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 17,
+          "value": 4,
+          "variant": "c.2340+18 C>G (rs3729948)"
+        },
+        {
+          "entry": {
+            "affected": 4,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "c.2340+18C>G"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 278",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729953 | 278 | 34/M | 21 | N | N | N | N | N | N | N | 18 | ANT | 60 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 278, 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "278",
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 17,
+          "value": 4,
+          "variant": "c.2340+18 C>G (rs3729948)"
+        },
+        {
+          "entry": {
+            "carriers": 3,
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2737+12 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2737+12 C>T | Intron 24 | Synonymous | rs3729936 | — | 251, 268, 194 |",
+            "variant": "c.2737+12C>T"
+          },
+          "evidence": {
+            "basis": "individual_rows",
+            "count_role": "per_variant_carriers",
+            "evidence_locator": {
+              "column": "Patient ID",
+              "kind": "patient_rows",
+              "row": "c.2737+12 C>T",
+              "section": "Results — Genetic analysis",
+              "table": "Table 3(b)"
+            },
+            "person_ids": [
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| DNA variation | Exon/intron | SNP | Novele | Protein variation | Patient ID |\n| c.2737+12 C>T | Intron 24 | Synonymous | rs3729936 | — | 251, 268, 194 |",
+            "scope": "current_study"
+          },
+          "field": "carriers",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 18,
+          "value": 3,
+          "variant": "c.2737+12 C>T (rs3729936)"
+        },
+        {
+          "entry": {
+            "affected": 3,
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "variant": "c.2737+12C>T"
+          },
+          "evidence": {
+            "additional_source_rows": [
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 268",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs 3729936 rs3729953 rs3729948 | 268 | 60/F | 57 | N | N | N | N | N | N | N | 17 | ANT | 65 |"
+              },
+              {
+                "evidence_locator": {
+                  "column": "ID; Max LVWT",
+                  "kind": "patient_rows",
+                  "row": "ID 194",
+                  "section": "Supplementary Material 1",
+                  "table": "Supplementary Table S4"
+                },
+                "quote": "| rs3729936 | 194 | 32/F | 12 | N | N | N | N | N | N | N | 34 | ANT | 65 |"
+              }
+            ],
+            "basis": "individual_rows",
+            "count_role": "per_variant_affected",
+            "evidence_locator": {
+              "column": "ID; Max LVWT",
+              "kind": "patient_rows",
+              "row": "IDs 251, 268, 194",
+              "section": "Supplementary Material 1",
+              "table": "Supplementary Table S4, joined to Table 3(b) by explicit IDs"
+            },
+            "person_ids": [
+              "251",
+              "268",
+              "194"
+            ],
+            "quote": "| rs3729953 | 251 | 28/M | 20 | N | N | Y | Y | Y | N | N | 32 | ANT | 60 |",
+            "scope": "current_study"
+          },
+          "field": "affected",
+          "reason": "acceptance requires explicit current-study count; derived/prior/unclear retained only in raw diagnostic",
+          "target": 18,
+          "value": 3,
+          "variant": "c.2737+12 C>T (rs3729936)"
+        }
+      ],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "MYBPC3",
+        "missing_fields": 60,
+        "pmid": "21302287",
+        "source_sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:16:25.300175+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical",
+  "schema_version": 2,
+  "trace_id": "1788704185300998000-000016-24757ed4"
+}

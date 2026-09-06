@@ -1,0 +1,306 @@
+Review a narrow benchmark telemetry change adversarially. No tools, edits, web, subagents or experiments. Max 600 words. A clinical reader call timed out with unknown provider usage. Its predictions retain the baseline, and its maximum possible call cost remains reserved. No gold score has been opened. Existing native schema demanded exact usage even for failed calls; we want to include failure honestly, not drop its paper or fake zero. Review whether the exception requires real same-paper hash-bound failed API traces, whether token reporting is honest, and if score/count acceptance changes. command_lock still verifies the write-time trace manifest and selection/source locks. Reference attachment is metadata only; immutable response files and all predictions stay intact. Give concrete bugs, not hypothetical requirements.
+diff --git a/benchmarks/codex_paper_eval/run_eval.py b/benchmarks/codex_paper_eval/run_eval.py
+index 15b627f8..59519aeb 100644
+--- a/benchmarks/codex_paper_eval/run_eval.py
++++ b/benchmarks/codex_paper_eval/run_eval.py
+@@ -831,7 +831,67 @@ def command_prepare(args) -> None:
+     print(run_dir)
+ 
+ 
+-def validate_predictions(selection: dict, predictions: dict) -> list[str]:
++def documented_unknown_call_usage(paper: dict, trace_root: Path | None) -> bool:
++    """Allow missing billing counters only for hash-bound, failed API calls.
++
++    A timeout may retain predictions while the provider returns no usage. It
++    must not become zero cost or force exclusion of the failed paper. Native
++    locks still require a write-time-verified trace manifest independently.
++    """
++    usage = paper.get("token_usage") or {}
++    ids = usage.get("unknown_failed_call_trace_ids")
++    if (
++        trace_root is None
++        or usage.get("status") != "unknown_failed_call"
++        or usage.get("telemetry_available") is not False
++        or any(
++            usage.get(k) is not None
++            for k in ("input_tokens", "output_tokens", "total_tokens")
++        )
++        or not isinstance(ids, list)
++        or not ids
++        or any(not isinstance(i, str) or not i for i in ids)
++        or len(set(ids)) != len(ids)
++    ):
++        return False
++    refs = {
++        r.get("trace_id"): r
++        for r in paper.get("llm_trace_refs", [])
++        if isinstance(r, dict)
++    }
++    root = trace_root.resolve()
++    for identity in ids:
++        ref = refs.get(identity) or {}
++        path = root / str(ref.get("path") or "")
++        if not path.is_file() or not path.resolve().is_relative_to(root):
++            return False
++        try:
++            record = read_json(path)
++        except (OSError, ValueError):
++            return False
++        if not isinstance(record, dict):
++            return False
++        response = record.get("response") or {}
++        context = record.get("context") or {}
++        if (
++            digest(path) != ref.get("sha256")
++            or record.get("trace_id") != identity
++            or record.get("record_type") != "llm_call"
++            or not isinstance(response, dict)
++            or response.get("success") is not False
++            or not response.get("error")
++            or response.get("usage") is not None
++            or not isinstance(context, dict)
++            or context.get("gene") != paper.get("gene")
++            or str(context.get("pmid")) != str(paper.get("pmid"))
++        ):
++            return False
++    return True
++
++
++def validate_predictions(
++    selection: dict, predictions: dict, *, trace_root: Path | None = None
++) -> list[str]:
+     errors = []
+     expected = {(p["gene"], p["pmid"]) for p in selection["papers"]}
+     actual = {
+@@ -854,7 +914,8 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
+     # projected by db_to_predictions.py): tool/rationale/variants are required,
+     # but per-paper wall time and exact token telemetry don't exist there —
+     # gvf-run does not aggregate them. Schema 2 is harness-native extraction,
+-    # where both are recorded per call and therefore mandatory.
++    # where both are recorded per call. A verified failed call may instead
++    # carry explicit unknown usage, never a fabricated zero.
+     native = int(predictions.get("schema_version") or 1) >= 2
+     for p in predictions.get("papers", []):
+         label = f"{p.get('gene')}:{p.get('pmid')}"
+@@ -923,11 +984,15 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
+             errors.append(f"{label}: invalid tool {p.get('tool')!r}")
+         usage = p.get("token_usage") or {}
+         total_tokens = usage.get("total_tokens")
+-        if native and (
+-            not usage.get("telemetry_available")
+-            or not isinstance(total_tokens, int)
+-            or isinstance(total_tokens, bool)
+-            or total_tokens < 0
++        if (
++            native
++            and (
++                not usage.get("telemetry_available")
++                or not isinstance(total_tokens, int)
++                or isinstance(total_tokens, bool)
++                or total_tokens < 0
++            )
++            and not documented_unknown_call_usage(p, trace_root)
+         ):
+             errors.append(f"{label}: missing exact token telemetry")
+         if int(predictions.get("schema_version") or 1) >= 2:
+@@ -993,7 +1058,7 @@ def command_lock(args) -> None:
+             run_id=selection.get("run_id"),
+             locked=True,
+         )
+-    errors = validate_predictions(selection, predictions)
++    errors = validate_predictions(selection, predictions, trace_root=trace_root)
+     errors.extend(selection_material_errors(selection))
+     errors.extend(production_trace_errors)
+     errors.extend(production_status_errors)
+@@ -1233,19 +1298,21 @@ def reasoning_params(model: str, effort: str) -> dict:
+     everything except grok, while production gated on
+     ``gpt-5|gpt5|o1|o3|o4-mini`` — so for any other deployment the benchmark
+     result did not describe the production configuration for the same model
+-    string. Grok-4-class deployments reason by default and reject
+-    ``reasoning.effort`` with a 400, so they still get no reasoning block.
++    string. Grok 4.6 now receives the supported effort setting; older Grok
++    deployments retain the existing provider-default configuration.
+     """
+     from utils.llm_utils import build_responses_reasoning_param
+ 
+-    if "grok" in model.lower():
+-        return {}
+     return build_responses_reasoning_param(model, effort)
+ 
+ 
+ def effective_effort(model: str, effort: str) -> str:
+     """The effort label to record, so reports never claim an unsent setting."""
+-    return effort if reasoning_params(model, effort) else "model_default"
++    return (
++        reasoning_params(model, effort)
++        .get("reasoning", {})
++        .get("effort", "model_default")
++    )
+ 
+ 
+ def supports_images(model: str) -> bool:
+@@ -2727,9 +2794,9 @@ def write_markdown_report(report: dict, path: Path) -> None:
+         ]
+         if telemetry_available
+         else [
+-            "- Exact API token and timing telemetry was not captured for this "
+-            "legacy production projection; zero placeholders must not be "
+-            "interpreted as zero cost."
++            "- Complete API token telemetry is unavailable for this run. "
++            "Traced failures may have unknown usage; any recorded token sum "
++            "covers known usage only and must not be interpreted as total cost."
+         ]
+     )
+     timing_lines = (
+
+FILE tests/unit/test_native_failed_call_telemetry.py
+"""Native locks retain traced API failures without fabricating zero usage."""
+
+import hashlib
+import json
+
+import pytest
+
+from benchmarks.codex_paper_eval.run_eval import validate_predictions
+
+
+def fixture(tmp_path):
+    record = {
+        "trace_id": "failed-request",
+        "record_type": "llm_call",
+        "context": {"gene": "SCN5A", "pmid": "123"},
+        "response": {"success": False, "error": {"type": "Timeout"}, "usage": None},
+    }
+    path = tmp_path / "failed.json"
+    path.write_text(json.dumps(record))
+    ref = {
+        "trace_id": "failed-request",
+        "path": path.name,
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "context": {"stage": "paper_curation"},
+    }
+    paper = {
+        "gene": "SCN5A",
+        "pmid": "123",
+        "tool": "text",
+        "tool_rationale": "source-only attempt",
+        "elapsed_seconds": 1200,
+        "source_completeness": "full_text",
+        "curation_rationale": "Traced timeout; retain previous result.",
+        "variants": [],
+        "token_usage": {
+            "telemetry_available": False,
+            "input_tokens": None,
+            "output_tokens": None,
+            "total_tokens": None,
+            "status": "unknown_failed_call",
+            "unknown_failed_call_trace_ids": ["failed-request"],
+        },
+        "llm_trace_refs": [ref]
+        + [
+            {"context": {"stage": s}}
+            for s in (
+                "representation_route",
+                "representation_route_decision",
+                "paper_curation_decision",
+            )
+        ],
+    }
+    return (
+        {"papers": [{"gene": "SCN5A", "pmid": "123"}]},
+        {"schema_version": 2, "papers": [paper]},
+        record,
+        path,
+    )
+
+
+def test_native_traced_timeout_accepts_explicit_null_usage(tmp_path):
+    selection, predictions, _, _ = fixture(tmp_path)
+    assert validate_predictions(selection, predictions, trace_root=tmp_path) == []
+    assert validate_predictions(selection, predictions) == [
+        "SCN5A:123: missing exact token telemetry"
+    ]
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        "zero",
+        "missing_id",
+        "bad_hash",
+        "wrong_paper",
+        "success",
+        "known_usage",
+        "non_object",
+    ],
+)
+def test_native_unknown_usage_requires_authentic_failed_trace(tmp_path, case):
+    selection, predictions, record, path = fixture(tmp_path)
+    p = predictions["papers"][0]
+    if case == "zero":
+        p["token_usage"]["total_tokens"] = 0
+    elif case == "missing_id":
+        p["token_usage"]["unknown_failed_call_trace_ids"] = []
+    elif case == "bad_hash":
+        p["llm_trace_refs"][0]["sha256"] = "bad"
+    else:
+        if case == "wrong_paper":
+            record["context"]["pmid"] = "another-paper"
+        elif case == "success":
+            record["response"]["success"] = True
+        elif case == "known_usage":
+            record["response"]["usage"] = {"total_tokens": 20}
+        elif case == "non_object":
+            record = []
+        path.write_text(json.dumps(record))
+        p["llm_trace_refs"][0]["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    assert "SCN5A:123: missing exact token telemetry" in validate_predictions(
+        selection, predictions, trace_root=tmp_path
+    )
+
+FILE docs/evidence/model_routing_20260906/bind_failed_usage.py
+"""Bind existing failed API traces to a finished clinical overlay before locking."""
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+HERE = Path(__file__).resolve().parent
+
+
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main():
+    folder = ROOT/'benchmarks/codex_paper_eval/runs/20260906_model12_grok43_astra_clinical_verified'
+    assert not (folder/'LOCK.json').exists(), 'Never mutate a locked result'
+    path = folder/'predictions.json'
+    data = json.loads(path.read_text())
+    assert data.get('completed_at') and len(data['papers']) == 12
+    before_sha = sha(path)
+    scientific = json.dumps([(p['gene'],p['pmid'],p['variants'],p['comparison_variants']) for p in data['papers']],sort_keys=True)
+    index = [json.loads(l) for l in (folder/'llm_traces/trace_index.jsonl').read_text().splitlines() if l]
+    changed = []
+    for paper in data['papers']:
+        usage = paper['token_usage']
+        if usage['telemetry_available']:continue
+        matches = [e for e in index if e.get('record_type')=='llm_call' and e.get('success') is False and e.get('context',{}).get('gene')==paper['gene'] and str(e.get('context',{}).get('pmid'))==str(paper['pmid'])]
+        assert matches, 'Unknown usage requires an authentic API failure'
+        for entry in matches:
+            assert sha(folder/'llm_traces'/entry['path']) == entry['sha256']
+            record = json.loads((folder/'llm_traces'/entry['path']).read_text())
+            assert record['response']['success'] is False and record['response']['usage'] is None
+            if entry['trace_id'] not in {r.get('trace_id') for r in paper['llm_trace_refs']}:
+                paper['llm_trace_refs'].append(entry)
+        usage.update(status='unknown_failed_call',unknown_failed_call_trace_ids=[e['trace_id'] for e in matches])
+        changed.append({'gene':paper['gene'],'pmid':paper['pmid'],'failed_trace_ids':usage['unknown_failed_call_trace_ids']})
+    assert scientific == json.dumps([(p['gene'],p['pmid'],p['variants'],p['comparison_variants']) for p in data['papers']],sort_keys=True)
+    data['baseline_token_usage'] = data['token_usage']
+    known = {f:sum(p['token_usage'].get(f) or 0 for p in data['papers']) for f in ['input_tokens','output_tokens','total_tokens']}
+    data['token_usage'] = {'telemetry_available':not bool(changed), **{f:None if changed else v for f,v in known.items()}, 'known_incremental_usage':known, 'unknown_usage_papers':len(changed), 'note':'Incremental clinical usage; aggregate totals are unknown when a failed API call returned no usage. Baseline usage remains separate. Campaign ledger retains cost reservations.'}
+    path.write_text(json.dumps(data,indent=2)+'\n')
+    receipt = {'before_predictions_sha256':before_sha,'after_predictions_sha256':sha(path),'scientific_predictions_sha256_unchanged':hashlib.sha256(scientific.encode()).hexdigest(),'attached_failure_references':changed,'gold_opened':False}
+    (HERE/'failed_usage_binding.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    print(json.dumps(receipt,indent=2))
+
+if __name__ == '__main__':main()

@@ -1,0 +1,14 @@
+[
+  {
+    "model": "azure_ai/grok-4.6",
+    "status": "failed",
+    "error": "litellm.BadRequestError: OpenAIException - The API deployment for this resource does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.",
+    "elapsed_seconds": 1.1899465409805998
+  },
+  {
+    "model": "azure_ai/gpt-6-astra",
+    "status": "failed",
+    "error": "litellm.BadRequestError: OpenAIException - The API deployment for this resource does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.",
+    "elapsed_seconds": 0.17844499996863306
+  }
+]

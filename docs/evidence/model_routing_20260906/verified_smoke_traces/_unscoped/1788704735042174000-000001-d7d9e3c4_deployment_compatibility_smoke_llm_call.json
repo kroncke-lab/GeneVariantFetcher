@@ -1,0 +1,183 @@
+{
+  "context": {
+    "model": "azure_ai/gpt-6-astra",
+    "provider": "litellm",
+    "stage": "deployment_compatibility_smoke"
+  },
+  "reasoning_capture": {
+    "note": "response_paths lists provider-returned reasoning CONTENT only. reasoning_token_usage is billing telemetry and never implies that any reasoning content was exposed. Hidden chain-of-thought is not available through model APIs and is not recorded.",
+    "provider_exposed_reasoning_available": false,
+    "reasoning_token_usage": {
+      "$.usage.completion_tokens_details.reasoning_tokens": 7
+    },
+    "response_paths": []
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "llm_call",
+  "request": {
+    "payload": {
+      "allowed_openai_params": [
+        "reasoning_effort"
+      ],
+      "api_base": "https://magen-api-2-resource.services.ai.azure.com/openai/v1",
+      "api_key": "<redacted>",
+      "max_completion_tokens": 32000,
+      "messages": [
+        {
+          "content": "Return exactly JSON {\"ok\":true}.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-6-astra",
+      "num_retries": 0,
+      "reasoning_effort": "medium",
+      "response_format": {
+        "type": "json_object"
+      },
+      "timeout": 120
+    },
+    "provider": "litellm",
+    "requested_model": "azure_ai/gpt-6-astra",
+    "resolved_model": "openai/gpt-6-astra",
+    "started_at": "2026-09-06T14:25:29.323795+00:00"
+  },
+  "response": {
+    "completed_at": "2026-09-06T14:25:35.041723+00:00",
+    "duration_seconds": 5.717861,
+    "envelope": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "{\"ok\":true}",
+            "function_call": null,
+            "provider_specific_fields": {
+              "refusal": null
+            },
+            "role": "assistant",
+            "tool_calls": null
+          },
+          "provider_specific_fields": {
+            "content_filter_results": {
+              "hate": {
+                "filtered": false,
+                "severity": "safe"
+              },
+              "protected_material_code": {
+                "detected": false,
+                "filtered": false
+              },
+              "protected_material_text": {
+                "detected": false,
+                "filtered": false
+              },
+              "self_harm": {
+                "filtered": false,
+                "severity": "safe"
+              },
+              "sexual": {
+                "filtered": false,
+                "severity": "safe"
+              },
+              "violence": {
+                "filtered": false,
+                "severity": "safe"
+              }
+            }
+          }
+        }
+      ],
+      "created": 1788704729,
+      "id": "chatcmpl-EL86DO5xKWWhJxyhQrHWa3DROM0dG",
+      "model": "gpt-6-astra-2026-09-03",
+      "moderation": null,
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "jailbreak": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "routing": {
+        "serving_pipereplica": "d20260906052358-e2911967-prefill-r11-dp0-prefill"
+      },
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 24,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 7,
+          "rejected_prediction_tokens": 0
+        },
+        "latency_checkpoint": {
+          "pre_inference_ms": 307,
+          "service_tbt_ms": 83,
+          "service_ttft_ms": 2865,
+          "service_ttlt_ms": 4862,
+          "user_visible_ttft_ms": 2558
+        },
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 38
+      }
+    },
+    "error": null,
+    "output_text": "{\"ok\":true}",
+    "success": true,
+    "usage": {
+      "completion_tokens": 24,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 7,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "pre_inference_ms": 307,
+        "service_tbt_ms": 83,
+        "service_ttft_ms": 2865,
+        "service_ttlt_ms": 4862,
+        "user_visible_ttft_ms": 2558
+      },
+      "prompt_tokens": 14,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 38
+    }
+  },
+  "run_id": "20260906_verified_smoke",
+  "schema_version": 2,
+  "trace_id": "1788704735042174000-000001-d7d9e3c4"
+}

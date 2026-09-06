@@ -1,0 +1,35 @@
+{
+  "classification": "Opened calibration; source-frozen primary model configuration comparison, not registered discovery or confirmation",
+  "runtime": {
+    "sha256": "90d5e538b0da888034e28a327da00f0f1ec5fe602389081ae219a91b7b451e9b",
+    "file_count": 251
+  },
+  "model_configuration": {
+    "MODEL_PROVIDER": "azure",
+    "ANTHROPIC_API_KEY": "",
+    "TIER2_MODEL": "azure_ai/gpt-5.6-luna",
+    "TIER2_REASONING_EFFORT": "xhigh",
+    "TABLE_ROUTER_MODEL": "azure_ai/Kimi-K2.6-1",
+    "TIER3_ADJUDICATOR_MODELS": "azure_ai/gpt-5.6-sol",
+    "TIER3_ADJUDICATOR_REASONING_EFFORT": "medium",
+    "TIER3_VERIFIER_REASONING_EFFORT": "medium",
+    "VISION_MODEL": "azure_ai/gpt-5.6-sol",
+    "VISION_REASONING_EFFORT": "",
+    "COUNT_RECOVERY_ENABLED": "0",
+    "COUNT_RECOVERY_MODEL": "azure_ai/gpt-5.6-luna",
+    "TIER3_MAX_TOKENS": "32000",
+    "MAX_WORKERS": "1",
+    "FILTER_MAX_WORKERS": "2",
+    "AZURE_MAX_WORKERS": "2",
+    "AZURE_RPM": "30",
+    "TIER3_MODELS": "azure_ai/gpt-6-astra",
+    "TIER3_REASONING_EFFORT": "medium"
+  },
+  "source_snapshot_sha256": "4d7840dae0f2fdb4953f3795aebc42003f88548b76eed444984a43d0ced1343a",
+  "campaign_hook_sha256": "1bb12f75340fae66d9dd8045c8acc41da3131dc93607e6b401711773ffca1b09",
+  "campaign_script_sha256": "4a1bb60124b22126a6c7a9a0488ff83e215fbe8ea885ae41d51fb54420df9eaa",
+  "arm": "astra_medium",
+  "attempts": 12,
+  "budget_envelope_usd": 150,
+  "gold_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key"
+}

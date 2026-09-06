@@ -1,0 +1,45 @@
+Read the supplied biomedical article independently as a clinical evidence curator.
+Target gene: {gene}. Article PMID: {pmid}.
+
+Identify target-gene variants and the numbers of HUMAN individuals carrying each
+variant in this article's study. Read methods, results, tables, footnotes, and
+article-bound supplements together. Extract three distinct fields:
+- carriers: distinct human people reported to carry this particular variant;
+- affected: those carriers explicitly described as symptomatic/phenotype-positive;
+- unaffected: those carriers explicitly described as asymptomatic/phenotype-negative.
+A count can be absent even when the variant identity is present. Return null for
+absence or uncertainty; never convert null to zero. Zero needs explicit evidence.
+
+Preserve study, variant, and person-unit ownership. Do not substitute allele or
+chromosome counts, allele frequencies, families, electrophysiology replicates,
+animals, or the overall number screened for per-variant people. A multi-variant
+cohort total cannot be copied onto each variant. Do not treat every case in a
+disease-ascertained cohort as affected without applicable phenotype evidence.
+Do not infer unaffected by subtracting affected from carriers. Do not add
+current-study and cited prior-study cohorts, or overlapping patient lists.
+
+Prefer an explicit per-variant count. If a patient-level table uniquely identifies
+each person, a count may instead be derived by enumerating and deduplicating
+those exact patient IDs, joining tables only through explicit IDs. In that case
+label the basis individual_rows and return all IDs and the verbatim source rows
+supporting the derivation. Do not manufacture a literal quote containing a sum.
+If layout/merged cells or IDs make ownership ambiguous, return null and explain.
+
+For each non-null field provide that field's own evidence: a verbatim contiguous
+quote or exact table header plus row, source locator, count role, basis, and scope.
+The normal downstream validator may refuse a derivation even if you consider it
+valid; your job here is an independent reading, with all uncertainty retained.
+Do not seek external sources or use remembered facts about the paper.
+
+Return JSON only:
+{"variants":[{"variant":"paper's variant notation", "carriers":null,
+"affected":null,"unaffected":null,
+"carriers_evidence":{"quote":"exact source span", "count_role":"per_variant_carriers", "basis":"explicit|individual_rows|none", "scope":"current_study|prior_study|unclear", "person_ids":[], "evidence_locator":{"kind":"sentence|table_row|patient_rows", "section":"", "table":"", "column":"", "row":""}},
+"affected_evidence":{},"unaffected_evidence":{},"uncertainty":""}],
+"clinical_count_status":"present|not_reported|ambiguous", "unresolved_sources":[]}
+
+Use per_variant_affected and per_variant_unaffected for the respective field's
+role. Include only the target gene and biological variants actually in the source.
+
+--- ARTICLE SOURCE ---
+{source}

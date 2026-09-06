@@ -831,7 +831,144 @@ def command_prepare(args) -> None:
     print(run_dir)
 
 
-def validate_predictions(selection: dict, predictions: dict) -> list[str]:
+def indexed_paper_call_usage(paper: dict, trace_root: Path) -> dict | None:
+    """Recover the known subset and failed-call IDs from write-time records."""
+    root = trace_root.resolve()
+    try:
+        entries = [
+            json.loads(line)
+            for line in (root / "trace_index.jsonl").read_text().splitlines()
+            if line
+        ]
+    except (OSError, ValueError):
+        return None
+    known = dict.fromkeys(("input_tokens", "output_tokens", "total_tokens"), 0)
+    unknown = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            return None
+        context = entry.get("context") or {}
+        if not isinstance(context, dict):
+            return None
+        if (
+            entry.get("record_type") != "llm_call"
+            or context.get("gene") != paper.get("gene")
+            or str(context.get("pmid")) != str(paper.get("pmid"))
+        ):
+            continue
+        path = root / str(entry.get("path") or "")
+        if not path.is_file() or not path.resolve().is_relative_to(root):
+            return None
+        try:
+            record = read_json(path)
+        except (OSError, ValueError):
+            return None
+        if (
+            not isinstance(record, dict)
+            or digest(path) != entry.get("sha256")
+            or record.get("trace_id") != entry.get("trace_id")
+            or record.get("context") != context
+        ):
+            return None
+        response = record.get("response") or {}
+        if not isinstance(response, dict):
+            return None
+        usage = response.get("usage")
+        if usage is None:
+            if response.get("success") is not False or not response.get("error"):
+                return None
+            unknown[record["trace_id"]] = entry
+            continue
+        if not isinstance(usage, dict):
+            return None
+        inp = usage.get("input_tokens", usage.get("prompt_tokens"))
+        out = usage.get("output_tokens", usage.get("completion_tokens"))
+        total = usage.get("total_tokens")
+        if (
+            any(
+                not isinstance(v, int) or isinstance(v, bool) or v < 0
+                for v in (inp, out, total)
+            )
+            or total < inp
+        ):
+            return None
+        known["input_tokens"] += inp
+        known["output_tokens"] += max(out, total - inp)
+        known["total_tokens"] += total
+    return {"known_usage": known, "unknown_calls": unknown}
+
+
+def documented_unknown_call_usage(paper: dict, trace_root: Path | None) -> bool:
+    """Allow missing billing counters only for hash-bound, failed API calls.
+
+    A timeout may retain predictions while the provider returns no usage. It
+    must not become zero cost or force exclusion of the failed paper. Native
+    locks still require a write-time-verified trace manifest independently.
+    """
+    usage = paper.get("token_usage") or {}
+    ids = usage.get("unknown_failed_call_trace_ids")
+    if (
+        trace_root is None
+        or usage.get("status") != "unknown_failed_call"
+        or usage.get("telemetry_available") is not False
+        or any(
+            usage.get(k) is not None
+            for k in ("input_tokens", "output_tokens", "total_tokens")
+        )
+        or not isinstance(ids, list)
+        or not ids
+        or any(not isinstance(i, str) or not i for i in ids)
+        or len(set(ids)) != len(ids)
+    ):
+        return False
+    refs = {
+        r.get("trace_id"): r
+        for r in paper.get("llm_trace_refs", [])
+        if isinstance(r, dict)
+    }
+    root = trace_root.resolve()
+    indexed = indexed_paper_call_usage(paper, root)
+    if (
+        indexed is None
+        or set(ids) != set(indexed["unknown_calls"])
+        or usage.get("known_usage") != indexed["known_usage"]
+    ):
+        return False
+    for identity in ids:
+        ref = refs.get(identity) or {}
+        entry = indexed["unknown_calls"][identity]
+        if any(ref.get(k) != entry.get(k) for k in ("trace_id", "path", "sha256")):
+            return False
+        path = root / str(ref.get("path") or "")
+        if not path.is_file() or not path.resolve().is_relative_to(root):
+            return False
+        try:
+            record = read_json(path)
+        except (OSError, ValueError):
+            return False
+        if not isinstance(record, dict):
+            return False
+        response = record.get("response") or {}
+        context = record.get("context") or {}
+        if (
+            digest(path) != ref.get("sha256")
+            or record.get("trace_id") != identity
+            or record.get("record_type") != "llm_call"
+            or not isinstance(response, dict)
+            or response.get("success") is not False
+            or not response.get("error")
+            or response.get("usage") is not None
+            or not isinstance(context, dict)
+            or context.get("gene") != paper.get("gene")
+            or str(context.get("pmid")) != str(paper.get("pmid"))
+        ):
+            return False
+    return True
+
+
+def validate_predictions(
+    selection: dict, predictions: dict, *, trace_root: Path | None = None
+) -> list[str]:
     errors = []
     expected = {(p["gene"], p["pmid"]) for p in selection["papers"]}
     actual = {
@@ -854,7 +991,8 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
     # projected by db_to_predictions.py): tool/rationale/variants are required,
     # but per-paper wall time and exact token telemetry don't exist there —
     # gvf-run does not aggregate them. Schema 2 is harness-native extraction,
-    # where both are recorded per call and therefore mandatory.
+    # where both are recorded per call. A verified failed call may instead
+    # carry explicit unknown usage, never a fabricated zero.
     native = int(predictions.get("schema_version") or 1) >= 2
     for p in predictions.get("papers", []):
         label = f"{p.get('gene')}:{p.get('pmid')}"
@@ -923,11 +1061,15 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
             errors.append(f"{label}: invalid tool {p.get('tool')!r}")
         usage = p.get("token_usage") or {}
         total_tokens = usage.get("total_tokens")
-        if native and (
-            not usage.get("telemetry_available")
-            or not isinstance(total_tokens, int)
-            or isinstance(total_tokens, bool)
-            or total_tokens < 0
+        if (
+            native
+            and (
+                not usage.get("telemetry_available")
+                or not isinstance(total_tokens, int)
+                or isinstance(total_tokens, bool)
+                or total_tokens < 0
+            )
+            and not documented_unknown_call_usage(p, trace_root)
         ):
             errors.append(f"{label}: missing exact token telemetry")
         if int(predictions.get("schema_version") or 1) >= 2:
@@ -948,6 +1090,35 @@ def validate_predictions(selection: dict, predictions: dict) -> list[str]:
                 errors.append(
                     f"{label}: missing locked LLM trace stages {missing_stages}"
                 )
+    unknown_papers = [
+        p
+        for p in predictions.get("papers", [])
+        if (p.get("token_usage") or {}).get("status") == "unknown_failed_call"
+    ]
+    if native and unknown_papers:
+        total_usage = predictions.get("token_usage") or {}
+        known = {
+            field: sum(
+                int(
+                    (
+                        (p.get("token_usage") or {}).get("known_usage")
+                        or p.get("token_usage")
+                        or {}
+                    ).get(field)
+                    or 0
+                )
+                for p in predictions["papers"]
+            )
+            for field in ("input_tokens", "output_tokens", "total_tokens")
+        }
+        if (
+            total_usage.get("telemetry_available") is not False
+            or any(total_usage.get(field) is not None for field in known)
+            or total_usage.get("known_usage") != known
+        ):
+            errors.append(
+                "run: failed-call usage requires null totals and the complete known subset"
+            )
     return errors
 
 
@@ -993,7 +1164,7 @@ def command_lock(args) -> None:
             run_id=selection.get("run_id"),
             locked=True,
         )
-    errors = validate_predictions(selection, predictions)
+    errors = validate_predictions(selection, predictions, trace_root=trace_root)
     errors.extend(selection_material_errors(selection))
     errors.extend(production_trace_errors)
     errors.extend(production_status_errors)
@@ -1233,19 +1404,21 @@ def reasoning_params(model: str, effort: str) -> dict:
     everything except grok, while production gated on
     ``gpt-5|gpt5|o1|o3|o4-mini`` — so for any other deployment the benchmark
     result did not describe the production configuration for the same model
-    string. Grok-4-class deployments reason by default and reject
-    ``reasoning.effort`` with a 400, so they still get no reasoning block.
+    string. Grok 4.6 now receives the supported effort setting; older Grok
+    deployments retain the existing provider-default configuration.
     """
     from utils.llm_utils import build_responses_reasoning_param
 
-    if "grok" in model.lower():
-        return {}
     return build_responses_reasoning_param(model, effort)
 
 
 def effective_effort(model: str, effort: str) -> str:
     """The effort label to record, so reports never claim an unsent setting."""
-    return effort if reasoning_params(model, effort) else "model_default"
+    return (
+        reasoning_params(model, effort)
+        .get("reasoning", {})
+        .get("effort", "model_default")
+    )
 
 
 def supports_images(model: str) -> bool:
@@ -2420,12 +2593,30 @@ def aggregate(scores: list[dict]) -> dict:
         "elapsed_seconds": sum(float(s.get("elapsed_seconds") or 0) for s in scores),
         "token_usage": {
             field: sum(
-                int((s.get("token_usage") or {}).get(field) or 0) for s in scores
+                int(
+                    (
+                        (s.get("token_usage") or {}).get("known_usage")
+                        or s.get("token_usage")
+                        or {}
+                    ).get(field)
+                    or 0
+                )
+                for s in scores
             )
             for field in ("input_tokens", "output_tokens", "total_tokens")
         },
         "count": {},
     }
+    unknown_usage_papers = sum(
+        (s.get("token_usage") or {}).get("status") == "unknown_failed_call"
+        for s in scores
+    )
+    if unknown_usage_papers:
+        result["token_usage"].update(
+            telemetry_available=False,
+            unknown_usage_papers=unknown_usage_papers,
+            totals_scope="known_usage_only",
+        )
     counted_extra_rows = sum(
         int((s.get("counted_precision") or {}).get("counted_extra_rows") or 0)
         for s in scores
@@ -2727,9 +2918,9 @@ def write_markdown_report(report: dict, path: Path) -> None:
         ]
         if telemetry_available
         else [
-            "- Exact API token and timing telemetry was not captured for this "
-            "legacy production projection; zero placeholders must not be "
-            "interpreted as zero cost."
+            "- Complete API token telemetry is unavailable for this run. "
+            "Traced failures may have unknown usage; any recorded token sum "
+            "covers known usage only and must not be interpreted as total cost."
         ]
     )
     timing_lines = (

@@ -1,0 +1,33 @@
+{
+  "context": {
+    "gene": "RYR2",
+    "pmid": "18929323",
+    "stage": "paper_curation_decision"
+  },
+  "event": {
+    "data": {
+      "accepted": [],
+      "contradictions": [],
+      "error": null,
+      "gene": "RYR2",
+      "pmid": "18929323",
+      "raw_fills": [],
+      "rejected": [],
+      "trigger": {
+        "clinical_signal": true,
+        "gene": "RYR2",
+        "missing_fields": 4,
+        "pmid": "18929323",
+        "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86",
+        "triggered": true
+      }
+    },
+    "type": "paper_curation_decision"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T14:04:31.973175+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical",
+  "schema_version": 2,
+  "trace_id": "1788703471973211000-000008-eb8d3439"
+}

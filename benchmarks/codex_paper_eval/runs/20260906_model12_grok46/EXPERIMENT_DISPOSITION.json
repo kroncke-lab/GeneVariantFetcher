@@ -1,0 +1,6 @@
+{
+  "status": "abandoned_unscored_integration_pilot",
+  "accuracy_comparison_allowed": false,
+  "reason": "New model reasoning_effort was requested in the pre-SDK trace but silently dropped by LiteLLM. Partial/canceled attempts and their unknown usage remain preserved. Do not score or treat the requested high/medium labels as transmitted effort.",
+  "superseding_plan": "docs/evidence/model_routing_20260906/PLAN.md"
+}

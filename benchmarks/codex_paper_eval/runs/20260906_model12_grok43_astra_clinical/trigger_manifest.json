@@ -1,0 +1,98 @@
+[
+  {
+    "gene": "RYR2",
+    "pmid": "18929323",
+    "missing_fields": 4,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "30059973",
+    "missing_fields": 370,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "a698d8143c6d9c33d363ae04a46e33f6fd368c087301fa936302a3292e02bb95"
+  },
+  {
+    "gene": "MYBPC3",
+    "pmid": "20433692",
+    "missing_fields": 36,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "263df7a8bf1a93e0664bdedba67278d725f7aa2be69954677326249c6d356976"
+  },
+  {
+    "gene": "MYBPC3",
+    "pmid": "21302287",
+    "missing_fields": 60,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "166023144594b696d3997e8141b2793f0990fd9ce0456cc1df049de4942f8cab"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "30403697",
+    "missing_fields": 63,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "67d6f490d6b2d4335c4770e14ef753dde958f94ba4e7efec4b0e7bdf968eaecb"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "20031634",
+    "missing_fields": 3,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "03e18c6617be22be9a73e2cbf1a116ec71a5a6da84e0f5f1e04e7209c4174670"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "19398417",
+    "missing_fields": 0,
+    "clinical_signal": false,
+    "triggered": false,
+    "source_sha256": "4aa46f457b35bef0db93b29bb622214bbe5321b2ce9fe475b7894afe838914e0"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "25435091",
+    "missing_fields": 0,
+    "clinical_signal": true,
+    "triggered": false,
+    "source_sha256": "15694585a5c378a5ca23e863b02cf765a4a52bc1f6934eeccb8865c1db10d1db"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "32533946",
+    "missing_fields": 309,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "a8d2fc7c7d11712b9e79d1168cec5771438748f9e1dac11a04a76ed73a0e9f65"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "25163546",
+    "missing_fields": 60,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "5925450313116a4ddc2822384e28daab042ed6f5b88eb1a33a09b5d599eef4c6"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "25814417",
+    "missing_fields": 0,
+    "clinical_signal": true,
+    "triggered": false,
+    "source_sha256": "a131c2488e8250c5383aba2ff98bd8ae2b681ae90b1e32c50ec1707b23c090ef"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "20129283",
+    "missing_fields": 639,
+    "clinical_signal": true,
+    "triggered": true,
+    "source_sha256": "e211e7bb07971cc8fc0d912aa73680f0de66f9580b868ac3a75e32ee61bf7a8c"
+  }
+]

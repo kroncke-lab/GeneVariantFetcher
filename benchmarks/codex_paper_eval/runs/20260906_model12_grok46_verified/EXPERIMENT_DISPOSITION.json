@@ -1,0 +1,6 @@
+{
+  "status": "prepared_not_dispatched",
+  "accuracy_comparison_allowed": false,
+  "reason": "Corrected live 32k-cap gate failed; repeated direct/SDK Chat Completions and Responses probes timed out. Availability result only.",
+  "evidence": "docs/evidence/model_routing_20260906/grok46_availability_decision.json"
+}

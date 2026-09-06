@@ -132,6 +132,8 @@ benchmarks/codex_paper_eval/runs/*/frozen_corpus/*/
 benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs/
 benchmarks/codex_paper_eval/runs/*/diagnostics/**/production_runs
 benchmarks/codex_paper_eval/runs/*/driver.log
+# Resumable checkpoints are superseded by the complete locked predictions.
+benchmarks/codex_paper_eval/runs/20260906_model12_*/clinical_progress.json
 
 # Human gold packets commit their protocol, roster hashes, manifests, and blank
 # templates. Full-text paper copies and handoff ZIPs are source artifacts and

@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "error": "litellm.Timeout: APITimeoutError - Request timed out. Error_str: Request timed out.",
+  "kind": "sdk_plain",
+  "seconds": 65.28860579093453
+}

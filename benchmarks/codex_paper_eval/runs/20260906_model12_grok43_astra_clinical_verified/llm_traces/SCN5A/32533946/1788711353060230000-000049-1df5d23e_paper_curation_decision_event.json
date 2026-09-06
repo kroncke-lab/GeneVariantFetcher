@@ -1,0 +1,20 @@
+{
+  "context": {
+    "gene": "SCN5A",
+    "pmid": "32533946",
+    "stage": "paper_curation"
+  },
+  "event": {
+    "data": {
+      "error": "RuntimeError: Campaign API budget prevents call to azure_ai/gpt-6-astra; reservation $12.028",
+      "status": "failed"
+    },
+    "type": "paper_curation"
+  },
+  "reasoning_limit": "Private hidden chain-of-thought is not exposed by model APIs. Only explicit model rationales and provider-returned reasoning summaries/content can be recorded.",
+  "record_type": "decision_event",
+  "recorded_at": "2026-09-06T16:15:53.059828+00:00",
+  "run_id": "20260906_model12_grok43_astra_clinical_verified",
+  "schema_version": 2,
+  "trace_id": "1788711353060230000-000049-1df5d23e"
+}
