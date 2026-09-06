@@ -38,6 +38,14 @@ recurs. Use finite Anthropic credits sparingly, for bounded reviews or hard
 cases where they materially improve the decision. A CLI's reported dollar
 estimate is not an additional budget charge unless it represents API spend.
 
+- [x] **Assess model capability and the claimed ceiling (2026-09-06).**
+      Claude, Grok and Agy CLI reviews plus a direct raw-response probe confirm
+      that neither the selected recall forecast nor source-notation triage is
+      a measured limit relative to humans. RYR2 18929323's primary model itself
+      omits explicit carrier totals; downstream clearing is not the cause in
+      that run. No new extraction or model A/B was run. Assessment and review
+      receipts: `docs/evidence/model_ceiling_assessment_20260906/README.md`.
+
 - [x] Validate the unchanged reader on continuation tranches 02 and 03.
       Both paired 120-attempt tranches completed and failed the registered
       identity and carrier-count rules. Pooled recall is essentially flat;
@@ -225,6 +233,16 @@ estimate is not an additional budget charge unless it represents API spend.
 - [ ] **Abstain independently by count field.** Preserve explicit carrier
       counts when A/U is unknown; RYR2 18929323's 13/6 counts are the concrete
       regression case. Require complete endpoint partitions before subtraction.
+- [ ] **Separate model capability from workflow effects on opened papers.**
+      After component validation, cross the current/stronger Azure primary
+      reader with current/defined clinical-completeness workflow on a bounded
+      12–16-paper calibration panel. Keep source bytes and counting rules
+      fixed, include fresh baselines and exact/negative controls, and report
+      ambiguous endpoint cases separately without changing official gold.
+      Size an API cap from a pilot receipt; repeat arms if affordable. This
+      tests a workflow/representation bundle, not representation alone. It is
+      not a new promotion gate or permission to open tranche 04. Design and
+      limitations: `docs/evidence/model_ceiling_assessment_20260906/README.md`.
 - [x] **Harden malformed metadata failure reporting (2026-09-06).** Summary
       arithmetic now counts actual variant rows rather than model metadata.
       Cached string/invalid totals have offline regressions; the archived BRCA1

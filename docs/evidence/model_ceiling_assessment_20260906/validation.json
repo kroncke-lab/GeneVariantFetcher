@@ -1,0 +1,15 @@
+{
+  "checked_at_utc": "2026-09-06T12:50:28.359798+00:00",
+  "classification": "Offline evidence and documentation verification; no new extraction/model A/B",
+  "checks": {
+    "repository_freshness_tests": "6 passed",
+    "new_evidence_json": "parsed",
+    "metric_denominators": "matched to immutable results.json",
+    "primary_model_probe": "structured raw response and final extraction fields matched",
+    "original_source_trace_extraction_hashes": "matched",
+    "scoped_secret_pattern_scan": "no matches"
+  },
+  "runtime_code_changed": false,
+  "new_extraction_api_calls": 0,
+  "immutable_source_sha256": "c06a54ff6e926cb06b41a46ad31eac033f5fb96f2bd26ccafc3db1c9857b8a1d"
+}

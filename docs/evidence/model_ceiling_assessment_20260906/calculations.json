@@ -1,0 +1,130 @@
+{
+  "classification": "Post-hoc interpretation and arithmetic checks of opened immutable results; no new extraction, score or endpoint",
+  "source_sha256": "c06a54ff6e926cb06b41a46ad31eac033f5fb96f2bd26ccafc3db1c9857b8a1d",
+  "latest_pooled": {
+    "attempts": 240,
+    "unique_pmids": 220,
+    "tp": 1212,
+    "fp": 315,
+    "fn": 318,
+    "identity_recall": 0.792156862745098,
+    "identity_precision": 0.793713163064833,
+    "counts": {
+      "carriers": {
+        "asserted_rows": 1530,
+        "supplied_rows": 875,
+        "supplied_fraction": 0.5718954248366013,
+        "nonzero_reference_rows": 1332,
+        "supplied_on_nonzero_reference": 868,
+        "fraction_supplied_on_nonzero_reference": 0.6516516516516516,
+        "supplied_zero_on_positive_reference": 0,
+        "exact_among_all_supplied": 0.8971428571428571
+      },
+      "affected": {
+        "asserted_rows": 1530,
+        "supplied_rows": 249,
+        "supplied_fraction": 0.1627450980392157,
+        "nonzero_reference_rows": 1170,
+        "supplied_on_nonzero_reference": 222,
+        "fraction_supplied_on_nonzero_reference": 0.18974358974358974,
+        "supplied_zero_on_positive_reference": 1,
+        "exact_among_all_supplied": 0.8232931726907631
+      },
+      "unaffected": {
+        "asserted_rows": 1530,
+        "supplied_rows": 178,
+        "supplied_fraction": 0.11633986928104575,
+        "nonzero_reference_rows": 227,
+        "supplied_on_nonzero_reference": 114,
+        "fraction_supplied_on_nonzero_reference": 0.5022026431718062,
+        "supplied_zero_on_positive_reference": 4,
+        "exact_among_all_supplied": 0.9044943820224719
+      }
+    }
+  },
+  "diagnostic_counterfactuals": [
+    {
+      "cohort": "hard_cont01",
+      "tp": 261,
+      "gold_rows": 384,
+      "false_negatives": 123,
+      "triage_buckets": {
+        "unknown_notation": 40,
+        "acquisition": 72,
+        "model_missed": 9,
+        "paper_row_lost_to_linkage_origin": 1,
+        "projection_dropped": 1
+      },
+      "model_miss_bucket_rows": 9,
+      "if_all_current_model_miss_bucket_fixed_with_no_regressions_recall": 0.703125,
+      "gain_percentage_points": 2.34375,
+      "acquisition_label_despite_run_text": [
+        {
+          "gene": "SCN5A",
+          "pmid": "21677263",
+          "variant": "N1325S"
+        },
+        {
+          "gene": "KCNQ1",
+          "pmid": "30462975",
+          "variant": "G45S"
+        }
+      ],
+      "caveat": "Bucket-restricted bookkeeping, not a model performance upper bound, causal estimate or validated patient evidence. Gold-aware lexical search and dated source inventory can misclassify."
+    },
+    {
+      "cohort": "cont02",
+      "tp": 445,
+      "gold_rows": 571,
+      "false_negatives": 126,
+      "triage_buckets": {
+        "acquisition": 73,
+        "unknown_notation": 31,
+        "condensing": 2,
+        "model_missed": 16,
+        "matcher": 3,
+        "projection_dropped": 1
+      },
+      "model_miss_bucket_rows": 16,
+      "if_all_current_model_miss_bucket_fixed_with_no_regressions_recall": 0.8073555166374781,
+      "gain_percentage_points": 2.8021015761821366,
+      "acquisition_label_despite_run_text": [],
+      "caveat": "Bucket-restricted bookkeeping, not a model performance upper bound, causal estimate or validated patient evidence. Gold-aware lexical search and dated source inventory can misclassify."
+    }
+  ],
+  "historical_carrier_omission_share": {
+    "mixed_continuation_120": {
+      "omission_units": 492,
+      "total_error_units": 522,
+      "fraction": 0.9425287356321839
+    },
+    "gold_120_current": {
+      "omission_units": 666,
+      "total_error_units": 703,
+      "fraction": 0.9473684210526315
+    }
+  },
+  "illustrative_source_reader_product": [
+    {
+      "source_ready_fraction": 0.8,
+      "conditional_correct_reading": 0.95,
+      "end_to_end": 0.76
+    },
+    {
+      "source_ready_fraction": 0.9,
+      "conditional_correct_reading": 0.95,
+      "end_to_end": 0.855
+    },
+    {
+      "source_ready_fraction": 0.95,
+      "conditional_correct_reading": 0.95,
+      "end_to_end": 0.9025
+    }
+  ],
+  "unknowns": [
+    "Same-information expert-versus-model accuracy and inter-curator agreement",
+    "Current source-ready fraction for count-bearing evidence",
+    "Current controlled model-only improvement",
+    "Corpus-wide effect of targeted component retrieval and joins"
+  ]
+}

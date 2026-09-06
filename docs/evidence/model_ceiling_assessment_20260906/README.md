@@ -1,0 +1,209 @@
+# Stronger readers are worth testing; 75% is not an established ceiling
+
+Assessment dated 2026-09-06, against main `47e88cad` and the already-opened
+September 5–6 locks. This is a post-hoc diagnosis and experiment proposal, not
+a new extraction, score, model comparison, acceptance decision or human study.
+Current measurements remain in [RECALL_STATUS](../../RECALL_STATUS.md); the
+active plan remains in [TASKS](../../../TASKS.md).
+
+**Recommendation:** test a stronger Azure reader alongside a narrowly defined
+clinical-completeness workflow. Do not upgrade every call, assume the model is
+irrelevant, or accept 75% as the limit of LLM-assisted extraction. The evidence
+supports both recoverable source/workflow failures and genuine model omissions.
+It does not establish how much a stronger reader will improve the whole corpus.
+
+## What the percentages mean
+
+The latest paired experiment contains 240 gene-paper attempts, 220 articles and
+1,530 reference identities. Its candidate finds 1,212 identities, misses 318 and
+emits 315 unmatched identities: **79.22% identity recall and 79.37% raw reference
+precision**. Pooled recall changes by −0.13 percentage points; its descriptive
+PMID-cluster 95% interval is −0.98 to +0.61 points. Both tranches fail the
+registered identity and carrier-count rules. The same model roster was used in
+both arms, so this tests a protocol change, not the value of a model upgrade.
+Flat protocol results cannot establish that models are not a bottleneck.
+
+Counts are a separate, substantially weaker outcome. On reference rows with a
+positive count, the candidate supplies a carrier value on **868/1,332 (65.2%)**,
+an affected value on **222/1,170 (19.0%)**, and an unaffected value on
+**114/227 (50.2%)**. “Supplies” means non-null, not necessarily correct; those
+affected and unaffected values include one and four erroneous zeros. Across
+all supplied values, including zero-reference rows, exact agreement is
+785/875 for carriers, 205/249 for affected, and 161/178 for unaffected. These
+conditional accuracy denominators must not hide the omitted values. Reference
+definitions and the source support for some counts remain disputed.
+
+The apparent 14.98% combined affected/unaffected error reduction is a real
+benchmark calculation, but **408 of its 511 recovered error units** come from
+one SCN5A H558R row whose person-versus-allele unit and source-cohort ownership
+remain unresolved. Removing that row post hoc leaves 3.43% reduction; this
+sensitivity is not a replacement score or gate.
+
+The earlier **76.04%** figure substitutes two selected source recoveries into
+the original hard continuation-01 results. It is neither a fresh cohort result
+nor “76% of what a human can do.” No matched human-versus-model study or
+inter-curator agreement estimate exists here. Arithmetic and denominators are
+recorded in [calculations.json](calculations.json), derived from the immutable
+[two-tranche results](../tranche_validation_20260905/results.json).
+
+## Why it still fails
+
+| Failure | Evidence in opened papers | What would address it |
+| --- | --- | --- |
+| Required evidence never reaches the reader | KCNQ1 14678125 has an abstract/navigation shell; RYR2 19398665 lacks the clinical table bodies. Acquiring SCN5A 25163546's real supplement recovered all 20 missed identities, but the roster supplied no per-variant clinical counts. | Validate article-specific body, tables, figures and linked supplements as components, with hashes and source identity. A file or table caption is not proof that its data arrived. |
+| Structure or relationships are lost | MYBPC3 20433692 has merged DOC cells that shift genotype/family/patient associations. MYBPC3 21302287 has patient-ID lists that need joining. | Preserve headers, merged cells, footnotes and patient IDs; use page images for damaged geometry and retain links to the original evidence. |
+| An identity result is mistaken for clinical completeness | SCN5A 30059973 already has Tables 5/11/14, but the deterministic identity path does not perform a general clinical reading of those components. | Continue to a bounded missing-fact reader when count-bearing evidence is present and corresponding fields remain unresolved. |
+| The model sees a fact but does not emit it | RYR2 18929323's primary model records P2328S n=13 and V4653F n=6 in notes, while returning both carrier counts null. Verification skips the paper as low risk. | Test field-specific abstention, an independent completeness check and a stronger reader on the identical source. |
+| Counts answer different clinical questions | RYR2 25814417's 97 affected / 62 unaffected / 26 uncertain differs from legacy gold; H558R 408 has unit and cohort ambiguity. | Bind every observation to people versus alleles, current versus prior cohort, variant, phenotype endpoint and assessment time. Keep uncertain status explicit. |
+
+The paper-level basis is the [22-paper phenotype audit](../phenotype_failure_panel_20260905/README.md)
+and the source reviews for [tranche 02](../tranche_validation_20260905/source_review_02.md)
+and [tranche 03](../tranche_validation_20260905/source_review_03.md).
+
+The RYR2 18929323 trace is an additional direct check in this assessment. The
+raw `azure_ai/grok-4.3` response already contains null carrier fields, and the
+final extraction preserves them. This is **not downstream code clearing a
+correct carrier count**. The model conflates unavailable variant-specific A/U
+splits with the available carrier totals. The source hash matches the saved
+extraction metadata. See [raw-response probe](primary_model_abstention_probe.json)
+for paths, hashes, structured fields and the `risk_below_threshold` decision.
+The specialized patient-table derivation was attempted but found no eligible
+table. This supports a model/prompt/trigger diagnosis; it does not prove a
+stronger model will fix the case. The aggregate clinical split must still not
+be copied onto each variant.
+
+## What stronger models can and cannot establish
+
+The recorded roster already uses Sol for verification and vision, Grok 4.3 for
+primary extraction, Kimi for table routing and Luna for relevance filtering.
+Luna is also configured for additive count recovery, but that stage is default
+off. Merely changing its model name would not activate it. See the frozen
+[model configuration](../tranche_validation_20260905/model_configuration.json).
+
+Current-code qualifications matter:
+
+- `_allow_deterministic_table_short_circuit` detects some obvious count-column
+  omissions but is not a per-variant, per-field completeness test.
+- `_attempt_extraction` already runs `derive_patient_row_phenotype_counts` on
+  successful paths, including deterministic returns. The missing capability is
+  a general clinical continuation, not the total absence of phenotype handling.
+- Claim-card verification normally reviews existing candidates (default cap
+  20) and may be skipped below a risk threshold. It is not an independent scan
+  for all missing identities or count-bearing evidence. There are fallback
+  adjudication paths, so “verification can never recover omissions” would also
+  be too strong.
+
+These paths are in [pipeline/extraction.py](../../../pipeline/extraction.py);
+default-off recovery is in [settings](../../../config/settings.py) and the
+[turnkey CLI](../../../cli/gvf_run.py). Stronger reasoning at a skipped stage
+cannot improve that paper. Conversely, the raw RYR2 response is direct reason
+to test reader capability rather than dismiss it as purely an acquisition issue.
+
+Historical July comparisons also exist, including a
+[48-paper Sol run](../../../benchmarks/codex_paper_eval/runs/20260724_fixed48_sol/report.md).
+They used different harnesses, matchers or selected cohorts. They show that a
+strong reader did not automatically solve the task then; they do not rank
+current models or predict the current model-only effect.
+
+Broader research is consistent with these mechanisms: long context alone did
+not ensure reliable evidence use in [Lost in the Middle](https://arxiv.org/abs/2307.03172),
+and a financial-table benchmark found difficulty with multi-step table questions
+in [TableQuest](https://arxiv.org/abs/2412.09884). These studies concern older
+models and other tasks; neither supplies a GVF performance ceiling or a current
+model recommendation.
+
+## What ceiling can honestly be stated
+
+**Fixed source, fixed clinical definition:** a source-grounded system cannot
+recover a fact absent from its evidence. But we have not manually established
+the current fraction of reference facts that are recoverable from the actual
+inputs. The September 3 “71–84%” source sweep is lexical/alias triage, not a
+certified limit. Unknown notation and figure content are unresolved; two
+continuation-01 “acquisition” rows even have the variant string in run text.
+That presence does not itself establish valid clinical evidence, but it defeats
+using the labels as a hard causal bound.
+
+**Better source and workflow:** observed recoveries show the current boundary
+can move. They do not measure how far it will move across the corpus. Repeated
+whole-paper prompting or more checks on existing claims may plateau while
+component retrieval and patient/variant/cohort/endpoint observations still
+offer a plausible route forward. Aggregate explicit observations deterministically
+with provenance; do not infer affected from carriers or unaffected by subtraction
+when the source does not support a complete partition.
+
+For intuition only, if 80% of target facts have adequate source and a reader
+correctly captures 95% of those, supported recall is 76%. At 90% source readiness
+with the same conditional reader accuracy it is 85.5%; at 95% readiness it is
+90.25%. **All three are assumed examples, not estimates.** The product uses
+conditional reading success, so it does not require independent failure modes.
+In the latest 1,530-row cohort, reaching 90% identity recall would require 165
+additional true positives with no existing true-positive losses—about 52% of
+today's misses—while also controlling unsupported extra claims. We have not
+demonstrated that recovery.
+
+**Relative to humans:** compare two blinded curators and the model with the
+same complete sources and predeclared cohort/endpoint rules, then adjudicate
+disagreement. Separate unavailable facts, omitted extraction and disagreement
+with an incomplete reference. For example, BRCA2 26848529's gold is explicitly
+nonexhaustive, but that does not validate all 74 carrier-bearing extra rows.
+Preserve official scores and add an independently adjudicated precision view;
+do not relabel all unmatched predictions as true.
+
+The honest answer is that the present implementation has limitations we can
+identify, while a numerical ceiling for the approach remains unknown. A
+high-confidence automated subset plus a targeted human ambiguity queue is a
+reasonable design goal. Near-human autonomous performance across all papers
+has not been established.
+
+## Recommended diagnostic experiment
+
+This is a proposal, not an executed or registered acceptance run. The active
+checklist in TASKS remains authoritative. Use 12–16 already-opened papers with
+source support established independently of each arm's predictions. Include
+source-present omissions, damaged tables/joins, exact-count controls and
+papers correctly lacking clinical counts. Keep ambiguous-source or endpoint
+controls in a separately reported stratum, without changing official gold or
+silently removing their errors.
+
+Cross two factors in four arms:
+
+| | Current primary reader | Stronger available Azure reader |
+| --- | --- | --- |
+| Current workflow | Fresh baseline | Model-only change |
+| Defined clinical continuation and improved component representation | Workflow/representation change | Combined change |
+
+Use identical source asset bytes, schema and clinical rules, fresh response
+namespaces, and fixed settings within each contrast. The second factor is a
+declared workflow/representation bundle; this experiment cannot attribute its
+effect separately to routing versus representation. Have the stronger model
+actually read the relevant components, rather than merely verify existing
+claims. If affordable after the pilot, repeat each arm to assess stochastic
+variation; a previous cached baseline alone is insufficient.
+
+Measure added exact counts including omissions, wrong supplied counts, identity
+precision/recall, per-paper effects, abstentions and API cost per additional
+correct source-supported count. Report whether effects depend on one large
+row. Do not turn a small selected panel into a corpus forecast or replace the
+existing acceptance gates. Freeze a successful general candidate before testing
+the still-unopened confirmation cohort under those gates.
+
+Start with an Azure pilot and its actual usage receipt to size the API cap.
+Existing source files do not make new reader calls free. Use Anthropic sparingly
+for genuinely disputed cases or a bounded comparator if the Azure result leaves
+the decision unresolved. This assessment itself ran no extraction calls.
+
+## Independent review and audit trail
+
+Claude, Grok and Agy CLIs each reviewed the same bounded evidence packet, with
+tools disabled or restricted to a sandboxed plan. Their raw responses are
+advice, not independent source adjudication. All reject a measured 75% human
+ceiling, but several of their stronger claims are incorrect. The
+[review adjudication](review_adjudication.md) records what was adopted, qualified
+or rejected. Claude's proposed raw-response check directly motivated the new
+RYR2 trace probe above.
+
+CLI-reported cost estimates: Claude **$0.1236968**, Grok **$0.00881076**; Agy
+reports tokens but no dollar cost. These are not reconciled provider charges,
+and an unavailable amount is not zero. No new extraction-campaign charge or
+campaign-ledger revision is inferred from these receipts. Prompt files and raw
+JSON responses are retained alongside this report.

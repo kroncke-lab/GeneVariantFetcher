@@ -1,0 +1,70 @@
+{
+  "gene": "RYR2",
+  "pmid": "18929323",
+  "trace_path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/RYR2/20260905_175554/llm_traces/RYR2/18929323/1788649075228482000-000009-1b36597d_paper_variant_extraction_ExpertExtractor.json",
+  "trace_sha256": "ad3a2dcbdf11fd5c1a8010b1afd8269fe05bba4677b501f219c1368b15a45622",
+  "extraction_path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/RYR2/20260905_175554/extractions/RYR2_PMID_18929323.json",
+  "extraction_sha256": "634381394caf415d6ad3da52d03e656f5c788bea0514fde3b15d60b4829b04db",
+  "source_sha256": "8769365b763f3cc5adf7c3bdff139e5b4e1175e36b1242018f9598eef6666c86",
+  "model": "azure_ai/grok-4.3",
+  "raw_model_rows": [
+    {
+      "identity": "p.Pro2328Ser",
+      "patients_count": null,
+      "carriers": null,
+      "affected": null,
+      "unaffected": null,
+      "notes": "Aggregate across both variants: 19 gene-positive CPVT patients (P2328S n=13, V4653F n=6) from 2 Finnish families; 13/19 (68%) had exercise-related syncope or cardiac arrest (affected); 6 asymptomatic/unaffected (including 2 with no ventricular arrhythmias on exercise testing). Counts not broken down by specific variant. Beta-blocker effects studied in 12 patients."
+    },
+    {
+      "identity": "p.Val4653Phe",
+      "patients_count": null,
+      "carriers": null,
+      "affected": null,
+      "unaffected": null,
+      "notes": "Aggregate across both variants: 19 gene-positive CPVT patients (P2328S n=13, V4653F n=6) from 2 Finnish families; 13/19 (68%) had exercise-related syncope or cardiac arrest (affected); 6 asymptomatic/unaffected (including 2 with no ventricular arrhythmias on exercise testing). Counts not broken down by specific variant. Beta-blocker effects studied in 12 patients."
+    }
+  ],
+  "final_extraction_rows": [
+    {
+      "identity": "p.Pro2328Ser",
+      "patients_count": null,
+      "carriers": null,
+      "affected": null,
+      "unaffected": null,
+      "notes": "Aggregate across both variants: 19 gene-positive CPVT patients (P2328S n=13, V4653F n=6) from 2 Finnish families; 13/19 (68%) had exercise-related syncope or cardiac arrest (affected); 6 asymptomatic/unaffected (including 2 with no ventricular arrhythmias on exercise testing). Counts not broken down by specific variant. Beta-blocker effects studied in 12 patients."
+    },
+    {
+      "identity": "p.Val4653Phe",
+      "patients_count": null,
+      "carriers": null,
+      "affected": null,
+      "unaffected": null,
+      "notes": "Aggregate across both variants: 19 gene-positive CPVT patients (P2328S n=13, V4653F n=6) from 2 Finnish families; 13/19 (68%) had exercise-related syncope or cardiac arrest (affected); 6 asymptomatic/unaffected (including 2 with no ventricular arrhythmias on exercise testing). Counts not broken down by specific variant. Beta-blocker effects studied in 12 patients."
+    }
+  ],
+  "adjudication_skipped_reason": "risk_below_threshold",
+  "patient_row_derivation": {
+    "protocol_version": "patient_row_phenotype_v2",
+    "attempted": true,
+    "applied": false,
+    "paper_variant_count": 2,
+    "parsed_patient_table_count": 0,
+    "applied_variant_count": 0,
+    "newly_applied_variant_count": 0,
+    "outcomes": [
+      {
+        "variant": "P2328S",
+        "status": "no_eligible_complete_patient_table",
+        "eligible_table_count": 0
+      },
+      {
+        "variant": "V4653F",
+        "status": "no_eligible_complete_patient_table",
+        "eligible_table_count": 0
+      }
+    ]
+  },
+  "interpretation": "Carrier omissions originate in raw primary-model response and survive to extraction; not caused by downstream clearing. Notes retain per-variant 13/6 counts; clinical split remains unavailable by variant. Verifier skipped for low assessed risk. This is a model/prompt/trigger issue, not proof a stronger model will solve it.",
+  "source_path": "benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_02_candidate/production_runs/RYR2/20260905_175554/pmc_fulltext/18929323_CLEANED.md"
+}

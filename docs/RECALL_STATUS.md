@@ -63,6 +63,13 @@ For broader available-source reading, there is no confirmed recall lift and
 only a cautious 0–5% count-error improvement allowance. These ranges are
 judgments, not confidence intervals or a corpus-wide performance guarantee.
 
+The [model/ceiling assessment](evidence/model_ceiling_assessment_20260906/README.md)
+clarifies that none of these percentages measures performance relative to
+humans or establishes a ceiling. The paired arms used the same model roster;
+they do not estimate a model-upgrade effect. Direct inspection of RYR2
+18929323's raw response confirms a primary-model carrier omission alongside a
+skipped verification step, so a purely source/routing explanation is incomplete.
+
 New API proxy **$40.04289**; active campaign **$44.73454 used / $55.26546
 remaining**. All new extraction used Azure; no Anthropic in these tests/reviews.
 [Report, forecast and source recommendations](evidence/tranche_validation_20260905/README.md),
@@ -148,11 +155,15 @@ They remain useful within-lock snapshots and failure inventories.
 | Gold 118 | Legacy trusted projection | 543 / 275 / 89 | 85.918% | 207 / 632 (32.753%) | 0.179 | 1.112 |
 | Mixed 120 | Paper-derived primary | 261 / 141 / 123 | 67.969% | 130 / 384 (33.854%) | 0.231 | 1.359 |
 
-Recall is principally source-bound: acquisition plus figure/unsearchable-
-notation failures account for **66/89 (74.2%)** Gold 118 false negatives and
-**112/123 (91.1%)** Mixed 120 false negatives. Only 23 and 11 misses,
-respectively, are reachable by downstream parser/model/projection changes on
-the bytes already acquired.
+The dated diagnostic assigns acquisition plus figure/unsearchable-notation
+labels to **66/89 (74.2%)** Gold 118 false negatives and **112/123 (91.1%)**
+Mixed 120 false negatives, leaving 23 and 11 in other buckets. These are triage
+assignments, not validated limits on what downstream changes can recover.
+Unknown notation remains unresolved; the corrected Mixed 120 diagnostic even
+contains two acquisition-labelled rows whose variant string is present in the
+actual run text. String presence alone also does not prove adequate clinical
+evidence. Source completeness and causal attribution need paper-level review;
+the older source-presence sweep does not establish a recall ceiling.
 
 Carrier error is also an omission problem. Gold 118 has 703 absolute-error
 units: 540 (76.8%) come from matched variants with no supplied count, 126
