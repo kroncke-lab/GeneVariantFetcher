@@ -46,7 +46,8 @@
     "command": ".venv/bin/python -m pytest tests/unit -q",
     "passed": 2969,
     "seconds": 110.34,
-    "exit_code": 0
+    "exit_code": 0,
+    "scope_note": "Ran before the final TASKS heading edit. CI subsequently caught the stale expected heading; the focused correction is recorded below and the next CI run verifies the pushed tree."
   },
   "final_offline_replays": {
     "primary_exact_replay": true,
@@ -55,5 +56,15 @@
     "post_format_compile": true,
     "ruff_check": true,
     "git_diff_check": true
+  },
+  "repository_freshness_followup": {
+    "initial_ci_run": 34058280993,
+    "initial_ci_head": "9477568b2ad3c600fe89bcbe37a7bb4eba722c76",
+    "initial_ci_result": "1 failed, 2968 passed; only the expected TASKS heading string was stale after the documentation update. All other CI jobs passed.",
+    "correction": "Update the existing expected heading to the current derived-count acceptance gate. No production or scientific code changes.",
+    "command": ".venv/bin/python -m pytest tests/unit/test_repository_freshness.py -q",
+    "passed": 6,
+    "seconds": 1.97,
+    "exit_code": 0
   }
 }
