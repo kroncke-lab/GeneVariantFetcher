@@ -1,0 +1,33 @@
+{
+  "run_id": "20260907_protocol_cont120_04_baseline",
+  "pricing_basis": "repository dated API list-price proxy (RATES in docs/evidence/model_routing_20260906/budget_guard.py) applied to per-call trace usage; actual invoice may differ; CLI reviewer costs excluded",
+  "per_model": [
+    {
+      "model": "azure_ai/Kimi-K2.6-1",
+      "calls": 12,
+      "input_tokens": 10980,
+      "output_tokens": 18620,
+      "calls_without_usage": 0,
+      "usd": 0.0849
+    },
+    {
+      "model": "azure_ai/gpt-5.6-sol",
+      "calls": 274,
+      "input_tokens": 490556,
+      "output_tokens": 105665,
+      "calls_without_usage": 1,
+      "usd": 5.6227
+    },
+    {
+      "model": "azure_ai/grok-4.3",
+      "calls": 126,
+      "input_tokens": 1144718,
+      "output_tokens": 244607,
+      "calls_without_usage": 11,
+      "usd": 2.0424
+    }
+  ],
+  "api_proxy_usd": 7.7501,
+  "budget_ceiling_usd": 100,
+  "remaining_usd": 92.2499
+}

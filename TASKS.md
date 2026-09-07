@@ -90,13 +90,22 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       row per testing centre against the table's pooled count), 0 on gold
       real-split rows, identity/carriers/unaffected/counted-extras unchanged.
       agy and grok reviewed the plan first (dispositions in the evidence README).
-      **In flight:** tranche 04 opened as the registry `baseline` arm running
-      current main with the projection (PLAN preregistered before opening);
-      count endpoint = within-arm strip ablation. **Follow-ups:** refuse a
-      count label mixing case and control nouns ("BrS + LQT + Control",
-      SCN5A 25904541, 342 rows stamped in the historical smoke); adjudicate the
-      20129283 per-centre gold rows as a curation convention; next lever per
-      both reviewers is the identity-only fixed-width fast path (30059973).
+      **Tranche 04 opened and scored** as the registry `baseline` arm running
+      current main with the projection (`20260907_protocol_cont120_04_baseline`,
+      identity 491/145/231, $7.75 API proxy, PLAN preregistered before opening).
+      The within-arm strip ablation is a **null with a reason**: the lane ran on
+      all 120 papers and classified no table, because the tranche has no
+      compendium-style count table (321 per-person clinical rows, 247 model
+      rows); rules 1 and 4 uninformative, 2 and 3 pass, no tranche-05 arm spent.
+      **Gold flag:** RYR2 28404607 is a WES background-frequency compendium
+      (6,517 clinical exomes, 97.7% VUS) whose 263 rows gold stores as 1/1/0
+      affected; the lane refuses it by design and a curator must decide.
+      **Fixed after the lock:** a count label pooling cases with controls
+      ("BrS + LQT + Control", SCN5A 25904541) now refuses. **Open:** adjudicate
+      the 20129283 per-centre gold rows (`gold_20129283_per_centre_rows.csv`);
+      a per-person extension for diagnosed-subject tables (29925740-shaped,
+      41 rows here) is a documented candidate, not shipped; next lever per both
+      reviewers is the identity-only fixed-width fast path (30059973).
       Evidence: `docs/evidence/table_cohort_phenotype_20260907/`.
 
 ## Previous $100 improvement campaign

@@ -576,6 +576,15 @@ def classify_table_cohort(
     control_caption = _CONTROL_RE.search(caption)
     control_column = _CONTROL_RE.search(count_label)
     case_in_caption = _CASE_NOUN_RE.search(caption)
+    if control_column and (
+        _label_has_case_noun(count_label)
+        or _disease_hit(count_label, run_disease)
+        or re.search(r"[+/&]|\band\b", count_label)
+    ):
+        # "BrS + LQT + Control" (SCN5A 25904541): a converter joined three
+        # count columns into one label. A count that pools cases with controls
+        # is neither phenotype class.
+        return TableCohort(None, None, "count_column_mixes_cases_and_controls", **base)
     if control_column or control_caption:
         if case_in_caption and not control_column:
             return TableCohort(None, None, "caption_mixes_cases_and_controls", **base)

@@ -1,0 +1,99 @@
+{
+  "llm_trace_index_sha256": null,
+  "llm_trace_integrity_level": null,
+  "llm_trace_manifest_sha256": null,
+  "llm_trace_report_sha256": null,
+  "locked_at": "2026-09-07T14:58:58.418191+00:00",
+  "predictions_sha256": "23e5138286a3513b97ebe505b896d9fcf4a49638c2fc767c07047f622f4598db",
+  "production_run_statuses": [
+    {
+      "gene": "APOE",
+      "sha256": "7a4d5a6f8c8e7e828e853321b66f01b6919bd95134361ff3f257d6884ec20b55",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/APOE/20260907_090728/RUN_STATUS.json"
+    },
+    {
+      "gene": "BRCA1",
+      "sha256": "1f38fdd11d025ec0f21163e79819b43dc91b774ac4dd923b5c48b17b8ac8d43f",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/BRCA1/20260907_090728/RUN_STATUS.json"
+    },
+    {
+      "gene": "KCNH2",
+      "sha256": "60b2e164d059a425056eab91ca07adc98542fea3676e5a1cb553eafc12e3853b",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNH2/20260907_090728/RUN_STATUS.json"
+    },
+    {
+      "gene": "KCNQ1",
+      "sha256": "8c519c1cc84be5563eb97997d2e263b55c54e8ca9802ec5a3fb8079588019ec8",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNQ1/20260907_090728/RUN_STATUS.json"
+    },
+    {
+      "gene": "RYR2",
+      "sha256": "cccb6e2af8a68353ba3fa59841acfb79d5e5e2072753d056efd2afa29c34fb31",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/RYR2/20260907_090728/RUN_STATUS.json"
+    },
+    {
+      "gene": "SCN5A",
+      "sha256": "fe04bdc24cd9af00bc029a8524cc152b94158a5e1404056e6738e4d4fb6f1ed9",
+      "status": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/SCN5A/20260907_090728/RUN_STATUS.json"
+    }
+  ],
+  "production_trace_manifests": [
+    {
+      "decision_event_count": 3,
+      "gene": "APOE",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 3,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/APOE/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "0edb808e-04fb-4ea2-95a1-aa0cd9befbce",
+      "sha256": "e087d70b04cfc3cfeb9a038c022fce19c2dcfd1dee38b711e21cf14bf61473ad"
+    },
+    {
+      "decision_event_count": 5,
+      "gene": "BRCA1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 4,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/BRCA1/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "ef4d6bb7-e7e1-46da-a8bf-ac8bf62214b1",
+      "sha256": "affd5335341db55b128c714d8f6e95477eeb0336542eeb8ff8710dd398cf41bd"
+    },
+    {
+      "decision_event_count": 86,
+      "gene": "KCNH2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 68,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNH2/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "c92abfea-88cf-4085-a3bc-8416d3c2b4f1",
+      "sha256": "d33fd47f680ef900a234a0c5e475c2c3e9013235c84bf1a6ad82a6b06b7a3a74"
+    },
+    {
+      "decision_event_count": 95,
+      "gene": "KCNQ1",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 63,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNQ1/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "1978c834-38e8-4a0d-b1a4-86ecde3ec843",
+      "sha256": "0fd035d360cdc69282280746a2f19e85605e39c0d1b5cafae2dc1ee9212ab44c"
+    },
+    {
+      "decision_event_count": 80,
+      "gene": "RYR2",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 66,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/RYR2/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "9670e6ac-4030-412f-aa99-81b08acfa1af",
+      "sha256": "dfe1ddb35b19e1184a8833b365c6ff0ffa511ddd6aeb59c748133a94bcaa9c04"
+    },
+    {
+      "decision_event_count": 262,
+      "gene": "SCN5A",
+      "integrity_level": "write_time_verified",
+      "llm_call_count": 208,
+      "manifest": "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/SCN5A/20260907_090728/llm_traces/trace_manifest.json",
+      "run_id": "15009b87-b3d5-44a5-a34e-5594b929fcea",
+      "sha256": "b26a882e843867b7cd1d8b6974afd53332aadadd2ad18f80ad264322d8232584"
+    }
+  ],
+  "selection_sha256": "0f18c4d798b94f9b8c14d7e5541214d9e02738736d580e050f41411935b2de8c",
+  "setup_sha256": "ae132a4543b09e3e484b3f633f3f90bc0eefc862852ad40262671a983f869388",
+  "statement": "Predictions finalized before gold values or gold row counts were exposed to extraction; score is the first phase that reads those values."
+}

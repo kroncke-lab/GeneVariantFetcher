@@ -363,6 +363,21 @@ def test_per_person_proband_rows_and_relative_tables_refuse():
     assert family.reason.startswith("caption_excluded:famil")
 
 
+def test_pooled_case_and_control_count_label_refuses():
+    """A converter can join "BrS (2111) | LQT (2888) | Control (8975)" into one
+    label; a count that pools cases with controls is neither class."""
+    for label in ("BrS + LQT + Control", "Cases/Controls", "patients and controls (n)"):
+        cohort = classify_table_cohort(
+            "Supplemental Table 1: Properties of SCN5A nsSNVs", label, []
+        )
+        assert cohort.role is None, label
+        assert cohort.reason == "count_column_mixes_cases_and_controls", label
+    plain = classify_table_cohort(
+        "Supplemental Table 1: Properties of SCN5A nsSNVs", "Control (8975)", []
+    )
+    assert plain.role == "control"
+
+
 def test_case_control_and_clinical_columns_refuse():
     two_arm = classify_table_cohort(
         "Table 2. Rare variants in BrS cases and controls",

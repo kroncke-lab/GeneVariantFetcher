@@ -111,6 +111,18 @@ and the extra gold rows are identity misses. Excluding that convention the newly
 supplied set is 366 / 367 exact (99.7%); including it, 88.8%. This is a curator
 question about row granularity, not something to patch in code
 (`replay_tier1/new_values_*.csv` lists every row).
+`gold_20129283_per_centre_rows.csv` quantifies it: 47 variants carry 117 gold
+rows; for 31 of the 46 with a Table 4 entry the pooled "No. of unrelated
+individuals" equals the sum of the per-centre rows (a pure granularity
+convention), while for 15 the gold rows do not sum to the table count either
+way (D1243N 1+1+5 against 5; D1275N 1+1 against 3), so those rows need a
+curator, not a parser.
+
+`guard_clear_audit.md` closes a tempting alternative: restoring every value the
+always-on guard cleared on these locks would recover 10 exact model-row
+affected values and add 6 wrong ones, and its zero restorations land only on
+zero-gold rows. Relaxing the guard is not a lever; the projection recovers the
+deterministic-table rows without touching model rows.
 
 ## 5. Gold-free transfer smoke
 
@@ -137,12 +149,72 @@ touch (`transfer_smoke_noncardiac.json`, `transfer_smoke_cardiac_results.json`).
   `model_authored_row` and `caption_mixes_cases_and_controls`, which is the
   conservative shape intended.
 
-## 6. Tranche 04 (pending)
+## 6. Tranche 04: one live arm, within-arm ablation
 
-See `PLAN.md` for the design fixed before opening. Results, the strip-mode
-ablation, the preregistered rule verdicts and the cost receipt are appended in
-§7 once the arm is locked and scored.
+Design fixed in `PLAN.md` before opening. Run
+`20260907_protocol_cont120_04_baseline` (registry arm label `baseline`; current
+`main` at `e85dcff6` with the projection on; 120 attempts, 110 PMIDs, six gene
+processes, all `completed`/`ok`, 50 minutes). Locked and scored through the
+registry's own `lock_and_score.sh`; the consumption log records the arm. The
+`strip` replay (`tranche04_ablation/`) nulls every field stamped
+`table_cohort_phenotype_v1` in the archived extraction output and rescores.
 
-## 7. Results
+Arm headline (all genes): identity TP 491 / FP 145 / FN 231, recall 68.0%,
+precision 77.2%; KCNQ1 36/4/81 and SCN5A 103/64/84 carry most of the misses.
+Cardiac four: affected exact recovery 51 / 545 positive-gold rows (9.4%),
+carriers 349 / 665 (52.5%), unaffected 6 / 71.
 
-_Pending._
+**The projection was inert on this tranche.** Its metadata block is present on
+all 120 extractions: 0 tables classified, 0 rows applied or stamped. The
+deterministic rows it saw were 321 per-person clinical rows (refused by design)
+and 4 rows under a "Symptomatic (Yes/No)" column; the other rows were 247
+model-authored and 81 without a carrier count. Off and on arms are therefore
+identical on every metric.
+
+Preregistered rules: (1) newly supplied exactness, **uninformative** (nothing
+supplied); (2) zero new affected on gold real-split rows, pass (0); (3)
+identity, carriers, unaffected and counted extras unchanged, pass; (4) supply on
+the addressable pool, **uninformative** by the rule's own clause: the tranche
+contains no compendium-style count table. This is a null with a reason, not a
+failure, and not a confirmation. Per `PLAN.md` no second arm is spent on
+tranche 05.
+
+## 7. What the tranche-04 gap looks like instead
+
+Per-person rows dominate: 270 matched rows where gold records the row's patient
+as `1 / 1 / 0` and the pipeline holds carriers = 1 with affected null, plus 8
+rows where gold affected > 1.
+
+- **RYR2 28404607 (229 rows): a gold-quality flag.** "Supplemental Table 1:
+  Compendium of variants identified by WES testing" lists RYR2/CASQ2 variants
+  found in 6,517 individuals undergoing clinical whole-exome sequencing for any
+  indication; the paper's point is the background frequency of CPVT-associated
+  variants (8.8% of the WES cohort, 97.7% VUS). Gold stores 263 of its 269 rows
+  as `1 / 1 / 0`. Deriving affected there would match gold and be wrong; the
+  projection's `exome` / `sequencing` exclusions refuse it. This is exactly the
+  "enrollment is not diagnosis" case both reviewers warned about, and it needs a
+  curator decision before anything counts those rows as affected.
+- **RYR2 29925740 (41 + 8 rows).** "Table S1. Subject Clinical and Genetic
+  Characteristics": one CPVT/LQT1 patient per row with "Most severe symptom" and
+  "Clinical diagnosis" columns. Gold treats each diagnosed subject as affected.
+  A per-person extension gated by the same caption/header classifier would take
+  these, but the header exclusion refuses tables with clinical columns on
+  purpose (28237968's relatives table is the counter-example), so this stays a
+  documented candidate, not a shipped rule.
+
+Cost (`budget.json`): 412 calls, $7.75 by the repository list-price proxy
+(gpt-5.6-sol $5.62, grok-4.3 $2.04, Kimi $0.08; 12 failed calls without usage
+records). $92.25 of the $100 testing budget remains unspent.
+
+## 8. Post-lock fix and live integration check
+
+The cardiac smoke's one bug (§5) is fixed in the commit after the lock: a
+count label that names both a case/disease group and controls
+("BrS + LQT + Control", SCN5A 25904541) now refuses with
+`count_column_mixes_cases_and_controls`; the smoke and the two-lock replay were
+re-run unchanged elsewhere. Because tranche 04 never exercised a stamped value
+through migrate, trust gate and projection live, a three-paper calibrated
+`gvf-run` (SCN5A 20129283 + 27566755, KCNH2 26496715, KCNQ1 26496715) was run
+after the fix into `results/table_cohort_live_check_20260907/`; its outcome is
+recorded in `live_check.md`. These are opened calibration papers: the check
+proves the persistence path, not generalisation.
