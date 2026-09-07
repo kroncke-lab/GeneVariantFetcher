@@ -142,9 +142,11 @@ touch (`transfer_smoke_noncardiac.json`, `transfer_smoke_cardiac_results.json`).
   **One is a bug:** SCN5A 25904541's fixed-width header "BrS (2111) / LQT
   (2888) / Control (8975)" was joined by the parser into "BrS + LQT + Control"
   and classified as a control column (342 rows stamped). A count label mixing
-  case/disease and control nouns must refuse; fix queued for the first commit
-  after the tranche-04 lock, because runtime files cannot change while the arm's
-  fingerprint is pinned.
+  case/disease and control nouns must refuse; the fix landed in the first commit
+  after the tranche-04 lock (runtime files cannot change while an arm's
+  fingerprint is pinned), and the re-run smoke (`transfer_smoke_cardiac_results.json`)
+  now refuses those 342 rows under `count_column_mixes_cases_and_controls` and
+  classifies nothing new.
 - Refusal tallies are dominated by `per_person_clinical_row`, `no_carrier_count`,
   `model_authored_row` and `caption_mixes_cases_and_controls`, which is the
   conservative shape intended.

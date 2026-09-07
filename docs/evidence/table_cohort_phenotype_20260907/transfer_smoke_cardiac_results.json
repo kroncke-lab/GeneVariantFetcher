@@ -10,8 +10,8 @@
   ],
   "paper_tier": false,
   "papers_scanned": 493,
-  "tables_classified": 13,
-  "rows_touched": 1351,
+  "tables_classified": 11,
+  "rows_touched": 1009,
   "refusal_reasons": {
     "not_derived:per_person_clinical_row": 13005,
     "no_carrier_count": 7639,
@@ -21,7 +21,7 @@
     "phenotype_already_populated": 672,
     "not_derived:count_column_not_a_people_count": 421,
     "not_derived:no_cohort_evidence": 411,
-    "control_partition_stamped": 342,
+    "not_derived:count_column_mixes_cases_and_controls": 342,
     "not_derived:count_column_excluded:allele": 56,
     "not_derived:control_count_unit_is_alleles": 55,
     "not_derived:caption_excluded:sudden death": 50,
@@ -46,20 +46,6 @@
       "rows_applied": 86,
       "rows_stamped": 0,
       "quote": "No. of patients"
-    },
-    {
-      "gene": "SCN5A",
-      "pmid": "25904541",
-      "run": "results/curated_eval_20260812/runs/SCN5A/SCN5A/20260812_204241",
-      "role": "control",
-      "tier": "count_column_names_cases",
-      "caption": "Supplemental Table 1: Properties of SCN5A nsSNVs",
-      "count_label": "BrS + LQT + Control",
-      "count_unit": "people",
-      "rows_seen": 171,
-      "rows_applied": 0,
-      "rows_stamped": 171,
-      "quote": "Control"
     },
     {
       "gene": "SCN5A",
@@ -186,20 +172,6 @@
       "rows_applied": 31,
       "rows_stamped": 31,
       "quote": "Cases (n=2111)"
-    },
-    {
-      "gene": "SCN5A",
-      "pmid": "25904541",
-      "run": "results/vb_reviewer8_20260829/SCN5A/20260829_161649",
-      "role": "control",
-      "tier": "count_column_names_cases",
-      "caption": "Supplemental Table 1: Properties of SCN5A nsSNVs",
-      "count_label": "BrS + LQT + Control",
-      "count_unit": "people",
-      "rows_seen": 171,
-      "rows_applied": 0,
-      "rows_stamped": 171,
-      "quote": "Control"
     },
     {
       "gene": "SCN5A",
