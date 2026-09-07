@@ -51,6 +51,7 @@ from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional
 
 from pipeline.count_provenance import TABLE_COHORT_PHENOTYPE_SOURCE
+from pipeline.phenotype_count_guard import phenotype_fields_to_clear
 
 PROTOCOL_VERSION = TABLE_COHORT_PHENOTYPE_SOURCE
 METHOD = "derived_from_table_cohort"
@@ -423,9 +424,15 @@ def expand_caption(label: str, source_text: str, *, max_lines: int = 3) -> str:
         if not normalized.startswith(wanted):
             continue
         if bare and not _BARE_TABLE_LABEL_RE.match(line):
-            # "Table 2" must not resolve to "Table 20. ..." or to a body
-            # sentence that merely starts with the same words.
-            continue
+            # Accept an inline caption ("Table 2. ..."), but never a
+            # different table number or a body sentence ("Table 2 shows...").
+            anchor = _TABLE_LABEL_RE.match(line)
+            if (
+                anchor is None
+                or _normalize_label(anchor.group(0)) != wanted
+                or not anchor.group(0).rstrip().endswith((".", ":"))
+            ):
+                continue
         parts = [line]
         taken = 0
         cursor = index + 1
@@ -586,22 +593,20 @@ def classify_table_cohort(
         # is neither phenotype class.
         return TableCohort(None, None, "count_column_mixes_cases_and_controls", **base)
     if control_column or control_caption:
-        if case_in_caption and not control_column:
+        if case_in_caption or _disease_hit(caption, run_disease):
             return TableCohort(None, None, "caption_mixes_cases_and_controls", **base)
-        quote = (control_column or control_caption).group(0)  # type: ignore[union-attr]
-        unit = (
-            "alleles"
-            if _ALLELE_UNIT_RE.search(caption + " " + count_label)
-            else "people"
-        )
-        return TableCohort(
-            "control",
-            TIER_COLUMN if control_column else TIER_CAPTION,
-            "control_cohort",
-            quote=quote,
-            count_unit=unit,
-            **base,
-        )
+        if _ALLELE_UNIT_RE.search(caption + " " + count_label):
+            # Preserve the explicit allele-unit abstention; it cannot stamp
+            # either phenotype field. People-unit controls must pass the
+            # same exclusions as cases below.
+            return TableCohort(
+                "control",
+                TIER_COLUMN if control_column else TIER_CAPTION,
+                "control_cohort",
+                quote=(control_column or control_caption).group(0),
+                count_unit="alleles",
+                **base,
+            )
 
     caption_exclusion = _CAPTION_EXCLUDE_RE.search(caption)
     if caption_exclusion:
@@ -620,6 +625,30 @@ def classify_table_cohort(
         _CONTROL_HEADER_RE.search(h) for h in header_list
     ):
         return TableCohort(None, None, "case_and_control_columns_present", **base)
+
+    if control_column or control_caption:
+        # A control caption does not turn an arbitrary measurement column
+        # into people. A bound "Controls" / "Control (8975)" header also
+        # names the counted people directly.
+        control_count_label = bool(control_column) and (
+            _has_count_word(count_label)
+            or bool(
+                re.fullmatch(
+                    r"controls?(?:\s*\(\s*(?:n\s*=?\s*)?\d+\s*\))?",
+                    count_label,
+                    re.IGNORECASE,
+                )
+            )
+        )
+        if not (_column_counts_people(count_label) or control_count_label):
+            return TableCohort(None, None, "count_column_not_a_people_count", **base)
+        return TableCohort(
+            "control",
+            TIER_COLUMN if control_column else TIER_CAPTION,
+            "control_cohort",
+            quote=(control_column or control_caption).group(0),
+            **base,
+        )
 
     if not _column_counts_people(count_label):
         return TableCohort(None, None, "count_column_not_a_people_count", **base)
@@ -883,6 +912,16 @@ def derive_table_cohort_phenotype_counts(
             )
             continue
 
+        # The replay must undo only this lane, including when it certifies
+        # a parser value the ordinary guard would already have kept.
+        guarded_counts_without_projection = {
+            "affected": affected,
+            "unaffected": unaffected,
+        }
+        for cleared in phenotype_fields_to_clear(variant):
+            if cleared.field in guarded_counts_without_projection:
+                guarded_counts_without_projection[cleared.field] = None
+
         if cohort.role == "case":
             if unaffected is not None or (
                 affected is not None and affected != carriers
@@ -1000,6 +1039,7 @@ def derive_table_cohort_phenotype_counts(
             "count_column": cohort.count_label[:200],
             "count_unit": cohort.count_unit,
             "evidence_quote": cohort.quote[:600],
+            "guarded_counts_without_projection": guarded_counts_without_projection,
             "operational_rule": (
                 "A case-series count column counts disease-ascertained people, "
                 "so the per-variant count is the affected count; unaffected is "

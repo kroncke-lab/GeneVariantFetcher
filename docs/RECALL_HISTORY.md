@@ -15,6 +15,30 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-07 — table-cohort projection and pre-push verification
+
+The deterministic table-cohort lane projects a per-variant people count onto
+the phenotype class named by its table, with code-owned provenance. On opened
+continuation candidates 02 and 03, a zero-LLM replay raises cardiac-four
+positive-gold affected exact recovery from 203 to 567 of 1,118 rows; identity,
+carrier and unaffected scores remain unchanged. The 46 additional supplied
+affected disagreements all occur on SCN5A 20129283; reference granularity and
+individual count discrepancies remain curator work. The separately opened
+tranche-04 baseline arm classifies no eligible table and supplies no confirmation
+of this lane's benefit. These are dated diagnostics, not a replacement headline.
+
+Pre-push verification reproduces both replay results, checks the 15 pinned
+tranche-04 input/status/trace-manifest hashes, and corrects control-table
+exclusion bypasses and bare-label inline-caption resolution. Replay now restores
+audited prior counts and uses the scorer's actual reference assignment for its
+row audit. The original historical row-audit totals are superseded by the
+[review addendum](evidence/table_cohort_phenotype_20260907/README.md#9-pre-push-verification-and-corrections).
+No new extraction calls, reference edits or tranche consumption accompany review.
+Existing [canonical figure](figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.png)
+and [membership](figures/evaluated_phenotype_counts/phenotype_count_recovery_stratified.json)
+remain prior evaluated-arm evidence; tranche 04 has its own
+[companion](../benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/figures/gold_difference.png).
+
 ## 2026-09-06 — Astra routine-inclusion decision
 
 An additional opened eight-paper component panel compares independent Grok 4.6

@@ -220,3 +220,66 @@ through migrate, trust gate and projection live, a three-paper calibrated
 after the fix into `results/table_cohort_live_check_20260907/`; its outcome is
 recorded in `live_check.md`. These are opened calibration papers: the check
 proves the persistence path, not generalisation.
+
+## 9. Pre-push verification and corrections
+
+Independent local verification reproduced the aggregate scores in both opened
+replays and the tranche-04 null, and checked all 15 pinned tranche-04
+prediction/selection/setup, run-status and trace-manifest hashes. No paid
+extraction or new tranche was used. The recorded tranche-04 figures were
+visually inspected; the canonical candidate membership remains unchanged.
+
+Four review findings were corrected before pushing:
+
+- Control classification returned before the caption, clinical-header and
+  people-count checks. A synthetic "Functional assays in control cells" table
+  therefore received a trusted 0/N phenotype partition. Controls now pass the
+  same exclusions as cases, including mixed disease/control captions and
+  adjacent case/control columns. Allele-unit controls still certify nothing.
+- `Table 2` did not resolve `Table 2. ...` on one line, hiding exclusion words
+  such as "patients and controls". Inline captions now resolve without matching
+  `Table 20` or a body sentence such as "Table 2 shows ...".
+- Strip-mode ablation erased pre-existing counts when the projection merely
+  certified them. Each new audit records the phenotype values the ordinary
+  guard would keep without the projection; strip restores those values. Legacy
+  stamped records lacking this audit now refuse reconstruction. Tranche 04 has
+  no stamps and its original null remains reproducible.
+- The new-value CSV performed a fresh fuzzy gold lookup instead of using the
+  scorer's one-to-one assignment. That reused a reference row for K1493del and
+  counted two unscored notations as exact. The audit now uses scored reference
+  assignments and includes the actual gold notation.
+
+**Corrected row audit:** 364 new exact affected values, 46 wrong, and 13
+unmatched/merged/gold-null log entries. The 410 scored additions reconcile with
+the aggregate supplied-count increase (248 to 658), and 364 exact additions
+reconcile with exact recovery (203 to 567 of 1,118 positive-gold rows). Identity,
+carriers, unaffected, counted extras and the zero real-split hits are unchanged.
+The earlier 366-exact row-audit total in this historical report is superseded;
+the aggregate recovery table was already correct. Corrected artifacts:
+[`review_replay/`](review_replay/).
+
+The original assertion that *all 46* disagreements were per-centre duplicates
+was too broad. Forty-five match repeated reference variants; K1493X has one
+reference row asserting 2 carriers/affected while Table 4 prints 1 unrelated
+individual. The source-frozen table also prints K1493del = 2, while the scorer
+assigns it a per-centre reference row of 1. These counts remain source/reference
+curation questions, without a paper-specific runtime patch. Conditional
+exactness is 364/410 (88.8%) unexcluded, or 363/364 (99.7%) after the plan's
+duplicate-reference exclusion removes 45 wrong and one exact value.
+This is calibration, and tranche 04 supplies no
+independent confirmation.
+
+Regression tests cover the unsafe control shapes, inline caption resolution,
+preservation of existing case/control counts during ablation, refusal of legacy
+stamps without prior-count evidence, and reference assignment with duplicate
+gold rows. Verification commands and scratch outputs are under the ignored
+`tmp/verify_table_cohort_20260907/`; historical locked inputs were not rewritten.
+
+Final validation: **2,996 unit tests passed**, plus nine bounded end-to-end and
+negative benchmark tests; repository-wide Ruff lint/format and pre-commit hooks
+passed. The 497-record cardiac archive scan leaves all shared classifications
+unchanged and still refuses the 342 pooled case/control rows. Its five additional
+table entries are the already-stamped live-check records and supply no new values.
+The 1,911-record non-cardiac scan adds no classification and removes the three
+older BMPR2 mixed-caption entries already discussed in §5. Machine-readable
+checks, source hashes and scan differences: [`review_verification.json`](review_verification.json).

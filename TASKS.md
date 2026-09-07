@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-06.
+Last reviewed: 2026-09-07.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -86,8 +86,8 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       own caption and header only; the paper-ascertainment tier is off. Free
       replay (`scripts/replay_table_cohort_phenotype.py`): cardiac-four
       positive-gold affected exact recovery 203→567 / 1,118 (18.2%→50.7%),
-      366 new exact / 46 new wrong (all SCN5A 20129283, where gold stores one
-      row per testing centre against the table's pooled count), 0 on gold
+      364 new exact / 46 new wrong (all SCN5A 20129283; 45 on duplicate
+      reference variants and one K1493X source/reference count discrepancy), 0 on gold
       real-split rows, identity/carriers/unaffected/counted-extras unchanged.
       agy and grok reviewed the plan first (dispositions in the evidence README).
       **Tranche 04 opened and scored** as the registry `baseline` arm running
@@ -106,6 +106,11 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       a per-person extension for diagnosed-subject tables (29925740-shaped,
       41 rows here) is a documented candidate, not shipped; next lever per both
       reviewers is the identity-only fixed-width fast path (30059973).
+      **Pre-push review:** control tables now pass the caption, clinical-header,
+      mixed-cohort and people-count exclusions; bare labels resolve inline
+      captions. Replay restores audited prior counts and uses the scorer's
+      one-to-one reference assignment. See the evidence README's review
+      addendum for corrections to the original row audit and verification.
       Evidence: `docs/evidence/table_cohort_phenotype_20260907/`.
 
 ## Previous $100 improvement campaign

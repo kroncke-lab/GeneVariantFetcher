@@ -221,6 +221,21 @@ def test_wrapped_caption_continues_but_header_fragments_do_not():
     )
 
 
+def test_bare_label_resolves_inline_caption_before_classification():
+    source = (
+        "Table 20. Mutations in LQT2 patients\n\n"
+        "Table 2 shows the patient counts.\n\n"
+        "Table 2. Variants in patients and controls\n\n"
+        "| Variant | No. of patients |\n|---|---|\n| p.Ala32Thr | 3 |\n"
+    )
+    assert expand_caption("Table 2", source) == (
+        "Table 2. Variants in patients and controls"
+    )
+    result = derive(extraction(table_row(source_table="Table 2")), source)
+    assert result["variants"][0]["penetrance_data"]["affected_count"] is None
+    assert "phenotype_derivation" not in result["variants"][0]
+
+
 def test_disease_caption_with_people_column_is_a_case_series():
     row = table_row(
         protein="E1784K",
@@ -297,6 +312,48 @@ def test_control_people_table_closes_partition_and_guard_keeps_the_zero():
     assert variant["patients"]["phenotype"] == "unaffected control"
     assert apply_phenotype_count_guard(result["variants"]).cleared == 0
     assert result["variants"][0]["penetrance_data"]["affected_count"] == 0
+
+
+def test_control_tables_must_pass_caption_header_and_people_count_checks():
+    for caption, label, headers in (
+        (
+            "Table 1. Functional assays in control cells",
+            "Number",
+            ("Variant", "Number"),
+        ),
+        (
+            "Table 2. Variants in cases and controls",
+            "Controls (n)",
+            ("Variant", "Cases (n)", "Controls (n)"),
+        ),
+        (
+            "Table 3. Variants in healthy control subjects",
+            "Number",
+            ("Variant", "Number", "Affected", "Unaffected"),
+        ),
+        ("Table 4. BrS and control variants", "Number", ("Variant", "Number")),
+        (
+            "Table 5. Variants in healthy control subjects",
+            "Positive tests",
+            ("Variant", "Positive tests"),
+        ),
+        (
+            "Table 6. Rare variants",
+            "Controls (n)",
+            ("Variant", "Cases (n)", "Controls (n)"),
+        ),
+        (
+            "Table 7. Healthy control subjects and their relatives",
+            "Number",
+            ("Variant", "Number"),
+        ),
+    ):
+        row = table_row(source_table=caption, count_label=label, headers=headers)
+        result = derive(extraction(row), caption)
+        variant = result["variants"][0]
+        assert variant["penetrance_data"] == row["penetrance_data"], caption
+        assert "phenotype_derivation" not in variant, caption
+        assert apply_phenotype_count_guard(result["variants"]).cleared == 0
 
 
 def test_model_declared_control_zero_is_still_unsourced():
@@ -493,6 +550,80 @@ def test_disabled_setting_is_a_recorded_noop():
         "applied": False,
         "reason": "disabled_by_setting",
     }
+
+
+def test_strip_replay_preserves_counts_that_preceded_projection():
+    from scripts.replay_table_cohort_phenotype import derived_records, patch_paper
+
+    for row, expected in (
+        (table_row(carriers=1, affected=1), {"affected": 1}),
+        (table_row(carriers=3, affected=3), {"affected": None}),
+        (
+            table_row(
+                carriers=4,
+                affected=0,
+                unaffected=4,
+                source_table="Table 3. Variants in healthy control subjects",
+                count_label="Number",
+                headers=("Variant", "Number"),
+            ),
+            {"affected": None, "unaffected": 4},
+        ),
+    ):
+        result = derive(extraction(row), row["source_table"])
+        records, _ = derived_records(
+            result, "", gene="KCNH2", disease=None, mode="strip", paper_tier=False
+        )
+        assert len(records) == 1
+        assert records[0]["targets"] == expected
+        current = result["variants"][0]["penetrance_data"]
+        paper = {
+            "variants": [
+                {
+                    "variant": row["protein_notation"],
+                    "affected": current["affected_count"],
+                    "unaffected": current["unaffected_count"],
+                }
+            ]
+        }
+        patch_paper(paper, records, "strip")
+        assert {f: paper["variants"][0][f] for f in expected} == expected
+
+
+def test_strip_replay_refuses_legacy_stamps_without_previous_counts():
+    import pytest
+    from scripts.replay_table_cohort_phenotype import derived_records
+
+    result = derive(extraction(table_row()), CASE_SOURCE)
+    del result["variants"][0]["phenotype_derivation"][
+        "guarded_counts_without_projection"
+    ]
+    with pytest.raises(ValueError, match="without audited pre-projection"):
+        derived_records(
+            result, "", gene="KCNH2", disease=None, mode="strip", paper_tier=False
+        )
+
+
+def test_replay_uses_scored_reference_assignment_for_count_audit():
+    from scripts.replay_table_cohort_phenotype import scored_gold_rows
+
+    gold = [
+        {"variant": "A32T", "affected": 1},
+        {"variant": "A32T", "affected": 2},
+        {"variant": "A32del", "affected": 3},
+    ]
+    score = {
+        "matched_variants": [
+            {"predicted": "p.Ala32Thr", "gold": "A32T"},
+            {"predicted": "c.94G>A", "gold": "A32T"},
+            {"predicted": "p.Ala32del", "gold": "A32del"},
+        ]
+    }
+    assigned = scored_gold_rows(score, gold)
+    assert assigned["p.Ala32Thr"]["affected"] == 1
+    assert assigned["c.94G>A"]["affected"] == 2
+    assert assigned["p.Ala32del"]["affected"] == 3
+    assert "A32T" not in assigned  # an unscored spelling must not reuse gold
 
 
 def test_paper_ascertainment_tier_is_off_unless_enabled():

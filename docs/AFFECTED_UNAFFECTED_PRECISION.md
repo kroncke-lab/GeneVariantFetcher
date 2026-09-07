@@ -200,12 +200,17 @@ code-owned projection described in `docs/EXTRACTION_CONTRACT.md` and
 | affected conditional exactness (all supplied) | 82.3% | 86.3% |
 | carriers, unaffected, identity, counted extras | unchanged | unchanged |
 
-Of the 46 new wrong values, all 46 are SCN5A 20129283, where Table 4 prints the
-pooled "No. of unrelated individuals" and gold stores one row of `1` per
-testing centre; the pipeline's carriers were already scored wrong there for the
-same reason. Excluding that gold convention the newly supplied set is 366 / 367
-exact, and no new affected value landed on a row where gold reports a real
-split. Do not "fix" the 46 in code: it is a curator question about row
-granularity. The paper-ascertainment tier (title/abstract) adds 18 rows on the
+The corrected one-to-one row audit supplies 364 new exact and 46 new wrong
+values. All 46 disagreements are SCN5A 20129283: 45 match variants with repeated
+gold rows, while K1493X has one gold row with count 2 against Table 4's printed
+count 1. The pooled table versus per-centre reference granularity explains many
+of the repeated-row disagreements, but some reference totals also differ.
+Excluding duplicate-reference variants removes 45 wrong and one exact value,
+leaving 363 / 364 exact; no new affected
+value lands on a gold real-split row. These are curator questions, not reasons
+for paper-specific code. The original 366 / 367 row audit counted two unscored
+notations; the aggregate recovery table above was already correct. See the
+evidence README's pre-push review addendum. The paper-ascertainment tier
+(title/abstract) adds 18 rows on the
 same locks and stays off. Confirmation on the unopened tranche 04 and the
 reviewer dispositions are in the evidence README.

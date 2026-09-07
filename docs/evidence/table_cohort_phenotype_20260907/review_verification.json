@@ -1,0 +1,185 @@
+{
+  "date": "2026-09-07",
+  "reviewed_original_head": "bd996682aea6a293594493a64d25369ef7ff297c",
+  "unit_suite": "2996 passed in 115.27s (0:01:55)",
+  "bounded_and_negative_benchmarks": "9 passed in 9.41s",
+  "ruff_check": "passed",
+  "ruff_format_check": "535 files already formatted",
+  "pre_commit": "passed",
+  "runtime_and_replay_sha256": {
+    "pipeline/table_cohort_phenotype.py": "3f7daa388cac00c671524a6f9977ea0f49047241159217ebc951197acb28e8e0",
+    "scripts/replay_table_cohort_phenotype.py": "9160a4aeb0c747b35f29df36d580bdaa97bcc2a2be9419600569407c9f47b48e",
+    "tests/unit/test_table_cohort_phenotype.py": "94b34cd6cad7afd347f42be19332ff0d494cffffdca97e85c3fce69b83d2d7e1"
+  },
+  "locked_hashes_verified": [
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/predictions.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/selection.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/setup.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/APOE/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/BRCA1/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNH2/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNQ1/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/RYR2/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/SCN5A/20260907_090728/RUN_STATUS.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/APOE/20260907_090728/llm_traces/trace_manifest.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/BRCA1/20260907_090728/llm_traces/trace_manifest.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNH2/20260907_090728/llm_traces/trace_manifest.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/KCNQ1/20260907_090728/llm_traces/trace_manifest.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/RYR2/20260907_090728/llm_traces/trace_manifest.json",
+    "benchmarks/codex_paper_eval/runs/20260907_protocol_cont120_04_baseline/production_runs/SCN5A/20260907_090728/llm_traces/trace_manifest.json"
+  ],
+  "opened_replay_aggregate_scores_unchanged": true,
+  "tranche04_null_reproduced": true,
+  "corrected_new_value_verdicts": {
+    "affected:exact": 364,
+    "affected:unmatched_or_gold_null": 13,
+    "affected:wrong": 46
+  },
+  "duplicate_reference_excluded": {
+    "wrong": 45,
+    "exact": 1
+  },
+  "duplicate_reference_retained": {
+    "exact": 363,
+    "wrong": 1
+  },
+  "smoke_scans": {
+    "cardiac": {
+      "papers_scanned": 497,
+      "tables_classified": 16,
+      "rows_touched": 1009,
+      "shared_classifications_unchanged": true,
+      "removed": [],
+      "added": [
+        {
+          "gene": "KCNH2",
+          "pmid": "26496715",
+          "run": "results/table_cohort_live_check_20260907/production_runs/KCNH2/20260907_100949",
+          "role": "case",
+          "tier": "count_column_names_cases",
+          "caption": "Table 2. Summary of putative LQT2-associated mutations in KCNH2",
+          "count_label": "No. ofpatients",
+          "count_unit": "people",
+          "rows_seen": 54,
+          "rows_applied": 0,
+          "rows_stamped": 0,
+          "quote": "No. ofpatients"
+        },
+        {
+          "gene": "KCNQ1",
+          "pmid": "26496715",
+          "run": "results/table_cohort_live_check_20260907/production_runs/KCNQ1/20260907_101105",
+          "role": "case",
+          "tier": "count_column_names_cases",
+          "caption": "Table 1. Summary of putative LQT1-associated mutations in KCNQ1",
+          "count_label": "No. ofpatients",
+          "count_unit": "people",
+          "rows_seen": 46,
+          "rows_applied": 0,
+          "rows_stamped": 0,
+          "quote": "No. ofpatients"
+        },
+        {
+          "gene": "SCN5A",
+          "pmid": "20129283",
+          "run": "results/table_cohort_live_check_20260907/production_runs/SCN5A/20260907_100827",
+          "role": "case",
+          "tier": "caption_names_disease_column_counts_people",
+          "caption": "Table 4 Compendium of Brugada syndrome-associated SCN5A mutations",
+          "count_label": "No. of unrelatedindividuals",
+          "count_unit": "people",
+          "rows_seen": 293,
+          "rows_applied": 0,
+          "rows_stamped": 0,
+          "quote": "Brugada; No. of unrelatedindividuals"
+        },
+        {
+          "gene": "SCN5A",
+          "pmid": "20129283",
+          "run": "results/table_cohort_live_check_20260907/production_runs/SCN5A/20260907_100827",
+          "role": "control",
+          "tier": "caption_names_disease_cases",
+          "caption": "Table 2 Control variants found in 2,600 reference alleles",
+          "count_label": "Number",
+          "count_unit": "alleles",
+          "rows_seen": 55,
+          "rows_applied": 0,
+          "rows_stamped": 0,
+          "quote": "Control"
+        },
+        {
+          "gene": "SCN5A",
+          "pmid": "27566755",
+          "run": "results/table_cohort_live_check_20260907/production_runs/SCN5A/20260907_100827",
+          "role": "case",
+          "tier": "caption_names_disease_cases",
+          "caption": "Table S1: List of Mutations by Coding Effect, Location, and Frequency in 406 LQT3 Patients.",
+          "count_label": "COUNT",
+          "count_unit": "people",
+          "rows_seen": 51,
+          "rows_applied": 0,
+          "rows_stamped": 0,
+          "quote": "LQT3; Patients"
+        }
+      ],
+      "pooled_case_control_rows_refused": 342
+    },
+    "noncardiac": {
+      "papers_scanned": 1911,
+      "tables_classified": 31,
+      "rows_touched": 887,
+      "shared_classifications_unchanged": true,
+      "removed": [
+        {
+          "gene": "BMPR2",
+          "pmid": "26820968",
+          "run": "results/bmpr2_current_protocol_20260902/BMPR2/20260902_111533",
+          "role": "case",
+          "tier": "count_column_names_cases",
+          "caption": "Table 4. Gene mutations in Chinese CTEPH patients and PE without PH patients.",
+          "count_label": "Patientsnumber",
+          "count_unit": "people",
+          "rows_seen": 1,
+          "rows_applied": 0,
+          "rows_stamped": 1,
+          "quote": "Patientsnumber"
+        },
+        {
+          "gene": "BMPR2",
+          "pmid": "26820968",
+          "run": "results/bmpr2_shared_fixes_20260902/BMPR2/20260902_074142",
+          "role": "case",
+          "tier": "count_column_names_cases",
+          "caption": "Table 4. Gene mutations in Chinese CTEPH patients and PE without PH patients.",
+          "count_label": "Patientsnumber",
+          "count_unit": "people",
+          "rows_seen": 1,
+          "rows_applied": 1,
+          "rows_stamped": 0,
+          "quote": "Patientsnumber"
+        },
+        {
+          "gene": "BMPR2",
+          "pmid": "26820968",
+          "run": "results/vb_curated150_20260826/BMPR2/20260826_083938",
+          "role": "case",
+          "tier": "count_column_names_cases",
+          "caption": "Table 4. Gene mutations in Chinese CTEPH patients and PE without PH patients.",
+          "count_label": "Patientsnumber",
+          "count_unit": "people",
+          "rows_seen": 1,
+          "rows_applied": 0,
+          "rows_stamped": 1,
+          "quote": "Patientsnumber"
+        }
+      ],
+      "added": []
+    }
+  },
+  "new_paid_extraction_calls": 0,
+  "limitations": [
+    "Tranche 04 contained no qualifying tables; confirmation remains open.",
+    "Legacy stamped extraction records without a prior-count audit cannot be faithfully stripped.",
+    "Reference curation was not changed."
+  ]
+}

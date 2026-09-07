@@ -14,7 +14,9 @@ Two modes:
 * ``derive`` (default) -- the archived extraction predates the module; the
   ``on`` arm is the locked predictions plus the derived values.
 * ``strip`` -- the archived extraction already carries the module's stamps; the
-  ``off`` arm nulls every field whose provenance source is the module's stamp.
+  ``off`` arm restores the audited pre-projection, post-guard phenotype values.
+  Stamped records without that audit refuse rather than guessing which counts
+  were already present before the projection.
 
 Either way the two arms differ only by this step, which removes provider
 run-to-run variance from the comparison. The script never writes into the
@@ -194,9 +196,19 @@ def derived_records(
             continue
         penetrance = variant.get("penetrance_data") or {}
         targets: dict[str, Optional[int]] = {}
+        previous = derivation.get("guarded_counts_without_projection")
+        if (
+            mode == "strip"
+            and stamped
+            and (not isinstance(previous, dict) or not stamped.issubset(previous))
+        ):
+            raise ValueError(
+                "cannot strip table-cohort stamps without audited pre-projection "
+                "counts; regenerate the extraction audit from the original input"
+            )
         for field in stamped:
             key = "affected_count" if field == "affected" else "unaffected_count"
-            targets[field] = None if mode == "strip" else penetrance.get(key)
+            targets[field] = previous[field] if mode == "strip" else penetrance.get(key)
         if not targets:
             continue
         records.append(
@@ -223,7 +235,7 @@ def derived_records(
 def patch_paper(
     paper: dict[str, Any], records: list[dict[str, Any]], mode: str
 ) -> list[dict[str, Any]]:
-    """Fill (or null) prediction rows from derived records; return the log."""
+    """Fill (or restore) prediction rows from derived records; return the log."""
     log: list[dict[str, Any]] = []
     for row in paper.get("variants") or []:
         tokens = prediction_tokens(row)
@@ -265,9 +277,9 @@ def patch_paper(
                     continue
                 row[field] = value
             else:
-                if before is None:
+                if before is None or before == value:
                     continue
-                row[field] = None
+                row[field] = value
             log.append(
                 {
                     "variant": row.get("variant"),
@@ -284,13 +296,28 @@ def patch_paper(
     return log
 
 
-def gold_for_variant(
-    run_eval, gene: str, variant: str, gold: list[dict]
-) -> Optional[dict]:
+def scored_gold_rows(score: dict, gold: list[dict]) -> dict[str, dict]:
+    """Use the scorer's one-to-one assignment, including duplicate gold rows.
+
+    A fresh fuzzy lookup can reuse an already-consumed reference row, and can
+    call a notation twin scored even though the scorer merged it away. Repeated
+    prediction strings cannot be disambiguated by the replay log; omit those
+    rather than attaching a possibly different row's clinical counts.
+    """
+    remaining: dict[str, list[dict]] = defaultdict(list)
     for row in gold:
-        if run_eval.matches(variant, row["variant"], gene):
-            return row
-    return None
+        remaining[row["variant"]].append(row)
+    pairs = score.get("matched_variants") or []
+    repetitions = Counter(pair["predicted"] for pair in pairs)
+    assigned = {}
+    for pair in pairs:
+        rows = remaining[pair["gold"]]
+        if not rows:
+            raise ValueError("scored reference assignment is absent from gold input")
+        row = rows.pop(0)
+        if repetitions[pair["predicted"]] == 1:
+            assigned[pair["predicted"]] = row
+    return assigned
 
 
 def summarize_arm(
@@ -426,10 +453,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 (e["variant"], e["field"]): e for e in on_score["count_errors"]
             }
             gold = gold_cache[(gene, pmid)]
+            assigned_gold = scored_gold_rows(on_score, gold)
             for entry in log:
                 if entry.get("status"):
                     continue
-                gold_row = gold_for_variant(run_eval, gene, entry["variant"], gold)
+                gold_row = assigned_gold.get(entry["variant"])
                 error_key = (entry["variant"], entry["field"])
                 supplied_value = (
                     entry["after"] if args.mode == "derive" else entry["before"]
@@ -452,6 +480,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "variant": entry["variant"],
                         "field": entry["field"],
                         "value": supplied_value,
+                        "gold_variant": gold_row.get("variant") if gold_row else None,
                         "gold_carriers": gold_row.get("carriers") if gold_row else None,
                         "gold_affected": gold_row.get("affected") if gold_row else None,
                         "gold_unaffected": gold_row.get("unaffected")

@@ -144,6 +144,9 @@ and the count-column header:
   `affected = 0` (`control`). A control table counted in alleles or chromosomes
   ("2,600 reference alleles") certifies nothing; whatever the row parser wrote
   is left exactly as it was.
+  People-unit controls must pass the same caption and clinical-header
+  exclusions as case rows, including mixed case/control captions and columns.
+  The word "control" alone cannot turn a measurement into a people count.
 - Everything else refuses: family / kindred / relatives / segregation / cascade
   captions, mutation-carrier and "clinical characteristics" tables,
   symptomatic / asymptomatic / unaffected / penetrance wording, population,
@@ -156,7 +159,10 @@ and the count-column header:
 
 The value carries the stamp `table_cohort_phenotype_v1`, a `phenotype_derivation`
 audit quoting caption and column, and `fact_provenance` rows, so a projected
-count is always distinguishable from a literal phenotype column. Paper-level
+count is always distinguishable from a literal phenotype column. The audit
+also stores the phenotype counts the ordinary guard would retain without the
+projection, so ablation restores prior values instead of erasing them.
+Paper-level
 ascertainment (title or abstract sentences) is implemented as a separately
 flagged tier that is off by default: projecting the abstract's cohort onto a
 table that names no cohort is the manufactured partition this contract forbids.
