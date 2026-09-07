@@ -474,6 +474,28 @@ class Settings(BaseSettings):
             "supplementary tables at the end of a folded source."
         ),
     )
+    table_cohort_phenotype_enabled: bool = Field(
+        default=True,
+        validation_alias="GVF_TABLE_COHORT_PHENOTYPE",
+        description=(
+            "When True, pipeline/table_cohort_phenotype.py projects a "
+            "deterministic table row's per-variant people count onto "
+            "affected (disease case-series table) or unaffected (control "
+            "table) from the table's own caption and count-column header. "
+            "Derived values carry count_type case/control/unaffected_control "
+            "and the code-owned source stamp table_cohort_phenotype_v1."
+        ),
+    )
+    table_cohort_paper_ascertainment_enabled: bool = Field(
+        default=False,
+        validation_alias="GVF_TABLE_COHORT_PAPER_ASCERTAINMENT",
+        description=(
+            "Second tier of the table-cohort projection: when the caption "
+            "names no cohort, use a title/abstract sentence that ascertains a "
+            "disease case cohort. Off by default because it reads outside the "
+            "table; measured separately before any promotion."
+        ),
+    )
     strict_cohort_labels: bool = Field(
         default=False,
         validation_alias="GVF_STRICT_COHORT_LABELS",

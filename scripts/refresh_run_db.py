@@ -43,6 +43,7 @@ from harvesting.migrate_to_sqlite import (  # noqa: E402
 from pipeline.count_provenance import (  # noqa: E402
     PATIENT_ROW_PHENOTYPE_SOURCE,
     SOURCE_BOUND_PHENOTYPE_SOURCE,
+    TABLE_COHORT_PHENOTYPE_SOURCE,
 )
 from pipeline.extraction import ExpertExtractor  # noqa: E402
 from pipeline.source_quality import is_usable_fulltext_source  # noqa: E402
@@ -1028,6 +1029,11 @@ def source_count_observations(
                 and str(provenance.get(source_key) or "").strip().lower()
                 == SOURCE_BOUND_PHENOTYPE_SOURCE
             )
+            audited_table_cohort_count = (
+                role in {"case", "control", "unaffected_control"}
+                and str(provenance.get(source_key) or "").strip().lower()
+                == TABLE_COHORT_PHENOTYPE_SOURCE
+            )
             if (
                 not (field_name == "total_carriers" and role == "family_count")
                 and verdict
@@ -1036,7 +1042,11 @@ def source_count_observations(
                     "ambiguous",
                     "source_missing",
                 }
-                and not (audited_patient_row_count or audited_source_bound_count)
+                and not (
+                    audited_patient_row_count
+                    or audited_source_bound_count
+                    or audited_table_cohort_count
+                )
             ):
                 continue
             raw_value = penetrance.get(data_key)

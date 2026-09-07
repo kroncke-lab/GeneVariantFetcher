@@ -8441,6 +8441,22 @@ Return strict JSON with this schema:
                 result.extracted_data = derive_patient_row_phenotype_counts(
                     result.extracted_data or {}, source_text
                 )
+                # Code-owned table-cohort projection: a case-series count
+                # column becomes ``affected``, a control table's count becomes
+                # ``unaffected``. Runs after the patient-row lane so an audited
+                # partition is never overwritten, and before the always-on
+                # phenotype guard, which keeps the stamped values.
+                from pipeline.table_cohort_phenotype import (
+                    derive_table_cohort_phenotype_counts,
+                )
+
+                result.extracted_data = derive_table_cohort_phenotype_counts(
+                    result.extracted_data or {},
+                    source_text,
+                    gene_symbol=paper.gene_symbol,
+                    disease=paper.disease,
+                    title=paper.title,
+                )
                 result.extracted_data = self._backfill_variant_notation_pairs(
                     result.extracted_data
                 )

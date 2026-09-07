@@ -33,6 +33,7 @@ from typing import Any, Iterable, Optional
 from pipeline.count_provenance import (
     PATIENT_ROW_PHENOTYPE_SOURCE,
     SOURCE_BOUND_PHENOTYPE_SOURCE,
+    TABLE_COHORT_PHENOTYPE_SOURCE,
 )
 from pipeline.count_outlier_guard import COUNT_FIELDS, _clear_field, _read_field
 from utils.source_layers import source_layer_tokens
@@ -200,6 +201,17 @@ def _phenotype_is_sourced(variant: dict[str, Any], field: str) -> bool:
             "control",
             "unaffected_control",
         }:
+            return True
+        # A control table's affected zero is closed by the cohort definition
+        # (the people counted were ascertained as unaffected). Only the
+        # code-owned table-cohort lane may assert it; a model-declared
+        # ``control`` type on affected stays an unsourced zero.
+        if (
+            field == "affected"
+            and declared == "control"
+            and str(provenance.get("affected_source") or "").strip().lower()
+            == TABLE_COHORT_PHENOTYPE_SOURCE
+        ):
             return True
     return False
 

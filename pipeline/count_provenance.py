@@ -13,9 +13,17 @@ from typing import Any
 
 PATIENT_ROW_PHENOTYPE_SOURCE = "patient_row_phenotype_v2"
 SOURCE_BOUND_PHENOTYPE_SOURCE = "source_bound_phenotype_v1"
+# Deterministic table-cohort projection (``pipeline/table_cohort_phenotype.py``):
+# a case-series count column becomes ``affected``, a control table's count
+# becomes ``unaffected``. Stamped only by that module, never by a model.
+TABLE_COHORT_PHENOTYPE_SOURCE = "table_cohort_phenotype_v1"
 
 CODE_OWNED_PHENOTYPE_SOURCES = frozenset(
-    {PATIENT_ROW_PHENOTYPE_SOURCE, SOURCE_BOUND_PHENOTYPE_SOURCE}
+    {
+        PATIENT_ROW_PHENOTYPE_SOURCE,
+        SOURCE_BOUND_PHENOTYPE_SOURCE,
+        TABLE_COHORT_PHENOTYPE_SOURCE,
+    }
 )
 
 
