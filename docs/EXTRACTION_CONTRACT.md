@@ -46,7 +46,11 @@ Two derived clinical claims are explicitly out of scope for extraction:
   `affected` or `unaffected`. Do not fill either field by subtraction, by setting
   `affected = carriers`, or by treating an unselected cohort as unaffected. The
   audited patient-row path below is deterministic aggregation of explicit cells,
-  not a license for those inferences.
+  not a license for those inferences. The table-cohort projection below is the
+  one other code-owned exception: it reads a count column whose own header or
+  table caption names the disease case series or the control cohort, which is
+  the paper's printed claim about who was counted, not an inference from
+  enrollment prose.
 
 ### Open blockers to the clinical-grade claim
 
@@ -121,9 +125,47 @@ the table locator, rule, table and add-on subtotals, and predicate tallies. Both
 phenotype count types must be `derived_from_patient_rows`; their column-label
 fields list the exact input headers joined with ` | `.
 
-`patient_row_phenotype_v2` and `source_bound_phenotype_v1` are code-owned
-provenance stamps. Model and adjudicator JSON is stripped of either value before
-verification. Only the matching deterministic audit may add one, and downstream
+### Deterministic table-cohort projection
+
+A code-parsed table row that carries one per-variant people count and no
+phenotype value may receive a phenotype count from the cohort its own table
+names (`pipeline/table_cohort_phenotype.py`). The classification reads only the
+printed caption (looked up in the source when the parser kept just `Table N`)
+and the count-column header:
+
+- A **case series** -- the count column names patients / probands / cases with
+  a count word ("No. of patients", "Cases (n=2111)"), or the caption names the
+  target disease and the column counts people ("Compendium of Brugada
+  syndrome-associated mutations" / "No. of unrelated individuals") -- sets
+  `affected = N` with `count_type = case`. `unaffected` stays null: the paper
+  assessed nobody else, and a zero it never counted is not emitted.
+- A **control cohort** -- controls, healthy, reference individuals -- counted in
+  people sets `unaffected = N` (`unaffected_control`) and the closed
+  `affected = 0` (`control`). A control table counted in alleles or chromosomes
+  ("2,600 reference alleles") certifies nothing; whatever the row parser wrote
+  is left exactly as it was.
+- Everything else refuses: family / kindred / relatives / segregation / cascade
+  captions, mutation-carrier and "clinical characteristics" tables,
+  symptomatic / asymptomatic / unaffected / penetrance wording, population,
+  biobank, sequencing, allele and frequency vocabulary, functional and assay
+  catalogues, autopsy and sudden-death series, literature compilations, captions
+  that mix cases with controls or say "versus" / "without", a second header that
+  carries clinical structure, a "Cases" column beside a "Controls" column, model
+  authored rows, per-person clinical rows, and any carrier count whose role is
+  not `per_variant_carrier`.
+
+The value carries the stamp `table_cohort_phenotype_v1`, a `phenotype_derivation`
+audit quoting caption and column, and `fact_provenance` rows, so a projected
+count is always distinguishable from a literal phenotype column. Paper-level
+ascertainment (title or abstract sentences) is implemented as a separately
+flagged tier that is off by default: projecting the abstract's cohort onto a
+table that names no cohort is the manufactured partition this contract forbids.
+Calibration and the prospective test plan live in
+`docs/evidence/table_cohort_phenotype_20260907/`.
+
+`patient_row_phenotype_v2`, `source_bound_phenotype_v1` and
+`table_cohort_phenotype_v1` are code-owned provenance stamps. Model and
+adjudicator JSON is stripped of any of these values before verification. Only the matching deterministic audit may add one, and downstream
 verification, refresh, trust, and phenotype guards require the exact count role,
 stamp, and closed arithmetic together. Refresh/rebuild operations must preserve
 the stamp on the count observation; a bare model-supplied type string never
@@ -218,6 +260,7 @@ says which is which. **Prompt-only** rows have no automated backup.
 | No clinical counts from reviews / pure functional / GWAS | `study_type_mismatch` | `trust_gate.py` |
 | A literal phenotype zero needs a closed source | `implied_unaffected_zero` plus the always-on phenotype guard mask an unsourced `unaffected=0` for open carrier sets. Claim verification cannot introduce a zero complement without an explicit phenotype column, closed partition, or complete audited patient rows. Null-to-zero conversion exists only in the diagnostic figure and is marked by `evaluation_zero_filled`. | `trust_gate.py`, `phenotype_count_guard.py`, `claim_verifier.py` |
 | Use the phenotype-specific denominator | `penetrance_data.total_carriers_observed` outranks the ambiguous legacy `patients.count` mirror when validating a phenotype partition. This prevents a source-supported split from being rejected against an affected/patient subset stored in the legacy field. | `phenotype_count_guard.py` |
+| A case-series count column is the affected count; a control table's count is the unaffected count | `pipeline/table_cohort_phenotype.py` classifies the source table from its printed caption and count-column header only, stamps `count_type` `case` / `control` / `unaffected_control` with the code-owned source `table_cohort_phenotype_v1`, and refuses family, carrier, phenotype-split, population, allele, functional, autopsy, literature and case-versus-control tables. The guard, trust gate and refresh treat the stamp as sourced; model output is scrubbed of it. Paper-level ascertainment is a separate tier, off by default. | `table_cohort_phenotype.py`, `phenotype_count_guard.py`, `refresh_run_db.py` |
 | Do not copy `carriers` onto `affected` | Always-on `pipeline/phenotype_count_guard.py`: clears `affected == carriers` with `unaffected in {0, None}` when N≥2 or `source_layer=figure`, unless a distinct phenotype column sourced the split. One-proband 1/1/0 text/table rows are left alone. Wired from `steps._apply_phenotype_count_guard` and figure-reader parse. Eval still scores raw, so this changes the emitted integers, not only trust. | enforced |
 | Do not calculate penetrance from extracted counts | Extraction keeps only an explicitly quoted, variant-specific percentage; `DataAggregator` never derives a percentage from raw pre-trust integers. | enforced |
 | Do not complete phenotype partitions arithmetically or from cohort labels | Claim verification clears ambiguous symptom-vs-diagnosis splits. The source-prose exceptions are exact-quote rules: (1) the same closed population is explicitly both N carriers of this variant and N target-disease patients, which may set `affected=N` and can replace a conflicting symptom-only split; or (2) the paper states `X out of Y [this variant] carriers were affected by [target disease]`, which supplies the closed partition. A zero remainder still requires independently closed source support. Off-target negative tests cannot negate the paper-title phenotype and never manufacture an unaffected zero. Assessed subsets, hedged counts, family/screen/assay totals, mixed variants, and unassessed residue fail closed. | enforced |

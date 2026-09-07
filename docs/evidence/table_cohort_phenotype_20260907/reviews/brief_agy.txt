@@ -1,0 +1,61 @@
+DO NOT use tools. DO NOT read files. Everything you need is in this brief. Answer in plain prose and markdown ONLY, in a single message of at most 160 lines. Do NOT emit a plan object or todo list. Begin your reply with the line REVIEW_VERDICT.
+
+You are an adversarial reviewer for GeneVariantFetcher (GVF), a pipeline that extracts variant identities and per-variant carrier / affected / unaffected counts from cardiac-gene papers (KCNH2, KCNQ1, SCN5A, RYR2) and is scored against a human-curated gold set. The PI asked to raise "affected count precision way up". I decomposed the failure and want you to attack my plan before I spend a $100 API budget testing it.
+
+== 1. What the numbers say (two locked evaluation runs, 234 gene-paper attempts, 1,478 gold rows) ==
+
+Affected counts: gold rows with a POSITIVE affected value = 1,118. Current pipeline: supplied 221 (19.8%), exact 203 (18.2%). Conditional exactness of what it supplies is 92%. So the problem is supply, not the accuracy of supplied values.
+
+Row-level decomposition of the 1,118 positive-affected rows:
+  477  identity matched, affected NULL, but the pipeline's CARRIER count == gold affected (exact if copied)
+  232  identity missed (no row at all)
+  203  affected exact
+  126  identity matched, both carriers and affected NULL
+   57  affected NULL, pipeline carriers wrong (45 of them are one paper's multi-center gold duplicates: gold lists 4 rows of "1" for a variant the table reports as "4 unrelated individuals")
+   18  affected supplied but wrong
+    5  affected NULL, pipeline carriers == gold carriers != gold affected (a real split the paper reports; copying would be wrong)
+
+Gold convention on positive-affected rows: affected == carriers on 1,018/1,118; unaffected == 0 on 1,023/1,118; affected+unaffected == carriers on 1,104/1,118. The lab treats a variant found in N disease-ascertained probands as N carriers, N affected, 0 unaffected.
+
+If I also count the 360 gold rows with affected == 0: 87 of those have a pipeline carrier count and null affected. 55 are a CONTROL table (gold 0 affected, N unaffected). 20 are an LQTS compendium control block already handled. So a naive "affected := carriers" rule would be wrong on ~87 + 62 rows and right on 477.
+
+== 2. Where the 477 rows sit (all from deterministic table parsers, no LLM) ==
+
+A) PMID 20129283 (Kapplinger 2010, SCN5A BrS compendium): 239 rows. Table 4 caption "Compendium of Brugada syndrome-associated SCN5A mutations", count column "No. of unrelated individuals". Methods: "2,111 unrelated patients were referred for BrS genetic testing ... 293 distinct mutations were identified in the 438 genotype-positive cases". The table's people-count column sums to 451 = 438 cases + 13 double-mutation patients (code can check this closure). Table 2 caption "Control variants found in 2,600 reference alleles", column "Number", row Status cells "Rare control"/"Polymorphism": the parser ALREADY emits unaffected = N for these 55 rows (row-level control regex) and affected = 0, but a downstream guard wipes the 0 as an "unsourced zero". Gold for controls: carriers N, affected 0, unaffected N. Gold H558R here is 408/0/408.
+B) PMID 26496715: 83 rows (KCNH2 53, KCNQ1 30). Supplement-only source. Captions "Table 1. Summary of putative LQT1-associated mutations in KCNQ1" / "Table 2 ... LQT2-associated mutations in KCNH2", column "No. of patients" (header wrapped over two lines: "No. of" / "patients"). Gold: N/N/0.
+C) PMID 28341781: 52 rows. Fixed-width PDF text. Title "Genotype-Phenotype Correlation of SCN5A Mutation for the Clinical and Electrocardiographic Characteristics of Probands With Brugada Syndrome: A Japanese Multicenter Registry". Table 2 caption "Included SCN5A Mutations and Variants"; the count is a parenthetical after the protein ("L136P (2)") and the column label the parser recorded is garbled ("Coding Effect"). No cohort noun in caption or column. Gold N/N/0.
+D) PMID 27566755: 47 rows. Caption "Table S1: List of Mutations by Coding Effect, Location, and Frequency in 406 LQT3 Patients" (caption wraps; the parser stored only "... in 406"), column "COUNT". Gold N/N/0.
+E) PMID 11854117: 18 rows. Body is an empty shell (headings only); one table under heading "HERG mutations" with column "No. of Subjects"; title "Increased Risk of Arrhythmic Events in Long-QT Syndrome With Mutations in the Pore Region ...". Gold N/N/0.
+F) ADVERSARIAL: PMID 28237968 (RYR2, Danish CPVT): 13 rows, one proband per row ("implicit one carrier per clinical row"), caption "Table 2 Primary symptom of proband, mutation type ..., asymptomatic/symptomatic RyR2 variant-carrying relatives (n) and relatives tested negative". Gold counts proband + relatives, e.g. H4579Y 11 carriers / 8 affected / 3 unaffected, Q32K 5/5/0. Copying the row's carrier count (1) onto affected would be wrong on 6/13 rows and coincidentally right on 7.
+
+== 3. Existing code precedent and the contract tension ==
+
+- A dedicated LQTS-compendium parser (PMID 19841300) already emits affected = count for "Case" status rows with count_type "case" and unaffected = count for control rows; the guard accepts count_type "case". Gold agrees (67 exact affected there).
+- The generic table router has a "closed case series" rule: when the ONLY count column header is a case-series people header ("Case count", "No. of patients", "Probands (n)") mapped to the affected role, it sets carriers = affected and declares count_type "case".
+- The extraction contract says: "Never manufacture a phenotype partition. A diagnosis label, enrollment in a disease cohort, or absence of a reported diagnosis does not by itself prove affected or unaffected. Do not fill either field by ... setting affected = carriers." It ALSO says for frequency columns: "read the role from the noun: cases/patients/probands to affected, controls to unaffected".
+- The phenotype guard (always on) clears affected when affected == carriers >= 2 and unaffected in {0, None} unless the affected count_type is "case"/"proband_count" or a phenotype-named column label exists. It clears affected == 0 unless sourced. The trust gate (Step 3.7) soft-quarantines a derived unaffected == 0 only in population/biobank/case-control/family-segregation designs.
+
+== 4. My proposal (code-owned, deterministic, no LLM call) ==
+
+New module pipeline/table_cohort_phenotype.py, run at the extraction success boundary right after the existing audited patient-row lane. For each deterministic-parser row that has a per-variant carrier count and NULL affected/unaffected, classify the SOURCE TABLE's cohort role from the caption (looked up in the source text when the parser stored only "Table N", including wrapped caption lines) plus the count-column header:
+
+  EXCLUDE (no derivation) if caption/headers/column mention: family, families, kindred, pedigree, relative(s), segregation, cascade, carriers, genotype-positive, asymptomatic, symptomatic, affected, unaffected, penetrance, phenotype, ECG/QTc-style clinical columns, population, biobank, general population, exome/genome sequencing, gnomAD/ExAC/ESP/1000 Genomes/TOPMed, allele, frequency, MAF; or the table already has explicit affected/unaffected columns; or the row is a per-person clinical row (implicit one carrier per row); or the carrier count_type is not per_variant_carrier.
+  CONTROL if caption or column names control(s), healthy, reference alleles, ostensibly healthy, normal individuals: emit unaffected = N, affected = 0 with count_type unaffected_control / control and a code-owned source stamp.
+  CASE tier 1 (table-local evidence): the count column's noun is patients/probands/cases/index cases with a count word ("No. of patients", "Probands (n)"), OR the caption names the target disease (BrS, Brugada, LQT*, long QT, CPVT, the run's disease string) AND the column counts people (individuals/subjects/patients/probands/cases/"Number"/"COUNT"/"N"). Emit affected = N, leave unaffected NULL (the paper did not assess unaffected relatives; the lab's 0 is a convention the scorer treats as no-error against NULL), count_type "case", source stamp table_cohort_phenotype_v1, column_label = caption + column quote.
+  CASE tier 2 (paper-level ascertainment, separately flagged so it can be disabled): caption has no cohort noun (case C above) but the title/abstract/methods state an unrelated-proband/patient disease cohort ("N unrelated patients/probands (with|referred for|diagnosed with) <disease>", "Probands With <Disease>"), the count column counts people, and no exclusion fires.
+  Every derived value is distinguishable from a literal phenotype column: count_type, a code-owned source stamp that is scrubbed from model output, a phenotype_derivation audit block with the caption/column/ascertainment quotes, and a fact_provenance row. The guard already accepts count_type "case"; I would add acceptance of the derived control zero. Nothing about identity changes.
+
+Expected on the two opened runs (calibration, not confirmation): affected exact recovery 18% -> roughly 55-60%; conditional exactness stays around 90% (the 45 multi-center duplicate rows become wrong affected because their carriers are already "wrong" against gold's row-splitting).
+
+== 5. Measurement plan ==
+
+(1) Free zero-LLM replay on the two opened locks: apply the module to the archived extraction JSON + frozen source text, re-run the guard, rescore with the same matcher (derivation on/off). (2) Then the registered next unopened tranche (120 attempts, 110 papers, about $10 per arm on Azure): baseline arm = current main before this change, candidate arm = main with the change, AND a within-arm on/off ablation on each arm's own extraction output, which removes the provider run-to-run variance that made two previous paired tranches uninterpretable. Preregister an affected-count endpoint before opening: exact affected recovery over positive-gold rows (within-arm, derivation on minus off) >= +10 pp, conditional exactness of supplied affected >= 85%, unaffected exact recovery non-decreasing, identity unchanged by construction, and every newly wrong value listed with its caption/column evidence.
+
+== 6. Questions (answer each, numbered, be concrete and adversarial) ==
+
+Q1. Is tier 1 defensible against the contract clause "enrollment in a disease cohort does not by itself prove affected"? Where exactly would you draw the line between a source-backed reading (the paper's own table says these N people are BrS patients) and a manufactured partition? Is tier 2 (title/abstract ascertainment) over the line? Would you ship tier 2 at all?
+Q2. List concrete caption/header shapes that would FOOL this classifier in cardiac and non-cardiac (BRCA1/2, BMPR2, MYBPC3) literature: case-control tables, mutation-carrier characteristic tables, screening cohorts, molecular-autopsy series, "patients with X" tables that include unaffected relatives, allele-count tables, supplementary variant catalogues. Which exclusion words am I missing? Which of my exclusions are too aggressive?
+Q3. For CONTROL tables, should the derived affected = 0 be emitted (a closed N/0/N partition the cohort definition supports) or left NULL? Is "reference alleles" (2,600 alleles = 1,300 people) safe to count as N unaffected carriers when N is an allele count (R34C: 44)?
+Q4. Critique the measurement plan: is the within-arm on/off ablation a valid effect estimate? What preregistered thresholds would you set instead? What would make you reject the change even if exact recovery jumps? Is spending one arm on a baseline that only differs by this deterministic step wasteful, given the registry requires a baseline before a candidate?
+Q5. Given the remaining misses (232 identity misses; 126 matched rows with no carrier count at all in papers like KCNH2 11854117 shells and RYR2 16272262; 30059973 where a fixed-width identity fast path returns 185 variants before the phenotype tables are read; 20129283's 45 multi-center duplicate gold rows), rank the NEXT single highest-leverage change for exact affected recovery and say why.
+Q6. Name one thing in this brief you think is factually wrong or unproven, and how you would check it.

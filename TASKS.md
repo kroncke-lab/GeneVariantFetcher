@@ -76,6 +76,28 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       unknown charges. Reconcile billing or establish a fresh envelope
       before a larger campaign. Only a passing fixed implementation advances to the
       unopened discovery/confirmation sequence.
+- [~] **Table-cohort phenotype projection (2026-09-07, commit `e85dcff6`,
+      default on).** The affected-count gap was supply, not accuracy: on the two
+      locked cont120_02/03 candidates 477 of the 1,118 positive-gold affected
+      values were NULL while the pipeline's carrier count on the same
+      deterministic table row already equalled gold. `pipeline/table_cohort_phenotype.py`
+      projects a case-series count column onto `affected` and a people-counted
+      control table onto `unaffected` + closed `affected = 0`, from the table's
+      own caption and header only; the paper-ascertainment tier is off. Free
+      replay (`scripts/replay_table_cohort_phenotype.py`): cardiac-four
+      positive-gold affected exact recovery 203→567 / 1,118 (18.2%→50.7%),
+      366 new exact / 46 new wrong (all SCN5A 20129283, where gold stores one
+      row per testing centre against the table's pooled count), 0 on gold
+      real-split rows, identity/carriers/unaffected/counted-extras unchanged.
+      agy and grok reviewed the plan first (dispositions in the evidence README).
+      **In flight:** tranche 04 opened as the registry `baseline` arm running
+      current main with the projection (PLAN preregistered before opening);
+      count endpoint = within-arm strip ablation. **Follow-ups:** refuse a
+      count label mixing case and control nouns ("BrS + LQT + Control",
+      SCN5A 25904541, 342 rows stamped in the historical smoke); adjudicate the
+      20129283 per-centre gold rows as a curation convention; next lever per
+      both reviewers is the identity-only fixed-width fast path (30059973).
+      Evidence: `docs/evidence/table_cohort_phenotype_20260907/`.
 
 ## Previous $100 improvement campaign
 

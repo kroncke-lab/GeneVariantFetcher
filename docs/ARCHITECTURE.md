@@ -169,6 +169,27 @@ reason when the gate abstains. The emitted `phenotype_derivation` audit must clo
 the full partition; otherwise the exception abstains and the ordinary
 no-inference contract applies.
 
+A second code-owned exception runs immediately after it at the same success
+boundary: the table-cohort projection (`pipeline/table_cohort_phenotype.py`).
+For a code-parsed table row that holds one per-variant people count and no
+phenotype value, it classifies the row's source table from the printed caption
+(resolved from the source text when the parser kept only `Table N`, including
+wrapped caption lines and router table ids) and the count-column header. A
+disease case-series count column becomes `affected` (`count_type = case`,
+`unaffected` left null); a control cohort counted in people becomes
+`unaffected` with a closed `affected = 0`; allele-unit control tables and every
+family, carrier, phenotype-split, population, allele, functional, autopsy,
+literature, case-versus-control, clinical-column, model-authored and per-person
+row refuse. Values carry the `table_cohort_phenotype_v1` stamp, a
+`phenotype_derivation` audit and `fact_provenance` rows; the always-on guard,
+the trust gate and `refresh_run_db.py` treat the stamp as sourced, and model
+output is scrubbed of it. `GVF_TABLE_COHORT_PHENOTYPE` (default on) switches the
+lane; `GVF_TABLE_COHORT_PAPER_ASCERTAINMENT` (default off) enables the
+paper-level tier that reviewers judged to be the manufactured partition the
+contract forbids. Every extraction records a
+`table_cohort_phenotype_derivation` block with per-table role, tier, evidence
+quote and per-row outcome.
+
 Variant-paper provenance separates origin from corroboration:
 `variant_papers.source_layer` is one primary enum, while
 `observed_source_layers` is the ordered, de-duplicated set of every lane that

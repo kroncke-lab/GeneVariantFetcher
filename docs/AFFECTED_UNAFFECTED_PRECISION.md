@@ -173,3 +173,39 @@ Note the shape of the trap: every simple predicate you would reach for
 - Do not enable `COUNT_RECOVERY_ENABLED` or un-park the per-paper final check
   to chase this number.
 - Offline tests: `.venv/bin/python -m pytest tests/unit -q`.
+
+## 8. The supply lever (2026-09-07): table-cohort projection
+
+The metric in §1 is conditional on a value being emitted, and on the two
+locked `cont120_02/03` candidate runs that condition was the whole problem: the
+pipeline supplied an affected value on 221 of the 1,118 positive-gold rows
+(18.2% exact recovery) although 477 of the missing values were the carrier
+count already sitting on a deterministic table row, in tables whose caption or
+count-column header named the disease case series ("No. of patients",
+"Compendium of Brugada syndrome-associated SCN5A mutations" / "No. of unrelated
+individuals", "... in 406 LQT3 Patients"). Gold treats disease-ascertained
+probands as affected (affected == carriers on 1,018 / 1,118 positive rows).
+
+`pipeline/table_cohort_phenotype.py` (commit `e85dcff6`) closes that gap with a
+code-owned projection described in `docs/EXTRACTION_CONTRACT.md` and
+`docs/ARCHITECTURE.md`. Zero-LLM replay on the two locks
+(`scripts/replay_table_cohort_phenotype.py`, evidence in
+`docs/evidence/table_cohort_phenotype_20260907/replay_tier1/`):
+
+| Cardiac four | off | on |
+| --- | --- | --- |
+| affected supplied on positive gold | 221 | 631 |
+| affected exact on positive gold | 203 / 1,118 (18.2%) | 567 / 1,118 (50.7%) |
+| affected wrong (all supplied) | 44 | 90 |
+| affected conditional exactness (all supplied) | 82.3% | 86.3% |
+| carriers, unaffected, identity, counted extras | unchanged | unchanged |
+
+Of the 46 new wrong values, all 46 are SCN5A 20129283, where Table 4 prints the
+pooled "No. of unrelated individuals" and gold stores one row of `1` per
+testing centre; the pipeline's carriers were already scored wrong there for the
+same reason. Excluding that gold convention the newly supplied set is 366 / 367
+exact, and no new affected value landed on a row where gold reports a real
+split. Do not "fix" the 46 in code: it is a curator question about row
+granularity. The paper-ascertainment tier (title/abstract) adds 18 rows on the
+same locks and stays off. Confirmation on the unopened tranche 04 and the
+reviewer dispositions are in the evidence README.
