@@ -362,8 +362,8 @@ def main() -> int:
     )
     ap.add_argument(
         "--workdir",
-        default="/tmp/gvf_refresh_recall",
-        help="Scratch dir for bridge/scoring.",
+        default=str(REPO / "tmp" / "refresh_recall"),
+        help="Scratch dir for bridge/scoring (default: repo tmp/refresh_recall).",
     )
     ap.add_argument(
         "--skip-fetch", action="store_true", help="Skip the supplement-fetch step."

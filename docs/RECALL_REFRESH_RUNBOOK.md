@@ -149,7 +149,7 @@ verifies with the same live probe `gvf-run` uses:
 `gvf-run`'s institutional preflight also attempts this refresh by itself when
 it detects an expired session and the bootstrapped profile exists
 (`GVF_EZPROXY_AUTOHEAL=0` disables). The profile
-(`~/.gvf/ezproxy_profile`, override `GVF_EZPROXY_PROFILE_DIR`) holds live SSO
+(`.gvf/ezproxy_profile` in the repo, override `GVF_EZPROXY_PROFILE_DIR`) holds live SSO
 tokens: it is created `chmod 700` and must never be committed or copied off
 the machine. Exit codes: `0` refreshed+verified, `3` the SSO session itself
 expired (re-run with `--bootstrap`), `4` cookie refreshed but the probe still
@@ -167,7 +167,7 @@ way. No per-run human step until the SSO session expires (re-do step 1).
   visible browser, reuse the profile unattended afterward:
   ```bash
   python scripts/fetch_paywalled.py --input <queue.csv> --output <dir> \
-      --no-headless --browser-profile-dir ~/.gvf/wiley_profile \
+      --no-headless --browser-profile-dir .gvf/wiley_profile \
       --auth-url "https://onlinelibrary.wiley.com/"
   ```
   The warmed profile re-passes the managed challenge silently on later headless

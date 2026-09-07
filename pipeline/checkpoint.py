@@ -198,10 +198,10 @@ class CheckpointManager:
 
         Args:
             base_dir: Base directory for storing checkpoints.
-                      Defaults to ~/.gvf_jobs
+                      Defaults to .gvf_jobs in the repository root.
         """
         if base_dir is None:
-            base_dir = Path.home() / self.CHECKPOINT_DIR
+            base_dir = Path(__file__).resolve().parents[1] / self.CHECKPOINT_DIR
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
 

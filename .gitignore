@@ -36,6 +36,10 @@ venv.bak/
 .env.local
 .env.*.local
 
+# Local authentication state and resumable jobs belong inside this checkout.
+/.gvf/
+/.gvf_jobs/
+
 # IDE
 .vscode/
 .idea/

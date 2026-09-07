@@ -32,7 +32,7 @@ Exit codes:
   4  cookies refreshed but the live probe is still blocked
 
 The persistent profile holds live SSO tokens: it is created ``chmod 700``,
-must stay untracked, and defaults to ``~/.gvf/ezproxy_profile`` (override with
+must stay untracked, and defaults to the repo's ``.gvf/ezproxy_profile`` (override with
 ``GVF_EZPROXY_PROFILE_DIR`` or ``--profile-dir``).
 """
 
@@ -58,7 +58,7 @@ from harvesting.browser_html.authenticated_pool import (  # noqa: E402
 )
 from harvesting.browser_html.cookie_loader import _cookies_from_file  # noqa: E402
 
-DEFAULT_PROFILE_DIR = "~/.gvf/ezproxy_profile"
+DEFAULT_PROFILE_DIR = str(REPO / ".gvf" / "ezproxy_profile")
 PROFILE_DIR_ENV = "GVF_EZPROXY_PROFILE_DIR"
 
 # How long a headless refresh waits for the silent SSO redirect chain to mint

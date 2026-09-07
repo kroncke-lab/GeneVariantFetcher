@@ -7,9 +7,14 @@ The authoritative working directory is:
 `/Users/kronckbm/GitRepos/GeneVariantFetcher`
 
 Use that path and the `main` branch for current GVF work unless Brett explicitly
-says otherwise. The 2026-08-12 handoff intentionally has no side worktrees or
-local feature branches. Old `Projects/` or remote `/mnt/temp4/` copies are
-historical scratch checkouts, not current sources.
+says otherwise. Keep one checkout on `main`; do not create side worktrees,
+source snapshots, sibling clones, or alternate `Projects/` aliases for routine
+work, reviews, or experiments. Put scratch work in this repo's ignored `tmp/`
+or `validation_runs/`, and run outputs in `results/`. Persistent authentication
+state belongs in the ignored `.gvf/`; job checkpoints belong in `.gvf_jobs/`.
+Do not write GVF project files into the home directory, Desktop, or system
+`/tmp`. The existing `corpus/` external-storage link described below remains
+the single source cache, accessed through this checkout.
 
 GVF extracts genetic variants, carrier counts, and phenotype data from
 biomedical literature for the Kroncke Lab variant interpretation pipeline.
@@ -85,7 +90,7 @@ same offline unit suite via `pytest.ini`):
 Live network/institutional checks are opt-in:
 
 ```bash
-GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_network tests/integration -q
+GVF_TEST_OUTPUT_DIR="$PWD/tmp/tests" .venv/bin/python -m pytest -m requires_network tests/integration -q
 ```
 
 ## Operating Shape
