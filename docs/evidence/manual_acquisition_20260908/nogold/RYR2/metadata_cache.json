@@ -1,0 +1,652 @@
+{
+ "pubmed": {
+  "11159936": {
+   "doi": "10.1093/hmg/10.3.189",
+   "full_journal": "Human molecular genetics",
+   "journal": "Hum Mol Genet",
+   "pmc_id": "",
+   "title": "Identification of mutations in the cardiac ryanodine receptor gene in families affected with arrhythmogenic right ventricular cardiomyopathy type 2 (ARVD2).",
+   "year": "2001"
+  },
+  "11741831": {
+   "doi": "10.1093/hmg/10.25.2879",
+   "full_journal": "Human molecular genetics",
+   "journal": "Hum Mol Genet",
+   "pmc_id": "",
+   "title": "Identification of four novel mutations in the C-terminal membrane spanning domain of the ryanodine receptor 1: association with central core disease and alteration of calcium homeostasis.",
+   "year": "2001"
+  },
+  "12919952": {
+   "doi": "10.1161/01.RES.0000091335.07574.86",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Ryanodine receptor mutations associated with stress-induced ventricular tachycardia mediate increased calcium release in stimulated cardiomyocytes.",
+   "year": "2003"
+  },
+  "15046067": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Effort-induced polymorphic ventricular arrhythmias.",
+   "year": "2004"
+  },
+  "15046070": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Effort-induced polymorphic ventricular arrhythmias.",
+   "year": "2004"
+  },
+  "15046072": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Effort-induced polymorphic ventricular arrhythmias.",
+   "year": "2004"
+  },
+  "15046073": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Effort-induced polymorphic ventricular arrhythmias.",
+   "year": "2004"
+  },
+  "15046075": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Arrhythmogenic right ventricular cardiomyopathy type 2.",
+   "year": "2004"
+  },
+  "15046079": {
+   "doi": "",
+   "full_journal": "Human genetics",
+   "journal": "Hum Genet",
+   "pmc_id": "",
+   "title": "Gene symbol: RYR2. Disease: Effort-induced polymorphic ventricular arrhythmias.",
+   "year": "2004"
+  },
+  "15197150": {
+   "doi": "10.1161/01.CIR.0000132472.98675.EC",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Sudden death in familial polymorphic ventricular tachycardia associated with calcium release channel (ryanodine receptor) leak.",
+   "year": "2004"
+  },
+  "15271719": {
+   "doi": "10.1213/01.ANE.0000130395.93107.15",
+   "full_journal": "Anesthesia and analgesia",
+   "journal": "Anesth Analg",
+   "pmc_id": "",
+   "title": "Volatile anesthetics and succinylcholine in cardiac ryanodine receptor defects.",
+   "year": "2004"
+  },
+  "15299003": {
+   "doi": "10.1074/jbc.M403612200",
+   "full_journal": "The Journal of biological chemistry",
+   "journal": "J Biol Chem",
+   "pmc_id": "",
+   "title": "Effect of ryanodine receptor mutations on interleukin-6 release and intracellular calcium homeostasis in human myotubes from malignant hyperthermia-susceptible individuals and patients affected by central core disease.",
+   "year": "2004"
+  },
+  "15689621": {
+   "doi": "10.1074/jbc.M410421200",
+   "full_journal": "The Journal of biological chemistry",
+   "journal": "J Biol Chem",
+   "pmc_id": "",
+   "title": "Ca2+ signaling in HEK-293 and skeletal muscle cells expressing recombinant ryanodine receptors harboring malignant hyperthermia and central core disease mutations.",
+   "year": "2005"
+  },
+  "15955866": {
+   "doi": "10.1124/mol.105.012807",
+   "full_journal": "Molecular pharmacology",
+   "journal": "Mol Pharmacol",
+   "pmc_id": "",
+   "title": "The Gln4863Ala mutation within a putative, pore-lining trans-membrane helix of the cardiac ryanodine receptor channel alters both the kinetics of ryanoid interaction and the subsequent fractional conductance.",
+   "year": "2005"
+  },
+  "15966600": {
+   "doi": "",
+   "full_journal": "Archives des maladies du coeur et des vaisseaux",
+   "journal": "Arch Mal Coeur Vaiss",
+   "pmc_id": "",
+   "title": "[Catecholinergic ventricular tachycardia in children].",
+   "year": "2005"
+  },
+  "16239587": {
+   "doi": "10.1161/01.RES.0000192146.85173.4b",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Enhanced store overload-induced Ca2+ release and channel sensitivity to luminal Ca2+ activation are common defects of RyR2 mutations linked to ventricular tachycardia and sudden death.",
+   "year": "2005"
+  },
+  "16339485": {
+   "doi": "10.1161/01.RES.0000199296.70534.7c",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Arrhythmogenic mutation-linked defects in ryanodine receptor autoregulation reveal a novel mechanism of Ca2+ release channel dysfunction.",
+   "year": "2006"
+  },
+  "16601229": {
+   "doi": "10.1161/01.RES.0000220647.93982.08",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Abnormal interactions of calsequestrin with the ryanodine receptor calcium release channel complex linked to exercise-induced sudden cardiac death.",
+   "year": "2006"
+  },
+  "19808439": {
+   "doi": "10.1161/CIRCEP.108.782888",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Yield of genetic screening in inherited cardiac channelopathies: how to prioritize access to genetic testing.",
+   "year": "2009"
+  },
+  "20023768": {
+   "doi": "10.1039/b907812f",
+   "full_journal": "Integrative biology : quantitative biosciences from nano to macro",
+   "journal": "Integr Biol (Camb)",
+   "pmc_id": "",
+   "title": "Impaired interaction between skeletal ryanodine receptors in malignant hyperthermia.",
+   "year": "2009"
+  },
+  "2064058": {
+   "doi": "10.1097/00000542-199107000-00002",
+   "full_journal": "Anesthesiology",
+   "journal": "Anesthesiology",
+   "pmc_id": "",
+   "title": "A comparison of the caffeine halothane muscle contracture test with the molecular genetic diagnosis of malignant hyperthermia.",
+   "year": "1991"
+  },
+  "22557844": {
+   "doi": "10.1016/s0972-6292(16)30481-8",
+   "full_journal": "Indian pacing and electrophysiology journal",
+   "journal": "Indian Pacing Electrophysiol J",
+   "pmc_id": "PMC3337370",
+   "title": "Bidirectional ventricular tachycardia: a hallmark of catecholaminergic polymorphic ventricular tachycardia.",
+   "year": "2012"
+  },
+  "23302672": {
+   "doi": "",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[Clinical features of six patients with catecholaminergic polymorphic ventricular tachycardia].",
+   "year": "2012"
+  },
+  "24025405": {
+   "doi": "10.1161/CIRCGENETICS.113.000118",
+   "full_journal": "Circulation. Cardiovascular genetics",
+   "journal": "Circ Cardiovasc Genet",
+   "pmc_id": "",
+   "title": "New exome data question the pathogenicity of genetic variants previously associated with catecholaminergic polymorphic ventricular tachycardia.",
+   "year": "2013"
+  },
+  "25012103": {
+   "doi": "",
+   "full_journal": "Minerva cardioangiologica",
+   "journal": "Minerva Cardioangiol",
+   "pmc_id": "",
+   "title": "Flecainide in patient with aggressive catecholaminergic polymorphic ventricular tachycardia due to novel RYR2 mutation.",
+   "year": "2014"
+  },
+  "27635072": {
+   "doi": "10.1161/CIRCEP.115.004274",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Cardiac Abnormalities in First-Degree Relatives of Unexplained Cardiac Arrest Victims: A Report From the Cardiac Arrest Survivors With Preserved Ejection Fraction Registry.",
+   "year": "2016"
+  },
+  "28620067": {
+   "doi": "10.1161/CIRCRESAHA.117.310882",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Allele-Specific Silencing of Mutant mRNA Rescues Ultrastructural and Arrhythmic Phenotype in Mice Carriers of the R4496C Mutation in the Ryanodine Receptor Gene (RYR2).",
+   "year": "2017"
+  },
+  "29489604": {
+   "doi": "10.1097/PEC.0000000000001444",
+   "full_journal": "Pediatric emergency care",
+   "journal": "Pediatr Emerg Care",
+   "pmc_id": "",
+   "title": "Out-of-Hospital Cardiac Arrest Due to Ventricular Fibrillation in a 5-Year-Old Pediatric Patient.",
+   "year": "2020"
+  },
+  "31112425": {
+   "doi": "10.1161/CIRCGEN.119.002510",
+   "full_journal": "Circulation. Genomic and precision medicine",
+   "journal": "Circ Genom Precis Med",
+   "pmc_id": "",
+   "title": "Assessment and Validation of a Phenotype-Enhanced Variant Classification Framework to Promote or Demote RYR2 Missense Variants of Uncertain Significance.",
+   "year": "2019"
+  },
+  "31453761": {
+   "doi": "10.1080/00015385.2019.1658374",
+   "full_journal": "Acta cardiologica",
+   "journal": "Acta Cardiol",
+   "pmc_id": "",
+   "title": "Clinical and genetic investigation of catecholaminergic polymorphic ventricular tachycardia in a consanguineous Tunisian family.",
+   "year": "2020"
+  },
+  "33325730": {
+   "doi": "10.1161/CIRCGEN.120.003126",
+   "full_journal": "Circulation. Genomic and precision medicine",
+   "journal": "Circ Genom Precis Med",
+   "pmc_id": "",
+   "title": "Genetic Association Between Hypoplastic Left Heart Syndrome and Cardiomyopathies.",
+   "year": "2021"
+  },
+  "34874747": {
+   "doi": "10.1161/CIRCULATIONAHA.121.056018",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "An International Multicenter Cohort Study on \u03b2-Blockers for the Treatment of Symptomatic Children With Catecholaminergic Polymorphic Ventricular Tachycardia.",
+   "year": "2022"
+  },
+  "34949103": {
+   "doi": "10.1161/CIRCGEN.121.003589",
+   "full_journal": "Circulation. Genomic and precision medicine",
+   "journal": "Circ Genom Precis Med",
+   "pmc_id": "",
+   "title": "Provocation Testing and Therapeutic Response in a Newly Described Channelopathy: RyR2 Calcium Release Deficiency Syndrome.",
+   "year": "2022"
+  },
+  "35537032": {
+   "doi": "10.1097/MPH.0000000000002475",
+   "full_journal": "Journal of pediatric hematology/oncology",
+   "journal": "J Pediatr Hematol Oncol",
+   "pmc_id": "",
+   "title": "Noncancer-related Secondary Findings in a Cohort of 231 Children With Cancer and Their Parents.",
+   "year": "2023"
+  },
+  "35882527": {
+   "doi": "",
+   "full_journal": "Soudni lekarstvi",
+   "journal": "Soud Lek",
+   "pmc_id": "",
+   "title": "Outcomes of a multicenter study of the causes of sudden cardiac death (SCD) in the Czech Republic and primary prevention of cardiac arrest in relatives.",
+   "year": "2022"
+  },
+  "36583384": {
+   "doi": "10.1161/CIRCRESAHA.122.321177",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "RyR2 Serine-2030 PKA Site Governs Ca(2+) Release Termination and Ca(2+) Alternans.",
+   "year": "2023"
+  },
+  "37325910": {
+   "doi": "10.1161/CIRCRESAHA.123.322504",
+   "full_journal": "Circulation research",
+   "journal": "Circ Res",
+   "pmc_id": "",
+   "title": "Increased Ca(2+) Transient Underlies RyR2-Related Left Ventricular Noncompaction.",
+   "year": "2023"
+  },
+  "37532495": {
+   "doi": "10.3760/cma.j.cn511374-20220730-00507",
+   "full_journal": "Zhonghua yi xue yi chuan xue za zhi = Zhonghua yixue yichuanxue zazhi = Chinese journal of medical genetics",
+   "journal": "Zhonghua Yi Xue Yi Chuan Xue Za Zhi",
+   "pmc_id": "",
+   "title": "[Clinical and genetic analysis of five children with Catecholaminergic polymorphic ventricular tachycardia due to variants of RYR2 gene].",
+   "year": "2023"
+  },
+  "37859363": {
+   "doi": "10.3760/cma.j.cn112148-20230531-00318",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[Hypertrophic cardiomyopathy complicating with ventricular tachycardia induced by MYBPC3 and RYR2 double gene mutations: a case report].",
+   "year": "2023"
+  },
+  "38644198": {
+   "doi": "10.1248/cpb.c24-00114",
+   "full_journal": "Chemical & pharmaceutical bulletin",
+   "journal": "Chem Pharm Bull (Tokyo)",
+   "pmc_id": "",
+   "title": "Discovery and Structure-Activity Relationship of a Ryanodine Receptor 2 Inhibitor.",
+   "year": "2024"
+  },
+  "41000018": {
+   "doi": "10.1161/CIRCEP.124.013437",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Intellectual and Neurodevelopmental Delays in Pediatric Catecholaminergic Polymorphic Ventricular Tachycardia: Distinct Characteristics and a More Malignant Neurocardiac Phenotype.",
+   "year": "2025"
+  },
+  "41255334": {
+   "doi": "10.1161/CIRCHEARTFAILURE.125.013630",
+   "full_journal": "Circulation. Heart failure",
+   "journal": "Circ Heart Fail",
+   "pmc_id": "",
+   "title": "RYR2 Exon 3 Deletion as a Cause of Convergent Catecholaminergic Polymorphic Ventricular Tachycardia and Cardiomyopathy.",
+   "year": "2025"
+  },
+  "41416846": {
+   "doi": "10.1093/eurheartj/ehaf965",
+   "full_journal": "European heart journal",
+   "journal": "Eur Heart J",
+   "pmc_id": "PMC13533563",
+   "title": "Catecholaminergic polymorphic ventricular tachycardia mediated by ryanodine receptor 2: a validated risk stratification.",
+   "year": "2026"
+  },
+  "41958394": {
+   "doi": "10.1161/CIRCGEN.125.005625",
+   "full_journal": "Circulation. Genomic and precision medicine",
+   "journal": "Circ Genom Precis Med",
+   "pmc_id": "",
+   "title": "Novel RYR2-A4510T Variant Presenting Both as Autosomal Dominant and Autosomal Recessive Catecholaminergic Polymorphic Ventricular Tachycardia.",
+   "year": "2026"
+  }
+ },
+ "unpaywall": {
+  "10.1016/s0972-6292(16)30481-8": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Indian Pacing and Electrophysiology Journal",
+   "landing_url": "https://doi.org/10.1016/s0972-6292(16)30481-8",
+   "oa_status": "gold",
+   "pdf_url": "https://www.sciencedirect.com/science/article/pii/S0972629216304818/pdf",
+   "publisher": "Elsevier BV"
+  },
+  "10.1039/b907812f": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Integrative Biology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Oxford University Press (OUP)"
+  },
+  "10.1074/jbc.M403612200": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Journal of Biological Chemistry",
+   "landing_url": "https://doi.org/10.1074/jbc.m403612200",
+   "oa_status": "hybrid",
+   "pdf_url": "http://www.jbc.org/article/S0021925820680565/pdf",
+   "publisher": "Elsevier BV"
+  },
+  "10.1074/jbc.M410421200": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Journal of Biological Chemistry",
+   "landing_url": "https://doi.org/10.1074/jbc.m410421200",
+   "oa_status": "hybrid",
+   "pdf_url": "http://www.jbc.org/article/S0021925820660689/pdf",
+   "publisher": "Elsevier BV"
+  },
+  "10.1080/00015385.2019.1658374": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Acta cardiologica. Supplementum",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Informa UK Limited"
+  },
+  "10.1093/eurheartj/ehaf965": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "European Heart Journal",
+   "landing_url": "https://doi.org/10.1093/eurheartj/ehaf965",
+   "oa_status": "hybrid",
+   "pdf_url": "https://pure.eur.nl/ws/files/230303099/atecholaminergic_polymorphic_ventricular_tachycardia_mediated_by_ryanodine_receptor_2.pdf",
+   "publisher": "Oxford University Press (OUP)"
+  },
+  "10.1093/hmg/10.25.2879": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Human Molecular Genetics",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Oxford University Press (OUP)"
+  },
+  "10.1093/hmg/10.3.189": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Human Molecular Genetics",
+   "landing_url": "https://doi.org/10.1093/hmg/10.3.189",
+   "oa_status": "bronze",
+   "pdf_url": "https://academic.oup.com/hmg/article-pdf/10/3/189/9464166/dde022.pdf",
+   "publisher": "Oxford University Press (OUP)"
+  },
+  "10.1097/00000542-199107000-00002": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Anesthesiology",
+   "landing_url": "https://doi.org/10.1097/00000542-199107000-00002",
+   "oa_status": "bronze",
+   "pdf_url": "https://pubs.asahq.org/anesthesiology/article-pdf/75/1/4/321992/0000542-199107000-00002.pdf",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1097/MPH.0000000000002475": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Pediatric Hematology/Oncology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1097/PEC.0000000000001444": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Pediatric Emergency Care",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1124/mol.105.012807": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Molecular Pharmacology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Elsevier BV"
+  },
+  "10.1161/01.CIR.0000132472.98675.EC": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.RES.0000091335.07574.86": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Research",
+   "landing_url": "https://doi.org/10.1161/01.res.0000091335.07574.86",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/01.RES.0000091335.07574.86",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.RES.0000192146.85173.4b": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Research",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.RES.0000199296.70534.7c": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Research",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.RES.0000220647.93982.08": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation Research",
+   "landing_url": "http://hdl.handle.net/11577/2449291",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.108.782888": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.108.782888",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.108.782888",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.115.004274": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.115.004274",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.115.004274",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.124.013437": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://resolver.sub.uni-goettingen.de/purl?gro-2/151722",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGEN.119.002510": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation Genomic and Precision Medicine",
+   "landing_url": "https://pure.amsterdamumc.nl/en/publications/b820692c-04f4-4876-9b40-129f6ccbbdd7",
+   "oa_status": "green",
+   "pdf_url": "https://pure.amsterdamumc.nl/ws/files/157708133/Assessment-and-validation-of-a-phenotype-enhanced-variant-classification-framework-to-promote-or-demote-ryr2-missense-va.pdf",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGEN.120.003126": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Genomic and Precision Medicine",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGEN.121.003589": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Genomic and Precision Medicine",
+   "landing_url": "https://doi.org/10.1161/circgen.121.003589",
+   "oa_status": "hybrid",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCGEN.121.003589",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGEN.125.005625": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Genomic and Precision Medicine",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGENETICS.113.000118": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Cardiovascular Genetics",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCHEARTFAILURE.125.013630": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Heart Failure",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCRESAHA.117.310882": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Research",
+   "landing_url": "https://doi.org/10.1161/circresaha.117.310882",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCRESAHA.117.310882",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCRESAHA.122.321177": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Research",
+   "landing_url": "https://doi.org/10.1161/circresaha.122.321177",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCRESAHA.122.321177",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCRESAHA.123.322504": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation Research",
+   "landing_url": "https://hdl.handle.net/2117/398769",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.121.056018": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/circulationaha.121.056018",
+   "oa_status": "hybrid",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.121.056018",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1213/01.ANE.0000130395.93107.15": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Anesthesia & Analgesia",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1248/cpb.c24-00114": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Chemical and Pharmaceutical Bulletin",
+   "landing_url": "https://doi.org/10.1248/cpb.c24-00114",
+   "oa_status": "gold",
+   "pdf_url": "https://www.jstage.jst.go.jp/article/cpb/72/4/72_c24-00114/_pdf",
+   "publisher": "Pharmaceutical Society of Japan"
+  },
+  "10.3760/cma.j.cn112148-20230531-00318": {
+   "error": "DOI not found in Unpaywall"
+  },
+  "10.3760/cma.j.cn511374-20220730-00507": {
+   "error": "DOI not found in Unpaywall"
+  }
+ }
+}

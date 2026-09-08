@@ -9,6 +9,33 @@ Built by [`scripts/recall_audit/rank_manual_acquisition.py`](../../../scripts/re
 from the 2026-09-03 source-presence sweep, PubMed metadata (ESummary) and
 Unpaywall open-access status. Nothing under `corpus/` was written.
 
+## What the list is out of
+
+The pipeline's own discovery step (PubMed search, Tier 1/2 relevance filtering,
+then acquisition) has touched **5,939** PMIDs for the four cardiac genes across
+all runs, as recorded in `corpus/INDEX.csv`: KCNH2 1,310, KCNQ1 2,383, SCN5A
+1,588, RYR2 658. Of those, 4,942 (83%) have a usable full text on disk and
+**996 (17%) are stubs**, an abstract or landing page only. The stubs split into
+251 gold papers and 746 papers outside the gold standard; ten more gold PMIDs
+were never fetched at all.
+
+Two lists therefore exist here, and they answer different questions:
+
+- **Gold-backed list** (`manual_acquisition_worklist.csv`, 363 papers ranked,
+  250 listed): every gold paper with rows behind the acquisition ceiling,
+  ranked by *measured* yield. This is what moves the benchmark. It includes the
+  251 gold stubs and the gold papers whose body is on disk but whose variants
+  sit in a supplement we never fetched.
+- **Gold-free list** (`nogold/manual_acquisition_worklist_nogold_top200.csv`,
+  the 746 non-gold stubs ranked by *predicted* yield): what a new gene would
+  get, since no gold exists to rank by. The predictor is the abstract-only
+  acquisition expected value (`scripts/acquisition_ev/predict_yield.py`); on
+  the cardiac gold it was validated to recover roughly half of all gold
+  carriers when the top 20% of papers by score are acquired, about twice an
+  abstract-length baseline. Its top 200 is 88 paywalled PDFs, 66 open-access
+  PDFs that a bot never fetched, and 46 papers without a DOI (mostly older or
+  non-English journals).
+
 ## What "yield" means here
 
 The sweep classified every gold row of the mixed-gold inventory by whether its
@@ -99,4 +126,8 @@ papers with many variants over papers with rich per-variant counts; the
 outside the gold inventory are not ranked here; use the gold-free mode.
 
 Files: `manual_acquisition_worklist.csv`, `manual_acquisition_worklist.md`,
-`summary.json` (capture curve and class counts), `metadata_cache.json`.
+`summary.json` (capture curve and class counts), `metadata_cache.json`;
+`nogold/<GENE>_nongold_stubs.txt` (the 746 non-gold stub PMIDs by gene),
+`nogold/<GENE>/` (per-gene gold-free rankings), and
+`nogold/manual_acquisition_worklist_nogold_top200.{csv,md}` (merged by predicted
+expected value; `nogold/run_all.sh` regenerates them).

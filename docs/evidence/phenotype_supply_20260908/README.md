@@ -243,6 +243,52 @@ a one-proband-per-row catalogue", applied to the still-unopened tranches under a
 preregistered rule before any score is read. That design is recorded as the
 next step in `TASKS.md`; it was not run today.
 
+### Where the 145 false positives come from
+
+Raw precision counts every predicted identity row the scorer could not pair
+with a gold row for that paper. Only 7 of the 145 carry a patient count
+(counted-extra precision 97.7%), and 80 of the 145 come from one paper,
+Splawski 2000 (PMID 10973849), a five-gene LQTS mutation survey whose
+mutation tables for KVLQT1, HERG, SCN5A, KCNE1 and KCNE2 arrive from the
+PDF as consecutive sub-tables with no gene column and no surviving captions.
+Attributing each extra to the sub-table that prints it:
+
+| run | extras | real HERG mutations absent from gold | rows from another gene's sub-table | nucleotide change emitted as protein | frameshift spelling not locatable |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 49 | 26 (gold lists 60 HERG rows; the paper prints more) | 8 (7 KVLQT1, 1 KCNE) | 8 ("G139T", "G928A") | 7 |
+| SCN5A | 31 | 1 (R1644H) | 13 (8 KVLQT1, 5 HERG) | 15 ("T742C", "A944G") | 2 |
+
+So about a third of this paper's extras are variants the paper does report and
+gold omits, and about two-thirds are two general pipeline errors: a multi-gene
+table whose gene is only in a lost caption leaks every row into the run gene,
+and a nucleotide-change string from a "Nucleotide" column is emitted as if it
+were a protein change. Neither was caught by the false-positive gate on this
+run. Both are deterministic and general; neither is fixed here. The other 65
+extras spread over 33 papers, at most 7 per paper, and were not examined row by
+row.
+
+### Would downloading the missing papers recover the misses?
+
+[`fn_root_cause/`](item5_tranche05/fn_root_cause/) walks every one of the 158
+misses through the stages the run left on disk:
+
+| first stage where the gold variant is absent | rows |
+| --- | ---: |
+| acquisition: not in any source on disk (54 body present but variant only in a missing supplement, 29 no source, 1 glyph-code PDF) | 84 |
+| undecidable by string search (45 unsearchable notation, 12 figure images on disk) | 57 |
+| in the model's request, not in its response | 15 |
+| in the response, dropped by the parser | 2 |
+
+The largest miss paper, RYR2 27452199 (34 rows, 0 hits), sits in the
+undecidable bucket only because its gold uses bare nucleotide notation; its
+"source" on disk is a 21 KB J-STAGE landing fragment with no table, so it is an
+acquisition miss in practice. Counting it, roughly three-quarters of this
+tranche's misses are source-side and one-tenth are reading failures with the
+text in hand. Manual download is therefore the right lever for this tranche,
+with the usual caveat that a downloaded paper can still keep its variants in a
+supplement or a figure. Two of the four largest miss papers (SCN5A 24721456 and
+22360817) are already ranked 16 and 18 on the gold-backed worklist.
+
 The canonical stratified figure regenerates only after a candidate-labelled
 arm, so `run_eval.py score` left it unchanged; the run's own figures are
 [`phenotype_count_recovery.png`](../../../benchmarks/codex_paper_eval/runs/20260908_protocol_cont120_05_baseline/figures/phenotype_count_recovery.png)

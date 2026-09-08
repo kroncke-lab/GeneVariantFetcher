@@ -1,0 +1,867 @@
+{
+ "pubmed": {
+  "10367071": {
+   "doi": "",
+   "full_journal": "Archives des maladies du coeur et des vaisseaux",
+   "journal": "Arch Mal Coeur Vaiss",
+   "pmc_id": "",
+   "title": "[Congenital long QT syndrome. The value of genetics in prognostic evaluation].",
+   "year": "1999"
+  },
+  "10560595": {
+   "doi": "10.4065/74.11.1088",
+   "full_journal": "Mayo Clinic proceedings",
+   "journal": "Mayo Clin Proc",
+   "pmc_id": "",
+   "title": "Swimming, a gene-specific arrhythmogenic trigger for inherited long QT syndrome.",
+   "year": "1999"
+  },
+  "10832806": {
+   "doi": "",
+   "full_journal": "Italian heart journal : official journal of the Italian Federation of Cardiology",
+   "journal": "Ital Heart J",
+   "pmc_id": "",
+   "title": "Gene-specific differences in the circadian variation of ventricular repolarization in the long QT syndrome: a key to sudden death during sleep?",
+   "year": "2000"
+  },
+  "11136691": {
+   "doi": "10.1161/01.cir.103.1.89",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Genotype-phenotype correlation in the long-QT syndrome: gene-specific triggers for life-threatening arrhythmias.",
+   "year": "2001"
+  },
+  "11434015": {
+   "doi": "",
+   "full_journal": "Archives des maladies du coeur et des vaisseaux",
+   "journal": "Arch Mal Coeur Vaiss",
+   "pmc_id": "",
+   "title": "[T wave abnormalities on Holter monitoring of congenital long QT syndrome: phenotypic marker of a mutation of LQT2 (HERG)].",
+   "year": "2001"
+  },
+  "11997281": {
+   "doi": "10.1161/01.cir.0000014448.19052.4c",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Allelic variants in long-QT disease genes in patients with drug-associated torsades de pointes.",
+   "year": "2002"
+  },
+  "12004990": {
+   "doi": "10.4065/77.5.413",
+   "full_journal": "Mayo Clinic proceedings",
+   "journal": "Mayo Clin Proc",
+   "pmc_id": "",
+   "title": "Epinephrine-induced QT interval prolongation: a gene-specific paradoxical response in congenital long QT syndrome.",
+   "year": "2002"
+  },
+  "12450262": {
+   "doi": "10.1088/0967-3334/23/4/301",
+   "full_journal": "Physiological measurement",
+   "journal": "Physiol Meas",
+   "pmc_id": "",
+   "title": "Detection of spatial repolarization abnormalities in patients with LQT1 and LQT2 forms of congenital long-QT syndrome.",
+   "year": "2002"
+  },
+  "14685754": {
+   "doi": "10.1007/s00380-003-0733-9",
+   "full_journal": "Heart and vessels",
+   "journal": "Heart Vessels",
+   "pmc_id": "",
+   "title": "Clinical features and management of congenital long QT syndrome: a report on 54 patients from a national registry.",
+   "year": "2004"
+  },
+  "14731347": {
+   "doi": "",
+   "full_journal": "Zhonghua er ke za zhi = Chinese journal of pediatrics",
+   "journal": "Zhonghua Er Ke Za Zhi",
+   "pmc_id": "",
+   "title": "[A novel KCNQ1 mutation in Chinese with congenital long QT syndrome].",
+   "year": "2003"
+  },
+  "15051644": {
+   "doi": "10.1161/01.CIR.0000125523.14403.1E",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Left cardiac sympathetic denervation in the management of high-risk patients affected by the long-QT syndrome.",
+   "year": "2004"
+  },
+  "15182506": {
+   "doi": "",
+   "full_journal": "Zhonghua nei ke za zhi",
+   "journal": "Zhonghua Nei Ke Za Zhi",
+   "pmc_id": "",
+   "title": "[Spectrum of ST-T-wave changes in hereditary long-QT syndrome in Chinese].",
+   "year": "2004"
+  },
+  "15192825": {
+   "doi": "",
+   "full_journal": "Zhonghua yi xue yi chuan xue za zhi = Zhonghua yixue yichuanxue zazhi = Chinese journal of medical genetics",
+   "journal": "Zhonghua Yi Xue Yi Chuan Xue Za Zhi",
+   "pmc_id": "",
+   "title": "[The mutation scanning of KCNQ1 gene for 31 long QT syndrome families].",
+   "year": "2004"
+  },
+  "16244680": {
+   "doi": "",
+   "full_journal": "Tidsskrift for den Norske laegeforening : tidsskrift for praktisk medicin, ny raekke",
+   "journal": "Tidsskr Nor Laegeforen",
+   "pmc_id": "",
+   "title": "[DNA-based diagnostics of long QT syndrome].",
+   "year": "2005"
+  },
+  "16534005": {
+   "doi": "10.1161/CIRCULATIONAHA.105.600445",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Epinephrine QT stress testing in the evaluation of congenital long-QT syndrome: diagnostic accuracy of the paradoxical QT response.",
+   "year": "2006"
+  },
+  "18071069": {
+   "doi": "10.1161/CIRCULATIONAHA.107.736330",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Cardiac sodium channel gene variants and sudden cardiac death in women.",
+   "year": "2008"
+  },
+  "18651418": {
+   "doi": "",
+   "full_journal": "Cardiology journal",
+   "journal": "Cardiol J",
+   "pmc_id": "",
+   "title": "Novel KCNQ1 mutations in patients after myocardial infarction.",
+   "year": "2008"
+  },
+  "18803136": {
+   "doi": "",
+   "full_journal": "Kardiologia polska",
+   "journal": "Kardiol Pol",
+   "pmc_id": "",
+   "title": "The association between SCN5A, KCNQ1 and KCNE1 gene polymorphisms and complex ventricular arrhythmias in survivors of myocardial infarction.",
+   "year": "2008"
+  },
+  "19996378": {
+   "doi": "10.1161/CIRCEP.109.882159",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Clinical characteristics and genetic background of congenital long-QT syndrome diagnosed in fetal, neonatal, and infantile life: a nationwide questionnaire survey in Japan.",
+   "year": "2010"
+  },
+  "20071715": {
+   "doi": "10.1161/CIRCEP.109.907865",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Utility of treadmill testing in identification and genotype prediction in long-QT syndrome.",
+   "year": "2010"
+  },
+  "20553101": {
+   "doi": "10.3109/14992021003743269",
+   "full_journal": "International journal of audiology",
+   "journal": "Int J Audiol",
+   "pmc_id": "",
+   "title": "Causes of hearing impairment in the Norwegian paediatric cochlear implant program.",
+   "year": "2010"
+  },
+  "20837891": {
+   "doi": "10.1161/CIRCULATIONAHA.110.950147",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Who are the long-QT syndrome patients who receive an implantable cardioverter-defibrillator and what happens to them?: data from the European Long-QT Syndrome Implantable Cardioverter-Defibrillator (LQTS ICD) Registry.",
+   "year": "2010"
+  },
+  "21493962": {
+   "doi": "10.1161/CIRCEP.110.959619",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "KCNE5 (KCNE1L) variants are novel modulators of Brugada syndrome and idiopathic ventricular fibrillation.",
+   "year": "2011"
+  },
+  "22042885": {
+   "doi": "10.1161/CIRCULATIONAHA.111.028258",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Derivation and validation of a simple exercise-based algorithm for prediction of genetic testing in relatives of LQTS probands.",
+   "year": "2011"
+  },
+  "22461049": {
+   "doi": "10.5603/cj.2012.0028",
+   "full_journal": "Cardiology journal",
+   "journal": "Cardiol J",
+   "pmc_id": "",
+   "title": "Molecular diagnostics of families with long-QT syndrome.",
+   "year": "2012"
+  },
+  "23691991": {
+   "doi": "10.1111/jce.12172",
+   "full_journal": "Journal of cardiovascular electrophysiology",
+   "journal": "J Cardiovasc Electrophysiol",
+   "pmc_id": "",
+   "title": "Mutation location effect on severity of phenotype during exercise testing in type 1 long-QT syndrome: impact of transmembrane and C-loop location.",
+   "year": "2013"
+  },
+  "24112685": {
+   "doi": "10.1111/jce.12270",
+   "full_journal": "Journal of cardiovascular electrophysiology",
+   "journal": "J Cardiovasc Electrophysiol",
+   "pmc_id": "",
+   "title": "Cardiac channelopathies associated with infantile fatal ventricular arrhythmias: from the cradle to the bench.",
+   "year": "2014"
+  },
+  "24113104": {
+   "doi": "",
+   "full_journal": "Zhonghua yu fang yi xue za zhi [Chinese journal of preventive medicine]",
+   "journal": "Zhonghua Yu Fang Yi Xue Za Zhi",
+   "pmc_id": "",
+   "title": "[Association of polymorphisms of potassium voltage-gated channel, KQT-like subfamily, member 1 and type 2 diabetes in Jiangsu province, China].",
+   "year": "2013"
+  },
+  "24270299": {
+   "doi": "10.1097/JOM.0000000000000026",
+   "full_journal": "Journal of occupational and environmental medicine",
+   "journal": "J Occup Environ Med",
+   "pmc_id": "",
+   "title": "Work stress and the long QT syndrome: high job strain and effort-reward imbalance at work associated with arrhythmic risk in the long QT syndrome.",
+   "year": "2013"
+  },
+  "24762593": {
+   "doi": "",
+   "full_journal": "Chinese medical journal",
+   "journal": "Chin Med J (Engl)",
+   "pmc_id": "",
+   "title": "Clinical characteristics of patients with congenital long QT syndrome and bigenic mutations.",
+   "year": "2014"
+  },
+  "25872798": {
+   "doi": "10.1111/jce.12686",
+   "full_journal": "Journal of cardiovascular electrophysiology",
+   "journal": "J Cardiovasc Electrophysiol",
+   "pmc_id": "",
+   "title": "Identification of Low-Risk Adult Congenital LQTS Patients.",
+   "year": "2015"
+  },
+  "26813553": {
+   "doi": "10.3760/cma.j.issn.0253-3758.2016.01.011",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[Relationship between electrocardiographic and genetic mutation (MYH7-H1717Q, MYLK2-K324E and KCNQ1-R190W) phenotype in patients with hypertrophic cardiomyopathy].",
+   "year": "2016"
+  },
+  "26888838": {
+   "doi": "",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[High incidence of sudden cardiac death in one family with type-3 long QT syndrome: molecular genetics and electrophysiology mechanism analysis].",
+   "year": "2015"
+  },
+  "27406603": {
+   "doi": "10.1161/CIRCEP.115.003830",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Identification of Concealed and Manifest Long QT Syndrome Using a Novel T Wave Analysis Program.",
+   "year": "2016"
+  },
+  "27936942": {
+   "doi": "10.1080/14017431.2016.1270463",
+   "full_journal": "Scandinavian cardiovascular journal : SCJ",
+   "journal": "Scand Cardiovasc J",
+   "pmc_id": "",
+   "title": "Implantable cardioverter defibrillator treatment in long QT syndrome patients: a national study on adherence to international guidelines.",
+   "year": "2017"
+  },
+  "28356306": {
+   "doi": "10.1161/CIRCEP.116.004645",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Effect of Age and Sex on the QTc Interval in Children and Adolescents With Type 1 and 2 Long-QT Syndrome.",
+   "year": "2017"
+  },
+  "28749187": {
+   "doi": "10.2217/epi-2017-0024",
+   "full_journal": "Epigenomics",
+   "journal": "Epigenomics",
+   "pmc_id": "",
+   "title": "Differential methylation of lncRNA KCNQ1OT1 promoter polymorphism was associated with symptomatic cardiac long QT.",
+   "year": "2017"
+  },
+  "29064790": {
+   "doi": "",
+   "full_journal": "Wiadomosci lekarskie (Warsaw, Poland : 1960)",
+   "journal": "Wiad Lek",
+   "pmc_id": "",
+   "title": "[The prognostic value of kcnq1 gene mutations in patients after myocardial infarction].",
+   "year": "2017"
+  },
+  "29705154": {
+   "doi": "10.1016/j.medcli.2018.03.014",
+   "full_journal": "Medicina clinica",
+   "journal": "Med Clin (Barc)",
+   "pmc_id": "",
+   "title": "Genetic mutations in young patients admitted to an emergency department for syncope during sport practice.",
+   "year": "2018"
+  },
+  "29921047": {
+   "doi": "10.13201/j.issn.1001-1781.2018.11.003",
+   "full_journal": "Lin chuang er bi yan hou tou jing wai ke za zhi = Journal of clinical otorhinolaryngology head and neck surgery",
+   "journal": "Lin Chuang Er Bi Yan Hou Tou Jing Wai Ke Za Zhi",
+   "pmc_id": "",
+   "title": "[Application of next generation sequencing in congenital sensorineural deafness].",
+   "year": "2018"
+  },
+  "30086202": {
+   "doi": "10.1111/fcp.12405",
+   "full_journal": "Fundamental & clinical pharmacology",
+   "journal": "Fundam Clin Pharmacol",
+   "pmc_id": "",
+   "title": "QT length during methadone maintenance treatment: gene\u00a0\u00d7\u00a0dose interaction.",
+   "year": "2019"
+  },
+  "30571576": {
+   "doi": "10.1161/CIRCULATIONAHA.118.033943",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Determination and Interpretation of the QT Interval.",
+   "year": "2018"
+  },
+  "31324086": {
+   "doi": "",
+   "full_journal": "The Journal of the Association of Physicians of India",
+   "journal": "J Assoc Physicians India",
+   "pmc_id": "",
+   "title": "SNP in KCNQ1 Gene is Associated with Susceptibility to Diabetic Nephropathy in Subjects with Type 2 Diabetes in India.",
+   "year": "2018"
+  },
+  "31696929": {
+   "doi": "10.1111/ahg.12359",
+   "full_journal": "Annals of human genetics",
+   "journal": "Ann Hum Genet",
+   "pmc_id": "",
+   "title": "Variant frequencies of KCNQ1, KCNH2, and SCN5A in a Chinese inherited arrhythmia cohort and other disease cohorts undergoing genetic testing.",
+   "year": "2020"
+  },
+  "32936022": {
+   "doi": "10.1161/CIRCGEN.120.002926",
+   "full_journal": "Circulation. Genomic and precision medicine",
+   "journal": "Circ Genom Precis Med",
+   "pmc_id": "",
+   "title": "Systematic Evaluation of KCNQ1 Variant Using ACMG/AMP Guidelines and Risk Stratification in Long QT Syndrome Type 1.",
+   "year": "2020"
+  },
+  "33198487": {
+   "doi": "10.1161/CIRCEP.120.008830",
+   "full_journal": "Circulation. Arrhythmia and electrophysiology",
+   "journal": "Circ Arrhythm Electrophysiol",
+   "pmc_id": "",
+   "title": "Left Cardiac Sympathetic Denervation Monotherapy in Patients With Congenital Long QT Syndrome.",
+   "year": "2020"
+  },
+  "33611903": {
+   "doi": "10.3760/cma.j.cn112148-20200529-00443",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[Analyses of triggers for recurrent cardiac events in 38 patients with symptomatic long QT syndrome].",
+   "year": "2021"
+  },
+  "34665019": {
+   "doi": "10.2217/pgs-2021-0059",
+   "full_journal": "Pharmacogenomics",
+   "journal": "Pharmacogenomics",
+   "pmc_id": "",
+   "title": "Pharmacogenetics of sulfonylurea-induced hypoglycemia in Type 2 diabetes patients: the SUCLINGEN study.",
+   "year": "2021"
+  },
+  "35705464": {
+   "doi": "10.3760/cma.j.cn112148-20211122-01009",
+   "full_journal": "Zhonghua xin xue guan bing za zhi",
+   "journal": "Zhonghua Xin Xue Guan Bing Za Zhi",
+   "pmc_id": "",
+   "title": "[The long-term efficacy of left cardiac sympathetic denervation in long QT syndrome].",
+   "year": "2022"
+  },
+  "39051104": {
+   "doi": "10.1161/CIRCULATIONAHA.123.067590",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Vigorous Exercise in Patients With Congenital Long QT Syndrome: Results of the Prospective, Observational, Multinational LIVE-LQTS Study.",
+   "year": "2024"
+  },
+  "39082327": {
+   "doi": "10.1111/jce.16384",
+   "full_journal": "Journal of cardiovascular electrophysiology",
+   "journal": "J Cardiovasc Electrophysiol",
+   "pmc_id": "",
+   "title": "Clinical presentation and genetic characterization of early-onset atrial fibrillation in patients affected by long QT syndrome: A single-center experience.",
+   "year": "2024"
+  },
+  "39428612": {
+   "doi": "10.1111/jce.16471",
+   "full_journal": "Journal of cardiovascular electrophysiology",
+   "journal": "J Cardiovasc Electrophysiol",
+   "pmc_id": "",
+   "title": "Frequency and Genotype-Dependence of intrinsic chronotropic insufficiency among patients with congenital long QT syndrome.",
+   "year": "2025"
+  },
+  "39936145": {
+   "doi": "10.1101/2024.12.08.24318665",
+   "full_journal": "medRxiv : the preprint server for health sciences",
+   "journal": "medRxiv",
+   "pmc_id": "PMC11812600",
+   "title": "Genetic Causes of Sudden Cardiac Arrest in the Community.",
+   "year": "2024"
+  },
+  "42128250": {
+   "doi": "10.1093/eurheartj/ehag294",
+   "full_journal": "European heart journal",
+   "journal": "Eur Heart J",
+   "pmc_id": "",
+   "title": "MTMR4 variants have opposite gene-specific impact on life-threatening arrhythmic risk in type 1 and 2 long QT syndrome.",
+   "year": "2026"
+  },
+  "9024139": {
+   "doi": "10.1161/01.cir.95.3.565",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Four novel KVLQT1 and four novel HERG mutations in familial long-QT syndrome.",
+   "year": "1997"
+  },
+  "9297927": {
+   "doi": "",
+   "full_journal": "Zhonghua Minguo xiao er ke yi xue hui za zhi [Journal]. Zhonghua Minguo xiao er ke yi xue hui",
+   "journal": "Zhonghua Min Guo Xiao Er Ke Yi Xue Hui Za Zhi",
+   "pmc_id": "",
+   "title": "Multi-undulant T-U-wave, sinus bradycardia and long QT syndrome: a possible phenotype of mutant genes controlling the inward potassium rectifiers.",
+   "year": "1997"
+  },
+  "9386136": {
+   "doi": "10.1161/01.cir.96.9.2778",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "KVLQT1 C-terminal missense mutation causes a forme fruste long-QT syndrome.",
+   "year": "1997"
+  },
+  "9445165": {
+   "doi": "10.1161/01.cir.97.2.142",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Mutation of the gene for IsK associated with both Jervell and Lange-Nielsen and Romano-Ward forms of Long-QT syndrome.",
+   "year": "1998"
+  },
+  "9570196": {
+   "doi": "10.1161/01.cir.97.13.1264",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "New mutations in the KVLQT1 potassium channel that cause long-QT syndrome.",
+   "year": "1998"
+  },
+  "9631873": {
+   "doi": "10.1161/01.cir.97.22.2237",
+   "full_journal": "Circulation",
+   "journal": "Circulation",
+   "pmc_id": "",
+   "title": "Age- and sex-related differences in clinical manifestations in patients with congenital long-QT syndrome: findings from the International LQTS Registry.",
+   "year": "1998"
+  }
+ },
+ "unpaywall": {
+  "10.1007/s00380-003-0733-9": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Heart and Vessels",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Springer Science and Business Media LLC"
+  },
+  "10.1016/j.medcli.2018.03.014": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Medicina Cl\u00ednica",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Elsevier BV"
+  },
+  "10.1080/14017431.2016.1270463": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Scandinavian Cardiovascular Journal",
+   "landing_url": "https://doi.org/10.1080/14017431.2016.1270463",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.tandfonline.com/doi/pdf/10.1080/14017431.2016.1270463?needAccess=true&role=button",
+   "publisher": "Informa UK Limited"
+  },
+  "10.1088/0967-3334/23/4/301": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Physiological Measurement",
+   "landing_url": "https://doi.org/10.1088/0967-3334/23/4/301",
+   "oa_status": "bronze",
+   "pdf_url": "https://iopscience.iop.org/article/10.1088/0967-3334/23/4/301/pdf",
+   "publisher": "IOP Publishing"
+  },
+  "10.1093/eurheartj/ehag294": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "European Heart Journal",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Oxford University Press (OUP)"
+  },
+  "10.1097/JOM.0000000000000026": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Occupational and Environmental Medicine",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1101/2024.12.08.24318665": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "medRxiv",
+   "landing_url": "https://doi.org/10.1101/2024.12.08.24318665",
+   "oa_status": "green",
+   "pdf_url": "https://www.medrxiv.org/content/medrxiv/early/2024/12/10/2024.12.08.24318665.full.pdf",
+   "publisher": "openRxiv"
+  },
+  "10.1111/ahg.12359": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Annals of Human Genetics",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1111/fcp.12405": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Fundamental and Clinical Pharmacology",
+   "landing_url": "https://doi.org/10.1111/fcp.12405",
+   "oa_status": "hybrid",
+   "pdf_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/fcp.12405",
+   "publisher": "Wiley"
+  },
+  "10.1111/jce.12172": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Cardiovascular Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1111/jce.12270": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Cardiovascular Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1111/jce.12686": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Cardiovascular Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1111/jce.16384": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Cardiovascular Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1111/jce.16471": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Journal of Cardiovascular Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Wiley"
+  },
+  "10.1161/01.CIR.0000125523.14403.1E": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/01.cir.0000125523.14403.1e",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/01.CIR.0000125523.14403.1E",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.0000014448.19052.4c": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.103.1.89": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.95.3.565": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.96.9.2778": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.97.13.1264": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/01.cir.97.13.1264",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/01.CIR.97.13.1264",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.97.2.142": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/01.cir.97.22.2237": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/01.cir.97.22.2237",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/01.CIR.97.22.2237",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.109.882159": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.109.882159",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.109.882159",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.109.907865": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.110.959619": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.115.003830": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.115.003830",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.115.003830",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.116.004645": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.116.004645",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.116.004645",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCEP.120.008830": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Arrhythmia and Electrophysiology",
+   "landing_url": "https://doi.org/10.1161/circep.120.008830",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCEP.120.008830?download=true",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCGEN.120.002926": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation Genomic and Precision Medicine",
+   "landing_url": "https://doi.org/10.1161/circgen.120.002926",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCGEN.120.002926",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.105.600445": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.107.736330": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "http://nrs.harvard.edu/urn-3:HUL.InstRepos:41245537",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.110.950147": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "http://hdl.handle.net/1765/27425",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.111.028258": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Circulation",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.118.033943": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/circulationaha.118.033943",
+   "oa_status": "bronze",
+   "pdf_url": "https://www.ahajournals.org/doi/pdf/10.1161/CIRCULATIONAHA.118.033943",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.1161/CIRCULATIONAHA.123.067590": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Circulation",
+   "landing_url": "https://doi.org/10.1161/CIRCULATIONAHA.123.067590",
+   "oa_status": "green",
+   "pdf_url": "https://openaccess.sgul.ac.uk/id/eprint/116856/1/Lampert_Ackerman_LIVE%20LQT%20manuscript%20accepted%20version%205.21.24.pdf",
+   "publisher": "Ovid Technologies (Wolters Kluwer Health)"
+  },
+  "10.13201/j.issn.1001-1781.2018.11.003": {
+   "error": "DOI not found in Unpaywall"
+  },
+  "10.2217/epi-2017-0024": {
+   "host_type": "repository",
+   "is_oa": true,
+   "journal_name": "Epigenomics",
+   "landing_url": "http://hdl.handle.net/10651/45212",
+   "oa_status": "green",
+   "pdf_url": "",
+   "publisher": "Informa UK Limited"
+  },
+  "10.2217/pgs-2021-0059": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Pharmacogenomics",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Informa UK Limited"
+  },
+  "10.3109/14992021003743269": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "International Journal of Audiology",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Informa UK Limited"
+  },
+  "10.3760/cma.j.cn112148-20200529-00443": {
+   "error": "DOI not found in Unpaywall"
+  },
+  "10.3760/cma.j.cn112148-20211122-01009": {
+   "error": "DOI not found in Unpaywall"
+  },
+  "10.3760/cma.j.issn.0253-3758.2016.01.011": {
+   "error": "DOI not found in Unpaywall"
+  },
+  "10.4065/74.11.1088": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Mayo Clinic Proceedings",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Elsevier BV"
+  },
+  "10.4065/77.5.413": {
+   "host_type": "",
+   "is_oa": false,
+   "journal_name": "Mayo Clinic Proceedings",
+   "landing_url": "",
+   "oa_status": "closed",
+   "pdf_url": "",
+   "publisher": "Elsevier BV"
+  },
+  "10.5603/cj.2012.0028": {
+   "host_type": "publisher",
+   "is_oa": true,
+   "journal_name": "Cardiology Journal",
+   "landing_url": "http://doi.org/10.5603/cj.2012.0028",
+   "oa_status": "gold",
+   "pdf_url": "",
+   "publisher": "VM Media SP. zo.o VM Group SK"
+  }
+ }
+}

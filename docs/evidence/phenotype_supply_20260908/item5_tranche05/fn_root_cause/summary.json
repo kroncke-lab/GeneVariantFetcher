@@ -1,0 +1,144 @@
+{
+ "run_id": "20260908_protocol_cont120_05_baseline",
+ "score_lane": "paper_derived",
+ "fn_total": 158,
+ "by_leaf": {
+  "model_missed": 15,
+  "acquisition": 84,
+  "unknown_notation": 57,
+  "parser_dropped": 2
+ },
+ "by_paper": {
+  "RYR2:27452199": {
+   "unknown_notation": 34
+  },
+  "SCN5A:24721456": {
+   "acquisition": 14
+  },
+  "SCN5A:22360817": {
+   "acquisition": 13
+  },
+  "KCNQ1:32470535": {
+   "acquisition": 9,
+   "unknown_notation": 3
+  },
+  "SCN5A:21126620": {
+   "acquisition": 7
+  },
+  "SCN5A:26921764": {
+   "unknown_notation": 6
+  },
+  "SCN5A:18508782": {
+   "acquisition": 5
+  },
+  "KCNH2:10973849": {
+   "model_missed": 4,
+   "acquisition": 1
+  },
+  "SCN5A:15992732": {
+   "model_missed": 5
+  },
+  "SCN5A:16344400": {
+   "acquisition": 4
+  },
+  "KCNH2:18508782": {
+   "acquisition": 4
+  },
+  "KCNQ1:18595190": {
+   "acquisition": 4
+  },
+  "SCN5A:25370050": {
+   "model_missed": 4
+  },
+  "KCNQ1:15028050": {
+   "acquisition": 4
+  },
+  "KCNQ1:27041096": {
+   "acquisition": 3
+  },
+  "SCN5A:12569154": {
+   "unknown_notation": 2
+  },
+  "SCN5A:15277732": {
+   "acquisition": 2
+  },
+  "SCN5A:11535580": {
+   "acquisition": 2
+  },
+  "SCN5A:10973849": {
+   "unknown_notation": 2
+  },
+  "SCN5A:24269159": {
+   "acquisition": 2
+  },
+  "KCNH2:19184172": {
+   "unknown_notation": 2
+  },
+  "SCN5A:14716629": {
+   "model_missed": 1
+  },
+  "SCN5A:23425522": {
+   "acquisition": 1
+  },
+  "RYR2:18554199": {
+   "acquisition": 1
+  },
+  "RYR2:22334434": {
+   "acquisition": 1
+  },
+  "KCNQ1:27525866": {
+   "acquisition": 1
+  },
+  "SCN5A:18362431": {
+   "acquisition": 1
+  },
+  "KCNQ1:28720088": {
+   "unknown_notation": 1
+  },
+  "KCNQ1:20044973": {
+   "acquisition": 1
+  },
+  "KCNH2:30105468": {
+   "unknown_notation": 1
+  },
+  "SCN5A:29132927": {
+   "acquisition": 1
+  },
+  "KCNQ1:26019114": {
+   "acquisition": 1
+  },
+  "KCNQ1:19808498": {
+   "model_missed": 1
+  },
+  "RYR2:29668588": {
+   "unknown_notation": 1
+  },
+  "BRCA1:30309222": {
+   "parser_dropped": 1
+  },
+  "KCNH2:15028050": {
+   "parser_dropped": 1
+  },
+  "KCNH2:22727609": {
+   "unknown_notation": 1
+  },
+  "SCN5A:12123759": {
+   "acquisition": 1
+  },
+  "SCN5A:12193783": {
+   "unknown_notation": 1
+  },
+  "RYR2:34735682": {
+   "unknown_notation": 1
+  },
+  "SCN5A:24895456": {
+   "unknown_notation": 1
+  },
+  "KCNH2:30844837": {
+   "unknown_notation": 1
+  },
+  "SCN5A:18071069": {
+   "acquisition": 1
+  }
+ }
+}
