@@ -9,6 +9,7 @@ for extraction and for the post-extraction lock/score boundary.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import os
@@ -45,6 +46,10 @@ RUNTIME_TREES = (
     "utils",
 )
 RUNTIME_FILES = ("pyproject.toml", "requirements.lock", "uv.lock")
+PAIRED_COMPARISON = "paired_frozen_baseline_and_candidate_on_same_manifest"
+# Ledger event closing an arm that will never be run, so the next tranche can
+# open in registry order without pretending the arm was scored.
+ABANDON_EVENT = "abandon_arm"
 
 
 class SetupError(RuntimeError):
@@ -189,10 +194,20 @@ def validate_comparison_slot(contract: dict, comparison_arm: str) -> None:
         )
     entries = consumption_entries(contract)
     used = defaultdict(set)
+    abandoned: dict[tuple[str, str], dict] = {}
     for entry in entries:
         if entry.get("registry_sha256") != contract.get("registry_sha256"):
             raise SetupError("consumption entry does not bind the active registry")
-        used[str(entry.get("tier_id"))].add(str(entry.get("comparison_arm")))
+        slot = (str(entry.get("tier_id")), str(entry.get("comparison_arm")))
+        used[slot[0]].add(slot[1])
+        if entry.get("event") == ABANDON_EVENT:
+            abandoned[slot] = entry
+    closed = abandoned.get((str(contract.get("id")), comparison_arm))
+    if closed is not None:
+        raise SetupError(
+            f"{contract.get('id')} {comparison_arm} arm was abandoned on "
+            f"{closed.get('recorded_at')}: {closed.get('reason')}"
+        )
     order = list(design.get("consume_order") or [])
     current = next(
         (tier_id for tier_id in order if not set(required) <= used[tier_id]), None
@@ -210,6 +225,88 @@ def validate_comparison_slot(contract: dict, comparison_arm: str) -> None:
         )
     if comparison_arm == "candidate" and "baseline" not in tier_used:
         raise SetupError("score the baseline arm before creating the candidate arm")
+
+
+def registry_contract(registry_path: Path, tier_id: str) -> dict:
+    """The ledger-facing slice of a registry tier (no manifest or gold checks)."""
+    registry = json.loads(registry_path.read_text())
+    tier = next(
+        (
+            entry
+            for entry in registry.get("tiers") or []
+            if str(entry.get("id")) == tier_id
+        ),
+        None,
+    )
+    if tier is None:
+        raise SetupError(f"registry has no tier {tier_id}")
+    return {
+        **tier,
+        "evaluation_design": registry.get("evaluation_design"),
+        "consumption_log": registry.get("consumption_log"),
+        "registry": str(registry_path.resolve()),
+        "registry_sha256": digest(registry_path),
+    }
+
+
+def abandon_arm(
+    contract: dict, comparison_arm: str, reason: str, recorded_by: str
+) -> dict:
+    """Append an event closing a paired arm that will never be run.
+
+    Only a *candidate* slot whose baseline has already been scored can be
+    abandoned: the tranche's opened arm stays a locked, single-arm calibration
+    record, ordering treats the tranche as consumed, and setup refuses to create
+    the arm later. Skipping an unopened tranche is not an event; it needs a
+    replacement registry, as the original mixed-gold suite did.
+    """
+    design = contract.get("evaluation_design") or {}
+    if design.get("comparison") != PAIRED_COMPARISON:
+        raise SetupError("only paired mixed-gold tiers record arm abandonment")
+    spec = contract.get("consumption_log") or {}
+    required = tuple(spec.get("required_arms") or ())
+    if comparison_arm not in required:
+        raise SetupError("abandonment needs --comparison-arm baseline or candidate")
+    if comparison_arm != "candidate":
+        raise SetupError(
+            "only a candidate arm may be abandoned; an unopened tranche is skipped "
+            "by a replacement registry, not by an event"
+        )
+    if len(reason.split()) < 8:
+        raise SetupError("an abandonment needs a reason a reader can act on")
+    entries = consumption_entries(contract)
+    for entry in entries:
+        if entry.get("registry_sha256") != contract.get("registry_sha256"):
+            raise SetupError("consumption entry does not bind the active registry")
+    tier_id = str(contract.get("id"))
+    tier_entries = [e for e in entries if str(e.get("tier_id")) == tier_id]
+    arms = {str(e.get("comparison_arm")) for e in tier_entries}
+    if "baseline" not in arms:
+        raise SetupError("score the baseline arm before abandoning its candidate")
+    if comparison_arm in arms:
+        raise SetupError(f"{tier_id} {comparison_arm} arm is already consumed")
+    baseline = next(
+        e for e in tier_entries if str(e.get("comparison_arm")) == "baseline"
+    )
+    event = {
+        "event": ABANDON_EVENT,
+        "schema_version": int(spec.get("schema_version") or 1),
+        "tier_id": tier_id,
+        "comparison_arm": comparison_arm,
+        "registry_sha256": contract.get("registry_sha256"),
+        "baseline_run_id": baseline.get("run_id"),
+        "baseline_predictions_sha256": baseline.get("predictions_sha256"),
+        "reason": " ".join(reason.split()),
+        "recorded_by": recorded_by,
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+    }
+    log_path = Path(contract["registry"]).resolve().parent / str(spec.get("path"))
+    with log_path.open("a+", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        handle.seek(0, 2)
+        handle.write(json.dumps(event, sort_keys=True) + "\n")
+        handle.flush()
+    return event
 
 
 def runtime_source_files() -> list[Path]:
@@ -660,6 +757,17 @@ def parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
     check_parser = sub.add_parser("check")
     check_parser.add_argument("--run-dir", type=Path, required=True)
+    abandon_parser = sub.add_parser(
+        "abandon",
+        help="close a paired candidate arm that will never run (append-only ledger event)",
+    )
+    abandon_parser.add_argument("--tier-id", required=True)
+    abandon_parser.add_argument(
+        "--comparison-arm", choices=("baseline", "candidate"), required=True
+    )
+    abandon_parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
+    abandon_parser.add_argument("--reason", required=True)
+    abandon_parser.add_argument("--recorded-by", default="operator")
     return ap
 
 
@@ -669,6 +777,14 @@ def main() -> int:
         if args.command == "create":
             run_dir = create(args)
             print(run_dir)
+        elif args.command == "abandon":
+            event = abandon_arm(
+                registry_contract(args.registry, args.tier_id),
+                args.comparison_arm,
+                args.reason,
+                args.recorded_by,
+            )
+            print(json.dumps(event, indent=2, sort_keys=True))
         else:
             check_run(args.run_dir)
             print(f"setup valid: {args.run_dir.resolve()}")

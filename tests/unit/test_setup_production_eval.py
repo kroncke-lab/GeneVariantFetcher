@@ -253,3 +253,68 @@ def test_check_run_detects_pmid_drift_without_reading_gold(
     kcnq1.write_text(kcnq1.read_text().replace("\n", "\n99999999\n", 1))
     with pytest.raises(setup.SetupError, match="KCNQ1 PMID file drifted"):
         setup.check_run(run_dir)
+
+
+def test_abandoned_candidate_arm_unlocks_the_next_tranche_and_stays_closed(
+    tmp_path: Path,
+):
+    log = tmp_path / "consumption.jsonl"
+    log.write_text("")
+    contract = {
+        "id": "mixed_01",
+        "registry": str(tmp_path / "registry.json"),
+        "registry_sha256": "reg",
+        "consumption_log": {
+            "path": log.name,
+            "required_arms": ["baseline", "candidate"],
+        },
+        "evaluation_design": {
+            "comparison": "paired_frozen_baseline_and_candidate_on_same_manifest",
+            "consume_order": ["mixed_01", "mixed_02"],
+        },
+    }
+    reason = (
+        "single live arm opened as baseline; score inspected, so the tranche is "
+        "burned for confirmation and a paired arm would measure only variance"
+    )
+    # Nothing scored yet: the baseline is not a thing that can be abandoned,
+    # and a candidate cannot be abandoned before its baseline exists.
+    with pytest.raises(setup.SetupError, match="only a candidate arm"):
+        setup.abandon_arm(contract, "baseline", reason, "tester")
+    with pytest.raises(setup.SetupError, match="score the baseline arm"):
+        setup.abandon_arm(contract, "candidate", reason, "tester")
+    log.write_text(
+        json.dumps(
+            {
+                "tier_id": "mixed_01",
+                "comparison_arm": "baseline",
+                "registry_sha256": "reg",
+                "run_id": "run_01_baseline",
+                "predictions_sha256": "pred",
+            }
+        )
+        + "\n"
+    )
+    with pytest.raises(setup.SetupError, match="next unconsumed tranche"):
+        setup.validate_comparison_slot({**contract, "id": "mixed_02"}, "baseline")
+    with pytest.raises(setup.SetupError, match="reason a reader can act on"):
+        setup.abandon_arm(contract, "candidate", "no", "tester")
+
+    event = setup.abandon_arm(contract, "candidate", reason, "tester")
+    assert event["event"] == setup.ABANDON_EVENT
+    assert event["baseline_run_id"] == "run_01_baseline"
+    assert event["baseline_predictions_sha256"] == "pred"
+    lines = [json.loads(line) for line in log.read_text().splitlines() if line]
+    assert len(lines) == 2 and lines[1]["comparison_arm"] == "candidate"
+
+    # The tranche now counts as consumed for ordering, the abandoned arm is
+    # closed for good, and nothing can be abandoned twice.
+    setup.validate_comparison_slot({**contract, "id": "mixed_02"}, "baseline")
+    with pytest.raises(setup.SetupError, match="was abandoned on"):
+        setup.validate_comparison_slot(contract, "candidate")
+    with pytest.raises(setup.SetupError, match="already consumed"):
+        setup.abandon_arm(contract, "candidate", reason, "tester")
+    # An event from another registry must not be honoured.
+    stale = {**contract, "registry_sha256": "other"}
+    with pytest.raises(setup.SetupError, match="does not bind"):
+        setup.validate_comparison_slot({**stale, "id": "mixed_02"}, "baseline")

@@ -175,7 +175,10 @@ also ranks a no-gold PMID list by the abstract-only yield predictor.
 
 ## 5. Tranche 05: one live arm of current main
 
-Design preregistered in [`PLAN.md`](PLAN.md) before opening. Run
+Design preregistered in [`PLAN.md`](PLAN.md) before opening, including the
+registry state: tranche 04's never-run candidate slot is closed by an
+append-only `abandon_arm` ledger event (new `setup_production_eval.py abandon`
+subcommand, tested) so that 05 opens next in order. Run
 `20260908_protocol_cont120_05_baseline` (121 attempts, 111 PMIDs). Results are
 appended below once locked and scored.
 
