@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-09-06.
+Last updated: 2026-09-07.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -11,6 +11,16 @@ carry the active work plan or dated session log.
 
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
+
+## Latest phenotype safety audit (2026-09-07; no promotion)
+
+The stricter table-cohort classifier preserves the existing opened-lock
+calibration scores. Newly supplied affected values are 364 exact / 46 wrong
+(**88.78%** conditional exactness), so the 90% acceptance gate is not passed
+without post-hoc source/reference exclusions. This is no new headline or
+independent confirmation. The source audit corrects 30059973's “identity-only”
+diagnosis and prevents a patient-header projection on a literature catalogue.
+[Report, replay and CLI reviews](evidence/fastpath_20260907/README.md).
 
 ## Latest Astra inclusion decision (2026-09-06; no promotion)
 

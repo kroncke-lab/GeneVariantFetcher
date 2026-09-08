@@ -1,0 +1,50 @@
+[
+  {
+    "gene": "KCNH2",
+    "pmid": "28292826",
+    "label": "Supplemental Table 1 Genetic background of pregnant women with LQTS",
+    "status": "resolved",
+    "caption": "Supplemental Table 1 Genetic background of pregnant women with LQTS",
+    "source_sha256": "ebbfefcbdf1663cdf70208b10d31cbce0dcd083e9c307783d08304fa7d20f223"
+  },
+  {
+    "gene": "KCNQ1",
+    "pmid": "30758498",
+    "label": "eTable 1. LQT1 Mutations or Rare Variants",
+    "status": "resolved",
+    "caption": "eTable 1. LQT1 Mutations or Rare Variants",
+    "source_sha256": "b9d85c2b8cc033e787cb0edc40fc1b0496ffc823bfeaa1b215c0803fe0c88d9b"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "22677073",
+    "label": "TABLE 2.",
+    "status": "resolved",
+    "caption": "Table 2 Summary of Putative Channelopathic Mutations and Channelopathy-Positive SUD Cases a",
+    "source_sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "22677073",
+    "label": "TABLE 2",
+    "status": "resolved",
+    "caption": "Table 2 Summary of Putative Channelopathic Mutations and Channelopathy-Positive SUD Cases a",
+    "source_sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9"
+  },
+  {
+    "gene": "RYR2",
+    "pmid": "22677073",
+    "label": "##### TABLE 2.",
+    "status": "resolved",
+    "caption": "Table 2 Summary of Putative Channelopathic Mutations and Channelopathy-Positive SUD Cases a",
+    "source_sha256": "329c3e7e6ef5dee519b1456e54832bfe870763c35648248d529881c6dc793eb9"
+  },
+  {
+    "gene": "SCN5A",
+    "pmid": "30758498",
+    "label": "eTable 3. LQT3 Mutations or Rare Variants",
+    "status": "resolved",
+    "caption": "eTable 3. LQT3 Mutations or Rare Variants",
+    "source_sha256": "2f7bdbee0550116b753dfc50275572df8ebd13c7d36df33c1cbd4d11a1bcd683"
+  }
+]

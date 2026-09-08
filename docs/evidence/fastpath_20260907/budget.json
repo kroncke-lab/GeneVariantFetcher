@@ -1,0 +1,12 @@
+{
+  "authorization_usd_approx": 50,
+  "paid_extraction_calls": 0,
+  "paid_extraction_cost_usd": 0,
+  "review_requests": 4,
+  "reported_grok_cost_usd": 0.08138308,
+  "agy_billing_usd": null,
+  "actual_total_billing_reconciled": false,
+  "provisional_unpriced_review_reserve_usd": 10,
+  "reported_plus_reserve_usd": 10.08138308,
+  "accounting_note": "Grok CLI estimates are recorded, not independently verified invoices. AGY exposes token usage but no dollar cost; retain $5 per request ($10 total), including the permission-denied attempt. No new holdout or extraction campaign. Reserve is a planning allowance, not a measured upper bound. Earlier campaign spend is separate."
+}

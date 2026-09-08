@@ -1,14 +1,9 @@
 """Project a code-classified table cohort onto affected / unaffected counts.
 
-The deterministic table parsers read one per-variant people count per row and
-leave ``affected`` / ``unaffected`` NULL unless the table prints explicit
-phenotype columns. Case-series compendia never do: their count column counts
-probands ascertained *for* the disease, and their control tables count
-reference individuals ascertained *without* it. Curators record those rows as
-``N / N / 0`` (cases) and ``N / 0 / N`` (controls); the pipeline recorded
-``N / NULL / NULL``, so on the two opened 120-attempt locks it supplied an
-affected value for under a fifth of the gold rows that carry one, while 477 of
-the missing values were exactly the carrier count already sitting on the row.
+The deterministic table parsers can read a per-variant people count without
+assigning a phenotype. A case-series caption or explicit case count can supply
+that context. A patient/proband noun by itself cannot: mutation catalogues may
+include several phenotypes or observations compiled from other publications.
 
 This module closes that gap without a model call and without arithmetic on
 other counts. It classifies the SOURCE TABLE's cohort from what the paper
@@ -195,6 +190,27 @@ _COLUMN_EXCLUDE_TOKENS = (
     "age",
     "year",
     "score",
+    # The selected count header is skipped by the sibling-header check. It
+    # must not turn a symptom/negative/assessed subset into the whole case
+    # cohort merely because it also says "patients" or "controls". Use the
+    # normalized label to cover converter-glued headers too.
+    "affected",
+    "symptom",
+    "phenotyp",
+    "diagnos",
+    "ecg",
+    "onset",
+    "event",
+    "syncope",
+    "arrest",
+    "death",
+    "deceased",
+    "therapy",
+    "treatment",
+    "followup",
+    "without",
+    "negative",
+    "positive",
 )
 _COUNT_WORD_TOKENS = ("noof", "numberof", "number", "count", "nof", "total")
 _BARE_COUNT_LABELS = frozenset({"n", "no", "number", "count", "counts", "total"})
@@ -209,6 +225,12 @@ _SENTENCE_END_RE = re.compile(r"[.!?](?=\s+[A-Z(])")
 # A caption sentence carries ordinary lowercase words ("found in", "and",
 # "variants"); a collapsed Title-Case header fragment does not.
 _PROSE_WORD_RE = re.compile(r"(?:^|\s)[a-z][a-z-]{2,}\b|\.\s")
+_CAPTION_HEADER_FRAGMENT_RE = re.compile(
+    r"^(?:(?:patient|subject|participant)\s+(?:id|number|no\.?)(?:\s|$)|"
+    r"(?:mutation|variant|mutation\s+or\s+(?:rare\s+)?variant)\s+"
+    r"(?:site|location)(?:\s|$))",
+    re.IGNORECASE,
+)
 
 _ASCERTAINMENT_RE = re.compile(
     r"\b(?:\d[\d,]*\s+)?(?:unrelated\s+|consecutive\s+|index\s+)?"
@@ -401,21 +423,24 @@ def _router_table_id(variant: dict[str, Any]) -> Optional[str]:
     return None
 
 
-def expand_caption(label: str, source_text: str, *, max_lines: int = 3) -> str:
-    """Return the caption text for ``label`` as printed in ``source_text``.
+def _resolve_caption(
+    label: str, source_text: str, *, max_lines: int = 3
+) -> tuple[str, str]:
+    """Resolve a caption only when every matching source anchor agrees.
 
     Parsers frequently keep only the anchor (``Table 2``) or the first wrapped
     line (``... Frequency in 406``). The descriptive sentence is what names the
-    cohort, so look it up: find the label's first occurrence, then append the
+    cohort, so look it up: find the label's occurrences, then append the
     following non-table lines until a blank line, a new table label, a heading,
     or ``max_lines`` lines.
     """
     label = _squash(label)
     if not label or not source_text:
-        return label
+        return label, "unresolved"
     lines = source_text.splitlines()
     wanted = _normalize_label(label)
     bare = bool(_BARE_TABLE_LABEL_RE.match(label))
+    candidates: dict[str, str] = {}
     for index, raw in enumerate(lines):
         line = _clean_caption_line(raw)
         if not line or raw.lstrip().startswith("|"):
@@ -459,6 +484,11 @@ def expand_caption(label: str, source_text: str, *, max_lines: int = 3) -> str:
                 # Title-Case header fragments whose spacing a converter has
                 # collapsed. A caption sentence carries ordinary lowercase words.
                 break
+            if _CAPTION_HEADER_FRAGMENT_RE.search(cleaned):
+                # Linearized headers can contain lowercase words, so the
+                # prose-word check alone cannot distinguish a second copy's
+                # "Mutation site ... Mean QTc" from a caption continuation.
+                break
             parts.append(cleaned)
             taken += 1
             if bare or cleaned.endswith((".", ":")):
@@ -471,8 +501,23 @@ def expand_caption(label: str, source_text: str, *, max_lines: int = 3) -> str:
             match = _SENTENCE_END_RE.search(text, max(anchor_end - 1, 0))
             if match:
                 text = text[: match.end()]
-        return text[:1200]
-    return label
+        if bare and _normalize_label(text) == wanted:
+            # An empty anchor/table-of-contents entry supplies no caption and
+            # cannot contradict a descriptive occurrence later in the source.
+            continue
+        candidates.setdefault(_normalize_label(text), text[:1200])
+    if len(candidates) > 1:
+        # Main text and supplements frequently reuse Table 1/2. A bare label
+        # cannot choose between them, even if the first happens to name cases.
+        return label, "ambiguous"
+    if candidates:
+        return next(iter(candidates.values())), "resolved"
+    return label, "unresolved"
+
+
+def expand_caption(label: str, source_text: str, *, max_lines: int = 3) -> str:
+    """Expand a source-unique caption; preserve the label if it is ambiguous."""
+    return _resolve_caption(label, source_text, max_lines=max_lines)[0]
 
 
 def _is_bare_count_label(label: str) -> bool:
@@ -502,6 +547,14 @@ def _column_excluded(label: str) -> str:
     for token in _COLUMN_EXCLUDE_TOKENS:
         if token in normalized:
             return token
+    if re.search(r"\bqtc\b", label, re.IGNORECASE):
+        return "qtc"
+    # Caption exclusions describe incompatible units/populations wherever
+    # they are printed, including inside the selected count column. Keep
+    # word boundaries here so ordinary words such as "individuals" survive.
+    context_exclusion = _CAPTION_EXCLUDE_RE.search(label)
+    if context_exclusion:
+        return context_exclusion.group(0).lower()
     return ""
 
 
@@ -655,6 +708,17 @@ def classify_table_cohort(
 
     disease = _disease_hit(caption, run_disease)
     if _label_has_case_noun(count_label) and _has_count_word(count_label):
+        if not (
+            disease
+            or _disease_hit(count_label, run_disease)
+            or re.search(r"\bcases?\b", count_label, re.IGNORECASE)
+        ):
+            # "Number of Patients" in an uncaptioned mutation catalogue can
+            # count a mixed-phenotype roster or a literature database. A
+            # patient/proband noun alone says nothing about disease status.
+            return TableCohort(
+                None, None, "patient_count_without_disease_context", **base
+            )
         return TableCohort(
             "case",
             TIER_COLUMN,
@@ -798,6 +862,7 @@ def derive_table_cohort_phenotype_counts(
     )
     router_tables: Optional[dict[str, Any]] = None
     table_cache: dict[tuple[str, str, tuple[str, ...]], TableCohort] = {}
+    caption_cache: dict[str, tuple[str, str]] = {}
     tables_summary: dict[str, dict[str, Any]] = {}
     outcomes: list[dict[str, Any]] = []
     applied = 0
@@ -878,7 +943,14 @@ def derive_table_cohort_phenotype_counts(
             headers = headers or router_headers
             label = label or f"Table {table_id}"
         if not caption:
-            caption = expand_caption(label, source_text) if label else ""
+            if label not in caption_cache:
+                caption_cache[label] = _resolve_caption(label, source_text)
+            caption, caption_status = caption_cache[label]
+            if caption_status == "ambiguous":
+                outcomes.append(
+                    {"variant": identity, "status": "ambiguous_source_caption"}
+                )
+                continue
         if not caption and not count_label:
             outcomes.append({"variant": identity, "status": "no_table_context"})
             continue

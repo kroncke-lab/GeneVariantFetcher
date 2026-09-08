@@ -104,14 +104,37 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       ("BrS + LQT + Control", SCN5A 25904541) now refuses. **Open:** adjudicate
       the 20129283 per-centre gold rows (`gold_20129283_per_centre_rows.csv`);
       a per-person extension for diagnosed-subject tables (29925740-shaped,
-      41 rows here) is a documented candidate, not shipped; next lever per both
-      reviewers is the identity-only fixed-width fast path (30059973).
+      41 rows here) is a documented candidate, not shipped. The later source audit
+      below corrects the reviewers’ identity-only fast-path diagnosis (30059973).
       **Pre-push review:** control tables now pass the caption, clinical-header,
       mixed-cohort and people-count exclusions; bare labels resolve inline
       captions. Replay restores audited prior counts and uses the scorer's
       one-to-one reference assignment. See the evidence README's review
       addendum for corrections to the original row audit and verification.
       Evidence: `docs/evidence/table_cohort_phenotype_20260907/`.
+
+- [x] **Adversarial phenotype safety / fast-path audit (2026-09-07; new ~$50 envelope).**
+      Corrected the 30059973 diagnosis: its deterministic path supplies 185
+      carrier-bearing variant rows but no A/U; later tables report different
+      ECG, symptom and follow-up endpoints. Do not copy carrier counts to fit
+      gold. Selected headers now pass clinical/negation/assay exclusions;
+      patient/proband headers need table-local disease context; conflicting
+      caption anchors refuse and caption resolution is cached. Added bounded,
+      diagnostic-only phenotype coverage metadata on deterministic/router
+      success. Grok and AGY CLI reviews are dispositioned in
+      [`the report`](docs/evidence/fastpath_20260907/README.md).
+      Free opened-lock replay preserves the previous projection's scores;
+      the 90% precision acceptance gate remains unmet without post-hoc exclusions.
+      A broader archive sweep identifies and prevents the patient-header
+      projection on a 263-variant literature-review table. No new holdout,
+      paid extraction arm, headline or default-off stage promotion.
+- [ ] **Next phenotype step:** specify source-bound target disease, endpoint,
+      timepoint and cohort ownership before bounded enrichment of the newly
+      flagged clinical tables. Preserve deterministic identities/carriers on
+      any enrichment failure. Missing unaffected values in case-only studies
+      are not an enrichment obligation. Audit 30059973's reference endpoint and
+      20129283's duplicate-row conventions with the curator; do not silently
+      rewrite either gold or source facts to pass a benchmark.
 
 ## Previous $100 improvement campaign
 

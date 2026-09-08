@@ -729,3 +729,183 @@ def test_router_rows_resolve_caption_by_table_id():
     assert variant["phenotype_derivation"]["source_table"].startswith(
         "Table 2. Mutations identified in 50 LQT1 patients"
     )
+
+
+def test_selected_count_column_cannot_bypass_cohort_exclusions():
+    """A patients noun does not override a negative, endpoint or assay unit."""
+    labels = [
+        "No. of unaffected patients",
+        "No.ofasymptomaticpatients",
+        "No. of patients without Brugada syndrome",
+        "No. of phenotype-negative patients",
+        "No. of patients with cardiac events",
+        "No. of patients at follow-up",
+        "No. of patients receiving treatment",
+        "No. of deceased patients",
+        "No. of patients reported in the literature",
+        "No. of control cells",
+        "No. of healthy individuals with syncope",
+        "No. of patients versus controls",
+    ]
+    for label in labels:
+        cohort = classify_table_cohort(
+            "Table 1. Mutation counts", label, ["Variant", label]
+        )
+        assert cohort.role is None, label
+        row = table_row(
+            source_table="Table 1. Mutation counts",
+            count_label=label,
+            headers=("Variant", label),
+        )
+        result = derive_table_cohort_phenotype_counts(
+            {"variants": [row]}, "", enabled=True, allow_paper_tier=False
+        )
+        assert result["variants"][0]["penetrance_data"]["affected_count"] is None, label
+        assert "affected_source" not in result["variants"][0]["count_provenance"], label
+
+
+def test_selected_count_column_exclusions_leave_literal_partition_untouched():
+    row = table_row(
+        carriers=7, affected=2, unaffected=5, count_label="No. of unaffected patients"
+    )
+    result = derive_table_cohort_phenotype_counts(
+        {"variants": [row]}, "", enabled=True, allow_paper_tier=False
+    )
+    assert result["variants"][0] == row
+
+
+def test_reused_table_number_never_borrows_first_case_caption():
+    source = """
+Table 1. LQT2 patients with mutations
+| Variant | No. of patients |
+|---|---|
+| A32T | 3 |
+
+# Supplement
+Table 1. Unaffected relatives with mutations
+| Variant | No. of patients |
+|---|---|
+| A32T | 3 |
+"""
+    assert expand_caption("Table 1", source) == "Table 1"
+    row = table_row(source_table="Table 1", count_label="No. of patients")
+    result = derive_table_cohort_phenotype_counts(
+        {"variants": [row]}, source, enabled=True, allow_paper_tier=False
+    )
+    assert result["variants"][0] == row
+    assert (
+        result["extraction_metadata"]["table_cohort_phenotype_derivation"]["outcomes"][
+            0
+        ]["status"]
+        == "ambiguous_source_caption"
+    )
+
+
+def test_repeated_identical_caption_remains_eligible():
+    source = CASE_SOURCE + "\n" + CASE_SOURCE
+    result = derive_table_cohort_phenotype_counts(
+        {"variants": [table_row(source_table="Table 2")]},
+        source,
+        enabled=True,
+        allow_paper_tier=False,
+    )
+    assert result["variants"][0]["penetrance_data"]["affected_count"] == 3
+
+
+def test_caption_resolution_is_cached_per_label(monkeypatch):
+    import pipeline.table_cohort_phenotype as module
+
+    original = module._resolve_caption
+    calls = []
+
+    def counted(*args, **kwargs):
+        calls.append(args[0])
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(module, "_resolve_caption", counted)
+    rows = [
+        table_row(protein=f"p.Ala{i}Thr", source_table="Table 2") for i in range(1, 100)
+    ]
+    result = derive_table_cohort_phenotype_counts(
+        {"variants": rows}, CASE_SOURCE, enabled=True, allow_paper_tier=False
+    )
+    assert calls == ["Table 2"]
+    assert all(v["penetrance_data"]["affected_count"] == 3 for v in result["variants"])
+
+
+def test_mutation_roster_patient_header_needs_table_local_disease_context():
+    for caption in (
+        "Table T4",
+        "Table 5. Mutations (44 patients, 47 mutations, 20 unique mutations)",
+        "Table 2. Sequence variants identified in GENE",
+    ):
+        for label in (
+            "Number of Patients",
+            "Number of Index Patients",
+            "No. of probands",
+        ):
+            cohort = classify_table_cohort(caption, label, ["Variant", label])
+            assert cohort.role is None, (caption, label)
+            assert cohort.reason == "patient_count_without_disease_context"
+    assert classify_table_cohort("Table 2. Variants", "Cases (n=200)").role == "case"
+    assert (
+        classify_table_cohort("Table 2. Variants", "Number of LQT2 patients").role
+        == "case"
+    )
+
+
+def test_unresolved_router_patient_catalogue_does_not_certify_a_copy():
+    row = table_row(
+        source_table="Table T4",
+        count_label="Number of Patients",
+        headers=("Variant", "Number of Patients"),
+        carriers=6,
+        affected=6,
+    )
+    row["locator_extra"]["table_id"] = "T4"
+    result = derive(extraction(row), "", gene_symbol="RYR2")
+    assert "phenotype_derivation" not in result["variants"][0]
+    assert apply_phenotype_count_guard(result["variants"]).cleared == 1
+    assert result["variants"][0]["penetrance_data"]["affected_count"] is None
+
+
+def test_duplicate_caption_does_not_absorb_linearized_header_fragments():
+    caption = "eTable 1. LQT2 Mutations or Rare Variants"
+    for header in (
+        "Mutation site Site N Female Proband Mean QTc Syncope",
+        "Mutation or rare variant location N female QTc mean",
+        "Patient number of",
+    ):
+        source = f"{caption}\n\n{caption}\n{header}\n"
+        assert expand_caption(caption, source) == caption
+
+
+def test_empty_table_anchor_cannot_hide_later_exclusion_caption():
+    source = "### Table 2\n\n### Main text\n\nTable 2. Summary of autopsy cases\n| Variant | No. of patients |\n"
+    assert expand_caption("Table 2", source) == "Table 2. Summary of autopsy cases"
+    result = derive(extraction(table_row(source_table="Table 2")), source)
+    assert result["variants"][0]["penetrance_data"]["affected_count"] is None
+
+
+def test_prefix_caption_can_name_a_different_cohort_and_must_not_win_by_length():
+    source = """
+Table 1. Mutation counts
+| Variant | Number of patients |
+|---|---|
+| A32T | 8 |
+
+# Supplement
+Table 1. Mutation counts in LQT2 patients
+| Variant | Number of patients |
+|---|---|
+| A32T | 3 |
+"""
+    row = table_row(source_table="Table 1", carriers=8)
+    result = derive(extraction(row), source)
+    assert result["variants"][0]["penetrance_data"]["affected_count"] is None
+    assert (
+        result["extraction_metadata"]["table_cohort_phenotype_derivation"]["outcomes"][
+            0
+        ]["status"]
+        == "ambiguous_source_caption"
+    )

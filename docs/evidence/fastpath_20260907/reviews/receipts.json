@@ -1,0 +1,67 @@
+[
+  {
+    "name": "grok_review",
+    "raw_output_sha256": "1230ec1883752d7556516678845f77a0a66389d6acc912ae62792ab9366209b5",
+    "usage": {
+      "input_tokens": 52850,
+      "cache_read_input_tokens": 177024,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 9832,
+      "reasoning_tokens": 7239,
+      "total_tokens": 239706
+    },
+    "reported_cost_usd": 0.04304468,
+    "denied_actions": null,
+    "status": "end_turn",
+    "num_turns": 6
+  },
+  {
+    "name": "agy_review",
+    "raw_output_sha256": "aff3fdc5338053401425ea4845f6e7b9d8861ebd2144a3b150fecbc5099a742a",
+    "usage": {
+      "input_tokens": 58832,
+      "output_tokens": 1042,
+      "thinking_tokens": 829,
+      "cache_read_tokens": 0,
+      "total_tokens": 59874
+    },
+    "reported_cost_usd": null,
+    "denied_actions": [
+      {
+        "action": "read_file",
+        "display_name": "ListDir"
+      }
+    ],
+    "status": "SUCCESS",
+    "num_turns": 1
+  },
+  {
+    "name": "agy_selfcontained",
+    "raw_output_sha256": "2b43f52c17a64412fa45b297097f7ee8553cf0e048daf6dfe26fecb13477cd2a",
+    "usage": {
+      "input_tokens": 8804,
+      "output_tokens": 6672,
+      "thinking_tokens": 4408,
+      "cache_read_tokens": 8142,
+      "total_tokens": 15476
+    },
+    "reported_cost_usd": null,
+    "denied_actions": null,
+    "status": "SUCCESS",
+    "num_turns": 1
+  },
+  {
+    "name": "grok_final_review",
+    "raw_output_sha256": "dfa1f979ec375381cbf9e817c2b4f7042440591bae244914b54dd55cd90adf8c",
+    "usage": {
+      "input_tokens": 46918,
+      "cache_read_input_tokens": 80896,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 15206,
+      "reasoning_tokens": 13634,
+      "total_tokens": 143020
+    },
+    "reported_cost_usd": 0.0383384,
+    "num_turns": 4
+  }
+]

@@ -182,6 +182,16 @@ family, carrier, phenotype-split, population, allele, functional, autopsy,
 literature, case-versus-control, clinical-column, model-authored and per-person
 row refuse. Control classification passes these same exclusions and requires
 a people-count column; merely finding "control" does not certify a count.
+The selected count header also passes clinical, negation, timepoint, population
+and assay exclusions. Patient/proband headers require disease context in the
+caption or column; an explicit case-count label retains its existing meaning.
+Contradictory captions sharing an anchor refuse; duplicate identical captions
+and empty anchors do not introduce ambiguity. Caption lookup is cached per
+label for each extraction. Deterministic/router successes additionally record
+`table_phenotype_coverage`: source hash, pre-guard supplied rows by field, and a
+bounded list of labelled clinical-table candidates with source lines. This is
+an incomplete heading/header heuristic, not a count mapper, trust decision or
+model trigger. Replay it with `scripts/audit_table_phenotype_coverage.py`.
 Values carry the `table_cohort_phenotype_v1` stamp, a
 `phenotype_derivation` audit and `fact_provenance` rows; the always-on guard,
 the trust gate and `refresh_run_db.py` treat the stamp as sourced, and model

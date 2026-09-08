@@ -1,0 +1,139 @@
+{
+  "success": true,
+  "model": "deterministic-fixed-width-table-parser",
+  "api_calls": 0,
+  "variant_rows": 185,
+  "summed_variant_occurrences": 445,
+  "source_sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18",
+  "coverage": {
+    "protocol_version": "table_phenotype_coverage_v1",
+    "stage": "after_derivation_before_phenotype_guard",
+    "source_sha256": "25b46c55c11b33cfa8776e372e051a26b0725a5df8fad31cfc4e3c7309c57f18",
+    "source_representation": "exact_input_text",
+    "variant_rows": 185,
+    "supplied_rows": {
+      "total_carriers_observed": 185,
+      "affected_count": 0,
+      "unaffected_count": 0
+    },
+    "missing_phenotype_fields": [
+      "affected_count",
+      "unaffected_count"
+    ],
+    "clinical_table_candidate_count": 11,
+    "clinical_table_candidates": [
+      {
+        "source_line_1based": 1782,
+        "caption": "Table 1: Clinical characteristics according to baseline ECG phenotypes (n=442)",
+        "clinical_signals": [
+          "asymptomatic",
+          "clinical",
+          "diagnosis",
+          "ecg",
+          "phenotype",
+          "phenotypes"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 1809,
+        "caption": "Table 2: Characteristics of cardiac events in the 28 patients who received appropriate ICD shocks",
+        "clinical_signals": [
+          "cardiac events",
+          "ecg",
+          "follow-up",
+          "phenotype"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 1851,
+        "caption": "Table 3: Phenotypes and family history (n=442)",
+        "clinical_signals": [
+          "follow-up",
+          "phenotype",
+          "phenotypes"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 1907,
+        "caption": "Table 4: Clinical characteristics of isolated LQT3 patients who experienced cardiac events (n=25)",
+        "clinical_signals": [
+          "cardiac events",
+          "clinical"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2191,
+        "caption": "Table 6: Comparison between VUS and other mutations (n=442)",
+        "clinical_signals": [
+          "diagnosis"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2232,
+        "caption": "Table 7: Clinical characteristics according to SCN5A mutation location (domains) (N=442)",
+        "clinical_signals": [
+          "clinical",
+          "diagnosis"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2270,
+        "caption": "Table 8: Phenotype and outcomes according to SCN5A mutation location (segments)",
+        "clinical_signals": [
+          "diagnosis",
+          "phenotype"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2316,
+        "caption": "Table 9: Clinical characteristics according to SCN5A mutation function (N=442)",
+        "clinical_signals": [
+          "clinical",
+          "diagnosis",
+          "phenotype"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2372,
+        "caption": "Table 10: Clinical characteristics according to SCN5A mutation type (N=442)",
+        "clinical_signals": [
+          "clinical",
+          "diagnosis",
+          "phenotype"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2427,
+        "caption": "Table 11: Clinical characteristics according to specific mutations",
+        "clinical_signals": [
+          "asymptomatic",
+          "clinical",
+          "diagnosis"
+        ],
+        "signals_truncated": false
+      },
+      {
+        "source_line_1based": 2570,
+        "caption": "Table 14: Most common SCN5A mutations per phenotype (n=442)",
+        "clinical_signals": [
+          "ecg",
+          "phenotype"
+        ],
+        "signals_truncated": false
+      }
+    ],
+    "candidates_truncated": false,
+    "status": "review_candidates",
+    "interpretation": "Heading/header candidates require source review for variant ownership, target disease, endpoint and timepoint. Supplied rows are pre-guard, not validated coverage. No candidate list establishes completeness."
+  },
+  "extraction": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/phenotype_safety_20260907/SCN5A_PMID_30059973.json"
+}

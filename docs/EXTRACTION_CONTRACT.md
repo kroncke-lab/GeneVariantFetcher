@@ -133,12 +133,19 @@ names (`pipeline/table_cohort_phenotype.py`). The classification reads only the
 printed caption (looked up in the source when the parser kept just `Table N`)
 and the count-column header:
 
-- A **case series** -- the count column names patients / probands / cases with
-  a count word ("No. of patients", "Cases (n=2111)"), or the caption names the
+- A **case series** -- the count column explicitly names cases with a count
+  word ("Cases (n=2111)"), or names patients/probands with a count word and
+  the caption or column also names a disease, or the caption names the
   target disease and the column counts people ("Compendium of Brugada
   syndrome-associated mutations" / "No. of unrelated individuals") -- sets
   `affected = N` with `count_type = case`. `unaffected` stays null: the paper
   assessed nobody else, and a zero it never counted is not emitted.
+  A bare "Number of Patients" in a mutation catalogue is insufficient:
+  the people may span multiple phenotypes or come from compiled literature.
+  Selected count columns pass the same clinical, negation, timepoint, assay
+  and population exclusions as the rest of the table. Reused table anchors
+  with contradictory source captions refuse; the first occurrence cannot
+  establish which cohort the row belongs to.
 - A **control cohort** -- controls, healthy, reference individuals -- counted in
   people sets `unaffected = N` (`unaffected_control`) and the closed
   `affected = 0` (`control`). A control table counted in alleles or chromosomes

@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-07",
+  "baseline_commit": "60952867e1a9dccddbaa9d8064048eb40ebe9a21",
+  "unit_tests": {
+    "command": ".venv/bin/python -m pytest tests/unit -q",
+    "passed": 3013,
+    "seconds": 110.97,
+    "log_sha256": "9ef24233643e7fb1c24007e33b9cb895d5e7a4db22fbd73fcf092ff95e12d26e"
+  },
+  "curated_negative_cases": {
+    "command": ".venv/bin/python -m pytest benchmarks/curated_extraction_eval/negative_cases -q",
+    "passed": 3,
+    "seconds": 0.97
+  },
+  "focused_tests": {
+    "passed": 44,
+    "included_in_unit_suite": true
+  },
+  "precommit_hooks": "passed",
+  "diff_check": "passed",
+  "pooled_replay_equal_to_corrected_previous_review": true,
+  "gold_modified": false,
+  "locked_runs_modified": false,
+  "holdouts_opened": 0,
+  "paid_extraction_calls": 0,
+  "canonical_figure_regenerated_from_unchanged_inputs": true,
+  "canonical_png_visually_inspected": true,
+  "runtime_and_test_sha256": {
+    "pipeline/extraction.py": "4a464519d683bb7c8179c8b190117600ca1641436209c51e86a735163e10567f",
+    "pipeline/table_cohort_phenotype.py": "9b0e1e6fca485887bcddb542d9369abf7849f84635f79f0356acba436dcd45f4",
+    "pipeline/table_phenotype_coverage.py": "af6b43c09b3a34ba26a567a151be26c276a3d29e28a7f6f47846c3887c50269d",
+    "scripts/audit_table_phenotype_coverage.py": "1fe33c5981b60521767aba578ac3a1fdc2c2cba210998470ee397acfb5544ca0",
+    "tests/unit/test_table_cohort_phenotype.py": "95b5991d7690de545544b1b8df1eec4102735c2a97694235be317b73041670bf",
+    "tests/unit/test_table_phenotype_coverage.py": "4ba52503c4c5bcb2482d0a51bf3c6419671391edee36298716562dd8d77bf58b"
+  }
+}

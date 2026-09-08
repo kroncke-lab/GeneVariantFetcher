@@ -8463,6 +8463,19 @@ Return strict JSON with this schema:
                 result.extracted_data = self._annotate_source_layers(
                     result.extracted_data
                 )
+                if str(result.model_used or "").startswith(
+                    ("deterministic-", "router+")
+                ):
+                    from pipeline.table_phenotype_coverage import (
+                        audit_table_phenotype_coverage,
+                    )
+
+                    result.extracted_data.setdefault("extraction_metadata", {})[
+                        "table_phenotype_coverage"
+                    ] = audit_table_phenotype_coverage(
+                        result.extracted_data,
+                        paper.full_text or prepared_full_text or "",
+                    )
             return result
         finally:
             self.model, self.max_tokens = saved_model, saved_max_tokens

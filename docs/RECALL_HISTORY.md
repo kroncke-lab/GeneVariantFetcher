@@ -15,6 +15,19 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-07 — adversarial phenotype safety and fast-path coverage
+
+Selected-count-header exclusions, table-local disease context for patient/proband
+columns, source-unique captions and cached lookup prevent unsupported cohort
+projection. Deterministic/router outputs now expose diagnostic-only field
+coverage. The 30059973 path has 185 carrier-bearing variant rows, not an
+identity-only result; its other tables have incompatible phenotype endpoints.
+Free replay preserves the prior 567/1,118 versus 203/1,118 exact positive affected
+values on the opened cardiac calibration rows, with 364 newly exact and 46
+newly wrong values. New-value precision 88.78% does not pass 90%; no new headline
+or holdout was opened. A broad archive sweep prevents projection of 263 variant
+rows from the 40875405 literature review. [Evidence and reviewer dispositions](evidence/fastpath_20260907/README.md).
+
 ## 2026-09-07 — table-cohort projection and pre-push verification
 
 The deterministic table-cohort lane projects a per-variant people count onto
