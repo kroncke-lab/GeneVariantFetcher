@@ -1,0 +1,13 @@
+variant_paper,variant_gold,negative_ecg,isolated_lqt3,isolated_brs1,isolated_pccd,isolated_sss,isolated_dcm,overlap,row_total,gold_carriers,gold_affected,gold_unaffected,proposed_carriers,proposed_unaffected,proposed_affected_lqt3,proposed_affected_brs1,proposed_affected_other_pccd_sss_dcm,proposed_ambiguous_overlap,source_line
+pGlu1784Lys,E1784K,29,13,0,17,0,0,10,69,69,69,0,69,29,13,0,17,10,2577
+pIle1768Val,I1768V,6,1,0,1,0,0,1,9,9,9,0,9,6,1,0,1,1,2578
+pGly1743Glu,G1743E,6,0,0,1,0,0,1,8,8,8,0,8,6,0,0,1,1,2579
+pVal411Met,V411M,2,5,0,2,0,0,1,10,10,10,0,10,2,5,0,2,1,2583
+pGln1507_Pro1509del,Q1507_P1509del,4,5,0,0,0,0,0,9,9,9,0,9,4,5,0,0,0,2585
+pGly1319Val,G1319V,6,0,0,2,0,0,0,8,8,8,0,8,6,0,0,2,0,2586
+pTyr1795_Glu1796insAsp,Y1795_E1796insD,4,0,1,1,0,0,1,7,7,7,0,7,4,0,1,1,1,2588
+pAsp1790Gly,D1790G,5,0,0,1,1,0,0,7,7,7,0,7,5,0,0,2,0,2590
+pAsp356Asn,D356N,1,0,0,2,0,0,0,3,3,3,0,3,1,0,0,2,0,2591
+pGln646Argfs5,Q646Rfs*5,0,0,0,5,0,0,2,7,,,,7,0,0,0,5,2,2592
+pGlu901Lys,E901K,3,0,0,1,0,0,3,7,7,7,0,7,3,0,0,1,3,2594
+pVal1763Met,V1763M,2,3,0,0,1,0,0,6,6,6,0,6,2,3,0,1,0,2595

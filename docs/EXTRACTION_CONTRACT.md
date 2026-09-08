@@ -146,6 +146,19 @@ and the count-column header:
   and population exclusions as the rest of the table. Reused table anchors
   with contradictory source captions refuse; the first occurrence cannot
   establish which cohort the row belongs to.
+- A **proband catalogue** -- one mutation per row, the parser's implicit one
+  carrier per row, no clinical column -- is a case series when its own caption
+  names the disease case series ("SCN5A mutations identified in Brugada
+  syndrome probands"), or when the paper's title binds a people noun to the
+  disease ("Probands With Brugada Syndrome", "patients referred for long QT
+  syndrome") and the caption names nobody else. Each row then receives
+  `affected = 1` (`count_type = case`). A clinical roster never qualifies:
+  characteristics, relatives, carriers, screened or followed-up people, any
+  phenotype / status / symptom / control column; its rows carry their own
+  phenotype and must be read, not projected. A continuation heading
+  ("Table 2. Continued") means the table's first printed caption. Titles that
+  name exome, genome, population, autopsy or relatives designs certify
+  nothing, and the sentence-level paper tier never certifies per-person rows.
 - A **control cohort** -- controls, healthy, reference individuals -- counted in
   people sets `unaffected = N` (`unaffected_control`) and the closed
   `affected = 0` (`control`). A control table counted in alleles or chromosomes

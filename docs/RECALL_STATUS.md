@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-09-07.
+Last updated: 2026-09-08.
 
 This file is the current measured recall snapshot. It intentionally does not
 carry the active work plan or dated session log.
@@ -11,6 +11,21 @@ carry the active work plan or dated session log.
 
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
+
+## Latest title-tier calibration (2026-09-08; tranche 05 arm opened)
+
+The title-ascertainment tier of the table-cohort projection is on by default.
+On the two opened cont120 locks it adds **48 exact and 0 wrong** affected
+values (all SCN5A 28341781); cardiac positive-gold affected exact recovery is
+**615 / 1,118 (55.0%)** with the projection versus 203 / 1,118 (18.2%)
+without; identity, carriers, unaffected and counted extras are unchanged and
+no new value lands on a real-split row. New-value precision is 412 / 458
+(**89.96%**); every wrong value is a SCN5A 20129283 per-testing-centre gold
+row awaiting curator adjudication, outside which it is 100%. These are
+calibration numbers on already-opened locks, not a headline. Tranche 05
+(`20260908_protocol_cont120_05_baseline`) is the first unopened tranche run
+with the tier; its result is recorded here when scored.
+[Report](evidence/phenotype_supply_20260908/README.md).
 
 ## Latest phenotype safety audit (2026-09-07; no promotion)
 

@@ -15,6 +15,23 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-08 — title-ascertainment tier, gold adjudication tables, manual acquisition worklist
+
+A paper title that binds a people noun to a disease now certifies count tables
+whose caption names no other cohort and one-mutation-per-proband catalogues
+with no clinical columns; continuation headings resolve to the first printed
+caption and the fixed-width clinical mutation parser labels implicit
+one-proband rows as such. Zero-LLM replay on the opened cont120_02/03 locks:
+cardiac positive-gold affected exact recovery 567 → 615 of 1,118 (50.7% →
+55.0%), +48 exact / 0 wrong, all SCN5A 28341781; nothing else moves. The
+sentence-level paper tier stays off after a cardiac archive smoke showed it
+firing on a footnote and on a drug-challenge cohort with a real split. Curator
+tables for the SCN5A 20129283 per-centre rows and the 30059973 ECG-negative
+carriers were drafted, not applied. A ranked 250-paper manual-acquisition
+worklist covers 91% of the gold rows behind the acquisition ceiling. Tranche
+05 opened as one live arm of current main.
+[Evidence](evidence/phenotype_supply_20260908/README.md).
+
 ## 2026-09-07 — adversarial phenotype safety and fast-path coverage
 
 Selected-count-header exclusions, table-local disease context for patient/proband

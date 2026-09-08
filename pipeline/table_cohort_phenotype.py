@@ -58,6 +58,11 @@ TIER_COLUMN = "count_column_names_cases"
 TIER_CAPTION = "caption_names_disease_cases"
 TIER_CAPTION_DISEASE = "caption_names_disease_column_counts_people"
 TIER_PAPER = "paper_ascertainment"
+# The paper's own title defines a disease proband/patient cohort ("Probands
+# With Brugada Syndrome"). Stronger than a sentence anywhere in the head of the
+# text, and the only paper-level evidence that may certify one-row-per-person
+# mutation catalogues.
+TIER_TITLE = "title_ascertainment"
 TABLE_LOCAL_TIERS = frozenset({TIER_COLUMN, TIER_CAPTION, TIER_CAPTION_DISEASE})
 
 _ROUTER_LOCATION_SUFFIX_RE = re.compile(
@@ -67,6 +72,13 @@ _ROUTER_TABLE_ID_RE = re.compile(r"^Table\s+(T\d+)$", re.IGNORECASE)
 _TABLE_LABEL_RE = re.compile(
     r"^(?:#+\s*)?(?:\*\*)?\s*(?:e|supplementa\w+\s+|supp\.?\s+|online\s+)?table\s+"
     r"[a-z]?\d+[a-z]?(?:\s*[\.:]|\s|$)",
+    re.IGNORECASE,
+)
+# "Table 2. Continued" / "Table 2 (cont.)": a PDF page break, not a caption.
+# The rows under it belong to the table whose caption was printed first.
+_CONTINUED_CAPTION_RE = re.compile(
+    r"^(?:#+\s*)?(?:\*\*)?\s*((?:e|supplementa\w+\s+|supp\.?\s+|online\s+)?table\s+"
+    r"[a-z]?\d+[a-z]?)\s*[\.:]?\s*[\(\[]?\s*cont(?:inued|d|\.)?\s*[\)\]]?\s*\.?\s*(?:\*\*)?\s*$",
     re.IGNORECASE,
 )
 _BARE_TABLE_LABEL_RE = re.compile(
@@ -131,7 +143,7 @@ _CAPTION_EXCLUDE_RE = re.compile(
     r"unaffected|penetran\w*|sub-?clinical|"
     r"clinical\s+(?:characteristics|features|data|findings|presentation|course)|"
     r"ecgs?|electrocardiograph\w*|qtc|"
-    r"population|biobank|exomes?|genomes?|sequencing|gnomad|exac|esp|"
+    r"population|biobank|exomes?|genomes?|sequencing|wes|wgs|gnomad|exac|esp|"
     r"1000\s+genomes|topmed|dbsnp|clinvar|hgmd|"
     r"alleles?|allelic|allele\s+frequenc\w*|maf|minor\s+allele|"
     r"gwas|association\s+stud\w*|odds\s+ratio|"
@@ -240,7 +252,26 @@ _ASCERTAINMENT_RE = re.compile(
     re.IGNORECASE,
 )
 _TITLE_ASCERTAINMENT_RE = re.compile(
-    r"\b(?:patients?|probands?|cases?)\s+with\b", re.IGNORECASE
+    r"\b(?:patients?|probands?|index\s+cases?|cases?)\s+"
+    r"(?:with|referred\s+for|diagnosed\s+with|affected\s+by|fulfilling|meeting)\b",
+    re.IGNORECASE,
+)
+_TITLE_COHORT_NOUN_RE = re.compile(
+    r"\b(?:patients?|probands?|index\s+cases?|cases?)\b", re.IGNORECASE
+)
+# A caption that describes people rather than a mutation catalogue. One
+# implicit carrier per row in such a table is a clinical roster (probands and
+# relatives, screened individuals, follow-up subjects) whose phenotype must be
+# read from the rows, never projected from the paper.
+_ROSTER_CAPTION_RE = re.compile(
+    r"\b(?:clinical|characteristics?|phenotyp\w*|demograph\w*|subjects?|"
+    r"individuals?|persons?|participants?|carriers?|relatives?|famil\w*|kindreds?|"
+    r"pedigrees?|cohorts?|registry|registries|ecgs?|symptoms?|diagnos\w*|"
+    r"follow[- ]?up|outcomes?|genotype[- ]positive|screen\w*|tested)\b",
+    re.IGNORECASE,
+)
+_CATALOGUE_NOUN_RE = re.compile(
+    r"\b(?:mutations?|variants?|substitutions?|alterations?)\b", re.IGNORECASE
 )
 _PAPER_EXCLUDE_RE = re.compile(
     r"\b(?:population|biobank|general\s+population|community|"
@@ -283,6 +314,7 @@ class PaperContext:
     quote: str = ""
     excluded_by: str = ""
     disease_terms: list[str] = field(default_factory=list)
+    from_title: bool = False
 
 
 # --------------------------------------------------------------------------- #
@@ -305,6 +337,10 @@ def table_cohort_phenotype_enabled() -> bool:
 
 def paper_ascertainment_tier_enabled() -> bool:
     return _setting("table_cohort_paper_ascertainment_enabled", False)
+
+
+def title_ascertainment_tier_enabled() -> bool:
+    return _setting("table_cohort_title_ascertainment_enabled", True)
 
 
 # --------------------------------------------------------------------------- #
@@ -376,7 +412,44 @@ def _is_deterministic_table_row(variant: dict[str, Any]) -> bool:
     return "deterministic" in notes and "parsed" in notes
 
 
+# Extraction JSON written before 2026-09-08 by the fixed-width clinical
+# mutation parser labelled an implicit one-carrier row with the "Coding Effect"
+# text column. Archived runs keep that label; read it as the implicit-row label
+# it always meant so replay and refresh classify those rows exactly as a fresh
+# extraction would. A printed count ("Coding Effect count") is untouched.
+_LEGACY_IMPLICIT_ROW_LABELS = frozenset(
+    {("fixed_width_clinical_mutation", "coding effect")}
+)
+
+
+def _row_parser(variant: dict[str, Any]) -> str:
+    for holder in (variant, variant.get("patients")):
+        if not isinstance(holder, dict):
+            continue
+        extra = holder.get("locator_extra")
+        if isinstance(extra, dict) and str(extra.get("parser") or "").strip():
+            return str(extra["parser"]).strip().lower()
+    return ""
+
+
 def _count_label(variant: dict[str, Any]) -> str:
+    label = _raw_count_label(variant)
+    if (_row_parser(variant), label.casefold()) in _LEGACY_IMPLICIT_ROW_LABELS:
+        penetrance = variant.get("penetrance_data")
+        patients = variant.get("patients")
+        carriers = _coerce_count(
+            (penetrance or {}).get("total_carriers_observed")
+            if isinstance(penetrance, dict)
+            else None
+        )
+        if carriers is None and isinstance(patients, dict):
+            carriers = _coerce_count(patients.get("count"))
+        if carriers == 1:
+            return IMPLICIT_ROW_CARRIER_LABEL
+    return label
+
+
+def _raw_count_label(variant: dict[str, Any]) -> str:
     provenance = variant.get("count_provenance")
     if isinstance(provenance, dict):
         label = _squash(provenance.get("carriers_column_label"))
@@ -505,6 +578,10 @@ def _resolve_caption(
             # An empty anchor/table-of-contents entry supplies no caption and
             # cannot contradict a descriptive occurrence later in the source.
             continue
+        if _CONTINUED_CAPTION_RE.match(text):
+            # A continuation heading repeats the label without describing the
+            # table; it neither names a cohort nor contradicts the caption.
+            continue
         candidates.setdefault(_normalize_label(text), text[:1200])
     if len(candidates) > 1:
         # Main text and supplements frequently reuse Table 1/2. A bare label
@@ -569,22 +646,52 @@ def _column_counts_people(label: str) -> bool:
     return False
 
 
+def title_ascertains(
+    title: Optional[str], run_disease: Optional[re.Pattern[str]] = None
+) -> str:
+    """Return the disease a paper title ascertains its cohort for, or ``""``.
+
+    Accepts "probands with Brugada syndrome", "patients referred for long QT
+    syndrome", or "long-QT syndrome patients": a people noun bound to a disease
+    name within the title. A title that names an exome/genome/population/
+    autopsy/relatives design is enrollment, not diagnosis, and never qualifies.
+    """
+    title_text = _squash(title)
+    if not title_text or _PAPER_EXCLUDE_RE.search(title_text):
+        return ""
+    match = _TITLE_ASCERTAINMENT_RE.search(title_text)
+    if match:
+        disease = _disease_hit(title_text[match.end() : match.end() + 80], run_disease)
+        if disease:
+            return disease
+    for noun in _TITLE_COHORT_NOUN_RE.finditer(title_text):
+        disease = _disease_hit(
+            title_text[max(0, noun.start() - 40) : noun.start()], run_disease
+        )
+        if disease:
+            return disease
+    return ""
+
+
 def paper_context(
     source_text: str,
     *,
     title: Optional[str] = None,
     run_disease: Optional[re.Pattern[str]] = None,
+    sentences: bool = True,
 ) -> PaperContext:
-    """Find one sentence that ascertains a disease case cohort, or nothing."""
+    """Find the title or one sentence that ascertains a disease case cohort."""
     context = PaperContext()
     head = _squash(source_text[:_PAPER_CONTEXT_CHARS])
     title_text = _squash(title)
-    if title_text and _TITLE_ASCERTAINMENT_RE.search(title_text):
-        disease = _disease_hit(title_text, run_disease)
-        if disease and not _PAPER_EXCLUDE_RE.search(title_text):
-            context.quote = title_text[:400]
-            context.disease_terms.append(disease)
-            return context
+    disease = title_ascertains(title_text, run_disease)
+    if disease:
+        context.quote = title_text[:400]
+        context.disease_terms.append(disease)
+        context.from_title = True
+        return context
+    if not sentences:
+        return context
     for sentence in _SENTENCE_SPLIT_RE.split(head):
         if not _ASCERTAINMENT_RE.search(sentence):
             continue
@@ -613,6 +720,7 @@ def classify_table_cohort(
     run_disease: Optional[re.Pattern[str]] = None,
     paper: Optional[PaperContext] = None,
     allow_paper_tier: bool = False,
+    allow_title_tier: bool = False,
 ) -> TableCohort:
     """Decide whether a count table enumerates cases, controls, or neither.
 
@@ -626,7 +734,14 @@ def classify_table_cohort(
     base = {"caption": caption, "count_label": count_label}
 
     if count_label.casefold() == IMPLICIT_ROW_CARRIER_LABEL:
-        return TableCohort(None, None, "per_person_clinical_row", **base)
+        return _classify_per_person_rows(
+            caption,
+            header_list,
+            base,
+            run_disease=run_disease,
+            paper=paper,
+            allow_title_tier=allow_title_tier,
+        )
     excluded_token = _column_excluded(count_label)
     if excluded_token:
         return TableCohort(
@@ -747,15 +862,70 @@ def classify_table_cohort(
     if disease and _is_bare_count_label(count_label):
         return TableCohort(None, None, "disease_caption_without_people_noun", **base)
 
-    if allow_paper_tier and paper is not None and paper.quote:
+    title_evidence = bool(allow_title_tier and paper is not None and paper.from_title)
+    if (allow_paper_tier or title_evidence) and paper is not None and paper.quote:
         if case_in_caption or _PEOPLE_NOUN_RE.search(caption):
             return TableCohort(
                 None, None, "caption_names_cohort_without_disease", **base
             )
         return TableCohort(
-            "case", TIER_PAPER, "paper_ascertainment", quote=paper.quote, **base
+            "case",
+            TIER_TITLE if title_evidence else TIER_PAPER,
+            "title_ascertainment" if title_evidence else "paper_ascertainment",
+            quote=paper.quote,
+            **base,
         )
     return TableCohort(None, None, "no_cohort_evidence", **base)
+
+
+def _classify_per_person_rows(
+    caption: str,
+    header_list: list[str],
+    base: dict[str, str],
+    *,
+    run_disease: Optional[re.Pattern[str]],
+    paper: Optional[PaperContext],
+    allow_title_tier: bool,
+) -> TableCohort:
+    """Classify a table whose parser inferred one carrier per row.
+
+    A mutation catalogue (one proband's mutation per row, no clinical
+    columns) may be projected when its own caption names the disease case
+    series, or when the paper's title defines a disease proband cohort and the
+    caption names nobody else. A clinical roster -- characteristics, relatives,
+    carriers, screened or followed-up people, any phenotype/status column --
+    always refuses: its rows carry their own phenotype and must be read.
+    """
+    refusal = "per_person_clinical_row"
+    if _CAPTION_EXCLUDE_RE.search(caption) or _CONTROL_RE.search(caption):
+        return TableCohort(None, None, refusal, **base)
+    if _ROSTER_CAPTION_RE.search(caption) or not _CATALOGUE_NOUN_RE.search(caption):
+        return TableCohort(None, None, refusal, **base)
+    for header in header_list:
+        if _HEADER_EXCLUDE_RE.search(header) or _CONTROL_HEADER_RE.search(header):
+            return TableCohort(None, None, refusal, **base)
+    disease = _disease_hit(caption, run_disease)
+    if disease and _CASE_NOUN_RE.search(caption):
+        return TableCohort(
+            "case",
+            TIER_CAPTION,
+            "per_person_disease_case_catalogue",
+            quote=f"{disease}; {caption}",
+            **base,
+        )
+    if _CASE_NOUN_RE.search(caption) or _PEOPLE_NOUN_RE.search(caption):
+        return TableCohort(
+            None, None, "per_person_cohort_caption_without_disease", **base
+        )
+    if allow_title_tier and paper is not None and paper.from_title and paper.quote:
+        return TableCohort(
+            "case",
+            TIER_TITLE,
+            "per_person_proband_catalogue",
+            quote=paper.quote,
+            **base,
+        )
+    return TableCohort(None, None, refusal, **base)
 
 
 # --------------------------------------------------------------------------- #
@@ -823,6 +993,7 @@ def derive_table_cohort_phenotype_counts(
     title: Optional[str] = None,
     enabled: Optional[bool] = None,
     allow_paper_tier: Optional[bool] = None,
+    allow_title_tier: Optional[bool] = None,
 ) -> dict[str, Any]:
     """Populate cohort-derived affected/unaffected on eligible table rows.
 
@@ -841,6 +1012,8 @@ def derive_table_cohort_phenotype_counts(
         enabled = table_cohort_phenotype_enabled()
     if allow_paper_tier is None:
         allow_paper_tier = paper_ascertainment_tier_enabled()
+    if allow_title_tier is None:
+        allow_title_tier = title_ascertainment_tier_enabled()
 
     result = copy.deepcopy(extracted_data)
     metadata = result.setdefault("extraction_metadata", {})
@@ -856,8 +1029,13 @@ def derive_table_cohort_phenotype_counts(
     source_text = source_text or ""
     run_disease = disease_pattern(disease)
     paper = (
-        paper_context(source_text, title=title, run_disease=run_disease)
-        if allow_paper_tier
+        paper_context(
+            source_text,
+            title=title,
+            run_disease=run_disease,
+            sentences=bool(allow_paper_tier),
+        )
+        if (allow_paper_tier or allow_title_tier)
         else None
     )
     router_tables: Optional[dict[str, Any]] = None
@@ -951,6 +1129,21 @@ def derive_table_cohort_phenotype_counts(
                     {"variant": identity, "status": "ambiguous_source_caption"}
                 )
                 continue
+        continued = _CONTINUED_CAPTION_RE.match(caption) if caption else None
+        if continued:
+            # The parser kept the page-break heading; the table's cohort is
+            # named by the caption printed at its first page.
+            base_label = _squash(continued.group(1))
+            if base_label not in caption_cache:
+                caption_cache[base_label] = _resolve_caption(base_label, source_text)
+            resolved, caption_status = caption_cache[base_label]
+            if caption_status == "ambiguous":
+                outcomes.append(
+                    {"variant": identity, "status": "ambiguous_source_caption"}
+                )
+                continue
+            if caption_status == "resolved":
+                caption = resolved
         if not caption and not count_label:
             outcomes.append({"variant": identity, "status": "no_table_context"})
             continue
@@ -964,6 +1157,7 @@ def derive_table_cohort_phenotype_counts(
                 run_disease=run_disease,
                 paper=paper,
                 allow_paper_tier=bool(allow_paper_tier),
+                allow_title_tier=bool(allow_title_tier),
             )
             table_cache[key] = cohort
         summary = tables_summary.setdefault(
@@ -981,6 +1175,16 @@ def derive_table_cohort_phenotype_counts(
         if cohort.role is None:
             outcomes.append(
                 {"variant": identity, "status": f"not_derived:{cohort.reason}"}
+            )
+            continue
+        if count_label.casefold() == IMPLICIT_ROW_CARRIER_LABEL and carriers != 1:
+            # The parser asserted one carrier per row; any other count means
+            # the row is not one proband and the catalogue rule does not apply.
+            outcomes.append(
+                {
+                    "variant": identity,
+                    "status": "not_derived:per_person_row_count_not_one",
+                }
             )
             continue
 
@@ -1140,7 +1344,9 @@ def derive_table_cohort_phenotype_counts(
         "attempted": True,
         "applied": bool(applied or stamped),
         "paper_tier_enabled": bool(allow_paper_tier),
+        "title_tier_enabled": bool(allow_title_tier),
         "paper_ascertainment_quote": (paper.quote if paper else ""),
+        "paper_ascertainment_from_title": bool(paper.from_title) if paper else False,
         "paper_variant_count": len(variants),
         "applied_variant_count": applied,
         "stamped_variant_count": stamped,

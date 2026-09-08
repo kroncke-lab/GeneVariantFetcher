@@ -2127,6 +2127,13 @@ Nucleotide Change              Coding Effect            Region
     assert by_protein["L136P"]["penetrance_data"] == {
         "total_carriers_observed": 2,
     }
+    # A row with no printed count is one proband: the provenance must say so
+    # rather than naming the "Coding Effect" text column as a count header.
+    assert by_protein["Q55X"]["penetrance_data"] == {"total_carriers_observed": 1}
+    assert (
+        by_protein["Q55X"]["count_provenance"]["carriers_column_label"]
+        == "implicit one carrier per clinical row"
+    )
     assert by_protein["L136P"]["count_provenance"] == {
         "carriers_column_label": "Coding Effect count",
         "carriers_count_type": "per_variant_carrier",

@@ -6403,8 +6403,11 @@ class ExpertExtractor(BaseLLMCaller):
                             source_ref=current_table_label
                             or "Fixed-width clinical mutation table",
                             parser="fixed_width_clinical_mutation",
-                            carriers_label="Coding Effect"
-                            if count == 1 and match.group("count") is None
+                            # No printed count: the parser asserts one proband
+                            # per row. Say so, instead of naming a text column
+                            # as if it were a people-count header.
+                            carriers_label="implicit one carrier per clinical row"
+                            if count_match is None and match.group("count") is None
                             else "Coding Effect count",
                             affected_label=None,
                             unaffected_label=None,

@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-07.
+Last reviewed: 2026-09-08.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -128,13 +128,41 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       A broader archive sweep identifies and prevents the patient-header
       projection on a 263-variant literature-review table. No new holdout,
       paid extraction arm, headline or default-off stage promotion.
-- [ ] **Next phenotype step:** specify source-bound target disease, endpoint,
-      timepoint and cohort ownership before bounded enrichment of the newly
-      flagged clinical tables. Preserve deterministic identities/carriers on
-      any enrichment failure. Missing unaffected values in case-only studies
-      are not an enrichment obligation. Audit 30059973's reference endpoint and
-      20129283's duplicate-row conventions with the curator; do not silently
-      rewrite either gold or source facts to pass a benchmark.
+- [x] **Five-item pass on Brett's 2026-09-08 instructions** (evidence:
+      `docs/evidence/phenotype_supply_20260908/README.md`).
+      1. **Curator adjudication tables drafted; decision is Brett's.** SCN5A
+         20129283: gold stores one row per testing centre listed in Table 4
+         (47 variants, 117 rows; 14 do not sum to the printed count);
+         `item1_gold_adjudication/gold_20129283_multirow_proposal.csv` proposes
+         one row per printed nucleotide change with carriers = affected =
+         Table 4 N. SCN5A 30059973: gold records all 442 carriers as
+         LQT3-affected while Table 1 reports 196 with a negative ECG phenotype;
+         `gold_30059973_table14_vs_gold.csv` gives the per-phenotype split for
+         the 12 variants the paper reports. Nothing in gold was changed.
+      2. **Title-ascertainment tier shipped, default on**
+         (`GVF_TABLE_COHORT_TITLE_ASCERTAINMENT`): +48 exact / 0 wrong on the
+         opened locks, cardiac affected exact recovery 50.7% → 55.0%; one table
+         stamped across 497 archived cardiac papers. Continuation headings and
+         the fixed-width parser's implicit-row label fixed alongside.
+      3. **Sentence-level paper tier stays off**: on the cardiac archive it
+         fires on a footnote (KCNH2 11854117) and on a drug-challenge cohort
+         (SCN5A 29709244) whose gold split it would overwrite. Non-cardiac
+         tables are out of scope per Brett.
+      4. **Manual-acquisition worklist**
+         (`docs/evidence/manual_acquisition_20260908/`): 363 papers ranked by
+         gold rows behind the acquisition ceiling; top 150 = 83.5% of 1,314
+         rows, 57 of them without institutional access. EZproxy is retired as
+         a route.
+      5. **Tranche 05 opened** as one live arm of current main
+         (`20260908_protocol_cont120_05_baseline`, PLAN preregistered); scored
+         result and within-arm ablation recorded in the evidence README.
+- [ ] **Next phenotype step:** the derived-count contract at the top of this
+      file owns the remaining gap, which is 146 model-authored rows without an
+      affected value on the opened locks. Per-person clinical rosters
+      (29925740-shaped "Clinical diagnosis" columns) need a reader of the
+      row's own status cell, never a projection. Fold the curator's answers on
+      20129283 and 30059973 into gold before the next scored arm; do not
+      silently rewrite either gold or source facts to pass a benchmark.
 
 ## Previous $100 improvement campaign
 

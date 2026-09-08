@@ -1,0 +1,77 @@
+{
+  "generated_from": {
+    "gold_rows": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/gold_source_presence_sweep_20260903/gold_rows.tsv",
+    "papers_json": "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/gold_source_presence_sweep_20260903/papers.json",
+    "corpus_index": "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/INDEX.csv",
+    "pmid_file": null,
+    "genes": [
+      "BRCA2",
+      "KCNH2",
+      "KCNQ1",
+      "RYR2",
+      "SCN5A"
+    ],
+    "network": true
+  },
+  "yield_label": "hard_yield",
+  "papers_with_hard_yield": 363,
+  "hard_rows_total": 1314,
+  "selected_papers": 250,
+  "selected_hard_rows": 1201,
+  "selected_hard_pct": 91.4,
+  "capture_curve": {
+    "25": {
+      "papers": 25,
+      "hard_rows": 578,
+      "pct_of_hard_rows": 44.0
+    },
+    "50": {
+      "papers": 50,
+      "hard_rows": 778,
+      "pct_of_hard_rows": 59.2
+    },
+    "100": {
+      "papers": 100,
+      "hard_rows": 986,
+      "pct_of_hard_rows": 75.0
+    },
+    "150": {
+      "papers": 150,
+      "hard_rows": 1097,
+      "pct_of_hard_rows": 83.5
+    },
+    "200": {
+      "papers": 200,
+      "hard_rows": 1151,
+      "pct_of_hard_rows": 87.6
+    },
+    "250": {
+      "papers": 250,
+      "hard_rows": 1201,
+      "pct_of_hard_rows": 91.4
+    },
+    "300": {
+      "papers": 300,
+      "hard_rows": 1251,
+      "pct_of_hard_rows": 95.2
+    }
+  },
+  "access_classes_in_selection": {
+    "paywalled_pdf": 88,
+    "free_pdf_not_fetched": 65,
+    "paywalled_supplements": 51,
+    "free_supplements": 24,
+    "no_doi": 20,
+    "garbled_pdf": 2
+  },
+  "hard_classes": [
+    "source_absent",
+    "text_absent_stub_body",
+    "text_absent_garbled_body",
+    "text_absent_substitution"
+  ],
+  "unknown_classes": [
+    "text_absent_figures_present",
+    "text_absent_notation_inconclusive"
+  ]
+}

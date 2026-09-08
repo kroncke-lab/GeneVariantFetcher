@@ -134,6 +134,41 @@ def source_text_for(extraction: dict[str, Any], gene_run: Path, pmid: str) -> st
     return ""
 
 
+# Extraction JSON carries "Paper <pmid>" when the run never stored a title.
+_PLACEHOLDER_TITLE_RE = re.compile(r"^paper\s+\d+$", re.IGNORECASE)
+
+
+def paper_title_for(
+    extraction: dict[str, Any], gene_run: Path, pmid: str
+) -> Optional[str]:
+    """The PubMed title the production run held for this paper, if archived.
+
+    The title tier reads the paper's title; extraction JSON rarely stores it,
+    so fall back to the run-local ``abstract_json/<pmid>.json`` metadata that
+    ``gvf-run`` wrote before extraction. Nothing here reaches the network.
+    """
+    title = (extraction.get("paper_metadata") or {}).get("title")
+    if (
+        isinstance(title, str)
+        and title.strip()
+        and not _PLACEHOLDER_TITLE_RE.match(title.strip())
+    ):
+        return title.strip()
+    path = gene_run / "abstract_json" / f"{pmid}.json"
+    if not path.is_file():
+        return None
+    try:
+        payload = json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    for holder in (payload.get("metadata"), payload):
+        if isinstance(holder, dict):
+            value = holder.get("title") or holder.get("Title")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+    return None
+
+
 def disease_for(gene_run: Path) -> Optional[str]:
     path = gene_run / "gene_disease_context.json"
     if not path.is_file():
@@ -157,9 +192,11 @@ def derived_records(
     disease: Optional[str],
     mode: str,
     paper_tier: bool,
+    title_tier: bool = False,
+    title: Optional[str] = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Return per-record target values plus the module's metadata block."""
-    title = (extraction.get("paper_metadata") or {}).get("title")
+    title = title or (extraction.get("paper_metadata") or {}).get("title")
     if mode == "derive":
         data = derive_table_cohort_phenotype_counts(
             extraction,
@@ -169,6 +206,7 @@ def derived_records(
             title=title,
             enabled=True,
             allow_paper_tier=paper_tier,
+            allow_title_tier=title_tier,
         )
         # Mimic the persist-site guard so only values the guard keeps count.
         apply_phenotype_count_guard(data.get("variants") or [])
@@ -366,6 +404,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     report: dict[str, Any] = {
         "mode": args.mode,
         "paper_tier": bool(args.paper_tier),
+        "title_tier": bool(getattr(args, "title_tier", False)),
         "runs": {},
     }
 
@@ -414,6 +453,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 disease=disease_for(gene_run),
                 mode=args.mode,
                 paper_tier=bool(args.paper_tier),
+                title_tier=bool(getattr(args, "title_tier", False)),
+                title=paper_title_for(extraction, gene_run, pmid),
             )
             if metadata.get("tables"):
                 module_tables[f"{gene}:{pmid}"] = metadata["tables"]
@@ -641,6 +682,11 @@ def main(argv: Optional[list[str]] = None) -> int:
         "--paper-tier",
         action="store_true",
         help="also enable the paper-ascertainment tier (diagnostic only)",
+    )
+    parser.add_argument(
+        "--title-tier",
+        action="store_true",
+        help="also enable the title-ascertainment tier (paper title defines the cohort)",
     )
     args = parser.parse_args(argv)
     run(args)

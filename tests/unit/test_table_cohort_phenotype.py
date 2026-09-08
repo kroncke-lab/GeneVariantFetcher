@@ -18,13 +18,18 @@ from pipeline.count_provenance import (
 )
 from pipeline.phenotype_count_guard import apply_phenotype_count_guard
 from pipeline.table_cohort_phenotype import (
+    IMPLICIT_ROW_CARRIER_LABEL,
     TIER_CAPTION,
     TIER_CAPTION_DISEASE,
     TIER_COLUMN,
     TIER_PAPER,
+    TIER_TITLE,
+    PaperContext,
     classify_table_cohort,
     derive_table_cohort_phenotype_counts,
     expand_caption,
+    paper_context,
+    title_ascertains,
 )
 
 CASE_SOURCE = """
@@ -127,6 +132,7 @@ def extraction(*rows):
 def derive(data, source, **kwargs):
     kwargs.setdefault("enabled", True)
     kwargs.setdefault("allow_paper_tier", False)
+    kwargs.setdefault("allow_title_tier", False)
     return derive_table_cohort_phenotype_counts(data, source, **kwargs)
 
 
@@ -909,3 +915,285 @@ Table 1. Mutation counts in LQT2 patients
         ]["status"]
         == "ambiguous_source_caption"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Title-ascertainment tier and one-proband-per-row mutation catalogues
+# --------------------------------------------------------------------------- #
+
+PROBAND_TITLE = (
+    "Genotype-Phenotype Correlation of SCN5A Mutation for the Clinical and "
+    "Electrocardiographic Characteristics of Probands With Brugada Syndrome: "
+    "A Japanese Multicenter Registry"
+)
+TITLE_CONTEXT = PaperContext(quote=PROBAND_TITLE, from_title=True)
+
+
+def proband_row(**overrides):
+    overrides.setdefault("protein", "Q55X")
+    overrides.setdefault("carriers", 1)
+    overrides.setdefault(
+        "source_table", "Table 2. Included SCN5A Mutations and Variants"
+    )
+    overrides.setdefault("headers", ("Nucleotide Change", "Coding Effect", "Region"))
+    overrides.setdefault("count_label", IMPLICIT_ROW_CARRIER_LABEL)
+    overrides.setdefault("parser", "fixed_width_clinical_mutation")
+    overrides.setdefault("gene_symbol", "SCN5A")
+    return table_row(**overrides)
+
+
+def test_title_ascertains_binds_a_people_noun_to_a_disease_in_the_title():
+    assert title_ascertains(PROBAND_TITLE)
+    assert title_ascertains(
+        "Results of genetic testing in 855 consecutive unrelated patients "
+        "referred for long QT syndrome in a clinical laboratory"
+    )
+    assert title_ascertains("Spectrum of KCNH2 mutations in long QT syndrome patients")
+    # No people noun, no disease, or an enrollment design: nothing is ascertained.
+    assert (
+        title_ascertains(
+            "Female predominance and transmission distortion in the long-QT syndrome"
+        )
+        == ""
+    )
+    assert (
+        title_ascertains(
+            "Functional characterization of SCN5A variants in patients with syncope"
+        )
+        == ""
+    )
+    assert (
+        title_ascertains(
+            "SCN5A mutation type and topology are associated with the risk of "
+            "ventricular arrhythmia by sodium channel blockers"
+        )
+        == ""
+    )
+    assert (
+        title_ascertains("Whole exome sequencing in patients with Brugada syndrome")
+        == ""
+    )
+    assert (
+        title_ascertains(
+            "Interpreting Incidentally Identified Variants in Genes Associated with "
+            "Catecholaminergic Polymorphic Ventricular Tachycardia in a Large Cohort "
+            "of Clinical Whole Exome Genetic Test Referrals"
+        )
+        == ""
+    )
+    context = paper_context("", title=PROBAND_TITLE, sentences=False)
+    assert context.from_title and context.quote == PROBAND_TITLE
+
+
+def test_title_tier_projects_one_proband_per_row_mutation_catalogue():
+    row = proband_row()
+    off = derive(extraction(copy.deepcopy(row)), "", title=PROBAND_TITLE)
+    assert off["variants"][0]["penetrance_data"]["affected_count"] is None
+    assert (
+        off["extraction_metadata"]["table_cohort_phenotype_derivation"]["outcomes"][0][
+            "status"
+        ]
+        == "not_derived:per_person_clinical_row"
+    )
+    # The weaker sentence tier alone must not unlock per-person rows.
+    sentence_only = derive(
+        extraction(copy.deepcopy(row)), "", title=PROBAND_TITLE, allow_paper_tier=True
+    )
+    assert sentence_only["variants"][0]["penetrance_data"]["affected_count"] is None
+
+    on = derive(
+        extraction(copy.deepcopy(row)), "", title=PROBAND_TITLE, allow_title_tier=True
+    )
+    variant = on["variants"][0]
+    assert variant["penetrance_data"]["affected_count"] == 1
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert variant["count_provenance"]["affected_count_type"] == "case"
+    assert (
+        variant["count_provenance"]["affected_source"] == TABLE_COHORT_PHENOTYPE_SOURCE
+    )
+    assert variant["phenotype_derivation"]["tier"] == TIER_TITLE
+    assert (
+        "Probands With Brugada Syndrome"
+        in variant["phenotype_derivation"]["evidence_quote"]
+    )
+    metadata = on["extraction_metadata"]["table_cohort_phenotype_derivation"]
+    assert metadata["title_tier_enabled"] is True
+    assert metadata["paper_ascertainment_from_title"] is True
+    assert metadata["tables"]["Table 2. Included SCN5A Mutations and Variants"][
+        "reason"
+    ] == ("per_person_proband_catalogue")
+    apply_phenotype_count_guard(on["variants"])
+    assert variant["penetrance_data"]["affected_count"] == 1
+
+
+def test_title_tier_refuses_clinical_rosters_relatives_and_enrollment_designs():
+    for caption in (
+        "Table S1. Subject Clinical and Genetic Characteristics",
+        "Table 2 Primary symptom of proband, mutation type and associated "
+        "asymptomatic/symptomatic RyR2 variant-carrying relatives (n)",
+        "Table 3. Clinical characteristics of mutation carriers",
+        "Supplemental Table 1: Compendium of variants identified by WES testing",
+        "Table 4. Variants in screened family members",
+        "Table 5. Genotype-positive individuals and follow-up",
+        "Table 6. Controls",
+    ):
+        cohort = classify_table_cohort(
+            caption,
+            IMPLICIT_ROW_CARRIER_LABEL,
+            [],
+            paper=TITLE_CONTEXT,
+            allow_title_tier=True,
+        )
+        assert cohort.role is None, caption
+    # A phenotype/status column means the rows carry their own phenotype.
+    for header in ("Symptoms", "Clinical diagnosis", "Affected status", "Controls"):
+        cohort = classify_table_cohort(
+            "Table 2. Included SCN5A Mutations and Variants",
+            IMPLICIT_ROW_CARRIER_LABEL,
+            ["Nucleotide Change", "Coding Effect", header],
+            paper=TITLE_CONTEXT,
+            allow_title_tier=True,
+        )
+        assert cohort.role is None, header
+    # A caption naming people without a disease could be any subgroup.
+    cohort = classify_table_cohort(
+        "Table 2. Mutations identified in 60 probands",
+        IMPLICIT_ROW_CARRIER_LABEL,
+        [],
+        paper=TITLE_CONTEXT,
+        allow_title_tier=True,
+    )
+    assert cohort.reason == "per_person_cohort_caption_without_disease"
+    # The sentence tier's context never certifies per-person rows.
+    sentence_context = PaperContext(
+        quote="Patients with Brugada syndrome were enrolled."
+    )
+    cohort = classify_table_cohort(
+        "Table 2. Included SCN5A Mutations and Variants",
+        IMPLICIT_ROW_CARRIER_LABEL,
+        [],
+        paper=sentence_context,
+        allow_paper_tier=True,
+        allow_title_tier=True,
+    )
+    assert cohort.reason == "per_person_clinical_row"
+    # The parser's one-carrier claim must hold for the row being projected.
+    result = derive(
+        extraction(proband_row(carriers=2)),
+        "",
+        title=PROBAND_TITLE,
+        allow_title_tier=True,
+    )
+    assert result["variants"][0]["penetrance_data"]["affected_count"] is None
+    assert (
+        result["extraction_metadata"]["table_cohort_phenotype_derivation"]["outcomes"][
+            0
+        ]["status"]
+        == "not_derived:per_person_row_count_not_one"
+    )
+
+
+def test_caption_naming_disease_probands_certifies_per_person_catalogue_locally():
+    cohort = classify_table_cohort(
+        "Table 2. SCN5A mutations identified in Brugada syndrome probands",
+        IMPLICIT_ROW_CARRIER_LABEL,
+        ["Proband", "Mutation", "Exon"],
+    )
+    assert cohort.role == "case"
+    assert cohort.tier == TIER_CAPTION
+    assert cohort.reason == "per_person_disease_case_catalogue"
+    relatives = classify_table_cohort(
+        "Table 3. Brugada syndrome probands and their relatives",
+        IMPLICIT_ROW_CARRIER_LABEL,
+        [],
+    )
+    assert relatives.role is None
+    literature = classify_table_cohort(
+        "Table 4. Previously reported Brugada syndrome mutations in probands",
+        IMPLICIT_ROW_CARRIER_LABEL,
+        [],
+    )
+    assert literature.role is None
+
+
+def test_title_tier_certifies_a_count_column_when_the_caption_names_no_cohort():
+    row = table_row(
+        protein="Q55X",
+        carriers=1,
+        source_table="Table 2. Included SCN5A Mutations and Variants",
+        headers=("Nucleotide", "Coding Effect", "n"),
+        count_label="n",
+        gene_symbol="SCN5A",
+    )
+    on = derive(
+        extraction(copy.deepcopy(row)), "", title=PROBAND_TITLE, allow_title_tier=True
+    )
+    variant = on["variants"][0]
+    assert variant["penetrance_data"]["affected_count"] == 1
+    assert variant["phenotype_derivation"]["tier"] == TIER_TITLE
+    # A caption that names its own cohort without the disease still refuses.
+    named = table_row(
+        protein="Q55X",
+        carriers=1,
+        source_table="Table 3. Mutations found in 60 patients",
+        headers=("Nucleotide", "Coding Effect", "n"),
+        count_label="n",
+        gene_symbol="SCN5A",
+    )
+    refused = derive(extraction(named), "", title=PROBAND_TITLE, allow_title_tier=True)
+    assert refused["variants"][0]["penetrance_data"]["affected_count"] is None
+
+
+def test_archived_coding_effect_label_is_read_as_one_carrier_per_row():
+    """Runs extracted before the parser fix carry "Coding Effect" as the carrier
+    label of an implicit one-proband row; replay and refresh must classify
+    them as a fresh extraction would. A printed count keeps its own label."""
+    archived = proband_row(count_label="Coding Effect")
+    on = derive(
+        extraction(copy.deepcopy(archived)),
+        "",
+        title=PROBAND_TITLE,
+        allow_title_tier=True,
+    )
+    assert on["variants"][0]["penetrance_data"]["affected_count"] == 1
+    assert on["variants"][0]["phenotype_derivation"]["tier"] == TIER_TITLE
+    counted = proband_row(count_label="Coding Effect count", carriers=2)
+    off = derive(extraction(counted), "", title=PROBAND_TITLE, allow_title_tier=True)
+    assert off["variants"][0]["penetrance_data"]["affected_count"] is None
+    other_parser = proband_row(count_label="Coding Effect", parser="markdown_table")
+    other = derive(
+        extraction(other_parser), "", title=PROBAND_TITLE, allow_title_tier=True
+    )
+    assert other["variants"][0]["penetrance_data"]["affected_count"] is None
+
+
+def test_continued_table_heading_resolves_to_the_first_printed_caption():
+    source = """
+Table 2. Included SCN5A Mutations and Variants
+Nucleotide Change              Coding Effect            Region
+163C>T                         Q55X                     N-terminal
+
+                        Table 2. Continued
+Nucleotide Change              Coding Effect            Region
+4222G>A                        G1408R                   DIII-S5/S6
+"""
+    # The continuation heading is not a competing caption for the bare label.
+    assert (
+        expand_caption("Table 2", source)
+        == "Table 2. Included SCN5A Mutations and Variants"
+    )
+    row = proband_row(protein="G1408R", source_table="Table 2. Continued")
+    on = derive(extraction(row), source, title=PROBAND_TITLE, allow_title_tier=True)
+    variant = on["variants"][0]
+    assert variant["penetrance_data"]["affected_count"] == 1
+    assert variant["phenotype_derivation"]["source_table"] == (
+        "Table 2. Included SCN5A Mutations and Variants"
+    )
+    # Without a resolvable first caption the continuation heading names nothing.
+    alone = derive(
+        extraction(proband_row(protein="G1408R", source_table="Table 2 (cont.)")),
+        "",
+        title=PROBAND_TITLE,
+        allow_title_tier=True,
+    )
+    assert alone["variants"][0]["penetrance_data"]["affected_count"] is None

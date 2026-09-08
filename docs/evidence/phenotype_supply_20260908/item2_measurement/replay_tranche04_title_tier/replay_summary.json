@@ -1,0 +1,383 @@
+{
+  "mode": "derive",
+  "paper_tier": false,
+  "title_tier": true,
+  "runs": {
+    "20260907_protocol_cont120_04_baseline": {
+      "inputs": {
+        "predictions_sha256": "23e5138286a3513b97ebe505b896d9fcf4a49638c2fc767c07047f622f4598db",
+        "report_sha256": "dab894fdba190337a490a09c5d43a6c7edd1774477cd055570ea229f0b4375c7",
+        "gold_root": "/Users/kronckbm/GitRepos/GeneVariantFetcher/benchmarks/evaluation_tiers/mixed_gold_continuation_120/answer_key"
+      },
+      "arms": {
+        "off": {
+          "all_genes": {
+            "attempts": 120,
+            "identity": {
+              "tp": 491,
+              "fp": 145,
+              "fn": 231,
+              "counted_extra_rows": 44
+            },
+            "counts": {
+              "carriers": {
+                "gold_assertions": 722,
+                "positive_gold": 677,
+                "supplied": 377,
+                "positive_supplied": 370,
+                "positive_exact": 350,
+                "wrong_supplied": 27,
+                "exact_supplied": 350,
+                "positive_exact_recovery_pct": 51.7,
+                "conditional_exact_pct": 92.84
+              },
+              "affected": {
+                "gold_assertions": 722,
+                "positive_gold": 549,
+                "supplied": 72,
+                "positive_supplied": 58,
+                "positive_exact": 52,
+                "wrong_supplied": 19,
+                "exact_supplied": 53,
+                "positive_exact_recovery_pct": 9.47,
+                "conditional_exact_pct": 73.61
+              },
+              "unaffected": {
+                "gold_assertions": 722,
+                "positive_gold": 73,
+                "supplied": 22,
+                "positive_supplied": 10,
+                "positive_exact": 7,
+                "wrong_supplied": 8,
+                "exact_supplied": 14,
+                "positive_exact_recovery_pct": 9.59,
+                "conditional_exact_pct": 63.64
+              }
+            }
+          },
+          "cardiac_four": {
+            "attempts": 118,
+            "identity": {
+              "tp": 485,
+              "fp": 145,
+              "fn": 225,
+              "counted_extra_rows": 44
+            },
+            "counts": {
+              "carriers": {
+                "gold_assertions": 710,
+                "positive_gold": 665,
+                "supplied": 376,
+                "positive_supplied": 369,
+                "positive_exact": 349,
+                "wrong_supplied": 27,
+                "exact_supplied": 349,
+                "positive_exact_recovery_pct": 52.48,
+                "conditional_exact_pct": 92.82
+              },
+              "affected": {
+                "gold_assertions": 710,
+                "positive_gold": 545,
+                "supplied": 71,
+                "positive_supplied": 57,
+                "positive_exact": 51,
+                "wrong_supplied": 19,
+                "exact_supplied": 52,
+                "positive_exact_recovery_pct": 9.36,
+                "conditional_exact_pct": 73.24
+              },
+              "unaffected": {
+                "gold_assertions": 710,
+                "positive_gold": 71,
+                "supplied": 21,
+                "positive_supplied": 9,
+                "positive_exact": 6,
+                "wrong_supplied": 8,
+                "exact_supplied": 13,
+                "positive_exact_recovery_pct": 8.45,
+                "conditional_exact_pct": 61.9
+              }
+            }
+          }
+        },
+        "on": {
+          "all_genes": {
+            "attempts": 120,
+            "identity": {
+              "tp": 491,
+              "fp": 145,
+              "fn": 231,
+              "counted_extra_rows": 44
+            },
+            "counts": {
+              "carriers": {
+                "gold_assertions": 722,
+                "positive_gold": 677,
+                "supplied": 377,
+                "positive_supplied": 370,
+                "positive_exact": 350,
+                "wrong_supplied": 27,
+                "exact_supplied": 350,
+                "positive_exact_recovery_pct": 51.7,
+                "conditional_exact_pct": 92.84
+              },
+              "affected": {
+                "gold_assertions": 722,
+                "positive_gold": 549,
+                "supplied": 72,
+                "positive_supplied": 58,
+                "positive_exact": 52,
+                "wrong_supplied": 19,
+                "exact_supplied": 53,
+                "positive_exact_recovery_pct": 9.47,
+                "conditional_exact_pct": 73.61
+              },
+              "unaffected": {
+                "gold_assertions": 722,
+                "positive_gold": 73,
+                "supplied": 22,
+                "positive_supplied": 10,
+                "positive_exact": 7,
+                "wrong_supplied": 8,
+                "exact_supplied": 14,
+                "positive_exact_recovery_pct": 9.59,
+                "conditional_exact_pct": 63.64
+              }
+            }
+          },
+          "cardiac_four": {
+            "attempts": 118,
+            "identity": {
+              "tp": 485,
+              "fp": 145,
+              "fn": 225,
+              "counted_extra_rows": 44
+            },
+            "counts": {
+              "carriers": {
+                "gold_assertions": 710,
+                "positive_gold": 665,
+                "supplied": 376,
+                "positive_supplied": 369,
+                "positive_exact": 349,
+                "wrong_supplied": 27,
+                "exact_supplied": 349,
+                "positive_exact_recovery_pct": 52.48,
+                "conditional_exact_pct": 92.82
+              },
+              "affected": {
+                "gold_assertions": 710,
+                "positive_gold": 545,
+                "supplied": 71,
+                "positive_supplied": 57,
+                "positive_exact": 51,
+                "wrong_supplied": 19,
+                "exact_supplied": 52,
+                "positive_exact_recovery_pct": 9.36,
+                "conditional_exact_pct": 73.24
+              },
+              "unaffected": {
+                "gold_assertions": 710,
+                "positive_gold": 71,
+                "supplied": 21,
+                "positive_supplied": 9,
+                "positive_exact": 6,
+                "wrong_supplied": 8,
+                "exact_supplied": 13,
+                "positive_exact_recovery_pct": 8.45,
+                "conditional_exact_pct": 61.9
+              }
+            }
+          }
+        }
+      },
+      "new_value_verdicts": {},
+      "new_affected_on_gold_real_split_rows": 0,
+      "papers_changed": []
+    }
+  },
+  "pooled": {
+    "off": {
+      "all_genes": {
+        "attempts": 120,
+        "identity": {
+          "tp": 491,
+          "fp": 145,
+          "fn": 231,
+          "counted_extra_rows": 44
+        },
+        "counts": {
+          "carriers": {
+            "gold_assertions": 722,
+            "positive_gold": 677,
+            "supplied": 377,
+            "positive_supplied": 370,
+            "positive_exact": 350,
+            "wrong_supplied": 27,
+            "exact_supplied": 350,
+            "positive_exact_recovery_pct": 51.7,
+            "conditional_exact_pct": 92.84
+          },
+          "affected": {
+            "gold_assertions": 722,
+            "positive_gold": 549,
+            "supplied": 72,
+            "positive_supplied": 58,
+            "positive_exact": 52,
+            "wrong_supplied": 19,
+            "exact_supplied": 53,
+            "positive_exact_recovery_pct": 9.47,
+            "conditional_exact_pct": 73.61
+          },
+          "unaffected": {
+            "gold_assertions": 722,
+            "positive_gold": 73,
+            "supplied": 22,
+            "positive_supplied": 10,
+            "positive_exact": 7,
+            "wrong_supplied": 8,
+            "exact_supplied": 14,
+            "positive_exact_recovery_pct": 9.59,
+            "conditional_exact_pct": 63.64
+          }
+        }
+      },
+      "cardiac_four": {
+        "attempts": 118,
+        "identity": {
+          "tp": 485,
+          "fp": 145,
+          "fn": 225,
+          "counted_extra_rows": 44
+        },
+        "counts": {
+          "carriers": {
+            "gold_assertions": 710,
+            "positive_gold": 665,
+            "supplied": 376,
+            "positive_supplied": 369,
+            "positive_exact": 349,
+            "wrong_supplied": 27,
+            "exact_supplied": 349,
+            "positive_exact_recovery_pct": 52.48,
+            "conditional_exact_pct": 92.82
+          },
+          "affected": {
+            "gold_assertions": 710,
+            "positive_gold": 545,
+            "supplied": 71,
+            "positive_supplied": 57,
+            "positive_exact": 51,
+            "wrong_supplied": 19,
+            "exact_supplied": 52,
+            "positive_exact_recovery_pct": 9.36,
+            "conditional_exact_pct": 73.24
+          },
+          "unaffected": {
+            "gold_assertions": 710,
+            "positive_gold": 71,
+            "supplied": 21,
+            "positive_supplied": 9,
+            "positive_exact": 6,
+            "wrong_supplied": 8,
+            "exact_supplied": 13,
+            "positive_exact_recovery_pct": 8.45,
+            "conditional_exact_pct": 61.9
+          }
+        }
+      }
+    },
+    "on": {
+      "all_genes": {
+        "attempts": 120,
+        "identity": {
+          "tp": 491,
+          "fp": 145,
+          "fn": 231,
+          "counted_extra_rows": 44
+        },
+        "counts": {
+          "carriers": {
+            "gold_assertions": 722,
+            "positive_gold": 677,
+            "supplied": 377,
+            "positive_supplied": 370,
+            "positive_exact": 350,
+            "wrong_supplied": 27,
+            "exact_supplied": 350,
+            "positive_exact_recovery_pct": 51.7,
+            "conditional_exact_pct": 92.84
+          },
+          "affected": {
+            "gold_assertions": 722,
+            "positive_gold": 549,
+            "supplied": 72,
+            "positive_supplied": 58,
+            "positive_exact": 52,
+            "wrong_supplied": 19,
+            "exact_supplied": 53,
+            "positive_exact_recovery_pct": 9.47,
+            "conditional_exact_pct": 73.61
+          },
+          "unaffected": {
+            "gold_assertions": 722,
+            "positive_gold": 73,
+            "supplied": 22,
+            "positive_supplied": 10,
+            "positive_exact": 7,
+            "wrong_supplied": 8,
+            "exact_supplied": 14,
+            "positive_exact_recovery_pct": 9.59,
+            "conditional_exact_pct": 63.64
+          }
+        }
+      },
+      "cardiac_four": {
+        "attempts": 118,
+        "identity": {
+          "tp": 485,
+          "fp": 145,
+          "fn": 225,
+          "counted_extra_rows": 44
+        },
+        "counts": {
+          "carriers": {
+            "gold_assertions": 710,
+            "positive_gold": 665,
+            "supplied": 376,
+            "positive_supplied": 369,
+            "positive_exact": 349,
+            "wrong_supplied": 27,
+            "exact_supplied": 349,
+            "positive_exact_recovery_pct": 52.48,
+            "conditional_exact_pct": 92.82
+          },
+          "affected": {
+            "gold_assertions": 710,
+            "positive_gold": 545,
+            "supplied": 71,
+            "positive_supplied": 57,
+            "positive_exact": 51,
+            "wrong_supplied": 19,
+            "exact_supplied": 52,
+            "positive_exact_recovery_pct": 9.36,
+            "conditional_exact_pct": 73.24
+          },
+          "unaffected": {
+            "gold_assertions": 710,
+            "positive_gold": 71,
+            "supplied": 21,
+            "positive_supplied": 9,
+            "positive_exact": 6,
+            "wrong_supplied": 8,
+            "exact_supplied": 13,
+            "positive_exact_recovery_pct": 8.45,
+            "conditional_exact_pct": 61.9
+          }
+        }
+      }
+    },
+    "new_value_verdicts": {},
+    "new_affected_on_gold_real_split_rows": 0
+  }
+}

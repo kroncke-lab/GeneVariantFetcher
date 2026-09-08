@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -52,6 +53,33 @@ def source_text_for(extraction: dict[str, Any], path: Path, pmid: str) -> str:
     return ""
 
 
+_PLACEHOLDER_TITLE_RE = re.compile(r"^paper\s+\d+$", re.IGNORECASE)
+
+
+def paper_title_for(extraction: dict[str, Any], path: Path, pmid: str) -> Optional[str]:
+    """The run's archived PubMed title; extraction JSON often holds a placeholder."""
+    title = (extraction.get("paper_metadata") or {}).get("title")
+    if (
+        isinstance(title, str)
+        and title.strip()
+        and not _PLACEHOLDER_TITLE_RE.match(title.strip())
+    ):
+        return title.strip()
+    candidate = path.parent.parent / "abstract_json" / f"{pmid}.json"
+    if not candidate.is_file():
+        return None
+    try:
+        payload = json.loads(candidate.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    for holder in (payload.get("metadata"), payload):
+        if isinstance(holder, dict):
+            value = holder.get("title") or holder.get("Title")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+    return None
+
+
 def iter_extractions(roots: list[Path], genes: Optional[set[str]]):
     seen: set[str] = set()
     for root in roots:
@@ -75,6 +103,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--genes", nargs="*")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--paper-tier", action="store_true")
+    parser.add_argument("--title-tier", action="store_true")
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args(argv)
 
@@ -99,9 +128,10 @@ def main(argv: Optional[list[str]] = None) -> int:
             text,
             gene_symbol=gene,
             disease=None,
-            title=(extraction.get("paper_metadata") or {}).get("title"),
+            title=paper_title_for(extraction, path, pmid),
             enabled=True,
             allow_paper_tier=bool(args.paper_tier),
+            allow_title_tier=bool(args.title_tier),
         )
         meta = result["extraction_metadata"].get(
             "table_cohort_phenotype_derivation", {}
@@ -136,6 +166,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         "roots": [str(r) for r in args.root],
         "genes": sorted(genes) if genes else None,
         "paper_tier": bool(args.paper_tier),
+        "title_tier": bool(args.title_tier),
         "papers_scanned": papers,
         "tables_classified": len(tables),
         "rows_touched": rows_applied,

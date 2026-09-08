@@ -1,0 +1,348 @@
+variant,gold_rows,gold_rows_values,gold_carriers_sum,table4_cdna_rows,table4_total_n,status,proposed_rows
+A1113V,1,1/1/0,1,1,1,ok,3338 C>T A1113V: carriers=1 affected=1 unaffected=0 (centres 5)
+A1288G,1,1/1/0,1,1,1,ok,3863 C>G A1288G: carriers=1 affected=1 unaffected=0 (centres 4)
+A1427S,1,1/1/0,1,1,1,ok,4279 G>T A1427S: carriers=1 affected=1 unaffected=0 (centres 2)
+A1428V,1,1/1/0,1,1,1,ok,4283 C>T A1428V: carriers=1 affected=1 unaffected=0 (centres 2)
+A1680T,2,1/1/0|1/1/0,2,1,2,ok,"5038 G>A A1680T: carriers=2 affected=2 unaffected=0 (centres 2, 6)"
+A1698T,1,1/1/0,1,1,1,ok,5092 G>A A1698T: carriers=1 affected=1 unaffected=0 (centres 2)
+A178G,1,1/1/0,1,1,1,ok,533 C>G A178G: carriers=1 affected=1 unaffected=0 (centres 9)
+A185V,1,1/1/0,1,1,1,ok,554 C>T A185V: carriers=1 affected=1 unaffected=0 (centres 2)
+A1924T,1,1/1/0,1,1,1,ok,5770 G>A A1924T: carriers=1 affected=1 unaffected=0 (centres 3)
+A204V,1,1/1/0,1,1,1,ok,611 C>T A204V: carriers=1 affected=1 unaffected=0 (centres 4)
+A226V,1,2/2/0,2,1,2,ok,677 C>T A226V: carriers=2 affected=2 unaffected=0 (centres 2)
+A286S,1,1/0/1,1,0,,no_table4_row,
+A447G,1,1/0/1,1,0,,no_table4_row,
+A647D,1,1/1/0,1,1,1,ok,1940 C>A A647D: carriers=1 affected=1 unaffected=0 (centres 5)
+A672T,1,1/0/1,1,0,,no_table4_row,
+A735V,4,1/1/0|1/1/0|1/1/0|1/1/0,4,1,4,ok,"2204 C>T A735V: carriers=4 affected=4 unaffected=0 (centres 2, 4, 8, 9)"
+A997T,1,1/1/0,1,1,1,ok,2989 G>A A997T: carriers=1 affected=1 unaffected=0 (centres 5)
+C1363Y,1,1/1/0,1,1,1,ok,4088 G>A C1363Y: carriers=1 affected=1 unaffected=0 (centres 3)
+C1728R,1,1/1/0,1,1,1,ok,5182 T>C C1728R: carriers=1 affected=1 unaffected=0 (centres 2)
+C1728W,1,1/1/0,1,1,1,ok,5184 C>G C1728W: carriers=1 affected=1 unaffected=0 (centres 2)
+C182R,1,1/1/0,1,1,1,ok,544 T>C C182R: carriers=1 affected=1 unaffected=0 (centres 4)
+C683G,1,1/1/0,1,1,1,ok,2047 T>G C683G: carriers=1 affected=1 unaffected=0 (centres 7)
+C915R,1,1/1/0,1,1,1,ok,2743 T>C C915R: carriers=1 affected=1 unaffected=0 (centres 3)
+D1055G,1,1/1/0,1,1,1,ok,3164 A>G D1055G: carriers=1 affected=1 unaffected=0 (centres 1)
+D1243N,3,1/1/0|1/1/0|5/5/0,7,1,5,gold_sum_differs,"3727 G>A D1243N: carriers=5 affected=5 unaffected=0 (centres 1, 2, 5)"
+D1275N,2,1/1/0|1/1/0,2,1,3,gold_sum_differs,"3823 G>A D1275N: carriers=3 affected=3 unaffected=0 (centres 1, 5)"
+D1714G,1,1/1/0,1,1,1,ok,5141 A>G D1714G: carriers=1 affected=1 unaffected=0 (centres 3)
+D356N,1,8/8/0,8,1,8,ok,"1066 G>A D356N: carriers=8 affected=8 unaffected=0 (centres 1, 2, 4, 6, 7)"
+D501G,1,1/1/0,1,1,1,ok,1502 A>G D501G: carriers=1 affected=1 unaffected=0 (centres 3)
+D596G,1,1/0/1,1,0,,no_table4_row,
+D772N,1,1/1/0,1,1,1,ok,2314 G>A D772N: carriers=1 affected=1 unaffected=0 (centres 1)
+D84N,1,2/2/0,2,1,2,ok,250 G>A D84N: carriers=2 affected=2 unaffected=0 (centres 1)
+E1053K,1,3/3/0,3,1,3,ok,3157 G>A E1053K: carriers=3 affected=3 unaffected=0 (centres 1)
+E1107K,1,1/0/1,1,0,,no_table4_row,
+E1208X,1,1/1/0,1,1,1,ok,3622 G>T E1208X: carriers=1 affected=1 unaffected=0 (centres 1)
+E1225K,4,1/1/0|1/1/0|1/1/0|1/1/0,4,1,4,ok,"3673 G>A E1225K: carriers=4 affected=4 unaffected=0 (centres 1, 5, 6, 7)"
+E1253G,1,1/1/0,1,1,1,ok,3758 A>G E1253G: carriers=1 affected=1 unaffected=0 (centres 1)
+E1441Q,1,1/1/0,1,1,1,ok,4321 G>C E1441Q: carriers=1 affected=1 unaffected=0 (centres 7)
+E1548K,1,3/3/0,3,1,3,ok,"4642 G>A E1548K: carriers=3 affected=3 unaffected=0 (centres 1, 4)"
+E1574K,1,4/4/0,4,1,4,ok,"4720 G>A E1574K: carriers=4 affected=4 unaffected=0 (centres 2, 6, 7)"
+E161K,2,1/1/0|1/1/0,2,1,3,gold_sum_differs,"481 G>A E161K: carriers=3 affected=3 unaffected=0 (centres 3, 4)"
+E161Q,1,1/1/0,1,1,1,ok,481 G>C E161Q: carriers=1 affected=1 unaffected=0 (centres 6)
+E1784K,1,14/14/0,14,1,14,ok,"5350 G>A E1784K: carriers=14 affected=14 unaffected=0 (centres 1, 2, 5, 6, 7)"
+E1901K,1,1/0/1,1,0,,no_table4_row,
+E1938K,1,1/1/0,1,1,1,ok,5812 G>A E1938K: carriers=1 affected=1 unaffected=0 (centres 2)
+E346X,1,1/1/0,1,1,1,ok,1036 G>T E346X: carriers=1 affected=1 unaffected=0 (centres 1)
+E439K,1,1/1/0,1,1,1,ok,1315 G>A E439K: carriers=1 affected=1 unaffected=0 (centres 3)
+E698X,1,1/1/0,1,1,1,ok,2092 G>T E698X: carriers=1 affected=1 unaffected=0 (centres 2)
+E746K,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"2236 G>A E746K: carriers=3 affected=3 unaffected=0 (centres 1, 2, 7)"
+E867Q,1,1/1/0,1,1,1,ok,2599 G>C E867Q: carriers=1 affected=1 unaffected=0 (centres 2)
+E901K,1,3/3/0,3,1,3,ok,"2701 G>A E901K: carriers=3 affected=3 unaffected=0 (centres 1, 4)"
+F1293S,1,2/0/2,2,0,,no_table4_row,
+F1344L,1,1/1/0,1,1,1,ok,4030 T>C F1344L: carriers=1 affected=1 unaffected=0 (centres 1)
+F1360C,1,1/1/0,1,1,1,ok,4079 T>G F1360C: carriers=1 affected=1 unaffected=0 (centres 1)
+F1571C,1,1/1/0,1,1,1,ok,4712 T>G F1571C: carriers=1 affected=1 unaffected=0 (centres 4)
+F2004L,1,7/0/7,7,0,,no_table4_row,
+F2004V,1,1/1/0,1,1,1,ok,6010 T>G F2004V: carriers=1 affected=1 unaffected=0 (centres 5)
+F532C,1,1/1/0,1,1,1,ok,1595 T>G F532C: carriers=1 affected=1 unaffected=0 (centres 2)
+F543L,1,1/1/0,1,1,1,ok,1629 T>A F543L: carriers=1 affected=1 unaffected=0 (centres 2)
+F851L,1,1/1/0,1,1,1,ok,2553 C>A F851L: carriers=1 affected=1 unaffected=0 (centres 2)
+F93S,1,1/1/0,1,1,1,ok,278 T>C F93S: carriers=1 affected=1 unaffected=0 (centres 1)
+G1040R,1,1/0/1,1,0,,no_table4_row,
+G1262S,1,1/1/0,1,1,1,ok,3784 G>A G1262S: carriers=1 affected=1 unaffected=0 (centres 1)
+G1319V,2,1/1/0|3/3/0,4,1,5,gold_sum_differs,"3956 G>T G1319V: carriers=5 affected=5 unaffected=0 (centres 2, 3, 7)"
+G1358W,1,1/1/0,1,1,1,ok,4072 G>T G1358W: carriers=1 affected=1 unaffected=0 (centres 4)
+G1406E,1,2/2/0,2,1,2,ok,4217 G>A G1406E: carriers=2 affected=2 unaffected=0 (centres 5)
+G1406R,1,1/1/0,1,1,1,ok,4216 G>C G1406R: carriers=1 affected=1 unaffected=0 (centres 3)
+G1408R,3,1/1/0|1/1/0|2/2/0,4,1,7,gold_sum_differs,"4222 G>A G1408R: carriers=7 affected=7 unaffected=0 (centres 1, 4, 5, 7)"
+G1420R,1,1/1/0,1,1,1,ok,4258 G>C G1420R: carriers=1 affected=1 unaffected=0 (centres 3)
+G1433V,1,1/1/0,1,1,1,ok,4298 G>T G1433V: carriers=1 affected=1 unaffected=0 (centres 3)
+G1642E,1,1/1/0,1,1,1,ok,4925 G>A G1642E: carriers=1 affected=1 unaffected=0 (centres 5)
+G1661R,2,2/2/0|1/1/0,3,2,3,ok,4981 G>A G1661R: carriers=2 affected=2 unaffected=0 (centres 1) | 4981 G>C G1661R: carriers=1 affected=1 unaffected=0 (centres 2)
+G1712S,1,1/1/0,1,1,1,ok,5134 G>A G1712S: carriers=1 affected=1 unaffected=0 (centres 7)
+G1740R,1,1/1/0,1,1,1,ok,5218 G>A G1740R: carriers=1 affected=1 unaffected=0 (centres 3)
+G1743E,2,1/1/0|1/1/0,2,1,6,gold_sum_differs,"5228 G>A G1743E: carriers=6 affected=6 unaffected=0 (centres 2, 3)"
+G1743R,4,1/1/0|1/1/0|1/1/0|1/1/0,4,1,5,gold_sum_differs,"5227 G>A G1743R: carriers=5 affected=5 unaffected=0 (centres 4, 5, 7, 9)"
+G1935S,1,1/1/0,1,1,1,ok,5803 G>A G1935S: carriers=1 affected=1 unaffected=0 (centres 2)
+G351D,1,1/1/0,1,1,1,ok,1052 G>A G351D: carriers=1 affected=1 unaffected=0 (centres 2)
+G351V,1,1/1/0,1,1,1,ok,1052 G>T G351V: carriers=1 affected=1 unaffected=0 (centres 9)
+G386E,1,2/2/0,2,1,2,ok,1157 G>A G386E: carriers=2 affected=2 unaffected=0 (centres 2)
+G386R,1,1/1/0,1,1,1,ok,1156 G>A G386R: carriers=1 affected=1 unaffected=0 (centres 1)
+G552R,1,1/1/0,1,1,1,ok,1654 G>A G552R: carriers=1 affected=1 unaffected=0 (centres 9)
+G579R,1,1/0/1,1,0,,no_table4_row,
+G615E,1,1/1/0,1,1,1,ok,1844 G>A G615E: carriers=1 affected=1 unaffected=0 (centres 4)
+G638D,1,1/0/1,1,0,,no_table4_row,
+G752R,2,1/1/0|1/1/0,2,1,5,gold_sum_differs,"2254 G>A G752R: carriers=5 affected=5 unaffected=0 (centres 1, 5)"
+G758E,1,1/1/0,1,1,1,ok,2273 G>A G758E: carriers=1 affected=1 unaffected=0 (centres 2)
+H278D,1,1/1/0,1,1,1,ok,832 C>G H278D: carriers=1 affected=1 unaffected=0 (centres 4)
+H558R,1,408/0/408,408,0,,no_table4_row,
+H886P,1,1/1/0,1,1,1,ok,2657 A>C H886P: carriers=1 affected=1 unaffected=0 (centres 2)
+I1448L,1,1/1/0,1,1,1,ok,4342 A>C I1448L: carriers=1 affected=1 unaffected=0 (centres 4)
+I1448T,1,1/1/0,1,1,1,ok,4343 T>C I1448T: carriers=1 affected=1 unaffected=0 (centres 2)
+I1521K,1,1/1/0,1,1,1,ok,4562 T>A I1521K: carriers=1 affected=1 unaffected=0 (centres 5)
+I1660V,2,4/4/0|4/4/0,8,1,5,gold_sum_differs,"4978 A>G I1660V: carriers=5 affected=5 unaffected=0 (centres 2, 3, 5, 6)"
+I1836T,1,1/0/1,1,0,,no_table4_row,
+I1968M,1,1/0/1,1,0,,no_table4_row,
+I94S,1,1/1/0,1,1,1,ok,281 T>G I94S: carriers=1 affected=1 unaffected=0 (centres 7)
+K126E,1,1/1/0,1,1,1,ok,376 A>G K126E: carriers=1 affected=1 unaffected=0 (centres 9)
+K1359N,1,1/1/0,1,1,1,ok,4077 G>T K1359N: carriers=1 affected=1 unaffected=0 (centres 4)
+K1419E,1,1/1/0,1,1,1,ok,4255 A>G K1419E: carriers=1 affected=1 unaffected=0 (centres 1)
+K1493X,1,2/2/0,2,1,1,gold_sum_differs,4477 A>T K1493X: carriers=1 affected=1 unaffected=0 (centres 2)
+K175N,1,1/1/0,1,1,1,ok,525 G>C K175N: carriers=1 affected=1 unaffected=0 (centres 1)
+K1872N,1,1/1/0,1,1,1,ok,5616 G>C K1872N: carriers=1 affected=1 unaffected=0 (centres 5)
+K249X,1,1/1/0,1,1,1,ok,745 A>T K249X: carriers=1 affected=1 unaffected=0 (centres 6)
+L1239P,1,1/1/0,1,1,1,ok,3716 T>C L1239P: carriers=1 affected=1 unaffected=0 (centres 2)
+L1308F,1,3/0/3,3,0,,no_table4_row,
+L1311P,1,1/1/0,1,1,1,ok,3932 T>C L1311P: carriers=1 affected=1 unaffected=0 (centres 7)
+L1346I,1,1/1/0,1,1,1,ok,4036 C>A L1346I: carriers=1 affected=1 unaffected=0 (centres 4)
+L1346P,1,1/1/0,1,1,1,ok,4037 T>C L1346P: carriers=1 affected=1 unaffected=0 (centres 3)
+L136P,1,2/2/0,2,1,2,ok,407 T>C L136P: carriers=2 affected=2 unaffected=0 (centres 8)
+L1373X,1,1/1/0,1,1,1,ok,4118 T>A L1373X: carriers=1 affected=1 unaffected=0 (centres 2)
+L1393X,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"4178 T>A L1393X: carriers=3 affected=3 unaffected=0 (centres 1, 3, 9)"
+L1412F,1,1/1/0,1,1,1,ok,4234 C>T L1412F: carriers=1 affected=1 unaffected=0 (centres 5)
+L1501V,1,1/1/0,1,1,1,ok,4501 C>G L1501V: carriers=1 affected=1 unaffected=0 (centres 1)
+L1582P,1,1/1/0,1,1,1,ok,4745 T>C L1582P: carriers=1 affected=1 unaffected=0 (centres 3)
+L212Q,1,1/1/0,1,1,1,ok,635 T>A L212Q: carriers=1 affected=1 unaffected=0 (centres 5)
+L276Q,1,1/1/0,1,1,1,ok,827 T>A L276Q: carriers=1 affected=1 unaffected=0 (centres 8)
+L299M,1,1/0/1,1,0,,no_table4_row,
+L315P,1,1/1/0,1,1,1,ok,944 T>C L315P: carriers=1 affected=1 unaffected=0 (centres 6)
+L325R,1,1/1/0,1,1,1,ok,974 T>G L325R: carriers=1 affected=1 unaffected=0 (centres 4)
+L461V,1,2/0/2,2,0,,no_table4_row,
+L618F,1,1/0/1,1,0,,no_table4_row,
+L619F,1,1/1/0,1,1,1,ok,1855 C>T L619F: carriers=1 affected=1 unaffected=0 (centres 1)
+L839P,1,1/1/0,1,1,1,ok,2516 T>C L839P: carriers=1 affected=1 unaffected=0 (centres 1)
+L868X,2,1/1/0|1/1/0,2,1,2,ok,"2602delC L868X: carriers=2 affected=2 unaffected=0 (centres 6, 7)"
+L917R,1,1/1/0,1,1,1,ok,2750 T>G L917R: carriers=1 affected=1 unaffected=0 (centres 2)
+L928P,1,1/1/0,1,1,1,ok,2783 T>C L928P: carriers=1 affected=1 unaffected=0 (centres 1)
+L935P,1,1/1/0,1,1,1,ok,2804 T>C L935P: carriers=1 affected=1 unaffected=0 (centres 5)
+M1351R,1,1/1/0,1,1,1,ok,4052 T>G M1351R: carriers=1 affected=1 unaffected=0 (centres 2)
+M1I,1,1/1/0,1,1,1,ok,3 G>A M1I: carriers=1 affected=1 unaffected=0 (centres 1)
+M369K,1,1/1/0,1,1,1,ok,1106 T>A M369K: carriers=1 affected=1 unaffected=0 (centres 1)
+M764R,1,1/1/0,1,1,1,ok,2291 T>G M764R: carriers=1 affected=1 unaffected=0 (centres 4)
+N109K,1,1/1/0,1,1,1,ok,327 C>A N109K: carriers=1 affected=1 unaffected=0 (centres 3)
+N1463Y,1,1/1/0,1,1,1,ok,4387 A>T N1463Y: carriers=1 affected=1 unaffected=0 (centres 2)
+N1722D,1,1/1/0,1,1,1,ok,5164 A>G N1722D: carriers=1 affected=1 unaffected=0 (centres 1)
+N291S,1,1/0/1,1,0,,no_table4_row,
+N592K,1,1/0/1,1,0,,no_table4_row,
+N70K,1,1/1/0,1,1,1,ok,210 T>G N70K: carriers=1 affected=1 unaffected=0 (centres 5)
+N927S,2,1/1/0|1/1/0,2,1,3,gold_sum_differs,"2780 A>G N927S: carriers=3 affected=3 unaffected=0 (centres 3, 7)"
+P.F2004DUP,1,1/1/0,1,0,,no_table4_row,
+P.I1212DEL,1,1/1/0,1,0,,no_table4_row,
+P.I137_C139DUP,1,1/1/0,1,0,,no_table4_row,
+P.I1570DUP,1,1/1/0,1,0,,no_table4_row,
+P.K1493DEL,2,1/1/0|1/1/0,2,0,,no_table4_row,
+P.L64DEL,1,1/1/0,1,0,,no_table4_row,
+P.T1709DEL,1,1/1/0,1,0,,no_table4_row,
+P.Y1795_E1796INSD,1,1/1/0,1,0,,no_table4_row,
+P.Y776DEL,1,1/1/0,1,0,,no_table4_row,
+P1090L,1,5/0/5,5,0,,no_table4_row,
+P1332L,1,1/1/0,1,1,1,ok,3995 C>T P1332L: carriers=1 affected=1 unaffected=0 (centres 5)
+P1438L,1,1/1/0,1,1,1,ok,4313 C>T P1438L: carriers=1 affected=1 unaffected=0 (centres 4)
+P1962L,1,1/0/1,1,0,,no_table4_row,
+P2006A,1,3/0/3,3,0,,no_table4_row,
+P336L,2,1/1/0|1/1/0,2,1,2,ok,"1007 C>T P336L: carriers=2 affected=2 unaffected=0 (centres 2, 6)"
+P640A,1,1/1/0,1,1,1,ok,1918 C>G P640A: carriers=1 affected=1 unaffected=0 (centres 3)
+P648L,1,1/1/0,1,1,1,ok,1943 C>T P648L: carriers=1 affected=1 unaffected=0 (centres 7)
+P656L,1,1/0/1,1,0,,no_table4_row,
+P701L,1,1/1/0,1,1,1,ok,2102 C>T P701L: carriers=1 affected=1 unaffected=0 (centres 4)
+P717L,1,1/1/0,1,1,1,ok,2150 C>T P717L: carriers=1 affected=1 unaffected=0 (centres 6)
+P773S,1,1/1/0,1,1,1,ok,2317 C>T P773S: carriers=1 affected=1 unaffected=0 (centres 6)
+Q1383X,1,1/1/0,1,1,1,ok,4147 C>T Q1383X: carriers=1 affected=1 unaffected=0 (centres 1)
+Q1476X,1,1/1/0,1,1,1,ok,4426 C>T Q1476X: carriers=1 affected=1 unaffected=0 (centres 4)
+Q1613L,1,1/1/0,1,1,1,ok,4838 A>T Q1613L: carriers=1 affected=1 unaffected=0 (centres 1)
+Q1695X,2,1/1/0|1/1/0,2,1,2,ok,"5083 C>T Q1695X: carriers=2 affected=2 unaffected=0 (centres 1, 4)"
+Q1832E,1,1/1/0,1,1,1,ok,5494 C>G Q1832E: carriers=1 affected=1 unaffected=0 (centres 6)
+Q270K,1,1/1/0,1,1,1,ok,808 C>A Q270K: carriers=1 affected=1 unaffected=0 (centres 6)
+Q419X,1,1/1/0,1,1,1,ok,1255 C>T Q419X: carriers=1 affected=1 unaffected=0 (centres 7)
+Q573X,1,1/1/0,1,1,1,ok,1717 C>T Q573X: carriers=1 affected=1 unaffected=0 (centres 2)
+Q692K,1,3/0/3,3,0,,no_table4_row,
+Q73X,1,1/1/0,1,1,1,ok,217 C>T Q73X: carriers=1 affected=1 unaffected=0 (centres 2)
+R104Q,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"311 G>A R104Q: carriers=3 affected=3 unaffected=0 (centres 1, 7, 8)"
+R104W,2,1/1/0|1/1/0,2,1,2,ok,"310 C>T R104W: carriers=2 affected=2 unaffected=0 (centres 1, 2)"
+R1116W,1,2/0/2,2,0,,no_table4_row,
+R1193Q,1,12/0/12,12,0,,no_table4_row,
+R121Q,2,1/1/0|1/1/0,2,1,2,ok,"362 G>A R121Q: carriers=2 affected=2 unaffected=0 (centres 2, 6)"
+R121W,1,1/1/0,1,1,1,ok,361 C>T R121W: carriers=1 affected=1 unaffected=0 (centres 8)
+R1232Q,1,1/1/0,1,1,1,ok,3695 G>A R1232Q: carriers=1 affected=1 unaffected=0 (centres 7)
+R1232W,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"3694 C>T R1232W: carriers=3 affected=3 unaffected=0 (centres 1, 2, 9)"
+R1432G,1,1/1/0,1,1,1,ok,4294 A>G R1432G: carriers=1 affected=1 unaffected=0 (centres 4)
+R1432S,1,1/1/0,1,1,1,ok,4296 G>C R1432S: carriers=1 affected=1 unaffected=0 (centres 2)
+R1512W,1,1/0/1,1,0,,no_table4_row,
+R1583C,2,1/1/0|1/1/0,2,1,2,ok,"4747 C>T R1583C: carriers=2 affected=2 unaffected=0 (centres 1, 2)"
+R1583H,1,1/1/0,1,1,1,ok,4748 G>A R1583H: carriers=1 affected=1 unaffected=0 (centres 1)
+R1623Q,1,1/1/0,1,1,1,ok,4868 G>A R1623Q: carriers=1 affected=1 unaffected=0 (centres 5)
+R1623X,2,1/1/0|1/1/0,2,1,2,ok,"4867 C>T R1623X: carriers=2 affected=2 unaffected=0 (centres 2, 3)"
+R1629Q,1,1/1/0,1,1,1,ok,4886 G>A R1629Q: carriers=1 affected=1 unaffected=0 (centres 3)
+R1629X,1,1/1/0,1,1,1,ok,4885 C>T R1629X: carriers=1 affected=1 unaffected=0 (centres 3)
+R1638X,2,1/1/0|1/1/0,2,1,3,gold_sum_differs,"4912 C>T R1638X: carriers=3 affected=3 unaffected=0 (centres 2, 3)"
+R179X,1,1/1/0,1,1,1,ok,535 C>T R179X: carriers=1 affected=1 unaffected=0 (centres 2)
+R18Q,1,1/1/0,1,1,1,ok,53 G>A R18Q: carriers=1 affected=1 unaffected=0 (centres 3)
+R18W,1,1/0/1,1,0,,no_table4_row,
+R1919C,1,1/0/1,1,0,,no_table4_row,
+R1958Q,1,1/0/1,1,0,,no_table4_row,
+R1991Q,1,1/0/1,1,0,,no_table4_row,
+R222Q,1,1/1/0,1,1,1,ok,665 G>A R222Q: carriers=1 affected=1 unaffected=0 (centres 4)
+R222X,1,4/4/0,4,1,4,ok,"664 C>T R222X: carriers=4 affected=4 unaffected=0 (centres 2, 4)"
+R225W,2,2/2/0|1/1/0,3,1,3,ok,"673 C>T R225W: carriers=3 affected=3 unaffected=0 (centres 1, 6)"
+R282C,1,1/1/0,1,1,1,ok,844 C>T R282C: carriers=1 affected=1 unaffected=0 (centres 2)
+R34C,1,44/0/44,44,0,,no_table4_row,
+R34H,1,1/0/1,1,0,,no_table4_row,
+R367C,1,2/2/0,2,1,2,ok,1099 C>T R367C: carriers=2 affected=2 unaffected=0 (centres 3)
+R367H,4,1/1/0|1/1/0|1/1/0|1/1/0,4,1,6,gold_sum_differs,"1100 G>A R367H: carriers=6 affected=6 unaffected=0 (centres 1, 2, 8, 9)"
+R367L,1,1/1/0,1,1,1,ok,1100 G>T R367L: carriers=1 affected=1 unaffected=0 (centres 1)
+R376C,1,1/0/1,1,0,,no_table4_row,
+R376H,3,1/1/0|1/1/0|1/1/0,3,1,4,gold_sum_differs,"1127 G>A R376H: carriers=4 affected=4 unaffected=0 (centres 3, 4, 8)"
+R475S,1,1/0/1,1,0,,no_table4_row,
+R481W,1,6/0/6,6,0,,no_table4_row,
+R526H,2,1/1/0|1/1/0,2,1,2,ok,"1577 G>A R526H: carriers=2 affected=2 unaffected=0 (centres 1, 5)"
+R535X,4,1/1/0|1/1/0|1/1/0|1/1/0,4,1,4,ok,"1603 C>T R535X: carriers=4 affected=4 unaffected=0 (centres 1, 2, 4, 5)"
+R568H,1,1/0/1,1,0,,no_table4_row,
+R620C,1,1/1/0,1,1,1,ok,1858 C>T R620C: carriers=1 affected=1 unaffected=0 (centres 1)
+R661W,1,1/1/0,1,1,1,ok,1981 C>T R661W: carriers=1 affected=1 unaffected=0 (centres 5)
+R689H,1,1/0/1,1,0,,no_table4_row,
+R808P,1,1/1/0,1,1,1,ok,2423 G>C R808P: carriers=1 affected=1 unaffected=0 (centres 1)
+R878C,1,1/1/0,1,1,1,ok,2632 C>T R878C: carriers=1 affected=1 unaffected=0 (centres 2)
+R878H,5,1/1/0|1/1/0|1/1/0|1/1/0|1/1/0,5,1,5,ok,"2633 G>A R878H: carriers=5 affected=5 unaffected=0 (centres 1, 2, 4, 5, 7)"
+R893C,1,2/2/0,2,1,2,ok,2677 C>T R893C: carriers=2 affected=2 unaffected=0 (centres 4)
+R893H,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"2678 G>A R893H: carriers=3 affected=3 unaffected=0 (centres 1, 3, 4)"
+R965C,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"2893 C>T R965C: carriers=3 affected=3 unaffected=0 (centres 2, 4, 5)"
+R965H,1,1/1/0,1,1,1,ok,2894 G>A R965H: carriers=1 affected=1 unaffected=0 (centres 3)
+R975W,1,1/0/1,1,0,,no_table4_row,
+R986Q,1,1/0/1,1,0,,no_table4_row,
+S1079Y,1,1/1/0,1,1,1,ok,3236 C>A S1079Y: carriers=1 affected=1 unaffected=0 (centres 1)
+S1103Y,1,31/0/31,31,0,,no_table4_row,
+S1140T,1,1/1/0,1,1,1,ok,3419 G>C S1140T: carriers=1 affected=1 unaffected=0 (centres 5)
+S1219N,1,1/1/0,1,1,1,ok,3656 G>A S1219N: carriers=1 affected=1 unaffected=0 (centres 1)
+S1382I,1,1/1/0,1,1,1,ok,4145 G>T S1382I: carriers=1 affected=1 unaffected=0 (centres 1)
+S1672Y,2,1/1/0|1/1/0,2,1,2,ok,"5015 C>A S1672Y: carriers=2 affected=2 unaffected=0 (centres 1, 4)"
+S1787N,1,3/0/3,3,0,,no_table4_row,
+S1812X,1,1/1/0,1,1,1,ok,5435 C>A S1812X: carriers=1 affected=1 unaffected=0 (centres 7)
+S1904L,1,1/1/0,1,1,1,ok,5707 G>C S1904L: carriers=1 affected=1 unaffected=0 (centres 2)
+S216L,1,4/0/4,4,0,,no_table4_row,
+S524Y,1,18/0/18,18,0,,no_table4_row,
+S705F,1,1/0/1,1,0,,no_table4_row,
+S910L,1,1/1/0,1,1,1,ok,2729 C>T S910L: carriers=1 affected=1 unaffected=0 (centres 1)
+T1016M,1,1/0/1,1,0,,no_table4_row,
+T1620M,2,1/1/0|1/1/0,2,1,2,ok,"4859 C>T T1620M: carriers=2 affected=2 unaffected=0 (centres 2, 9)"
+T1709M,2,1/1/0|1/1/0,2,1,2,ok,"5126 C>T T1709M: carriers=2 affected=2 unaffected=0 (centres 1, 8)"
+T1709R,1,1/1/0,1,1,1,ok,5126 C>G T1709R: carriers=1 affected=1 unaffected=0 (centres 4)
+T1779M,1,1/1/0,1,1,1,ok,5336 C>T T1779M: carriers=1 affected=1 unaffected=0 (centres 2)
+T220I,2,1/1/0|1/1/0,2,1,2,ok,"659 C>T T220I: carriers=2 affected=2 unaffected=0 (centres 2, 3)"
+T320N,1,1/1/0,1,1,1,ok,959 C>A T320N: carriers=1 affected=1 unaffected=0 (centres 5)
+T449A,1,1/0/1,1,0,,no_table4_row,
+T632M,2,1/1/0|1/1/0,2,1,2,ok,"1895 C>T T632M: carriers=2 affected=2 unaffected=0 (centres 2, 4)"
+V1082A,1,1/0/1,1,0,,no_table4_row,
+V1098L,1,1/0/1,1,0,,no_table4_row,
+V1249D,1,1/1/0,1,1,1,ok,3746 T>A V1249D: carriers=1 affected=1 unaffected=0 (centres 6)
+V1251M,1,1/0/1,1,0,,no_table4_row,
+V1323G,1,1/1/0,1,1,1,ok,3968 T>G V1323G: carriers=1 affected=1 unaffected=0 (centres 7)
+V1340I,1,1/1/0,1,1,1,ok,4018 G>A V1340I: carriers=1 affected=1 unaffected=0 (centres 9)
+V1353M,1,2/2/0,2,1,2,ok,4057 G>A V1353M: carriers=2 affected=2 unaffected=0 (centres 2)
+V1405L,1,2/2/0,2,1,2,ok,4213 G>C V1405L: carriers=2 affected=2 unaffected=0 (centres 3)
+V1405M,2,1/1/0|1/1/0,2,1,2,ok,"4213 G>A V1405M: carriers=2 affected=2 unaffected=0 (centres 1, 7)"
+V1451D,1,1/1/0,1,1,1,ok,4352 T>A V1451D: carriers=1 affected=1 unaffected=0 (centres 5)
+V1468F,1,1/1/0,1,1,1,ok,4402 G>T V1468F: carriers=1 affected=1 unaffected=0 (centres 2)
+V146M,1,1/1/0,1,1,1,ok,436 G>A V146M: carriers=1 affected=1 unaffected=0 (centres 7)
+V1604M,1,1/1/0,1,1,1,ok,4810 G>A V1604M: carriers=1 affected=1 unaffected=0 (centres 1)
+V1667I,1,1/1/0,1,1,1,ok,4999 G>A V1667I: carriers=1 affected=1 unaffected=0 (centres 3)
+V1764F,1,1/1/0,1,1,1,ok,5290 G>T V1764F: carriers=1 affected=1 unaffected=0 (centres 7)
+V1861I,1,1/1/0,1,1,1,ok,5581 G>A V1861I: carriers=1 affected=1 unaffected=0 (centres 2)
+V1951L,1,16/0/16,16,0,,no_table4_row,
+V223L,1,2/2/0,2,1,2,ok,667 G>C V223L: carriers=2 affected=2 unaffected=0 (centres 2)
+V232I,2,1/1/0|1/1/0,2,1,2,ok,"694 G>A V232I: carriers=2 affected=2 unaffected=0 (centres 2, 6)"
+V240M,1,1/1/0,1,1,1,ok,718 G>A V240M: carriers=1 affected=1 unaffected=0 (centres 3)
+V300I,1,1/1/0,1,1,1,ok,898 G>A V300I: carriers=1 affected=1 unaffected=0 (centres 5)
+V396A,1,1/1/0,1,1,1,ok,1187 T>C V396A: carriers=1 affected=1 unaffected=0 (centres 2)
+V396L,1,1/1/0,1,1,1,ok,1186 G>C V396L: carriers=1 affected=1 unaffected=0 (centres 1)
+V601A,1,1/0/1,1,0,,no_table4_row,
+V789I,1,1/1/0,1,1,1,ok,2365 G>A V789I: carriers=1 affected=1 unaffected=0 (centres 4)
+V924I,1,2/0/2,2,0,,no_table4_row,
+W1115X,1,1/1/0,1,1,1,ok,3345 G>A W1115X: carriers=1 affected=1 unaffected=0 (centres 6)
+W1192X,1,1/1/0,1,1,1,ok,3576 G>A W1192X: carriers=1 affected=1 unaffected=0 (centres 6)
+W1271C,1,1/1/0,1,1,1,ok,3813 G>C W1271C: carriers=1 affected=1 unaffected=0 (centres 1)
+W1440X,1,1/1/0,1,1,1,ok,4320 G>A W1440X: carriers=1 affected=1 unaffected=0 (centres 2)
+W156X,1,1/1/0,1,1,1,ok,468 G>A W156X: carriers=1 affected=1 unaffected=0 (centres 3)
+W1591X,1,1/1/0,1,1,1,ok,4773 G>A W1591X: carriers=1 affected=1 unaffected=0 (centres 2)
+W193X,1,1/1/0,1,1,1,ok,579 G>A W193X: carriers=1 affected=1 unaffected=0 (centres 4)
+W374G,1,1/1/0,1,1,1,ok,1120 T>G W374G: carriers=1 affected=1 unaffected=0 (centres 1)
+W822X,1,1/1/0,1,1,1,ok,2465 G>A W822X: carriers=1 affected=1 unaffected=0 (centres 4)
+Y1228H,1,1/1/0,1,1,1,ok,3682 T>C Y1228H: carriers=1 affected=1 unaffected=0 (centres 1)
+Y1394X,1,1/1/0,1,1,1,ok,4182 C>G Y1394X: carriers=1 affected=1 unaffected=0 (centres 5)
+Y1409C,1,1/1/0,1,1,1,ok,4226 A>G Y1409C: carriers=1 affected=1 unaffected=0 (centres 1)
+Y1409X,1,1/1/0,1,1,1,ok,4227 C>G Y1409X: carriers=1 affected=1 unaffected=0 (centres 8)
+Y1434X,1,1/1/0,1,1,1,ok,4302 T>G Y1434X: carriers=1 affected=1 unaffected=0 (centres 5)
+Y1449C,1,1/1/0,1,1,1,ok,4346 A>G Y1449C: carriers=1 affected=1 unaffected=0 (centres 1)
+Y159X,1,1/1/0,1,1,1,ok,477 T>A Y159X: carriers=1 affected=1 unaffected=0 (centres 5)
+Y1615X,1,1/1/0,1,1,1,ok,4845 C>A Y1615X: carriers=1 affected=1 unaffected=0 (centres 2)
+c.1338+2T>A,1,1/1/0,1,0,,no_table4_row,
+c.1428_1431delCAAG,1,1/1/0,1,1,1,ok,1428_1431delCAAG S476RfsX30: carriers=1 affected=1 unaffected=0 (centres 3)
+c.1537delC,1,1/1/0,1,1,1,ok,1537delC R513VfsX8: carriers=1 affected=1 unaffected=0 (centres 8)
+c.1562delA,1,1/1/0,1,1,1,ok,1562delA K521SfsX102: carriers=1 affected=1 unaffected=0 (centres 2)
+c.1721delG,1,1/1/0,1,1,1,ok,1721delG G574DfsX49: carriers=1 affected=1 unaffected=0 (centres 2)
+c.1890+5G>A,2,1/1/0|1/1/0,2,0,,no_table4_row,
+c.1890G>A,1,3/3/0,3,1,3,ok,"1890 G>A T630T: carriers=3 affected=3 unaffected=0 (centres 1, 3)"
+c.1936delC,3,1/1/0|1/1/0|1/1/0,3,1,3,ok,"1936delC Q646RfsX5: carriers=3 affected=3 unaffected=0 (centres 2, 5, 6)"
+c.1950_1953delAGAT,1,1/1/0,1,1,1,ok,1950_1953delAGAT D651AfsX25: carriers=1 affected=1 unaffected=0 (centres 4)
+c.1983_1993dupGGCCCTCAGCG,1,1/1/0,1,1,1,ok,1983_1993dupGGCCCTCAGCG A665GfsX16: carriers=1 affected=1 unaffected=0 (centres 1)
+c.2024_2025delAG,1,1/1/0,1,1,1,ok,2024_2025delAG E675VfsX45: carriers=1 affected=1 unaffected=0 (centres 2)
+c.2201dupT,1,1/1/0,1,1,1,ok,2201dupT M734IfsX11: carriers=1 affected=1 unaffected=0 (centres 7)
+c.2274delG,1,2/2/0,2,1,2,ok,2274delG I759FfsX6: carriers=2 affected=2 unaffected=0 (centres 5)
+c.2320delT,1,2/2/0,2,1,2,ok,2320delT Y774TfsX28: carriers=2 affected=2 unaffected=0 (centres 3)
+c.2435_2436+3delTGGTAinsCGCCT,1,1/1/0,1,0,,no_table4_row,
+c.2533delG,1,1/1/0,1,1,1,ok,2533delG V845CfsX2: carriers=1 affected=1 unaffected=0 (centres 6)
+c.2549_2550insTG,1,1/1/0,1,1,1,ok,2549_2550insTG F851GfsX19: carriers=1 affected=1 unaffected=0 (centres 2)
+c.2550_2551dupGT,1,1/1/0,1,1,1,ok,2550_2551dupGT F851CfsX19: carriers=1 affected=1 unaffected=0 (centres 5)
+c.2582_2583delTT,1,11/11/0,11,1,11,ok,"2582_2583delTT F861WfsX90: carriers=11 affected=11 unaffected=0 (centres 3, 7)"
+c.2602delC,2,1/1/0|1/1/0,2,1,2,ok,"2602delC L868X: carriers=2 affected=2 unaffected=0 (centres 6, 7)"
+c.2850delT,1,1/1/0,1,1,1,ok,2850delT D951MfsX6: carriers=1 affected=1 unaffected=0 (centres 4)
+c.2914_2923delTTTGTCAAGC,1,1/1/0,1,1,1,ok,2914_2923delTTTGTCAAGC F972GfsX170: carriers=1 affected=1 unaffected=0 (centres 6)
+c.3005_3012delCCAGCTGC,1,1/1/0,1,1,1,ok,3005_3012delCCAGCTGC P1002HfsX25: carriers=1 affected=1 unaffected=0 (centres 7)
+c.3140_3141dupTG,1,1/1/0,1,1,1,ok,3140_3141dupTG P1048CfsX98: carriers=1 affected=1 unaffected=0 (centres 3)
+c.3171_3172delTGinsA,1,1/1/0,1,1,1,ok,3171_3172delTGinsA D1057EfsX88: carriers=1 affected=1 unaffected=0 (centres 7)
+c.3228+2delT,1,1/1/0,1,0,,no_table4_row,
+c.3553_3554delCA,1,1/1/0,1,1,1,ok,3553_3554delCA Q1185GfsX55: carriers=1 affected=1 unaffected=0 (centres 3)
+c.3667delG,1,1/1/0,1,0,,no_table4_row,
+c.381dupT,1,1/1/0,1,1,1,ok,381dupT L128SfsX44: carriers=1 affected=1 unaffected=0 (centres 7)
+c.3840+1G>A,2,1/1/0|2/2/0,3,1,6,gold_sum_differs,"3840 +1 G>A : carriers=6 affected=6 unaffected=0 (centres 1, 3, 4)"
+c.3894delC,1,1/1/0,1,1,1,ok,3894delC I1299SfsX13: carriers=1 affected=1 unaffected=0 (centres 5)
+c.393-5C>A,1,1/1/0,1,0,,no_table4_row,
+c.3963+2T>C,1,1/1/0,1,1,1,ok,3963 +2 T>C : carriers=1 affected=1 unaffected=0 (centres 1)
+c.3963+4A>G,1,1/1/0,1,0,,no_table4_row,
+c.4190delA,1,1/1/0,1,1,1,ok,4190delA K1397RfsX2: carriers=1 affected=1 unaffected=0 (centres 9)
+c.4299+1G>T,1,1/1/0,1,0,,no_table4_row,
+c.4299+1delG,1,1/1/0,1,0,,no_table4_row,
+c.4299+2T>A,1,1/0/1,1,0,,no_table4_row,
+c.4299G>A,1,1/1/0,1,1,1,ok,4299 G>A G1433G: carriers=1 affected=1 unaffected=0 (centres 4)
+c.4300-1G>A,1,1/1/0,1,0,,no_table4_row,
+c.4376_4379delTCTT,1,1/1/0,1,1,1,ok,4376_4379delTCTT F1459SfsX3: carriers=1 affected=1 unaffected=0 (centres 6)
+c.4389_4396delCCTCTTTA,1,1/1/0,1,1,1,ok,4389_4396delCCTCTTTA L1464WfsX5: carriers=1 affected=1 unaffected=0 (centres 8)
+c.4437+5G>A,2,1/1/0|1/1/0,2,0,,no_table4_row,
+c.4813+2_4813+5dupTGGG,1,1/1/0,1,1,1,ok,4813 +2_4813+5dupTGGG : carriers=1 affected=1 unaffected=0 (centres 2)
+c.4856delC,1,1/1/0,1,1,1,ok,4856delC P1619RfsX12: carriers=1 affected=1 unaffected=0 (centres 2)
+c.486delC,1,1/1/0,1,1,1,ok,486delC Y162XfsX1: carriers=1 affected=1 unaffected=0 (centres 5)
+c.5068_5070delGA,1,1/1/0,1,1,1,ok,5068_5070delGA D1690HfsX98: carriers=1 affected=1 unaffected=0 (centres 1)
+c.5157delC,1,1/1/0,1,1,1,ok,5157delC I1720SfsX67: carriers=1 affected=1 unaffected=0 (centres 8)
+c.5290delG,1,1/1/0,1,1,1,ok,5290delG V1764SfsX23: carriers=1 affected=1 unaffected=0 (centres 8)
+c.5356_5357delCT,1,2/2/0,2,1,2,ok,5356_5357delCT L1786EfsX2: carriers=2 affected=2 unaffected=0 (centres 1)
+c.5420dupA,1,1/1/0,1,1,1,ok,5420dupA F1808IfsX3: carriers=1 affected=1 unaffected=0 (centres 7)
+c.5464_5467delTCTG,1,1/1/0,1,1,1,ok,5464_5467delTCTG E1823HfsX10: carriers=1 affected=1 unaffected=0 (centres 2)
+c.5577_5578dupAA,1,1/1/0,1,1,1,ok,5577_5578dupAA R1860KfsX13: carriers=1 affected=1 unaffected=0 (centres 2)
+c.611+1G>A,1,1/1/0,1,0,,no_table4_row,
+c.611+3_611+4dupAA,1,1/1/0,1,1,1,ok,611 +3_611+4dupAA : carriers=1 affected=1 unaffected=0 (centres 9)
+c.612-2A>G,1,1/1/0,1,0,,no_table4_row,
+c.656_657insATTCA,1,1/1/0,1,1,1,ok,656_657insATTCA T220FfsX10: carriers=1 affected=1 unaffected=0 (centres 2)
+c.934+1G>A,1,1/1/0,1,0,,no_table4_row,
+c.934+4C>T,1,1/1/0,1,0,,no_table4_row,
+c.998+1G>A,1,1/1/0,1,0,,no_table4_row,

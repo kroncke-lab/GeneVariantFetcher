@@ -1,0 +1,66 @@
+positive-gold affected rows matched: 886 | supplied exact: 567 | wrong: 64 {('RYR2', '32218223'): 1, ('SCN5A', '15851440'): 1, ('SCN5A', '26036855'): 1, ('RYR2', '25814417'): 1, ('SCN5A', '29672598'): 3, ('KCNQ1', '28491650'): 1, ('RYR2', '24113177'): 1, ('SCN5A', '25401102'): 2, ('KCNH2', '12062363'): 1, ('RYR2', '19781797'): 1, ('KCNQ1', '24372464'): 1, ('SCN5A', '28294644'): 1, ('SCN5A', '28781849'): 1, ('SCN5A', '20129283'): 46, ('RYR2', '32866913'): 1, ('SCN5A', '22519808'): 1}
+
+STILL NULL by category:
+   95 model_row_no_carriers
+   51 model_row_with_carriers[model_authored_row]
+   48 deterministic_table[not_derived:per_person_clinical_row]
+   22 deterministic_table[no_carrier_count]
+   18 deterministic_table[not_derived:no_cohort_evidence]
+   13 per_person_row[vertical_gene_table]
+    4 deterministic_table[not_derived:count_column_not_a_people_count]
+    3 no_extraction_row_match
+    1 deterministic_table[applied]
+
+Top (paper,category):
+   48 ('SCN5A', '28341781', 'deterministic_table[not_derived:per_person_clinical_row]')
+   18 ('KCNH2', '11854117', 'deterministic_table[not_derived:no_cohort_evidence]')
+   15 ('KCNH2', '11854117', 'deterministic_table[no_carrier_count]')
+   13 ('RYR2', '28237968', 'per_person_row[vertical_gene_table]')
+   12 ('SCN5A', '19843921', 'model_row_no_carriers')
+   12 ('RYR2', '16272262', 'model_row_no_carriers')
+    7 ('KCNH2', '27871843', 'deterministic_table[no_carrier_count]')
+    5 ('KCNH2', '10220144', 'model_row_no_carriers')
+    4 ('RYR2', '18285261', 'model_row_no_carriers')
+    4 ('KCNQ1', '10220144', 'model_row_no_carriers')
+    4 ('KCNQ1', '22885918', 'model_row_with_carriers[model_authored_row]')
+    4 ('SCN5A', '28341781', 'deterministic_table[not_derived:count_column_not_a_people_count]')
+    4 ('RYR2', '27756708', 'model_row_no_carriers')
+    3 ('SCN5A', '27566755', 'no_extraction_row_match')
+    3 ('RYR2', '30471092', 'model_row_no_carriers')
+    3 ('RYR2', '14571276', 'model_row_no_carriers')
+    3 ('KCNH2', '30244407', 'model_row_no_carriers')
+    3 ('SCN5A', '15520322', 'model_row_with_carriers[model_authored_row]')
+    3 ('KCNH2', '12808265', 'model_row_no_carriers')
+    2 ('SCN5A', '21596231', 'model_row_no_carriers')
+    2 ('RYR2', '28158428', 'model_row_with_carriers[model_authored_row]')
+    2 ('KCNQ1', '30036649', 'model_row_with_carriers[model_authored_row]')
+    2 ('RYR2', '18929323', 'model_row_no_carriers')
+    2 ('SCN5A', '16980337', 'model_row_no_carriers')
+    2 ('SCN5A', '24349418', 'model_row_no_carriers')
+
+Top captions:
+   37 ('SCN5A', '28341781', 'deterministic_table[not_derived:per_person_clinical_row]', 'Table 2. Included SCN5A Mutations and Variants')
+   18 ('KCNH2', '11854117', 'deterministic_table[not_derived:no_cohort_evidence]', 'Table T1')
+   13 ('RYR2', '28237968', 'per_person_row[vertical_gene_table]', 'Table 2\u2003 Primary symptom of proband, mutation type (gene, DNA and prot')
+   12 ('SCN5A', '19843921', 'model_row_no_carriers', 'Results')
+   12 ('RYR2', '16272262', 'model_row_no_carriers', 'Table 1, Figure 1')
+   11 ('SCN5A', '28341781', 'deterministic_table[not_derived:per_person_clinical_row]', 'Table 2. Continued')
+    6 ('KCNH2', '27871843', 'deterministic_table[no_carrier_count]', 'Table 2')
+    4 ('KCNQ1', '22885918', 'model_row_with_carriers[model_authored_row]', 'Results')
+    4 ('RYR2', '27756708', 'model_row_no_carriers', 'Results, Novel RyR2 variants')
+    3 ('RYR2', '30471092', 'model_row_no_carriers', 'Table 3')
+    3 ('RYR2', '14571276', 'model_row_no_carriers', 'Abstract')
+    3 ('SCN5A', '28341781', 'deterministic_table[not_derived:count_column_not_a_people_count]', 'Table 2. Included SCN5A Mutations and Variants')
+    3 ('SCN5A', '15520322', 'model_row_with_carriers[model_authored_row]', 'Table 1')
+    2 ('RYR2', '28158428', 'model_row_with_carriers[model_authored_row]', 'Results')
+    2 ('KCNQ1', '30036649', 'model_row_with_carriers[model_authored_row]', 'Table 2')
+    2 ('SCN5A', '24349418', 'model_row_no_carriers', 'Table 1')
+    2 ('SCN5A', '18822425', 'model_row_no_carriers', 'Genetics')
+    2 ('KCNH2', '22885918', 'model_row_with_carriers[model_authored_row]', 'Results')
+    2 ('SCN5A', '21705349', 'model_row_no_carriers', 'Abstract')
+    2 ('SCN5A', '28069705', 'model_row_with_carriers[model_authored_row]', 'Table 2')
+    2 ('RYR2', '12093772', 'model_row_with_carriers[model_authored_row]', 'Discussion')
+    1 ('SCN5A', '11748104', 'model_row_no_carriers', 'Results')
+    1 ('RYR2', '32218223', 'model_row_with_carriers[model_authored_row]', 'Results, section 3.3 and 3.4.2')
+    1 ('SCN5A', '17897635', 'model_row_with_carriers[model_authored_row]', 'Results, section 3.2')
+    1 ('SCN5A', '30371189', 'model_row_no_carriers', 'Table 1')

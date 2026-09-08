@@ -197,8 +197,19 @@ Values carry the `table_cohort_phenotype_v1` stamp, a
 the trust gate and `refresh_run_db.py` treat the stamp as sourced, and model
 output is scrubbed of it. `GVF_TABLE_COHORT_PHENOTYPE` (default on) switches the
 lane; `GVF_TABLE_COHORT_PAPER_ASCERTAINMENT` (default off) enables the
-paper-level tier that reviewers judged to be the manufactured partition the
-contract forbids. Every extraction records a
+sentence-level paper tier that reviewers judged to be the manufactured
+partition the contract forbids; `GVF_TABLE_COHORT_TITLE_ASCERTAINMENT` (default
+on since 2026-09-08) enables the title tier. When the paper's own title binds a
+people noun to a disease ("Probands With Brugada Syndrome", "patients referred
+for long QT syndrome"), a count table whose caption names no other cohort, or a
+one-mutation-per-proband catalogue (the parser's implicit one carrier per row,
+a mutation/variant noun in the caption, no roster wording, no clinical column,
+exactly one carrier on the row) is projected onto `affected`; a caption that
+itself names the disease case series certifies such a catalogue without the
+title. Continuation headings ("Table 2. Continued") resolve to the table's
+first printed caption and never compete with it. The fixed-width clinical
+mutation parser labels an implicit one-proband row as such; archived rows that
+carry the older "Coding Effect" label are read the same way. Every extraction records a
 `table_cohort_phenotype_derivation` block with per-table role, tier, evidence
 quote and per-row outcome. Each stamped row also records the phenotype counts
 the ordinary guard would retain without this projection. Strip-mode replay

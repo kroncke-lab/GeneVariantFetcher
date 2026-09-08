@@ -496,6 +496,21 @@ class Settings(BaseSettings):
             "table; measured separately before any promotion."
         ),
     )
+    table_cohort_title_ascertainment_enabled: bool = Field(
+        default=True,
+        validation_alias="GVF_TABLE_COHORT_TITLE_ASCERTAINMENT",
+        description=(
+            "Title tier of the table-cohort projection: when the paper's own "
+            "title defines a disease proband/patient cohort ('Probands With "
+            "Brugada Syndrome'), a count table whose caption names no other "
+            "cohort, or a one-mutation-per-proband catalogue with no clinical "
+            "columns, is projected onto affected. Clinical rosters, relatives, "
+            "carriers, exome/population/autopsy designs refuse. On by default "
+            "since 2026-09-08: on the two opened cont120 locks it added 48 exact "
+            "and 0 wrong affected values, and on 497 archived cardiac papers it "
+            "stamps exactly one table (docs/evidence/phenotype_supply_20260908/)."
+        ),
+    )
     strict_cohort_labels: bool = Field(
         default=False,
         validation_alias="GVF_STRICT_COHORT_LABELS",
