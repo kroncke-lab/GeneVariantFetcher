@@ -15,6 +15,20 @@ recall numbers below are **figures-skipped, DB-observed** scoring via
 `scripts/run_recall_suite.py` unless noted, and depend on the Vanderbilt
 Elsevier insttoken.
 
+## 2026-09-08 — SCN5A gold adjudications applied (20129283 per-centre rows, 30059973 phenotype)
+
+With Brett's approval, 301 SCN5A gold rows received `gold_v2_*` adjudications:
+Kapplinger 20129283's one-row-per-centre split collapsed to the printed Table 4
+count (47 consolidated, 69 excluded duplicates), and Baruteau 30059973's
+ascertainment-copied affected values replaced by the paper's Table 14 split for
+12 variants and explicit nulls for 173. Duplicate gold rows had capped identity
+recall at 98.1%; the ceiling is now 99.1%. Re-scoring the opened cont120_02/03
+locks against the adjudicated gold: cardiac identity FN 289 -> 220, carrier
+wrongs 89 -> 48, the projection's new affected values 458 exact / 0 wrong,
+positive-gold affected exact recovery 661 / 1,049 (63.0%). Locked tranche
+scores are unchanged (frozen answer key).
+[Record](evidence/phenotype_supply_20260908/item1_gold_adjudication/ADJUDICATIONS_20260908.md).
+
 ## 2026-09-08 — title-ascertainment tier, gold adjudication tables, manual acquisition worklist
 
 A paper title that binds a people noun to a disease now certifies count tables

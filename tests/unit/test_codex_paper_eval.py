@@ -2057,3 +2057,79 @@ def test_twin_merge_refuses_an_ambiguous_deletion_endpoint():
     merged, twins = run_eval_module.merge_notation_twins(rows, "SCN5A")
     assert twins == 0
     assert len(merged) == 3
+
+
+def test_phenotype_partition_and_not_reported_statuses_resolve_as_documented():
+    """The two 2026-09-08 statuses: a printed split supplies all three counts;
+    an unreported phenotype keeps carriers and makes both phenotype fields
+    explicit nulls. Unknown statuses still fail closed."""
+    from benchmarks.codex_paper_eval.run_eval import to_int
+    from utils.gold_standard import authoritative_gold_count, gold_v2_status
+
+    split = {
+        "carriers": "69",
+        "affected": "69",
+        "unaffected": "0",
+        "gold_v2_carriers": "69",
+        "gold_v2_affected": "40",
+        "gold_v2_unaffected": "29",
+        "gold_v2_status": "adjudicated_source_phenotype_partition",
+    }
+    assert gold_v2_status(split) == "adjudicated_source_phenotype_partition"
+    assert [
+        authoritative_gold_count(split, f, parser=to_int)
+        for f in ("carriers", "affected", "unaffected")
+    ] == [69, 40, 29]
+    unreported = {
+        "carriers": "2",
+        "affected": "2",
+        "unaffected": "0",
+        "gold_v2_carriers": "2",
+        "gold_v2_affected": "",
+        "gold_v2_unaffected": "",
+        "gold_v2_status": "adjudicated_phenotype_not_reported",
+    }
+    assert [
+        authoritative_gold_count(unreported, f, parser=to_int)
+        for f in ("carriers", "affected", "unaffected")
+    ] == [2, None, None]
+    with pytest.raises(ValueError, match="Unknown gold_v2_status"):
+        gold_v2_status({**unreported, "gold_v2_status": "adjudicated_typo"})
+
+
+def test_gold_digest_lineage_walks_recorded_revisions_only(tmp_path: Path):
+    """A pinned digest passes only if it is the live file or an ancestor recorded
+    in the append-only revision log; a broken or missing chain yields the live
+    digest alone."""
+    import hashlib
+
+    from utils.gold_standard import gold_digest_lineage
+
+    root = tmp_path / "repo"
+    gold = (
+        root
+        / "gene_variant_fetcher_gold_standard"
+        / "normalized"
+        / "X_recall_input.csv"
+    )
+    gold.parent.mkdir(parents=True)
+    gold.write_text("variant,pmid\nA1V,1\n")
+    current = hashlib.sha256(gold.read_bytes()).hexdigest()
+    log = root / "gene_variant_fetcher_gold_standard" / "gold_revisions.jsonl"
+    rel = "gene_variant_fetcher_gold_standard/normalized/X_recall_input.csv"
+    assert gold_digest_lineage(gold, log_path=log) == [current]
+    log.write_text(
+        json.dumps({"path": rel, "previous_sha256": "a" * 64, "sha256": current})
+        + "\n"
+        + json.dumps({"path": rel, "previous_sha256": "b" * 64, "sha256": "a" * 64})
+        + "\n"
+        + json.dumps(
+            {"path": "other.csv", "previous_sha256": "c" * 64, "sha256": current}
+        )
+        + "\n"
+    )
+    assert gold_digest_lineage(gold, log_path=log) == [current, "a" * 64, "b" * 64]
+    # An edit nobody recorded breaks the chain at the live file.
+    gold.write_text("variant,pmid\nA1V,1\nB2W,2\n")
+    edited = hashlib.sha256(gold.read_bytes()).hexdigest()
+    assert gold_digest_lineage(gold, log_path=log) == [edited]

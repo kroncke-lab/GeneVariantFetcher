@@ -130,15 +130,17 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       paid extraction arm, headline or default-off stage promotion.
 - [x] **Five-item pass on Brett's 2026-09-08 instructions** (evidence:
       `docs/evidence/phenotype_supply_20260908/README.md`).
-      1. **Curator adjudication tables drafted; decision is Brett's.** SCN5A
-         20129283: gold stores one row per testing centre listed in Table 4
-         (47 variants, 117 rows; 14 do not sum to the printed count);
-         `item1_gold_adjudication/gold_20129283_multirow_proposal.csv` proposes
-         one row per printed nucleotide change with carriers = affected =
-         Table 4 N. SCN5A 30059973: gold records all 442 carriers as
-         LQT3-affected while Table 1 reports 196 with a negative ECG phenotype;
-         `gold_30059973_table14_vs_gold.csv` gives the per-phenotype split for
-         the 12 variants the paper reports. Nothing in gold was changed.
+      1. **Curator adjudications approved by Brett and applied** (`gold_v2_*`
+         columns; record `item1_gold_adjudication/ADJUDICATIONS_20260908.md`).
+         SCN5A 20129283: one row per printed Table 4 nucleotide change (47
+         consolidated, 69 per-centre duplicates excluded). SCN5A 30059973:
+         Table 14 phenotype split for 12 variants, explicit-null phenotype for
+         173. Ceiling note: duplicate gold rows capped identity recall at
+         98.1%, now 99.1% (RYR2 28404607's WES compendium holds 26 of the 64
+         that remain and still needs a decision). On the opened locks the
+         projection's new affected values become 458 exact / 0 wrong. The
+         frozen continuation answer key predates the change; cut a new
+         registry version before the next campaign so tranche scores use it.
       2. **Title-ascertainment tier shipped, default on**
          (`GVF_TABLE_COHORT_TITLE_ASCERTAINMENT`): +48 exact / 0 wrong on the
          opened locks, cardiac affected exact recovery 50.7% → 55.0%; one table

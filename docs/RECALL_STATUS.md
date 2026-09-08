@@ -12,6 +12,24 @@ carry the active work plan or dated session log.
 No other doc should restate live recall tables. If a metric conflicts with this
 file, this file is authoritative.
 
+## Gold adjudication and the ceiling it removes (2026-09-08)
+
+Two SCN5A gold conventions were adjudicated with Brett's approval through the
+`gold_v2_*` columns (row-by-row record:
+`docs/evidence/phenotype_supply_20260908/item1_gold_adjudication/ADJUDICATIONS_20260908.md`).
+Kapplinger 20129283 stored one row per testing centre for a pooled printed
+count: 47 rows consolidated to the printed count, 69 duplicates excluded.
+Baruteau 30059973 recorded all 442 carriers as affected while the paper reports
+196 with a negative ECG phenotype: 12 variants take the paper's Table 14 split,
+173 take explicit-null phenotype. Gold conventions of this kind set a ceiling
+on measured recall and precision: duplicate (variant, PMID) rows capped a
+perfect extractor at **98.1%** identity recall before, **99.1%** after (64
+duplicate rows remain, 26 of them RYR2 28404607). On the two opened locks the
+adjudicated gold turns the projection's 46 wrong affected values into 0 (458
+exact) and lifts cardiac positive-gold affected exact recovery to **661 / 1,049
+(63.0%)**. The continuation registry's frozen answer key predates the change;
+locked tranche scores are unchanged.
+
 ## Latest title-tier calibration (2026-09-08; tranche 05 arm opened)
 
 The title-ascertainment tier of the table-cohort projection is on by default.

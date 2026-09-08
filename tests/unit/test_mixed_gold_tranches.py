@@ -9,6 +9,8 @@ from pathlib import Path
 
 import pytest
 
+from utils.gold_standard import gold_digest_lineage
+
 from benchmarks.evaluation_tiers.build_mixed_tranches import (
     digest_answer_key,
     excluded_pmids,
@@ -229,7 +231,13 @@ def test_inventory_is_complete_and_costs_reconcile():
     for source in registry["gold_inputs"]:
         path = REPO / source["path"]
         assert path.is_file()
-        assert sha256_file(path) == source["sha256"]
+        # The registry pins the gold it was built from. An approved adjudication
+        # may move the live file forward, but only through the append-only
+        # revision log; an unrecorded edit still fails here.
+        assert source["sha256"] in gold_digest_lineage(path), (
+            f"{source['path']}: pinned digest is neither the live file nor a "
+            "recorded revision in gene_variant_fetcher_gold_standard/gold_revisions.jsonl"
+        )
     calibration = REPO / registry["cost_model"]["calibration"]
     assert sha256_file(calibration) == registry["cost_model"]["calibration_sha256"]
     cost_profile = json.loads(calibration.read_text())

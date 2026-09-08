@@ -84,6 +84,34 @@ already follows this convention where a paper prints it (RYR2 28237968 has
 seven rows with unaffected relatives), so the change is consistency, not a new
 rule.
 
+### Applied (2026-09-08, after Brett's approval)
+
+Both proposals were applied through the repository's `gold_v2_*` columns by
+[`apply_adjudications.py`](item1_gold_adjudication/apply_adjudications.py) and
+recorded row by row in
+[`ADJUDICATIONS_20260908.md`](item1_gold_adjudication/ADJUDICATIONS_20260908.md):
+47 consolidated Table 4 rows, 69 excluded per-centre duplicates, 12 Table 14
+phenotype partitions, 173 explicit-null phenotypes. Legacy values are preserved;
+two statuses were added to the closed vocabulary in `utils/gold_standard.py`.
+The continuation registry's frozen `answer_key/` predates the change, so
+tranches 01-05 keep the scores they were locked with.
+
+Brett's framing: gold conventions like these set a theoretical ceiling on
+measured precision and recall. Quantified: before adjudication the four cardiac
+gold files held 134 duplicate (variant, PMID) rows out of 6,971, so a perfect
+extractor could reach at most 98.1% identity recall; after it, 64 remain
+(RYR2 28404607's WES compendium alone holds 26) and the ceiling is 99.1%. The
+count ceiling cannot be enumerated without reading every paper; the two known
+ascertainment-copied cases (30059973, 185 rows; 28404607, 263 rows) cover 6.4%
+of gold rows. Re-scoring the two opened locks against the adjudicated gold
+([`replay_locks_adjudicated_gold/`](item1_gold_adjudication/replay_locks_adjudicated_gold/))
+shows what the corrections were worth: cardiac identity FN 289 -> 220, carrier
+wrongs 89 -> 48, and the projection's newly supplied affected values 458 exact /
+**0 wrong** (the 46 wrongs were all per-centre rows), positive-gold affected
+exact recovery 661 / 1,049 (63.0%) with the projection versus 203 / 1,049
+without. That passes the 90% new-value gate on the calibration locks; it is
+calibration, not confirmation.
+
 ## 2. Phenotype lever: where the gap is, what was built, what it measures
 
 Decomposition of the 255 positive-gold affected values still null after the

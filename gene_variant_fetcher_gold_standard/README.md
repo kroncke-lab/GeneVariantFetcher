@@ -129,6 +129,16 @@ Current adjudication semantics:
 - `carriers` means variant-positive people, not everyone enrolled, sampled, sequenced, or screened.
 - `affected` means variant carriers meeting the paper's disease/phenotype definition, including ECG/QTc-defined affection when the paper defines it that way.
 - `unaffected` means explicit unaffected/asymptomatic carriers. When v2 has a populated status and blank `gold_v2_unaffected`, the adjudicated value is intentionally null rather than the original unaffected count.
+- `gold_v2_status` is a closed vocabulary (`utils/gold_standard.py`). Two statuses were added on 2026-09-08 for the SCN5A adjudications in `docs/evidence/phenotype_supply_20260908/item1_gold_adjudication/ADJUDICATIONS_20260908.md`: `adjudicated_source_phenotype_partition` (the paper prints a per-variant phenotype split; its negative-phenotype column is `unaffected`, every phenotype-positive carrier is `affected`) and `adjudicated_phenotype_not_reported` (the paper reports no per-variant phenotype; carriers stand, affected and unaffected are explicit nulls). A paper that prints one pooled count per nucleotide change with a list of contributing centres has one gold row per nucleotide change; legacy per-centre rows are `excluded_duplicate_current_cohort`.
+
+## Gold revisions (`gold_revisions.jsonl`)
+
+Every approved adjudication that changes a normalized file's bytes appends one
+line: the file, its previous and new sha256, who approved it, and the artifact
+that lists the decisions. Registries pin the digest of the gold they were built
+from; `utils.gold_standard.gold_digest_lineage` walks this chain so a pinned
+digest that is an ancestor of the live file passes provenance checks while an
+unrecorded edit still fails them. Frozen registry answer keys are never edited.
 
 ## Current review-gold overlay (`adjudications/`)
 
