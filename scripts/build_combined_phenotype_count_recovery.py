@@ -90,6 +90,10 @@ def candidate_runs(
         record = json.loads(line)
         if record.get("comparison_arm") != "candidate":
             continue
+        if record.get("event") or not record.get("run_id"):
+            # Ledger events (an abandoned candidate slot) close a tranche
+            # without scoring an arm; there is no run to plot.
+            continue
         run_dir = runs_root / str(record["run_id"])
         found.append((str(record["tier_id"]), run_dir))
     if not found and require:

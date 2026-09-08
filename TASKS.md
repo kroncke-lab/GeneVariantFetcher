@@ -153,9 +153,25 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
          gold rows behind the acquisition ceiling; top 150 = 83.5% of 1,314
          rows, 57 of them without institutional access. EZproxy is retired as
          a route.
-      5. **Tranche 05 opened** as one live arm of current main
-         (`20260908_protocol_cont120_05_baseline`, PLAN preregistered); scored
-         result and within-arm ablation recorded in the evidence README.
+      5. **Tranche 05 opened and scored** as one live arm of current main
+         (`20260908_protocol_cont120_05_baseline`, PLAN preregistered, $7.07):
+         identity 297/145/158 (recall 65.3%, precision 67.2%, counted-extra
+         97.7%), cardiac four 270/141/157. The projection lane classified no
+         table: the tranche holds no deterministic count table (575
+         deterministic rows without counts, 286 model rows), so the within-arm
+         ablation is identical off and on, the second null with a reason after
+         tranche 04. Tranche 04's never-run candidate slot was closed by an
+         append-only `abandon_arm` ledger event so 05 could open in order.
+- [ ] **Confirm the projection on a gold-free, source-selected cohort, not on
+      whole mixed tranches.** Two consecutive tranches (241 attempts) held no
+      table the lane classifies while the opened locks held several. Before
+      reading any score, select from the still-unopened tranches (06–11) every
+      attempt whose frozen source contains a deterministic count table or a
+      one-proband-per-row catalogue, by running the parsers and the lane's
+      classifier on source only; preregister the rule, run one arm, and apply
+      rules 1–6 of `docs/evidence/phenotype_supply_20260908/PLAN.md`. Record
+      the selection as an abandonment-free side cohort if the registry cannot
+      express it, and say so.
 - [ ] **Next phenotype step:** the derived-count contract at the top of this
       file owns the remaining gap, which is 146 model-authored rows without an
       affected value on the opened locks. Per-person clinical rosters

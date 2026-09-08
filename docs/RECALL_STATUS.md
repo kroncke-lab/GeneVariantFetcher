@@ -22,9 +22,18 @@ without; identity, carriers, unaffected and counted extras are unchanged and
 no new value lands on a real-split row. New-value precision is 412 / 458
 (**89.96%**); every wrong value is a SCN5A 20129283 per-testing-centre gold
 row awaiting curator adjudication, outside which it is 100%. These are
-calibration numbers on already-opened locks, not a headline. Tranche 05
-(`20260908_protocol_cont120_05_baseline`) is the first unopened tranche run
-with the tier; its result is recorded here when scored.
+calibration numbers on already-opened locks, not a headline.
+
+Tranche 05 (`20260908_protocol_cont120_05_baseline`, 121 attempts, $7.07) was
+opened and scored as one live arm of current main with the tier on: identity
+**297 / 145 / 158** (recall 65.3%, precision 67.2%, counted-extra precision
+97.7%); cardiac four 270 / 141 / 157. The projection lane classified **no
+table and stamped no row**, because the tranche holds no deterministic count
+table at all (575 deterministic rows without counts, 286 model rows), so the
+within-arm ablation is identical off and on: a second null with a reason after
+tranche 04, not a confirmation. Cardiac affected exact recovery on this tranche
+is 35 / 344 (10.2%). Whole mixed tranches will not confirm the projection; a
+gold-free source-property selection is the next design.
 [Report](evidence/phenotype_supply_20260908/README.md).
 
 ## Latest phenotype safety audit (2026-09-07; no promotion)

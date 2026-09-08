@@ -184,8 +184,69 @@ appended below once locked and scored.
 
 ### Result
 
-_Pending: extraction running; this section is filled in after `lock_and_score.sh`
-and the strip-mode ablation._
+Run `20260908_protocol_cont120_05_baseline`: 121 attempts / 112 PMIDs, seven
+gene processes, all `completed`, 48.2 minutes of production, locked and scored
+through the registry's `lock_and_score.sh`; the ledger records the arm. API
+cost by the list-price proxy **$7.07** ([`budget.json`](item5_tranche05/budget.json):
+gpt-5.6-sol $4.74 on 276 calls, grok-4.3 $2.13 on 140 calls of which 19 failed
+without usage, Kimi $0.21).
+
+Identity, paper-derived lane (all genes): **297 TP / 145 FP / 158 FN**, recall
+65.3%, precision 67.2%, F1 66.2%, counted-extra precision 97.7% (7 extra rows
+with counts). Cardiac four (118 attempts): 270 / 141 / 157, recall 63.2%,
+precision 65.7%.
+
+| gene | TP | FP | FN | recall | precision |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 81 | 62 | 15 | 84.4% | 56.6% |
+| KCNQ1 | 42 | 13 | 28 | 60.0% | 76.4% |
+| RYR2 | 24 | 14 | 38 | 38.7% | 63.2% |
+| SCN5A | 123 | 52 | 76 | 61.8% | 70.3% |
+| BRCA1 / BRCA2 / MYBPC3 | 20 / 6 / 1 | 4 / 0 / 0 | 1 / 0 / 0 | | |
+
+Four papers hold 73 of the 158 misses with few or no hits: RYR2 27452199 (34),
+SCN5A 24721456 (14, rank 16 on the manual-acquisition worklist), SCN5A 22360817
+(13, rank 18) and KCNQ1 32470535 (12). The per-gene RUN_STATUS files flag 20
+attempts (SCN5A 13, KCNQ1 5, KCNH2 2) whose on-disk source scan is abstract-only
+while the finalized extraction records say full text; the scorer reports every
+attempt as `corpus_as_locked`. Recall is bounded by acquisition here as on every
+prior tranche.
+
+Counts, cardiac four ([`ablation_stdout.txt`](item5_tranche05/ablation_stdout.txt)):
+carriers supplied on 66 of 374 positive-gold rows (47 exact), affected on 43 of
+344 (35 exact, **10.2%** exact recovery), unaffected on 18 of 50 (3 exact).
+
+**The projection lane, including the title tier, was inert on this tranche**, as
+it was on tranche 04. Its metadata block is present on all 121 extractions with
+the title tier enabled: 0 tables classified, 0 rows stamped. The rows it saw
+were 575 deterministic rows without any carrier count (identity-only tables)
+and 286 model-authored rows; not one attempt short-circuited on a deterministic
+or router table (every paper went to the grok-4.3 primary, 50 of them through
+verification), so the fast-path coverage audit had nothing to record either.
+The strip ablation ([`ablation/`](item5_tranche05/ablation/)) is therefore
+identical on every metric, off and on.
+
+Preregistered rules: (1) newly supplied exactness, **uninformative** (nothing
+supplied); (2) no manufactured split, pass (0); (3) nothing else moves, pass;
+(4) supply on the addressable pool, **uninformative** by the rule's own clause,
+the tranche contains no compendium-style count table and no per-proband
+catalogue; (5) no wrong values to list; (6) title tier, no stamps to list. This
+is the second consecutive null with a reason, not a failure and not a
+confirmation.
+
+What it says about the confirmation path: the count-table shapes the projection
+targets sit in a minority of gold papers (the opened locks 02/03 held several;
+04 and 05, 241 attempts, held none). Drawing whole mixed tranches will keep
+producing nulls. A confirmation cohort has to be selected by a **gold-free
+source property**, "the frozen source contains a deterministic count table or
+a one-proband-per-row catalogue", applied to the still-unopened tranches under a
+preregistered rule before any score is read. That design is recorded as the
+next step in `TASKS.md`; it was not run today.
+
+The canonical stratified figure regenerates only after a candidate-labelled
+arm, so `run_eval.py score` left it unchanged; the run's own figures are
+[`phenotype_count_recovery.png`](../../../benchmarks/codex_paper_eval/runs/20260908_protocol_cont120_05_baseline/figures/phenotype_count_recovery.png)
+and [`gold_difference.png`](../../../benchmarks/codex_paper_eval/runs/20260908_protocol_cont120_05_baseline/figures/gold_difference.png).
 
 ## Reproduction
 

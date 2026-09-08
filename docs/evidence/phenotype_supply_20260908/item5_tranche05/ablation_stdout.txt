@@ -1,0 +1,17 @@
+
+== pooled cardiac_four (strip, paper_tier=False) ==
+identity off/on: TP 270/270 FP 141/141 FN 157/157 counted extras 7/7
+field       pos gold   supplied off/on   pos exact off/on   exact rec% off/on  wrong off/on    cond% off/on
+carriers         374             66/66              47/47         12.57/12.57         19/19     71.21/71.21
+affected         344             43/43              35/35         10.17/10.17           8/8       81.4/81.4
+unaffected        50             18/18                3/3             6.0/6.0         10/10     44.44/44.44
+
+== pooled all_genes (strip, paper_tier=False) ==
+identity off/on: TP 297/297 FP 145/145 FN 158/158 counted extras 7/7
+field       pos gold   supplied off/on   pos exact off/on   exact rec% off/on  wrong off/on    cond% off/on
+carriers         402             93/93              70/70         17.41/17.41         23/23     75.27/75.27
+affected         369             62/62              50/50         13.55/13.55         12/12     80.65/80.65
+unaffected        53             31/31                3/3           5.66/5.66         11/11     64.52/64.52
+
+new value verdicts (pooled): {}
+new affected on gold real-split rows: 0

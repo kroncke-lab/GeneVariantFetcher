@@ -29,7 +29,12 @@ firing on a footnote and on a drug-challenge cohort with a real split. Curator
 tables for the SCN5A 20129283 per-centre rows and the 30059973 ECG-negative
 carriers were drafted, not applied. A ranked 250-paper manual-acquisition
 worklist covers 91% of the gold rows behind the acquisition ceiling. Tranche
-05 opened as one live arm of current main.
+05 opened and scored as one live arm of current main ($7.07): identity
+297 / 145 / 158 (recall 65.3%, precision 67.2%), cardiac four 270 / 141 / 157;
+the projection lane classified no table because the tranche holds no
+deterministic count table, so the within-arm ablation is identical off and on,
+the second null with a reason in a row. Tranche 04's never-run candidate slot
+was closed by an append-only ledger event so 05 could open in order.
 [Evidence](evidence/phenotype_supply_20260908/README.md).
 
 ## 2026-09-07 — adversarial phenotype safety and fast-path coverage

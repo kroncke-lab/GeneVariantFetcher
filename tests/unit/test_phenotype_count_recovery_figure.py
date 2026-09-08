@@ -194,3 +194,40 @@ def test_stratified_cohort_attempt_labels_are_derived_not_hard_coded():
     assert "Historical cardiac evaluation · 118 gene–paper attempts" in svg
     assert "Opened mixed-gold candidate arms · 218 gene–paper attempts" in svg
     assert "Opened mixed-gold calibration · 98 gene–paper attempts" not in svg
+
+
+def test_candidate_runs_skip_abandoned_slots_in_the_ledger(tmp_path):
+    """An ``abandon_arm`` event closes a candidate slot without a scored run;
+    the figure builders must neither crash on it nor plot a phantom arm."""
+    import importlib.util
+    import json
+    from pathlib import Path
+
+    spec = importlib.util.spec_from_file_location(
+        "combined_builder",
+        Path(__file__).resolve().parents[2]
+        / "scripts"
+        / "build_combined_phenotype_count_recovery.py",
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    log = tmp_path / "consumption_log.jsonl"
+    log.write_text(
+        "\n".join(
+            json.dumps(entry)
+            for entry in (
+                {"tier_id": "t1", "comparison_arm": "baseline", "run_id": "r1_base"},
+                {"tier_id": "t1", "comparison_arm": "candidate", "run_id": "r1_cand"},
+                {"tier_id": "t2", "comparison_arm": "baseline", "run_id": "r2_base"},
+                {
+                    "event": "abandon_arm",
+                    "tier_id": "t2",
+                    "comparison_arm": "candidate",
+                    "reason": "single live arm; slot closed",
+                },
+            )
+        )
+        + "\n"
+    )
+    found = module.candidate_runs(log, tmp_path / "runs")
+    assert found == [("t1", tmp_path / "runs" / "r1_cand")]
