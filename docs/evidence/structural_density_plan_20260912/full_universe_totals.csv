@@ -1,0 +1,6 @@
+gene,full_variants,histogram_variants,restored_rows,restored_classes,full_affected,full_literature_unaffected,full_gnomad_unaffected,full_unaffected,restored_affected,restored_literature_unaffected,restored_gnomad_unaffected,full_missense,full_all_have_literature_carriers,full_pooled_carrier_fraction
+HNF1A,234,233,1,synonymous,762.0,115.0,240189.0,240304.0,1.0,0.0,60579.0,152,True,0.0031609600690267396
+GCK,398,391,7,synonymous,932.0,82.0,3620.0,3702.0,9.0,0.0,2553.0,268,True,0.20112214069917997
+LDLR,880,871,9,synonymous,4595.0,216.0,576920.0,577136.0,31.0,0.0,559841.0,522,True,0.007898839841782542
+BRCA2,6106,5962,144,synonymous,11958.0,3731.0,5484999.0,5488730.0,1280.0,1181.0,3478668.0,3733,True,0.00217390988181842
+KCNQ1,699,691,8,synonymous,8392.0,2264.0,77099.0,79363.0,190.0,90.0,69874.0,443,True,0.09562987863939376

@@ -1,0 +1,53 @@
+{
+  "status": "two_completed_reviews",
+  "scope": "User-provided methodology, generic mathematics and recovered public historical formulas only; tools disabled, verbatim mode. No private observations or source code shared.",
+  "reviews": [
+    {
+      "raw_file": "grok_raw.json",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 13648,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "output_tokens": 15084,
+        "reasoning_tokens": 7982,
+        "total_tokens": 28732
+      },
+      "model_usage": {
+        "grok-4.6-build": {
+          "inputTokens": 13648,
+          "outputTokens": 15084,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "modelCalls": 1,
+          "costUSD": 0.040052
+        }
+      },
+      "total_cost_usd": 0.040052
+    },
+    {
+      "raw_file": "grok_historical_followup_raw.json",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 13803,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "output_tokens": 8295,
+        "reasoning_tokens": 6040,
+        "total_tokens": 22098
+      },
+      "model_usage": {
+        "grok-4.6-build": {
+          "inputTokens": 13803,
+          "outputTokens": 8295,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "modelCalls": 1,
+          "costUSD": 0.02630784
+        }
+      },
+      "total_cost_usd": 0.02630784
+    }
+  ],
+  "total_cost_usd": 0.06635984
+}

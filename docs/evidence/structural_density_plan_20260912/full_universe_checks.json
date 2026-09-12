@@ -1,0 +1,18 @@
+{
+  "source_hashes": {
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/HNF1A_protocol/variants_features.csv": "c7dd30139a051fc936ba35ed15f8b0b45e3794e8387d6d53df3fc2593fb56139",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/GCK_protocol/variants_features.csv": "b329170a9166361efc38404bbd4e1bd2065c05e89a0cf457b0cb5443590fc769",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/variants_features.csv": "401407808dcb8cf7496d513f9101230361e214fb8d097ccc0bfaa3af998d9dbe",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/BRCA2_protocol/variants_features.csv": "ef6788e0f6a22f90ca0486456c3b24178634ce49a43e272cc5d572f424e9cad3",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/KCNQ1_protocol/variants_features.csv": "3693ecfbc5e05cdb2f59b0d08f9051ea8e7ebec3568a3f60fb9d5918b2c841c5"
+  },
+  "snapshot_sha256": "670f557ab4c3e930133f84544411b5f862453f9a55b8fadab1dcf3ec7114c2c8",
+  "snapshot_rows": 8317,
+  "count_partitions": true,
+  "one_row_per_gene_key": true,
+  "all_full_rows_positive_n": true,
+  "all_candidate_moments_valid": true,
+  "beta_moment_roundtrip": true,
+  "exact_zero_and_one_fractions_preserved": true,
+  "only_committed_snapshot_and_provenance_read": true
+}

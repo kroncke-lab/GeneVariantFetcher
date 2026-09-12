@@ -52,11 +52,31 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       toward 0.09 in the S=10 update. Same-row predictor comparisons and
       reproducible evidence:
       [`prior/count/predictor analysis`](docs/evidence/prior_count_predictors_20260912/README.md).
-- [ ] **Next grant-analysis experiment: review the shared priors and test
-      additional features with gnomAD-as-unaffected fixed.** Review high-prior
-      missing-AlphaMissense strata, truncation bands and ambiguous allele keys.
-      Compare cross-fitted GPN-Star/AVI feature arms on identical outcome rows;
-      prespecify S=10/prior-strength and common-variant influence sensitivity.
+- [x] **Recover the empirical-posterior density method and plan execution with
+      Grok (2026-09-12).** The user specifies variant-only LOO, retaining other
+      substitutions at the same residue; a full-dataset empirical Beta prior
+      and count-updated posterior donors; a short sine/sigmoid kernel; and
+      polymer distances in disorder on correctly numbered biological units.
+      Recover the original formulas and preflight all 8,317 count-bearing rows,
+      including synonymous variants omitted from prior histograms. Detailed
+      choices, empirical parameters, source recovery and reviews:
+      [`structural density plan`](docs/evidence/structural_density_plan_20260912/PLAN.md).
+- [ ] **Next: execute the GCK empirical-posterior density pilot.** Fit the
+      historical saturating-weight mean/MSE Beta moments on the full eligible
+      gene dataset, then update each variant with affected and unaffected
+      counts (gnomAD assumed unaffected). Use equal-variant posterior donors;
+      exclude only the target variant across all chain copies. Keep other
+      substitutions at its residue. Begin with the recovered sine kernel,
+      midpoint 3 Angstrom, and 3.8*sqrt(sequence separation) polymer fallback
+      within disordered segments. Validate isoform/canonical numbering in a
+      complete biological monomer, propagate the explicit centroid metric,
+      retain support/missingness, and test the planned kernel sensitivities.
+      Full-dataset hyperparameters stay fixed in this primary LOO calculation;
+      do not substitute raw-count donors or leave-whole-residue-out validation.
+- [ ] **Then compare and extend structural priors.** Compare empirical baseline,
+      density, AlphaMissense and their combination on identical target variants,
+      preserving variant-only LOO. Test GPN-Star/AVI after the density pilot;
+      complete the other genes' biological-unit mapping and support checks.
       Inventory population-only variants absent from the literature row set.
       Before outcome validation, freeze gene-specific endpoint, age/sex/time
       horizon, ascertainment and independent people/family/cohort ownership.

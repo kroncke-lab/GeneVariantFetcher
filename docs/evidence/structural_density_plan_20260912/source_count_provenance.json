@@ -1,0 +1,21 @@
+{
+  "assumption": "gnomAD count is unaffected",
+  "universe": "All available count-bearing literature-keyed variants before the original synonymous exclusion. One empirical prior per gene/endpoint.",
+  "external_source_hashes": {
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/HNF1A_protocol/variants_features.csv": "c7dd30139a051fc936ba35ed15f8b0b45e3794e8387d6d53df3fc2593fb56139",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/GCK_protocol/variants_features.csv": "b329170a9166361efc38404bbd4e1bd2065c05e89a0cf457b0cb5443590fc769",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/variants_features.csv": "401407808dcb8cf7496d513f9101230361e214fb8d097ccc0bfaa3af998d9dbe",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/BRCA2_protocol/variants_features.csv": "ef6788e0f6a22f90ca0486456c3b24178634ce49a43e272cc5d572f424e9cad3",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/KCNQ1_protocol/variants_features.csv": "3693ecfbc5e05cdb2f59b0d08f9051ea8e7ebec3568a3f60fb9d5918b2c841c5"
+  },
+  "histogram_source": "docs/evidence/prior_count_predictors_20260912/variant_counts.csv.gz",
+  "histogram_source_sha256": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+  "snapshot_file": "full_universe_source_counts.csv.gz",
+  "snapshot_sha256": "670f557ab4c3e930133f84544411b5f862453f9a55b8fadab1dcf3ec7114c2c8",
+  "snapshot_rows": 8317,
+  "snapshot_construction_checks": {
+    "all_8148_histogram_rows_matched_one_to_one": true,
+    "all_affected_unaffected_gnomad_and_total_counts_match_histogram": true,
+    "source_count_partition_valid": true
+  }
+}

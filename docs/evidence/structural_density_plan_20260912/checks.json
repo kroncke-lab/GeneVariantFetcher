@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "scope": "Numerical preflight only; no structure, density fit, or validation run",
+  "source": "https://github.com/kroncke-lab/Bayes_BrS1_Penetrance/blob/master/func_dist_seq.R",
+  "sine_numerical_change": "Use math.pi in boundaries instead of rounded 3.14",
+  "sine_formula": "1 below a-pi; 0.5-0.5*sin((d-a)/2) through a+pi; 0 above",
+  "sigmoid_formula": "2/(1+exp(log(3)*d/h))",
+  "parameters": [
+    {
+      "midpoint_or_half_distance_angstrom": 2.0,
+      "sine_zero_weight": 0.9207354924039483,
+      "sine_midpoint_weight": 0.5,
+      "sine_midpoint_relative_weight": 0.5430441251857795,
+      "sine_cutoff_angstrom": 5.141592653589793,
+      "sigmoid_zero_weight": 1.0,
+      "sigmoid_half_distance_weight": 0.5
+    },
+    {
+      "midpoint_or_half_distance_angstrom": 3.0,
+      "sine_zero_weight": 0.9987474933020273,
+      "sine_midpoint_weight": 0.5,
+      "sine_midpoint_relative_weight": 0.500627038719182,
+      "sine_cutoff_angstrom": 6.141592653589793,
+      "sigmoid_zero_weight": 1.0,
+      "sigmoid_half_distance_weight": 0.5
+    },
+    {
+      "midpoint_or_half_distance_angstrom": 5.0,
+      "sine_zero_weight": 1.0,
+      "sine_midpoint_weight": 0.5,
+      "sine_midpoint_relative_weight": 0.5,
+      "sine_cutoff_angstrom": 8.141592653589793,
+      "sigmoid_zero_weight": 1.0,
+      "sigmoid_half_distance_weight": 0.5
+    }
+  ],
+  "polymer_models": [
+    {
+      "label": "historical_baseline",
+      "b_angstrom": 3.8,
+      "nu": 0.5
+    },
+    {
+      "label": "existing_ppa",
+      "b_angstrom": 5.5,
+      "nu": 0.55
+    }
+  ],
+  "nonzero_sine_a3_sequence_separations_tested_0_through_100": {
+    "historical_baseline": [
+      0,
+      1,
+      2
+    ],
+    "existing_ppa": [
+      0,
+      1
+    ]
+  },
+  "notes": [
+    "The sine midpoint is absolute half weight, not exactly half of K(0) when a<pi.",
+    "Sine a=3 K(0) is approximately 0.998747; a=2 K(0) is approximately 0.920735.",
+    "N=0 may retain other substitutions at the target residue after variant-only LOO.",
+    "No remaining donors means missing density and zero support; do not widen silently.",
+    "Positive sigmoid weights at longer distances do not establish useful support."
+  ],
+  "csv_rows": 234
+}

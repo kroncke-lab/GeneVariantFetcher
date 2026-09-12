@@ -1,0 +1,24 @@
+{
+  "ruff_check": "passed",
+  "snapshot_only_rerun": "passed",
+  "all_8148_frozen_histogram_counts_matched_at_snapshot_creation": true,
+  "exact_external_input_calculation_match": true,
+  "outputs": {
+    "full_universe_totals.csv": {
+      "identical_bytes_after_rerun": true,
+      "sha256": "c4da635e4016daf42eb98e8fda824a5bdd8637f9fa60d97cdbb70d31631085bf"
+    },
+    "full_universe_moments.csv": {
+      "identical_bytes_after_rerun": true,
+      "sha256": "19063d8fb50c941182dc56bc264ba4b20de829fc95b5fc48c7d4a016cdcc612d"
+    },
+    "full_universe_empirical_posteriors.csv.gz": {
+      "identical_bytes_after_rerun": true,
+      "sha256": "6034faf94e5975a04848c67ed5993de1f68325b16a35fad978df9d447d909a77"
+    },
+    "full_universe_checks.json": {
+      "identical_bytes_after_rerun": true,
+      "sha256": "21bf4181b8d9cbb60170413cf32d054099e2247b0594d78279bc43d44fcaf073"
+    }
+  }
+}
