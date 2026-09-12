@@ -1,0 +1,19 @@
+{
+  "original_source": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/variants_features.csv",
+  "original_source_sha256": "401407808dcb8cf7496d513f9101230361e214fb8d097ccc0bfaa3af998d9dbe",
+  "snapshot": "feature_join/LDLR.csv",
+  "snapshot_sha256": "1fab12736be71dd2b8fec218ae5a2bab697e1c242c911fb05fc29f8f40ec5107",
+  "rows": 871,
+  "columns": [
+    "key",
+    "allele_match",
+    "clinvar_simple",
+    "n_alleles",
+    "clinvar_alleles_with_record",
+    "single_proband_rows",
+    "single_proband_share",
+    "gnomad_ac",
+    "gnomad_an",
+    "gnomad_dataset"
+  ]
+}

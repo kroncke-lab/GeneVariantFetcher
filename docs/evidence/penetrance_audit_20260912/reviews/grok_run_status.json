@@ -1,0 +1,56 @@
+{
+  "requested_model": "grok-4.6",
+  "cli_version": "grok 1.0.13 (5e9a58528b76) [stable]",
+  "reasoning_effort": "xhigh",
+  "initial_attempt": {
+    "status": "failed",
+    "reason": "sandbox denied normal local session storage and network DNS",
+    "raw": "grok_raw.json",
+    "stderr": "grok_stderr.log"
+  },
+  "full_local_context_escalation": {
+    "status": "automatic_review_rejected",
+    "reason": "Potentially sensitive internal research data and source details to external Grok; full payload authorization not accepted",
+    "payload": "grok_prompt.txt",
+    "executed": false
+  },
+  "minimal_attempt": {
+    "status": "stopped_at_plan_max_turns",
+    "scope": "User-pasted aggregate table/narrative and generic math only. No internal derived results or source code. Tools disabled, verbatim mode, max_turns 1.",
+    "payload": "grok_minimal_first_prompt.txt",
+    "raw": "grok_minimal_raw.json",
+    "stderr": "grok_minimal_stderr.log",
+    "model_returned": "grok-4.6-build",
+    "total_cost_usd": 0.00505988,
+    "notes": "One-turn run attempted a plan to look up Grokbot; no substantive review."
+  },
+  "minimal_retry": {
+    "status": "completed",
+    "scope": "User-pasted aggregate table/narrative and generic math only. No internal derived results or source code. Tools disabled, verbatim mode, max_turns 2.",
+    "payload": "grok_minimal_prompt.txt",
+    "system_prompt_override": "You are Grok, acting as a statistical reviewer. Review the supplied aggregate table directly. No tools, file access, delegation, web lookup, plans or progress messages. State only evidence-supported conclusions and clearly label hypotheses. Return your complete critique as a final answer.",
+    "raw": "grok_minimal_retry_raw.json",
+    "stderr": "grok_minimal_retry_stderr.log",
+    "stop_reason": "end_turn",
+    "model_usage": {
+      "grok-4.6-build": {
+        "inputTokens": 13586,
+        "outputTokens": 4979,
+        "cacheReadInputTokens": 128,
+        "cacheCreationInputTokens": 0,
+        "modelCalls": 1,
+        "costUSD": 0.0194174
+      }
+    },
+    "usage": {
+      "input_tokens": 13586,
+      "cache_read_input_tokens": 128,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 4979,
+      "reasoning_tokens": 2637,
+      "total_tokens": 18693
+    },
+    "total_cost_usd": 0.0194174,
+    "review": "grok_review.md"
+  }
+}

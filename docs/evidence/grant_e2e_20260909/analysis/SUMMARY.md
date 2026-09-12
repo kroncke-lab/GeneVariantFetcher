@@ -1,5 +1,13 @@
 # Cross-gene summary — grant end-to-end run (frozen 2026-09-09)
 
+## Interpretation notice — 2026-09-12
+
+This is an archived exploratory model comparison. The
+[histogram audit](../../penetrance_audit_20260912/README.md) supersedes its
+population-risk/calibration interpretation and provides same-row AUC
+comparisons. The original scores and alternative arms below remain historical
+evidence, not independently validated disease risks.
+
 Per-gene detail and figures: `<gene>/report/REPORT.md`. Metrics are held-out (5-fold by variant) unless marked in-sample.
 
 ## Data and model

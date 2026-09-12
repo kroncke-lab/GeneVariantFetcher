@@ -1,0 +1,19 @@
+{
+  "original_source": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/BRCA2_protocol/variants_features.csv",
+  "original_source_sha256": "ef6788e0f6a22f90ca0486456c3b24178634ce49a43e272cc5d572f424e9cad3",
+  "snapshot": "feature_join/BRCA2.csv",
+  "snapshot_sha256": "1dc16f195d5c1ac04a63ccd64c9a4c57a2a9d7735c54c1f7e301b2ae06cfb8ec",
+  "rows": 5962,
+  "columns": [
+    "key",
+    "allele_match",
+    "clinvar_simple",
+    "n_alleles",
+    "clinvar_alleles_with_record",
+    "single_proband_rows",
+    "single_proband_share",
+    "gnomad_ac",
+    "gnomad_an",
+    "gnomad_dataset"
+  ]
+}

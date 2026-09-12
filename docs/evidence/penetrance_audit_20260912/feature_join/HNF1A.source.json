@@ -1,0 +1,19 @@
+{
+  "original_source": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/HNF1A_protocol/variants_features.csv",
+  "original_source_sha256": "c7dd30139a051fc936ba35ed15f8b0b45e3794e8387d6d53df3fc2593fb56139",
+  "snapshot": "feature_join/HNF1A.csv",
+  "snapshot_sha256": "6a606884a9f32fdf0ea23ebd23a07d2b0074f6bb6a129d7d1b2deb1229b96105",
+  "rows": 233,
+  "columns": [
+    "key",
+    "allele_match",
+    "clinvar_simple",
+    "n_alleles",
+    "clinvar_alleles_with_record",
+    "single_proband_rows",
+    "single_proband_share",
+    "gnomad_ac",
+    "gnomad_an",
+    "gnomad_dataset"
+  ]
+}

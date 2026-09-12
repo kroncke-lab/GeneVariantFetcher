@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-08.
+Last reviewed: 2026-09-12.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -27,6 +27,42 @@ minus reference over every asserted gold row, candidate over frozen baseline;
 `docs/PROTOCOL_CHANGELOG.md` row for every protocol change. The hierarchy,
 zero-imputation semantics, provenance, and visual QA requirements are defined in
 `docs/PHENOTYPE_COUNT_FIGURE_POLICY.md`.
+
+## Grant penetrance interpretation and next analysis gate
+
+- [x] **Preserve and sync the useful grant work to main (2026-09-12).** GVF's
+      six pending commits, dated grant evidence and tested `source_path` CSV
+      compatibility fix are committed/pushed; the grant-freeze tag is remote.
+      The sibling BayesianPenetranceEstimator source/compact evidence is
+      preserved and its divergent main histories reconciled without discarding
+      either side. Its sync record is `docs/REPOSITORY_SYNC_20260912.md` there.
+- [x] **Audit the five penetrance histograms with Grok consultation.** The
+      arithmetic reproduces, but population-penetrance interpretation fails:
+      synthetic unaffected gnomAD counts, a selected literature universe,
+      singleton/shared-prior modes, incomplete allele joins and incomparable
+      AUC subsets. Original evidence retained; corrected explanation,
+      same-row AUC, diagnostic figure and executable audit:
+      [`penetrance audit`](docs/evidence/penetrance_audit_20260912/README.md).
+- [ ] **Next grant-analysis step: phenotype/denominator and allele review on
+      existing source before broader extraction or model tuning.** Freeze
+      gene-specific endpoint, age/sex/time horizon, ascertainment, independent
+      people/family/cohort ownership and unknown-versus-unaffected semantics.
+      Begin with HNF1A/GCK PMID 36257325 and GCK PMID 36208030 source/supplements;
+      totals without a split remain unknown. Separate gnomAD frequency evidence
+      from measured clinical outcomes; preserve release/QC/AC/AN/homozygote
+      and transcript/allele provenance. Correct consequence/annotation
+      inconsistencies through reviewed source, not a target histogram shape.
+- [ ] **Then validate on independent genotype-first outcomes.** Inventory
+      population-only/common/benign/synonymous variants and keep unsupported
+      risks unestimated. Compare a coherent cohort-aware model or independently
+      trained prior with the historical S=10 arm; prespecify prior/common-allele
+      influence sensitivity. Use identical held-out rows and cohort/family
+      splits for calibration, interval coverage and predictive scores.
+      KCNQ1 browser concordance and the synthetic common-variant check are not
+      population calibration. No grant-ready penetrance headline until this
+      analysis gate passes. Detailed acceptance sequence is in the audit.
+
+This analysis lane does not replace the extraction/derived-count gates below.
 
 ## Completed $150 model-routing tests; derived-count acceptance gate
 

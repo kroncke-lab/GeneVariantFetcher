@@ -1,5 +1,13 @@
 # Methods (draft for the grant application) — frozen workflow, 2026-09-09
 
+**Historical draft; not the headline protocol's current methods.** Sections 6–7
+describe the earlier mixture-model arm. The plotted protocol scores instead use
+the feature-conditioned prior/Beta update described in the
+[2026-09-12 audit](../penetrance_audit_20260912/README.md). Neither construction
+has demonstrated calibrated population risk. Resolve the audit's phenotype,
+sampling and allele-provenance findings before using these methods in the
+application; the archived calculations remain unchanged.
+
 Wording is descriptive of what the frozen code does; numbers are filled in from
 the run artifacts once each gene completes (see `analysis/SUMMARY.md`).
 

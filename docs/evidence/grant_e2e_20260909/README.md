@@ -1,5 +1,14 @@
 # Grant end-to-end run — evidence record (started 2026-09-09)
 
+**Interpretation corrected 2026-09-12:** the figures below are archived protocol
+scores for literature-selected variants, not validated population penetrance.
+The [histogram audit](../penetrance_audit_20260912/README.md) reproduces the
+numbers but identifies unobserved gnomAD phenotype treated as unaffected,
+singleton/prior-driven modes, incomplete allele joins, inconsistent consequence
+exclusions, and unmatched AUC evaluation sets. Its interpretation supersedes
+the population-risk, common-variant calibration and control-ceiling claims
+below. Keep this evidence intact; use the audit and `TASKS.md` for next steps.
+
 Status: **in progress**. This README is filled in as stages complete; the
 frozen protocol and launch contract are in [`FREEZE.md`](FREEZE.md).
 
@@ -153,6 +162,7 @@ quota, source recovery + replay ~3–5 h per shard, retry pass ~2 h, analysis ~4
 
 | When (local) | Event |
 | --- | --- |
+| 2026-09-12 | Histogram interpretation audited; original estimates retained as exploratory scores. See the correction notice above and the linked numerical audit. |
 | 2026-09-09 08:36 | HNF1A and GCK `gvf-run` launched (discovery → extraction, source recovery on) |
 | 2026-09-09 08:53 | LDLR launched (`--extraction-top-n 2500`) |
 | 2026-09-09 08:54 | BRCA2 launched (`--extraction-top-n 2000`; discovery hit the 7,000 PMID cap) |

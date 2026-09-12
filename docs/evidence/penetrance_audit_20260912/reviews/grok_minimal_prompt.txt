@@ -1,0 +1,19 @@
+You are already the requested Grokbot reviewer. Respond directly with the statistical critique; do not look up, invoke or delegate to Grokbot or any other tool. The user explicitly asked for this consultation to interpret the following table and explanation they pasted into the conversation. This prompt contains only that user-provided aggregate material and general statistical questions. You have no file, shell, web or other tools. Do not access or request internal data, source code, credentials or files. Return a bounded conceptual statistical critique in at most 1200 words; identify unknowns and avoid claiming verification. Do not write a plan or progress statement: give your full answer immediately.
+
+User question: "feels like there should be more variants with ~0 or population rate of associated disease."
+
+User-provided table: Five histograms, one per gene, counts of variants on y-axis, stacked by ClinVar class.
+Gene | Variants | Median | Below .10 | At or above .50 | At or above .90
+HNF1A | 233 | .84 | 16% | 73% | 16%
+GCK | 391 | .94 | 2% | 87% | 62%
+LDLR | 871 | .94 | 4% | 82% | 63%
+BRCA2 | 5962 | .10 | 49% | 11% | 0%
+KCNQ1 | 691 | .71 | 3% | 66% | 4%
+
+User-provided narrative to critique:
+"BRCA2 is the opposite shape from the others. Half its variants sit below 0.10 and almost none reach 0.90. That is the two million gnomAD carriers doing the work: most BRCA2 variants in the literature appear a handful of times against a large population denominator, so they settle near population risk. The cluster near 0.35 is where a few affected carriers meet a small denominator.
+The diabetes and lipid genes pile up near 1.0 because their literature is almost purely proband-ascertained and their gnomAD denominators are small. LDLR's spike at 0.94 is mostly variants with no ClinVar record, which are the frameshift and splice alleles the warehouse does not enumerate.
+KCNQ1, the control, is the most spread out, which is what you would expect from a gene with real curated penetrance across the range, and it is the panel that most resembles a genuine penetrance distribution rather than an ascertainment artefact.
+One caveat worth stating when this goes in the application: the tall grey bars are variants with no ClinVar record, and in three genes they dominate the high-penetrance end. Those are largely truncating alleles taking the truncating prior, so their position reflects the prior as much as the counts."
+
+Address: (1) Can a histogram of literature-observed variants represent all variants, including benign and genotype-first variants? (2) Does having a large summed population allele count imply most individual variants have large denominators? (3) Can phenotype-unknown gnomAD carriers be treated as confirmed unaffected; distinguish allele counts and distinct carriers? (4) Could a count-weighted feature prior transfer the influence of common alleles to unanchored rare variants? (5) For a generic Beta estimator with mean (10*p_prior + affected)/(10 + carrier_denominator), explain behavior of one proband when p_prior is .94 versus .003. This is a mathematical example, not a verified implementation description. (6) Is close to zero equivalent to background absolute disease risk, across endpoints and age/sex? (7) Does visual spread or ClinVar status validate absolute penetrance? (8) Give a ranked bounded audit plan and acceptance checks before changing a standing statistical protocol. Distinguish hypotheses from what the provided aggregate table can actually establish.
