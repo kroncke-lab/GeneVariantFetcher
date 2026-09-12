@@ -1634,6 +1634,25 @@ def test_load_source_override_csv_filters_to_usable_refresh_rows(tmp_path):
     assert selected == {"123": usable}
 
 
+def test_load_source_override_csv_accepts_linked_supplement_output(tmp_path):
+    from scripts.fetch_linked_supplements import _write_source_overrides
+
+    source = tmp_path / "123_FULL_CONTEXT.md"
+    source.write_text(
+        _long_fulltext("# MAIN TEXT\n\nKCNH2 p.Arg1His\n"), encoding="utf-8"
+    )
+    csv_path = tmp_path / "linked_supplement_overrides.csv"
+    _write_source_overrides(
+        csv_path,
+        [
+            {"pmid": "123", "folded": True, "full_context": str(source)},
+            {"pmid": "456", "folded": False, "full_context": str(source)},
+        ],
+    )
+
+    assert refresh_run_db.load_source_override_csv(csv_path) == {"123": source}
+
+
 def test_stage_extractions_uses_copy_and_leaves_active_json(tmp_path, monkeypatch):
     run_dir = tmp_path / "run"
     harvest_dir = run_dir / "pmc_fulltext"

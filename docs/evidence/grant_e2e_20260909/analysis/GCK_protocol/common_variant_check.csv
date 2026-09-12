@@ -1,0 +1,2 @@
+key,vclass,clinvar_simple,gnomad_af_max,gnomad_added,affected,literature_n,literature_fraction,insilico_post_mean,insilico_post_q975,n_papers
+A11T,missense,B/LB,0.00615126,936.0,3.0,3.0,1.0,0.0037817860645411256,0.008450068258131542,2

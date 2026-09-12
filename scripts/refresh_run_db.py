@@ -334,6 +334,7 @@ def load_source_override_csv(path: Path) -> dict[str, Path]:
             "source_file",
             "context_path",
             "full_context_path",
+            "source_path",  # written by scripts/fetch_linked_supplements.py
         ):
             if candidate in lower_to_field:
                 path_col = lower_to_field[candidate]

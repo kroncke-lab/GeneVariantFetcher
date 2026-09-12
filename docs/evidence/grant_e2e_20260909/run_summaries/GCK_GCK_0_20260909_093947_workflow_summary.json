@@ -1,0 +1,41 @@
+{
+  "gene_symbol": "GCK",
+  "workflow_timestamp": "2026-09-10T00:15:52.313574",
+  "statistics": {
+    "pmids_discovered": 353,
+    "pmids_filtered_out": 0,
+    "pmids_passed_filters": 353,
+    "papers_downloaded": 2,
+    "papers_download_failed": 351,
+    "papers_extracted": 346,
+    "papers_from_fulltext": 243,
+    "papers_from_abstract_only": 103,
+    "papers_extraction_failed": 7,
+    "total_variants_found": 2754,
+    "variants_with_penetrance_data": 540,
+    "total_carriers_observed": 967,
+    "total_affected_carriers": 300,
+    "unique_pmids_with_variants": 138,
+    "variant_paper_links": 2702,
+    "success_rate": "98.0%"
+  },
+  "output_locations": {
+    "pmid_list": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK_pmids.txt",
+    "pmid_status": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/pmid_status",
+    "full_text_papers": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/pmc_fulltext",
+    "extractions": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/extractions",
+    "penetrance_summary": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK_penetrance_summary.json",
+    "sqlite_database": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK.db",
+    "workflow_log": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK_workflow.log",
+    "llm_traces": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/llm_traces"
+  },
+  "database_migration": {
+    "successful": 346,
+    "failed": 0,
+    "total_files": 346
+  },
+  "penetrance_validation": {
+    "errors": 1,
+    "warnings": 6
+  }
+}

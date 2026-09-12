@@ -1,0 +1,136 @@
+{
+  "common_variant_check": {
+    "expectation": "common alleles carry no Mendelian effect, so the posterior should sit near population risk",
+    "literature_fraction_median": 1.0,
+    "n_common": 5,
+    "posterior_mean_median": 0.0052975713334542165,
+    "share_posterior_mean_below_0_10": 1.0,
+    "share_posterior_q975_below_0_10": 1.0,
+    "threshold_af": 0.001
+  },
+  "discordant_non_plp_high": 1,
+  "discordant_plp_low": 1,
+  "elapsed_seconds": 60.58699679374695,
+  "gene": "LDLR",
+  "gnomad_as_unaffected": true,
+  "gnomad_carriers_added": 17079,
+  "high_threshold": 0.5,
+  "input": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/variants_features.csv",
+  "level": "protocol",
+  "min_carriers_eval": 5,
+  "models": {
+    "base": {
+      "alpha_mean": -1.332,
+      "diagnostics": {
+        "divergences": 0,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1520.0,
+        "min_ess_tail": 1674.0
+      },
+      "features": [],
+      "mixture": false,
+      "prior_mean_iqr": [
+        0.2088769368701309,
+        0.2088769368701309
+      ],
+      "prior_mean_median": 0.2088769368701309,
+      "prior_strength": 10.0
+    },
+    "class": {
+      "alpha_mean": -0.269,
+      "diagnostics": {
+        "divergences": 0,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1014.0,
+        "min_ess_tail": 1123.0
+      },
+      "features": [
+        "trunc"
+      ],
+      "mixture": false,
+      "prior_mean_iqr": [
+        0.16587386924807165,
+        0.9296811026427032
+      ],
+      "prior_mean_median": 0.16587386924807165,
+      "prior_strength": 10.0
+    },
+    "clinvar": {
+      "alpha_mean": 1.87,
+      "diagnostics": {
+        "divergences": 0,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 2589.0,
+        "min_ess_tail": 2027.0
+      },
+      "features": [
+        "trunc",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "mixture": false,
+      "prior_mean_iqr": [
+        0.7968970857395545,
+        0.9495452195531606
+      ],
+      "prior_mean_median": 0.8699611405680471,
+      "prior_strength": 10.0
+    },
+    "insilico": {
+      "alpha_mean": 1.639,
+      "diagnostics": {
+        "divergences": 0,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1788.0,
+        "min_ess_tail": 1763.0
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing"
+      ],
+      "mixture": false,
+      "prior_mean_iqr": [
+        0.8391850031532933,
+        0.938685974529943
+      ],
+      "prior_mean_median": 0.9307595729063901,
+      "prior_strength": 10.0
+    },
+    "insilico_clinvar": {
+      "alpha_mean": 1.978,
+      "diagnostics": {
+        "divergences": 0,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 2020.0,
+        "min_ess_tail": 1996.0
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "mixture": false,
+      "prior_mean_iqr": [
+        0.8292915788361471,
+        0.9649068576799713
+      ],
+      "prior_mean_median": 0.8810491136230068,
+      "prior_strength": 10.0
+    }
+  },
+  "n_affected": 4564,
+  "n_carriers": 21859,
+  "n_eval_variants": 231,
+  "n_eval_variants_literature": 155,
+  "n_variants": 871,
+  "pooled_rate": 0.20879271695868978,
+  "prior_strength": 10.0,
+  "protocol": "feature-conditioned prior + Beta posterior (Variant Browser p_mean_w)",
+  "seed": 20260909,
+  "synonymous_or_unkeyed_rows_excluded": 9
+}

@@ -1,0 +1,6 @@
+model,fit,max_r_hat,min_ess_bulk,min_ess_tail,divergences,draws,chains,rows,variants,mixture,features
+base,full,1.0,1672.0,2319.0,0,1000,4,555,391,False,
+class,full,1.0,1652.0,1719.0,0,1000,4,555,391,False,trunc
+insilico,full,1.0,1888.0,2238.0,0,1000,4,555,391,False,"trunc,am,am_missing"
+clinvar,full,1.0,1645.0,1719.0,0,1000,4,555,391,False,"trunc,clinvar_plp,clinvar_blb,clinvar_none"
+insilico_clinvar,full,1.0,1897.0,2163.0,0,1000,4,555,391,False,"trunc,am,am_missing,clinvar_plp,clinvar_blb,clinvar_none"

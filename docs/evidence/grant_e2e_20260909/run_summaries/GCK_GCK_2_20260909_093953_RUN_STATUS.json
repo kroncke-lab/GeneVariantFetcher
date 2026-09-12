@@ -1,0 +1,407 @@
+{
+  "gene": "GCK",
+  "status": "completed",
+  "severity": "ok",
+  "exit_code": 0,
+  "active_db": "GCK.db",
+  "duration_seconds": 5246,
+  "stage_failures": [],
+  "stage_warnings": [
+    "source accounting disagreement: on-disk scan says 338 full text / 15 abstract-only, finalized extraction records say 352 / 0",
+    "refused to relabel another run's trace manifest: /Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_2/GCK/20260909_093953/llm_traces holds trace records from run(s) ['fde26c30-a5fa-459d-808c-7354d7b89f94']; refusing to rebuild its manifest under run_id='02bfe4cf-e58f-4687-849d-33ca13aaf0ab'. Use a per-run trace directory, or pass allow_mixed_runs=True to record the mixture."
+  ],
+  "gold_access": {
+    "disabled": true,
+    "mode": "disabled",
+    "gold_derived_alias_files_disabled": true
+  },
+  "source_integrity": {
+    "full_text": 338,
+    "abstract_only": 15,
+    "total": 353,
+    "abstract_only_ratio": 0.042,
+    "threshold": 0.85,
+    "degraded": false,
+    "finalized_ledger": {
+      "papers_finalized": 352,
+      "full_text": 352,
+      "abstract_only": 0,
+      "source_unverified": 0,
+      "agrees_with_disk_scan": false,
+      "source_class_discrepancies": [
+        {
+          "pmid": "10694920",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "11119017",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "11289470",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "11916951",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "12400064",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "12934346",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "1303265",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "14517946",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "14580233",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "1502186",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "15216446",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "15305805",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "15677518",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "15918042",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "15987895",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "16059790",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "16331569",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "16925503",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "16956505",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "17573900",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "18159847",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "18298419",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "18332101",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "18512226",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "18577346",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "19146401",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "19565026",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "20082465",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "20172480",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "20337973",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "21348868",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "21463240",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "21688019",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "21978167",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "22043488",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "22060211",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "22231386",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "22298776",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "23155716",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "23517481",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "24168455",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "24520939",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "24660669",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "24918535",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "25395195",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "25581748",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "25953829",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "26106223",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "26324089",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "26634513",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "27167055",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "27323672",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "27512465",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "27852188",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "28597946",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "30362177",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "30453719",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "31133092",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "31529753",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "31638358",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "32086287",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "32202040",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "32515761",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "32860162",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "33036022",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "33277730",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "34171966",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "34547194",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "34627944",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "35228227",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "35996042",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "36383636",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "36773254",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "36894549",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "38691834",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "38946358",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "39660359",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "40462586",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "41224746",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "41263552",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "41686236",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "41733586",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "42466846",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "7712840",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "7882822",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "8168652",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "8261750",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "8325892",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "8589523",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "8866553",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "9075802",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "9341881",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        },
+        {
+          "pmid": "9713013",
+          "discrepancy": "extraction declared 'abstract_only' but recorded source bytes read as 'fulltext'"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+model,max_r_hat,min_ess_bulk,min_ess_tail,divergences
+base,1.0,1430.0,1574.0,0
+class,1.0,1313.0,1533.0,0
+insilico,1.01,1118.0,1410.0,0
+clinvar,1.0,1600.0,2042.0,0
+insilico_clinvar,1.0,1613.0,1318.0,0

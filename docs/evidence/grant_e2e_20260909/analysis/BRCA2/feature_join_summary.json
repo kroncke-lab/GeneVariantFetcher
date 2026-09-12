@@ -1,0 +1,30 @@
+{
+  "allele_match": {
+    "cdna_alias": 64,
+    "cdna_within_protein": 987,
+    "none": 1807,
+    "protein_all_alleles": 3248
+  },
+  "clinvar_allele_conflicts": 63,
+  "clinvar_simple": {
+    "B/LB": 893,
+    "Conflicting": 610,
+    "P/LP": 496,
+    "VUS": 2083,
+    "none": 2024
+  },
+  "enumerated_consequence_rows": 30769,
+  "features_db": "/Volumes/Ezekers/ResearchData/variantFeatures/data/variants.db",
+  "features_db_sha256_skipped": "38 GB warehouse; sha not computed",
+  "gene": "BRCA2",
+  "missense_total": 3733,
+  "missense_with_alphamissense": 3631,
+  "refseq_match": null,
+  "transcript": "ENST00000380152.8",
+  "variants": 6106,
+  "warehouse_alleles_for_gene": 30769,
+  "with_alphamissense": 3682,
+  "with_clinvar": 4082,
+  "with_gnomad_af_but_no_ac": 54,
+  "with_gnomad_record": 1544
+}

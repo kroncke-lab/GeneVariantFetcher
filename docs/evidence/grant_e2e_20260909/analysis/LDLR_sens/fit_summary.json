@@ -1,0 +1,231 @@
+{
+  "am_standardization": {
+    "mean": 0.6779005882352941,
+    "sd": 0.3477157122263326
+  },
+  "ascertainment_mixture": true,
+  "class_fallback": "none",
+  "class_source_counts": {
+    "clinvar": 182,
+    "none": 143
+  },
+  "common_variant_check": {
+    "expectation": "common alleles carry no Mendelian effect (or a modest GWAS-scale risk), so penetrance should be near the population risk; case-series literature fractions are the ascertainment artifact",
+    "literature_fraction_median": 0.9166666666666667,
+    "n_common": 2,
+    "posterior_mean_median": 0.7327854074939689,
+    "share_literature_fraction_ge_0_5": 1.0,
+    "share_posterior_mean_below_0_10": 0.0,
+    "share_posterior_q975_below_0_10": 0.0,
+    "threshold_af": 0.001
+  },
+  "common_variants_excluded": 0,
+  "common_variants_excluded_literature_carriers": 0,
+  "cv": {
+    "chains": 2,
+    "draws": 500,
+    "folds": 5,
+    "skipped": false
+  },
+  "discordant_non_plp_high": 0,
+  "discordant_plp_low": 0,
+  "elapsed_seconds": 257.09158205986023,
+  "gene": "LDLR",
+  "genotype_first_carriers": 765,
+  "genotype_first_rows": 84,
+  "gnomad_as_unaffected": false,
+  "gnomad_carriers_added": 0,
+  "high_threshold": 0.5,
+  "input": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_sens/variants_features.csv",
+  "level": "paper",
+  "max_gnomad_af": 0.0,
+  "min_carriers_eval": 5,
+  "models": {
+    "base": {
+      "alpha_mean": 7.015616959613605,
+      "beta_mean": {},
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1325.0,
+        "min_ess_tail": 977.0,
+        "mixture": true,
+        "rows": 517,
+        "variants": 325
+      },
+      "features": [],
+      "g2_frequency_mean": 0.12484520861715544,
+      "mixture": true,
+      "p_ascertained_mean": 0.5499609876791599,
+      "pi_common_variant_rows_mean": 0.18300819548500327,
+      "pi_genotype_first_mean": 0.24512625451139092,
+      "pi_phenotype_first_mean": 0.1336919085710741,
+      "sigma_mean": 1.3000707610020072,
+      "tau_mean": 0.5011146416487156
+    },
+    "class": {
+      "alpha_mean": 2.053688539777613,
+      "beta_mean": {
+        "trunc": 0.1934688862232331
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.53,
+        "min_ess_bulk": 7.0,
+        "min_ess_tail": 28.0,
+        "mixture": true,
+        "rows": 517,
+        "variants": 325
+      },
+      "features": [
+        "trunc"
+      ],
+      "g2_frequency_mean": -0.05840681697974998,
+      "mixture": true,
+      "p_ascertained_mean": 0.8872194186895818,
+      "pi_common_variant_rows_mean": 0.6399787003864434,
+      "pi_genotype_first_mean": 0.6076896513505312,
+      "pi_phenotype_first_mean": 0.6664817839593759,
+      "sigma_mean": 0.6813136348753513,
+      "tau_mean": 0.44491127067688613
+    },
+    "clinvar": {
+      "alpha_mean": 2.216498335024214,
+      "beta_mean": {
+        "clinvar_blb": -0.011168864149249976,
+        "clinvar_none": -0.12370742842573676,
+        "clinvar_plp": -0.0717978704409451,
+        "trunc": 0.15965371685268331
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.53,
+        "min_ess_bulk": 7.0,
+        "min_ess_tail": 27.0,
+        "mixture": true,
+        "rows": 517,
+        "variants": 325
+      },
+      "features": [
+        "trunc",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "g2_frequency_mean": -0.05890875976978641,
+      "mixture": true,
+      "p_ascertained_mean": 0.8874240181006934,
+      "pi_common_variant_rows_mean": 0.6401907684167338,
+      "pi_genotype_first_mean": 0.6077351820576211,
+      "pi_phenotype_first_mean": 0.6668477032278669,
+      "sigma_mean": 0.6767539813203105,
+      "tau_mean": 0.41656524605370404
+    },
+    "insilico": {
+      "alpha_mean": 2.0178674558894856,
+      "beta_mean": {
+        "am": 0.033327279776122105,
+        "am_missing": 0.0791254542152387,
+        "trunc": 0.2301966773014753
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.53,
+        "min_ess_bulk": 7.0,
+        "min_ess_tail": 27.0,
+        "mixture": true,
+        "rows": 517,
+        "variants": 325
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing"
+      ],
+      "g2_frequency_mean": -0.06057678380674974,
+      "mixture": true,
+      "p_ascertained_mean": 0.8865711379224038,
+      "pi_common_variant_rows_mean": 0.6399246447687789,
+      "pi_genotype_first_mean": 0.6099717556636122,
+      "pi_phenotype_first_mean": 0.6665000375030667,
+      "sigma_mean": 0.6421987357083969,
+      "tau_mean": 0.437293164910819
+    },
+    "insilico_clinvar": {
+      "alpha_mean": 2.2243245935461613,
+      "beta_mean": {
+        "am": 0.06252230408717571,
+        "am_missing": 0.06661504656960339,
+        "clinvar_blb": 0.016938184182551875,
+        "clinvar_none": -0.18625998169585345,
+        "clinvar_plp": -0.08490605432796655,
+        "trunc": 0.23170113954130048
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.53,
+        "min_ess_bulk": 7.0,
+        "min_ess_tail": 27.0,
+        "mixture": true,
+        "rows": 517,
+        "variants": 325
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "g2_frequency_mean": -0.061561109532563774,
+      "mixture": true,
+      "p_ascertained_mean": 0.88717714869648,
+      "pi_common_variant_rows_mean": 0.6392803151684787,
+      "pi_genotype_first_mean": 0.6066828934993928,
+      "pi_phenotype_first_mean": 0.6666505915806036,
+      "sigma_mean": 0.6512657532276274,
+      "tau_mean": 0.44062177087692306
+    }
+  },
+  "n_affected": 3553,
+  "n_carriers": 3758,
+  "n_eval_variants": 130,
+  "n_rows": 517,
+  "n_variants": 325,
+  "pooled_rate": 0.9454497072911123,
+  "seed": 20260909,
+  "single_carrier_rows_merged": true,
+  "split_alternating": {
+    "held_out_carriers": 1490,
+    "status": "ok",
+    "variants": 68
+  },
+  "split_design": {
+    "held_out_carriers": 484,
+    "status": "ok",
+    "variants": 26
+  },
+  "split_genotype_first_eligible_variants": 26,
+  "split_min_b": 3,
+  "split_mode": "alternating",
+  "split_mode_design": true,
+  "split_modes": [
+    "alternating",
+    "design"
+  ],
+  "split_validation_variants": 68,
+  "synonymous_or_unkeyed_rows_excluded": 4,
+  "target_accept": 0.95,
+  "tau_prior_sd": 0.5
+}

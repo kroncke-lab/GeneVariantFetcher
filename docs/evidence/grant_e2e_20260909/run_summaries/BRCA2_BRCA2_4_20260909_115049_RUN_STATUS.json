@@ -1,0 +1,34 @@
+{
+  "gene": "BRCA2",
+  "status": "completed",
+  "severity": "ok",
+  "exit_code": 0,
+  "active_db": "BRCA2.db",
+  "duration_seconds": 6899,
+  "stage_failures": [],
+  "stage_warnings": [
+    "source accounting disagreement: on-disk scan says 1096 full text / 79 abstract-only, finalized extraction records say 398 / 0",
+    "refused to relabel another run's trace manifest: /Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_4/BRCA2/20260909_115049/llm_traces holds trace records from run(s) ['e6e4f110-b6f7-4de1-b19d-4f2209b5f56b']; refusing to rebuild its manifest under run_id='84493bb9-e11b-44cb-9819-94c574ff3eec'. Use a per-run trace directory, or pass allow_mixed_runs=True to record the mixture."
+  ],
+  "gold_access": {
+    "disabled": true,
+    "mode": "disabled",
+    "gold_derived_alias_files_disabled": true
+  },
+  "source_integrity": {
+    "full_text": 1096,
+    "abstract_only": 79,
+    "total": 1175,
+    "abstract_only_ratio": 0.067,
+    "threshold": 0.85,
+    "degraded": false,
+    "finalized_ledger": {
+      "papers_finalized": 398,
+      "full_text": 398,
+      "abstract_only": 0,
+      "source_unverified": 0,
+      "agrees_with_disk_scan": false,
+      "source_class_discrepancies": []
+    }
+  }
+}

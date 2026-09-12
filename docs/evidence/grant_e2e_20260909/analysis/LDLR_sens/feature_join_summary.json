@@ -1,0 +1,30 @@
+{
+  "allele_match": {
+    "cdna_alias": 30,
+    "cdna_within_protein": 147,
+    "none": 130,
+    "protein_all_alleles": 22
+  },
+  "clinvar_allele_conflicts": 0,
+  "clinvar_simple": {
+    "B/LB": 8,
+    "Conflicting": 7,
+    "P/LP": 146,
+    "VUS": 25,
+    "none": 143
+  },
+  "enumerated_consequence_rows": 7748,
+  "features_db": "/Volumes/Ezekers/ResearchData/variantFeatures/data/variants.db",
+  "features_db_sha256_skipped": "38 GB warehouse; sha not computed",
+  "gene": "LDLR",
+  "missense_total": 203,
+  "missense_with_alphamissense": 169,
+  "refseq_match": "NM_000527.5",
+  "transcript": "ENST00000558518.6",
+  "variants": 329,
+  "warehouse_alleles_for_gene": 7748,
+  "with_alphamissense": 170,
+  "with_clinvar": 186,
+  "with_gnomad_af_but_no_ac": 3,
+  "with_gnomad_record": 102
+}

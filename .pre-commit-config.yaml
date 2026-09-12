@@ -29,6 +29,12 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=1200"]
-        # Preserve complete SHA-locked tranche-03 and clinical-overlay records.
-        exclude: ^benchmarks/codex_paper_eval/runs/(20260905_protocol_cont120_03_(baseline|candidate)|20260906_model12_grok43_astra_clinical_verified)/predictions\.json$
+        # Preserve complete SHA-locked tranche records and the three full BRCA2
+        # evidence tables needed to reproduce the dated grant analysis/audit.
+        exclude: |
+          (?x)^(
+            benchmarks/codex_paper_eval/runs/(20260905_protocol_cont120_03_(baseline|candidate)|20260906_model12_grok43_astra_clinical_verified)/predictions\.json
+            |docs/evidence/grant_e2e_20260909/analysis/BRCA2/posterior_variants\.csv
+            |docs/evidence/grant_e2e_20260909/analysis/BRCA2_protocol/(posterior_variants|oof_predictions)\.csv
+          )$
       - id: check-merge-conflict

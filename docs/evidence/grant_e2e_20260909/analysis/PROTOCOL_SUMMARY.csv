@@ -1,0 +1,6 @@
+gene,papers,papers_w_counts,variants,lit_carriers,gnomad_added,eval_n,common,common_post_med,AUC_prior,AUC_clinvar,disc_PLP_low,disc_nonPLP_high
+HNF1A,1000,173.0,233,877,179610,65,3,0.0008,0.923,0.97,0,1
+GCK,1050,194.0,391,1014,1067,59,1,0.0038,0.784,0.932,1,1
+LDLR,2431,433.0,871,4811,17079,231,5,0.0053,0.881,0.751,1,1
+BRCA2,3759,575.0,5962,15689,2006331,552,31,0.002,0.885,0.896,4,0
+KCNQ1,2383,,691,10656,7225,259,6,0.0164,0.803,0.814,4,9

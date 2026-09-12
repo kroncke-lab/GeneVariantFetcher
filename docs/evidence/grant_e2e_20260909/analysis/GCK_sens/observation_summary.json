@@ -1,0 +1,90 @@
+{
+  "excluded_designs": [],
+  "gene": "GCK",
+  "gvf_db": [
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_0/GCK/20260909_093947/GCK.refresh_20260909_211010.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_1/GCK/20260909_093950/GCK.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_1/GCK/20260909_093950/GCK.refresh_20260909_204653.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_2/GCK/20260909_093953/GCK.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/GCK_2/GCK/20260909_093953/GCK.refresh_20260909_204753.db"
+  ],
+  "gvf_db_sha256": [
+    "48cd9e536f0daad2a774fe29c255f61d3d290fbe273d09d3a18a5df7236d1059",
+    "6dadfb8cc407094829451ede560f78ed3924699b95f3d55a2ac9d010eeef35e3",
+    "3be9405326440ab5d4da935f8b0bff25fd7f9be07d79c15399988f5da7bf84aa",
+    "5c8877966338567768aaab65595d170a2abb161cfaf72b4251862e21fb5dc55c",
+    "7342d22f4258067490bf68bcb8c70c1963f9285ceddee8688724ef1b3056c955",
+    "586824d9ec9c0e523b506a3459420a1aab11970b06cca5c0a4b62c3f2faa8688"
+  ],
+  "min_n_per_row": 2,
+  "observations_by_denominator": {
+    "explicit": 28,
+    "individual_records": 21,
+    "total_derived": 155
+  },
+  "observations_by_design": {
+    "case_report": 24,
+    "case_series": 96,
+    "cohort_population": 29,
+    "family_segregation": 19,
+    "functional_invitro": 2,
+    "other": 2,
+    "unknown": 32
+  },
+  "observations_by_source": {
+    "cohort": 183,
+    "individual": 21
+  },
+  "observations_excluded_by_design": 0,
+  "observations_unusable_no_denominator": 20658,
+  "observations_usable": 204,
+  "papers_in_db": 1050,
+  "papers_with_usable_observations": 108,
+  "penetrance_rows_quarantined_excluded": 134,
+  "penetrance_rows_total": 21885,
+  "single_proband_observation_share": 0.0,
+  "top_total_only_papers": [
+    {
+      "carriers_reported": 18034,
+      "pmid": "37101203",
+      "rows": 18020,
+      "study_design": null
+    },
+    {
+      "carriers_reported": 3202,
+      "pmid": "36257325",
+      "rows": 1022,
+      "study_design": null
+    },
+    {
+      "carriers_reported": 733,
+      "pmid": "34763692",
+      "rows": 681,
+      "study_design": null
+    }
+  ],
+  "total_affected": 526,
+  "total_carriers": 602,
+  "unkeyed_variant_rows": 49,
+  "unusable_by_shape": {
+    "affected_only_no_denominator": 78,
+    "other_or_inconsistent": 17,
+    "total_only_no_phenotype_split": 20506,
+    "unaffected_only": 57
+  },
+  "variant_rows_rekeyed_to_protein": 167,
+  "variants_by_class": {
+    "frameshift": 4,
+    "inframe_indel": 9,
+    "missense": 118,
+    "nonsense": 11,
+    "splice": 9,
+    "substitution_cdna": 3,
+    "synonymous": 1
+  },
+  "variants_in_db": 25579,
+  "variants_with_counts": 155,
+  "variants_with_n_ge_10": 7,
+  "variants_with_n_ge_5": 36
+}

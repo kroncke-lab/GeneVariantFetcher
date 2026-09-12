@@ -1,0 +1,94 @@
+{
+  "excluded_designs": [],
+  "gene": "HNF1A",
+  "gvf_db": [
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A.refresh_20260909_212303.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_1/HNF1A/20260909_093720/HNF1A.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/HNF1A.db",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/HNF1A.refresh_20260909_211437.db"
+  ],
+  "gvf_db_sha256": [
+    "5f05430152adfba8609612a506c6b60ecd4d06ec581c17e39f029c7372543197",
+    "b80f8a28c5b84f6863f3f0fe4827576fa96bed9aa42639c80825e356f4784032",
+    "c32a0117a618dadb9cbf9a0d6fdbedf3471308d0fce5a6324035850053ee227e",
+    "26154cf93e60f173952d8f1b62acc7e36d7877ff966ef8fa77c6fbb8eda983e2",
+    "c9f340d67f2f1c0ed7eb72bb1c541f0652796937b5709dc62a17f1887a81e910"
+  ],
+  "min_n_per_row": 1,
+  "observations_by_denominator": {
+    "explicit": 56,
+    "individual_records": 69,
+    "total_derived": 294
+  },
+  "observations_by_design": {
+    "biobank": 1,
+    "case_control": 13,
+    "case_report": 51,
+    "case_series": 233,
+    "cohort": 1,
+    "cohort_population": 80,
+    "cross-sectional": 1,
+    "family_segregation": 15,
+    "functional_invitro": 3,
+    "other": 11,
+    "unknown": 10
+  },
+  "observations_by_source": {
+    "cohort": 350,
+    "individual": 69
+  },
+  "observations_excluded_by_design": 0,
+  "observations_unusable_no_denominator": 547,
+  "observations_usable": 419,
+  "papers_in_db": 1000,
+  "papers_with_usable_observations": 173,
+  "penetrance_rows_quarantined_excluded": 113,
+  "penetrance_rows_total": 1233,
+  "single_proband_observation_share": 0.6921241050119332,
+  "top_total_only_papers": [
+    {
+      "carriers_reported": 564,
+      "pmid": "36257325",
+      "rows": 218,
+      "study_design": null
+    },
+    {
+      "carriers_reported": 52,
+      "pmid": "36504295",
+      "rows": 40,
+      "study_design": null
+    },
+    {
+      "carriers_reported": 28,
+      "pmid": "37798422",
+      "rows": 14,
+      "study_design": "cohort_population"
+    }
+  ],
+  "total_affected": 762,
+  "total_carriers": 877,
+  "unkeyed_variant_rows": 52,
+  "unusable_by_shape": {
+    "affected_only_no_denominator": 8,
+    "other_or_inconsistent": 16,
+    "total_only_no_phenotype_split": 495,
+    "unaffected_only": 28
+  },
+  "variant_rows_rekeyed_to_protein": 140,
+  "variants_by_class": {
+    "frameshift": 35,
+    "indel_cdna": 3,
+    "inframe_indel": 6,
+    "missense": 152,
+    "nonsense": 21,
+    "splice": 13,
+    "start_lost": 1,
+    "substitution_cdna": 2,
+    "synonymous": 1
+  },
+  "variants_in_db": 7882,
+  "variants_with_counts": 234,
+  "variants_with_n_ge_10": 14,
+  "variants_with_n_ge_5": 39
+}

@@ -1,0 +1,42 @@
+{
+  "gene": "KCNQ1",
+  "gvf_db": "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/canonical_baseline/KCNQ1.db",
+  "gvf_db_sha256": "9d974e08fd0510192abbe027bb5dee6c298ee28e45d53323c4a5830985ae0398",
+  "observations_by_denominator": {
+    "explicit": 1377,
+    "individual_records": 3,
+    "total_derived": 529
+  },
+  "observations_by_design": {
+    "unknown": 1909
+  },
+  "observations_by_source": {
+    "cohort": 1906,
+    "individual": 3
+  },
+  "observations_unusable_no_denominator": 423,
+  "observations_usable": 1909,
+  "papers_in_db": 2383,
+  "penetrance_rows_quarantined_excluded": 0,
+  "penetrance_rows_total": 2478,
+  "single_proband_observation_share": 0.5416448402304872,
+  "total_affected": 8392,
+  "total_carriers": 10656,
+  "unkeyed_variant_rows": 238,
+  "variant_rows_rekeyed_to_protein": 316,
+  "variants_by_class": {
+    "frameshift": 82,
+    "indel_cdna": 12,
+    "inframe_indel": 29,
+    "missense": 443,
+    "nonsense": 42,
+    "splice": 45,
+    "start_lost": 1,
+    "substitution_cdna": 37,
+    "synonymous": 8
+  },
+  "variants_in_db": 10183,
+  "variants_with_counts": 699,
+  "variants_with_n_ge_10": 121,
+  "variants_with_n_ge_5": 218
+}

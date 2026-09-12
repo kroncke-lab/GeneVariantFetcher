@@ -1,0 +1,224 @@
+{
+  "am_standardization": {
+    "mean": 0.7802065,
+    "sd": 0.3266101626675906
+  },
+  "ascertainment_mixture": false,
+  "class_fallback": "none",
+  "class_source_counts": {
+    "clinvar": 377,
+    "none": 314
+  },
+  "common_variant_check": {
+    "expectation": "common alleles carry no Mendelian effect (or a modest GWAS-scale risk), so penetrance should be near the population risk; case-series literature fractions are the ascertainment artifact",
+    "literature_fraction_median": 0.5063396730063396,
+    "n_common": 6,
+    "posterior_mean_median": 0.0018814210663368911,
+    "share_literature_fraction_ge_0_5": 0.5,
+    "share_posterior_mean_below_0_10": 1.0,
+    "share_posterior_q975_below_0_10": 1.0,
+    "threshold_af": 0.001
+  },
+  "common_variants_excluded": 0,
+  "common_variants_excluded_literature_carriers": 0,
+  "cv": {
+    "chains": 2,
+    "draws": 500,
+    "folds": 5,
+    "skipped": false
+  },
+  "discordant_non_plp_high": 3,
+  "discordant_plp_low": 6,
+  "elapsed_seconds": 576.6783010959625,
+  "gene": "KCNQ1",
+  "genotype_first_carriers": 7225,
+  "genotype_first_rows": 152,
+  "gnomad_as_unaffected": true,
+  "gnomad_carriers_added": 7225,
+  "high_threshold": 0.5,
+  "input": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/KCNQ1_gnomad_nomix/variants_features.csv",
+  "level": "paper",
+  "max_gnomad_af": 0.0,
+  "min_carriers_eval": 5,
+  "models": {
+    "base": {
+      "alpha_mean": 2.3320012118465394,
+      "beta_mean": {},
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1405.0,
+        "min_ess_tail": 2177.0,
+        "mixture": false,
+        "rows": 1505,
+        "variants": 691
+      },
+      "features": [],
+      "g2_frequency_mean": 0.0,
+      "mixture": false,
+      "p_ascertained_mean": 1.0,
+      "pi_common_variant_rows_mean": 0.0,
+      "pi_genotype_first_mean": 0.0,
+      "pi_phenotype_first_mean": 0.0,
+      "sigma_mean": 4.0610838607938,
+      "tau_mean": 4.539956609323121
+    },
+    "class": {
+      "alpha_mean": 2.0948970384360255,
+      "beta_mean": {
+        "trunc": 1.134842321828185
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1293.0,
+        "min_ess_tail": 2189.0,
+        "mixture": false,
+        "rows": 1505,
+        "variants": 691
+      },
+      "features": [
+        "trunc"
+      ],
+      "g2_frequency_mean": 0.0,
+      "mixture": false,
+      "p_ascertained_mean": 1.0,
+      "pi_common_variant_rows_mean": 0.0,
+      "pi_genotype_first_mean": 0.0,
+      "pi_phenotype_first_mean": 0.0,
+      "sigma_mean": 4.019326022009174,
+      "tau_mean": 4.541475272068038
+    },
+    "clinvar": {
+      "alpha_mean": -0.8741763617161682,
+      "beta_mean": {
+        "clinvar_blb": -2.5628232480622377,
+        "clinvar_none": 4.976328291381861,
+        "clinvar_plp": 2.849936568981544,
+        "trunc": -0.257791201341793
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1031.0,
+        "min_ess_tail": 1592.0,
+        "mixture": false,
+        "rows": 1505,
+        "variants": 691
+      },
+      "features": [
+        "trunc",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "g2_frequency_mean": 0.0,
+      "mixture": false,
+      "p_ascertained_mean": 1.0,
+      "pi_common_variant_rows_mean": 0.0,
+      "pi_genotype_first_mean": 0.0,
+      "pi_phenotype_first_mean": 0.0,
+      "sigma_mean": 2.649793595193594,
+      "tau_mean": 4.439724507822148
+    },
+    "insilico": {
+      "alpha_mean": 1.5839418578589348,
+      "beta_mean": {
+        "am": 2.463481766697268,
+        "am_missing": 2.182606740263038,
+        "trunc": 0.9994538849001916
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1620.0,
+        "min_ess_tail": 2511.0,
+        "mixture": false,
+        "rows": 1505,
+        "variants": 691
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing"
+      ],
+      "g2_frequency_mean": 0.0,
+      "mixture": false,
+      "p_ascertained_mean": 1.0,
+      "pi_common_variant_rows_mean": 0.0,
+      "pi_genotype_first_mean": 0.0,
+      "pi_phenotype_first_mean": 0.0,
+      "sigma_mean": 2.9261437703471507,
+      "tau_mean": 4.4285413386027415
+    },
+    "insilico_clinvar": {
+      "alpha_mean": 0.4492339645616229,
+      "beta_mean": {
+        "am": 2.013407556907038,
+        "am_missing": 0.7509149919964448,
+        "clinvar_blb": -1.8826438534683076,
+        "clinvar_none": 3.5058365301692107,
+        "clinvar_plp": 0.7764266219453184,
+        "trunc": -0.06716198800642191
+      },
+      "diagnostics": {
+        "chains": 4,
+        "divergences": 0,
+        "draws": 1000,
+        "max_r_hat": 1.0,
+        "min_ess_bulk": 1338.0,
+        "min_ess_tail": 1856.0,
+        "mixture": false,
+        "rows": 1505,
+        "variants": 691
+      },
+      "features": [
+        "trunc",
+        "am",
+        "am_missing",
+        "clinvar_plp",
+        "clinvar_blb",
+        "clinvar_none"
+      ],
+      "g2_frequency_mean": 0.0,
+      "mixture": false,
+      "p_ascertained_mean": 1.0,
+      "pi_common_variant_rows_mean": 0.0,
+      "pi_genotype_first_mean": 0.0,
+      "pi_phenotype_first_mean": 0.0,
+      "sigma_mean": 2.3956518589573053,
+      "tau_mean": 4.478510236322056
+    }
+  },
+  "n_affected": 8202,
+  "n_carriers": 17601,
+  "n_eval_variants": 259,
+  "n_rows": 1505,
+  "n_variants": 691,
+  "pooled_rate": 0.4659962502130561,
+  "seed": 20260909,
+  "single_carrier_rows_merged": true,
+  "split_alternating": {
+    "held_out_carriers": 3774,
+    "status": "ok",
+    "variants": 132
+  },
+  "split_genotype_first_eligible_variants": 0,
+  "split_min_b": 3,
+  "split_mode": "alternating",
+  "split_modes": [
+    "alternating"
+  ],
+  "split_validation_variants": 132,
+  "synonymous_or_unkeyed_rows_excluded": 8,
+  "target_accept": 0.95,
+  "tau_prior_sd": 0.5
+}

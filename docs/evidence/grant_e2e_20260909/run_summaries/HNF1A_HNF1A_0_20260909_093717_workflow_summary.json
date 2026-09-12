@@ -1,0 +1,41 @@
+{
+  "gene_symbol": "HNF1A",
+  "workflow_timestamp": "2026-09-10T00:17:52.333048",
+  "statistics": {
+    "pmids_discovered": 341,
+    "pmids_filtered_out": 0,
+    "pmids_passed_filters": 341,
+    "papers_downloaded": 2,
+    "papers_download_failed": 339,
+    "papers_extracted": 331,
+    "papers_from_fulltext": 230,
+    "papers_from_abstract_only": 101,
+    "papers_extraction_failed": 10,
+    "total_variants_found": 2593,
+    "variants_with_penetrance_data": 151,
+    "total_carriers_observed": 711,
+    "total_affected_carriers": 247,
+    "unique_pmids_with_variants": 147,
+    "variant_paper_links": 2576,
+    "success_rate": "97.1%"
+  },
+  "output_locations": {
+    "pmid_list": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A_pmids.txt",
+    "pmid_status": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmid_status",
+    "full_text_papers": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmc_fulltext",
+    "extractions": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/extractions",
+    "penetrance_summary": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A_penetrance_summary.json",
+    "sqlite_database": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A.db",
+    "workflow_log": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A_workflow.log",
+    "llm_traces": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/llm_traces"
+  },
+  "database_migration": {
+    "successful": 331,
+    "failed": 0,
+    "total_files": 331
+  },
+  "penetrance_validation": {
+    "errors": 2,
+    "warnings": 4
+  }
+}

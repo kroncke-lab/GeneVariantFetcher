@@ -1,0 +1,29 @@
+{
+  "allele_match": {
+    "cdna_alias": 3,
+    "cdna_within_protein": 88,
+    "none": 29,
+    "protein_all_alleles": 35
+  },
+  "clinvar_allele_conflicts": 1,
+  "clinvar_simple": {
+    "B/LB": 2,
+    "Conflicting": 3,
+    "P/LP": 80,
+    "VUS": 10,
+    "none": 60
+  },
+  "enumerated_consequence_rows": 4193,
+  "features_db": "/Volumes/Ezekers/ResearchData/variantFeatures/data/variants.db",
+  "features_db_sha256_skipped": "38 GB warehouse; sha not computed",
+  "gene": "GCK",
+  "missense_total": 118,
+  "missense_with_alphamissense": 113,
+  "refseq_match": "NM_000162.5",
+  "transcript": "ENST00000403799.8",
+  "variants": 155,
+  "warehouse_alleles_for_gene": 4193,
+  "with_alphamissense": 115,
+  "with_clinvar": 95,
+  "with_gnomad_record": 30
+}

@@ -1,0 +1,41 @@
+{
+  "gene_symbol": "BRCA2",
+  "workflow_timestamp": "2026-09-12T07:08:33.978769",
+  "statistics": {
+    "pmids_discovered": 773,
+    "pmids_filtered_out": 0,
+    "pmids_passed_filters": 773,
+    "papers_downloaded": 1,
+    "papers_download_failed": 772,
+    "papers_extracted": 400,
+    "papers_from_fulltext": 400,
+    "papers_from_abstract_only": 0,
+    "papers_extraction_failed": 0,
+    "total_variants_found": 26077,
+    "variants_with_penetrance_data": 9430,
+    "total_carriers_observed": 15433980,
+    "total_affected_carriers": 23671,
+    "unique_pmids_with_variants": 321,
+    "variant_paper_links": 23658,
+    "success_rate": "51.7%"
+  },
+  "output_locations": {
+    "pmid_list": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/BRCA2_pmids.txt",
+    "pmid_status": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmid_status",
+    "full_text_papers": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext",
+    "extractions": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/extractions",
+    "penetrance_summary": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/BRCA2_penetrance_summary.json",
+    "sqlite_database": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/BRCA2.db",
+    "workflow_log": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/BRCA2_workflow.log",
+    "llm_traces": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/llm_traces"
+  },
+  "database_migration": {
+    "successful": 743,
+    "failed": 0,
+    "total_files": 743
+  },
+  "penetrance_validation": {
+    "errors": 11,
+    "warnings": 27
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "allele_match": {
+    "cdna_alias": 61,
+    "cdna_within_protein": 375,
+    "none": 204,
+    "protein_all_alleles": 59
+  },
+  "clinvar_allele_conflicts": 1,
+  "clinvar_simple": {
+    "B/LB": 15,
+    "Conflicting": 17,
+    "P/LP": 231,
+    "VUS": 121,
+    "none": 315
+  },
+  "enumerated_consequence_rows": 6092,
+  "features_db": "/Volumes/Ezekers/ResearchData/variantFeatures/data/variants.db",
+  "features_db_sha256_skipped": "38 GB warehouse; sha not computed",
+  "gene": "KCNQ1",
+  "missense_total": 443,
+  "missense_with_alphamissense": 396,
+  "refseq_match": null,
+  "transcript": "ENST00000155840.12",
+  "variants": 699,
+  "warehouse_alleles_for_gene": 7526,
+  "with_alphamissense": 401,
+  "with_clinvar": 384,
+  "with_gnomad_record": 164
+}
