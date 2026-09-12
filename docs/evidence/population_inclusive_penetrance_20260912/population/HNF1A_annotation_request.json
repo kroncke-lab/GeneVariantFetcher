@@ -1,0 +1,7 @@
+{
+  "query": "\nquery PopulationInclusiveAnnotation($symbol: String!, $transcript: String!) {\n  gene(gene_symbol: $symbol, reference_genome: GRCh38) {\n    gene_id gene_version symbol chrom start stop strand canonical_transcript_id\n    mane_select_transcript { ensembl_id ensembl_version refseq_id refseq_version }\n    exons { start stop }\n    variants(dataset: gnomad_r4) {\n      \nvariant_id consequence transcript_id transcript_version hgvsc hgvsp\nconsequence_in_canonical_transcript\ntranscript_consequence {\n  consequence_terms major_consequence gene_id gene_symbol\n  transcript_id transcript_version is_canonical is_mane_select\n  hgvsc hgvsp lof lof_filter lof_flags\n}\n\n      exome { ac an homozygote_count filters }\n      genome { ac an homozygote_count filters }\n      joint { ac an homozygote_count filters }\n    }\n  }\n  transcript(transcript_id: $transcript, reference_genome: GRCh38) {\n    transcript_id transcript_version gene_id chrom start stop strand\n    exons { start stop }\n    variants(dataset: gnomad_r4) { \nvariant_id consequence transcript_id transcript_version hgvsc hgvsp\nconsequence_in_canonical_transcript\ntranscript_consequence {\n  consequence_terms major_consequence gene_id gene_symbol\n  transcript_id transcript_version is_canonical is_mane_select\n  hgvsc hgvsp lof lof_filter lof_flags\n}\n }\n  }\n}\n",
+  "variables": {
+    "symbol": "HNF1A",
+    "transcript": "ENST00000257555"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "input_sha256": {
+    "population/population_variants.csv.gz": "6915110c42954f04da4155d00053883de38e7f518aee3f95c34f125843e5f5cf",
+    "population/full_locus/HNF1A_provenance.json": "be3f1137150a1b5da2511214f817139fc483642775b682e15fd09cdc764c3bf8",
+    "population/full_locus/HNF1A_population_variants.csv.gz": "fa74bfd38b91404713a5c502ba33a8ab8e1d9325e137e1f5b9114370012a43b1",
+    "population/full_locus/GCK_provenance.json": "5be9faf2661632aeeb02d96d1da45015e18293cd05bc8b8d5c9049104307adda",
+    "population/full_locus/GCK_population_variants.csv.gz": "12c1da28b22719aadc258ce419d42f990675dbf14f30ce0426df5ae56d4e11cb",
+    "population/full_locus/LDLR_provenance.json": "2ebbc9a39b68d84c65d65bcd29412d8b2a6ce7eed15a4090be1c48c1cd2820f3",
+    "population/full_locus/LDLR_population_variants.csv.gz": "305ab2b7f11d37eff577762bfc541b6352f0a2a3208b4eab926233dd27e9980d",
+    "population/full_locus/BRCA2_provenance.json": "98ff0baa46a72a22f81216a5453becbf8b42a71e62459df03b45c8f7b816055c",
+    "population/full_locus/BRCA2_population_variants.csv.gz": "1d70f8bdac7679bd70e7eccd302d88cccae9e734244e0bb04092e7ea7cbf9f10",
+    "population/full_locus/KCNQ1_provenance.json": "e0a851029fbda48479eb662eb8f60917da27723eb76b1f2c40a572a66fed377d",
+    "population/full_locus/KCNQ1_population_variants.part001.csv.gz": "c1c65de5a7a2cb26e832ac64f4320fa941f3d9ab89d0b0d582382ac41fb37473",
+    "population/full_locus/KCNQ1_population_variants.part002.csv.gz": "b704830519ee94c02626d8a4ae8740e9469dfd6ad42f36d5943144539b38c6bb",
+    "population/full_locus/KCNQ1_population_variants.part003.csv.gz": "163508c52a5bac9e08b2338418ab162d4eb515c5fba80ffbe2a79e1b0ebb3aa8",
+    "population/full_locus/KCNQ1_population_variants.part004.csv.gz": "35e3170d381fd44b56ca444d908c1aa2529c0f50a27482dee0129898cee2ac57",
+    "audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c"
+  },
+  "population_assumption": "all included gnomAD carriers unaffected",
+  "population_count": "joint AC minus joint homozygotes; never summed with exome/genome counts",
+  "primary_scope": "all observed QC-passing small variants in full genomic gene span plus original CDS+75bp boundary padding and eligible clinical rows",
+  "missing_population_members_are_not_imputed_from_hypothetical_variants": true,
+  "unresolved_clinical_identity_rows_retained_in_ledger": true
+}

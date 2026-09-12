@@ -1,0 +1,24 @@
+{
+  "source": "Installed Grok CLI (same tool/channel as earlier requested Grokbot review)",
+  "model_requested": "grok-4.6",
+  "model_returned": [
+    "grok-4.6-build"
+  ],
+  "status": "completed",
+  "scope": "Sanitized abstract mathematical method; tools disabled. Local source findings independently verified.",
+  "prompt": "grok_prompt.txt",
+  "response": "grok_corrected_raw.json",
+  "disposition": "REVIEW_DISPOSITION.md",
+  "reasoning_effort": "low",
+  "max_turns": 2,
+  "actual_turns": 1,
+  "completed_call_cost_usd": 0.01232976,
+  "initial_attempt": {
+    "prompt": "grok_initial_prompt.txt",
+    "requested_effort": "xhigh",
+    "status": "interrupted_exit_130",
+    "reason": "Prompt incorrectly described weighting; superseded by corrected call",
+    "usage": "unavailable"
+  },
+  "reviewer_error_rejected": "Historical variance normalization direction reversed by reviewer; exact saved moments establish the correct direction."
+}

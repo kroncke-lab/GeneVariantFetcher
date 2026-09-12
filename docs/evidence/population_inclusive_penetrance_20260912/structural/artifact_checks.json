@@ -1,0 +1,15 @@
+{
+  "input_and_output_hashes_match": true,
+  "all_supported_targets_reconstructed": 614,
+  "donor_pair_rows": 376382,
+  "positive_pairs_beyond_20": 278640,
+  "no_self_donor_records": true,
+  "normalized_donor_weights_sum_to_one": true,
+  "posterior_alpha_affected_beta_unaffected_orientation": true,
+  "maximum_density_reconstruction_error": 3.885780586188048e-15,
+  "maximum_conditional_variance_reconstruction_error": 1.0213184464813452e-16,
+  "maximum_monte_carlo_mean_error_in_standard_errors": 2.794483828038064,
+  "all_artifacts_at_most_1200000_bytes": true,
+  "two_generated_figures_visually_inspected": true,
+  "validator_sha256": "cc6e297b329dd7010f25cb2255464615d34c0724bdda588c8d1bb644f4451db2"
+}

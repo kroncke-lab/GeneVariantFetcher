@@ -1,0 +1,5 @@
+gene,vf_variant_id,pmid,literature_keys,n_keys,affected_sum_across_keys,unaffected_sum_across_keys,n_sum_across_keys,largest_single_key_n,status
+KCNQ1,48824,30758498,R147H;R174H,2,1.0,2.0,3.0,2.0,potential_same_allele_same_paper_overlap_not_adjudicated
+LDLR,147709,31102204,W23X;W44X,2,2.0,0.0,2.0,1.0,potential_same_allele_same_paper_overlap_not_adjudicated
+LDLR,149314,31102204,C201X;C222X,2,2.0,0.0,2.0,1.0,potential_same_allele_same_paper_overlap_not_adjudicated
+LDLR,152169,25606447,P518=;P539=,2,2.0,0.0,2.0,1.0,potential_same_allele_same_paper_overlap_not_adjudicated

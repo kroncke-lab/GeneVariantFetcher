@@ -1,0 +1,6 @@
+gene,source_population_alleles,source_gene_span_alleles,boundary_padding_alleles,eligible_population_alleles,clinical_input_keys,quarantined_clinical_keys,quarantined_affected_observations,clinical_units,population_only_units,union_units,multi_allele_clinical_units,affected,unaffected_literature,gnomad_unaffected_carrier_observations,alpha_gets_affected_beta_gets_all_unaffected,each_population_allele_once,each_eligible_clinical_count_once
+HNF1A,13514,13514,0,7935,234,9,22,225,7838,8063,2,740,115,13994756,True,True,True
+GCK,19779,19779,0,14294,398,26,34,372,14181,14553,2,898,80,8931920,True,True,True
+LDLR,24225,24225,0,14385,880,220,2107,660,14069,14729,10,2488,155,16363132,True,True,True
+BRCA2,34835,34835,0,24851,6106,136,1989,5970,23162,29132,57,9969,2233,15877471,True,True,True
+KCNQ1,169728,169715,13,113721,699,69,176,630,113506,114136,6,8216,2205,66821104,True,True,True

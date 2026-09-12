@@ -1,0 +1,16 @@
+{
+  "checked_at_utc": "2026-09-12T22:16:22.924085+00:00",
+  "source_and_output_hashes_match": true,
+  "input_rows_preserved": 30101,
+  "exact_identity_columns_unchanged": true,
+  "score_resolution_reproduced_from_saved_rows": true,
+  "max_absolute_score_roundtrip_difference": {
+    "alphamissense": 0.0,
+    "gpn_star_m447_llr_calibrated": 0.0,
+    "alphagenome_avi": 0.0
+  },
+  "alphamissense_values_in_unit_interval": true,
+  "gene_membership_validated_for_every_available_score": true,
+  "missing_or_conflicting_scores_not_imputed": true,
+  "validator_sha256": "3a23d2cc3aad46f56800f89ead2ca348382f0ccbc383d8851490329d97d8805f"
+}

@@ -1,0 +1,92 @@
+{
+  "gene": "BRCA2",
+  "gnomad_release": "4.1.1",
+  "dataset_selector": "gnomad_r4",
+  "interval": {
+    "chrom": "13",
+    "start": 32315086,
+    "stop": 32400268,
+    "reference_genome": "GRCh38"
+  },
+  "source_rows": 34835,
+  "observed_joint_ac_positive": 26671,
+  "observed_qc_pass": 24851,
+  "joint_carriers_qc_pass": 15877471,
+  "joint_ac_qc_pass": 22260300,
+  "joint_hom_qc_pass": 6382829,
+  "prior_footprint_overlap_rows": 10769,
+  "all_overlap_alleles_counts_filters_exact_match": true,
+  "deduplicated_identical_chunk_rows": 0,
+  "successful_region_requests": 5,
+  "complete_interval_coverage_verified": true,
+  "output_files": [
+    {
+      "file": "BRCA2_population_variants.csv.gz",
+      "bytes": 606305,
+      "sha256": "1d70f8bdac7679bd70e7eccd302d88cccae9e734244e0bb04092e7ea7cbf9f10",
+      "rows": 34835
+    }
+  ],
+  "output_bytes": 606305,
+  "source_scope": "All returned small variants whose POS is within the exact genomic gene span; no coding-consequence filter. Structural variants/CNVs require separate endpoints.",
+  "annotation_policy": "No protein annotation inferred for region-only records. Join canonical annotations from the earlier snapshot by exact genomic allele ID; preserve unmapped state.",
+  "carrier_policy": "joint AC minus joint homozygote count, once per allele; gnomAD carriers assumed unaffected",
+  "qc_policy": "Every present assay must PASS; absent assay permitted. Preserve raw joint API filters separately.",
+  "sources": [
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/BRCA2_13_32315086_32335085.json.gz",
+      "sha256": "ab1f34aa689f0f61d06890a0765e07994cfdd6d98fb5407812604fb675813c55",
+      "fetched_at": "2026-09-12T22:00:29.949511+00:00",
+      "region": {
+        "chrom": "13",
+        "start": 32315086,
+        "stop": 32335085
+      },
+      "rows": 7731
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/BRCA2_13_32335086_32355085.json.gz",
+      "sha256": "006327b7fab079ebb2bb8cc29f878000b4392011db0b5d05e049a62824b32abd",
+      "fetched_at": "2026-09-12T22:00:35.464508+00:00",
+      "region": {
+        "chrom": "13",
+        "start": 32335086,
+        "stop": 32355085
+      },
+      "rows": 8223
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/BRCA2_13_32355086_32375085.json.gz",
+      "sha256": "ead5edac34f2b7f0409e4896fb6c62f1f16b8717dec5ff54cefb8ebfe76808ff",
+      "fetched_at": "2026-09-12T22:00:42.512623+00:00",
+      "region": {
+        "chrom": "13",
+        "start": 32355086,
+        "stop": 32375085
+      },
+      "rows": 7195
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/BRCA2_13_32375086_32395085.json.gz",
+      "sha256": "4c7d50a0106229202afb73fb52cb64327181f3c2904e09056ab491baec54cd9d",
+      "fetched_at": "2026-09-12T22:00:49.622190+00:00",
+      "region": {
+        "chrom": "13",
+        "start": 32375086,
+        "stop": 32395085
+      },
+      "rows": 8296
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/BRCA2_13_32395086_32400268.json.gz",
+      "sha256": "bc7d581f2f60c12e829233ec8fab879eab9848146a593055e0b18d1ea0352e2b",
+      "fetched_at": "2026-09-12T22:00:55.243670+00:00",
+      "region": {
+        "chrom": "13",
+        "start": 32395086,
+        "stop": 32400268
+      },
+      "rows": 3390
+    }
+  ]
+}

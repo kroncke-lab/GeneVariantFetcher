@@ -1,0 +1,16 @@
+gene,predictor,inventory_rows,exact_warehouse_alleles,exact_allele_and_gene,available,version_or_value_conflict,context_projection_conflict,missing_annotation
+BRCA2,alphamissense,10769,6285,6285,0,4531,0,1754
+BRCA2,gpn_star_m447_llr_calibrated,10769,6285,6285,6285,0,0,0
+BRCA2,alphagenome_avi,10769,6285,6285,6285,0,0,0
+GCK,alphamissense,3542,1013,1013,624,0,0,389
+GCK,gpn_star_m447_llr_calibrated,3542,1013,1013,1013,0,0,0
+GCK,alphagenome_avi,3542,1013,1013,1013,0,0,0
+HNF1A,alphamissense,3326,1306,1306,865,0,0,441
+HNF1A,gpn_star_m447_llr_calibrated,3326,1306,1306,1306,0,0,0
+HNF1A,alphagenome_avi,3326,1306,1306,1306,0,0,0
+KCNQ1,alphamissense,6967,2613,2613,1430,0,0,1183
+KCNQ1,gpn_star_m447_llr_calibrated,6967,2613,2613,2531,0,0,82
+KCNQ1,alphagenome_avi,6967,2613,2613,2531,0,0,82
+LDLR,alphamissense,5497,1916,1916,1316,0,0,600
+LDLR,gpn_star_m447_llr_calibrated,5497,1916,1916,1916,0,0,0
+LDLR,alphagenome_avi,5497,1916,1916,1916,0,0,0

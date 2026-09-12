@@ -1,0 +1,129 @@
+{
+  "GCK": {
+    "rows": 19779,
+    "observed_qc_pass": 14294,
+    "unique_genomic_alleles": true,
+    "all_positions_inside_gene_span": true,
+    "all_count_and_eligibility_checks": true,
+    "complete_interval_coverage": true,
+    "all_raw_and_output_hashes_match": true,
+    "all_part_files_under_1100000bytes": true,
+    "prior_footprint_overlap_rows": 3542,
+    "all_overlap_alleles_counts_QC_exact_match": true
+  },
+  "HNF1A": {
+    "rows": 13514,
+    "observed_qc_pass": 7935,
+    "unique_genomic_alleles": true,
+    "all_positions_inside_gene_span": true,
+    "all_count_and_eligibility_checks": true,
+    "complete_interval_coverage": true,
+    "all_raw_and_output_hashes_match": true,
+    "all_part_files_under_1100000bytes": true,
+    "prior_footprint_overlap_rows": 3326,
+    "all_overlap_alleles_counts_QC_exact_match": true
+  },
+  "LDLR": {
+    "rows": 24225,
+    "observed_qc_pass": 14385,
+    "unique_genomic_alleles": true,
+    "all_positions_inside_gene_span": true,
+    "all_count_and_eligibility_checks": true,
+    "complete_interval_coverage": true,
+    "all_raw_and_output_hashes_match": true,
+    "all_part_files_under_1100000bytes": true,
+    "prior_footprint_overlap_rows": 5497,
+    "all_overlap_alleles_counts_QC_exact_match": true
+  },
+  "BRCA2": {
+    "rows": 34835,
+    "observed_qc_pass": 24851,
+    "unique_genomic_alleles": true,
+    "all_positions_inside_gene_span": true,
+    "all_count_and_eligibility_checks": true,
+    "complete_interval_coverage": true,
+    "all_raw_and_output_hashes_match": true,
+    "all_part_files_under_1100000bytes": true,
+    "prior_footprint_overlap_rows": 10769,
+    "all_overlap_alleles_counts_QC_exact_match": true
+  },
+  "KCNQ1": {
+    "rows": 169715,
+    "observed_qc_pass": 113720,
+    "unique_genomic_alleles": true,
+    "all_positions_inside_gene_span": true,
+    "all_count_and_eligibility_checks": true,
+    "complete_interval_coverage": true,
+    "all_raw_and_output_hashes_match": true,
+    "all_part_files_under_1100000bytes": true,
+    "prior_footprint_overlap_rows": 6954,
+    "all_overlap_alleles_counts_QC_exact_match": true
+  },
+  "total_source_rows": 262068,
+  "total_observed_qc_pass": 175185,
+  "cached_rebuild_byte_identical": true,
+  "output_sha256": {
+    "BRCA2_population_variants.csv.gz": "1d70f8bdac7679bd70e7eccd302d88cccae9e734244e0bb04092e7ea7cbf9f10",
+    "BRCA2_provenance.json": "98ff0baa46a72a22f81216a5453becbf8b42a71e62459df03b45c8f7b816055c",
+    "GCK_population_variants.csv.gz": "12c1da28b22719aadc258ce419d42f990675dbf14f30ce0426df5ae56d4e11cb",
+    "GCK_provenance.json": "5be9faf2661632aeeb02d96d1da45015e18293cd05bc8b8d5c9049104307adda",
+    "HNF1A_population_variants.csv.gz": "fa74bfd38b91404713a5c502ba33a8ab8e1d9325e137e1f5b9114370012a43b1",
+    "HNF1A_provenance.json": "be3f1137150a1b5da2511214f817139fc483642775b682e15fd09cdc764c3bf8",
+    "KCNQ1_population_variants.part001.csv.gz": "c1c65de5a7a2cb26e832ac64f4320fa941f3d9ab89d0b0d582382ac41fb37473",
+    "KCNQ1_population_variants.part002.csv.gz": "b704830519ee94c02626d8a4ae8740e9469dfd6ad42f36d5943144539b38c6bb",
+    "KCNQ1_population_variants.part003.csv.gz": "163508c52a5bac9e08b2338418ab162d4eb515c5fba80ffbe2a79e1b0ebb3aa8",
+    "KCNQ1_population_variants.part004.csv.gz": "35e3170d381fd44b56ca444d908c1aa2529c0f50a27482dee0129898cee2ac57",
+    "KCNQ1_provenance.json": "e0a851029fbda48479eb662eb8f60917da27723eb76b1f2c40a572a66fed377d",
+    "LDLR_population_variants.csv.gz": "305ab2b7f11d37eff577762bfc541b6352f0a2a3208b4eab926233dd27e9980d",
+    "LDLR_provenance.json": "2ebbc9a39b68d84c65d65bcd29412d8b2a6ce7eed15a4090be1c48c1cd2820f3",
+    "full_locus_summary.csv": "a72598d116b857b4e530b4c89e27f94244695bd00bc73da43e75584073c2c2ac",
+    "run_progress.json": "15853a52b15a959d0e4e89510eef9c62fce26f62cfa9a53c70c4d6fc20fac266"
+  },
+  "input_csv_CRLF_and_size_checks": [
+    {
+      "path": "full_locus/BRCA2_population_variants.csv.gz",
+      "compressed_bytes": 606305,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/GCK_population_variants.csv.gz",
+      "compressed_bytes": 329293,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/HNF1A_population_variants.csv.gz",
+      "compressed_bytes": 239150,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/KCNQ1_population_variants.part001.csv.gz",
+      "compressed_bytes": 693596,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/KCNQ1_population_variants.part002.csv.gz",
+      "compressed_bytes": 693259,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/KCNQ1_population_variants.part003.csv.gz",
+      "compressed_bytes": 651019,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/KCNQ1_population_variants.part004.csv.gz",
+      "compressed_bytes": 677676,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "full_locus/LDLR_population_variants.csv.gz",
+      "compressed_bytes": 427314,
+      "CRLF_sequences": 0
+    },
+    {
+      "path": "population_variants.csv.gz",
+      "compressed_bytes": 989301,
+      "CRLF_sequences": 0
+    }
+  ]
+}

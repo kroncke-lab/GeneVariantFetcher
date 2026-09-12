@@ -61,7 +61,7 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       including synonymous variants omitted from prior histograms. Detailed
       choices, empirical parameters, source recovery and reviews:
       [`structural density plan`](docs/evidence/structural_density_plan_20260912/PLAN.md).
-- [x] **Execute the GCK empirical-posterior density pilot (2026-09-12).** Fit the
+- [x] **Execute the initial GCK empirical-posterior density pilot (2026-09-12).** Fit the
       historical saturating-weight mean/MSE Beta moments on the full eligible
       gene dataset, then update each variant with affected and unaffected
       counts (gnomAD assumed unaffected). Use equal-variant posterior donors;
@@ -80,18 +80,37 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       The 242-target internal comparison found essentially no incremental gain
       from density beyond AlphaMissense. Code, plots, checks and source audits:
       [`GCK structural pilot`](docs/evidence/gck_structural_pilot_20260912/README.md).
+- [x] **Redo the empirical prior and GCK density including population-only
+      variants (2026-09-12).** The initial empirical universe was literature
+      selected. The corrected union contains 180,613 units across five genes,
+      including 175,186 observed QC-passing population alleles from complete
+      gene spans plus boundary padding. All gnomAD carriers are assumed
+      unaffected; alpha adds affected and beta adds all unaffected counts.
+      GCK's primary prior changes from mean 80.7% to 1.989%
+      (alpha 0.042974, beta 2.117582). Canonical coding/splice sensitivity is
+      23.742%; retain this scope distinction. The structural redo uses 634
+      missense donors, including 385 population-only units, with 614 supported
+      experimental targets. Twenty geometry/kernel scenarios, fixed-geometry
+      prior sensitivities and variant-only LOO preserve same-residue neighbors
+      and positive distance tails. Density adds only a tiny gain over AM on
+      the expanded comparison and none on the original 242 targets.
+      Source snapshots, count/identity checks, predictor comparisons, Grok
+      review, plots and reproducible scripts:
+      [`population-inclusive redo`](docs/evidence/population_inclusive_penetrance_20260912/README.md).
 - [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
       adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous
       protein-key/genomic-allele identities. Preserve existing frozen evidence,
       then recompute the full-dataset empirical prior and variant-only LOO
-      density. The current pilot is pooled clinical evidence, not MODY-specific
-      validation. Review queues are in the pilot's `eligibility/` folder.
+      density. The population-inclusive redo remains pooled clinical evidence,
+      not MODY-specific validation. Review queues are in the original pilot's
+      `eligibility/` folder and the redo's complete clinical join ledger.
 - [ ] **Then extend structural priors.** Repeat empirical baseline, density,
       AlphaMissense and combination comparisons on identical target variants,
       preserving variant-only LOO. Test GPN-Star/AVI after GCK source curation;
       complete the other genes' biological-unit mapping and support checks.
-      Inventory population-only variants absent from the literature row set.
+      Reuse the now-frozen population-inclusive variant inventory, and resolve
+      BRCA2 AlphaMissense version conflicts before its predictor comparison.
       Before outcome validation, freeze gene-specific endpoint, age/sex/time
       horizon, ascertainment and independent people/family/cohort ownership.
       Begin with HNF1A/GCK PMID 36257325 and GCK PMID 36208030 source/supplements;

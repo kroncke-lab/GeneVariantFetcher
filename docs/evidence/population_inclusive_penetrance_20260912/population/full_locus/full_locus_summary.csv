@@ -1,0 +1,6 @@
+gene,source_rows,observed_joint_ac_positive,observed_qc_pass,joint_carriers_qc_pass,joint_ac_qc_pass,joint_hom_qc_pass,prior_footprint_overlap_rows,successful_region_requests,all_overlap_alleles_counts_filters_exact_match,complete_interval_coverage_verified,deduplicated_identical_chunk_rows
+GCK,19779,15085,14294,8931920,12048550,3116630,3542,3,True,True,0
+HNF1A,13514,8706,7935,13994756,19339967,5345211,3326,2,True,True,0
+LDLR,24225,16331,14385,16363132,21385668,5022536,5497,3,True,True,0
+BRCA2,34835,26671,24851,15877471,22260300,6382829,10769,5,True,True,0
+KCNQ1,169715,121104,113720,66821101,91316350,24495249,6954,21,True,True,0

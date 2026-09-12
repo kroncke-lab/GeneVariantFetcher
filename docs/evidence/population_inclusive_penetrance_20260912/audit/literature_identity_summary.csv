@@ -1,0 +1,6 @@
+gene,literature_rows,canonical_wt_match,canonical_wt_mismatch,position_out_of_range,no_protein_position,shared_vf_id_keys,incompatible_shared_allele_keys,identity_quarantine_recommended,point_join_allowed
+HNF1A,234,207,9,0,18,0,0,9,167
+GCK,398,324,26,0,48,4,2,26,282
+LDLR,880,546,209,0,125,88,45,209,447
+BRCA2,6106,5679,110,0,317,33,15,118,4337
+KCNQ1,699,544,66,0,89,10,5,69,441

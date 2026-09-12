@@ -1,0 +1,5 @@
+{
+  "query": "\nquery FullLocusPopulation($chrom: String!, $start: Int!, $stop: Int!) {\n  region(chrom: $chrom, start: $start, stop: $stop, reference_genome: GRCh38) {\n    chrom start stop\n    variants(dataset: gnomad_r4) {\n      variant_id chrom pos ref alt\n      exome { ac an homozygote_count filters }\n      genome { ac an homozygote_count filters }\n      joint { ac an homozygote_count filters }\n    }\n  }\n}\n",
+  "dataset_selector": "gnomad_r4",
+  "chunk_bp": 20000
+}

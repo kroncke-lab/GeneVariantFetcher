@@ -1,0 +1,6 @@
+gene,raw_api_alleles,positive_joint_AC,QC_population_eligible,coding_splice_eligible,outside_coding_splice_eligible,eligible_joint_AC_sum,eligible_homozygote_alt_sum,eligible_carrier_sum,coding_splice_carrier_sum,multiple_alleles_one_protein_key,canonical_WT_mismatches
+BRCA2,10769,9402,9037,6811,2226,9951238,3161837,6789401,4957210,205,0
+GCK,3542,2463,2292,956,1336,1596969,283920,1313049,333403,50,0
+HNF1A,3326,2512,2389,1302,1087,9365870,2384525,6981345,3821193,74,0
+KCNQ1,6967,4232,3912,1716,2196,4796508,1027192,3769316,679039,99,0
+LDLR,5497,4424,4218,2216,2002,9936552,2224815,7711737,3118329,94,0

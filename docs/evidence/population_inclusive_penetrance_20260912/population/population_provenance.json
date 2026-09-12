@@ -1,0 +1,1571 @@
+{
+  "gnomad_release": "4.1.1",
+  "dataset_selector": "gnomad_r4",
+  "reference_genome": "GRCh38",
+  "gene_query_boundary": "union of all gene CDS intervals plus 75bp padding on each side; merged overlaps; gene_id filter; paginated complete endpoint result; not entire gene locus",
+  "canonical_query_boundary": "canonical transcript CDS intervals plus 75bp padding; exact transcript_id filter",
+  "carrier_policy": "official joint AC minus joint homozygote_count, once per genomic allele; all genes autosomal; gnomAD carriers assumed unaffected",
+  "qc_policy": "Reconstruct documented joint VCF categories from both assay filter lists. PASS requires every present assay PASS; absent assay permitted. Joint API filters retained but not trusted as joint VCF FILTER.",
+  "qc_source": "https://discuss.gnomad.broadinstitute.org/t/is-joint-combined-genome-exome-faf-unreliable-if-either-genome-or-exome-fails-filters/88/3",
+  "browser_source_commit": "5c14bfea3298f46854df14781adc1ccead58da3b",
+  "browser_source_url": "https://github.com/broadinstitute/gnomad-browser/blob/5c14bfea3298f46854df14781adc1ccead58da3b/graphql-api/src/queries/variant-datasets/gnomad-v4-variant-queries.ts",
+  "browser_source_findings": "getFilteredRegions/fetchVariantsByGene/fetchVariantsByTranscript define CDS+75bp boundary; shapeVariantSummary reads joint.filter singular despite selected joint.filters and may append AC0 from exome AC",
+  "coding_splice_subset": [
+    "coding_sequence_variant",
+    "frameshift_variant",
+    "inframe_deletion",
+    "inframe_insertion",
+    "missense_variant",
+    "protein_altering_variant",
+    "splice_acceptor_variant",
+    "splice_donor_5th_base_variant",
+    "splice_donor_region_variant",
+    "splice_donor_variant",
+    "splice_polypyrimidine_tract_variant",
+    "splice_region_variant",
+    "start_lost",
+    "start_retained_variant",
+    "stop_gained",
+    "stop_lost",
+    "stop_retained_variant",
+    "synonymous_variant"
+  ],
+  "population_only_outcome_assumption": "No literature match in downstream union means A=0 under the user's gnomAD-unaffected assumption; collector itself does not assign literature overlap.",
+  "noncoding_scope": "All returned observed QC-pass rows retained; coding/splice subset is separately identifiable. No claim that deep intronic, whole-locus regulatory, CNV or SV inventories are complete.",
+  "sources": [
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/GCK_population_20260911.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "f46465a2502256a4da1211629d76f19d9d2b8b4f74226bf1986d2810aa57c0da",
+      "bytes": 305339
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/GCK_annotations.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "94de6f4c70a1594a4b9149532804c34709e98b4bdd862a4c9aae400e8822741a",
+      "bytes": 142350
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/GCK_UniProt.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P35557.json",
+      "sha256": "9eed125663276d9402c27e1e6062dbef4dcd6e356ef69aecf70f23d942b6ad13",
+      "bytes": 160061
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/HNF1A_population_20260911.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "5b5421ebfec7480ba8d268d7c687bae4671bbfc7ea3413cd0b3908f9ec27f65e",
+      "bytes": 308467
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/HNF1A_annotations.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "b893fb30dd4a0a8087e9ff2dcaa146455791d089f24d3ba3189afbc7ae2054a4",
+      "bytes": 147665
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/HNF1A_UniProt.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P20823.json",
+      "sha256": "ce102af203520765dd3385d604c421ef71c30866ec2dcd582649441b10ba631b",
+      "bytes": 110765
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/LDLR_population_20260911.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "638e53369c0e8114e631dc661d402beb06065bc8e8e5daac73fb5358a78a8aab",
+      "bytes": 506221
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/LDLR_annotations.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "ba7f7134d45442c58c62c938afcf25529182ee2fe4bf6f35c879439ea5d91b4d",
+      "bytes": 245609
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/LDLR_UniProt.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P01130.json",
+      "sha256": "9d2a3549fe1e6c0b6dff76018d167810f2207b24ac6dd1bd936a099865b4939b",
+      "bytes": 258378
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/BRCA2_population_20260911.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "c45f48c16ff3a6d874adeb2b38a2477632c6754ee671a4d154ae284e1af07ebc",
+      "bytes": 1016813
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/BRCA2_annotations.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "ca124e891ed4654885b30c0c755b78e5e2c9a72170eeeb73461bdce250fab922",
+      "bytes": 521916
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/BRCA2_UniProt.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P51587.json",
+      "sha256": "befba0a62b75b4f67c7651d0bb175a4ec3ef6a9751be6575af593c9e94cfd82f",
+      "bytes": 213277
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/KCNQ1_population_20260911.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "6a377a44cf7ec614348392e868079ccb7186b7ce0d1d44935dce375db0412b0b",
+      "bytes": 587110
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/KCNQ1_annotations.json.gz",
+      "url": "https://gnomad.broadinstitute.org/api",
+      "sha256": "4130b6215fd7a12105ef1a0f6900dc007773ed9d611a4fb847ad463f47aa2d9e",
+      "bytes": 282874
+    },
+    {
+      "path": "results/population_inclusive_penetrance_20260912/raw/KCNQ1_UniProt.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P51787.json",
+      "sha256": "bf911515222032ba8bd6e683873fa3e5f3f931f8cae83ca9fa5d2a5321310091",
+      "bytes": 266904
+    }
+  ],
+  "gene_contexts": {
+    "GCK": {
+      "gene_metadata": {
+        "gene_id": "ENSG00000106633",
+        "gene_version": "18",
+        "symbol": "GCK",
+        "chrom": "7",
+        "start": 44143213,
+        "stop": 44198170,
+        "strand": "-",
+        "canonical_transcript_id": "ENST00000403799",
+        "mane_select_transcript": {
+          "ensembl_id": "ENST00000403799",
+          "ensembl_version": "8",
+          "refseq_id": "NM_000162",
+          "refseq_version": "5"
+        },
+        "exons": [
+          {
+            "start": 44145139,
+            "stop": 44145280
+          },
+          {
+            "start": 44145497,
+            "stop": 44145730
+          },
+          {
+            "start": 44146074,
+            "stop": 44146126
+          },
+          {
+            "start": 44146463,
+            "stop": 44146618
+          },
+          {
+            "start": 44147341,
+            "stop": 44147413
+          },
+          {
+            "start": 44147650,
+            "stop": 44147833
+          },
+          {
+            "start": 44149760,
+            "stop": 44149859
+          },
+          {
+            "start": 44149969,
+            "stop": 44150064
+          },
+          {
+            "start": 44150956,
+            "stop": 44151075
+          },
+          {
+            "start": 44152271,
+            "stop": 44152425
+          },
+          {
+            "start": 44153301,
+            "stop": 44153463
+          },
+          {
+            "start": 44158119,
+            "stop": 44158196
+          },
+          {
+            "start": 44159073,
+            "stop": 44159120
+          },
+          {
+            "start": 44188909,
+            "stop": 44188953
+          },
+          {
+            "start": 44143213,
+            "stop": 44144236
+          },
+          {
+            "start": 44144275,
+            "stop": 44145280
+          },
+          {
+            "start": 44145497,
+            "stop": 44145730
+          },
+          {
+            "start": 44146127,
+            "stop": 44146144
+          },
+          {
+            "start": 44146463,
+            "stop": 44146618
+          },
+          {
+            "start": 44147650,
+            "stop": 44147833
+          },
+          {
+            "start": 44149760,
+            "stop": 44149859
+          },
+          {
+            "start": 44149969,
+            "stop": 44150064
+          },
+          {
+            "start": 44150956,
+            "stop": 44151075
+          },
+          {
+            "start": 44152271,
+            "stop": 44152425
+          },
+          {
+            "start": 44153301,
+            "stop": 44153463
+          },
+          {
+            "start": 44158073,
+            "stop": 44158118
+          },
+          {
+            "start": 44159121,
+            "stop": 44159282
+          },
+          {
+            "start": 44188954,
+            "stop": 44189439
+          },
+          {
+            "start": 44143772,
+            "stop": 44144236
+          },
+          {
+            "start": 44144273,
+            "stop": 44145280
+          },
+          {
+            "start": 44145497,
+            "stop": 44146129
+          },
+          {
+            "start": 44146463,
+            "stop": 44146707
+          },
+          {
+            "start": 44146965,
+            "stop": 44147125
+          },
+          {
+            "start": 44148310,
+            "stop": 44149859
+          },
+          {
+            "start": 44149969,
+            "stop": 44150064
+          },
+          {
+            "start": 44150956,
+            "stop": 44151075
+          },
+          {
+            "start": 44152271,
+            "stop": 44152425
+          },
+          {
+            "start": 44153301,
+            "stop": 44153463
+          },
+          {
+            "start": 44188909,
+            "stop": 44189439
+          },
+          {
+            "start": 44197691,
+            "stop": 44198170
+          }
+        ]
+      },
+      "canonical_transcript_metadata": {
+        "transcript_id": "ENST00000403799",
+        "transcript_version": "8",
+        "gene_id": "ENSG00000106633",
+        "chrom": "7",
+        "start": 44144275,
+        "stop": 44189439,
+        "strand": "-",
+        "exons": [
+          {
+            "start": 44144275,
+            "stop": 44145138
+          },
+          {
+            "start": 44145139,
+            "stop": 44145280
+          },
+          {
+            "start": 44145497,
+            "stop": 44145730
+          },
+          {
+            "start": 44146463,
+            "stop": 44146618
+          },
+          {
+            "start": 44147650,
+            "stop": 44147833
+          },
+          {
+            "start": 44149760,
+            "stop": 44149859
+          },
+          {
+            "start": 44149969,
+            "stop": 44150064
+          },
+          {
+            "start": 44150956,
+            "stop": 44151075
+          },
+          {
+            "start": 44152271,
+            "stop": 44152425
+          },
+          {
+            "start": 44153301,
+            "stop": 44153463
+          },
+          {
+            "start": 44188909,
+            "stop": 44188953
+          },
+          {
+            "start": 44188954,
+            "stop": 44189439
+          }
+        ]
+      },
+      "canonical_protein_accession": "P35557",
+      "canonical_protein_length": 465,
+      "population_fetched_at": "2026-09-11T21:07:53.507554+00:00",
+      "annotations_fetched_at": "2026-09-12T21:44:28.085692+00:00",
+      "major_consequence_counts_all_canonical_rows": {
+        "3_prime_UTR_variant": 106,
+        "stop_lost": 1,
+        "synonymous_variant": 344,
+        "frameshift_variant": 21,
+        "missense_variant": 625,
+        "stop_gained": 33,
+        "splice_acceptor_variant": 12,
+        "splice_region_variant": 94,
+        "intron_variant": 1302,
+        "splice_donor_variant": 13,
+        "inframe_deletion": 8,
+        "": 934,
+        "inframe_insertion": 1,
+        "start_lost": 2,
+        "5_prime_UTR_variant": 46
+      }
+    },
+    "HNF1A": {
+      "gene_metadata": {
+        "gene_id": "ENSG00000135100",
+        "gene_version": "19",
+        "symbol": "HNF1A",
+        "chrom": "12",
+        "start": 120978543,
+        "stop": 121002512,
+        "strand": "+",
+        "canonical_transcript_id": "ENST00000257555",
+        "mane_select_transcript": {
+          "ensembl_id": "ENST00000257555",
+          "ensembl_version": "11",
+          "refseq_id": "NM_000545",
+          "refseq_version": "8"
+        },
+        "exons": [
+          {
+            "start": 120978626,
+            "stop": 120979094
+          },
+          {
+            "start": 120988833,
+            "stop": 120989032
+          },
+          {
+            "start": 120993520,
+            "stop": 120993706
+          },
+          {
+            "start": 120994164,
+            "stop": 120994405
+          },
+          {
+            "start": 120996262,
+            "stop": 120996413
+          },
+          {
+            "start": 120996541,
+            "stop": 120996742
+          },
+          {
+            "start": 120997474,
+            "stop": 120997790
+          },
+          {
+            "start": 120999268,
+            "stop": 120999627
+          },
+          {
+            "start": 121001065,
+            "stop": 121001189
+          },
+          {
+            "start": 120978543,
+            "stop": 120978768
+          },
+          {
+            "start": 120993551,
+            "stop": 120993706
+          },
+          {
+            "start": 120994164,
+            "stop": 120994405
+          },
+          {
+            "start": 120996262,
+            "stop": 120996413
+          },
+          {
+            "start": 120996541,
+            "stop": 120996742
+          },
+          {
+            "start": 120997474,
+            "stop": 120998300
+          },
+          {
+            "start": 120999268,
+            "stop": 120999389
+          },
+          {
+            "start": 120999483,
+            "stop": 120999627
+          },
+          {
+            "start": 121001065,
+            "stop": 121002512
+          },
+          {
+            "start": 120978634,
+            "stop": 120979094
+          },
+          {
+            "start": 120988833,
+            "stop": 120989032
+          },
+          {
+            "start": 120993520,
+            "stop": 120993706
+          },
+          {
+            "start": 120994164,
+            "stop": 120994405
+          },
+          {
+            "start": 120996262,
+            "stop": 120998300
+          }
+        ]
+      },
+      "canonical_transcript_metadata": {
+        "transcript_id": "ENST00000257555",
+        "transcript_version": "11",
+        "gene_id": "ENSG00000135100",
+        "chrom": "12",
+        "start": 120978543,
+        "stop": 121002512,
+        "strand": "+",
+        "exons": [
+          {
+            "start": 120978543,
+            "stop": 120978768
+          },
+          {
+            "start": 120978769,
+            "stop": 120979094
+          },
+          {
+            "start": 120988833,
+            "stop": 120989032
+          },
+          {
+            "start": 120993520,
+            "stop": 120993706
+          },
+          {
+            "start": 120994164,
+            "stop": 120994405
+          },
+          {
+            "start": 120996262,
+            "stop": 120996413
+          },
+          {
+            "start": 120996541,
+            "stop": 120996742
+          },
+          {
+            "start": 120997474,
+            "stop": 120997665
+          },
+          {
+            "start": 120999268,
+            "stop": 120999389
+          },
+          {
+            "start": 120999483,
+            "stop": 120999627
+          },
+          {
+            "start": 121001065,
+            "stop": 121001189
+          },
+          {
+            "start": 121001190,
+            "stop": 121002512
+          }
+        ]
+      },
+      "canonical_protein_accession": "P20823",
+      "canonical_protein_length": 631,
+      "population_fetched_at": "2026-09-11T21:07:37.731167+00:00",
+      "annotations_fetched_at": "2026-09-12T21:44:37.313943+00:00",
+      "major_consequence_counts_all_canonical_rows": {
+        "": 405,
+        "5_prime_UTR_variant": 105,
+        "start_lost": 2,
+        "missense_variant": 838,
+        "synonymous_variant": 435,
+        "stop_gained": 18,
+        "inframe_insertion": 3,
+        "frameshift_variant": 42,
+        "splice_donor_variant": 7,
+        "intron_variant": 1282,
+        "splice_region_variant": 76,
+        "splice_acceptor_variant": 4,
+        "inframe_deletion": 11,
+        "stop_retained_variant": 1,
+        "3_prime_UTR_variant": 97
+      }
+    },
+    "LDLR": {
+      "gene_metadata": {
+        "gene_id": "ENSG00000130164",
+        "gene_version": "14",
+        "symbol": "LDLR",
+        "chrom": "19",
+        "start": 11089462,
+        "stop": 11133820,
+        "strand": "+",
+        "canonical_transcript_id": "ENST00000558518",
+        "mane_select_transcript": {
+          "ensembl_id": "ENST00000558518",
+          "ensembl_version": "6",
+          "refseq_id": "NM_000527",
+          "refseq_version": "5"
+        },
+        "exons": [
+          {
+            "start": 11089549,
+            "stop": 11089615
+          },
+          {
+            "start": 11090599,
+            "stop": 11090919
+          },
+          {
+            "start": 11100223,
+            "stop": 11100345
+          },
+          {
+            "start": 11102664,
+            "stop": 11102786
+          },
+          {
+            "start": 11105220,
+            "stop": 11105600
+          },
+          {
+            "start": 11106565,
+            "stop": 11106687
+          },
+          {
+            "start": 11107392,
+            "stop": 11107514
+          },
+          {
+            "start": 11110652,
+            "stop": 11110771
+          },
+          {
+            "start": 11111514,
+            "stop": 11111639
+          },
+          {
+            "start": 11113278,
+            "stop": 11113449
+          },
+          {
+            "start": 11113535,
+            "stop": 11113762
+          },
+          {
+            "start": 11116094,
+            "stop": 11116212
+          },
+          {
+            "start": 11116859,
+            "stop": 11116998
+          },
+          {
+            "start": 11120092,
+            "stop": 11120233
+          },
+          {
+            "start": 11120370,
+            "stop": 11120522
+          },
+          {
+            "start": 11123174,
+            "stop": 11123344
+          },
+          {
+            "start": 11128008,
+            "stop": 11128085
+          },
+          {
+            "start": 11129451,
+            "stop": 11129670
+          },
+          {
+            "start": 11131281,
+            "stop": 11131515
+          },
+          {
+            "start": 11089462,
+            "stop": 11089548
+          },
+          {
+            "start": 11120175,
+            "stop": 11120233
+          },
+          {
+            "start": 11120370,
+            "stop": 11120406
+          },
+          {
+            "start": 11131314,
+            "stop": 11133820
+          },
+          {
+            "start": 11089463,
+            "stop": 11089615
+          },
+          {
+            "start": 11100223,
+            "stop": 11100578
+          },
+          {
+            "start": 11102664,
+            "stop": 11104268
+          },
+          {
+            "start": 11106356,
+            "stop": 11106687
+          },
+          {
+            "start": 11107392,
+            "stop": 11107515
+          },
+          {
+            "start": 11110713,
+            "stop": 11110771
+          },
+          {
+            "start": 11111514,
+            "stop": 11111639
+          },
+          {
+            "start": 11113278,
+            "stop": 11113481
+          },
+          {
+            "start": 11127547,
+            "stop": 11127654
+          },
+          {
+            "start": 11133095,
+            "stop": 11133521
+          }
+        ]
+      },
+      "canonical_transcript_metadata": {
+        "transcript_id": "ENST00000558518",
+        "transcript_version": "6",
+        "gene_id": "ENSG00000130164",
+        "chrom": "19",
+        "start": 11089463,
+        "stop": 11133820,
+        "strand": "+",
+        "exons": [
+          {
+            "start": 11089463,
+            "stop": 11089548
+          },
+          {
+            "start": 11089549,
+            "stop": 11089615
+          },
+          {
+            "start": 11100223,
+            "stop": 11100345
+          },
+          {
+            "start": 11102664,
+            "stop": 11102786
+          },
+          {
+            "start": 11105220,
+            "stop": 11105600
+          },
+          {
+            "start": 11106565,
+            "stop": 11106687
+          },
+          {
+            "start": 11107392,
+            "stop": 11107514
+          },
+          {
+            "start": 11110652,
+            "stop": 11110771
+          },
+          {
+            "start": 11111514,
+            "stop": 11111639
+          },
+          {
+            "start": 11113278,
+            "stop": 11113449
+          },
+          {
+            "start": 11113535,
+            "stop": 11113762
+          },
+          {
+            "start": 11116094,
+            "stop": 11116212
+          },
+          {
+            "start": 11116859,
+            "stop": 11116998
+          },
+          {
+            "start": 11120092,
+            "stop": 11120233
+          },
+          {
+            "start": 11120370,
+            "stop": 11120522
+          },
+          {
+            "start": 11123174,
+            "stop": 11123344
+          },
+          {
+            "start": 11128008,
+            "stop": 11128085
+          },
+          {
+            "start": 11129513,
+            "stop": 11129670
+          },
+          {
+            "start": 11131281,
+            "stop": 11131313
+          },
+          {
+            "start": 11131314,
+            "stop": 11133820
+          }
+        ]
+      },
+      "canonical_protein_accession": "P01130",
+      "canonical_protein_length": 860,
+      "population_fetched_at": "2026-09-11T21:07:05.750618+00:00",
+      "annotations_fetched_at": "2026-09-12T21:44:50.746484+00:00",
+      "major_consequence_counts_all_canonical_rows": {
+        "5_prime_UTR_variant": 84,
+        "frameshift_variant": 96,
+        "missense_variant": 1283,
+        "synonymous_variant": 533,
+        "stop_gained": 78,
+        "inframe_deletion": 18,
+        "splice_donor_variant": 32,
+        "intron_variant": 2384,
+        "splice_region_variant": 132,
+        "": 764,
+        "splice_acceptor_variant": 19,
+        "inframe_insertion": 5,
+        "protein_altering_variant": 1,
+        "stop_retained_variant": 1,
+        "3_prime_UTR_variant": 67
+      }
+    },
+    "BRCA2": {
+      "gene_metadata": {
+        "gene_id": "ENSG00000139618",
+        "gene_version": "17",
+        "symbol": "BRCA2",
+        "chrom": "13",
+        "start": 32315086,
+        "stop": 32400268,
+        "strand": "+",
+        "canonical_transcript_id": "ENST00000380152",
+        "mane_select_transcript": {
+          "ensembl_id": "ENST00000380152",
+          "ensembl_version": "8",
+          "refseq_id": "NM_000059",
+          "refseq_version": "4"
+        },
+        "exons": [
+          {
+            "start": 32316461,
+            "stop": 32316527
+          },
+          {
+            "start": 32319077,
+            "stop": 32319325
+          },
+          {
+            "start": 32325076,
+            "stop": 32325184
+          },
+          {
+            "start": 32326101,
+            "stop": 32326150
+          },
+          {
+            "start": 32326242,
+            "stop": 32326282
+          },
+          {
+            "start": 32326499,
+            "stop": 32326613
+          },
+          {
+            "start": 32329443,
+            "stop": 32329492
+          },
+          {
+            "start": 32330919,
+            "stop": 32331030
+          },
+          {
+            "start": 32332272,
+            "stop": 32333387
+          },
+          {
+            "start": 32336265,
+            "stop": 32341196
+          },
+          {
+            "start": 32344558,
+            "stop": 32344653
+          },
+          {
+            "start": 32346827,
+            "stop": 32346896
+          },
+          {
+            "start": 32354861,
+            "stop": 32355288
+          },
+          {
+            "start": 32356428,
+            "stop": 32356609
+          },
+          {
+            "start": 32357742,
+            "stop": 32357929
+          },
+          {
+            "start": 32362515,
+            "stop": 32362693
+          },
+          {
+            "start": 32363179,
+            "stop": 32363533
+          },
+          {
+            "start": 32370402,
+            "stop": 32370557
+          },
+          {
+            "start": 32370956,
+            "stop": 32371100
+          },
+          {
+            "start": 32374962,
+            "stop": 32375077
+          },
+          {
+            "start": 32375343,
+            "stop": 32375404
+          },
+          {
+            "start": 32376670,
+            "stop": 32376791
+          },
+          {
+            "start": 32379317,
+            "stop": 32379515
+          },
+          {
+            "start": 32379750,
+            "stop": 32379913
+          },
+          {
+            "start": 32380007,
+            "stop": 32380145
+          },
+          {
+            "start": 32383893,
+            "stop": 32383927
+          },
+          {
+            "start": 32394689,
+            "stop": 32394933
+          },
+          {
+            "start": 32395991,
+            "stop": 32396089
+          },
+          {
+            "start": 32396898,
+            "stop": 32397044
+          },
+          {
+            "start": 32398162,
+            "stop": 32398767
+          },
+          {
+            "start": 32315086,
+            "stop": 32315145
+          },
+          {
+            "start": 32315505,
+            "stop": 32315667
+          },
+          {
+            "start": 32316072,
+            "stop": 32316157
+          },
+          {
+            "start": 32316422,
+            "stop": 32316523
+          },
+          {
+            "start": 32319077,
+            "stop": 32319325
+          },
+          {
+            "start": 32325076,
+            "stop": 32325128
+          },
+          {
+            "start": 32362657,
+            "stop": 32362693
+          },
+          {
+            "start": 32363179,
+            "stop": 32363533
+          },
+          {
+            "start": 32370402,
+            "stop": 32370557
+          },
+          {
+            "start": 32370956,
+            "stop": 32371100
+          },
+          {
+            "start": 32375078,
+            "stop": 32375210
+          },
+          {
+            "start": 32375343,
+            "stop": 32375406
+          },
+          {
+            "start": 32376670,
+            "stop": 32376791
+          },
+          {
+            "start": 32379317,
+            "stop": 32379515
+          },
+          {
+            "start": 32379750,
+            "stop": 32379913
+          },
+          {
+            "start": 32380007,
+            "stop": 32380145
+          },
+          {
+            "start": 32383928,
+            "stop": 32384031
+          },
+          {
+            "start": 32394689,
+            "stop": 32394933
+          },
+          {
+            "start": 32396090,
+            "stop": 32396116
+          },
+          {
+            "start": 32396898,
+            "stop": 32397044
+          },
+          {
+            "start": 32398162,
+            "stop": 32400268
+          },
+          {
+            "start": 32396809,
+            "stop": 32397044
+          },
+          {
+            "start": 32398162,
+            "stop": 32398448
+          }
+        ]
+      },
+      "canonical_transcript_metadata": {
+        "transcript_id": "ENST00000380152",
+        "transcript_version": "8",
+        "gene_id": "ENSG00000139618",
+        "chrom": "13",
+        "start": 32315508,
+        "stop": 32400268,
+        "strand": "+",
+        "exons": [
+          {
+            "start": 32315508,
+            "stop": 32315667
+          },
+          {
+            "start": 32316422,
+            "stop": 32316460
+          },
+          {
+            "start": 32316461,
+            "stop": 32316527
+          },
+          {
+            "start": 32319077,
+            "stop": 32319325
+          },
+          {
+            "start": 32325076,
+            "stop": 32325184
+          },
+          {
+            "start": 32326101,
+            "stop": 32326150
+          },
+          {
+            "start": 32326242,
+            "stop": 32326282
+          },
+          {
+            "start": 32326499,
+            "stop": 32326613
+          },
+          {
+            "start": 32329443,
+            "stop": 32329492
+          },
+          {
+            "start": 32330919,
+            "stop": 32331030
+          },
+          {
+            "start": 32332272,
+            "stop": 32333387
+          },
+          {
+            "start": 32336265,
+            "stop": 32341196
+          },
+          {
+            "start": 32344558,
+            "stop": 32344653
+          },
+          {
+            "start": 32346827,
+            "stop": 32346896
+          },
+          {
+            "start": 32354861,
+            "stop": 32355288
+          },
+          {
+            "start": 32356428,
+            "stop": 32356609
+          },
+          {
+            "start": 32357742,
+            "stop": 32357929
+          },
+          {
+            "start": 32362523,
+            "stop": 32362693
+          },
+          {
+            "start": 32363179,
+            "stop": 32363533
+          },
+          {
+            "start": 32370402,
+            "stop": 32370557
+          },
+          {
+            "start": 32370956,
+            "stop": 32371100
+          },
+          {
+            "start": 32376670,
+            "stop": 32376791
+          },
+          {
+            "start": 32379317,
+            "stop": 32379515
+          },
+          {
+            "start": 32379750,
+            "stop": 32379913
+          },
+          {
+            "start": 32380007,
+            "stop": 32380145
+          },
+          {
+            "start": 32394689,
+            "stop": 32394933
+          },
+          {
+            "start": 32396898,
+            "stop": 32397044
+          },
+          {
+            "start": 32398162,
+            "stop": 32398767
+          },
+          {
+            "start": 32398768,
+            "stop": 32400268
+          }
+        ]
+      },
+      "canonical_protein_accession": "P51587",
+      "canonical_protein_length": 3418,
+      "population_fetched_at": "2026-09-11T21:06:48.561684+00:00",
+      "annotations_fetched_at": "2026-09-12T21:45:03.212597+00:00",
+      "major_consequence_counts_all_canonical_rows": {
+        "intron_variant": 2701,
+        "splice_region_variant": 160,
+        "splice_acceptor_variant": 40,
+        "5_prime_UTR_variant": 30,
+        "start_lost": 2,
+        "missense_variant": 4531,
+        "synonymous_variant": 1511,
+        "frameshift_variant": 483,
+        "inframe_insertion": 26,
+        "splice_donor_variant": 38,
+        "stop_gained": 231,
+        "inframe_deletion": 116,
+        "protein_altering_variant": 2,
+        "": 849,
+        "stop_retained_variant": 2,
+        "3_prime_UTR_variant": 47
+      }
+    },
+    "KCNQ1": {
+      "gene_metadata": {
+        "gene_id": "ENSG00000053918",
+        "gene_version": "18",
+        "symbol": "KCNQ1",
+        "chrom": "11",
+        "start": 2444684,
+        "stop": 2849105,
+        "strand": "+",
+        "canonical_transcript_id": "ENST00000155840",
+        "mane_select_transcript": {
+          "ensembl_id": "ENST00000155840",
+          "ensembl_version": "12",
+          "refseq_id": "NM_000218",
+          "refseq_version": "3"
+        },
+        "exons": [
+          {
+            "start": 2444686,
+            "stop": 2444708
+          },
+          {
+            "start": 2445099,
+            "stop": 2445484
+          },
+          {
+            "start": 2461710,
+            "stop": 2461714
+          },
+          {
+            "start": 2461894,
+            "stop": 2461977
+          },
+          {
+            "start": 2521479,
+            "stop": 2521570
+          },
+          {
+            "start": 2527928,
+            "stop": 2528018
+          },
+          {
+            "start": 2570628,
+            "stop": 2570754
+          },
+          {
+            "start": 2571325,
+            "stop": 2571403
+          },
+          {
+            "start": 2572013,
+            "stop": 2572109
+          },
+          {
+            "start": 2572846,
+            "stop": 2572986
+          },
+          {
+            "start": 2583435,
+            "stop": 2583545
+          },
+          {
+            "start": 2585212,
+            "stop": 2585307
+          },
+          {
+            "start": 2587570,
+            "stop": 2587692
+          },
+          {
+            "start": 2588713,
+            "stop": 2588854
+          },
+          {
+            "start": 2661961,
+            "stop": 2662081
+          },
+          {
+            "start": 2768844,
+            "stop": 2768919
+          },
+          {
+            "start": 2775960,
+            "stop": 2776054
+          },
+          {
+            "start": 2776986,
+            "stop": 2777032
+          },
+          {
+            "start": 2777678,
+            "stop": 2777813
+          },
+          {
+            "start": 2777976,
+            "stop": 2778037
+          },
+          {
+            "start": 2839716,
+            "stop": 2839745
+          },
+          {
+            "start": 2847767,
+            "stop": 2848000
+          },
+          {
+            "start": 2444684,
+            "stop": 2444685
+          },
+          {
+            "start": 2445008,
+            "stop": 2445098
+          },
+          {
+            "start": 2461441,
+            "stop": 2461709
+          },
+          {
+            "start": 2461887,
+            "stop": 2461893
+          },
+          {
+            "start": 2777575,
+            "stop": 2777677
+          },
+          {
+            "start": 2839746,
+            "stop": 2840190
+          },
+          {
+            "start": 2848001,
+            "stop": 2849105
+          },
+          {
+            "start": 2445322,
+            "stop": 2445484
+          },
+          {
+            "start": 2521479,
+            "stop": 2521570
+          },
+          {
+            "start": 2527928,
+            "stop": 2527976
+          }
+        ]
+      },
+      "canonical_transcript_metadata": {
+        "transcript_id": "ENST00000155840",
+        "transcript_version": "12",
+        "gene_id": "ENSG00000053918",
+        "chrom": "11",
+        "start": 2445008,
+        "stop": 2849105,
+        "strand": "+",
+        "exons": [
+          {
+            "start": 2776986,
+            "stop": 2777032
+          },
+          {
+            "start": 2777976,
+            "stop": 2778037
+          },
+          {
+            "start": 2847767,
+            "stop": 2848000
+          },
+          {
+            "start": 2848001,
+            "stop": 2849105
+          },
+          {
+            "start": 2445008,
+            "stop": 2445098
+          },
+          {
+            "start": 2445099,
+            "stop": 2445484
+          },
+          {
+            "start": 2527928,
+            "stop": 2528018
+          },
+          {
+            "start": 2570628,
+            "stop": 2570754
+          },
+          {
+            "start": 2571325,
+            "stop": 2571403
+          },
+          {
+            "start": 2572013,
+            "stop": 2572109
+          },
+          {
+            "start": 2572846,
+            "stop": 2572986
+          },
+          {
+            "start": 2583435,
+            "stop": 2583545
+          },
+          {
+            "start": 2585212,
+            "stop": 2585307
+          },
+          {
+            "start": 2587570,
+            "stop": 2587692
+          },
+          {
+            "start": 2588713,
+            "stop": 2588854
+          },
+          {
+            "start": 2661961,
+            "stop": 2662081
+          },
+          {
+            "start": 2768844,
+            "stop": 2768919
+          },
+          {
+            "start": 2775960,
+            "stop": 2776054
+          }
+        ]
+      },
+      "canonical_protein_accession": "P51787",
+      "canonical_protein_length": 676,
+      "population_fetched_at": "2026-09-11T21:03:20.157063+00:00",
+      "annotations_fetched_at": "2026-09-12T21:45:13.582181+00:00",
+      "major_consequence_counts_all_canonical_rows": {
+        "": 1485,
+        "5_prime_UTR_variant": 185,
+        "start_lost": 7,
+        "frameshift_variant": 137,
+        "missense_variant": 1430,
+        "synonymous_variant": 717,
+        "stop_gained": 62,
+        "inframe_deletion": 24,
+        "inframe_insertion": 11,
+        "splice_region_variant": 139,
+        "intron_variant": 2592,
+        "splice_donor_variant": 16,
+        "splice_acceptor_variant": 15,
+        "stop_lost": 6,
+        "stop_retained_variant": 1,
+        "3_prime_UTR_variant": 140
+      }
+    }
+  },
+  "summaries": [
+    {
+      "gene": "GCK",
+      "all_source_rows": 3542,
+      "canonical_annotation_rows": 2608,
+      "observed_joint_ac_positive": 2463,
+      "observed_reconstructed_qc_pass": 2292,
+      "coding_splice_qc_pass": 956,
+      "canonical_missense_qc_pass": 468,
+      "canonical_missense_wt_valid_qc_pass": 468,
+      "observed_qc_fail": 171,
+      "joint_ac_total_qc_pass": 1596969,
+      "joint_hom_total_qc_pass": 283920,
+      "joint_carriers_total_qc_pass": 1313049,
+      "source_indels": 265,
+      "qc_pass_indels": 134,
+      "canonical_wt_mismatch_rows": 0,
+      "allele_inventory_and_all_cohort_counts_match_prior_snapshot": true
+    },
+    {
+      "gene": "HNF1A",
+      "all_source_rows": 3326,
+      "canonical_annotation_rows": 2921,
+      "observed_joint_ac_positive": 2512,
+      "observed_reconstructed_qc_pass": 2389,
+      "coding_splice_qc_pass": 1302,
+      "canonical_missense_qc_pass": 723,
+      "canonical_missense_wt_valid_qc_pass": 723,
+      "observed_qc_fail": 123,
+      "joint_ac_total_qc_pass": 9365870,
+      "joint_hom_total_qc_pass": 2384525,
+      "joint_carriers_total_qc_pass": 6981345,
+      "source_indels": 224,
+      "qc_pass_indels": 147,
+      "canonical_wt_mismatch_rows": 0,
+      "allele_inventory_and_all_cohort_counts_match_prior_snapshot": true
+    },
+    {
+      "gene": "LDLR",
+      "all_source_rows": 5497,
+      "canonical_annotation_rows": 4733,
+      "observed_joint_ac_positive": 4424,
+      "observed_reconstructed_qc_pass": 4218,
+      "coding_splice_qc_pass": 2216,
+      "canonical_missense_qc_pass": 1230,
+      "canonical_missense_wt_valid_qc_pass": 1230,
+      "observed_qc_fail": 206,
+      "joint_ac_total_qc_pass": 9936552,
+      "joint_hom_total_qc_pass": 2224815,
+      "joint_carriers_total_qc_pass": 7711737,
+      "source_indels": 418,
+      "qc_pass_indels": 287,
+      "canonical_wt_mismatch_rows": 0,
+      "allele_inventory_and_all_cohort_counts_match_prior_snapshot": true
+    },
+    {
+      "gene": "BRCA2",
+      "all_source_rows": 10769,
+      "canonical_annotation_rows": 9920,
+      "observed_joint_ac_positive": 9402,
+      "observed_reconstructed_qc_pass": 9037,
+      "coding_splice_qc_pass": 6811,
+      "canonical_missense_qc_pass": 4231,
+      "canonical_missense_wt_valid_qc_pass": 4231,
+      "observed_qc_fail": 365,
+      "joint_ac_total_qc_pass": 9951238,
+      "joint_hom_total_qc_pass": 3161837,
+      "joint_carriers_total_qc_pass": 6789401,
+      "source_indels": 1229,
+      "qc_pass_indels": 919,
+      "canonical_wt_mismatch_rows": 0,
+      "allele_inventory_and_all_cohort_counts_match_prior_snapshot": true
+    },
+    {
+      "gene": "KCNQ1",
+      "all_source_rows": 6967,
+      "canonical_annotation_rows": 5482,
+      "observed_joint_ac_positive": 4232,
+      "observed_reconstructed_qc_pass": 3912,
+      "coding_splice_qc_pass": 1716,
+      "canonical_missense_qc_pass": 833,
+      "canonical_missense_wt_valid_qc_pass": 833,
+      "observed_qc_fail": 320,
+      "joint_ac_total_qc_pass": 4796508,
+      "joint_hom_total_qc_pass": 1027192,
+      "joint_carriers_total_qc_pass": 3769316,
+      "source_indels": 564,
+      "qc_pass_indels": 301,
+      "canonical_wt_mismatch_rows": 0,
+      "allele_inventory_and_all_cohort_counts_match_prior_snapshot": true
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "gene": "GCK",
+  "gnomad_release": "4.1.1",
+  "dataset_selector": "gnomad_r4",
+  "interval": {
+    "chrom": "7",
+    "start": 44143213,
+    "stop": 44198170,
+    "reference_genome": "GRCh38"
+  },
+  "source_rows": 19779,
+  "observed_joint_ac_positive": 15085,
+  "observed_qc_pass": 14294,
+  "joint_carriers_qc_pass": 8931920,
+  "joint_ac_qc_pass": 12048550,
+  "joint_hom_qc_pass": 3116630,
+  "prior_footprint_overlap_rows": 3542,
+  "all_overlap_alleles_counts_filters_exact_match": true,
+  "deduplicated_identical_chunk_rows": 0,
+  "successful_region_requests": 3,
+  "complete_interval_coverage_verified": true,
+  "output_files": [
+    {
+      "file": "GCK_population_variants.csv.gz",
+      "bytes": 329293,
+      "sha256": "12c1da28b22719aadc258ce419d42f990675dbf14f30ce0426df5ae56d4e11cb",
+      "rows": 19779
+    }
+  ],
+  "output_bytes": 329293,
+  "source_scope": "All returned small variants whose POS is within the exact genomic gene span; no coding-consequence filter. Structural variants/CNVs require separate endpoints.",
+  "annotation_policy": "No protein annotation inferred for region-only records. Join canonical annotations from the earlier snapshot by exact genomic allele ID; preserve unmapped state.",
+  "carrier_policy": "joint AC minus joint homozygote count, once per allele; gnomAD carriers assumed unaffected",
+  "qc_policy": "Every present assay must PASS; absent assay permitted. Preserve raw joint API filters separately.",
+  "sources": [
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/GCK_7_44143213_44163212.json.gz",
+      "sha256": "9200ee2f70f793d801b92e83612d024469d823bbbe3cee119f2f4f69b6692cd6",
+      "fetched_at": "2026-09-12T21:57:56.830902+00:00",
+      "region": {
+        "chrom": "7",
+        "start": 44143213,
+        "stop": 44163212
+      },
+      "rows": 10537
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/GCK_7_44163213_44183212.json.gz",
+      "sha256": "e48daa9ad3ac9164ade671ab89639522c9233765381d76b75409fb48d62866c1",
+      "fetched_at": "2026-09-12T21:58:01.082641+00:00",
+      "region": {
+        "chrom": "7",
+        "start": 44163213,
+        "stop": 44183212
+      },
+      "rows": 4887
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/GCK_7_44183213_44198170.json.gz",
+      "sha256": "d27e8231ee281ecc67c97af2423acff5fe96388d7b68014bce1109028162e6f1",
+      "fetched_at": "2026-09-12T21:58:08.109796+00:00",
+      "region": {
+        "chrom": "7",
+        "start": 44183213,
+        "stop": 44198170
+      },
+      "rows": 4355
+    }
+  ]
+}

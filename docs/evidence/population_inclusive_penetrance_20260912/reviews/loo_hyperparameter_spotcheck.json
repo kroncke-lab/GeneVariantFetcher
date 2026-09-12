@@ -1,0 +1,10 @@
+{
+  "scope": "Exact single-unit deletion effect on shared GCK empirical hyperparameters, all observed full locus",
+  "units": 14553,
+  "eligible_missense": 634,
+  "max_abs_mu_shift_all": 0.0001653894935721087,
+  "max_abs_mu_shift_missense": 0.00016422881627615668,
+  "max_abs_alpha_shift_missense": 0.00031699915684269,
+  "max_abs_beta_shift_missense": 0.0055367802666710375,
+  "note": "Diagnostic only. This does not recompute structural fits or establish independent outcome validation."
+}

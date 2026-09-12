@@ -1,0 +1,286 @@
+{
+  "gene": "KCNQ1",
+  "gnomad_release": "4.1.1",
+  "dataset_selector": "gnomad_r4",
+  "interval": {
+    "chrom": "11",
+    "start": 2444684,
+    "stop": 2849105,
+    "reference_genome": "GRCh38"
+  },
+  "source_rows": 169715,
+  "observed_joint_ac_positive": 121104,
+  "observed_qc_pass": 113720,
+  "joint_carriers_qc_pass": 66821101,
+  "joint_ac_qc_pass": 91316350,
+  "joint_hom_qc_pass": 24495249,
+  "prior_footprint_overlap_rows": 6954,
+  "all_overlap_alleles_counts_filters_exact_match": true,
+  "deduplicated_identical_chunk_rows": 0,
+  "successful_region_requests": 21,
+  "complete_interval_coverage_verified": true,
+  "output_files": [
+    {
+      "file": "KCNQ1_population_variants.part001.csv.gz",
+      "bytes": 693596,
+      "sha256": "c1c65de5a7a2cb26e832ac64f4320fa941f3d9ab89d0b0d582382ac41fb37473",
+      "rows": 42428
+    },
+    {
+      "file": "KCNQ1_population_variants.part002.csv.gz",
+      "bytes": 693259,
+      "sha256": "b704830519ee94c02626d8a4ae8740e9469dfd6ad42f36d5943144539b38c6bb",
+      "rows": 42429
+    },
+    {
+      "file": "KCNQ1_population_variants.part003.csv.gz",
+      "bytes": 651019,
+      "sha256": "163508c52a5bac9e08b2338418ab162d4eb515c5fba80ffbe2a79e1b0ebb3aa8",
+      "rows": 42429
+    },
+    {
+      "file": "KCNQ1_population_variants.part004.csv.gz",
+      "bytes": 677676,
+      "sha256": "35e3170d381fd44b56ca444d908c1aa2529c0f50a27482dee0129898cee2ac57",
+      "rows": 42429
+    }
+  ],
+  "output_bytes": 2715550,
+  "source_scope": "All returned small variants whose POS is within the exact genomic gene span; no coding-consequence filter. Structural variants/CNVs require separate endpoints.",
+  "annotation_policy": "No protein annotation inferred for region-only records. Join canonical annotations from the earlier snapshot by exact genomic allele ID; preserve unmapped state.",
+  "carrier_policy": "joint AC minus joint homozygote count, once per allele; gnomAD carriers assumed unaffected",
+  "qc_policy": "Every present assay must PASS; absent assay permitted. Preserve raw joint API filters separately.",
+  "sources": [
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2444684_2464683.json.gz",
+      "sha256": "9f81a516aa35802759e65821e83596a3c4a0db1a60a448b1e558667e9e74097f",
+      "fetched_at": "2026-09-12T22:01:04.339742+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2444684,
+        "stop": 2464683
+      },
+      "rows": 8254
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2464684_2484683.json.gz",
+      "sha256": "99deb664dee78ec872c99cddb198cf65f495b7f115368797b592f28859314868",
+      "fetched_at": "2026-09-12T22:01:09.742712+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2464684,
+        "stop": 2484683
+      },
+      "rows": 5307
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2484684_2504683.json.gz",
+      "sha256": "28bad5a78d8439ffb41151182499ce2a1cba1cbb911fff38477ec56721d2b924",
+      "fetched_at": "2026-09-12T22:01:17.099694+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2484684,
+        "stop": 2504683
+      },
+      "rows": 6123
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2504684_2524683.json.gz",
+      "sha256": "e844e7b8775436716c9587b092cfe3bb256e217c149e79b0ed9a71ce69026d64",
+      "fetched_at": "2026-09-12T22:01:24.011183+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2504684,
+        "stop": 2524683
+      },
+      "rows": 5632
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2524684_2544683.json.gz",
+      "sha256": "bfc7c091962ed112e802f182ad841714d77b94388584b22021d1fe3679d81cc8",
+      "fetched_at": "2026-09-12T22:01:30.924539+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2524684,
+        "stop": 2544683
+      },
+      "rows": 6225
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2544684_2564683.json.gz",
+      "sha256": "a47caee942b5eb952055de41e09e161f527c6fb58f6b223a06419bac5ad4d1a8",
+      "fetched_at": "2026-09-12T22:01:38.073857+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2544684,
+        "stop": 2564683
+      },
+      "rows": 5802
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2564684_2584683.json.gz",
+      "sha256": "9662ddd506f44c1f16e3c57c4647ebff323df417ccf06c9ec1855b03e224f1fa",
+      "fetched_at": "2026-09-12T22:01:45.535402+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2564684,
+        "stop": 2584683
+      },
+      "rows": 7588
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2584684_2604683.json.gz",
+      "sha256": "48e5e206cf3e422d7264a460d3882905a852e25d99e2becbadb63770bd1a6149",
+      "fetched_at": "2026-09-12T22:01:52.057031+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2584684,
+        "stop": 2604683
+      },
+      "rows": 5862
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2604684_2624683.json.gz",
+      "sha256": "f9a9b2c487fbc05339d6f1405bbe7f966bc7b28126a1c31dbf94d95607428258",
+      "fetched_at": "2026-09-12T22:02:00.674104+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2604684,
+        "stop": 2624683
+      },
+      "rows": 11677
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2624684_2644683.json.gz",
+      "sha256": "7475cacd42c2973c0e332df2c9a57338bc5ba567c54d53ea756134ceff7c8cef",
+      "fetched_at": "2026-09-12T22:02:08.814669+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2624684,
+        "stop": 2644683
+      },
+      "rows": 13085
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2644684_2664683.json.gz",
+      "sha256": "56d42a0f1fd8367fccc8172b4e3fde8017d2521dcd1ef6ac9d1694358e7e12dc",
+      "fetched_at": "2026-09-12T22:02:17.221637+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2644684,
+        "stop": 2664683
+      },
+      "rows": 17113
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2664684_2684683.json.gz",
+      "sha256": "cad37a457ce77ef8829b81759da7e506d67dd8458a7f43a22fc6507272618ca2",
+      "fetched_at": "2026-09-12T22:02:23.931604+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2664684,
+        "stop": 2684683
+      },
+      "rows": 17176
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2684684_2704683.json.gz",
+      "sha256": "52760e291d830e7db4eae79fa3a3a9481c791e5331a775df701f281a61dcf7c2",
+      "fetched_at": "2026-09-12T22:02:30.179172+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2684684,
+        "stop": 2704683
+      },
+      "rows": 16185
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2704684_2724683.json.gz",
+      "sha256": "06604ae68b357ad8105b20005eaa731607c87e86e958d0b3bd6176c6700f1fe9",
+      "fetched_at": "2026-09-12T22:02:33.681989+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2704684,
+        "stop": 2724683
+      },
+      "rows": 5323
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2724684_2744683.json.gz",
+      "sha256": "11afdae1247bbbd4fba205b383d2bbfd4054f9dd2de3c275b70262a8a90c0f0a",
+      "fetched_at": "2026-09-12T22:02:41.012590+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2724684,
+        "stop": 2744683
+      },
+      "rows": 6148
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2744684_2764683.json.gz",
+      "sha256": "58cf1c48b5cbcf305b7dba75682a1aba2bbfacae80dcaff3f07d71189d982eae",
+      "fetched_at": "2026-09-12T22:02:47.885698+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2744684,
+        "stop": 2764683
+      },
+      "rows": 5436
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2764684_2784683.json.gz",
+      "sha256": "37ca552e3290ee1137247f8ff371ea30adc39ce7138bd68f4cbffdfece4d4eac",
+      "fetched_at": "2026-09-12T22:02:55.294298+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2764684,
+        "stop": 2784683
+      },
+      "rows": 7156
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2784684_2804683.json.gz",
+      "sha256": "5bd7c7ce59a4705addf964701a54622f31d7e4cf68a98ebf0ea3868989e39408",
+      "fetched_at": "2026-09-12T22:03:01.958249+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2784684,
+        "stop": 2804683
+      },
+      "rows": 5666
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2804684_2824683.json.gz",
+      "sha256": "10b5a34fe82f614370f2c1d0a53c372a703389abfebcaaa46fa590d27ec7e8d9",
+      "fetched_at": "2026-09-12T22:03:11.393941+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2804684,
+        "stop": 2824683
+      },
+      "rows": 5048
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2824684_2844683.json.gz",
+      "sha256": "9d0c8374b89342e9c6d5bea831f2330c26c3d0a07e0067d0de11c3e14e5d223f",
+      "fetched_at": "2026-09-12T22:03:22.356894+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2824684,
+        "stop": 2844683
+      },
+      "rows": 6184
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/KCNQ1_11_2844684_2849105.json.gz",
+      "sha256": "42ad70d5eff574e962ea0d6d0ca01719a2f6f8273188e2ca7a1871eef43805f5",
+      "fetched_at": "2026-09-12T22:03:23.556775+00:00",
+      "region": {
+        "chrom": "11",
+        "start": 2844684,
+        "stop": 2849105
+      },
+      "rows": 2725
+    }
+  ]
+}

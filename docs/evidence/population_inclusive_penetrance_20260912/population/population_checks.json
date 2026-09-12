@@ -1,0 +1,16 @@
+{
+  "all_source_rows": 30101,
+  "unique_gene_allele_keys": true,
+  "carrier_identity_AC_minus_hom": true,
+  "AC0_and_QC_failures_excluded_by_population_eligible": true,
+  "noncanonical_HGVS_never_in_canonical_columns": true,
+  "zero_canonical_WT_mismatches": true,
+  "all_raw_source_hashes_match": true,
+  "all_source_counts_and_alleles_match_fresh_annotation_queries": true,
+  "cached_rebuild_byte_identical": true,
+  "output_sha256": {
+    "population_variants.csv.gz": "6915110c42954f04da4155d00053883de38e7f518aee3f95c34f125843e5f5cf",
+    "population_summary.csv": "73b31aa5d26849dde38e308e036a220e895b25b4ca146b1221bf62c6ce315c0f",
+    "population_provenance.json": "f6973119612438e81d0bc81484b0eb2ce523b2a83cfc28ad319489c03ee4e763"
+  }
+}

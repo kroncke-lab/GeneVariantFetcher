@@ -1,0 +1,37 @@
+{
+  "same_634_donor_identities": true,
+  "same_geometry_and_normalized_weights": true,
+  "same_variant_only_exclusion": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_unaffected_and_gnomad": true,
+  "allele_count_proxy_uses_AC_in_beta": true,
+  "primary_reproduces_original_run": true,
+  "no_new_regression_bandwidth_or_geometry_fitting": true,
+  "interpretation": "Sensitivity only; the primary remains the historical-MSE full-locus carrier-count prior.",
+  "script_sha256": "f566255afb318cbc3c729e8c8204cd64a08883336145d100ec51ef8fa1db32c1",
+  "inputs": {
+    "structural/GCK_structural_input_variants.csv.gz": "8d0bb09ac8834ae4233bb5f58df0555a09d86d43a9b9e0ef850bf2e96b542c81",
+    "structural/GCK_primary_variant_density.csv": "0af3962872854522f18d312e62992f3aa7e5b755f563c942b974bdecd63bd75a",
+    "analysis/empirical_prior_comparison.csv": "da262a432b373cffc766eb8ca96c72f3bade43655f99b760327d3b94f3f5ace3",
+    "structural/GCK_primary_normalized_weights.part001.csv.gz": "3d9992235f453a9550fa9d1e3b633ec049a1a68552baecf7899838e8752c41c3",
+    "structural/GCK_primary_normalized_weights.part002.csv.gz": "544900d971b99ab6ad992b630e6511015a12183ef9a5ee642315c677d0e65701",
+    "structural/GCK_primary_normalized_weights.part003.csv.gz": "926c0f597770c91a89c0cf570ad0adc987c950ef32d47b219b0ac68ff49760b4",
+    "structural/GCK_primary_normalized_weights.part004.csv.gz": "c739fb4c4f05c7a3c7d8af238eb975ac00b18f8ad3ff00228bcd47408340ff4b",
+    "structural/GCK_primary_normalized_weights.part005.csv.gz": "2eaf8288be0c2b41e6f9ecd7ce265f465d51c05c7e45a2993e9f50ebe97f5ea5",
+    "structural/GCK_primary_normalized_weights.part006.csv.gz": "c415aabcec25f294d2887793db1e920013a635a34820bd0453e3afd3fda9455d",
+    "structural/GCK_primary_normalized_weights.part007.csv.gz": "797f626d0977b0924dc03e4bf0aa4676523806aa2ce8360628a7311ae2aa3028",
+    "structural/GCK_primary_normalized_weights.part008.csv.gz": "d6b6a8637da55778eb435fc36867a4ce9543c0194b57013dd38233a3c06ebb66",
+    "structural/GCK_primary_normalized_weights.part009.csv.gz": "fb33ffc8d54ab842a374e7f130dddb14bb6622663cf53fcbff43ba34600bcd14",
+    "structural/GCK_primary_normalized_weights.part010.csv.gz": "c4377ec69e97fe1f6d1a4ed7972e3ddb175db854675a1b96a2b4f39fea49a8ab",
+    "structural/GCK_primary_normalized_weights.part011.csv.gz": "16af84014e6354a590dd3466199772b5ff44e28b4e29d18fa9b5f001b01f7bfc",
+    "structural/GCK_primary_normalized_weights.part012.csv.gz": "2bff60ab3f76cdda403720dcc2235ed501511a59aea0546cd5908787fc02e53d",
+    "structural/GCK_primary_normalized_weights.part013.csv.gz": "e3a4e5a93a1b8f9b1dbbfe9fe1be41c74ff0feba6fceb47dcedc617f28b3a9b4",
+    "structural/GCK_primary_normalized_weights.part014.csv.gz": "8554833b59510d06ed620480bd968695b0e3f45d78c8d16eac3bf80f1105392c",
+    "structural/GCK_primary_normalized_weights.part015.csv.gz": "ab64d2b039233cff4d098fcdd97a22bd409780560e07c9b33f2bb0694b502202",
+    "structural/GCK_primary_normalized_weights.part016.csv.gz": "f15e02029a0a5659a337dce088487fddb96801aca833bd16b707af7bc53d597a"
+  },
+  "outputs": {
+    "GCK_fixed_geometry_prior_sensitivity.csv.gz": "ee584ba88babf4ce40c0b39b69ab5549f93705d454da98008a8450e5769e5b15",
+    "GCK_fixed_geometry_prior_sensitivity_summary.csv": "1f3d4967197648003e59b41db9078335a0a8cf3cbc60868ea4dd07c97d722ab4"
+  }
+}

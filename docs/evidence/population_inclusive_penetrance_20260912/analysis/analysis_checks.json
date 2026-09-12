@@ -1,0 +1,15 @@
+{
+  "union_units": 180613,
+  "unique_units": true,
+  "genes": [
+    "HNF1A",
+    "GCK",
+    "LDLR",
+    "BRCA2",
+    "KCNQ1"
+  ],
+  "predictor_join": "exact genomic members only; disagreements and absent scores stay missing; no archive fallback in this five-gene comparison",
+  "predictor_inventory_scope": "original canonical gene footprint; region-only extra alleles unscored",
+  "prior_has_no_predictor_input": true,
+  "figure_count": 3
+}

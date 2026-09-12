@@ -1,0 +1,13 @@
+{
+  "analysis_tests_passed": 38,
+  "PPA_tests_passed": 191,
+  "analysis_test_command": "../BayesianPenetranceEstimator/.venv/bin/python -m pytest docs/evidence/population_inclusive_penetrance_20260912 -q",
+  "byte_identical_union_replay_tables": 114,
+  "predictor_snapshot_rows_reconstructed": 30101,
+  "structural_donor_rows_reconstructed": 376382,
+  "positive_structural_pairs_beyond_20_angstrom": 278640,
+  "source_count_and_identity_checks_passed": true,
+  "pre_commit_hooks_passed": true,
+  "scientific_figures_visually_inspected": 5,
+  "unrelated_existing_work_preserved": true
+}

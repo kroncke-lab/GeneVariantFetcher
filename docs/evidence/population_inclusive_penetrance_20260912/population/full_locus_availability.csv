@@ -1,0 +1,6 @@
+gene,chrom,start_grch38,stop_grch38,span_bp,current_scope,official_region_api_support,region_request_span_limit_bp,region_request_variant_limit,full_locus_download_status
+GCK,7,44143213,44198170,54958,gene CDS union plus75bp; not full locus,True,2500000,30000,not_requested; avoid delaying current pilot
+HNF1A,12,120978543,121002512,23970,gene CDS union plus75bp; not full locus,True,2500000,30000,not_requested; avoid delaying current pilot
+LDLR,19,11089462,11133820,44359,gene CDS union plus75bp; not full locus,True,2500000,30000,not_requested; avoid delaying current pilot
+BRCA2,13,32315086,32400268,85183,gene CDS union plus75bp; not full locus,True,2500000,30000,not_requested; avoid delaying current pilot
+KCNQ1,11,2444684,2849105,404422,gene CDS union plus75bp; not full locus,True,2500000,30000,not_requested; avoid delaying current pilot

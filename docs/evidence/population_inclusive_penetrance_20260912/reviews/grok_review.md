@@ -1,0 +1,40 @@
+# Grok updated mathematical review — 2026-09-12
+
+Scope: abstract mathematical method only, no source access or independent data verification. Requested model grok-4.6; response model and usage preserved in grok_corrected_raw.json. Requested reasoning low for bounded turnaround.
+
+**Review of the abstract historical-Beta + spatial-density procedure**
+
+**(1) Moments, orientation, and variance normalization**
+
+The estimator is internally consistent. For each observed unit, \(y_i=A_i/n_i\) is a sample penetrance, \(w_i=1-1/(n_i+0.01)\) is a bounded, increasing function of sample size (not inverse-variance), \(\mu\) is a weighted mean of those rates, and \(v\) is a weighted second-moment about \(\mu\) divided by \(M\), not by \(\sum w_i\) or \(M-1\). Then \(S=\mu(1-\mu)/v-1\) and \(\alpha=\mu S\), \(\beta=(1-\mu)S\) recover a Beta whose mean is \(\mu\) and whose method-of-moments variance is \(\mu(1-\mu)/(S+1)=v\). Posterior \(\mathrm{Beta}(\alpha+A_i,\beta+U_i)\) is correctly oriented: affected inflate \(\alpha\), unaffected/population carriers inflate \(\beta\).
+
+The \(v\) divisor \(M\) is a historical choice, not a silent error. Dividing by \(M\) treats the weighted sum of squared deviations as if it were an unweighted total over \(M\) units. Because \(w_i<1\), this inflates \(v\) relative to the usual weighted variance \(\sum w_i(y_i-\mu)^2/\sum w_i\), which shrinks \(S\) and thus \(\alpha,\beta\). The sensitivity that normalizes by \(\sum w_i\) is therefore a different (typically more concentrated) prior, not a correction of arithmetic. The numerical example is coherent: \(\mu=0.01989\), \(S=2.16056\) give \(\alpha\approx0.043\), \(\beta\approx2.118\); a 1/0 clinical unit has posterior mean \(\approx0.33\); a 0/1 population singleton has a small positive mean \(\alpha/(\alpha+\beta+1)\). Valid Beta moments require \(v<\mu(1-\mu)\) and \(S>0\); otherwise \(\alpha,\beta\) are invalid and should be reported as such rather than patched.
+
+**(2) Full-span prior vs missense estimand**
+
+The gene-level \(\alpha,\beta\) are estimated on the primary population universe (full gene span plus padding), mixing coding, splice, and noncoding observed units. Structural density then uses only eligible canonical missense units. Those are different estimands: the shared prior is a gene-wide mixture rate, not a missense-restricted rate. Coding/splice-only and prior-footprint sensitivities can show how \(\mu\) (and thus shrinkage) moves when the population universe is restricted; they cannot make the full-span prior a missense prior. Full-span additions lowering \(\mu\) versus coding-only is expected if extra units are mostly unaffected carriers. Using that lower prior for missense posteriors is an intentional pooling assumption, not a coding error.
+
+**(3) Residual dependence (variant-only leave-out)**
+
+Leave-out is variant-level: the target’s own donor weight is zero; other alleles at the same residue remain; density features for all training targets drop every outer held-out variant globally. That answers a variant-only question and should not be recast as residue holdout.
+
+Two residual leaks remain. First, \(\alpha,\beta\) are fit on the full gene, including the held-out unit’s \(A,U\). One observation among \(M\) is usually small, but for rare genes or high-\(n_i\) units it slightly ties every posterior mean to the left-out target. Second, same-residue (and nearby) donors share protein neighborhood, so spatial features remain dependent even after dropping the exact allele. Neither is a bug relative to the stated design; both limit how independent a “held-out” density or regression residual is.
+
+**(4) Predicting posterior means, distance-only kernel, conditional intervals**
+
+The regression target is each variant’s empirical posterior mean, not a person-level Bernoulli. Fit and reported error therefore describe reproduction of a shrinkage statistic, not calibration to independent clinical outcomes. Restricting evaluation to original clinical targets while keeping the larger donor pool is a coherent secondary comparison of the same quantity on a different target set.
+
+The kernel \(k(d)=2/(1+\exp(\log 3\cdot d/h))\) with \(h=3\,\text{Å}\) is a distance-only sigmoid, half-weight at \(3\,\text{Å}\), no inverse-variance or \(n_i\) multiplier. Local averages can be dominated by nearby population-only singletons whose posterior means sit near the gene prior. That is the model, not an omission.
+
+Uncertainty intervals from independent Beta draws at fixed \(\alpha,\beta\) and fixed spatial weights are conditional on those hyperparameters and on the kernel. They omit uncertainty in \(\mu,S\), in donor identities, and in \(h\). They are not unconditional predictive intervals.
+
+**(5) Data-grain caveat**
+
+Units are alleles (protein-only clinical counts rolled onto matching canonical genomic alleles; unmatched population alleles stay separate). \(U_i\) mixes clinical unaffecteds with QC-passing population carriers treated as unaffected. Carrier count is joint AC minus homozygotes with AC \(\ge 2\cdot\)hom. Ambiguous identity matches are excluded from numerators and held in an audit ledger. Grain is therefore variant-level, not independent persons; multiple observations of one allele are already collapsed into \(A_i,U_i\). Hypothetical unobserved alleles are correctly never used as negatives.
+
+**(6) Follow-up checks (at most four)**
+
+1. For each gene, verify \(0<v<\mu(1-\mu)\) so \(S>0\), and recompute \(\alpha,\beta\) under \(v\) normalized by \(\sum w_i\) only as the already-specified sensitivity.
+2. Report \(\mu,S\) on full-span vs coding/splice vs missense-only units to quantify how much the shared prior differs from the missense estimand.
+3. One-gene diagnostic: refit \(\alpha,\beta\) after dropping a high-\(n_i\) unit and measure shift in that unit’s posterior mean and in nearby density features.
+4. Compare regression residuals when same-residue other alleles are or are not in the donor pool, without changing the variant-only holdout rule.

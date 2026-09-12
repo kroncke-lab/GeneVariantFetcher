@@ -1,0 +1,70 @@
+{
+  "gene": "LDLR",
+  "gnomad_release": "4.1.1",
+  "dataset_selector": "gnomad_r4",
+  "interval": {
+    "chrom": "19",
+    "start": 11089462,
+    "stop": 11133820,
+    "reference_genome": "GRCh38"
+  },
+  "source_rows": 24225,
+  "observed_joint_ac_positive": 16331,
+  "observed_qc_pass": 14385,
+  "joint_carriers_qc_pass": 16363132,
+  "joint_ac_qc_pass": 21385668,
+  "joint_hom_qc_pass": 5022536,
+  "prior_footprint_overlap_rows": 5497,
+  "all_overlap_alleles_counts_filters_exact_match": true,
+  "deduplicated_identical_chunk_rows": 0,
+  "successful_region_requests": 3,
+  "complete_interval_coverage_verified": true,
+  "output_files": [
+    {
+      "file": "LDLR_population_variants.csv.gz",
+      "bytes": 427314,
+      "sha256": "305ab2b7f11d37eff577762bfc541b6352f0a2a3208b4eab926233dd27e9980d",
+      "rows": 24225
+    }
+  ],
+  "output_bytes": 427314,
+  "source_scope": "All returned small variants whose POS is within the exact genomic gene span; no coding-consequence filter. Structural variants/CNVs require separate endpoints.",
+  "annotation_policy": "No protein annotation inferred for region-only records. Join canonical annotations from the earlier snapshot by exact genomic allele ID; preserve unmapped state.",
+  "carrier_policy": "joint AC minus joint homozygote count, once per allele; gnomAD carriers assumed unaffected",
+  "qc_policy": "Every present assay must PASS; absent assay permitted. Preserve raw joint API filters separately.",
+  "sources": [
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/LDLR_19_11089462_11109461.json.gz",
+      "sha256": "c168e24a99c2ac88783fea9c321d4bfb59d52b3c5076b73d556bcee69c11d333",
+      "fetched_at": "2026-09-12T22:00:09.270766+00:00",
+      "region": {
+        "chrom": "19",
+        "start": 11089462,
+        "stop": 11109461
+      },
+      "rows": 9875
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/LDLR_19_11109462_11129461.json.gz",
+      "sha256": "b211081085d8091be5a4125578429acea0d09c714d33771b8a06475591119857",
+      "fetched_at": "2026-09-12T22:00:16.034138+00:00",
+      "region": {
+        "chrom": "19",
+        "start": 11109462,
+        "stop": 11129461
+      },
+      "rows": 10720
+    },
+    {
+      "raw_file": "results/population_inclusive_penetrance_20260912/raw/full_locus/LDLR_19_11129462_11133820.json.gz",
+      "sha256": "ab56eb6f4577b9e8b8d6428bd7ecd77e4cdc38c23160a1bf7de379c8da915211",
+      "fetched_at": "2026-09-12T22:00:20.534605+00:00",
+      "region": {
+        "chrom": "19",
+        "start": 11129462,
+        "stop": 11133820
+      },
+      "rows": 3630
+    }
+  ]
+}
