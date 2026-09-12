@@ -1,5 +1,12 @@
 # Grok consultation: disposition
 
+Subsequent user clarification supersedes the compact-sine choice discussed in
+these reviews: the active plan uses the reviewed normalized sigmoid
+`2/(1+exp(log(3)*d/3))`, with a positive tail and no hard 20 Å or sequence cutoff.
+Earlier compact-sine recommendations remain as review history. Empirical
+posterior donors, variant-only exclusion and the polymer distance rule remain
+the same.
+
 The user explicitly requested Grok's help with all four methodological steps.
 Two tool-disabled, verbatim reviews were requested using the local Grok CLI:
 the first discussed the user's instructions and generic math; the second added

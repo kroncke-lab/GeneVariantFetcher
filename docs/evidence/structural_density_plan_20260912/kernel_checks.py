@@ -1,7 +1,9 @@
 """Reproduce the proposed kernel preflight without any structure or model jobs.
 
 Run from any directory with Python 3.10+; no third-party packages are required.
-Outputs are adjacent to this script. The sine function preserves the historical
+Outputs are adjacent to this script. Primary: normalized sigmoid h=3, with no
+hard cutoff at 20 Angstrom or at a polymer sequence separation. The sine
+function is historical reference only; it preserves the historical
 formula, replacing rounded 3.14 boundaries with math.pi. Its midpoint is an
 absolute weight of 0.5; for small midpoints K(0) is below 1. The normalized
 sigmoid has K(0)=1 and K(h)=0.5 exactly (up to floating-point error).
@@ -50,6 +52,12 @@ def make_rows() -> list[dict]:
         "zero": 0.0,
         "2A": 2.0,
         "3A": 3.0,
+        "6A": 6.0,
+        "10A": 10.0,
+        "15A": 15.0,
+        "20A": 20.0,
+        "25A": 25.0,
+        "40A": 40.0,
         "adjacent_baseline": 3.8,
         "two_apart_baseline": 3.8 * math.sqrt(2),
         "three_apart_baseline": 3.8 * math.sqrt(3),
@@ -64,7 +72,7 @@ def make_rows() -> list[dict]:
         for label, distance in distances.items()
     ]
     for label, b, nu in POLYMERS:
-        for separation in (*range(11), 20, 30):
+        for separation in (*range(11), 20, 25, 30, 31, 100):
             positions.append(
                 (
                     "polymer_probe",
@@ -94,6 +102,13 @@ def make_rows() -> list[dict]:
                         "sequence_separation": separation,
                         "distance_angstrom": distance,
                         "kernel": kernel_name,
+                        "analysis_role": (
+                            "historical_reference_only"
+                            if kernel_name == "historical_sine_pi_cleanup"
+                            else "primary"
+                            if half_distance == 3.0
+                            else "positive_tail_sensitivity"
+                        ),
                         "midpoint_or_half_distance_angstrom": half_distance,
                         "weight": value,
                         "weight_at_zero": zero_weight,
@@ -138,8 +153,27 @@ def check() -> dict:
         ]
     assert support["historical_baseline"] == [0, 1, 2]
     assert support["existing_ppa"] == [0, 1]
+    for midpoint in HALF_DISTANCES:
+        assert 0 < normalized_sigmoid(25, midpoint) < normalized_sigmoid(20, midpoint)
+        assert 0 < normalized_sigmoid(40, midpoint) < normalized_sigmoid(25, midpoint)
+        for _, b, nu in POLYMERS:
+            assert all(
+                normalized_sigmoid(polymer_distance(n, b, nu), midpoint) > 0
+                for n in range(1001)
+            )
+    primary_anchors = {
+        str(distance): normalized_sigmoid(distance, 3)
+        for distance in [0, 3, 6, 10, 15, 20, 25, 40]
+    }
+    assert math.isclose(primary_anchors["20"], 0.001318060433707166, rel_tol=1e-10)
     return {
         "passed": True,
+        "primary_kernel": "normalized_sigmoid",
+        "primary_half_distance_angstrom": 3,
+        "hard_distance_cutoff": None,
+        "hard_sequence_cutoff": None,
+        "primary_distance_weights": primary_anchors,
+        "primary_positive_polymer_weights_tested_N0_through_1000": True,
         "scope": "Numerical preflight only; no structure, density fit, or validation run",
         "source": (
             "https://github.com/kroncke-lab/Bayes_BrS1_Penetrance/"
@@ -152,8 +186,11 @@ def check() -> dict:
         "polymer_models": [
             {"label": label, "b_angstrom": b, "nu": nu} for label, b, nu in POLYMERS
         ],
-        "nonzero_sine_a3_sequence_separations_tested_0_through_100": support,
+        "historical_reference_only_nonzero_sine_a3_sequence_separations": support,
         "notes": [
+            "User clarification selects the sigmoid with a positive tail; compact sine is historical reference only.",
+            "20 Angstrom is a downweighting reference, not a radius cutoff.",
+            "All eligible same-IDR sequence offsets contribute; no +/-30-residue window is imposed.",
             "The sine midpoint is absolute half weight, not exactly half of K(0) when a<pi.",
             "Sine a=3 K(0) is approximately 0.998747; a=2 K(0) is approximately 0.920735.",
             "N=0 may retain other substitutions at the target residue after variant-only LOO.",

@@ -4,6 +4,9 @@ Final execution choices are in [PLAN.md](PLAN.md). In particular, the final
 primary polymer path requires both endpoints in the same IDR on the same chain;
 mixed ordered/IDR geometry stays unavailable. Earlier suggestions below to
 route a pair when either endpoint is disordered are superseded by that rule.
+The user subsequently selected a positive-tail sigmoid with half weight at 3 Å
+and strong downweighting toward 20 Å. The compact sine and N<=2 statements
+below describe the recovered historical method, not the current primary plan.
 
 Read-only inspection of ProteinProximityAnalysis (PPA), its saved outputs, BayesianPenetranceEstimator (BPE), and the author's public historical code. No sibling code, data, or Git state changed. No structure prediction or full analysis run performed.
 

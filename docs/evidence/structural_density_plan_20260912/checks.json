@@ -1,5 +1,20 @@
 {
   "passed": true,
+  "primary_kernel": "normalized_sigmoid",
+  "primary_half_distance_angstrom": 3,
+  "hard_distance_cutoff": null,
+  "hard_sequence_cutoff": null,
+  "primary_distance_weights": {
+    "0": 1.0,
+    "3": 0.5,
+    "6": 0.19999999999999996,
+    "10": 0.05007418691300718,
+    "15": 0.008196721311475412,
+    "20": 0.001318060433708577,
+    "25": 0.0002113360793244921,
+    "40": 8.697873301861758e-07
+  },
+  "primary_positive_polymer_weights_tested_N0_through_1000": true,
   "scope": "Numerical preflight only; no structure, density fit, or validation run",
   "source": "https://github.com/kroncke-lab/Bayes_BrS1_Penetrance/blob/master/func_dist_seq.R",
   "sine_numerical_change": "Use math.pi in boundaries instead of rounded 3.14",
@@ -46,7 +61,7 @@
       "nu": 0.55
     }
   ],
-  "nonzero_sine_a3_sequence_separations_tested_0_through_100": {
+  "historical_reference_only_nonzero_sine_a3_sequence_separations": {
     "historical_baseline": [
       0,
       1,
@@ -58,11 +73,14 @@
     ]
   },
   "notes": [
+    "User clarification selects the sigmoid with a positive tail; compact sine is historical reference only.",
+    "20 Angstrom is a downweighting reference, not a radius cutoff.",
+    "All eligible same-IDR sequence offsets contribute; no +/-30-residue window is imposed.",
     "The sine midpoint is absolute half weight, not exactly half of K(0) when a<pi.",
     "Sine a=3 K(0) is approximately 0.998747; a=2 K(0) is approximately 0.920735.",
     "N=0 may retain other substitutions at the target residue after variant-only LOO.",
     "No remaining donors means missing density and zero support; do not widen silently.",
     "Positive sigmoid weights at longer distances do not establish useful support."
   ],
-  "csv_rows": 234
+  "csv_rows": 306
 }

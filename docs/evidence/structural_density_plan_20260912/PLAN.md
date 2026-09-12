@@ -5,6 +5,11 @@ structural execution has not started. This plan implements the user's four
 choices and supersedes the earlier proposed raw-count donor / whole-residue
 holdout experiment for this analysis lane.
 
+Kernel amendment, 2026-09-12: the user clarified that distance weights must
+remain positive while becoming very small toward 20 Å. The primary is now a
+normalized sigmoid with no hard distance cutoff. The earlier compact-sine
+choice and its one-/two-residue polymer limit are superseded.
+
 ## Fixed choices
 
 1. Leave out only the target variant. Other variants at the same residue remain
@@ -13,8 +18,9 @@ holdout experiment for this analysis lane.
    for each gene–disease endpoint. Update it with each variant's counts. Use
    those empirical posterior means as density donors. AlphaMissense does not
    enter this step. gnomAD counts remain assumed unaffected.
-3. Begin with the historical compact sine kernel, midpoint 3 Å, and run a small
-   prespecified distance sensitivity. Use an explicitly documented metric
+3. Use a normalized sigmoid, half weight at 3 Å, strongly downweighted toward
+   20 Å with a positive tail beyond it. No hard cutoff. Run a small
+   prespecified half-distance sensitivity. Use an explicitly documented metric
    based on the historical centroid concept; the exact old atom selection is
    not recovered, so do not claim exact geometry reproduction.
 4. Use polymer distances in disordered sections and correctly numbered
@@ -142,24 +148,40 @@ density. This incorporates
 interfaces without multiplying clinical observations by oligomer copy count.
 Record this copy-collapse rule as a new explicit implementation choice.
 
-## 3. Historical compact kernel and sensitivity
+## 3. Positive-tail kernel and sensitivity
 
 The recovered [original function](https://github.com/kroncke-lab/Bayes_BrS1_Penetrance/blob/master/func_dist_seq.R)
-uses a compact sine transition, with midpoint a:
+offers both compact sine and sigmoid forms. The user's clarification selects
+a sigmoid with a positive tail. Normalize and parameterize it as:
 
 ```text
-K(d; a) = 1                           if d <= a - pi
-          0.5 - 0.5*sin((d-a)/2)      if a-pi < d <= a+pi
-          0                           if d > a + pi
+K(d; h) = 2 / (1 + exp(log(3) * d / h))
+primary h = 3 Å
 ```
 
-Use a=3 Å as primary: K(3)=0.5, K(0) is approximately 0.999, and support ends at
-approximately 6.14 Å. The original code uses 3.14 for pi; mathematical pi is the
-documented numerical cleanup. Density normalization makes the negligible
-zero-distance scale difference unimportant. Prespecified half-distance
-sensitivity: a in {2, 3, 5} Å; report K(0) as well because a<pi does not have a
-full unit-weight plateau. Also test the historical sigmoid as a labeled shape
-comparison, normalized/tuned to the same relative half-distance.
+This gives K(0)=1 and K(3)=0.5. Its decline is:
+
+| Distance | Relative donor weight |
+|---|---:|
+| 3 Å | 50% |
+| 6 Å | 20% |
+| 10 Å | 5.007% |
+| 15 Å | 0.820% |
+| 20 Å | 0.132% |
+| 25 Å | 0.0211% |
+
+Twenty angstroms is a decay reference, not an exclusion radius. Do not truncate
+candidate donors at 20 Å, apply a minimum-weight floor that turns small weights
+into zero, or restrict polymer sequence offsets to one or two residues.
+Prespecified half-distance sensitivity: h in {2, 3, 5} Å, all with positive
+tails. The old compact sine remains a historical reference only. Use stable
+exponential/log-weight arithmetic for remote donors when necessary.
+Use coordinate-derived streamed distances rather than relying only on cached
+20 Å neighbor tables, whose omitted pairs would otherwise lose their tail
+weights. Report the fraction of total weight arising beyond 20 Å because many
+small weights can accumulate. A normalized weighted average does not itself
+shrink toward the empirical baseline just because all donors are distant;
+any later support-based shrinkage must be a separate explicit model choice.
 
 The original source describes residue-centroid distances. Current PPA density
 uses C-alpha coordinates, so add an explicit coordinate/metric contract.
@@ -205,13 +227,16 @@ B-factors are not pLDDT. Preserve independent disorder annotations where
 available and record the evidence for every segment assignment. More permissive
 predicted-coordinate eligibility is a labeled sensitivity, not a silent change.
 
-The requested short kernel has a concrete consequence: with a=3 Å and
-3.8*sqrt(N), polymer donors with N>=3 lie beyond the cutoff. Apart from another
-variant at the same residue, only positions one or two residues away can
-contribute. Keep that primary setting and explicitly report sparse/no-donor
-regions; test wider distance settings rather than inventing contacts. With no
-eligible donors, density is missing and the downstream model can fall back to
-the gene empirical prior with a missing-density flag.
+Feed the polymer distance into the same sigmoid. A donor three residues away
+has d=6.58 Å and weight 16.48%; nine residues away has d=11.4 Å and weight 3.03%;
+25 residues away has d=19 Å and weight 0.190%. More distant eligible donors
+continue to contribute with smaller weights. There is no sequence-distance
+cutoff, including no inherited +/-30-residue scan limit, within the eligible
+same-chain IDR segment. Eligibility and geometry exclusions still apply.
+Report total kernel mass and donor distances: a nonempty distant neighborhood
+can have tiny support even though a normalized weighted average is calculable.
+With no eligible donors, density is missing and the downstream model can fall
+back to the gene empirical prior with a missing-density flag.
 
 ### First biological unit and expansion order
 
@@ -250,12 +275,14 @@ discard all empirical posteriors for a partially mapped protein.
    interpreting structural differences.
 4. **Extend PPA's variant-specific density API.** Preserve target/donor IDs
    through preprocessing and chain expansion; add target-only variant exclusion,
-   the compact kernel, equal-variant donor weights, copy collapse, pairwise
+   the positive-tail sigmoid, equal-variant donor weights, copy collapse, pairwise
    disorder routing and missing canonical rows. Keep the current historical
    PPA output path reproducible under a separately named legacy mode.
 5. **Validate geometry and exclusion.** Tests must show R100W is excluded on
    every equivalent chain while R100Q is retained; duplicate observations/copy
-   count do not add carriers; K(3)=0.5 and the cutoff is exact; numbering shifts
+   count do not add carriers; K(3)=0.5, K(20)>0 and donors beyond 20 Å retain
+   smaller positive weights; no radius/weight/sequence cutoff is introduced;
+   numbering shifts
    and WT mismatches fail; N uses canonical separation; IDR donor coordinates
    cannot create tertiary contacts; unrelated chains/fragments do not gain
    polymer contacts; zero-donor rows remain missing with an explicit fallback.

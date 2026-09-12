@@ -66,8 +66,10 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       gene dataset, then update each variant with affected and unaffected
       counts (gnomAD assumed unaffected). Use equal-variant posterior donors;
       exclude only the target variant across all chain copies. Keep other
-      substitutions at its residue. Begin with the recovered sine kernel,
-      midpoint 3 Angstrom, and 3.8*sqrt(sequence separation) polymer fallback
+      substitutions at its residue. Use the clarified normalized sigmoid:
+      half weight at 3 Angstrom, about 0.132% at 20 Angstrom, with a positive
+      tail beyond 20 and no hard distance or sequence cutoff. Apply
+      3.8*sqrt(sequence separation) polymer fallback
       within disordered segments. Validate isoform/canonical numbering in a
       complete biological monomer, propagate the explicit centroid metric,
       retain support/missingness, and test the planned kernel sensitivities.
