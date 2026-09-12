@@ -4,3 +4,5 @@
 /benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_baseline/**/*.csv -text
 /benchmarks/codex_paper_eval/runs/20260905_protocol_cont120_03_candidate/**/*.csv -text
 /benchmarks/codex_paper_eval/runs/20260905_supplement1_source_check/**/*.csv -text
+# Preserve frozen geometry CSV byte hashes used by the structural pilot replay.
+/docs/evidence/gck_structural_pilot_20260912/geometry/*.csv -text whitespace=cr-at-eol
