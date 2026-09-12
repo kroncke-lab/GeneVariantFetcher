@@ -1,0 +1,1052 @@
+{
+  "date": "2026-09-12",
+  "assumption": "Every gnomad_added observation is treated as unaffected, as requested.",
+  "universe": "Frozen insilico protocol rows: retained literature variants with usable phenotype counts; population-only variants absent.",
+  "unit": "Per-variant rows and variant-carrier observations; counts summed across variants are not unique individuals.",
+  "prior": "insilico_prior_mean; feature-conditioned mean fitted to these counts using truncation, AlphaMissense, and AlphaMissense missingness.",
+  "pseudo_counts": "Prior equivalent A=S*p0 and U=S*(1-p0), S=10; model weights, not observed people.",
+  "mean_formula": "p_mean=(affected+S*p0)/(affected+unaffected_total+S). Saved posterior means use Monte Carlo draws, so differ slightly.",
+  "correlation_note": "Descriptive Spearman rank correlation; no independent validation or causal interpretation. AlphaMissense is an input to this prior.",
+  "genes": {
+    "HNF1A": {
+      "source_sha256": "76f9ed06e495edab98ab6a2e2b58c3f29266fdf2fde12baa6c7e39ae94fed633",
+      "fit_summary_sha256": "97d2139b49ac85637b3e3cb9c791eeba7ae7b20dfdffdb2c5f72711af9274519",
+      "variants": 233,
+      "prior_strength": 10.0,
+      "distributions": {
+        "prior_mean": {
+          "n": 233,
+          "min": 0.0005327156687507,
+          "q25": 0.1886279221793141,
+          "median": 0.8286423361924622,
+          "q75": 0.8778061718680374,
+          "max": 0.9471708370899312,
+          "mean": 0.6248393501283196
+        },
+        "prior_affected": {
+          "n": 233,
+          "min": 0.0053271566875070005,
+          "q25": 1.886279221793141,
+          "median": 8.286423361924623,
+          "q75": 8.778061718680375,
+          "max": 9.471708370899313,
+          "mean": 6.248393501283196
+        },
+        "prior_unaffected": {
+          "n": 233,
+          "min": 0.5282916291006878,
+          "q25": 1.2219382813196256,
+          "median": 1.713576638075378,
+          "q75": 8.113720778206858,
+          "max": 9.994672843312493,
+          "mean": 3.7516064987168045
+        },
+        "prior_weight": {
+          "n": 233,
+          "min": 0.00011314393039385403,
+          "q25": 0.6666666666666666,
+          "median": 0.8333333333333334,
+          "q75": 0.9090909090909091,
+          "max": 0.9090909090909091,
+          "mean": 0.7434766361948765
+        },
+        "affected": {
+          "n": 233,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 3.0,
+          "max": 70.0,
+          "mean": 3.2660944206008584
+        },
+        "unaffected_literature": {
+          "n": 233,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 23.0,
+          "mean": 0.49356223175965663
+        },
+        "gnomad_added": {
+          "n": 233,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 88280.0,
+          "mean": 770.8583690987125
+        },
+        "unaffected_total": {
+          "n": 233,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 88303.0,
+          "mean": 771.3519313304721
+        },
+        "n": {
+          "n": 233,
+          "min": 1.0,
+          "q25": 1.0,
+          "median": 2.0,
+          "q75": 5.0,
+          "max": 88373.0,
+          "mean": 774.618025751073
+        },
+        "count_fraction": {
+          "n": 233,
+          "min": 0.0,
+          "q25": 0.6666666666666666,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 1.0,
+          "mean": 0.7977521674250716
+        },
+        "posterior_mean": {
+          "n": 233,
+          "min": 1.2363857051683382e-05,
+          "q25": 0.2973619599376526,
+          "median": 0.8437136733313207,
+          "q75": 0.8893898292845862,
+          "max": 0.96746968198674,
+          "mean": 0.6511055222984573
+        },
+        "posterior_minus_prior": {
+          "n": 233,
+          "min": -0.48979145005433133,
+          "q25": 0.009701552634439059,
+          "median": 0.016047460882373077,
+          "q75": 0.0555112938239114,
+          "max": 0.6463488954746136,
+          "mean": 0.026266172170137707
+        }
+      },
+      "sums": {
+        "affected": 761.0,
+        "unaffected_literature": 115.0,
+        "gnomad_added": 179610.0,
+        "unaffected_total": 179725.0,
+        "n": 180486.0
+      },
+      "pooled_count_fraction": 0.004216393515286504,
+      "pooled_literature_fraction": 0.8687214611872146,
+      "gnomad_positive_variants": 66,
+      "unaffected_literature_positive_variants": 28,
+      "zero_affected_variants": 4,
+      "zero_unaffected_variants": 157,
+      "prior_majority_variants": 198,
+      "prior_90pct_variants": 101,
+      "count_majority_variants": 30,
+      "am_present": 145,
+      "truncating": 70,
+      "gnomad_concentration": {
+        "top_1_variant_share": 0.4915093814375592,
+        "top_5_variant_share": 0.9968320249429319,
+        "top_10_variant_share": 0.998351984856077
+      },
+      "largest_gnomad_rows": [
+        {
+          "key": "I27L",
+          "affected": 70.0,
+          "unaffected_literature": 23.0,
+          "gnomad_added": 88280.0,
+          "prior_mean": 0.001189865,
+          "posterior_mean": 0.000791237
+        },
+        {
+          "key": "S487N",
+          "affected": 1.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 83546.0,
+          "prior_mean": 0.0011175981,
+          "posterior_mean": 1.23639e-05
+        },
+        {
+          "key": "A98V",
+          "affected": 44.0,
+          "unaffected_literature": 3.0,
+          "gnomad_added": 6974.0,
+          "prior_mean": 0.0037732955,
+          "posterior_mean": 0.0062721376
+        },
+        {
+          "key": "E508K",
+          "affected": 56.0,
+          "unaffected_literature": 12.0,
+          "gnomad_added": 122.0,
+          "prior_mean": 0.1216123272,
+          "posterior_mean": 0.285793796
+        },
+        {
+          "key": "G31D",
+          "affected": 9.0,
+          "unaffected_literature": 2.0,
+          "gnomad_added": 119.0,
+          "prior_mean": 0.0013473436,
+          "posterior_mean": 0.0646014498
+        }
+      ],
+      "prior_count_correlations": {
+        "affected": {
+          "n": 233,
+          "spearman_rho": 0.06753937587095339
+        },
+        "unaffected_literature": {
+          "n": 233,
+          "spearman_rho": -0.2100779804939665
+        },
+        "gnomad_added": {
+          "n": 233,
+          "spearman_rho": -0.5411219713317525
+        },
+        "unaffected_total": {
+          "n": 233,
+          "spearman_rho": -0.5323847640482933
+        },
+        "n": {
+          "n": 233,
+          "spearman_rho": -0.3293251757989538
+        },
+        "count_fraction": {
+          "n": 233,
+          "spearman_rho": 0.5516470655638234
+        }
+      },
+      "analytic_saved_abs_diff_max": 0.00504570078819544
+    },
+    "GCK": {
+      "source_sha256": "ecc5c1550f4b2ce6ecdf4eaf033eff88128e95292f19e2848ac7d782353f9edf",
+      "fit_summary_sha256": "2bd32cd0da63367750abdde15a9aa1b79cca67d6c35ef80091e95fdbc930a6a5",
+      "variants": 391,
+      "prior_strength": 10.0,
+      "distributions": {
+        "prior_mean": {
+          "n": 391,
+          "min": 0.0561768024392122,
+          "q25": 0.8239014340400451,
+          "median": 0.9281096466770936,
+          "q75": 0.943799143650952,
+          "max": 0.961710047716498,
+          "mean": 0.8045047852837045
+        },
+        "prior_affected": {
+          "n": 391,
+          "min": 0.561768024392122,
+          "q25": 8.239014340400452,
+          "median": 9.281096466770936,
+          "q75": 9.43799143650952,
+          "max": 9.61710047716498,
+          "mean": 8.045047852837044
+        },
+        "prior_unaffected": {
+          "n": 391,
+          "min": 0.3828995228350196,
+          "q25": 0.5620085634904803,
+          "median": 0.7189035332290639,
+          "q75": 1.7609856595995488,
+          "max": 9.438231975607877,
+          "mean": 1.9549521471629552
+        },
+        "prior_weight": {
+          "n": 391,
+          "min": 0.01053740779768177,
+          "q25": 0.7692307692307693,
+          "median": 0.8333333333333334,
+          "q75": 0.9090909090909091,
+          "max": 0.9090909090909091,
+          "mean": 0.8093608487471966
+        },
+        "affected": {
+          "n": 391,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 3.0,
+          "max": 22.0,
+          "mean": 2.360613810741688
+        },
+        "unaffected_literature": {
+          "n": 391,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 25.0,
+          "mean": 0.20971867007672634
+        },
+        "gnomad_added": {
+          "n": 391,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 936.0,
+          "mean": 2.7289002557544757
+        },
+        "unaffected_total": {
+          "n": 391,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 936.0,
+          "mean": 2.938618925831202
+        },
+        "n": {
+          "n": 391,
+          "min": 1.0,
+          "q25": 1.0,
+          "median": 2.0,
+          "q75": 3.0,
+          "max": 939.0,
+          "mean": 5.29923273657289
+        },
+        "count_fraction": {
+          "n": 391,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 1.0,
+          "mean": 0.9142137045717199
+        },
+        "posterior_mean": {
+          "n": 391,
+          "min": 0.0037817860645411,
+          "q25": 0.8106119552590161,
+          "median": 0.9352234851412432,
+          "q75": 0.9494142091693472,
+          "max": 0.9832177603945416,
+          "mean": 0.8194080031748516
+        },
+        "posterior_minus_prior": {
+          "n": 391,
+          "min": -0.6384118115100219,
+          "q25": 0.004940994001568777,
+          "median": 0.008108702605086004,
+          "q75": 0.024724310014595297,
+          "max": 0.3795836994479544,
+          "mean": 0.014903217891147267
+        }
+      },
+      "sums": {
+        "affected": 923.0,
+        "unaffected_literature": 82.0,
+        "gnomad_added": 1067.0,
+        "unaffected_total": 1149.0,
+        "n": 2072.0
+      },
+      "pooled_count_fraction": 0.4454633204633205,
+      "pooled_literature_fraction": 0.918407960199005,
+      "gnomad_positive_variants": 47,
+      "unaffected_literature_positive_variants": 41,
+      "zero_affected_variants": 4,
+      "zero_unaffected_variants": 317,
+      "prior_majority_variants": 369,
+      "prior_90pct_variants": 185,
+      "count_majority_variants": 17,
+      "am_present": 255,
+      "truncating": 89,
+      "gnomad_concentration": {
+        "top_1_variant_share": 0.8772258669165885,
+        "top_5_variant_share": 0.9306466729147141,
+        "top_10_variant_share": 0.9531396438612934
+      },
+      "largest_gnomad_rows": [
+        {
+          "key": "A11T",
+          "affected": 3.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 936.0,
+          "prior_mean": 0.0644541907,
+          "posterior_mean": 0.0037817861
+        },
+        {
+          "key": "V101M",
+          "affected": 1.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 26.0,
+          "prior_mean": 0.2700851597,
+          "posterior_mean": 0.0989964219
+        },
+        {
+          "key": "E279G",
+          "affected": 1.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 14.0,
+          "prior_mean": 0.0845567458,
+          "posterior_mean": 0.0724626705
+        },
+        {
+          "key": "Q239R",
+          "affected": 4.0,
+          "unaffected_literature": 1.0,
+          "gnomad_added": 10.0,
+          "prior_mean": 0.0561768024,
+          "posterior_mean": 0.1827311888
+        },
+        {
+          "key": "V455E",
+          "affected": 3.0,
+          "unaffected_literature": 25.0,
+          "gnomad_added": 7.0,
+          "prior_mean": 0.9066510357,
+          "posterior_mean": 0.2682392242
+        }
+      ],
+      "prior_count_correlations": {
+        "affected": {
+          "n": 391,
+          "spearman_rho": -0.1540065343433949
+        },
+        "unaffected_literature": {
+          "n": 391,
+          "spearman_rho": -0.1647131899644777
+        },
+        "gnomad_added": {
+          "n": 391,
+          "spearman_rho": -0.33519312075612334
+        },
+        "unaffected_total": {
+          "n": 391,
+          "spearman_rho": -0.3242466529921939
+        },
+        "n": {
+          "n": 391,
+          "spearman_rho": -0.2873862517783407
+        },
+        "count_fraction": {
+          "n": 391,
+          "spearman_rho": 0.3162505155065332
+        }
+      },
+      "analytic_saved_abs_diff_max": 0.005637614586778694
+    },
+    "LDLR": {
+      "source_sha256": "9c5193126c999c0d4224663b32a485ee1f00903d8e3b149485dfb74d3c9a8c4e",
+      "fit_summary_sha256": "cf9a2dd302d0bbf0bde29f94f01d939d319b1df80367f57f9d09df34dd978548",
+      "variants": 871,
+      "prior_strength": 10.0,
+      "distributions": {
+        "prior_mean": {
+          "n": 871,
+          "min": 0.0238043663674633,
+          "q25": 0.8391850031532933,
+          "median": 0.93075957290639,
+          "q75": 0.938685974529943,
+          "max": 0.9561404538142018,
+          "mean": 0.7700831924679642
+        },
+        "prior_affected": {
+          "n": 871,
+          "min": 0.238043663674633,
+          "q25": 8.391850031532933,
+          "median": 9.3075957290639,
+          "q75": 9.386859745299429,
+          "max": 9.561404538142018,
+          "mean": 7.700831924679641
+        },
+        "prior_unaffected": {
+          "n": 871,
+          "min": 0.43859546185798237,
+          "q25": 0.6131402547005704,
+          "median": 0.6924042709361,
+          "q75": 1.6081499684670675,
+          "max": 9.761956336325367,
+          "mean": 2.2991680753203583
+        },
+        "prior_weight": {
+          "n": 871,
+          "min": 0.0008194034742707309,
+          "q25": 0.6666666666666666,
+          "median": 0.8333333333333334,
+          "q75": 0.9090909090909091,
+          "max": 0.9090909090909091,
+          "mean": 0.7461350635185321
+        },
+        "affected": {
+          "n": 871,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 3.0,
+          "max": 354.0,
+          "mean": 5.239954075774971
+        },
+        "unaffected_literature": {
+          "n": 871,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 17.0,
+          "mean": 0.24799081515499427
+        },
+        "gnomad_added": {
+          "n": 871,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 12192.0,
+          "mean": 19.60849598163031
+        },
+        "unaffected_total": {
+          "n": 871,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 12192.0,
+          "mean": 19.856486796785305
+        },
+        "n": {
+          "n": 871,
+          "min": 1.0,
+          "q25": 1.0,
+          "median": 2.0,
+          "q75": 5.0,
+          "max": 12194.0,
+          "mean": 25.096440872560276
+        },
+        "count_fraction": {
+          "n": 871,
+          "min": 0.0,
+          "q25": 0.75,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 1.0,
+          "mean": 0.8396131221274908
+        },
+        "posterior_mean": {
+          "n": 871,
+          "min": 0.000183928067437,
+          "q25": 0.7562868005729735,
+          "median": 0.936951532870989,
+          "q75": 0.9500952483377948,
+          "max": 0.9960544889371874,
+          "mean": 0.7814841646073917
+        },
+        "posterior_minus_prior": {
+          "n": 871,
+          "min": -0.44068312662798215,
+          "q25": 0.004230581576479653,
+          "median": 0.00713699706888804,
+          "q75": 0.022491988883221015,
+          "max": 0.7161318321187464,
+          "mean": 0.011400972139427545
+        }
+      },
+      "sums": {
+        "affected": 4564.0,
+        "unaffected_literature": 216.0,
+        "gnomad_added": 17079.0,
+        "unaffected_total": 17295.0,
+        "n": 21859.0
+      },
+      "pooled_count_fraction": 0.20879271695868978,
+      "pooled_literature_fraction": 0.9548117154811715,
+      "gnomad_positive_variants": 221,
+      "unaffected_literature_positive_variants": 79,
+      "zero_affected_variants": 7,
+      "zero_unaffected_variants": 606,
+      "prior_majority_variants": 738,
+      "prior_90pct_variants": 363,
+      "count_majority_variants": 122,
+      "am_present": 440,
+      "truncating": 279,
+      "gnomad_concentration": {
+        "top_1_variant_share": 0.7138591252415247,
+        "top_5_variant_share": 0.9026289595409567,
+        "top_10_variant_share": 0.9395749165642017
+      },
+      "largest_gnomad_rows": [
+        {
+          "key": "A391T",
+          "affected": 2.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 12192.0,
+          "prior_mean": 0.0240645459,
+          "posterior_mean": 0.0001839281
+        },
+        {
+          "key": "T726I",
+          "affected": 7.0,
+          "unaffected_literature": 1.0,
+          "gnomad_added": 1378.0,
+          "prior_mean": 0.0332040396,
+          "posterior_mean": 0.0052975713
+        },
+        {
+          "key": "T705I",
+          "affected": 1.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 1378.0,
+          "prior_mean": 0.0332040396,
+          "posterior_mean": 0.0009502135
+        },
+        {
+          "key": "V827I",
+          "affected": 12.0,
+          "unaffected_literature": 0.0,
+          "gnomad_added": 253.0,
+          "prior_mean": 0.0307488116,
+          "posterior_mean": 0.0448061879
+        },
+        {
+          "key": "R744Q",
+          "affected": 2.0,
+          "unaffected_literature": 1.0,
+          "gnomad_added": 215.0,
+          "prior_mean": 0.0256500375,
+          "posterior_mean": 0.0097358547
+        }
+      ],
+      "prior_count_correlations": {
+        "affected": {
+          "n": 871,
+          "spearman_rho": -0.04290142305728575
+        },
+        "unaffected_literature": {
+          "n": 871,
+          "spearman_rho": -0.08821955108543482
+        },
+        "gnomad_added": {
+          "n": 871,
+          "spearman_rho": -0.49279684776169247
+        },
+        "unaffected_total": {
+          "n": 871,
+          "spearman_rho": -0.4539211258560078
+        },
+        "n": {
+          "n": 871,
+          "spearman_rho": -0.29425917505393345
+        },
+        "count_fraction": {
+          "n": 871,
+          "spearman_rho": 0.4623933005681627
+        }
+      },
+      "analytic_saved_abs_diff_max": 0.005333800688794299
+    },
+    "BRCA2": {
+      "source_sha256": "77319d11894b7c49b65254474e4a471c919a3cd85e9bb6e792cdfc3dba404521",
+      "fit_summary_sha256": "5363e38a224196295cc81160e0ac99e469fb3767fdad36e3c9a3beda36ee852e",
+      "variants": 5962,
+      "prior_strength": 10.0,
+      "distributions": {
+        "prior_mean": {
+          "n": 5962,
+          "min": 0.0003718533480248,
+          "q25": 0.0028990843809444,
+          "median": 0.009584253377471048,
+          "q75": 0.2554004733443414,
+          "max": 0.9251024197341524,
+          "mean": 0.15692569884648896
+        },
+        "prior_affected": {
+          "n": 5962,
+          "min": 0.003718533480248,
+          "q25": 0.028990843809444,
+          "median": 0.0958425337747105,
+          "q75": 2.554004733443414,
+          "max": 9.251024197341524,
+          "mean": 1.56925698846489
+        },
+        "prior_unaffected": {
+          "n": 5962,
+          "min": 0.7489758026584759,
+          "q25": 7.4459952665565865,
+          "median": 9.90415746622529,
+          "q75": 9.971009156190556,
+          "max": 9.996281466519752,
+          "mean": 8.43074301153511
+        },
+        "prior_weight": {
+          "n": 5962,
+          "min": 6.857487690809595e-06,
+          "q25": 0.8333333333333334,
+          "median": 0.9090909090909091,
+          "q75": 0.9090909090909091,
+          "max": 0.9090909090909091,
+          "mean": 0.8382572111943083
+        },
+        "affected": {
+          "n": 5962,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 252.0,
+          "mean": 1.7910097282791009
+        },
+        "unaffected_literature": {
+          "n": 5962,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 230.0,
+          "mean": 0.4277088225427709
+        },
+        "gnomad_added": {
+          "n": 5962,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 1458237.0,
+          "mean": 336.519792016102
+        },
+        "unaffected_total": {
+          "n": 5962,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 1458239.0,
+          "mean": 336.94750083864477
+        },
+        "n": {
+          "n": 5962,
+          "min": 1.0,
+          "q25": 1.0,
+          "median": 1.0,
+          "q75": 2.0,
+          "max": 1458250.0,
+          "mean": 338.7385105669239
+        },
+        "count_fraction": {
+          "n": 5962,
+          "min": 0.0,
+          "q25": 0.6666666666666666,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 1.0,
+          "mean": 0.8361508837094069
+        },
+        "posterior_mean": {
+          "n": 5962,
+          "min": 7.556252879531841e-06,
+          "q25": 0.09279998928900454,
+          "median": 0.1037148028438724,
+          "q75": 0.3251713979169902,
+          "max": 0.9337499263973168,
+          "mean": 0.24007284074541513
+        },
+        "posterior_minus_prior": {
+          "n": 5962,
+          "min": -0.6669566082685073,
+          "q25": 0.06727750588759805,
+          "median": 0.08367149914950454,
+          "q75": 0.0910915858216515,
+          "max": 0.8212496985607385,
+          "mean": 0.08314714189892619
+        }
+      },
+      "sums": {
+        "affected": 10678.0,
+        "unaffected_literature": 2550.0,
+        "gnomad_added": 2006331.0,
+        "unaffected_total": 2008881.0,
+        "n": 2019559.0
+      },
+      "pooled_count_fraction": 0.005287292918899621,
+      "pooled_literature_fraction": 0.8072270940429392,
+      "gnomad_positive_variants": 1399,
+      "unaffected_literature_positive_variants": 414,
+      "zero_affected_variants": 128,
+      "zero_unaffected_variants": 4374,
+      "prior_majority_variants": 5686,
+      "prior_90pct_variants": 3802,
+      "count_majority_variants": 251,
+      "am_present": 3682,
+      "truncating": 1942,
+      "gnomad_concentration": {
+        "top_1_variant_share": 0.7268177583858296,
+        "top_5_variant_share": 0.9641081157595631,
+        "top_10_variant_share": 0.9812732794339518
+      },
+      "largest_gnomad_rows": [
+        {
+          "key": "V2466A",
+          "affected": 11.0,
+          "unaffected_literature": 2.0,
+          "gnomad_added": 1458237.0,
+          "prior_mean": 0.0018758065,
+          "posterior_mean": 7.5563e-06
+        },
+        {
+          "key": "N372H",
+          "affected": 122.0,
+          "unaffected_literature": 18.0,
+          "gnomad_added": 409992.0,
+          "prior_mean": 0.0022577049,
+          "posterior_mean": 0.0002977515
+        },
+        {
+          "key": "T1915M",
+          "affected": 12.0,
+          "unaffected_literature": 1.0,
+          "gnomad_added": 40071.0,
+          "prior_mean": 0.0020964239,
+          "posterior_mean": 0.000300009
+        },
+        {
+          "key": "N991D",
+          "affected": 57.0,
+          "unaffected_literature": 8.0,
+          "gnomad_added": 13545.0,
+          "prior_mean": 0.001928687,
+          "posterior_mean": 0.0041871119
+        },
+        {
+          "key": "N289H",
+          "affected": 43.0,
+          "unaffected_literature": 19.0,
+          "gnomad_added": 12475.0,
+          "prior_mean": 0.0027936842,
+          "posterior_mean": 0.0034276747
+        }
+      ],
+      "prior_count_correlations": {
+        "affected": {
+          "n": 5962,
+          "spearman_rho": 0.24249385457626735
+        },
+        "unaffected_literature": {
+          "n": 5962,
+          "spearman_rho": -0.07359912722220968
+        },
+        "gnomad_added": {
+          "n": 5962,
+          "spearman_rho": -0.296654755882171
+        },
+        "unaffected_total": {
+          "n": 5962,
+          "spearman_rho": -0.2686292401917561
+        },
+        "n": {
+          "n": 5962,
+          "spearman_rho": -0.0716661709515502
+        },
+        "count_fraction": {
+          "n": 5962,
+          "spearman_rho": 0.28373718241033996
+        }
+      },
+      "analytic_saved_abs_diff_max": 0.00735869068720596
+    },
+    "KCNQ1": {
+      "source_sha256": "f72f25597efdbfd30f4bade7f93c87c2583fa6190a36c248da6827d86b813d08",
+      "fit_summary_sha256": "4087cab79b8a4cc4903d41944536071a67071b8ac1304fb98067f8b03c769707",
+      "variants": 691,
+      "prior_strength": 10.0,
+      "distributions": {
+        "prior_mean": {
+          "n": 691,
+          "min": 0.0398207049076846,
+          "q25": 0.2062008430240162,
+          "median": 0.7348925010351965,
+          "q75": 0.7965957534841204,
+          "max": 0.8072844907465808,
+          "mean": 0.5675003833613306
+        },
+        "prior_affected": {
+          "n": 691,
+          "min": 0.398207049076846,
+          "q25": 2.0620084302401622,
+          "median": 7.348925010351966,
+          "q75": 7.965957534841204,
+          "max": 8.072844907465807,
+          "mean": 5.675003833613306
+        },
+        "prior_unaffected": {
+          "n": 691,
+          "min": 1.9271550925341918,
+          "q25": 2.0340424651587963,
+          "median": 2.6510749896480346,
+          "q75": 7.937991569759838,
+          "max": 9.601792950923153,
+          "mean": 4.324996166386695
+        },
+        "prior_weight": {
+          "n": 691,
+          "min": 0.005070993914807302,
+          "q25": 0.5555555555555556,
+          "median": 0.7692307692307693,
+          "q75": 0.9090909090909091,
+          "max": 0.9090909090909091,
+          "mean": 0.6955358944596346
+        },
+        "affected": {
+          "n": 691,
+          "min": 0.0,
+          "q25": 1.0,
+          "median": 2.0,
+          "q75": 4.0,
+          "max": 1329.0,
+          "mean": 11.869753979739508
+        },
+        "unaffected_literature": {
+          "n": 691,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 1.0,
+          "max": 443.0,
+          "mean": 3.14616497829233
+        },
+        "gnomad_added": {
+          "n": 691,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 0.0,
+          "max": 1888.0,
+          "mean": 10.455861070911721
+        },
+        "unaffected_total": {
+          "n": 691,
+          "min": 0.0,
+          "q25": 0.0,
+          "median": 0.0,
+          "q75": 3.0,
+          "max": 1930.0,
+          "mean": 13.602026049204053
+        },
+        "n": {
+          "n": 691,
+          "min": 1.0,
+          "q25": 1.0,
+          "median": 3.0,
+          "q75": 8.0,
+          "max": 1962.0,
+          "mean": 25.47178002894356
+        },
+        "count_fraction": {
+          "n": 691,
+          "min": 0.0,
+          "q25": 0.5,
+          "median": 1.0,
+          "q75": 1.0,
+          "max": 1.0,
+          "mean": 0.7649520831698119
+        },
+        "posterior_mean": {
+          "n": 691,
+          "min": 0.0003805643766014,
+          "q25": 0.33441247268612595,
+          "median": 0.711535171876154,
+          "q75": 0.8112914892393489,
+          "max": 0.9953147457462987,
+          "mean": 0.595572940413876
+        },
+        "posterior_minus_prior": {
+          "n": 691,
+          "min": -0.6190726236361289,
+          "q25": -0.005996738131079839,
+          "median": 0.03217940360819449,
+          "q75": 0.07395277395701005,
+          "max": 0.6503149449551701,
+          "mean": 0.02807255705254545
+        }
+      },
+      "sums": {
+        "affected": 8202.0,
+        "unaffected_literature": 2174.0,
+        "gnomad_added": 7225.0,
+        "unaffected_total": 9399.0,
+        "n": 17601.0
+      },
+      "pooled_count_fraction": 0.4659962502130561,
+      "pooled_literature_fraction": 0.7904780262143408,
+      "gnomad_positive_variants": 152,
+      "unaffected_literature_positive_variants": 231,
+      "zero_affected_variants": 35,
+      "zero_unaffected_variants": 391,
+      "prior_majority_variants": 544,
+      "prior_90pct_variants": 246,
+      "count_majority_variants": 135,
+      "am_present": 400,
+      "truncating": 170,
+      "gnomad_concentration": {
+        "top_1_variant_share": 0.2613148788927336,
+        "top_5_variant_share": 0.8224221453287197,
+        "top_10_variant_share": 0.897993079584775
+      },
+      "largest_gnomad_rows": [
+        {
+          "key": "P448R",
+          "affected": 32.0,
+          "unaffected_literature": 42.0,
+          "gnomad_added": 1888.0,
+          "prior_mean": 0.0448097363,
+          "posterior_mean": 0.0164571298
+        },
+        {
+          "key": "G643S",
+          "affected": 47.0,
+          "unaffected_literature": 34.0,
+          "gnomad_added": 1201.0,
+          "prior_mean": 0.041819777,
+          "posterior_mean": 0.0366724241
+        },
+        {
+          "key": "I145=",
+          "affected": 18.0,
+          "unaffected_literature": 6.0,
+          "gnomad_added": 1192.0,
+          "prior_mean": 0.206200843,
+          "posterior_mean": 0.0162731124
+        },
+        {
+          "key": "V648I",
+          "affected": 0.0,
+          "unaffected_literature": 10.0,
+          "gnomad_added": 1025.0,
+          "prior_mean": 0.0418985513,
+          "posterior_mean": 0.0003805644
+        },
+        {
+          "key": "P408A",
+          "affected": 4.0,
+          "unaffected_literature": 10.0,
+          "gnomad_added": 636.0,
+          "prior_mean": 0.0421357268,
+          "posterior_mean": 0.0067615687
+        }
+      ],
+      "prior_count_correlations": {
+        "affected": {
+          "n": 691,
+          "spearman_rho": 0.20666331588517164
+        },
+        "unaffected_literature": {
+          "n": 691,
+          "spearman_rho": 0.06436055490593276
+        },
+        "gnomad_added": {
+          "n": 691,
+          "spearman_rho": -0.25870126728853343
+        },
+        "unaffected_total": {
+          "n": 691,
+          "spearman_rho": -0.1087460774405045
+        },
+        "n": {
+          "n": 691,
+          "spearman_rho": 0.06283554202809846
+        },
+        "count_fraction": {
+          "n": 691,
+          "spearman_rho": 0.16474003311234992
+        }
+      },
+      "analytic_saved_abs_diff_max": 0.0055332631598070114
+    }
+  }
+}

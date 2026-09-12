@@ -43,13 +43,26 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       AUC subsets. Original evidence retained; corrected explanation,
       same-row AUC, diagnostic figure and executable audit:
       [`penetrance audit`](docs/evidence/penetrance_audit_20260912/README.md).
-- [ ] **Next grant-analysis step: phenotype/denominator and allele review on
-      existing source before broader extraction or model tuning.** Freeze
-      gene-specific endpoint, age/sex/time horizon, ascertainment, independent
-      people/family/cohort ownership and unknown-versus-unaffected semantics.
+- [x] **Compare priors, counts and genomic predictors assuming gnomAD is
+      unaffected, as requested (2026-09-12).** Preserve the five frozen fits;
+      plot prior/posterior/count distributions and prior against affected,
+      unaffected, AlphaMissense, GPN-Star-M and AlphaGenome AVI. Most rows
+      have no unaffected counts; common variants dominate gnomAD totals.
+      BRCA2 already has near-zero priors, with affected singletons moving
+      toward 0.09 in the S=10 update. Same-row predictor comparisons and
+      reproducible evidence:
+      [`prior/count/predictor analysis`](docs/evidence/prior_count_predictors_20260912/README.md).
+- [ ] **Next grant-analysis experiment: review the shared priors and test
+      additional features with gnomAD-as-unaffected fixed.** Review high-prior
+      missing-AlphaMissense strata, truncation bands and ambiguous allele keys.
+      Compare cross-fitted GPN-Star/AVI feature arms on identical outcome rows;
+      prespecify S=10/prior-strength and common-variant influence sensitivity.
+      Inventory population-only variants absent from the literature row set.
+      Before outcome validation, freeze gene-specific endpoint, age/sex/time
+      horizon, ascertainment and independent people/family/cohort ownership.
       Begin with HNF1A/GCK PMID 36257325 and GCK PMID 36208030 source/supplements;
-      totals without a split remain unknown. Separate gnomAD frequency evidence
-      from measured clinical outcomes; preserve release/QC/AC/AN/homozygote
+      totals without a split remain unknown. Label gnomAD unaffected counts as
+      the adopted assumption; preserve release/QC/AC/AN/homozygote
       and transcript/allele provenance. Correct consequence/annotation
       inconsistencies through reviewed source, not a target histogram shape.
 - [ ] **Then validate on independent genotype-first outcomes.** Inventory

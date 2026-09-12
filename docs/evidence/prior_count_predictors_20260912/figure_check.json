@@ -1,0 +1,252 @@
+{
+  "gnomad_assumed_unaffected": true,
+  "row_counts": {
+    "HNF1A": 233,
+    "GCK": 391,
+    "LDLR": 871,
+    "BRCA2": 5962,
+    "KCNQ1": 691
+  },
+  "predictor_metrics": [
+    {
+      "gene": "HNF1A",
+      "comparison": "all_available",
+      "predictor": "alphamissense_frozen",
+      "n": 145,
+      "total_variants": 233,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "HNF1A",
+      "comparison": "all_available",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 163,
+      "total_variants": 233,
+      "spearman_rho": -0.7282862609667872
+    },
+    {
+      "gene": "HNF1A",
+      "comparison": "all_available",
+      "predictor": "alphagenome_avi",
+      "n": 163,
+      "total_variants": 233,
+      "spearman_rho": 0.6899092606708064
+    },
+    {
+      "gene": "HNF1A",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphamissense_frozen",
+      "n": 139,
+      "total_variants": 233,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "HNF1A",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 139,
+      "total_variants": 233,
+      "spearman_rho": -0.7943394114681716
+    },
+    {
+      "gene": "HNF1A",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphagenome_avi",
+      "n": 139,
+      "total_variants": 233,
+      "spearman_rho": 0.7834601922279356
+    },
+    {
+      "gene": "GCK",
+      "comparison": "all_available",
+      "predictor": "alphamissense_frozen",
+      "n": 255,
+      "total_variants": 391,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "GCK",
+      "comparison": "all_available",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 274,
+      "total_variants": 391,
+      "spearman_rho": -0.5054521256152571
+    },
+    {
+      "gene": "GCK",
+      "comparison": "all_available",
+      "predictor": "alphagenome_avi",
+      "n": 274,
+      "total_variants": 391,
+      "spearman_rho": 0.7637271134131474
+    },
+    {
+      "gene": "GCK",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphamissense_frozen",
+      "n": 244,
+      "total_variants": 391,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "GCK",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 244,
+      "total_variants": 391,
+      "spearman_rho": -0.5346042277915749
+    },
+    {
+      "gene": "GCK",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphagenome_avi",
+      "n": 244,
+      "total_variants": 391,
+      "spearman_rho": 0.7552164779555209
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "all_available",
+      "predictor": "alphamissense_frozen",
+      "n": 440,
+      "total_variants": 871,
+      "spearman_rho": 0.9999999999999999
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "all_available",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 508,
+      "total_variants": 871,
+      "spearman_rho": -0.6107067112178477
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "all_available",
+      "predictor": "alphagenome_avi",
+      "n": 508,
+      "total_variants": 871,
+      "spearman_rho": 0.685723337272433
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphamissense_frozen",
+      "n": 426,
+      "total_variants": 871,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 426,
+      "total_variants": 871,
+      "spearman_rho": -0.6903711014733057
+    },
+    {
+      "gene": "LDLR",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphagenome_avi",
+      "n": 426,
+      "total_variants": 871,
+      "spearman_rho": 0.7481309948230032
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "all_available",
+      "predictor": "alphamissense_frozen",
+      "n": 3682,
+      "total_variants": 5962,
+      "spearman_rho": 0.9973804171903854
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "all_available",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 3619,
+      "total_variants": 5962,
+      "spearman_rho": -0.6361144327404307
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "all_available",
+      "predictor": "alphagenome_avi",
+      "n": 3619,
+      "total_variants": 5962,
+      "spearman_rho": 0.7586579986740356
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphamissense_frozen",
+      "n": 3167,
+      "total_variants": 5962,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 3167,
+      "total_variants": 5962,
+      "spearman_rho": -0.6659733948008566
+    },
+    {
+      "gene": "BRCA2",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphagenome_avi",
+      "n": 3167,
+      "total_variants": 5962,
+      "spearman_rho": 0.6805977894106346
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "all_available",
+      "predictor": "alphamissense_frozen",
+      "n": 400,
+      "total_variants": 691,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "all_available",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 466,
+      "total_variants": 691,
+      "spearman_rho": -0.6122858396423505
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "all_available",
+      "predictor": "alphagenome_avi",
+      "n": 466,
+      "total_variants": 691,
+      "spearman_rho": 0.585763401124807
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphamissense_frozen",
+      "n": 391,
+      "total_variants": 691,
+      "spearman_rho": 1.0
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "gpn_star_m447_llr_calibrated",
+      "n": 391,
+      "total_variants": 691,
+      "spearman_rho": -0.7197625489334549
+    },
+    {
+      "gene": "KCNQ1",
+      "comparison": "same_single_allele_missense_variants",
+      "predictor": "alphagenome_avi",
+      "n": 391,
+      "total_variants": 691,
+      "spearman_rho": 0.7412168759098569
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "PRIOR_COUNT_DISTRIBUTIONS.png": "e7ebd8f5fd31091e1051314d00f570b6f6ab824e7be1473aaa34cc35bbd14f28",
+  "PRIOR_VS_COUNTS.png": "d40b2a9450e6675dee7b1619cc9a72bb5657c7dad23b3f06d9039a52af995683",
+  "PRIOR_VS_PREDICTORS.png": "08f3d391f09cdb320fb394b27ad586c1282273735a5605cf1162e3e17ccaddd2",
+  "alphamissense_comparison.csv": "ead6e16aa2766261ea174077dbcc68d41d452993ccacd45cad6ee1136c88cd42",
+  "count_distributions.csv": "b3a2dadfa84fbd32db5857dace6a6c17e36aa0199e32da3ffa758555ca55d949",
+  "counts_summary.json": "31e4cfb18d20637edc529865f722458485bca9e911b2327e05164eb4040b3606",
+  "evidence_strength.csv": "fb57c4f90c5509d950f899fc8c9961e84dbb504d37588d0f691f7f890138ce5d",
+  "feature_strata.csv": "216ae688a749fb5a15764306e5d01a10dc29eadda4871c66c7f00c988704eaec",
+  "figure_check.json": "28c6a3c7c2067b9bb3e0de8f2b0cda0035e8f2805e3e727e599f0cdaebdf74d5",
+  "gene_summary.csv": "324961988262fabb93186bb80f4397758513c346c3a4c1f118f1ecfc38cd6861",
+  "predictor_alleles.csv.gz": "74029e2ebc1b05a7d5dcdeb296803dc3838b566ca8ad754ade16679ad21ab459",
+  "predictor_correlations.csv": "e3eaa845f3e1bce9a078c2520d6463d8522c840a65137cc96bdf672a3cffb6f2",
+  "predictor_scores.csv.gz": "dcecd5eeeb5a88350cfc8d8017a6bf8b4e7cba86dd9aa40f2509d23924f0cb4b",
+  "predictor_sources.json": "85671f0ef0ec1360cda01c33da1fa71e475a0ec3579abd58acb8240f34351f90",
+  "predictor_version_conflicts.csv.gz": "33a985787236f8b3ec57ab28ba4ac4a8010b29ccbd026756c29ae946888a762b",
+  "probability_distributions.csv": "0d607fdbd835d432546334225a675704e388fedc4b2e937ff7b205b78292069f",
+  "variant_counts.csv.gz": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731"
+}
